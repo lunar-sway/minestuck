@@ -7,14 +7,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-import java.util.function.BiConsumer;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class MSPacketHandler
 {
@@ -26,83 +25,96 @@ public class MSPacketHandler
 	{
 		nextIndex = 0;
 		
-		registerMessage(DataCheckerPermissionPacket.class, DataCheckerPermissionPacket::decode);
-		registerMessage(EcheladderDataPacket.class, EcheladderDataPacket::decode);
-		registerMessage(ColorDataPacket.class, ColorDataPacket::decode);
-		registerMessage(ModusDataPacket.class, ModusDataPacket::decode);
-		registerMessage(BoondollarDataPacket.class, BoondollarDataPacket::decode);
-		registerMessage(ConsortReputationDataPacket.class, ConsortReputationDataPacket::decode);
-		registerMessage(GristCachePacket.class, GristCachePacket::decode);
-		registerMessage(EditmodeCacheLimitPacket.class, EditmodeCacheLimitPacket::decode);
-		registerMessage(TitleDataPacket.class, TitleDataPacket::decode);
-		registerMessage(LandTypesDataPacket.class, LandTypesDataPacket::decode);
+		registerToClientMessage(DataCheckerPermissionPacket.class, DataCheckerPermissionPacket::decode);
+		registerToClientMessage(EcheladderDataPacket.class, EcheladderDataPacket::decode);
+		registerToClientMessage(ColorDataPacket.class, ColorDataPacket::decode);
+		registerToClientMessage(ModusDataPacket.class, ModusDataPacket::decode);
+		registerToClientMessage(BoondollarDataPacket.class, BoondollarDataPacket::decode);
+		registerToClientMessage(ConsortReputationDataPacket.class, ConsortReputationDataPacket::decode);
+		registerToClientMessage(GristCachePacket.class, GristCachePacket::decode);
+		registerToClientMessage(EditmodeCacheLimitPacket.class, EditmodeCacheLimitPacket::decode);
+		registerToClientMessage(TitleDataPacket.class, TitleDataPacket::decode);
+		registerToClientMessage(LandTypesDataPacket.class, LandTypesDataPacket::decode);
 		
-		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
-		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
-		registerMessage(RGBColorSelectPacket.class, RGBColorSelectPacket::decode);
-		registerMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
-		registerMessage(ConnectToSburbServerPacket.class, ConnectToSburbServerPacket::decode);
-		registerMessage(OpenSburbServerPacket.class, OpenSburbServerPacket::decode);
-		registerMessage(ResumeSburbConnectionPacket.class, ResumeSburbConnectionPacket::decode);
-		registerMessage(CloseSburbConnectionPacket.class, CloseSburbConnectionPacket::decode);
-		registerMessage(CloseRemoteSburbConnectionPacket.class, CloseRemoteSburbConnectionPacket::decode);
-		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
-		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
-		registerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
-		registerMessage(ThemeSelectPacket.class, ThemeSelectPacket::decode);
-		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
-		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
-		registerMessage(ServerEditPacket.Activate.class, ServerEditPacket.Activate::decode);
-		registerMessage(ServerEditPacket.UpdateDeployList.class, ServerEditPacket.UpdateDeployList::decode);
-		registerMessage(ServerEditPacket.Exit.class, ServerEditPacket.Exit::decode);
-		registerMessage(EditmodeLocationsPacket.class, EditmodeLocationsPacket::decode);
-		registerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
-		registerMessage(EditmodeDragPacket.Fill.class, EditmodeDragPacket.Fill::decode);
-		registerMessage(EditmodeDragPacket.Destroy.class, EditmodeDragPacket.Destroy::decode);
-		registerMessage(EditmodeDragPacket.Cursor.class, EditmodeDragPacket.Cursor::decode);
-		registerMessage(EditmodeDragPacket.Reset.class, EditmodeDragPacket.Reset::decode);
-		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
-		registerMessage(EditmodeTeleportPacket.class, EditmodeTeleportPacket::decode);
-		registerMessage(MachinePacket.SetRunning.class, MachinePacket.SetRunning::decode);
-		registerMessage(MachinePacket.SetLooping.class, MachinePacket.SetLooping::decode);
-		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
-		registerMessage(PunchDesignixPacket.class, PunchDesignixPacket::decode);
-		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
-		registerMessage(SendificatorPacket.class, SendificatorPacket::decode);
-		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
-		registerMessage(AreaEffectPacket.class, AreaEffectPacket::decode);
-		registerMessage(WirelessRedstoneTransmitterPacket.class, WirelessRedstoneTransmitterPacket::decode);
-		registerMessage(StatStorerPacket.class, StatStorerPacket::decode);
-		registerMessage(RemoteObserverPacket.class, RemoteObserverPacket::decode);
-		registerMessage(SummonerPacket.class, SummonerPacket::decode);
-		registerMessage(StructureCorePacket.class, StructureCorePacket::decode);
-		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
-		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
-		registerMessage(AnthvilPacket.class, AnthvilPacket::decode);
-		registerMessage(MagicRangedEffectPacket.class, MagicRangedEffectPacket::decode);
-		registerMessage(MagicAOEEffectPacket.class, MagicAOEEffectPacket::decode);
-		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
-		registerMessage(ServerCursorPacket.class, ServerCursorPacket::decode);
-		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
-		registerMessage(GristRejectAnimationPacket.class, GristRejectAnimationPacket::decode);
-		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
-		registerMessage(ClientMovementPacket.class, ClientMovementPacket::decode);
-		registerMessage(GristToastPacket.class, GristToastPacket::decode);
-		registerMessage(AtheneumPacket.Scroll.class, AtheneumPacket.Scroll::decode);
-		registerMessage(AtheneumPacket.Update.class, AtheneumPacket.Update::decode);
-		registerMessage(EntryEffectPackets.Effect.class, EntryEffectPackets.Effect::decode);
-		registerMessage(EntryEffectPackets.Clear.class, EntryEffectPackets.Clear::decode);
+		registerToServerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
+		registerToServerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
+		registerToServerMessage(RGBColorSelectPacket.class, RGBColorSelectPacket::decode);
+		registerToBothMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
+		registerToServerMessage(ConnectToSburbServerPacket.class, ConnectToSburbServerPacket::decode);
+		registerToServerMessage(OpenSburbServerPacket.class, OpenSburbServerPacket::decode);
+		registerToServerMessage(ResumeSburbConnectionPacket.class, ResumeSburbConnectionPacket::decode);
+		registerToServerMessage(CloseSburbConnectionPacket.class, CloseSburbConnectionPacket::decode);
+		registerToServerMessage(CloseRemoteSburbConnectionPacket.class, CloseRemoteSburbConnectionPacket::decode);
+		registerToServerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
+		registerToBothMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
+		registerToServerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
+		registerToServerMessage(ThemeSelectPacket.class, ThemeSelectPacket::decode);
+		registerToBothMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
+		registerToServerMessage(ClientEditPacket.class, ClientEditPacket::decode);
+		registerToClientMessage(ServerEditPacket.Activate.class, ServerEditPacket.Activate::decode);
+		registerToClientMessage(ServerEditPacket.UpdateDeployList.class, ServerEditPacket.UpdateDeployList::decode);
+		registerToClientMessage(ServerEditPacket.Exit.class, ServerEditPacket.Exit::decode);
+		registerToClientMessage(EditmodeLocationsPacket.class, EditmodeLocationsPacket::decode);
+		registerToServerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
+		registerToServerMessage(EditmodeDragPacket.Fill.class, EditmodeDragPacket.Fill::decode);
+		registerToServerMessage(EditmodeDragPacket.Destroy.class, EditmodeDragPacket.Destroy::decode);
+		registerToServerMessage(EditmodeDragPacket.Cursor.class, EditmodeDragPacket.Cursor::decode);
+		registerToServerMessage(EditmodeDragPacket.Reset.class, EditmodeDragPacket.Reset::decode);
+		registerToBothMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
+		registerToServerMessage(EditmodeTeleportPacket.class, EditmodeTeleportPacket::decode);
+		registerToServerMessage(MachinePacket.SetRunning.class, MachinePacket.SetRunning::decode);
+		registerToServerMessage(MachinePacket.SetLooping.class, MachinePacket.SetLooping::decode);
+		registerToServerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
+		registerToServerMessage(PunchDesignixPacket.class, PunchDesignixPacket::decode);
+		registerToServerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
+		registerToServerMessage(SendificatorPacket.class, SendificatorPacket::decode);
+		registerToServerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
+		registerToServerMessage(AreaEffectPacket.class, AreaEffectPacket::decode);
+		registerToServerMessage(WirelessRedstoneTransmitterPacket.class, WirelessRedstoneTransmitterPacket::decode);
+		registerToServerMessage(StatStorerPacket.class, StatStorerPacket::decode);
+		registerToServerMessage(RemoteObserverPacket.class, RemoteObserverPacket::decode);
+		registerToServerMessage(SummonerPacket.class, SummonerPacket::decode);
+		registerToServerMessage(StructureCorePacket.class, StructureCorePacket::decode);
+		registerToServerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
+		registerToServerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
+		registerToServerMessage(AnthvilPacket.class, AnthvilPacket::decode);
+		registerToClientMessage(MagicRangedEffectPacket.class, MagicRangedEffectPacket::decode);
+		registerToClientMessage(MagicAOEEffectPacket.class, MagicAOEEffectPacket::decode);
+		registerToClientMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
+		registerToClientMessage(ServerCursorPacket.class, ServerCursorPacket::decode);
+		registerToClientMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
+		registerToClientMessage(GristRejectAnimationPacket.class, GristRejectAnimationPacket::decode);
+		registerToClientMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
+		registerToClientMessage(ClientMovementPacket.class, ClientMovementPacket::decode);
+		registerToClientMessage(GristToastPacket.class, GristToastPacket::decode);
+		registerToServerMessage(AtheneumPacket.Scroll.class, AtheneumPacket.Scroll::decode);
+		registerToClientMessage(AtheneumPacket.Update.class, AtheneumPacket.Update::decode);
+		registerToClientMessage(EntryEffectPackets.Effect.class, EntryEffectPackets.Effect::decode);
+		registerToClientMessage(EntryEffectPackets.Clear.class, EntryEffectPackets.Clear::decode);
+	}
+	
+	private static <MSG extends PlayToBothPacket> void registerToBothMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	{
+		registerMessage(messageType, decoder, Optional.empty());
+	}
+	
+	private static <MSG extends PlayToClientPacket> void registerToClientMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	{
+		registerMessage(messageType, decoder, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+	}
+	
+	private static <MSG extends PlayToServerPacket> void registerToServerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	{
+		registerMessage(messageType, decoder, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 	}
 	
 	private static int nextIndex;
-	private static <MSG extends StandardPacket> void registerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
-	{
-		registerMessage(messageType, StandardPacket::encode, decoder, StandardPacket::consume);
-	}
 	
-	private static <MSG> void registerMessage(Class<MSG> messageType, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer)
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	private static <MSG extends StandardPacket> void registerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder,
+																	 Optional<NetworkDirection> networkDirection)
 	{
-		INSTANCE.registerMessage(nextIndex++, messageType, encoder, decoder, messageConsumer);
+		INSTANCE.registerMessage(nextIndex++, messageType, StandardPacket::encode, decoder, StandardPacket::consume, networkDirection);
 	}
 	
 	public static <MSG> void sendToPlayer(MSG message, ServerPlayer player)
