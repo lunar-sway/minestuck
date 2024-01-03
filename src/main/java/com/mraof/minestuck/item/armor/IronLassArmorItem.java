@@ -31,11 +31,13 @@ public class IronLassArmorItem extends ArmorItem
 		{
 			if(player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof IronLassArmorItem && player.isShiftKeyDown())
 			{
-				player.level().playSound(player, player.blockPosition(), MSSoundEvents.ITEM_JETPACK_FLIGHT.get(), SoundSource.PLAYERS, 1, player.getRandom().nextFloat()+0.35f);
-				player.level().addParticle(MSParticleType.EXHAUST.get(), player.getX(), player.getY(), player.getZ(), 0, 0, 0);
-				
 				Vec3 look = player.getLookAngle();
 				Vec3 movement = player.getDeltaMovement();
+				
+				player.level().playSound(player, player.blockPosition(), MSSoundEvents.ITEM_JETPACK_FLIGHT.get(), SoundSource.PLAYERS, 1, player.getRandom().nextFloat()+0.35f);
+				player.level().addParticle(MSParticleType.EXHAUST.get(), player.getX(), player.getY(), player.getZ(), 0, 0, 0);
+				player.level().addParticle(MSParticleType.EXHAUST.get(), player.getX()-movement.x/2, player.getY()-movement.y/2, player.getZ()-movement.z/2, 0, 0, 0);
+				
 				player.setDeltaMovement(movement.add(
 						look.x * 0.1D + (look.x * 1.5D - movement.x) * 0.2D,
 						look.y * 0.1D + (look.y * 1.5D - movement.y) * 0.2D,

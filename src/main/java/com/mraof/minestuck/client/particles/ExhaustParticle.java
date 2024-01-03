@@ -12,6 +12,9 @@ public class ExhaustParticle extends TextureSheetParticle
 	{
 		super(clientLevel, x, y, z);
 		
+		this.scale(3.5f);
+		this.lifetime = 12;
+		
 		this.spriteSet = spriteSet;
 		this.setSpriteFromAge(this.spriteSet);
 	}
