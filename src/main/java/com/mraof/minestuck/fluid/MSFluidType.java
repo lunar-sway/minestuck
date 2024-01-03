@@ -11,27 +11,16 @@ import net.minecraftforge.fluids.FluidType;
 
 public class MSFluidType extends FluidType
 {
-	private final FLUID_STYLE fluidStyle;
+	private final Style fluidStyle;
 	
-	public enum FLUID_STYLE
+	public record Style(double xzMovement, double yMovement, float soundPitch)
 	{
-		VISCOUS(0.65D, 0.8D, 0.1F),
-		PARTIALLY_VISCOUS(0.8D, 0.8D, 0.5F),
-		RUNNY(0.9D, 0.9D, 0.8F);
-		
-		public final double xzMovement;
-		public final double yMovement;
-		public final float soundPitch;
-		
-		FLUID_STYLE(double xzMovement, double yMovement, float soundPitch)
-		{
-			this.xzMovement = xzMovement;
-			this.yMovement = yMovement;
-			this.soundPitch = soundPitch;
-		}
+		public static final Style VISCOUS = new Style(0.65D, 0.8D, 0.1F);
+		public static final Style PARTIALLY_VISCOUS = new Style(0.8D, 0.8D, 0.5F);
+		public static final Style RUNNY = new Style(0.9D, 0.9D, 0.8F);
 	}
 	
-	public MSFluidType(Properties properties, FLUID_STYLE fluidStyle)
+	public MSFluidType(Properties properties, Style fluidStyle)
 	{
 		super(properties);
 		this.fluidStyle = fluidStyle;
@@ -47,7 +36,7 @@ public class MSFluidType extends FluidType
 	{
 		//modified version of code in {https://github.com/RCXcrafter/EmbersRekindled/blob/rekindled/src/main/java/com/rekindled/embers/fluidtypes/ViscousFluidType.java}
 		//which is a modified version of code in LivingEntity travel()
-		FLUID_STYLE fluidStyle = fluidType.getFluidStyle();
+		Style fluidStyle = fluidType.getFluidStyle();
 		gravity = gravity * fluidStyle.yMovement;
 		double initialY = entity.getY();
 		boolean isSinking = entity.getDeltaMovement().y <= 0.0D && !passesMovementThreshold(entity);
@@ -60,7 +49,7 @@ public class MSFluidType extends FluidType
 			entity.setDeltaMovement(entity.getDeltaMovement().multiply(fluidStyle.xzMovement, fluidStyle.yMovement, fluidStyle.xzMovement));
 			Vec3 fallAdjustedMoveVec = entity.getFluidFallingAdjustedMovement(gravity / 8.0D, isSinking, entity.getDeltaMovement());
 			entity.setDeltaMovement(fallAdjustedMoveVec);
-			if(!entity.isSwimming() && fluidStyle != FLUID_STYLE.VISCOUS)
+			if(!entity.isSwimming() && fluidStyle != Style.VISCOUS)
 				splashSounds(entity, fluidStyle);
 		} else
 		{
@@ -84,7 +73,7 @@ public class MSFluidType extends FluidType
 		return true;
 	}
 	
-	private static void splashSounds(LivingEntity entity, FLUID_STYLE movementType)
+	private static void splashSounds(LivingEntity entity, Style movementType)
 	{
 		SoundEvent splashSound = entity instanceof Player ? SoundEvents.PLAYER_SPLASH : SoundEvents.GENERIC_SPLASH;
 		if(passesMovementThreshold(entity) && entity.yOld > entity.getY())
@@ -100,7 +89,7 @@ public class MSFluidType extends FluidType
 		return oldPosVec.distanceTo(newPosVec) >= 0.05D;
 	}
 	
-	private static void swimSounds(LivingEntity entity, FLUID_STYLE movementType)
+	private static void swimSounds(LivingEntity entity, Style movementType)
 	{
 		SoundEvent swimSound = entity instanceof Player ? SoundEvents.PLAYER_SWIM : SoundEvents.GENERIC_SWIM;
 		if(passesMovementThreshold(entity))
@@ -112,7 +101,7 @@ public class MSFluidType extends FluidType
 		}
 	}
 	
-	public FLUID_STYLE getFluidStyle()
+	public Style getFluidStyle()
 	{
 		return fluidStyle;
 	}

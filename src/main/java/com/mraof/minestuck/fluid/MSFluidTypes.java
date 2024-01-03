@@ -28,7 +28,7 @@ public class MSFluidTypes
 			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH),
-			MSFluidType.FLUID_STYLE.VISCOUS)
+			MSFluidType.Style.VISCOUS)
 	{
 		@Override
 		public boolean canExtinguish(Entity entity)
@@ -74,7 +74,7 @@ public class MSFluidTypes
 			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH),
-			MSFluidType.FLUID_STYLE.RUNNY)
+			MSFluidType.Style.RUNNY)
 	{
 		@Override
 		public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
@@ -110,7 +110,7 @@ public class MSFluidTypes
 			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH),
-			MSFluidType.FLUID_STYLE.PARTIALLY_VISCOUS)
+			MSFluidType.Style.PARTIALLY_VISCOUS)
 	{
 		@Override
 		public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
@@ -148,7 +148,7 @@ public class MSFluidTypes
 			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH),
-			MSFluidType.FLUID_STYLE.PARTIALLY_VISCOUS)
+			MSFluidType.Style.PARTIALLY_VISCOUS)
 	{
 		@Override
 		public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
@@ -184,7 +184,7 @@ public class MSFluidTypes
 			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH),
-			MSFluidType.FLUID_STYLE.PARTIALLY_VISCOUS)
+			MSFluidType.Style.PARTIALLY_VISCOUS)
 	{
 		@Override
 		public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
@@ -217,7 +217,7 @@ public class MSFluidTypes
 			.fallDistanceModifier(0F)
 			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
 			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
-			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH), MSFluidType.FLUID_STYLE.VISCOUS)
+			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH), MSFluidType.Style.VISCOUS)
 	{
 		@Override
 		public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
