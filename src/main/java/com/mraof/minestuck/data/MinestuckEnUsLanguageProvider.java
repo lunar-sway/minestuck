@@ -1345,6 +1345,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.GOLD_BOAT, "Golden Boat");
 		addItem(MSItems.FLARP_MANUAL, "Flarp Manual");
 		addItem(MSItems.SASSACRE_TEXT, "Sassacre Text");
+		addItem(MSItems.THRUST_CONTROLLER, "Jet Pack Joysticks");
+		addItem(MSItems.JETPACK, "Jetpack");
 		addItem(MSItems.WISEGUY, "Wise Guy");
 		addItem(MSItems.TABLESTUCK_MANUAL, "Tablestuck Manual");
 		addItem(MSItems.TILLDEATH_HANDBOOK, "~ATH Handbook");
@@ -2460,6 +2462,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("electric_autoharp_stroke", "Chord plays on electric autoharp");
 		addSubtitles("magic_cast", "Spell cast");
 		addSubtitles("magic_hit", "Spell hits something");
+		addSubtitles("jetpack_flight", "Jetpack thrust");
+		addSubtitles("jetpack_flight_stop", "Jetpack thrust cuts off");
 		addSubtitles("baton_orchestra", "An orchestra plays briefly");
 		addSubtitles("lotus_flower_loot_spawn", "Items pop into existence");
 		addSubtitles("lotus_flower_open", "Flower unfurls");

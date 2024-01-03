@@ -57,6 +57,10 @@ public class MSItemTypes
 			Map.of(ArmorItem.Type.BOOTS, 1, ArmorItem.Type.LEGGINGS, 2, ArmorItem.Type.CHESTPLATE, 3, ArmorItem.Type.HELMET, 1),
 			0, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
 	
+	public static final ArmorMaterial JETPACK = new ModArmorMaterial("minestuck:jetpack", 50,
+			Map.of(ArmorItem.Type.CHESTPLATE, 0),
+			15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.EMPTY);
+	
 	//Base Tools
 	public static final MSToolType SICKLE_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType CLAWS_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);

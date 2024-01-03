@@ -659,6 +659,26 @@
       }
     ]
   },
+  "item.jetpack_flight.thrust": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.jetpack_flight",
+    "sounds": [
+      {
+        "name": "minestuck:item/jetpack_flight",
+        "stream": false
+      }
+    ]
+  },
+  "item.jetpack_flight.stop": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.jetpack_flight_stop",
+    "sounds": [
+      {
+        "name": "minestuck:item/jetpack_flight_stop",
+        "stream": false
+      }
+    ]
+  },
   "item.grimoire.use": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.whispers",

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.model.armor;
 
-import com.mraof.minestuck.item.MSArmorItem;
+import com.mraof.minestuck.item.armor.MSArmorItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

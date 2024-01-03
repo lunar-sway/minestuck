@@ -84,6 +84,8 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> ENTITY_GICLOPS_HURT = register("entity.giclops.hurt");
 	public static final RegistryObject<SoundEvent> ENTITY_GICLOPS_DEATH = register("entity.giclops.death");
 	public static final RegistryObject<SoundEvent> ITEM_LONG_FORGOTTEN_WARHORN_USE = register("item.long_forgotten_warhorn.use");
+	public static final RegistryObject<SoundEvent> JETPACK_THRUST = register("item.jetpack_flight.thrust");
+	public static final RegistryObject<SoundEvent> JETPACK_THRUST_STOP = register("item.jetpack_flight.stop");
 	public static final RegistryObject<SoundEvent> ITEM_GRIMOIRE_USE = register("item.grimoire.use");
 	public static final RegistryObject<SoundEvent> ITEM_HORN_USE = register("item.horn.use");
 	public static final RegistryObject<SoundEvent> ITEM_EEEEEEEEEEEE_HIT = register("item.eeeeeeeeeeee.hit");
