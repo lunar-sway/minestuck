@@ -50,9 +50,6 @@ public final class SburbConnection
 	//Only used by the edit handler
 	private ListTag inventory;
 	
-	record ActiveConnection(ComputerReference clientComputer, ComputerReference serverComputer)
-	{}
-	
 	SburbConnection(PlayerIdentifier client, SkaianetHandler skaianet)
 	{
 		this(client, IdentifierHandler.NULL_IDENTIFIER, skaianet);
@@ -94,7 +91,7 @@ public final class SburbConnection
 			{
 				ComputerReference clientComputer = ComputerReference.read(nbt.getCompound("client_computer"));
 				ComputerReference serverComputer = ComputerReference.read(nbt.getCompound("server_computer"));
-				activeConnection = new ActiveConnection(clientComputer, serverComputer);
+				activeConnection = new ActiveConnection(this, clientComputer, serverComputer);
 			} catch(Exception e)
 			{
 				LOGGER.error("Unable to read computer position for sburb connection between {} and {}, setting connection to be inactive. Cause: ", clientIdentifier.getUsername(), serverIdentifier.getUsername(), e);
@@ -158,7 +155,7 @@ public final class SburbConnection
 		if(!connection.isActive() || !connection.getClientIdentifier().equals(clientIdentifier)
 				|| !connection.getServerIdentifier().equals(serverIdentifier))
 			throw new IllegalArgumentException();
-		activeConnection = new ActiveConnection(connection.getClientComputer(), connection.getServerComputer());
+		activeConnection = connection.activeConnection;
 	}
 	
 	void setActive(ISburbComputer client, ISburbComputer server, ConnectionCreatedEvent.ConnectionType type)
@@ -168,7 +165,7 @@ public final class SburbConnection
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
 		
-		activeConnection = new ActiveConnection(client.createReference(), server.createReference());
+		activeConnection = new ActiveConnection(this, client.createReference(), server.createReference());
 		skaianet.infoTracker.markDirty(this);
 		
 		client.connected(serverIdentifier, true);
@@ -226,25 +223,9 @@ public final class SburbConnection
 	}
 	
 	@Nullable
-	public ComputerReference getClientComputer()
+	public ActiveConnection getActiveConnection()
 	{
-		return activeConnection == null ? null : activeConnection.clientComputer;
-	}
-	
-	@Nullable
-	public ComputerReference getServerComputer()
-	{
-		return activeConnection == null ? null : activeConnection.serverComputer;
-	}
-	
-	public boolean isClient(ISburbComputer computer)
-	{
-		return activeConnection != null && activeConnection.clientComputer().matches(computer) && getClientIdentifier().equals(computer.getOwner());
-	}
-	
-	public boolean isServer(ISburbComputer computer)
-	{
-		return activeConnection != null && activeConnection.serverComputer().matches(computer) && getServerIdentifier().equals(computer.getOwner());
+		return activeConnection;
 	}
 	
 	void updateComputer(ISburbComputer oldComputer, ComputerReference newComputer)
@@ -253,9 +234,9 @@ public final class SburbConnection
 		if(activeConnection != null)
 		{
 			if(activeConnection.clientComputer().matches(oldComputer))
-				activeConnection = new ActiveConnection(newComputer, activeConnection.serverComputer());
+				activeConnection = new ActiveConnection(this, newComputer, activeConnection.serverComputer());
 			if(activeConnection.serverComputer().matches(oldComputer))
-				activeConnection = new ActiveConnection(activeConnection.clientComputer(), newComputer);
+				activeConnection = new ActiveConnection(this, activeConnection.clientComputer(), newComputer);
 		}
 	}
 	

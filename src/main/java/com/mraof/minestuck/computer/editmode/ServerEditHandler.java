@@ -19,6 +19,7 @@ import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -205,10 +206,11 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
 		{
 			LOGGER.info("Activating edit mode on player \"{}\", target player: \"{}\".", player.getName().getString(), computerTarget);
+			ActiveConnection activeConnection = Objects.requireNonNull(c.getActiveConnection(), "Connection has to be active with a computer position to be used here");
 			DecoyEntity decoy = new DecoyEntity((ServerLevel) player.level(), player);
 			EditData data = new EditData(decoy, player, c);
 			
-			if(!setPlayerStats(player, c))
+			if(!setPlayerStats(player, c, activeConnection))
 			{
 				player.sendSystemMessage(Component.literal("Failed to activate edit mode.").withStyle(ChatFormatting.RED));
 				return;
@@ -229,11 +231,11 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		}
 	}
 	
-	static boolean setPlayerStats(ServerPlayer player, SburbConnection c)
+	static boolean setPlayerStats(ServerPlayer player, SburbConnection c, ActiveConnection activeConnection)
 	{
-		
+		GlobalPos computerPos = activeConnection.clientComputer().getPosForEditmode();
 		double posX, posY, posZ;
-		ResourceKey<Level> landDimension = Objects.requireNonNullElse(c.getLandDimensionIfEntered(), c.getClientComputer().getPosForEditmode().dimension());
+		ResourceKey<Level> landDimension = Objects.requireNonNullElse(c.getLandDimensionIfEntered(), computerPos.dimension());
 		ServerLevel level = player.getServer().getLevel(landDimension);
 		
 		if(lastEditmodePos.containsKey(c))
@@ -243,7 +245,10 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			posZ = lastPos.z;
 		} else
 		{
-			BlockPos center = getEditmodeCenter(c);
+			BlockPos center;
+			if(c.hasEntered())
+				center = new BlockPos(0, 0, 0);
+			else center = computerPos.pos();
 			posX = center.getX() + 0.5;
 			posZ = center.getZ() + 0.5;
 		}
@@ -306,16 +311,6 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	public static EditData getData(DecoyEntity decoy)
 	{
 		return MSExtraData.get(decoy.getCommandSenderWorld()).findEditData(editData -> editData.getDecoy() == decoy);
-	}
-	
-	private static BlockPos getEditmodeCenter(SburbConnection connection)
-	{
-		GlobalPos computerPos = connection.getClientComputer().getPosForEditmode();
-		if(computerPos == null)
-			throw new IllegalStateException("Connection has to be active with a computer position to be used here");
-		if(connection.hasEntered())
-			return new BlockPos(0, 0, 0);
-		else return computerPos.pos();
 	}
 	
 	@SubscribeEvent

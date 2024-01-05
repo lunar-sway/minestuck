@@ -10,6 +10,7 @@ import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSNBTUtil;
@@ -146,9 +147,10 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			tagCompound.putInt("ownerId", owner.getId());
 		if(hasProgram(1))
 		{
-			SburbConnection c = SkaianetHandler.get(getLevel()).getServerConnection(this);
-			if(c != null)
-				tagCompound.getCompound("programData").getCompound("program_1").putInt("connectedClient", c.getClientIdentifier().getId());
+			SkaianetHandler.get(getLevel()).getServerConnection(this).ifPresent(c ->
+					tagCompound.getCompound("programData").getCompound("program_1")
+							.putInt("connectedClient", c.client().getId())
+			);
 		}
 		return tagCompound;
 	}

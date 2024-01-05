@@ -286,11 +286,8 @@ public final class SkaianetHandler extends SavedData
 			computer.putClientMessage(STOP_RESUME);
 		} else
 		{
-			SburbConnection activeConnection = getActiveConnection(owner);
-			if(activeConnection != null && activeConnection.isClient(computer))
-			{
-				closeConnection(activeConnection, computer, activeConnection.getServerComputer().getComputer(mcServer));
-			}
+			getClientConnection(computer).ifPresent(connection ->
+					closeConnection(getConnection(connection), computer, connection.serverComputer().getComputer(mcServer)));
 		}
 	}
 	
@@ -299,12 +296,8 @@ public final class SkaianetHandler extends SavedData
 		checkAndCloseFromServerList(computer, openedServers);
 		checkAndCloseFromServerList(computer, resumingServers);
 		
-		SburbConnection connection = getServerConnection(computer);
-		
-		if(connection != null)
-		{
-			closeConnection(connection, connection.getClientComputer().getComputer(mcServer), computer);
-		}
+		getServerConnection(computer).ifPresent(connection ->
+				closeConnection(getConnection(connection), connection.clientComputer().getComputer(mcServer), computer));
 	}
 	
 	private void checkAndCloseFromServerList(ISburbComputer computer, ComputerWaitingList map)
@@ -320,8 +313,10 @@ public final class SkaianetHandler extends SavedData
 	
 	void closeConnection(SburbConnection connection)
 	{
-		closeConnection(connection, connection.getClientComputer().getComputer(mcServer),
-				connection.getServerComputer().getComputer(mcServer));
+		ActiveConnection activeConnection = connection.getActiveConnection();
+		Objects.requireNonNull(activeConnection);
+		closeConnection(connection, activeConnection.clientComputer().getComputer(mcServer),
+				activeConnection.serverComputer().getComputer(mcServer));
 	}
 	
 	private void closeConnection(SburbConnection connection, ISburbComputer clientComputer, ISburbComputer serverComputer)
@@ -377,17 +372,26 @@ public final class SkaianetHandler extends SavedData
 		resumingServers.validate(mcServer);
 		
 		sessionHandler.getConnectionStream().forEach(c -> {
-			if(c.isActive())
+			ActiveConnection activeConnection = c.getActiveConnection();
+			if(activeConnection != null)
 			{
-				ISburbComputer cc = c.getClientComputer().getComputer(mcServer), sc = c.getServerComputer().getComputer(mcServer);
-				if(cc == null || sc == null || c.getClientComputer().isInNether() || c.getServerComputer().isInNether() || !c.getClientIdentifier().equals(cc.getOwner())
-						|| !c.getServerIdentifier().equals(sc.getOwner()) || !cc.getClientBoolean("connectedToServer"))
+				ISburbComputer cc = activeConnection.clientComputer().getComputer(mcServer),
+						sc = activeConnection.serverComputer().getComputer(mcServer);
+				if(cc == null || sc == null
+						|| activeConnection.clientComputer().isInNether() || activeConnection.serverComputer().isInNether()
+						|| !c.getClientIdentifier().equals(cc.getOwner()) || !c.getServerIdentifier().equals(sc.getOwner())
+						|| !cc.getClientBoolean("connectedToServer"))
 				{
 					LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", c.getClientIdentifier(), c.getServerIdentifier());
 					closeConnection(c, cc, sc);
 				}
 			}
 		});
+	}
+	
+	public SburbConnection getConnection(ActiveConnection connection)
+	{
+		return getConnection(connection.client(), connection.server());
 	}
 	
 	public SburbConnection getConnection(PlayerIdentifier client, PlayerIdentifier server)
@@ -406,19 +410,24 @@ public final class SkaianetHandler extends SavedData
 		return resumingServers.contains(identifier) || openedServers.contains(identifier);
 	}
 	
-	public SburbConnection getServerConnection(ISburbComputer computer)
+	public Optional<ActiveConnection> getServerConnection(ISburbComputer computer)
 	{
-		return sessionHandler.getConnectionStream().filter(c -> c.isServer(computer)).findAny().orElse(null);
+		return activeConnections().filter(c -> c.isServer(computer)).findAny();
 	}
 	
-	public SburbConnection getClientConnection(ISburbComputer computer)
+	public Optional<ActiveConnection> getClientConnection(ISburbComputer computer)
 	{
-		return sessionHandler.getConnectionStream().filter(c -> c.isClient(computer)).findAny().orElse(null);
+		return activeConnections().filter(c -> c.isClient(computer)).findAny();
+	}
+	
+	public Stream<ActiveConnection> activeConnections()
+	{
+		return sessionHandler.getConnectionStream().flatMap(connection -> Stream.ofNullable(connection.getActiveConnection()));
 	}
 	
 	public Stream<SburbConnection> getConnectionsInEntry()
 	{
-		return sessionHandler.getConnectionStream().filter(connection -> connection.isActive() && connection.isMain() && !connection.hasEntered());
+		return sessionHandler.getConnectionStream().filter(connection -> connection.isMain() && !connection.hasEntered());
 	}
 	
 	/**
