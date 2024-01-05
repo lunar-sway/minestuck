@@ -111,55 +111,55 @@ public final class SkaianetHandler extends SavedData
 		
 		ISburbComputer serverComputer = openedServers.getComputer(mcServer, server);
 		
-		if(serverComputer != null)
+		if(serverComputer == null)
+			return;
+		
+		Optional<SburbConnection> optional = getPrimaryConnection(player, true);
+		if(optional.isEmpty())
 		{
-			Optional<SburbConnection> optional = getPrimaryConnection(player, true);
-			if(optional.isPresent())
+			try
 			{
-				SburbConnection connection = optional.get();
-				if(connection.getServerIdentifier().equals(server))
-				{
-					connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
-					openedServers.remove(server);
-				} else if(!connection.hasServerPlayer())
-				{
-					try
-					{
-						sessionHandler.getSessionForConnecting(player, server);
-						connection.setNewServerPlayer(server);
-						
-						connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.NEW_SERVER);
-						openedServers.remove(server);
-					} catch(MergeResult.SessionMergeException e)
-					{
-						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-						computer.putClientMessage(e.getResult().translationKey());
-					}
-				} else
-				{
-					try
-					{
-						SburbConnection newConnection = tryCreateSecondaryConnectionFor(connection, server);
-						newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.SECONDARY);
-						openedServers.remove(server);
-					} catch(MergeResult.SessionMergeException e)
-					{
-						LOGGER.warn("Secondary connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-						computer.putClientMessage(e.getResult().translationKey());
-					}
-				}
-			} else
+				SburbConnection newConnection = tryCreateNewConnectionFor(player, server);
+				newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.REGULAR);
+				openedServers.remove(server);
+			} catch(MergeResult.SessionMergeException e)
 			{
-				try
-				{
-					SburbConnection newConnection = tryCreateNewConnectionFor(player, server);
-					newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.REGULAR);
-					openedServers.remove(server);
-				} catch(MergeResult.SessionMergeException e)
-				{
-					LOGGER.warn("Connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-					computer.putClientMessage(e.getResult().translationKey());
-				}
+				LOGGER.warn("Connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
+				computer.putClientMessage(e.getResult().translationKey());
+			}
+			return;
+		}
+		
+		SburbConnection connection = optional.get();
+		if(connection.getServerIdentifier().equals(server))
+		{
+			connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
+			openedServers.remove(server);
+		} else if(!connection.hasServerPlayer())
+		{
+			try
+			{
+				sessionHandler.getSessionForConnecting(player, server);
+				connection.setNewServerPlayer(server);
+				
+				connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.NEW_SERVER);
+				openedServers.remove(server);
+			} catch(MergeResult.SessionMergeException e)
+			{
+				LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
+				computer.putClientMessage(e.getResult().translationKey());
+			}
+		} else
+		{
+			try
+			{
+				SburbConnection newConnection = tryCreateSecondaryConnectionFor(connection, server);
+				newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.SECONDARY);
+				openedServers.remove(server);
+			} catch(MergeResult.SessionMergeException e)
+			{
+				LOGGER.warn("Secondary connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
+				computer.putClientMessage(e.getResult().translationKey());
 			}
 		}
 	}
