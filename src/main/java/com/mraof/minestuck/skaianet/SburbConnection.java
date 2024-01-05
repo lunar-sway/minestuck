@@ -41,7 +41,6 @@ public final class SburbConnection
 	
 	private boolean isActive;
 	private boolean isMain;
-	boolean lockedToSession;
 	private boolean hasEntered = false;    //If the player has entered. Is set to true after entry has finished
 	@Nullable
 	private ResourceKey<Level> clientLandKey;    //The land info for this client player. This is initialized in preparation for entry
@@ -63,7 +62,6 @@ public final class SburbConnection
 		clientIdentifier = Objects.requireNonNull(client);
 		serverIdentifier = Objects.requireNonNull(server);
 		this.skaianet = skaianet;
-		this.lockedToSession = false;
 	}
 	
 	SburbConnection(CompoundTag nbt, SkaianetHandler skaianet)
@@ -79,7 +77,6 @@ public final class SburbConnection
 		{
 			active = nbt.getBoolean("IsActive");
 			
-			lockedToSession = nbt.getBoolean("locked");
 			ListTag list = nbt.getList("GivenItems", Tag.TAG_STRING);
 			for(int i = 0; i < list.size(); i++)
 			{
@@ -122,7 +119,6 @@ public final class SburbConnection
 		if(isMain)
 		{
 			nbt.putBoolean("IsActive", isActive);
-			nbt.putBoolean("locked", lockedToSession);
 			ListTag list = new ListTag();
 			for(String name : givenItemList)
 				list.add(StringTag.valueOf(name));
@@ -289,6 +285,11 @@ public final class SburbConnection
 		return hasEntered;
 	}
 	
+	public boolean isLockedToSession()
+	{
+		return false;
+	}
+	
 	public Title getClientTitle()
 	{
 		if(hasEntered())
@@ -399,7 +400,6 @@ public final class SburbConnection
 	
 	void copyFrom(SburbConnection other)
 	{
-		lockedToSession = other.lockedToSession;
 		clientLandKey = other.clientLandKey;
 		hasEntered = other.hasEntered;
 		artifactType = other.artifactType;
