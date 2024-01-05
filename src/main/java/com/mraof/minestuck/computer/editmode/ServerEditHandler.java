@@ -65,7 +65,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -90,8 +89,6 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
 	
-	static final Map<SburbConnection, Vec3> lastEditmodePos = new HashMap<>();
-	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
 	 */
@@ -102,23 +99,17 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	}
 	
 	@SubscribeEvent
-	public static void serverStopped(ServerStoppedEvent event)
-	{
-		lastEditmodePos.clear();
-	}
-	
-	@SubscribeEvent
 	public static void onDisconnect(ConnectionClosedEvent event)
 	{
 		reset(getData(event.getMinecraftServer(), event.getConnection()));
-		lastEditmodePos.remove(event.getConnection());
 	}
 	
 	@SubscribeEvent
 	public static void onEntry(SburbEvent.OnEntry event)
 	{
-		lastEditmodePos.remove(event.getConnection());
-		//TODO remove overworld
+		ActiveConnection connection = event.getConnection().getActiveConnection();
+		if(connection != null)
+			connection.lastEditmodePosition = null;
 	}
 	
 	@SubscribeEvent
@@ -238,11 +229,10 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		ResourceKey<Level> landDimension = Objects.requireNonNullElse(c.getLandDimensionIfEntered(), computerPos.dimension());
 		ServerLevel level = player.getServer().getLevel(landDimension);
 		
-		if(lastEditmodePos.containsKey(c))
+		if(activeConnection.lastEditmodePosition != null)
 		{
-			Vec3 lastPos = lastEditmodePos.get(c);
-			posX = lastPos.x;
-			posZ = lastPos.z;
+			posX = activeConnection.lastEditmodePosition.x;
+			posZ = activeConnection.lastEditmodePosition.z;
 		} else
 		{
 			BlockPos center;

@@ -3,10 +3,27 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import net.minecraft.world.phys.Vec3;
 
-public record ActiveConnection(PlayerIdentifier client, ComputerReference clientComputer,
-							   PlayerIdentifier server, ComputerReference serverComputer)
+import javax.annotation.Nullable;
+import java.util.Objects;
+
+public final class ActiveConnection
 {
+	private final PlayerIdentifier client;
+	private final ComputerReference clientComputer;
+	private final PlayerIdentifier server;
+	private final ComputerReference serverComputer;
+	
+	ActiveConnection(PlayerIdentifier client, ComputerReference clientComputer,
+							PlayerIdentifier server, ComputerReference serverComputer)
+	{
+		this.client = client;
+		this.clientComputer = clientComputer;
+		this.server = server;
+		this.serverComputer = serverComputer;
+	}
+	
 	ActiveConnection(SburbConnection connection, ComputerReference clientComputer, ComputerReference serverComputer)
 	{
 		this(connection.getClientIdentifier(), clientComputer, connection.getServerIdentifier(), serverComputer);
@@ -21,4 +38,27 @@ public record ActiveConnection(PlayerIdentifier client, ComputerReference client
 	{
 		return this.serverComputer().matches(computer) && this.server().equals(computer.getOwner());
 	}
+	
+	public PlayerIdentifier client()
+	{
+		return client;
+	}
+	
+	public ComputerReference clientComputer()
+	{
+		return clientComputer;
+	}
+	
+	public PlayerIdentifier server()
+	{
+		return server;
+	}
+	
+	public ComputerReference serverComputer()
+	{
+		return serverComputer;
+	}
+	
+	@Nullable
+	public Vec3 lastEditmodePosition;
 }

@@ -21,9 +21,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nullable;
 
 /**
  * Data structure used by the server sided EditHandler
@@ -250,21 +251,18 @@ public class EditData
 			return clientPlayer;
 		}
 		
-		public void recover(SburbConnection connection)
-		{
-			recover(connection, null);
-		}
-		
-		void recover(SburbConnection connection, ServerPlayer editPlayer)
+		public void recover(@Nullable SburbConnection connection)
 		{
 			if(connection != null)
-			{
-				connection.putEditmodeInventory(this.inventory);
-				if(editPlayer != null)
-				{
-					ServerEditHandler.lastEditmodePos.put(connection, new Vec3(editPlayer.getX(), editPlayer.getY(), editPlayer.getZ()));
-				}
-			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
+				recover(connection, null);
+			else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
+		}
+		
+		void recover(SburbConnection connection, @Nullable ServerPlayer editPlayer)
+		{
+			connection.putEditmodeInventory(this.inventory);
+			if(editPlayer != null && connection.getActiveConnection() != null)
+				connection.getActiveConnection().lastEditmodePosition = editPlayer.position();
 		}
 	}
 }
