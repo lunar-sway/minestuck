@@ -104,8 +104,7 @@ public final class InfoTracker
 			LOGGER.warn("[Skaianet] Player {} already got the requested data.", player.getName());
 		}
 		
-		SkaianetInfoPacket packet = generateClientInfoPacket(p1);
-		MSPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(generateClientInfoPacket(p1), player);
 	}
 	
 	
@@ -206,7 +205,7 @@ public final class InfoTracker
 	
 	private void sendConnectionInfo(PlayerIdentifier player)
 	{
-		SkaianetInfoPacket packet = generateClientInfoPacket(player);
+		SkaianetInfoPacket.Data packet = generateClientInfoPacket(player);
 		
 		for(PlayerIdentifier listener : getSet(player))
 		{
@@ -226,7 +225,7 @@ public final class InfoTracker
 		}
 	}
 	
-	private SkaianetInfoPacket generateClientInfoPacket(PlayerIdentifier player)
+	private SkaianetInfoPacket.Data generateClientInfoPacket(PlayerIdentifier player)
 	{
 		boolean clientResuming = skaianet.hasResumingClient(player);
 		boolean serverResuming = skaianet.hasResumingServer(player);
@@ -237,7 +236,7 @@ public final class InfoTracker
 		// create list with all connections that the player is in
 		List<ReducedConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
 		
-		return SkaianetInfoPacket.update(player.getId(), clientResuming, serverResuming, serverMap, list);
+		return new SkaianetInfoPacket.Data(player.getId(), clientResuming, serverResuming, serverMap, list);
 	}
 	
 	private void checkListeners()

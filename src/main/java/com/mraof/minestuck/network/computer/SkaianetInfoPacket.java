@@ -13,40 +13,15 @@ import net.minecraft.world.level.Level;
 
 import java.util.*;
 
-public class SkaianetInfoPacket implements MSPacket.PlayToBoth
+public final class SkaianetInfoPacket
 {
-	public int playerId;
-	public boolean isClientResuming, isServerResuming;
-	public Map<Integer, String> openServers;
-	public List<ReducedConnection> connections;
-	
-	public static SkaianetInfoPacket update(int playerId, boolean isClientResuming, boolean isServerResuming, Map<Integer, String> openServers, List<ReducedConnection> connections)
+	public record Data(int playerId, boolean isClientResuming, boolean isServerResuming,
+					   Map<Integer, String> openServers, List<ReducedConnection> connections) implements MSPacket.PlayToClient
 	{
-		SkaianetInfoPacket packet = new SkaianetInfoPacket();
-		packet.playerId = playerId;
-		packet.isClientResuming = isClientResuming;
-		packet.isServerResuming = isServerResuming;
-		packet.openServers = openServers;
-		packet.connections = connections;
-		
-		return packet;
-	}
-	
-	public static SkaianetInfoPacket request(int playerId)
-	{
-		SkaianetInfoPacket packet = new SkaianetInfoPacket();
-		packet.playerId = playerId;
-		
-		return packet;
-	}
-	
-	@Override
-	public void encode(FriendlyByteBuf buffer)
-	{
-		buffer.writeInt(playerId);
-		
-		if(connections != null)
+		@Override
+		public void encode(FriendlyByteBuf buffer)
 		{
+			buffer.writeInt(playerId);
 			
 			buffer.writeBoolean(isClientResuming);
 			buffer.writeBoolean(isServerResuming);
@@ -58,43 +33,53 @@ public class SkaianetInfoPacket implements MSPacket.PlayToBoth
 				buffer.writeUtf(entry.getValue(), 16);
 			}
 			
-			for(ReducedConnection connection : connections)
-				connection.write(buffer);
+			buffer.writeCollection(connections, (buffer1, connection) -> connection.write(buffer1));
 		}
-	}
-	
-	public static SkaianetInfoPacket decode(FriendlyByteBuf buffer)
-	{
-		SkaianetInfoPacket packet = new SkaianetInfoPacket();
-		packet.playerId = buffer.readInt();
 		
-		if(buffer.readableBytes() > 0)
+		public static Data decode(FriendlyByteBuf buffer)
 		{
-			packet.isClientResuming = buffer.readBoolean();
-			packet.isServerResuming = buffer.readBoolean();
+			int playerId = buffer.readInt();
+			
+			boolean isClientResuming = buffer.readBoolean();
+			boolean isServerResuming = buffer.readBoolean();
 			int size = buffer.readInt();
-			packet.openServers = new HashMap<>();
+			Map<Integer, String> openServers = new HashMap<>();
 			for(int i = 0; i < size; i++)
-				packet.openServers.put(buffer.readInt(), buffer.readUtf(16));
-			packet.connections = new ArrayList<>();
-			while(buffer.readableBytes() > 0)
-				packet.connections.add(ReducedConnection.read(buffer));
+				openServers.put(buffer.readInt(), buffer.readUtf(16));
+			
+			List<ReducedConnection> connections = buffer.readList(ReducedConnection::read);
+			
+			return new Data(playerId, isClientResuming, isServerResuming, openServers, connections);
 		}
 		
-		return packet;
+		@Override
+		public void execute()
+		{
+			SkaiaClient.handlePacket(this);
+		}
 	}
 	
-	public void execute()
+	public record Request(int playerId) implements MSPacket.PlayToServer
 	{
-		SkaiaClient.consumePacket(this);
+		@Override
+		public void encode(FriendlyByteBuf buffer)
+		{
+			buffer.writeInt(this.playerId);
+		}
+		
+		public static Request decode(FriendlyByteBuf buffer)
+		{
+			return new Request(buffer.readInt());
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			SkaianetHandler.get(player.server).requestInfo(player, IdentifierHandler.getById(this.playerId));
+		}
 	}
 	
-	public void execute(ServerPlayer player)
-	{
-		SkaianetHandler.get(player.server).requestInfo(player, IdentifierHandler.getById(this.playerId));
-	}
-	
-	public record LandChains(List<List<ResourceKey<Level>>> landChains) implements PlayToClient
+	public record LandChains(List<List<ResourceKey<Level>>> landChains) implements MSPacket.PlayToClient
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)

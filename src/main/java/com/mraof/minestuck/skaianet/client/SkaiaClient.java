@@ -58,8 +58,7 @@ public class SkaiaClient
 		boolean b = openServers.get(computer.ownerId) != null;
 		if(!b)
 		{
-			SkaianetInfoPacket packet = SkaianetInfoPacket.request(computer.ownerId);
-			MSPacketHandler.sendToServer(packet);
+			MSPacketHandler.sendToServer(new SkaianetInfoPacket.Request(computer.ownerId));
 			be = computer;
 		}
 		return b;
@@ -125,22 +124,22 @@ public class SkaiaClient
 		return null;
 	}
 	
-	public static void consumePacket(SkaianetInfoPacket data)
+	public static void handlePacket(SkaianetInfoPacket.Data data)
 	{
 		if(playerId == -1)
-			playerId = data.playerId;	//The first info packet is expected to be regarding the receiving player.
-		openServers.put(data.playerId, data.openServers);
+			playerId = data.playerId();	//The first info packet is expected to be regarding the receiving player.
+		openServers.put(data.playerId(), data.openServers());
 		
-		resumingClient.put(data.playerId, data.isClientResuming);
-		serverWaiting.put(data.playerId, data.isServerResuming);
+		resumingClient.put(data.playerId(), data.isClientResuming());
+		serverWaiting.put(data.playerId(), data.isServerResuming());
 		
-		connections.removeIf(c -> c.client().id() == data.playerId || c.server().id() == data.playerId);
-		connections.addAll(data.connections);
+		connections.removeIf(c -> c.client().id() == data.playerId() || c.server().id() == data.playerId());
+		connections.addAll(data.connections());
 		
 		Screen gui = Minecraft.getInstance().screen;
 		if(gui instanceof ComputerScreen computerScreen)
 			computerScreen.updateGui();
-		else if(be != null && be.ownerId == data.playerId)
+		else if(be != null && be.ownerId == data.playerId())
 		{
 			if(!Minecraft.getInstance().player.isShiftKeyDown())
 				MSScreenFactories.displayComputerScreen(be);
