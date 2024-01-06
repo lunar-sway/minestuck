@@ -4,8 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -56,9 +55,9 @@ public class GristLayerInfo
 			long seed = level.getSeed();
 			
 			GristType baseType;
-			SburbConnection connection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
-			if (connection != null)
-				baseType = connection.data().getBaseGrist();
+			Optional<SburbPlayerData> landData = SburbPlayerData.getForLand(level);
+			if (landData.isPresent())
+				baseType = landData.get().getBaseGrist();
 			else
 			{
 				LOGGER.error("Unable to find sburb connection for land dimension \"{}\" when creating grist layers. Defaulting to amber base type.", level.dimension().location());

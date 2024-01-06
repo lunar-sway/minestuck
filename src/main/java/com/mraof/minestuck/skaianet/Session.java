@@ -202,7 +202,7 @@ public final class Session
 		{
 			if(!c.getClientIdentifier().equals(ignore))
 			{
-				LandTypePair.getTypes(server, c.data().getClientDimension())
+				LandTypePair.getTypes(server, c.data().getLandDimension())
 						.ifPresent(landTypes -> types.add(landTypes.getTitle()));
 			}
 		}
@@ -226,7 +226,7 @@ public final class Session
 		{
 			if(!c.getClientIdentifier().equals(ignore))
 			{
-				LandTypePair.getTypes(server, c.data().getClientDimension())
+				LandTypePair.getTypes(server, c.data().getLandDimension())
 						.ifPresent(landTypes -> types.add(landTypes.getTerrain()));
 			}
 		}

@@ -45,7 +45,7 @@ public final class SkaianetHandler extends SavedData
 	final ComputerWaitingList openedServers = new ComputerWaitingList(infoTracker, false, "opened server");
 	private final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
 	private final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
-	final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
+	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
 	final SessionHandler sessionHandler;
 	
 	final MinecraftServer mcServer;
@@ -480,12 +480,12 @@ public final class SkaianetHandler extends SavedData
 			}
 		} else if(!c.isMain())
 			SburbHandler.giveItems(mcServer, target);
-		else if(playerData.getClientDimension() != null)
-			return playerData.getClientDimension();
+		else if(playerData.getLandDimension() != null)
+			return playerData.getLandDimension();
 		
 		SburbHandler.prepareEntry(mcServer, playerData);
 		
-		return playerData.getClientDimension();
+		return playerData.getLandDimension();
 	}
 	
 	/**
@@ -500,7 +500,7 @@ public final class SkaianetHandler extends SavedData
 			return;
 		}
 		
-		SburbHandler.onEntry(mcServer, c.get());
+		SburbHandler.onEntry(mcServer, getOrCreateData(target));
 		
 		infoTracker.reloadLandChains();
 		
@@ -522,7 +522,12 @@ public final class SkaianetHandler extends SavedData
 	
 	SburbPlayerData getOrCreateData(PlayerIdentifier player)
 	{
-		return playerDataMap.computeIfAbsent(player, playerId -> new SburbPlayerData(playerId, mcServer));
+		return this.playerDataMap.computeIfAbsent(player, playerId -> new SburbPlayerData(playerId, this.mcServer));
+	}
+	
+	Collection<SburbPlayerData> allPlayerData()
+	{
+		return this.playerDataMap.values();
 	}
 	
 	public static SkaianetHandler get(Level level)

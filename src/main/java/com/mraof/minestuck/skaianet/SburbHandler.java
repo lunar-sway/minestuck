@@ -2,16 +2,17 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
-import com.mraof.minestuck.computer.editmode.*;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
+import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.network.chat.Component;
@@ -20,7 +21,6 @@ import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -100,19 +100,6 @@ public final class SburbHandler
 		Item artifact = playerData.artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
 		
 		return ColorHandler.setColor(new ItemStack(artifact), color);
-	}
-	
-	public static SburbConnection getConnectionForDimension(ServerLevel level)
-	{
-		return getConnectionForDimension(level.getServer(), level.dimension());
-	}
-	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, ResourceKey<Level> dim)
-	{
-		if(dim == null)
-			return null;
-		
-		return SessionHandler.get(mcServer).getConnectionStream().filter(c -> c.data().getClientDimension() == dim)
-				.findAny().orElse(null);
 	}
 	
 	/**
@@ -205,18 +192,18 @@ public final class SburbHandler
 		playerData.setLand(dimType);
 	}
 	
-	static void onEntry(MinecraftServer server, SburbConnection c)
+	static void onEntry(MinecraftServer server, SburbPlayerData playerData)
 	{
-		c.data().setHasEntered();
+		playerData.setHasEntered();
 		
-		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
+		SessionHandler.get(server).getPlayerSession(playerData.getPlayerId()).checkIfCompleted();
 		
-		ServerPlayer player = c.getClientIdentifier().getPlayer(server);
+		ServerPlayer player = playerData.getPlayerId().getPlayer(server);
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
-			EditmodeLocations.onEntry(server, c.getClientIdentifier());
+			EditmodeLocations.onEntry(server, playerData.getPlayerId());
 			
 			LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
 			

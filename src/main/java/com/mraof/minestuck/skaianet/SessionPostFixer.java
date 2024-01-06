@@ -20,15 +20,15 @@ public final class SessionPostFixer
 	@SubscribeEvent
 	public static void onServerStarted(ServerStartedEvent event)
 	{
-		for(SburbPlayerData playerData : SkaianetHandler.get(event.getServer()).playerDataMap.values())
+		for(SburbPlayerData playerData : SkaianetHandler.get(event.getServer()).allPlayerData())
 			validate(event.getServer(), playerData);
 	}
 	
 	private static void validate(MinecraftServer mcServer, SburbPlayerData playerData)
 	{
-		if(playerData.getClientDimension() != null && mcServer.getLevel(playerData.getClientDimension()) == null)
+		if(playerData.getLandDimension() != null && mcServer.getLevel(playerData.getLandDimension()) == null)
 		{
-			LOGGER.error("Found missing land dimension \"{}\" in the connection for player {}. Resetting entry status.", playerData.getClientDimension(), playerData.getPlayerId().getUsername());
+			LOGGER.error("Found missing land dimension \"{}\" in the connection for player {}. Resetting entry status.", playerData.getLandDimension(), playerData.getPlayerId().getUsername());
 			playerData.resetEntryState();
 		}
 	}

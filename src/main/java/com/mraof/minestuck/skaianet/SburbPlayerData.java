@@ -12,6 +12,7 @@ import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
@@ -30,7 +32,7 @@ public final class SburbPlayerData
 	private final MinecraftServer mcServer;
 	private boolean hasEntered = false;    //If the player has entered. Is set to true after entry has finished
 	@Nullable
-	private ResourceKey<Level> clientLandKey;    //The land info for this client player. This is initialized in preparation for entry
+	private ResourceKey<Level> landKey;    //The land info for this client player. This is initialized in preparation for entry
 	int artifactType;
 	private GristType baseGrist;
 	
@@ -58,7 +60,7 @@ public final class SburbPlayerData
 		
 		if(tag.contains("ClientLand"))
 		{
-			this.clientLandKey = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, tag.get("ClientLand")).resultOrPartial(LOGGER::error).orElse(null);
+			this.landKey = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, tag.get("ClientLand")).resultOrPartial(LOGGER::error).orElse(null);
 			this.hasEntered = tag.contains("has_entered") ? tag.getBoolean("has_entered") : true;
 		}
 		
@@ -76,9 +78,9 @@ public final class SburbPlayerData
 			list.add(StringTag.valueOf(name));
 		
 		tag.put("GivenItems", list);
-		if(this.clientLandKey != null)
+		if(this.landKey != null)
 		{
-			Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, this.clientLandKey).resultOrPartial(LOGGER::error)
+			Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, this.landKey).resultOrPartial(LOGGER::error)
 					.ifPresent(keyTag -> tag.put("ClientLand", keyTag));
 			tag.putBoolean("has_entered", this.hasEntered);
 		}
@@ -100,38 +102,38 @@ public final class SburbPlayerData
 	@Nullable
 	public ResourceKey<Level> getLandDimensionIfEntered()
 	{
-		return this.hasEntered() ? this.clientLandKey : null;
+		return this.hasEntered() ? this.landKey : null;
 	}
 	
 	/**
-	 * @return The land dimension assigned to the client player.
+	 * @return The land dimension assigned to this player
 	 */
 	@Nullable
-	public ResourceKey<Level> getClientDimension()
+	public ResourceKey<Level> getLandDimension()
 	{
-		return this.clientLandKey;
+		return this.landKey;
 	}
 	
 	void setLand(ResourceKey<Level> dimension)
 	{
-		if(clientLandKey != null)
+		if(landKey != null)
 			throw new IllegalStateException("Can't set land twice");
 		else
 		{
-			clientLandKey = dimension;
+			landKey = dimension;
 		}
 	}
 	
 	void resetEntryState()
 	{
 		hasEntered = false;
-		clientLandKey = null;
+		landKey = null;
 		resendEntryState();
 	}
 	
 	void setHasEntered()
 	{
-		if(clientLandKey == null)
+		if(landKey == null)
 			throw new IllegalStateException("Land has not been initiated, can't have entered now!");
 		if(hasEntered)
 			throw new IllegalStateException("Can't have entered twice");
@@ -203,5 +205,15 @@ public final class SburbPlayerData
 	public static SburbPlayerData get(PlayerIdentifier player, MinecraftServer mcServer)
 	{
 		return SkaianetHandler.get(mcServer).getOrCreateData(player);
+	}
+	
+	public static Optional<SburbPlayerData> getForLand(ServerLevel level)
+	{
+		return getForLand(level.dimension(), level.getServer());
+	}
+	
+	public static Optional<SburbPlayerData> getForLand(ResourceKey<Level> level, MinecraftServer mcServer)
+	{
+		return SkaianetHandler.get(mcServer).allPlayerData().stream().filter(data -> data.getLandDimension() == level).findAny();
 	}
 }

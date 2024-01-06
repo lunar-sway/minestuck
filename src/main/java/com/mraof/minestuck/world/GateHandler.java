@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class GateHandler
@@ -90,42 +92,62 @@ public class GateHandler
 	
 	private static GlobalPos findClientLandGate(ServerLevel level)
 	{
-		SburbConnection landConnection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
-		if(landConnection != null)
+		Optional<PlayerIdentifier> landPlayer = SburbPlayerData.getForLand(level).map(SburbPlayerData::getPlayerId);
+		if(landPlayer.isEmpty())
 		{
-			SburbConnection clientConnection = SkaianetHandler.get(level.getServer()).getPrimaryConnection(landConnection.getClientIdentifier(), false).orElse(null);
-			
-			if(clientConnection != null && clientConnection.data().hasEntered() && MSDimensions.isLandDimension(level.getServer(), clientConnection.data().getClientDimension()))
-			{
-				ResourceKey<Level> clientDim = clientConnection.data().getClientDimension();
-				ServerLevel clientLevel = level.getServer().getLevel(clientDim);
-				BlockPos gatePos = Type.LAND_GATE.getPosition(clientLevel);
-				if(gatePos == null)
-				{LOGGER.error("Unexpected error: Can't initialize land gate placement for dimension {}!", clientDim); return null;}
-				
-				return GlobalPos.of(clientDim, gatePos);
-			}
-			//else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
-		} else
-			LOGGER.error("Unexpected error: Can't find connection for dimension {}!", level.dimension());
-		return null;
+			LOGGER.error("Unexpected error: Can't find player for land {}!", level.dimension());
+			return null;
+		}
+		
+		Optional<ResourceKey<Level>> clientLandOptional = SkaianetHandler.get(level.getServer())
+				.getPrimaryConnection(landPlayer.get(), false)
+				.map(SburbConnection::getClientIdentifier)
+				.flatMap(clientPlayer -> {
+					SburbPlayerData clientPlayerData = SburbPlayerData.get(clientPlayer, level.getServer());
+					return Optional.ofNullable(clientPlayerData.getLandDimensionIfEntered());
+				});
+		
+		if(clientLandOptional.isEmpty())
+		{
+			//player.sendMessage(new TranslationTextComponent(MISSING_LAND));
+			return null;
+		}
+		
+		ResourceKey<Level> clientLand = clientLandOptional.get();
+		ServerLevel clientLevel = level.getServer().getLevel(clientLand);
+		BlockPos gatePos = Type.LAND_GATE.getPosition(clientLevel);
+		if(gatePos == null)
+		{
+			LOGGER.error("Unexpected error: Can't initialize land gate placement for dimension {}!", clientLand);
+			return null;
+		}
+		
+		return GlobalPos.of(clientLand, gatePos);
 	}
 	
 	private static GlobalPos findServerSecondGate(ServerLevel level)
 	{
-		SburbConnection landConnection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
-		if(landConnection != null)
+		Optional<PlayerIdentifier> landPlayer = SburbPlayerData.getForLand(level).map(SburbPlayerData::getPlayerId);
+		if(landPlayer.isEmpty())
 		{
-			SburbPlayerData serverPlayerData = SburbPlayerData.get(landConnection.getServerIdentifier(), level.getServer());
-			
-			ResourceKey<Level> serverDim = serverPlayerData.getLandDimensionIfEntered();
-			if(serverDim != null)
-				return GlobalPos.of(serverDim, Type.GATE_2.getPosition(level.getServer().getLevel(serverDim)));
-			//else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
-			
-		} else
-			LOGGER.error("Unexpected error: Can't find connection for dimension {}!", level.dimension());
-		return null;
+			LOGGER.error("Unexpected error: Can't find player for land {}!", level.dimension());
+			return null;
+		}
+		
+		Optional<ResourceKey<Level>> serverLandOptional = SkaianetHandler.get(level).getPrimaryConnection(landPlayer.get(), true)
+				.filter(SburbConnection::hasServerPlayer).map(SburbConnection::getServerIdentifier)
+				.flatMap(serverPlayer -> {
+					SburbPlayerData serverPlayerData = SburbPlayerData.get(serverPlayer, level.getServer());
+					return Optional.ofNullable(serverPlayerData.getLandDimensionIfEntered());
+				});
+		if(serverLandOptional.isEmpty())
+		{
+			//player.sendMessage(new TranslationTextComponent(MISSING_LAND));
+			return null;
+		}
+		
+		var serverLand = serverLandOptional.get();
+		return GlobalPos.of(serverLand, Type.GATE_2.getPosition(level.getServer().getLevel(serverLand)));
 	}
 	
 	public enum Type
