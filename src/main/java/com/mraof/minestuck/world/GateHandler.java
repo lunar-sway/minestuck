@@ -3,7 +3,6 @@ package com.mraof.minestuck.world;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSTags;
@@ -92,7 +91,7 @@ public class GateHandler
 	
 	private static GlobalPos findClientLandGate(ServerLevel level)
 	{
-		Optional<PlayerIdentifier> landPlayer = SburbPlayerData.getForLand(level).map(SburbPlayerData::getPlayerId);
+		Optional<PlayerIdentifier> landPlayer = SburbPlayerData.getForLand(level).map(SburbPlayerData::playerId);
 		if(landPlayer.isEmpty())
 		{
 			LOGGER.error("Unexpected error: Can't find player for land {}!", level.dimension());
@@ -127,7 +126,7 @@ public class GateHandler
 	
 	private static GlobalPos findServerSecondGate(ServerLevel level)
 	{
-		Optional<PlayerIdentifier> landPlayer = SburbPlayerData.getForLand(level).map(SburbPlayerData::getPlayerId);
+		Optional<PlayerIdentifier> landPlayer = SburbPlayerData.getForLand(level).map(SburbPlayerData::playerId);
 		if(landPlayer.isEmpty())
 		{
 			LOGGER.error("Unexpected error: Can't find player for land {}!", level.dimension());

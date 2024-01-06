@@ -89,7 +89,7 @@ public final class SburbPlayerData
 		MSNBTUtil.writeGristType(tag, "base_grist", this.baseGrist);
 	}
 	
-	public PlayerIdentifier getPlayerId()
+	public PlayerIdentifier playerId()
 	{
 		return playerId;
 	}

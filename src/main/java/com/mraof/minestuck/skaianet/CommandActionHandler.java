@@ -82,7 +82,6 @@ public final class CommandActionHandler
 				Session session = skaianet.sessionHandler.prepareSessionFor(client, server);
 				SburbConnection newConnection = new SburbConnection(client, server, skaianet);
 				session.connections.add(newConnection);
-				SburbHandler.onConnectionCreated(newConnection);
 				newConnection.setIsMain();
 			}
 		} else
@@ -183,7 +182,6 @@ public final class CommandActionHandler
 		
 		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);
 		session.connections.add(c);
-		SburbHandler.onConnectionCreated(c);
 		
 		//The land types used by generation is set during connection init above, so placing gates currently has to go after that
 		ServerLevel level = skaianet.mcServer.getLevel(dimensionName);

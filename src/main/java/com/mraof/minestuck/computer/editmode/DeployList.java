@@ -69,7 +69,7 @@ public final class DeployList
 		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, playerData) -> playerData.getBaseGrist().amount(4), EntryLists.DEPLOY);
 		registerItem("portable_cruxtruder", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines),
-				(playerData, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(playerData.getPlayerId(), level)), EntryLists.DEPLOY);
+				(playerData, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(playerData.playerId(), level)), EntryLists.DEPLOY);
 		registerItem("portable_punch_designix", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX.get()), EntryLists.DEPLOY);
 		registerItem("portable_totem_lathe", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE.get()), EntryLists.DEPLOY);
 		registerItem("portable_alchemiter", GristTypes.BUILD.get().amount(300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER.get()), EntryLists.DEPLOY);
@@ -300,7 +300,7 @@ public final class DeployList
 	
 	public static List<DeployEntry> getItemList(MinecraftServer server, SburbPlayerData playerData, EntryLists entryList)
 	{
-		int tier = SburbHandler.availableTier(server, playerData.getPlayerId());
+		int tier = SburbHandler.availableTier(server, playerData.playerId());
 		ArrayList<DeployEntry> itemList = new ArrayList<>();
 		for(DeployEntry entry : entryList.getList())
 			if(entry.isAvailable(playerData, tier))
@@ -394,7 +394,7 @@ public final class DeployList
 		CompoundTag nbt = new CompoundTag();
 		ListTag tagList = new ListTag();
 		nbt.put("l", tagList);
-		int tier = SburbHandler.availableTier(server, playerData.getPlayerId());
+		int tier = SburbHandler.availableTier(server, playerData.playerId());
 		for(int i = 0; i < entryList.getList().size(); i++)
 		{
 			DeployEntry entry = entryList.getList().get(i);

@@ -28,7 +28,7 @@ public final class SessionPostFixer
 	{
 		if(playerData.getLandDimension() != null && mcServer.getLevel(playerData.getLandDimension()) == null)
 		{
-			LOGGER.error("Found missing land dimension \"{}\" in the connection for player {}. Resetting entry status.", playerData.getLandDimension(), playerData.getPlayerId().getUsername());
+			LOGGER.error("Found missing land dimension \"{}\" in the connection for player {}. Resetting entry status.", playerData.getLandDimension(), playerData.playerId().getUsername());
 			playerData.resetEntryState();
 		}
 	}

@@ -95,7 +95,7 @@ public final class SburbHandler
 	
 	public static ItemStack getEntryItem(Level level, SburbPlayerData playerData)
 	{
-		int color =  ColorHandler.getColorForPlayer(playerData.getPlayerId(), level);
+		int color =  ColorHandler.getColorForPlayer(playerData.playerId(), level);
 		
 		Item artifact = playerData.artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
 		
@@ -181,7 +181,7 @@ public final class SburbHandler
 	
 	static void prepareEntry(MinecraftServer mcServer, SburbPlayerData playerData)
 	{
-		PlayerIdentifier identifier = playerData.getPlayerId();
+		PlayerIdentifier identifier = playerData.playerId();
 		
 		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), identifier);
 		LandTypePair landTypes = genLandAspects(mcServer, identifier);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
@@ -196,14 +196,14 @@ public final class SburbHandler
 	{
 		playerData.setHasEntered();
 		
-		SessionHandler.get(server).getPlayerSession(playerData.getPlayerId()).checkIfCompleted();
+		SessionHandler.get(server).getPlayerSession(playerData.playerId()).checkIfCompleted();
 		
-		ServerPlayer player = playerData.getPlayerId().getPlayer(server);
+		ServerPlayer player = playerData.playerId().getPlayer(server);
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
-			EditmodeLocations.onEntry(server, playerData.getPlayerId());
+			EditmodeLocations.onEntry(server, playerData.playerId());
 			
 			LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
 			
@@ -222,15 +222,12 @@ public final class SburbHandler
 		return SessionHandler.get(mcServer).getConnectionStream().noneMatch(c -> c.getClientIdentifier().equals(player));
 	}
 	
-	/**
-	 * Extra behavior on the creation of a connection, such as generating the artifact type.
-	 */
-	static void onConnectionCreated(SburbConnection c)
+	static void initNewData(SburbPlayerData playerData)
 	{
 		Random rand = new Random();	//TODO seed?
-		c.data().artifactType = rand.nextInt(2);
-		LOGGER.info("Randomized artifact type to be: {} for player {}.", c.data().artifactType, c.getClientIdentifier().getUsername());
-		c.data().setBaseGrist(generateGristType(rand));
+		playerData.artifactType = rand.nextInt(2);
+		LOGGER.info("Randomized artifact type to be: {} for player {}.", playerData.artifactType, playerData.playerId().getUsername());
+		playerData.setBaseGrist(generateGristType(rand));
 	}
 	
 	static GristType generateGristType(Random rand)
@@ -241,7 +238,7 @@ public final class SburbHandler
 	
 	public static void resetGivenItems(MinecraftServer mcServer)
 	{
-		SessionHandler.get(mcServer).getConnectionStream().map(SburbConnection::data).forEach(SburbPlayerData::resetGivenItems);
+		SkaianetHandler.get(mcServer).allPlayerData().forEach(SburbPlayerData::resetGivenItems);
 		
 		DeployList.onConditionsUpdated(mcServer);
 	}

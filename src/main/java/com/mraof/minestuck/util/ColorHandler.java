@@ -108,7 +108,7 @@ public class ColorHandler
 	public static int getColorForDimension(ServerLevel level)
 	{
 		return SburbPlayerData.getForLand(level)
-				.map(data -> getColorForPlayer(data.getPlayerId(), level))
+				.map(data -> getColorForPlayer(data.playerId(), level))
 				.orElse(ColorHandler.DEFAULT_COLOR);
 	}
 	

@@ -62,14 +62,14 @@ public abstract class MessageType
 		Object[] obj = new Object[args.length];
 		Optional<SburbPlayerData> landData = SburbPlayerData.getForLand(consort.homeDimension, player.server);
 		Title worldTitle = landData.map(playerData ->
-				PlayerSavedData.getData(playerData.getPlayerId(), player.server).getTitle()
+				PlayerSavedData.getData(playerData.playerId(), player.server).getTitle()
 		).orElse(null);
 		
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i].equals("player_name_land"))	//TODO How about extendable objects or enums instead of type strings for args?
 			{
-				obj[i] = landData.map(playerData -> playerData.getPlayerId().getUsername())
+				obj[i] = landData.map(playerData -> playerData.playerId().getUsername())
 						.orElse("Player name");
 			} else if(args[i].equals("player_name"))
 			{
