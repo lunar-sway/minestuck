@@ -70,10 +70,10 @@ public class SkaiaClient
 	{
 		for(ReducedConnection c : connections)
 			if(c.isMain())
-				if(isClient && c.getClientId() == playerId)
-					return c.getServerId();
-				else if(!isClient && c.getServerId() == playerId)
-					return c.getClientId();
+				if(isClient && c.client().id() == playerId)
+					return c.server().id();
+				else if(!isClient && c.server().id() == playerId)
+					return c.client().id();
 		return -1;
 	}
 	
@@ -85,7 +85,7 @@ public class SkaiaClient
 	public static boolean enteredMedium(int player)
 	{
 		for(ReducedConnection c : connections)
-			if(c.isMain() && c.getClientId() == player)
+			if(c.isMain() && c.client().id() == player)
 				return c.hasEntered();
 		return false;
 	}
@@ -110,7 +110,7 @@ public class SkaiaClient
 		if(playerId != SkaiaClient.playerId)
 			return false;
 		for(ReducedConnection c : connections)
-			if(playerId == c.getClientId())
+			if(playerId == c.client().id())
 				return false;
 		return true;
 	}
@@ -120,7 +120,7 @@ public class SkaiaClient
 	public static ReducedConnection getClientConnection(int client)
 	{
 		for(ReducedConnection c : connections)
-			if(c.isActive() && c.getClientId() == client)
+			if(c.isActive() && c.client().id() == client)
 				return c;
 		return null;
 	}
@@ -134,8 +134,8 @@ public class SkaiaClient
 		resumingClient.put(data.playerId, data.isClientResuming);
 		serverWaiting.put(data.playerId, data.isServerResuming);
 		
-		connections.removeIf(c -> c.getClientId() == data.playerId || c.getServerId() == data.playerId);
-		connections.addAll(data.connectionsTo);
+		connections.removeIf(c -> c.client().id() == data.playerId || c.server().id() == data.playerId);
+		connections.addAll(data.connections);
 		
 		Screen gui = Minecraft.getInstance().screen;
 		if(gui instanceof ComputerScreen computerScreen)

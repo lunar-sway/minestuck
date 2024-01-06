@@ -2,7 +2,6 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -19,17 +18,16 @@ public class SkaianetInfoPacket implements MSPacket.PlayToBoth
 	public int playerId;
 	public boolean isClientResuming, isServerResuming;
 	public Map<Integer, String> openServers;
-	public List<SburbConnection> connectionsFrom;
-	public List<ReducedConnection> connectionsTo;
+	public List<ReducedConnection> connections;
 	
-	public static SkaianetInfoPacket update(int playerId, boolean isClientResuming, boolean isServerResuming, Map<Integer, String> openServers, List<SburbConnection> connections)
+	public static SkaianetInfoPacket update(int playerId, boolean isClientResuming, boolean isServerResuming, Map<Integer, String> openServers, List<ReducedConnection> connections)
 	{
 		SkaianetInfoPacket packet = new SkaianetInfoPacket();
 		packet.playerId = playerId;
 		packet.isClientResuming = isClientResuming;
 		packet.isServerResuming = isServerResuming;
 		packet.openServers = openServers;
-		packet.connectionsFrom = connections;
+		packet.connections = connections;
 		
 		return packet;
 	}
@@ -47,7 +45,7 @@ public class SkaianetInfoPacket implements MSPacket.PlayToBoth
 	{
 		buffer.writeInt(playerId);
 		
-		if(connectionsFrom != null)
+		if(connections != null)
 		{
 			
 			buffer.writeBoolean(isClientResuming);
@@ -60,8 +58,8 @@ public class SkaianetInfoPacket implements MSPacket.PlayToBoth
 				buffer.writeUtf(entry.getValue(), 16);
 			}
 			
-			for(SburbConnection connection : connectionsFrom)
-				connection.toBuffer(buffer);
+			for(ReducedConnection connection : connections)
+				connection.write(buffer);
 		}
 	}
 	
@@ -78,9 +76,9 @@ public class SkaianetInfoPacket implements MSPacket.PlayToBoth
 			packet.openServers = new HashMap<>();
 			for(int i = 0; i < size; i++)
 				packet.openServers.put(buffer.readInt(), buffer.readUtf(16));
-			packet.connectionsTo = new ArrayList<>();
+			packet.connections = new ArrayList<>();
 			while(buffer.readableBytes() > 0)
-				packet.connectionsTo.add(ReducedConnection.read(buffer));
+				packet.connections.add(ReducedConnection.read(buffer));
 		}
 		
 		return packet;

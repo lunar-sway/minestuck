@@ -7,34 +7,18 @@ import net.minecraft.network.FriendlyByteBuf;
 /**
  * The client side version of {@link SburbConnection}
  */
-public class ReducedConnection
+public record ReducedConnection(NamedPlayerId client, NamedPlayerId server, boolean isActive, boolean isMain, boolean hasEntered)
 {
-	private final NamedPlayerId client, server;
-	
-	private final boolean isActive;
-	private final boolean isMain;
-	private final boolean hasEntered;
-	
-	//client side
-	public String getClientDisplayName() {return client.name();}
-	public String getServerDisplayName() {return server.name();}
-	public int getClientId() {return client.id();}
-	public int getServerId() {return server.id();}
-	public boolean isActive() {return isActive;}
-	public boolean isMain() {return isMain;}
-	public boolean hasEntered() {return hasEntered;}
-	
-	/**
-	 * Reads a connection from a network buffer. Must match with {@link SburbConnection#toBuffer}.
-	 */
-	public static ReducedConnection read(FriendlyByteBuf buffer)
+	public ReducedConnection(SburbConnection connection)
 	{
-		return new ReducedConnection(buffer);
+		this(NamedPlayerId.of(connection.getClientIdentifier()), NamedPlayerId.of(connection.getServerIdentifier()),
+				connection.isActive(), connection.isMain(), connection.data().hasEntered());
 	}
 	
-	private ReducedConnection(FriendlyByteBuf buffer)
+	public static ReducedConnection read(FriendlyByteBuf buffer)
 	{
-		isMain = buffer.readBoolean();
+		boolean isMain = buffer.readBoolean();
+		boolean isActive, hasEntered;
 		if(isMain)
 		{
 			isActive = buffer.readBoolean();
@@ -44,7 +28,20 @@ public class ReducedConnection
 			isActive = true;
 			hasEntered = false;
 		}
-		client = NamedPlayerId.read(buffer);
-		server = NamedPlayerId.read(buffer);
+		NamedPlayerId client = NamedPlayerId.read(buffer);
+		NamedPlayerId server = NamedPlayerId.read(buffer);
+		return new ReducedConnection(client, server, isActive, isMain, hasEntered);
+	}
+	
+	public void write(FriendlyByteBuf buffer)
+	{
+		buffer.writeBoolean(isMain);
+		if(isMain)
+		{
+			buffer.writeBoolean(isActive);
+			buffer.writeBoolean(hasEntered);
+		}
+		client.write(buffer);
+		server.write(buffer);
 	}
 }

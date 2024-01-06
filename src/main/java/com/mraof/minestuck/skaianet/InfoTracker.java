@@ -7,6 +7,7 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Works with the info that will be sent to players through {@link SkaianetInfoPacket}
@@ -235,7 +235,7 @@ public final class InfoTracker
 		openedServersCache.put(player, serverMap.keySet());
 		
 		// create list with all connections that the player is in
-		List<SburbConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).collect(Collectors.toList());
+		List<ReducedConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
 		
 		return SkaianetInfoPacket.update(player.getId(), clientResuming, serverResuming, serverMap, list);
 	}

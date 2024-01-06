@@ -33,11 +33,11 @@ public class SburbServer extends ButtonListProgram
 	{
 		int clientId = be.getData(1).contains("connectedClient") ? be.getData(1).getInt("connectedClient") : -1;
 		ReducedConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
-		if(connection != null && connection.getServerId() != be.ownerId)
+		if(connection != null && connection.server().id() != be.ownerId)
 			connection = null;
 		
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		String displayPlayer = connection == null ? "UNDEFINED" : connection.getClientDisplayName();
+		String displayPlayer = connection == null ? "UNDEFINED" : connection.client().name();
 		if(connection != null)
 		{
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));

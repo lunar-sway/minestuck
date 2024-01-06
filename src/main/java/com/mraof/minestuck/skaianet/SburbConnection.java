@@ -3,9 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -224,18 +222,4 @@ public final class SburbConnection
 		this.playerData.copyFrom(other.playerData);
 	}
 	
-	/**
-	 * Writes the connection info needed client-side to a network buffer. Must match with {@link ReducedConnection#read}.
-	 */
-	public void toBuffer(FriendlyByteBuf buffer)
-	{
-		buffer.writeBoolean(isMain);
-		if(isMain)
-		{
-			buffer.writeBoolean(isActive());
-			buffer.writeBoolean(playerData.hasEntered());
-		}
-		NamedPlayerId.of(this.getClientIdentifier()).write(buffer);
-		NamedPlayerId.of(this.getServerIdentifier()).write(buffer);
-	}
 }

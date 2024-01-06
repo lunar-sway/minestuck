@@ -39,7 +39,7 @@ public class SburbClient extends ButtonListProgram
 		ReducedConnection c = SkaiaClient.getClientConnection(be.ownerId);
 		if(nbt.getBoolean("connectedToServer") && c != null) //If it is connected to someone.
 		{
-			String displayPlayer = c.getServerDisplayName();
+			String displayPlayer = c.server().name();
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
 		} else if(nbt.getBoolean("isResuming"))
