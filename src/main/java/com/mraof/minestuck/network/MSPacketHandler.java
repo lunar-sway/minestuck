@@ -48,6 +48,7 @@ public class MSPacketHandler
 		registerToServerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		
 		registerToClientMessage(SkaianetInfoPacket.Data.class, SkaianetInfoPacket.Data::decode);
+		registerToClientMessage(SkaianetInfoPacket.HasEntered.class, SkaianetInfoPacket.HasEntered::decode);
 		registerToServerMessage(SkaianetInfoPacket.Request.class, SkaianetInfoPacket.Request::decode);
 		registerToClientMessage(SkaianetInfoPacket.LandChains.class, SkaianetInfoPacket.LandChains::decode);
 		

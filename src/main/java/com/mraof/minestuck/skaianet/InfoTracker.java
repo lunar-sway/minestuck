@@ -81,6 +81,7 @@ public final class InfoTracker
 		getSet(identifier).add(identifier);
 		sendConnectionInfo(identifier);
 		MSPacketHandler.sendToPlayer(createLandChainPacket(), player);
+		MSPacketHandler.sendToPlayer(new SkaianetInfoPacket.HasEntered(SburbPlayerData.hasEntered(player)), player);
 	}
 	
 	private Set<PlayerIdentifier> getSet(PlayerIdentifier identifier)

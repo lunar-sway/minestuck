@@ -35,6 +35,7 @@ public class SkaiaClient
 	private static final Map<ResourceKey<Level>, List<ResourceKey<Level>>> landChainMap = new HashMap<>();
 	private static ComputerBlockEntity be = null;
 	public static int playerId;	//The id that this player is expected to have.
+	private static boolean hasEntered;
 	
 	@SubscribeEvent
 	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
@@ -45,6 +46,7 @@ public class SkaiaClient
 		resumingClient.clear();
 		landChainMap.clear();
 		playerId = -1;
+		hasEntered = false;
 	}
 	
 	/**
@@ -81,12 +83,9 @@ public class SkaiaClient
 		return openServers.get(playerId);
 	}
 	
-	public static boolean enteredMedium(int player)
+	public static boolean hasPlayerEntered()
 	{
-		for(ReducedConnection c : connections)
-			if(c.isMain() && c.client().id() == player)
-				return c.hasEntered();
-		return false;
+		return hasEntered;
 	}
 	
 	public static List<ResourceKey<Level>> getLandChain(ResourceKey<Level> id)
@@ -158,5 +157,10 @@ public class SkaiaClient
 					landChainMap.put(land, list);
 			}
 		}
+	}
+	
+	public static void handlePacket(SkaianetInfoPacket.HasEntered packet)
+	{
+		hasEntered = packet.hasEntered();
 	}
 }

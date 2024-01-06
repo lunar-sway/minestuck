@@ -4,6 +4,8 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.MSNBTUtil;
@@ -126,7 +128,7 @@ public final class SburbPlayerData
 	{
 		hasEntered = false;
 		clientLandKey = null;
-		connection.skaianet.infoTracker.markDirty(connection);
+		resendEntryState();
 	}
 	
 	void setHasEntered()
@@ -136,7 +138,14 @@ public final class SburbPlayerData
 		if(hasEntered)
 			throw new IllegalStateException("Can't have entered twice");
 		hasEntered = true;
-		connection.skaianet.infoTracker.markDirty(connection);
+		resendEntryState();
+	}
+	
+	private void resendEntryState()
+	{
+		ServerPlayer player = connection.getClientIdentifier().getPlayer(connection.skaianet.mcServer);
+		if(player != null)
+			MSPacketHandler.sendToPlayer(new SkaianetInfoPacket.HasEntered(this.hasEntered), player);
 	}
 	
 	public boolean hasGivenItem(DeployEntry item)

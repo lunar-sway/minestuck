@@ -7,12 +7,12 @@ import net.minecraft.network.FriendlyByteBuf;
 /**
  * The client side version of {@link SburbConnection}
  */
-public record ReducedConnection(NamedPlayerId client, NamedPlayerId server, boolean isActive, boolean isMain, boolean hasEntered)
+public record ReducedConnection(NamedPlayerId client, NamedPlayerId server, boolean isActive, boolean isMain)
 {
 	public ReducedConnection(SburbConnection connection)
 	{
 		this(NamedPlayerId.of(connection.getClientIdentifier()), NamedPlayerId.of(connection.getServerIdentifier()),
-				connection.isActive(), connection.isMain(), connection.data().hasEntered());
+				connection.isActive(), connection.isMain());
 	}
 	
 	public static ReducedConnection read(FriendlyByteBuf buffer)
@@ -22,7 +22,6 @@ public record ReducedConnection(NamedPlayerId client, NamedPlayerId server, bool
 		if(isMain)
 		{
 			isActive = buffer.readBoolean();
-			hasEntered = buffer.readBoolean();
 		} else
 		{
 			isActive = true;
@@ -30,7 +29,7 @@ public record ReducedConnection(NamedPlayerId client, NamedPlayerId server, bool
 		}
 		NamedPlayerId client = NamedPlayerId.read(buffer);
 		NamedPlayerId server = NamedPlayerId.read(buffer);
-		return new ReducedConnection(client, server, isActive, isMain, hasEntered);
+		return new ReducedConnection(client, server, isActive, isMain);
 	}
 	
 	public void write(FriendlyByteBuf buffer)
@@ -39,7 +38,6 @@ public record ReducedConnection(NamedPlayerId client, NamedPlayerId server, bool
 		if(isMain)
 		{
 			buffer.writeBoolean(isActive);
-			buffer.writeBoolean(hasEntered);
 		}
 		client.write(buffer);
 		server.write(buffer);

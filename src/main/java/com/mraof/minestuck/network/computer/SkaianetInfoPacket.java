@@ -59,6 +59,26 @@ public final class SkaianetInfoPacket
 		}
 	}
 	
+	public record HasEntered(boolean hasEntered) implements MSPacket.PlayToClient
+	{
+		@Override
+		public void encode(FriendlyByteBuf buffer)
+		{
+			buffer.writeBoolean(hasEntered);
+		}
+		
+		public static HasEntered decode(FriendlyByteBuf buffer)
+		{
+			return new HasEntered(buffer.readBoolean());
+		}
+		
+		@Override
+		public void execute()
+		{
+			SkaiaClient.handlePacket(this);
+		}
+	}
+	
 	public record Request(int playerId) implements MSPacket.PlayToServer
 	{
 		@Override
