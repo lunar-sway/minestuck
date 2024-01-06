@@ -21,21 +21,17 @@ public final class SburbConnection
 	private final PlayerIdentifier clientIdentifier;
 	@Nonnull
 	private PlayerIdentifier serverIdentifier;
-	final SburbPlayerData playerData = new SburbPlayerData(this);
+	final SburbPlayerData playerData;
 	@Nullable
 	private ActiveConnection activeConnection;
 	private boolean isMain;
-	
-	SburbConnection(PlayerIdentifier client, SkaianetHandler skaianet)
-	{
-		this(client, IdentifierHandler.NULL_IDENTIFIER, skaianet);
-	}
 	
 	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler skaianet)
 	{
 		clientIdentifier = Objects.requireNonNull(client);
 		serverIdentifier = Objects.requireNonNull(server);
 		this.skaianet = skaianet;
+		this.playerData = new SburbPlayerData(client, skaianet.mcServer);
 	}
 	
 	SburbConnection(CompoundTag nbt, SkaianetHandler skaianet)
@@ -63,6 +59,7 @@ public final class SburbConnection
 			}
 		}
 		
+		this.playerData = new SburbPlayerData(clientIdentifier, skaianet.mcServer);
 		playerData.read(nbt, this.isMain);
 	}
 	

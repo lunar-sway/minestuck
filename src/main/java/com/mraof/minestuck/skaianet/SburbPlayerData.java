@@ -27,8 +27,8 @@ public final class SburbPlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	@Deprecated
-	private final SburbConnection connection;
+	private final PlayerIdentifier playerId;
+	private final MinecraftServer mcServer;
 	private boolean hasEntered = false;    //If the player has entered. Is set to true after entry has finished
 	@Nullable
 	private ResourceKey<Level> clientLandKey;    //The land info for this client player. This is initialized in preparation for entry
@@ -40,9 +40,10 @@ public final class SburbPlayerData
 	//Only used by the edit handler
 	private ListTag inventory;
 	
-	SburbPlayerData(SburbConnection connection)
+	SburbPlayerData(PlayerIdentifier playerId, MinecraftServer mcServer)
 	{
-		this.connection = connection;
+		this.playerId = playerId;
+		this.mcServer = mcServer;
 	}
 	
 	void read(CompoundTag tag, boolean isMain)
@@ -143,7 +144,7 @@ public final class SburbPlayerData
 	
 	private void resendEntryState()
 	{
-		ServerPlayer player = connection.getClientIdentifier().getPlayer(connection.skaianet.mcServer);
+		ServerPlayer player = this.playerId.getPlayer(this.mcServer);
 		if(player != null)
 			MSPacketHandler.sendToPlayer(new SkaianetInfoPacket.HasEntered(this.hasEntered), player);
 	}
@@ -156,11 +157,7 @@ public final class SburbPlayerData
 	public void setHasGivenItem(DeployEntry item)
 	{
 		if(givenItemList.add(item.getName()))
-		{
-			EditData data = ServerEditHandler.getData(connection.skaianet.mcServer, connection);
-			if(data != null)
-				data.sendGivenItemsToEditor();
-		}
+			resendGivenItems();
 	}
 	
 	void resetGivenItems()
@@ -168,10 +165,15 @@ public final class SburbPlayerData
 		if(!givenItemList.isEmpty())
 		{
 			givenItemList.clear();
-			EditData data = ServerEditHandler.getData(connection.skaianet.mcServer, connection);
-			if(data != null)
-				data.sendGivenItemsToEditor();
+			resendGivenItems();
 		}
+	}
+	
+	private void resendGivenItems()
+	{
+		EditData data = ServerEditHandler.getData(this.mcServer, this.playerId);
+		if(data != null)
+			data.sendGivenItemsToEditor();
 	}
 	
 	public ListTag getEditmodeInventory()
