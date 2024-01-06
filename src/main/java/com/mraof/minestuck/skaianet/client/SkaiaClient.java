@@ -127,19 +127,6 @@ public class SkaiaClient
 	
 	public static void consumePacket(SkaianetInfoPacket data)
 	{
-		if(data.landChains != null)
-		{
-			landChainMap.clear();
-			for(List<ResourceKey<Level>> list : data.landChains)
-			{
-				for(ResourceKey<Level> land : list)
-				{
-					landChainMap.put(land, list);
-				}
-			}
-			return;
-		}
-		
 		if(playerId == -1)
 			playerId = data.playerId;	//The first info packet is expected to be regarding the receiving player.
 		openServers.put(data.playerId, data.openServers);
@@ -158,6 +145,19 @@ public class SkaiaClient
 			if(!Minecraft.getInstance().player.isShiftKeyDown())
 				MSScreenFactories.displayComputerScreen(be);
 			be = null;
+		}
+	}
+	
+	public static void handlePacket(SkaianetInfoPacket.LandChains packet)
+	{
+		landChainMap.clear();
+		for(List<ResourceKey<Level>> list : packet.landChains())
+		{
+			for(ResourceKey<Level> land : list)
+			{
+				if(land != null)
+					landChainMap.put(land, list);
+			}
 		}
 	}
 }

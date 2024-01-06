@@ -109,9 +109,9 @@ public final class InfoTracker
 	}
 	
 	
-	private SkaianetInfoPacket createLandChainPacket()
+	private SkaianetInfoPacket.LandChains createLandChainPacket()
 	{
-		return SkaianetInfoPacket.landChains(landChains.get());
+		return new SkaianetInfoPacket.LandChains(landChains.get());
 	}
 	
 	private List<List<ResourceKey<Level>>> createLandChains()

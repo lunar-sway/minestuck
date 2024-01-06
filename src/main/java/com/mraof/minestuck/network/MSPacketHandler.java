@@ -47,6 +47,7 @@ public class MSPacketHandler
 		registerToServerMessage(CloseRemoteSburbConnectionPacket.class, CloseRemoteSburbConnectionPacket::decode);
 		registerToServerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		registerToBothMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
+		registerToClientMessage(SkaianetInfoPacket.LandChains.class, SkaianetInfoPacket.LandChains::decode);
 		registerToServerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
 		registerToServerMessage(ThemeSelectPacket.class, ThemeSelectPacket::decode);
 		registerToBothMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
