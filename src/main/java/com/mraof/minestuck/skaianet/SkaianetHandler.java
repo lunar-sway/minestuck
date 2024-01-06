@@ -441,7 +441,7 @@ public final class SkaianetHandler extends SavedData
 	
 	public Stream<SburbConnection> getConnectionsInEntry()
 	{
-		return sessionHandler.getConnectionStream().filter(connection -> connection.isMain() && !connection.hasEntered());
+		return sessionHandler.getConnectionStream().filter(connection -> connection.isMain() && !connection.data().hasEntered());
 	}
 	
 	/**
@@ -467,12 +467,12 @@ public final class SkaianetHandler extends SavedData
 			}
 		} else if(!c.isMain())
 			SburbHandler.giveItems(mcServer, target);
-		else if(c.getClientDimension() != null)
-			return c.getClientDimension();
+		else if(c.data().getClientDimension() != null)
+			return c.data().getClientDimension();
 		
 		SburbHandler.prepareEntry(mcServer, c);
 		
-		return c.getClientDimension();
+		return c.data().getClientDimension();
 	}
 	
 	/**

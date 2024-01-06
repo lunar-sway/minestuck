@@ -19,8 +19,7 @@ public record EditmodeLocationsPacket(@Nullable ResourceKey<Level> land, Editmod
 {
 	public static void send(EditData data)
 	{
-		MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(data.getConnection().getLandDimensionIfEntered(),
-						data.getConnection().getClientEditmodeLocations()),
+		MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(data.sburbData().getLandDimensionIfEntered(), data.locations()),
 				data.getEditor());
 	}
 	

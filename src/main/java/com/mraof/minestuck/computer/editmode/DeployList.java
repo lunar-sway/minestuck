@@ -34,7 +34,7 @@ import java.util.function.BiFunction;
  */
 public final class DeployList
 {
-	public static final IAvailabilityCondition HAS_NOT_ENTERED = connection -> !connection.hasEntered();
+	public static final IAvailabilityCondition HAS_NOT_ENTERED = connection -> !connection.data().hasEntered();
 	
 	private static final ArrayList<DeployEntry> allList = new ArrayList<>();
 	private static final ArrayList<DeployEntry> deployList = new ArrayList<>();
@@ -67,7 +67,7 @@ public final class DeployList
 				(connection, level) -> AlchemyHelper.createPunchedCard(SburbHandler.getEntryItem(level, connection)), EntryLists.DEPLOY);
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), GristSet.EMPTY, GristTypes.BUILD.get().amount(100), 0, EntryLists.DEPLOY);
 		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
-				(isPrimary, connection) -> connection.getBaseGrist().amount(4), EntryLists.DEPLOY);
+				(isPrimary, connection) -> connection.data().getBaseGrist().amount(4), EntryLists.DEPLOY);
 		registerItem("portable_cruxtruder", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines),
 				(connection, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), level)), EntryLists.DEPLOY);
 		registerItem("portable_punch_designix", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX.get()), EntryLists.DEPLOY);

@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -27,7 +27,7 @@ public class LandRespawnHandler
 		if(player.getRespawnPosition() != null)
 			return;
 		
-		Optional<ResourceKey<Level>> land = SkaianetHandler.get(player.server).getPrimaryConnection(IdentifierHandler.encode(player), true)
+		Optional<ResourceKey<Level>> land = SburbPlayerData.get(IdentifierHandler.encode(player), player.server)
 				.flatMap(c -> Optional.ofNullable(c.getLandDimensionIfEntered()));
 		
 		if(land.isEmpty())

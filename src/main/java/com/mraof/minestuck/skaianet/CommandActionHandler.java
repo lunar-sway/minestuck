@@ -65,7 +65,7 @@ public final class CommandActionHandler
 			if(serverConnection.isActive())
 				skaianet.closeConnection(serverConnection);
 			serverConnection.removeServerPlayer();
-			updateLandChain = serverConnection.hasEntered();
+			updateLandChain = serverConnection.data().hasEntered();
 		}
 		
 		if(cc.isPresent() && cc.get().isActive())
@@ -95,7 +95,7 @@ public final class CommandActionHandler
 				skaianet.sessionHandler.getPlayerSession(client).connections.remove(connection);
 				clientConnection.copyComputerReferences(connection);
 			}
-			updateLandChain |= clientConnection.hasEntered();
+			updateLandChain |= clientConnection.data().hasEntered();
 		}
 		
 		if(updateLandChain)
@@ -110,7 +110,7 @@ public final class CommandActionHandler
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		Optional<SburbConnection> cc = skaianet.getPrimaryConnection(identifier, true);
-		if(!cc.isPresent()|| !cc.get().hasEntered())
+		if(!cc.isPresent()|| !cc.get().data().hasEntered())
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		SburbConnection clientConnection = cc.get();
 		
@@ -177,8 +177,8 @@ public final class CommandActionHandler
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
 		c.setIsMain();
-		c.setLand(dimensionName);
-		c.setHasEntered();
+		c.data().setLand(dimensionName);
+		c.data().setHasEntered();
 		
 		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);
 		session.connections.add(c);

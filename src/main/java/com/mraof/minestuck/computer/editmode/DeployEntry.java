@@ -72,7 +72,7 @@ public class DeployEntry
 	@Nullable
 	public GristSet getCurrentCost(SburbConnection c)
 	{
-		return c.hasGivenItem(this) ? getSecondaryGristCost(c) : getPrimaryGristCost(c);
+		return c.data().hasGivenItem(this) ? getSecondaryGristCost(c) : getPrimaryGristCost(c);
 	}
 	
 	void tryAddDeployTag(SburbConnection c, Level level, int tier, ListTag list, int i)

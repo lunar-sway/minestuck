@@ -91,11 +91,11 @@ public class ClientEditPacket implements MSPacket.PlayToServer
 				
 				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.DEPLOY))
 				{
-					if(!c.hasGivenItem(entry))
+					if(!c.data().hasGivenItem(entry))
 					{
 						ItemStack item = entry.getItemStack(c, player.level());
 						if(!targetPlayer.getInventory().contains(item) && targetPlayer.getInventory().add(item))
-							c.setHasGivenItem(entry);
+							c.data().setHasGivenItem(entry);
 					}
 				}
 				player.getServer().getPlayerList().sendAllPlayerInfo(targetPlayer);

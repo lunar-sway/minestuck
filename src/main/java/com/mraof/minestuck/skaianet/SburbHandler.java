@@ -29,7 +29,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -102,7 +101,7 @@ public final class SburbHandler
 	{
 		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), level);
 		
-		Item artifact = c.artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
+		Item artifact = c.data().artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
 		
 		return ColorHandler.setColor(new ItemStack(artifact), color);
 	}
@@ -116,7 +115,7 @@ public final class SburbHandler
 		if(dim == null)
 			return null;
 		
-		return SessionHandler.get(mcServer).getConnectionStream().filter(c -> c.getClientDimension() == dim)
+		return SessionHandler.get(mcServer).getConnectionStream().filter(c -> c.data().getClientDimension() == dim)
 				.findAny().orElse(null);
 	}
 	
@@ -138,9 +137,9 @@ public final class SburbHandler
 			return -1;
 		int count = -1;
 		for(SburbConnection conn : s.connections)
-			if(conn.hasEntered())
+			if(conn.data().hasEntered())
 				count++;
-		if(!c.hasEntered())
+		if(!c.data().hasEntered())
 			count++;
 		return count;
 	}
@@ -207,12 +206,12 @@ public final class SburbHandler
 		ResourceKey<Level> dimType = LandTypeGenerator.createLandDimension(mcServer, identifier, landTypes);
 		MSDimensions.sendLandTypesToAll(mcServer);
 		
-		c.setLand(dimType);
+		c.data().setLand(dimType);
 	}
 	
 	static void onEntry(MinecraftServer server, SburbConnection c)
 	{
-		c.setHasEntered();
+		c.data().setHasEntered();
 		
 		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
 		
@@ -240,22 +239,15 @@ public final class SburbHandler
 		return SessionHandler.get(mcServer).getConnectionStream().noneMatch(c -> c.getClientIdentifier().equals(player));
 	}
 	
-	public static boolean hasEntered(ServerPlayer player)
-	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getPrimaryConnection(identifier, true);
-		return c.isPresent() && c.get().hasEntered();
-	}
-	
 	/**
 	 * Extra behavior on the creation of a connection, such as generating the artifact type.
 	 */
 	static void onConnectionCreated(SburbConnection c)
 	{
 		Random rand = new Random();	//TODO seed?
-		c.artifactType = rand.nextInt(2);
-		LOGGER.info("Randomized artifact type to be: {} for player {}.", c.artifactType, c.getClientIdentifier().getUsername());
-		c.setBaseGrist(generateGristType(rand));
+		c.data().artifactType = rand.nextInt(2);
+		LOGGER.info("Randomized artifact type to be: {} for player {}.", c.data().artifactType, c.getClientIdentifier().getUsername());
+		c.data().setBaseGrist(generateGristType(rand));
 	}
 	
 	static GristType generateGristType(Random rand)
@@ -266,7 +258,7 @@ public final class SburbHandler
 	
 	public static void resetGivenItems(MinecraftServer mcServer)
 	{
-		SessionHandler.get(mcServer).getConnectionStream().forEach(SburbConnection::resetGivenItems);
+		SessionHandler.get(mcServer).getConnectionStream().map(SburbConnection::data).forEach(SburbPlayerData::resetGivenItems);
 		
 		DeployList.onConditionsUpdated(mcServer);
 	}

@@ -58,7 +58,7 @@ public class GristLayerInfo
 			GristType baseType;
 			SburbConnection connection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
 			if (connection != null)
-				baseType = connection.getBaseGrist();
+				baseType = connection.data().getBaseGrist();
 			else
 			{
 				LOGGER.error("Unable to find sburb connection for land dimension \"{}\" when creating grist layers. Defaulting to amber base type.", level.dimension().location());

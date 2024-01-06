@@ -92,10 +92,10 @@ public class DataCheckerManager
 		connectionTag.putBoolean("isActive", connection.isActive());
 		if(connection.isMain())
 		{
-			ResourceKey<Level> landDimensionKey = connection.getClientDimension();
+			ResourceKey<Level> landDimensionKey = connection.data().getClientDimension();
 			if(landDimensionKey != null)
 			{
-				connectionTag.putString("clientDim", connection.getClientDimension().location().toString());
+				connectionTag.putString("clientDim", connection.data().getClientDimension().location().toString());
 				
 				Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(server, landDimensionKey);
 				landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))

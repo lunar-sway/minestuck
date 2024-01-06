@@ -10,6 +10,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -54,6 +55,21 @@ public class EditData
 	public SburbConnection getConnection()
 	{
 		return connection;
+	}
+	
+	public PlayerIdentifier getTarget()
+	{
+		return this.connection.getClientIdentifier();
+	}
+	
+	public SburbPlayerData sburbData()
+	{
+		return this.connection.data();
+	}
+	
+	public EditmodeLocations locations()
+	{
+		return PlayerSavedData.getData(this.getTarget(), player.server).editmodeLocations;
 	}
 	
 	public GristCache getGristCache()
@@ -260,7 +276,7 @@ public class EditData
 		
 		void recover(SburbConnection connection, @Nullable ServerPlayer editPlayer)
 		{
-			connection.putEditmodeInventory(this.inventory);
+			connection.data().putEditmodeInventory(this.inventory);
 			if(editPlayer != null && connection.getActiveConnection() != null)
 				connection.getActiveConnection().lastEditmodePosition = editPlayer.position();
 		}

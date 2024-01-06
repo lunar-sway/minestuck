@@ -29,10 +29,10 @@ public final class SessionPostFixer
 	
 	private static void validate(MinecraftServer mcServer, SburbConnection connection)
 	{
-		if(connection.getClientDimension() != null && mcServer.getLevel(connection.getClientDimension()) == null)
+		if(connection.data().getClientDimension() != null && mcServer.getLevel(connection.data().getClientDimension()) == null)
 		{
-			LOGGER.error("Found missing land dimension \"{}\" in the connection for player {}. Resetting entry status.", connection.getClientDimension(), connection.getClientIdentifier().getUsername());
-			connection.resetEntryState();
+			LOGGER.error("Found missing land dimension \"{}\" in the connection for player {}. Resetting entry status.", connection.data().getClientDimension(), connection.getClientIdentifier().getUsername());
+			connection.data().resetEntryState();
 		}
 	}
 }

@@ -92,7 +92,7 @@ public final class Session
 		for(PlayerIdentifier player : players)
 		{
 			if(connections.stream().noneMatch(c ->
-					c.getClientIdentifier().equals(player) && c.hasEntered()))
+					c.getClientIdentifier().equals(player) && c.data().hasEntered()))
 			{
 				completed = false;
 				return;
@@ -202,7 +202,7 @@ public final class Session
 		{
 			if(!c.getClientIdentifier().equals(ignore))
 			{
-				LandTypePair.getTypes(server, c.getClientDimension())
+				LandTypePair.getTypes(server, c.data().getClientDimension())
 						.ifPresent(landTypes -> types.add(landTypes.getTitle()));
 			}
 		}
@@ -226,7 +226,7 @@ public final class Session
 		{
 			if(!c.getClientIdentifier().equals(ignore))
 			{
-				LandTypePair.getTypes(server, c.getClientDimension())
+				LandTypePair.getTypes(server, c.data().getClientDimension())
 						.ifPresent(landTypes -> types.add(landTypes.getTerrain()));
 			}
 		}

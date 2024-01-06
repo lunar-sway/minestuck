@@ -117,8 +117,8 @@ public final class EditmodeLocations
 	
 	public static boolean checkIsValidSourcePos(EditData data, ResourceKey<Level> level, BlockPos pos)
 	{
-		PlayerIdentifier owner = data.getConnection().getClientIdentifier();
-		ResourceKey<Level> land = data.getConnection().getLandDimensionIfEntered();
+		PlayerIdentifier owner = data.getTarget();
+		ResourceKey<Level> land = data.sburbData().getLandDimensionIfEntered();
 		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).editmodeLocations;
 		
 		if(level == land && ENTRY_POSITIONS.contains(pos))
@@ -140,7 +140,7 @@ public final class EditmodeLocations
 	{
 		Level editLevel = editPlayer.level();
 		ResourceKey<Level> editDimension = editLevel.dimension();
-		ResourceKey<Level> land = connection.getLandDimensionIfEntered();
+		ResourceKey<Level> land = connection.data().getLandDimensionIfEntered();
 		
 		this.findRelativelyClosestArea(editPlayer, land).map(Area::center).ifPresent(pos -> {
 			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
@@ -259,7 +259,7 @@ public final class EditmodeLocations
 		if(data == null)
 			return;
 		Player editPlayer = data.getEditor();
-		ResourceKey<Level> land = data.getConnection().getLandDimensionIfEntered();
+		ResourceKey<Level> land = data.getConnection().data().getLandDimensionIfEntered();
 		
 		if(editPlayer.level().dimension() != level || isInsideBounds(editPlayer, land))
 			return;

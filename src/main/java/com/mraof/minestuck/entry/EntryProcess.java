@@ -11,7 +11,7 @@ import com.mraof.minestuck.network.EntryEffectPackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.util.Teleport;
@@ -116,11 +116,11 @@ public class EntryProcess
 		}
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Optional<SburbConnection> c = SkaianetHandler.get(player.serverLevel()).getPrimaryConnection(identifier, true);
+		Optional<SburbPlayerData> playerData = SburbPlayerData.get(identifier, player.server);
 		
-		if(c.isPresent() && c.get().hasEntered())
+		if(playerData.isPresent() && playerData.get().hasEntered())
 		{
-			secondEntryTeleport(player, c.get().getClientDimension());
+			secondEntryTeleport(player, playerData.get().getClientDimension());
 			return;
 		}
 		

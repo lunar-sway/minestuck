@@ -3,11 +3,10 @@ package com.mraof.minestuck.world;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.biome.LandBiomeSetType;
-import com.mraof.minestuck.world.biome.RegistryBackedBiomeSet;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 public class GateHandler
@@ -97,9 +95,9 @@ public class GateHandler
 		{
 			SburbConnection clientConnection = SkaianetHandler.get(level.getServer()).getPrimaryConnection(landConnection.getClientIdentifier(), false).orElse(null);
 			
-			if(clientConnection != null && clientConnection.hasEntered() && MSDimensions.isLandDimension(level.getServer(), clientConnection.getClientDimension()))
+			if(clientConnection != null && clientConnection.data().hasEntered() && MSDimensions.isLandDimension(level.getServer(), clientConnection.data().getClientDimension()))
 			{
-				ResourceKey<Level> clientDim = clientConnection.getClientDimension();
+				ResourceKey<Level> clientDim = clientConnection.data().getClientDimension();
 				ServerLevel clientLevel = level.getServer().getLevel(clientDim);
 				BlockPos gatePos = Type.LAND_GATE.getPosition(clientLevel);
 				if(gatePos == null)
@@ -118,11 +116,11 @@ public class GateHandler
 		SburbConnection landConnection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
 		if(landConnection != null)
 		{
-			SburbConnection serverConnection = SkaianetHandler.get(level.getServer()).getPrimaryConnection(landConnection.getServerIdentifier(), true).orElse(null);
+			SburbPlayerData serverPlayerData = SburbPlayerData.get(landConnection.getServerIdentifier(), level.getServer()).orElse(null);
 			
-			if(serverConnection != null && serverConnection.hasEntered() && MSDimensions.isLandDimension(level.getServer(), serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
+			if(serverPlayerData != null && serverPlayerData.hasEntered() && MSDimensions.isLandDimension(level.getServer(), serverPlayerData.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 			{
-				ResourceKey<Level> serverDim = serverConnection.getClientDimension();
+				ResourceKey<Level> serverDim = serverPlayerData.getClientDimension();
 				return GlobalPos.of(serverDim, Type.GATE_2.getPosition(level.getServer().getLevel(serverDim)));
 				
 			}// else player.sendMessage(new TranslationTextComponent(MISSING_LAND));

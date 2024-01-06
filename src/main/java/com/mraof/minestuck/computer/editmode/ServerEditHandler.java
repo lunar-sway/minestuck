@@ -19,10 +19,7 @@ import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.ActiveConnection;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.*;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
@@ -201,17 +198,17 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			DecoyEntity decoy = new DecoyEntity((ServerLevel) player.level(), player);
 			EditData data = new EditData(decoy, player, c);
 			
-			if(!setPlayerStats(player, c, activeConnection))
+			if(!setPlayerStats(player, c.data(), activeConnection))
 			{
 				player.sendSystemMessage(Component.literal("Failed to activate edit mode.").withStyle(ChatFormatting.RED));
 				return;
 			}
-			if(c.getEditmodeInventory() != null)
-				player.getInventory().load(c.getEditmodeInventory());
+			if(c.data().getEditmodeInventory() != null)
+				player.getInventory().load(c.data().getEditmodeInventory());
 			decoy.level().addFreshEntity(decoy);
 			MSExtraData.get(player.level()).addEditData(data);
 			
-			c.getClientEditmodeLocations().validateClosestSource(player, c);
+			data.locations().validateClosestSource(player, c);
 			
 			MSPacketHandler.sendToPlayer(new ServerEditPacket.Activate(), player);
 			data.sendGivenItemsToEditor();
@@ -222,11 +219,11 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		}
 	}
 	
-	static boolean setPlayerStats(ServerPlayer player, SburbConnection c, ActiveConnection activeConnection)
+	static boolean setPlayerStats(ServerPlayer player, SburbPlayerData clientData, ActiveConnection activeConnection)
 	{
 		GlobalPos computerPos = activeConnection.clientComputer().getPosForEditmode();
 		double posX, posY, posZ;
-		ResourceKey<Level> landDimension = Objects.requireNonNullElse(c.getLandDimensionIfEntered(), computerPos.dimension());
+		ResourceKey<Level> landDimension = Objects.requireNonNullElse(clientData.getLandDimensionIfEntered(), computerPos.dimension());
 		ServerLevel level = player.getServer().getLevel(landDimension);
 		
 		if(activeConnection.lastEditmodePosition != null)
@@ -236,7 +233,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		} else
 		{
 			BlockPos center;
-			if(c.hasEntered())
+			if(clientData.hasEntered())
 				center = new BlockPos(0, 0, 0);
 			else center = computerPos.pos();
 			posX = center.getX() + 0.5;
@@ -315,13 +312,13 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			return;
 		
 		SburbConnection c = data.connection;
-		EditmodeLocations editmodeLocations = c.getClientEditmodeLocations();
+		EditmodeLocations editmodeLocations = data.locations();
 		
 		//every 10 seconds, revalidate locations
 		if(player.level().getGameTime() % 200 == 0)
-			c.getClientEditmodeLocations().validateClosestSource(player, c);
+			editmodeLocations.validateClosestSource(player, c);
 		
-		editmodeLocations.limitMovement(player, c.getLandDimensionIfEntered());
+		editmodeLocations.limitMovement(player, c.data().getLandDimensionIfEntered());
 		
 		updateInventory(player, c);
 		
@@ -342,7 +339,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				GristSet cost = entry.getCurrentCost(data.connection);
 				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
-					data.connection.setHasGivenItem(entry);
+					data.connection.data().setHasGivenItem(entry);
 					if(!data.connection.isMain())
 						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 				} else event.setCanceled(true);
@@ -519,7 +516,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				GristSet cost = entry.getCurrentCost(c);
 				if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
 				{
-					c.setHasGivenItem(entry);
+					c.data().setHasGivenItem(entry);
 					if(!c.isMain())
 						SburbHandler.giveItems(player.server, c.getClientIdentifier());
 				}

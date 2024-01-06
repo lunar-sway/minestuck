@@ -126,22 +126,22 @@ public final class InfoTracker
 	
 	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, SburbConnection c)
 	{
-		ResourceKey<Level> dimensionType = c.getClientDimension();
+		ResourceKey<Level> dimensionType = c.data().getClientDimension();
 		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
 		{
 			LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
-			chain.add(c.getClientDimension());
-			checked.add(c.getClientDimension());
+			chain.add(c.data().getClientDimension());
+			checked.add(c.data().getClientDimension());
 			SburbConnection cIter = c;
 			while(true)
 			{
 				cIter = skaianet.getPrimaryConnection(cIter.getClientIdentifier(), false).orElse(null);
-				if(cIter != null && cIter.hasEntered())
+				if(cIter != null && cIter.data().hasEntered())
 				{
-					if(!checked.contains(cIter.getClientDimension()))
+					if(!checked.contains(cIter.data().getClientDimension()))
 					{
-						chain.addLast(cIter.getClientDimension());
-						checked.add(cIter.getClientDimension());
+						chain.addLast(cIter.data().getClientDimension());
+						checked.add(cIter.data().getClientDimension());
 					} else break;
 				} else
 				{
@@ -153,10 +153,10 @@ public final class InfoTracker
 			while(true)
 			{
 				cIter = skaianet.getPrimaryConnection(cIter.getServerIdentifier(), true).orElse(null);
-				if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
+				if(cIter != null && cIter.data().hasEntered() && !checked.contains(cIter.data().getClientDimension()))
 				{
-					chain.addFirst(cIter.getClientDimension());
-					checked.add(cIter.getClientDimension());
+					chain.addFirst(cIter.data().getClientDimension());
+					checked.add(cIter.data().getClientDimension());
 				} else
 				{
 					break;
