@@ -48,7 +48,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
@@ -116,11 +115,11 @@ public class EntryProcess
 		}
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Optional<SburbPlayerData> playerData = SburbPlayerData.get(identifier, player.server);
+		ResourceKey<Level> land = SburbPlayerData.get(identifier, player.server).getLandDimensionIfEntered();
 		
-		if(playerData.isPresent() && playerData.get().hasEntered())
+		if(land != null)
 		{
-			secondEntryTeleport(player, playerData.get().getClientDimension());
+			secondEntryTeleport(player, land);
 			return;
 		}
 		

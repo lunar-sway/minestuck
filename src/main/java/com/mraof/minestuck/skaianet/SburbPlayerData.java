@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
@@ -46,20 +45,16 @@ public final class SburbPlayerData
 		this.mcServer = mcServer;
 	}
 	
-	void read(CompoundTag tag, boolean isMain)
+	void read(CompoundTag tag)
 	{
 		if(tag.contains("Inventory", Tag.TAG_LIST))
 			this.inventory = tag.getList("Inventory", Tag.TAG_COMPOUND);
 		
-		if(isMain)
+		ListTag list = tag.getList("GivenItems", Tag.TAG_STRING);
+		for(int i = 0; i < list.size(); i++)
 		{
-			ListTag list = tag.getList("GivenItems", Tag.TAG_STRING);
-			for(int i = 0; i < list.size(); i++)
-			{
-				this.givenItemList.add(list.getString(i));
-			}
+			this.givenItemList.add(list.getString(i));
 		}
-		
 		
 		if(tag.contains("ClientLand"))
 		{
@@ -71,28 +66,30 @@ public final class SburbPlayerData
 		this.baseGrist = MSNBTUtil.readGristType(tag, "base_grist", () -> SburbHandler.generateGristType(new Random()));
 	}
 	
-	void write(CompoundTag tag, boolean isMain)
+	void write(CompoundTag tag)
 	{
 		if(this.inventory != null)
 			tag.put("Inventory", this.inventory);
 		
-		if(isMain)
+		ListTag list = new ListTag();
+		for(String name : this.givenItemList)
+			list.add(StringTag.valueOf(name));
+		
+		tag.put("GivenItems", list);
+		if(this.clientLandKey != null)
 		{
-			ListTag list = new ListTag();
-			for(String name : this.givenItemList)
-				list.add(StringTag.valueOf(name));
-			
-			tag.put("GivenItems", list);
-			if(this.clientLandKey != null)
-			{
-				Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, this.clientLandKey).resultOrPartial(LOGGER::error)
-						.ifPresent(keyTag -> tag.put("ClientLand", keyTag));
-				tag.putBoolean("has_entered", this.hasEntered);
-			}
+			Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, this.clientLandKey).resultOrPartial(LOGGER::error)
+					.ifPresent(keyTag -> tag.put("ClientLand", keyTag));
+			tag.putBoolean("has_entered", this.hasEntered);
 		}
 		
 		tag.putInt("artifact", this.artifactType);
 		MSNBTUtil.writeGristType(tag, "base_grist", this.baseGrist);
+	}
+	
+	public PlayerIdentifier getPlayerId()
+	{
+		return playerId;
 	}
 	
 	public boolean hasEntered()
@@ -198,24 +195,13 @@ public final class SburbPlayerData
 		baseGrist = type;
 	}
 	
-	void copyFrom(SburbPlayerData other)
+	public static SburbPlayerData get(ServerPlayer player)
 	{
-		clientLandKey = other.clientLandKey;
-		hasEntered = other.hasEntered;
-		artifactType = other.artifactType;
-		baseGrist = other.baseGrist;
-		if(other.inventory != null)
-			inventory = other.inventory.copy();
+		return get(IdentifierHandler.encode(player), player.server);
 	}
 	
-	public static Optional<SburbPlayerData> get(PlayerIdentifier player, MinecraftServer mcServer)
+	public static SburbPlayerData get(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		return SkaianetHandler.get(mcServer).getPrimaryConnection(player, true)
-				.map(connection -> connection.playerData);
-	}
-	
-	public static boolean hasEntered(ServerPlayer player)
-	{
-		return get(IdentifierHandler.encode(player), player.server).map(SburbPlayerData::hasEntered).orElse(false);
+		return SkaianetHandler.get(mcServer).getOrCreateData(player);
 	}
 }

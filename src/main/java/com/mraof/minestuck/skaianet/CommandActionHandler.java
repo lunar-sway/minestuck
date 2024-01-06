@@ -110,7 +110,7 @@ public final class CommandActionHandler
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		Optional<SburbConnection> cc = skaianet.getPrimaryConnection(identifier, true);
-		if(!cc.isPresent()|| !cc.get().data().hasEntered())
+		if(cc.isEmpty() || !skaianet.getOrCreateData(identifier).hasEntered())
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		SburbConnection clientConnection = cc.get();
 		
@@ -177,8 +177,9 @@ public final class CommandActionHandler
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
 		c.setIsMain();
-		c.data().setLand(dimensionName);
-		c.data().setHasEntered();
+		SburbPlayerData data = skaianet.getOrCreateData(client);
+		data.setLand(dimensionName);
+		data.setHasEntered();
 		
 		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);
 		session.connections.add(c);

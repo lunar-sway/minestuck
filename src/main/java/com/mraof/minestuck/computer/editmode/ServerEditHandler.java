@@ -79,6 +79,7 @@ import java.util.*;
  *
  * @author kirderf1
  */
+@SuppressWarnings("resource")
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ServerEditHandler    //TODO Consider splitting this class into two
 {
@@ -194,21 +195,23 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
 		{
 			LOGGER.info("Activating edit mode on player \"{}\", target player: \"{}\".", player.getName().getString(), computerTarget);
+			
 			ActiveConnection activeConnection = Objects.requireNonNull(c.getActiveConnection(), "Connection has to be active with a computer position to be used here");
+			SburbPlayerData targetData = SburbPlayerData.get(computerTarget, player.server);
 			DecoyEntity decoy = new DecoyEntity((ServerLevel) player.level(), player);
 			EditData data = new EditData(decoy, player, c);
 			
-			if(!setPlayerStats(player, c.data(), activeConnection))
+			if(!setPlayerStats(player, targetData, activeConnection))
 			{
 				player.sendSystemMessage(Component.literal("Failed to activate edit mode.").withStyle(ChatFormatting.RED));
 				return;
 			}
-			if(c.data().getEditmodeInventory() != null)
-				player.getInventory().load(c.data().getEditmodeInventory());
+			if(targetData.getEditmodeInventory() != null)
+				player.getInventory().load(targetData.getEditmodeInventory());
 			decoy.level().addFreshEntity(decoy);
 			MSExtraData.get(player.level()).addEditData(data);
 			
-			data.locations().validateClosestSource(player, c);
+			data.locations().validateClosestSource(player, targetData);
 			
 			MSPacketHandler.sendToPlayer(new ServerEditPacket.Activate(), player);
 			data.sendGivenItemsToEditor();
@@ -224,7 +227,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		GlobalPos computerPos = activeConnection.clientComputer().getPosForEditmode();
 		double posX, posY, posZ;
 		ResourceKey<Level> landDimension = Objects.requireNonNullElse(clientData.getLandDimensionIfEntered(), computerPos.dimension());
-		ServerLevel level = player.getServer().getLevel(landDimension);
+		ServerLevel level = player.server.getLevel(landDimension);
 		
 		if(activeConnection.lastEditmodePosition != null)
 		{
@@ -311,16 +314,16 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		if(data == null)
 			return;
 		
-		SburbConnection c = data.connection;
+		SburbPlayerData targetData = data.sburbData();
 		EditmodeLocations editmodeLocations = data.locations();
 		
 		//every 10 seconds, revalidate locations
 		if(player.level().getGameTime() % 200 == 0)
-			editmodeLocations.validateClosestSource(player, c);
+			editmodeLocations.validateClosestSource(player, targetData);
 		
-		editmodeLocations.limitMovement(player, c.data().getLandDimensionIfEntered());
+		editmodeLocations.limitMovement(player, targetData.getLandDimensionIfEntered());
 		
-		updateInventory(player, c);
+		updateInventory(player, targetData);
 		
 		player.setPortalCooldown();
 	}
@@ -333,17 +336,17 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		{
 			EditData data = getData(event.getPlayer());
 			ItemStack stack = event.getEntity().getItem();
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level(), DeployList.EntryLists.DEPLOY);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), event.getEntity().level(), DeployList.EntryLists.DEPLOY);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
-				GristSet cost = entry.getCurrentCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.sburbData());
 				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
-					data.connection.data().setHasGivenItem(entry);
+					data.sburbData().setHasGivenItem(entry);
 					if(!data.connection.isMain())
-						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
+						SburbHandler.giveItems(event.getPlayer().getServer(), data.getTarget());
 				} else event.setCanceled(true);
-			} else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.connection, event.getEntity().level(), DeployList.EntryLists.ATHENEUM))
+			} else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.sburbData(), event.getEntity().level(), DeployList.EntryLists.ATHENEUM))
 			{
 				GristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, event.getPlayer().level());
 				if(cost == null || !data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
@@ -395,13 +398,14 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				return;
 			}
 			
-			cleanStackNBT(stack, data.connection, event.getLevel());
+			SburbPlayerData targetData = data.sburbData();
+			cleanStackNBT(stack, targetData, event.getLevel());
 			
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level());
+			DeployEntry entry = DeployList.getEntryForItem(stack, targetData, event.getEntity().level());
 			GristCache gristCache = data.getGristCache();
 			if(entry != null)
 			{
-				GristSet cost = entry.getCurrentCost(data.connection);
+				GristSet cost = entry.getCurrentCost(targetData);
 				if(!gristCache.canAfford(cost))
 				{
 					if(cost != null)
@@ -438,7 +442,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			EditData data = getData(event.getEntity());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST)
 					|| (!data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()
 					|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
@@ -471,7 +475,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			EditData data = getData(event.getPlayer());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getPlayer());
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getPlayer().level(), DeployList.EntryLists.ATHENEUM);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), event.getPlayer().level(), DeployList.EntryLists.ATHENEUM);
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 			{
 				event.setCanceled(true);
@@ -480,12 +484,12 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
 				if(entry != null)
-					data.getGristCache().addWithGutter(entry.getCurrentCost(data.connection), GristHelper.EnumSource.SERVER);
+					data.getGristCache().addWithGutter(entry.getCurrentCost(data.sburbData()), GristHelper.EnumSource.SERVER);
 				else //Assumes that this will succeed because of the check in onLeftClickBlockControl()
 					data.getGristCache().tryTake(blockBreakCost(), GristHelper.EnumSource.SERVER);
 			} else
 			{
-				GristSet set = entry != null ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getPlayer().level());
+				GristSet set = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(stack, null, false, event.getPlayer().level());
 				if(set != null && !set.isEmpty())
 				{
 					data.getGristCache().addWithGutter(set, GristHelper.EnumSource.SERVER);
@@ -509,16 +513,16 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			}
 			
 			ItemStack stack = player.getMainHandItem();    //TODO Make sure offhand isn't used in editmode?
-			SburbConnection c = data.connection;
-			DeployEntry entry = DeployList.getEntryForItem(stack, c, player.level());
+			SburbPlayerData targetData = data.sburbData();
+			DeployEntry entry = DeployList.getEntryForItem(stack, targetData, player.level());
 			if(entry != null)
 			{
-				GristSet cost = entry.getCurrentCost(c);
+				GristSet cost = entry.getCurrentCost(targetData);
 				if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
 				{
-					c.data().setHasGivenItem(entry);
-					if(!c.isMain())
-						SburbHandler.giveItems(player.server, c.getClientIdentifier());
+					targetData.setHasGivenItem(entry);
+					if(!data.connection.isMain())
+						SburbHandler.giveItems(player.server, data.getTarget());
 				}
 				if(!cost.isEmpty())
 				{
@@ -646,12 +650,12 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		cap.resetDragTools();
 	}
 	
-	public static void updateInventory(ServerPlayer player, SburbConnection connection)
+	public static void updateInventory(ServerPlayer player, SburbPlayerData playerData)
 	{
-		List<DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
-		deployList.removeIf(entry -> entry.getCurrentCost(connection) == null);
+		List<DeployEntry> deployList = DeployList.getItemList(player.getServer(), playerData);
+		deployList.removeIf(entry -> entry.getCurrentCost(playerData) == null);
 		List<ItemStack> itemList = new ArrayList<>();
-		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection, player.level())));
+		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(playerData, player.level())));
 		
 		boolean inventoryChanged = false;
 		for(int i = 0; i < player.getInventory().items.size(); i++)
@@ -664,7 +668,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				listSearch:
 				{
 					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack) || (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack)) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), connection, player.level(), DeployList.EntryLists.ATHENEUM)))
+						if(ItemStack.matches(deployStack, stack)
+								|| (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))
+								&& DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, player.level(), DeployList.EntryLists.ATHENEUM)))
 							break listSearch;
 					player.getInventory().items.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
@@ -674,7 +680,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				listSearch:
 				{
 					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack) || (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack)) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), connection, player.level(), DeployList.EntryLists.ATHENEUM)))
+						if(ItemStack.matches(deployStack, stack)
+								|| (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))
+								&& DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, player.level(), DeployList.EntryLists.ATHENEUM)))
 							break listSearch;
 					stack.setTag(null);
 					inventoryChanged = true;
@@ -773,9 +781,10 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		return item instanceof BlockItem;
 	}
 	
-	public static void cleanStackNBT(ItemStack stack, SburbConnection c, Level level)
+	public static void cleanStackNBT(ItemStack stack, SburbPlayerData playerData, Level level)
 	{
-		if(!DeployList.containsItemStack(stack, c, level, DeployList.EntryLists.DEPLOY) || !(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), c, level, DeployList.EntryLists.ATHENEUM)))
+		if(!DeployList.containsItemStack(stack, playerData, level, DeployList.EntryLists.DEPLOY)
+				|| !(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, level, DeployList.EntryLists.ATHENEUM)))
 			stack.setTag(null);
 	}
 	

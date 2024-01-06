@@ -8,6 +8,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -89,13 +90,14 @@ public class ClientEditPacket implements MSPacket.PlayToServer
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SburbHandler.giveItems(player.server, target)))
 					return;
 				
-				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.DEPLOY))
+				SburbPlayerData targetData = SburbPlayerData.get(target, player.server);
+				for(DeployEntry entry : DeployList.getItemList(player.server, targetData, DeployList.EntryLists.DEPLOY))
 				{
-					if(!c.data().hasGivenItem(entry))
+					if(!targetData.hasGivenItem(entry))
 					{
-						ItemStack item = entry.getItemStack(c, player.level());
+						ItemStack item = entry.getItemStack(targetData, player.level());
 						if(!targetPlayer.getInventory().contains(item) && targetPlayer.getInventory().add(item))
-							c.data().setHasGivenItem(entry);
+							targetData.setHasGivenItem(entry);
 					}
 				}
 				player.getServer().getPlayerList().sendAllPlayerInfo(targetPlayer);

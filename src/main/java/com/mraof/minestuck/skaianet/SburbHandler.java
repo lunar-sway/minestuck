@@ -93,15 +93,11 @@ public final class SburbHandler
 		SessionHandler.get(player.server).findOrCreateAndCall(identifier, session -> session.predefineCall(identifier, consumer));
 	}
 	
-	/**
-	 * @param c The connection.
-	 * @return Damage value for the entry item
-	 */
-	public static ItemStack getEntryItem(Level level, SburbConnection c)
+	public static ItemStack getEntryItem(Level level, SburbPlayerData playerData)
 	{
-		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), level);
+		int color =  ColorHandler.getColorForPlayer(playerData.getPlayerId(), level);
 		
-		Item artifact = c.data().artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
+		Item artifact = playerData.artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
 		
 		return ColorHandler.setColor(new ItemStack(artifact), color);
 	}
@@ -144,16 +140,16 @@ public final class SburbHandler
 		return count;
 	}
 	
-	private static LandTypePair genLandAspects(MinecraftServer mcServer, SburbConnection connection)
+	private static LandTypePair genLandAspects(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
-		Title title = PlayerSavedData.getData(connection.getClientIdentifier(), mcServer).getTitle();
+		Session session = SessionHandler.get(mcServer).getPlayerSession(player);
+		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		
-		if(session.predefinedPlayers.containsKey(connection.getClientIdentifier()))
+		if(session.predefinedPlayers.containsKey(player))
 		{
-			PredefineData data = session.predefinedPlayers.get(connection.getClientIdentifier());
+			PredefineData data = session.predefinedPlayers.get(player);
 			titleLandType = data.getTitleLandType();
 			terrainLandType = data.getTerrainLandType();
 		}
@@ -165,16 +161,16 @@ public final class SburbHandler
 				titleLandType = LandTypes.FROGS.get();
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
+				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, player);
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType));
-					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, connection.getClientIdentifier());
+					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, player);
 				}
 			}
 		}
 		if(terrainLandType == null)
-			terrainLandType = Generator.generateWeightedTerrainLandType(mcServer, session, titleLandType, connection.getClientIdentifier());
+			terrainLandType = Generator.generateWeightedTerrainLandType(mcServer, session, titleLandType, player);
 		
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
@@ -196,17 +192,17 @@ public final class SburbHandler
 		connection.setIsMain();
 	}
 	
-	static void prepareEntry(MinecraftServer mcServer, SburbConnection c)
+	static void prepareEntry(MinecraftServer mcServer, SburbPlayerData playerData)
 	{
-		PlayerIdentifier identifier = c.getClientIdentifier();
+		PlayerIdentifier identifier = playerData.getPlayerId();
 		
-		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), c.getClientIdentifier());
-		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), identifier);
+		LandTypePair landTypes = genLandAspects(mcServer, identifier);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		
 		ResourceKey<Level> dimType = LandTypeGenerator.createLandDimension(mcServer, identifier, landTypes);
 		MSDimensions.sendLandTypesToAll(mcServer);
 		
-		c.data().setLand(dimType);
+		playerData.setLand(dimType);
 	}
 	
 	static void onEntry(MinecraftServer server, SburbConnection c)

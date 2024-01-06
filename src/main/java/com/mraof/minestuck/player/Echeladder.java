@@ -88,7 +88,7 @@ public class Echeladder
 	{
 		//for each rung, the experience is divided and approaches 0(at infinity). That means there is a certain rung for each experience amount where it becomes less than one and no longer capable of contributing
 		exp = (int) ((exp / (rung + 1) * 2) + .5D);
-		boolean hasEntered = SburbPlayerData.get(identifier, mcServer).map(SburbPlayerData::hasEntered).orElse(false);
+		boolean hasEntered = SburbPlayerData.get(identifier, mcServer).hasEntered();
 		int topRung = hasEntered ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
 		

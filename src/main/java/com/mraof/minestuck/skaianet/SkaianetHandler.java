@@ -11,6 +11,7 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -23,9 +24,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -46,6 +45,7 @@ public final class SkaianetHandler extends SavedData
 	final ComputerWaitingList openedServers = new ComputerWaitingList(infoTracker, false, "opened server");
 	private final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
 	private final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
+	final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
 	final SessionHandler sessionHandler;
 	
 	final MinecraftServer mcServer;
@@ -72,10 +72,13 @@ public final class SkaianetHandler extends SavedData
 		resumingClients.read(nbt.getList("resumingClients", Tag.TAG_COMPOUND));
 		resumingServers.read(nbt.getList("resumingServers", Tag.TAG_COMPOUND));
 		
-		//fix data in secondary connections that isn't being saved by finding them and copying data from the primary counterpart
-		// TODO this is a simple solution, but a more elegant solution would be to achieve this during reading from nbt
-		sessionHandler.getConnectionStream().filter(c -> c.isActive() && !c.isMain()).forEach(c ->
-				getPrimaryConnection(c.getClientIdentifier(), true).ifPresent(c::copyFrom));
+		ListTag playerDataList = nbt.getList("player_data", Tag.TAG_COMPOUND);
+		for(int i = 0; i < playerDataList.size(); i++)
+		{
+			CompoundTag playerDataTag = playerDataList.getCompound(i);
+			PlayerIdentifier player = IdentifierHandler.load(playerDataTag, "player");
+			getOrCreateData(player).read(playerDataTag);
+		}
 	}
 	
 	/**
@@ -192,7 +195,6 @@ public final class SkaianetHandler extends SavedData
 		PlayerIdentifier client = connection.getClientIdentifier();
 		Session session = sessionHandler.getSessionForConnecting(client, server);
 		SburbConnection newConnection = new SburbConnection(client, server, this);
-		newConnection.copyFrom(connection);
 		session.connections.add(newConnection);
 		
 		return newConnection;
@@ -373,6 +375,16 @@ public final class SkaianetHandler extends SavedData
 		compound.put("resumingClients", resumingClients.write());
 		compound.put("resumingServers", resumingServers.write());
 		
+		ListTag playerDataList = new ListTag();
+		for(SburbPlayerData playerData : playerDataMap.values())
+		{
+			CompoundTag playerDataTag = new CompoundTag();
+			playerData.getPlayerId().saveToNBT(playerDataTag, "player");
+			playerData.write(playerDataTag);
+			playerDataList.add(playerDataTag);
+		}
+		compound.put("player_data", playerDataList);
+		
 		return compound;
 	}
 	
@@ -453,6 +465,7 @@ public final class SkaianetHandler extends SavedData
 	public ResourceKey<Level> prepareEntry(PlayerIdentifier target)
 	{
 		SburbConnection c = getPrimaryConnection(target, true).orElse(null);
+		SburbPlayerData playerData = getOrCreateData(target);
 		if(c == null)
 		{
 			LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
@@ -467,12 +480,12 @@ public final class SkaianetHandler extends SavedData
 			}
 		} else if(!c.isMain())
 			SburbHandler.giveItems(mcServer, target);
-		else if(c.data().getClientDimension() != null)
-			return c.data().getClientDimension();
+		else if(playerData.getClientDimension() != null)
+			return playerData.getClientDimension();
 		
-		SburbHandler.prepareEntry(mcServer, c);
+		SburbHandler.prepareEntry(mcServer, playerData);
 		
-		return c.data().getClientDimension();
+		return playerData.getClientDimension();
 	}
 	
 	/**
@@ -505,6 +518,11 @@ public final class SkaianetHandler extends SavedData
 		resumingClients.replace(oldBE.owner, oldRef, newRef);
 		resumingServers.replace(oldBE.owner, oldRef, newRef);
 		openedServers.replace(oldBE.owner, oldRef, newRef);
+	}
+	
+	SburbPlayerData getOrCreateData(PlayerIdentifier player)
+	{
+		return playerDataMap.computeIfAbsent(player, playerId -> new SburbPlayerData(playerId, mcServer));
 	}
 	
 	public static SkaianetHandler get(Level level)

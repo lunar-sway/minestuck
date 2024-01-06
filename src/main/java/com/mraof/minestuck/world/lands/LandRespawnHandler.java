@@ -14,8 +14,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Optional;
-
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class LandRespawnHandler
 {
@@ -27,13 +25,12 @@ public class LandRespawnHandler
 		if(player.getRespawnPosition() != null)
 			return;
 		
-		Optional<ResourceKey<Level>> land = SburbPlayerData.get(IdentifierHandler.encode(player), player.server)
-				.flatMap(c -> Optional.ofNullable(c.getLandDimensionIfEntered()));
+		ResourceKey<Level> land = SburbPlayerData.get(IdentifierHandler.encode(player), player.server).getLandDimensionIfEntered();
 		
-		if(land.isEmpty())
+		if(land == null)
 			return;
 		
-		ServerLevel landLevel = player.server.getLevel(land.get());
+		ServerLevel landLevel = player.server.getLevel(land);
 		
 		if (landLevel == null)
 			return;

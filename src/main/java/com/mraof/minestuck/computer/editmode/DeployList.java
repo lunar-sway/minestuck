@@ -8,8 +8,8 @@ import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +34,7 @@ import java.util.function.BiFunction;
  */
 public final class DeployList
 {
-	public static final IAvailabilityCondition HAS_NOT_ENTERED = connection -> !connection.data().hasEntered();
+	public static final IAvailabilityCondition HAS_NOT_ENTERED = playerData -> !playerData.hasEntered();
 	
 	private static final ArrayList<DeployEntry> allList = new ArrayList<>();
 	private static final ArrayList<DeployEntry> deployList = new ArrayList<>();
@@ -64,18 +64,19 @@ public final class DeployList
 		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), GristSet.EMPTY, GristTypes.BUILD.get().amount(100), 0, EntryLists.DEPLOY);
 		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), GristSet.EMPTY, GristTypes.BUILD.get().amount(100), 0, EntryLists.DEPLOY);
 		registerItem("artifact_card", GristSet.EMPTY, null, 0, HAS_NOT_ENTERED,
-				(connection, level) -> AlchemyHelper.createPunchedCard(SburbHandler.getEntryItem(level, connection)), EntryLists.DEPLOY);
+				(playerData, level) -> AlchemyHelper.createPunchedCard(SburbHandler.getEntryItem(level, playerData)), EntryLists.DEPLOY);
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), GristSet.EMPTY, GristTypes.BUILD.get().amount(100), 0, EntryLists.DEPLOY);
 		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
-				(isPrimary, connection) -> connection.data().getBaseGrist().amount(4), EntryLists.DEPLOY);
+				(isPrimary, playerData) -> playerData.getBaseGrist().amount(4), EntryLists.DEPLOY);
 		registerItem("portable_cruxtruder", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines),
-				(connection, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), level)), EntryLists.DEPLOY);
+				(playerData, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(playerData.getPlayerId(), level)), EntryLists.DEPLOY);
 		registerItem("portable_punch_designix", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX.get()), EntryLists.DEPLOY);
 		registerItem("portable_totem_lathe", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE.get()), EntryLists.DEPLOY);
 		registerItem("portable_alchemiter", GristTypes.BUILD.get().amount(300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER.get()), EntryLists.DEPLOY);
 		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD.get()), GristTypes.BUILD.get().amount(4000), 2, EntryLists.DEPLOY);
 		registerItem("intellibeam_laserstation", new ItemStack(MSBlocks.INTELLIBEAM_LASERSTATION.get()), GristTypes.BUILD.get().amount(100000), 2, EntryLists.DEPLOY);
-		registerItem("card_punched_card", GristTypes.BUILD.get().amount(25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createPunchedCard(new ItemStack(MSItems.CAPTCHA_CARD.get())), EntryLists.DEPLOY);
+		registerItem("card_punched_card", GristTypes.BUILD.get().amount(25), null, 0, config(MinestuckConfig.SERVER.deployCard),
+				(playerData, world) -> AlchemyHelper.createPunchedCard(new ItemStack(MSItems.CAPTCHA_CARD.get())), EntryLists.DEPLOY);
 		
 		//Atheneum
 		registerItem("cobblestone", new ItemStack(Blocks.COBBLESTONE), GristTypes.BUILD.get().amount(1), 0, EntryLists.ATHENEUM);
@@ -262,23 +263,27 @@ public final class DeployList
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, ImmutableGristSet cost, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, EntryLists entryList)
+	public static void registerItem(String name, ImmutableGristSet cost, int tier, IAvailabilityCondition condition,
+									BiFunction<SburbPlayerData, Level, ItemStack> item, EntryLists entryList)
 	{
-		registerItem(name, tier, condition, item, (isPrimary, connection) -> cost, entryList);
+		registerItem(name, tier, condition, item, (isPrimary, playerData) -> cost, entryList);
 	}
 	
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, ImmutableGristSet cost1, ImmutableGristSet cost2, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, EntryLists entryList)
+	public static void registerItem(String name, ImmutableGristSet cost1, ImmutableGristSet cost2, int tier, IAvailabilityCondition condition,
+									BiFunction<SburbPlayerData, Level, ItemStack> item, EntryLists entryList)
 	{
-		registerItem(name, tier, condition, item, (isPrimary, connection) -> isPrimary ? cost1 : cost2, entryList);
+		registerItem(name, tier, condition, item, (isPrimary, playerData) -> isPrimary ? cost1 : cost2, entryList);
 	}
 	
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, EntryLists entryList)
+	public static void registerItem(String name, int tier, IAvailabilityCondition condition,
+									BiFunction<SburbPlayerData, Level, ItemStack> item,
+									BiFunction<Boolean, SburbPlayerData, GristSet> grist, EntryLists entryList)
 	{
 		if(entryList == EntryLists.ALL)
 			throw new IllegalArgumentException("Not allowed to add items to allList directly!");
@@ -288,17 +293,17 @@ public final class DeployList
 		allList.add(new DeployEntry(name, tier, condition, item, grist, entryList));
 	}
 	
-	public static List<DeployEntry> getItemList(MinecraftServer server, SburbConnection c)
+	public static List<DeployEntry> getItemList(MinecraftServer server, SburbPlayerData playerData)
 	{
-		return getItemList(server, c, EntryLists.ALL);
+		return getItemList(server, playerData, EntryLists.ALL);
 	}
 	
-	public static List<DeployEntry> getItemList(MinecraftServer server, SburbConnection c, EntryLists entryList)
+	public static List<DeployEntry> getItemList(MinecraftServer server, SburbPlayerData playerData, EntryLists entryList)
 	{
-		int tier = SburbHandler.availableTier(server, c.getClientIdentifier());
+		int tier = SburbHandler.availableTier(server, playerData.getPlayerId());
 		ArrayList<DeployEntry> itemList = new ArrayList<>();
 		for(DeployEntry entry : entryList.getList())
-			if(entry.isAvailable(c, tier))
+			if(entry.isAvailable(playerData, tier))
 				itemList.add(entry);
 		
 		return itemList;
@@ -326,14 +331,14 @@ public final class DeployList
 		return getEntryForName(name, entryList) != null;
 	}
 	
-	public static boolean containsItemStack(ItemStack stack, SburbConnection c, Level level)
+	public static boolean containsItemStack(ItemStack stack, SburbPlayerData playerData, Level level)
 	{
-		return containsItemStack(stack, c, level, EntryLists.ALL);
+		return containsItemStack(stack, playerData, level, EntryLists.ALL);
 	}
 	
-	public static boolean containsItemStack(ItemStack stack, SburbConnection c, Level level, EntryLists entryList)
+	public static boolean containsItemStack(ItemStack stack, SburbPlayerData playerData, Level level, EntryLists entryList)
 	{
-		return getEntryForItem(stack, c, level, entryList) != null;
+		return getEntryForItem(stack, playerData, level, entryList) != null;
 	}
 	
 	public static DeployEntry getEntryForName(String name)
@@ -349,16 +354,16 @@ public final class DeployList
 		return null;
 	}
 	
-	public static DeployEntry getEntryForItem(ItemStack stack, SburbConnection c, Level level)
+	public static DeployEntry getEntryForItem(ItemStack stack, SburbPlayerData playerData, Level level)
 	{
-		return getEntryForItem(stack, c, level, EntryLists.ALL);
+		return getEntryForItem(stack, playerData, level, EntryLists.ALL);
 	}
 	
-	public static DeployEntry getEntryForItem(ItemStack stack, SburbConnection c, Level level, EntryLists entryList)
+	public static DeployEntry getEntryForItem(ItemStack stack, SburbPlayerData playerData, Level level, EntryLists entryList)
 	{
 		stack = cleanStack(stack);
 		for(DeployEntry entry : entryList.getList())
-			if(ItemStack.matches(stack, entry.getItemStack(c, level)))
+			if(ItemStack.matches(stack, entry.getItemStack(playerData, level)))
 				return entry;
 		return null;
 	}
@@ -366,34 +371,34 @@ public final class DeployList
 	
 	public interface IAvailabilityCondition
 	{
-		boolean test(SburbConnection connection);
+		boolean test(SburbPlayerData playerData);
 	}
 	
 	public static IAvailabilityCondition config(ForgeConfigSpec.BooleanValue config)
 	{
-		return connection -> config.get();
+		return playerData -> config.get();
 	}
 	
-	public static BiFunction<SburbConnection, Level, ItemStack> item(ItemLike item)
+	public static BiFunction<SburbPlayerData, Level, ItemStack> item(ItemLike item)
 	{
-		return (sburbConnection, world) -> new ItemStack(item);
+		return (playerData, world) -> new ItemStack(item);
 	}
 	
-	static CompoundTag getDeployListTag(MinecraftServer server, SburbConnection c)
+	static CompoundTag getDeployListTag(MinecraftServer server, SburbPlayerData playerData)
 	{
-		return getDeployListTag(server, c, EntryLists.ALL);
+		return getDeployListTag(server, playerData, EntryLists.ALL);
 	}
 	
-	static CompoundTag getDeployListTag(MinecraftServer server, SburbConnection c, EntryLists entryList)
+	static CompoundTag getDeployListTag(MinecraftServer server, SburbPlayerData playerData, EntryLists entryList)
 	{
 		CompoundTag nbt = new CompoundTag();
 		ListTag tagList = new ListTag();
 		nbt.put("l", tagList);
-		int tier = SburbHandler.availableTier(server, c.getClientIdentifier());
+		int tier = SburbHandler.availableTier(server, playerData.getPlayerId());
 		for(int i = 0; i < entryList.getList().size(); i++)
 		{
 			DeployEntry entry = entryList.getList().get(i);
-			entry.tryAddDeployTag(c, server.getLevel(Level.OVERWORLD), tier, tagList, i);
+			entry.tryAddDeployTag(playerData, server.getLevel(Level.OVERWORLD), tier, tagList, i);
 		}
 		return nbt;
 	}

@@ -116,14 +116,12 @@ public class GateHandler
 		SburbConnection landConnection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
 		if(landConnection != null)
 		{
-			SburbPlayerData serverPlayerData = SburbPlayerData.get(landConnection.getServerIdentifier(), level.getServer()).orElse(null);
+			SburbPlayerData serverPlayerData = SburbPlayerData.get(landConnection.getServerIdentifier(), level.getServer());
 			
-			if(serverPlayerData != null && serverPlayerData.hasEntered() && MSDimensions.isLandDimension(level.getServer(), serverPlayerData.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
-			{
-				ResourceKey<Level> serverDim = serverPlayerData.getClientDimension();
+			ResourceKey<Level> serverDim = serverPlayerData.getLandDimensionIfEntered();
+			if(serverDim != null)
 				return GlobalPos.of(serverDim, Type.GATE_2.getPosition(level.getServer().getLevel(serverDim)));
-				
-			}// else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
+			//else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
 			
 		} else
 			LOGGER.error("Unexpected error: Can't find connection for dimension {}!", level.dimension());

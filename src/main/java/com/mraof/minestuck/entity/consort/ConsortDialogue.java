@@ -233,7 +233,7 @@ public class ConsortDialogue
 		addMessage("lazy_king").condition(terrainLand(SHADE));
 		addMessage("music_invention").consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		addMessage("wyrm").consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((consort, player) -> SburbPlayerData.hasEntered(player),
+		addMessage(new ConditionedMessage((consort, player) -> SburbPlayerData.get(player).hasEntered(),
 				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
 		
 		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,

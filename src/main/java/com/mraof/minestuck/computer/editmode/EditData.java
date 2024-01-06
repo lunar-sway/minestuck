@@ -64,7 +64,7 @@ public class EditData
 	
 	public SburbPlayerData sburbData()
 	{
-		return this.connection.data();
+		return SburbPlayerData.get(this.getTarget(), player.server);
 	}
 	
 	public EditmodeLocations locations()
@@ -107,7 +107,7 @@ public class EditData
 	
 	public void sendGivenItemsToEditor()
 	{
-		MSPacketHandler.sendToPlayer(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, connection)), getEditor());
+		MSPacketHandler.sendToPlayer(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, connection.data())), getEditor());
 	}
 	
 	public CompoundTag writeRecoveryData()

@@ -49,7 +49,7 @@ public class SendGristCommand
 	private static boolean isPermittedFor(ServerPlayer player, ServerPlayer player2)
 	{
 		
-		if(!SburbPlayerData.hasEntered(player) || !SburbPlayerData.hasEntered(player2))
+		if(!SburbPlayerData.get(player).hasEntered() || !SburbPlayerData.get(player2).hasEntered())
 			return false;
 		
 		SessionHandler sessionHandler = SessionHandler.get(player.server);

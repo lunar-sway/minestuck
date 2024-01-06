@@ -81,7 +81,7 @@ public final class InfoTracker
 		getSet(identifier).add(identifier);
 		sendConnectionInfo(identifier);
 		MSPacketHandler.sendToPlayer(createLandChainPacket(), player);
-		MSPacketHandler.sendToPlayer(new SkaianetInfoPacket.HasEntered(SburbPlayerData.hasEntered(player)), player);
+		MSPacketHandler.sendToPlayer(new SkaianetInfoPacket.HasEntered(SburbPlayerData.get(player).hasEntered()), player);
 	}
 	
 	private Set<PlayerIdentifier> getSet(PlayerIdentifier identifier)
@@ -130,8 +130,8 @@ public final class InfoTracker
 		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
 		{
 			LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
-			chain.add(c.data().getClientDimension());
-			checked.add(c.data().getClientDimension());
+			chain.add(dimensionType);
+			checked.add(dimensionType);
 			SburbConnection cIter = c;
 			while(true)
 			{

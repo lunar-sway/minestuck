@@ -7,7 +7,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -136,15 +136,15 @@ public final class EditmodeLocations
 		return true;
 	}
 	
-	public void validateClosestSource(ServerPlayer editPlayer, SburbConnection connection)
+	public void validateClosestSource(ServerPlayer editPlayer, SburbPlayerData targetData)
 	{
 		Level editLevel = editPlayer.level();
 		ResourceKey<Level> editDimension = editLevel.dimension();
-		ResourceKey<Level> land = connection.data().getLandDimensionIfEntered();
+		ResourceKey<Level> land = targetData.getLandDimensionIfEntered();
 		
 		this.findRelativelyClosestArea(editPlayer, land).map(Area::center).ifPresent(pos -> {
-			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
-				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
+			if(isComputerSourceInvalidFor(editLevel, pos, targetData.getPlayerId()))
+				removeBlockSource(editPlayer.server, targetData.getPlayerId(), editDimension, pos);
 		});
 	}
 	

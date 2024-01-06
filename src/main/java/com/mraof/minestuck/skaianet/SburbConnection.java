@@ -21,7 +21,6 @@ public final class SburbConnection
 	private final PlayerIdentifier clientIdentifier;
 	@Nonnull
 	private PlayerIdentifier serverIdentifier;
-	final SburbPlayerData playerData;
 	@Nullable
 	private ActiveConnection activeConnection;
 	private boolean isMain;
@@ -31,7 +30,6 @@ public final class SburbConnection
 		clientIdentifier = Objects.requireNonNull(client);
 		serverIdentifier = Objects.requireNonNull(server);
 		this.skaianet = skaianet;
-		this.playerData = new SburbPlayerData(client, skaianet.mcServer);
 	}
 	
 	SburbConnection(CompoundTag nbt, SkaianetHandler skaianet)
@@ -58,9 +56,6 @@ public final class SburbConnection
 				LOGGER.error("Unable to read computer position for sburb connection between {} and {}, setting connection to be inactive. Cause: ", clientIdentifier.getUsername(), serverIdentifier.getUsername(), e);
 			}
 		}
-		
-		this.playerData = new SburbPlayerData(clientIdentifier, skaianet.mcServer);
-		playerData.read(nbt, this.isMain);
 	}
 	
 	CompoundTag write()
@@ -80,8 +75,6 @@ public final class SburbConnection
 			nbt.put("client_computer", activeConnection.clientComputer().write(new CompoundTag()));
 			nbt.put("server_computer", activeConnection.serverComputer().write(new CompoundTag()));
 		}
-		
-		playerData.write(nbt, this.isMain);
 		
 		return nbt;
 	}
@@ -161,9 +154,10 @@ public final class SburbConnection
 		return activeConnection;
 	}
 	
+	@Deprecated
 	public SburbPlayerData data()
 	{
-		return this.playerData;
+		return SburbPlayerData.get(clientIdentifier, skaianet.mcServer);
 	}
 	
 	void updateComputer(ISburbComputer oldComputer, ComputerReference newComputer)
@@ -213,10 +207,4 @@ public final class SburbConnection
 		}
 		return null;
 	}
-	
-	void copyFrom(SburbConnection other)
-	{
-		this.playerData.copyFrom(other.playerData);
-	}
-	
 }
