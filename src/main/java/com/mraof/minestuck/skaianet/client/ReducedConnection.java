@@ -1,5 +1,6 @@
 package com.mraof.minestuck.skaianet.client;
 
+import com.mraof.minestuck.player.NamedPlayerId;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -8,24 +9,17 @@ import net.minecraft.network.FriendlyByteBuf;
  */
 public class ReducedConnection
 {
-	/**
-	 * Display name used by computer guis
-	 */
-	private final String clientName, serverName;
-	/**
-	 * Id for identifying players clientside
-	 */
-	private final int clientId, serverId;
+	private final NamedPlayerId client, server;
 	
 	private final boolean isActive;
 	private final boolean isMain;
 	private final boolean hasEntered;
 	
 	//client side
-	public String getClientDisplayName() {return clientName;}
-	public String getServerDisplayName() {return serverName;}
-	public int getClientId() {return clientId;}
-	public int getServerId() {return serverId;}
+	public String getClientDisplayName() {return client.name();}
+	public String getServerDisplayName() {return server.name();}
+	public int getClientId() {return client.id();}
+	public int getServerId() {return server.id();}
 	public boolean isActive() {return isActive;}
 	public boolean isMain() {return isMain;}
 	public boolean hasEntered() {return hasEntered;}
@@ -50,9 +44,7 @@ public class ReducedConnection
 			isActive = true;
 			hasEntered = false;
 		}
-		clientId = buffer.readInt();
-		clientName = buffer.readUtf(16);
-		serverId = buffer.readInt();
-		serverName = buffer.readUtf(16);
+		client = NamedPlayerId.read(buffer);
+		server = NamedPlayerId.read(buffer);
 	}
 }

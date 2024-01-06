@@ -2,10 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -238,9 +235,7 @@ public final class SburbConnection
 			buffer.writeBoolean(isActive());
 			buffer.writeBoolean(playerData.hasEntered());
 		}
-		buffer.writeInt(getClientIdentifier().getId());
-		buffer.writeUtf(getClientIdentifier().getUsername(), 16);
-		buffer.writeInt(getServerIdentifier().getId());
-		buffer.writeUtf(getServerIdentifier().getUsername(), 16);
+		NamedPlayerId.of(this.getClientIdentifier()).write(buffer);
+		NamedPlayerId.of(this.getServerIdentifier()).write(buffer);
 	}
 }
