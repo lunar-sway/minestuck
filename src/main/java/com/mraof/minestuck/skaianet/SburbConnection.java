@@ -1,30 +1,31 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.event.ConnectionCreatedEvent;
-import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 
 public final class SburbConnection
 {
@@ -158,20 +159,12 @@ public final class SburbConnection
 		activeConnection = connection.activeConnection;
 	}
 	
-	void setActive(ISburbComputer client, ISburbComputer server, ConnectionCreatedEvent.ConnectionType type)
+	void setActive(ComputerReference client, ComputerReference server)
 	{
 		if(isActive())
 			throw new IllegalStateException("Should not activate sburb connection when already active");
-		Objects.requireNonNull(client);
-		Objects.requireNonNull(server);
 		
-		activeConnection = new ActiveConnection(this, client.createReference(), server.createReference());
-		skaianet.infoTracker.markDirty(this);
-		
-		client.connected(serverIdentifier, true);
-		server.connected(clientIdentifier, false);
-		
-		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(skaianet.mcServer, this, this.getSession(), type));
+		activeConnection = new ActiveConnection(this, client, server);
 	}
 	
 	void close()
