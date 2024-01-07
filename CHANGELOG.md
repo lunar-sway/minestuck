@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Sopor Slime Pie food item
 - Land type extensions for datapacks, which can be used to add worldgen features, carvers and mob spawn to lands
 - New editmode settings screen, which can be used to teleport between different areas where editmode can function
+- Behaviour for buckets and barbasol bombs when used in dispensers
 
 ### Changed
 
