@@ -23,6 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -292,7 +293,7 @@ public final class SkaianetHandler extends SavedData
 		} else
 		{
 			getClientConnection(computer).ifPresent(connection ->
-					closeConnection(getConnection(connection), computer, connection.serverComputer().getComputer(mcServer)));
+					closeConnection(connection, computer, null));
 		}
 	}
 	
@@ -302,7 +303,7 @@ public final class SkaianetHandler extends SavedData
 		checkAndCloseFromServerList(computer, resumingServers);
 		
 		getServerConnection(computer).ifPresent(connection ->
-				closeConnection(getConnection(connection), connection.clientComputer().getComputer(mcServer), computer));
+				closeConnection(connection, null, computer));
 	}
 	
 	private void checkAndCloseFromServerList(ISburbComputer computer, ComputerWaitingList map)
@@ -318,27 +319,21 @@ public final class SkaianetHandler extends SavedData
 	
 	void closeConnection(ActiveConnection activeConnection)
 	{
-		SburbConnection connection = getConnection(activeConnection.client(), activeConnection.server());
-		closeConnection(connection, activeConnection.clientComputer().getComputer(mcServer),
-				activeConnection.serverComputer().getComputer(mcServer));
+		closeConnection(activeConnection, null, null);
 	}
 	
-	@Deprecated
-	void closeConnection(SburbConnection connection)
+	private void closeConnection(ActiveConnection connection, @Nullable ISburbComputer clientComputer, @Nullable ISburbComputer serverComputer)
 	{
-		ActiveConnection activeConnection = connection.getActiveConnection();
-		Objects.requireNonNull(activeConnection);
-		closeConnection(connection, activeConnection.clientComputer().getComputer(mcServer),
-				activeConnection.serverComputer().getComputer(mcServer));
-	}
-	
-	private void closeConnection(SburbConnection connection, ISburbComputer clientComputer, ISburbComputer serverComputer)
-	{
-		ActiveConnection activeConnection = Objects.requireNonNull(connection.getActiveConnection());
+		SburbConnection sburbConnection = getConnection(connection);
 		
-		sessionHandler.onConnectionClosed(connection, true);
+		if(clientComputer == null)
+			clientComputer = connection.clientComputer().getComputer(mcServer);
+		if(serverComputer == null)
+			serverComputer = connection.serverComputer().getComputer(mcServer);
 		
-		connection.close();
+		sessionHandler.onConnectionClosed(sburbConnection, true);
+		
+		sburbConnection.close();
 		
 		if(clientComputer != null)
 		{
@@ -351,7 +346,7 @@ public final class SkaianetHandler extends SavedData
 			serverComputer.putServerMessage(CLOSED);
 		}
 		
-		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(mcServer, activeConnection));
+		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(mcServer, connection));
 	}
 	
 	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)
@@ -393,20 +388,17 @@ public final class SkaianetHandler extends SavedData
 		resumingClients.validate(mcServer);
 		resumingServers.validate(mcServer);
 		
-		sessionHandler.getConnectionStream().forEach(c -> {
-			ActiveConnection activeConnection = c.getActiveConnection();
-			if(activeConnection != null)
+		activeConnections().forEach(activeConnection -> {
+			
+			ISburbComputer cc = activeConnection.clientComputer().getComputer(mcServer),
+					sc = activeConnection.serverComputer().getComputer(mcServer);
+			if(cc == null || sc == null
+					|| activeConnection.clientComputer().isInNether() || activeConnection.serverComputer().isInNether()
+					|| !activeConnection.client().equals(cc.getOwner()) || !activeConnection.server().equals(sc.getOwner())
+					|| !cc.getClientBoolean("connectedToServer"))
 			{
-				ISburbComputer cc = activeConnection.clientComputer().getComputer(mcServer),
-						sc = activeConnection.serverComputer().getComputer(mcServer);
-				if(cc == null || sc == null
-						|| activeConnection.clientComputer().isInNether() || activeConnection.serverComputer().isInNether()
-						|| !c.getClientIdentifier().equals(cc.getOwner()) || !c.getServerIdentifier().equals(sc.getOwner())
-						|| !cc.getClientBoolean("connectedToServer"))
-				{
-					LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", c.getClientIdentifier(), c.getServerIdentifier());
-					closeConnection(c, cc, sc);
-				}
+				LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", activeConnection.client(), activeConnection.server());
+				closeConnection(activeConnection, cc, sc);
 			}
 		});
 	}

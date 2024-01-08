@@ -109,7 +109,7 @@ public abstract class SessionHandler
 			{
 				SburbConnection c = optional.get();
 				if(c.isActive())
-					skaianetHandler.closeConnection(c);
+					skaianetHandler.closeConnection(c.getActiveConnection());
 				if(c.isMain())
 				{
 					switch(MinestuckConfig.SERVER.escapeFailureMode.get())
