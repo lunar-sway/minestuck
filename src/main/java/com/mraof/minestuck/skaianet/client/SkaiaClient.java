@@ -61,12 +61,12 @@ public class SkaiaClient
 	
 	public static boolean hasPrimaryConnectionAsClient(int playerId)
 	{
-		return connections.stream().anyMatch(c -> c.isMain() && c.client().id() == playerId);
+		return playerStateMap.get(playerId).hasPrimaryConnectionAsClient();
 	}
 	
 	public static boolean hasPrimaryConnectionAsServer(int playerId)
 	{
-		return connections.stream().anyMatch(c -> c.isMain() && c.server().id() == playerId);
+		return playerStateMap.get(playerId).hasPrimaryConnectionAsServer();
 	}
 	
 	public static Map<Integer, String> getAvailableServers(Integer playerId)

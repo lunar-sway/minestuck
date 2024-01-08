@@ -232,9 +232,14 @@ public final class InfoTracker
 		boolean clientResuming = skaianet.hasResumingClient(player);
 		boolean serverResuming = skaianet.hasResumingServer(player);
 		
+		boolean hasPrimaryConnectionAsClient = skaianet.getPrimaryConnection(player, true).isPresent();
+		boolean hasPrimaryConnectionAsServer = skaianet.getPrimaryConnection(player, false).isPresent();
+		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
 		openedServersCache.put(player, serverMap.keySet());
-		ReducedPlayerState playerState = new ReducedPlayerState(clientResuming, serverResuming, serverMap);
+		
+		ReducedPlayerState playerState = new ReducedPlayerState(clientResuming, serverResuming,
+				hasPrimaryConnectionAsClient, hasPrimaryConnectionAsServer, serverMap);
 		
 		// create list with all connections that the player is in
 		List<ReducedConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();

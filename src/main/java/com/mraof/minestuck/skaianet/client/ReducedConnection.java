@@ -7,38 +7,27 @@ import net.minecraft.network.FriendlyByteBuf;
 /**
  * The client side version of {@link SburbConnection}
  */
-public record ReducedConnection(NamedPlayerId client, NamedPlayerId server, boolean isActive, boolean isMain)
+public record ReducedConnection(NamedPlayerId client, NamedPlayerId server, boolean isActive)
 {
 	public ReducedConnection(SburbConnection connection)
 	{
 		this(NamedPlayerId.of(connection.getClientIdentifier()), NamedPlayerId.of(connection.getServerIdentifier()),
-				connection.isActive(), connection.isMain());
+				connection.isActive());
 	}
 	
 	public static ReducedConnection read(FriendlyByteBuf buffer)
 	{
-		boolean isMain = buffer.readBoolean();
-		boolean isActive, hasEntered;
-		if(isMain)
-		{
-			isActive = buffer.readBoolean();
-		} else
-		{
-			isActive = true;
-			hasEntered = false;
-		}
+		boolean isActive = buffer.readBoolean();
+		
 		NamedPlayerId client = NamedPlayerId.read(buffer);
 		NamedPlayerId server = NamedPlayerId.read(buffer);
-		return new ReducedConnection(client, server, isActive, isMain);
+		return new ReducedConnection(client, server, isActive);
 	}
 	
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeBoolean(isMain);
-		if(isMain)
-		{
-			buffer.writeBoolean(isActive);
-		}
+		buffer.writeBoolean(isActive);
+		
 		client.write(buffer);
 		server.write(buffer);
 	}
