@@ -6,7 +6,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public final class ActiveConnection
 {
@@ -37,6 +36,11 @@ public final class ActiveConnection
 	public boolean isServer(ISburbComputer computer)
 	{
 		return this.serverComputer().matches(computer) && this.server().equals(computer.getOwner());
+	}
+	
+	boolean hasPlayer(PlayerIdentifier player)
+	{
+		return this.client().equals(player) || this.server().equals(player);
 	}
 	
 	public PlayerIdentifier client()

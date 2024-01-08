@@ -242,7 +242,7 @@ public final class InfoTracker
 				hasPrimaryConnectionAsClient, hasPrimaryConnectionAsServer, serverMap);
 		
 		// create list with all connections that the player is in
-		List<ReducedConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
+		List<ReducedConnection> list = skaianet.activeConnections().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
 		
 		return new SkaianetInfoPacket.Data(player.getId(), playerState, list);
 	}

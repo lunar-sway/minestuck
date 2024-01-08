@@ -98,10 +98,10 @@ public class SkaiaClient
 	{
 		if(playerId != SkaiaClient.playerId)
 			return false;
-		for(ReducedConnection c : connections)
-			if(playerId == c.client().id())
-				return false;
-		return true;
+		if(playerStateMap.get(playerId).hasPrimaryConnectionAsClient())
+			return false;
+		
+		return connections.stream().anyMatch(c -> c.client().id() == playerId);
 	}
 	
 	//Methods called from the actionPerformed method in the gui.
@@ -109,7 +109,7 @@ public class SkaiaClient
 	public static ReducedConnection getClientConnection(int client)
 	{
 		for(ReducedConnection c : connections)
-			if(c.isActive() && c.client().id() == client)
+			if(c.client().id() == client)
 				return c;
 		return null;
 	}
