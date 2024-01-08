@@ -126,15 +126,14 @@ public class GateHandler
 	
 	private static GlobalPos findServerSecondGate(ServerLevel level)
 	{
-		Optional<PlayerIdentifier> landPlayer = SburbPlayerData.getForLand(level).map(SburbPlayerData::playerId);
-		if(landPlayer.isEmpty())
+		Optional<SburbPlayerData> landPlayerData = SburbPlayerData.getForLand(level);
+		if(landPlayerData.isEmpty())
 		{
 			LOGGER.error("Unexpected error: Can't find player for land {}!", level.dimension());
 			return null;
 		}
 		
-		Optional<ResourceKey<Level>> serverLandOptional = SkaianetHandler.get(level).primaryConnectionForClient(landPlayer.get())
-				.filter(SburbConnection::hasServerPlayer).map(SburbConnection::getServerIdentifier)
+		Optional<ResourceKey<Level>> serverLandOptional = landPlayerData.get().primaryServerPlayer(level.getServer())
 				.flatMap(serverPlayer -> {
 					SburbPlayerData serverPlayerData = SburbPlayerData.get(serverPlayer, level.getServer());
 					return Optional.ofNullable(serverPlayerData.getLandDimensionIfEntered());

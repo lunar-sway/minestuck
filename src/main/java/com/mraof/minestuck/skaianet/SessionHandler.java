@@ -69,17 +69,9 @@ public abstract class SessionHandler
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
 		Optional<SburbConnection> cClient = skaianetHandler.getPrimaryOrCandidateConnection(client, true);
 		Optional<SburbConnection> cServer = skaianetHandler.getPrimaryOrCandidateConnection(server, false);
-		boolean serverActive = cServer.isPresent();
-		if(!serverActive && sServer != null)
-			for(SburbConnection c : sServer.connections)
-				if(c.getServerIdentifier().equals(server))
-				{
-					serverActive = true;
-					break;
-				}
 		
-		return cClient.isPresent() && sClient == sServer && (MinestuckConfig.SERVER.allowSecondaryConnections.get() || cClient.get() == cServer.orElse(null))	//Reconnect within session
-				|| !cClient.isPresent() && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
+		return cClient.isPresent() && cServer.isPresent() && sClient == sServer && (MinestuckConfig.SERVER.allowSecondaryConnections.get() || cClient.get() == cServer.get())	//Reconnect within session
+				|| cClient.isEmpty() && cServer.isEmpty() && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
 	Session getSessionForConnecting(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException

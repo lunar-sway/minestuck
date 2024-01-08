@@ -120,51 +120,62 @@ public final class InfoTracker
 		List<List<ResourceKey<Level>>> landChains = new ArrayList<>();
 		
 		Set<ResourceKey<Level>> checked = new HashSet<>();
-		skaianet.primaryConnections().forEach(c -> populateLandChain(landChains, checked, c));
+		skaianet.primaryConnections().forEach(c -> populateLandChain(landChains, checked, c.getClientIdentifier()));
 		
 		return landChains;
 	}
 	
-	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, SburbConnection c)
+	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, PlayerIdentifier player)
 	{
-		ResourceKey<Level> dimensionType = c.data().getLandDimension();
-		if(dimensionType != null && !checked.contains(dimensionType))
+		ResourceKey<Level> dimensionType = SburbPlayerData.get(player, skaianet.mcServer).getLandDimensionIfEntered();
+		if(dimensionType == null || checked.contains(dimensionType))
+			return;
+		
+		LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
+		chain.add(dimensionType);
+		checked.add(dimensionType);
+		
+		PlayerIdentifier lastPlayer = player;
+		while(true)
 		{
-			LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
-			chain.add(dimensionType);
-			checked.add(dimensionType);
-			SburbConnection cIter = c;
-			while(true)
+			Optional<PlayerIdentifier> client = skaianet.primaryConnectionForServer(lastPlayer).map(SburbConnection::getClientIdentifier);
+			if(client.isEmpty())
 			{
-				cIter = skaianet.primaryConnectionForServer(cIter.getClientIdentifier()).orElse(null);
-				if(cIter != null && cIter.data().hasEntered())
-				{
-					if(!checked.contains(cIter.data().getLandDimension()))
-					{
-						chain.addLast(cIter.data().getLandDimension());
-						checked.add(cIter.data().getLandDimension());
-					} else break;
-				} else
-				{
-					chain.addLast(null);
-					break;
-				}
+				chain.addLast(null);
+				break;
 			}
-			cIter = c;
-			while(true)
+			PlayerIdentifier nextPlayer = client.get();
+			ResourceKey<Level> nextLand = SburbPlayerData.get(nextPlayer, skaianet.mcServer).getLandDimensionIfEntered();
+			if(nextLand == null)
 			{
-				cIter = skaianet.primaryConnectionForClient(cIter.getServerIdentifier()).orElse(null);
-				if(cIter != null && cIter.data().hasEntered() && !checked.contains(cIter.data().getLandDimension()))
-				{
-					chain.addFirst(cIter.data().getLandDimension());
-					checked.add(cIter.data().getLandDimension());
-				} else
-				{
-					break;
-				}
+				chain.addLast(null);
+				break;
 			}
-			landChains.add(chain);
+			if(checked.contains(nextLand))
+				break;
+			
+			chain.addLast(nextLand);
+			checked.add(nextLand);
+			lastPlayer = nextPlayer;
 		}
+		
+		lastPlayer = player;
+		while(true)
+		{
+			Optional<PlayerIdentifier> server = SburbPlayerData.get(lastPlayer, skaianet.mcServer).primaryServerPlayer(skaianet.mcServer);
+			if(server.isEmpty())
+				break;
+			PlayerIdentifier nextPlayer = server.get();
+			
+			ResourceKey<Level> nextLand = SburbPlayerData.get(nextPlayer, skaianet.mcServer).getLandDimensionIfEntered();
+			if(nextLand == null || checked.contains(nextLand))
+				break;
+			
+			chain.addFirst(nextLand);
+			checked.add(nextLand);
+			lastPlayer = nextPlayer;
+		}
+		landChains.add(chain);
 	}
 	
 	void reloadLandChains()
