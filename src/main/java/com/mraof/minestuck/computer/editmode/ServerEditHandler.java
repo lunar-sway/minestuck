@@ -121,7 +121,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			MSExtraData data = MSExtraData.get(event.getEntity().level());
 			data.removeEditData(prevData);
-			data.addEditData(new EditData(prevData.getDecoy(), player, prevData.connection));
+			data.addEditData(new EditData(prevData.getDecoy(), player, prevData.activeConnection));
 		}
 	}
 	
@@ -199,7 +199,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			ActiveConnection activeConnection = Objects.requireNonNull(c.getActiveConnection(), "Connection has to be active with a computer position to be used here");
 			SburbPlayerData targetData = SburbPlayerData.get(computerTarget, player.server);
 			DecoyEntity decoy = new DecoyEntity((ServerLevel) player.level(), player);
-			EditData data = new EditData(decoy, player, c);
+			EditData data = new EditData(decoy, player, activeConnection);
 			
 			if(!setPlayerStats(player, targetData, activeConnection))
 			{
@@ -268,9 +268,6 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			SburbConnection connection = data.connection;
-			
-			connection.getClientIdentifier().getUsername();
 			MSPacketHandler.sendToPlayer(new ServerEditPacket.Activate(), editor);
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
@@ -290,12 +287,12 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	
 	public static EditData getData(MinecraftServer server, SburbConnection c)
 	{
-		return MSExtraData.get(server).findEditData(editData -> editData.connection.getClientIdentifier().equals(c.getClientIdentifier()) && editData.connection.getServerIdentifier().equals(c.getServerIdentifier()));
+		return MSExtraData.get(server).findEditData(editData -> editData.activeConnection.client().equals(c.getClientIdentifier()) && editData.activeConnection.server().equals(c.getServerIdentifier()));
 	}
 	
 	public static EditData getData(MinecraftServer server, PlayerIdentifier client)
 	{
-		return MSExtraData.get(server).findEditData(editData -> editData.connection.getClientIdentifier().equals(client));
+		return MSExtraData.get(server).findEditData(editData -> editData.getTarget().equals(client));
 	}
 	
 	public static EditData getData(DecoyEntity decoy)
@@ -343,8 +340,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
 					data.sburbData().setHasGivenItem(entry);
-					if(!data.connection.isMain())
-						SburbHandler.giveItems(event.getPlayer().getServer(), data.getTarget());
+					SburbHandler.giveItems(event.getPlayer().getServer(), data.getTarget());
 				} else event.setCanceled(true);
 			} else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.sburbData(), event.getEntity().level(), DeployList.EntryLists.ATHENEUM))
 			{
@@ -521,8 +517,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
 				{
 					targetData.setHasGivenItem(entry);
-					if(!data.connection.isMain())
-						SburbHandler.giveItems(player.server, data.getTarget());
+					SburbHandler.giveItems(player.server, data.getTarget());
 				}
 				if(!cost.isEmpty())
 				{
@@ -814,7 +809,6 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent
 	public static void serverStarted(ServerStartedEvent event)
 	{
-		SkaianetHandler skaianet = SkaianetHandler.get(event.getServer());
-		MSExtraData.get(event.getServer()).recoverConnections(recovery -> recovery.recover(skaianet.getActiveConnection(recovery.getClientPlayer())));
+		MSExtraData.get(event.getServer()).recoverConnections(event.getServer());
 	}
 }

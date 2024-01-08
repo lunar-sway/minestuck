@@ -259,7 +259,7 @@ public final class EditmodeLocations
 		if(data == null)
 			return;
 		Player editPlayer = data.getEditor();
-		ResourceKey<Level> land = data.getConnection().data().getLandDimensionIfEntered();
+		ResourceKey<Level> land = data.sburbData().getLandDimensionIfEntered();
 		
 		if(editPlayer.level().dimension() != level || isInsideBounds(editPlayer, land))
 			return;

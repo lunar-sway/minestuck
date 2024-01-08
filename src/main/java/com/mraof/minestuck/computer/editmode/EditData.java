@@ -9,8 +9,10 @@ import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -18,6 +20,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
@@ -26,6 +29,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
  * Data structure used by the server sided EditHandler
@@ -37,29 +41,24 @@ public class EditData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	EditData(DecoyEntity decoy, ServerPlayer player, SburbConnection c)
+	EditData(DecoyEntity decoy, ServerPlayer player, ActiveConnection activeConnection)
 	{
 		this.decoy = decoy;
 		this.player = player;
-		this.connection = c;
+		this.activeConnection = activeConnection;
 	}
 	
 	private final DecoyEntity decoy;
 	
-	final SburbConnection connection;
+	final ActiveConnection activeConnection;
 	
 	private final ServerPlayer player;
 	
 	private boolean isRecovering;
 	
-	public SburbConnection getConnection()
-	{
-		return connection;
-	}
-	
 	public PlayerIdentifier getTarget()
 	{
-		return this.connection.getClientIdentifier();
+		return this.activeConnection.client();
 	}
 	
 	public SburbPlayerData sburbData()
@@ -74,7 +73,7 @@ public class EditData
 	
 	public GristCache getGristCache()
 	{
-		return GristCache.get(player.server, connection.getClientIdentifier());
+		return GristCache.get(player.server, this.getTarget());
 	}
 	
 	/**
@@ -101,13 +100,13 @@ public class EditData
 	
 	public void sendCacheLimitToEditor()
 	{
-		long limit = PlayerSavedData.getData(connection.getClientIdentifier(), player.server).getEcheladder().getGristCapacity();
+		long limit = PlayerSavedData.getData(this.getTarget(), player.server).getEcheladder().getGristCapacity();
 		MSPacketHandler.sendToPlayer(new EditmodeCacheLimitPacket(limit), this.getEditor());
 	}
 	
 	public void sendGivenItemsToEditor()
 	{
-		MSPacketHandler.sendToPlayer(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, connection.data())), getEditor());
+		MSPacketHandler.sendToPlayer(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())), getEditor());
 	}
 	
 	public CompoundTag writeRecoveryData()
@@ -137,7 +136,7 @@ public class EditData
 		isRecovering = true;
 		try
 		{
-			new ConnectionRecovery(this).recover(connection, player);
+			new ConnectionRecovery(this).recover(player.server, player);
 			new PlayerRecovery(decoy).recover(player, true);
 		} finally {
 			isRecovering = false;
@@ -149,6 +148,7 @@ public class EditData
 		return isRecovering;
 	}
 	
+	@SuppressWarnings("resource")
 	public static class PlayerRecovery
 	{
 		private final ResourceKey<Level> dimension;
@@ -246,7 +246,7 @@ public class EditData
 		
 		private ConnectionRecovery(EditData data)
 		{
-			clientPlayer = data.connection.getClientIdentifier();
+			clientPlayer = data.getTarget();
 			inventory = data.player.getInventory().save(new ListTag());
 		}
 		
@@ -262,23 +262,20 @@ public class EditData
 			nbt.put("edit_inv", inventory);
 		}
 		
-		public PlayerIdentifier getClientPlayer()
+		public void recover(MinecraftServer mcServer)
 		{
-			return clientPlayer;
+			recover(mcServer, null);
 		}
 		
-		public void recover(@Nullable SburbConnection connection)
+		void recover(MinecraftServer mcServer, @Nullable ServerPlayer editPlayer)
 		{
-			if(connection != null)
-				recover(connection, null);
-			else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
-		}
-		
-		void recover(SburbConnection connection, @Nullable ServerPlayer editPlayer)
-		{
-			connection.data().putEditmodeInventory(this.inventory);
-			if(editPlayer != null && connection.getActiveConnection() != null)
-				connection.getActiveConnection().lastEditmodePosition = editPlayer.position();
+			SburbPlayerData.get(this.clientPlayer, mcServer).putEditmodeInventory(this.inventory);
+			if(editPlayer != null)
+			{
+				SburbConnection connection = SkaianetHandler.get(mcServer).getActiveConnection(this.clientPlayer);
+				if(connection != null)
+					Objects.requireNonNull(connection.getActiveConnection()).lastEditmodePosition = editPlayer.position();
+			}
 		}
 	}
 }
