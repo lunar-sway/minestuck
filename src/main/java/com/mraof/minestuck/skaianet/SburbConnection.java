@@ -77,8 +77,11 @@ public final class SburbConnection
 	{
 		if(hasServerPlayer())
 		{
-			Session session = this.getSession();
 			skaianet.infoTracker.markDirty(serverIdentifier);
+			if(skaianet.getOrCreateData(this.clientIdentifier).hasEntered())
+				skaianet.infoTracker.markLandChainDirty();
+			
+			Session session = this.getSession();
 			serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
 			skaianet.sessionHandler.onConnectionChainBroken(session);
 		}
@@ -94,6 +97,8 @@ public final class SburbConnection
 		
 		serverIdentifier = Objects.requireNonNull(server);
 		skaianet.infoTracker.markDirty(serverIdentifier);
+		if(skaianet.getOrCreateData(this.clientIdentifier).hasEntered())
+			skaianet.infoTracker.markLandChainDirty();
 	}
 	
 	@Nullable

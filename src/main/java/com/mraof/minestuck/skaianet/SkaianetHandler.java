@@ -524,7 +524,7 @@ public final class SkaianetHandler extends SavedData
 	{
 		SburbHandler.onEntry(mcServer, getOrCreateData(target));
 		
-		infoTracker.reloadLandChains();
+		infoTracker.markLandChainDirty();
 		
 		MinecraftForge.EVENT_BUS.post(new OnEntryEvent(mcServer, target));
 	}

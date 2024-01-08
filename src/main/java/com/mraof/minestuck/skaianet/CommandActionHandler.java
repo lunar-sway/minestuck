@@ -7,7 +7,6 @@ import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -58,13 +57,11 @@ public final class CommandActionHandler
 			return false;
 		}
 		
-		boolean updateLandChain = false;
 		if(cs.isPresent())
 		{
 			SburbConnection serverConnection = cs.get();
 			serverConnection.closeIfActive();
 			serverConnection.removeServerPlayer();
-			updateLandChain = skaianet.getOrCreateData(serverConnection.getClientIdentifier()).hasEntered();
 		}
 		
 		cc.ifPresent(SburbConnection::closeIfActive);
@@ -73,9 +70,8 @@ public final class CommandActionHandler
 		if(cc.isEmpty() || !cc.get().isMain())
 		{
 			if(connection != null)
-			{
 				connection.setIsMain();
-			} else
+			else
 			{
 				Session session = skaianet.sessionHandler.prepareSessionFor(client, server);
 				SburbConnection newConnection = new SburbConnection(client, server, skaianet);
@@ -88,14 +84,8 @@ public final class CommandActionHandler
 			clientConnection.removeServerPlayer();
 			clientConnection.setNewServerPlayer(server);
 			if(connection != null)
-			{
 				skaianet.sessionHandler.getPlayerSession(client).connections.remove(connection);
-			}
-			updateLandChain |= skaianet.getOrCreateData(clientConnection.getClientIdentifier()).hasEntered();
 		}
-		
-		if(updateLandChain)
-			skaianet.infoTracker.reloadLandChains();
 		
 		return true;
 	}
@@ -158,10 +148,6 @@ public final class CommandActionHandler
 		{
 			//TODO give proper feedback to user. The operation will most likely have partially executed
 		}
-		
-		// Several new lands may have been created through calls to createDebugLand(). Send potentially new land types to players
-		MSDimensions.sendLandTypesToAll(source.getServer());
-		skaianet.infoTracker.reloadLandChains();
 	}
 	
 	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException

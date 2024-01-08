@@ -9,7 +9,6 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.ReducedPlayerState;
-import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -41,7 +40,7 @@ public final class InfoTracker
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
-	private final LazyInstance<List<List<ResourceKey<Level>>>> landChains = new LazyInstance<>(this::createLandChains);
+	private boolean resendLandChains;
 	
 	InfoTracker(SkaianetHandler skaianet)
 	{
@@ -112,7 +111,7 @@ public final class InfoTracker
 	
 	private SkaianetInfoPacket.LandChains createLandChainPacket()
 	{
-		return new SkaianetInfoPacket.LandChains(landChains.get());
+		return new SkaianetInfoPacket.LandChains(createLandChains());
 	}
 	
 	private List<List<ResourceKey<Level>>> createLandChains()
@@ -178,10 +177,9 @@ public final class InfoTracker
 		landChains.add(chain);
 	}
 	
-	void reloadLandChains()
+	void markLandChainDirty()
 	{
-		landChains.invalidate();
-		MSPacketHandler.sendToAll(createLandChainPacket());
+		resendLandChains = true;
 	}
 	
 	void markDirty(PlayerIdentifier player)
@@ -220,6 +218,12 @@ public final class InfoTracker
 			sendConnectionInfo(identifier);
 		}
 		toUpdate.clear();
+		
+		if(resendLandChains)
+		{
+			MSPacketHandler.sendToAll(createLandChainPacket());
+			resendLandChains = false;
+		}
 	}
 	
 	private void sendConnectionInfo(PlayerIdentifier player)
