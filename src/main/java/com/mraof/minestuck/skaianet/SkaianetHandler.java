@@ -83,9 +83,9 @@ public final class SkaianetHandler extends SavedData
 		
 		ListTag connectionList = nbt.getList("connections", Tag.TAG_COMPOUND);
 		for(int i = 0; i < connectionList.size(); i++)
-		{
 			activeConnections.add(ActiveConnection.read(connectionList.getCompound(i)));
-		}
+		
+		sessionHandler.getSessions().forEach(existingSession -> existingSession.checkIfCompleted(this));
 	}
 	
 	public Optional<ActiveConnection> getActiveConnection(PlayerIdentifier client)

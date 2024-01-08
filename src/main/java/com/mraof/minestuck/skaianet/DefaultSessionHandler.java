@@ -111,6 +111,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	void onConnectionChainBroken(Session session)
 	{
 		split(session);
+		sessions.forEach(existingSession -> existingSession.checkIfCompleted(skaianetHandler));
 	}
 	
 	private void correctAndAddSession(Session session)
@@ -160,7 +161,6 @@ public final class DefaultSessionHandler extends SessionHandler
 	private void split(Session session)
 	{
 		List<Session> sessions = SessionMerger.splitSession(session);
-		sessions.forEach(Session::checkIfCompleted);
 		this.sessions.addAll(sessions);
 		removeIfEmpty(session);
 	}

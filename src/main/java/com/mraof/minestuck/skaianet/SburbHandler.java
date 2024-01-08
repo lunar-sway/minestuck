@@ -195,7 +195,7 @@ public final class SburbHandler
 	{
 		playerData.setHasEntered();
 		
-		SessionHandler.get(server).getPlayerSession(playerData.playerId()).checkIfCompleted();
+		SessionHandler.get(server).getPlayerSession(playerData.playerId()).checkIfCompleted(SkaianetHandler.get(server));
 		
 		ServerPlayer player = playerData.playerId().getPlayer(server);
 		if(player != null)

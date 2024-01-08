@@ -76,29 +76,20 @@ public final class Session
 	/**
 	 * Sets `completed` to true if everyone in the session has entered and has completed connections.
 	 */
-	void checkIfCompleted()
+	void checkIfCompleted(SkaianetHandler skaianetHandler)
 	{
-		if(connections.isEmpty())
-		{
-			completed = false;
-			return;
-		}
-		if(connections.stream().anyMatch(c -> !c.hasServerPlayer()))
-		{
-			completed = false;
-			return;
-		}
-		Set<PlayerIdentifier> players = this.getPlayerList();
-		for(PlayerIdentifier player : players)
-		{
-			if(connections.stream().noneMatch(c ->
-					c.getClientIdentifier().equals(player) && c.data().hasEntered()))
-			{
-				completed = false;
-				return;
-			}
-		}
-		completed = true;
+		completed = computeIsComplete(skaianetHandler);
+	}
+	
+	boolean computeIsComplete(SkaianetHandler skaianetHandler)
+	{
+		if(this.connections.isEmpty())
+			return false;
+		
+		return this.getPlayerList().stream().allMatch(player -> {
+			SburbPlayerData playerData = skaianetHandler.getOrCreateData(player);
+			return playerData.hasEntered() && playerData.primaryServerPlayer(skaianetHandler.mcServer).isPresent();
+		});
 	}
 	
 	Session()
@@ -313,8 +304,6 @@ public final class Session
 		}
 		
 		s.locked = nbt.getBoolean("locked");
-		
-		s.checkIfCompleted();
 		return s;
 	}
 	
