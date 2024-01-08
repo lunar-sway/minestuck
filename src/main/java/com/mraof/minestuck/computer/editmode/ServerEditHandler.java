@@ -11,7 +11,7 @@ import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.ServerCursorEntity;
-import com.mraof.minestuck.event.ConnectionClosedEvent;
+import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -97,17 +97,16 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	}
 	
 	@SubscribeEvent
-	public static void onDisconnect(ConnectionClosedEvent event)
+	public static void onDisconnect(SburbEvent.ConnectionClosed event)
 	{
 		reset(getData(event.getMinecraftServer(), event.getConnection()));
 	}
 	
 	@SubscribeEvent
-	public static void onEntry(SburbEvent.OnEntry event)
+	public static void onEntry(OnEntryEvent event)
 	{
-		ActiveConnection connection = event.getConnection().getActiveConnection();
-		if(connection != null)
-			connection.lastEditmodePosition = null;
+		SkaianetHandler.get(event.getMcServer()).getActiveConnection(event.getPlayer())
+				.ifPresent(connection -> connection.lastEditmodePosition = null);
 	}
 	
 	@SubscribeEvent
@@ -286,11 +285,6 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	public static EditData getData(Player editor)
 	{
 		return MSExtraData.get(editor.level()).findEditData(editData -> editData.getEditor() == editor);
-	}
-	
-	public static EditData getData(MinecraftServer server, SburbConnection c)
-	{
-		return getData(server, c.getClientIdentifier());
 	}
 	
 	public static EditData getData(MinecraftServer server, ActiveConnection connection)

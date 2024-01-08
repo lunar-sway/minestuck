@@ -5,8 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.event.ConnectionClosedEvent;
-import com.mraof.minestuck.event.ConnectionCreatedEvent;
+import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -118,7 +117,7 @@ public final class SkaianetHandler extends SavedData
 			try
 			{
 				SburbConnection newConnection = tryCreateNewConnectionFor(player, server);
-				setActive(newConnection, computer, serverComputer, ConnectionCreatedEvent.ConnectionType.REGULAR);
+				setActive(newConnection, computer, serverComputer, SburbEvent.ConnectionType.REGULAR);
 				openedServers.remove(server);
 			} catch(MergeResult.SessionMergeException e)
 			{
@@ -131,7 +130,7 @@ public final class SkaianetHandler extends SavedData
 		SburbConnection connection = optional.get();
 		if(connection.getServerIdentifier().equals(server))
 		{
-			setActive(connection, computer, serverComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
+			setActive(connection, computer, serverComputer, SburbEvent.ConnectionType.RESUME);
 			openedServers.remove(server);
 		} else if(!connection.hasServerPlayer())
 		{
@@ -140,7 +139,7 @@ public final class SkaianetHandler extends SavedData
 				sessionHandler.getSessionForConnecting(player, server);
 				connection.setNewServerPlayer(server);
 				
-				setActive(connection, computer, serverComputer, ConnectionCreatedEvent.ConnectionType.NEW_SERVER);
+				setActive(connection, computer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
 				openedServers.remove(server);
 			} catch(MergeResult.SessionMergeException e)
 			{
@@ -152,7 +151,7 @@ public final class SkaianetHandler extends SavedData
 			try
 			{
 				SburbConnection newConnection = tryCreateSecondaryConnectionFor(connection, server);
-				setActive(newConnection, computer, serverComputer, ConnectionCreatedEvent.ConnectionType.SECONDARY);
+				setActive(newConnection, computer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
 				openedServers.remove(server);
 			} catch(MergeResult.SessionMergeException e)
 			{
@@ -162,7 +161,7 @@ public final class SkaianetHandler extends SavedData
 		}
 	}
 	
-	private void setActive(SburbConnection connection, ISburbComputer client, ISburbComputer server, ConnectionCreatedEvent.ConnectionType type)
+	private void setActive(SburbConnection connection, ISburbComputer client, ISburbComputer server, SburbEvent.ConnectionType type)
 	{
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
@@ -172,7 +171,7 @@ public final class SkaianetHandler extends SavedData
 		client.connected(connection.getServerIdentifier(), true);
 		server.connected(connection.getClientIdentifier(), false);
 		
-		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(this.mcServer, connection, connection.getSession(), type));
+		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(this.mcServer, connection.getActiveConnection(), type));
 	}
 	
 	private SburbConnection tryCreateNewConnectionFor(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
@@ -217,9 +216,9 @@ public final class SkaianetHandler extends SavedData
 			if(otherComputer != null)
 			{
 				if(isClient)
-					setActive(connection, computer, otherComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
+					setActive(connection, computer, otherComputer, SburbEvent.ConnectionType.RESUME);
 				else
-					setActive(connection, otherComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
+					setActive(connection, otherComputer, computer, SburbEvent.ConnectionType.RESUME);
 				
 				list.remove(otherPlayer);
 			} else
@@ -245,7 +244,7 @@ public final class SkaianetHandler extends SavedData
 			if(clientComputer != null)
 			{
 				resumingClients.remove(connection.getClientIdentifier());
-				setActive(connection, clientComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
+				setActive(connection, clientComputer, computer, SburbEvent.ConnectionType.RESUME);
 			}
 		} else
 		{
@@ -335,6 +334,8 @@ public final class SkaianetHandler extends SavedData
 	
 	private void closeConnection(SburbConnection connection, ISburbComputer clientComputer, ISburbComputer serverComputer)
 	{
+		ActiveConnection activeConnection = Objects.requireNonNull(connection.getActiveConnection());
+		
 		sessionHandler.onConnectionClosed(connection, true);
 		
 		connection.close();
@@ -349,11 +350,8 @@ public final class SkaianetHandler extends SavedData
 			serverComputer.clearConnectedClient();
 			serverComputer.putServerMessage(CLOSED);
 		}
-		//Is secondary connection if primary is present, and does not equal this connection.
-		// TODO it being primary/secondary should be present as a final field in connections
-		ConnectionCreatedEvent.ConnectionType type = getPrimaryConnection(connection.getClientIdentifier(), true).map(c -> !connection.equals(c)).orElse(true)
-				? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
-		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
+		
+		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(mcServer, activeConnection));
 	}
 	
 	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)
@@ -491,18 +489,11 @@ public final class SkaianetHandler extends SavedData
 	 */
 	public void onEntry(PlayerIdentifier target)
 	{
-		Optional<SburbConnection> c = getPrimaryConnection(target, true);
-		if(c.isEmpty())
-		{
-			LOGGER.error("Finished entry without a player connection for {}. This should NOT happen!", target.getUsername());
-			return;
-		}
-		
 		SburbHandler.onEntry(mcServer, getOrCreateData(target));
 		
 		infoTracker.reloadLandChains();
 		
-		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));
+		MinecraftForge.EVENT_BUS.post(new OnEntryEvent(mcServer, target));
 	}
 	
 	public void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE)
