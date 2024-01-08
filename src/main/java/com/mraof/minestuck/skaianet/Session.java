@@ -294,9 +294,7 @@ public final class Session
 		{
 			try
 			{
-				SburbConnection c = new SburbConnection(list.getCompound(i), handler);
-				if(c.isActive() || c.isMain())
-					s.connections.add(c);
+				s.connections.add(new SburbConnection(list.getCompound(i), handler));
 			} catch(Exception e)
 			{
 				LOGGER.error("Unable to read sburb connection from tag {}. Forced to skip connection. Caused by:", list.getCompound(i), e);

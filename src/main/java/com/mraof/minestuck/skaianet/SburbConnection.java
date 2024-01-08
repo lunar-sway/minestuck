@@ -1,6 +1,5 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.player.*;
 import net.minecraft.nbt.CompoundTag;
 import org.apache.logging.log4j.LogManager;
@@ -20,8 +19,6 @@ public final class SburbConnection
 	private final PlayerIdentifier clientIdentifier;
 	@Nonnull
 	private PlayerIdentifier serverIdentifier;
-	@Nullable
-	private ActiveConnection activeConnection;
 	private boolean isMain;
 	
 	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler skaianet)
@@ -35,45 +32,17 @@ public final class SburbConnection
 	{
 		this.skaianet = skaianet;
 		isMain = nbt.getBoolean("IsMain");
-		boolean active = true;
-		
-		if(isMain)
-			active = nbt.getBoolean("IsActive");
-		
 		clientIdentifier = IdentifierHandler.load(nbt, "client");
 		serverIdentifier = IdentifierHandler.load(nbt, "server");
-		
-		if(active)
-		{
-			try
-			{
-				ComputerReference clientComputer = ComputerReference.read(nbt.getCompound("client_computer"));
-				ComputerReference serverComputer = ComputerReference.read(nbt.getCompound("server_computer"));
-				activeConnection = new ActiveConnection(this, clientComputer, serverComputer);
-			} catch(Exception e)
-			{
-				LOGGER.error("Unable to read computer position for sburb connection between {} and {}, setting connection to be inactive. Cause: ", clientIdentifier.getUsername(), serverIdentifier.getUsername(), e);
-			}
-		}
 	}
 	
 	CompoundTag write()
 	{
 		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("IsMain", isMain);
-		if(isMain)
-		{
-			nbt.putBoolean("IsActive", activeConnection != null);
-		}
 		
 		getClientIdentifier().saveToNBT(nbt, "client");
 		getServerIdentifier().saveToNBT(nbt, "server");
-		
-		if(activeConnection != null)
-		{
-			nbt.put("client_computer", activeConnection.clientComputer().write(new CompoundTag()));
-			nbt.put("server_computer", activeConnection.serverComputer().write(new CompoundTag()));
-		}
 		
 		return nbt;
 	}
@@ -81,28 +50,6 @@ public final class SburbConnection
 	public Session getSession()
 	{
 		return skaianet.sessionHandler.getPlayerSession(this.getClientIdentifier());
-	}
-	
-	void copyComputerReferences(SburbConnection connection)
-	{
-		if(!connection.isActive() || !connection.getClientIdentifier().equals(clientIdentifier)
-				|| !connection.getServerIdentifier().equals(serverIdentifier))
-			throw new IllegalArgumentException();
-		activeConnection = connection.activeConnection;
-	}
-	
-	void setActive(ComputerReference client, ComputerReference server)
-	{
-		if(isActive())
-			throw new IllegalStateException("Should not activate sburb connection when already active");
-		
-		activeConnection = new ActiveConnection(this, client, server);
-	}
-	
-	void close()
-	{
-		activeConnection = null;
-		skaianet.infoTracker.markDirty(this);
 	}
 	
 	@Nonnull
@@ -120,6 +67,13 @@ public final class SburbConnection
 	public boolean hasServerPlayer()
 	{
 		return getServerIdentifier() != IdentifierHandler.NULL_IDENTIFIER;
+	}
+	
+	void closeIfActive()
+	{
+		ActiveConnection connection = this.getActiveConnection();
+		if(connection != null)
+			skaianet.closeConnection(connection);
 	}
 	
 	void removeServerPlayer()
@@ -142,15 +96,12 @@ public final class SburbConnection
 		skaianet.infoTracker.markDirty(this);
 	}
 	
-	boolean hasPlayer(PlayerIdentifier player)
-	{
-		return clientIdentifier.equals(player) || serverIdentifier.equals(player);
-	}
-	
 	@Nullable
 	public ActiveConnection getActiveConnection()
 	{
-		return activeConnection;
+		return skaianet.activeConnections.stream()
+				.filter(c -> c.client().equals(this.getClientIdentifier()) && c.server().equals(this.getServerIdentifier()))
+				.findAny().orElse(null);
 	}
 	
 	@Deprecated
@@ -164,9 +115,10 @@ public final class SburbConnection
 		return isMain;
 	}
 	
+	@Deprecated
 	public boolean isActive()
 	{
-		return activeConnection != null;
+		return getActiveConnection() != null;
 	}
 	
 	void setIsMain()

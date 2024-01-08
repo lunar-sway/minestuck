@@ -62,14 +62,12 @@ public final class CommandActionHandler
 		if(cs.isPresent())
 		{
 			SburbConnection serverConnection = cs.get();
-			if(serverConnection.isActive())
-				skaianet.closeConnection(serverConnection.getActiveConnection());
+			serverConnection.closeIfActive();
 			serverConnection.removeServerPlayer();
 			updateLandChain = serverConnection.data().hasEntered();
 		}
 		
-		if(cc.isPresent() && cc.get().isActive())
-			skaianet.closeConnection(cc.get().getActiveConnection());
+		cc.ifPresent(SburbConnection::closeIfActive);
 		
 		SburbConnection connection = skaianet.getConnection(client, server);
 		if(cc.isEmpty() || !cc.get().isMain())
@@ -89,10 +87,9 @@ public final class CommandActionHandler
 			SburbConnection clientConnection = cc.get();
 			clientConnection.removeServerPlayer();
 			clientConnection.setNewServerPlayer(server);
-			if(connection != null && connection.isActive())
+			if(connection != null)
 			{
 				skaianet.sessionHandler.getPlayerSession(client).connections.remove(connection);
-				clientConnection.copyComputerReferences(connection);
 			}
 			updateLandChain |= clientConnection.data().hasEntered();
 		}
@@ -116,15 +113,13 @@ public final class CommandActionHandler
 		if(clientConnection.getSession().locked)
 			throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
 		
-		if(clientConnection.isActive())
-			skaianet.closeConnection(clientConnection.getActiveConnection());
+		clientConnection.closeIfActive();
 		
 		Optional<SburbConnection> cs = skaianet.getPrimaryOrCandidateConnection(identifier, false);
 		if(cs.isPresent())
 		{
 			SburbConnection serverConnection = cs.get();
-			if(serverConnection.isActive())
-				skaianet.closeConnection(serverConnection.getActiveConnection());
+			serverConnection.closeIfActive();
 			serverConnection.removeServerPlayer();
 			source.sendSuccess(() -> Component.literal(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(ChatFormatting.YELLOW), true);
 		}

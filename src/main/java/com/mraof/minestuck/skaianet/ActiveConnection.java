@@ -2,7 +2,9 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -75,4 +77,25 @@ public final class ActiveConnection
 	
 	@Nullable
 	public Vec3 lastEditmodePosition;
+	
+	CompoundTag write()
+	{
+		CompoundTag tag = new CompoundTag();
+		client.saveToNBT(tag, "client");
+		server.saveToNBT(tag, "server");
+		tag.put("client_computer", clientComputer.write(new CompoundTag()));
+		tag.put("server_computer", serverComputer.write(new CompoundTag()));
+		
+		return tag;
+	}
+	
+	static ActiveConnection read(CompoundTag tag)
+	{
+		PlayerIdentifier client = IdentifierHandler.load(tag, "client");
+		PlayerIdentifier server = IdentifierHandler.load(tag, "server");
+		ComputerReference clientComputer = ComputerReference.read(tag.getCompound("client_computer"));
+		ComputerReference serverComputer = ComputerReference.read(tag.getCompound("server_computer"));
+		
+		return new ActiveConnection(client, clientComputer, server, serverComputer);
+	}
 }

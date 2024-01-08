@@ -46,6 +46,7 @@ public final class SkaianetHandler extends SavedData
 	private final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
 	private final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
+	final List<ActiveConnection> activeConnections = new ArrayList<>();
 	final SessionHandler sessionHandler;
 	
 	final MinecraftServer mcServer;
@@ -79,6 +80,12 @@ public final class SkaianetHandler extends SavedData
 			PlayerIdentifier player = IdentifierHandler.load(playerDataTag, "player");
 			getOrCreateData(player).read(playerDataTag);
 		}
+		
+		ListTag connectionList = nbt.getList("connections", Tag.TAG_COMPOUND);
+		for(int i = 0; i < connectionList.size(); i++)
+		{
+			activeConnections.add(ActiveConnection.read(connectionList.getCompound(i)));
+		}
 	}
 	
 	public Optional<ActiveConnection> getActiveConnection(PlayerIdentifier client)
@@ -106,7 +113,7 @@ public final class SkaianetHandler extends SavedData
 			connections = connections.filter(c -> c.getClientIdentifier().equals(player));
 		else connections = connections.filter(c -> c.getServerIdentifier().equals(player));
 		
-		return connections.filter(c -> c.isMain() || c.isActive()).max(Comparator.comparingInt(c -> c.isMain() ? 1 : 0));
+		return connections.max(Comparator.comparingInt(c -> c.isMain() ? 1 : 0));
 	}
 	
 	public void connectToServer(ISburbComputer computer, PlayerIdentifier server)
@@ -176,13 +183,19 @@ public final class SkaianetHandler extends SavedData
 	{
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
-		connection.setActive(client.createReference(), server.createReference());
+		
+		if(connection.getActiveConnection() != null)
+			throw new IllegalStateException("Should not activate sburb connection when already active");
+		
+		ActiveConnection activeConnection = new ActiveConnection(connection, client.createReference(), server.createReference());
+		connection.skaianet.activeConnections.add(activeConnection);
+		
 		this.infoTracker.markDirty(connection);
 		
 		client.connected(connection.getServerIdentifier(), true);
 		server.connected(connection.getClientIdentifier(), false);
 		
-		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(this.mcServer, connection.getActiveConnection(), type));
+		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(this.mcServer, activeConnection, type));
 	}
 	
 	private SburbConnection tryCreateNewConnectionFor(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
@@ -212,31 +225,43 @@ public final class SkaianetHandler extends SavedData
 			return;
 		Optional<SburbConnection> optional = getPrimaryOrCandidateConnection(player, isClient);
 		
-		optional.filter(connection -> !connection.isActive()).ifPresent(connection -> {
-			PlayerIdentifier otherPlayer = isClient ? connection.getServerIdentifier() : connection.getClientIdentifier();
+		if(optional.isEmpty() || getActiveConnection(optional.get().getClientIdentifier()).isPresent())
+			return;
+		
+		SburbConnection connection = optional.get();
+		
+		if(isClient)
+		{
 			
-			ComputerWaitingList list = getResumeList(!isClient);
-			ISburbComputer otherComputer = list.getComputer(mcServer, otherPlayer);
-			
-			if(isClient && otherComputer == null)
-			{
-				list = openedServers;
-				otherComputer = list.getComputer(mcServer, otherPlayer);
-			}
+			ISburbComputer otherComputer = resumingServers.getComputer(mcServer, connection.getServerIdentifier());
 			
 			if(otherComputer != null)
 			{
-				if(isClient)
-					setActive(connection, computer, otherComputer, SburbEvent.ConnectionType.RESUME);
-				else
-					setActive(connection, otherComputer, computer, SburbEvent.ConnectionType.RESUME);
-				
-				list.remove(otherPlayer);
-			} else
-			{
-				getResumeList(isClient).put(player, computer);
+				setActive(connection, computer, otherComputer, SburbEvent.ConnectionType.RESUME);
+				resumingServers.remove(connection.getServerIdentifier());
+				return;
 			}
-		});
+			
+			otherComputer = openedServers.getComputer(mcServer, connection.getServerIdentifier());
+			
+			if(otherComputer != null)
+			{
+				setActive(connection, computer, otherComputer, SburbEvent.ConnectionType.RESUME);
+				openedServers.remove(connection.getServerIdentifier());
+			} else
+				resumingClients.put(player, computer);
+		} else
+		{
+			
+			ISburbComputer otherComputer = resumingClients.getComputer(mcServer, connection.getClientIdentifier());
+			
+			if(otherComputer != null)
+			{
+				setActive(connection, otherComputer, computer, SburbEvent.ConnectionType.RESUME);
+				resumingClients.remove(connection.getClientIdentifier());
+			} else
+				resumingServers.put(player, computer);
+		}
 	}
 	
 	public void openServer(ISburbComputer computer)
@@ -268,11 +293,6 @@ public final class SkaianetHandler extends SavedData
 		if(isClient)
 			return getActiveConnection(player).isPresent() || resumingClients.contains(player);
 		else return openedServers.contains(player) || resumingServers.contains(player);
-	}
-	
-	private ComputerWaitingList getResumeList(boolean isClient)
-	{
-		return isClient ? resumingClients : resumingServers;
 	}
 	
 	public void closeClientConnectionRemotely(PlayerIdentifier player)
@@ -343,7 +363,8 @@ public final class SkaianetHandler extends SavedData
 		
 		sessionHandler.onConnectionClosed(sburbConnection, true);
 		
-		sburbConnection.close();
+		activeConnections.remove(connection);
+		infoTracker.markDirty(sburbConnection);
 		
 		if(clientComputer != null)
 		{
@@ -385,6 +406,11 @@ public final class SkaianetHandler extends SavedData
 			playerDataList.add(playerDataTag);
 		}
 		compound.put("player_data", playerDataList);
+		
+		ListTag connectionList = new ListTag();
+		for(ActiveConnection connection : this.activeConnections)
+			connectionList.add(connection.write());
+		compound.put("connections", connectionList);
 		
 		return compound;
 	}
