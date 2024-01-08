@@ -99,8 +99,7 @@ public class GateHandler
 		}
 		
 		Optional<ResourceKey<Level>> clientLandOptional = SkaianetHandler.get(level.getServer())
-				.primaryConnectionForServer(landPlayer.get())
-				.map(SburbConnection::getClientIdentifier)
+				.primaryPartnerForServer(landPlayer.get())
 				.flatMap(clientPlayer -> {
 					SburbPlayerData clientPlayerData = SburbPlayerData.get(clientPlayer, level.getServer());
 					return Optional.ofNullable(clientPlayerData.getLandDimensionIfEntered());

@@ -46,6 +46,12 @@ public class ResumeSburbConnectionPacket implements MSPacket.PlayToServer
 	public void execute(ServerPlayer player)
 	{
 		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> SkaianetHandler.get(player.server).resumeConnection(computer, isClient));
+				computer -> {
+					SkaianetHandler skaianetHandler = SkaianetHandler.get(player.server);
+					if(isClient)
+						skaianetHandler.resumeClientConnection(computer);
+					else
+						skaianetHandler.resumeServerConnection(computer);
+				});
 	}
 }

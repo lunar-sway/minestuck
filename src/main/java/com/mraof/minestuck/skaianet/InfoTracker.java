@@ -138,7 +138,7 @@ public final class InfoTracker
 		PlayerIdentifier lastPlayer = player;
 		while(true)
 		{
-			Optional<PlayerIdentifier> client = skaianet.primaryConnectionForServer(lastPlayer).map(SburbConnection::getClientIdentifier);
+			Optional<PlayerIdentifier> client = skaianet.primaryPartnerForServer(lastPlayer);
 			if(client.isEmpty())
 			{
 				chain.addLast(null);
@@ -162,7 +162,7 @@ public final class InfoTracker
 		lastPlayer = player;
 		while(true)
 		{
-			Optional<PlayerIdentifier> server = SburbPlayerData.get(lastPlayer, skaianet.mcServer).primaryServerPlayer(skaianet.mcServer);
+			Optional<PlayerIdentifier> server = skaianet.primaryPartnerForClient(lastPlayer);
 			if(server.isEmpty())
 				break;
 			PlayerIdentifier nextPlayer = server.get();
@@ -248,8 +248,8 @@ public final class InfoTracker
 		boolean clientResuming = skaianet.hasResumingClient(player);
 		boolean serverResuming = skaianet.hasResumingServer(player);
 		
-		boolean hasPrimaryConnectionAsClient = skaianet.primaryConnectionForClient(player).isPresent();
-		boolean hasPrimaryConnectionAsServer = skaianet.primaryConnectionForServer(player).isPresent();
+		boolean hasPrimaryConnectionAsClient = skaianet.hasPrimaryConnectionForClient(player);
+		boolean hasPrimaryConnectionAsServer = skaianet.hasPrimaryConnectionForServer(player);
 		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
 		openedServersCache.put(player, serverMap.keySet());

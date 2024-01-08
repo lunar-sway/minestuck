@@ -93,14 +93,25 @@ public final class SkaianetHandler extends SavedData
 		return activeConnections().filter(c -> c.client().equals(client)).findAny();
 	}
 	
-	public Optional<SburbConnection> primaryConnectionForClient(PlayerIdentifier player)
+	public boolean hasPrimaryConnectionForClient(PlayerIdentifier player)
 	{
-		return primaryConnections().filter(c -> c.getClientIdentifier().equals(player)).findAny();
+		return primaryConnections().anyMatch(c -> c.getClientIdentifier().equals(player));
 	}
 	
-	public Optional<SburbConnection> primaryConnectionForServer(PlayerIdentifier player)
+	public Optional<PlayerIdentifier> primaryPartnerForClient(PlayerIdentifier player)
 	{
-		return primaryConnections().filter(c -> c.hasServerPlayer() && c.getServerIdentifier().equals(player)).findAny();
+		return primaryConnections().filter(c -> c.getClientIdentifier().equals(player)).findAny()
+				.filter(SburbConnection::hasServerPlayer).map(SburbConnection::getServerIdentifier);
+	}
+	
+	public boolean hasPrimaryConnectionForServer(PlayerIdentifier player)
+	{
+		return primaryConnections().anyMatch(c -> c.hasServerPlayer() && c.getServerIdentifier().equals(player));
+	}
+	
+	public Optional<PlayerIdentifier> primaryPartnerForServer(PlayerIdentifier player)
+	{
+		return primaryConnections().filter(c -> c.hasServerPlayer() && c.getServerIdentifier().equals(player)).findAny().map(SburbConnection::getClientIdentifier);
 	}
 	
 	public Optional<SburbConnection> getPrimaryOrCandidateConnection(PlayerIdentifier player, boolean isClient)
@@ -215,51 +226,61 @@ public final class SkaianetHandler extends SavedData
 		return newConnection;
 	}
 	
-	public void resumeConnection(ISburbComputer computer, boolean isClient)
+	public void resumeClientConnection(ISburbComputer computer)
 	{
 		PlayerIdentifier player = computer.getOwner();
-		ComputerReference reference = computer.createReference();
-		if(reference.isInNether() || isConnectingBlocked(player, isClient))
-			return;
-		Optional<SburbConnection> optional = getPrimaryOrCandidateConnection(player, isClient);
-		
-		if(optional.isEmpty() || getActiveConnection(optional.get().getClientIdentifier()).isPresent())
+		if(computer.createReference().isInNether() || isConnectingBlocked(player, true))
 			return;
 		
-		SburbConnection connection = optional.get();
+		if(!hasPrimaryConnectionForClient(player))
+			return;
 		
-		if(isClient)
+		Optional<PlayerIdentifier> server = primaryPartnerForClient(player);
+		if(server.isPresent())
 		{
-			
-			ISburbComputer otherComputer = resumingServers.getComputer(mcServer, connection.getServerIdentifier());
-			
+			ISburbComputer otherComputer = resumingServers.getComputer(mcServer, server.get());
 			if(otherComputer != null)
 			{
 				setActive(computer, otherComputer, SburbEvent.ConnectionType.RESUME);
-				resumingServers.remove(connection.getServerIdentifier());
+				resumingServers.remove(server.get());
 				return;
 			}
 			
-			otherComputer = openedServers.getComputer(mcServer, connection.getServerIdentifier());
-			
+			otherComputer = openedServers.getComputer(mcServer, server.get());
 			if(otherComputer != null)
 			{
 				setActive(computer, otherComputer, SburbEvent.ConnectionType.RESUME);
-				openedServers.remove(connection.getServerIdentifier());
-			} else
-				resumingClients.put(player, computer);
-		} else
-		{
-			
-			ISburbComputer otherComputer = resumingClients.getComputer(mcServer, connection.getClientIdentifier());
-			
-			if(otherComputer != null)
-			{
-				setActive(otherComputer, computer, SburbEvent.ConnectionType.RESUME);
-				resumingClients.remove(connection.getClientIdentifier());
-			} else
-				resumingServers.put(player, computer);
+				openedServers.remove(server.get());
+				return;
+			}
 		}
+		
+		resumingClients.put(player, computer);
+	}
+	
+	public void resumeServerConnection(ISburbComputer computer)
+	{
+		PlayerIdentifier player = computer.getOwner();
+		if(computer.createReference().isInNether() || isConnectingBlocked(player, false))
+			return;
+		
+		Optional<PlayerIdentifier> optionalClient = primaryPartnerForServer(player);
+		if(optionalClient.isEmpty())
+			return;
+		
+		PlayerIdentifier client = optionalClient.get();
+		if(getActiveConnection(client).isPresent())
+			return;
+		
+		ISburbComputer otherComputer = resumingClients.getComputer(mcServer, client);
+		if(otherComputer != null)
+		{
+			setActive(otherComputer, computer, SburbEvent.ConnectionType.RESUME);
+			resumingClients.remove(client);
+			return;
+		}
+		
+		resumingServers.put(player, computer);
 	}
 	
 	public void openServer(ISburbComputer computer)
@@ -269,7 +290,7 @@ public final class SkaianetHandler extends SavedData
 		if(reference.isInNether() || isConnectingBlocked(player, false))
 			return;
 		
-		Optional<PlayerIdentifier> primaryClient = primaryConnectionForServer(player).map(SburbConnection::getClientIdentifier);
+		Optional<PlayerIdentifier> primaryClient = primaryPartnerForServer(player);
 		if(primaryClient.isPresent() && getActiveConnection(primaryClient.get()).isEmpty()
 				&& resumingClients.contains(primaryClient.get()))
 		{

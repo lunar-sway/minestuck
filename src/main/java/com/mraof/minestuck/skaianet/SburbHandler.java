@@ -219,7 +219,7 @@ public final class SburbHandler
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)
 	{
 		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
-		return skaianetHandler.getActiveConnection(player).isEmpty() && skaianetHandler.getPrimaryOrCandidateConnection(player, true).isEmpty();
+		return skaianetHandler.getActiveConnection(player).isEmpty() && !skaianetHandler.hasPrimaryConnectionForClient(player);
 	}
 	
 	static void initNewData(SburbPlayerData playerData)

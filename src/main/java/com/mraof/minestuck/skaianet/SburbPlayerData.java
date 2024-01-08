@@ -96,8 +96,7 @@ public final class SburbPlayerData
 	
 	public Optional<PlayerIdentifier> primaryServerPlayer(MinecraftServer mcServer)
 	{
-		return SkaianetHandler.get(mcServer).primaryConnectionForClient(this.playerId)
-				.filter(SburbConnection::hasServerPlayer).map(SburbConnection::getServerIdentifier);
+		return SkaianetHandler.get(mcServer).primaryPartnerForClient(playerId());
 	}
 	
 	public boolean hasEntered()
