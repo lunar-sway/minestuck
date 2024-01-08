@@ -4,6 +4,7 @@ import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
+import com.mraof.minestuck.skaianet.client.ReducedPlayerState;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,23 +16,14 @@ import java.util.*;
 
 public final class SkaianetInfoPacket
 {
-	public record Data(int playerId, boolean isClientResuming, boolean isServerResuming,
-					   Map<Integer, String> openServers, List<ReducedConnection> connections) implements MSPacket.PlayToClient
+	public record Data(int playerId, ReducedPlayerState playerState, List<ReducedConnection> connections) implements MSPacket.PlayToClient
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)
 		{
 			buffer.writeInt(playerId);
 			
-			buffer.writeBoolean(isClientResuming);
-			buffer.writeBoolean(isServerResuming);
-			
-			buffer.writeInt(openServers.size());
-			for(Map.Entry<Integer, String> entry : openServers.entrySet())
-			{
-				buffer.writeInt(entry.getKey());
-				buffer.writeUtf(entry.getValue(), 16);
-			}
+			playerState.write(buffer);
 			
 			buffer.writeCollection(connections, (buffer1, connection) -> connection.write(buffer1));
 		}
@@ -40,16 +32,11 @@ public final class SkaianetInfoPacket
 		{
 			int playerId = buffer.readInt();
 			
-			boolean isClientResuming = buffer.readBoolean();
-			boolean isServerResuming = buffer.readBoolean();
-			int size = buffer.readInt();
-			Map<Integer, String> openServers = new HashMap<>();
-			for(int i = 0; i < size; i++)
-				openServers.put(buffer.readInt(), buffer.readUtf(16));
+			ReducedPlayerState playerState = ReducedPlayerState.read(buffer);
 			
 			List<ReducedConnection> connections = buffer.readList(ReducedConnection::read);
 			
-			return new Data(playerId, isClientResuming, isServerResuming, openServers, connections);
+			return new Data(playerId, playerState, connections);
 		}
 		
 		@Override

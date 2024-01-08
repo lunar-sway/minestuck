@@ -20,12 +20,8 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SkaiaClient
 {
-	
-	//Variables
-	private static final Map<Integer, Map<Integer, String>> openServers = new HashMap<>();
+	private static final Map<Integer, ReducedPlayerState> playerStateMap = new HashMap<>();
 	private static final List<ReducedConnection> connections = new ArrayList<>();
-	private static final Map<Integer, Boolean> serverWaiting = new HashMap<>();
-	private static final Map<Integer, Boolean> resumingClient = new HashMap<>();
 	/**
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
@@ -37,10 +33,8 @@ public class SkaiaClient
 	@SubscribeEvent
 	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
-		openServers.clear();
+		playerStateMap.clear();
 		connections.clear();
-		serverWaiting.clear();
-		resumingClient.clear();
 		landChainMap.clear();
 		playerId = -1;
 		hasEntered = false;
@@ -54,7 +48,7 @@ public class SkaiaClient
 	 */
 	public static boolean requestData(ComputerBlockEntity computer)
 	{
-		boolean b = openServers.get(computer.ownerId) != null;
+		boolean b = playerStateMap.get(computer.ownerId) != null;
 		if(!b)
 		{
 			MSPacketHandler.sendToServer(new SkaianetInfoPacket.Request(computer.ownerId));
@@ -77,7 +71,7 @@ public class SkaiaClient
 	
 	public static Map<Integer, String> getAvailableServers(Integer playerId)
 	{
-		return openServers.get(playerId);
+		return playerStateMap.get(playerId).openServers();
 	}
 	
 	public static boolean hasPlayerEntered()
@@ -93,8 +87,8 @@ public class SkaiaClient
 	public static boolean isActive(int playerId, boolean isClient)
 	{
 		if(isClient)
-			return getClientConnection(playerId) != null || resumingClient.get(playerId);
-		else return serverWaiting.get(playerId);
+			return getClientConnection(playerId) != null || playerStateMap.get(playerId).isClientResuming();
+		else return playerStateMap.get(playerId).isServerResuming();
 	}
 	
 	/**
@@ -124,10 +118,8 @@ public class SkaiaClient
 	{
 		if(playerId == -1)
 			playerId = data.playerId();	//The first info packet is expected to be regarding the receiving player.
-		openServers.put(data.playerId(), data.openServers());
 		
-		resumingClient.put(data.playerId(), data.isClientResuming());
-		serverWaiting.put(data.playerId(), data.isServerResuming());
+		playerStateMap.put(data.playerId(), data.playerState());
 		
 		connections.removeIf(c -> c.client().id() == data.playerId() || c.server().id() == data.playerId());
 		connections.addAll(data.connections());

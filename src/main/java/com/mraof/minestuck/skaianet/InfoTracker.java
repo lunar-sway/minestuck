@@ -8,6 +8,7 @@ import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
+import com.mraof.minestuck.skaianet.client.ReducedPlayerState;
 import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -233,11 +234,12 @@ public final class InfoTracker
 		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
 		openedServersCache.put(player, serverMap.keySet());
+		ReducedPlayerState playerState = new ReducedPlayerState(clientResuming, serverResuming, serverMap);
 		
 		// create list with all connections that the player is in
 		List<ReducedConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
 		
-		return new SkaianetInfoPacket.Data(player.getId(), clientResuming, serverResuming, serverMap, list);
+		return new SkaianetInfoPacket.Data(player.getId(), playerState, list);
 	}
 	
 	private void checkListeners()
