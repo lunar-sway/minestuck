@@ -1950,7 +1950,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SettingsApp.THEME, "Theme: %s");
 		add(SettingsApp.TITLE, "Sburb Settings");
 		add(MergeResult.ABLE, "Able to merge");
-		add(MergeResult.LOCKED, "Either session is locked");
 		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
 		add(MergeResult.SESSION_FULL, "The session is full");
 		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
@@ -2010,7 +2009,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerCommand.FAILURE_RESULT, "Failed the teleport anything.");
 		add(TransportalizerCommand.RESULT, "Successfully teleported %s entities to transportalizer");
 		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
-		add(SburbConnectionCommand.LOCKED, "Their session is locked, and should no longer be modified");
 		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
 		add(DebugLandsCommand.MUST_ENTER, "You must have entered before you can create debug lands");
 		add(SburbPredefineCommand.SET_TITLE, "Predefined %s's title as %s");

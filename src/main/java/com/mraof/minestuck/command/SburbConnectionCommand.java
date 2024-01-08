@@ -16,10 +16,8 @@ import net.minecraft.server.level.ServerPlayer;
 public class SburbConnectionCommand
 {
 	public static final String SUCCESS = "commands.minestuck.sburbconnection.success";
-	public static final String LOCKED = "commands.minestuck.sburbconnection.locked";
 	public static final String ALREADY_CONNECTED = "commands.minestuck.sburbconnection.already_connected";
 	
-	public static final SimpleCommandExceptionType LOCKED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(LOCKED));
 	public static final SimpleCommandExceptionType CONNECTED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(ALREADY_CONNECTED));
 	public static final DynamicCommandExceptionType MERGE_EXCEPTION = new DynamicCommandExceptionType(o -> Component.translatable(((MergeResult) o).translationKey()));
 	

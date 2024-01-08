@@ -31,7 +31,6 @@ public final class PredefineData
 	
 	private final PlayerIdentifier player;
 	private final Session session;
-	private boolean lockedToSession;
 	private Title title;
 	private TerrainLandType terrainLandType;
 	private TitleLandType titleLandType;
@@ -44,7 +43,6 @@ public final class PredefineData
 	
 	PredefineData read(CompoundTag nbt)
 	{
-		lockedToSession = nbt.getBoolean("locked");
 		title = Title.tryRead(nbt, "title");
 		if(nbt.contains("landTerrain", Tag.TAG_STRING))
 			terrainLandType = LandTypes.TERRAIN_REGISTRY.get().getValue(ResourceLocation.tryParse(nbt.getString("landTerrain")));
@@ -57,7 +55,6 @@ public final class PredefineData
 	CompoundTag write()
 	{
 		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("locked", lockedToSession);
 		if(title != null)
 			title.write(nbt, "title");
 		if(terrainLandType != null)
@@ -147,11 +144,6 @@ public final class PredefineData
 				source.sendSuccess(() -> Component.translatable(GENERATED_TITLE_LAND, LandTypes.TITLE_REGISTRY.get().getKey(titleLandType)), true);
 			else source.sendSuccess(() -> Component.translatable(CHANGED_TITLE_LAND, LandTypes.TITLE_REGISTRY.get().getKey(previous), LandTypes.TITLE_REGISTRY.get().getKey(titleLandType)).withStyle(ChatFormatting.YELLOW), true);
 		}
-	}
-	
-	public boolean isLockedToSession()
-	{
-		return lockedToSession;
 	}
 	
 	public PlayerIdentifier getPlayer()

@@ -71,7 +71,7 @@ public abstract class SessionHandler
 		Optional<SburbConnection> cServer = skaianetHandler.getPrimaryOrCandidateConnection(server, false);
 		
 		return cClient.isPresent() && cServer.isPresent() && sClient == sServer && (MinestuckConfig.SERVER.allowSecondaryConnections.get() || cClient.get() == cServer.get())	//Reconnect within session
-				|| cClient.isEmpty() && cServer.isEmpty() && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
+				|| cClient.isEmpty() && cServer.isEmpty();	//Connect with a new player and potentially create a main connection
 	}
 	
 	Session getSessionForConnecting(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException

@@ -124,8 +124,4 @@ public final class SburbConnection
 		}
 	}
 	
-	public boolean isLockedToSession()
-	{
-		return false;
-	}
 }

@@ -51,15 +51,10 @@ final class SessionMerger
 	
 	static List<Session> splitSession(Session originalSession, List<ActiveConnection> activeConnections)
 	{
-		if(originalSession.locked)
-			return Collections.emptyList();
-		
 		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
 		Set<SburbConnection> unhandledConnections = new HashSet<>(originalSession.connections);
 		Set<PlayerIdentifier> unhandledPredefine = new HashSet<>(originalSession.predefinedPlayers.keySet());
 		activeConnections = new ArrayList<>(activeConnections);
-		
-		clearSessionLockedPlayers(originalSession, unhandledConnections, activeConnections, unhandledPredefine);
 		
 		//Pick out as many session chains that we can from the remaining connections
 		List<Session> sessions = new ArrayList<>();
@@ -90,37 +85,6 @@ final class SessionMerger
 		}
 		
 		return sessions;
-	}
-	
-	/**
-	 * Clears out any connections and players that are locked to the session (and connections connected to these) from the provided sets.
-	 */
-	private static void clearSessionLockedPlayers(Session session, Set<SburbConnection> connections, List<ActiveConnection> activeConnections, Set<PlayerIdentifier> predefinedPlayers)
-	{
-		Set<PlayerIdentifier> lockedPlayers = new HashSet<>();
-		//Add locked players from connections
-		for(SburbConnection connection : session.connections)
-		{
-			if(connection.isLockedToSession())
-			{
-				connections.remove(connection);
-				lockedPlayers.add(connection.getClientIdentifier());
-				if(connection.hasServerPlayer())
-					lockedPlayers.add(connection.getServerIdentifier());
-			}
-		}
-		//Add locked players from predefined data
-		for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
-		{
-			if(entry.getValue().isLockedToSession())
-				lockedPlayers.add(entry.getKey());
-		}
-		
-		//Clear out all connections connected to players that should stay in the session
-		collectConnectionsWithMembers(connections, activeConnections, lockedPlayers, sburbConnection -> {});
-		
-		predefinedPlayers.removeAll(lockedPlayers);
-		
 	}
 	
 	private static Session createSplitSession(Session originalSession, Set<SburbConnection> unhandledConnections, List<ActiveConnection> activeConnections, Set<PlayerIdentifier> predefinedPlayers)
@@ -185,9 +149,6 @@ final class SessionMerger
 			if(!playersInSession.contains(player))
 				size++;
 		}
-		
-		if(target.locked && size != playersInSession.size())	//If the session is locked and we're trying to add a new player to it
-			throw MergeResult.LOCKED.exception();
 		
 		if(MinestuckConfig.SERVER.forceMaxSize && size > SessionHandler.MAX_SIZE)
 			throw fullSessionResult.exception();

@@ -110,9 +110,6 @@ public final class CommandActionHandler
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		SburbConnection clientConnection = cc.get();
 		
-		if(clientConnection.getSession().locked)
-			throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
-		
 		clientConnection.closeIfActive();
 		
 		Optional<SburbConnection> cs = skaianet.getPrimaryOrCandidateConnection(identifier, false);

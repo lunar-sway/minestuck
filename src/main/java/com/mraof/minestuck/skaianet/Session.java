@@ -38,17 +38,12 @@ public final class Session
 	 * If the "connection circle" is whole, unused if globalSession == true.
 	 */
 	boolean completed;
-	boolean locked;
 	
 	/**
 	 * If the function throws an exception, this session should no longer be considered valid
 	 */
 	void inheritFrom(Session other) throws MergeResult.SessionMergeException
 	{
-		if(locked)
-			throw MergeResult.LOCKED.exception();
-		else locked = other.locked;
-		
 		if(other.isCustom())
 		{
 			if(!isCustom())
@@ -264,7 +259,6 @@ public final class Session
 		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
-		nbt.putBoolean("locked", locked);
 		nbt.put("gutter", this.gutter.write());
 		return nbt;
 	}
@@ -305,7 +299,6 @@ public final class Session
 			}
 		}
 		
-		s.locked = nbt.getBoolean("locked");
 		return s;
 	}
 	
