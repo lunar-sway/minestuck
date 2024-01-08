@@ -6,13 +6,14 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public final class ActiveConnection
 {
 	private final PlayerIdentifier client;
-	private final ComputerReference clientComputer;
+	private ComputerReference clientComputer;
 	private final PlayerIdentifier server;
-	private final ComputerReference serverComputer;
+	private ComputerReference serverComputer;
 	
 	ActiveConnection(PlayerIdentifier client, ComputerReference clientComputer,
 							PlayerIdentifier server, ComputerReference serverComputer)
@@ -61,6 +62,15 @@ public final class ActiveConnection
 	public ComputerReference serverComputer()
 	{
 		return serverComputer;
+	}
+	
+	void updateComputer(ISburbComputer oldComputer, ComputerReference newComputer)
+	{
+		Objects.requireNonNull(newComputer);
+		if(this.clientComputer.matches(oldComputer))
+			this.clientComputer = newComputer;
+		if(this.serverComputer.matches(oldComputer))
+			this.serverComputer = newComputer;
 	}
 	
 	@Nullable

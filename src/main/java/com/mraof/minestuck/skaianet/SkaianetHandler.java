@@ -86,7 +86,17 @@ public final class SkaianetHandler extends SavedData
 		return activeConnections().filter(c -> c.client().equals(client)).findAny();
 	}
 	
-	public Optional<SburbConnection> getPrimaryConnection(PlayerIdentifier player, boolean isClient)
+	public Optional<SburbConnection> primaryConnectionForClient(PlayerIdentifier player)
+	{
+		return primaryConnections().filter(c -> c.getClientIdentifier().equals(player)).findAny();
+	}
+	
+	public Optional<SburbConnection> primaryConnectionForServer(PlayerIdentifier player)
+	{
+		return primaryConnections().filter(c -> c.hasServerPlayer() && c.getServerIdentifier().equals(player)).findAny();
+	}
+	
+	public Optional<SburbConnection> getPrimaryOrCandidateConnection(PlayerIdentifier player, boolean isClient)
 	{
 		if(player == null || player.equals(IdentifierHandler.NULL_IDENTIFIER))
 			return Optional.empty();
@@ -112,7 +122,7 @@ public final class SkaianetHandler extends SavedData
 		if(serverComputer == null)
 			return;
 		
-		Optional<SburbConnection> optional = getPrimaryConnection(player, true);
+		Optional<SburbConnection> optional = getPrimaryOrCandidateConnection(player, true);
 		if(optional.isEmpty())
 		{
 			try
@@ -200,7 +210,7 @@ public final class SkaianetHandler extends SavedData
 		ComputerReference reference = computer.createReference();
 		if(reference.isInNether() || isConnectingBlocked(player, isClient))
 			return;
-		Optional<SburbConnection> optional = getPrimaryConnection(player, isClient);
+		Optional<SburbConnection> optional = getPrimaryOrCandidateConnection(player, isClient);
 		
 		optional.filter(connection -> !connection.isActive()).ifPresent(connection -> {
 			PlayerIdentifier otherPlayer = isClient ? connection.getServerIdentifier() : connection.getClientIdentifier();
@@ -236,7 +246,7 @@ public final class SkaianetHandler extends SavedData
 		if(reference.isInNether() || isConnectingBlocked(player, false))
 			return;
 		
-		Optional<SburbConnection> optional = getPrimaryConnection(player, false);
+		Optional<SburbConnection> optional = getPrimaryOrCandidateConnection(player, false);
 		if(optional.isPresent() && !optional.get().isActive() && resumingClients.contains(optional.get().getClientIdentifier()))
 		{
 			SburbConnection connection = optional.get();
@@ -441,7 +451,12 @@ public final class SkaianetHandler extends SavedData
 	
 	public Stream<SburbConnection> getConnectionsInEntry()
 	{
-		return sessionHandler.getConnectionStream().filter(connection -> connection.isMain() && !connection.data().hasEntered());
+		return primaryConnections().filter(connection -> !connection.data().hasEntered());
+	}
+	
+	Stream<SburbConnection> primaryConnections()
+	{
+		return sessionHandler.getConnectionStream().filter(SburbConnection::isMain);
 	}
 	
 	/**
@@ -452,7 +467,7 @@ public final class SkaianetHandler extends SavedData
 	 */
 	public ResourceKey<Level> prepareEntry(PlayerIdentifier target)
 	{
-		SburbConnection c = getPrimaryConnection(target, true).orElse(null);
+		SburbConnection c = getPrimaryOrCandidateConnection(target, true).orElse(null);
 		SburbPlayerData playerData = getOrCreateData(target);
 		if(c == null)
 		{
@@ -494,7 +509,7 @@ public final class SkaianetHandler extends SavedData
 		if(!oldBE.owner.equals(newBE.owner))
 			throw new IllegalStateException("Moving computers with different owners! ("+oldBE.owner+" and "+newBE.owner+")");
 		
-		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldBE, newRef));
+		activeConnections().forEach(c -> c.updateComputer(oldBE, newRef));
 		
 		resumingClients.replace(oldBE.owner, oldRef, newRef);
 		resumingServers.replace(oldBE.owner, oldRef, newRef);

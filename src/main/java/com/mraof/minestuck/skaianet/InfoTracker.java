@@ -120,7 +120,7 @@ public final class InfoTracker
 		List<List<ResourceKey<Level>>> landChains = new ArrayList<>();
 		
 		Set<ResourceKey<Level>> checked = new HashSet<>();
-		skaianet.sessionHandler.getConnectionStream().forEach(c -> populateLandChain(landChains, checked, c));
+		skaianet.primaryConnections().forEach(c -> populateLandChain(landChains, checked, c));
 		
 		return landChains;
 	}
@@ -128,7 +128,7 @@ public final class InfoTracker
 	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, SburbConnection c)
 	{
 		ResourceKey<Level> dimensionType = c.data().getLandDimension();
-		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
+		if(dimensionType != null && !checked.contains(dimensionType))
 		{
 			LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
 			chain.add(dimensionType);
@@ -136,7 +136,7 @@ public final class InfoTracker
 			SburbConnection cIter = c;
 			while(true)
 			{
-				cIter = skaianet.getPrimaryConnection(cIter.getClientIdentifier(), false).orElse(null);
+				cIter = skaianet.primaryConnectionForServer(cIter.getClientIdentifier()).orElse(null);
 				if(cIter != null && cIter.data().hasEntered())
 				{
 					if(!checked.contains(cIter.data().getLandDimension()))
@@ -153,7 +153,7 @@ public final class InfoTracker
 			cIter = c;
 			while(true)
 			{
-				cIter = skaianet.getPrimaryConnection(cIter.getServerIdentifier(), true).orElse(null);
+				cIter = skaianet.primaryConnectionForClient(cIter.getServerIdentifier()).orElse(null);
 				if(cIter != null && cIter.data().hasEntered() && !checked.contains(cIter.data().getLandDimension()))
 				{
 					chain.addFirst(cIter.data().getLandDimension());
@@ -217,9 +217,8 @@ public final class InfoTracker
 			{
 				if(player.equals(listener))
 				{
-					//Trigger advancement if there is an active connection that the player is in
-					skaianet.sessionHandler.getConnectionStream().filter(SburbConnection::isActive).filter(c -> c.hasPlayer(player))
-							.findAny().ifPresent(c -> MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerListener));
+					if(skaianet.activeConnections().anyMatch(c -> c.hasPlayer(player)))
+						MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerListener);
 				}
 				
 				MSPacketHandler.sendToPlayer(packet, playerListener);
@@ -232,8 +231,8 @@ public final class InfoTracker
 		boolean clientResuming = skaianet.hasResumingClient(player);
 		boolean serverResuming = skaianet.hasResumingServer(player);
 		
-		boolean hasPrimaryConnectionAsClient = skaianet.getPrimaryConnection(player, true).isPresent();
-		boolean hasPrimaryConnectionAsServer = skaianet.getPrimaryConnection(player, false).isPresent();
+		boolean hasPrimaryConnectionAsClient = skaianet.primaryConnectionForClient(player).isPresent();
+		boolean hasPrimaryConnectionAsServer = skaianet.primaryConnectionForServer(player).isPresent();
 		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
 		openedServersCache.put(player, serverMap.keySet());

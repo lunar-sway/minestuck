@@ -164,7 +164,7 @@ public final class SburbHandler
 	public static boolean giveItems(MinecraftServer mcServer, PlayerIdentifier player)
 	{
 		SkaianetHandler handler = SkaianetHandler.get(mcServer);
-		SburbConnection c = handler.getPrimaryConnection(player, true).orElse(null);
+		SburbConnection c = handler.getPrimaryOrCandidateConnection(player, true).orElse(null);
 		if(c != null && !c.isMain())
 		{
 			onFirstItemGiven(c);
@@ -218,7 +218,8 @@ public final class SburbHandler
 	
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		return SessionHandler.get(mcServer).getConnectionStream().noneMatch(c -> c.getClientIdentifier().equals(player));
+		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
+		return skaianetHandler.getActiveConnection(player).isEmpty() && skaianetHandler.getPrimaryOrCandidateConnection(player, true).isEmpty();
 	}
 	
 	static void initNewData(SburbPlayerData playerData)

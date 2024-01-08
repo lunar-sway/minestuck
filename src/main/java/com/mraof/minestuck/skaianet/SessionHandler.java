@@ -67,8 +67,8 @@ public abstract class SessionHandler
 	private boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
-		Optional<SburbConnection> cClient = skaianetHandler.getPrimaryConnection(client, true);
-		Optional<SburbConnection> cServer = skaianetHandler.getPrimaryConnection(server, false);
+		Optional<SburbConnection> cClient = skaianetHandler.getPrimaryOrCandidateConnection(client, true);
+		Optional<SburbConnection> cServer = skaianetHandler.getPrimaryOrCandidateConnection(server, false);
 		boolean serverActive = cServer.isPresent();
 		if(!serverActive && sServer != null)
 			for(SburbConnection c : sServer.connections)
@@ -104,7 +104,7 @@ public abstract class SessionHandler
 			onConnectionChainBroken(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			Optional<SburbConnection> optional = skaianetHandler.getPrimaryConnection(connection.getClientIdentifier(), false);
+			Optional<SburbConnection> optional = skaianetHandler.getPrimaryOrCandidateConnection(connection.getClientIdentifier(), false);
 			if(optional.isPresent())
 			{
 				SburbConnection c = optional.get();

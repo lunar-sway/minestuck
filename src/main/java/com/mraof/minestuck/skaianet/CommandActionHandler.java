@@ -46,7 +46,7 @@ public final class CommandActionHandler
 	
 	private static boolean forceConnection(SkaianetHandler skaianet, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
-		Optional<SburbConnection> cc = skaianet.getPrimaryConnection(client, true), cs = skaianet.getPrimaryConnection(server, false);
+		Optional<SburbConnection> cc = skaianet.getPrimaryOrCandidateConnection(client, true), cs = skaianet.getPrimaryOrCandidateConnection(server, false);
 		
 		if(cc.isPresent() && cc.equals(cs))
 		{
@@ -108,7 +108,7 @@ public final class CommandActionHandler
 		SkaianetHandler skaianet = SkaianetHandler.get(player.server);
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
-		Optional<SburbConnection> cc = skaianet.getPrimaryConnection(identifier, true);
+		Optional<SburbConnection> cc = skaianet.getPrimaryOrCandidateConnection(identifier, true);
 		if(cc.isEmpty() || !skaianet.getOrCreateData(identifier).hasEntered())
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		SburbConnection clientConnection = cc.get();
@@ -119,7 +119,7 @@ public final class CommandActionHandler
 		if(clientConnection.isActive())
 			skaianet.closeConnection(clientConnection.getActiveConnection());
 		
-		Optional<SburbConnection> cs = skaianet.getPrimaryConnection(identifier, false);
+		Optional<SburbConnection> cs = skaianet.getPrimaryOrCandidateConnection(identifier, false);
 		if(cs.isPresent())
 		{
 			SburbConnection serverConnection = cs.get();

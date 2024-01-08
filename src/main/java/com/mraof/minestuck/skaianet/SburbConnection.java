@@ -1,7 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.computer.ComputerReference;
-import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.player.*;
 import net.minecraft.nbt.CompoundTag;
 import org.apache.logging.log4j.LogManager;
@@ -135,7 +134,7 @@ public final class SburbConnection
 	{
 		if(hasServerPlayer())
 			throw new IllegalStateException("Connection already has server player");
-		if(skaianet.getPrimaryConnection(server, false).isPresent())
+		if(skaianet.getPrimaryOrCandidateConnection(server, false).isPresent())
 			throw MergeResult.GENERIC_FAIL.exception();
 		skaianet.sessionHandler.prepareSessionFor(clientIdentifier, server);    //Make sure that it is fine to add the server here session-wise
 		
@@ -158,18 +157,6 @@ public final class SburbConnection
 	public SburbPlayerData data()
 	{
 		return SburbPlayerData.get(clientIdentifier, skaianet.mcServer);
-	}
-	
-	void updateComputer(ISburbComputer oldComputer, ComputerReference newComputer)
-	{
-		Objects.requireNonNull(newComputer);
-		if(activeConnection != null)
-		{
-			if(activeConnection.clientComputer().matches(oldComputer))
-				activeConnection = new ActiveConnection(this, newComputer, activeConnection.serverComputer());
-			if(activeConnection.serverComputer().matches(oldComputer))
-				activeConnection = new ActiveConnection(this, activeConnection.clientComputer(), newComputer);
-		}
 	}
 	
 	public boolean isMain()

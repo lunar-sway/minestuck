@@ -99,7 +99,7 @@ public class GateHandler
 		}
 		
 		Optional<ResourceKey<Level>> clientLandOptional = SkaianetHandler.get(level.getServer())
-				.getPrimaryConnection(landPlayer.get(), false)
+				.primaryConnectionForServer(landPlayer.get())
 				.map(SburbConnection::getClientIdentifier)
 				.flatMap(clientPlayer -> {
 					SburbPlayerData clientPlayerData = SburbPlayerData.get(clientPlayer, level.getServer());
@@ -133,7 +133,7 @@ public class GateHandler
 			return null;
 		}
 		
-		Optional<ResourceKey<Level>> serverLandOptional = SkaianetHandler.get(level).getPrimaryConnection(landPlayer.get(), true)
+		Optional<ResourceKey<Level>> serverLandOptional = SkaianetHandler.get(level).primaryConnectionForClient(landPlayer.get())
 				.filter(SburbConnection::hasServerPlayer).map(SburbConnection::getServerIdentifier)
 				.flatMap(serverPlayer -> {
 					SburbPlayerData serverPlayerData = SburbPlayerData.get(serverPlayer, level.getServer());
