@@ -34,11 +34,7 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 			
 			if(source == GristHelper.EnumSource.SERVER)
 			{
-				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
-				if(sc == null)
-					return;
-				
-				EditData ed = ServerEditHandler.getData(server, sc);
+				EditData ed = ServerEditHandler.getData(server, player);
 				if(ed == null)
 					return;
 				

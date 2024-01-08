@@ -272,9 +272,8 @@ public class EditData
 			SburbPlayerData.get(this.clientPlayer, mcServer).putEditmodeInventory(this.inventory);
 			if(editPlayer != null)
 			{
-				SburbConnection connection = SkaianetHandler.get(mcServer).getActiveConnection(this.clientPlayer);
-				if(connection != null)
-					Objects.requireNonNull(connection.getActiveConnection()).lastEditmodePosition = editPlayer.position();
+				SkaianetHandler.get(mcServer).getActiveConnection(this.clientPlayer)
+						.ifPresent(connection -> connection.lastEditmodePosition = editPlayer.position());
 			}
 		}
 	}

@@ -191,17 +191,20 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			player.sendSystemMessage(Component.literal("You may not activate editmode while riding something"));
 			return;    //Don't want to bother making the decoy able to ride anything right now.
 		}
-		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
-		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
+		Optional<ActiveConnection> connectionOptional = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
+		if(connectionOptional.isEmpty())
+			return;
+		ActiveConnection connection = connectionOptional.get();
+		
+		if(connection.server().equals(computerOwner) && getData(player.server, connection) == null && getData(player) == null)
 		{
 			LOGGER.info("Activating edit mode on player \"{}\", target player: \"{}\".", player.getName().getString(), computerTarget);
 			
-			ActiveConnection activeConnection = Objects.requireNonNull(c.getActiveConnection(), "Connection has to be active with a computer position to be used here");
 			SburbPlayerData targetData = SburbPlayerData.get(computerTarget, player.server);
 			DecoyEntity decoy = new DecoyEntity((ServerLevel) player.level(), player);
-			EditData data = new EditData(decoy, player, activeConnection);
+			EditData data = new EditData(decoy, player, connection);
 			
-			if(!setPlayerStats(player, targetData, activeConnection))
+			if(!setPlayerStats(player, targetData, connection))
 			{
 				player.sendSystemMessage(Component.literal("Failed to activate edit mode.").withStyle(ChatFormatting.RED));
 				return;
@@ -287,7 +290,12 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	
 	public static EditData getData(MinecraftServer server, SburbConnection c)
 	{
-		return MSExtraData.get(server).findEditData(editData -> editData.activeConnection.client().equals(c.getClientIdentifier()) && editData.activeConnection.server().equals(c.getServerIdentifier()));
+		return getData(server, c.getClientIdentifier());
+	}
+	
+	public static EditData getData(MinecraftServer server, ActiveConnection connection)
+	{
+		return getData(server, connection.client());
 	}
 	
 	public static EditData getData(MinecraftServer server, PlayerIdentifier client)

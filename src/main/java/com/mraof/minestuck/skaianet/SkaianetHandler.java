@@ -81,14 +81,9 @@ public final class SkaianetHandler extends SavedData
 		}
 	}
 	
-	/**
-	 * @param client The client player to search for
-	 * @return The active connection with the client as its client player, or null if no such connection was found.
-	 */
-	public SburbConnection getActiveConnection(PlayerIdentifier client)
+	public Optional<ActiveConnection> getActiveConnection(PlayerIdentifier client)
 	{
-		return sessionHandler.getConnectionStream().filter(SburbConnection::isActive).filter(c -> c.getClientIdentifier().equals(client))
-				.findAny().orElse(null);
+		return activeConnections().filter(c -> c.client().equals(client)).findAny();
 	}
 	
 	public Optional<SburbConnection> getPrimaryConnection(PlayerIdentifier player, boolean isClient)
@@ -261,7 +256,7 @@ public final class SkaianetHandler extends SavedData
 	private boolean isConnectingBlocked(PlayerIdentifier player, boolean isClient)
 	{
 		if(isClient)
-			return getActiveConnection(player) != null || resumingClients.contains(player);
+			return getActiveConnection(player).isPresent() || resumingClients.contains(player);
 		else return openedServers.contains(player) || resumingServers.contains(player);
 	}
 	
@@ -283,11 +278,7 @@ public final class SkaianetHandler extends SavedData
 			}
 		} else
 		{
-			SburbConnection activeConnection = getActiveConnection(player);
-			if(activeConnection != null)
-			{
-				closeConnection(activeConnection);
-			}
+			getActiveConnection(player).ifPresent(this::closeConnection);
 		}
 	}
 	
@@ -326,6 +317,14 @@ public final class SkaianetHandler extends SavedData
 		}
 	}
 	
+	void closeConnection(ActiveConnection activeConnection)
+	{
+		SburbConnection connection = getConnection(activeConnection.client(), activeConnection.server());
+		closeConnection(connection, activeConnection.clientComputer().getComputer(mcServer),
+				activeConnection.serverComputer().getComputer(mcServer));
+	}
+	
+	@Deprecated
 	void closeConnection(SburbConnection connection)
 	{
 		ActiveConnection activeConnection = connection.getActiveConnection();

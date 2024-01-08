@@ -1,6 +1,6 @@
 package com.mraof.minestuck.player;
 
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
@@ -8,10 +8,8 @@ import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.GristCachePacket;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
@@ -224,14 +222,10 @@ public final class GristCache
 		}
 		
 		//Also send to the editing player, if there is any
-		SburbConnection c = SkaianetHandler.get(mcServer).getActiveConnection(data.identifier);
-		if(c != null)
+		EditData data = ServerEditHandler.getData(mcServer, this.data.identifier);
+		if(data != null)
 		{
-			EditData data = ServerEditHandler.getData(mcServer, c);
-			if(data != null)
-			{
-				data.sendGristCacheToEditor();
-			}
+			data.sendGristCacheToEditor();
 		}
 	}
 	

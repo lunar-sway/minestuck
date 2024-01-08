@@ -115,15 +115,14 @@ public final class SburbHandler
 			return -1;
 		if(handler.doesSessionHaveMaxTier(s))
 			return Integer.MAX_VALUE;
-		SburbConnection c = SkaianetHandler.get(mcServer).getActiveConnection(client);
-		if(c == null)
-			return -1;
+		
 		int count = -1;
-		for(SburbConnection conn : s.connections)
-			if(conn.data().hasEntered())
+		for(PlayerIdentifier player : s.getPlayerList())
+			if(SburbPlayerData.get(player, mcServer).hasEntered())
 				count++;
-		if(!c.data().hasEntered())
+		if(!SburbPlayerData.get(client, mcServer).hasEntered())
 			count++;
+		
 		return count;
 	}
 	
