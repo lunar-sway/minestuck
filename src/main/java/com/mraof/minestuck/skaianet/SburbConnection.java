@@ -78,10 +78,13 @@ public final class SburbConnection
 	
 	void removeServerPlayer()
 	{
-		Session session = this.getSession();
-		skaianet.infoTracker.markDirty(this);
-		serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
-		skaianet.sessionHandler.onConnectionChainBroken(session);
+		if(hasServerPlayer())
+		{
+			Session session = this.getSession();
+			skaianet.infoTracker.markDirty(serverIdentifier);
+			serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+			skaianet.sessionHandler.onConnectionChainBroken(session);
+		}
 	}
 	
 	void setNewServerPlayer(PlayerIdentifier server) throws MergeResult.SessionMergeException
@@ -93,7 +96,7 @@ public final class SburbConnection
 		skaianet.sessionHandler.prepareSessionFor(clientIdentifier, server);    //Make sure that it is fine to add the server here session-wise
 		
 		serverIdentifier = Objects.requireNonNull(server);
-		skaianet.infoTracker.markDirty(this);
+		skaianet.infoTracker.markDirty(serverIdentifier);
 	}
 	
 	@Nullable

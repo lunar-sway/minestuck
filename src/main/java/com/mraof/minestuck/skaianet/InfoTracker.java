@@ -196,6 +196,12 @@ public final class InfoTracker
 			markDirty(connection.getServerIdentifier());
 	}
 	
+	void markDirty(ActiveConnection connection)
+	{
+		markDirty(connection.client());
+		markDirty(connection.server());
+	}
+	
 	private void checkAndSend()
 	{
 		checkListeners();

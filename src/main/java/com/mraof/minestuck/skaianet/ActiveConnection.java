@@ -26,9 +26,9 @@ public final class ActiveConnection
 		this.serverComputer = serverComputer;
 	}
 	
-	ActiveConnection(SburbConnection connection, ComputerReference clientComputer, ComputerReference serverComputer)
+	ActiveConnection(ISburbComputer client, ISburbComputer server)
 	{
-		this(connection.getClientIdentifier(), clientComputer, connection.getServerIdentifier(), serverComputer);
+		this(client.getOwner(), client.createReference(), server.getOwner(), server.createReference());
 	}
 	
 	public boolean isClient(ISburbComputer computer)
