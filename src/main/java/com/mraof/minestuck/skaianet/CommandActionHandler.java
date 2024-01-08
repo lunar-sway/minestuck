@@ -64,7 +64,7 @@ public final class CommandActionHandler
 			SburbConnection serverConnection = cs.get();
 			serverConnection.closeIfActive();
 			serverConnection.removeServerPlayer();
-			updateLandChain = serverConnection.data().hasEntered();
+			updateLandChain = skaianet.getOrCreateData(serverConnection.getClientIdentifier()).hasEntered();
 		}
 		
 		cc.ifPresent(SburbConnection::closeIfActive);
@@ -91,7 +91,7 @@ public final class CommandActionHandler
 			{
 				skaianet.sessionHandler.getPlayerSession(client).connections.remove(connection);
 			}
-			updateLandChain |= clientConnection.data().hasEntered();
+			updateLandChain |= skaianet.getOrCreateData(clientConnection.getClientIdentifier()).hasEntered();
 		}
 		
 		if(updateLandChain)

@@ -27,16 +27,16 @@ public class Generator
 {
 	public static final String NO_AVAILABLE_TITLES = "minestuck.skaianet.no_available_titles";
 	
-	static boolean isTitleValid(Session session, Title title)
+	static boolean isTitleValid(Session session, Title title, MinecraftServer mcServer)
 	{
-		return !session.isTitleUsed(title);
+		return !session.isTitleUsed(title, mcServer);
 	}
 	
-	static Title generateTitle(Session session, Set<EnumAspect> availableAspects, PlayerIdentifier ignore) throws SkaianetException
+	static Title generateTitle(Session session, Set<EnumAspect> availableAspects, PlayerIdentifier ignore, MinecraftServer mcServer) throws SkaianetException
 	{
 		Random random = new Random();	//TODO seed based on player and world in a good way
 		
-		Set<Title> usedTitles = session.getUsedTitles(ignore);
+		Set<Title> usedTitles = session.getUsedTitles(mcServer, ignore);
 		
 		List<EnumAspect> unusedAspects = unusedAspects(availableAspects, usedTitles);
 		List<EnumClass> unusedClasses = unusedClasses(usedTitles);

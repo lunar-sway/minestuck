@@ -1,9 +1,8 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -11,8 +10,6 @@ import java.util.Objects;
 
 public final class SburbConnection
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	final SkaianetHandler skaianet;
 	
 	@Nonnull
@@ -107,12 +104,6 @@ public final class SburbConnection
 				.findAny().orElse(null);
 	}
 	
-	@Deprecated
-	public SburbPlayerData data()
-	{
-		return SburbPlayerData.get(clientIdentifier, skaianet.mcServer);
-	}
-	
 	public boolean isMain()
 	{
 		return isMain;
@@ -136,17 +127,5 @@ public final class SburbConnection
 	public boolean isLockedToSession()
 	{
 		return false;
-	}
-	
-	public Title getClientTitle()
-	{
-		if(data().hasEntered())
-		{
-			Title title = PlayerSavedData.getData(getClientIdentifier(), skaianet.mcServer).getTitle();
-			if(title == null)
-				LOGGER.warn("Found player {} that has entered, but did not have a title!", getClientIdentifier().getUsername());
-			return title;
-		}
-		return null;
 	}
 }

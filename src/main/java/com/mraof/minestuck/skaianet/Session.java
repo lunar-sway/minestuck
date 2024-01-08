@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -140,11 +142,11 @@ public final class Session
 		return list;
 	}
 	
-	boolean isTitleUsed(@Nonnull Title newTitle)
+	boolean isTitleUsed(@Nonnull Title newTitle, MinecraftServer server)
 	{
-		for(SburbConnection c : connections)
+		for(PlayerIdentifier player : this.getPlayerList())
 		{
-			Title title = c.getClientTitle();
+			Title title = PlayerSavedData.getData(player, server).getTitle();
 			if(newTitle.equals(title))
 				return true;
 		}
@@ -156,19 +158,19 @@ public final class Session
 		return false;
 	}
 	
-	Set<Title> getUsedTitles()
+	Set<Title> getUsedTitles(MinecraftServer server)
 	{
-		return getUsedTitles(null);
+		return getUsedTitles(server, null);
 	}
 	
-	Set<Title> getUsedTitles(PlayerIdentifier ignore)
+	Set<Title> getUsedTitles(MinecraftServer server, @Nullable PlayerIdentifier ignore)
 	{
 		Set<Title> titles = new HashSet<>();
-		for(SburbConnection c : connections)
+		for(PlayerIdentifier player : this.getPlayerList())
 		{
-			if(!c.getClientIdentifier().equals(ignore))
+			if(!player.equals(ignore))
 			{
-				Title title = c.getClientTitle();
+				Title title = PlayerSavedData.getData(player, server).getTitle();
 				if(title != null)
 					titles.add(title);
 			}
@@ -186,14 +188,14 @@ public final class Session
 		return getUsedTitleLandTypes(server, null);
 	}
 	
-	List<TitleLandType> getUsedTitleLandTypes(MinecraftServer server, PlayerIdentifier ignore)
+	List<TitleLandType> getUsedTitleLandTypes(MinecraftServer server, @Nullable PlayerIdentifier ignore)
 	{
 		List<TitleLandType> types = new ArrayList<>();
-		for(SburbConnection c : connections)
+		for(PlayerIdentifier player : this.getPlayerList())
 		{
-			if(!c.getClientIdentifier().equals(ignore))
+			if(!player.equals(ignore))
 			{
-				LandTypePair.getTypes(server, c.data().getLandDimension())
+				LandTypePair.getTypes(server, SburbPlayerData.get(player, server).getLandDimension())
 						.ifPresent(landTypes -> types.add(landTypes.getTitle()));
 			}
 		}
@@ -210,14 +212,14 @@ public final class Session
 		return getUsedTerrainLandTypes(server, null);
 	}
 	
-	List<TerrainLandType> getUsedTerrainLandTypes(MinecraftServer server, PlayerIdentifier ignore)
+	List<TerrainLandType> getUsedTerrainLandTypes(MinecraftServer server, @Nullable PlayerIdentifier ignore)
 	{
 		List<TerrainLandType> types = new ArrayList<>();
-		for(SburbConnection c : connections)
+		for(PlayerIdentifier player : this.getPlayerList())
 		{
-			if(!c.getClientIdentifier().equals(ignore))
+			if(!player.equals(ignore))
 			{
-				LandTypePair.getTypes(server, c.data().getLandDimension())
+				LandTypePair.getTypes(server, SburbPlayerData.get(player, server).getLandDimension())
 						.ifPresent(landTypes -> types.add(landTypes.getTerrain()));
 			}
 		}

@@ -491,12 +491,12 @@ public final class SkaianetHandler extends SavedData
 	
 	public Stream<ActiveConnection> activeConnections()
 	{
-		return sessionHandler.getConnectionStream().flatMap(connection -> Stream.ofNullable(connection.getActiveConnection()));
+		return activeConnections.stream();
 	}
 	
 	public Stream<SburbConnection> getConnectionsInEntry()
 	{
-		return primaryConnections().filter(connection -> !connection.data().hasEntered());
+		return primaryConnections().filter(connection -> !getOrCreateData(connection.getClientIdentifier()).hasEntered());
 	}
 	
 	Stream<SburbConnection> primaryConnections()

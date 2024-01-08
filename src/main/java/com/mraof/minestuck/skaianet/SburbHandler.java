@@ -65,7 +65,7 @@ public final class SburbHandler
 		{
 			try
 			{
-				title = Generator.generateTitle(session, EnumAspect.valuesSet(), player);
+				title = Generator.generateTitle(session, EnumAspect.valuesSet(), player, level.getServer());
 			} catch(SkaianetException e)
 			{
 				return null;	//TODO handle exception further down the line

@@ -81,6 +81,7 @@ public class DataCheckerManager
 	 */
 	private static CompoundTag createConnectionDataTag(MinecraftServer server, SburbConnection connection, Set<PlayerIdentifier> playerSet, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
 	{
+		SburbPlayerData playerData = SburbPlayerData.get(connection.getClientIdentifier(), server);
 		if(connection.isMain())
 			playerSet.add(connection.getClientIdentifier());
 		CompoundTag connectionTag = new CompoundTag();
@@ -92,7 +93,7 @@ public class DataCheckerManager
 		connectionTag.putBoolean("isActive", connection.isActive());
 		if(connection.isMain())
 		{
-			ResourceKey<Level> landDimensionKey = connection.data().getLandDimension();
+			ResourceKey<Level> landDimensionKey = playerData.getLandDimension();
 			if(landDimensionKey != null)
 			{
 				connectionTag.putString("clientDim", landDimensionKey.location().toString());

@@ -72,7 +72,7 @@ public class TitleSelectionHook
 		else
 		{
 			Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
-			if(s != null && s.getUsedTitles(identifier).contains(title))
+			if(s != null && s.getUsedTitles(player.server, identifier).contains(title))
 			{
 				// Title is already used in session; inform the player that they can't pick this title
 				MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
