@@ -1,6 +1,8 @@
 
 # Modeling
 
+- Badadamadaba: [Crumply hat](src/main/java/com/mraof/minestuck/client/model/armor/CrumplyHatModel.java)
+
 - blankMushroom
 
 - Caldw3ll: [`sendificator.json`](src/main/resources/assets/minestuck/models/block/sendificator.json)
@@ -10,6 +12,8 @@
 - Dado: [`grist_widget.json`](src/main/resources/assets/minestuck/models/block/grist_widget.json)
 and [`grist_widget_with_card.json`](src/main/resources/assets/minestuck/models/block/grist_widget_with_card.json)
 
+- DORO: [Dreamer pajamas](src/main/java/com/mraof/minestuck/client/model/armor/DreamerPajamasModel.java)
+
 - Dweblenod
 
 - [iconmaster](https://github.com/iconmaster5326/)
@@ -18,6 +22,9 @@ and [`grist_widget_with_card.json`](src/main/resources/assets/minestuck/models/b
 
 - kirderf1: [`cruxite_dowel.json`](src/main/resources/assets/minestuck/models/block/cruxite_dowel.json)
 and [`cruxtruder_dowel.json`](src/main/resources/assets/minestuck/models/block/cruxtruder_dowel.json)
+
+- Mraof: [Carapacian bishop](src/main/java/com/mraof/minestuck/client/model/entity/BishopModel.java)
+and [Carapacian rook](src/main/java/com/mraof/minestuck/client/model/entity/RookModel.java)
 
 - Riotmode
 
