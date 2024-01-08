@@ -52,9 +52,10 @@ public class SburbServer extends ButtonListProgram
 		else
 		{
 			list.add(new UnlocalizedString(OFFLINE));
-			if(MinestuckConfig.SERVER.allowSecondaryConnections.get() || SkaiaClient.getAssociatedPartner(be.ownerId, false) == -1)
+			if(MinestuckConfig.SERVER.allowSecondaryConnections.get()
+					|| !SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
 				list.add(new UnlocalizedString(OPEN_BUTTON));
-			if(SkaiaClient.getAssociatedPartner(be.ownerId, false) != -1)
+			if(SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
 				list.add(new UnlocalizedString(RESUME_BUTTON));
 		}
 		return list;

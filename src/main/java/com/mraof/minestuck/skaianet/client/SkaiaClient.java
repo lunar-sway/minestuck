@@ -15,10 +15,7 @@ import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SkaiaClient
@@ -67,15 +64,15 @@ public class SkaiaClient
 	}
 	
 	//Getters used by the computer
-	public static int getAssociatedPartner(int playerId, boolean isClient)
+	
+	public static boolean hasPrimaryConnectionAsClient(int playerId)
 	{
-		for(ReducedConnection c : connections)
-			if(c.isMain())
-				if(isClient && c.client().id() == playerId)
-					return c.server().id();
-				else if(!isClient && c.server().id() == playerId)
-					return c.client().id();
-		return -1;
+		return connections.stream().anyMatch(c -> c.isMain() && c.client().id() == playerId);
+	}
+	
+	public static boolean hasPrimaryConnectionAsServer(int playerId)
+	{
+		return connections.stream().anyMatch(c -> c.isMain() && c.server().id() == playerId);
 	}
 	
 	public static Map<Integer, String> getAvailableServers(Integer playerId)
