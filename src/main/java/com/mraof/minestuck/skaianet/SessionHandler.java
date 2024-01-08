@@ -82,47 +82,16 @@ public abstract class SessionHandler
 		return prepareSessionFor(client, server);
 	}
 	
-	/**
-	 * @param normal If the connection was closed by normal means.
-	 * (includes everything but getting crushed by a meteor and other reasons for removal of a main connection)
-	 */
-	void onConnectionClosed(SburbConnection connection, boolean normal)
-	{	//TODO the design of this function may need to be looked over
-		Session s = getPlayerSession(connection.getClientIdentifier());
-		Objects.requireNonNull(s);	//If the connection exists, then there should be a session that contains it
-		if(!connection.isMain())
-		{
-			s.connections.remove(connection);
+	void onConnectionClosed(ActiveConnection connection)
+	{
+		SburbConnection sburbConnection = skaianetHandler.getConnection(connection);
+		
+		Session s = Objects.requireNonNull(getPlayerSession(connection.client()));	//If the connection exists, then there should be a session that contains it
+		
+		if(sburbConnection != null && !sburbConnection.isMain())
+			s.connections.remove(sburbConnection);
+		if(sburbConnection == null || !sburbConnection.isMain())
 			onConnectionChainBroken(s);
-		} else if(!normal) {
-			s.connections.remove(connection);
-			Optional<SburbConnection> optional = skaianetHandler.getPrimaryOrCandidateConnection(connection.getClientIdentifier(), false);
-			if(optional.isPresent())
-			{
-				SburbConnection c = optional.get();
-				c.closeIfActive();
-				if(c.isMain())
-				{
-					switch(MinestuckConfig.SERVER.escapeFailureMode.get())
-					{
-						case CLOSE:
-							try
-							{
-								c.removeServerPlayer();
-								c.setNewServerPlayer(connection.getServerIdentifier());
-							} catch(MergeResult.SessionMergeException e)
-							{
-								throw new IllegalStateException(e);
-							}
-							break;
-						case OPEN:
-							c.removeServerPlayer();
-							break;
-					}
-				}
-			}
-			onConnectionChainBroken(s);
-		}
 	}
 	
 	Map<Integer, String> getServerList(PlayerIdentifier client)

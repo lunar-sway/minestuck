@@ -160,7 +160,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	
 	private void split(Session session)
 	{
-		List<Session> sessions = SessionMerger.splitSession(session);
+		List<Session> sessions = SessionMerger.splitSession(session, skaianetHandler.activeConnections);
 		this.sessions.addAll(sessions);
 		removeIfEmpty(session);
 	}

@@ -49,7 +49,7 @@ final class SessionMerger
 		return session;
 	}
 	
-	static List<Session> splitSession(Session originalSession)
+	static List<Session> splitSession(Session originalSession, List<ActiveConnection> activeConnections)
 	{
 		if(originalSession.locked)
 			return Collections.emptyList();
@@ -57,14 +57,15 @@ final class SessionMerger
 		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
 		Set<SburbConnection> unhandledConnections = new HashSet<>(originalSession.connections);
 		Set<PlayerIdentifier> unhandledPredefine = new HashSet<>(originalSession.predefinedPlayers.keySet());
+		activeConnections = new ArrayList<>(activeConnections);
 		
-		clearSessionLockedPlayers(originalSession, unhandledConnections, unhandledPredefine);
+		clearSessionLockedPlayers(originalSession, unhandledConnections, activeConnections, unhandledPredefine);
 		
 		//Pick out as many session chains that we can from the remaining connections
 		List<Session> sessions = new ArrayList<>();
 		while(!unhandledConnections.isEmpty())
 		{
-			sessions.add(createSplitSession(originalSession, unhandledConnections, unhandledPredefine));
+			sessions.add(createSplitSession(originalSession, unhandledConnections, activeConnections, unhandledPredefine));
 		}
 		
 		//Create sessions from all predefined players that doesn't need to belong to a specific session
@@ -94,7 +95,7 @@ final class SessionMerger
 	/**
 	 * Clears out any connections and players that are locked to the session (and connections connected to these) from the provided sets.
 	 */
-	private static void clearSessionLockedPlayers(Session session, Set<SburbConnection> connections, Set<PlayerIdentifier> predefinedPlayers)
+	private static void clearSessionLockedPlayers(Session session, Set<SburbConnection> connections, List<ActiveConnection> activeConnections, Set<PlayerIdentifier> predefinedPlayers)
 	{
 		Set<PlayerIdentifier> lockedPlayers = new HashSet<>();
 		//Add locked players from connections
@@ -116,20 +117,20 @@ final class SessionMerger
 		}
 		
 		//Clear out all connections connected to players that should stay in the session
-		collectConnectionsWithMembers(connections, lockedPlayers, sburbConnection -> {});
+		collectConnectionsWithMembers(connections, activeConnections, lockedPlayers, sburbConnection -> {});
 		
 		predefinedPlayers.removeAll(lockedPlayers);
 		
 	}
 	
-	private static Session createSplitSession(Session originalSession, Set<SburbConnection> unhandledConnections, Set<PlayerIdentifier> predefinedPlayers)
+	private static Session createSplitSession(Session originalSession, Set<SburbConnection> unhandledConnections, List<ActiveConnection> activeConnections, Set<PlayerIdentifier> predefinedPlayers)
 	{
 		SburbConnection next = unhandledConnections.iterator().next();
 		Set<PlayerIdentifier> players = new HashSet<>();
 		players.add(next.getClientIdentifier());
 		Session newSession = new Session();
 		
-		collectConnectionsWithMembers(unhandledConnections, players, newSession.connections::add);
+		collectConnectionsWithMembers(unhandledConnections, activeConnections, players, newSession.connections::add);
 		for(PlayerIdentifier identifier : players)
 		{
 			if(originalSession.predefinedPlayers.containsKey(identifier))
@@ -140,7 +141,7 @@ final class SessionMerger
 		return newSession;
 	}
 	
-	private static void collectConnectionsWithMembers(Set<SburbConnection> unhandledConnections, Set<PlayerIdentifier> members, Consumer<SburbConnection> collector)
+	private static void collectConnectionsWithMembers(Set<SburbConnection> unhandledConnections, List<ActiveConnection> activeConnections, Set<PlayerIdentifier> members, Consumer<SburbConnection> collector)
 	{
 		boolean addedAny;
 		do
@@ -158,6 +159,18 @@ final class SessionMerger
 						addedAny = true;
 					iterator.remove();
 				}
+			 }
+			 
+			 Iterator<ActiveConnection> iterator1 = activeConnections.iterator();
+			 while(iterator1.hasNext())
+			 {
+				 ActiveConnection connection = iterator1.next();
+				 if(members.contains(connection.client()) || members.contains(connection.server()))
+				 {
+					 if(members.add(connection.client()) || members.add(connection.server()))
+						 addedAny = true;
+					 iterator1.remove();
+				 }
 			 }
 			 
 		} while(addedAny);

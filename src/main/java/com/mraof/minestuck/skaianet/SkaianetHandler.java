@@ -177,16 +177,8 @@ public final class SkaianetHandler extends SavedData
 			}
 		} else
 		{
-			try
-			{
-				tryCreateSecondaryConnectionFor(connection.getClientIdentifier(), server);
-				setActive(computer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
-				openedServers.remove(server);
-			} catch(MergeResult.SessionMergeException e)
-			{
-				LOGGER.warn("Secondary connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-				computer.putClientMessage(e.getResult().translationKey());
-			}
+			setActive(computer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
+			openedServers.remove(server);
 		}
 	}
 	
@@ -209,15 +201,6 @@ public final class SkaianetHandler extends SavedData
 	}
 	
 	private SburbConnection tryCreateNewConnectionFor(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
-	{
-		Session session = sessionHandler.getSessionForConnecting(client, server);
-		SburbConnection newConnection = new SburbConnection(client, server, this);
-		session.connections.add(newConnection);
-		
-		return newConnection;
-	}
-	
-	private SburbConnection tryCreateSecondaryConnectionFor(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		Session session = sessionHandler.getSessionForConnecting(client, server);
 		SburbConnection newConnection = new SburbConnection(client, server, this);
@@ -373,14 +356,12 @@ public final class SkaianetHandler extends SavedData
 	
 	private void closeConnection(ActiveConnection connection, @Nullable ISburbComputer clientComputer, @Nullable ISburbComputer serverComputer)
 	{
-		SburbConnection sburbConnection = getConnection(connection);
-		
 		if(clientComputer == null)
 			clientComputer = connection.clientComputer().getComputer(mcServer);
 		if(serverComputer == null)
 			serverComputer = connection.serverComputer().getComputer(mcServer);
 		
-		sessionHandler.onConnectionClosed(sburbConnection, true);
+		sessionHandler.onConnectionClosed(connection);
 		
 		activeConnections.remove(connection);
 		infoTracker.markDirty(connection);
