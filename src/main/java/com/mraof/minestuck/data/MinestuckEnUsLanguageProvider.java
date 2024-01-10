@@ -1950,11 +1950,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SettingsApp.THEME, "Theme: %s");
 		add(SettingsApp.TITLE, "Sburb Settings");
 		add(MergeResult.ABLE, "Able to merge");
-		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
-		add(MergeResult.SESSION_FULL, "The session is full");
-		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
-		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
 		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console");
@@ -2025,7 +2021,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(LandTypePairArgument.INCOMPLETE, "Incomplete (expected two land aspects)");
 		
 		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
-		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
 		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
 		add(PredefineData.GENERATED_TITLE, "Generated %s as predefined title");
 		add(PredefineData.CHANGED_TITLE, "Changed predefined title from %s to %s due to a new title land type");

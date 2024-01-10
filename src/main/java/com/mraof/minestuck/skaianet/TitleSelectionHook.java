@@ -70,17 +70,7 @@ public class TitleSelectionHook
 		if(title == null)
 			SburbHandler.generateAndSetTitle(player.level(), identifier);
 		else
-		{
-			Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
-			if(s != null && s.getUsedTitles(player.server, identifier).contains(title))
-			{
-				// Title is already used in session; inform the player that they can't pick this title
-				MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
-				return;
-			}
-			
 			PlayerSavedData.getData(identifier, player.server).setTitle(title);
-		}
 		
 		//Once the title selection has finished successfully, restore player position and trigger entry
 		var both = playersInTitleSelection.remove(player);

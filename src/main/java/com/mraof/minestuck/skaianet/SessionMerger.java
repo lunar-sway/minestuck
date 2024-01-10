@@ -1,6 +1,5 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.player.PlayerIdentifier;
 
@@ -10,37 +9,27 @@ import java.util.stream.Collectors;
 
 final class SessionMerger
 {
-	static Session getValidMergedSession(DefaultSessionHandler handler, PlayerIdentifier... players) throws MergeResult.SessionMergeException
+	static Session getValidMergedSession(DefaultSessionHandler handler, PlayerIdentifier... players)
 	{
 		Set<Session> sessions = Arrays.stream(players).map(handler::getPlayerSession).filter(Objects::nonNull).collect(Collectors.toSet());
 		
 		if(sessions.size() > 1)
 		{
 			Session target = createMergedSession(sessions);
-			verifyCanAdd(target, MergeResult.MERGED_SESSION_FULL, players);
 			handler.handleSuccessfulMerge(sessions, target);
 			return target;
 		} else if(sessions.size() == 1)
 		{
-			Session session = sessions.stream().findAny().get();
-			verifyCanAdd(session, MergeResult.SESSION_FULL, players);
-			return session;
+			return sessions.stream().findAny().get();
 		} else
 		{
 			Session session = new Session();
-			verifyCanAdd(session, MergeResult.GENERIC_FAIL, players);
 			handler.addNewSession(session);
 			return session;
 		}
 	}
 	
-	static Session verifyCanAddToGlobal(Session session, PlayerIdentifier... players) throws MergeResult.SessionMergeException
-	{
-		verifyCanAdd(session, MergeResult.GLOBAL_SESSION_FULL, players);
-		return session;
-	}
-	
-	static Session mergedSessionFromAll(Set<Session> sessions) throws MergeResult.SessionMergeException
+	static Session mergedSessionFromAll(Set<Session> sessions)
 	{
 		Session session = new Session();
 		for(Session other : sessions)
@@ -140,21 +129,7 @@ final class SessionMerger
 		} while(addedAny);
 	}
 	
-	private static void verifyCanAdd(Session target, MergeResult fullSessionResult, PlayerIdentifier... players) throws MergeResult.SessionMergeException
-	{
-		Set<PlayerIdentifier> playersInSession = target.getPlayerList();
-		int size = playersInSession.size();
-		for(PlayerIdentifier player : players)
-		{
-			if(!playersInSession.contains(player))
-				size++;
-		}
-		
-		if(MinestuckConfig.SERVER.forceMaxSize && size > SessionHandler.MAX_SIZE)
-			throw fullSessionResult.exception();
-	}
-	
-	private static Session createMergedSession(Set<Session> sessions) throws MergeResult.SessionMergeException
+	private static Session createMergedSession(Set<Session> sessions)
 	{
 		Session mergedSession = new Session();
 		for(Session session : sessions)

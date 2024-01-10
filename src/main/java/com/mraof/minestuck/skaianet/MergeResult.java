@@ -3,9 +3,6 @@ package com.mraof.minestuck.skaianet;
 public enum MergeResult	//TODO This isn't used for much else than exceptions. Replace usage with SkaianetException and when relevant factory functions
 {
 	ABLE("able", "Is able to merge"),
-	GLOBAL_SESSION_FULL("global_session_full", "Global session is full"),
-	SESSION_FULL("session_full", "Session is full"),
-	MERGED_SESSION_FULL("merged_session_full", "Merged session is full"),
 	GENERIC_FAIL("fail", "Merge failed");
 	
 	private final String key, message;

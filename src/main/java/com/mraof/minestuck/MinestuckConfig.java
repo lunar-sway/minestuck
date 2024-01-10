@@ -88,7 +88,6 @@ public class MinestuckConfig
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
 		
 		//Mechanics
-		public final boolean forceMaxSize = true;
 		public final BooleanValue hardMode;
 		public final BooleanValue echeladderProgress;
 		public final BooleanValue aspectEffects;

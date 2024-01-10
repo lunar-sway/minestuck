@@ -4,14 +4,13 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.server.MinecraftServer;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -25,8 +24,6 @@ import java.util.stream.Collectors;
  */
 public class Generator
 {
-	public static final String NO_AVAILABLE_TITLES = "minestuck.skaianet.no_available_titles";
-	
 	static boolean isTitleValid(Session session, Title title, MinecraftServer mcServer)
 	{
 		return !session.isTitleUsed(title, mcServer);
@@ -50,23 +47,29 @@ public class Generator
 		} else if(!unusedAspects.isEmpty())
 		{
 			EnumAspect a = getRandomFromList(unusedAspects, random);
-			EnumClass c = getRandomFromList(EnumClass.valuesStream().collect(Collectors.toList()), random);
+			EnumClass c = getRandomFromList(EnumClass.valuesStream().toList(), random);
 			
 			return new Title(c, a);
 		} else if(!unusedClasses.isEmpty())
 		{
-			EnumAspect a = getRandomFromList(new ArrayList<>(availableAspects), random);
+			EnumAspect a = getRandomFromList(List.copyOf(availableAspects), random);
 			EnumClass c = getRandomFromList(unusedClasses, random);
 			
 			return new Title(c, a);
 		} else
 		{
 			List<Title> unusedTitles = availableAspects.stream().flatMap(a -> EnumClass.valuesStream().map(c -> new Title(c, a)))
-					.filter(title -> !usedTitles.contains(title)).collect(Collectors.toList());
+					.filter(title -> !usedTitles.contains(title)).toList();
 			
 			if(!unusedTitles.isEmpty())
 				return getRandomFromList(unusedTitles, random);
-			else throw new SkaianetException(NO_AVAILABLE_TITLES);
+			else
+			{
+				EnumAspect a = getRandomFromList(List.copyOf(availableAspects), random);
+				EnumClass c = getRandomFromList(EnumClass.valuesStream().toList(), random);
+				
+				return new Title(c, a);
+			}
 		}
 	}
 	

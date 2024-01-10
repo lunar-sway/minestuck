@@ -56,15 +56,8 @@ public final class DefaultSessionHandler extends SessionHandler
 	{
 		if(MinestuckConfig.SERVER.globalSession.get())
 		{
-			try
-			{
-				Session session = SessionMerger.mergedSessionFromAll(sessions);
-				return new GlobalSessionHandler(skaianetHandler, session);
-				
-			} catch(MergeResult.SessionMergeException e)
-			{
-				LOGGER.warn("Not able to merge all sessions together! Reason: {}. Global session temporarily disabled for this time.", e.getMessage());
-			}
+			Session session = SessionMerger.mergedSessionFromAll(sessions);
+			return new GlobalSessionHandler(skaianetHandler, session);
 		}
 		return this;
 	}
@@ -85,7 +78,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	Session prepareSessionFor(PlayerIdentifier... players) throws MergeResult.SessionMergeException
+	Session prepareSessionFor(PlayerIdentifier... players)
 	{
 		return SessionMerger.getValidMergedSession(this, players);
 	}

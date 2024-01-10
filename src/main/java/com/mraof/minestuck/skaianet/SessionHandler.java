@@ -15,11 +15,6 @@ import java.util.stream.Stream;
  */
 public abstract class SessionHandler
 {
-	/**
-	 * The max numbers of players per session.
-	 */
-	public static final int MAX_SIZE = 144;
-	
 	final SkaianetHandler skaianetHandler;
 	
 	SessionHandler(SkaianetHandler skaianetHandler)
@@ -45,7 +40,7 @@ public abstract class SessionHandler
 		return getSessions().stream().flatMap(session -> session.connections.stream());
 	}
 	
-	abstract Session prepareSessionFor(PlayerIdentifier... players) throws MergeResult.SessionMergeException;
+	abstract Session prepareSessionFor(PlayerIdentifier... players);
 	
 	abstract void findOrCreateAndCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<Session> consumer) throws SkaianetException;
 	

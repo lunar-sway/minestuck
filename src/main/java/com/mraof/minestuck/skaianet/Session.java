@@ -1,6 +1,5 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -41,25 +40,15 @@ public final class Session
 	/**
 	 * If the function throws an exception, this session should no longer be considered valid
 	 */
-	void inheritFrom(Session other) throws MergeResult.SessionMergeException
+	void inheritFrom(Session other)
 	{
-		if(other.predefinedPlayers.entrySet().stream().allMatch(entry -> canAdd(entry.getKey(), entry.getValue())))
-			predefinedPlayers.putAll(other.predefinedPlayers);
-		else throw MergeResult.GENERIC_FAIL.exception();
+		predefinedPlayers.putAll(other.predefinedPlayers);
 		
 		connections.addAll(other.connections);
-		
-		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.MAX_SIZE)
-			throw MergeResult.MERGED_SESSION_FULL.exception();
 		
 		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
 		// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
 		this.gutter.addGristUnchecked(other.gutter.getCache());
-	}
-	
-	private boolean canAdd(PlayerIdentifier player, PredefineData data)
-	{
-		return true;
 	}
 	
 	/**
