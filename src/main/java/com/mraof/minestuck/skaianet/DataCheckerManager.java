@@ -70,8 +70,6 @@ public class DataCheckerManager
 		}
 		
 		CompoundTag sessionTag = new CompoundTag();
-		if(session.name != null)
-			sessionTag.putString("name", session.name);
 		sessionTag.put("connections", connectionList);
 		return sessionTag;
 	}

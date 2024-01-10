@@ -2189,7 +2189,6 @@
   "minestuck.select_title.select": "Select",
   "minestuck.select_title.used": "%s is already used",
   "minestuck.session.merge.able": "Able to merge",
-  "minestuck.session.merge.both_custom": "Can't merge two custom sessions",
   "minestuck.session.merge.fail": "Merge failed",
   "minestuck.session.merge.global_session_full": "Game session is full",
   "minestuck.session.merge.merged_session_full": "Too many players in total in both player's sessions",

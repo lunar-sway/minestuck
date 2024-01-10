@@ -14,15 +14,12 @@ import java.util.Set;
  */
 public final class GlobalSessionHandler extends SessionHandler
 {
-	private static final String GLOBAL_SESSION_NAME = "global";
-	
 	@Nonnull
 	private final Session globalSession;
 	
 	GlobalSessionHandler(SkaianetHandler skaianetHandler, Session session)
 	{
 		super(skaianetHandler);
-		session.name = GLOBAL_SESSION_NAME;
 		globalSession = Objects.requireNonNull(session);
 	}
 	

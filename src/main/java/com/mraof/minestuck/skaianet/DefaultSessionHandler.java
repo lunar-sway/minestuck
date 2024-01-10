@@ -20,7 +20,6 @@ public final class DefaultSessionHandler extends SessionHandler
 	 * An array list of the current worlds sessions.
 	 */
 	private final Set<Session> sessions = new HashSet<>();
-	private final Map<String, Session> sessionsByName = new HashMap<>();
 	
 	DefaultSessionHandler(SkaianetHandler skaianetHandler)
 	{
@@ -116,11 +115,6 @@ public final class DefaultSessionHandler extends SessionHandler
 	
 	private void correctAndAddSession(Session session)
 	{
-		if(session.isCustom() && sessionsByName.containsKey(session.name))
-		{
-			LOGGER.error("Found session with name that is already being used. Removing session name before adding.");
-			session.name = null;
-		}
 		try
 		{
 			addNewSession(session);
@@ -133,29 +127,19 @@ public final class DefaultSessionHandler extends SessionHandler
 	void addNewSession(Session session)
 	{
 		if(sessions.contains(session))
-			throw new IllegalStateException("Session has already been added: " + session.name);
-		else if(session.isCustom() && sessionsByName.containsKey(session.name))
-			throw new IllegalStateException("Session name is already in use: " + session.name);
+			throw new IllegalStateException("Session has already been added");
 		else if(getConnectionStream().anyMatch(session.connections::contains))
-			throw new IllegalStateException("Session contained connections that have already been added: " + session.name);
-		else
-		{
-			sessions.add(session);
-			if(session.isCustom())
-				sessionsByName.put(session.name, session);
-		}
+			throw new IllegalStateException("Session contained connections that have already been added");
+		
+		sessions.add(session);
 	}
 	
 	void handleSuccessfulMerge(Set<Session> sessions, Session result)
 	{
 		for(Session session : sessions)
-		{
 			this.sessions.remove(session);
-			sessionsByName.remove(session.name);
-		}
+		
 		this.sessions.add(result);
-		if(result.isCustom())
-			sessionsByName.put(result.name, result);
 	}
 	
 	private void split(Session session)
@@ -168,9 +152,6 @@ public final class DefaultSessionHandler extends SessionHandler
 	private void removeIfEmpty(Session session)
 	{
 		if(session.isEmpty())
-		{
 			sessions.remove(session);
-			sessionsByName.remove(session.name);
-		}
 	}
 }

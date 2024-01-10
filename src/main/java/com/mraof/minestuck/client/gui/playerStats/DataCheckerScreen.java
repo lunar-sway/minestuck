@@ -364,13 +364,7 @@ public class DataCheckerScreen extends Screen
 			{
 				CompoundTag sessionTag = sessionList.getCompound(i);
 				SessionComponent session = new SessionComponent(this, sessionTag, data);
-				if(sessionTag.contains("name", Tag.TAG_STRING))
-					session.name = sessionTag.getString("name");
-				else
-				{
-					session.name = "Session " + String.valueOf(nameIndex);
-					nameIndex++;
-				}
+				session.name = "Session " + nameIndex++;
 				list.add(session);
 			}
 		}

@@ -6,7 +6,6 @@ public enum MergeResult	//TODO This isn't used for much else than exceptions. Re
 	GLOBAL_SESSION_FULL("global_session_full", "Global session is full"),
 	SESSION_FULL("session_full", "Session is full"),
 	MERGED_SESSION_FULL("merged_session_full", "Merged session is full"),
-	BOTH_CUSTOM("both_custom", "Both sessions are custom sessions"),
 	GENERIC_FAIL("fail", "Merge failed");
 	
 	private final String key, message;

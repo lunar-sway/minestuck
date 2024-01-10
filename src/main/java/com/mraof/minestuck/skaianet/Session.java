@@ -32,7 +32,6 @@ public final class Session
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
 	private final GristGutter gutter;
-	String name;
 	
 	/**
 	 * If the "connection circle" is whole, unused if globalSession == true.
@@ -44,13 +43,6 @@ public final class Session
 	 */
 	void inheritFrom(Session other) throws MergeResult.SessionMergeException
 	{
-		if(other.isCustom())
-		{
-			if(!isCustom())
-				name = other.name;
-			else throw MergeResult.BOTH_CUSTOM.exception();
-		}
-		
 		if(other.predefinedPlayers.entrySet().stream().allMatch(entry -> canAdd(entry.getKey(), entry.getValue())))
 			predefinedPlayers.putAll(other.predefinedPlayers);
 		else throw MergeResult.GENERIC_FAIL.exception();
@@ -250,8 +242,6 @@ public final class Session
 	{
 		CompoundTag nbt = new CompoundTag();
 		
-		if(isCustom())
-			nbt.putString("name", name);
 		ListTag list = new ListTag();
 		for(SburbConnection c : connections) list.add(c.write());
 		nbt.put("connections", list);
@@ -272,9 +262,6 @@ public final class Session
 	static Session read(CompoundTag nbt, SkaianetHandler handler)
 	{
 		Session s = new Session(nbt);
-		if(nbt.contains("name", Tag.TAG_STRING))
-			s.name = nbt.getString("name");
-		else s.name = null;
 		
 		ListTag list = nbt.getList("connections", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
@@ -300,11 +287,6 @@ public final class Session
 		}
 		
 		return s;
-	}
-	
-	public boolean isCustom()
-	{
-		return name != null;
 	}
 	
 	public boolean isEmpty()

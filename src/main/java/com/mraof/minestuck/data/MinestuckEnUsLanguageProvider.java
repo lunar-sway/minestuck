@@ -1953,7 +1953,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
 		add(MergeResult.SESSION_FULL, "The session is full");
 		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
-		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
