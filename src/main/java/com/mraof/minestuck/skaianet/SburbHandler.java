@@ -6,7 +6,6 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.MSDimensions;
@@ -22,7 +21,6 @@ import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
@@ -97,9 +95,7 @@ public final class SburbHandler
 	{
 		int color =  ColorHandler.getColorForPlayer(playerData.playerId(), level);
 		
-		Item artifact = playerData.artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
-		
-		return ColorHandler.setColor(new ItemStack(artifact), color);
+		return ColorHandler.setColor(playerData.artifactType.createItemStack(), color);
 	}
 	
 	/**
@@ -225,8 +221,8 @@ public final class SburbHandler
 	static void initNewData(SburbPlayerData playerData)
 	{
 		Random rand = new Random();	//TODO seed?
-		playerData.artifactType = rand.nextInt(2);
-		LOGGER.info("Randomized artifact type to be: {} for player {}.", playerData.artifactType, playerData.playerId().getUsername());
+		playerData.artifactType = SburbPlayerData.ArtifactType.values()[rand.nextInt(SburbPlayerData.ArtifactType.values().length)];
+		LOGGER.info("Randomized artifact type to be: {} for player {}.", playerData.artifactType.name(), playerData.playerId().getUsername());
 		playerData.setBaseGrist(generateGristType(rand));
 	}
 	

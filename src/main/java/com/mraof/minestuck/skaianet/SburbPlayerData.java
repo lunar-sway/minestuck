@@ -4,6 +4,7 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -14,6 +15,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +27,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public final class SburbPlayerData
 {
@@ -33,7 +38,7 @@ public final class SburbPlayerData
 	private boolean hasEntered = false;    //If the player has entered. Is set to true after entry has finished
 	@Nullable
 	private ResourceKey<Level> landKey;    //The land info for this client player. This is initialized in preparation for entry
-	int artifactType;
+	ArtifactType artifactType;
 	private GristType baseGrist;
 	
 	private final Set<String> givenItemList = new HashSet<>();
@@ -64,7 +69,7 @@ public final class SburbPlayerData
 			this.hasEntered = tag.contains("has_entered") ? tag.getBoolean("has_entered") : true;
 		}
 		
-		this.artifactType = tag.getInt("artifact");
+		this.artifactType = ArtifactType.fromInt(tag.getInt("artifact"));
 		this.baseGrist = MSNBTUtil.readGristType(tag, "base_grist", () -> SburbHandler.generateGristType(new Random()));
 	}
 	
@@ -85,7 +90,7 @@ public final class SburbPlayerData
 			tag.putBoolean("has_entered", this.hasEntered);
 		}
 		
-		tag.putInt("artifact", this.artifactType);
+		tag.putInt("artifact", this.artifactType.ordinal());
 		MSNBTUtil.writeGristType(tag, "base_grist", this.baseGrist);
 	}
 	
@@ -220,5 +225,27 @@ public final class SburbPlayerData
 	public static Optional<SburbPlayerData> getForLand(ResourceKey<Level> level, MinecraftServer mcServer)
 	{
 		return SkaianetHandler.get(mcServer).allPlayerData().stream().filter(data -> data.getLandDimension() == level).findAny();
+	}
+	
+	enum ArtifactType {
+		APPLE(MSItems.CRUXITE_APPLE),
+		POTION(MSItems.CRUXITE_POTION);
+		
+		private final Supplier<Item> item;
+		
+		ArtifactType(Supplier<Item> item)
+		{
+			this.item = item;
+		}
+		
+		ItemStack createItemStack()
+		{
+			return new ItemStack(this.item.get());
+		}
+		
+		static ArtifactType fromInt(int ordinal)
+		{
+			return values()[Mth.clamp(ordinal, 0, values().length - 1)];
+		}
 	}
 }
