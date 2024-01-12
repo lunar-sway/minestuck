@@ -1949,8 +1949,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
 		add(SettingsApp.THEME, "Theme: %s");
 		add(SettingsApp.TITLE, "Sburb Settings");
-		add(MergeResult.ABLE, "Able to merge");
-		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
 		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console");

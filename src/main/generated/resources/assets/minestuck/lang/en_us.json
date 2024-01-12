@@ -2187,8 +2187,6 @@
   "minestuck.select_title.randomize": "Randomize",
   "minestuck.select_title.select": "Select",
   "minestuck.select_title.used": "%s is already used",
-  "minestuck.session.merge.able": "Able to merge",
-  "minestuck.session.merge.fail": "Merge failed",
   "minestuck.stat_storer": "Stat Storer",
   "minestuck.stat_storer.divide_comparator": "Divide comparator output strength",
   "minestuck.stat_storer.divide_value": "Divide power output by:",

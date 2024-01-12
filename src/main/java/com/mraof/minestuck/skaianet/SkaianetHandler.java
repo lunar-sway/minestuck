@@ -144,7 +144,6 @@ public final class SkaianetHandler extends SavedData
 			if(getPrimaryOrCandidateConnection(server, false).isPresent())
 			{
 				LOGGER.warn("Connection failed between {} and {}", player.getUsername(), server.getUsername());
-				computer.putClientMessage(MergeResult.GENERIC_FAIL.translationKey());
 				return;
 			}
 			
@@ -166,7 +165,6 @@ public final class SkaianetHandler extends SavedData
 			if(getPrimaryOrCandidateConnection(server, false).isPresent())
 			{
 				LOGGER.warn("Connection between {} and {} denied because the latter is already in a connection", player.getUsername(), server.getUsername());
-				computer.putClientMessage(MergeResult.GENERIC_FAIL.translationKey());
 				return;
 			}
 			

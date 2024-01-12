@@ -2,11 +2,9 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.CommandActionHandler;
-import com.mraof.minestuck.skaianet.MergeResult;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -19,7 +17,6 @@ public class SburbConnectionCommand
 	public static final String ALREADY_CONNECTED = "commands.minestuck.sburbconnection.already_connected";
 	
 	public static final SimpleCommandExceptionType CONNECTED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(ALREADY_CONNECTED));
-	public static final DynamicCommandExceptionType MERGE_EXCEPTION = new DynamicCommandExceptionType(o -> Component.translatable(((MergeResult) o).translationKey()));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
