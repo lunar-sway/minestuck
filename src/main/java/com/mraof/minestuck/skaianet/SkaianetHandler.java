@@ -496,10 +496,24 @@ public final class SkaianetHandler extends SavedData
 		getOrCreateData(client).setHasPrimaryConnection();
 	}
 	
-	@Deprecated
-	void trySetPrimaryConnection(SburbConnection connection)
+	void unlinkClientPlayer(PlayerIdentifier clientPlayer)
 	{
-		getOrCreateData(connection.getClientIdentifier()).setHasPrimaryConnection();
+		getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
+		primaryConnections().filter(connection -> connection.getClientIdentifier().equals(clientPlayer))
+				.findAny().ifPresent(SburbConnection::removeServerPlayer);
+	}
+	
+	void unlinkServerPlayer(PlayerIdentifier serverPlayer)
+	{
+		primaryPartnerForServer(serverPlayer).ifPresent(this::unlinkClientPlayer);
+		activeConnections().filter(connection -> connection.server().equals(serverPlayer) && !getOrCreateData(connection.client()).hasPrimaryConnection())
+				.forEach(this::closeConnection);
+	}
+	
+	void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
+	{
+		primaryConnections().filter(connection -> connection.getClientIdentifier().equals(clientPlayer))
+				.findAny().orElseThrow().setNewServerPlayer(serverPlayer);
 	}
 	
 	/**

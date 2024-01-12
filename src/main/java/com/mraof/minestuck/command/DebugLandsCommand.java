@@ -32,7 +32,7 @@ public class DebugLandsCommand
 	private static int createDebugLands(CommandSourceStack source, List<LandTypePair> landTypes) throws CommandSyntaxException
 	{
 		ServerPlayer player = source.getPlayerOrException();
-		CommandActionHandler.createDebugLandsChain(player, landTypes, source);
+		CommandActionHandler.createDebugLandsChain(player, landTypes);
 		return 1;
 	}
 }
