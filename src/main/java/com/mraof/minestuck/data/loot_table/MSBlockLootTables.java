@@ -55,13 +55,45 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(LIGHT_GRAY_CHESS_DIRT.get());
 		
 		dropSelf(BLACK_CHESS_BRICKS.get());
+		dropSelf(BLACK_CHESS_BRICK_WALL.get());
+		
 		dropSelf(WHITE_CHESS_BRICKS.get());
+		dropSelf(WHITE_CHESS_BRICK_WALL.get());
+		
 		dropSelf(LIGHT_GRAY_CHESS_BRICKS.get());
+		dropSelf(LIGHT_GRAY_CHESS_BRICK_WALL.get());
+		
 		dropSelf(DARK_GRAY_CHESS_BRICKS.get());
+		dropSelf(DARK_GRAY_CHESS_BRICK_WALL.get());
+		
 		dropSelf(BLACK_CHESS_BRICK_SMOOTH.get());
+		dropSelf(BLACK_CHESS_BRICK_SMOOTH_STAIRS.get());
+		dropSelf(BLACK_CHESS_BRICK_SMOOTH_SLAB.get());
+		dropSelf(BLACK_CHESS_BRICK_SMOOTH_WALL.get());
+		dropSelf(BLACK_CHESS_BRICK_SMOOTH_BUTTON.get());
+		dropSelf(BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		
 		dropSelf(WHITE_CHESS_BRICK_SMOOTH.get());
+		dropSelf(WHITE_CHESS_BRICK_SMOOTH_STAIRS.get());
+		dropSelf(WHITE_CHESS_BRICK_SMOOTH_SLAB.get());
+		dropSelf(WHITE_CHESS_BRICK_SMOOTH_WALL.get());
+		dropSelf(WHITE_CHESS_BRICK_SMOOTH_BUTTON.get());
+		dropSelf(WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get());
+		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
+		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB.get());
+		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
+		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
+		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		
 		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH.get());
+		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
+		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB.get());
+		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
+		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
+		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		
 		dropSelf(BLACK_CHESS_BRICK_TRIM.get());
 		dropSelf(WHITE_CHESS_BRICK_TRIM.get());
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_TRIM.get());
@@ -109,87 +141,276 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(PINK_STONE_DIAMOND_ORE.get(), this::diamondOreDrop);
 		
 		dropSelf(CRUXITE_BLOCK.get());
+		dropSelf(CRUXITE_STAIRS.get());
+		dropSelf(CRUXITE_SLAB.get());
+		dropSelf(CRUXITE_WALL.get());
+		dropSelf(CRUXITE_BUTTON.get());
+		dropSelf(CRUXITE_PRESSURE_PLATE.get());
+		
 		dropSelf(URANIUM_BLOCK.get());
+		dropSelf(URANIUM_STAIRS.get());
+		dropSelf(URANIUM_SLAB.get());
+		dropSelf(URANIUM_WALL.get());
+		dropSelf(URANIUM_BUTTON.get());
+		dropSelf(URANIUM_PRESSURE_PLATE.get());
+		
 		dropSelf(GENERIC_OBJECT.get());
+		dropSelf(PERFECTLY_GENERIC_STAIRS.get());
+		dropSelf(PERFECTLY_GENERIC_SLAB.get());
+		dropSelf(PERFECTLY_GENERIC_WALL.get());
+		dropSelf(PERFECTLY_GENERIC_FENCE.get());
+		dropSelf(PERFECTLY_GENERIC_FENCE_GATE.get());
+		dropSelf(PERFECTLY_GENERIC_BUTTON.get());
+		dropSelf(PERFECTLY_GENERIC_PRESSURE_PLATE.get());
+		dropSelf(PERFECTLY_GENERIC_DOOR.get());
+		dropSelf(PERFECTLY_GENERIC_TRAPDOOR.get());
 		
 		dropSelf(BLUE_DIRT.get());
 		dropSelf(THOUGHT_DIRT.get());
+		
 		dropSelf(COARSE_STONE.get());
+		dropSelf(COARSE_STONE_WALL.get());
+		dropSelf(COARSE_STONE_BUTTON.get());
+		dropSelf(COARSE_STONE_PRESSURE_PLATE.get());
+		
 		dropSelf(CHISELED_COARSE_STONE.get());
+		
 		dropSelf(COARSE_STONE_BRICKS.get());
+		dropSelf(COARSE_STONE_BRICK_WALL.get());
+		
 		dropSelf(COARSE_STONE_COLUMN.get());
 		dropSelf(CHISELED_COARSE_STONE_BRICKS.get());
 		dropSelf(CRACKED_COARSE_STONE_BRICKS.get());
 		dropSelf(MOSSY_COARSE_STONE_BRICKS.get());
+		
 		dropSelf(SHADE_STONE.get());
+		dropSelf(SHADE_WALL.get());
+		dropSelf(SHADE_BUTTON.get());
+		dropSelf(SHADE_PRESSURE_PLATE.get());
+		
 		dropSelf(SMOOTH_SHADE_STONE.get());
+		dropSelf(SMOOTH_SHADE_STONE_STAIRS.get());
+		dropSelf(SMOOTH_SHADE_STONE_SLAB.get());
+		dropSelf(SMOOTH_SHADE_STONE_WALL.get());
+		
 		dropSelf(SHADE_BRICKS.get());
+		dropSelf(SHADE_BRICK_WALL.get());
+		
 		dropSelf(SHADE_COLUMN.get());
 		dropSelf(CHISELED_SHADE_BRICKS.get());
 		dropSelf(CRACKED_SHADE_BRICKS.get());
+		
 		dropSelf(MOSSY_SHADE_BRICKS.get());
+		dropSelf(MOSSY_SHADE_BRICK_STAIRS.get());
+		dropSelf(MOSSY_SHADE_BRICK_SLAB.get());
+		dropSelf(MOSSY_SHADE_BRICK_WALL.get());
+		
 		dropSelf(BLOOD_SHADE_BRICKS.get());
+		dropSelf(BLOOD_SHADE_BRICK_STAIRS.get());
+		dropSelf(BLOOD_SHADE_BRICK_SLAB.get());
+		dropSelf(BLOOD_SHADE_BRICK_WALL.get());
+		
 		dropSelf(TAR_SHADE_BRICKS.get());
+		dropSelf(TAR_SHADE_BRICK_STAIRS.get());
+		dropSelf(TAR_SHADE_BRICK_SLAB.get());
+		dropSelf(TAR_SHADE_BRICK_WALL.get());
+		
 		dropSelf(FROST_TILE.get());
+		dropSelf(FROST_TILE_WALL.get());
+		
 		dropSelf(CHISELED_FROST_TILE.get());
+		
 		dropSelf(FROST_BRICKS.get());
+		dropSelf(FROST_BRICK_WALL.get());
+		
 		dropSelf(FROST_COLUMN.get());
 		dropSelf(CHISELED_FROST_BRICKS.get());
 		dropSelf(CRACKED_FROST_BRICKS.get());
+		
 		dropSelf(FLOWERY_FROST_BRICKS.get());
+		dropSelf(FLOWERY_FROST_BRICK_STAIRS.get());
+		dropSelf(FLOWERY_FROST_BRICK_SLAB.get());
+		dropSelf(FLOWERY_FROST_BRICK_WALL.get());
+		
 		dropSelf(CAST_IRON.get());
+		dropSelf(CAST_IRON_SLAB.get());
+		dropSelf(CAST_IRON_WALL.get());
+		dropSelf(CAST_IRON_BUTTON.get());
+		dropSelf(CAST_IRON_PRESSURE_PLATE.get());
+		
 		dropSelf(CHISELED_CAST_IRON.get());
 		dropSelf(STEEL_BEAM.get());
+		
 		dropSelf(MYCELIUM_COBBLESTONE.get());
+		dropSelf(MYCELIUM_COBBLESTONE_STAIRS.get());
+		dropSelf(MYCELIUM_COBBLESTONE_SLAB.get());
+		dropSelf(MYCELIUM_COBBLESTONE_WALL.get());
+		
 		add(MYCELIUM_STONE.get(), createSingleItemTableWithSilkTouch(MYCELIUM_STONE.get(), MYCELIUM_COBBLESTONE.get()));
+		dropSelf(MYCELIUM_STONE_WALL.get());
+		dropSelf(MYCELIUM_STONE_BUTTON.get());
+		dropSelf(MYCELIUM_STONE_PRESSURE_PLATE.get());
+		
 		dropSelf(POLISHED_MYCELIUM_STONE.get());
+		dropSelf(POLISHED_MYCELIUM_STONE_STAIRS.get());
+		dropSelf(POLISHED_MYCELIUM_STONE_SLAB.get());
+		dropSelf(POLISHED_MYCELIUM_STONE_WALL.get());
+		
 		dropSelf(MYCELIUM_BRICKS.get());
+		dropSelf(MYCELIUM_BRICK_WALL.get());
+		
 		dropSelf(MYCELIUM_COLUMN.get());
 		dropSelf(CHISELED_MYCELIUM_BRICKS.get());
 		dropSelf(SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get());
 		dropSelf(CRACKED_MYCELIUM_BRICKS.get());
+		
 		dropSelf(MOSSY_MYCELIUM_BRICKS.get());
+		dropSelf(MOSSY_MYCELIUM_BRICK_STAIRS.get());
+		dropSelf(MOSSY_MYCELIUM_BRICK_SLAB.get());
+		dropSelf(MOSSY_MYCELIUM_BRICK_WALL.get());
+		
 		dropSelf(FLOWERY_MYCELIUM_BRICKS.get());
+		dropSelf(FLOWERY_MYCELIUM_BRICK_STAIRS.get());
+		dropSelf(FLOWERY_MYCELIUM_BRICK_SLAB.get());
+		dropSelf(FLOWERY_MYCELIUM_BRICK_WALL.get());
+		
 		add(BLACK_STONE.get(), createSingleItemTableWithSilkTouch(BLACK_STONE.get(), BLACK_COBBLESTONE.get()));
+		dropSelf(BLACK_STONE_WALL.get());
+		dropSelf(BLACK_STONE_BUTTON.get());
+		dropSelf(BLACK_STONE_PRESSURE_PLATE.get());
+		
 		dropSelf(BLACK_COBBLESTONE.get());
+		dropSelf(BLACK_COBBLESTONE_STAIRS.get());
+		dropSelf(BLACK_COBBLESTONE_SLAB.get());
+		dropSelf(BLACK_COBBLESTONE_WALL.get());
+		
 		dropSelf(POLISHED_BLACK_STONE.get());
+		dropSelf(POLISHED_BLACK_STONE_STAIRS.get());
+		dropSelf(POLISHED_BLACK_STONE_SLAB.get());
+		dropSelf(POLISHED_BLACK_STONE_WALL.get());
+		
 		dropSelf(BLACK_STONE_BRICKS.get());
+		dropSelf(BLACK_STONE_BRICK_WALL.get());
+		
 		dropSelf(BLACK_STONE_COLUMN.get());
 		dropSelf(CHISELED_BLACK_STONE_BRICKS.get());
 		dropSelf(CRACKED_BLACK_STONE_BRICKS.get());
 		dropSelf(BLACK_SAND.get());
+		
 		dropSelf(DECREPIT_STONE_BRICKS.get());
+		dropSelf(DECREPIT_STONE_BRICK_STAIRS.get());
+		dropSelf(DECREPIT_STONE_BRICK_SLAB.get());
+		dropSelf(DECREPIT_STONE_BRICK_WALL.get());
+		
 		dropSelf(FLOWERY_MOSSY_COBBLESTONE.get());
+		dropSelf(FLOWERY_MOSSY_COBBLESTONE_STAIRS.get());
+		dropSelf(FLOWERY_MOSSY_COBBLESTONE_SLAB.get());
+		dropSelf(FLOWERY_MOSSY_COBBLESTONE_WALL.get());
+		
 		dropSelf(MOSSY_DECREPIT_STONE_BRICKS.get());
+		dropSelf(MOSSY_DECREPIT_STONE_BRICK_STAIRS.get());
+		dropSelf(MOSSY_DECREPIT_STONE_BRICK_SLAB.get());
+		dropSelf(MOSSY_DECREPIT_STONE_BRICK_WALL.get());
+		
 		dropSelf(FLOWERY_MOSSY_STONE_BRICKS.get());
+		dropSelf(FLOWERY_MOSSY_STONE_BRICK_STAIRS.get());
+		dropSelf(FLOWERY_MOSSY_STONE_BRICK_SLAB.get());
+		dropSelf(FLOWERY_MOSSY_STONE_BRICK_WALL.get());
+		
 		dropSelf(COARSE_END_STONE.get());
 		add(END_GRASS.get(), this::endGrassDrop);
+		
 		dropSelf(CHALK.get());
+		dropSelf(CHALK_WALL.get());
+		dropSelf(CHALK_BUTTON.get());
+		dropSelf(CHALK_PRESSURE_PLATE.get());
+		
 		dropSelf(POLISHED_CHALK.get());
+		dropSelf(POLISHED_CHALK_STAIRS.get());
+		dropSelf(POLISHED_CHALK_SLAB.get());
+		dropSelf(POLISHED_CHALK_WALL.get());
+		
 		dropSelf(CHALK_BRICKS.get());
+		dropSelf(CHALK_BRICK_WALL.get());
+		
 		dropSelf(CHALK_COLUMN.get());
 		dropSelf(CHISELED_CHALK_BRICKS.get());
+		
 		dropSelf(MOSSY_CHALK_BRICKS.get());
+		dropSelf(MOSSY_CHALK_BRICK_STAIRS.get());
+		dropSelf(MOSSY_CHALK_BRICK_SLAB.get());
+		dropSelf(MOSSY_CHALK_BRICK_WALL.get());
+		
 		dropSelf(FLOWERY_CHALK_BRICKS.get());
+		dropSelf(FLOWERY_CHALK_BRICK_STAIRS.get());
+		dropSelf(FLOWERY_CHALK_BRICK_SLAB.get());
+		dropSelf(FLOWERY_CHALK_BRICK_WALL.get());
+		
 		dropSelf(PINK_STONE.get());
+		dropSelf(PINK_STONE_WALL.get());
+		dropSelf(PINK_STONE_BUTTON.get());
+		dropSelf(PINK_STONE_PRESSURE_PLATE.get());
+		
 		dropSelf(POLISHED_PINK_STONE.get());
+		dropSelf(POLISHED_PINK_STONE_STAIRS.get());
+		dropSelf(POLISHED_PINK_STONE_SLAB.get());
+		dropSelf(POLISHED_PINK_STONE_WALL.get());
+		
 		dropSelf(PINK_STONE_BRICKS.get());
+		dropSelf(PINK_STONE_BRICK_WALL.get());
+		
 		dropSelf(CHISELED_PINK_STONE_BRICKS.get());
 		dropSelf(CRACKED_PINK_STONE_BRICKS.get());
+		
 		dropSelf(MOSSY_PINK_STONE_BRICKS.get());
+		dropSelf(MOSSY_PINK_STONE_BRICK_STAIRS.get());
+		dropSelf(MOSSY_PINK_STONE_BRICK_SLAB.get());
+		dropSelf(MOSSY_PINK_STONE_BRICK_WALL.get());
+		
 		dropSelf(PINK_STONE_COLUMN.get());
+		
 		dropSelf(BROWN_STONE.get());
+		dropSelf(BROWN_STONE_WALL.get());
+		dropSelf(BROWN_STONE_BUTTON.get());
+		dropSelf(BROWN_STONE_PRESSURE_PLATE.get());
+		
 		dropSelf(POLISHED_BROWN_STONE.get());
+		dropSelf(POLISHED_BROWN_STONE_STAIRS.get());
+		dropSelf(POLISHED_BROWN_STONE_SLAB.get());
+		dropSelf(POLISHED_BROWN_STONE_WALL.get());
+		
 		dropSelf(BROWN_STONE_BRICKS.get());
+		dropSelf(BROWN_STONE_BRICK_WALL.get());
+		
 		dropSelf(BROWN_STONE_COLUMN.get());
 		dropSelf(CRACKED_BROWN_STONE_BRICKS.get());
+		
 		dropSelf(GREEN_STONE.get());
+		dropSelf(GREEN_STONE_WALL.get());
+		dropSelf(GREEN_STONE_BUTTON.get());
+		dropSelf(GREEN_STONE_PRESSURE_PLATE.get());
+		
 		dropSelf(POLISHED_GREEN_STONE.get());
+		dropSelf(POLISHED_GREEN_STONE_STAIRS.get());
+		dropSelf(POLISHED_GREEN_STONE_SLAB.get());
+		dropSelf(POLISHED_GREEN_STONE_WALL.get());
+		
 		dropSelf(GREEN_STONE_BRICKS.get());
+		dropSelf(GREEN_STONE_BRICK_WALL.get());
+		
 		dropSelf(GREEN_STONE_COLUMN.get());
 		dropSelf(CHISELED_GREEN_STONE_BRICKS.get());
+		
 		dropSelf(HORIZONTAL_GREEN_STONE_BRICKS.get());
+		dropSelf(HORIZONTAL_GREEN_STONE_BRICK_STAIRS.get());
+		dropSelf(HORIZONTAL_GREEN_STONE_BRICK_SLAB.get());
+		dropSelf(HORIZONTAL_GREEN_STONE_BRICK_WALL.get());
+		
 		dropSelf(VERTICAL_GREEN_STONE_BRICKS.get());
+		dropSelf(VERTICAL_GREEN_STONE_BRICK_STAIRS.get());
+		dropSelf(VERTICAL_GREEN_STONE_BRICK_SLAB.get());
+		dropSelf(VERTICAL_GREEN_STONE_BRICK_WALL.get());
+		
 		dropSelf(GREEN_STONE_BRICK_EMBEDDED_LADDER.get());
 		dropSelf(GREEN_STONE_BRICK_TRIM.get());
 		dropSelf(GREEN_STONE_BRICK_FROG.get());
@@ -206,12 +427,43 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CHISELED_SANDSTONE_COLUMN.get());
 		dropSelf(RED_SANDSTONE_COLUMN.get());
 		dropSelf(CHISELED_RED_SANDSTONE_COLUMN.get());
+		
 		add(UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(UNCARVED_WOOD.get(), CHIPBOARD.get()));
+		dropSelf(UNCARVED_WOOD_STAIRS.get());
+		dropSelf(UNCARVED_WOOD_SLAB.get());
+		dropSelf(UNCARVED_WOOD_BUTTON.get());
+		dropSelf(UNCARVED_WOOD_PRESSURE_PLATE.get());
+		dropSelf(UNCARVED_WOOD_FENCE.get());
+		dropSelf(UNCARVED_WOOD_FENCE_GATE.get());
+	
 		dropSelf(CHIPBOARD.get());
+		dropSelf(CHIPBOARD_STAIRS.get());
+		dropSelf(CHIPBOARD_SLAB.get());
+		dropSelf(CHIPBOARD_BUTTON.get());
+		dropSelf(CHIPBOARD_PRESSURE_PLATE.get());
+		dropSelf(CHIPBOARD_FENCE.get());
+		dropSelf(CHIPBOARD_FENCE_GATE.get());
+
 		dropSelf(WOOD_SHAVINGS.get());
+		
 		dropSelf(CARVED_HEAVY_PLANKS.get());
+		dropSelf(CARVED_HEAVY_PLANK_STAIRS.get());
+		dropSelf(CARVED_HEAVY_PLANK_SLAB.get());
+		
 		dropSelf(CARVED_PLANKS.get());
+		dropSelf(CARVED_STAIRS.get());
+		dropSelf(CARVED_SLAB.get());
+		dropSelf(CARVED_BUTTON.get());
+		dropSelf(CARVED_PRESSURE_PLATE.get());
+		dropSelf(CARVED_FENCE.get());
+		dropSelf(CARVED_FENCE_GATE.get());
+		//dropSelf(CARVED_DOOR.get());
+		//dropSelf(CARVED_TRAPDOOR.get());
+		
 		dropSelf(POLISHED_UNCARVED_WOOD.get());
+		dropSelf(POLISHED_UNCARVED_STAIRS.get());
+		dropSelf(POLISHED_UNCARVED_SLAB.get());
+		
 		dropSelf(CARVED_KNOTTED_WOOD.get());
 		dropSelf(DENSE_CLOUD.get());
 		dropSelf(BRIGHT_DENSE_CLOUD.get());
@@ -247,13 +499,77 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(FLOWERY_VINE_WOOD.get());
 		dropSelf(DEAD_WOOD.get());
 		dropSelf(PETRIFIED_WOOD.get());
+		
 		dropSelf(GLOWING_PLANKS.get());
+		dropSelf(GLOWING_STAIRS.get());
+		dropSelf(GLOWING_SLAB.get());
+		dropSelf(GLOWING_BUTTON.get());
+		dropSelf(GLOWING_PRESSURE_PLATE.get());
+		dropSelf(GLOWING_FENCE.get());
+		dropSelf(GLOWING_FENCE_GATE.get());
+		//dropSelf(GLOWING_DOOR.get());
+		//dropSelf(GLOWING_TRAPDOOR.get());
+		
 		dropSelf(SHADEWOOD_PLANKS.get());
+		dropSelf(SHADEWOOD_STAIRS.get());
+		dropSelf(SHADEWOOD_SLAB.get());
+		dropSelf(SHADEWOOD_BUTTON.get());
+		dropSelf(SHADEWOOD_PRESSURE_PLATE.get());
+		dropSelf(SHADEWOOD_FENCE.get());
+		dropSelf(SHADEWOOD_FENCE_GATE.get());
+		//dropSelf(SHADEWOOD_DOOR.get());
+		//dropSelf(SHADEWOOD_TRAPDOOR.get());
+		
 		dropSelf(FROST_PLANKS.get());
+		dropSelf(FROST_STAIRS.get());
+		dropSelf(FROST_SLAB.get());
+		dropSelf(FROST_BUTTON.get());
+		dropSelf(FROST_PRESSURE_PLATE.get());
+		dropSelf(FROST_FENCE.get());
+		dropSelf(FROST_FENCE_GATE.get());
+		//dropSelf(FROST_DOOR.get());
+		//dropSelf(FROST_TRAPDOOR.get());
+		
 		dropSelf(RAINBOW_PLANKS.get());
+		dropSelf(RAINBOW_STAIRS.get());
+		dropSelf(RAINBOW_SLAB.get());
+		dropSelf(RAINBOW_BUTTON.get());
+		dropSelf(RAINBOW_PRESSURE_PLATE.get());
+		dropSelf(RAINBOW_FENCE.get());
+		dropSelf(RAINBOW_FENCE_GATE.get());
+		//dropSelf(RAINBOW_DOOR.get());
+		//dropSelf(RAINBOW_TRAPDOOR.get());
+		
 		dropSelf(END_PLANKS.get());
+		dropSelf(END_STAIRS.get());
+		dropSelf(END_SLAB.get());
+		dropSelf(END_BUTTON.get());
+		dropSelf(END_PRESSURE_PLATE.get());
+		dropSelf(END_FENCE.get());
+		dropSelf(END_FENCE_GATE.get());
+		//dropSelf(END_DOOR.get());
+		//dropSelf(END_TRAPDOOR.get());
+		
 		dropSelf(DEAD_PLANKS.get());
+		dropSelf(DEAD_STAIRS.get());
+		dropSelf(DEAD_SLAB.get());
+		dropSelf(DEAD_BUTTON.get());
+		dropSelf(DEAD_PRESSURE_PLATE.get());
+		dropSelf(DEAD_FENCE.get());
+		dropSelf(DEAD_FENCE_GATE.get());
+		//dropSelf(DEAD_DOOR.get());
+		//dropSelf(DEAD_TRAPDOOR.get());
+		
 		dropSelf(TREATED_PLANKS.get());
+		dropSelf(TREATED_STAIRS.get());
+		dropSelf(TREATED_SLAB.get());
+		dropSelf(TREATED_BUTTON.get());
+		dropSelf(TREATED_PRESSURE_PLATE.get());
+		dropSelf(TREATED_FENCE.get());
+		dropSelf(TREATED_FENCE_GATE.get());
+		//dropSelf(TREATED_DOOR.get());
+		//dropSelf(TREATED_TRAPDOOR.get());
+		
 		add(FROST_LEAVES.get(), this::frostLeavesDrop);
 		add(RAINBOW_LEAVES.get(), this::rainbowLeavesDrop);
 		add(SHADEWOOD_LEAVES.get(), this::shadewoodLeavesDrop);
@@ -275,18 +591,127 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(SPACE_ASPECT_LOG.get());
 		dropSelf(TIME_ASPECT_LOG.get());
 		dropSelf(VOID_ASPECT_LOG.get());
+		
 		dropSelf(BLOOD_ASPECT_PLANKS.get());
+		dropSelf(BLOOD_ASPECT_STAIRS.get());
+		dropSelf(BLOOD_ASPECT_SLAB.get());
+		dropSelf(BLOOD_ASPECT_BUTTON.get());
+		dropSelf(BLOOD_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(BLOOD_ASPECT_FENCE.get());
+		dropSelf(BLOOD_ASPECT_FENCE_GATE.get());
+		//dropSelf(BLOOD_ASPECT_DOOR.get());
+		//dropSelf(BLOOD_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(BREATH_ASPECT_PLANKS.get());
+		dropSelf(BREATH_ASPECT_STAIRS.get());
+		dropSelf(BREATH_ASPECT_SLAB.get());
+		dropSelf(BREATH_ASPECT_BUTTON.get());
+		dropSelf(BREATH_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(BREATH_ASPECT_FENCE.get());
+		dropSelf(BREATH_ASPECT_FENCE_GATE.get());
+		//dropSelf(BREATH_ASPECT_DOOR.get());
+		//dropSelf(BREATH_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(DOOM_ASPECT_PLANKS.get());
+		dropSelf(DOOM_ASPECT_STAIRS.get());
+		dropSelf(DOOM_ASPECT_SLAB.get());
+		dropSelf(DOOM_ASPECT_BUTTON.get());
+		dropSelf(DOOM_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(DOOM_ASPECT_FENCE.get());
+		dropSelf(DOOM_ASPECT_FENCE_GATE.get());
+		//dropSelf(DOOM_ASPECT_DOOR.get());
+		//dropSelf(DOOM_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(HEART_ASPECT_PLANKS.get());
+		dropSelf(HEART_ASPECT_STAIRS.get());
+		dropSelf(HEART_ASPECT_SLAB.get());
+		dropSelf(HEART_ASPECT_BUTTON.get());
+		dropSelf(HEART_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(HEART_ASPECT_FENCE.get());
+		dropSelf(HEART_ASPECT_FENCE_GATE.get());
+		//dropSelf(HEART_ASPECT_DOOR.get());
+		//dropSelf(HEART_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(HOPE_ASPECT_PLANKS.get());
+		dropSelf(HOPE_ASPECT_STAIRS.get());
+		dropSelf(HOPE_ASPECT_SLAB.get());
+		dropSelf(HOPE_ASPECT_BUTTON.get());
+		dropSelf(HOPE_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(HOPE_ASPECT_FENCE.get());
+		dropSelf(HOPE_ASPECT_FENCE_GATE.get());
+		//dropSelf(HOPE_ASPECT_DOOR.get());
+		//dropSelf(HOPE_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(LIFE_ASPECT_PLANKS.get());
+		dropSelf(LIFE_ASPECT_STAIRS.get());
+		dropSelf(LIFE_ASPECT_SLAB.get());
+		dropSelf(LIFE_ASPECT_BUTTON.get());
+		dropSelf(LIFE_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(LIFE_ASPECT_FENCE.get());
+		dropSelf(LIFE_ASPECT_FENCE_GATE.get());
+		//dropSelf(LIFE_ASPECT_DOOR.get());
+		//dropSelf(LIFE_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(LIGHT_ASPECT_PLANKS.get());
+		dropSelf(LIGHT_ASPECT_STAIRS.get());
+		dropSelf(LIGHT_ASPECT_SLAB.get());
+		dropSelf(LIGHT_ASPECT_BUTTON.get());
+		dropSelf(LIGHT_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(LIGHT_ASPECT_FENCE.get());
+		dropSelf(LIGHT_ASPECT_FENCE_GATE.get());
+		//dropSelf(LIGHT_ASPECT_DOOR.get());
+		//dropSelf(LIGHT_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(MIND_ASPECT_PLANKS.get());
+		dropSelf(MIND_ASPECT_STAIRS.get());
+		dropSelf(MIND_ASPECT_SLAB.get());
+		dropSelf(MIND_ASPECT_BUTTON.get());
+		dropSelf(MIND_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(MIND_ASPECT_FENCE.get());
+		dropSelf(MIND_ASPECT_FENCE_GATE.get());
+		//dropSelf(MIND_ASPECT_DOOR.get());
+		//dropSelf(MIND_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(RAGE_ASPECT_PLANKS.get());
+		dropSelf(RAGE_ASPECT_STAIRS.get());
+		dropSelf(RAGE_ASPECT_SLAB.get());
+		dropSelf(RAGE_ASPECT_BUTTON.get());
+		dropSelf(RAGE_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(RAGE_ASPECT_FENCE.get());
+		dropSelf(RAGE_ASPECT_FENCE_GATE.get());
+		//dropSelf(RAGE_ASPECT_DOOR.get());
+		//dropSelf(RAGE_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(SPACE_ASPECT_PLANKS.get());
+		dropSelf(SPACE_ASPECT_STAIRS.get());
+		dropSelf(SPACE_ASPECT_SLAB.get());
+		dropSelf(SPACE_ASPECT_BUTTON.get());
+		dropSelf(SPACE_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(SPACE_ASPECT_FENCE.get());
+		dropSelf(SPACE_ASPECT_FENCE_GATE.get());
+		//dropSelf(SPACE_ASPECT_DOOR.get());
+		//dropSelf(SPACE_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(TIME_ASPECT_PLANKS.get());
+		dropSelf(TIME_ASPECT_STAIRS.get());
+		dropSelf(TIME_ASPECT_SLAB.get());
+		dropSelf(TIME_ASPECT_BUTTON.get());
+		dropSelf(TIME_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(TIME_ASPECT_FENCE.get());
+		dropSelf(TIME_ASPECT_FENCE_GATE.get());
+		//dropSelf(TIME_ASPECT_DOOR.get());
+		//dropSelf(TIME_ASPECT_TRAPDOOR.get());
+		
 		dropSelf(VOID_ASPECT_PLANKS.get());
+		dropSelf(VOID_ASPECT_STAIRS.get());
+		dropSelf(VOID_ASPECT_SLAB.get());
+		dropSelf(VOID_ASPECT_BUTTON.get());
+		dropSelf(VOID_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(VOID_ASPECT_FENCE.get());
+		dropSelf(VOID_ASPECT_FENCE_GATE.get());
+		//dropSelf(VOID_ASPECT_DOOR.get());
+		//dropSelf(VOID_ASPECT_TRAPDOOR.get());
+		
 		add(BLOOD_ASPECT_LEAVES.get(), this::bloodAspectLeavesDrop);
 		add(BREATH_ASPECT_LEAVES.get(), this::breathAspectLeavesDrop);
 		add(DOOM_ASPECT_LEAVES.get(), this::doomAspectLeavesDrop);
@@ -299,6 +724,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(SPACE_ASPECT_LEAVES.get(), this::spaceAspectLeavesDrop);
 		add(TIME_ASPECT_LEAVES.get(), this::timeAspectLeavesDrop);
 		add(VOID_ASPECT_LEAVES.get(), this::voidAspectLeavesDrop);
+		
 		dropSelf(BLOOD_ASPECT_SAPLING.get());
 		dropSelf(BREATH_ASPECT_SAPLING.get());
 		dropSelf(DOOM_ASPECT_SAPLING.get());
@@ -399,7 +825,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(END_PLANKS_STAIRS.get());
 		dropSelf(DEAD_PLANKS_STAIRS.get());
 		dropSelf(TREATED_PLANKS_STAIRS.get());
-		dropSelf(FLOWERY_MOSSY_STONE_BRICK_STAIRS.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get());
 		dropSelf(BLACK_CHESS_BRICK_SLAB.get());
@@ -422,7 +847,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(BLACK_STONE_BRICK_SLAB.get());
 		dropSelf(MYCELIUM_SLAB.get());
 		dropSelf(MYCELIUM_BRICK_SLAB.get());
-		dropSelf(FLOWERY_MOSSY_STONE_BRICK_SLAB.get());
 		dropSelf(FROST_TILE_SLAB.get());
 		dropSelf(FROST_BRICK_SLAB.get());
 		dropSelf(SHADE_SLAB.get());
