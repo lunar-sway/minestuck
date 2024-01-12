@@ -55,25 +55,14 @@ public final class CommandActionHandler
 		
 		skaianet.getActiveConnection(client).ifPresent(skaianet::closeConnection);
 		
-		SburbConnection connection = skaianet.getConnection(client, server);
-		if(cc.isEmpty() || !cc.get().isMain())
-		{
-			if(connection != null)
-				skaianet.trySetPrimaryConnection(connection);
-			else
-			{
-				Session session = skaianet.sessionHandler.prepareSessionFor(client, server);
-				SburbConnection newConnection = new SburbConnection(client, server, skaianet);
-				session.connections.add(newConnection);
-				skaianet.trySetPrimaryConnection(newConnection);
-			}
-		} else
+		if(cc.isPresent() && cc.get().isMain())
 		{
 			SburbConnection clientConnection = cc.get();
 			clientConnection.removeServerPlayer();
 			clientConnection.setNewServerPlayer(server);
-			if(connection != null)
-				skaianet.sessionHandler.getPlayerSession(client).connections.remove(connection);
+		} else
+		{
+			skaianet.trySetPrimaryConnection(client, server);
 		}
 		
 		return true;
@@ -97,61 +86,52 @@ public final class CommandActionHandler
 			source.sendSuccess(() -> Component.literal(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(ChatFormatting.YELLOW), true);
 		}
 		
-		try
+		clientConnection.removeServerPlayer();
+		SburbConnection c = clientConnection;
+		int i = 0;
+		for(; i < landTypes.size(); i++)
 		{
-			clientConnection.removeServerPlayer();
-			SburbConnection c = clientConnection;
-			int i = 0;
-			for(; i < landTypes.size(); i++)
+			LandTypePair land = landTypes.get(i);
+			if(land == null)
+				break;
+			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
+			c.setNewServerPlayer(fakePlayer);
+			
+			c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
+		}
+		
+		if(i == landTypes.size())
+			c.setNewServerPlayer(identifier);
+		else
+		{
+			PlayerIdentifier lastIdentifier = identifier;
+			for(i = landTypes.size() - 1; i >= 0; i--)
 			{
 				LandTypePair land = landTypes.get(i);
 				if(land == null)
 					break;
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-				c.setNewServerPlayer(fakePlayer);
 				
-				c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
+				c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
+				
+				lastIdentifier = fakePlayer;
 			}
-			
-			if(i == landTypes.size())
-				c.setNewServerPlayer(identifier);
-			else
-			{
-				PlayerIdentifier lastIdentifier = identifier;
-				for(i = landTypes.size() - 1; i >= 0; i--)
-				{
-					LandTypePair land = landTypes.get(i);
-					if(land == null)
-						break;
-					PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-					
-					c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
-					
-					lastIdentifier = fakePlayer;
-				}
-			}
-		} catch(MergeResult.SessionMergeException e)
-		{
-			//TODO give proper feedback to user. The operation will most likely have partially executed
 		}
 	}
 	
-	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server)
 	{
-		SburbConnection c = new SburbConnection(client, server, skaianet);
-		skaianet.trySetPrimaryConnection(c);
+		skaianet.trySetPrimaryConnection(client, server);
 		SburbPlayerData data = skaianet.getOrCreateData(client);
 		data.setLand(dimensionName);
 		data.setHasEntered();
 		
-		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);
-		session.connections.add(c);
 		
 		//The land types used by generation is set during connection init above, so placing gates currently has to go after that
 		ServerLevel level = skaianet.mcServer.getLevel(dimensionName);
 		EntryProcess.placeGates(level);
 		
-		return c;
+		return skaianet.getConnection(client, server);
 	}
 	
 	

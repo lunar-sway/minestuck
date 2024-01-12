@@ -59,16 +59,6 @@ public abstract class SessionHandler
 				&& getPlayerSession(client) == getPlayerSession(server);
 	}
 	
-	Session getSessionForConnecting(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
-	{
-		
-		if(skaianetHandler.getPrimaryOrCandidateConnection(client, true).isEmpty()
-				&& skaianetHandler.getPrimaryOrCandidateConnection(server, false).isEmpty())
-			throw MergeResult.GENERIC_FAIL.exception();
-		
-		return prepareSessionFor(client, server);
-	}
-	
 	void onConnectionClosed(ActiveConnection connection)
 	{
 		SburbConnection sburbConnection = skaianetHandler.getConnection(connection);

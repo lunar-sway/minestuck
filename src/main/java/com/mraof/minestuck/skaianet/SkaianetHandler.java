@@ -486,7 +486,15 @@ public final class SkaianetHandler extends SavedData
 	
 	void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		Objects.requireNonNull(getConnection(client, server));
+		if(getConnection(client, server) == null)
+		{
+			if(getPrimaryOrCandidateConnection(client, true).isEmpty()
+					&& getPrimaryOrCandidateConnection(server, false).isEmpty())
+				throw new IllegalArgumentException();
+			
+			sessionHandler.prepareSessionFor(client, server)
+					.connections.add(new SburbConnection(client, server, this));
+		}
 		getOrCreateData(client).setHasPrimaryConnection();
 	}
 	
@@ -512,12 +520,9 @@ public final class SkaianetHandler extends SavedData
 				trySetPrimaryConnection(connection.get());
 			else
 			{
-				LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
+				LOGGER.info("Player {} entered without connection.", target.getUsername());
 				
-				Session session = sessionHandler.prepareSessionFor(target, IdentifierHandler.NULL_IDENTIFIER);
-				SburbConnection c = new SburbConnection(target, IdentifierHandler.NULL_IDENTIFIER, this);
-				session.connections.add(c);
-				trySetPrimaryConnection(c);
+				trySetPrimaryConnection(target, IdentifierHandler.NULL_IDENTIFIER);
 			}
 		}
 		
