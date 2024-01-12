@@ -20,7 +20,6 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
 import java.util.Optional;
 
 public class DataCheckerManager
@@ -50,99 +49,99 @@ public class DataCheckerManager
 		return nbt;
 	}
 	
-	private static CompoundTag createSessionDataTag(MinecraftServer server, Session session)
+	private static CompoundTag createSessionDataTag(MinecraftServer mcServer, Session session)
 	{
 		ListTag connectionList = new ListTag();
 		for(PlayerIdentifier player : session.getPlayerList())
-		{
-			Optional<SburbConnection> optionalConnection = session.connections.stream().filter(c -> c.getClientIdentifier().equals(player)).findAny();
-			if(optionalConnection.isEmpty())
-			{
-				PredefineData predefineData = session.predefinedPlayers.get(player);
-				if(predefineData != null)
-					connectionList.add(createPredefineDataTag(player, predefineData));
-				continue;
-			}
-			
-			connectionList.add(createConnectionDataTag(server, optionalConnection.get(), session.predefinedPlayers));
-		}
+			connectionList.add(createPlayerDataTag(player, session, mcServer));
 		
 		CompoundTag sessionTag = new CompoundTag();
 		sessionTag.put("connections", connectionList);
 		return sessionTag;
 	}
 	
-	/**
-	 * Creates data for this connection to be sent to the data checker screen
-	 */
-	private static CompoundTag createConnectionDataTag(MinecraftServer server, SburbConnection connection, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
+	private static CompoundTag createPlayerDataTag(PlayerIdentifier player, Session session, MinecraftServer mcServer)
 	{
-		SburbPlayerData playerData = SburbPlayerData.get(connection.getClientIdentifier(), server);
-		CompoundTag connectionTag = new CompoundTag();
-		connectionTag.putString("client", connection.getClientIdentifier().getUsername());
-		connectionTag.putString("clientId", connection.getClientIdentifier().getCommandString());
-		if(connection.hasServerPlayer())
-			connectionTag.putString("server", connection.getServerIdentifier().getUsername());
-		connectionTag.putBoolean("isMain", connection.isMain());
-		connectionTag.putBoolean("isActive", connection.isActive());
+		CompoundTag tag = new CompoundTag();
 		
-		ResourceKey<Level> landDimensionKey = playerData.getLandDimension();
-		if(!connection.isMain() || landDimensionKey == null)
+		tag.putString("client", player.getUsername());
+		tag.putString("clientId", player.getCommandString());
+		
+		writeConnectionData(tag, player, session);
+		writeExtraData(tag, player, session, mcServer);
+		
+		return tag;
+	}
+	
+	private static void writeConnectionData(CompoundTag tag, PlayerIdentifier player, Session session)
+	{
+		Optional<SburbConnection> optionalConnection = session.connections.stream().filter(c -> c.getClientIdentifier().equals(player)).findAny();
+		if(optionalConnection.isPresent())
 		{
-			PredefineData data = predefinedPlayers.get(connection.getClientIdentifier());
-			if(data != null)
-				putPredefinedDataToTag(connectionTag, data);
+			SburbConnection connection = optionalConnection.get();
 			
-			return connectionTag;
+			if(connection.hasServerPlayer())
+				tag.putString("server", connection.getServerIdentifier().getUsername());
+			
+			tag.putBoolean("isMain", connection.isMain());
+			tag.putBoolean("isActive", connection.isActive());
+		} else
+		{
+			tag.putBoolean("isMain", false);
+			tag.putBoolean("isActive", false);
+		}
+	}
+	
+	private static void writeExtraData(CompoundTag tag, PlayerIdentifier player, Session session, MinecraftServer mcServer)
+	{
+		SburbPlayerData playerData = SburbPlayerData.get(player, mcServer);
+		ResourceKey<Level> landDimensionKey = playerData.getLandDimension();
+		if(landDimensionKey != null)
+		{
+			writeEntryPreparedData(tag, player, landDimensionKey, mcServer);
+			return;
 		}
 		
-		connectionTag.putString("clientDim", landDimensionKey.location().toString());
+		PredefineData data = session.predefinedPlayers.get(player);
+		if(data != null)
+			putPredefinedData(tag, data);
+	}
+	
+	/**
+	 * When entry is prepared, the land types and player title is generated or taken from predefined data.
+	 * This function is meant to write that data.
+	 */
+	private static void writeEntryPreparedData(CompoundTag tag, PlayerIdentifier player,
+											   ResourceKey<Level> landDimensionKey, MinecraftServer mcServer)
+	{
+		tag.putString("clientDim", landDimensionKey.location().toString());
 		
-		Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(server, landDimensionKey);
+		Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(mcServer, landDimensionKey);
 		landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
-				.ifPresent(tag -> connectionTag.put("landTypes", tag));
+				.ifPresent(landPairTag -> tag.put("landTypes", landPairTag));
 		
-		Title title = PlayerSavedData.getData(connection.getClientIdentifier(), connection.skaianet.mcServer).getTitle();
+		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
 		if(title != null)
 		{
-			connectionTag.putByte("class", (byte) title.getHeroClass().ordinal());
-			connectionTag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
+			tag.putByte("class", (byte) title.getHeroClass().ordinal());
+			tag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
 		}
-		return connectionTag;
 	}
 	
-	/**
-	 * Creates data to be sent to the data checker screen for players with predefined data but without a connection
-	 */
-	private static CompoundTag createPredefineDataTag(PlayerIdentifier identifier, PredefineData data)
-	{
-		CompoundTag connectionTag = new CompoundTag();
-		
-		connectionTag.putString("client", identifier.getUsername());
-		connectionTag.putString("clientId", identifier.getCommandString());
-		connectionTag.putBoolean("isMain", false);
-		connectionTag.putBoolean("isActive", false);
-		connectionTag.putInt("clientDim", 0);
-		
-		putPredefinedDataToTag(connectionTag, data);
-		
-		return connectionTag;
-	}
-	
-	private static void putPredefinedDataToTag(CompoundTag nbt, PredefineData data)
+	private static void putPredefinedData(CompoundTag tag, PredefineData data)
 	{
 		Title title = data.getTitle();
 		if(title != null)
 		{
-			nbt.putByte("class", (byte) data.getTitle().getHeroClass().ordinal());
-			nbt.putByte("aspect", (byte) data.getTitle().getHeroAspect().ordinal());
+			tag.putByte("class", (byte) data.getTitle().getHeroClass().ordinal());
+			tag.putByte("aspect", (byte) data.getTitle().getHeroAspect().ordinal());
 		}
 		
 		TerrainLandType terrainType = data.getTerrainLandType();
 		TitleLandType titleType = data.getTitleLandType();
 		if(terrainType != null)
-			nbt.putString("terrainLandType", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainType).toString());
+			tag.putString("terrainLandType", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainType).toString());
 		if(titleType != null)
-			nbt.putString("titleLandType", LandTypes.TITLE_REGISTRY.get().getKey(titleType).toString());
+			tag.putString("titleLandType", LandTypes.TITLE_REGISTRY.get().getKey(titleType).toString());
 	}
 }
