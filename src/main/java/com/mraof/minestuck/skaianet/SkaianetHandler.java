@@ -504,22 +504,25 @@ public final class SkaianetHandler extends SavedData
 	 */
 	public ResourceKey<Level> prepareEntry(PlayerIdentifier target)
 	{
-		SburbConnection c = getPrimaryOrCandidateConnection(target, true).orElse(null);
 		SburbPlayerData playerData = getOrCreateData(target);
-		if(c == null)
+		if(!playerData.hasPrimaryConnection())
 		{
-			LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
-			
-			Session session = sessionHandler.prepareSessionFor(target, IdentifierHandler.NULL_IDENTIFIER);
-			c = new SburbConnection(target, IdentifierHandler.NULL_IDENTIFIER, this);
-			session.connections.add(c);
-			trySetPrimaryConnection(c);
-		} else if(!c.isMain())
-			trySetPrimaryConnection(c);
-		else if(playerData.getLandDimension() != null)
-			return playerData.getLandDimension();
+			Optional<ActiveConnection> connection = getActiveConnection(target);
+			if(connection.isPresent())
+				trySetPrimaryConnection(connection.get());
+			else
+			{
+				LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
+				
+				Session session = sessionHandler.prepareSessionFor(target, IdentifierHandler.NULL_IDENTIFIER);
+				SburbConnection c = new SburbConnection(target, IdentifierHandler.NULL_IDENTIFIER, this);
+				session.connections.add(c);
+				trySetPrimaryConnection(c);
+			}
+		}
 		
-		SburbHandler.prepareEntry(mcServer, playerData);
+		if(playerData.getLandDimension() == null)
+			SburbHandler.prepareEntry(mcServer, playerData);
 		
 		return playerData.getLandDimension();
 	}
