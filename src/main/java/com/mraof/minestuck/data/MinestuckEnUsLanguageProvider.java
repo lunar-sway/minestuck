@@ -70,13 +70,45 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.LIGHT_GRAY_CHESS_DIRT, "Light Gray Chess Tile");
 		addBlock(MSBlocks.SKAIA_PORTAL, "Skaia Portal");
 		addBlock(MSBlocks.BLACK_CHESS_BRICKS, "Black Chess Bricks");
+		addBlock(MSBlocks.BLACK_CHESS_BRICK_WALL, "Black Chess Brick Wall");
+		
 		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICKS, "Dark Gray Chess Bricks");
+		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_WALL, "Dark Gray Chess Brick Wall");
+		
 		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICKS, "Light Gray Chess Bricks");
+		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_WALL, "Light Gray Chess Brick Wall");
+		
 		addBlock(MSBlocks.WHITE_CHESS_BRICKS, "White Chess Bricks");
+		addBlock(MSBlocks.WHITE_CHESS_BRICK_WALL, "White Chess Brick Wall");
+		
 		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH, "Smooth Black Chess Brick");
+		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Black Chess Brick Stairs");
+		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_SLAB, "Smooth Black Chess Brick Slab");
+		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_WALL, "Smooth Black Chess Brick Wall");
+		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Black Chess Brick Button");
+		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth Black Chess Brick Pressure Plate");
+		
 		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH, "Smooth Dark Gray Chess Brick");
+		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Dark Gray Chess Brick Stairs");
+		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB, "Smooth Dark Gray Chess Brick Slab");
+		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL, "Smooth Dark Gray Chess Brick Wall");
+		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Dark Gray Chess Brick Button");
+		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "DBrick ark Gray Chess Smooth Pressure Plate");
+		
 		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH, "Smooth Light Gray Black Chess Brick");
+		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Light Gray Chess Brick Stairs");
+		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB, "Smooth Light Gray Chess Brick Slab");
+		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL, "LSmooth ight Gray Chess Brick Wall");
+		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Light Gray Chess Brick Button");
+		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth Light Gray Chess Brick Pressure Plate");
+		
 		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH, "Smooth White Chess Brick");
+		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_STAIRS, "Smooth White Chess Brick Stairs");
+		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_SLAB, "Smooth White Chess Brick Slab");
+		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_WALL, "Smooth White Chess Brick Wall");
+		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_BUTTON, "Smooth White Chess Brick Button");
+		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth White Chess Brick Pressure Plate");
+		
 		addBlock(MSBlocks.BLACK_CHESS_BRICK_TRIM, "Black Chess Brick Trim");
 		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_TRIM, "Dark Gray Chess Brick Trim");
 		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM, "Light Gray Chess Brick Trim");
@@ -119,87 +151,277 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.STONE_QUARTZ_ORE, "Quartz Ore");
 		addBlock(MSBlocks.PINK_STONE_LAPIS_ORE, "Lapis Ore");
 		addBlock(MSBlocks.PINK_STONE_DIAMOND_ORE, "Diamond Ore");
+		
 		addBlock(MSBlocks.CRUXITE_BLOCK, "Cruxite Block");
+		addBlock(MSBlocks.CRUXITE_STAIRS, "Cruxite Stairs");
+		addBlock(MSBlocks.CRUXITE_SLAB, "Cruxite Slab");
+		addBlock(MSBlocks.CRUXITE_WALL, "Cruxite Wall");
+		addBlock(MSBlocks.CRUXITE_BUTTON, "Cruxite Button");
+		addBlock(MSBlocks.CRUXITE_PRESSURE_PLATE, "Cruxite Pressure Plate");
+		
 		addBlock(MSBlocks.URANIUM_BLOCK, "Uranium Block");
+		addBlock(MSBlocks.URANIUM_STAIRS, "Uranium Stairs");
+		addBlock(MSBlocks.URANIUM_SLAB, "Uranium Slab");
+		addBlock(MSBlocks.URANIUM_WALL, "Uranium Wall");
+		addBlock(MSBlocks.URANIUM_BUTTON, "Uranium Button");
+		addBlock(MSBlocks.URANIUM_PRESSURE_PLATE, "Uranium Pressure Plate");
+		
 		addBlock(MSBlocks.GENERIC_OBJECT, "Perfectly Generic Object");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_STAIRS, "Perfectly Generic Stairs");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_SLAB, "Perfectly Generic Slab");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_WALL, "Perfectly Generic Wall");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_FENCE, "Perfectly Generic Fence");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_FENCE_GATE, "Perfectly Generic Fence Gate");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_BUTTON, "Perfectly Generic Button");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_PRESSURE_PLATE, "Perfectly Generic Pressure Plate");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_DOOR, "Perfectly Generic Door");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR, "Perfectly Generic Trapdoor");
+		
 		addBlock(MSBlocks.BLUE_DIRT, "Blue Dirt");
 		addBlock(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
+		
 		addBlock(MSBlocks.COARSE_STONE, "Coarse Stone");
+		addBlock(MSBlocks.COARSE_STONE_WALL, "Coarse Stone Wall");
+		addBlock(MSBlocks.COARSE_STONE_BUTTON, "Coarse Stone Button");
+		addBlock(MSBlocks.COARSE_STONE_PRESSURE_PLATE, "Coarse Stone Pressure Plate");
+		
 		addBlock(MSBlocks.CHISELED_COARSE_STONE, "Chiseled Coarse Stone");
+		
 		addBlock(MSBlocks.COARSE_STONE_BRICKS, "Coarse Stone Bricks");
+		addBlock(MSBlocks.COARSE_STONE_BRICK_WALL, "Coarse Stone Brick Wall");
+		
 		addBlock(MSBlocks.COARSE_STONE_COLUMN, "Coarse Stone Column");
 		addBlock(MSBlocks.CHISELED_COARSE_STONE_BRICKS, "Chiseled Coarse Stone Bricks");
 		addBlock(MSBlocks.CRACKED_COARSE_STONE_BRICKS, "Cracked Coarse Stone Bricks");
 		addBlock(MSBlocks.MOSSY_COARSE_STONE_BRICKS, "Mossy Coarse Stone Bricks");
+		
 		addBlock(MSBlocks.SHADE_STONE, "Shade Stone");
+		addBlock(MSBlocks.SHADE_WALL, "Shade Wall");
+		addBlock(MSBlocks.SHADE_BUTTON, "Shade Button");
+		addBlock(MSBlocks.SHADE_PRESSURE_PLATE, "Shade Pressure Plate");
+		
 		addBlock(MSBlocks.SMOOTH_SHADE_STONE, "Smooth Shade Stone");
+		addBlock(MSBlocks.SMOOTH_SHADE_STONE_STAIRS, "Smooth Shade Stone Stairs");
+		addBlock(MSBlocks.SMOOTH_SHADE_STONE_SLAB, "Smooth Shade Stone Slab");
+		addBlock(MSBlocks.SMOOTH_SHADE_STONE_WALL, "Smooth Shade Stone Wall");
+		
 		addBlock(MSBlocks.SHADE_BRICKS, "Shade Bricks");
+		addBlock(MSBlocks.SHADE_BRICK_WALL, "Shade Brick Wall");
+		
 		addBlock(MSBlocks.SHADE_COLUMN, "Shade Stone Column");
 		addBlock(MSBlocks.CHISELED_SHADE_BRICKS, "Chiseled Shade Bricks");
 		addBlock(MSBlocks.CRACKED_SHADE_BRICKS, "Cracked Shade Bricks");
+		
 		addBlock(MSBlocks.MOSSY_SHADE_BRICKS, "Mossy Shade Bricks");
+		addBlock(MSBlocks.MOSSY_SHADE_BRICK_STAIRS, "Mossy Shade Brick Stairs");
+		addBlock(MSBlocks.MOSSY_SHADE_BRICK_SLAB, "Mossy Shade Brick Slab");
+		addBlock(MSBlocks.MOSSY_SHADE_BRICK_WALL, "Mossy Shade Brick Wall");
+		
 		addBlock(MSBlocks.BLOOD_SHADE_BRICKS, "Bloody Shade Bricks");
+		addBlock(MSBlocks.BLOOD_SHADE_BRICK_STAIRS, "Bloody Shade Brick Stairs");
+		addBlock(MSBlocks.BLOOD_SHADE_BRICK_SLAB, "Bloody Shade Brick Slab");
+		addBlock(MSBlocks.BLOOD_SHADE_BRICK_WALL, "Bloody Shade Brick Wall");
+		
 		addBlock(MSBlocks.TAR_SHADE_BRICKS, "Oily Shade Bricks");
+		addBlock(MSBlocks.TAR_SHADE_BRICK_STAIRS, "Oily Shade Brick Stairs");
+		addBlock(MSBlocks.TAR_SHADE_BRICK_SLAB, "Oily Shade Brick Slab");
+		addBlock(MSBlocks.TAR_SHADE_BRICK_WALL, "Oily Shade Brick Wall");
+		
 		addBlock(MSBlocks.FROST_TILE, "Frost Tiles");
+		addBlock(MSBlocks.FROST_TILE_WALL, "Frost Tile Wall");
+		
 		addBlock(MSBlocks.CHISELED_FROST_TILE, "Chiseled Frost Tiles");
+		
 		addBlock(MSBlocks.FROST_BRICKS, "Frost Bricks");
 		addBlock(MSBlocks.FROST_COLUMN, "Frost Column");
+		addBlock(MSBlocks.FROST_BRICK_WALL, "Frost Brick Wall");
+		
 		addBlock(MSBlocks.CHISELED_FROST_BRICKS, "Chiseled Frost Bricks");
 		addBlock(MSBlocks.CRACKED_FROST_BRICKS, "Cracked Frost Bricks");
+		
 		addBlock(MSBlocks.FLOWERY_FROST_BRICKS, "Flowery Frost Bricks");
+		addBlock(MSBlocks.FLOWERY_FROST_BRICK_STAIRS, "Flowery Frost Brick Stairs");
+		addBlock(MSBlocks.FLOWERY_FROST_BRICK_SLAB, "Flowery Frost Brick Slab");
+		addBlock(MSBlocks.FLOWERY_FROST_BRICK_WALL, "Flowery Frost Brick Wall");
+		
 		addBlock(MSBlocks.CAST_IRON, "Cast-Iron");
+		addBlock(MSBlocks.CAST_IRON_SLAB, "Cast Iron Slab");
+		addBlock(MSBlocks.CAST_IRON_WALL, "Cast Iron Wall");
+		addBlock(MSBlocks.CAST_IRON_BUTTON, "Cast Iron Button");
+		addBlock(MSBlocks.CAST_IRON_PRESSURE_PLATE, "Cast Iron Pressure Plate");
+		
 		addBlock(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast-Iron");
 		addBlock(MSBlocks.STEEL_BEAM, "Steel Beam");
+		
 		addBlock(MSBlocks.MYCELIUM_COBBLESTONE, "Mycelium Cobblestone");
+		addBlock(MSBlocks.MYCELIUM_COBBLESTONE_STAIRS, "Mycelium Cobblestone Stairs");
+		addBlock(MSBlocks.MYCELIUM_COBBLESTONE_SLAB, "Mycelium Cobblestone Slab");
+		addBlock(MSBlocks.MYCELIUM_COBBLESTONE_WALL, "Mycelium Cobblestone Wall");
+		
 		addBlock(MSBlocks.MYCELIUM_STONE, "Mycelium Stone");
+		addBlock(MSBlocks.MYCELIUM_STONE_WALL, "Mycelium Stone Wall");
+		addBlock(MSBlocks.MYCELIUM_STONE_BUTTON, "Mycelium Stone Button");
+		addBlock(MSBlocks.MYCELIUM_STONE_PRESSURE_PLATE, "Mycelium Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE, "Polished Mycelium Stone");
+		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE_STAIRS, "Polished Mycelium Stone Stairs");
+		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE_SLAB, "Polished Mycelium Stone Slab");
+		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE_WALL, "Polished Mycelium Stone Wall");
+		
 		addBlock(MSBlocks.MYCELIUM_BRICKS, "Mycelium Bricks");
+		addBlock(MSBlocks.MYCELIUM_BRICK_WALL, "Mycelium Brick Wall");
+		
 		addBlock(MSBlocks.MYCELIUM_COLUMN, "Mycelium Column");
 		addBlock(MSBlocks.CHISELED_MYCELIUM_BRICKS, "Chiseled Mycelium Bricks");
 		addBlock(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS, "Suspicious Chiseled Mycelium Bricks");
 		addBlock(MSBlocks.CRACKED_MYCELIUM_BRICKS, "Cracked Mycelium Bricks");
+		
 		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICKS, "Mossy Mycelium Bricks");
+		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICK_STAIRS, "Mossy Mycelium Brick Stairs");
+		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICK_SLAB, "Mossy Mycelium Brick Slab");
+		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICK_WALL, "Mossy Mycelium Brick Wall");
+		
 		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICKS, "Flowery Mycelium Bricks");
+		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICK_STAIRS, "Flowery Mycelium Brick Stairs");
+		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICK_SLAB, "Flowery Mycelium Brick Slab");
+		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICK_WALL, "Flowery Mycelium Brick Wall");
+		
 		addBlock(MSBlocks.BLACK_STONE, "Black Stone");
+		addBlock(MSBlocks.BLACK_STONE_WALL, "Black Stone Wall");
+		addBlock(MSBlocks.BLACK_STONE_BUTTON, "Black Stone Button");
+		addBlock(MSBlocks.BLACK_STONE_PRESSURE_PLATE, "Black Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_BLACK_STONE, "Polished Black Stone");
+		addBlock(MSBlocks.POLISHED_BLACK_STONE_STAIRS, "Polished Black Stone Stairs");
+		addBlock(MSBlocks.POLISHED_BLACK_STONE_SLAB, "Polished Black Stone Slab");
+		addBlock(MSBlocks.POLISHED_BLACK_STONE_WALL, "Polished Black Stone Wall");
+		
 		addBlock(MSBlocks.BLACK_COBBLESTONE, "Black Cobblestone");
+		addBlock(MSBlocks.BLACK_COBBLESTONE_STAIRS, "Black Cobblestone Stairs");
+		addBlock(MSBlocks.BLACK_COBBLESTONE_SLAB, "Black Cobblestone Slab");
+		addBlock(MSBlocks.BLACK_COBBLESTONE_WALL, "Black Cobblestone Wall");
+		
 		addBlock(MSBlocks.BLACK_STONE_BRICKS, "Black Stone Bricks");
+		addBlock(MSBlocks.BLACK_STONE_BRICK_WALL, "Black Stone Brick Wall");
+		
 		addBlock(MSBlocks.BLACK_STONE_COLUMN, "Black Stone Column");
 		addBlock(MSBlocks.CHISELED_BLACK_STONE_BRICKS, "Chiseled Black Stone Bricks");
 		addBlock(MSBlocks.CRACKED_BLACK_STONE_BRICKS, "Cracked Black Stone Bricks");
 		addBlock(MSBlocks.BLACK_SAND, "Black Sand");
+		
 		addBlock(MSBlocks.DECREPIT_STONE_BRICKS, "Decrepit Stone Bricks");
+		addBlock(MSBlocks.DECREPIT_STONE_BRICK_STAIRS, "Decrepit Stone Brick Stairs");
+		addBlock(MSBlocks.DECREPIT_STONE_BRICK_SLAB, "Decrepit Stone Brick Slab");
+		addBlock(MSBlocks.DECREPIT_STONE_BRICK_WALL, "Decrepit Stone Brick Wall");
+		
 		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE, "Flowery Mossy Cobblestone");
+		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_STAIRS, "Flowery Mossy Cobblestone Stairs");
+		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_SLAB, "Flowery Mossy Cobblestone Slab");
+		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_WALL, "Flowery Mossy Cobblestone Wall");
+		
 		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS, "Mossy Decrepit Stone Bricks");
+		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_STAIRS, "Mossy Decrepit Stone Brick Stairs");
+		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_SLAB, "Mossy Decrepit Stone Brick Slab");
+		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_WALL, "Mossy Decrepit Stone Brick Wall");
+		
 		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, "Flowery Mossy Decrepit Stone Bricks");
+		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "Flowery Mossy Decrepit Stone Brick Stairs");
+		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, "Flowery Mossy Decrepit Stone Brick Slab");
+		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_WALL, "Flowery Mossy Decrepit Stone Brick Wall");
 		addBlock(MSBlocks.COARSE_END_STONE, "Coarse End Stone");
 		addBlock(MSBlocks.END_GRASS, "End Grass Block");
+		
 		addBlock(MSBlocks.CHALK, "Chalk");
+		addBlock(MSBlocks.CHALK_WALL, "Chalk Wall");
+		addBlock(MSBlocks.CHALK_BUTTON, "Chalk Button");
+		addBlock(MSBlocks.CHALK_PRESSURE_PLATE, "Chalk Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_CHALK, "Polished Chalk");
+		addBlock(MSBlocks.POLISHED_CHALK_STAIRS, "Polished Chalk Stairs");
+		addBlock(MSBlocks.POLISHED_CHALK_SLAB, "Polished Chalk Slab");
+		addBlock(MSBlocks.POLISHED_CHALK_WALL, "Polished Chalk Wall");
+		
 		addBlock(MSBlocks.CHALK_BRICKS, "Chalk Bricks");
+		addBlock(MSBlocks.CHALK_BRICK_WALL, "Chalk Brick Wall");
+		
 		addBlock(MSBlocks.CHALK_COLUMN, "Chalk Column");
 		addBlock(MSBlocks.CHISELED_CHALK_BRICKS, "Chiseled Chalk Bricks");
+		
 		addBlock(MSBlocks.MOSSY_CHALK_BRICKS, "Mossy Chalk Bricks");
+		addBlock(MSBlocks.MOSSY_CHALK_BRICK_STAIRS, "Mossy Chalk Brick Stairs");
+		addBlock(MSBlocks.MOSSY_CHALK_BRICK_SLAB, "Mossy Chalk Brick Slab");
+		addBlock(MSBlocks.MOSSY_CHALK_BRICK_WALL, "Mossy Chalk Brick Wall");
+		
 		addBlock(MSBlocks.FLOWERY_CHALK_BRICKS, "Flowery Chalk Bricks");
+		addBlock(MSBlocks.FLOWERY_CHALK_BRICK_STAIRS, "Flowery Chalk Brick Stairs");
+		addBlock(MSBlocks.FLOWERY_CHALK_BRICK_SLAB, "Flowery Chalk Brick Slab");
+		addBlock(MSBlocks.FLOWERY_CHALK_BRICK_WALL, "Flowery Chalk Brick Wall");
+		
 		addBlock(MSBlocks.PINK_STONE, "Pink Stone");
+		addBlock(MSBlocks.PINK_STONE_WALL, "Pink Stone Wall");
+		addBlock(MSBlocks.PINK_STONE_BUTTON, "Pink Stone Button");
+		addBlock(MSBlocks.PINK_STONE_PRESSURE_PLATE, "Pink Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_PINK_STONE, "Polished Pink Stone");
+		addBlock(MSBlocks.POLISHED_PINK_STONE_STAIRS, "Polished Pink Stone Stairs");
+		addBlock(MSBlocks.POLISHED_PINK_STONE_SLAB, "Polished Pink Stone Slab");
+		addBlock(MSBlocks.POLISHED_PINK_STONE_WALL, "Polished Pink Stone Wall");
+		
 		addBlock(MSBlocks.PINK_STONE_BRICKS, "Pink Stone Bricks");
+		addBlock(MSBlocks.PINK_STONE_BRICK_WALL, "Pink Stone Brick Wall");
+		
 		addBlock(MSBlocks.CHISELED_PINK_STONE_BRICKS, "Chiseled Pink Stone Bricks");
 		addBlock(MSBlocks.CRACKED_PINK_STONE_BRICKS, "Cracked Pink Stone Bricks");
+		
 		addBlock(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
+		addBlock(MSBlocks.MOSSY_PINK_STONE_BRICK_STAIRS, "Mossy Pink Stone Brick Stairs");
+		addBlock(MSBlocks.MOSSY_PINK_STONE_BRICK_SLAB, "Mossy Pink Stone Brick Slab");
+		addBlock(MSBlocks.MOSSY_PINK_STONE_BRICK_WALL, "Mossy Pink Stone Brick Wall");
+		
 		addBlock(MSBlocks.PINK_STONE_COLUMN, "Pink Stone Column");
+		
 		addBlock(MSBlocks.BROWN_STONE, "Brown Stone");
+		addBlock(MSBlocks.BROWN_STONE_WALL, "Brown Stone Wall");
+		addBlock(MSBlocks.BROWN_STONE_BUTTON, "Brown Stone Button");
+		addBlock(MSBlocks.BROWN_STONE_PRESSURE_PLATE, "Brown Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_BROWN_STONE, "Polished Brown Stone");
+		addBlock(MSBlocks.POLISHED_BROWN_STONE_STAIRS, "Polished Brown Stone Stairs");
+		addBlock(MSBlocks.POLISHED_BROWN_STONE_SLAB, "Polished Brown Stone Slab");
+		addBlock(MSBlocks.POLISHED_BROWN_STONE_WALL, "Polished Brown Stone Wall");
+		
 		addBlock(MSBlocks.BROWN_STONE_BRICKS, "Brown Stone Bricks");
+		addBlock(MSBlocks.BROWN_STONE_BRICK_WALL, "Brown Stone Brick Wall");
+		
 		addBlock(MSBlocks.BROWN_STONE_COLUMN, "Brown Stone Column");
 		addBlock(MSBlocks.CRACKED_BROWN_STONE_BRICKS, "Cracked Brown Stone Bricks");
+		
 		addBlock(MSBlocks.GREEN_STONE, "Green Stone");
+		addBlock(MSBlocks.GREEN_STONE_WALL, "Green Stone Wall");
+		addBlock(MSBlocks.GREEN_STONE_BUTTON, "Green Stone Button");
+		addBlock(MSBlocks.GREEN_STONE_PRESSURE_PLATE, "Green Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_GREEN_STONE, "Polished Green Stone");
+		addBlock(MSBlocks.POLISHED_GREEN_STONE_STAIRS, "Polished Green Stone Stairs");
+		addBlock(MSBlocks.POLISHED_GREEN_STONE_SLAB, "Polished Green Stone Slab");
+		addBlock(MSBlocks.POLISHED_GREEN_STONE_WALL, "Polished Green Stone Wall");
+		
 		addBlock(MSBlocks.GREEN_STONE_BRICKS, "Green Stone Bricks");
+		addBlock(MSBlocks.GREEN_STONE_BRICK_WALL, "Green Stone Brick Wall");
+		
 		addBlock(MSBlocks.GREEN_STONE_COLUMN, "Green Stone Column");
 		addBlock(MSBlocks.CHISELED_GREEN_STONE_BRICKS, "Chiseled Green Stone Bricks");
+		
 		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, "Horizontal Green Stone Bricks");
+		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICK_STAIRS, "Horizontal Green Stone Brick Stairs");
+		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICK_SLAB, "Horizontal Green Stone Brick Slab");
+		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICK_WALL, "Horizontal Green Stone Brick Wall");
+		
 		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, "Vertical Green Stone Bricks");
+		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICK_STAIRS, "Vertical Green Stone Brick Stairs");
+		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICK_SLAB, "Vertical Green Stone Brick Slab");
+		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICK_WALL, "Vertical Green Stone Brick Wall");
+		
 		addBlock(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER, "Green Stone Brick Embedded Ladder");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_TRIM, "Green Stone Brick Trim");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_FROG, "Green Stone Brick Frog Hieroglyph");
@@ -217,13 +439,44 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RED_SANDSTONE_COLUMN, "Red Sandstone Column");
 		addBlock(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
 		addBlock(MSBlocks.NATIVE_SULFUR, "Native Sulfur");
+		
 		addBlock(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
 		addBlockTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
+		addBlock(MSBlocks.UNCARVED_WOOD_STAIRS, "Uncarved Wood Stairs");
+		addBlock(MSBlocks.UNCARVED_WOOD_SLAB, "Uncarved Wood Slab");
+		addBlock(MSBlocks.UNCARVED_WOOD_BUTTON, "Uncarved Wood Button");
+		addBlock(MSBlocks.UNCARVED_WOOD_PRESSURE_PLATE, "Uncarved Wood Pressure Plate");
+		addBlock(MSBlocks.UNCARVED_WOOD_FENCE, "Uncarved Wood Fence");
+		addBlock(MSBlocks.UNCARVED_WOOD_FENCE_GATE, "Uncarved Wood Fence Gate");
+
 		addBlock(MSBlocks.CHIPBOARD, "Chipboard");
+		addBlock(MSBlocks.CHIPBOARD_STAIRS, "Chipboard Stairs");
+		addBlock(MSBlocks.CHIPBOARD_SLAB, "Chipboard Slab");
+		addBlock(MSBlocks.CHIPBOARD_BUTTON, "Chipboard Button");
+		addBlock(MSBlocks.CHIPBOARD_PRESSURE_PLATE, "Chipboard Pressure Plate");
+		addBlock(MSBlocks.CHIPBOARD_FENCE, "Chipboard Fence");
+		addBlock(MSBlocks.CHIPBOARD_FENCE_GATE, "Chipboard Fence Gate");
+	
 		addBlock(MSBlocks.WOOD_SHAVINGS, "Wood Shavings");
+		
 		addBlock(MSBlocks.CARVED_HEAVY_PLANKS, "Carved Heavy Planks");
+		addBlock(MSBlocks.CARVED_HEAVY_PLANK_STAIRS, "Carved Heavy Stairs");
+		addBlock(MSBlocks.CARVED_HEAVY_PLANK_SLAB, "Carved Heavy Slab");
+		
 		addBlock(MSBlocks.CARVED_PLANKS, "Carved Planks");
+		addBlock(MSBlocks.CARVED_STAIRS, "Carved Stairs");
+		addBlock(MSBlocks.CARVED_SLAB, "Carved Slab");
+		addBlock(MSBlocks.CARVED_BUTTON, "Carved Button");
+		addBlock(MSBlocks.CARVED_PRESSURE_PLATE, "Carved Pressure Plate");
+		addBlock(MSBlocks.CARVED_FENCE, "Carved Fence");
+		addBlock(MSBlocks.CARVED_FENCE_GATE, "Carved Fence Gate");
+		//addBlock(MSBlocks.CARVED_DOOR, "Carved Door");
+		//addBlock(MSBlocks.CARVED_TRAPDOOR, "Carved Trapdoor");
+		
 		addBlock(MSBlocks.POLISHED_UNCARVED_WOOD, "Polished Uncarved Wood");
+		addBlock(MSBlocks.POLISHED_UNCARVED_STAIRS, "Polished Uncarved Stairs");
+		addBlock(MSBlocks.POLISHED_UNCARVED_SLAB, "Polished Uncarved Slab");
+		
 		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
 		addBlock(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
@@ -257,13 +510,77 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_VINE_WOOD, "Flowery Vine Wood");
 		addBlock(MSBlocks.DEAD_WOOD, "Dead Wood");
 		addBlock(MSBlocks.PETRIFIED_WOOD, "Petrified Wood");
+		
 		addBlock(MSBlocks.GLOWING_PLANKS, "Glowing Planks");
+		addBlock(MSBlocks.GLOWING_STAIRS, "Glowing Stairs");
+		addBlock(MSBlocks.GLOWING_SLAB, "Glowing Slab");
+		addBlock(MSBlocks.GLOWING_BUTTON, "Glowing Button");
+		addBlock(MSBlocks.GLOWING_PRESSURE_PLATE, "Glowing Pressure Plate");
+		addBlock(MSBlocks.GLOWING_FENCE, "Glowing Fence");
+		addBlock(MSBlocks.GLOWING_FENCE_GATE, "Glowing Fence Gate");
+		//addBlock(MSBlocks.GLOWING_DOOR, "Glowing Door");
+		//addBlock(MSBlocks.GLOWING_TRAPDOOR, "Glowing Trapdoor");
+		
 		addBlock(MSBlocks.FROST_PLANKS, "Frost Planks");
+		addBlock(MSBlocks.FROST_STAIRS, "Frost Stairs");
+		addBlock(MSBlocks.FROST_SLAB, "Frost Slab");
+		addBlock(MSBlocks.FROST_BUTTON, "Frost Button");
+		addBlock(MSBlocks.FROST_PRESSURE_PLATE, "Frost Pressure Plate");
+		addBlock(MSBlocks.FROST_FENCE, "Frost Fence");
+		addBlock(MSBlocks.FROST_FENCE_GATE, "Frost Fence Gate");
+		//addBlock(MSBlocks.FROST_DOOR, "Frost Door");
+		//addBlock(MSBlocks.FROST_TRAPDOOR, "Frost Trapdoor");
+		
 		addBlock(MSBlocks.RAINBOW_PLANKS, "Rainbow Planks");
+		addBlock(MSBlocks.RAINBOW_STAIRS, "Rainbow Stairs");
+		addBlock(MSBlocks.RAINBOW_SLAB, "Rainbow Slab");
+		addBlock(MSBlocks.RAINBOW_BUTTON, "Rainbow Button");
+		addBlock(MSBlocks.RAINBOW_PRESSURE_PLATE, "Rainbow Pressure Plate");
+		addBlock(MSBlocks.RAINBOW_FENCE, "Rainbow Fence");
+		addBlock(MSBlocks.RAINBOW_FENCE_GATE, "Rainbow Fence Gate");
+		//addBlock(MSBlocks.RAINBOW_DOOR, "Rainbow Door");
+		//addBlock(MSBlocks.RAINBOW_TRAPDOOR, "Rainbow Trapdoor");
+		
 		addBlock(MSBlocks.END_PLANKS, "End Planks");
+		addBlock(MSBlocks.END_STAIRS, "End Stairs");
+		addBlock(MSBlocks.END_SLAB, "End Slab");
+		addBlock(MSBlocks.END_BUTTON, "End Button");
+		addBlock(MSBlocks.END_PRESSURE_PLATE, "End Pressure Plate");
+		addBlock(MSBlocks.END_FENCE, "End Fence");
+		addBlock(MSBlocks.END_FENCE_GATE, "End Fence Gate");
+		//addBlock(MSBlocks.END_DOOR, "End Door");
+		//addBlock(MSBlocks.END_TRAPDOOR, "End Trapdoor");
+		
 		addBlock(MSBlocks.DEAD_PLANKS, "Dead Planks");
+		addBlock(MSBlocks.DEAD_STAIRS, "Dead Stairs");
+		addBlock(MSBlocks.DEAD_SLAB, "Dead Slab");
+		addBlock(MSBlocks.DEAD_BUTTON, "Dead Button");
+		addBlock(MSBlocks.DEAD_PRESSURE_PLATE, "Dead Pressure Plate");
+		addBlock(MSBlocks.DEAD_FENCE, "Dead Fence");
+		addBlock(MSBlocks.DEAD_FENCE_GATE, "Dead Fence Gate");
+		//addBlock(MSBlocks.DEAD_DOOR, "Dead Door");
+		//addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
+		
 		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
+		addBlock(MSBlocks.TREATED_STAIRS, "Treated Stairs");
+		addBlock(MSBlocks.TREATED_SLAB, "Treated Slab");
+		addBlock(MSBlocks.TREATED_BUTTON, "Treated Button");
+		addBlock(MSBlocks.TREATED_PRESSURE_PLATE, "Treated Pressure Plate");
+		addBlock(MSBlocks.TREATED_FENCE, "Treated Fence");
+		addBlock(MSBlocks.TREATED_FENCE_GATE, "Treated Fence Gate");
+		//addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
+		//addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
+		
 		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
+		addBlock(MSBlocks.SHADEWOOD_STAIRS, "Shadewood Stairs");
+		addBlock(MSBlocks.SHADEWOOD_SLAB, "Shadewood Slab");
+		addBlock(MSBlocks.SHADEWOOD_BUTTON, "Shadewood Button");
+		addBlock(MSBlocks.SHADEWOOD_PRESSURE_PLATE, "Shadewood Pressure Plate");
+		addBlock(MSBlocks.SHADEWOOD_FENCE, "Shadewood Fence");
+		addBlock(MSBlocks.SHADEWOOD_FENCE_GATE, "Shadewood Fence Gate");
+		//addBlock(MSBlocks.SHADEWOOD_DOOR, "Shadewood Door");
+		//addBlock(MSBlocks.SHADEWOOD_TRAPDOOR, "Shadewood Trapdoor");
+		
 		addBlock(MSBlocks.FROST_LEAVES, "Frost Leaves");
 		addBlock(MSBlocks.RAINBOW_LEAVES, "Rainbow Leaves");
 		addBlock(MSBlocks.END_LEAVES, "End Leaves");
@@ -284,18 +601,127 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SPACE_ASPECT_LOG, "Space Log");
 		addBlock(MSBlocks.TIME_ASPECT_LOG, "Time Log");
 		addBlock(MSBlocks.VOID_ASPECT_LOG, "Void Log");
+		
 		addBlock(MSBlocks.BLOOD_ASPECT_PLANKS, "Blood Planks");
+		addBlock(MSBlocks.BLOOD_ASPECT_STAIRS, "Blood Stairs");
+		addBlock(MSBlocks.BLOOD_ASPECT_SLAB, "Blood Slab");
+		addBlock(MSBlocks.BLOOD_ASPECT_BUTTON, "Blood Button");
+		addBlock(MSBlocks.BLOOD_ASPECT_PRESSURE_PLATE, "Blood Pressure Plate");
+		addBlock(MSBlocks.BLOOD_ASPECT_FENCE, "Blood Fence");
+		addBlock(MSBlocks.BLOOD_ASPECT_FENCE_GATE, "Blood Fence Gate");
+		//addBlock(MSBlocks.BLOOD_ASPECT_DOOR, "Blood Door");
+		//addBlock(MSBlocks.BLOOD_ASPECT_TRAPDOOR, "Blood Trapdoor");
+		
 		addBlock(MSBlocks.BREATH_ASPECT_PLANKS, "Breath Planks");
+		addBlock(MSBlocks.BREATH_ASPECT_STAIRS, "Breath Stairs");
+		addBlock(MSBlocks.BREATH_ASPECT_SLAB, "Breath Slab");
+		addBlock(MSBlocks.BREATH_ASPECT_BUTTON, "Breath Button");
+		addBlock(MSBlocks.BREATH_ASPECT_PRESSURE_PLATE, "Breath Pressure Plate");
+		addBlock(MSBlocks.BREATH_ASPECT_FENCE, "Breath Fence");
+		addBlock(MSBlocks.BREATH_ASPECT_FENCE_GATE, "Breath Fence Gate");
+		//addBlock(MSBlocks.BREATH_ASPECT_DOOR, "Breath Door");
+		//addBlock(MSBlocks.BREATH_ASPECT_TRAPDOOR, "Breath Trapdoor");
+		
 		addBlock(MSBlocks.DOOM_ASPECT_PLANKS, "Doom Planks");
+		addBlock(MSBlocks.DOOM_ASPECT_STAIRS, "Doom Stairs");
+		addBlock(MSBlocks.DOOM_ASPECT_SLAB, "Doom Slab");
+		addBlock(MSBlocks.DOOM_ASPECT_BUTTON, "Doom Button");
+		addBlock(MSBlocks.DOOM_ASPECT_PRESSURE_PLATE, "Doom Pressure Plate");
+		addBlock(MSBlocks.DOOM_ASPECT_FENCE, "Doom Fence");
+		addBlock(MSBlocks.DOOM_ASPECT_FENCE_GATE, "Doom Fence Gate");
+		//addBlock(MSBlocks.DOOM_ASPECT_DOOR, "Doom Door");
+		//addBlock(MSBlocks.DOOM_ASPECT_TRAPDOOR, "Doom Trapdoor");
+		
 		addBlock(MSBlocks.HEART_ASPECT_PLANKS, "Heart Planks");
+		addBlock(MSBlocks.HEART_ASPECT_STAIRS, "Heart Stairs");
+		addBlock(MSBlocks.HEART_ASPECT_SLAB, "Heart Slab");
+		addBlock(MSBlocks.HEART_ASPECT_BUTTON, "Heart Button");
+		addBlock(MSBlocks.HEART_ASPECT_PRESSURE_PLATE, "Heart Pressure Plate");
+		addBlock(MSBlocks.HEART_ASPECT_FENCE, "Heart Fence");
+		addBlock(MSBlocks.HEART_ASPECT_FENCE_GATE, "Heart Fence Gate");
+		//addBlock(MSBlocks.HEART_ASPECT_DOOR, "Heart Door");
+		//addBlock(MSBlocks.HEART_ASPECT_TRAPDOOR, "Heart Trapdoor");
+		
 		addBlock(MSBlocks.HOPE_ASPECT_PLANKS, "Hope Planks");
+		addBlock(MSBlocks.HOPE_ASPECT_STAIRS, "Hope Stairs");
+		addBlock(MSBlocks.HOPE_ASPECT_SLAB, "Hope Slab");
+		addBlock(MSBlocks.HOPE_ASPECT_BUTTON, "Hope Button");
+		addBlock(MSBlocks.HOPE_ASPECT_PRESSURE_PLATE, "Hope Pressure Plate");
+		addBlock(MSBlocks.HOPE_ASPECT_FENCE, "Hope Fence");
+		addBlock(MSBlocks.HOPE_ASPECT_FENCE_GATE, "Hope Fence Gate");
+		//addBlock(MSBlocks.HOPE_ASPECT_DOOR, "Hope Door");
+		//addBlock(MSBlocks.HOPE_ASPECT_TRAPDOOR, "Hope Trapdoor");
+		
 		addBlock(MSBlocks.LIFE_ASPECT_PLANKS, "Life Planks");
+		addBlock(MSBlocks.LIFE_ASPECT_STAIRS, "Life Stairs");
+		addBlock(MSBlocks.LIFE_ASPECT_SLAB, "Life Slab");
+		addBlock(MSBlocks.LIFE_ASPECT_BUTTON, "Life Button");
+		addBlock(MSBlocks.LIFE_ASPECT_PRESSURE_PLATE, "Life Pressure Plate");
+		addBlock(MSBlocks.LIFE_ASPECT_FENCE, "Life Fence");
+		addBlock(MSBlocks.LIFE_ASPECT_FENCE_GATE, "Life Fence Gate");
+		//addBlock(MSBlocks.LIFE_ASPECT_DOOR, "Life Door");
+		//addBlock(MSBlocks.LIFE_ASPECT_TRAPDOOR, "Life Trapdoor");
+		
 		addBlock(MSBlocks.LIGHT_ASPECT_PLANKS, "Light Planks");
+		addBlock(MSBlocks.LIGHT_ASPECT_STAIRS, "Light Stairs");
+		addBlock(MSBlocks.LIGHT_ASPECT_SLAB, "Light Slab");
+		addBlock(MSBlocks.LIGHT_ASPECT_BUTTON, "Light Button");
+		addBlock(MSBlocks.LIGHT_ASPECT_PRESSURE_PLATE, "Light Pressure Plate");
+		addBlock(MSBlocks.LIGHT_ASPECT_FENCE, "Light Fence");
+		addBlock(MSBlocks.LIGHT_ASPECT_FENCE_GATE, "Light Fence Gate");
+		//addBlock(MSBlocks.LIGHT_ASPECT_DOOR, "Light Door");
+		//addBlock(MSBlocks.LIGHT_ASPECT_TRAPDOOR, "Light Trapdoor");
+		
 		addBlock(MSBlocks.MIND_ASPECT_PLANKS, "Mind Planks");
+		addBlock(MSBlocks.MIND_ASPECT_STAIRS, "Mind Stairs");
+		addBlock(MSBlocks.MIND_ASPECT_SLAB, "Mind Slab");
+		addBlock(MSBlocks.MIND_ASPECT_BUTTON, "Mind Button");
+		addBlock(MSBlocks.MIND_ASPECT_PRESSURE_PLATE, "Mind Pressure Plate");
+		addBlock(MSBlocks.MIND_ASPECT_FENCE, "Mind Fence");
+		addBlock(MSBlocks.MIND_ASPECT_FENCE_GATE, "Mind Fence Gate");
+		//addBlock(MSBlocks.MIND_ASPECT_DOOR, "Mind Door");
+		//addBlock(MSBlocks.MIND_ASPECT_TRAPDOOR, "Mind Trapdoor");
+		
 		addBlock(MSBlocks.RAGE_ASPECT_PLANKS, "Rage Planks");
+		addBlock(MSBlocks.RAGE_ASPECT_STAIRS, "Rage Stairs");
+		addBlock(MSBlocks.RAGE_ASPECT_SLAB, "Rage Slab");
+		addBlock(MSBlocks.RAGE_ASPECT_BUTTON, "Rage Button");
+		addBlock(MSBlocks.RAGE_ASPECT_PRESSURE_PLATE, "Rage Pressure Plate");
+		addBlock(MSBlocks.RAGE_ASPECT_FENCE, "Rage Fence");
+		addBlock(MSBlocks.RAGE_ASPECT_FENCE_GATE, "Rage Fence Gate");
+		//addBlock(MSBlocks.RAGE_ASPECT_DOOR, "Rage Door");
+		//addBlock(MSBlocks.RAGE_ASPECT_TRAPDOOR, "Rage Trapdoor");
+		
 		addBlock(MSBlocks.SPACE_ASPECT_PLANKS, "Space Planks");
+		addBlock(MSBlocks.SPACE_ASPECT_STAIRS, "Space Stairs");
+		addBlock(MSBlocks.SPACE_ASPECT_SLAB, "Space Slab");
+		addBlock(MSBlocks.SPACE_ASPECT_BUTTON, "Space Button");
+		addBlock(MSBlocks.SPACE_ASPECT_PRESSURE_PLATE, "Space Pressure Plate");
+		addBlock(MSBlocks.SPACE_ASPECT_FENCE, "Space Fence");
+		addBlock(MSBlocks.SPACE_ASPECT_FENCE_GATE, "Space Fence Gate");
+		//addBlock(MSBlocks.SPACE_ASPECT_DOOR, "Space Door");
+		//addBlock(MSBlocks.SPACE_ASPECT_TRAPDOOR, "Space Trapdoor");
+		
 		addBlock(MSBlocks.TIME_ASPECT_PLANKS, "Time Planks");
+		addBlock(MSBlocks.TIME_ASPECT_STAIRS, "Time Stairs");
+		addBlock(MSBlocks.TIME_ASPECT_SLAB, "Time Slab");
+		addBlock(MSBlocks.TIME_ASPECT_BUTTON, "Time Button");
+		addBlock(MSBlocks.TIME_ASPECT_PRESSURE_PLATE, "Time Pressure Plate");
+		addBlock(MSBlocks.TIME_ASPECT_FENCE, "Time Fence");
+		addBlock(MSBlocks.TIME_ASPECT_FENCE_GATE, "Time Fence Gate");
+		//addBlock(MSBlocks.TIME_ASPECT_DOOR, "Time Door");
+		//addBlock(MSBlocks.TIME_ASPECT_TRAPDOOR, "Time Trapdoor");
+		
 		addBlock(MSBlocks.VOID_ASPECT_PLANKS, "Void Planks");
+		addBlock(MSBlocks.VOID_ASPECT_STAIRS, "Void Stairs");
+		addBlock(MSBlocks.VOID_ASPECT_SLAB, "Void Slab");
+		addBlock(MSBlocks.VOID_ASPECT_BUTTON, "Void Button");
+		addBlock(MSBlocks.VOID_ASPECT_PRESSURE_PLATE, "Void Pressure Plate");
+		addBlock(MSBlocks.VOID_ASPECT_FENCE, "Void Fence");
+		addBlock(MSBlocks.VOID_ASPECT_FENCE_GATE, "Void Fence Gate");
+		//addBlock(MSBlocks.VOID_ASPECT_DOOR, "Void Door");
+		//addBlock(MSBlocks.VOID_ASPECT_TRAPDOOR, "Void Trapdoor");
+		
 		addBlock(MSBlocks.BLOOD_ASPECT_LEAVES, "Blood Leaves");
 		addBlock(MSBlocks.BREATH_ASPECT_LEAVES, "Breath Leaves");
 		addBlock(MSBlocks.DOOM_ASPECT_LEAVES, "Doom Leaves");
@@ -404,7 +830,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLACK_STONE_BRICK_STAIRS, "Black Stone Brick Stairs");
 		addBlock(MSBlocks.MYCELIUM_STAIRS, "Mycelium Stairs");
 		addBlock(MSBlocks.MYCELIUM_BRICK_STAIRS, "Mycelium Brick Stairs");
-		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "Flowery Mossy Stone Brick Stairs");
 		addBlock(MSBlocks.CHALK_STAIRS, "Chalk Stairs");
 		addBlock(MSBlocks.CHALK_BRICK_STAIRS, "Chalk Brick Stairs");
 		addBlock(MSBlocks.PINK_STONE_STAIRS, "Pink Stone Stairs");
@@ -439,7 +864,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");
 		addBlock(MSBlocks.MYCELIUM_BRICK_SLAB, "Mycelium Brick Slab");
-		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, "Flowery Mossy Stone Brick Slab");
 		addBlock(MSBlocks.FROST_TILE_SLAB, "Frost Tile Slab");
 		addBlock(MSBlocks.FROST_BRICK_SLAB, "Frost Brick Slab");
 		addBlock(MSBlocks.SHADE_SLAB, "Shade Stone Slab");
