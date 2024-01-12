@@ -89,7 +89,7 @@ public class ClientEditPacket implements MSPacket.PlayToServer
 				if(c.isEmpty() || c.get().server() != user)
 					return;
 				
-				SburbHandler.giveItems(player.server, target);
+				SburbHandler.onEntryItemsDeployed(player.server, target);
 				
 				SburbPlayerData targetData = SburbPlayerData.get(target, player.server);
 				for(DeployEntry entry : DeployList.getItemList(player.server, targetData, DeployList.EntryLists.DEPLOY))

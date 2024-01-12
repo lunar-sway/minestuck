@@ -485,6 +485,23 @@ public final class SkaianetHandler extends SavedData
 		return sessionHandler.getConnectionStream().filter(SburbConnection::isMain);
 	}
 	
+	void trySetPrimaryConnection(ActiveConnection connection)
+	{
+		trySetPrimaryConnection(connection.client(), connection.server());
+	}
+	
+	void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
+	{
+		SburbConnection connection = Objects.requireNonNull(getConnection(client, server));
+		connection.setIsMain();
+	}
+	
+	@Deprecated
+	void trySetPrimaryConnection(SburbConnection connection)
+	{
+		connection.setIsMain();
+	}
+	
 	/**
 	 * Prepares the sburb connection and data needed for after entry.
 	 * Should only be called by the cruxite artifact on trigger before teleportation
@@ -501,14 +518,14 @@ public final class SkaianetHandler extends SavedData
 			try
 			{
 				c = tryCreateNewConnectionFor(target, IdentifierHandler.NULL_IDENTIFIER);
-				SburbHandler.onFirstItemGiven(c);
+				trySetPrimaryConnection(c);
 			} catch(MergeResult.SessionMergeException e)
 			{
 				LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), e.getMessage());
 				return null;
 			}
 		} else if(!c.isMain())
-			SburbHandler.giveItems(mcServer, target);
+			trySetPrimaryConnection(c);
 		else if(playerData.getLandDimension() != null)
 			return playerData.getLandDimension();
 		

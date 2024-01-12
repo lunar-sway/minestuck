@@ -51,7 +51,7 @@ public final class CommandActionHandler
 		{
 			if(!cc.get().isMain())
 			{
-				cc.get().setIsMain();
+				skaianet.trySetPrimaryConnection(cc.get());
 				return true;
 			}
 			return false;
@@ -70,13 +70,13 @@ public final class CommandActionHandler
 		if(cc.isEmpty() || !cc.get().isMain())
 		{
 			if(connection != null)
-				connection.setIsMain();
+				skaianet.trySetPrimaryConnection(connection);
 			else
 			{
 				Session session = skaianet.sessionHandler.prepareSessionFor(client, server);
 				SburbConnection newConnection = new SburbConnection(client, server, skaianet);
 				session.connections.add(newConnection);
-				newConnection.setIsMain();
+				skaianet.trySetPrimaryConnection(newConnection);
 			}
 		} else
 		{
@@ -153,7 +153,7 @@ public final class CommandActionHandler
 	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
-		c.setIsMain();
+		skaianet.trySetPrimaryConnection(c);
 		SburbPlayerData data = skaianet.getOrCreateData(client);
 		data.setLand(dimensionName);
 		data.setHasEntered();

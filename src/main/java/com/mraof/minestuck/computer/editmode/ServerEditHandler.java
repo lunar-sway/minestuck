@@ -342,7 +342,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
 					data.sburbData().setHasGivenItem(entry);
-					SburbHandler.giveItems(event.getPlayer().getServer(), data.getTarget());
+					SburbHandler.onEntryItemsDeployed(event.getPlayer().getServer(), data.getTarget());
 				} else event.setCanceled(true);
 			} else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.sburbData(), event.getEntity().level(), DeployList.EntryLists.ATHENEUM))
 			{
@@ -519,7 +519,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
 				{
 					targetData.setHasGivenItem(entry);
-					SburbHandler.giveItems(player.server, data.getTarget());
+					SburbHandler.onEntryItemsDeployed(player.server, data.getTarget());
 				}
 				if(!cost.isEmpty())
 				{

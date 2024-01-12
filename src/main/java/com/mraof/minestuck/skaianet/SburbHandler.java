@@ -27,6 +27,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -157,21 +158,12 @@ public final class SburbHandler
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
 	
-	public static boolean giveItems(MinecraftServer mcServer, PlayerIdentifier player)
+	public static void onEntryItemsDeployed(MinecraftServer mcServer, PlayerIdentifier player)
 	{
 		SkaianetHandler handler = SkaianetHandler.get(mcServer);
-		SburbConnection c = handler.getPrimaryOrCandidateConnection(player, true).orElse(null);
-		if(c != null && !c.isMain())
-		{
-			onFirstItemGiven(c);
-			return true;
-		}
-		return false;
-	}
-	
-	static void onFirstItemGiven(SburbConnection connection)
-	{
-		connection.setIsMain();
+		Optional<ActiveConnection> connection = handler.getActiveConnection(player);
+		if(connection.isPresent() && !handler.hasPrimaryConnectionForClient(player))
+			handler.trySetPrimaryConnection(connection.get());
 	}
 	
 	static void prepareEntry(MinecraftServer mcServer, SburbPlayerData playerData)
