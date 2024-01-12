@@ -67,25 +67,25 @@ public class DataCheckerManager
 		tag.putString("client", player.getUsername());
 		tag.putString("clientId", player.getCommandString());
 		
-		writeConnectionData(tag, player, session);
+		writeConnectionData(tag, player, mcServer);
 		writeExtraData(tag, player, session, mcServer);
 		
 		return tag;
 	}
 	
-	private static void writeConnectionData(CompoundTag tag, PlayerIdentifier player, Session session)
+	private static void writeConnectionData(CompoundTag tag, PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		Optional<SburbConnection> optionalConnection = session.connections.stream().filter(c -> c.getClientIdentifier().equals(player)).findAny();
-		if(optionalConnection.isPresent())
-		{
-			SburbConnection connection = optionalConnection.get();
-			
-			if(connection.hasServerPlayer())
-				tag.putString("server", connection.getServerIdentifier().getUsername());
-			
-			tag.putBoolean("isMain", connection.isMain());
-		} else
-			tag.putBoolean("isMain", false);
+		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
+		
+		boolean isMain = skaianetHandler.hasPrimaryConnectionForClient(player);
+		tag.putBoolean("isMain", isMain);
+		
+		if(isMain)
+			skaianetHandler.primaryPartnerForClient(player)
+					.ifPresent(serverPlayer -> tag.putString("server", serverPlayer.getUsername()));
+		else
+			skaianetHandler.getActiveConnection(player)
+					.ifPresent(connection -> tag.putString("server", connection.server().getUsername()));
 	}
 	
 	private static void writeExtraData(CompoundTag tag, PlayerIdentifier player, Session session, MinecraftServer mcServer)
