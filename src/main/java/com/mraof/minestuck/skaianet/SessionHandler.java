@@ -52,21 +52,20 @@ public abstract class SessionHandler
 	void onConnectionChainBroken(Session session)
 	{}
 	
-	/**
-	 * Will check if two players can connect based on their main connections and sessions.
-	 * Does NOT include session size checking.
-	 * @return True if client connection is not null and client and server session is the same or 
-	 * client connection is null and server connection is null.
-	 */
-	//TODO repalce with proper checks when creating a regular or secondary connection
 	private boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
 		Optional<SburbConnection> cClient = skaianetHandler.getPrimaryOrCandidateConnection(client, true);
 		Optional<SburbConnection> cServer = skaianetHandler.getPrimaryOrCandidateConnection(server, false);
 		
-		return cClient.isPresent() && cServer.isPresent() && sClient == sServer && (MinestuckConfig.SERVER.allowSecondaryConnections.get() || cClient.get() == cServer.get())	//Reconnect within session
+		return cClient.isPresent() && cServer.isPresent() && cClient.get() == cServer.get()	//Resume connection
 				|| cClient.isEmpty() && cServer.isEmpty();	//Connect with a new player and potentially create a main connection
+	}
+	
+	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
+	{
+		return MinestuckConfig.SERVER.allowSecondaryConnections.get()
+				&& skaianetHandler.hasPrimaryConnectionForClient(client)
+				&& getPlayerSession(client) == getPlayerSession(server);
 	}
 	
 	Session getSessionForConnecting(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
@@ -94,10 +93,8 @@ public abstract class SessionHandler
 		Map<Integer, String> map = new HashMap<>();
 		for(PlayerIdentifier server : skaianetHandler.openedServers.getPlayers())
 		{
-			if(canConnect(client, server))
-			{
+			if(canConnect(client, server) || canMakeSecondaryConnection(client, server))
 				map.put(server.getId(), server.getUsername());
-			}
 		}
 		return map;
 	}

@@ -175,7 +175,7 @@ public final class SkaianetHandler extends SavedData
 				LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
 				computer.putClientMessage(e.getResult().translationKey());
 			}
-		} else
+		} else if(sessionHandler.canMakeSecondaryConnection(player, server))
 		{
 			setActive(computer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
 			openedServers.remove(server);
