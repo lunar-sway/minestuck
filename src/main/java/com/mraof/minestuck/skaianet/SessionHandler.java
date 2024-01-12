@@ -52,15 +52,6 @@ public abstract class SessionHandler
 	void onConnectionChainBroken(Session session)
 	{}
 	
-	boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
-	{
-		Optional<SburbConnection> cClient = skaianetHandler.getPrimaryOrCandidateConnection(client, true);
-		Optional<SburbConnection> cServer = skaianetHandler.getPrimaryOrCandidateConnection(server, false);
-		
-		return cClient.isPresent() && cServer.isPresent() && cClient.get() == cServer.get()	//Resume connection
-				|| cClient.isEmpty() && cServer.isEmpty();	//Connect with a new player and potentially create a main connection
-	}
-	
 	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		return MinestuckConfig.SERVER.allowSecondaryConnections.get()
@@ -70,7 +61,9 @@ public abstract class SessionHandler
 	
 	Session getSessionForConnecting(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
-		if(!canConnect(client, server))
+		
+		if(skaianetHandler.getPrimaryOrCandidateConnection(client, true).isEmpty()
+				&& skaianetHandler.getPrimaryOrCandidateConnection(server, false).isEmpty())
 			throw MergeResult.GENERIC_FAIL.exception();
 		
 		return prepareSessionFor(client, server);
@@ -90,10 +83,14 @@ public abstract class SessionHandler
 	
 	Map<Integer, String> getServerList(PlayerIdentifier client)
 	{
+		Optional<PlayerIdentifier> primaryServer = skaianetHandler.primaryPartnerForClient(client);
 		Map<Integer, String> map = new HashMap<>();
 		for(PlayerIdentifier server : skaianetHandler.openedServers.getPlayers())
 		{
-			if(canConnect(client, server) || canMakeSecondaryConnection(client, server))
+			
+			if(primaryServer.isPresent() && primaryServer.get().equals(server)
+					|| primaryServer.isEmpty() && skaianetHandler.getPrimaryOrCandidateConnection(server, false).isEmpty()
+					|| canMakeSecondaryConnection(client, server))
 				map.put(server.getId(), server.getUsername());
 		}
 		return map;

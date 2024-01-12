@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Right-clicking an item outside the atheneum menu no longer crashes the client
 - Suspicion effect now correctly stops the affected mob from summoning zombie reinforcements
 - Respawning mid-entry no longer spawns you in your land
+- Fixes some niche issues with connections
 
 ### Contributors for this release
 

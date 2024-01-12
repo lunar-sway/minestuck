@@ -143,7 +143,7 @@ public final class SkaianetHandler extends SavedData
 		Optional<SburbConnection> optional = getPrimaryOrCandidateConnection(player, true);
 		if(optional.isEmpty())
 		{
-			if(!sessionHandler.canConnect(player, server))
+			if(getPrimaryOrCandidateConnection(server, false).isPresent())
 			{
 				LOGGER.warn("Connection failed between {} and {}", player.getUsername(), server.getUsername());
 				computer.putClientMessage(MergeResult.GENERIC_FAIL.translationKey());
@@ -165,9 +165,9 @@ public final class SkaianetHandler extends SavedData
 			openedServers.remove(server);
 		} else if(!connection.hasServerPlayer())
 		{
-			if(!sessionHandler.canConnect(player, server))
+			if(getPrimaryOrCandidateConnection(server, false).isPresent())
 			{
-				LOGGER.warn("SessionHandler denied connection between {} and {}", player.getUsername(), server.getUsername());
+				LOGGER.warn("Connection between {} and {} denied because the latter is already in a connection", player.getUsername(), server.getUsername());
 				computer.putClientMessage(MergeResult.GENERIC_FAIL.translationKey());
 				return;
 			}
