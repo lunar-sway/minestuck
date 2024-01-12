@@ -471,7 +471,6 @@ public class DataCheckerScreen extends Screen
 			list.add(new TextField("Client Player: %s", client));
 			if(!server.isEmpty())
 				list.add(new TextField("Server Player: %s", server));
-			list.add(new TextField("Is Active: %b", connectionTag.getBoolean("isActive")));
 			list.add(new TextField("Is Primary Connection: %b", isMain));
 			
 			list.add(null);

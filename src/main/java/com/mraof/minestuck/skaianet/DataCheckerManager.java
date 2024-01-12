@@ -84,12 +84,8 @@ public class DataCheckerManager
 				tag.putString("server", connection.getServerIdentifier().getUsername());
 			
 			tag.putBoolean("isMain", connection.isMain());
-			tag.putBoolean("isActive", connection.isActive());
 		} else
-		{
 			tag.putBoolean("isMain", false);
-			tag.putBoolean("isActive", false);
-		}
 	}
 	
 	private static void writeExtraData(CompoundTag tag, PlayerIdentifier player, Session session, MinecraftServer mcServer)
