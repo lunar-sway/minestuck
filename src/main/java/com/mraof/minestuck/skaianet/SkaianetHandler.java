@@ -143,16 +143,18 @@ public final class SkaianetHandler extends SavedData
 		Optional<SburbConnection> optional = getPrimaryOrCandidateConnection(player, true);
 		if(optional.isEmpty())
 		{
-			try
+			if(!sessionHandler.canConnect(player, server))
 			{
-				tryCreateNewConnectionFor(player, server);
-				setActive(computer, serverComputer, SburbEvent.ConnectionType.REGULAR);
-				openedServers.remove(server);
-			} catch(MergeResult.SessionMergeException e)
-			{
-				LOGGER.warn("Connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-				computer.putClientMessage(e.getResult().translationKey());
+				LOGGER.warn("Connection failed between {} and {}", player.getUsername(), server.getUsername());
+				computer.putClientMessage(MergeResult.GENERIC_FAIL.translationKey());
+				return;
 			}
+			
+			Session session = sessionHandler.prepareSessionFor(player, server);
+			session.connections.add(new SburbConnection(player, server, this));
+			
+			setActive(computer, serverComputer, SburbEvent.ConnectionType.REGULAR);
+			openedServers.remove(server);
 			return;
 		}
 		
@@ -163,18 +165,18 @@ public final class SkaianetHandler extends SavedData
 			openedServers.remove(server);
 		} else if(!connection.hasServerPlayer())
 		{
-			try
+			if(!sessionHandler.canConnect(player, server))
 			{
-				sessionHandler.getSessionForConnecting(player, server);
-				connection.setNewServerPlayer(server);
-				
-				setActive(computer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
-				openedServers.remove(server);
-			} catch(MergeResult.SessionMergeException e)
-			{
-				LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-				computer.putClientMessage(e.getResult().translationKey());
+				LOGGER.warn("SessionHandler denied connection between {} and {}", player.getUsername(), server.getUsername());
+				computer.putClientMessage(MergeResult.GENERIC_FAIL.translationKey());
+				return;
 			}
+			
+			sessionHandler.prepareSessionFor(player, server);
+			connection.setNewServerPlayer(server);
+			
+			setActive(computer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
+			openedServers.remove(server);
 		} else if(sessionHandler.canMakeSecondaryConnection(player, server))
 		{
 			setActive(computer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
@@ -198,15 +200,6 @@ public final class SkaianetHandler extends SavedData
 		server.connected(client.getOwner(), false);
 		
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(this.mcServer, activeConnection, type));
-	}
-	
-	private SburbConnection tryCreateNewConnectionFor(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
-	{
-		Session session = sessionHandler.getSessionForConnecting(client, server);
-		SburbConnection newConnection = new SburbConnection(client, server, this);
-		session.connections.add(newConnection);
-		
-		return newConnection;
 	}
 	
 	public void resumeClientConnection(ISburbComputer computer)
@@ -515,15 +508,11 @@ public final class SkaianetHandler extends SavedData
 		if(c == null)
 		{
 			LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
-			try
-			{
-				c = tryCreateNewConnectionFor(target, IdentifierHandler.NULL_IDENTIFIER);
-				trySetPrimaryConnection(c);
-			} catch(MergeResult.SessionMergeException e)
-			{
-				LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), e.getMessage());
-				return null;
-			}
+			
+			Session session = sessionHandler.prepareSessionFor(target, IdentifierHandler.NULL_IDENTIFIER);
+			c = new SburbConnection(target, IdentifierHandler.NULL_IDENTIFIER, this);
+			session.connections.add(c);
+			trySetPrimaryConnection(c);
 		} else if(!c.isMain())
 			trySetPrimaryConnection(c);
 		else if(playerData.getLandDimension() != null)

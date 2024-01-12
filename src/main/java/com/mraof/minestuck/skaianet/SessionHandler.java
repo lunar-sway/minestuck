@@ -52,7 +52,7 @@ public abstract class SessionHandler
 	void onConnectionChainBroken(Session session)
 	{}
 	
-	private boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
+	boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Optional<SburbConnection> cClient = skaianetHandler.getPrimaryOrCandidateConnection(client, true);
 		Optional<SburbConnection> cServer = skaianetHandler.getPrimaryOrCandidateConnection(server, false);

@@ -87,12 +87,12 @@ public final class SburbConnection
 		}
 	}
 	
-	void setNewServerPlayer(PlayerIdentifier server) throws MergeResult.SessionMergeException
+	void setNewServerPlayer(PlayerIdentifier server)
 	{
 		if(hasServerPlayer())
-			throw new IllegalStateException("Connection already has server player");
+			throw new IllegalStateException("Connection already has a server player");
 		if(skaianet.getPrimaryOrCandidateConnection(server, false).isPresent())
-			throw MergeResult.GENERIC_FAIL.exception();
+			throw new IllegalStateException("Server player already has a connection");
 		skaianet.sessionHandler.prepareSessionFor(clientIdentifier, server);    //Make sure that it is fine to add the server here session-wise
 		
 		serverIdentifier = Objects.requireNonNull(server);

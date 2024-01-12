@@ -27,23 +27,17 @@ public final class CommandActionHandler
 	public static int connectByCommand(CommandSourceStack source, PlayerIdentifier client, PlayerIdentifier server) throws CommandSyntaxException
 	{
 		SkaianetHandler skaianet = SkaianetHandler.get(source.getServer());
-		try
+		if(forceConnection(skaianet, client, server))
 		{
-			if(forceConnection(skaianet, client, server))
-			{
-				source.sendSuccess(() -> Component.translatable(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
-				return 1;
-			} else
-			{
-				throw SburbConnectionCommand.CONNECTED_EXCEPTION.create();
-			}
-		} catch(MergeResult.SessionMergeException e)
+			source.sendSuccess(() -> Component.translatable(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
+			return 1;
+		} else
 		{
-			throw SburbConnectionCommand.MERGE_EXCEPTION.create(e.getResult());
+			throw SburbConnectionCommand.CONNECTED_EXCEPTION.create();
 		}
 	}
 	
-	private static boolean forceConnection(SkaianetHandler skaianet, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	private static boolean forceConnection(SkaianetHandler skaianet, PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Optional<SburbConnection> cc = skaianet.getPrimaryOrCandidateConnection(client, true), cs = skaianet.getPrimaryOrCandidateConnection(server, false);
 		
