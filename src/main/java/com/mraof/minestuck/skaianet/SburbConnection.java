@@ -16,7 +16,6 @@ public final class SburbConnection
 	private final PlayerIdentifier clientIdentifier;
 	@Nonnull
 	private PlayerIdentifier serverIdentifier;
-	private boolean isMain;
 	
 	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler skaianet)
 	{
@@ -28,7 +27,6 @@ public final class SburbConnection
 	SburbConnection(CompoundTag nbt, SkaianetHandler skaianet)
 	{
 		this.skaianet = skaianet;
-		isMain = nbt.getBoolean("IsMain");
 		clientIdentifier = IdentifierHandler.load(nbt, "client");
 		serverIdentifier = IdentifierHandler.load(nbt, "server");
 	}
@@ -36,7 +34,6 @@ public final class SburbConnection
 	CompoundTag write()
 	{
 		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("IsMain", isMain);
 		
 		getClientIdentifier().saveToNBT(nbt, "client");
 		getServerIdentifier().saveToNBT(nbt, "server");
@@ -109,9 +106,10 @@ public final class SburbConnection
 				.findAny().orElse(null);
 	}
 	
+	@Deprecated
 	public boolean isMain()
 	{
-		return isMain;
+		return skaianet.getOrCreateData(this.getClientIdentifier()).hasPrimaryConnection();
 	}
 	
 	@Deprecated
@@ -119,14 +117,4 @@ public final class SburbConnection
 	{
 		return getActiveConnection() != null;
 	}
-	
-	void setIsMain()
-	{
-		if(!isMain)
-		{
-			isMain = true;
-			skaianet.infoTracker.markDirty(this);
-		}
-	}
-	
 }

@@ -119,12 +119,10 @@ public final class SkaianetHandler extends SavedData
 		if(player == null || player.equals(IdentifierHandler.NULL_IDENTIFIER))
 			return Optional.empty();
 		
-		Stream<SburbConnection> connections = sessionHandler.getConnectionStream();
 		if(isClient)
-			connections = connections.filter(c -> c.getClientIdentifier().equals(player));
-		else connections = connections.filter(c -> c.getServerIdentifier().equals(player));
-		
-		return connections.max(Comparator.comparingInt(c -> c.isMain() ? 1 : 0));
+			return sessionHandler.getConnectionStream().filter(c -> c.getClientIdentifier().equals(player)).findAny();
+		else
+			return sessionHandler.getConnectionStream().filter(c -> c.getServerIdentifier().equals(player)).findAny();
 	}
 	
 	public void connectToServer(ISburbComputer computer, PlayerIdentifier server)
@@ -475,7 +473,7 @@ public final class SkaianetHandler extends SavedData
 	
 	Stream<SburbConnection> primaryConnections()
 	{
-		return sessionHandler.getConnectionStream().filter(SburbConnection::isMain);
+		return sessionHandler.getConnectionStream().filter(connection -> this.getOrCreateData(connection.getClientIdentifier()).hasPrimaryConnection());
 	}
 	
 	void trySetPrimaryConnection(ActiveConnection connection)
@@ -485,14 +483,14 @@ public final class SkaianetHandler extends SavedData
 	
 	void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		SburbConnection connection = Objects.requireNonNull(getConnection(client, server));
-		connection.setIsMain();
+		Objects.requireNonNull(getConnection(client, server));
+		getOrCreateData(client).setHasPrimaryConnection();
 	}
 	
 	@Deprecated
 	void trySetPrimaryConnection(SburbConnection connection)
 	{
-		connection.setIsMain();
+		getOrCreateData(connection.getClientIdentifier()).setHasPrimaryConnection();
 	}
 	
 	/**

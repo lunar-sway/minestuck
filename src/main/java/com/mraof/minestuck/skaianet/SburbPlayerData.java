@@ -35,6 +35,8 @@ public final class SburbPlayerData
 	
 	private final PlayerIdentifier playerId;
 	private final MinecraftServer mcServer;
+	
+	private boolean hasPrimaryConnection;
 	private boolean hasEntered = false;
 	@Nullable
 	private ResourceKey<Level> landKey;
@@ -54,6 +56,8 @@ public final class SburbPlayerData
 	
 	void read(CompoundTag tag)
 	{
+		this.hasPrimaryConnection = tag.getBoolean("IsMain");
+		
 		if(tag.contains("inventory", Tag.TAG_LIST))
 			this.inventory = tag.getList("inventory", Tag.TAG_COMPOUND);
 		
@@ -74,6 +78,8 @@ public final class SburbPlayerData
 	
 	void write(CompoundTag tag)
 	{
+		tag.putBoolean("IsMain", this.hasPrimaryConnection);
+		
 		if(this.inventory != null)
 			tag.put("inventory", this.inventory);
 		
@@ -98,9 +104,33 @@ public final class SburbPlayerData
 		return playerId;
 	}
 	
+	/**
+	 * @return the server player that is locked in to this player. If this exists, {@link SburbPlayerData#hasPrimaryConnection()} is assumed to return true.
+	 * Note that a primary server player might be missing even if {@link SburbPlayerData#hasPrimaryConnection()} returns true.
+	 */
 	public Optional<PlayerIdentifier> primaryServerPlayer()
 	{
 		return SkaianetHandler.get(this.mcServer).primaryPartnerForClient(playerId());
+	}
+	
+	/**
+	 * @return true if this player has started getting items for entry and should be locked in with their current server player.
+	 * @see SburbPlayerData#primaryServerPlayer()
+	 */
+	public boolean hasPrimaryConnection()
+	{
+		return this.hasPrimaryConnection;
+	}
+	
+	void setHasPrimaryConnection()
+	{
+		if(hasPrimaryConnection)
+			return;
+		
+		hasPrimaryConnection = true;
+		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
+		skaianetHandler.infoTracker.markDirty(this.playerId());
+		this.primaryServerPlayer().ifPresent(skaianetHandler.infoTracker::markDirty);
 	}
 	
 	public boolean hasEntered()
