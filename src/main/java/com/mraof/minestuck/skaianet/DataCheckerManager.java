@@ -3,13 +3,13 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.DataCheckerPermission;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -20,10 +20,8 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class DataCheckerManager
 {
@@ -55,18 +53,15 @@ public class DataCheckerManager
 	private static CompoundTag createSessionDataTag(MinecraftServer server, Session session)
 	{
 		ListTag connectionList = new ListTag();
-		Set<PlayerIdentifier> playerSet = new HashSet<>();
-		for(SburbConnection c : session.connections)
+		for(PlayerIdentifier player : session.getPlayerList())
 		{
-			connectionList.add(createConnectionDataTag(server, c, playerSet, session.predefinedPlayers));
-		}
-		
-		for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
-		{
-			if(playerSet.contains(entry.getKey()))
-				continue;
+			Optional<SburbConnection> optionalConnection = session.connections.stream().filter(c -> c.getClientIdentifier().equals(player)).findAny();
+			optionalConnection.ifPresent(connection ->
+					connectionList.add(createConnectionDataTag(server, connection, session.predefinedPlayers)));
 			
-			connectionList.add(createPredefineDataTag(entry.getKey(), entry.getValue()));
+			PredefineData predefineData = session.predefinedPlayers.get(player);
+			if(predefineData != null && (optionalConnection.isEmpty() || !optionalConnection.get().isMain()))
+				connectionList.add(createPredefineDataTag(player, predefineData));
 		}
 		
 		CompoundTag sessionTag = new CompoundTag();
@@ -77,11 +72,9 @@ public class DataCheckerManager
 	/**
 	 * Creates data for this connection to be sent to the data checker screen
 	 */
-	private static CompoundTag createConnectionDataTag(MinecraftServer server, SburbConnection connection, Set<PlayerIdentifier> playerSet, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
+	private static CompoundTag createConnectionDataTag(MinecraftServer server, SburbConnection connection, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
 	{
 		SburbPlayerData playerData = SburbPlayerData.get(connection.getClientIdentifier(), server);
-		if(connection.isMain())
-			playerSet.add(connection.getClientIdentifier());
 		CompoundTag connectionTag = new CompoundTag();
 		connectionTag.putString("client", connection.getClientIdentifier().getUsername());
 		connectionTag.putString("clientId", connection.getClientIdentifier().getCommandString());
@@ -89,28 +82,31 @@ public class DataCheckerManager
 			connectionTag.putString("server", connection.getServerIdentifier().getUsername());
 		connectionTag.putBoolean("isMain", connection.isMain());
 		connectionTag.putBoolean("isActive", connection.isActive());
-		if(connection.isMain())
+		
+		if(!connection.isMain())
+			return connectionTag;
+		
+		ResourceKey<Level> landDimensionKey = playerData.getLandDimension();
+		if(landDimensionKey == null)
 		{
-			ResourceKey<Level> landDimensionKey = playerData.getLandDimension();
-			if(landDimensionKey != null)
-			{
-				connectionTag.putString("clientDim", landDimensionKey.location().toString());
-				
-				Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(server, landDimensionKey);
-				landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
-						.ifPresent(tag -> connectionTag.put("landTypes", tag));
-				
-				Title title = PlayerSavedData.getData(connection.getClientIdentifier(), connection.skaianet.mcServer).getTitle();
-				if(title != null)
-				{
-					connectionTag.putByte("class", (byte) title.getHeroClass().ordinal());
-					connectionTag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
-				}
-			} else if(predefinedPlayers.containsKey(connection.getClientIdentifier()))
-			{
-				PredefineData data = predefinedPlayers.get(connection.getClientIdentifier());
+			PredefineData data = predefinedPlayers.get(connection.getClientIdentifier());
+			if(data != null)
 				putPredefinedDataToTag(connectionTag, data);
-			}
+			
+			return connectionTag;
+		}
+		
+		connectionTag.putString("clientDim", landDimensionKey.location().toString());
+		
+		Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(server, landDimensionKey);
+		landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
+				.ifPresent(tag -> connectionTag.put("landTypes", tag));
+		
+		Title title = PlayerSavedData.getData(connection.getClientIdentifier(), connection.skaianet.mcServer).getTitle();
+		if(title != null)
+		{
+			connectionTag.putByte("class", (byte) title.getHeroClass().ordinal());
+			connectionTag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
 		}
 		return connectionTag;
 	}
