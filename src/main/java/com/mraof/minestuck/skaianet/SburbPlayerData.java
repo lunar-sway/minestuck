@@ -35,9 +35,9 @@ public final class SburbPlayerData
 	
 	private final PlayerIdentifier playerId;
 	private final MinecraftServer mcServer;
-	private boolean hasEntered = false;    //If the player has entered. Is set to true after entry has finished
+	private boolean hasEntered = false;
 	@Nullable
-	private ResourceKey<Level> landKey;    //The land info for this client player. This is initialized in preparation for entry
+	private ResourceKey<Level> landKey;
 	ArtifactType artifactType;
 	private GristType baseGrist;
 	
@@ -54,19 +54,18 @@ public final class SburbPlayerData
 	
 	void read(CompoundTag tag)
 	{
-		if(tag.contains("Inventory", Tag.TAG_LIST))
-			this.inventory = tag.getList("Inventory", Tag.TAG_COMPOUND);
+		if(tag.contains("inventory", Tag.TAG_LIST))
+			this.inventory = tag.getList("inventory", Tag.TAG_COMPOUND);
 		
-		ListTag list = tag.getList("GivenItems", Tag.TAG_STRING);
+		ListTag list = tag.getList("given_items", Tag.TAG_STRING);
 		for(int i = 0; i < list.size(); i++)
-		{
 			this.givenItemList.add(list.getString(i));
-		}
 		
-		if(tag.contains("ClientLand"))
+		if(tag.contains("land"))
 		{
-			this.landKey = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, tag.get("ClientLand")).resultOrPartial(LOGGER::error).orElse(null);
-			this.hasEntered = tag.contains("has_entered") ? tag.getBoolean("has_entered") : true;
+			this.landKey = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, tag.get("land"))
+					.resultOrPartial(LOGGER::error).orElse(null);
+			this.hasEntered = tag.getBoolean("has_entered");
 		}
 		
 		this.artifactType = ArtifactType.fromInt(tag.getInt("artifact"));
@@ -76,17 +75,17 @@ public final class SburbPlayerData
 	void write(CompoundTag tag)
 	{
 		if(this.inventory != null)
-			tag.put("Inventory", this.inventory);
+			tag.put("inventory", this.inventory);
 		
 		ListTag list = new ListTag();
 		for(String name : this.givenItemList)
 			list.add(StringTag.valueOf(name));
 		
-		tag.put("GivenItems", list);
+		tag.put("given_items", list);
 		if(this.landKey != null)
 		{
-			Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, this.landKey).resultOrPartial(LOGGER::error)
-					.ifPresent(keyTag -> tag.put("ClientLand", keyTag));
+			Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, this.landKey)
+					.resultOrPartial(LOGGER::error).ifPresent(keyTag -> tag.put("land", keyTag));
 			tag.putBoolean("has_entered", this.hasEntered);
 		}
 		
@@ -99,9 +98,9 @@ public final class SburbPlayerData
 		return playerId;
 	}
 	
-	public Optional<PlayerIdentifier> primaryServerPlayer(MinecraftServer mcServer)
+	public Optional<PlayerIdentifier> primaryServerPlayer()
 	{
-		return SkaianetHandler.get(mcServer).primaryPartnerForClient(playerId());
+		return SkaianetHandler.get(this.mcServer).primaryPartnerForClient(playerId());
 	}
 	
 	public boolean hasEntered()
@@ -109,6 +108,10 @@ public final class SburbPlayerData
 		return hasEntered;
 	}
 	
+	/**
+	 * @return The land dimension assigned to this player, or null if the player hasn't entered.
+	 * @see SburbPlayerData#getLandDimension()
+	 */
 	@Nullable
 	public ResourceKey<Level> getLandDimensionIfEntered()
 	{
@@ -116,7 +119,9 @@ public final class SburbPlayerData
 	}
 	
 	/**
-	 * @return The land dimension assigned to this player
+	 * @return The land dimension assigned to this player.
+	 * It is non-null as long as a land dimension has been initiated, even if the player hasn't entered yet.
+	 * @see SburbPlayerData#getLandDimensionIfEntered()
 	 */
 	@Nullable
 	public ResourceKey<Level> getLandDimension()
@@ -128,10 +133,7 @@ public final class SburbPlayerData
 	{
 		if(landKey != null)
 			throw new IllegalStateException("Can't set land twice");
-		else
-		{
-			landKey = dimension;
-		}
+		landKey = dimension;
 	}
 	
 	void resetEntryState()

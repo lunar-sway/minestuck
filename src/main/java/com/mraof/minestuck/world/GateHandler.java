@@ -132,7 +132,7 @@ public class GateHandler
 			return null;
 		}
 		
-		Optional<ResourceKey<Level>> serverLandOptional = landPlayerData.get().primaryServerPlayer(level.getServer())
+		Optional<ResourceKey<Level>> serverLandOptional = landPlayerData.get().primaryServerPlayer()
 				.flatMap(serverPlayer -> {
 					SburbPlayerData serverPlayerData = SburbPlayerData.get(serverPlayer, level.getServer());
 					return Optional.ofNullable(serverPlayerData.getLandDimensionIfEntered());

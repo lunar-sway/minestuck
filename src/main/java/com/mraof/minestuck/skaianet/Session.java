@@ -66,7 +66,7 @@ public final class Session
 		
 		return this.getPlayerList().stream().allMatch(player -> {
 			SburbPlayerData playerData = skaianetHandler.getOrCreateData(player);
-			return playerData.hasEntered() && playerData.primaryServerPlayer(skaianetHandler.mcServer).isPresent();
+			return playerData.hasEntered() && playerData.primaryServerPlayer().isPresent();
 		});
 	}
 	
