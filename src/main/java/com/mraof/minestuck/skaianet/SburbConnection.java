@@ -5,7 +5,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 
 public final class SburbConnection
@@ -41,11 +40,6 @@ public final class SburbConnection
 		return nbt;
 	}
 	
-	public Session getSession()
-	{
-		return skaianet.sessionHandler.getPlayerSession(this.getClientIdentifier());
-	}
-	
 	@Nonnull
 	public PlayerIdentifier getClientIdentifier()
 	{
@@ -63,22 +57,16 @@ public final class SburbConnection
 		return getServerIdentifier() != IdentifierHandler.NULL_IDENTIFIER;
 	}
 	
-	void closeIfActive()
-	{
-		ActiveConnection connection = this.getActiveConnection();
-		if(connection != null)
-			skaianet.closeConnection(connection);
-	}
-	
 	void removeServerPlayer()
 	{
+		skaianet.getActiveConnection(this.getClientIdentifier()).ifPresent(skaianet::closeConnection);
 		if(hasServerPlayer())
 		{
 			skaianet.infoTracker.markDirty(serverIdentifier);
 			if(skaianet.getOrCreateData(this.clientIdentifier).hasEntered())
 				skaianet.infoTracker.markLandChainDirty();
 			
-			Session session = this.getSession();
+			Session session = skaianet.sessionHandler.getPlayerSession(this.getClientIdentifier());
 			serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
 			skaianet.sessionHandler.onConnectionChainBroken(session);
 		}
@@ -98,23 +86,9 @@ public final class SburbConnection
 			skaianet.infoTracker.markLandChainDirty();
 	}
 	
-	@Nullable
-	public ActiveConnection getActiveConnection()
-	{
-		return skaianet.activeConnections.stream()
-				.filter(c -> c.client().equals(this.getClientIdentifier()) && c.server().equals(this.getServerIdentifier()))
-				.findAny().orElse(null);
-	}
-	
 	@Deprecated
 	public boolean isMain()
 	{
 		return skaianet.getOrCreateData(this.getClientIdentifier()).hasPrimaryConnection();
-	}
-	
-	@Deprecated
-	public boolean isActive()
-	{
-		return getActiveConnection() != null;
 	}
 }

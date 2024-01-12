@@ -51,14 +51,9 @@ public final class CommandActionHandler
 			return false;
 		}
 		
-		if(cs.isPresent())
-		{
-			SburbConnection serverConnection = cs.get();
-			serverConnection.closeIfActive();
-			serverConnection.removeServerPlayer();
-		}
+		cs.ifPresent(SburbConnection::removeServerPlayer);
 		
-		cc.ifPresent(SburbConnection::closeIfActive);
+		skaianet.getActiveConnection(client).ifPresent(skaianet::closeConnection);
 		
 		SburbConnection connection = skaianet.getConnection(client, server);
 		if(cc.isEmpty() || !cc.get().isMain())
@@ -94,13 +89,10 @@ public final class CommandActionHandler
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		SburbConnection clientConnection = cc.get();
 		
-		clientConnection.closeIfActive();
-		
 		Optional<SburbConnection> cs = skaianet.getPrimaryOrCandidateConnection(identifier, false);
 		if(cs.isPresent())
 		{
 			SburbConnection serverConnection = cs.get();
-			serverConnection.closeIfActive();
 			serverConnection.removeServerPlayer();
 			source.sendSuccess(() -> Component.literal(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(ChatFormatting.YELLOW), true);
 		}

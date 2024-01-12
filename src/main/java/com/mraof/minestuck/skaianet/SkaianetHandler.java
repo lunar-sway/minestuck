@@ -466,9 +466,12 @@ public final class SkaianetHandler extends SavedData
 		return activeConnections.stream();
 	}
 	
-	public Stream<SburbConnection> getConnectionsInEntry()
+	public Stream<ActiveConnection> getConnectionsInEntry()
 	{
-		return primaryConnections().filter(connection -> !getOrCreateData(connection.getClientIdentifier()).hasEntered());
+		return activeConnections().filter(connection -> {
+			SburbPlayerData playerData = getOrCreateData(connection.client());
+			return playerData.hasPrimaryConnection() && !playerData.hasEntered();
+		});
 	}
 	
 	Stream<SburbConnection> primaryConnections()

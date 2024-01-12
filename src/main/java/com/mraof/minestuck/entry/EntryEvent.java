@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.skaianet.ActiveConnection;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
@@ -26,12 +25,9 @@ public class EntryEvent
 			SkaianetHandler.get(server).getConnectionsInEntry().forEach(connection -> handleConnection(connection, server));
 	}
 	
-	private static void handleConnection(SburbConnection connection, MinecraftServer server)
+	private static void handleConnection(ActiveConnection connection, MinecraftServer server)
 	{
-		ActiveConnection activeConnection = connection.getActiveConnection();
-		if(activeConnection == null)
-			return;
-		GlobalPos pos = activeConnection.clientComputer().getPosForEditmode();
+		GlobalPos pos = connection.clientComputer().getPosForEditmode();
 		ServerLevel level = server.getLevel(pos.dimension());
 		if (level != null && level.isLoaded(pos.pos()))
 		{
