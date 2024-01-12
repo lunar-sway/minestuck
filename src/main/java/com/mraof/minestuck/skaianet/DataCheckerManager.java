@@ -56,12 +56,15 @@ public class DataCheckerManager
 		for(PlayerIdentifier player : session.getPlayerList())
 		{
 			Optional<SburbConnection> optionalConnection = session.connections.stream().filter(c -> c.getClientIdentifier().equals(player)).findAny();
-			optionalConnection.ifPresent(connection ->
-					connectionList.add(createConnectionDataTag(server, connection, session.predefinedPlayers)));
+			if(optionalConnection.isEmpty())
+			{
+				PredefineData predefineData = session.predefinedPlayers.get(player);
+				if(predefineData != null)
+					connectionList.add(createPredefineDataTag(player, predefineData));
+				continue;
+			}
 			
-			PredefineData predefineData = session.predefinedPlayers.get(player);
-			if(predefineData != null && (optionalConnection.isEmpty() || !optionalConnection.get().isMain()))
-				connectionList.add(createPredefineDataTag(player, predefineData));
+			connectionList.add(createConnectionDataTag(server, optionalConnection.get(), session.predefinedPlayers));
 		}
 		
 		CompoundTag sessionTag = new CompoundTag();
@@ -83,11 +86,8 @@ public class DataCheckerManager
 		connectionTag.putBoolean("isMain", connection.isMain());
 		connectionTag.putBoolean("isActive", connection.isActive());
 		
-		if(!connection.isMain())
-			return connectionTag;
-		
 		ResourceKey<Level> landDimensionKey = playerData.getLandDimension();
-		if(landDimensionKey == null)
+		if(!connection.isMain() || landDimensionKey == null)
 		{
 			PredefineData data = predefinedPlayers.get(connection.getClientIdentifier());
 			if(data != null)
@@ -120,7 +120,7 @@ public class DataCheckerManager
 		
 		connectionTag.putString("client", identifier.getUsername());
 		connectionTag.putString("clientId", identifier.getCommandString());
-		connectionTag.putBoolean("isMain", true);
+		connectionTag.putBoolean("isMain", false);
 		connectionTag.putBoolean("isActive", false);
 		connectionTag.putInt("clientDim", 0);
 		

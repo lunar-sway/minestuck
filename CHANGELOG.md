@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed `/setrung` command into `/rung set`
 - Minor changes and polish to the temple scanner
 - The area around which an editmode player can move has been made more flexible, each computer can act as a source to extend reach
+- Minor changes to what is shown in the data checker
 
 ### Fixed
 
