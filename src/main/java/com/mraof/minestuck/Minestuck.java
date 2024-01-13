@@ -1,8 +1,8 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterSerializers;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
@@ -15,7 +15,6 @@ import com.mraof.minestuck.entry.BlockCopier;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
 import com.mraof.minestuck.entry.RSEntryBlockProcess;
 import com.mraof.minestuck.entry.TransportalizerBlockProcess;
-import com.mraof.minestuck.fluid.MSFluidTypes;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
@@ -68,7 +67,7 @@ public class Minestuck
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
-		MSFluidTypes.REGISTER.register(eventBus);
+		MSFluids.TYPE_REGISTER.register(eventBus);
 		MSBlockEntityTypes.REGISTER.register(eventBus);
 		MSEntityTypes.REGISTER.register(eventBus);
 		MSMenuTypes.REGISTER.register(eventBus);

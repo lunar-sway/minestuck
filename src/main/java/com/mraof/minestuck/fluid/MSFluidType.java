@@ -1,6 +1,5 @@
 package com.mraof.minestuck.fluid;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
