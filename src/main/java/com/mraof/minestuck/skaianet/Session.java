@@ -285,9 +285,9 @@ public final class Session
 		connections.add(new SburbConnection(client, server, skaianet));
 	}
 	
-	void removeConnection(SburbConnection connection)
+	void removeConnectionIfPresent(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		connections.remove(connection);
+		connections.removeIf(connection -> connection.getClientIdentifier().equals(client) && connection.getServerIdentifier().equals(server));
 	}
 	
 	void removeOverlap(Session otherSession)
@@ -296,8 +296,8 @@ public final class Session
 		predefinedPlayers.keySet().removeAll(otherSession.predefinedPlayers.keySet());
 	}
 	
-	Stream<SburbConnection> connections()
+	Stream<SburbConnection> primaryConnections(SkaianetHandler skaianetHandler)
 	{
-		return connections.stream();
+		return connections.stream().filter(connection -> skaianetHandler.getOrCreateData(connection.getClientIdentifier()).hasPrimaryConnection());
 	}
 }

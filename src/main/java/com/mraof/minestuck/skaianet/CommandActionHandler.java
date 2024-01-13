@@ -37,7 +37,7 @@ public final class CommandActionHandler
 	private static boolean forceConnection(SkaianetHandler skaianet, PlayerIdentifier client, PlayerIdentifier server)
 	{
 		SburbPlayerData clientData = skaianet.getOrCreateData(client);
-		if(clientData.primaryServerPlayer().map(server::equals).orElse(false))
+		if(clientData.isPrimaryServerPlayer(server))
 			return false;
 		
 		if(!clientData.hasPrimaryConnection() && skaianet.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())

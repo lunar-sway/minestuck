@@ -7,7 +7,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * An extension to SkaianetHandler with a focus on sessions
@@ -35,9 +34,16 @@ public abstract class SessionHandler
 	
 	public abstract Set<Session> getSessions();
 	
-	Stream<SburbConnection> getConnectionStream()
+	Optional<SburbConnection> findPrimaryConnectionForClient(PlayerIdentifier clientPlayer)
 	{
-		return getSessions().stream().flatMap(Session::connections);
+		return getSessions().stream().flatMap(session -> session.primaryConnections(skaianetHandler))
+				.filter(connection -> connection.getClientIdentifier().equals(clientPlayer)).findAny();
+	}
+	
+	Optional<SburbConnection> findPrimaryConnectionForServer(PlayerIdentifier serverPlayer)
+	{
+		return getSessions().stream().flatMap(session -> session.primaryConnections(skaianetHandler))
+				.filter(connection -> connection.hasServerPlayer() && connection.getServerIdentifier().equals(serverPlayer)).findAny();
 	}
 	
 	abstract Session prepareSessionFor(PlayerIdentifier... players);
@@ -62,12 +68,11 @@ public abstract class SessionHandler
 	void onConnectionClosed(ActiveConnection connection)
 	{
 		Session s = Objects.requireNonNull(getPlayerSession(connection.client()));
-		Optional<SburbConnection> sburbConnection = s.connections()
-				.filter(c -> c.getClientIdentifier().equals(connection.client()) && c.getServerIdentifier().equals(connection.server())).findAny();
 		
-		if(sburbConnection.isEmpty() || !skaianetHandler.getOrCreateData(connection.client()).hasPrimaryConnection())
+		SburbPlayerData playerData = skaianetHandler.getOrCreateData(connection.client());
+		if(!playerData.hasPrimaryConnection() || !playerData.isPrimaryServerPlayer(connection.server()))
 		{
-			sburbConnection.ifPresent(s::removeConnection);
+			s.removeConnectionIfPresent(connection.client(), connection.server());
 			onConnectionChainBroken(s);
 		}
 	}

@@ -119,14 +119,14 @@ public final class InfoTracker
 		List<List<ResourceKey<Level>>> landChains = new ArrayList<>();
 		
 		Set<ResourceKey<Level>> checked = new HashSet<>();
-		skaianet.primaryConnections().forEach(c -> populateLandChain(landChains, checked, c.getClientIdentifier()));
+		skaianet.players().forEach(player -> populateLandChain(landChains, checked, player));
 		
 		return landChains;
 	}
 	
 	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, PlayerIdentifier player)
 	{
-		ResourceKey<Level> dimensionType = SburbPlayerData.get(player, skaianet.mcServer).getLandDimensionIfEntered();
+		ResourceKey<Level> dimensionType = skaianet.getOrCreateData(player).getLandDimensionIfEntered();
 		if(dimensionType == null || checked.contains(dimensionType))
 			return;
 		
@@ -144,7 +144,7 @@ public final class InfoTracker
 				break;
 			}
 			PlayerIdentifier nextPlayer = client.get();
-			ResourceKey<Level> nextLand = SburbPlayerData.get(nextPlayer, skaianet.mcServer).getLandDimensionIfEntered();
+			ResourceKey<Level> nextLand = skaianet.getOrCreateData(nextPlayer).getLandDimensionIfEntered();
 			if(nextLand == null)
 			{
 				chain.addLast(null);
@@ -166,7 +166,7 @@ public final class InfoTracker
 				break;
 			PlayerIdentifier nextPlayer = server.get();
 			
-			ResourceKey<Level> nextLand = SburbPlayerData.get(nextPlayer, skaianet.mcServer).getLandDimensionIfEntered();
+			ResourceKey<Level> nextLand = skaianet.getOrCreateData(nextPlayer).getLandDimensionIfEntered();
 			if(nextLand == null || checked.contains(nextLand))
 				break;
 			

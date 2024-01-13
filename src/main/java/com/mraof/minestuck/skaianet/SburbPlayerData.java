@@ -113,6 +113,11 @@ public final class SburbPlayerData
 		return SkaianetHandler.get(this.mcServer).primaryPartnerForClient(playerId());
 	}
 	
+	public boolean isPrimaryServerPlayer(PlayerIdentifier serverPlayer)
+	{
+		return this.primaryServerPlayer().map(serverPlayer::equals).orElse(false);
+	}
+	
 	/**
 	 * @return true if this player has started getting items for entry and should be locked in with their current server player.
 	 * @see SburbPlayerData#primaryServerPlayer()

@@ -46,7 +46,7 @@ public final class SkaianetHandler extends SavedData
 	private final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
 	private final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
-	final List<ActiveConnection> activeConnections = new ArrayList<>();
+	private final List<ActiveConnection> activeConnections = new ArrayList<>();
 	final SessionHandler sessionHandler;
 	
 	final MinecraftServer mcServer;
@@ -100,18 +100,18 @@ public final class SkaianetHandler extends SavedData
 	
 	public Optional<PlayerIdentifier> primaryPartnerForClient(PlayerIdentifier player)
 	{
-		return primaryConnections().filter(c -> c.getClientIdentifier().equals(player)).findAny()
+		return sessionHandler.findPrimaryConnectionForClient(player)
 				.filter(SburbConnection::hasServerPlayer).map(SburbConnection::getServerIdentifier);
 	}
 	
 	public boolean hasPrimaryConnectionForServer(PlayerIdentifier player)
 	{
-		return primaryConnections().anyMatch(c -> c.hasServerPlayer() && c.getServerIdentifier().equals(player));
+		return sessionHandler.findPrimaryConnectionForServer(player).isPresent();
 	}
 	
 	public Optional<PlayerIdentifier> primaryPartnerForServer(PlayerIdentifier player)
 	{
-		return primaryConnections().filter(c -> c.hasServerPlayer() && c.getServerIdentifier().equals(player)).findAny().map(SburbConnection::getClientIdentifier);
+		return sessionHandler.findPrimaryConnectionForServer(player).map(SburbConnection::getClientIdentifier);
 	}
 	
 	public boolean canMakeNewRegularConnectionAsServer(PlayerIdentifier serverPlayer)
@@ -460,9 +460,9 @@ public final class SkaianetHandler extends SavedData
 		});
 	}
 	
-	Stream<SburbConnection> primaryConnections()
+	Stream<PlayerIdentifier> players()
 	{
-		return sessionHandler.getConnectionStream().filter(connection -> this.getOrCreateData(connection.getClientIdentifier()).hasPrimaryConnection());
+		return playerDataMap.keySet().stream();
 	}
 	
 	void trySetPrimaryConnection(ActiveConnection connection)
@@ -494,8 +494,8 @@ public final class SkaianetHandler extends SavedData
 	void unlinkClientPlayer(PlayerIdentifier clientPlayer)
 	{
 		getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
-		primaryConnections().filter(connection -> connection.getClientIdentifier().equals(clientPlayer))
-				.findAny().ifPresent(SburbConnection::removeServerPlayer);
+		sessionHandler.findPrimaryConnectionForClient(clientPlayer)
+				.ifPresent(SburbConnection::removeServerPlayer);
 	}
 	
 	void unlinkServerPlayer(PlayerIdentifier serverPlayer)
@@ -507,8 +507,8 @@ public final class SkaianetHandler extends SavedData
 	
 	void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
 	{
-		primaryConnections().filter(connection -> connection.getClientIdentifier().equals(clientPlayer))
-				.findAny().orElseThrow().setNewServerPlayer(serverPlayer);
+		sessionHandler.findPrimaryConnectionForClient(clientPlayer)
+				.orElseThrow().setNewServerPlayer(serverPlayer);
 	}
 	
 	/**

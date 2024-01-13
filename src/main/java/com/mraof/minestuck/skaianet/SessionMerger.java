@@ -38,12 +38,12 @@ final class SessionMerger
 		return session;
 	}
 	
-	static List<Session> splitSession(Session originalSession, List<ActiveConnection> activeConnections)
+	static List<Session> splitSession(Session originalSession, SkaianetHandler skaianetHandler)
 	{
 		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
-		Set<SburbConnection> unhandledConnections = originalSession.connections().collect(Collectors.toCollection(HashSet::new));;
+		Set<SburbConnection> unhandledConnections = originalSession.primaryConnections(skaianetHandler).collect(Collectors.toCollection(HashSet::new));;
 		Set<PlayerIdentifier> unhandledPredefine = new HashSet<>(originalSession.predefinedPlayers.keySet());
-		activeConnections = new ArrayList<>(activeConnections);
+		List<ActiveConnection> activeConnections = skaianetHandler.activeConnections().collect(Collectors.toCollection(ArrayList::new));
 		
 		//Pick out as many session chains that we can from the remaining connections
 		List<Session> sessions = new ArrayList<>();
