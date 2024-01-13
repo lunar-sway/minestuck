@@ -76,7 +76,7 @@ public final class SburbConnection
 	{
 		if(hasServerPlayer())
 			throw new IllegalStateException("Connection already has a server player");
-		if(skaianet.getPrimaryOrCandidateConnection(server, false).isPresent())
+		if(!skaianet.canMakeNewRegularConnectionAsServer(server))
 			throw new IllegalStateException("Server player already has a connection");
 		skaianet.sessionHandler.prepareSessionFor(clientIdentifier, server);    //Make sure that it is fine to add the server here session-wise
 		
@@ -84,11 +84,5 @@ public final class SburbConnection
 		skaianet.infoTracker.markDirty(serverIdentifier);
 		if(skaianet.getOrCreateData(this.clientIdentifier).hasEntered())
 			skaianet.infoTracker.markLandChainDirty();
-	}
-	
-	@Deprecated
-	public boolean isMain()
-	{
-		return skaianet.getOrCreateData(this.getClientIdentifier()).hasPrimaryConnection();
 	}
 }

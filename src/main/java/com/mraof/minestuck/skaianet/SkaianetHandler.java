@@ -95,7 +95,7 @@ public final class SkaianetHandler extends SavedData
 	
 	public boolean hasPrimaryConnectionForClient(PlayerIdentifier player)
 	{
-		return primaryConnections().anyMatch(c -> c.getClientIdentifier().equals(player));
+		return getOrCreateData(player).hasPrimaryConnection();
 	}
 	
 	public Optional<PlayerIdentifier> primaryPartnerForClient(PlayerIdentifier player)
@@ -114,15 +114,11 @@ public final class SkaianetHandler extends SavedData
 		return primaryConnections().filter(c -> c.hasServerPlayer() && c.getServerIdentifier().equals(player)).findAny().map(SburbConnection::getClientIdentifier);
 	}
 	
-	public Optional<SburbConnection> getPrimaryOrCandidateConnection(PlayerIdentifier player, boolean isClient)
+	public boolean canMakeNewRegularConnectionAsServer(PlayerIdentifier serverPlayer)
 	{
-		if(player == null || player.equals(IdentifierHandler.NULL_IDENTIFIER))
-			return Optional.empty();
-		
-		if(isClient)
-			return sessionHandler.getConnectionStream().filter(c -> c.getClientIdentifier().equals(player)).findAny();
-		else
-			return sessionHandler.getConnectionStream().filter(c -> c.getServerIdentifier().equals(player)).findAny();
+		return !hasPrimaryConnectionForServer(serverPlayer)
+				&& activeConnections().filter(connection -> connection.server().equals(serverPlayer))
+				.allMatch(connection -> getOrCreateData(connection.client()).hasPrimaryConnection());
 	}
 	
 	public void connectToServer(ISburbComputer computer, PlayerIdentifier server)
@@ -138,10 +134,10 @@ public final class SkaianetHandler extends SavedData
 		if(serverComputer == null)
 			return;
 		
-		Optional<SburbConnection> optional = getPrimaryOrCandidateConnection(player, true);
-		if(optional.isEmpty())
+		SburbPlayerData playerData = getOrCreateData(player);
+		if(!playerData.hasPrimaryConnection())
 		{
-			if(getPrimaryOrCandidateConnection(server, false).isPresent())
+			if(!canMakeNewRegularConnectionAsServer(server))
 			{
 				LOGGER.warn("Connection failed between {} and {}", player.getUsername(), server.getUsername());
 				return;
@@ -155,23 +151,26 @@ public final class SkaianetHandler extends SavedData
 			return;
 		}
 		
-		SburbConnection connection = optional.get();
-		if(connection.getServerIdentifier().equals(server))
+		Optional<PlayerIdentifier> primaryServer = playerData.primaryServerPlayer();
+		if(primaryServer.isEmpty())
 		{
-			setActive(computer, serverComputer, SburbEvent.ConnectionType.RESUME);
-			openedServers.remove(server);
-		} else if(!connection.hasServerPlayer())
-		{
-			if(getPrimaryOrCandidateConnection(server, false).isPresent())
+			if(!canMakeNewRegularConnectionAsServer(server))
 			{
 				LOGGER.warn("Connection between {} and {} denied because the latter is already in a connection", player.getUsername(), server.getUsername());
 				return;
 			}
 			
 			sessionHandler.prepareSessionFor(player, server);
-			connection.setNewServerPlayer(server);
+			newServerForClient(player, server);
 			
 			setActive(computer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
+			openedServers.remove(server);
+			return;
+		}
+		
+		if(primaryServer.get().equals(server))
+		{
+			setActive(computer, serverComputer, SburbEvent.ConnectionType.RESUME);
 			openedServers.remove(server);
 		} else if(sessionHandler.canMakeSecondaryConnection(player, server))
 		{
@@ -428,17 +427,6 @@ public final class SkaianetHandler extends SavedData
 		});
 	}
 	
-	public SburbConnection getConnection(ActiveConnection connection)
-	{
-		return getConnection(connection.client(), connection.server());
-	}
-	
-	public SburbConnection getConnection(PlayerIdentifier client, PlayerIdentifier server)
-	{
-		return sessionHandler.getConnectionStream().filter(c -> c.getClientIdentifier().equals(client) && c.getServerIdentifier().equals(server))
-				.findAny().orElse(null);
-	}
-	
 	boolean hasResumingClient(PlayerIdentifier identifier)
 	{
 		return resumingClients.contains(identifier);
@@ -484,11 +472,18 @@ public final class SkaianetHandler extends SavedData
 	
 	void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		if(getConnection(client, server) == null)
+		if(hasPrimaryConnectionForClient(client) || hasPrimaryConnectionForServer(server))
+			throw new IllegalStateException();
+		
+		Optional<ActiveConnection> activeConnection = getActiveConnection(client);
+		if(activeConnection.isPresent() && !activeConnection.get().server().equals(server))
+			throw new IllegalStateException();
+		
+		if(activeConnection.isEmpty())
 		{
-			if(getPrimaryOrCandidateConnection(client, true).isEmpty()
-					&& getPrimaryOrCandidateConnection(server, false).isEmpty())
-				throw new IllegalArgumentException();
+			if(!activeConnections().filter(connection -> connection.server().equals(server))
+					.allMatch(connection -> getOrCreateData(connection.client()).hasPrimaryConnection()))
+				throw new IllegalStateException();
 			
 			sessionHandler.prepareSessionFor(client, server)
 					.addConnection(client, server, this);

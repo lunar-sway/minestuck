@@ -61,14 +61,13 @@ public abstract class SessionHandler
 	
 	void onConnectionClosed(ActiveConnection connection)
 	{
-		SburbConnection sburbConnection = skaianetHandler.getConnection(connection);
+		Session s = Objects.requireNonNull(getPlayerSession(connection.client()));
+		Optional<SburbConnection> sburbConnection = s.connections()
+				.filter(c -> c.getClientIdentifier().equals(connection.client()) && c.getServerIdentifier().equals(connection.server())).findAny();
 		
-		Session s = Objects.requireNonNull(getPlayerSession(connection.client()));	//If the connection exists, then there should be a session that contains it
-		
-		if(sburbConnection == null || !sburbConnection.isMain())
+		if(sburbConnection.isEmpty() || !skaianetHandler.getOrCreateData(connection.client()).hasPrimaryConnection())
 		{
-			if(sburbConnection != null)
-				s.removeConnection(sburbConnection);
+			sburbConnection.ifPresent(s::removeConnection);
 			onConnectionChainBroken(s);
 		}
 	}
@@ -81,7 +80,7 @@ public abstract class SessionHandler
 		{
 			
 			if(primaryServer.isPresent() && primaryServer.get().equals(server)
-					|| primaryServer.isEmpty() && skaianetHandler.getPrimaryOrCandidateConnection(server, false).isEmpty()
+					|| primaryServer.isEmpty() && skaianetHandler.canMakeNewRegularConnectionAsServer(server)
 					|| canMakeSecondaryConnection(client, server))
 				map.put(server.getId(), server.getUsername());
 		}

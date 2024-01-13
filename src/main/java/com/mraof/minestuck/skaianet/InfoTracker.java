@@ -187,13 +187,6 @@ public final class InfoTracker
 		toUpdate.add(player);
 	}
 	
-	void markDirty(SburbConnection connection)
-	{
-		markDirty(connection.getClientIdentifier());
-		if(connection.hasServerPlayer())
-			markDirty(connection.getServerIdentifier());
-	}
-	
 	void markDirty(ActiveConnection connection)
 	{
 		markDirty(connection.client());
