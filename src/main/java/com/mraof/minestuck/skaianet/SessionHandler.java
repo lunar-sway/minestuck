@@ -48,8 +48,6 @@ public abstract class SessionHandler
 	
 	abstract Session prepareSessionFor(PlayerIdentifier... players);
 	
-	abstract void findOrCreateAndCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<Session> consumer) throws SkaianetException;
-	
 	boolean doesSessionHaveMaxTier(Session session)
 	{
 		return session.completed;

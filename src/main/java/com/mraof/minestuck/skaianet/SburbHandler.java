@@ -57,7 +57,7 @@ public final class SburbHandler
 		}
 		
 		Title title = null;
-		Optional<PredefineData> data = session.predefineData(player);
+		Optional<PredefineData> data = skaianetHandler.predefineData(player);
 		if(data.isPresent())
 			title = data.get().getTitle();
 		
@@ -90,7 +90,7 @@ public final class SburbHandler
 	public static void handlePredefineData(ServerPlayer player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SessionHandler.get(player.server).findOrCreateAndCall(identifier, session -> session.predefineCall(identifier, consumer));
+		SkaianetHandler.get(player.server).predefineCall(identifier, consumer);
 	}
 	
 	public static ItemStack getEntryItem(Level level, SburbPlayerData playerData)
@@ -126,12 +126,13 @@ public final class SburbHandler
 	
 	private static LandTypePair genLandAspects(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		Session session = SessionHandler.get(mcServer).getPlayerSession(player);
+		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
+		Session session = skaianetHandler.sessionHandler.getPlayerSession(player);
 		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		
-		Optional<PredefineData> data = session.predefineData(player);
+		Optional<PredefineData> data = skaianetHandler.predefineData(player);
 		if(data.isPresent())
 		{
 			titleLandType = data.get().getTitleLandType();

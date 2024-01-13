@@ -41,25 +41,14 @@ final class SessionMerger
 	static List<Session> splitSession(Session originalSession, SkaianetHandler skaianetHandler)
 	{
 		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
-		Set<SburbConnection> unhandledConnections = originalSession.primaryConnections().collect(Collectors.toCollection(HashSet::new));;
-		Set<PlayerIdentifier> unhandledPredefine = new HashSet<>(originalSession.predefinedPlayers.keySet());
+		Set<SburbConnection> unhandledConnections = originalSession.primaryConnections().collect(Collectors.toCollection(HashSet::new));
 		List<ActiveConnection> activeConnections = skaianetHandler.activeConnections().collect(Collectors.toCollection(ArrayList::new));
 		
 		//Pick out as many session chains that we can from the remaining connections
 		List<Session> sessions = new ArrayList<>();
 		while(!unhandledConnections.isEmpty())
 		{
-			sessions.add(createSplitSession(originalSession, unhandledConnections, activeConnections, unhandledPredefine));
-		}
-		
-		//Create sessions from all predefined players that doesn't need to belong to a specific session
-		for(PlayerIdentifier predefinedPlayer : unhandledPredefine)
-		{
-			Session session = new Session(skaianetHandler);
-			
-			session.predefinedPlayers.put(predefinedPlayer, originalSession.predefinedPlayers.get(predefinedPlayer));
-			
-			sessions.add(session);
+			sessions.add(createSplitSession(unhandledConnections, activeConnections));
 		}
 		
 		sessions.forEach(originalSession::removeOverlap);
@@ -75,18 +64,15 @@ final class SessionMerger
 		return sessions;
 	}
 	
-	private static Session createSplitSession(Session originalSession, Set<SburbConnection> unhandledConnections, List<ActiveConnection> activeConnections, Set<PlayerIdentifier> predefinedPlayers)
+	private static Session createSplitSession(Set<SburbConnection> unhandledConnections, List<ActiveConnection> activeConnections)
 	{
 		SburbConnection next = unhandledConnections.iterator().next();
 		Set<PlayerIdentifier> players = new HashSet<>();
 		players.add(next.getClientIdentifier());
-		Session newSession = new Session(originalSession.skaianetHandler);
+		Session newSession = new Session(next.skaianet);
 		
 		collectConnectionsWithMembers(unhandledConnections, activeConnections, players,
 				connection -> newSession.addConnection(connection.getClientIdentifier(), connection.getServerIdentifier()));
-		
-		newSession.copyPredefineDataForPlayers(players, originalSession);
-		predefinedPlayers.removeAll(players);
 		
 		return newSession;
 	}

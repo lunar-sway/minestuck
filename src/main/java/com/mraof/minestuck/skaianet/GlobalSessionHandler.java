@@ -61,12 +61,6 @@ public final class GlobalSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	void findOrCreateAndCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<Session> consumer) throws SkaianetException
-	{
-		consumer.consume(globalSession);
-	}
-	
-	@Override
 	boolean doesSessionHaveMaxTier(Session session)
 	{
 		return false;

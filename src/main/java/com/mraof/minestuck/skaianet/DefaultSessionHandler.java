@@ -84,22 +84,6 @@ public final class DefaultSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	void findOrCreateAndCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<Session> consumer) throws SkaianetException
-	{
-		Session session = getPlayerSession(player);
-		if(session != null)
-			consumer.consume(session);
-		else
-		{
-			//When no previous session exists, add the session after the consumer call,
-			// such that the session isn't added if predefine call fails
-			session = new Session(skaianetHandler);
-			consumer.consume(session);
-			addNewSession(session);
-		}
-	}
-	
-	@Override
 	void onConnectionChainBroken(Session session)
 	{
 		split(session);

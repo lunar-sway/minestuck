@@ -47,6 +47,7 @@ public final class SkaianetHandler extends SavedData
 	private final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
 	private final List<ActiveConnection> activeConnections = new ArrayList<>();
+	final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
 	final SessionHandler sessionHandler;
 	
 	final MinecraftServer mcServer;
@@ -79,6 +80,17 @@ public final class SkaianetHandler extends SavedData
 			CompoundTag playerDataTag = playerDataList.getCompound(i);
 			PlayerIdentifier player = IdentifierHandler.load(playerDataTag, "player");
 			getOrCreateData(player).read(playerDataTag);
+		}
+		
+		if(nbt.contains("predefine_data", Tag.TAG_LIST))
+		{
+			ListTag list = nbt.getList("predefine_data", Tag.TAG_COMPOUND);
+			for(int i = 0; i < list.size(); i++)
+			{
+				CompoundTag compound = list.getCompound(i);
+				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
+				predefineData.put(player, new PredefineData(player).read(compound));
+			}
 		}
 		
 		ListTag connectionList = nbt.getList("connections", Tag.TAG_COMPOUND);
@@ -395,6 +407,11 @@ public final class SkaianetHandler extends SavedData
 		}
 		compound.put("player_data", playerDataList);
 		
+		ListTag predefineList = new ListTag();
+		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefineData.entrySet())
+			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
+		compound.put("predefine_data", predefineList);
+		
 		ListTag connectionList = new ListTag();
 		for(ActiveConnection connection : this.activeConnections)
 			connectionList.add(connection.write());
@@ -571,6 +588,20 @@ public final class SkaianetHandler extends SavedData
 			SburbHandler.initNewData(data);
 			return data;
 		});
+	}
+	
+	void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	{
+		PredefineData data = predefineData.get(player);
+		if(data == null)    //TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
+			data = new PredefineData(player);
+		consumer.consume(data);
+		predefineData.put(player, data);
+	}
+	
+	Optional<PredefineData> predefineData(PlayerIdentifier player)
+	{
+		return Optional.ofNullable(this.predefineData.get(player));
 	}
 	
 	Collection<SburbPlayerData> allPlayerData()
