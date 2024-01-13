@@ -73,10 +73,7 @@ public class MSLiquidBlock extends LiquidBlock implements IMSFog
 				if(!state.getFluidState().isSource())
 				{
 					//TODO create custom sound for subtitle change
-					if(fluidStyle == MSFluidType.Style.VISCOUS)
-						level.playLocalSound(blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, SoundEvents.LAVA_AMBIENT, SoundSource.BLOCKS, rand.nextFloat() * 0.4F, fluidStyle.soundPitch() + (rand.nextFloat() - 0.9F), false);
-					else
-						level.playLocalSound(blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, SoundEvents.WATER_AMBIENT, SoundSource.BLOCKS, rand.nextFloat() * 0.4F, fluidStyle.soundPitch() + (rand.nextFloat() - 0.9F), false);
+					level.playLocalSound(blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, fluidStyle.ambientSound(), SoundSource.BLOCKS, rand.nextFloat() * 0.4F, fluidStyle.soundPitch() + (rand.nextFloat() - 0.9F), false);
 				}
 			}
 		}

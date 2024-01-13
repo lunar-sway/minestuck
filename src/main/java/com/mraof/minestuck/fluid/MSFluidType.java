@@ -18,11 +18,11 @@ public class MSFluidType extends FluidType
 {
 	private final Style fluidStyle;
 	
-	public record Style(double xzMovement, double yMovement, float soundPitch)
+	public record Style(double xzMovement, double yMovement, float soundPitch, boolean hasSplashSound, SoundEvent ambientSound)
 	{
-		public static final Style VISCOUS = new Style(0.65D, 0.8D, 0.1F);
-		public static final Style PARTIALLY_VISCOUS = new Style(0.8D, 0.8D, 0.5F);
-		public static final Style RUNNY = new Style(0.9D, 0.9D, 0.8F);
+		public static final Style VISCOUS = new Style(0.65D, 0.8D, 0.1F, false, SoundEvents.LAVA_AMBIENT);
+		public static final Style PARTIALLY_VISCOUS = new Style(0.8D, 0.8D, 0.5F, true, SoundEvents.WATER_AMBIENT);
+		public static final Style RUNNY = new Style(0.9D, 0.9D, 0.8F, true, SoundEvents.WATER_AMBIENT);
 	}
 	
 	public MSFluidType(Properties properties, Style fluidStyle)
@@ -57,7 +57,7 @@ public class MSFluidType extends FluidType
 		long tick = entity.level().getGameTime();
 		long lastTick = Objects.requireNonNullElse(data.lastTickMap.get(fluidType), 0L);
 		
-		if(!entity.isSwimming() && fluidStyle != Style.VISCOUS && tick != lastTick + 1)
+		if(!entity.isSwimming() && fluidStyle.hasSplashSound && tick != lastTick + 1)
 			splashSounds(entity, fluidStyle);
 		
 		Vec3 moveVec = entity.getDeltaMovement();

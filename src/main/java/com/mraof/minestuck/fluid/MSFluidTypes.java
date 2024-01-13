@@ -17,8 +17,6 @@ public class MSFluidTypes
 {
 	public static final DeferredRegister<FluidType> REGISTER = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, Minestuck.MOD_ID);
 	
-	//TODO fix flowing fluid push mechanics (player is too slow to walk up stream)
-	
 	public static final RegistryObject<FluidType> OIL_TYPE = REGISTER.register("oil", () -> new MSFluidType(FluidType.Properties.create()
 			.density(2000)
 			.viscosity(4000)
