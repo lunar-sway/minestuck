@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Minestuck fluids now have custom tick rates
 - Blood/brain juice/light water now have underwater particles
 - Minestuck fluids now have improved mod compatibility
+- The Iron Lass armor set has the ability to glide like an elytra and boost with the sneak key
 
 ### Changed
 
