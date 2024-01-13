@@ -16,6 +16,7 @@ import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
@@ -25,6 +26,8 @@ import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -109,6 +112,18 @@ public class ClientProxy
 
 		ItemPropertyFunction content = (stack, level, holder, seed) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
 		ResourceLocation contentName = new ResourceLocation(Minestuck.MOD_ID, "content");
+		
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.OIL.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.FLOWING_OIL.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.BLOOD.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.FLOWING_BLOOD.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.BRAIN_JUICE.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.FLOWING_BRAIN_JUICE.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.WATER_COLORS.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.FLOWING_WATER_COLORS.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.LIGHT_WATER.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(MSFluids.FLOWING_LIGHT_WATER.get(), RenderType.translucent());
+		//ender fluid has non-transparent texture
 		
 		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), contentName, content);
 		ItemProperties.register(MSItems.CRUXITE_DOWEL.get(), contentName, content);
