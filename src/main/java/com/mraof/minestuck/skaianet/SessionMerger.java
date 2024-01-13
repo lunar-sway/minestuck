@@ -41,7 +41,7 @@ final class SessionMerger
 	static List<Session> splitSession(Session originalSession, List<ActiveConnection> activeConnections)
 	{
 		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
-		Set<SburbConnection> unhandledConnections = new HashSet<>(originalSession.connections);
+		Set<SburbConnection> unhandledConnections = originalSession.connections().collect(Collectors.toCollection(HashSet::new));;
 		Set<PlayerIdentifier> unhandledPredefine = new HashSet<>(originalSession.predefinedPlayers.keySet());
 		activeConnections = new ArrayList<>(activeConnections);
 		
@@ -62,8 +62,7 @@ final class SessionMerger
 			sessions.add(session);
 		}
 		
-		sessions.forEach(session1 -> originalSession.connections.removeAll(session1.connections));
-		sessions.forEach(session1 -> originalSession.predefinedPlayers.keySet().removeAll(session1.predefinedPlayers.keySet()));
+		sessions.forEach(originalSession::removeOverlap);
 		
 		for(Session session : sessions)
 		{
@@ -83,7 +82,8 @@ final class SessionMerger
 		players.add(next.getClientIdentifier());
 		Session newSession = new Session();
 		
-		collectConnectionsWithMembers(unhandledConnections, activeConnections, players, newSession.connections::add);
+		collectConnectionsWithMembers(unhandledConnections, activeConnections, players,
+				connection -> newSession.addConnection(connection.getClientIdentifier(), connection.getServerIdentifier(), connection.skaianet));
 		for(PlayerIdentifier identifier : players)
 		{
 			if(originalSession.predefinedPlayers.containsKey(identifier))

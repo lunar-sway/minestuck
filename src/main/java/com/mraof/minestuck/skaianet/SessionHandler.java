@@ -37,7 +37,7 @@ public abstract class SessionHandler
 	
 	Stream<SburbConnection> getConnectionStream()
 	{
-		return getSessions().stream().flatMap(session -> session.connections.stream());
+		return getSessions().stream().flatMap(Session::connections);
 	}
 	
 	abstract Session prepareSessionFor(PlayerIdentifier... players);
@@ -65,10 +65,12 @@ public abstract class SessionHandler
 		
 		Session s = Objects.requireNonNull(getPlayerSession(connection.client()));	//If the connection exists, then there should be a session that contains it
 		
-		if(sburbConnection != null && !sburbConnection.isMain())
-			s.connections.remove(sburbConnection);
 		if(sburbConnection == null || !sburbConnection.isMain())
+		{
+			if(sburbConnection != null)
+				s.removeConnection(sburbConnection);
 			onConnectionChainBroken(s);
+		}
 	}
 	
 	Map<Integer, String> getServerList(PlayerIdentifier client)

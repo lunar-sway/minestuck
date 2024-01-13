@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * A data structure that contains all related connections, along with any related data, such as predefine data.
@@ -28,8 +29,8 @@ public final class Session
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
-	final Set<SburbConnection> connections;
+	final Map<PlayerIdentifier, PredefineData> predefinedPlayers = new HashMap<>();
+	private final Set<SburbConnection> connections = new HashSet<>();
 	private final GristGutter gutter;
 	
 	/**
@@ -72,15 +73,11 @@ public final class Session
 	
 	Session()
 	{
-		connections = new HashSet<>();
-		predefinedPlayers = new HashMap<>();
 		this.gutter = new GristGutter(this);
 	}
 	
 	private Session(CompoundTag nbt)
 	{
-		connections = new HashSet<>();
-		predefinedPlayers = new HashMap<>();
 		this.gutter = new GristGutter(this, nbt.getList("gutter", Tag.TAG_COMPOUND));
 	}
 	
@@ -281,5 +278,26 @@ public final class Session
 	public boolean isEmpty()
 	{
 		return connections.isEmpty() && predefinedPlayers.isEmpty();
+	}
+	
+	void addConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler skaianet)
+	{
+		connections.add(new SburbConnection(client, server, skaianet));
+	}
+	
+	void removeConnection(SburbConnection connection)
+	{
+		connections.remove(connection);
+	}
+	
+	void removeOverlap(Session otherSession)
+	{
+		connections.removeAll(otherSession.connections);
+		predefinedPlayers.keySet().removeAll(otherSession.predefinedPlayers.keySet());
+	}
+	
+	Stream<SburbConnection> connections()
+	{
+		return connections.stream();
 	}
 }
