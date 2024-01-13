@@ -208,7 +208,7 @@ public final class Session
 	{
 		PredefineData data = predefinedPlayers.get(player);
 		if(data == null)    //TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
-			data = new PredefineData(player, this);
+			data = new PredefineData(player);
 		consumer.consume(data);
 		predefinedPlayers.put(player, data);
 	}
@@ -268,7 +268,7 @@ public final class Session
 			{
 				CompoundTag compound = list.getCompound(i);
 				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
-				s.predefinedPlayers.put(player, new PredefineData(player, s).read(compound));
+				s.predefinedPlayers.put(player, new PredefineData(player).read(compound));
 			}
 		}
 		

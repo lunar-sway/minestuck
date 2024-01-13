@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,15 +30,13 @@ public final class PredefineData
 	public static final String CHANGED_TITLE_LAND = "minestuck.predefine.changed_title_land";
 	
 	private final PlayerIdentifier player;
-	private final Session session;
 	private Title title;
 	private TerrainLandType terrainLandType;
 	private TitleLandType titleLandType;
 	
-	PredefineData(PlayerIdentifier player, Session session)
+	PredefineData(PlayerIdentifier player)
 	{
 		this.player = player;
-		this.session = session;
 	}
 	
 	PredefineData read(CompoundTag nbt)
@@ -98,6 +97,7 @@ public final class PredefineData
 				.collect(Collectors.toSet());
 		if(title == null || !availableAspects.contains(title.getHeroAspect()))
 		{
+			Session session = Objects.requireNonNull(SessionHandler.get(source.getServer()).getPlayerSession(player));
 			Title previous = title;
 			title = Generator.generateTitle(session, availableAspects, player, source.getServer());
 			
@@ -128,6 +128,7 @@ public final class PredefineData
 				throw new IllegalStateException("Had no title land types to generate when some were expected.");
 			}
 			
+			Session session = Objects.requireNonNull(SessionHandler.get(source.getServer()).getPlayerSession(player));
 			TitleLandType previous = titleLandType;
 			titleLandType = Generator.generateWeightedTitleLandType(source.getServer(), session, title.getHeroAspect(), type, player);
 			
