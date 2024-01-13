@@ -41,14 +41,14 @@ final class SessionMerger
 	static List<Session> splitSession(Session originalSession, SkaianetHandler skaianetHandler)
 	{
 		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
-		Set<SburbConnection> unhandledConnections = originalSession.primaryConnections().collect(Collectors.toCollection(HashSet::new));
+		Set<PlayerIdentifier> unhandledConnections = originalSession.primaryConnections().collect(Collectors.toCollection(HashSet::new));
 		List<ActiveConnection> activeConnections = skaianetHandler.activeConnections().collect(Collectors.toCollection(ArrayList::new));
 		
 		//Pick out as many session chains that we can from the remaining connections
 		List<Session> sessions = new ArrayList<>();
 		while(!unhandledConnections.isEmpty())
 		{
-			sessions.add(createSplitSession(unhandledConnections, activeConnections));
+			sessions.add(createSplitSession(unhandledConnections, activeConnections, skaianetHandler));
 		}
 		
 		sessions.forEach(originalSession::removeOverlap);
@@ -64,35 +64,36 @@ final class SessionMerger
 		return sessions;
 	}
 	
-	private static Session createSplitSession(Set<SburbConnection> unhandledConnections, List<ActiveConnection> activeConnections)
+	private static Session createSplitSession(Set<PlayerIdentifier> unhandledConnections, List<ActiveConnection> activeConnections, SkaianetHandler skaianet)
 	{
-		SburbConnection next = unhandledConnections.iterator().next();
+		PlayerIdentifier next = unhandledConnections.iterator().next();
 		Set<PlayerIdentifier> players = new HashSet<>();
-		players.add(next.getClientIdentifier());
-		Session newSession = new Session(next.skaianet);
+		players.add(next);
+		Session newSession = new Session(skaianet);
 		
 		collectConnectionsWithMembers(unhandledConnections, activeConnections, players,
-				connection -> newSession.addConnection(connection.getClientIdentifier()));
+				newSession::addConnectedClient, skaianet);
 		
 		return newSession;
 	}
 	
-	private static void collectConnectionsWithMembers(Set<SburbConnection> unhandledConnections, List<ActiveConnection> activeConnections, Set<PlayerIdentifier> members, Consumer<SburbConnection> collector)
+	private static void collectConnectionsWithMembers(Set<PlayerIdentifier> unhandledConnections, List<ActiveConnection> activeConnections,
+													  Set<PlayerIdentifier> members, Consumer<PlayerIdentifier> collector, SkaianetHandler skaianet)
 	{
 		boolean addedAny;
 		do
 		{
 			 addedAny = false;
 			
-			Iterator<SburbConnection> iterator = unhandledConnections.iterator();
+			Iterator<PlayerIdentifier> iterator = unhandledConnections.iterator();
 			while(iterator.hasNext())
 			{
-				SburbConnection connection = iterator.next();
-				Optional<PlayerIdentifier> serverPlayer = connection.skaianet.getOrCreateData(connection.getClientIdentifier()).primaryServerPlayer();
-				if(members.contains(connection.getClientIdentifier()) || serverPlayer.isPresent() && members.contains(serverPlayer.get()))
+				PlayerIdentifier player = iterator.next();
+				Optional<PlayerIdentifier> serverPlayer = skaianet.getOrCreateData(player).primaryServerPlayer();
+				if(members.contains(player) || serverPlayer.isPresent() && members.contains(serverPlayer.get()))
 				{
-					collector.accept(connection);
-					if(members.add(connection.getClientIdentifier()) || serverPlayer.isPresent() && members.add(serverPlayer.get()))
+					collector.accept(player);
+					if(members.add(player) || serverPlayer.isPresent() && members.add(serverPlayer.get()))
 						addedAny = true;
 					iterator.remove();
 				}

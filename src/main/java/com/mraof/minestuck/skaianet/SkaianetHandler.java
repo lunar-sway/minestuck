@@ -156,7 +156,7 @@ public final class SkaianetHandler extends SavedData
 			}
 			
 			Session session = sessionHandler.prepareSessionFor(player, server);
-			session.addConnection(player);
+			session.addConnectedClient(player);
 			
 			setActive(computer, serverComputer, SburbEvent.ConnectionType.REGULAR);
 			openedServers.remove(server);
@@ -503,7 +503,7 @@ public final class SkaianetHandler extends SavedData
 				throw new IllegalStateException();
 			
 			sessionHandler.prepareSessionFor(client, server)
-					.addConnection(client);
+					.addConnectedClient(client);
 		}
 		getOrCreateData(client).setHasPrimaryConnection(server);
 	}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.alchemy.GristGutter;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
@@ -28,7 +29,7 @@ public final class Session
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	final SkaianetHandler skaianetHandler;
-	private final Set<SburbConnection> connections = new HashSet<>();
+	private final Set<PlayerIdentifier> connectedClients = new HashSet<>();
 	private final Set<PlayerIdentifier> players = new HashSet<>();
 	private final GristGutter gutter;
 	
@@ -42,7 +43,7 @@ public final class Session
 	 */
 	void inheritFrom(Session other)
 	{
-		connections.addAll(other.connections);
+		connectedClients.addAll(other.connectedClients);
 		updatePlayerSet();
 		
 		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
@@ -60,7 +61,7 @@ public final class Session
 	
 	boolean computeIsComplete()
 	{
-		if(this.connections.isEmpty())
+		if(this.connectedClients.isEmpty())
 			return false;
 		
 		return this.getPlayers().stream().allMatch(player -> {
@@ -103,14 +104,14 @@ public final class Session
 	void updatePlayerSet()
 	{
 		players.clear();
-		for(SburbConnection c : this.connections)
+		for(PlayerIdentifier player : this.connectedClients)
 		{
-			players.add(c.getClientIdentifier());
-			SburbPlayerData playerData = skaianetHandler.getOrCreateData(c.getClientIdentifier());
+			players.add(player);
+			SburbPlayerData playerData = skaianetHandler.getOrCreateData(player);
 			if(playerData.hasPrimaryConnection())
 				playerData.primaryServerPlayer().ifPresent(players::add);
 			else
-				players.add(skaianetHandler.getActiveConnection(c.getClientIdentifier()).orElseThrow().server());
+				players.add(skaianetHandler.getActiveConnection(player).orElseThrow().server());
 		}
 		
 		if(skaianetHandler.sessionHandler instanceof GlobalSessionHandler)
@@ -224,7 +225,12 @@ public final class Session
 		CompoundTag nbt = new CompoundTag();
 		
 		ListTag list = new ListTag();
-		for(SburbConnection c : connections) list.add(c.write());
+		for(PlayerIdentifier player : connectedClients)
+		{
+			CompoundTag playerTag = new CompoundTag();
+			player.saveToNBT(playerTag, "client");
+			list.add(playerTag);
+		}
 		nbt.put("connections", list);
 		nbt.put("gutter", this.gutter.write());
 		return nbt;
@@ -245,7 +251,7 @@ public final class Session
 		{
 			try
 			{
-				s.connections.add(new SburbConnection(list.getCompound(i), handler));
+				s.connectedClients.add(IdentifierHandler.load(list.getCompound(i), "client"));
 			} catch(Exception e)
 			{
 				LOGGER.error("Unable to read sburb connection from tag {}. Forced to skip connection. Caused by:", list.getCompound(i), e);
@@ -257,30 +263,30 @@ public final class Session
 	
 	public boolean isEmpty()
 	{
-		return connections.isEmpty();
+		return connectedClients.isEmpty();
 	}
 	
-	void addConnection(PlayerIdentifier client)
+	void addConnectedClient(PlayerIdentifier client)
 	{
-		connections.add(new SburbConnection(client, skaianetHandler));
+		connectedClients.add(client);
 		updatePlayerSet();
 	}
 	
 	void removeConnection(PlayerIdentifier client)
 	{
-		connections.removeIf(connection -> connection.getClientIdentifier().equals(client));
+		connectedClients.remove(client);
 		updatePlayerSet();
 	}
 	
 	void removeOverlap(Session otherSession)
 	{
-		connections.removeAll(otherSession.connections);
+		connectedClients.removeAll(otherSession.connectedClients);
 		updatePlayerSet();
 	}
 	
-	Stream<SburbConnection> primaryConnections()
+	Stream<PlayerIdentifier> primaryConnections()
 	{
-		return connections.stream().filter(connection -> skaianetHandler.getOrCreateData(connection.getClientIdentifier()).hasPrimaryConnection());
+		return connectedClients.stream().filter(player -> skaianetHandler.getOrCreateData(player).hasPrimaryConnection());
 	}
 	
 }
