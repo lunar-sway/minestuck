@@ -3,7 +3,6 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

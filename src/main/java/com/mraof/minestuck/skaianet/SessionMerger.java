@@ -72,7 +72,7 @@ final class SessionMerger
 		Session newSession = new Session(next.skaianet);
 		
 		collectConnectionsWithMembers(unhandledConnections, activeConnections, players,
-				connection -> newSession.addConnection(connection.getClientIdentifier(), connection.getServerIdentifier()));
+				connection -> newSession.addConnection(connection.getClientIdentifier()));
 		
 		return newSession;
 	}
@@ -85,13 +85,14 @@ final class SessionMerger
 			 addedAny = false;
 			
 			Iterator<SburbConnection> iterator = unhandledConnections.iterator();
-			 while(iterator.hasNext())
-			 {
-			 	SburbConnection connection = iterator.next();
-			 	if(members.contains(connection.getClientIdentifier()) || members.contains(connection.getServerIdentifier()))
+			while(iterator.hasNext())
+			{
+				SburbConnection connection = iterator.next();
+				Optional<PlayerIdentifier> serverPlayer = connection.skaianet.getOrCreateData(connection.getClientIdentifier()).primaryServerPlayer();
+				if(members.contains(connection.getClientIdentifier()) || serverPlayer.isPresent() && members.contains(serverPlayer.get()))
 				{
 					collector.accept(connection);
-					if(members.add(connection.getClientIdentifier()) || connection.hasServerPlayer() && members.add(connection.getServerIdentifier()))
+					if(members.add(connection.getClientIdentifier()) || serverPlayer.isPresent() && members.add(serverPlayer.get()))
 						addedAny = true;
 					iterator.remove();
 				}

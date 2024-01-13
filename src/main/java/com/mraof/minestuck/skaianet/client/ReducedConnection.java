@@ -2,11 +2,10 @@ package com.mraof.minestuck.skaianet.client;
 
 import com.mraof.minestuck.player.NamedPlayerId;
 import com.mraof.minestuck.skaianet.ActiveConnection;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.network.FriendlyByteBuf;
 
 /**
- * The client side version of {@link SburbConnection}
+ * The client side version of {@link ActiveConnection}
  */
 public record ReducedConnection(NamedPlayerId client, NamedPlayerId server)
 {

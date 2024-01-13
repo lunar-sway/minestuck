@@ -23,10 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 public final class SburbPlayerData
@@ -37,6 +34,7 @@ public final class SburbPlayerData
 	private final MinecraftServer mcServer;
 	
 	private boolean hasPrimaryConnection;
+	private PlayerIdentifier primaryServerPlayer = IdentifierHandler.NULL_IDENTIFIER;
 	private boolean hasEntered = false;
 	@Nullable
 	private ResourceKey<Level> landKey;
@@ -57,6 +55,8 @@ public final class SburbPlayerData
 	void read(CompoundTag tag)
 	{
 		this.hasPrimaryConnection = tag.getBoolean("IsMain");
+		if(this.hasPrimaryConnection)
+			this.primaryServerPlayer = IdentifierHandler.load(tag, "server");
 		
 		if(tag.contains("inventory", Tag.TAG_LIST))
 			this.inventory = tag.getList("inventory", Tag.TAG_COMPOUND);
@@ -79,6 +79,8 @@ public final class SburbPlayerData
 	void write(CompoundTag tag)
 	{
 		tag.putBoolean("IsMain", this.hasPrimaryConnection);
+		if(this.hasPrimaryConnection)
+			this.primaryServerPlayer.saveToNBT(tag, "server");
 		
 		if(this.inventory != null)
 			tag.put("inventory", this.inventory);
@@ -110,12 +112,47 @@ public final class SburbPlayerData
 	 */
 	public Optional<PlayerIdentifier> primaryServerPlayer()
 	{
-		return SkaianetHandler.get(this.mcServer).primaryPartnerForClient(playerId());
+		return this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER ? Optional.of(this.primaryServerPlayer) : Optional.empty();
 	}
 	
 	public boolean isPrimaryServerPlayer(PlayerIdentifier serverPlayer)
 	{
 		return this.primaryServerPlayer().map(serverPlayer::equals).orElse(false);
+	}
+	
+	void removeServerPlayer()
+	{
+		SkaianetHandler skaianet = SkaianetHandler.get(this.mcServer);
+		skaianet.getActiveConnection(this.playerId()).ifPresent(skaianet::closeConnection);
+		if(this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER)
+		{
+			skaianet.infoTracker.markDirty(this.primaryServerPlayer);
+			if(this.hasEntered())
+				skaianet.infoTracker.markLandChainDirty();
+			
+			Session session = skaianet.sessionHandler.getPlayerSession(this.playerId());
+			this.primaryServerPlayer = IdentifierHandler.NULL_IDENTIFIER;
+			session.updatePlayerSet();
+			skaianet.sessionHandler.onConnectionChainBroken(session);
+		}
+	}
+	
+	void setNewServerPlayer(PlayerIdentifier server)
+	{
+		if(!this.hasPrimaryConnection())
+			throw new IllegalStateException();
+		if(this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER)
+			throw new IllegalStateException("Connection already has a server player");
+		SkaianetHandler skaianet = SkaianetHandler.get(this.mcServer);
+		if(!skaianet.canMakeNewRegularConnectionAsServer(server))
+			throw new IllegalStateException("Server player already has a connection");
+		skaianet.sessionHandler.prepareSessionFor(this.playerId(), server);    //Make sure that it is fine to add the server here session-wise
+		
+		this.primaryServerPlayer = Objects.requireNonNull(server);
+		skaianet.sessionHandler.getPlayerSession(this.playerId()).updatePlayerSet();
+		skaianet.infoTracker.markDirty(server);
+		if(this.hasEntered())
+			skaianet.infoTracker.markLandChainDirty();
 	}
 	
 	/**
@@ -127,15 +164,17 @@ public final class SburbPlayerData
 		return this.hasPrimaryConnection;
 	}
 	
-	void setHasPrimaryConnection()
+	void setHasPrimaryConnection(PlayerIdentifier serverPlayer)
 	{
 		if(hasPrimaryConnection)
 			return;
 		
 		hasPrimaryConnection = true;
+		primaryServerPlayer = serverPlayer;
 		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
 		skaianetHandler.infoTracker.markDirty(this.playerId());
 		this.primaryServerPlayer().ifPresent(skaianetHandler.infoTracker::markDirty);
+		skaianetHandler.sessionHandler.getPlayerSession(this.playerId()).updatePlayerSet();
 	}
 	
 	public boolean hasEntered()

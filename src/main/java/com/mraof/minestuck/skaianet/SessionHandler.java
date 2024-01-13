@@ -34,18 +34,6 @@ public abstract class SessionHandler
 	
 	public abstract Set<Session> getSessions();
 	
-	Optional<SburbConnection> findPrimaryConnectionForClient(PlayerIdentifier clientPlayer)
-	{
-		return getSessions().stream().flatMap(Session::primaryConnections)
-				.filter(connection -> connection.getClientIdentifier().equals(clientPlayer)).findAny();
-	}
-	
-	Optional<SburbConnection> findPrimaryConnectionForServer(PlayerIdentifier serverPlayer)
-	{
-		return getSessions().stream().flatMap(Session::primaryConnections)
-				.filter(connection -> connection.hasServerPlayer() && connection.getServerIdentifier().equals(serverPlayer)).findAny();
-	}
-	
 	abstract Session prepareSessionFor(PlayerIdentifier... players);
 	
 	boolean doesSessionHaveMaxTier(Session session)
@@ -70,7 +58,8 @@ public abstract class SessionHandler
 		SburbPlayerData playerData = skaianetHandler.getOrCreateData(connection.client());
 		if(!playerData.hasPrimaryConnection() || !playerData.isPrimaryServerPlayer(connection.server()))
 		{
-			s.removeConnectionIfPresent(connection.client(), connection.server());
+			if(!playerData.hasPrimaryConnection())
+				s.removeConnection(connection.client());
 			onConnectionChainBroken(s);
 		}
 	}

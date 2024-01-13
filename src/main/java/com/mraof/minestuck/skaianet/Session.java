@@ -106,8 +106,11 @@ public final class Session
 		for(SburbConnection c : this.connections)
 		{
 			players.add(c.getClientIdentifier());
-			if(c.hasServerPlayer())
-				players.add(c.getServerIdentifier());
+			SburbPlayerData playerData = skaianetHandler.getOrCreateData(c.getClientIdentifier());
+			if(playerData.hasPrimaryConnection())
+				playerData.primaryServerPlayer().ifPresent(players::add);
+			else
+				players.add(skaianetHandler.getActiveConnection(c.getClientIdentifier()).orElseThrow().server());
 		}
 		
 		if(skaianetHandler.sessionHandler instanceof GlobalSessionHandler)
@@ -257,15 +260,15 @@ public final class Session
 		return connections.isEmpty();
 	}
 	
-	void addConnection(PlayerIdentifier client, PlayerIdentifier server)
+	void addConnection(PlayerIdentifier client)
 	{
-		connections.add(new SburbConnection(client, server, skaianetHandler));
+		connections.add(new SburbConnection(client, skaianetHandler));
 		updatePlayerSet();
 	}
 	
-	void removeConnectionIfPresent(PlayerIdentifier client, PlayerIdentifier server)
+	void removeConnection(PlayerIdentifier client)
 	{
-		connections.removeIf(connection -> connection.getClientIdentifier().equals(client) && connection.getServerIdentifier().equals(server));
+		connections.removeIf(connection -> connection.getClientIdentifier().equals(client));
 		updatePlayerSet();
 	}
 	

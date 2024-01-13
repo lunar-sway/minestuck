@@ -13,13 +13,10 @@ public final class SburbConnection
 	
 	@Nonnull
 	private final PlayerIdentifier clientIdentifier;
-	@Nonnull
-	private PlayerIdentifier serverIdentifier;
 	
-	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler skaianet)
+	SburbConnection(PlayerIdentifier client, SkaianetHandler skaianet)
 	{
 		clientIdentifier = Objects.requireNonNull(client);
-		serverIdentifier = Objects.requireNonNull(server);
 		this.skaianet = skaianet;
 	}
 	
@@ -27,7 +24,6 @@ public final class SburbConnection
 	{
 		this.skaianet = skaianet;
 		clientIdentifier = IdentifierHandler.load(nbt, "client");
-		serverIdentifier = IdentifierHandler.load(nbt, "server");
 	}
 	
 	CompoundTag write()
@@ -35,7 +31,6 @@ public final class SburbConnection
 		CompoundTag nbt = new CompoundTag();
 		
 		getClientIdentifier().saveToNBT(nbt, "client");
-		getServerIdentifier().saveToNBT(nbt, "server");
 		
 		return nbt;
 	}
@@ -44,47 +39,5 @@ public final class SburbConnection
 	public PlayerIdentifier getClientIdentifier()
 	{
 		return clientIdentifier;
-	}
-	
-	@Nonnull
-	public PlayerIdentifier getServerIdentifier()
-	{
-		return serverIdentifier;
-	}
-	
-	public boolean hasServerPlayer()
-	{
-		return getServerIdentifier() != IdentifierHandler.NULL_IDENTIFIER;
-	}
-	
-	void removeServerPlayer()
-	{
-		skaianet.getActiveConnection(this.getClientIdentifier()).ifPresent(skaianet::closeConnection);
-		if(hasServerPlayer())
-		{
-			skaianet.infoTracker.markDirty(serverIdentifier);
-			if(skaianet.getOrCreateData(this.clientIdentifier).hasEntered())
-				skaianet.infoTracker.markLandChainDirty();
-			
-			Session session = skaianet.sessionHandler.getPlayerSession(this.getClientIdentifier());
-			serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
-			session.updatePlayerSet();
-			skaianet.sessionHandler.onConnectionChainBroken(session);
-		}
-	}
-	
-	void setNewServerPlayer(PlayerIdentifier server)
-	{
-		if(hasServerPlayer())
-			throw new IllegalStateException("Connection already has a server player");
-		if(!skaianet.canMakeNewRegularConnectionAsServer(server))
-			throw new IllegalStateException("Server player already has a connection");
-		skaianet.sessionHandler.prepareSessionFor(clientIdentifier, server);    //Make sure that it is fine to add the server here session-wise
-		
-		serverIdentifier = Objects.requireNonNull(server);
-		skaianet.sessionHandler.getPlayerSession(this.getClientIdentifier()).updatePlayerSet();
-		skaianet.infoTracker.markDirty(serverIdentifier);
-		if(skaianet.getOrCreateData(this.clientIdentifier).hasEntered())
-			skaianet.infoTracker.markLandChainDirty();
 	}
 }

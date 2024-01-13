@@ -113,18 +113,17 @@ public final class SkaianetHandler extends SavedData
 	
 	public Optional<PlayerIdentifier> primaryPartnerForClient(PlayerIdentifier player)
 	{
-		return sessionHandler.findPrimaryConnectionForClient(player)
-				.filter(SburbConnection::hasServerPlayer).map(SburbConnection::getServerIdentifier);
+		return getOrCreateData(player).primaryServerPlayer();
 	}
 	
 	public boolean hasPrimaryConnectionForServer(PlayerIdentifier player)
 	{
-		return sessionHandler.findPrimaryConnectionForServer(player).isPresent();
+		return playerDataMap.values().stream().anyMatch(data -> data.isPrimaryServerPlayer(player));
 	}
 	
 	public Optional<PlayerIdentifier> primaryPartnerForServer(PlayerIdentifier player)
 	{
-		return sessionHandler.findPrimaryConnectionForServer(player).map(SburbConnection::getClientIdentifier);
+		return playerDataMap.values().stream().filter(data -> data.isPrimaryServerPlayer(player)).findAny().map(SburbPlayerData::playerId);
 	}
 	
 	public boolean canMakeNewRegularConnectionAsServer(PlayerIdentifier serverPlayer)
@@ -157,7 +156,7 @@ public final class SkaianetHandler extends SavedData
 			}
 			
 			Session session = sessionHandler.prepareSessionFor(player, server);
-			session.addConnection(player, server);
+			session.addConnection(player);
 			
 			setActive(computer, serverComputer, SburbEvent.ConnectionType.REGULAR);
 			openedServers.remove(server);
@@ -504,16 +503,15 @@ public final class SkaianetHandler extends SavedData
 				throw new IllegalStateException();
 			
 			sessionHandler.prepareSessionFor(client, server)
-					.addConnection(client, server);
+					.addConnection(client);
 		}
-		getOrCreateData(client).setHasPrimaryConnection();
+		getOrCreateData(client).setHasPrimaryConnection(server);
 	}
 	
 	void unlinkClientPlayer(PlayerIdentifier clientPlayer)
 	{
 		getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
-		sessionHandler.findPrimaryConnectionForClient(clientPlayer)
-				.ifPresent(SburbConnection::removeServerPlayer);
+		getOrCreateData(clientPlayer).removeServerPlayer();
 	}
 	
 	void unlinkServerPlayer(PlayerIdentifier serverPlayer)
@@ -525,8 +523,7 @@ public final class SkaianetHandler extends SavedData
 	
 	void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
 	{
-		sessionHandler.findPrimaryConnectionForClient(clientPlayer)
-				.orElseThrow().setNewServerPlayer(serverPlayer);
+		getOrCreateData(clientPlayer).setNewServerPlayer(serverPlayer);
 	}
 	
 	/**

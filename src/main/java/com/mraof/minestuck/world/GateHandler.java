@@ -2,7 +2,6 @@ package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSTags;
