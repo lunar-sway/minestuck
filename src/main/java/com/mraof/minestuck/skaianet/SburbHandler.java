@@ -45,6 +45,7 @@ public final class SburbHandler
 	{
 		Session session = SessionHandler.get(level).getPlayerSession(player);
 		if(session == null)
+		{
 			if(MinestuckConfig.SERVER.playerSelectedTitle.get())
 				session = new Session();
 			else
@@ -52,13 +53,12 @@ public final class SburbHandler
 				LOGGER.warn("Trying to generate a title for {} before creating a session!", player.getUsername(), new Throwable().fillInStackTrace());
 				return null;
 			}
+		}
 		
 		Title title = null;
-		if(session.predefinedPlayers.containsKey(player))
-		{
-			PredefineData data = session.predefinedPlayers.get(player);
-			title = data.getTitle();
-		}
+		Optional<PredefineData> data = session.predefineData(player);
+		if(data.isPresent())
+			title = data.get().getTitle();
 		
 		if(title == null)
 		{
@@ -130,11 +130,11 @@ public final class SburbHandler
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		
-		if(session.predefinedPlayers.containsKey(player))
+		Optional<PredefineData> data = session.predefineData(player);
+		if(data.isPresent())
 		{
-			PredefineData data = session.predefinedPlayers.get(player);
-			titleLandType = data.getTitleLandType();
-			terrainLandType = data.getTerrainLandType();
+			titleLandType = data.get().getTitleLandType();
+			terrainLandType = data.get().getTerrainLandType();
 		}
 		
 		if(titleLandType == null)

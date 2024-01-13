@@ -42,7 +42,7 @@ public class TitleSelectionHook
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Session s = SessionHandler.get(player.level()).getPlayerSession(identifier);
 		
-		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
+		if(s != null && s.predefineData(identifier).map(data -> data.getTitle() != null).orElse(false)
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		

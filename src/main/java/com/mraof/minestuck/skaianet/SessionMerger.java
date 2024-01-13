@@ -84,11 +84,8 @@ final class SessionMerger
 		
 		collectConnectionsWithMembers(unhandledConnections, activeConnections, players,
 				connection -> newSession.addConnection(connection.getClientIdentifier(), connection.getServerIdentifier(), connection.skaianet));
-		for(PlayerIdentifier identifier : players)
-		{
-			if(originalSession.predefinedPlayers.containsKey(identifier))
-				newSession.predefinedPlayers.put(identifier, originalSession.predefinedPlayers.get(identifier));
-		}
+		
+		newSession.copyPredefineDataForPlayers(players, originalSession);
 		predefinedPlayers.removeAll(players);
 		
 		return newSession;

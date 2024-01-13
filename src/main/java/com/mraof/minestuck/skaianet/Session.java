@@ -52,6 +52,12 @@ public final class Session
 		this.gutter.addGristUnchecked(other.gutter.getCache());
 	}
 	
+	void copyPredefineDataForPlayers(Set<PlayerIdentifier> players, Session otherSession)
+	{
+		players.forEach(player ->
+				otherSession.predefineData(player).ifPresent(data -> predefinedPlayers.put(player, data)));
+	}
+	
 	/**
 	 * Sets `completed` to true if everyone in the session has entered and has completed connections.
 	 */
@@ -299,5 +305,10 @@ public final class Session
 	Stream<SburbConnection> primaryConnections(SkaianetHandler skaianetHandler)
 	{
 		return connections.stream().filter(connection -> skaianetHandler.getOrCreateData(connection.getClientIdentifier()).hasPrimaryConnection());
+	}
+	
+	Optional<PredefineData> predefineData(PlayerIdentifier player)
+	{
+		return Optional.ofNullable(this.predefinedPlayers.get(player));
 	}
 }

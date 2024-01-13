@@ -98,9 +98,7 @@ public class DataCheckerManager
 			return;
 		}
 		
-		PredefineData data = session.predefinedPlayers.get(player);
-		if(data != null)
-			putPredefinedData(tag, data);
+		session.predefineData(player).ifPresent(data -> putPredefinedData(tag, data));
 	}
 	
 	/**
