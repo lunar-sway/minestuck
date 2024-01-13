@@ -8,7 +8,6 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.server.MinecraftServer;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -24,16 +23,16 @@ import java.util.stream.Collectors;
  */
 public class Generator
 {
-	static boolean isTitleValid(Session session, Title title, MinecraftServer mcServer)
+	static boolean isTitleValid(Session session, Title title)
 	{
-		return !session.isTitleUsed(title, mcServer);
+		return !session.isTitleUsed(title);
 	}
 	
-	static Title generateTitle(Session session, Set<EnumAspect> availableAspects, PlayerIdentifier ignore, MinecraftServer mcServer) throws SkaianetException
+	static Title generateTitle(Session session, Set<EnumAspect> availableAspects, PlayerIdentifier ignore) throws SkaianetException
 	{
 		Random random = new Random();	//TODO seed based on player and world in a good way
 		
-		Set<Title> usedTitles = session.getUsedTitles(mcServer, ignore);
+		Set<Title> usedTitles = session.getUsedTitles(ignore);
 		
 		List<EnumAspect> unusedAspects = unusedAspects(availableAspects, usedTitles);
 		List<EnumClass> unusedClasses = unusedClasses(usedTitles);
@@ -85,12 +84,12 @@ public class Generator
 		return EnumClass.valuesStream().filter(c -> !usedClasses.contains(c)).collect(Collectors.toList());
 	}
 	
-	static TitleLandType generateWeightedTitleLandType(MinecraftServer server, Session session, EnumAspect aspect, @Nullable TerrainLandType terrainType, PlayerIdentifier ignore)
+	static TitleLandType generateWeightedTitleLandType(Session session, EnumAspect aspect, @Nullable TerrainLandType terrainType, PlayerIdentifier ignore)
 	{
 		Random random = new Random();
 		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
-		List<TitleLandType> usedTypes = session.getUsedTitleLandTypes(server, ignore);
+		List<TitleLandType> usedTypes = session.getUsedTitleLandTypes(ignore);
 		
 		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS.get());
 		
@@ -100,12 +99,12 @@ public class Generator
 		return landGen.getTitleAspect(terrainType, aspect, usedTypes);
 	}
 	
-	static TerrainLandType generateWeightedTerrainLandType(MinecraftServer server, Session session, TitleLandType titleType, PlayerIdentifier ignore)
+	static TerrainLandType generateWeightedTerrainLandType(Session session, TitleLandType titleType, PlayerIdentifier ignore)
 	{
 		Random random = new Random();
 		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
-		List<TerrainLandType> usedTypes = session.getUsedTerrainLandTypes(server, ignore);
+		List<TerrainLandType> usedTypes = session.getUsedTerrainLandTypes(ignore);
 		
 		return landGen.getTerrainAspect(titleType, usedTypes);
 	}

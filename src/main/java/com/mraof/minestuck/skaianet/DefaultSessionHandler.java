@@ -56,7 +56,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	{
 		if(MinestuckConfig.SERVER.globalSession.get())
 		{
-			Session session = SessionMerger.mergedSessionFromAll(sessions);
+			Session session = SessionMerger.mergedSessionFromAll(sessions, skaianetHandler);
 			return new GlobalSessionHandler(skaianetHandler, session);
 		}
 		return this;
@@ -93,7 +93,7 @@ public final class DefaultSessionHandler extends SessionHandler
 		{
 			//When no previous session exists, add the session after the consumer call,
 			// such that the session isn't added if predefine call fails
-			session = new Session();
+			session = new Session(skaianetHandler);
 			consumer.consume(session);
 			addNewSession(session);
 		}
@@ -103,7 +103,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	void onConnectionChainBroken(Session session)
 	{
 		split(session);
-		sessions.forEach(existingSession -> existingSession.checkIfCompleted(skaianetHandler));
+		sessions.forEach(Session::checkIfCompleted);
 	}
 	
 	private void correctAndAddSession(Session session)

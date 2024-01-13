@@ -15,7 +15,7 @@ final class SessionMerger
 		
 		if(sessions.size() > 1)
 		{
-			Session target = createMergedSession(sessions);
+			Session target = createMergedSession(sessions, handler.skaianetHandler);
 			handler.handleSuccessfulMerge(sessions, target);
 			return target;
 		} else if(sessions.size() == 1)
@@ -23,15 +23,15 @@ final class SessionMerger
 			return sessions.stream().findAny().get();
 		} else
 		{
-			Session session = new Session();
+			Session session = new Session(handler.skaianetHandler);
 			handler.addNewSession(session);
 			return session;
 		}
 	}
 	
-	static Session mergedSessionFromAll(Set<Session> sessions)
+	static Session mergedSessionFromAll(Set<Session> sessions, SkaianetHandler skaianetHandler)
 	{
-		Session session = new Session();
+		Session session = new Session(skaianetHandler);
 		for(Session other : sessions)
 			session.inheritFrom(other);
 		
@@ -41,7 +41,7 @@ final class SessionMerger
 	static List<Session> splitSession(Session originalSession, SkaianetHandler skaianetHandler)
 	{
 		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
-		Set<SburbConnection> unhandledConnections = originalSession.primaryConnections(skaianetHandler).collect(Collectors.toCollection(HashSet::new));;
+		Set<SburbConnection> unhandledConnections = originalSession.primaryConnections().collect(Collectors.toCollection(HashSet::new));;
 		Set<PlayerIdentifier> unhandledPredefine = new HashSet<>(originalSession.predefinedPlayers.keySet());
 		List<ActiveConnection> activeConnections = skaianetHandler.activeConnections().collect(Collectors.toCollection(ArrayList::new));
 		
@@ -55,7 +55,7 @@ final class SessionMerger
 		//Create sessions from all predefined players that doesn't need to belong to a specific session
 		for(PlayerIdentifier predefinedPlayer : unhandledPredefine)
 		{
-			Session session = new Session();
+			Session session = new Session(skaianetHandler);
 			
 			session.predefinedPlayers.put(predefinedPlayer, originalSession.predefinedPlayers.get(predefinedPlayer));
 			
@@ -80,10 +80,10 @@ final class SessionMerger
 		SburbConnection next = unhandledConnections.iterator().next();
 		Set<PlayerIdentifier> players = new HashSet<>();
 		players.add(next.getClientIdentifier());
-		Session newSession = new Session();
+		Session newSession = new Session(originalSession.skaianetHandler);
 		
 		collectConnectionsWithMembers(unhandledConnections, activeConnections, players,
-				connection -> newSession.addConnection(connection.getClientIdentifier(), connection.getServerIdentifier(), connection.skaianet));
+				connection -> newSession.addConnection(connection.getClientIdentifier(), connection.getServerIdentifier()));
 		
 		newSession.copyPredefineDataForPlayers(players, originalSession);
 		predefinedPlayers.removeAll(players);
@@ -126,9 +126,9 @@ final class SessionMerger
 		} while(addedAny);
 	}
 	
-	private static Session createMergedSession(Set<Session> sessions)
+	private static Session createMergedSession(Set<Session> sessions, SkaianetHandler skaianetHandler)
 	{
-		Session mergedSession = new Session();
+		Session mergedSession = new Session(skaianetHandler);
 		for(Session session : sessions)
 			mergedSession.inheritFrom(session);
 		return mergedSession;

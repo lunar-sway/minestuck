@@ -85,7 +85,7 @@ public final class SkaianetHandler extends SavedData
 		for(int i = 0; i < connectionList.size(); i++)
 			activeConnections.add(ActiveConnection.read(connectionList.getCompound(i)));
 		
-		sessionHandler.getSessions().forEach(existingSession -> existingSession.checkIfCompleted(this));
+		sessionHandler.getSessions().forEach(Session::checkIfCompleted);
 	}
 	
 	public Optional<ActiveConnection> getActiveConnection(PlayerIdentifier client)
@@ -144,7 +144,7 @@ public final class SkaianetHandler extends SavedData
 			}
 			
 			Session session = sessionHandler.prepareSessionFor(player, server);
-			session.addConnection(player, server, this);
+			session.addConnection(player, server);
 			
 			setActive(computer, serverComputer, SburbEvent.ConnectionType.REGULAR);
 			openedServers.remove(server);
@@ -486,7 +486,7 @@ public final class SkaianetHandler extends SavedData
 				throw new IllegalStateException();
 			
 			sessionHandler.prepareSessionFor(client, server)
-					.addConnection(client, server, this);
+					.addConnection(client, server);
 		}
 		getOrCreateData(client).setHasPrimaryConnection();
 	}

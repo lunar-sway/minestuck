@@ -43,11 +43,12 @@ public final class SburbHandler
 	
 	private static Title produceTitle(Level level, PlayerIdentifier player)
 	{
-		Session session = SessionHandler.get(level).getPlayerSession(player);
+		SkaianetHandler skaianetHandler = SkaianetHandler.get(level);
+		Session session = skaianetHandler.sessionHandler.getPlayerSession(player);
 		if(session == null)
 		{
 			if(MinestuckConfig.SERVER.playerSelectedTitle.get())
-				session = new Session();
+				session = new Session(skaianetHandler);
 			else
 			{
 				LOGGER.warn("Trying to generate a title for {} before creating a session!", player.getUsername(), new Throwable().fillInStackTrace());
@@ -64,7 +65,7 @@ public final class SburbHandler
 		{
 			try
 			{
-				title = Generator.generateTitle(session, EnumAspect.valuesSet(), player, level.getServer());
+				title = Generator.generateTitle(session, EnumAspect.valuesSet(), player);
 			} catch(SkaianetException e)
 			{
 				return null;	//TODO handle exception further down the line
@@ -139,21 +140,21 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes(mcServer).contains(LandTypes.FROGS.get()) &&
+			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes().contains(LandTypes.FROGS.get()) &&
 					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS.get();
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, player);
+				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, player);
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType));
-					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, player);
+					titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, player);
 				}
 			}
 		}
 		if(terrainLandType == null)
-			terrainLandType = Generator.generateWeightedTerrainLandType(mcServer, session, titleLandType, player);
+			terrainLandType = Generator.generateWeightedTerrainLandType(session, titleLandType, player);
 		
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
@@ -183,7 +184,7 @@ public final class SburbHandler
 	{
 		playerData.setHasEntered();
 		
-		SessionHandler.get(server).getPlayerSession(playerData.playerId()).checkIfCompleted(SkaianetHandler.get(server));
+		SessionHandler.get(server).getPlayerSession(playerData.playerId()).checkIfCompleted();
 		
 		ServerPlayer player = playerData.playerId().getPlayer(server);
 		if(player != null)

@@ -99,7 +99,7 @@ public final class PredefineData
 		{
 			Session session = Objects.requireNonNull(SessionHandler.get(source.getServer()).getPlayerSession(player));
 			Title previous = title;
-			title = Generator.generateTitle(session, availableAspects, player, source.getServer());
+			title = Generator.generateTitle(session, availableAspects, player);
 			
 			if(!availableAspects.contains(title.getHeroAspect()))
 			{
@@ -130,7 +130,7 @@ public final class PredefineData
 			
 			Session session = Objects.requireNonNull(SessionHandler.get(source.getServer()).getPlayerSession(player));
 			TitleLandType previous = titleLandType;
-			titleLandType = Generator.generateWeightedTitleLandType(source.getServer(), session, title.getHeroAspect(), type, player);
+			titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), type, player);
 			
 			if(!titleLandType.isAspectCompatible(type))
 			{

@@ -36,13 +36,13 @@ public abstract class SessionHandler
 	
 	Optional<SburbConnection> findPrimaryConnectionForClient(PlayerIdentifier clientPlayer)
 	{
-		return getSessions().stream().flatMap(session -> session.primaryConnections(skaianetHandler))
+		return getSessions().stream().flatMap(Session::primaryConnections)
 				.filter(connection -> connection.getClientIdentifier().equals(clientPlayer)).findAny();
 	}
 	
 	Optional<SburbConnection> findPrimaryConnectionForServer(PlayerIdentifier serverPlayer)
 	{
-		return getSessions().stream().flatMap(session -> session.primaryConnections(skaianetHandler))
+		return getSessions().stream().flatMap(Session::primaryConnections)
 				.filter(connection -> connection.hasServerPlayer() && connection.getServerIdentifier().equals(serverPlayer)).findAny();
 	}
 	

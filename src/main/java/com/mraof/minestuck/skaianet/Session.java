@@ -11,7 +11,6 @@ import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +28,7 @@ public final class Session
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	final SkaianetHandler skaianetHandler;
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers = new HashMap<>();
 	private final Set<SburbConnection> connections = new HashSet<>();
 	private final GristGutter gutter;
@@ -61,12 +61,12 @@ public final class Session
 	/**
 	 * Sets `completed` to true if everyone in the session has entered and has completed connections.
 	 */
-	void checkIfCompleted(SkaianetHandler skaianetHandler)
+	void checkIfCompleted()
 	{
-		completed = computeIsComplete(skaianetHandler);
+		completed = computeIsComplete();
 	}
 	
-	boolean computeIsComplete(SkaianetHandler skaianetHandler)
+	boolean computeIsComplete()
 	{
 		if(this.connections.isEmpty())
 			return false;
@@ -77,13 +77,15 @@ public final class Session
 		});
 	}
 	
-	Session()
+	Session(SkaianetHandler skaianetHandler)
 	{
+		this.skaianetHandler = skaianetHandler;
 		this.gutter = new GristGutter(this);
 	}
 	
-	private Session(CompoundTag nbt)
+	private Session(CompoundTag nbt, SkaianetHandler skaianetHandler)
 	{
+		this.skaianetHandler = skaianetHandler;
 		this.gutter = new GristGutter(this, nbt.getList("gutter", Tag.TAG_COMPOUND));
 	}
 	
@@ -121,11 +123,11 @@ public final class Session
 		return list;
 	}
 	
-	boolean isTitleUsed(@Nonnull Title newTitle, MinecraftServer server)
+	boolean isTitleUsed(@Nonnull Title newTitle)
 	{
 		for(PlayerIdentifier player : this.getPlayerList())
 		{
-			Title title = PlayerSavedData.getData(player, server).getTitle();
+			Title title = PlayerSavedData.getData(player, skaianetHandler.mcServer).getTitle();
 			if(newTitle.equals(title))
 				return true;
 		}
@@ -137,19 +139,19 @@ public final class Session
 		return false;
 	}
 	
-	Set<Title> getUsedTitles(MinecraftServer server)
+	Set<Title> getUsedTitles()
 	{
-		return getUsedTitles(server, null);
+		return getUsedTitles(null);
 	}
 	
-	Set<Title> getUsedTitles(MinecraftServer server, @Nullable PlayerIdentifier ignore)
+	Set<Title> getUsedTitles(@Nullable PlayerIdentifier ignore)
 	{
 		Set<Title> titles = new HashSet<>();
 		for(PlayerIdentifier player : this.getPlayerList())
 		{
 			if(!player.equals(ignore))
 			{
-				Title title = PlayerSavedData.getData(player, server).getTitle();
+				Title title = PlayerSavedData.getData(player, skaianetHandler.mcServer).getTitle();
 				if(title != null)
 					titles.add(title);
 			}
@@ -162,19 +164,19 @@ public final class Session
 		return titles;
 	}
 	
-	List<TitleLandType> getUsedTitleLandTypes(MinecraftServer server)
+	List<TitleLandType> getUsedTitleLandTypes()
 	{
-		return getUsedTitleLandTypes(server, null);
+		return getUsedTitleLandTypes(null);
 	}
 	
-	List<TitleLandType> getUsedTitleLandTypes(MinecraftServer server, @Nullable PlayerIdentifier ignore)
+	List<TitleLandType> getUsedTitleLandTypes(@Nullable PlayerIdentifier ignore)
 	{
 		List<TitleLandType> types = new ArrayList<>();
 		for(PlayerIdentifier player : this.getPlayerList())
 		{
 			if(!player.equals(ignore))
 			{
-				LandTypePair.getTypes(server, SburbPlayerData.get(player, server).getLandDimension())
+				LandTypePair.getTypes(skaianetHandler.mcServer, skaianetHandler.getOrCreateData(player).getLandDimension())
 						.ifPresent(landTypes -> types.add(landTypes.getTitle()));
 			}
 		}
@@ -186,19 +188,19 @@ public final class Session
 		return types;
 	}
 	
-	List<TerrainLandType> getUsedTerrainLandTypes(MinecraftServer server)
+	List<TerrainLandType> getUsedTerrainLandTypes()
 	{
-		return getUsedTerrainLandTypes(server, null);
+		return getUsedTerrainLandTypes(null);
 	}
 	
-	List<TerrainLandType> getUsedTerrainLandTypes(MinecraftServer server, @Nullable PlayerIdentifier ignore)
+	List<TerrainLandType> getUsedTerrainLandTypes(@Nullable PlayerIdentifier ignore)
 	{
 		List<TerrainLandType> types = new ArrayList<>();
 		for(PlayerIdentifier player : this.getPlayerList())
 		{
 			if(!player.equals(ignore))
 			{
-				LandTypePair.getTypes(server, SburbPlayerData.get(player, server).getLandDimension())
+				LandTypePair.getTypes(skaianetHandler.mcServer, skaianetHandler.getOrCreateData(player).getLandDimension())
 						.ifPresent(landTypes -> types.add(landTypes.getTerrain()));
 			}
 		}
@@ -253,7 +255,7 @@ public final class Session
 	 */
 	static Session read(CompoundTag nbt, SkaianetHandler handler)
 	{
-		Session s = new Session(nbt);
+		Session s = new Session(nbt, handler);
 		
 		ListTag list = nbt.getList("connections", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
@@ -286,9 +288,9 @@ public final class Session
 		return connections.isEmpty() && predefinedPlayers.isEmpty();
 	}
 	
-	void addConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler skaianet)
+	void addConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		connections.add(new SburbConnection(client, server, skaianet));
+		connections.add(new SburbConnection(client, server, skaianetHandler));
 	}
 	
 	void removeConnectionIfPresent(PlayerIdentifier client, PlayerIdentifier server)
@@ -302,7 +304,7 @@ public final class Session
 		predefinedPlayers.keySet().removeAll(otherSession.predefinedPlayers.keySet());
 	}
 	
-	Stream<SburbConnection> primaryConnections(SkaianetHandler skaianetHandler)
+	Stream<SburbConnection> primaryConnections()
 	{
 		return connections.stream().filter(connection -> skaianetHandler.getOrCreateData(connection.getClientIdentifier()).hasPrimaryConnection());
 	}
