@@ -409,6 +409,7 @@ public final class MinestuckGristCostsProvider
 		
 		GristCostRecipeBuilder.of(MSItems.LANEC.get()).grist(ARTIFACT, -2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.JOUSTING_LANCE.get()).grist(RUST, 113).grist(QUARTZ, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.POGO_LANCE.get()).grist(BUILD, 98).grist(SHALE, 12).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.LANCELOTS_LOLLY.get()).grist(BUILD, 24).grist(IODINE, 36).grist(COBALT, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DRAGON_LANCE.get()).grist(GARNET, 62).grist(DIAMOND, 7).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SKY_PIERCER.get()).grist(AMBER, 596).grist(CAULK, 596).grist(DIAMOND, 239).grist(GOLD, 239).build(recipeSaver);
@@ -780,6 +781,7 @@ public final class MinestuckGristCostsProvider
 			if(type.getIdOrThrow().getNamespace().equals(Minestuck.MOD_ID))
 				GristCostRecipeBuilder.of(type.getCandyItem().getItem()).grist(type, 3).build(recipeSaver);
 		}
+		GristCostRecipeBuilder.of(MSItems.SOPOR_SLIME_PIE.get()).grist(URANIUM, 8).grist(RUST, 2).grist(MERCURY, 6).grist(CHALK, 5).grist(ARTIFACT, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.APPLE_JUICE.get()).grist(AMBER, 4).grist(SULFUR, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TAB.get()).grist(COBALT, 1).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ORANGE_FAYGO.get()).grist(COBALT, 1).grist(AMBER, 1).build(recipeSaver);

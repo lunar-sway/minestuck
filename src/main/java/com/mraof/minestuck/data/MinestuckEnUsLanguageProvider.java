@@ -22,6 +22,7 @@ import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.*;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -31,6 +32,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.StructureScannerItem;
 import com.mraof.minestuck.item.loot.MSLootEvents;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
@@ -853,6 +855,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.LANEC, "lanec");
 		addItemExtra(MSItems.LANEC, OnHitEffect.SORD_DROP_MESSAGE, "fuck......ahhhahahaaa....");
 		addItem(MSItems.JOUSTING_LANCE, "Jousting Lance");
+		addItem(MSItems.POGO_LANCE, "Pogo Lance");
 		addItem(MSItems.LANCELOTS_LOLLY,"Lancelot's Lolly");
 		addItemTooltip(MSItems.LANCELOTS_LOLLY, "Make your enemies POP with this SICKLE oops I mean LANCE");
 		addItem(MSItems.DRAGON_LANCE, "Dragon Lance");
@@ -1182,6 +1185,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemStoreTooltip(MSItems.ONION, "This cool vegetable is so good that it will make you cry!");
 		addItem(MSItems.SALAD, "Bowl of Leaves");
 		addItemTooltip(MSItems.SALAD, "It's literally just salad, Gordon Ramsay would not approve.");
+		addItem(MSItems.SOPOR_SLIME_PIE, "Sopor Slime Pie");
+		addItemTooltip(MSItems.SOPOR_SLIME_PIE, "An incandescent sludge made exclusively for a different biology.");
 		addItemStore(MSItems.SALAD, "Handpicked Greens");
 		addItemStoreTooltip(MSItems.SALAD, "A bowl of our fine, handpicked greens. The perfect meal.");
 		addItem(MSItems.DESERT_FRUIT, "Desert Fruit");
@@ -1473,8 +1478,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.dice.4", "You rolled a 5.");
 		add("message.dice.5", "You rolled a 6.");
 		
-		add("message.temple_scanner.on", "Temple scanner: On");
-		add("message.temple_scanner.off", "Temple scanner: Off");
+		add(StructureScannerItem.ON, "Temple scanner: On");
+		add(StructureScannerItem.OFF, "Temple scanner: Off");
+		add(StructureScannerItem.MISSING_FUEL, "You lack fuel for this scanner.");
+		add(StructureScannerItem.NO_TARGET, "The scanner did not find a target to lock on to.");
 		
 		add("message.gutter.minor_increase", "Gutter Size Increased");
 		add("message.gutter.increase", "Gutter Size Increased Greatly");
@@ -1774,6 +1781,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
 		addEffect(MSEffects.SUSPICION, "Suspicion");
+		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
@@ -1802,6 +1810,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
+		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
+		add(EditmodeSettingsScreen.EDITMODE_LOCATIONS, "Teleport Locus");
+		add(EditmodeSettingsScreen.RETURN, "Return");
+		add(EditmodeSettingsScreen.INTERACTION_MODE_UNAVAILABLE, "Interaction mode toggle not available yet");
+		add(EditmodeSettingsScreen.NOCLIP_UNAVAILABLE, "Noclip toggle not available yet");
 		add(AtheneumScreen.TITLE, "Atheneum");
 		add(SylladexScreen.TITLE, "Sylladex");
 		add(SylladexScreen.EMPTY_SYLLADEX_1, "Are you sure you want to continue?");
@@ -1959,6 +1972,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryProcess.EXCEPTION, "[Minestuck] Something went wrong during entry. %s");
 		add(EntryCommand.ENTERING, "Preparing to enter The Medium");
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
+		add(EditmodeLocations.REMOVED_LOCATION_MESSAGE, "The location you were in is no longer in range, and you have now been teleported to a valid location.");
 		
 		add(Theme.DEFAULT.getName(), "Default");
 		add(Theme.PESTERCHUM.getName(), "Pesterchum");
@@ -2155,10 +2169,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("mushroom_pizza.off.reply", "I leave them off!");
 		addDialogue("mushroom_pizza.off.consort_reply", "You are a despicable person.");
 		addDialogue("fire_hazard", "Our land is a fire waiting to happen! Hopefully there isn't any lightning!");
+		addDialogue("that_boy_needs_therapy", "Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...");
 		//Heat
 		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
 		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
 		addDialogue("step_into_fire", "You'd better watch where you're going. Wouldn't want you to step right into some fire.");
+		addDialogue("the_water_is_lava", "You know the water is fucking lava? Who thought it would be a good idea to make water out of lava? How do we even stay hydrated in this place dude?");
 		//Wood
 		addDialogue("wood_treatments", "We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.");
 		addDialogue("splinters.1", "Be careful not to walk barefoot here, you could get a splinter!");
@@ -2317,6 +2333,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("hats", "I like crumpled hats, they're comfy and easy to wear!");
 		addDialogue("wwizard", "Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?");
 		addDialogue("stock_market", "I bought a bunch of stocks on the market... Now I'm broke...");
+		addDialogue("consort_scoliosis", "I'm not actually a child, I simply have an incredibly advanced case of consort scoliosisis that has gone untreated for years.");
+		addDialogue("oh_to_be_ugly", "Inspite of the fact that I'm training to become an evil wizard, I'm simply not ugly enough to fit the bill. Any good wizardling knows that one must be as ugly as their desires to truly obtain power.");
+		addDialogue("no_to_podcasting", "My buddy wanted to do some podcasting... I'm no longer friends with him I'm not gonna lie");
+		addDialogue("bats", "I don't like the idea of a bat. Never seen one, and I don't plan on it. It's just like, why the fuck are they built like that!?");
+		addDialogue("so_what", "Uhuh, so what you think you and your little hairy non-reptilian disposition impresses me? It doesn't impress me you just look like a fool. A damned hairy fool.");
+		addDialogue("trolly_problem", "The trolly problem isn't really all that complicated for me all things considered. I mean, I'll probably die of old age before the trolly ever hits me considering my incredibly short and quickly dwindling lifespan");
+		addDialogue("a_little_lampshading", "Look I know you aren't a reptile, I just got one question. You ever hear some of these people talk? I swear, they must be putting mercury in the water with how nonsensical conversation can be with these guys.");
 		addDialogue("identity", "I heard that the true name of the %s is %s. Isn't that cool?");
 		addDialogue("college.1", "Please, I need to pay for my children to attend college...");
 		addDialogue("college.2", "Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.");
@@ -2417,6 +2440,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("tower_general_shop", "I got the goods; they're all recently raided from a nearby tower!");
 		addDialogue("general_shop", "We have generic goods for generic people!");
 		addDialogue("got_the_goods", "You want the goods? We got the goods.");
+		addDialogue("tummy_tunnel", "Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.");
 		addDialogue("rising_shop", "We have top tier goods for a top tier god!");
 		addDialogue("boring_shop", "Looking for something that won't catch your eye? You've come to the right place!");
 		

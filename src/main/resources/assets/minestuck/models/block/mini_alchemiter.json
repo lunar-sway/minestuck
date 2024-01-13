@@ -1,4 +1,5 @@
 {
+    "credit": "Made by iconmaster, converted to json format by kirderf1",
     "parent": "block/block",
     "display": {
         "gui": {
@@ -29,8 +30,8 @@
     },
     "textures": {
         "particle": "minestuck:item/alchemiter",
-        "base": "minestuck:block/alchemiter_base",
-        "other": "minestuck:block/alchemiter_misc"
+        "base": "minestuck:block/machine/mini_alchemiter_base",
+        "other": "minestuck:block/machine/mini_alchemiter_misc"
     },
     "elements": [
         {

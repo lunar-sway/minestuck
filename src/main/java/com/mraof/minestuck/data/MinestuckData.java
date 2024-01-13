@@ -45,6 +45,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new MinestuckItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), fileHelper));
 		gen.addProvider(event.includeServer(), new MinestuckFluidTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MinestuckEntityTypeTagsProvider(output, lookupProvider, fileHelper));
+		gen.addProvider(event.includeServer(), new MSEffectTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MinestuckBiomeTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MSStructureTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MSGristTypeTagsProvider(output, lookupProvider, fileHelper));
@@ -62,7 +63,7 @@ public final class MinestuckData
 		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
 		
-		gen.addProvider(event.includeClient(), new MinestuckBlockStateProvider(output, fileHelper));
+		gen.addProvider(event.includeClient(), new MSBlockStateProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
 	}

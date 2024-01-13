@@ -1,10 +1,10 @@
 {
-	"credit": "crafted with love by the grease artisan mysterymeat",
+	"credit": "Made with Blockbench by Riotmode",
 	"texture_size": [64, 64],
 	"render_type": "translucent",
 	"textures": {
-		"0": "minestuck:block/lunchtop_on",
-		"particle": "minestuck:block/lunchtop_on"
+		"0": "minestuck:block/computer/lunchtop_on",
+		"particle": "minestuck:block/computer/lunchtop_on"
 	},
 	"elements": [
 		{

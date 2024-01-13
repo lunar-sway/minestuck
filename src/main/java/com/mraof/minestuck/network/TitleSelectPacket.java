@@ -6,7 +6,7 @@ import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public class TitleSelectPacket implements PlayToBothPacket
+public class TitleSelectPacket implements MSPacket.PlayToBoth
 {
 	private final Title title;
 	

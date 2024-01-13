@@ -58,6 +58,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.PHLEGM_GUSHERS.get());
 		output.accept(MSItems.SORROW_GUSHERS.get());
 		
+		output.accept(MSItems.SOPOR_SLIME_PIE.get());
+		
 		output.accept(MSItems.BUG_ON_A_STICK.get());
 		output.accept(MSItems.FOOD_CAN.get());
 		
@@ -773,6 +775,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.WOODEN_LANCE.get());
 		output.accept(MSItems.LANEC.get());
 		output.accept(MSItems.JOUSTING_LANCE.get());
+		output.accept(MSItems.POGO_LANCE.get());
 		output.accept(MSItems.LANCELOTS_LOLLY.get());
 		output.accept(MSItems.DRAGON_LANCE.get());
 		output.accept(MSItems.SKY_PIERCER.get());

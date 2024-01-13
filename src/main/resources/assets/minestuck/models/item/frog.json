@@ -1,9 +1,9 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:item/frog_skin",
-        "layer1": "minestuck:item/frog_eyes",
-        "layer2": "minestuck:item/frog_belly"
+        "layer0": "minestuck:item/frog/skin",
+        "layer1": "minestuck:item/frog/eyes",
+        "layer2": "minestuck:item/frog/belly"
     },
     "overrides": [
         {

@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench by Caldw3ll and modified by Dweblenod",
 	"texture_size": [64, 64],
 	"textures": {
-		"bottom_texture": "minestuck:block/machine/sendificator/sendificator_bottom",
-		"top_texture": "minestuck:block/machine/sendificator/sendificator_top",
-		"side_texture": "minestuck:block/machine/sendificator/sendificator_sides",
-		"particle": "minestuck:block/machine/sendificator/sendificator_top"
+		"bottom_texture": "minestuck:block/machine/sendificator/bottom",
+		"top_texture": "minestuck:block/machine/sendificator/top",
+		"side_texture": "minestuck:block/machine/sendificator/sides",
+		"particle": "minestuck:block/machine/sendificator/top"
 	},
 	"elements": [
 		{

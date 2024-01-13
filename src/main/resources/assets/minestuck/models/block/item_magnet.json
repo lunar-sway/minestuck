@@ -1,5 +1,5 @@
 {
-    "credit": "Crafted with love by the grease artisan mysterymeat in Blockbench",
+    "credit": "Made with Blockbench by Riotmode",
     "parent": "minecraft:block/block",
     "texture_size": [64, 64],
     "render_type": "translucent",

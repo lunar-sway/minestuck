@@ -5,7 +5,7 @@ import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public class ColorSelectPacket implements PlayToServerPacket
+public class ColorSelectPacket implements MSPacket.PlayToServer
 {
 	private final int colorIndex;
 	

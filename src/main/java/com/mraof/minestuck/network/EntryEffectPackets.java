@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 
 public final class EntryEffectPackets
 {
-	public record Effect(ResourceKey<Level> level, BlockPos center, int range) implements PlayToClientPacket
+	public record Effect(ResourceKey<Level> level, BlockPos center, int range) implements MSPacket.PlayToClient
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)
@@ -34,7 +34,7 @@ public final class EntryEffectPackets
 		}
 	}
 	
-	public record Clear() implements PlayToClientPacket
+	public record Clear() implements MSPacket.PlayToClient
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)

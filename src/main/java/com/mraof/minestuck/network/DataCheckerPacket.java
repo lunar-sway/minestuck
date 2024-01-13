@@ -11,7 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class DataCheckerPacket implements PlayToBothPacket
+public class DataCheckerPacket implements MSPacket.PlayToBoth
 {
 	
 	private static int index = 0;

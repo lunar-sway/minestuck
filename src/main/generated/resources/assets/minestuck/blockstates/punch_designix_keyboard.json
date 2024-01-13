@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/punch_designix_keyboard",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/punch_designix_keyboard"
+    },
+    "facing=south": {
+      "model": "minestuck:block/punch_designix_keyboard",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/punch_designix_keyboard",
+      "y": 270
+    }
+  }
+}

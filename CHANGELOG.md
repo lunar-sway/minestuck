@@ -11,6 +11,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
 - Uncarved wood block group now has a stonecutting recipe and grist cost
 - `/rung get` command, which output a player's echeladder rung
+- Pogo lance weapon
+- New consort dialogue
+- Sopor Stupor Effect
+- Sopor Slime Pie food item
+- Land type extensions for datapacks, which can be used to add worldgen features, carvers and mob spawn to lands
+- New editmode settings screen, which can be used to teleport between different areas where editmode can function
+- Behaviour for buckets and barbasol bombs when used in dispensers
+- Minestuck fluids now have sound effects in situations reminiscent of water
+- Light water now acts as a light source and has underwater fog appear closer
+- All Minestuck fluids besides ender fluid now support boats
+- All Minestuck fluids besides oil now extinguish on fire entities, entities touching oil while on fire extends fire duration
+- Brain juice now forms an infinite source, it also now cannot be drowned in
+- Blood and brain juice now hydrate crops
+- Minestuck fluids now have custom tick rates
+- Blood/brain juice/light water now have underwater particles
+- Minestuck fluids now have improved mod compatibility
 - The Iron Lass armor set has the ability to glide like an elytra and boost with the sneak key
 
 ### Changed
@@ -18,14 +34,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Bamboo item now costs 1 build grist instead of 2 (bamboo plank blocks now similar in cost to traditional planks)
 - Fine china axe now uses decorated pot in recipe instead of flower pot
 - Changed `/setrung` command into `/rung set`
+- Minor changes and polish to the temple scanner
+- The area around which an editmode player can move has been made more flexible, each computer can act as a source to extend reach
+- Entities now move through and sink in Minestuck fluids at rates specific to the fluid
+- The texture for oil and blood are now more transparent than they were in previous versions
+- Underwater fog appears closer for oil/blood/water colors/light water
 
 ### Fixed
 
 - Fixed multiple sources of crashes involving fake players
+- Creative Shock effect is no longer cured by drinking milk
+- Right-clicking an item outside the atheneum menu no longer crashes the client
+- Suspicion effect now correctly stops the affected mob from summoning zombie reinforcements
+- Respawning mid-entry no longer spawns you in your land
+- Fixed a performance issue with land gate placement
+- Minestuck fluids now prevent fall damage
+- Minestuck fluids no longer have a breaking sound effect and now have bucket/extinguish sound effects
+- Minestuck fluids now use their translatable name
+- All Minestuck fluids besides ender fluid now have transparency
+- Water colors underwater fog is a rave again
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean
+- Dweblenod, Zepsun, hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 

@@ -5,12 +5,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -37,19 +35,43 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public class StructureScannerItem extends Item
 {
+	public static final String ON = "message.temple_scanner.on";
+	public static final String OFF = "message.temple_scanner.off";
+	public static final String MISSING_FUEL = "message.temple_scanner.missing_fuel";
+	public static final String NO_TARGET = "message.temple_scanner.no_target";
+	
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private final TagKey<Structure> structure;
 	@Nullable
 	private final Supplier<Item> fuelItem;
+	private final int powerCapacity;
 	
-	public StructureScannerItem(Properties properties, TagKey<Structure> structure, @Nullable Supplier<Item> fuelItem)
+	public StructureScannerItem(Properties properties, TagKey<Structure> structure, @Nullable Supplier<Item> fuelItem, int powerCapacity)
 	{
-		super(properties);
+		super(properties.stacksTo(1));
 		this.structure = structure;
 		this.fuelItem = fuelItem;
+		this.powerCapacity = powerCapacity;
+	}
+	
+	public static boolean isPowered(ItemStack stack)
+	{
+		return getPower(stack) > 0;
+	}
+	
+	@SuppressWarnings("DataFlowIssue")
+	public static int getPower(ItemStack stack)
+	{
+		return stack.hasTag() ? stack.getTag().getInt("power") : 0;
+	}
+	
+	public static void setPower(ItemStack stack, int power)
+	{
+		stack.getOrCreateTag().putInt("power", power);
 	}
 	
 	@Nullable
+	@SuppressWarnings("DataFlowIssue")
 	public static GlobalPos getTargetFromNbt(ItemStack stack)
 	{
 		if(stack.hasTag() && stack.getTag().contains("TargetLocation"))
@@ -63,111 +85,44 @@ public class StructureScannerItem extends Item
 	
 	public static void setTargetToNbt(ItemStack stack, @Nullable GlobalPos pos)
 	{
-		CompoundTag tag = stack.getOrCreateTag();
 		if(pos == null)
-			tag.remove("TargetLocation");
+			stack.removeTagKey("TargetLocation");
 		else
-			tag.put("TargetLocation",
+			stack.getOrCreateTag().put("TargetLocation",
 					GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, pos)
 							.getOrThrow(false, LOGGER::error));
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
 	{
-		ItemStack stack = pPlayer.getItemInHand(pUsedHand);
+		ItemStack stack = player.getItemInHand(usedHand);
 		
-		if(fuelItem != null && !pPlayer.isCreative())
+		if(isPowered(stack))
+			return InteractionResultHolder.fail(stack);
+		if(!(level instanceof ServerLevel serverLevel))
+			return InteractionResultHolder.success(stack);
+		
+		if(fuelItem != null && !player.isCreative())
 		{
-			ItemStack invItem = findItem(pPlayer, fuelItem.get());
+			ItemStack invItem = findItem(player, fuelItem.get());
 			
 			if(invItem == null)
+			{
+				player.sendSystemMessage(Component.translatable(MISSING_FUEL).withStyle(ChatFormatting.RED));
+				return InteractionResultHolder.fail(stack);
+			}
+			
+			if(!tryActivateScanner(serverLevel, player, stack))
 				return InteractionResultHolder.fail(stack);
 			
-			consumeFuelItem(invItem, pPlayer, pLevel);
+			consumeFuelItem(invItem, player, serverLevel);
+		} else {
+			if(!tryActivateScanner(serverLevel, player, stack))
+				return InteractionResultHolder.fail(stack);
 		}
 		
-		if (stack.getDamageValue() > 0)
-			resetCharge(stack);
-		
-		stack.getOrCreateTag().putBoolean("Powered", true);
-		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
-		
-		if (!pLevel.isClientSide)
-		{
-			MutableComponent message = Component.translatable("message.temple_scanner.on");
-			pPlayer.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
-		}
-		return InteractionResultHolder.success(stack);
-	}
-	
-	/**
-	 * Check if the item is powered, and if it's out of battery, recharge it.
-	 * Set the location to the nearest structure, check that a structure exists, then reduce charge if fuelled.
-	 */
-	@Override
-	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected)
-	{
-		super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
-		
-		if(pStack.hasTag() && pStack.getTag().getBoolean("Powered") && pLevel instanceof ServerLevel sLevel)
-		{
-			if (!isCharged(pStack))
-			{
-				resetCharge(pStack);
-			}
-			
-			GlobalPos pos = findStructureTarget(pEntity, sLevel);
-			
-			setTargetToNbt(pStack, pos);
-			
-			reduceCharge(pStack, pEntity, pLevel);
-		}
-	}
-	
-	public static boolean isCharged(ItemStack stack)
-	{
-		return stack.getDamageValue() < stack.getMaxDamage();
-	}
-	
-	public void resetCharge(ItemStack pStack)
-	{
-		pStack.setDamageValue(0);
-	}
-	
-	@Nullable
-	public GlobalPos findStructureTarget(Entity entity, ServerLevel level)
-	{
-		BlockPos pos = level.findNearestMapStructure(this.structure, entity.blockPosition(), 100, false);
-		return pos == null ? null : GlobalPos.of(level.dimension(), pos);
-	}
-	
-	/**
-	 * Does nothing if this scanner type has no fuel item that it uses.
-	 * Scanner charge is represented by durability and damage.
-	 * Damage is dealt every 20 ticks, powers off when out of charge.
-	 *
-	 * @param stack current item
-	 * @param entity player entity
-	 * @param level player's current level
-	 */
-	public void reduceCharge(ItemStack stack, Entity entity, Level level)
-	{
-		if(fuelItem == null || entity.tickCount % 20 != 0)
-			return;
-		
-		stack.hurt(1, level.random, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
-		
-		if(!isCharged(stack))
-		{
-			stack.getOrCreateTag().putBoolean("Powered", false);
-			
-			if(!level.isClientSide())
-			{
-				MutableComponent message = Component.translatable("message.temple_scanner.off");
-				entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
-			}
-		}
+		return InteractionResultHolder.consume(stack);
 	}
 	
 	@Nullable
@@ -181,11 +136,81 @@ public class StructureScannerItem extends Item
 		return null;
 	}
 	
-	private static void consumeFuelItem(ItemStack fuelStack, Player player, Level level)
+	private static void consumeFuelItem(ItemStack fuelStack, Player player, ServerLevel level)
 	{
-		if(!level.isClientSide)
-			fuelStack.shrink(1);
+		fuelStack.shrink(1);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
+	}
+	
+	private boolean tryActivateScanner(ServerLevel level, Player player, ItemStack stack)
+	{
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
+		GlobalPos pos = findStructureTarget(player, level);
 		
-		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
+		if(pos == null)
+		{
+			player.sendSystemMessage(Component.translatable(NO_TARGET).withStyle(ChatFormatting.RED));
+			return false;
+		}
+		
+		setTargetToNbt(stack, pos);
+		setPower(stack, this.powerCapacity);
+		
+		player.sendSystemMessage(Component.translatable(ON).withStyle(ChatFormatting.DARK_GREEN));
+		return true;
+	}
+	
+	@Nullable
+	private GlobalPos findStructureTarget(Entity entity, ServerLevel level)
+	{
+		BlockPos pos = level.findNearestMapStructure(this.structure, entity.blockPosition(), 100, false);
+		return pos == null ? null : GlobalPos.of(level.dimension(), pos);
+	}
+	
+	/**
+	 * Check if the item is powered, and if it's out of battery, recharge it.
+	 * Set the location to the nearest structure, check that a structure exists, then reduce charge if fuelled.
+	 */
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected)
+	{
+		if(!level.isClientSide && isPowered(stack) && entity.tickCount % 20 == 0)
+			powerTick(stack, entity);
+	}
+	
+	private static void powerTick(ItemStack stack, Entity entity)
+	{
+		setPower(stack, getPower(stack) - 1);
+		
+		if(!isPowered(stack))
+		{
+			setTargetToNbt(stack, null);
+			MutableComponent message = Component.translatable(OFF);
+			entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
+		}
+	}
+	
+	@Override
+	public boolean isBarVisible(ItemStack stack)
+	{
+		return isPowered(stack);
+	}
+	
+	@Override
+	public int getBarWidth(ItemStack stack)
+	{
+		return Math.round(13 * (float) getPower(stack) / this.powerCapacity);
+	}
+	
+	@Override
+	public int getBarColor(ItemStack stack)
+	{
+		return 0x66BAFF;
+	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
+	{
+		return !ItemStack.isSameItem(oldStack, newStack);
 	}
 }

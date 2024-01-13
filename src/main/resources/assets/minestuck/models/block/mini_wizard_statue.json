@@ -2,13 +2,13 @@
 	"credit": "Made with Blockbench by Cibernet",
 	"render_type": "cutout",
 	"textures": {
-		"0": "minestuck:block/wizard_statue",
-		"1": "minestuck:block/wizard_statue_back",
-		"2": "minestuck:block/wizard_statue_side",
-		"3": "minestuck:block/wizard_statue_bottom",
-		"4": "minestuck:block/wizard_statue_top",
+		"0": "minestuck:block/wizard_statue/front",
+		"1": "minestuck:block/wizard_statue/back",
+		"2": "minestuck:block/wizard_statue/side",
+		"3": "minestuck:block/wizard_statue/bottom",
+		"4": "minestuck:block/wizard_statue/top",
 		"5": "minestuck:block/coarse_stone",
-		"particle": "minestuck:block/wizard_statue"
+		"particle": "minestuck:block/wizard_statue/front"
 	},
 	"elements": [
 		{

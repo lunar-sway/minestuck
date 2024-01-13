@@ -1,4 +1,5 @@
 {
+    "credit": "Made by iconmaster, converted to json format by kirderf1",
     "parent": "block/block",
     "display": {
         "gui": {
@@ -29,9 +30,9 @@
     },
     "textures": {
         "particle": "minestuck:item/cruxtruder",
-        "up": "minestuck:block/cruxtruder_top",
-        "down": "minestuck:block/cruxtruder_bottom",
-        "other": "minestuck:block/cruxtruder_misc"
+        "up": "minestuck:block/machine/mini_cruxtruder_top",
+        "down": "minestuck:block/machine/mini_cruxtruder_bottom",
+        "other": "minestuck:block/machine/mini_cruxtruder_misc"
     },
     "elements": [
         {

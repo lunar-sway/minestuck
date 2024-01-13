@@ -1,14 +1,14 @@
 package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.client.gui.playerStats.EcheladderScreen;
-import com.mraof.minestuck.network.PlayToClientPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Echeladder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
-public class EcheladderDataPacket implements PlayToClientPacket
+public class EcheladderDataPacket implements MSPacket.PlayToClient
 {
 	private final int rung;
 	private final float progress;

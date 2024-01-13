@@ -6,6 +6,8 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.network.ClientMovementPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
@@ -330,6 +332,32 @@ public interface OnHitEffect
 			if(!attacker.getCommandSenderWorld().isClientSide)
 			{
 				target.setDeltaMovement(target.getDeltaMovement().x * randFloat, target.getDeltaMovement().y, target.getDeltaMovement().z * randFloat);
+			}
+		};
+	}
+	
+	/**
+	 * Flings the target in the direction the attacker was facing, and flings the attacker in the opposite direction of their facing
+	 */
+	static OnHitEffect mutualKnockback(float knockback)
+	{
+		return (itemStack, target, attacker) ->
+		{
+			Vec3 targetVec = attacker.getLookAngle().scale(1F + knockback);
+			Vec3 attackerVec = targetVec.reverse();
+			
+			target.push(targetVec.x, targetVec.y, targetVec.z);
+			
+			//dismount the attacker
+			if(attacker.getVehicle() != null)
+				attacker.dismountTo(attacker.getX(), attacker.getY(), attacker.getZ());
+			
+			attacker.push(attackerVec.x, attackerVec.y, attackerVec.z);
+			
+			if(attacker instanceof ServerPlayer player)
+			{
+				ClientMovementPacket packet = ClientMovementPacket.createPacket(attackerVec);
+				MSPacketHandler.sendToPlayer(packet, player);
 			}
 		};
 	}

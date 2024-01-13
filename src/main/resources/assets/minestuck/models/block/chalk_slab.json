@@ -1,8 +1,0 @@
-{
-    "parent": "block/slab",
-    "textures": {
-        "bottom": "minestuck:block/chalk",
-        "top": "minestuck:block/chalk",
-        "side": "minestuck:block/chalk"
-    }
-}
