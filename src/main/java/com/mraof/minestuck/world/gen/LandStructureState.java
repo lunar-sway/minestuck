@@ -32,11 +32,13 @@ public final class LandStructureState extends ChunkGeneratorStructureState
 	
 	public ChunkPos getOrFindLandGatePosition()
 	{
-		if (landGatePosition != null)
-			return landGatePosition;
-		
-		RandomSource worldRand = RandomSource.create(this.getLevelSeed());
-		
+		if (this.landGatePosition == null)
+			this.landGatePosition = findLandGatePosition(this.biomeSource, this.randomState(), RandomSource.create(this.getLevelSeed()));
+		return this.landGatePosition;
+	}
+	
+	private static ChunkPos findLandGatePosition(BiomeSource biomeSource, RandomState randomState, RandomSource worldRand)
+	{
 		double angle = 2 * Math.PI * worldRand.nextDouble();
 		int radius = 38 + worldRand.nextInt(12);
 		
@@ -46,13 +48,15 @@ public final class LandStructureState extends ChunkGeneratorStructureState
 			int posZ = (int) Math.round(Math.sin(angle) * radius);
 			
 			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			Pair<BlockPos, Holder<Biome>> result = biomeSource.findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome.is(MSTags.Biomes.LAND_NORMAL), worldRand, this.randomState().sampler());
+			Pair<BlockPos, Holder<Biome>> result = biomeSource.findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96,
+					biome -> biome.is(MSTags.Biomes.LAND_NORMAL), worldRand, randomState.sampler());
 			
 			if(result != null)
 			{
 				BlockPos pos = result.getFirst();
-				if(biomeSource.getBiomesWithin(pos.getX(), 0, pos.getZ(), 16, this.randomState().sampler()).stream().allMatch(biome -> biome.is(MSTags.Biomes.LAND_NORMAL)))
-					return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
+				if(biomeSource.getBiomesWithin(pos.getX(), 0, pos.getZ(), 16,
+						randomState.sampler()).stream().allMatch(biome -> biome.is(MSTags.Biomes.LAND_NORMAL)))
+					return new ChunkPos(pos);
 			}
 		}
 		
@@ -60,12 +64,12 @@ public final class LandStructureState extends ChunkGeneratorStructureState
 		int posZ = (int) Math.round(Math.sin(angle) * radius);
 		LOGGER.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
 		
-		Pair<BlockPos, Holder<Biome>> result = biomeSource.findBiomeHorizontal((posX << 4) + 8, 0, (posZ << 4) + 8, 96, biome -> biome.is(MSTags.Biomes.LAND_NORMAL), worldRand, this.randomState().sampler());
+		Pair<BlockPos, Holder<Biome>> result = biomeSource.findBiomeHorizontal((posX << 4) + 8, 0, (posZ << 4) + 8, 96,
+				biome -> biome.is(MSTags.Biomes.LAND_NORMAL), worldRand, randomState.sampler());
 		
 		if(result != null)
-			landGatePosition = new ChunkPos(result.getFirst());
-		else landGatePosition = new ChunkPos(posX, posZ);
+			return new ChunkPos(result.getFirst());
 		
-		return landGatePosition;
+		return new ChunkPos(posX, posZ);
 	}
 }

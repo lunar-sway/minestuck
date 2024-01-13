@@ -1,24 +1,33 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
  * A quickfix to some sidedness issues
  * Contains common and server program data, unlike {@link ComputerProgram} which should now ONLY contain client-sided stuff
  */
-public class ProgramData
+public final class ProgramData
 {
-	private static final HashMap<Integer, Consumer<ComputerBlockEntity>> closeFunctions = new HashMap<>();
+	private static final HashMap<Integer, ProgramHandler> programHandlers = new HashMap<>();
 	
 	private static final HashMap<Integer, ItemStack> disks = new HashMap<>();
 	
+	public static void init()
+	{
+		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), CLIENT_HANDLER);
+		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), SERVER_HANDLER);
+	}
 	
 	/**
 	 * Registers a program class to the list.
@@ -30,35 +39,32 @@ public class ProgramData
 	 *            The item that will serve as the disk that installs the
 	 *            program.
 	 */
-	public static void registerProgram(int id, ItemStack disk, Consumer<ComputerBlockEntity> closeFunction)
+	public static void registerProgram(int id, ItemStack disk, ProgramHandler programHandler)
 	{
-		if(disks.containsKey(id) || id == -1 || id == -2)
+		if(disks.containsKey(id) || id == -1)
 			throw new IllegalArgumentException("Program id " + id + " is already used!");
-		closeFunctions.put(id, closeFunction);
+		programHandlers.put(id, programHandler);
 		disks.put(id, disk);
 	}
 	
-	public static void closeProgram(int id, ComputerBlockEntity computer)
+	public static Optional<ProgramHandler> getHandler(int id)
 	{
-		Consumer<ComputerBlockEntity> closeFunction = closeFunctions.get(id);
-		if(closeFunction != null)
-			closeFunction.accept(computer);
+		return Optional.ofNullable(programHandlers.get(id));
 	}
 	
 	/**
-	 * Returns the id of the program. Note that it returns -2 if the item does
-	 * not correspond to any program.
+	 * Returns the id of the program corresponding to the given item.
 	 */
-	public static int getProgramID(ItemStack item)
+	public static OptionalInt getProgramID(ItemStack item)
 	{
 		if(item.isEmpty())
-			return -2;
+			return OptionalInt.empty();
 		item = item.copy();
 		item.setCount(1);
 		for(int id : disks.keySet())
 			if(ItemStack.isSameItem(disks.get(id), item))
-				return id;
-		return -2;
+				return OptionalInt.of(id);
+		return OptionalInt.empty();
 	}
 	
 	@Nonnull
@@ -69,15 +75,51 @@ public class ProgramData
 		return disks.get(id).copy();
 	}
 	
-	public static void onClientClosed(ComputerBlockEntity be)
+	public interface ProgramHandler
 	{
-		Objects.requireNonNull(be.getLevel());
-		SkaianetHandler.get(be.getLevel()).closeClientConnection(be);	//Can safely be done even if this computer isn't in a connection
+		default void onDiskInserted(ComputerBlockEntity computer)
+		{}
+		
+		default void onLoad(ComputerBlockEntity computer)
+		{}
+		
+		default void onClosed(ComputerBlockEntity computer)
+		{}
 	}
 	
-	public static void onServerClosed(ComputerBlockEntity be)
+	private static final ProgramHandler CLIENT_HANDLER = new ProgramHandler()
 	{
-		Objects.requireNonNull(be.getLevel());
-		SkaianetHandler.get(be.getLevel()).closeServerConnection(be);
-	}
+		@Override
+		public void onDiskInserted(ComputerBlockEntity computer)
+		{
+			EditmodeLocations.addBlockSourceIfValid(computer);
+		}
+		
+		@Override
+		public void onLoad(ComputerBlockEntity computer)
+		{
+			EditmodeLocations.addBlockSourceIfValid(computer);
+		}
+		
+		@Override
+		public void onClosed(ComputerBlockEntity computer)
+		{
+			if(computer.getLevel() instanceof ServerLevel level && computer.getOwner() != null)
+			{
+				SkaianetHandler.get(level).closeClientConnection(computer);	//Can safely be done even if this computer isn't in a connection
+				
+				EditmodeLocations.removeBlockSource(level.getServer(), computer.getOwner(), level.dimension(), computer.getBlockPos());
+			}
+		}
+	};
+	
+	private static final ProgramHandler SERVER_HANDLER = new ProgramHandler()
+	{
+		@Override
+		public void onClosed(ComputerBlockEntity computer)
+		{
+			Objects.requireNonNull(computer.getLevel());
+			SkaianetHandler.get(computer.getLevel()).closeServerConnection(computer);
+		}
+	};
 }

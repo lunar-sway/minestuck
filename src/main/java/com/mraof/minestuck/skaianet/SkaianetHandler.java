@@ -411,6 +411,11 @@ public final class SkaianetHandler extends SavedData
 		return sessionHandler.getConnectionStream().filter(c -> c.isServer(computer)).findAny().orElse(null);
 	}
 	
+	public SburbConnection getClientConnection(ISburbComputer computer)
+	{
+		return sessionHandler.getConnectionStream().filter(c -> c.isClient(computer)).findAny().orElse(null);
+	}
+	
 	public Stream<SburbConnection> getConnectionsInEntry()
 	{
 		return sessionHandler.getConnectionStream().filter(connection -> connection.isActive() && connection.isMain() && !connection.hasEntered());

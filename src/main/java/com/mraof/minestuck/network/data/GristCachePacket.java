@@ -2,11 +2,11 @@ package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.network.PlayToClientPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 
-public record GristCachePacket(ImmutableGristSet gristCache, boolean isEditmode) implements PlayToClientPacket
+public record GristCachePacket(ImmutableGristSet gristCache, boolean isEditmode) implements MSPacket.PlayToClient
 {
 	@Override
 	public void encode(FriendlyByteBuf buffer)

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.network.data;
 
-import com.mraof.minestuck.network.PlayToClientPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class ColorDataPacket implements PlayToClientPacket
+public class ColorDataPacket implements MSPacket.PlayToClient
 {
 	private static final int NO_COLOR = -2;    //Can be removed if we remove -1 as a default color when colors are made to hexes
 	

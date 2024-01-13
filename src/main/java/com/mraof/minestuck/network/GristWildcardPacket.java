@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
-public class GristWildcardPacket implements PlayToServerPacket
+public class GristWildcardPacket implements MSPacket.PlayToServer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	

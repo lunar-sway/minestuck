@@ -24,6 +24,7 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
+import com.mraof.minestuck.util.DispenserBehaviourUtil;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
@@ -34,7 +35,6 @@ import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
 import com.mraof.minestuck.world.lands.LandTypes;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -125,9 +125,9 @@ public class Minestuck
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
+		DispenserBehaviourUtil.registerBehaviours();
 		
-		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), ProgramData::onClientClosed);
-		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), ProgramData::onServerClosed);
+		ProgramData.init();
 		
 		BlockCopier.addStep(new ComputerBlockProcess());
 		BlockCopier.addStep(new TransportalizerBlockProcess());

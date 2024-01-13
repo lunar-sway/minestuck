@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.ZombieEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
@@ -88,7 +89,8 @@ public class SuspicionEffect extends MobEffect
 	@SubscribeEvent
 	public static void summonAttempt(ZombieEvent.SummonAidEvent event)
 	{
-		if(event.getEntity().hasEffect(MSEffects.SUSPICION.get())) event.setCanceled(true);
+		if(event.getEntity().hasEffect(MSEffects.SUSPICION.get()))
+			event.setResult(Event.Result.DENY);
 	}
 	
 	@Override

@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 
-public class CaptchaDeckPacket implements PlayToServerPacket
+public class CaptchaDeckPacket implements MSPacket.PlayToServer
 {
 	
 	private static final byte MODUS = 0;

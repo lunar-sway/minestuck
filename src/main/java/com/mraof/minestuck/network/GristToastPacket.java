@@ -14,7 +14,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 
 public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource source,
-							   boolean isCacheOwner) implements PlayToClientPacket
+							   boolean isCacheOwner) implements MSPacket.PlayToClient
 {
 	
 	/**

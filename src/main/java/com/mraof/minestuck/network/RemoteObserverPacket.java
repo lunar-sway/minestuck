@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class RemoteObserverPacket implements PlayToServerPacket
+public class RemoteObserverPacket implements MSPacket.PlayToServer
 {
 	private final RemoteObserverBlockEntity.ActiveType activeType;
 	private final BlockPos beBlockPos;

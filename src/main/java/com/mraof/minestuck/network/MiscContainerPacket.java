@@ -13,7 +13,7 @@ import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MiscContainerPacket implements PlayToServerPacket
+public class MiscContainerPacket implements MSPacket.PlayToServer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	

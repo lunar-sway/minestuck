@@ -7,7 +7,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.Objects;
 
-public class GristRejectAnimationPacket implements PlayToClientPacket
+public class GristRejectAnimationPacket implements MSPacket.PlayToClient
 {
 	private final int entityID;
 	

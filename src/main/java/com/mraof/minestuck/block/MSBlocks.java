@@ -40,32 +40,49 @@ public class MSBlocks
 	public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Minestuck.MOD_ID);
 	
 	//Skaia
+	public static final RegistryObject<Block> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> new SkaiaPortalBlock(Block.Properties.of().mapColor(MapColor.COLOR_CYAN).pushReaction(PushReaction.BLOCK).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noLootTable()));
+	
 	public static final RegistryObject<Block> BLACK_CHESS_DIRT = REGISTER.register("black_chess_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> WHITE_CHESS_DIRT = REGISTER.register("white_chess_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_DIRT = REGISTER.register("dark_gray_chess_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_DIRT = REGISTER.register("light_gray_chess_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.GRAVEL)));
-	public static final RegistryObject<Block> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> new SkaiaPortalBlock(Block.Properties.of().mapColor(MapColor.COLOR_CYAN).pushReaction(PushReaction.BLOCK).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noLootTable()));
 	
+	//Black Chess Bricks
 	public static final RegistryObject<Block> BLACK_CHESS_BRICKS = REGISTER.register("black_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICKS = REGISTER.register("dark_gray_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICKS = REGISTER.register("light_gray_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final RegistryObject<Block> WHITE_CHESS_BRICKS = REGISTER.register("white_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> BLACK_CHESS_BRICK_STAIRS = REGISTER.register("black_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_CHESS_BRICKS.get().defaultBlockState(), copy(BLACK_CHESS_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> BLACK_CHESS_BRICK_SLAB = REGISTER.register("black_chess_brick_slab", () -> new SlabBlock(copy(BLACK_CHESS_BRICKS.get())));
 	public static final RegistryObject<Block> BLACK_CHESS_BRICK_SMOOTH = REGISTER.register("black_chess_brick_smooth", () -> new Block(copy(BLACK_CHESS_BRICKS.get())));
-	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_SMOOTH = REGISTER.register("dark_gray_chess_brick_smooth", () -> new Block(copy(DARK_GRAY_CHESS_BRICKS.get())));
-	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_SMOOTH = REGISTER.register("light_gray_chess_brick_smooth", () -> new Block(copy(LIGHT_GRAY_CHESS_BRICKS.get())));
-	public static final RegistryObject<Block> WHITE_CHESS_BRICK_SMOOTH = REGISTER.register("white_chess_brick_smooth", () -> new Block(copy(WHITE_CHESS_BRICKS.get())));
 	public static final RegistryObject<Block> BLACK_CHESS_BRICK_TRIM = REGISTER.register("black_chess_brick_trim", () -> new MSDirectionalBlock(copy(BLACK_CHESS_BRICKS.get())));
+	
+	//Dark Gray Chess Bricks
+	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICKS = REGISTER.register("dark_gray_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> DARK_GRAY_CHESS_BRICK_STAIRS = REGISTER.register("dark_gray_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.DARK_GRAY_CHESS_BRICKS.get().defaultBlockState(), copy(DARK_GRAY_CHESS_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> DARK_GRAY_CHESS_BRICK_SLAB = REGISTER.register("dark_gray_chess_brick_slab", () -> new SlabBlock(copy(DARK_GRAY_CHESS_BRICKS.get())));
+	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_SMOOTH = REGISTER.register("dark_gray_chess_brick_smooth", () -> new Block(copy(DARK_GRAY_CHESS_BRICKS.get())));
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_TRIM = REGISTER.register("dark_gray_chess_brick_trim", () -> new MSDirectionalBlock(copy(DARK_GRAY_CHESS_BRICKS.get())));
+	
+	//Light Gray Chess Bricks
+	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICKS = REGISTER.register("light_gray_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> LIGHT_GRAY_CHESS_BRICK_STAIRS = REGISTER.register("light_gray_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.LIGHT_GRAY_CHESS_BRICKS.get().defaultBlockState(), copy(LIGHT_GRAY_CHESS_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> LIGHT_GRAY_CHESS_BRICK_SLAB = REGISTER.register("light_gray_chess_brick_slab", () -> new SlabBlock(copy(LIGHT_GRAY_CHESS_BRICKS.get())));
+	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_SMOOTH = REGISTER.register("light_gray_chess_brick_smooth", () -> new Block(copy(LIGHT_GRAY_CHESS_BRICKS.get())));
 	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_TRIM = REGISTER.register("light_gray_chess_brick_trim", () -> new MSDirectionalBlock(copy(LIGHT_GRAY_CHESS_BRICKS.get())));
+	
+	//White Chess Bricks
+	public static final RegistryObject<Block> WHITE_CHESS_BRICKS = REGISTER.register("white_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> WHITE_CHESS_BRICK_STAIRS = REGISTER.register("white_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.WHITE_CHESS_BRICKS.get().defaultBlockState(), copy(WHITE_CHESS_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> WHITE_CHESS_BRICK_SLAB = REGISTER.register("white_chess_brick_slab", () -> new SlabBlock(copy(WHITE_CHESS_BRICKS.get())));
+	public static final RegistryObject<Block> WHITE_CHESS_BRICK_SMOOTH = REGISTER.register("white_chess_brick_smooth", () -> new Block(copy(WHITE_CHESS_BRICKS.get())));
 	public static final RegistryObject<Block> WHITE_CHESS_BRICK_TRIM = REGISTER.register("white_chess_brick_trim", () -> new MSDirectionalBlock(copy(WHITE_CHESS_BRICKS.get())));
 	
+	//Stained Glass
 	public static final RegistryObject<Block> CHECKERED_STAINED_GLASS = REGISTER.register("checkered_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, Block.Properties.of().mapColor(DyeColor.BLUE).instrument(NoteBlockInstrument.HAT).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(MSBlocks::never).isRedstoneConductor(MSBlocks::never).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)));
 	public static final RegistryObject<Block> BLACK_CROWN_STAINED_GLASS = REGISTER.register("black_crown_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, copy(CHECKERED_STAINED_GLASS.get())));
 	public static final RegistryObject<Block> BLACK_PAWN_STAINED_GLASS = REGISTER.register("black_pawn_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, copy(CHECKERED_STAINED_GLASS.get())));
 	public static final RegistryObject<Block> WHITE_CROWN_STAINED_GLASS = REGISTER.register("white_crown_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, copy(CHECKERED_STAINED_GLASS.get())));
 	public static final RegistryObject<Block> WHITE_PAWN_STAINED_GLASS = REGISTER.register("white_pawn_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, copy(CHECKERED_STAINED_GLASS.get())));
 	
-	
+	//Cruxite ores
 	public static final RegistryObject<Block> STONE_CRUXITE_ORE = REGISTER.register("stone_cruxite_ore", () -> cruxiteOre(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F, 3.0F).requiresCorrectToolForDrops()));
 	public static final RegistryObject<Block> NETHERRACK_CRUXITE_ORE = REGISTER.register("netherrack_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> COBBLESTONE_CRUXITE_ORE = REGISTER.register("cobblestone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
@@ -81,6 +98,7 @@ public class MSBlocks
 		return new DropExperienceBlock(properties, UniformInt.of(2, 5));
 	}
 	
+	//Uranium ores
 	public static final RegistryObject<Block> STONE_URANIUM_ORE = REGISTER.register("stone_uranium_ore", () -> uraniumOre(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F, 3.0F).requiresCorrectToolForDrops().lightLevel(state -> 3)));
 	public static final RegistryObject<Block> DEEPSLATE_URANIUM_ORE = REGISTER.register("deepslate_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get()).mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE)));
 	public static final RegistryObject<Block> NETHERRACK_URANIUM_ORE = REGISTER.register("netherrack_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
@@ -97,6 +115,7 @@ public class MSBlocks
 		return new DropExperienceBlock(properties, UniformInt.of(2, 5));
 	}
 	
+	//Land-specific vanilla ores
 	public static final RegistryObject<Block> NETHERRACK_COAL_ORE = REGISTER.register("netherrack_coal_ore", () -> coalOre(copy(Blocks.COAL_ORE)));
 	public static final RegistryObject<Block> SHADE_STONE_COAL_ORE = REGISTER.register("shade_stone_coal_ore", () -> coalOre(copy(Blocks.COAL_ORE)));
 	public static final RegistryObject<Block> PINK_STONE_COAL_ORE = REGISTER.register("pink_stone_coal_ore", () -> coalOre(copy(Blocks.COAL_ORE)));
@@ -120,30 +139,41 @@ public class MSBlocks
 	public static final RegistryObject<Block> PINK_STONE_LAPIS_ORE = REGISTER.register("pink_stone_lapis_ore", () -> new DropExperienceBlock(copy(Blocks.LAPIS_ORE), UniformInt.of(2, 5)));
 	public static final RegistryObject<Block> PINK_STONE_DIAMOND_ORE = REGISTER.register("pink_stone_diamond_ore", () -> new DropExperienceBlock(copy(Blocks.DIAMOND_ORE), UniformInt.of(3, 7)));
 	
-	
-	
 	//Resource Blocks
 	public static final RegistryObject<Block> CRUXITE_BLOCK = REGISTER.register("cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F).requiresCorrectToolForDrops()));
 	public static final RegistryObject<Block> URANIUM_BLOCK = REGISTER.register("uranium_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIME).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F).requiresCorrectToolForDrops().lightLevel(state -> 7)));
 	public static final RegistryObject<Block> GENERIC_OBJECT = REGISTER.register("generic_object", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIME).strength(1.0F).sound(SoundType.WOOD)));
 	
-	
-	
 	//Land Environment
+	//Aspect Terrain Dirt
 	public static final RegistryObject<Block> BLUE_DIRT = REGISTER.register("blue_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLUE).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> THOUGHT_DIRT = REGISTER.register("thought_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_GREEN).strength(0.5F).sound(SoundType.GRAVEL)));
 	
+	//Coarse
 	public static final RegistryObject<Block> COARSE_STONE = REGISTER.register("coarse_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0F, 6.0F)));
-	public static final RegistryObject<Block> CHISELED_COARSE_STONE = REGISTER.register("chiseled_coarse_stone", () -> new Block(copy(COARSE_STONE.get())));
+	public static final RegistryObject<StairBlock> COARSE_STONE_STAIRS = REGISTER.register("coarse_stone_stairs", () -> new StairBlock(() -> MSBlocks.COARSE_STONE.get().defaultBlockState(), copy(COARSE_STONE.get())));
+	public static final RegistryObject<SlabBlock> COARSE_STONE_SLAB = REGISTER.register("coarse_stone_slab", () -> new SlabBlock(copy(COARSE_STONE.get())));
+	
 	public static final RegistryObject<Block> COARSE_STONE_BRICKS = REGISTER.register("coarse_stone_bricks", () -> new Block(copy(COARSE_STONE.get())));
+	public static final RegistryObject<StairBlock> COARSE_STONE_BRICK_STAIRS = REGISTER.register("coarse_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.COARSE_STONE_BRICKS.get().defaultBlockState(), copy(COARSE_STONE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> COARSE_STONE_BRICK_SLAB = REGISTER.register("coarse_stone_brick_slab", () -> new SlabBlock(copy(COARSE_STONE_BRICKS.get())));
+	
 	public static final RegistryObject<Block> COARSE_STONE_COLUMN = REGISTER.register("coarse_stone_column", () -> new MSDirectionalBlock(copy(COARSE_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_COARSE_STONE_BRICKS = REGISTER.register("chiseled_coarse_stone_bricks", () -> new Block(copy(COARSE_STONE.get())));
 	public static final RegistryObject<Block> CRACKED_COARSE_STONE_BRICKS = REGISTER.register("cracked_coarse_stone_bricks", () -> new Block(copy(COARSE_STONE.get())));
 	public static final RegistryObject<Block> MOSSY_COARSE_STONE_BRICKS = REGISTER.register("mossy_coarse_stone_bricks", () -> new Block(copy(COARSE_STONE.get())));
+	public static final RegistryObject<Block> CHISELED_COARSE_STONE = REGISTER.register("chiseled_coarse_stone", () -> new Block(copy(COARSE_STONE.get())));
 	
+	//Shade
 	public static final RegistryObject<Block> SHADE_STONE = REGISTER.register("shade_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final RegistryObject<Block> SMOOTH_SHADE_STONE = REGISTER.register("smooth_shade_stone", () -> new Block(copy(SHADE_STONE.get())));
+	public static final RegistryObject<StairBlock> SHADE_STAIRS = REGISTER.register("shade_stairs", () -> new StairBlock(() -> MSBlocks.SHADE_STONE.get().defaultBlockState(), copy(SHADE_STONE.get())));
+	public static final RegistryObject<SlabBlock> SHADE_SLAB = REGISTER.register("shade_slab", () -> new SlabBlock(copy(SHADE_STONE.get())));
+	
 	public static final RegistryObject<Block> SHADE_BRICKS = REGISTER.register("shade_bricks", () -> new Block(copy(SHADE_STONE.get())));
+	public static final RegistryObject<StairBlock> SHADE_BRICK_STAIRS = REGISTER.register("shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.SHADE_BRICKS.get().defaultBlockState(), copy(SHADE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> SHADE_BRICK_SLAB = REGISTER.register("shade_brick_slab", () -> new SlabBlock(copy(SHADE_BRICKS.get())));
+	
+	public static final RegistryObject<Block> SMOOTH_SHADE_STONE = REGISTER.register("smooth_shade_stone", () -> new Block(copy(SHADE_STONE.get())));
 	public static final RegistryObject<Block> SHADE_COLUMN = REGISTER.register("shade_column", () -> new MSDirectionalBlock(copy(SHADE_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_SHADE_BRICKS = REGISTER.register("chiseled_shade_bricks", () -> new Block(copy(SHADE_BRICKS.get())));
 	public static final RegistryObject<Block> CRACKED_SHADE_BRICKS = REGISTER.register("cracked_shade_bricks", () -> new Block(copy(SHADE_BRICKS.get())));
@@ -151,24 +181,44 @@ public class MSBlocks
 	public static final RegistryObject<Block> BLOOD_SHADE_BRICKS = REGISTER.register("blood_shade_bricks", () -> new Block(copy(SHADE_BRICKS.get())));
 	public static final RegistryObject<Block> TAR_SHADE_BRICKS = REGISTER.register("tar_shade_bricks", () -> new Block(copy(SHADE_BRICKS.get())));
 	
+	//Frost
 	public static final RegistryObject<Block> FROST_TILE = REGISTER.register("frost_tile", () -> new Block(Block.Properties.of().mapColor(MapColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final RegistryObject<Block> CHISELED_FROST_TILE = REGISTER.register("chiseled_frost_tile", () -> new Block(copy(FROST_TILE.get())));
+	public static final RegistryObject<StairBlock> FROST_TILE_STAIRS = REGISTER.register("frost_tile_stairs", () -> new StairBlock(() -> MSBlocks.FROST_TILE.get().defaultBlockState(), copy(FROST_TILE.get())));
+	public static final RegistryObject<SlabBlock> FROST_TILE_SLAB = REGISTER.register("frost_tile_slab", () -> new SlabBlock(copy(FROST_TILE.get())));
+	
 	public static final RegistryObject<Block> FROST_BRICKS = REGISTER.register("frost_bricks", () -> new Block(copy(FROST_TILE.get())));
+	public static final RegistryObject<StairBlock> FROST_BRICK_STAIRS = REGISTER.register("frost_brick_stairs", () -> new StairBlock(() -> MSBlocks.FROST_BRICKS.get().defaultBlockState(), copy(FROST_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> FROST_BRICK_SLAB = REGISTER.register("frost_brick_slab", () -> new SlabBlock(copy(FROST_BRICKS.get())));
+	
+	public static final RegistryObject<Block> CHISELED_FROST_TILE = REGISTER.register("chiseled_frost_tile", () -> new Block(copy(FROST_TILE.get())));
 	public static final RegistryObject<Block> FROST_COLUMN = REGISTER.register("frost_column", () -> new MSDirectionalBlock(copy(FROST_TILE.get())));
 	public static final RegistryObject<Block> CHISELED_FROST_BRICKS = REGISTER.register("chiseled_frost_bricks", () -> new Block(copy(FROST_BRICKS.get()))); //while it is a pillar block, it cannot be rotated, making it similar to cut sandstone
 	public static final RegistryObject<Block> CRACKED_FROST_BRICKS = REGISTER.register("cracked_frost_bricks", () -> new Block(copy(FROST_BRICKS.get())));
 	public static final RegistryObject<Block> FLOWERY_FROST_BRICKS = REGISTER.register("flowery_frost_bricks", () -> new Block(copy(FROST_BRICKS.get())));
 	
+	//Cast Iron
 	public static final RegistryObject<Block> CAST_IRON = REGISTER.register("cast_iron", () -> new Block(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
+	public static final RegistryObject<StairBlock> CAST_IRON_STAIRS = REGISTER.register("cast_iron_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON.get().defaultBlockState(), copy(CAST_IRON.get())));
+	
 	public static final RegistryObject<Block> CHISELED_CAST_IRON = REGISTER.register("chiseled_cast_iron", () -> new Block(copy(CAST_IRON.get())));
 	public static final RegistryObject<Block> STEEL_BEAM = REGISTER.register("steel_beam", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	
+	//Sulfur
 	public static final RegistryObject<Block> NATIVE_SULFUR = REGISTER.register("native_sulfur", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.5F, 1.0F)));
 	
+	//Mycelium
 	public static final RegistryObject<Block> MYCELIUM_STONE = REGISTER.register("mycelium_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_MAGENTA).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> MYCELIUM_STAIRS = REGISTER.register("mycelium_stairs", () -> new StairBlock(() -> MSBlocks.MYCELIUM_STONE.get().defaultBlockState(), copy(MYCELIUM_STONE.get())));
+	public static final RegistryObject<SlabBlock> MYCELIUM_SLAB = REGISTER.register("mycelium_slab", () -> new SlabBlock(copy(MYCELIUM_STONE.get())));
+	
 	public static final RegistryObject<Block> MYCELIUM_COBBLESTONE = REGISTER.register("mycelium_cobblestone", () -> new Block(copy(MYCELIUM_STONE.get())));
+	
 	public static final RegistryObject<Block> POLISHED_MYCELIUM_STONE = REGISTER.register("polished_mycelium_stone", () -> new Block(copy(MYCELIUM_STONE.get())));
+	
 	public static final RegistryObject<Block> MYCELIUM_BRICKS = REGISTER.register("mycelium_bricks", () -> new Block(copy(MYCELIUM_STONE.get())));
+	public static final RegistryObject<StairBlock> MYCELIUM_BRICK_STAIRS = REGISTER.register("mycelium_brick_stairs", () -> new StairBlock(() -> MSBlocks.MYCELIUM_BRICKS.get().defaultBlockState(), copy(MYCELIUM_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> MYCELIUM_BRICK_SLAB = REGISTER.register("mycelium_brick_slab", () -> new SlabBlock(copy(MYCELIUM_BRICKS.get())));
+	
 	public static final RegistryObject<Block> MYCELIUM_COLUMN = REGISTER.register("mycelium_column", () -> new MSDirectionalBlock(copy(MYCELIUM_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_MYCELIUM_BRICKS = REGISTER.register("chiseled_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> SUSPICIOUS_CHISELED_MYCELIUM_BRICKS = REGISTER.register("suspicious_chiseled_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
@@ -176,51 +226,100 @@ public class MSBlocks
 	public static final RegistryObject<Block> MOSSY_MYCELIUM_BRICKS = REGISTER.register("mossy_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> FLOWERY_MYCELIUM_BRICKS = REGISTER.register("flowery_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 
+	//Black
 	public static final RegistryObject<Block> BLACK_SAND = REGISTER.register("black_sand", () -> new SandBlock(0x181915, Block.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.SNARE).strength(0.5F).sound(SoundType.SAND)));
+	
 	public static final RegistryObject<Block> BLACK_STONE = REGISTER.register("black_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> BLACK_STONE_STAIRS = REGISTER.register("black_stone_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_STONE.get().defaultBlockState(), copy(BLACK_STONE.get())));
+	public static final RegistryObject<SlabBlock> BLACK_STONE_SLAB = REGISTER.register("black_stone_slab", () -> new SlabBlock(copy(BLACK_STONE.get())));
+	
 	public static final RegistryObject<Block> BLACK_COBBLESTONE = REGISTER.register("black_cobblestone", () -> new Block(copy(BLACK_STONE.get())));
+	
 	public static final RegistryObject<Block> POLISHED_BLACK_STONE = REGISTER.register("polished_black_stone", () -> new Block(copy(BLACK_STONE.get())));
+	
 	public static final RegistryObject<Block> BLACK_STONE_BRICKS = REGISTER.register("black_stone_bricks", () -> new Block(copy(BLACK_STONE.get())));
+	public static final RegistryObject<StairBlock> BLACK_STONE_BRICK_STAIRS = REGISTER.register("black_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState(), copy(BLACK_STONE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> BLACK_STONE_BRICK_SLAB = REGISTER.register("black_stone_brick_slab", () -> new SlabBlock(copy(BLACK_STONE_BRICKS.get())));
+	
 	public static final RegistryObject<Block> BLACK_STONE_COLUMN = REGISTER.register("black_stone_column", () -> new MSDirectionalBlock(copy(BLACK_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_BLACK_STONE_BRICKS = REGISTER.register("chiseled_black_stone_bricks", () -> new Block(copy(BLACK_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> CRACKED_BLACK_STONE_BRICKS = REGISTER.register("cracked_black_stone_bricks", () -> new Block(copy(BLACK_STONE_BRICKS.get())));
 	
+	//Flowery
 	public static final RegistryObject<Block> FLOWERY_MOSSY_COBBLESTONE = REGISTER.register("flowery_mossy_cobblestone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	
 	public static final RegistryObject<Block> FLOWERY_MOSSY_STONE_BRICKS = REGISTER.register("flowery_mossy_stone_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> FLOWERY_MOSSY_STONE_BRICK_STAIRS = REGISTER.register("flowery_mossy_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get().defaultBlockState(), copy(FLOWERY_MOSSY_STONE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> FLOWERY_MOSSY_STONE_BRICK_SLAB = REGISTER.register("flowery_mossy_stone_brick_slab", () -> new SlabBlock(copy(FLOWERY_MOSSY_STONE_BRICKS.get())));
+	
+	//Decrepit
 	public static final RegistryObject<Block> DECREPIT_STONE_BRICKS = REGISTER.register("decrepit_stone_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
 	public static final RegistryObject<Block> MOSSY_DECREPIT_STONE_BRICKS = REGISTER.register("mossy_decrepit_stone_bricks", () -> new Block(copy(DECREPIT_STONE_BRICKS.get())));
-	public static final RegistryObject<Block> COARSE_END_STONE = REGISTER.register("coarse_end_stone", () -> new TillableBlock(Block.Properties.of().mapColor(MapColor.SAND).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 9.0F), Blocks.END_STONE::defaultBlockState));
-	public static final RegistryObject<Block> END_GRASS = REGISTER.register("end_grass", () -> new EndGrassBlock(Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	
+	//End
+	public static final RegistryObject<Block> COARSE_END_STONE = REGISTER.register("coarse_end_stone", () -> new TillableBlock(Block.Properties.of().mapColor(MapColor.SAND).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 9.0F), Blocks.END_STONE::defaultBlockState));
+	
+	//Chalk
 	public static final RegistryObject<Block> CHALK = REGISTER.register("chalk", () -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> CHALK_STAIRS = REGISTER.register("chalk_stairs", () -> new StairBlock(() -> MSBlocks.CHALK.get().defaultBlockState(), copy(CHALK.get())));
+	public static final RegistryObject<SlabBlock> CHALK_SLAB = REGISTER.register("chalk_slab", () -> new SlabBlock(copy(CHALK.get())));
+	
 	public static final RegistryObject<Block> POLISHED_CHALK = REGISTER.register("polished_chalk", () -> new Block(copy(CHALK.get())));
+	
 	public static final RegistryObject<Block> CHALK_BRICKS = REGISTER.register("chalk_bricks", () -> new Block(copy(CHALK.get())));
+	public static final RegistryObject<StairBlock> CHALK_BRICK_STAIRS = REGISTER.register("chalk_brick_stairs", () -> new StairBlock(() -> MSBlocks.CHALK_BRICKS.get().defaultBlockState(), copy(CHALK_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> CHALK_BRICK_SLAB = REGISTER.register("chalk_brick_slab", () -> new SlabBlock(copy(CHALK_BRICKS.get())));
+	
 	public static final RegistryObject<Block> CHALK_COLUMN = REGISTER.register("chalk_column", () -> new MSDirectionalBlock(copy(CHALK.get())));
 	public static final RegistryObject<Block> CHISELED_CHALK_BRICKS = REGISTER.register("chiseled_chalk_bricks", () -> new Block(copy(CHALK_BRICKS.get())));
 	public static final RegistryObject<Block> MOSSY_CHALK_BRICKS = REGISTER.register("mossy_chalk_bricks", () -> new Block(copy(CHALK_BRICKS.get())));
 	public static final RegistryObject<Block> FLOWERY_CHALK_BRICKS = REGISTER.register("flowery_chalk_bricks", () -> new Block(copy(CHALK_BRICKS.get())));
 	
+	//Pink
 	public static final RegistryObject<Block> PINK_STONE = REGISTER.register("pink_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<StairBlock> PINK_STONE_STAIRS = REGISTER.register("pink_stone_stairs", () -> new StairBlock(() -> MSBlocks.PINK_STONE.get().defaultBlockState(), copy(PINK_STONE.get())));
+	public static final RegistryObject<SlabBlock> PINK_STONE_SLAB = REGISTER.register("pink_stone_slab", () -> new SlabBlock(copy(PINK_STONE.get())));
+	
 	public static final RegistryObject<Block> POLISHED_PINK_STONE = REGISTER.register("polished_pink_stone", () -> new Block(copy(PINK_STONE.get())));
+	
 	public static final RegistryObject<Block> PINK_STONE_BRICKS = REGISTER.register("pink_stone_bricks", () -> new Block(copy(PINK_STONE.get())));
+	public static final RegistryObject<StairBlock> PINK_STONE_BRICK_STAIRS = REGISTER.register("pink_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.PINK_STONE_BRICKS.get().defaultBlockState(), copy(PINK_STONE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> PINK_STONE_BRICK_SLAB = REGISTER.register("pink_stone_brick_slab", () -> new SlabBlock(copy(PINK_STONE_BRICKS.get())));
+	
 	public static final RegistryObject<Block> PINK_STONE_COLUMN = REGISTER.register("pink_stone_column", () -> new MSDirectionalBlock(copy(PINK_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_PINK_STONE_BRICKS = REGISTER.register("chiseled_pink_stone_bricks", () -> new Block(copy(PINK_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> CRACKED_PINK_STONE_BRICKS = REGISTER.register("cracked_pink_stone_bricks", () -> new Block(copy(PINK_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> MOSSY_PINK_STONE_BRICKS = REGISTER.register("mossy_pink_stone_bricks", () -> new Block(copy(PINK_STONE_BRICKS.get())));
 	
+	//Brown
 	public static final RegistryObject<Block> BROWN_STONE = REGISTER.register("brown_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.5F, 7.0F)));
+	public static final RegistryObject<StairBlock> BROWN_STONE_STAIRS = REGISTER.register("brown_stone_stairs", () -> new StairBlock(() -> MSBlocks.BROWN_STONE.get().defaultBlockState(), copy(BROWN_STONE.get())));
+	public static final RegistryObject<SlabBlock> BROWN_STONE_SLAB = REGISTER.register("brown_stone_slab", () -> new SlabBlock(copy(BROWN_STONE.get())));
+	
 	public static final RegistryObject<Block> POLISHED_BROWN_STONE = REGISTER.register("polished_brown_stone", () -> new Block(copy(BROWN_STONE.get())));
+	
 	public static final RegistryObject<Block> BROWN_STONE_BRICKS = REGISTER.register("brown_stone_bricks", () -> new Block(copy(BROWN_STONE.get())));
+	public static final RegistryObject<StairBlock> BROWN_STONE_BRICK_STAIRS = REGISTER.register("brown_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.BROWN_STONE_BRICKS.get().defaultBlockState(), copy(BROWN_STONE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> BROWN_STONE_BRICK_SLAB = REGISTER.register("brown_stone_brick_slab", () -> new SlabBlock(copy(BROWN_STONE_BRICKS.get())));
+	
 	public static final RegistryObject<Block> CRACKED_BROWN_STONE_BRICKS = REGISTER.register("cracked_brown_stone_bricks", () -> new Block(copy(BROWN_STONE.get())));
 	public static final RegistryObject<Block> BROWN_STONE_COLUMN = REGISTER.register("brown_stone_column", () -> new MSDirectionalBlock(copy(BROWN_STONE.get())));
 	
+	//Green
 	public static final RegistryObject<Block> GREEN_STONE = REGISTER.register("green_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GREEN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.5F, 7.0F)));
+	public static final RegistryObject<StairBlock> GREEN_STONE_STAIRS = REGISTER.register("green_stone_stairs", () -> new StairBlock(() -> MSBlocks.GREEN_STONE.get().defaultBlockState(), copy(GREEN_STONE.get())));
+	public static final RegistryObject<SlabBlock> GREEN_STONE_SLAB = REGISTER.register("green_stone_slab", () -> new SlabBlock(copy(GREEN_STONE.get())));
+	
 	public static final RegistryObject<Block> POLISHED_GREEN_STONE = REGISTER.register("polished_green_stone", () -> new Block(copy(GREEN_STONE.get())));
 	public static final RegistryObject<Block> GREEN_STONE_BRICKS = REGISTER.register("green_stone_bricks", () -> new Block(copy(GREEN_STONE.get())));
+	public static final RegistryObject<StairBlock> GREEN_STONE_BRICK_STAIRS = REGISTER.register("green_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), copy(GREEN_STONE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> GREEN_STONE_BRICK_SLAB = REGISTER.register("green_stone_brick_slab", () -> new SlabBlock(copy(GREEN_STONE_BRICKS.get())));
+	
 	public static final RegistryObject<Block> GREEN_STONE_COLUMN = REGISTER.register("green_stone_column", () -> new MSDirectionalBlock(copy(GREEN_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_GREEN_STONE_BRICKS = REGISTER.register("chiseled_green_stone_bricks", () -> new Block(copy(GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> HORIZONTAL_GREEN_STONE_BRICKS = REGISTER.register("horizontal_green_stone_bricks", () -> new Block(copy(GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> VERTICAL_GREEN_STONE_BRICKS = REGISTER.register("vertical_green_stone_bricks", () -> new Block(copy(GREEN_STONE_BRICKS.get())));
+	
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_EMBEDDED_LADDER = REGISTER.register("green_stone_brick_embedded_ladder", () -> new CustomShapeBlock(copy(GREEN_STONE_BRICKS.get()), MSBlockShapes.EMBEDDED_STAIRS)); //uses the tag CLIMBABLE
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_TRIM = REGISTER.register("green_stone_brick_trim", () -> new MSDirectionalBlock(copy(GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_FROG = REGISTER.register("green_stone_brick_frog", () -> new HieroglyphBlock(copy(GREEN_STONE_BRICKS.get())));
@@ -233,12 +332,17 @@ public class MSBlocks
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_SALAMANDER_RIGHT = REGISTER.register("green_stone_brick_salamander_right", () -> new HieroglyphBlock(copy(GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_SKAIA = REGISTER.register("green_stone_brick_skaia", () -> new HieroglyphBlock(copy(GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_TURTLE = REGISTER.register("green_stone_brick_turtle", () -> new HieroglyphBlock(copy(GREEN_STONE_BRICKS.get())));
+	//TODO when walking down steep stairs, players take fall damage that cannot be circumvented by the fallOn function. This includes when there is only an air block underneath them
+	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = REGISTER.register("steep_green_stone_brick_stairs_base", () -> new CustomShapeBlock(copy(GREEN_STONE.get()), MSBlockShapes.STEEP_STAIRS_BASE));
+	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = REGISTER.register("steep_green_stone_brick_stairs_top", () -> new CustomShapeBlock(copy(GREEN_STONE.get()), MSBlockShapes.STEEP_STAIRS_TOP));
 	
+	//Sandstone
 	public static final RegistryObject<Block> SANDSTONE_COLUMN = REGISTER.register("sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.SAND).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)));
 	public static final RegistryObject<Block> CHISELED_SANDSTONE_COLUMN = REGISTER.register("chiseled_sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.SAND).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)));
 	public static final RegistryObject<Block> RED_SANDSTONE_COLUMN = REGISTER.register("red_sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.COLOR_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)));
 	public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_COLUMN = REGISTER.register("chiseled_red_sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.COLOR_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)));
 	
+	//Wood
 	public static final RegistryObject<Block> UNCARVED_WOOD = REGISTER.register("uncarved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CHIPBOARD = REGISTER.register("chipboard", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
 	public static final RegistryObject<Block> WOOD_SHAVINGS = REGISTER.register("wood_shavings", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(0.4F).sound(SoundType.SAND)));
@@ -247,152 +351,198 @@ public class MSBlocks
 	public static final RegistryObject<Block> POLISHED_UNCARVED_WOOD = REGISTER.register("polished_carved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CARVED_KNOTTED_WOOD = REGISTER.register("carved_knotted_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	
+	//Cloud
 	public static final RegistryObject<Block> DENSE_CLOUD = REGISTER.register("dense_cloud", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.HAT).strength(0.5F).sound(SoundType.SNOW).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> BRIGHT_DENSE_CLOUD = REGISTER.register("bright_dense_cloud", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).instrument(NoteBlockInstrument.HAT).strength(0.5F).sound(SoundType.SNOW).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> SUGAR_CUBE = REGISTER.register("sugar_cube", () -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).instrument(NoteBlockInstrument.SNARE).strength(0.4F).sound(SoundType.SAND)));
 	
 	//Land Tree Blocks
+	//Glowing
 	public static final RegistryObject<Block> GLOWING_LOG = REGISTER.register("glowing_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> FROST_LOG = REGISTER.register("frost_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.ICE).strength(2.0F).ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> RAINBOW_LOG = REGISTER.register("rainbow_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> END_LOG = REGISTER.register("end_log", () -> new DoubleLogBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> VINE_LOG = REGISTER.register("vine_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> FLOWERY_VINE_LOG = REGISTER.register("flowery_vine_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> DEAD_LOG = REGISTER.register("dead_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> PETRIFIED_LOG = REGISTER.register("petrified_log", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STONE)));
-	public static final RegistryObject<Block> SHADEWOOD_LOG = REGISTER.register("shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_SHADEWOOD_LOG.get().defaultBlockState()));
-	public static final RegistryObject<Block> SCARRED_SHADEWOOD_LOG = REGISTER.register("scarred_shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 6).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG.get().defaultBlockState()));
-	public static final RegistryObject<Block> ROTTED_SHADEWOOD_LOG = REGISTER.register("rotted_shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 5).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG.get().defaultBlockState()));
-	public static final RegistryObject<Block> STRIPPED_SHADEWOOD_LOG = REGISTER.register("stripped_shadewood_log", () -> new FlammableLogBlock(copy(SHADEWOOD_LOG.get())));
-	public static final RegistryObject<Block> STRIPPED_SCARRED_SHADEWOOD_LOG = REGISTER.register("stripped_scarred_shadewood_log", () -> new FlammableLogBlock(copy(SCARRED_SHADEWOOD_LOG.get())));
-	public static final RegistryObject<Block> STRIPPED_ROTTED_SHADEWOOD_LOG = REGISTER.register("stripped_rotted_shadewood_log", () -> new FlammableLogBlock(copy(ROTTED_SHADEWOOD_LOG.get())));
-	
 	public static final RegistryObject<Block> GLOWING_WOOD = REGISTER.register("glowing_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> SHADEWOOD = REGISTER.register("shadewood", () -> new StrippableFlammableLogBlock(copy(SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_SHADEWOOD.get().defaultBlockState()));
-	public static final RegistryObject<Block> SCARRED_SHADEWOOD = REGISTER.register("scarred_shadewood", () -> new StrippableFlammableLogBlock(copy(SCARRED_SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_SCARRED_SHADEWOOD.get().defaultBlockState()));
-	public static final RegistryObject<Block> ROTTED_SHADEWOOD = REGISTER.register("rotted_shadewood", () -> new StrippableFlammableLogBlock(copy(ROTTED_SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_ROTTED_SHADEWOOD.get().defaultBlockState()));
-	public static final RegistryObject<Block> STRIPPED_SHADEWOOD = REGISTER.register("stripped_shadewood", () -> new FlammableLogBlock(copy(SHADEWOOD_LOG.get())));
-	public static final RegistryObject<Block> STRIPPED_SCARRED_SHADEWOOD = REGISTER.register("stripped_scarred_shadewood", () -> new FlammableLogBlock(copy(SCARRED_SHADEWOOD_LOG.get())));
-	public static final RegistryObject<Block> STRIPPED_ROTTED_SHADEWOOD = REGISTER.register("stripped_rotted_shadewood", () -> new FlammableLogBlock(copy(ROTTED_SHADEWOOD_LOG.get())));
+	public static final RegistryObject<Block> GLOWING_PLANKS = REGISTER.register("glowing_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> GLOWING_BOOKSHELF = REGISTER.register("glowing_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> GLOWING_LADDER = REGISTER.register("glowing_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	
+	//Frost
+	public static final RegistryObject<Block> FROST_LOG = REGISTER.register("frost_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.ICE).strength(2.0F).ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FROST_WOOD = REGISTER.register("frost_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.ICE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> FROST_PLANKS = REGISTER.register("frost_planks", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.ICE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> FROST_LEAVES = REGISTER.register("frost_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> FROST_BOOKSHELF = REGISTER.register("frost_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> FROST_LADDER = REGISTER.register("frost_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	
+	//Rainbow
+	public static final RegistryObject<Block> RAINBOW_LOG = REGISTER.register("rainbow_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> RAINBOW_WOOD = REGISTER.register("rainbow_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> RAINBOW_PLANKS = REGISTER.register("rainbow_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<StairBlock> RAINBOW_PLANKS_STAIRS = REGISTER.register("rainbow_planks_stairs", () -> new StairBlock(() -> MSBlocks.RAINBOW_PLANKS.get().defaultBlockState(), copy(RAINBOW_PLANKS.get())));
+	public static final RegistryObject<SlabBlock> RAINBOW_PLANKS_SLAB = REGISTER.register("rainbow_planks_slab", () -> new SlabBlock(copy(RAINBOW_PLANKS.get())));
+	public static final RegistryObject<Block> RAINBOW_LEAVES = REGISTER.register("rainbow_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<BushBlock> RAINBOW_SAPLING = REGISTER.register("rainbow_sapling", () -> new RainbowSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	public static final RegistryObject<Block> RAINBOW_BOOKSHELF = REGISTER.register("rainbow_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> RAINBOW_LADDER = REGISTER.register("rainbow_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	
+	//End
+	public static final RegistryObject<Block> END_LOG = REGISTER.register("end_log", () -> new DoubleLogBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> END_WOOD = REGISTER.register("end_wood", () -> new FlammableLogBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> END_PLANKS = REGISTER.register("end_planks", () -> new FlammableBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<StairBlock> END_PLANKS_STAIRS = REGISTER.register("end_planks_stairs", () -> new StairBlock(() -> MSBlocks.END_PLANKS.get().defaultBlockState(), copy(END_PLANKS.get())));
+	public static final RegistryObject<SlabBlock> END_PLANKS_SLAB = REGISTER.register("end_planks_slab", () -> new SlabBlock(copy(END_PLANKS.get())));
+	public static final RegistryObject<Block> END_LEAVES = REGISTER.register("end_leaves", () -> new EndLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<BushBlock> END_SAPLING = REGISTER.register("end_sapling", () -> new EndSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	public static final RegistryObject<Block> END_LADDER = REGISTER.register("end_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> END_BOOKSHELF = REGISTER.register("end_bookshelf", () -> new FlammableBlock(1, 250, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	
+	//Vine
+	public static final RegistryObject<Block> VINE_LOG = REGISTER.register("vine_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> VINE_WOOD = REGISTER.register("vine_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.PODZOL).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	
+	public static final RegistryObject<Block> FLOWERY_VINE_LOG = REGISTER.register("flowery_vine_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FLOWERY_VINE_WOOD = REGISTER.register("flowery_vine_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.PODZOL).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	
+	//Dead
+	public static final RegistryObject<Block> DEAD_LOG = REGISTER.register("dead_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> DEAD_WOOD = REGISTER.register("dead_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.PODZOL).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> DEAD_PLANKS = REGISTER.register("dead_planks", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<StairBlock> DEAD_PLANKS_STAIRS = REGISTER.register("dead_planks_stairs", () -> new StairBlock(() -> MSBlocks.DEAD_PLANKS.get().defaultBlockState(), copy(DEAD_PLANKS.get())));
+	public static final RegistryObject<SlabBlock> DEAD_PLANKS_SLAB = REGISTER.register("dead_planks_slab", () -> new SlabBlock(copy(DEAD_PLANKS.get())));
+	public static final RegistryObject<Block> DEAD_BOOKSHELF = REGISTER.register("dead_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> DEAD_LADDER = REGISTER.register("dead_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	
+	//Petrified
+	public static final RegistryObject<Block> PETRIFIED_LOG = REGISTER.register("petrified_log", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> PETRIFIED_WOOD = REGISTER.register("petrified_wood", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STONE)));
 	
-	public static final RegistryObject<Block> GLOWING_PLANKS = REGISTER.register("glowing_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> FROST_PLANKS = REGISTER.register("frost_planks", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.ICE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> RAINBOW_PLANKS = REGISTER.register("rainbow_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> END_PLANKS = REGISTER.register("end_planks", () -> new FlammableBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> DEAD_PLANKS = REGISTER.register("dead_planks", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> TREATED_PLANKS = REGISTER.register("treated_planks", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	//Shadewood
+	public static final RegistryObject<Block> SHADEWOOD_LOG = REGISTER.register("shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_SHADEWOOD_LOG.get().defaultBlockState()));
+	public static final RegistryObject<Block> SHADEWOOD = REGISTER.register("shadewood", () -> new StrippableFlammableLogBlock(copy(SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_SHADEWOOD.get().defaultBlockState()));
 	public static final RegistryObject<Block> SHADEWOOD_PLANKS = REGISTER.register("shadewood_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
-	public static final RegistryObject<Block> FROST_LEAVES = REGISTER.register("frost_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> RAINBOW_LEAVES = REGISTER.register("rainbow_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> END_LEAVES = REGISTER.register("end_leaves", () -> new EndLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> SHADEWOOD_LEAVES = REGISTER.register("shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> SHROOMY_SHADEWOOD_LEAVES = REGISTER.register("shroomy_shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().lightLevel(state -> 11).sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	
-	public static final RegistryObject<BushBlock> RAINBOW_SAPLING = REGISTER.register("rainbow_sapling", () -> new RainbowSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<BushBlock> END_SAPLING = REGISTER.register("end_sapling", () -> new EndSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BushBlock> SHADEWOOD_SAPLING = REGISTER.register("shadewood_sapling", () -> new SaplingBlock(new ShadewoodTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().lightLevel(state -> 8).strength(0).sound(SoundType.GRASS)));
 	
-	public static final RegistryObject<Block> BLOOD_ASPECT_LOG = REGISTER.register("blood_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> BREATH_ASPECT_LOG = REGISTER.register("breath_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> DOOM_ASPECT_LOG = REGISTER.register("doom_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> HEART_ASPECT_LOG = REGISTER.register("heart_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> HOPE_ASPECT_LOG = REGISTER.register("hope_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> LIFE_ASPECT_LOG = REGISTER.register("life_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> LIGHT_ASPECT_LOG = REGISTER.register("light_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> MIND_ASPECT_LOG = REGISTER.register("mind_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> RAGE_ASPECT_LOG = REGISTER.register("rage_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> SPACE_ASPECT_LOG = REGISTER.register("space_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> TIME_ASPECT_LOG = REGISTER.register("time_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> VOID_ASPECT_LOG = REGISTER.register("void_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> SCARRED_SHADEWOOD_LOG = REGISTER.register("scarred_shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 6).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG.get().defaultBlockState()));
+	public static final RegistryObject<Block> SCARRED_SHADEWOOD = REGISTER.register("scarred_shadewood", () -> new StrippableFlammableLogBlock(copy(SCARRED_SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_SCARRED_SHADEWOOD.get().defaultBlockState()));
 	
-	public static final RegistryObject<Block> BLOOD_ASPECT_PLANKS = REGISTER.register("blood_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> BREATH_ASPECT_PLANKS = REGISTER.register("breath_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> DOOM_ASPECT_PLANKS = REGISTER.register("doom_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> HEART_ASPECT_PLANKS = REGISTER.register("heart_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> HOPE_ASPECT_PLANKS = REGISTER.register("hope_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> LIFE_ASPECT_PLANKS = REGISTER.register("life_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> LIGHT_ASPECT_PLANKS = REGISTER.register("light_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> MIND_ASPECT_PLANKS = REGISTER.register("mind_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> RAGE_ASPECT_PLANKS = REGISTER.register("rage_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> SPACE_ASPECT_PLANKS = REGISTER.register("space_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> TIME_ASPECT_PLANKS = REGISTER.register("time_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> VOID_ASPECT_PLANKS = REGISTER.register("void_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> ROTTED_SHADEWOOD_LOG = REGISTER.register("rotted_shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 5).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG.get().defaultBlockState()));
+	public static final RegistryObject<Block> ROTTED_SHADEWOOD = REGISTER.register("rotted_shadewood", () -> new StrippableFlammableLogBlock(copy(ROTTED_SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_ROTTED_SHADEWOOD.get().defaultBlockState()));
 	
+	public static final RegistryObject<Block> STRIPPED_SHADEWOOD_LOG = REGISTER.register("stripped_shadewood_log", () -> new FlammableLogBlock(copy(SHADEWOOD_LOG.get())));
+	public static final RegistryObject<Block> STRIPPED_SHADEWOOD = REGISTER.register("stripped_shadewood", () -> new FlammableLogBlock(copy(SHADEWOOD_LOG.get())));
+	
+	public static final RegistryObject<Block> STRIPPED_SCARRED_SHADEWOOD_LOG = REGISTER.register("stripped_scarred_shadewood_log", () -> new FlammableLogBlock(copy(SCARRED_SHADEWOOD_LOG.get())));
+	public static final RegistryObject<Block> STRIPPED_SCARRED_SHADEWOOD = REGISTER.register("stripped_scarred_shadewood", () -> new FlammableLogBlock(copy(SCARRED_SHADEWOOD_LOG.get())));
+	
+	public static final RegistryObject<Block> STRIPPED_ROTTED_SHADEWOOD_LOG = REGISTER.register("stripped_rotted_shadewood_log", () -> new FlammableLogBlock(copy(ROTTED_SHADEWOOD_LOG.get())));
+	public static final RegistryObject<Block> STRIPPED_ROTTED_SHADEWOOD = REGISTER.register("stripped_rotted_shadewood", () -> new FlammableLogBlock(copy(ROTTED_SHADEWOOD_LOG.get())));
+	
+	//Treated
+	public static final RegistryObject<Block> TREATED_PLANKS = REGISTER.register("treated_planks", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<StairBlock> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), copy(TREATED_PLANKS.get())));
+	public static final RegistryObject<SlabBlock> TREATED_PLANKS_SLAB = REGISTER.register("treated_planks_slab", () -> new SlabBlock(copy(TREATED_PLANKS.get())));
+	public static final RegistryObject<Block> TREATED_BOOKSHELF = REGISTER.register("treated_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> TREATED_LADDER = REGISTER.register("treated_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	
+	//Aspect tree blocks
+	//Blood
+	public static final RegistryObject<Block> BLOOD_ASPECT_BOOKSHELF = REGISTER.register("blood_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> BLOOD_ASPECT_LADDER = REGISTER.register("blood_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<Block> BLOOD_ASPECT_LEAVES = REGISTER.register("blood_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> BREATH_ASPECT_LEAVES = REGISTER.register("breath_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> DOOM_ASPECT_LEAVES = REGISTER.register("doom_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> HEART_ASPECT_LEAVES = REGISTER.register("heart_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> HOPE_ASPECT_LEAVES = REGISTER.register("hope_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> LIFE_ASPECT_LEAVES = REGISTER.register("life_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> LIGHT_ASPECT_LEAVES = REGISTER.register("light_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> MIND_ASPECT_LEAVES = REGISTER.register("mind_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> RAGE_ASPECT_LEAVES = REGISTER.register("rage_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> SPACE_ASPECT_LEAVES = REGISTER.register("space_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> TIME_ASPECT_LEAVES = REGISTER.register("time_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	public static final RegistryObject<Block> VOID_ASPECT_LEAVES = REGISTER.register("void_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
-	
+	public static final RegistryObject<Block> BLOOD_ASPECT_LOG = REGISTER.register("blood_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> BLOOD_ASPECT_PLANKS = REGISTER.register("blood_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> BLOOD_ASPECT_SAPLING = REGISTER.register("blood_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Breath
+	public static final RegistryObject<Block> BREATH_ASPECT_BOOKSHELF = REGISTER.register("breath_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> BREATH_ASPECT_LADDER = REGISTER.register("breath_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> BREATH_ASPECT_LEAVES = REGISTER.register("breath_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> BREATH_ASPECT_LOG = REGISTER.register("breath_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> BREATH_ASPECT_PLANKS = REGISTER.register("breath_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> BREATH_ASPECT_SAPLING = REGISTER.register("breath_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Doom
+	public static final RegistryObject<Block> DOOM_ASPECT_BOOKSHELF = REGISTER.register("doom_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> DOOM_ASPECT_LADDER = REGISTER.register("doom_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> DOOM_ASPECT_LEAVES = REGISTER.register("doom_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> DOOM_ASPECT_LOG = REGISTER.register("doom_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> DOOM_ASPECT_PLANKS = REGISTER.register("doom_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> DOOM_ASPECT_SAPLING = REGISTER.register("doom_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Heart
+	public static final RegistryObject<Block> HEART_ASPECT_BOOKSHELF = REGISTER.register("heart_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> HEART_ASPECT_LADDER = REGISTER.register("heart_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> HEART_ASPECT_LEAVES = REGISTER.register("heart_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> HEART_ASPECT_LOG = REGISTER.register("heart_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> HEART_ASPECT_PLANKS = REGISTER.register("heart_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> HEART_ASPECT_SAPLING = REGISTER.register("heart_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Hope
+	public static final RegistryObject<Block> HOPE_ASPECT_BOOKSHELF = REGISTER.register("hope_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> HOPE_ASPECT_LADDER = REGISTER.register("hope_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> HOPE_ASPECT_LEAVES = REGISTER.register("hope_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> HOPE_ASPECT_LOG = REGISTER.register("hope_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> HOPE_ASPECT_PLANKS = REGISTER.register("hope_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> HOPE_ASPECT_SAPLING = REGISTER.register("hope_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Life
+	public static final RegistryObject<Block> LIFE_ASPECT_BOOKSHELF = REGISTER.register("life_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> LIFE_ASPECT_LADDER = REGISTER.register("life_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> LIFE_ASPECT_LEAVES = REGISTER.register("life_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> LIFE_ASPECT_LOG = REGISTER.register("life_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> LIFE_ASPECT_PLANKS = REGISTER.register("life_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> LIFE_ASPECT_SAPLING = REGISTER.register("life_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Light
+	public static final RegistryObject<Block> LIGHT_ASPECT_BOOKSHELF = REGISTER.register("light_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> LIGHT_ASPECT_LADDER = REGISTER.register("light_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> LIGHT_ASPECT_LEAVES = REGISTER.register("light_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> LIGHT_ASPECT_LOG = REGISTER.register("light_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> LIGHT_ASPECT_PLANKS = REGISTER.register("light_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> LIGHT_ASPECT_SAPLING = REGISTER.register("light_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Mind
+	public static final RegistryObject<Block> MIND_ASPECT_BOOKSHELF = REGISTER.register("mind_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> MIND_ASPECT_LADDER = REGISTER.register("mind_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> MIND_ASPECT_LEAVES = REGISTER.register("mind_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> MIND_ASPECT_LOG = REGISTER.register("mind_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> MIND_ASPECT_PLANKS = REGISTER.register("mind_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> MIND_ASPECT_SAPLING = REGISTER.register("mind_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Rage
+	public static final RegistryObject<Block> RAGE_ASPECT_BOOKSHELF = REGISTER.register("rage_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> RAGE_ASPECT_LADDER = REGISTER.register("rage_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> RAGE_ASPECT_LEAVES = REGISTER.register("rage_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> RAGE_ASPECT_LOG = REGISTER.register("rage_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> RAGE_ASPECT_PLANKS = REGISTER.register("rage_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> RAGE_ASPECT_SAPLING = REGISTER.register("rage_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Space
+	public static final RegistryObject<Block> SPACE_ASPECT_BOOKSHELF = REGISTER.register("space_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> SPACE_ASPECT_LADDER = REGISTER.register("space_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> SPACE_ASPECT_LEAVES = REGISTER.register("space_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> SPACE_ASPECT_LOG = REGISTER.register("space_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> SPACE_ASPECT_PLANKS = REGISTER.register("space_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> SPACE_ASPECT_SAPLING = REGISTER.register("space_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Time
+	public static final RegistryObject<Block> TIME_ASPECT_BOOKSHELF = REGISTER.register("time_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> TIME_ASPECT_LADDER = REGISTER.register("time_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> TIME_ASPECT_LEAVES = REGISTER.register("time_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> TIME_ASPECT_LOG = REGISTER.register("time_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> TIME_ASPECT_PLANKS = REGISTER.register("time_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> TIME_ASPECT_SAPLING = REGISTER.register("time_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	
+	//Void
+	public static final RegistryObject<Block> VOID_ASPECT_BOOKSHELF = REGISTER.register("void_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> VOID_ASPECT_LADDER = REGISTER.register("void_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> VOID_ASPECT_LEAVES = REGISTER.register("void_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
+	public static final RegistryObject<Block> VOID_ASPECT_LOG = REGISTER.register("void_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> VOID_ASPECT_PLANKS = REGISTER.register("void_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> VOID_ASPECT_SAPLING = REGISTER.register("void_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	
-	//Bookshelves
-	public static final RegistryObject<Block> BLOOD_ASPECT_BOOKSHELF = REGISTER.register("blood_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> BREATH_ASPECT_BOOKSHELF = REGISTER.register("breath_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> DOOM_ASPECT_BOOKSHELF = REGISTER.register("doom_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> HEART_ASPECT_BOOKSHELF = REGISTER.register("heart_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> HOPE_ASPECT_BOOKSHELF = REGISTER.register("hope_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> LIFE_ASPECT_BOOKSHELF = REGISTER.register("life_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> LIGHT_ASPECT_BOOKSHELF = REGISTER.register("light_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> MIND_ASPECT_BOOKSHELF = REGISTER.register("mind_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> RAGE_ASPECT_BOOKSHELF = REGISTER.register("rage_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> SPACE_ASPECT_BOOKSHELF = REGISTER.register("space_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> TIME_ASPECT_BOOKSHELF = REGISTER.register("time_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> VOID_ASPECT_BOOKSHELF = REGISTER.register("void_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	
-	public static final RegistryObject<Block> GLOWING_BOOKSHELF = REGISTER.register("glowing_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> FROST_BOOKSHELF = REGISTER.register("frost_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> RAINBOW_BOOKSHELF = REGISTER.register("rainbow_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> END_BOOKSHELF = REGISTER.register("end_bookshelf", () -> new FlammableBlock(1, 250, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> DEAD_BOOKSHELF = REGISTER.register("dead_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> TREATED_BOOKSHELF = REGISTER.register("treated_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	
-	//Ladders
-	public static final RegistryObject<Block> BLOOD_ASPECT_LADDER = REGISTER.register("blood_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> BREATH_ASPECT_LADDER = REGISTER.register("breath_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> DOOM_ASPECT_LADDER = REGISTER.register("doom_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> HEART_ASPECT_LADDER = REGISTER.register("heart_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> HOPE_ASPECT_LADDER = REGISTER.register("hope_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> LIFE_ASPECT_LADDER = REGISTER.register("life_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> LIGHT_ASPECT_LADDER = REGISTER.register("light_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> MIND_ASPECT_LADDER = REGISTER.register("mind_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> RAGE_ASPECT_LADDER = REGISTER.register("rage_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> SPACE_ASPECT_LADDER = REGISTER.register("space_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> TIME_ASPECT_LADDER = REGISTER.register("time_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> VOID_ASPECT_LADDER = REGISTER.register("void_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	
-	public static final RegistryObject<Block> GLOWING_LADDER = REGISTER.register("glowing_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> FROST_LADDER = REGISTER.register("frost_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> RAINBOW_LADDER = REGISTER.register("rainbow_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> END_LADDER = REGISTER.register("end_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> DEAD_LADDER = REGISTER.register("dead_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> TREATED_LADDER = REGISTER.register("treated_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	//Land Plant Blocks
 	public static final RegistryObject<Block> GLOWING_MUSHROOM = REGISTER.register("glowing_mushroom", () -> new GlowingMushroomBlock(Block.Properties.of().mapColor(MapColor.DIAMOND).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11).offsetType(BlockBehaviour.OffsetType.XZ)));
@@ -400,16 +550,13 @@ public class MSBlocks
 	public static final RegistryObject<Block> BLOOMING_CACTUS = REGISTER.register("blooming_cactus", () -> new DesertFloraBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
 	public static final RegistryObject<Block> PETRIFIED_GRASS = REGISTER.register("petrified_grass", () -> new PetrifiedFloraBlock(Block.Properties.of().mapColor(DyeColor.GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE).offsetType(BlockBehaviour.OffsetType.XYZ), PetrifiedFloraBlock.GRASS_SHAPE));
 	public static final RegistryObject<Block> PETRIFIED_POPPY = REGISTER.register("petrified_poppy", () -> new PetrifiedFloraBlock(Block.Properties.of().mapColor(DyeColor.GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE).offsetType(BlockBehaviour.OffsetType.XZ), PetrifiedFloraBlock.FLOWER_SHAPE));
-	
 	public static final RegistryObject<Block> GLOWING_MUSHROOM_VINES = REGISTER.register("glowing_mushroom_vines", () -> new GlowingMushroomVinesBlock(Block.Properties.of().mapColor(MapColor.DIAMOND).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11).offsetType(BlockBehaviour.OffsetType.XZ)));
-	
 	public static final RegistryObject<StemGrownBlock> STRAWBERRY = REGISTER.register("strawberry", () -> new StrawberryBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).pushReaction(PushReaction.DESTROY).strength(1.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<AttachedStemBlock> ATTACHED_STRAWBERRY_STEM = REGISTER.register("attached_strawberry_stem", () -> new AttachedStemBlock(STRAWBERRY.get(), MSItems.STRAWBERRY_CHUNK, Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
 	public static final RegistryObject<StemBlock> STRAWBERRY_STEM = REGISTER.register("strawberry_stem", () -> new StemBlock(STRAWBERRY.get(), MSItems.STRAWBERRY_CHUNK, Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
-	
+	public static final RegistryObject<Block> END_GRASS = REGISTER.register("end_grass", () -> new EndGrassBlock(Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	public static final RegistryObject<Block> TALL_END_GRASS = REGISTER.register("tall_end_grass", () -> new TallEndGrassBlock(Block.Properties.of().mapColor(DyeColor.GREEN).replaceable().ignitedByLava().pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0.1F).sound(SoundType.NETHER_WART).offsetType(BlockBehaviour.OffsetType.XYZ)));
 	public static final RegistryObject<Block> GLOWFLOWER = REGISTER.register("glowflower", () -> new FlowerBlock(MobEffects.GLOWING, 20, Block.Properties.of().mapColor(DyeColor.YELLOW).pushReaction(PushReaction.DESTROY).noCollission().strength(0).lightLevel(state -> 12).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
-	
 	
 	
 	//Special Land Blocks
@@ -423,70 +570,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> NAKAGATOR_STATUE = REGISTER.register("nakagator_statue", () -> new CustomShapeBlock(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(0.5F), MSBlockShapes.NAKAGATOR_STATUE));
 	
 	
-	
-	//Structure Land Blocks
-	public static final RegistryObject<StairBlock> BLACK_CHESS_BRICK_STAIRS = REGISTER.register("black_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_CHESS_BRICKS.get().defaultBlockState(), copy(BLACK_CHESS_BRICKS.get())));
-	public static final RegistryObject<StairBlock> DARK_GRAY_CHESS_BRICK_STAIRS = REGISTER.register("dark_gray_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.DARK_GRAY_CHESS_BRICKS.get().defaultBlockState(), copy(DARK_GRAY_CHESS_BRICKS.get())));
-	public static final RegistryObject<StairBlock> LIGHT_GRAY_CHESS_BRICK_STAIRS = REGISTER.register("light_gray_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.LIGHT_GRAY_CHESS_BRICKS.get().defaultBlockState(), copy(LIGHT_GRAY_CHESS_BRICKS.get())));
-	public static final RegistryObject<StairBlock> WHITE_CHESS_BRICK_STAIRS = REGISTER.register("white_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.WHITE_CHESS_BRICKS.get().defaultBlockState(), copy(WHITE_CHESS_BRICKS.get())));
-	public static final RegistryObject<StairBlock> COARSE_STONE_STAIRS = REGISTER.register("coarse_stone_stairs", () -> new StairBlock(() -> MSBlocks.COARSE_STONE.get().defaultBlockState(), copy(COARSE_STONE.get())));
-	public static final RegistryObject<StairBlock> COARSE_STONE_BRICK_STAIRS = REGISTER.register("coarse_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.COARSE_STONE_BRICKS.get().defaultBlockState(), copy(COARSE_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> SHADE_STAIRS = REGISTER.register("shade_stairs", () -> new StairBlock(() -> MSBlocks.SHADE_STONE.get().defaultBlockState(), copy(SHADE_STONE.get())));
-	public static final RegistryObject<StairBlock> SHADE_BRICK_STAIRS = REGISTER.register("shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.SHADE_BRICKS.get().defaultBlockState(), copy(SHADE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> FROST_TILE_STAIRS = REGISTER.register("frost_tile_stairs", () -> new StairBlock(() -> MSBlocks.FROST_TILE.get().defaultBlockState(), copy(FROST_TILE.get())));
-	public static final RegistryObject<StairBlock> FROST_BRICK_STAIRS = REGISTER.register("frost_brick_stairs", () -> new StairBlock(() -> MSBlocks.FROST_BRICKS.get().defaultBlockState(), copy(FROST_BRICKS.get())));
-	public static final RegistryObject<StairBlock> CAST_IRON_STAIRS = REGISTER.register("cast_iron_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON.get().defaultBlockState(), copy(CAST_IRON.get())));
-	public static final RegistryObject<StairBlock> BLACK_STONE_STAIRS = REGISTER.register("black_stone_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_STONE.get().defaultBlockState(), copy(BLACK_STONE.get())));
-	public static final RegistryObject<StairBlock> BLACK_STONE_BRICK_STAIRS = REGISTER.register("black_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState(), copy(BLACK_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> FLOWERY_MOSSY_STONE_BRICK_STAIRS = REGISTER.register("flowery_mossy_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get().defaultBlockState(), copy(FLOWERY_MOSSY_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> MYCELIUM_STAIRS = REGISTER.register("mycelium_stairs", () -> new StairBlock(() -> MSBlocks.MYCELIUM_STONE.get().defaultBlockState(), copy(MYCELIUM_STONE.get())));
-	public static final RegistryObject<StairBlock> MYCELIUM_BRICK_STAIRS = REGISTER.register("mycelium_brick_stairs", () -> new StairBlock(() -> MSBlocks.MYCELIUM_BRICKS.get().defaultBlockState(), copy(MYCELIUM_BRICKS.get())));
-	public static final RegistryObject<StairBlock> CHALK_STAIRS = REGISTER.register("chalk_stairs", () -> new StairBlock(() -> MSBlocks.CHALK.get().defaultBlockState(), copy(CHALK.get())));
-	public static final RegistryObject<StairBlock> CHALK_BRICK_STAIRS = REGISTER.register("chalk_brick_stairs", () -> new StairBlock(() -> MSBlocks.CHALK_BRICKS.get().defaultBlockState(), copy(CHALK_BRICKS.get())));
-	public static final RegistryObject<StairBlock> PINK_STONE_STAIRS = REGISTER.register("pink_stone_stairs", () -> new StairBlock(() -> MSBlocks.PINK_STONE.get().defaultBlockState(), copy(PINK_STONE.get())));
-	public static final RegistryObject<StairBlock> PINK_STONE_BRICK_STAIRS = REGISTER.register("pink_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.PINK_STONE_BRICKS.get().defaultBlockState(), copy(PINK_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> BROWN_STONE_STAIRS = REGISTER.register("brown_stone_stairs", () -> new StairBlock(() -> MSBlocks.BROWN_STONE.get().defaultBlockState(), copy(BROWN_STONE.get())));
-	public static final RegistryObject<StairBlock> BROWN_STONE_BRICK_STAIRS = REGISTER.register("brown_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.BROWN_STONE_BRICKS.get().defaultBlockState(), copy(BROWN_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> GREEN_STONE_STAIRS = REGISTER.register("green_stone_stairs", () -> new StairBlock(() -> MSBlocks.GREEN_STONE.get().defaultBlockState(), copy(GREEN_STONE.get())));
-	public static final RegistryObject<StairBlock> GREEN_STONE_BRICK_STAIRS = REGISTER.register("green_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), copy(GREEN_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> RAINBOW_PLANKS_STAIRS = REGISTER.register("rainbow_planks_stairs", () -> new StairBlock(() -> MSBlocks.RAINBOW_PLANKS.get().defaultBlockState(), copy(RAINBOW_PLANKS.get())));
-	public static final RegistryObject<StairBlock> END_PLANKS_STAIRS = REGISTER.register("end_planks_stairs", () -> new StairBlock(() -> MSBlocks.END_PLANKS.get().defaultBlockState(), copy(END_PLANKS.get())));
-	public static final RegistryObject<StairBlock> DEAD_PLANKS_STAIRS = REGISTER.register("dead_planks_stairs", () -> new StairBlock(() -> MSBlocks.DEAD_PLANKS.get().defaultBlockState(), copy(DEAD_PLANKS.get())));
-	public static final RegistryObject<StairBlock> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), copy(TREATED_PLANKS.get())));
-	
-	//TODO when walking down steep stairs, players take fall damage that cannot be circumvented by the fallOn function. This includes when there is only an air block underneath them
-	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = REGISTER.register("steep_green_stone_brick_stairs_base", () -> new CustomShapeBlock(copy(GREEN_STONE.get()), MSBlockShapes.STEEP_STAIRS_BASE));
-	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = REGISTER.register("steep_green_stone_brick_stairs_top", () -> new CustomShapeBlock(copy(GREEN_STONE.get()), MSBlockShapes.STEEP_STAIRS_TOP));
-	
-	public static final RegistryObject<SlabBlock> BLACK_CHESS_BRICK_SLAB = REGISTER.register("black_chess_brick_slab", () -> new SlabBlock(copy(BLACK_CHESS_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> DARK_GRAY_CHESS_BRICK_SLAB = REGISTER.register("dark_gray_chess_brick_slab", () -> new SlabBlock(copy(DARK_GRAY_CHESS_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> LIGHT_GRAY_CHESS_BRICK_SLAB = REGISTER.register("light_gray_chess_brick_slab", () -> new SlabBlock(copy(LIGHT_GRAY_CHESS_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> WHITE_CHESS_BRICK_SLAB = REGISTER.register("white_chess_brick_slab", () -> new SlabBlock(copy(WHITE_CHESS_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> FLOWERY_MOSSY_STONE_BRICK_SLAB = REGISTER.register("flowery_mossy_stone_brick_slab", () -> new SlabBlock(copy(FLOWERY_MOSSY_STONE_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> COARSE_STONE_SLAB = REGISTER.register("coarse_stone_slab", () -> new SlabBlock(copy(COARSE_STONE.get())));
-	public static final RegistryObject<SlabBlock> COARSE_STONE_BRICK_SLAB = REGISTER.register("coarse_stone_brick_slab", () -> new SlabBlock(copy(COARSE_STONE_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> SHADE_SLAB = REGISTER.register("shade_slab", () -> new SlabBlock(copy(SHADE_STONE.get())));
-	public static final RegistryObject<SlabBlock> SHADE_BRICK_SLAB = REGISTER.register("shade_brick_slab", () -> new SlabBlock(copy(SHADE_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> FROST_TILE_SLAB = REGISTER.register("frost_tile_slab", () -> new SlabBlock(copy(FROST_TILE.get())));
-	public static final RegistryObject<SlabBlock> FROST_BRICK_SLAB = REGISTER.register("frost_brick_slab", () -> new SlabBlock(copy(FROST_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> BLACK_STONE_SLAB = REGISTER.register("black_stone_slab", () -> new SlabBlock(copy(BLACK_STONE.get())));
-	public static final RegistryObject<SlabBlock> BLACK_STONE_BRICK_SLAB = REGISTER.register("black_stone_brick_slab", () -> new SlabBlock(copy(BLACK_STONE_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> MYCELIUM_SLAB = REGISTER.register("mycelium_slab", () -> new SlabBlock(copy(MYCELIUM_STONE.get())));
-	public static final RegistryObject<SlabBlock> MYCELIUM_BRICK_SLAB = REGISTER.register("mycelium_brick_slab", () -> new SlabBlock(copy(MYCELIUM_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> CHALK_SLAB = REGISTER.register("chalk_slab", () -> new SlabBlock(copy(CHALK.get())));
-	public static final RegistryObject<SlabBlock> CHALK_BRICK_SLAB = REGISTER.register("chalk_brick_slab", () -> new SlabBlock(copy(CHALK_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> PINK_STONE_SLAB = REGISTER.register("pink_stone_slab", () -> new SlabBlock(copy(PINK_STONE.get())));
-	public static final RegistryObject<SlabBlock> PINK_STONE_BRICK_SLAB = REGISTER.register("pink_stone_brick_slab", () -> new SlabBlock(copy(PINK_STONE_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> BROWN_STONE_SLAB = REGISTER.register("brown_stone_slab", () -> new SlabBlock(copy(BROWN_STONE.get())));
-	public static final RegistryObject<SlabBlock> BROWN_STONE_BRICK_SLAB = REGISTER.register("brown_stone_brick_slab", () -> new SlabBlock(copy(BROWN_STONE_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> GREEN_STONE_SLAB = REGISTER.register("green_stone_slab", () -> new SlabBlock(copy(GREEN_STONE.get())));
-	public static final RegistryObject<SlabBlock> GREEN_STONE_BRICK_SLAB = REGISTER.register("green_stone_brick_slab", () -> new SlabBlock(copy(GREEN_STONE_BRICKS.get())));
-	public static final RegistryObject<SlabBlock> RAINBOW_PLANKS_SLAB = REGISTER.register("rainbow_planks_slab", () -> new SlabBlock(copy(RAINBOW_PLANKS.get())));
-	public static final RegistryObject<SlabBlock> END_PLANKS_SLAB = REGISTER.register("end_planks_slab", () -> new SlabBlock(copy(END_PLANKS.get())));
-	public static final RegistryObject<SlabBlock> DEAD_PLANKS_SLAB = REGISTER.register("dead_planks_slab", () -> new SlabBlock(copy(DEAD_PLANKS.get())));
-	public static final RegistryObject<SlabBlock> TREATED_PLANKS_SLAB = REGISTER.register("treated_planks_slab", () -> new SlabBlock(copy(TREATED_PLANKS.get())));
-	
-	
+	//Redstone Blocks
 	public static final RegistryObject<Block> TRAJECTORY_BLOCK = REGISTER.register("trajectory_block", () -> new TrajectoryBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> STAT_STORER = REGISTER.register("stat_storer", () -> new StatStorerBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> REMOTE_OBSERVER = REGISTER.register("remote_observer", () -> new RemoteObserverBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL)));
@@ -522,7 +606,6 @@ public class MSBlocks
 	public static final RegistryObject<Block> XNOR_GATE_BLOCK = REGISTER.register("xnor_gate_block", () -> new LogicGateBlock(copy(AND_GATE_BLOCK.get()), LogicGateBlock.State.XNOR));
 	
 	
-	
 	//Core Functional Land Blocks
 	public static final RegistryObject<Block> GATE = REGISTER.register("gate", () -> new GateBlock(Block.Properties.of().pushReaction(PushReaction.BLOCK).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noLootTable()));
 	public static final RegistryObject<Block> GATE_MAIN = REGISTER.register("gate_main", () -> new GateBlock.Main(Block.Properties.of().pushReaction(PushReaction.BLOCK).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noLootTable()));
@@ -531,8 +614,6 @@ public class MSBlocks
 	
 	
 	//Misc Functional Land Blocks
-	
-	
 	
 	//Sburb Machines
 	public static final RegistryObject<Block> CRUXTRUDER_LID = REGISTER.register("cruxtruder_lid", () -> new CruxtruderLidBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(1.0F)));
@@ -568,12 +649,10 @@ public class MSBlocks
 	public static final RegistryObject<Block> POWER_HUB = REGISTER.register("power_hub", () -> new PowerHubBlock(Block.Properties.of().mapColor(MapColor.METAL).strength(2).sound(SoundType.METAL)));
 	
 	
-	
 	//Misc Core Objects
 	public static final RegistryObject<Block> CRUXITE_DOWEL = REGISTER.register("cruxite_dowel", () -> new CruxiteDowelBlock(Block.Properties.of().instrument(NoteBlockInstrument.HAT).pushReaction(PushReaction.DESTROY).strength(0.0F)));
 	public static final RegistryObject<Block> EMERGING_CRUXITE_DOWEL = REGISTER.register("emerging_cruxite_dowel", () -> new EmergingCruxiteDowelBlock(Block.Properties.of().instrument(NoteBlockInstrument.HAT).strength(0.0F)));
 	public static final LotusTimeCapsuleMultiblock LOTUS_TIME_CAPSULE_BLOCK = new LotusTimeCapsuleMultiblock(REGISTER);
-	
 	
 	
 	//Misc Alchemy Semi-Plants
@@ -581,6 +660,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> WOODEN_CACTUS = REGISTER.register("wooden_cactus", () -> new SpecialCactusBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).randomTicks().strength(1.0F, 2.5F).sound(SoundType.WOOD)));
 	
 	
+	//Cakes
 	public static final RegistryObject<Block> APPLE_CAKE = REGISTER.register("apple_cake", () -> new SimpleCakeBlock(copy(Blocks.CAKE), 2, 0.5F, null));
 	public static final RegistryObject<Block> BLUE_CAKE = REGISTER.register("blue_cake", () -> new SimpleCakeBlock(copy(Blocks.CAKE), 2, 0.3F, player -> player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 150, 0))));
 	public static final RegistryObject<Block> COLD_CAKE = REGISTER.register("cold_cake", () -> new SimpleCakeBlock(copy(Blocks.CAKE), 2, 0.3F, player -> {
@@ -611,7 +691,7 @@ public class MSBlocks
 	public static final RegistryObject<ButtonBlock> WOODEN_EXPLOSIVE_BUTTON = REGISTER.register("wooden_explosive_button", () -> new SpecialButtonBlock(Block.Properties.of().pushReaction(PushReaction.DESTROY).noCollission().strength(0.5F).sound(SoundType.WOOD), true, BlockSetType.OAK, 30, true));
 	public static final RegistryObject<ButtonBlock> STONE_EXPLOSIVE_BUTTON = REGISTER.register("stone_explosive_button", () -> new SpecialButtonBlock(Block.Properties.of().pushReaction(PushReaction.DESTROY).noCollission().strength(0.5F).sound(SoundType.STONE), true, BlockSetType.STONE, 20, false));
 	
-	
+	//Misc Clutter
 	public static final RegistryObject<Block> BLENDER = REGISTER.register("blender", () -> new CustomShapeBlock(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F).sound(SoundType.METAL), MSBlockShapes.BLENDER));
 	public static final RegistryObject<Block> CHESSBOARD = REGISTER.register("chessboard", () -> new CustomShapeBlock(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F), MSBlockShapes.CHESSBOARD));
 	public static final RegistryObject<Block> MINI_FROG_STATUE = REGISTER.register("mini_frog_statue", () -> new CustomShapeBlock(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F), MSBlockShapes.FROG_STATUE));

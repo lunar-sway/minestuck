@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network.computer;
 
-import com.mraof.minestuck.network.PlayToBothPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SkaianetInfoPacket implements PlayToBothPacket
+public class SkaianetInfoPacket implements MSPacket.PlayToBoth
 {
 	public int playerId;
 	public boolean isClientResuming, isServerResuming;
