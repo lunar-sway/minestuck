@@ -43,24 +43,12 @@ public class MSFluidType extends FluidType
 		
 		entity.moveRelative(0.02F, movementVector);
 		entity.move(MoverType.SELF, entity.getDeltaMovement());
-		if(entity.getFluidTypeHeight(fluidType) <= entity.getFluidJumpThreshold())
-		{
-			//barely submerged
-			entity.setDeltaMovement(entity.getDeltaMovement().multiply(fluidStyle.xzMovement, fluidStyle.yMovement, fluidStyle.xzMovement));
-			Vec3 fallAdjustedMoveVec = entity.getFluidFallingAdjustedMovement(gravity / 8.0D, isSinking, entity.getDeltaMovement());
-			entity.setDeltaMovement(fallAdjustedMoveVec);
-			if(!entity.isSwimming() && fluidStyle != Style.VISCOUS)
-				splashSounds(entity, fluidStyle);
-		} else
-		{
-			//partially or fully submerged
-			entity.setDeltaMovement(entity.getDeltaMovement().scale(fluidStyle.xzMovement));
-		}
 		
-		if(!entity.isNoGravity())
-		{
-			entity.setDeltaMovement(entity.getDeltaMovement().add(0.0D, -gravity / 8.0D, 0.0D));
-		}
+		entity.setDeltaMovement(entity.getDeltaMovement().multiply(fluidStyle.xzMovement, fluidStyle.yMovement, fluidStyle.xzMovement));
+		Vec3 fallAdjustedMoveVec = entity.getFluidFallingAdjustedMovement(gravity, isSinking, entity.getDeltaMovement());
+		entity.setDeltaMovement(fallAdjustedMoveVec);
+		//if(!entity.isSwimming() && fluidStyle != Style.VISCOUS)
+		//	splashSounds(entity, fluidStyle);
 		
 		Vec3 moveVec = entity.getDeltaMovement();
 		if(entity.horizontalCollision && entity.isFree(moveVec.x, moveVec.y + 0.6D - entity.getY() + initialY, moveVec.z))

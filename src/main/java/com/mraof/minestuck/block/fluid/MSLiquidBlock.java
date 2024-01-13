@@ -20,13 +20,13 @@ import java.util.function.Supplier;
 /**
  * This class allows for implementing most fluid blocks in the game
  */
-public class FlowingModFluidBlock extends LiquidBlock implements IMSFog
+public class MSLiquidBlock extends LiquidBlock implements IMSFog
 {
 	protected final Vec3 fogColor;
 	protected final float fogDensity;
 	protected final boolean underwaterParticles;
 	
-	public FlowingModFluidBlock(Supplier<? extends FlowingFluid> fluid, Vec3 fogColor, float fogDensity, boolean underwaterParticles, Properties properties)
+	public MSLiquidBlock(Supplier<? extends FlowingFluid> fluid, Vec3 fogColor, float fogDensity, boolean underwaterParticles, Properties properties)
 	{
 		super(fluid, properties);
 		this.fogColor = fogColor;
@@ -53,7 +53,7 @@ public class FlowingModFluidBlock extends LiquidBlock implements IMSFog
 		
 		ambientSounds(state, level, blockPos, rand);
 		
-		if(underwaterParticles && rand.nextInt(20) == 0)
+		if(underwaterParticles && rand.nextInt(20) == 0 && state.getFluidState().isSource())
 		{
 			level.addParticle(ParticleTypes.UNDERWATER, blockPos.getX() + rand.nextDouble(), blockPos.getY() + rand.nextDouble(), blockPos.getZ() + rand.nextDouble(), 0.0D, 0.0D, 0.0D);
 		}

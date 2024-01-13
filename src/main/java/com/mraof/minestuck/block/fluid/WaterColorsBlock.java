@@ -13,11 +13,11 @@ import java.util.function.Supplier;
 /**
  * specifically for implementing fluid blocks that change fluid fog color on movement
  */
-public class FlowingWaterColorsBlock extends LiquidBlock implements IMSFog
+public class WaterColorsBlock extends LiquidBlock implements IMSFog
 {
 	private final float fogDensity;
 	
-	public FlowingWaterColorsBlock(Supplier<? extends FlowingFluid> fluid, float fogDensity, Properties properties)
+	public WaterColorsBlock(Supplier<? extends FlowingFluid> fluid, float fogDensity, Properties properties)
 	{
 		super(fluid, properties);
 		this.fogDensity = fogDensity;
