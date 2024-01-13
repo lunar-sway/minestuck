@@ -68,6 +68,7 @@ public final class SburbConnection
 			
 			Session session = skaianet.sessionHandler.getPlayerSession(this.getClientIdentifier());
 			serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+			session.updatePlayerSet();
 			skaianet.sessionHandler.onConnectionChainBroken(session);
 		}
 	}
@@ -81,6 +82,7 @@ public final class SburbConnection
 		skaianet.sessionHandler.prepareSessionFor(clientIdentifier, server);    //Make sure that it is fine to add the server here session-wise
 		
 		serverIdentifier = Objects.requireNonNull(server);
+		skaianet.sessionHandler.getPlayerSession(this.getClientIdentifier()).updatePlayerSet();
 		skaianet.infoTracker.markDirty(serverIdentifier);
 		if(skaianet.getOrCreateData(this.clientIdentifier).hasEntered())
 			skaianet.infoTracker.markLandChainDirty();

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.alchemy.GristGutter;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
@@ -30,6 +29,7 @@ public final class Session
 	
 	final SkaianetHandler skaianetHandler;
 	private final Set<SburbConnection> connections = new HashSet<>();
+	private final Set<PlayerIdentifier> players = new HashSet<>();
 	private final GristGutter gutter;
 	
 	/**
@@ -43,6 +43,7 @@ public final class Session
 	void inheritFrom(Session other)
 	{
 		connections.addAll(other.connections);
+		updatePlayerSet();
 		
 		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
 		// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
@@ -62,7 +63,7 @@ public final class Session
 		if(this.connections.isEmpty())
 			return false;
 		
-		return this.getPlayerList().stream().allMatch(player -> {
+		return this.getPlayers().stream().allMatch(player -> {
 			SburbPlayerData playerData = skaianetHandler.getOrCreateData(player);
 			return playerData.hasEntered() && playerData.primaryServerPlayer().isPresent();
 		});
@@ -87,37 +88,35 @@ public final class Session
 	 */
 	public boolean containsPlayer(PlayerIdentifier player)
 	{
-		if(player.equals(IdentifierHandler.NULL_IDENTIFIER))
-			return false;
-		for(SburbConnection c : connections)
-			if(c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player))
-				return true;
-		return false;
+		return players.contains(player);
 	}
 	
 	/**
 	 * Creates a list with all players in the session.
 	 * @return Returns a list with the players identifiers.
 	 */
-	public Set<PlayerIdentifier> getPlayerList()
+	public Set<PlayerIdentifier> getPlayers()
 	{
-		Set<PlayerIdentifier> list = new HashSet<>();
+		return players;
+	}
+	
+	void updatePlayerSet()
+	{
+		players.clear();
 		for(SburbConnection c : this.connections)
 		{
-			list.add(c.getClientIdentifier());
+			players.add(c.getClientIdentifier());
 			if(c.hasServerPlayer())
-				list.add(c.getServerIdentifier());
+				players.add(c.getServerIdentifier());
 		}
 		
 		if(skaianetHandler.sessionHandler instanceof GlobalSessionHandler)
-			list.addAll(skaianetHandler.predefineData.keySet());
-		
-		return list;
+			players.addAll(skaianetHandler.predefineData.keySet());
 	}
 	
 	boolean isTitleUsed(@Nonnull Title newTitle)
 	{
-		for(PlayerIdentifier player : this.getPlayerList())
+		for(PlayerIdentifier player : this.getPlayers())
 		{
 			Title title = PlayerSavedData.getData(player, skaianetHandler.mcServer).getTitle();
 			if(newTitle.equals(title))
@@ -138,7 +137,7 @@ public final class Session
 	Set<Title> getUsedTitles(@Nullable PlayerIdentifier ignore)
 	{
 		Set<Title> titles = new HashSet<>();
-		for(PlayerIdentifier player : this.getPlayerList())
+		for(PlayerIdentifier player : this.getPlayers())
 		{
 			if(player.equals(ignore))
 				continue;
@@ -164,7 +163,7 @@ public final class Session
 	List<TitleLandType> getUsedTitleLandTypes(@Nullable PlayerIdentifier ignore)
 	{
 		List<TitleLandType> types = new ArrayList<>();
-		for(PlayerIdentifier player : this.getPlayerList())
+		for(PlayerIdentifier player : this.getPlayers())
 		{
 			if(player.equals(ignore))
 				continue;
@@ -189,7 +188,7 @@ public final class Session
 	List<TerrainLandType> getUsedTerrainLandTypes(@Nullable PlayerIdentifier ignore)
 	{
 		List<TerrainLandType> types = new ArrayList<>();
-		for(PlayerIdentifier player : this.getPlayerList())
+		for(PlayerIdentifier player : this.getPlayers())
 		{
 			if(player.equals(ignore))
 				continue;
@@ -261,16 +260,19 @@ public final class Session
 	void addConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		connections.add(new SburbConnection(client, server, skaianetHandler));
+		updatePlayerSet();
 	}
 	
 	void removeConnectionIfPresent(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		connections.removeIf(connection -> connection.getClientIdentifier().equals(client) && connection.getServerIdentifier().equals(server));
+		updatePlayerSet();
 	}
 	
 	void removeOverlap(Session otherSession)
 	{
 		connections.removeAll(otherSession.connections);
+		updatePlayerSet();
 	}
 	
 	Stream<SburbConnection> primaryConnections()

@@ -115,7 +115,7 @@ public final class SburbHandler
 			return Integer.MAX_VALUE;
 		
 		int count = -1;
-		for(PlayerIdentifier player : s.getPlayerList())
+		for(PlayerIdentifier player : s.getPlayers())
 			if(SburbPlayerData.get(player, mcServer).hasEntered())
 				count++;
 		if(!SburbPlayerData.get(client, mcServer).hasEntered())

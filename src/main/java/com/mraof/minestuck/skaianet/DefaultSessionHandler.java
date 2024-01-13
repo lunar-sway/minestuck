@@ -105,7 +105,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	{
 		if(sessions.contains(session))
 			throw new IllegalStateException("Session has already been added");
-		else if(session.getPlayerList().stream().anyMatch(player -> this.getPlayerSession(player) != null))
+		else if(session.getPlayers().stream().anyMatch(player -> this.getPlayerSession(player) != null))
 			throw new IllegalStateException("Session contained connections that have already been added");
 		
 		sessions.add(session);

@@ -71,7 +71,7 @@ public class GristGutter
 	{
 		PlayerSavedData playerSavedData = PlayerSavedData.get(ServerLifecycleHooks.getCurrentServer());
 		double gutterMultiplier = 0;
-		for(PlayerIdentifier player : this.session.getPlayerList())
+		for(PlayerIdentifier player : this.session.getPlayers())
 		{
 			PlayerData data = playerSavedData.getData(player);
 			gutterMultiplier += data.getGutterMultipler();
@@ -148,7 +148,7 @@ public class GristGutter
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 			{
-				session.getGristGutter().distributeToPlayers(session.getPlayerList(), event.getServer());
+				session.getGristGutter().distributeToPlayers(session.getPlayers(), event.getServer());
 			}
 		}
 	}

@@ -52,7 +52,7 @@ public class DataCheckerManager
 	private static CompoundTag createSessionDataTag(MinecraftServer mcServer, Session session)
 	{
 		ListTag connectionList = new ListTag();
-		for(PlayerIdentifier player : session.getPlayerList())
+		for(PlayerIdentifier player : session.getPlayers())
 			connectionList.add(createPlayerDataTag(player, mcServer));
 		
 		CompoundTag sessionTag = new CompoundTag();

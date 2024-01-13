@@ -97,6 +97,7 @@ public final class SkaianetHandler extends SavedData
 		for(int i = 0; i < connectionList.size(); i++)
 			activeConnections.add(ActiveConnection.read(connectionList.getCompound(i)));
 		
+		sessionHandler.getSessions().forEach(Session::updatePlayerSet);
 		sessionHandler.getSessions().forEach(Session::checkIfCompleted);
 	}
 	
