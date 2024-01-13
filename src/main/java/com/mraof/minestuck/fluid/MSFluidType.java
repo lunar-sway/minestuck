@@ -1,5 +1,6 @@
 package com.mraof.minestuck.fluid;
 
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,6 +9,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class MSFluidType extends FluidType
 {
@@ -47,8 +52,13 @@ public class MSFluidType extends FluidType
 		entity.setDeltaMovement(entity.getDeltaMovement().multiply(fluidStyle.xzMovement, fluidStyle.yMovement, fluidStyle.xzMovement));
 		Vec3 fallAdjustedMoveVec = entity.getFluidFallingAdjustedMovement(gravity, isSinking, entity.getDeltaMovement());
 		entity.setDeltaMovement(fallAdjustedMoveVec);
-		//if(!entity.isSwimming() && fluidStyle != Style.VISCOUS)
-		//	splashSounds(entity, fluidStyle);
+		
+		LastFluidTickData data = entity.getCapability(MSCapabilities.LAST_FLUID_TICK).orElseThrow(IllegalStateException::new);
+		long tick = entity.level().getGameTime();
+		long lastTick = Objects.requireNonNullElse(data.lastTickMap.get(fluidType), 0L);
+		
+		if(!entity.isSwimming() && fluidStyle != Style.VISCOUS && tick != lastTick + 1)
+			splashSounds(entity, fluidStyle);
 		
 		Vec3 moveVec = entity.getDeltaMovement();
 		if(entity.horizontalCollision && entity.isFree(moveVec.x, moveVec.y + 0.6D - entity.getY() + initialY, moveVec.z))
@@ -58,16 +68,16 @@ public class MSFluidType extends FluidType
 		
 		swimSounds(entity, fluidStyle);
 		
+		data.lastTickMap.put(fluidType, tick);
+		
 		return true;
 	}
 	
 	private static void splashSounds(LivingEntity entity, Style movementType)
 	{
+		//TODO adaptive volume? and conditionally use `SoundEvents.PLAYER_SPLASH_HIGH_SPEED`?
 		SoundEvent splashSound = entity instanceof Player ? SoundEvents.PLAYER_SPLASH : SoundEvents.GENERIC_SPLASH;
-		if(passesMovementThreshold(entity) && entity.yOld > entity.getY())
-		{
-			entity.playSound(splashSound, 0.25F, movementType.soundPitch);
-		}
+		entity.playSound(splashSound, 0.25F, movementType.soundPitch);
 	}
 	
 	static boolean passesMovementThreshold(LivingEntity entity)
@@ -92,5 +102,10 @@ public class MSFluidType extends FluidType
 	public Style getFluidStyle()
 	{
 		return fluidStyle;
+	}
+	
+	public static final class LastFluidTickData
+	{
+		private final Map<MSFluidType, Long> lastTickMap = new HashMap<>();
 	}
 }

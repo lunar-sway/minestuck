@@ -3,18 +3,20 @@ package com.mraof.minestuck.util;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.EditToolsCapabilityProvider;
 import com.mraof.minestuck.computer.editmode.IEditTools;
+import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayingCapabilityProvider;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class MSCapabilities
@@ -27,10 +29,13 @@ public class MSCapabilities
 	{
 	});
 	
+	public static final Capability<MSFluidType.LastFluidTickData> LAST_FLUID_TICK = CapabilityManager.get(new CapabilityToken<>(){});
+	
 	public static void register(RegisterCapabilitiesEvent event)
 	{
 		event.register(IMusicPlaying.class);
 		event.register(IEditTools.class);
+		event.register(MSFluidType.LastFluidTickData.class);
 	}
 	
 	/**
@@ -49,5 +54,18 @@ public class MSCapabilities
 			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "edit_tools"),
 					new EditToolsCapabilityProvider());
 		}
+		
+		attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "last_fluid_tick"),
+				new ICapabilityProvider()
+				{
+					private final LazyOptional<MSFluidType.LastFluidTickData> lazyOptional = LazyOptional.of(() -> this.data);
+					private final MSFluidType.LastFluidTickData data = new MSFluidType.LastFluidTickData();
+					
+					@Override
+					public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
+					{
+						return LAST_FLUID_TICK.orEmpty(cap, lazyOptional);
+					}
+				});
 	}
 }
