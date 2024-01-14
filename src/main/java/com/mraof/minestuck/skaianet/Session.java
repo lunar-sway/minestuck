@@ -1,6 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.alchemy.GristGutter;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -278,13 +279,26 @@ public final class Session
 		updatePlayerSet();
 	}
 	
-	void removeOverlap(Session otherSession)
+	Session createSessionSplit(Set<PlayerIdentifier> clientPlayers)
 	{
-		connectedClients.removeAll(otherSession.connectedClients);
+		double originalGutterMultiplier = this.gutter.gutterMultiplierForSession();
+		
+		Session newSession = new Session(skaianetHandler);
+		
+		newSession.connectedClients.addAll(clientPlayers);
+		newSession.updatePlayerSet();
+		
+		connectedClients.removeAll(newSession.connectedClients);
 		updatePlayerSet();
+		
+		double gutterMultiplier = newSession.gutter.gutterMultiplierForSession();
+		MutableGristSet takenGrist = this.gutter.takeFraction(gutterMultiplier/originalGutterMultiplier);
+		newSession.gutter.addGristFrom(takenGrist);
+		
+		return newSession;
 	}
 	
-	Stream<PlayerIdentifier> primaryConnections()
+	Stream<PlayerIdentifier> primaryClientPlayers()
 	{
 		return connectedClients.stream().filter(player -> skaianetHandler.getOrCreateData(player).hasPrimaryConnection());
 	}

@@ -1,10 +1,8 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.player.PlayerIdentifier;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 final class SessionMerger
@@ -40,59 +38,41 @@ final class SessionMerger
 	
 	static List<Session> splitSession(Session originalSession, SkaianetHandler skaianetHandler)
 	{
-		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
-		Set<PlayerIdentifier> unhandledConnections = originalSession.primaryConnections().collect(Collectors.toCollection(HashSet::new));
+		Set<PlayerIdentifier> unhandledClientPlayers = originalSession.primaryClientPlayers().collect(Collectors.toCollection(HashSet::new));
 		List<ActiveConnection> activeConnections = skaianetHandler.activeConnections().collect(Collectors.toCollection(ArrayList::new));
 		
 		//Pick out as many session chains that we can from the remaining connections
 		List<Session> sessions = new ArrayList<>();
-		while(!unhandledConnections.isEmpty())
+		while(!originalSession.getPlayers().isEmpty())
 		{
-			sessions.add(createSplitSession(unhandledConnections, activeConnections, skaianetHandler));
-		}
-		
-		sessions.forEach(originalSession::removeOverlap);
-		
-		for(Session session : sessions)
-		{
-			double gutterMultiplier = session.getGristGutter().gutterMultiplierForSession();
-			MutableGristSet takenGrist = originalSession.getGristGutter().takeFraction(gutterMultiplier/originalGutterMultiplier);
-			session.getGristGutter().addGristFrom(takenGrist);
-			originalGutterMultiplier -= gutterMultiplier;
+			PlayerIdentifier nextPlayer = originalSession.getPlayers().iterator().next();
+			Set<PlayerIdentifier> clientPlayers = collectConnectionsWithMembers(unhandledClientPlayers, activeConnections, nextPlayer, skaianetHandler);
+			
+			sessions.add(originalSession.createSessionSplit(clientPlayers));
 		}
 		
 		return sessions;
 	}
 	
-	private static Session createSplitSession(Set<PlayerIdentifier> unhandledConnections, List<ActiveConnection> activeConnections, SkaianetHandler skaianet)
+	private static Set<PlayerIdentifier> collectConnectionsWithMembers(Set<PlayerIdentifier> unhandledClientPlayers, List<ActiveConnection> activeConnections,
+													  PlayerIdentifier nextPlayer, SkaianetHandler skaianet)
 	{
-		PlayerIdentifier next = unhandledConnections.iterator().next();
-		Set<PlayerIdentifier> players = new HashSet<>();
-		players.add(next);
-		Session newSession = new Session(skaianet);
-		
-		collectConnectionsWithMembers(unhandledConnections, activeConnections, players,
-				newSession::addConnectedClient, skaianet);
-		
-		return newSession;
-	}
-	
-	private static void collectConnectionsWithMembers(Set<PlayerIdentifier> unhandledConnections, List<ActiveConnection> activeConnections,
-													  Set<PlayerIdentifier> members, Consumer<PlayerIdentifier> collector, SkaianetHandler skaianet)
-	{
+		Set<PlayerIdentifier> clientPlayers = new HashSet<>();
+		Set<PlayerIdentifier> members = new HashSet<>();
+		members.add(nextPlayer);
 		boolean addedAny;
 		do
 		{
 			 addedAny = false;
 			
-			Iterator<PlayerIdentifier> iterator = unhandledConnections.iterator();
+			Iterator<PlayerIdentifier> iterator = unhandledClientPlayers.iterator();
 			while(iterator.hasNext())
 			{
 				PlayerIdentifier player = iterator.next();
 				Optional<PlayerIdentifier> serverPlayer = skaianet.getOrCreateData(player).primaryServerPlayer();
 				if(members.contains(player) || serverPlayer.isPresent() && members.contains(serverPlayer.get()))
 				{
-					collector.accept(player);
+					clientPlayers.add(player);
 					if(members.add(player) || serverPlayer.isPresent() && members.add(serverPlayer.get()))
 						addedAny = true;
 					iterator.remove();
@@ -105,6 +85,7 @@ final class SessionMerger
 				 ActiveConnection connection = iterator1.next();
 				 if(members.contains(connection.client()) || members.contains(connection.server()))
 				 {
+					 clientPlayers.add(connection.client());
 					 if(members.add(connection.client()) || members.add(connection.server()))
 						 addedAny = true;
 					 iterator1.remove();
@@ -112,6 +93,7 @@ final class SessionMerger
 			 }
 			 
 		} while(addedAny);
+		return clientPlayers;
 	}
 	
 	private static Session createMergedSession(Set<Session> sessions, SkaianetHandler skaianetHandler)
