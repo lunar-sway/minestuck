@@ -1,18 +1,14 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.EnumClass;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -23,16 +19,11 @@ import java.util.stream.Collectors;
  */
 public class Generator
 {
-	static boolean isTitleValid(Session session, Title title)
-	{
-		return !session.isTitleUsed(title);
-	}
-	
 	static Title generateTitle(Session session, Set<EnumAspect> availableAspects, PlayerIdentifier ignore) throws SkaianetException
 	{
 		Random random = new Random();	//TODO seed based on player and world in a good way
 		
-		Set<Title> usedTitles = session.getUsedTitles(ignore);
+		Set<Title> usedTitles = getUsedTitles(session, ignore);
 		
 		List<EnumAspect> unusedAspects = unusedAspects(availableAspects, usedTitles);
 		List<EnumClass> unusedClasses = unusedClasses(usedTitles);
@@ -72,6 +63,27 @@ public class Generator
 		}
 	}
 	
+	static Set<Title> getUsedTitles(Session session, @Nullable PlayerIdentifier ignore)
+	{
+		Set<Title> titles = new HashSet<>();
+		for(PlayerIdentifier player : session.getPlayers())
+		{
+			if(player.equals(ignore))
+				continue;
+			
+			Title title = PlayerSavedData.getData(player, session.skaianetHandler.mcServer).getTitle();
+			if(title != null)
+				titles.add(title);
+			else
+				session.skaianetHandler.predefineData(player).ifPresent(data -> {
+					if(data.getTitle() != null)
+						titles.add(data.getTitle());
+				});
+		}
+		
+		return titles;
+	}
+	
 	private static List<EnumAspect> unusedAspects(Set<EnumAspect> base, Set<Title> usedTitles)
 	{
 		Set<EnumAspect> usedAspects = usedTitles.stream().map(Title::getHeroAspect).collect(Collectors.toSet());
@@ -89,7 +101,7 @@ public class Generator
 		Random random = new Random();
 		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
-		List<TitleLandType> usedTypes = session.getUsedTitleLandTypes(ignore);
+		List<TitleLandType> usedTypes = getUsedTitleLandTypes(session, ignore);
 		
 		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS.get());
 		
@@ -99,14 +111,58 @@ public class Generator
 		return landGen.getTitleAspect(terrainType, aspect, usedTypes);
 	}
 	
+	static List<TitleLandType> getUsedTitleLandTypes(Session session)
+	{
+		return getUsedTitleLandTypes(session, null);
+	}
+	
+	static List<TitleLandType> getUsedTitleLandTypes(Session session, @Nullable PlayerIdentifier ignore)
+	{
+		List<TitleLandType> types = new ArrayList<>();
+		for(PlayerIdentifier player : session.getPlayers())
+		{
+			if(player.equals(ignore))
+				continue;
+			
+			LandTypePair.getTypes(session.skaianetHandler.mcServer, session.skaianetHandler.getOrCreateData(player).getLandDimension())
+					.ifPresent(landTypes -> types.add(landTypes.getTitle()));
+			
+			session.skaianetHandler.predefineData(player).ifPresent(data -> {
+				if(data.getTitleLandType() != null)
+					types.add(data.getTitleLandType());
+			});
+		}
+		
+		return types;
+	}
 	static TerrainLandType generateWeightedTerrainLandType(Session session, TitleLandType titleType, PlayerIdentifier ignore)
 	{
 		Random random = new Random();
 		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
-		List<TerrainLandType> usedTypes = session.getUsedTerrainLandTypes(ignore);
+		List<TerrainLandType> usedTypes = getUsedTerrainLandTypes(session, ignore);
 		
 		return landGen.getTerrainAspect(titleType, usedTypes);
+	}
+	
+	static List<TerrainLandType> getUsedTerrainLandTypes(Session session, @Nullable PlayerIdentifier ignore)
+	{
+		List<TerrainLandType> types = new ArrayList<>();
+		for(PlayerIdentifier player : session.getPlayers())
+		{
+			if(player.equals(ignore))
+				continue;
+			
+			LandTypePair.getTypes(session.skaianetHandler.mcServer, session.skaianetHandler.getOrCreateData(player).getLandDimension())
+					.ifPresent(landTypes -> types.add(landTypes.getTerrain()));
+			
+			session.skaianetHandler.predefineData(player).ifPresent(data -> {
+				if(data.getTerrainLandType() != null)
+					types.add(data.getTerrainLandType());
+			});
+		}
+		
+		return types;
 	}
 	
 	private static <T> T getRandomFromList(List<T> list, Random random)

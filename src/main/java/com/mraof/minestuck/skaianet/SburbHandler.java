@@ -141,7 +141,7 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes().contains(LandTypes.FROGS.get()) &&
+			if(title.getHeroAspect() == EnumAspect.SPACE && !Generator.getUsedTitleLandTypes(session).contains(LandTypes.FROGS.get()) &&
 					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS.get();
 			else

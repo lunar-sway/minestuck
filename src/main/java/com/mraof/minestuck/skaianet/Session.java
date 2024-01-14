@@ -4,20 +4,15 @@ import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A data structure that contains all related connections, along with any related data, such as predefine data.
@@ -116,97 +111,6 @@ public final class Session
 		
 		if(skaianetHandler.sessionHandler instanceof GlobalSessionHandler)
 			players.addAll(skaianetHandler.predefineData.keySet());
-	}
-	
-	boolean isTitleUsed(@Nonnull Title newTitle)
-	{
-		for(PlayerIdentifier player : this.getPlayers())
-		{
-			Title title = PlayerSavedData.getData(player, skaianetHandler.mcServer).getTitle();
-			if(newTitle.equals(title))
-				return true;
-			Optional<PredefineData> data = skaianetHandler.predefineData(player);
-			if(data.isPresent() && newTitle.equals(data.get().getTitle()))
-				return true;
-		}
-		
-		return false;
-	}
-	
-	Set<Title> getUsedTitles()
-	{
-		return getUsedTitles(null);
-	}
-	
-	Set<Title> getUsedTitles(@Nullable PlayerIdentifier ignore)
-	{
-		Set<Title> titles = new HashSet<>();
-		for(PlayerIdentifier player : this.getPlayers())
-		{
-			if(player.equals(ignore))
-				continue;
-			
-			Title title = PlayerSavedData.getData(player, skaianetHandler.mcServer).getTitle();
-			if(title != null)
-				titles.add(title);
-			else
-				skaianetHandler.predefineData(player).ifPresent(data -> {
-					if(data.getTitle() != null)
-						titles.add(data.getTitle());
-				});
-		}
-		
-		return titles;
-	}
-	
-	List<TitleLandType> getUsedTitleLandTypes()
-	{
-		return getUsedTitleLandTypes(null);
-	}
-	
-	List<TitleLandType> getUsedTitleLandTypes(@Nullable PlayerIdentifier ignore)
-	{
-		List<TitleLandType> types = new ArrayList<>();
-		for(PlayerIdentifier player : this.getPlayers())
-		{
-			if(player.equals(ignore))
-				continue;
-			
-			LandTypePair.getTypes(skaianetHandler.mcServer, skaianetHandler.getOrCreateData(player).getLandDimension())
-					.ifPresent(landTypes -> types.add(landTypes.getTitle()));
-			
-			skaianetHandler.predefineData(player).ifPresent(data -> {
-				if(data.getTitleLandType() != null)
-					types.add(data.getTitleLandType());
-			});
-		}
-		
-		return types;
-	}
-	
-	List<TerrainLandType> getUsedTerrainLandTypes()
-	{
-		return getUsedTerrainLandTypes(null);
-	}
-	
-	List<TerrainLandType> getUsedTerrainLandTypes(@Nullable PlayerIdentifier ignore)
-	{
-		List<TerrainLandType> types = new ArrayList<>();
-		for(PlayerIdentifier player : this.getPlayers())
-		{
-			if(player.equals(ignore))
-				continue;
-			
-			LandTypePair.getTypes(skaianetHandler.mcServer, skaianetHandler.getOrCreateData(player).getLandDimension())
-					.ifPresent(landTypes -> types.add(landTypes.getTerrain()));
-			
-			skaianetHandler.predefineData(player).ifPresent(data -> {
-				if(data.getTerrainLandType() != null)
-					types.add(data.getTerrainLandType());
-			});
-		}
-		
-		return types;
 	}
 	
 	public GristGutter getGristGutter()
