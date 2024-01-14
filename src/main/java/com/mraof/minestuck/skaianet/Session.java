@@ -38,17 +38,17 @@ public final class Session
 	 */
 	boolean completed;
 	
-	/**
-	 * If the function throws an exception, this session should no longer be considered valid
-	 */
-	void inheritFrom(Session other)
+	static Session createMergedSession(Collection<Session> sessions, SkaianetHandler skaianetHandler)
 	{
-		connectedClients.addAll(other.connectedClients);
-		updatePlayerSet();
-		
-		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
-		// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
-		this.gutter.addGristUnchecked(other.gutter.getCache());
+		Session session = new Session(skaianetHandler);
+		sessions.forEach(other -> {
+			session.connectedClients.addAll(other.connectedClients);
+			// Since the gutter capacity of the merged session should be the sum of the individual sessions,
+			// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
+			session.gutter.addGristUnchecked(other.gutter.getCache());
+		});
+		session.updatePlayerSet();
+		return session;
 	}
 	
 	/**

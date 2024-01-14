@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * The standard implementation of SessionHandler which allows multiple sessions
@@ -55,10 +57,9 @@ public final class DefaultSessionHandler extends SessionHandler
 	SessionHandler getActual()
 	{
 		if(MinestuckConfig.SERVER.globalSession.get())
-		{
-			Session session = SessionMerger.mergedSessionFromAll(sessions, skaianetHandler);
-			return new GlobalSessionHandler(skaianetHandler, session);
-		}
+			return new GlobalSessionHandler(skaianetHandler,
+					Session.createMergedSession(this.sessions, this.skaianetHandler));
+		
 		return this;
 	}
 	
@@ -80,7 +81,23 @@ public final class DefaultSessionHandler extends SessionHandler
 	@Override
 	Session prepareSessionFor(PlayerIdentifier... players)
 	{
-		return SessionMerger.getValidMergedSession(this, players);
+		Set<Session> sessions = Arrays.stream(players).map(this::getPlayerSession).filter(Objects::nonNull).collect(Collectors.toSet());
+		
+		if(sessions.size() > 1)
+		{
+			this.sessions.removeAll(sessions);
+			Session newSession = Session.createMergedSession(sessions, this.skaianetHandler);
+			this.sessions.add(newSession);
+			return newSession;
+		} else if(sessions.size() == 1)
+		{
+			return sessions.stream().findAny().get();
+		} else
+		{
+			Session session = new Session(skaianetHandler);
+			addNewSession(session);
+			return session;
+		}
 	}
 	
 	@Override
@@ -111,23 +128,43 @@ public final class DefaultSessionHandler extends SessionHandler
 		sessions.add(session);
 	}
 	
-	void handleSuccessfulMerge(Set<Session> sessions, Session result)
-	{
-		for(Session session : sessions)
-			this.sessions.remove(session);
-		
-		this.sessions.add(result);
-	}
-	
 	private void split(Session session)
 	{
 		sessions.remove(session);
 		while(!session.getPlayers().isEmpty())
 		{
 			PlayerIdentifier remainingPlayer = session.getPlayers().iterator().next();
-			Set<PlayerIdentifier> players = SessionMerger.collectAllConnectedPlayers(remainingPlayer, skaianetHandler);
+			Set<PlayerIdentifier> players = collectAllConnectedPlayers(remainingPlayer, skaianetHandler);
 			Session newSession = session.createSessionSplit(players);
 			this.sessions.add(newSession);
 		}
+	}
+	
+	
+	static Set<PlayerIdentifier> collectAllConnectedPlayers(PlayerIdentifier player, SkaianetHandler skaianetHandler)
+	{
+		Set<PlayerIdentifier> players = new HashSet<>();
+		Queue<PlayerIdentifier> uncheckedPlayers = new LinkedList<>();
+		
+		players.add(player);
+		
+		for(PlayerIdentifier nextPlayer = player; nextPlayer != null; nextPlayer = uncheckedPlayers.poll())
+		{
+			findDirectlyConnectedPlayers(nextPlayer, skaianetHandler, connectedPlayer -> {
+				if(players.add(connectedPlayer))
+					uncheckedPlayers.add(connectedPlayer);
+			});
+		}
+		
+		return players;
+	}
+	
+	private static void findDirectlyConnectedPlayers(PlayerIdentifier player, SkaianetHandler skaianetHandler, Consumer<PlayerIdentifier> playerConsumer)
+	{
+		skaianetHandler.primaryPartnerForClient(player).ifPresent(playerConsumer);
+		skaianetHandler.primaryPartnerForServer(player).ifPresent(playerConsumer);
+		
+		skaianetHandler.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
+		skaianetHandler.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));
 	}
 }
