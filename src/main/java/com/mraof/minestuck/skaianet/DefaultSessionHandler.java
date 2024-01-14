@@ -121,14 +121,13 @@ public final class DefaultSessionHandler extends SessionHandler
 	
 	private void split(Session session)
 	{
-		List<Session> sessions = SessionMerger.splitSession(session, skaianetHandler);
-		this.sessions.addAll(sessions);
-		removeIfEmpty(session);
-	}
-	
-	private void removeIfEmpty(Session session)
-	{
-		if(session.isEmpty())
-			sessions.remove(session);
+		sessions.remove(session);
+		while(!session.getPlayers().isEmpty())
+		{
+			PlayerIdentifier remainingPlayer = session.getPlayers().iterator().next();
+			Set<PlayerIdentifier> players = SessionMerger.collectAllConnectedPlayers(remainingPlayer, skaianetHandler);
+			Session newSession = session.createSessionSplit(players);
+			this.sessions.add(newSession);
+		}
 	}
 }

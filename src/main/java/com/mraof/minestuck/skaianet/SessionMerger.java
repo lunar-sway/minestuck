@@ -3,6 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.player.PlayerIdentifier;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 final class SessionMerger
@@ -36,64 +37,31 @@ final class SessionMerger
 		return session;
 	}
 	
-	static List<Session> splitSession(Session originalSession, SkaianetHandler skaianetHandler)
+	static Set<PlayerIdentifier> collectAllConnectedPlayers(PlayerIdentifier player, SkaianetHandler skaianet)
 	{
-		Set<PlayerIdentifier> unhandledClientPlayers = originalSession.primaryClientPlayers().collect(Collectors.toCollection(HashSet::new));
-		List<ActiveConnection> activeConnections = skaianetHandler.activeConnections().collect(Collectors.toCollection(ArrayList::new));
+		Set<PlayerIdentifier> players = new HashSet<>();
+		Queue<PlayerIdentifier> uncheckedPlayers = new LinkedList<>();
 		
-		//Pick out as many session chains that we can from the remaining connections
-		List<Session> sessions = new ArrayList<>();
-		while(!originalSession.getPlayers().isEmpty())
+		players.add(player);
+		
+		for(PlayerIdentifier nextPlayer = player; nextPlayer != null; nextPlayer = uncheckedPlayers.poll())
 		{
-			PlayerIdentifier nextPlayer = originalSession.getPlayers().iterator().next();
-			Set<PlayerIdentifier> clientPlayers = collectConnectionsWithMembers(unhandledClientPlayers, activeConnections, nextPlayer, skaianetHandler);
-			
-			sessions.add(originalSession.createSessionSplit(clientPlayers));
+			findDirectlyConnectedPlayers(nextPlayer, skaianet, connectedPlayer -> {
+				if(players.add(connectedPlayer))
+					uncheckedPlayers.add(connectedPlayer);
+			});
 		}
 		
-		return sessions;
+		return players;
 	}
 	
-	private static Set<PlayerIdentifier> collectConnectionsWithMembers(Set<PlayerIdentifier> unhandledClientPlayers, List<ActiveConnection> activeConnections,
-													  PlayerIdentifier nextPlayer, SkaianetHandler skaianet)
+	private static void findDirectlyConnectedPlayers(PlayerIdentifier player, SkaianetHandler skaianetHandler, Consumer<PlayerIdentifier> playerConsumer)
 	{
-		Set<PlayerIdentifier> clientPlayers = new HashSet<>();
-		Set<PlayerIdentifier> members = new HashSet<>();
-		members.add(nextPlayer);
-		boolean addedAny;
-		do
-		{
-			 addedAny = false;
-			
-			Iterator<PlayerIdentifier> iterator = unhandledClientPlayers.iterator();
-			while(iterator.hasNext())
-			{
-				PlayerIdentifier player = iterator.next();
-				Optional<PlayerIdentifier> serverPlayer = skaianet.getOrCreateData(player).primaryServerPlayer();
-				if(members.contains(player) || serverPlayer.isPresent() && members.contains(serverPlayer.get()))
-				{
-					clientPlayers.add(player);
-					if(members.add(player) || serverPlayer.isPresent() && members.add(serverPlayer.get()))
-						addedAny = true;
-					iterator.remove();
-				}
-			 }
-			 
-			 Iterator<ActiveConnection> iterator1 = activeConnections.iterator();
-			 while(iterator1.hasNext())
-			 {
-				 ActiveConnection connection = iterator1.next();
-				 if(members.contains(connection.client()) || members.contains(connection.server()))
-				 {
-					 clientPlayers.add(connection.client());
-					 if(members.add(connection.client()) || members.add(connection.server()))
-						 addedAny = true;
-					 iterator1.remove();
-				 }
-			 }
-			 
-		} while(addedAny);
-		return clientPlayers;
+		skaianetHandler.primaryPartnerForClient(player).ifPresent(playerConsumer);
+		skaianetHandler.primaryPartnerForServer(player).ifPresent(playerConsumer);
+		
+		skaianetHandler.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
+		skaianetHandler.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));
 	}
 	
 	private static Session createMergedSession(Set<Session> sessions, SkaianetHandler skaianetHandler)

@@ -18,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * A data structure that contains all related connections, along with any related data, such as predefine data.
@@ -262,11 +261,6 @@ public final class Session
 		return s;
 	}
 	
-	public boolean isEmpty()
-	{
-		return connectedClients.isEmpty();
-	}
-	
 	void addConnectedClient(PlayerIdentifier client)
 	{
 		connectedClients.add(client);
@@ -285,11 +279,13 @@ public final class Session
 		
 		Session newSession = new Session(skaianetHandler);
 		
-		newSession.connectedClients.addAll(clientPlayers);
+		for(PlayerIdentifier player : clientPlayers)
+		{
+			if(connectedClients.remove(player))
+				newSession.connectedClients.add(player);
+		}
 		newSession.updatePlayerSet();
-		
-		connectedClients.removeAll(newSession.connectedClients);
-		updatePlayerSet();
+		this.updatePlayerSet();
 		
 		double gutterMultiplier = newSession.gutter.gutterMultiplierForSession();
 		MutableGristSet takenGrist = this.gutter.takeFraction(gutterMultiplier/originalGutterMultiplier);
@@ -297,10 +293,4 @@ public final class Session
 		
 		return newSession;
 	}
-	
-	Stream<PlayerIdentifier> primaryClientPlayers()
-	{
-		return connectedClients.stream().filter(player -> skaianetHandler.getOrCreateData(player).hasPrimaryConnection());
-	}
-	
 }
