@@ -30,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Blood/brain juice/light water now have underwater particles
 - Minestuck fluids now have improved mod compatibility
 - The Iron Lass armor set has the ability to glide like an elytra and boost with the sneak key
-
+- Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
 ### Changed
 
 - Bamboo item now costs 1 build grist instead of 2 (bamboo plank blocks now similar in cost to traditional planks)
@@ -55,10 +55,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Minestuck fluids now use their translatable name
 - All Minestuck fluids besides ender fluid now have transparency
 - Water colors underwater fog is a rave again
+- Double slabs will now drop two slabs when broken
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli
+- Dweblenod, Zepsun, hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli, glubtier
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 
