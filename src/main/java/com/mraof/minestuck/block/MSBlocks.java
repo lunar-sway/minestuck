@@ -195,8 +195,8 @@ public class MSBlocks
 	public static final RegistryObject<FenceGateBlock> PERFECTLY_GENERIC_FENCE_GATE = REGISTER.register("perfectly_generic_fence_gate", () -> new FenceGateBlock(copy(GENERIC_OBJECT.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	public static final RegistryObject<ButtonBlock> PERFECTLY_GENERIC_BUTTON = REGISTER.register("perfectly_generic_button", () -> new ButtonBlock(copy(GENERIC_OBJECT.get()),BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> PERFECTLY_GENERIC_PRESSURE_PLATE	= REGISTER.register("perfectly_generic_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(GENERIC_OBJECT.get()), BlockSetType.OAK));
-	public static final RegistryObject<DoorBlock> PERFECTLY_GENERIC_DOOR = REGISTER.register("perfectly_generic_door", () -> new DoorBlock(copy(GENERIC_OBJECT.get()), BlockSetType.OAK));
-	public static final RegistryObject<TrapDoorBlock> PERFECTLY_GENERIC_TRAPDOOR = REGISTER.register("perfectly_generic_trapdoor", () -> new TrapDoorBlock(copy(GENERIC_OBJECT.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> PERFECTLY_GENERIC_DOOR = REGISTER.register("perfectly_generic_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> PERFECTLY_GENERIC_TRAPDOOR = REGISTER.register("perfectly_generic_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Land Environment
 	//Aspect Terrain Dirt
@@ -288,7 +288,7 @@ public class MSBlocks
 	public static final RegistryObject<WallBlock> CAST_IRON_WALL = REGISTER.register("cast_iron_wall", () -> new WallBlock(copy(CAST_IRON.get())));
 	public static final RegistryObject<ButtonBlock> CAST_IRON_BUTTON = REGISTER.register("cast_iron_button", () -> new ButtonBlock(copy(CAST_IRON.get()),BlockSetType.STONE, 10, true));
 	public static final RegistryObject<PressurePlateBlock> CAST_IRON_PRESSURE_PLATE = REGISTER.register("cast_iron_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CAST_IRON.get()), BlockSetType.IRON));
-
+	
 	public static final RegistryObject<Block> CHISELED_CAST_IRON = REGISTER.register("chiseled_cast_iron", () -> new Block(copy(CAST_IRON.get())));
 	public static final RegistryObject<Block> STEEL_BEAM = REGISTER.register("steel_beam", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	
@@ -332,7 +332,7 @@ public class MSBlocks
 	public static final RegistryObject<StairBlock> FLOWERY_MYCELIUM_BRICK_STAIRS = REGISTER.register("flowery_mycelium_brick_stairs", () -> new StairBlock(FLOWERY_MYCELIUM_BRICKS.get().defaultBlockState(), copy(FLOWERY_MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> FLOWERY_MYCELIUM_BRICK_SLAB = REGISTER.register("flowery_mycelium_brick_slab", () -> new SlabBlock(copy(FLOWERY_MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<WallBlock> FLOWERY_MYCELIUM_BRICK_WALL = REGISTER.register("flowery_mycelium_brick_wall", () -> new WallBlock(copy(FLOWERY_MYCELIUM_BRICKS.get())));
-
+	
 	//Black
 	public static final RegistryObject<Block> BLACK_SAND = REGISTER.register("black_sand", () -> new SandBlock(0x181915, Block.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.SNARE).strength(0.5F).sound(SoundType.SAND)));
 	
@@ -527,7 +527,7 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> UNCARVED_WOOD_PRESSURE_PLATE = REGISTER.register("uncarved_wood_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(UNCARVED_WOOD.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> UNCARVED_WOOD_FENCE = REGISTER.register("uncarved_wood_fence", () -> new FenceBlock(copy(UNCARVED_WOOD.get())));
 	public static final RegistryObject<FenceGateBlock> UNCARVED_WOOD_FENCE_GATE = REGISTER.register("uncarved_wood_fence_gate", () -> new FenceGateBlock(copy(UNCARVED_WOOD.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-
+	
 	public static final RegistryObject<Block> CHIPBOARD = REGISTER.register("chipboard", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
 	public static final RegistryObject<StairBlock> CHIPBOARD_STAIRS = REGISTER.register("chipboard_stairs", () -> new StairBlock(CHIPBOARD.get().defaultBlockState(), copy(CHIPBOARD.get())));
 	public static final RegistryObject<SlabBlock> CHIPBOARD_SLAB = REGISTER.register("chipboard_slab", () -> new SlabBlock(copy(CHIPBOARD.get())));
@@ -535,12 +535,12 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> CHIPBOARD_PRESSURE_PLATE = REGISTER.register("chipboard_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CHIPBOARD.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> CHIPBOARD_FENCE = REGISTER.register("chipboard_fence", () -> new FenceBlock(copy(CHIPBOARD.get())));
 	public static final RegistryObject<FenceGateBlock> CHIPBOARD_FENCE_GATE = REGISTER.register("chipboard_fence_gate", () -> new FenceGateBlock(copy(CHIPBOARD.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-
+	
 	public static final RegistryObject<Block> WOOD_SHAVINGS = REGISTER.register("wood_shavings", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(0.4F).sound(SoundType.SAND)));
 	public static final RegistryObject<Block> CARVED_HEAVY_PLANKS = REGISTER.register("carved_heavy_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> CARVED_HEAVY_PLANK_STAIRS = REGISTER.register("carved_heavy_plank_stairs", () -> new StairBlock(CARVED_HEAVY_PLANKS.get().defaultBlockState(), copy(CARVED_HEAVY_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> CARVED_HEAVY_PLANK_SLAB = REGISTER.register("carved_heavy_plank_slab", () -> new SlabBlock(copy(CARVED_HEAVY_PLANKS.get())));
-
+	
 	public static final RegistryObject<Block> CARVED_PLANKS = REGISTER.register("carved_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> CARVED_STAIRS = REGISTER.register("carved_stairs", () -> new StairBlock(CARVED_PLANKS.get().defaultBlockState(), copy(CARVED_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> CARVED_SLAB = REGISTER.register("carved_slab", () -> new SlabBlock(copy(CARVED_PLANKS.get())));
@@ -548,13 +548,13 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> CARVED_PRESSURE_PLATE = REGISTER.register("carved_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CARVED_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> CARVED_FENCE = REGISTER.register("carved_fence", () -> new FenceBlock(copy(CARVED_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> CARVED_FENCE_GATE = REGISTER.register("carved_fence_gate", () -> new FenceGateBlock(copy(CARVED_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> CARVED_DOOR = REGISTER.register("carved_door", () -> new DoorBlock(copy(CARVED_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> CARVED_TRAPDOOR = REGISTER.register("carved_trapdoor", () -> new TrapDoorBlock(copy(CARVED_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> CARVED_DOOR = REGISTER.register("carved_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> CARVED_TRAPDOOR = REGISTER.register("carved_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	public static final RegistryObject<Block> POLISHED_UNCARVED_WOOD = REGISTER.register("polished_carved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> POLISHED_UNCARVED_STAIRS = REGISTER.register("polished_uncarved_stairs", () -> new StairBlock(POLISHED_UNCARVED_WOOD.get().defaultBlockState(), copy(POLISHED_UNCARVED_WOOD.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_UNCARVED_SLAB = REGISTER.register("polished_uncarved_slab", () -> new SlabBlock(copy(POLISHED_UNCARVED_WOOD.get())));
-
+	
 	public static final RegistryObject<Block> CARVED_KNOTTED_WOOD = REGISTER.register("carved_knotted_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	
 	//Cloud
@@ -575,8 +575,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> GLOWING_PRESSURE_PLATE = REGISTER.register("glowing_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(GLOWING_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> GLOWING_FENCE = REGISTER.register("glowing_fence", () -> new FenceBlock(copy(GLOWING_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> GLOWING_FENCE_GATE = REGISTER.register("glowing_fence_gate", () -> new FenceGateBlock(copy(GLOWING_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> GLOWING_DOOR = REGISTER.register("glowing_door", () -> new DoorBlock(copy(GLOWING_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> GLOWING_TRAPDOOR = REGISTER.register("glowing_trapdoor", () -> new TrapDoorBlock(copy(GLOWING_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> GLOWING_DOOR = REGISTER.register("glowing_door", () -> new DoorBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> GLOWING_TRAPDOOR = REGISTER.register("glowing_trapdoor", () -> new TrapDoorBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD),BlockSetType.OAK));
 	
 	//Frost
 	public static final RegistryObject<Block> FROST_LOG = REGISTER.register("frost_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.ICE).strength(2.0F).ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD)));
@@ -591,8 +591,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> FROST_PRESSURE_PLATE = REGISTER.register("frost_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(FROST_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> FROST_FENCE = REGISTER.register("frost_fence", () -> new FenceBlock(copy(FROST_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> FROST_FENCE_GATE = REGISTER.register("frost_fence_gate", () -> new FenceGateBlock(copy(FROST_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> FROST_DOOR = REGISTER.register("frost_door", () -> new DoorBlock(copy(FROST_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> FROST_TRAPDOOR = REGISTER.register("frost_trapdoor", () -> new TrapDoorBlock(copy(FROST_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> FROST_DOOR = REGISTER.register("frost_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> FROST_TRAPDOOR = REGISTER.register("frost_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Rainbow
 	public static final RegistryObject<Block> RAINBOW_LOG = REGISTER.register("rainbow_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
@@ -610,8 +610,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> RAINBOW_PRESSURE_PLATE = REGISTER.register("rainbow_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(RAINBOW_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> RAINBOW_FENCE = REGISTER.register("rainbow_fence", () -> new FenceBlock(copy(RAINBOW_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> RAINBOW_FENCE_GATE = REGISTER.register("rainbow_fence_gate", () -> new FenceGateBlock(copy(RAINBOW_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> RAINBOW_DOOR = REGISTER.register("rainbow_door", () -> new DoorBlock(copy(RAINBOW_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> RAINBOW_TRAPDOOR = REGISTER.register("rainbow_trapdoor", () -> new TrapDoorBlock(copy(RAINBOW_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> RAINBOW_DOOR = REGISTER.register("rainbow_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> RAINBOW_TRAPDOOR = REGISTER.register("rainbow_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//End
 	public static final RegistryObject<Block> END_LOG = REGISTER.register("end_log", () -> new DoubleLogBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
@@ -629,8 +629,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> END_PRESSURE_PLATE = REGISTER.register("end_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(END_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> END_FENCE = REGISTER.register("end_fence", () -> new FenceBlock(copy(END_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> END_FENCE_GATE = REGISTER.register("end_fence_gate", () -> new FenceGateBlock(copy(END_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> END_DOOR = REGISTER.register("end_door", () -> new DoorBlock(copy(END_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> END_TRAPDOOR = REGISTER.register("end_trapdoor", () -> new TrapDoorBlock(copy(END_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> END_DOOR = REGISTER.register("end_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> END_TRAPDOOR = REGISTER.register("end_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Vine
 	public static final RegistryObject<Block> VINE_LOG = REGISTER.register("vine_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
@@ -653,8 +653,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> DEAD_PRESSURE_PLATE = REGISTER.register("dead_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(DEAD_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> DEAD_FENCE = REGISTER.register("dead_fence", () -> new FenceBlock(copy(DEAD_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> DEAD_FENCE_GATE = REGISTER.register("dead_fence_gate", () -> new FenceGateBlock(copy(DEAD_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> DEAD_DOOR = REGISTER.register("dead_door", () -> new DoorBlock(copy(DEAD_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> DEAD_TRAPDOOR = REGISTER.register("dead_trapdoor", () -> new TrapDoorBlock(copy(DEAD_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> DEAD_DOOR = REGISTER.register("dead_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> DEAD_TRAPDOOR = REGISTER.register("dead_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Petrified
 	public static final RegistryObject<Block> PETRIFIED_LOG = REGISTER.register("petrified_log", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STONE)));
@@ -670,8 +670,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> SHADEWOOD_PRESSURE_PLATE = REGISTER.register("shadewood_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(SHADEWOOD_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> SHADEWOOD_FENCE = REGISTER.register("shadewood_fence", () -> new FenceBlock(copy(SHADEWOOD_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> SHADEWOOD_FENCE_GATE = REGISTER.register("shadewood_fence_gate", () -> new FenceGateBlock(copy(SHADEWOOD_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> SHADEWOOD_DOOR = REGISTER.register("shadewood_door", () -> new DoorBlock(copy(SHADEWOOD_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> SHADEWOOD_TRAPDOOR = REGISTER.register("shadewood_trapdoor", () -> new TrapDoorBlock(copy(SHADEWOOD_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> SHADEWOOD_DOOR = REGISTER.register("shadewood_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> SHADEWOOD_TRAPDOOR = REGISTER.register("shadewood_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	public static final RegistryObject<Block> SHADEWOOD_LEAVES = REGISTER.register("shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> SHROOMY_SHADEWOOD_LEAVES = REGISTER.register("shroomy_shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().lightLevel(state -> 11).sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
@@ -705,8 +705,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> TREATED_PRESSURE_PLATE = REGISTER.register("treated_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(TREATED_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> TREATED_FENCE = REGISTER.register("treated_fence", () -> new FenceBlock(copy(TREATED_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> TREATED_FENCE_GATE = REGISTER.register("treated_fence_gate", () -> new FenceGateBlock(copy(TREATED_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> TREATED_DOOR = REGISTER.register("treated_door", () -> new DoorBlock(copy(TREATED_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> TREATED_TRAPDOOR = REGISTER.register("treated_trapdoor", () -> new TrapDoorBlock(copy(TREATED_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> TREATED_DOOR = REGISTER.register("treated_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> TREATED_TRAPDOOR = REGISTER.register("treated_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Aspect tree blocks
 	//Blood
@@ -722,8 +722,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> BLOOD_ASPECT_PRESSURE_PLATE = REGISTER.register("blood_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BLOOD_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> BLOOD_ASPECT_FENCE = REGISTER.register("blood_aspect_fence", () -> new FenceBlock(copy(BLOOD_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> BLOOD_ASPECT_FENCE_GATE = REGISTER.register("blood_aspect_fence_gate", () -> new FenceGateBlock(copy(BLOOD_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> BLOOD_ASPECT_DOOR = REGISTER.register("blood_aspect_door", () -> new DoorBlock(copy(BLOOD_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> BLOOD_ASPECT_TRAPDOOR = REGISTER.register("blood_aspect_trapdoor", () -> new TrapDoorBlock(copy(BLOOD_ASPECT_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> BLOOD_ASPECT_DOOR = REGISTER.register("blood_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> BLOOD_ASPECT_TRAPDOOR = REGISTER.register("blood_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Breath
 	public static final RegistryObject<Block> BREATH_ASPECT_BOOKSHELF = REGISTER.register("breath_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -738,9 +738,9 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> BREATH_ASPECT_PRESSURE_PLATE = REGISTER.register("breath_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BREATH_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> BREATH_ASPECT_FENCE = REGISTER.register("breath_aspect_fence", () -> new FenceBlock(copy(BREATH_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> BREATH_ASPECT_FENCE_GATE = REGISTER.register("breath_aspect_fence_gate", () -> new FenceGateBlock(copy(BREATH_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> BREATH_ASPECT_DOOR = REGISTER.register("breath_aspect_door", () -> new DoorBlock(copy(BREATH_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> BREATH_ASPECT_TRAPDOOR = REGISTER.register("breath_aspect_trapdoor", () -> new TrapDoorBlock(copy(BREATH_ASPECT_PLANKS.get()), BlockSetType.OAK));
-
+	public static final RegistryObject<DoorBlock> BREATH_ASPECT_DOOR = REGISTER.register("breath_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> BREATH_ASPECT_TRAPDOOR = REGISTER.register("breath_aspect_trapdoor", () -> new TrapDoorBlock(copy(BREATH_ASPECT_PLANKS.get()), BlockSetType.OAK));
+	
 	//Doom
 	public static final RegistryObject<Block> DOOM_ASPECT_BOOKSHELF = REGISTER.register("doom_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> DOOM_ASPECT_LADDER = REGISTER.register("doom_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -754,9 +754,9 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> DOOM_ASPECT_PRESSURE_PLATE = REGISTER.register("doom_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(DOOM_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> DOOM_ASPECT_FENCE = REGISTER.register("doom_aspect_fence", () -> new FenceBlock(copy(DOOM_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> DOOM_ASPECT_FENCE_GATE = REGISTER.register("doom_aspect_fence_gate", () -> new FenceGateBlock(copy(DOOM_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> DOOM_ASPECT_DOOR = REGISTER.register("doom_aspect_door", () -> new DoorBlock(copy(DOOM_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> DOOM_ASPECT_TRAPDOOR = REGISTER.register("doom_aspect_trapdoor", () -> new TrapDoorBlock(copy(DOOM_ASPECT_PLANKS.get()), BlockSetType.OAK));
-
+	public static final RegistryObject<DoorBlock> DOOM_ASPECT_DOOR = REGISTER.register("doom_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> DOOM_ASPECT_TRAPDOOR = REGISTER.register("doom_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	
 	//Heart
 	public static final RegistryObject<Block> HEART_ASPECT_BOOKSHELF = REGISTER.register("heart_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> HEART_ASPECT_LADDER = REGISTER.register("heart_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -770,9 +770,9 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> HEART_ASPECT_PRESSURE_PLATE = REGISTER.register("heart_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(HEART_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> HEART_ASPECT_FENCE = REGISTER.register("heart_aspect_fence", () -> new FenceBlock(copy(HEART_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> HEART_ASPECT_FENCE_GATE = REGISTER.register("heart_aspect_fence_gate", () -> new FenceGateBlock(copy(HEART_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> HEART_ASPECT_DOOR = REGISTER.register("heart_aspect_door", () -> new DoorBlock(copy(HEART_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> HEART_ASPECT_TRAPDOOR = REGISTER.register("heart_aspect_trapdoor", () -> new TrapDoorBlock(copy(HEART_ASPECT_PLANKS.get()), BlockSetType.OAK));
-
+	public static final RegistryObject<DoorBlock> HEART_ASPECT_DOOR = REGISTER.register("heart_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> HEART_ASPECT_TRAPDOOR = REGISTER.register("heart_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	
 	//Hope
 	public static final RegistryObject<Block> HOPE_ASPECT_BOOKSHELF = REGISTER.register("hope_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> HOPE_ASPECT_LADDER = REGISTER.register("hope_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -786,9 +786,9 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> HOPE_ASPECT_PRESSURE_PLATE = REGISTER.register("hope_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(HOPE_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> HOPE_ASPECT_FENCE = REGISTER.register("hope_aspect_fence", () -> new FenceBlock(copy(HOPE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> HOPE_ASPECT_FENCE_GATE = REGISTER.register("hope_aspect_fence_gate", () -> new FenceGateBlock(copy(HOPE_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	//public static final RegistryObject<DoorBlock> HOPE_ASPECT_DOOR = REGISTER.register("hope_aspect_door", () -> new DoorBlock(copy(HOPE_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> HOPE_ASPECT_TRAPDOOR = REGISTER.register("hope_aspect_trapdoor", () -> new TrapDoorBlock(copy(HOPE_ASPECT_PLANKS.get()), BlockSetType.OAK));
-
+	public static final RegistryObject<DoorBlock> HOPE_ASPECT_DOOR = REGISTER.register("hope_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> HOPE_ASPECT_TRAPDOOR = REGISTER.register("hope_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	
 	//Life
 	public static final RegistryObject<Block> LIFE_ASPECT_BOOKSHELF = REGISTER.register("life_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> LIFE_ASPECT_LADDER = REGISTER.register("life_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -802,9 +802,9 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> LIFE_ASPECT_PRESSURE_PLATE = REGISTER.register("life_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(LIFE_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> LIFE_ASPECT_FENCE = REGISTER.register("life_aspect_fence", () -> new FenceBlock(copy(LIFE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> LIFE_ASPECT_FENCE_GATE = REGISTER.register("life_aspect_fence_gate", () -> new FenceGateBlock(copy(LIFE_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE ));
-	//public static final RegistryObject<DoorBlock> LIFE_ASPECT_DOOR = REGISTER.register("life_aspect_door", () -> new DoorBlock(copy(LIFE_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> LIFE_ASPECT_TRAPDOOR = REGISTER.register("life_aspect_trapdoor", () -> new TrapDoorBlock(copy(LIFE_ASPECT_PLANKS.get()), BlockSetType.OAK));
-
+	public static final RegistryObject<DoorBlock> LIFE_ASPECT_DOOR = REGISTER.register("life_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> LIFE_ASPECT_TRAPDOOR = REGISTER.register("life_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	
 	//Light
 	public static final RegistryObject<Block> LIGHT_ASPECT_BOOKSHELF = REGISTER.register("light_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> LIGHT_ASPECT_LADDER = REGISTER.register("light_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -818,8 +818,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> LIGHT_ASPECT_PRESSURE_PLATE = REGISTER.register("light_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(LIGHT_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> LIGHT_ASPECT_FENCE = REGISTER.register("light_aspect_fence", () -> new FenceBlock(copy(LIGHT_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> LIGHT_ASPECT_FENCE_GATE = REGISTER.register("light_aspect_fence_gate", () -> new FenceGateBlock(copy(LIGHT_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE ));
-	//public static final RegistryObject<DoorBlock> LIGHT_ASPECT_DOOR = REGISTER.register("light_aspect_door", () -> new DoorBlock(copy(LIGHT_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> LIGHT_ASPECT_TRAPDOOR = REGISTER.register("light_aspect_trapdoor", () -> new TrapDoorBlock(copy(LIGHT_ASPECT_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> LIGHT_ASPECT_DOOR = REGISTER.register("light_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> LIGHT_ASPECT_TRAPDOOR = REGISTER.register("light_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Mind
 	public static final RegistryObject<Block> MIND_ASPECT_BOOKSHELF = REGISTER.register("mind_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -834,8 +834,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> MIND_ASPECT_PRESSURE_PLATE = REGISTER.register("mind_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(MIND_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> MIND_ASPECT_FENCE = REGISTER.register("mind_aspect_fence", () -> new FenceBlock(copy(MIND_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> MIND_ASPECT_FENCE_GATE = REGISTER.register("mind_aspect_fence_gate", () -> new FenceGateBlock(copy(MIND_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE ));
-	//public static final RegistryObject<DoorBlock> MIND_ASPECT_DOOR = REGISTER.register("mind_aspect_door", () -> new DoorBlock(copy(MIND_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> MIND_ASPECT_TRAPDOOR = REGISTER.register("mind_aspect_trapdoor", () -> new TrapDoorBlock(copy(MIND_ASPECT_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> MIND_ASPECT_DOOR = REGISTER.register("mind_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> MIND_ASPECT_TRAPDOOR = REGISTER.register("mind_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Rage
 	public static final RegistryObject<Block> RAGE_ASPECT_BOOKSHELF = REGISTER.register("rage_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -850,8 +850,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> RAGE_ASPECT_PRESSURE_PLATE = REGISTER.register("rage_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(RAGE_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> RAGE_ASPECT_FENCE = REGISTER.register("rage_aspect_fence", () -> new FenceBlock(copy(RAGE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> RAGE_ASPECT_FENCE_GATE = REGISTER.register("rage_aspect_fence_gate", () -> new FenceGateBlock(copy(RAGE_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE ));
-	//public static final RegistryObject<DoorBlock> RAGE_ASPECT_DOOR = REGISTER.register("rage_aspect_door", () -> new DoorBlock(copy(RAGE_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> RAGE_ASPECT_TRAPDOOR = REGISTER.register("rage_aspect_trapdoor", () -> new TrapDoorBlock(copy(RAGE_ASPECT_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> RAGE_ASPECT_DOOR = REGISTER.register("rage_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> RAGE_ASPECT_TRAPDOOR = REGISTER.register("rage_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Space
 	public static final RegistryObject<Block> SPACE_ASPECT_BOOKSHELF = REGISTER.register("space_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -866,8 +866,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> SPACE_ASPECT_PRESSURE_PLATE = REGISTER.register("space_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(SPACE_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> SPACE_ASPECT_FENCE = REGISTER.register("space_aspect_fence", () -> new FenceBlock(copy(SPACE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> SPACE_ASPECT_FENCE_GATE = REGISTER.register("space_aspect_fence_gate", () -> new FenceGateBlock(copy(SPACE_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE ));
-	//public static final RegistryObject<DoorBlock> SPACE_ASPECT_DOOR = REGISTER.register("space_aspect_door", () -> new DoorBlock(copy(SPACE_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> SPACE_ASPECT_TRAPDOOR = REGISTER.register("space_aspect_trapdoor", () -> new TrapDoorBlock(copy(SPACE_ASPECT_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> SPACE_ASPECT_DOOR = REGISTER.register("space_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> SPACE_ASPECT_TRAPDOOR = REGISTER.register("space_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Time
 	public static final RegistryObject<Block> TIME_ASPECT_BOOKSHELF = REGISTER.register("time_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -882,8 +882,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> TIME_ASPECT_PRESSURE_PLATE = REGISTER.register("time_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(TIME_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> TIME_ASPECT_FENCE = REGISTER.register("time_aspect_fence", () -> new FenceBlock(copy(TIME_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> TIME_ASPECT_FENCE_GATE = REGISTER.register("time_aspect_fence_gate", () -> new FenceGateBlock(copy(TIME_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE ));
-	//public static final RegistryObject<DoorBlock> TIME_ASPECT_DOOR = REGISTER.register("time_aspect_door", () -> new DoorBlock(copy(TIME_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> TIME_ASPECT_TRAPDOOR = REGISTER.register("time_aspect_trapdoor", () -> new TrapDoorBlock(copy(TIME_ASPECT_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> TIME_ASPECT_DOOR = REGISTER.register("time_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> TIME_ASPECT_TRAPDOOR = REGISTER.register("time_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Void
 	public static final RegistryObject<Block> VOID_ASPECT_BOOKSHELF = REGISTER.register("void_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -898,8 +898,8 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> VOID_ASPECT_PRESSURE_PLATE = REGISTER.register("void_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(VOID_ASPECT_PLANKS.get()), BlockSetType.OAK));
 	public static final RegistryObject<FenceBlock> VOID_ASPECT_FENCE = REGISTER.register("void_aspect_fence", () -> new FenceBlock(copy(VOID_ASPECT_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> VOID_ASPECT_FENCE_GATE = REGISTER.register("void_aspect_fence_gate", () -> new FenceGateBlock(copy(VOID_ASPECT_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE ));
-	//public static final RegistryObject<DoorBlock> VOID_ASPECT_DOOR = REGISTER.register("void_aspect_door", () -> new DoorBlock(copy(VOID_ASPECT_PLANKS.get()), BlockSetType.OAK));
-	//public static final RegistryObject<TrapDoorBlock> VOID_ASPECT_TRAPDOOR = REGISTER.register("void_aspect_trapdoor", () -> new TrapDoorBlock(copy(VOID_ASPECT_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> VOID_ASPECT_DOOR = REGISTER.register("void_aspect_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> VOID_ASPECT_TRAPDOOR = REGISTER.register("void_aspect_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	
 	//Land Plant Blocks

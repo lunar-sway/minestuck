@@ -601,9 +601,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.CARVED_PRESSURE_PLATE, MSBlocks.CARVED_PLANKS);
 		fenceWithItem(MSBlocks.CARVED_FENCE, MSBlocks.CARVED_PLANKS);
 		fenceGateWithItem(MSBlocks.CARVED_FENCE_GATE, MSBlocks.CARVED_PLANKS);
-		//simpleDoorBlock(MSBlocks.CARVED_DOOR);
-		//trapDoorWithItem(MSBlocks.CARVED_TRAPDOOR);
-		//flatItem(MSItems.CARVED_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.CARVED_DOOR);
+		trapDoorWithItem(MSBlocks.CARVED_TRAPDOOR);
+		flatItem(MSItems.CARVED_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.POLISHED_UNCARVED_WOOD);
 		stairsWithItem(MSBlocks.POLISHED_UNCARVED_STAIRS, MSBlocks.POLISHED_UNCARVED_WOOD);
@@ -729,9 +729,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.GLOWING_PRESSURE_PLATE, MSBlocks.GLOWING_PLANKS);
 		fenceWithItem(MSBlocks.GLOWING_FENCE, MSBlocks.GLOWING_PLANKS);
 		fenceGateWithItem(MSBlocks.GLOWING_FENCE_GATE, MSBlocks.GLOWING_PLANKS);
-		//simpleDoorBlock(MSBlocks.GLOWING_DOOR);
-		//trapDoorWithItem(MSBlocks.GLOWING_TRAPDOOR);
-		//flatItem(MSItems.GLOWING_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.GLOWING_DOOR);
+		trapDoorWithItem(MSBlocks.GLOWING_TRAPDOOR);
+		flatItem(MSItems.GLOWING_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.FROST_PLANKS);
 		stairsWithItem(MSBlocks.FROST_STAIRS, MSBlocks.FROST_PLANKS);
@@ -740,9 +740,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.FROST_PRESSURE_PLATE, MSBlocks.FROST_PLANKS);
 		fenceWithItem(MSBlocks.FROST_FENCE, MSBlocks.FROST_PLANKS);
 		fenceGateWithItem(MSBlocks.FROST_FENCE_GATE, MSBlocks.FROST_PLANKS);
-		//simpleDoorBlock(MSBlocks.FROST_DOOR);
-		//trapDoorWithItem(MSBlocks.FROST_TRAPDOOR);
-		//flatItem(MSItems.FROST_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.FROST_DOOR);
+		trapDoorWithItem(MSBlocks.FROST_TRAPDOOR);
+		flatItem(MSItems.FROST_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.RAINBOW_PLANKS);
 		stairsWithItem(MSBlocks.RAINBOW_STAIRS, MSBlocks.RAINBOW_PLANKS);
@@ -751,9 +751,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.RAINBOW_PRESSURE_PLATE, MSBlocks.RAINBOW_PLANKS);
 		fenceWithItem(MSBlocks.RAINBOW_FENCE, MSBlocks.RAINBOW_PLANKS);
 		fenceGateWithItem(MSBlocks.RAINBOW_FENCE_GATE, MSBlocks.RAINBOW_PLANKS);
-		//simpleDoorBlock(MSBlocks.RAINBOW_DOOR);
-		//trapDoorWithItem(MSBlocks.RAINBOW_TRAPDOOR);
-		//flatItem(MSItems.RAINBOW_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.RAINBOW_DOOR);
+		trapDoorWithItem(MSBlocks.RAINBOW_TRAPDOOR);
+		flatItem(MSItems.RAINBOW_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.END_PLANKS);
 		stairsWithItem(MSBlocks.END_STAIRS, MSBlocks.END_PLANKS);
@@ -762,9 +762,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.END_PRESSURE_PLATE, MSBlocks.END_PLANKS);
 		fenceWithItem(MSBlocks.END_FENCE, MSBlocks.END_PLANKS);
 		fenceGateWithItem(MSBlocks.END_FENCE_GATE, MSBlocks.END_PLANKS);
-		//simpleDoorBlock(MSBlocks.END_DOOR);
-		//trapDoorWithItem(MSBlocks.END_TRAPDOOR);
-		//flatItem(MSItems.END_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.END_DOOR);
+		trapDoorWithItem(MSBlocks.END_TRAPDOOR);
+		flatItem(MSItems.END_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.DEAD_PLANKS);
 		stairsWithItem(MSBlocks.DEAD_STAIRS, MSBlocks.DEAD_PLANKS);
@@ -773,9 +773,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.DEAD_PRESSURE_PLATE, MSBlocks.DEAD_PLANKS);
 		fenceWithItem(MSBlocks.DEAD_FENCE, MSBlocks.DEAD_PLANKS);
 		fenceGateWithItem(MSBlocks.DEAD_FENCE_GATE, MSBlocks.DEAD_PLANKS);
-		//simpleDoorBlock(MSBlocks.DEAD_DOOR);
-		//trapDoorWithItem(MSBlocks.DEAD_TRAPDOOR);
-		//flatItem(MSItems.DEAD_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.DEAD_DOOR);
+		trapDoorWithItem(MSBlocks.DEAD_TRAPDOOR);
+		flatItem(MSItems.DEAD_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.TREATED_PLANKS);
 		stairsWithItem(MSBlocks.TREATED_STAIRS, MSBlocks.TREATED_PLANKS);
@@ -784,9 +784,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.TREATED_PRESSURE_PLATE, MSBlocks.TREATED_PLANKS);
 		fenceWithItem(MSBlocks.TREATED_FENCE, MSBlocks.TREATED_PLANKS);
 		fenceGateWithItem(MSBlocks.TREATED_FENCE_GATE, MSBlocks.TREATED_PLANKS);
-		//simpleDoorBlock(MSBlocks.TREATED_DOOR);
-		//trapDoorWithItem(MSBlocks.TREATED_TRAPDOOR);
-		//flatItem(MSItems.TREATED_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.TREATED_DOOR);
+		trapDoorWithItem(MSBlocks.TREATED_TRAPDOOR);
+		flatItem(MSItems.TREATED_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.SHADEWOOD_PLANKS);
 		stairsWithItem(MSBlocks.SHADEWOOD_STAIRS, MSBlocks.SHADEWOOD_PLANKS);
@@ -795,9 +795,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.SHADEWOOD_PRESSURE_PLATE, MSBlocks.SHADEWOOD_PLANKS);
 		fenceWithItem(MSBlocks.SHADEWOOD_FENCE, MSBlocks.SHADEWOOD_PLANKS);
 		fenceGateWithItem(MSBlocks.SHADEWOOD_FENCE_GATE, MSBlocks.SHADEWOOD_PLANKS);
-		//simpleDoorBlock(MSBlocks.SHADEWOOD_DOOR);
-		//trapDoorWithItem(MSBlocks.SHADEWOOD_TRAPDOOR);
-		//flatItem(MSItems.SHADEWOOD_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.SHADEWOOD_DOOR);
+		trapDoorWithItem(MSBlocks.SHADEWOOD_TRAPDOOR);
+		flatItem(MSItems.SHADEWOOD_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.FROST_LEAVES);
 		simpleBlockWithItem(MSBlocks.RAINBOW_LEAVES,
@@ -872,9 +872,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.BLOOD_ASPECT_PRESSURE_PLATE, MSBlocks.BLOOD_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.BLOOD_ASPECT_FENCE, MSBlocks.BLOOD_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.BLOOD_ASPECT_FENCE_GATE, MSBlocks.BLOOD_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.BLOOD_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.BLOOD_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.BLOOD_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.BLOOD_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.BLOOD_ASPECT_TRAPDOOR);
+		flatItem(MSItems.BLOOD_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.BREATH_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.BREATH_ASPECT_STAIRS, MSBlocks.BREATH_ASPECT_PLANKS);
@@ -883,9 +883,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.BREATH_ASPECT_PRESSURE_PLATE, MSBlocks.BREATH_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.BREATH_ASPECT_FENCE, MSBlocks.BREATH_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.BREATH_ASPECT_FENCE_GATE, MSBlocks.BREATH_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.BREATH_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.BREATH_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.BREATH_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.BREATH_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.BREATH_ASPECT_TRAPDOOR);
+		flatItem(MSItems.BREATH_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.DOOM_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.DOOM_ASPECT_STAIRS, MSBlocks.DOOM_ASPECT_PLANKS);
@@ -894,9 +894,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.DOOM_ASPECT_PRESSURE_PLATE, MSBlocks.DOOM_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.DOOM_ASPECT_FENCE, MSBlocks.DOOM_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.DOOM_ASPECT_FENCE_GATE, MSBlocks.DOOM_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.DOOM_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.DOOM_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.DOOM_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.DOOM_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.DOOM_ASPECT_TRAPDOOR);
+		flatItem(MSItems.DOOM_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.HEART_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.HEART_ASPECT_STAIRS, MSBlocks.HEART_ASPECT_PLANKS);
@@ -905,9 +905,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.HEART_ASPECT_PRESSURE_PLATE, MSBlocks.HEART_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.HEART_ASPECT_FENCE, MSBlocks.HEART_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.HEART_ASPECT_FENCE_GATE, MSBlocks.HEART_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.HEART_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.HEART_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.HEART_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.HEART_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.HEART_ASPECT_TRAPDOOR);
+		flatItem(MSItems.HEART_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.HOPE_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.HOPE_ASPECT_STAIRS, MSBlocks.HOPE_ASPECT_PLANKS);
@@ -916,9 +916,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.HOPE_ASPECT_PRESSURE_PLATE, MSBlocks.HOPE_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.HOPE_ASPECT_FENCE, MSBlocks.HOPE_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.HOPE_ASPECT_FENCE_GATE, MSBlocks.HOPE_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.HOPE_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.HOPE_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.HOPE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.HOPE_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.HOPE_ASPECT_TRAPDOOR);
+		flatItem(MSItems.HOPE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.LIFE_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.LIFE_ASPECT_STAIRS, MSBlocks.LIFE_ASPECT_PLANKS);
@@ -927,9 +927,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.LIFE_ASPECT_PRESSURE_PLATE, MSBlocks.LIFE_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.LIFE_ASPECT_FENCE, MSBlocks.LIFE_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.LIFE_ASPECT_FENCE_GATE, MSBlocks.LIFE_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.LIFE_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.LIFE_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.LIFE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.LIFE_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.LIFE_ASPECT_TRAPDOOR);
+		flatItem(MSItems.LIFE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.LIGHT_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.LIGHT_ASPECT_STAIRS, MSBlocks.LIGHT_ASPECT_PLANKS);
@@ -938,9 +938,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.LIGHT_ASPECT_PRESSURE_PLATE, MSBlocks.LIGHT_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.LIGHT_ASPECT_FENCE, MSBlocks.LIGHT_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.LIGHT_ASPECT_FENCE_GATE, MSBlocks.LIGHT_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.LIGHT_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.LIGHT_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.LIGHT_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.LIGHT_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.LIGHT_ASPECT_TRAPDOOR);
+		flatItem(MSItems.LIGHT_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.MIND_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.MIND_ASPECT_STAIRS, MSBlocks.MIND_ASPECT_PLANKS);
@@ -949,9 +949,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.MIND_ASPECT_PRESSURE_PLATE, MSBlocks.MIND_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.MIND_ASPECT_FENCE, MSBlocks.MIND_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.MIND_ASPECT_FENCE_GATE, MSBlocks.MIND_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.MIND_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.MIND_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.MIND_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.MIND_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.MIND_ASPECT_TRAPDOOR);
+		flatItem(MSItems.MIND_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.RAGE_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.RAGE_ASPECT_STAIRS, MSBlocks.RAGE_ASPECT_PLANKS);
@@ -960,9 +960,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.RAGE_ASPECT_PRESSURE_PLATE, MSBlocks.RAGE_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.RAGE_ASPECT_FENCE, MSBlocks.RAGE_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.RAGE_ASPECT_FENCE_GATE, MSBlocks.RAGE_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.RAGE_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.RAGE_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.RAGE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.RAGE_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.RAGE_ASPECT_TRAPDOOR);
+		flatItem(MSItems.RAGE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.SPACE_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.SPACE_ASPECT_STAIRS, MSBlocks.SPACE_ASPECT_PLANKS);
@@ -971,9 +971,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.SPACE_ASPECT_PRESSURE_PLATE, MSBlocks.SPACE_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.SPACE_ASPECT_FENCE, MSBlocks.SPACE_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.SPACE_ASPECT_FENCE_GATE, MSBlocks.SPACE_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.SPACE_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.SPACE_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.SPACE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.SPACE_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.SPACE_ASPECT_TRAPDOOR);
+		flatItem(MSItems.SPACE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.TIME_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.TIME_ASPECT_STAIRS, MSBlocks.TIME_ASPECT_PLANKS);
@@ -982,9 +982,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.TIME_ASPECT_PRESSURE_PLATE, MSBlocks.TIME_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.TIME_ASPECT_FENCE, MSBlocks.TIME_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.TIME_ASPECT_FENCE_GATE, MSBlocks.TIME_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.TIME_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.TIME_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.TIME_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.TIME_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.TIME_ASPECT_TRAPDOOR);
+		flatItem(MSItems.TIME_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.VOID_ASPECT_PLANKS);
 		stairsWithItem(MSBlocks.VOID_ASPECT_STAIRS, MSBlocks.VOID_ASPECT_PLANKS);
@@ -993,9 +993,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.VOID_ASPECT_PRESSURE_PLATE, MSBlocks.VOID_ASPECT_PLANKS);
 		fenceWithItem(MSBlocks.VOID_ASPECT_FENCE, MSBlocks.VOID_ASPECT_PLANKS);
 		fenceGateWithItem(MSBlocks.VOID_ASPECT_FENCE_GATE, MSBlocks.VOID_ASPECT_PLANKS);
-		//simpleDoorBlock(MSBlocks.VOID_ASPECT_DOOR);
-		//trapDoorWithItem(MSBlocks.VOID_ASPECT_TRAPDOOR);
-		//flatItem(MSItems.VOID_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
+		simpleDoorBlock(MSBlocks.VOID_ASPECT_DOOR);
+		trapDoorWithItem(MSBlocks.VOID_ASPECT_TRAPDOOR);
+		flatItem(MSItems.VOID_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.BLOOD_ASPECT_LEAVES);
 		simpleBlockWithItem(MSBlocks.BREATH_ASPECT_LEAVES);
