@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class StructureCorePacket implements PlayToServerPacket
+public class StructureCorePacket implements MSPacket.PlayToServer
 {
 	private final StructureCoreBlockEntity.ActionType actionType;
 	private final int shutdownRange;

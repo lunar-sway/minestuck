@@ -13,7 +13,7 @@ import java.util.List;
 public final class AtheneumPacket
 {
 	
-	public record Scroll(boolean scrollUp) implements PlayToServerPacket
+	public record Scroll(boolean scrollUp) implements MSPacket.PlayToServer
 	{
 		
 		@Override
@@ -37,7 +37,7 @@ public final class AtheneumPacket
 		
 	}
 	
-	public record Update(boolean less, boolean more, List<ItemStack> inventory) implements PlayToClientPacket
+	public record Update(boolean less, boolean more, List<ItemStack> inventory) implements MSPacket.PlayToClient
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)

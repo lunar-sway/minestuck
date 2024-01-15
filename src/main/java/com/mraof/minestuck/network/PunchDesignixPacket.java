@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public class PunchDesignixPacket implements PlayToServerPacket
+public class PunchDesignixPacket implements MSPacket.PlayToServer
 {
 	private final BlockPos pos;
 	private final String captcha;

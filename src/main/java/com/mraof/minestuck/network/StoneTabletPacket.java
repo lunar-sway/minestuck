@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
-public class StoneTabletPacket implements PlayToServerPacket
+public class StoneTabletPacket implements MSPacket.PlayToServer
 {
 	private final String text;
 	private final InteractionHand hand;

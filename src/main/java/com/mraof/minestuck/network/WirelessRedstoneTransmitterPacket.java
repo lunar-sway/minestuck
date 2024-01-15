@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
+public class WirelessRedstoneTransmitterPacket implements MSPacket.PlayToServer
 {
 	private final BlockPos destinationBlockPos;
 	private final BlockPos beBlockPos;

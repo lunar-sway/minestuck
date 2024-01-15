@@ -6,7 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-public class EffectTogglePacket implements PlayToServerPacket
+public class EffectTogglePacket implements MSPacket.PlayToServer
 {
 	public static final String ON = "minestuck.aspect_effects.on";
 	public static final String OFF = "minestuck.aspect_effects.off";

@@ -6,7 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class StatStorerPacket implements PlayToServerPacket
+public class StatStorerPacket implements MSPacket.PlayToServer
 {
 	private final StatStorerBlockEntity.ActiveType activeType;
 	private final BlockPos beBlockPos;

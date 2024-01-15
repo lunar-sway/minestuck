@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 
-public class ServerCursorPacket implements PlayToClientPacket
+public class ServerCursorPacket implements MSPacket.PlayToClient
 {
 	private final int entityID;
 	private final ServerCursorEntity.AnimationType animation;

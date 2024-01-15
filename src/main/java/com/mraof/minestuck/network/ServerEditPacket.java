@@ -2,16 +2,14 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.computer.editmode.ClientDeployList;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.Objects;
 
 public final class ServerEditPacket
 {
-	public record Activate() implements PlayToClientPacket
+	public record Activate() implements MSPacket.PlayToClient
 	{
 		@Override
 		public void encode(FriendlyByteBuf ignored)
@@ -29,7 +27,7 @@ public final class ServerEditPacket
 		}
 	}
 	
-	public record UpdateDeployList(CompoundTag data) implements PlayToClientPacket
+	public record UpdateDeployList(CompoundTag data) implements MSPacket.PlayToClient
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)
@@ -50,7 +48,7 @@ public final class ServerEditPacket
 		}
 	}
 	
-	public record Exit() implements PlayToClientPacket
+	public record Exit() implements MSPacket.PlayToClient
 	{
 		@Override
 		public void encode(FriendlyByteBuf ignored)

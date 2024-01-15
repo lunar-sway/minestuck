@@ -8,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Used for when the player needs to be moved but only server side access is available
  */
-public class ClientMovementPacket implements PlayToClientPacket
+public class ClientMovementPacket implements MSPacket.PlayToClient
 {
 	private final double moveX;
 	private final double moveY;

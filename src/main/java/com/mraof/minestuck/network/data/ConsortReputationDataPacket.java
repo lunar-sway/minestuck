@@ -1,10 +1,10 @@
 package com.mraof.minestuck.network.data;
 
-import com.mraof.minestuck.network.PlayToClientPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class ConsortReputationDataPacket implements PlayToClientPacket
+public class ConsortReputationDataPacket implements MSPacket.PlayToClient
 {
     private final int count;
     

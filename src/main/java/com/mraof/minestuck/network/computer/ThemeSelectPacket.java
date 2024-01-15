@@ -2,12 +2,12 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.Theme;
-import com.mraof.minestuck.network.PlayToServerPacket;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public class ThemeSelectPacket implements PlayToServerPacket
+public class ThemeSelectPacket implements MSPacket.PlayToServer
 {
 	private final BlockPos pos;
 	private final int themeId;

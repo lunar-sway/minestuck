@@ -11,17 +11,17 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 {
-	protected final RecipeType<? extends AbstractCookingRecipe> fallbackType;
+	protected final RecipeType<?> fallbackType;
 	
-	public IrradiatingFallbackRecipe(ResourceLocation idIn, RecipeType<? extends AbstractCookingRecipe> fallbackType)
+	public IrradiatingFallbackRecipe(ResourceLocation idIn, RecipeType<?> fallbackType)
 	{
 		super(idIn, "", CookingBookCategory.MISC, Ingredient.EMPTY, ItemStack.EMPTY, 0, 20);
 		this.fallbackType = fallbackType;
@@ -36,7 +36,23 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	@Override
 	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(Container container, Level level)
 	{
-		return level.getRecipeManager().getRecipesFor(fallbackType, container, level).stream().filter(o -> !o.isSpecial()).findFirst();
+		RecipeManager recipeManager = level.getRecipeManager();
+		return getFallbackRecipes(recipeManager)
+				.filter(recipe -> recipe.matches(container, level))
+				.findFirst();
+	}
+	
+	private Stream<AbstractCookingRecipe> getFallbackRecipes(RecipeManager recipeManager)
+	{
+		return recipeManager.getRecipes().stream()
+				.filter(recipe -> recipe.getType() == this.fallbackType)
+				.flatMap(recipe -> {
+					if(recipe instanceof AbstractCookingRecipe cookingRecipe)
+						return Stream.of(cookingRecipe);
+					else
+						return Stream.empty();
+				})
+				.filter(o -> !o.isSpecial());
 	}
 	
 	@Override
@@ -62,11 +78,10 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 		@Override
 		public IrradiatingFallbackRecipe fromJson(ResourceLocation recipeId, JsonObject json)
 		{
-			RecipeType<? extends AbstractCookingRecipe> fallbackType = deserializeRecipeType(json);
+			RecipeType<?> fallbackType = deserializeRecipeType(json);
 			return new IrradiatingFallbackRecipe(recipeId, fallbackType);
 		}
 		
-		@Nullable
 		@Override
 		public IrradiatingFallbackRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
 		{
@@ -74,7 +89,7 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 			RecipeType<?> fallbackType = ForgeRegistries.RECIPE_TYPES.getValue(typeName);
 			if(fallbackType == null)
 				throw new IllegalArgumentException("Can not deserialize unknown Recipe type: " + typeName);
-			return new IrradiatingFallbackRecipe(recipeId, (RecipeType<? extends AbstractCookingRecipe>) fallbackType);
+			return new IrradiatingFallbackRecipe(recipeId, fallbackType);
 		}
 		
 		@Override
@@ -84,12 +99,12 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 		}
 	}
 	
-	private static RecipeType<? extends AbstractCookingRecipe> deserializeRecipeType(JsonObject json)
+	private static RecipeType<?> deserializeRecipeType(JsonObject json)
 	{
 		String typeName = GsonHelper.getAsString(json, "fallback_type");
 		RecipeType<?> fallbackType = ForgeRegistries.RECIPE_TYPES.getValue(new ResourceLocation(typeName));
 		if(fallbackType == null)
 			throw new JsonSyntaxException("Unknown recipe type '" + typeName + "'");
-		return (RecipeType<? extends AbstractCookingRecipe>) fallbackType;
+		return fallbackType;
 	}
 }

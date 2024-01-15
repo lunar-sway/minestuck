@@ -1,12 +1,12 @@
 package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.network.PlayToServerPacket;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public class BurnDiskPacket implements PlayToServerPacket
+public class BurnDiskPacket implements MSPacket.PlayToServer
 {
 	private final BlockPos bePos;
 	private final int programId;

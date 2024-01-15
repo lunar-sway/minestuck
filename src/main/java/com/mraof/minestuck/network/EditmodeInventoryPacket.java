@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditmodeInventoryPacket implements PlayToBothPacket
+public class EditmodeInventoryPacket implements MSPacket.PlayToBoth
 {
 	
 	private final boolean b1, b2;
