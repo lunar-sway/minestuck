@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/vertical_green_stone_bricks",
+    "side": "minestuck:block/vertical_green_stone_bricks",
+    "top": "minestuck:block/vertical_green_stone_bricks"
+  }
+}

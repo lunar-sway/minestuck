@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "minestuck:block/flowery_mossy_cobblestone",
+    "side": "minestuck:block/flowery_mossy_cobblestone",
+    "top": "minestuck:block/flowery_mossy_cobblestone"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/carved_heavy_plank_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/carved_heavy_planks"
+    },
+    "type=top": {
+      "model": "minestuck:block/carved_heavy_plank_slab_top"
+    }
+  }
+}

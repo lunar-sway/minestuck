@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/uranium_block",
+    "side": "minestuck:block/uranium_block",
+    "top": "minestuck:block/uranium_block"
+  }
+}
