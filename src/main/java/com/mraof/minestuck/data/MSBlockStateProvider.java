@@ -222,7 +222,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.GENERIC_OBJECT);
 		
 		//Land Environment
-		weightedVariantsWithItem(MSBlocks.BLUE_DIRT, new int[] {12, 6, 1, 1},
+		weightedVariantsWithItem(MSBlocks.BLUE_DIRT, new int[]{12, 6, 1, 1},
 				i -> models().cubeAll("blue_dirt" + i, texture("blue_dirt/" + i)));
 		simpleBlockWithItem(MSBlocks.THOUGHT_DIRT);
 		
@@ -398,14 +398,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 		//stairsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
 		//slabWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
 		//wallWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_WALL, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
-
+		
 		variantsWithItem(MSBlocks.DECREPIT_STONE_BRICKS, 4,
 				i -> models().cubeAll("decrepit_stone_bricks" + (i + 1),
 						texture(id("decrepit_stone_bricks/" + (i + 1)))));
 		//stairsWithItem(MSBlocks.DECREPIT_STONE_BRICK_STAIRS, MSBlocks.DECREPIT_STONE_BRICKS);
 		//slabWithItem(MSBlocks.DECREPIT_STONE_BRICK_SLAB, MSBlocks.DECREPIT_STONE_BRICKS);
 		//wallWithItem(MSBlocks.DECREPIT_STONE_BRICK_WALL, MSBlocks.DECREPIT_STONE_BRICKS);
-
+		
 		variantsWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS, 4,
 				i -> models().cubeAll("mossy_decrepit_stone_bricks" + (i + 1),
 						texture(id("mossy_decrepit_stone_bricks/" + (i + 1)))));
@@ -579,7 +579,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.UNCARVED_WOOD);
 		fenceWithItem(MSBlocks.UNCARVED_WOOD_FENCE, MSBlocks.UNCARVED_WOOD);
 		fenceGateWithItem(MSBlocks.UNCARVED_WOOD_FENCE_GATE, MSBlocks.UNCARVED_WOOD);
-	
+		
 		simpleBlockWithItem(MSBlocks.CHIPBOARD);
 		stairsWithItem(MSBlocks.CHIPBOARD_STAIRS, MSBlocks.CHIPBOARD);
 		slabWithItem(MSBlocks.CHIPBOARD_SLAB, MSBlocks.CHIPBOARD);
@@ -587,7 +587,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.CHIPBOARD_PRESSURE_PLATE, MSBlocks.CHIPBOARD);
 		fenceWithItem(MSBlocks.CHIPBOARD_FENCE, MSBlocks.CHIPBOARD);
 		fenceGateWithItem(MSBlocks.CHIPBOARD_FENCE_GATE, MSBlocks.CHIPBOARD);
-	
+		
 		simpleBlockWithItem(MSBlocks.WOOD_SHAVINGS);
 		
 		simpleBlockWithItem(MSBlocks.CARVED_HEAVY_PLANKS);
@@ -1161,7 +1161,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.TREATED_LADDER, MSBlockStateProvider::texture);
 		
 		//Land Plant Blocks
-		getVariantBuilder(MSBlocks.GLOWING_MUSHROOM.get()).partialState().setModels(weightedVariantModels(new int[] {2, 3, 2, 1, 2, 2, 1, 1},
+		getVariantBuilder(MSBlocks.GLOWING_MUSHROOM.get()).partialState().setModels(weightedVariantModels(new int[]{2, 3, 2, 1, 2, 2, 1, 1},
 				i -> models().cross("glowing_mushroom" + i, texture("glowing_mushroom/" + i)).renderType("cutout")));
 		flatItem(MSItems.GLOWING_MUSHROOM, id -> texture("glowing_mushroom/1"));
 		simpleBlock(MSBlocks.DESERT_BUSH,
@@ -1275,8 +1275,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		{
 			ModelFile verticalUnpowered = models()
 					.cubeColumn("trajectory_block_vertical_unpowered",
-					texture("redstone_machine_block"),
-					texture("trajectory_block/vertical_top_unpowered"));
+							texture("redstone_machine_block"),
+							texture("trajectory_block/vertical_top_unpowered"));
 			ModelFile verticalPowered = models()
 					.cubeColumn("trajectory_block_vertical_powered",
 							texture("redstone_machine_block"),
@@ -1638,7 +1638,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		cake(MSBlocks.CARROT_CAKE);
 		flatItem(MSItems.CARROT_CAKE, MSBlockStateProvider::itemTexture);
 		simpleBlockWithItem(MSBlocks.LARGE_CAKE);
-		weightedVariantsWithItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, new int[] {7, 2},
+		weightedVariantsWithItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, new int[]{7, 2},
 				i -> models().getExistingFile(id("pink_frosted_top_large_cake" + i)));
 		
 		//Explosives
@@ -1981,7 +1981,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	{
 		ModelFile fenceInventory = models().fenceInventory(baseName + "_fence_inventory", texture);
 		
-		fenceBlock(block.get(),texture);
+		fenceBlock(block.get(), texture);
 		simpleBlockItem(block.get(), fenceInventory);
 	}
 	
@@ -1993,7 +1993,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	private void fenceGateWithItem(RegistryObject<FenceGateBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile fenceGateInventory = models().fenceGate(baseName + "_fence_gate", texture);
-		fenceGateBlock(block.get(),texture);
+		fenceGateBlock(block.get(), texture);
 		simpleBlockItem(block.get(), fenceGateInventory);
 	}
 	
@@ -2003,7 +2003,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		ResourceLocation doorBottom = new ResourceLocation("minestuck:block/" + baseName + "_bottom");
 		ResourceLocation doorTop = new ResourceLocation("minestuck:block/" + baseName + "_top");
 		
-		doorBlockWithRenderType(block.get(),doorBottom,doorTop,"cutout");
+		doorBlockWithRenderType(block.get(), doorBottom, doorTop, "cutout");
 	}
 	
 	private void trapDoorWithItem(RegistryObject<TrapDoorBlock> block)
@@ -2015,7 +2015,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	{
 		ModelFile trapDoorInventory = models().trapdoorBottom(baseName + "_bottom", texture);
 		
-		trapdoorBlockWithRenderType(block.get(),texture,true,"cutout");
+		trapdoorBlockWithRenderType(block.get(), texture, true, "cutout");
 		simpleBlockItem(block.get(), trapDoorInventory);
 	}
 	
@@ -2027,20 +2027,20 @@ public class MSBlockStateProvider extends BlockStateProvider
 	private void buttonWithItem(RegistryObject<ButtonBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile buttonInventory = models().buttonInventory(baseName + "_button_inventory", texture);
-		buttonBlock(block.get(),texture);
+		buttonBlock(block.get(), texture);
 		simpleBlockItem(block.get(), buttonInventory);
 	}
 	
 	private void pressurePlateWithItem(RegistryObject<PressurePlateBlock> block, RegistryObject<? extends Block> sourceBlock)
 	{
-		pressurePlateWithItem(block,sourceBlock.getId().getPath(), texture(sourceBlock));
+		pressurePlateWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
 	private void pressurePlateWithItem(RegistryObject<PressurePlateBlock> block, String baseName, ResourceLocation texture)
 	{
-		ModelFile pressurePlateInventory = models().pressurePlate( baseName+ "_pressure_plate", texture);
-		pressurePlateBlock(block.get(),texture);
-		simpleBlockItem(block.get(),pressurePlateInventory);
+		ModelFile pressurePlateInventory = models().pressurePlate(baseName + "_pressure_plate", texture);
+		pressurePlateBlock(block.get(), texture);
+		simpleBlockItem(block.get(), pressurePlateInventory);
 	}
 	
 	private void powerVariableWithItem(RegistryObject<Block> block, ModelFile highPowerModel, ModelFile mediumPowerModel, ModelFile lowPowerModel, ModelFile unpoweredModel)
@@ -2091,7 +2091,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 					.texture("side", texture(id.withSuffix("_side")))
 					.texture("inside", texture(id.withSuffix("_inner")))
 					.element()
-					.from(1 + 2*bites, 0, 1).to(15, 8, 15)
+					.from(1 + 2 * bites, 0, 1).to(15, 8, 15)
 					.allFaces((direction, faceBuilder) -> {
 						if(direction == Direction.UP)
 							faceBuilder.texture("#top");

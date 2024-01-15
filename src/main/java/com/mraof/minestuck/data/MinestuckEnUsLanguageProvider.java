@@ -448,7 +448,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.UNCARVED_WOOD_PRESSURE_PLATE, "Uncarved Wood Pressure Plate");
 		addBlock(MSBlocks.UNCARVED_WOOD_FENCE, "Uncarved Wood Fence");
 		addBlock(MSBlocks.UNCARVED_WOOD_FENCE_GATE, "Uncarved Wood Fence Gate");
-
+		
 		addBlock(MSBlocks.CHIPBOARD, "Chipboard");
 		addBlock(MSBlocks.CHIPBOARD_STAIRS, "Chipboard Stairs");
 		addBlock(MSBlocks.CHIPBOARD_SLAB, "Chipboard Slab");
@@ -456,7 +456,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHIPBOARD_PRESSURE_PLATE, "Chipboard Pressure Plate");
 		addBlock(MSBlocks.CHIPBOARD_FENCE, "Chipboard Fence");
 		addBlock(MSBlocks.CHIPBOARD_FENCE_GATE, "Chipboard Fence Gate");
-	
+		
 		addBlock(MSBlocks.WOOD_SHAVINGS, "Wood Shavings");
 		
 		addBlock(MSBlocks.CARVED_HEAVY_PLANKS, "Carved Heavy Planks");
@@ -1202,8 +1202,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.BLACKSMITH_BANE, "Blacksmith's Bane");
 		addItem(MSItems.REGIAXE, "Regiaxe");
 		addItem(MSItems.GOTHY_AXE, "Gothy Axe");
-        addItem(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
-        addItemTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
+		addItem(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
+		addItemTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
 		addItemExtra(MSItems.SURPRISE_AXE, "message", "WOW! NO WAY! You found a %s from your opponent!");
 		addItem(MSItems.SHOCK_AXE, "Kundler Shock Axe");
 		addItemTooltip(MSItems.SHOCK_AXE, "An electric surprise!");
@@ -1280,7 +1280,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.LANEC, OnHitEffect.SORD_DROP_MESSAGE, "fuck......ahhhahahaaa....");
 		addItem(MSItems.JOUSTING_LANCE, "Jousting Lance");
 		addItem(MSItems.POGO_LANCE, "Pogo Lance");
-		addItem(MSItems.LANCELOTS_LOLLY,"Lancelot's Lolly");
+		addItem(MSItems.LANCELOTS_LOLLY, "Lancelot's Lolly");
 		addItemTooltip(MSItems.LANCELOTS_LOLLY, "Make your enemies POP with this SICKLE oops I mean LANCE");
 		addItem(MSItems.DRAGON_LANCE, "Dragon Lance");
 		addItem(MSItems.SKY_PIERCER, "Sky Piercer");
@@ -1295,7 +1295,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.FAN, "Fan");
 		addItem(MSItems.CANDY_FAN, "Candy Fan");
 		addItem(MSItems.SPINES_OF_FLUTHLU, "Spines of Fluthlu");
-		addItemTooltip(MSItems.SPINES_OF_FLUTHLU, ChatFormatting.OBFUSCATED+"Oooh it's the Spines of FLUTHLU so spooky hehehe");
+		addItemTooltip(MSItems.SPINES_OF_FLUTHLU, ChatFormatting.OBFUSCATED + "Oooh it's the Spines of FLUTHLU so spooky hehehe");
 		addItem(MSItems.RAZOR_FAN, "Razor Fan");
 		addItem(MSItems.MOTOR_FAN, "Motor Fan");
 		addItemTooltip(MSItems.MOTOR_FAN, "This battery-powered fan has greater knockback, and is great for a hot day.");
@@ -1333,7 +1333,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		addItem(MSItems.TIME_FLAYER, "Time Flayer");
 		addItem(MSItems.DESTINY_DECIMATOR, "Destiny Decimator");
-		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
+		addItem(MSItems.SUNRAY_HARVESTER, "Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
 		addItem(MSItems.GREEN_SUN_RAYREAPER, "Green Sun Rayreaper");
 		addItemTooltip(MSItems.GREEN_SUN_RAYREAPER, "Decimate enemies with the power of a star the mass of two universes.");
@@ -1703,7 +1703,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.FROG, "type.5", "Golden Frog");
 		addItemExtra(MSItems.FROG, "type.6", "Frog");
 		addItemExtra(MSItems.FROG, "desc.4", "frog.null.name");
-		addItemExtra(MSItems.FROG, "desc.6", ChatFormatting.OBFUSCATED+"Susan");
+		addItemExtra(MSItems.FROG, "desc.6", ChatFormatting.OBFUSCATED + "Susan");
 		addItemExtra(MSItems.FROG, "eyes.0", "Lighter Eyes");
 		addItemExtra(MSItems.FROG, "eyes.1", "Darker Eyes");
 		addItemExtra(MSItems.FROG, "eyes.2", "Blank Eyes");

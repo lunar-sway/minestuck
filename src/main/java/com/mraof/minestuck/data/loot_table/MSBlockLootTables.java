@@ -1052,122 +1052,152 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
+	
 	private LootTable.Builder uraniumOreDrop(Block block)
 	{
 		return createOreDrop(block, MSItems.RAW_URANIUM.get());
 	}
+	
 	private LootTable.Builder coalOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.COAL);
 	}
+	
 	private LootTable.Builder goldOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.RAW_GOLD);
 	}
+	
 	private LootTable.Builder ironOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.RAW_IRON);
 	}
+	
 	private LootTable.Builder redstoneOreDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(Items.REDSTONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 5.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
+	
 	private LootTable.Builder quartzOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.QUARTZ);
 	}
+	
 	private LootTable.Builder lapisOreDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(Items.LAPIS_LAZULI).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 9.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
+	
 	private LootTable.Builder diamondOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.DIAMOND);
 	}
+	
 	private LootTable.Builder endGrassDrop(Block block)
 	{
 		return createSingleItemTableWithSilkTouch(block, Blocks.END_STONE);
 	}
+	
 	private LootTable.Builder frostLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder rainbowLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, RAINBOW_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder endLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(NO_SILK_OR_SHEAR_CONDITION).add(applyExplosionCondition(block, LootItem.lootTableItem(Items.CHORUS_FRUIT)).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
 	}
+	
 	private LootTable.Builder shadewoodLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, SHADEWOOD_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder bloodAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, BLOOD_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder breathAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, BREATH_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder doomAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, DOOM_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder heartAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, HEART_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder hopeAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, HOPE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder lifeAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, LIFE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder lightAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, LIGHT_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder mindAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, MIND_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder rageAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, RAGE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder spaceAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, SPACE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder timeAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, TIME_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder voidAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	
 	private LootTable.Builder bookshelfDrop(Block block)
 	{
 		return createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F));
 	}
+	
 	private LootTable.Builder desertBushDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
+	
 	private LootTable.Builder droppingWithColor(Block block)
 	{
 		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("color", "color")))));
 	}
+	
 	private LootTable.Builder droppingWithTEItem(Block block)
 	{
 		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackBlockEntity.ITEM_DYNAMIC))));
 	}
+	
 	private static LootTable.Builder droppingWithNameOnSilkTouch(Block block)
 	{
 		return createSelfDropDispatchTable(block, SILK_TOUCH_CONDITION.invert(), LootItem.lootTableItem(block).apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));

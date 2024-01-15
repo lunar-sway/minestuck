@@ -595,7 +595,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BUG_NET.get());
 		output.accept(MSItems.FROG.get());
 		// FROG TYPES
-		for (int i : new int[]{1,2,5,6}) {
+		for(int i : new int[]{1, 2, 5, 6})
+		{
 			ItemStack item = new ItemStack(MSItems.FROG.get());
 			item.getOrCreateTag().putInt("Type", i);
 			output.accept(item);
@@ -878,7 +879,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.UNCARVED_WOOD_PRESSURE_PLATE.get());
 		output.accept(MSItems.UNCARVED_WOOD_FENCE.get());
 		output.accept(MSItems.UNCARVED_WOOD_FENCE_GATE.get());
-
+		
 		output.accept(MSItems.CHIPBOARD.get());
 		output.accept(MSItems.CHIPBOARD_STAIRS.get());
 		output.accept(MSItems.CHIPBOARD_SLAB.get());
@@ -886,7 +887,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CHIPBOARD_PRESSURE_PLATE.get());
 		output.accept(MSItems.CHIPBOARD_FENCE.get());
 		output.accept(MSItems.CHIPBOARD_FENCE_GATE.get());
-
+		
 		output.accept(MSItems.WOOD_SHAVINGS.get());
 		
 		output.accept(MSItems.CARVED_HEAVY_PLANKS.get());
