@@ -470,8 +470,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CARVED_PRESSURE_PLATE, "Carved Pressure Plate");
 		addBlock(MSBlocks.CARVED_FENCE, "Carved Fence");
 		addBlock(MSBlocks.CARVED_FENCE_GATE, "Carved Fence Gate");
-		//addBlock(MSBlocks.CARVED_DOOR, "Carved Door");
-		//addBlock(MSBlocks.CARVED_TRAPDOOR, "Carved Trapdoor");
+		addBlock(MSBlocks.CARVED_DOOR, "Carved Door");
+		addBlock(MSBlocks.CARVED_TRAPDOOR, "Carved Trapdoor");
 		
 		addBlock(MSBlocks.POLISHED_UNCARVED_WOOD, "Polished Uncarved Wood");
 		addBlock(MSBlocks.POLISHED_UNCARVED_STAIRS, "Polished Uncarved Stairs");
@@ -518,8 +518,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.GLOWING_PRESSURE_PLATE, "Glowing Pressure Plate");
 		addBlock(MSBlocks.GLOWING_FENCE, "Glowing Fence");
 		addBlock(MSBlocks.GLOWING_FENCE_GATE, "Glowing Fence Gate");
-		//addBlock(MSBlocks.GLOWING_DOOR, "Glowing Door");
-		//addBlock(MSBlocks.GLOWING_TRAPDOOR, "Glowing Trapdoor");
+		addBlock(MSBlocks.GLOWING_DOOR, "Glowing Door");
+		addBlock(MSBlocks.GLOWING_TRAPDOOR, "Glowing Trapdoor");
 		
 		addBlock(MSBlocks.FROST_PLANKS, "Frost Planks");
 		addBlock(MSBlocks.FROST_STAIRS, "Frost Stairs");
@@ -528,8 +528,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FROST_PRESSURE_PLATE, "Frost Pressure Plate");
 		addBlock(MSBlocks.FROST_FENCE, "Frost Fence");
 		addBlock(MSBlocks.FROST_FENCE_GATE, "Frost Fence Gate");
-		//addBlock(MSBlocks.FROST_DOOR, "Frost Door");
-		//addBlock(MSBlocks.FROST_TRAPDOOR, "Frost Trapdoor");
+		addBlock(MSBlocks.FROST_DOOR, "Frost Door");
+		addBlock(MSBlocks.FROST_TRAPDOOR, "Frost Trapdoor");
 		
 		addBlock(MSBlocks.RAINBOW_PLANKS, "Rainbow Planks");
 		addBlock(MSBlocks.RAINBOW_STAIRS, "Rainbow Stairs");
@@ -538,8 +538,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_PRESSURE_PLATE, "Rainbow Pressure Plate");
 		addBlock(MSBlocks.RAINBOW_FENCE, "Rainbow Fence");
 		addBlock(MSBlocks.RAINBOW_FENCE_GATE, "Rainbow Fence Gate");
-		//addBlock(MSBlocks.RAINBOW_DOOR, "Rainbow Door");
-		//addBlock(MSBlocks.RAINBOW_TRAPDOOR, "Rainbow Trapdoor");
+		addBlock(MSBlocks.RAINBOW_DOOR, "Rainbow Door");
+		addBlock(MSBlocks.RAINBOW_TRAPDOOR, "Rainbow Trapdoor");
 		
 		addBlock(MSBlocks.END_PLANKS, "End Planks");
 		addBlock(MSBlocks.END_STAIRS, "End Stairs");
@@ -548,8 +548,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.END_PRESSURE_PLATE, "End Pressure Plate");
 		addBlock(MSBlocks.END_FENCE, "End Fence");
 		addBlock(MSBlocks.END_FENCE_GATE, "End Fence Gate");
-		//addBlock(MSBlocks.END_DOOR, "End Door");
-		//addBlock(MSBlocks.END_TRAPDOOR, "End Trapdoor");
+		addBlock(MSBlocks.END_DOOR, "End Door");
+		addBlock(MSBlocks.END_TRAPDOOR, "End Trapdoor");
 		
 		addBlock(MSBlocks.DEAD_PLANKS, "Dead Planks");
 		addBlock(MSBlocks.DEAD_STAIRS, "Dead Stairs");
@@ -558,8 +558,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_PRESSURE_PLATE, "Dead Pressure Plate");
 		addBlock(MSBlocks.DEAD_FENCE, "Dead Fence");
 		addBlock(MSBlocks.DEAD_FENCE_GATE, "Dead Fence Gate");
-		//addBlock(MSBlocks.DEAD_DOOR, "Dead Door");
-		//addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
+		addBlock(MSBlocks.DEAD_DOOR, "Dead Door");
+		addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
 		
 		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
 		addBlock(MSBlocks.TREATED_STAIRS, "Treated Stairs");
@@ -568,8 +568,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.TREATED_PRESSURE_PLATE, "Treated Pressure Plate");
 		addBlock(MSBlocks.TREATED_FENCE, "Treated Fence");
 		addBlock(MSBlocks.TREATED_FENCE_GATE, "Treated Fence Gate");
-		//addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
-		//addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
+		addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
+		addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
 		
 		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
 		addBlock(MSBlocks.SHADEWOOD_STAIRS, "Shadewood Stairs");
@@ -578,8 +578,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADEWOOD_PRESSURE_PLATE, "Shadewood Pressure Plate");
 		addBlock(MSBlocks.SHADEWOOD_FENCE, "Shadewood Fence");
 		addBlock(MSBlocks.SHADEWOOD_FENCE_GATE, "Shadewood Fence Gate");
-		//addBlock(MSBlocks.SHADEWOOD_DOOR, "Shadewood Door");
-		//addBlock(MSBlocks.SHADEWOOD_TRAPDOOR, "Shadewood Trapdoor");
+		addBlock(MSBlocks.SHADEWOOD_DOOR, "Shadewood Door");
+		addBlock(MSBlocks.SHADEWOOD_TRAPDOOR, "Shadewood Trapdoor");
 		
 		addBlock(MSBlocks.FROST_LEAVES, "Frost Leaves");
 		addBlock(MSBlocks.RAINBOW_LEAVES, "Rainbow Leaves");
@@ -609,8 +609,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLOOD_ASPECT_PRESSURE_PLATE, "Blood Pressure Plate");
 		addBlock(MSBlocks.BLOOD_ASPECT_FENCE, "Blood Fence");
 		addBlock(MSBlocks.BLOOD_ASPECT_FENCE_GATE, "Blood Fence Gate");
-		//addBlock(MSBlocks.BLOOD_ASPECT_DOOR, "Blood Door");
-		//addBlock(MSBlocks.BLOOD_ASPECT_TRAPDOOR, "Blood Trapdoor");
+		addBlock(MSBlocks.BLOOD_ASPECT_DOOR, "Blood Door");
+		addBlock(MSBlocks.BLOOD_ASPECT_TRAPDOOR, "Blood Trapdoor");
 		
 		addBlock(MSBlocks.BREATH_ASPECT_PLANKS, "Breath Planks");
 		addBlock(MSBlocks.BREATH_ASPECT_STAIRS, "Breath Stairs");
@@ -619,8 +619,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BREATH_ASPECT_PRESSURE_PLATE, "Breath Pressure Plate");
 		addBlock(MSBlocks.BREATH_ASPECT_FENCE, "Breath Fence");
 		addBlock(MSBlocks.BREATH_ASPECT_FENCE_GATE, "Breath Fence Gate");
-		//addBlock(MSBlocks.BREATH_ASPECT_DOOR, "Breath Door");
-		//addBlock(MSBlocks.BREATH_ASPECT_TRAPDOOR, "Breath Trapdoor");
+		addBlock(MSBlocks.BREATH_ASPECT_DOOR, "Breath Door");
+		addBlock(MSBlocks.BREATH_ASPECT_TRAPDOOR, "Breath Trapdoor");
 		
 		addBlock(MSBlocks.DOOM_ASPECT_PLANKS, "Doom Planks");
 		addBlock(MSBlocks.DOOM_ASPECT_STAIRS, "Doom Stairs");
@@ -629,8 +629,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DOOM_ASPECT_PRESSURE_PLATE, "Doom Pressure Plate");
 		addBlock(MSBlocks.DOOM_ASPECT_FENCE, "Doom Fence");
 		addBlock(MSBlocks.DOOM_ASPECT_FENCE_GATE, "Doom Fence Gate");
-		//addBlock(MSBlocks.DOOM_ASPECT_DOOR, "Doom Door");
-		//addBlock(MSBlocks.DOOM_ASPECT_TRAPDOOR, "Doom Trapdoor");
+		addBlock(MSBlocks.DOOM_ASPECT_DOOR, "Doom Door");
+		addBlock(MSBlocks.DOOM_ASPECT_TRAPDOOR, "Doom Trapdoor");
 		
 		addBlock(MSBlocks.HEART_ASPECT_PLANKS, "Heart Planks");
 		addBlock(MSBlocks.HEART_ASPECT_STAIRS, "Heart Stairs");
@@ -639,8 +639,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.HEART_ASPECT_PRESSURE_PLATE, "Heart Pressure Plate");
 		addBlock(MSBlocks.HEART_ASPECT_FENCE, "Heart Fence");
 		addBlock(MSBlocks.HEART_ASPECT_FENCE_GATE, "Heart Fence Gate");
-		//addBlock(MSBlocks.HEART_ASPECT_DOOR, "Heart Door");
-		//addBlock(MSBlocks.HEART_ASPECT_TRAPDOOR, "Heart Trapdoor");
+		addBlock(MSBlocks.HEART_ASPECT_DOOR, "Heart Door");
+		addBlock(MSBlocks.HEART_ASPECT_TRAPDOOR, "Heart Trapdoor");
 		
 		addBlock(MSBlocks.HOPE_ASPECT_PLANKS, "Hope Planks");
 		addBlock(MSBlocks.HOPE_ASPECT_STAIRS, "Hope Stairs");
@@ -649,8 +649,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.HOPE_ASPECT_PRESSURE_PLATE, "Hope Pressure Plate");
 		addBlock(MSBlocks.HOPE_ASPECT_FENCE, "Hope Fence");
 		addBlock(MSBlocks.HOPE_ASPECT_FENCE_GATE, "Hope Fence Gate");
-		//addBlock(MSBlocks.HOPE_ASPECT_DOOR, "Hope Door");
-		//addBlock(MSBlocks.HOPE_ASPECT_TRAPDOOR, "Hope Trapdoor");
+		addBlock(MSBlocks.HOPE_ASPECT_DOOR, "Hope Door");
+		addBlock(MSBlocks.HOPE_ASPECT_TRAPDOOR, "Hope Trapdoor");
 		
 		addBlock(MSBlocks.LIFE_ASPECT_PLANKS, "Life Planks");
 		addBlock(MSBlocks.LIFE_ASPECT_STAIRS, "Life Stairs");
@@ -659,8 +659,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.LIFE_ASPECT_PRESSURE_PLATE, "Life Pressure Plate");
 		addBlock(MSBlocks.LIFE_ASPECT_FENCE, "Life Fence");
 		addBlock(MSBlocks.LIFE_ASPECT_FENCE_GATE, "Life Fence Gate");
-		//addBlock(MSBlocks.LIFE_ASPECT_DOOR, "Life Door");
-		//addBlock(MSBlocks.LIFE_ASPECT_TRAPDOOR, "Life Trapdoor");
+		addBlock(MSBlocks.LIFE_ASPECT_DOOR, "Life Door");
+		addBlock(MSBlocks.LIFE_ASPECT_TRAPDOOR, "Life Trapdoor");
 		
 		addBlock(MSBlocks.LIGHT_ASPECT_PLANKS, "Light Planks");
 		addBlock(MSBlocks.LIGHT_ASPECT_STAIRS, "Light Stairs");
@@ -669,8 +669,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.LIGHT_ASPECT_PRESSURE_PLATE, "Light Pressure Plate");
 		addBlock(MSBlocks.LIGHT_ASPECT_FENCE, "Light Fence");
 		addBlock(MSBlocks.LIGHT_ASPECT_FENCE_GATE, "Light Fence Gate");
-		//addBlock(MSBlocks.LIGHT_ASPECT_DOOR, "Light Door");
-		//addBlock(MSBlocks.LIGHT_ASPECT_TRAPDOOR, "Light Trapdoor");
+		addBlock(MSBlocks.LIGHT_ASPECT_DOOR, "Light Door");
+		addBlock(MSBlocks.LIGHT_ASPECT_TRAPDOOR, "Light Trapdoor");
 		
 		addBlock(MSBlocks.MIND_ASPECT_PLANKS, "Mind Planks");
 		addBlock(MSBlocks.MIND_ASPECT_STAIRS, "Mind Stairs");
@@ -679,8 +679,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.MIND_ASPECT_PRESSURE_PLATE, "Mind Pressure Plate");
 		addBlock(MSBlocks.MIND_ASPECT_FENCE, "Mind Fence");
 		addBlock(MSBlocks.MIND_ASPECT_FENCE_GATE, "Mind Fence Gate");
-		//addBlock(MSBlocks.MIND_ASPECT_DOOR, "Mind Door");
-		//addBlock(MSBlocks.MIND_ASPECT_TRAPDOOR, "Mind Trapdoor");
+		addBlock(MSBlocks.MIND_ASPECT_DOOR, "Mind Door");
+		addBlock(MSBlocks.MIND_ASPECT_TRAPDOOR, "Mind Trapdoor");
 		
 		addBlock(MSBlocks.RAGE_ASPECT_PLANKS, "Rage Planks");
 		addBlock(MSBlocks.RAGE_ASPECT_STAIRS, "Rage Stairs");
@@ -689,8 +689,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAGE_ASPECT_PRESSURE_PLATE, "Rage Pressure Plate");
 		addBlock(MSBlocks.RAGE_ASPECT_FENCE, "Rage Fence");
 		addBlock(MSBlocks.RAGE_ASPECT_FENCE_GATE, "Rage Fence Gate");
-		//addBlock(MSBlocks.RAGE_ASPECT_DOOR, "Rage Door");
-		//addBlock(MSBlocks.RAGE_ASPECT_TRAPDOOR, "Rage Trapdoor");
+		addBlock(MSBlocks.RAGE_ASPECT_DOOR, "Rage Door");
+		addBlock(MSBlocks.RAGE_ASPECT_TRAPDOOR, "Rage Trapdoor");
 		
 		addBlock(MSBlocks.SPACE_ASPECT_PLANKS, "Space Planks");
 		addBlock(MSBlocks.SPACE_ASPECT_STAIRS, "Space Stairs");
@@ -699,8 +699,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SPACE_ASPECT_PRESSURE_PLATE, "Space Pressure Plate");
 		addBlock(MSBlocks.SPACE_ASPECT_FENCE, "Space Fence");
 		addBlock(MSBlocks.SPACE_ASPECT_FENCE_GATE, "Space Fence Gate");
-		//addBlock(MSBlocks.SPACE_ASPECT_DOOR, "Space Door");
-		//addBlock(MSBlocks.SPACE_ASPECT_TRAPDOOR, "Space Trapdoor");
+		addBlock(MSBlocks.SPACE_ASPECT_DOOR, "Space Door");
+		addBlock(MSBlocks.SPACE_ASPECT_TRAPDOOR, "Space Trapdoor");
 		
 		addBlock(MSBlocks.TIME_ASPECT_PLANKS, "Time Planks");
 		addBlock(MSBlocks.TIME_ASPECT_STAIRS, "Time Stairs");
@@ -709,8 +709,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.TIME_ASPECT_PRESSURE_PLATE, "Time Pressure Plate");
 		addBlock(MSBlocks.TIME_ASPECT_FENCE, "Time Fence");
 		addBlock(MSBlocks.TIME_ASPECT_FENCE_GATE, "Time Fence Gate");
-		//addBlock(MSBlocks.TIME_ASPECT_DOOR, "Time Door");
-		//addBlock(MSBlocks.TIME_ASPECT_TRAPDOOR, "Time Trapdoor");
+		addBlock(MSBlocks.TIME_ASPECT_DOOR, "Time Door");
+		addBlock(MSBlocks.TIME_ASPECT_TRAPDOOR, "Time Trapdoor");
 		
 		addBlock(MSBlocks.VOID_ASPECT_PLANKS, "Void Planks");
 		addBlock(MSBlocks.VOID_ASPECT_STAIRS, "Void Stairs");
@@ -719,8 +719,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.VOID_ASPECT_PRESSURE_PLATE, "Void Pressure Plate");
 		addBlock(MSBlocks.VOID_ASPECT_FENCE, "Void Fence");
 		addBlock(MSBlocks.VOID_ASPECT_FENCE_GATE, "Void Fence Gate");
-		//addBlock(MSBlocks.VOID_ASPECT_DOOR, "Void Door");
-		//addBlock(MSBlocks.VOID_ASPECT_TRAPDOOR, "Void Trapdoor");
+		addBlock(MSBlocks.VOID_ASPECT_DOOR, "Void Door");
+		addBlock(MSBlocks.VOID_ASPECT_TRAPDOOR, "Void Trapdoor");
 		
 		addBlock(MSBlocks.BLOOD_ASPECT_LEAVES, "Blood Leaves");
 		addBlock(MSBlocks.BREATH_ASPECT_LEAVES, "Breath Leaves");

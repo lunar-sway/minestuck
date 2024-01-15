@@ -399,8 +399,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BLOOD_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.BLOOD_ASPECT_FENCE.get());
 		output.accept(MSItems.BLOOD_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.BLOOD_ASPECT_DOOR.get());
-		//output.accept(MSItems.BLOOD_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.BLOOD_ASPECT_DOOR.get());
+		output.accept(MSItems.BLOOD_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.BLOOD_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.BLOOD_ASPECT_LADDER.get());
 		
@@ -414,8 +414,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BREATH_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.BREATH_ASPECT_FENCE.get());
 		output.accept(MSItems.BREATH_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.BREATH_ASPECT_DOOR.get());
-		//output.accept(MSItems.BREATH_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.BREATH_ASPECT_DOOR.get());
+		output.accept(MSItems.BREATH_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.BREATH_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.BREATH_ASPECT_LADDER.get());
 		
@@ -429,8 +429,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.DOOM_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.DOOM_ASPECT_FENCE.get());
 		output.accept(MSItems.DOOM_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.DOOM_ASPECT_DOOR.get());
-		//output.accept(MSItems.DOOM_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.DOOM_ASPECT_DOOR.get());
+		output.accept(MSItems.DOOM_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.DOOM_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.DOOM_ASPECT_LADDER.get());
 		
@@ -444,8 +444,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.HEART_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.HEART_ASPECT_FENCE.get());
 		output.accept(MSItems.HEART_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.HEART_ASPECT_DOOR.get());
-		//output.accept(MSItems.HEART_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.HEART_ASPECT_DOOR.get());
+		output.accept(MSItems.HEART_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.HEART_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.HEART_ASPECT_LADDER.get());
 		
@@ -459,8 +459,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.HOPE_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.HOPE_ASPECT_FENCE.get());
 		output.accept(MSItems.HOPE_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.HOPE_ASPECT_DOOR.get());
-		//output.accept(MSItems.HOPE_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.HOPE_ASPECT_DOOR.get());
+		output.accept(MSItems.HOPE_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.HOPE_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.HOPE_ASPECT_LADDER.get());
 		
@@ -474,8 +474,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.LIFE_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.LIFE_ASPECT_FENCE.get());
 		output.accept(MSItems.LIFE_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.LIFE_ASPECT_DOOR.get());
-		//output.accept(MSItems.LIFE_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.LIFE_ASPECT_DOOR.get());
+		output.accept(MSItems.LIFE_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.LIFE_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.LIFE_ASPECT_LADDER.get());
 		
@@ -489,8 +489,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.LIGHT_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.LIGHT_ASPECT_FENCE.get());
 		output.accept(MSItems.LIGHT_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.LIGHT_ASPECT_DOOR.get());
-		//output.accept(MSItems.LIGHT_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.LIGHT_ASPECT_DOOR.get());
+		output.accept(MSItems.LIGHT_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.LIGHT_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.LIGHT_ASPECT_LADDER.get());
 		
@@ -504,8 +504,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.MIND_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.MIND_ASPECT_FENCE.get());
 		output.accept(MSItems.MIND_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.MIND_ASPECT_DOOR.get());
-		//output.accept(MSItems.MIND_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.MIND_ASPECT_DOOR.get());
+		output.accept(MSItems.MIND_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.MIND_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.MIND_ASPECT_LADDER.get());
 		
@@ -519,8 +519,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.RAGE_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.RAGE_ASPECT_FENCE.get());
 		output.accept(MSItems.RAGE_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.RAGE_ASPECT_DOOR.get());
-		//output.accept(MSItems.RAGE_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.RAGE_ASPECT_DOOR.get());
+		output.accept(MSItems.RAGE_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.RAGE_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.RAGE_ASPECT_LADDER.get());
 		
@@ -534,8 +534,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SPACE_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.SPACE_ASPECT_FENCE.get());
 		output.accept(MSItems.SPACE_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.SPACE_ASPECT_DOOR.get());
-		//output.accept(MSItems.SPACE_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.SPACE_ASPECT_DOOR.get());
+		output.accept(MSItems.SPACE_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.SPACE_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.SPACE_ASPECT_LADDER.get());
 		
@@ -549,8 +549,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.TIME_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.TIME_ASPECT_FENCE.get());
 		output.accept(MSItems.TIME_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.TIME_ASPECT_DOOR.get());
-		//output.accept(MSItems.TIME_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.TIME_ASPECT_DOOR.get());
+		output.accept(MSItems.TIME_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.TIME_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.TIME_ASPECT_LADDER.get());
 		
@@ -564,8 +564,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.VOID_ASPECT_PRESSURE_PLATE.get());
 		output.accept(MSItems.VOID_ASPECT_FENCE.get());
 		output.accept(MSItems.VOID_ASPECT_FENCE_GATE.get());
-		//output.accept(MSItems.VOID_ASPECT_DOOR.get());
-		//output.accept(MSItems.VOID_ASPECT_TRAPDOOR.get());
+		output.accept(MSItems.VOID_ASPECT_DOOR.get());
+		output.accept(MSItems.VOID_ASPECT_TRAPDOOR.get());
 		output.accept(MSItems.VOID_ASPECT_BOOKSHELF.get());
 		output.accept(MSItems.VOID_ASPECT_LADDER.get());
 		
@@ -900,8 +900,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CARVED_PRESSURE_PLATE.get());
 		output.accept(MSItems.CARVED_FENCE.get());
 		output.accept(MSItems.CARVED_FENCE_GATE.get());
-		//output.accept(MSItems.CARVED_DOOR.get());
-		//output.accept(MSItems.CARVED_TRAPDOOR.get());
+		output.accept(MSItems.CARVED_DOOR.get());
+		output.accept(MSItems.CARVED_TRAPDOOR.get());
 		
 		output.accept(MSItems.POLISHED_UNCARVED_WOOD.get());
 		output.accept(MSItems.POLISHED_UNCARVED_STAIRS.get());
@@ -949,8 +949,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.GLOWING_PRESSURE_PLATE.get());
 		output.accept(MSItems.GLOWING_FENCE.get());
 		output.accept(MSItems.GLOWING_FENCE_GATE.get());
-		//output.accept(MSItems.GLOWING_DOOR.get());
-		//output.accept(MSItems.GLOWING_TRAPDOOR.get());
+		output.accept(MSItems.GLOWING_DOOR.get());
+		output.accept(MSItems.GLOWING_TRAPDOOR.get());
 		
 		output.accept(MSItems.FROST_PLANKS.get());
 		output.accept(MSItems.FROST_STAIRS.get());
@@ -959,8 +959,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FROST_PRESSURE_PLATE.get());
 		output.accept(MSItems.FROST_FENCE.get());
 		output.accept(MSItems.FROST_FENCE_GATE.get());
-		//output.accept(MSItems.FROST_DOOR.get());
-		//output.accept(MSItems.FROST_TRAPDOOR.get());
+		output.accept(MSItems.FROST_DOOR.get());
+		output.accept(MSItems.FROST_TRAPDOOR.get());
 		
 		output.accept(MSItems.RAINBOW_PLANKS.get());
 		output.accept(MSItems.RAINBOW_STAIRS.get());
@@ -969,8 +969,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.RAINBOW_PRESSURE_PLATE.get());
 		output.accept(MSItems.RAINBOW_FENCE.get());
 		output.accept(MSItems.RAINBOW_FENCE_GATE.get());
-		//output.accept(MSItems.RAINBOW_DOOR.get());
-		//output.accept(MSItems.RAINBOW_TRAPDOOR.get());
+		output.accept(MSItems.RAINBOW_DOOR.get());
+		output.accept(MSItems.RAINBOW_TRAPDOOR.get());
 		
 		output.accept(MSItems.END_PLANKS.get());
 		output.accept(MSItems.END_STAIRS.get());
@@ -979,8 +979,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.END_PRESSURE_PLATE.get());
 		output.accept(MSItems.END_FENCE.get());
 		output.accept(MSItems.END_FENCE_GATE.get());
-		//output.accept(MSItems.END_DOOR.get());
-		//output.accept(MSItems.END_TRAPDOOR.get());
+		output.accept(MSItems.END_DOOR.get());
+		output.accept(MSItems.END_TRAPDOOR.get());
 		
 		output.accept(MSItems.DEAD_PLANKS.get());
 		output.accept(MSItems.DEAD_STAIRS.get());
@@ -989,8 +989,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.DEAD_PRESSURE_PLATE.get());
 		output.accept(MSItems.DEAD_FENCE.get());
 		output.accept(MSItems.DEAD_FENCE_GATE.get());
-		//output.accept(MSItems.DEAD_DOOR.get());
-		//output.accept(MSItems.DEAD_TRAPDOOR.get());
+		output.accept(MSItems.DEAD_DOOR.get());
+		output.accept(MSItems.DEAD_TRAPDOOR.get());
 		
 		output.accept(MSItems.TREATED_PLANKS.get());
 		output.accept(MSItems.TREATED_STAIRS.get());
@@ -999,8 +999,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.TREATED_PRESSURE_PLATE.get());
 		output.accept(MSItems.TREATED_FENCE.get());
 		output.accept(MSItems.TREATED_FENCE_GATE.get());
-		//output.accept(MSItems.TREATED_DOOR.get());
-		//output.accept(MSItems.TREATED_TRAPDOOR.get());
+		output.accept(MSItems.TREATED_DOOR.get());
+		output.accept(MSItems.TREATED_TRAPDOOR.get());
 		
 		output.accept(MSItems.SHADEWOOD_PLANKS.get());
 		output.accept(MSItems.SHADEWOOD_STAIRS.get());
@@ -1009,8 +1009,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SHADEWOOD_PRESSURE_PLATE.get());
 		output.accept(MSItems.SHADEWOOD_FENCE.get());
 		output.accept(MSItems.SHADEWOOD_FENCE_GATE.get());
-		//output.accept(MSItems.SHADEWOOD_DOOR.get());
-		//output.accept(MSItems.SHADEWOOD_TRAPDOOR.get());
+		output.accept(MSItems.SHADEWOOD_DOOR.get());
+		output.accept(MSItems.SHADEWOOD_TRAPDOOR.get());
 		
 		output.accept(MSItems.FROST_LEAVES.get());
 		output.accept(MSItems.RAINBOW_LEAVES.get());
