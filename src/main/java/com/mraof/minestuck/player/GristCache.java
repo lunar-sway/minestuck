@@ -1,5 +1,6 @@
 package com.mraof.minestuck.player;
 
+import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.computer.editmode.EditData;
@@ -8,8 +9,6 @@ import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.GristCachePacket;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
@@ -159,12 +158,10 @@ public final class GristCache
 		
 		if(!overflowedGrist.isEmpty())
 		{
-			Session session = SessionHandler.get(mcServer).getPlayerSession(data.identifier);
-			if(session != null)
-			{
-				session.getGristGutter().addGristFrom(overflowedGrist);
+			GristGutter.get(data.identifier, mcServer).ifPresent(gutter -> {
+				gutter.addGristFrom(overflowedGrist);
 				GristToastPacket.notify(mcServer, data.identifier, set, GristHelper.EnumSource.GUTTER); //still send a grist toast when adding to gutter
-			}
+			});
 			
 			ServerPlayer player = data.getPlayer();
 			if(player != null && !overflowedGrist.isEmpty())

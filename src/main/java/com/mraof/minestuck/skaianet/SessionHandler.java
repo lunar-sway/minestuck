@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.Level;
 
 import java.util.*;
 
@@ -82,10 +81,5 @@ public abstract class SessionHandler
 	public static SessionHandler get(MinecraftServer server)
 	{
 		return SkaianetHandler.get(server).sessionHandler;
-	}
-	
-	public static SessionHandler get(Level level)
-	{
-		return SkaianetHandler.get(level).sessionHandler;
 	}
 }

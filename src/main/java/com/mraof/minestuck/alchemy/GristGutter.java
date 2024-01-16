@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.EndTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,6 +57,21 @@ public class GristGutter
 	public Tag write()
 	{
 		return NonNegativeGristSet.CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet).resultOrPartial(LOGGER::error).orElse(EndTag.INSTANCE);
+	}
+	
+	public static Optional<GristGutter> get(ServerPlayer player)
+	{
+		PlayerIdentifier playerIdentifier = IdentifierHandler.encode(player);
+		if(playerIdentifier == null)
+			return Optional.empty();
+		
+		return get(playerIdentifier, player.server);
+	}
+	
+	public static Optional<GristGutter> get(PlayerIdentifier player, MinecraftServer mcServer)
+	{
+		return Optional.ofNullable(SessionHandler.get(mcServer).getPlayerSession(player))
+				.map(Session::getGristGutter);
 	}
 	
 	public GristSet getCache()
