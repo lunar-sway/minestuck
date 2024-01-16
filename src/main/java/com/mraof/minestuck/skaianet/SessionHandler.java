@@ -41,7 +41,9 @@ public abstract class SessionHandler
 	}
 	
 	void onConnectionChainBroken(Session session)
-	{}
+	{
+		session.updatePlayerSet();
+	}
 	
 	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
@@ -50,15 +52,20 @@ public abstract class SessionHandler
 				&& getPlayerSession(client) == getPlayerSession(server);
 	}
 	
-	void onConnectionClosed(ActiveConnection connection)
+	void onConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		Session s = Objects.requireNonNull(getPlayerSession(connection.client()));
+		prepareSessionFor(client, server).addConnectedClient(client);
+	}
+	
+	void onDisconnect(PlayerIdentifier client, PlayerIdentifier server)
+	{
+		Session s = Objects.requireNonNull(getPlayerSession(client));
 		
-		SburbPlayerData playerData = skaianetHandler.getOrCreateData(connection.client());
-		if(!playerData.hasPrimaryConnection() || !playerData.isPrimaryServerPlayer(connection.server()))
+		SburbPlayerData playerData = skaianetHandler.getOrCreateData(client);
+		if(!playerData.hasPrimaryConnection() || !playerData.isPrimaryServerPlayer(server))
 		{
 			if(!playerData.hasPrimaryConnection())
-				s.removeConnection(connection.client());
+				s.removeConnection(client);
 			onConnectionChainBroken(s);
 		}
 	}

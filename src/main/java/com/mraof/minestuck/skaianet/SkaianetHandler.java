@@ -155,9 +155,6 @@ public final class SkaianetHandler extends SavedData
 				return;
 			}
 			
-			Session session = sessionHandler.prepareSessionFor(player, server);
-			session.addConnectedClient(player);
-			
 			setActive(computer, serverComputer, SburbEvent.ConnectionType.REGULAR);
 			openedServers.remove(server);
 			return;
@@ -172,7 +169,6 @@ public final class SkaianetHandler extends SavedData
 				return;
 			}
 			
-			sessionHandler.prepareSessionFor(player, server);
 			newServerForClient(player, server);
 			
 			setActive(computer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
@@ -201,6 +197,7 @@ public final class SkaianetHandler extends SavedData
 		
 		ActiveConnection activeConnection = new ActiveConnection(client, server);
 		activeConnections.add(activeConnection);
+		sessionHandler.onConnect(activeConnection.client(), activeConnection.server());
 		this.infoTracker.markDirty(activeConnection);
 		
 		client.connected(server.getOwner(), true);
@@ -361,9 +358,8 @@ public final class SkaianetHandler extends SavedData
 		if(serverComputer == null)
 			serverComputer = connection.serverComputer().getComputer(mcServer);
 		
-		sessionHandler.onConnectionClosed(connection);
-		
 		activeConnections.remove(connection);
+		sessionHandler.onDisconnect(connection.client(), connection.server());
 		infoTracker.markDirty(connection);
 		
 		if(clientComputer != null)
@@ -496,15 +492,11 @@ public final class SkaianetHandler extends SavedData
 		if(activeConnection.isPresent() && !activeConnection.get().server().equals(server))
 			throw new IllegalStateException();
 		
-		if(activeConnection.isEmpty())
-		{
-			if(!activeConnections().filter(connection -> connection.server().equals(server))
-					.allMatch(connection -> getOrCreateData(connection.client()).hasPrimaryConnection()))
-				throw new IllegalStateException();
-			
-			sessionHandler.prepareSessionFor(client, server)
-					.addConnectedClient(client);
-		}
+		if(activeConnection.isEmpty()
+				&& !activeConnections().filter(connection -> connection.server().equals(server))
+				.allMatch(connection -> getOrCreateData(connection.client()).hasPrimaryConnection()))
+			throw new IllegalStateException();
+		
 		getOrCreateData(client).setHasPrimaryConnection(server);
 	}
 	

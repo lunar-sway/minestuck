@@ -130,10 +130,9 @@ public final class SburbPlayerData
 			if(this.hasEntered())
 				skaianet.infoTracker.markLandChainDirty();
 			
-			Session session = skaianet.sessionHandler.getPlayerSession(this.playerId());
+			PlayerIdentifier oldServerPlayer = this.primaryServerPlayer;
 			this.primaryServerPlayer = IdentifierHandler.NULL_IDENTIFIER;
-			session.updatePlayerSet();
-			skaianet.sessionHandler.onConnectionChainBroken(session);
+			skaianet.sessionHandler.onDisconnect(this.playerId(), oldServerPlayer);
 		}
 	}
 	
@@ -146,10 +145,9 @@ public final class SburbPlayerData
 		SkaianetHandler skaianet = SkaianetHandler.get(this.mcServer);
 		if(!skaianet.canMakeNewRegularConnectionAsServer(server))
 			throw new IllegalStateException("Server player already has a connection");
-		skaianet.sessionHandler.prepareSessionFor(this.playerId(), server);    //Make sure that it is fine to add the server here session-wise
 		
 		this.primaryServerPlayer = Objects.requireNonNull(server);
-		skaianet.sessionHandler.getPlayerSession(this.playerId()).updatePlayerSet();
+		skaianet.sessionHandler.onConnect(this.playerId(), server);
 		skaianet.infoTracker.markDirty(server);
 		if(this.hasEntered())
 			skaianet.infoTracker.markLandChainDirty();
@@ -172,9 +170,9 @@ public final class SburbPlayerData
 		hasPrimaryConnection = true;
 		primaryServerPlayer = serverPlayer;
 		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
+		skaianetHandler.sessionHandler.onConnect(this.playerId(), serverPlayer);
 		skaianetHandler.infoTracker.markDirty(this.playerId());
 		this.primaryServerPlayer().ifPresent(skaianetHandler.infoTracker::markDirty);
-		skaianetHandler.sessionHandler.getPlayerSession(this.playerId()).updatePlayerSet();
 	}
 	
 	public boolean hasEntered()
