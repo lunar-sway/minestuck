@@ -245,7 +245,7 @@ public final class SburbPlayerData
 			resendGivenItems();
 	}
 	
-	void resetGivenItems()
+	public void resetGivenItems()
 	{
 		if(!givenItemList.isEmpty())
 		{

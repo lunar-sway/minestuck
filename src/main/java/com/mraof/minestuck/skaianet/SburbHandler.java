@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
-import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
@@ -224,12 +223,5 @@ public final class SburbHandler
 	{
 		List<GristType> types = GristTypeSpawnCategory.COMMON.gristTypes().toList();
 		return types.get(rand.nextInt(types.size()));
-	}
-	
-	public static void resetGivenItems(MinecraftServer mcServer)
-	{
-		SkaianetHandler.get(mcServer).allPlayerData().forEach(SburbPlayerData::resetGivenItems);
-		
-		DeployList.onConditionsUpdated(mcServer);
 	}
 }

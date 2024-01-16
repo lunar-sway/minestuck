@@ -5,15 +5,12 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
-import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.server.MinecraftServer;
@@ -42,7 +39,6 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -55,20 +51,10 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
 {
-	public static long lastDay;
-	
-	@SubscribeEvent
-	public static void serverStarting(ServerStartingEvent event)
-	{
-		ConsortDialogue.serverStarting();
-		lastDay = event.getServer().overworld().getGameTime() / 24000L;
-	}
-	
 	@SubscribeEvent
 	public static void serverStopped(ServerStoppedEvent event)
 	{
 		IdentifierHandler.clear();
-		SkaianetHandler.clear();
 	}
 	
 	@SubscribeEvent
@@ -77,15 +63,6 @@ public class ServerEventHandler
 		if(event.phase == TickEvent.Phase.END)
 		{
 			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-			if(!MinestuckConfig.SERVER.hardMode.get())
-			{
-				long time = server.overworld().getGameTime() / 24000L;
-				if(time != lastDay)
-				{
-					lastDay = time;
-					SburbHandler.resetGivenItems(server);
-				}
-			}
 			
 			if(event.haveTime())
 				MSExtraData.get(server).executeEntryTasks(server);

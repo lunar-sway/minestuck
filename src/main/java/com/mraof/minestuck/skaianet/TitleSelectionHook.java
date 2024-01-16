@@ -1,6 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -13,6 +14,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,12 +27,13 @@ import java.util.Map;
  * A class that determines when to stop entry and tell the player to pick a title,
  * and to then handle the selection once it's been sent back.
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class TitleSelectionHook
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	// previous player position and specified entry point
-	static Map<Player, Pair<Vec3, BlockPos>> playersInTitleSelection = new HashMap<>();
+	private static final Map<Player, Pair<Vec3, BlockPos>> playersInTitleSelection = new HashMap<>();
 	
 	/**
 	 * Checks if the player has the go-ahead to enter.
@@ -81,5 +86,11 @@ public class TitleSelectionHook
 		
 		EntryProcess.enter(player, specifiedPos);
 		
+	}
+	
+	@SubscribeEvent
+	public static void serverStopped(ServerStoppedEvent event)
+	{
+		playersInTitleSelection.clear();
 	}
 }

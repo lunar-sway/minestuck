@@ -602,7 +602,7 @@ public final class SkaianetHandler extends SavedData
 		return Optional.ofNullable(this.predefineData.get(player));
 	}
 	
-	Collection<SburbPlayerData> allPlayerData()
+	public Collection<SburbPlayerData> allPlayerData()
 	{
 		return this.playerDataMap.values();
 	}
@@ -633,13 +633,5 @@ public final class SkaianetHandler extends SavedData
 	public boolean isDirty()
 	{
 		return true;
-	}
-	
-	/**
-	 * Clears data connected to skaianet. Should only be called on a ServerStopped event by minestuck itself.
-	 */
-	public static void clear()
-	{
-		TitleSelectionHook.playersInTitleSelection.clear();
 	}
 }

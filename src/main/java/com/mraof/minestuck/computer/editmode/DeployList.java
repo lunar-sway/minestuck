@@ -1,15 +1,18 @@
 package com.mraof.minestuck.computer.editmode;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +23,11 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -32,6 +40,7 @@ import java.util.function.BiFunction;
  * items accessible by the server.
  * @author kirderf1
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public final class DeployList
 {
 	public static final IAvailabilityCondition HAS_NOT_ENTERED = playerData -> !playerData.hasEntered();
@@ -401,6 +410,30 @@ public final class DeployList
 			entry.tryAddDeployTag(playerData, server.getLevel(Level.OVERWORLD), tier, tagList, i);
 		}
 		return nbt;
+	}
+	
+	private static long lastDay;
+	
+	@SubscribeEvent
+	public static void serverStarting(ServerStartingEvent event)
+	{
+		ConsortDialogue.serverStarting();
+		lastDay = event.getServer().overworld().getGameTime() / 24000L;
+	}
+	
+	@SubscribeEvent
+	public static void onServerTick(TickEvent.ServerTickEvent event)
+	{
+		if(event.phase == TickEvent.Phase.END && !MinestuckConfig.SERVER.hardMode.get())
+		{
+			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+			long currentDay = server.overworld().getGameTime() / 24000L;
+			if(currentDay != lastDay)
+			{
+				lastDay = currentDay;
+				SkaianetHandler.get(server).allPlayerData().forEach(SburbPlayerData::resetGivenItems);
+			}
+		}
 	}
 	
 	/**
