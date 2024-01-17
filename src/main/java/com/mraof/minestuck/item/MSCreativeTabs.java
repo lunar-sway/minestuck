@@ -5,10 +5,16 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class MSCreativeTabs
 {
 	public static final String MAIN_KEY = "minestuck.item_group.main";
@@ -971,5 +977,27 @@ public final class MSCreativeTabs
 		output.accept(MSItems.AMPHIBEANIE.get());
 		output.accept(MSItems.NOSTRILDAMUS.get());
 		output.accept(MSItems.PONYTAIL.get());
+	}
+	
+	@SubscribeEvent
+	public static void buildSpawnEggs(BuildCreativeModeTabContentsEvent event) {
+		if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+			event.accept(MSItems.IMP_SPAWN_EGG);
+			event.accept(MSItems.OGRE_SPAWN_EGG);
+			event.accept(MSItems.BASILISK_SPAWN_EGG);
+			event.accept(MSItems.LICH_SPAWN_EGG);
+			
+			event.accept(MSItems.SALAMANDER_SPAWN_EGG);
+			event.accept(MSItems.TURTLE_SPAWN_EGG);
+			event.accept(MSItems.NAKAGATOR_SPAWN_EGG);
+			event.accept(MSItems.IGUANA_SPAWN_EGG);
+			
+			event.accept(MSItems.DERSITE_PAWN_SPAWN_EGG);
+			event.accept(MSItems.DERSITE_BISHOP_SPAWN_EGG);
+			event.accept(MSItems.DERSITE_ROOK_SPAWN_EGG);
+			event.accept(MSItems.PROSPITIAN_PAWN_SPAWN_EGG);
+			event.accept(MSItems.PROSPITIAN_BISHOP_SPAWN_EGG);
+			event.accept(MSItems.PROSPITIAN_ROOK_SPAWN_EGG);
+		}
 	}
 }
