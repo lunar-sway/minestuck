@@ -3,8 +3,8 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.lands.gen.LandTypeSelection;
 import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.gen.LandTypeSelection;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.ChatFormatting;
@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
-import java.util.Objects;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -90,16 +90,15 @@ public final class PredefineData
 		this.titleLandType = landType;
 	}
 	
-	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSourceStack source) throws SkaianetException
+	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSourceStack source)
 	{
 		Set<EnumAspect> availableAspects = availableTypes.stream()
 				.flatMap(titleType -> LandTypeSelection.compatibleAspects(titleType).stream())
 				.collect(Collectors.toSet());
 		if(title == null || !availableAspects.contains(title.getHeroAspect()))
 		{
-			Session session = Objects.requireNonNull(SessionHandler.get(source.getServer()).getPlayerSession(player));
 			Title previous = title;
-			title = Generator.generateTitle(session, availableAspects, player);
+			title = Generator.generateTitle(player, availableAspects, SkaianetHandler.get(source.getServer()));
 			
 			if(!availableAspects.contains(title.getHeroAspect()))
 			{
@@ -128,9 +127,10 @@ public final class PredefineData
 				throw new IllegalStateException("Had no title land types to generate when some were expected.");
 			}
 			
-			Session session = Objects.requireNonNull(SessionHandler.get(source.getServer()).getPlayerSession(player));
+			SkaianetHandler skaianetHandler = SkaianetHandler.get(source.getServer());
 			TitleLandType previous = titleLandType;
-			titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), type, player);
+			List<PlayerIdentifier> otherPlayers = skaianetHandler.sessionHandler.playersToCheckForDataSelection(player).toList();
+			titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), type, skaianetHandler);
 			
 			if(!titleLandType.isAspectCompatible(type))
 			{

@@ -40,20 +40,9 @@ public final class SburbHandler
 	
 	public static final String CHAT_LAND_ENTRY = "minestuck.chat_land_entry";
 	
-	private static Title produceTitle(Level level, PlayerIdentifier player)
+	private static Title produceTitle(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianetHandler = SkaianetHandler.get(level);
-		Session session = skaianetHandler.sessionHandler.getPlayerSession(player);
-		if(session == null)
-		{
-			if(MinestuckConfig.SERVER.playerSelectedTitle.get())
-				session = new Session(skaianetHandler);
-			else
-			{
-				LOGGER.warn("Trying to generate a title for {} before creating a session!", player.getUsername(), new Throwable().fillInStackTrace());
-				return null;
-			}
-		}
+		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
 		
 		Title title = null;
 		Optional<PredefineData> data = skaianetHandler.predefineData(player);
@@ -61,27 +50,20 @@ public final class SburbHandler
 			title = data.get().getTitle();
 		
 		if(title == null)
-		{
-			try
-			{
-				title = Generator.generateTitle(session, EnumAspect.valuesSet(), player);
-			} catch(SkaianetException e)
-			{
-				return null;	//TODO handle exception further down the line
-			}
-		}
+			title = Generator.generateTitle(player, EnumAspect.valuesSet(), skaianetHandler);
+		
 		return title;
 	}
 	
-	static void generateAndSetTitle(Level level, PlayerIdentifier player)
+	static void generateAndSetTitle(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		PlayerData data = PlayerSavedData.getData(player, level);
+		PlayerData data = PlayerSavedData.getData(player, mcServer);
 		if(data.getTitle() == null)
 		{
-			Title title = produceTitle(level, player);
+			Title title = produceTitle(player, mcServer);
 			if(title == null)
 				return;
-			PlayerSavedData.getData(player, level).setTitle(title);
+			PlayerSavedData.getData(player, mcServer).setTitle(title);
 		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
 	}
@@ -126,7 +108,7 @@ public final class SburbHandler
 	private static LandTypePair genLandAspects(MinecraftServer mcServer, PlayerIdentifier player)
 	{
 		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
-		Session session = skaianetHandler.sessionHandler.getPlayerSession(player);
+		List<PlayerIdentifier> otherPlayers = skaianetHandler.sessionHandler.playersToCheckForDataSelection(player).toList();
 		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
@@ -140,21 +122,21 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !Generator.getUsedTitleLandTypes(session).contains(LandTypes.FROGS.get()) &&
+			if(title.getHeroAspect() == EnumAspect.SPACE && !Generator.titleLandTypesUsedBy(otherPlayers, skaianetHandler).contains(LandTypes.FROGS.get()) &&
 					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS.get();
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, player);
+				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), terrainLandType, skaianetHandler);
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType));
-					titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, player);
+					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), null, skaianetHandler);
 				}
 			}
 		}
 		if(terrainLandType == null)
-			terrainLandType = Generator.generateWeightedTerrainLandType(session, titleLandType, player);
+			terrainLandType = Generator.generateWeightedTerrainLandType(otherPlayers, titleLandType, skaianetHandler);
 		
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
@@ -167,11 +149,11 @@ public final class SburbHandler
 			handler.trySetPrimaryConnection(connection.get());
 	}
 	
-	static void prepareEntry(MinecraftServer mcServer, SburbPlayerData playerData)
+	static void prepareEntry(SburbPlayerData playerData, MinecraftServer mcServer)
 	{
 		PlayerIdentifier identifier = playerData.playerId();
 		
-		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), identifier);
+		generateAndSetTitle(identifier, mcServer);
 		LandTypePair landTypes = genLandAspects(mcServer, identifier);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		
 		ResourceKey<Level> dimType = LandTypeGenerator.createLandDimension(mcServer, identifier, landTypes);

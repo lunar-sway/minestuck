@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * An extension to SkaianetHandler with a focus on sessions
@@ -83,6 +84,17 @@ public abstract class SessionHandler
 				map.put(server.getId(), server.getUsername());
 		}
 		return map;
+	}
+	
+	/**
+	 * @return all players whose title or land types (predefined or not) should influence the selection of the same for the specified player.
+	 */
+	Stream<PlayerIdentifier> playersToCheckForDataSelection(PlayerIdentifier player)
+	{
+		Session session = this.getPlayerSession(player);
+		return session != null
+				? session.getPlayers().stream().filter(otherPlayer -> !otherPlayer.equals(player))
+				: Stream.empty();
 	}
 	
 	public static SessionHandler get(MinecraftServer server)

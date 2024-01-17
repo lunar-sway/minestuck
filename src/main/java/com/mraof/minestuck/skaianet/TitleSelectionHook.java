@@ -72,7 +72,7 @@ public class TitleSelectionHook
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		if(title == null)
-			SburbHandler.generateAndSetTitle(player.level(), identifier);
+			SburbHandler.generateAndSetTitle(identifier, player.server);
 		else
 			PlayerSavedData.getData(identifier, player.server).setTitle(title);
 		

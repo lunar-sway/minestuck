@@ -541,7 +541,7 @@ public final class SkaianetHandler extends SavedData
 		}
 		
 		if(playerData.getLandDimension() == null)
-			SburbHandler.prepareEntry(mcServer, playerData);
+			SburbHandler.prepareEntry(playerData, mcServer);
 		
 		return playerData.getLandDimension();
 	}
