@@ -68,13 +68,13 @@ public final class Session
 	Session(SkaianetHandler skaianetHandler)
 	{
 		this.skaianetHandler = skaianetHandler;
-		this.gutter = new GristGutter(this);
+		this.gutter = new GristGutter(skaianetHandler.mcServer, this);
 	}
 	
 	private Session(CompoundTag nbt, SkaianetHandler skaianetHandler)
 	{
 		this.skaianetHandler = skaianetHandler;
-		this.gutter = new GristGutter(this, nbt.getList("gutter", Tag.TAG_COMPOUND));
+		this.gutter = new GristGutter(skaianetHandler.mcServer, this, nbt.getList("gutter", Tag.TAG_COMPOUND));
 	}
 	
 	/**

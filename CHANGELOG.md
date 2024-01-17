@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Minor changes to what is shown in the data checker
 - Duplicate titles are now allowed in the same session
+- Pre-entry players no longer play a part in grist gutter capacity,
+and they no longer receive grist from the gutter
 
 ### Fixed
 
