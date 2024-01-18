@@ -56,7 +56,7 @@ public final class SkaianetHandler extends SavedData
 	{
 		this.mcServer = mcServer;
 		
-		sessionHandler = new DefaultSessionHandler(this);
+		sessionHandler = new SessionHandler.Multi(this).getActual();
 	}
 	
 	private SkaianetHandler(MinecraftServer mcServer, CompoundTag nbt)
@@ -92,8 +92,8 @@ public final class SkaianetHandler extends SavedData
 		
 		SessionHandler sessions;
 		if(nbt.contains("session", Tag.TAG_COMPOUND))
-			sessions = new GlobalSessionHandler(this, nbt.getCompound("session"));
-		else sessions = new DefaultSessionHandler(this, nbt.getList("sessions", Tag.TAG_COMPOUND));
+			sessions = new SessionHandler.Global(this, nbt.getCompound("session"));
+		else sessions = new SessionHandler.Multi(this, nbt.getList("sessions", Tag.TAG_COMPOUND));
 		
 		sessionHandler = sessions.getActual();
 		
