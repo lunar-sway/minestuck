@@ -55,14 +55,24 @@ public final class GlobalSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	Session prepareSessionFor(PlayerIdentifier... players)
-	{
-		return globalSession;
-	}
-	
-	@Override
 	boolean doesSessionHaveMaxTier(Session session)
 	{
 		return false;
+	}
+	
+	@Override
+	void onConnect(PlayerIdentifier client, PlayerIdentifier server)
+	{
+		globalSession.addConnectedClient(client);
+	}
+	
+	@Override
+	void onDisconnect(PlayerIdentifier client, PlayerIdentifier server)
+	{
+		SburbPlayerData playerData = skaianetHandler.getOrCreateData(client);
+		if(!playerData.hasPrimaryConnection())
+			globalSession.removeConnection(client);
+		else if(!playerData.isPrimaryServerPlayer(server))
+			globalSession.updatePlayerSet();
 	}
 }

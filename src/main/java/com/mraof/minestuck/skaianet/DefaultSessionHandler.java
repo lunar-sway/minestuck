@@ -31,7 +31,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	DefaultSessionHandler(SkaianetHandler skaianetHandler, Session globalSession)
 	{
 		this(skaianetHandler);
-		addNewSession(globalSession);
+		sessions.add(globalSession);
 		split(globalSession);
 	}
 	
@@ -78,7 +78,6 @@ public final class DefaultSessionHandler extends SessionHandler
 		return Collections.unmodifiableSet(sessions);
 	}
 	
-	@Override
 	Session prepareSessionFor(PlayerIdentifier... players)
 	{
 		Set<Session> sessions = Arrays.stream(players).map(this::getPlayerSession).filter(Objects::nonNull).collect(Collectors.toSet());
@@ -95,37 +94,43 @@ public final class DefaultSessionHandler extends SessionHandler
 		} else
 		{
 			Session session = new Session(skaianetHandler);
-			addNewSession(session);
+			this.sessions.add(session);
 			return session;
 		}
 	}
 	
 	@Override
-	void onConnectionChainBroken(Session session)
+	void onConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		split(session);
-		sessions.forEach(Session::checkIfCompleted);
+		prepareSessionFor(client, server).addConnectedClient(client);
+	}
+	
+	@Override
+	void onDisconnect(PlayerIdentifier client, PlayerIdentifier server)
+	{
+		Session s = Objects.requireNonNull(getPlayerSession(client));
+		
+		SburbPlayerData playerData = skaianetHandler.getOrCreateData(client);
+		if(!playerData.isPrimaryServerPlayer(server))
+		{
+			if(!playerData.hasPrimaryConnection())
+				s.removeConnection(client);
+			split(s);
+		}
 	}
 	
 	private void correctAndAddSession(Session session)
 	{
 		try
 		{
-			addNewSession(session);
+			if(session.getPlayers().stream().anyMatch(player -> this.getPlayerSession(player) != null))
+				throw new IllegalStateException("Session contained connections that have already been added");
+			
+			sessions.add(session);
 		} catch(RuntimeException e)
 		{
 			LOGGER.error("Failed to add session. This might lead to loss of data, so I hope you've got a backup! Reason \"{}\"", e.getMessage());
 		}
-	}
-	
-	void addNewSession(Session session)
-	{
-		if(sessions.contains(session))
-			throw new IllegalStateException("Session has already been added");
-		else if(session.getPlayers().stream().anyMatch(player -> this.getPlayerSession(player) != null))
-			throw new IllegalStateException("Session contained connections that have already been added");
-		
-		sessions.add(session);
 	}
 	
 	private void split(Session session)
@@ -136,10 +141,11 @@ public final class DefaultSessionHandler extends SessionHandler
 			PlayerIdentifier remainingPlayer = session.getPlayers().iterator().next();
 			Set<PlayerIdentifier> players = collectAllConnectedPlayers(remainingPlayer, skaianetHandler);
 			Session newSession = session.createSessionSplit(players);
-			this.sessions.add(newSession);
+			newSession.checkIfCompleted();
+			if(newSession.getPlayers().size() > 1 || newSession.getGristGutter().gutterMultiplierForSession() > 0)
+				this.sessions.add(newSession);
 		}
 	}
-	
 	
 	static Set<PlayerIdentifier> collectAllConnectedPlayers(PlayerIdentifier player, SkaianetHandler skaianetHandler)
 	{

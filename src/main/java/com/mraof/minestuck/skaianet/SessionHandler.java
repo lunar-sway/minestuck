@@ -34,16 +34,9 @@ public abstract class SessionHandler
 	
 	public abstract Set<Session> getSessions();
 	
-	abstract Session prepareSessionFor(PlayerIdentifier... players);
-	
 	boolean doesSessionHaveMaxTier(Session session)
 	{
 		return session.completed;
-	}
-	
-	void onConnectionChainBroken(Session session)
-	{
-		session.updatePlayerSet();
 	}
 	
 	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
@@ -53,23 +46,9 @@ public abstract class SessionHandler
 				&& getPlayerSession(client) == getPlayerSession(server);
 	}
 	
-	void onConnect(PlayerIdentifier client, PlayerIdentifier server)
-	{
-		prepareSessionFor(client, server).addConnectedClient(client);
-	}
+	abstract void onConnect(PlayerIdentifier client, PlayerIdentifier server);
 	
-	void onDisconnect(PlayerIdentifier client, PlayerIdentifier server)
-	{
-		Session s = Objects.requireNonNull(getPlayerSession(client));
-		
-		SburbPlayerData playerData = skaianetHandler.getOrCreateData(client);
-		if(!playerData.hasPrimaryConnection() || !playerData.isPrimaryServerPlayer(server))
-		{
-			if(!playerData.hasPrimaryConnection())
-				s.removeConnection(client);
-			onConnectionChainBroken(s);
-		}
-	}
+	abstract void onDisconnect(PlayerIdentifier client, PlayerIdentifier server);
 	
 	Map<Integer, String> getServerList(PlayerIdentifier client)
 	{
