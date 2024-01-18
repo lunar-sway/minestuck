@@ -5,6 +5,7 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.MSDimensions;
@@ -22,10 +23,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -162,29 +165,32 @@ public final class SburbHandler
 		playerData.setLand(dimType);
 	}
 	
-	static void onEntry(MinecraftServer server, SburbPlayerData playerData)
+	public static void onEntry(MinecraftServer server, ServerPlayer player)
 	{
+		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
+		SkaianetHandler skaianetHandler = SkaianetHandler.get(server);
+		SburbPlayerData playerData = skaianetHandler.getOrCreateData(playerId);
+		
 		playerData.setHasEntered();
+		skaianetHandler.infoTracker.markLandChainDirty();
 		
 		SessionHandler.get(server).getPlayerSession(playerData.playerId()).checkIfCompleted();
 		
-		ServerPlayer player = playerData.playerId().getPlayer(server);
-		if(player != null)
-		{
-			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
-			
-			EditmodeLocations.onEntry(server, playerData.playerId());
-			
-			LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
-			
-			//chat message
-			player.sendSystemMessage(Component.translatable(CHAT_LAND_ENTRY, landTypes.asComponent()));
-			
-			//Title style message
-			player.connection.send(new ClientboundSetTitlesAnimationPacket(90, 150, 40)); //large fade in time and total length to offset lag
-			player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
-			player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponentWithLandFont()));
-		}
+		MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
+		
+		EditmodeLocations.onEntry(server, playerData.playerId());
+		
+		LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
+		
+		//chat message
+		player.sendSystemMessage(Component.translatable(CHAT_LAND_ENTRY, landTypes.asComponent()));
+		
+		//Title style message
+		player.connection.send(new ClientboundSetTitlesAnimationPacket(90, 150, 40)); //large fade in time and total length to offset lag
+		player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
+		player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponentWithLandFont()));
+		
+		MinecraftForge.EVENT_BUS.post(new OnEntryEvent(server, playerId));
 	}
 	
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)

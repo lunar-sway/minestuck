@@ -11,6 +11,7 @@ import com.mraof.minestuck.network.EntryEffectPackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
@@ -225,7 +226,7 @@ public class EntryProcess
 			}
 			
 			finalizeEntry(player, originLevel, landLevel, wasInsideEntryArea);
-			SkaianetHandler.get(player.level()).onEntry(playerId);
+			SburbHandler.onEntry(player.server, player);
 			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - time);
 			
 		} catch(Exception e)

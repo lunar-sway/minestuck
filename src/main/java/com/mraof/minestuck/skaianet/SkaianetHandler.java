@@ -5,7 +5,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -543,18 +542,6 @@ public final class SkaianetHandler extends SavedData
 			SburbHandler.prepareEntry(playerData, mcServer);
 		
 		return playerData.getLandDimension();
-	}
-	
-	/**
-	 * Called when entry teleportation has successfully finished.
-	 */
-	public void onEntry(PlayerIdentifier target)
-	{
-		SburbHandler.onEntry(mcServer, getOrCreateData(target));
-		
-		infoTracker.markLandChainDirty();
-		
-		MinecraftForge.EVENT_BUS.post(new OnEntryEvent(mcServer, target));
 	}
 	
 	public void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE)
