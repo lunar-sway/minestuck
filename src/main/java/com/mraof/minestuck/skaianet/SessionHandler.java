@@ -50,6 +50,9 @@ public abstract class SessionHandler
 	
 	abstract void onDisconnect(PlayerIdentifier client, PlayerIdentifier server);
 	
+	void newPredefineData(PlayerIdentifier player)
+	{}
+	
 	Map<Integer, String> getServerList(PlayerIdentifier client)
 	{
 		Optional<PlayerIdentifier> primaryServer = skaianetHandler.primaryPartnerForClient(client);

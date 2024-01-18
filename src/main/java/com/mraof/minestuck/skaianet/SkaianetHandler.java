@@ -63,13 +63,6 @@ public final class SkaianetHandler extends SavedData
 	{
 		this.mcServer = mcServer;
 		
-		SessionHandler sessions;
-		if(nbt.contains("session", Tag.TAG_COMPOUND))
-			sessions = new GlobalSessionHandler(this, nbt.getCompound("session"));
-		else sessions = new DefaultSessionHandler(this, nbt.getList("sessions", Tag.TAG_COMPOUND));
-		
-		sessionHandler = sessions.getActual();
-		
 		openedServers.read(nbt.getList("serversOpen", Tag.TAG_COMPOUND));
 		resumingClients.read(nbt.getList("resumingClients", Tag.TAG_COMPOUND));
 		resumingServers.read(nbt.getList("resumingServers", Tag.TAG_COMPOUND));
@@ -97,7 +90,13 @@ public final class SkaianetHandler extends SavedData
 		for(int i = 0; i < connectionList.size(); i++)
 			activeConnections.add(ActiveConnection.read(connectionList.getCompound(i)));
 		
-		sessionHandler.getSessions().forEach(Session::updatePlayerSet);
+		SessionHandler sessions;
+		if(nbt.contains("session", Tag.TAG_COMPOUND))
+			sessions = new GlobalSessionHandler(this, nbt.getCompound("session"));
+		else sessions = new DefaultSessionHandler(this, nbt.getList("sessions", Tag.TAG_COMPOUND));
+		
+		sessionHandler = sessions.getActual();
+		
 		sessionHandler.getSessions().forEach(Session::checkIfCompleted);
 	}
 	
@@ -587,6 +586,7 @@ public final class SkaianetHandler extends SavedData
 			data = new PredefineData(player);
 		consumer.consume(data);
 		predefineData.put(player, data);
+		sessionHandler.newPredefineData(player);
 	}
 	
 	Optional<PredefineData> predefineData(PlayerIdentifier player)

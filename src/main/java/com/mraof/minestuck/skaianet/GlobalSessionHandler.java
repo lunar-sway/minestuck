@@ -21,6 +21,7 @@ public final class GlobalSessionHandler extends SessionHandler
 	{
 		super(skaianetHandler);
 		globalSession = Objects.requireNonNull(session);
+		skaianetHandler.predefineData.keySet().forEach(globalSession::addPlayer);
 	}
 	
 	GlobalSessionHandler(SkaianetHandler skaianetHandler, CompoundTag nbt)
@@ -63,16 +64,16 @@ public final class GlobalSessionHandler extends SessionHandler
 	@Override
 	void onConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		globalSession.addConnectedClient(client);
+		globalSession.addPlayer(client).addPlayer(server);
 	}
 	
 	@Override
 	void onDisconnect(PlayerIdentifier client, PlayerIdentifier server)
+	{}
+	
+	@Override
+	void newPredefineData(PlayerIdentifier player)
 	{
-		SburbPlayerData playerData = skaianetHandler.getOrCreateData(client);
-		if(!playerData.hasPrimaryConnection())
-			globalSession.removeConnection(client);
-		else if(!playerData.isPrimaryServerPlayer(server))
-			globalSession.updatePlayerSet();
+		globalSession.addPlayer(player);
 	}
 }

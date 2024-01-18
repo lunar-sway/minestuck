@@ -102,7 +102,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	@Override
 	void onConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		prepareSessionFor(client, server).addConnectedClient(client);
+		prepareSessionFor(client, server).addPlayer(client).addPlayer(server);
 	}
 	
 	@Override
@@ -112,11 +112,7 @@ public final class DefaultSessionHandler extends SessionHandler
 		
 		SburbPlayerData playerData = skaianetHandler.getOrCreateData(client);
 		if(!playerData.isPrimaryServerPlayer(server))
-		{
-			if(!playerData.hasPrimaryConnection())
-				s.removeConnection(client);
 			split(s);
-		}
 	}
 	
 	private void correctAndAddSession(Session session)

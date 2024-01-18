@@ -7,8 +7,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,10 +19,7 @@ import java.util.Set;
  */
 public final class Session
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	final SkaianetHandler skaianetHandler;
-	private final Set<PlayerIdentifier> connectedClients = new HashSet<>();
 	private final Set<PlayerIdentifier> players = new HashSet<>();
 	private final GristGutter gutter;
 	
@@ -37,12 +32,11 @@ public final class Session
 	{
 		Session session = new Session(skaianetHandler);
 		sessions.forEach(other -> {
-			session.connectedClients.addAll(other.connectedClients);
+			session.players.addAll(other.players);
 			// Since the gutter capacity of the merged session should be the sum of the individual sessions,
 			// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
 			session.gutter.addGristUnchecked(other.gutter.getCache());
 		});
-		session.updatePlayerSet();
 		return session;
 	}
 	
@@ -56,10 +50,10 @@ public final class Session
 	
 	boolean computeIsComplete()
 	{
-		if(this.connectedClients.isEmpty())
+		if(this.players.isEmpty())
 			return false;
 		
-		return this.getPlayers().stream().allMatch(player -> {
+		return this.players.stream().allMatch(player -> {
 			SburbPlayerData playerData = skaianetHandler.getOrCreateData(player);
 			return playerData.hasEntered() && playerData.primaryServerPlayer().isPresent();
 		});
@@ -96,23 +90,6 @@ public final class Session
 		return players;
 	}
 	
-	void updatePlayerSet()
-	{
-		players.clear();
-		for(PlayerIdentifier player : this.connectedClients)
-		{
-			players.add(player);
-			SburbPlayerData playerData = skaianetHandler.getOrCreateData(player);
-			if(playerData.hasPrimaryConnection())
-				playerData.primaryServerPlayer().ifPresent(players::add);
-			else
-				players.add(skaianetHandler.getActiveConnection(player).orElseThrow().server());
-		}
-		
-		if(skaianetHandler.sessionHandler instanceof GlobalSessionHandler)
-			players.addAll(skaianetHandler.predefineData.keySet());
-	}
-	
 	public GristGutter getGristGutter()
 	{
 		return gutter;
@@ -129,13 +106,13 @@ public final class Session
 		CompoundTag nbt = new CompoundTag();
 		
 		ListTag list = new ListTag();
-		for(PlayerIdentifier player : connectedClients)
+		for(PlayerIdentifier player : players)
 		{
 			CompoundTag playerTag = new CompoundTag();
-			player.saveToNBT(playerTag, "client");
+			player.saveToNBT(playerTag, "player");
 			list.add(playerTag);
 		}
-		nbt.put("connections", list);
+		nbt.put("players", list);
 		nbt.put("gutter", this.gutter.write());
 		return nbt;
 	}
@@ -150,46 +127,30 @@ public final class Session
 	{
 		Session s = new Session(nbt, handler);
 		
-		ListTag list = nbt.getList("connections", Tag.TAG_COMPOUND);
+		ListTag list = nbt.getList("players", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
-		{
-			try
-			{
-				s.connectedClients.add(IdentifierHandler.load(list.getCompound(i), "client"));
-			} catch(Exception e)
-			{
-				LOGGER.error("Unable to read sburb connection from tag {}. Forced to skip connection. Caused by:", list.getCompound(i), e);
-			}
-		}
+			s.players.add(IdentifierHandler.load(list.getCompound(i), "player"));
 		
 		return s;
 	}
 	
-	void addConnectedClient(PlayerIdentifier client)
+	Session addPlayer(PlayerIdentifier player)
 	{
-		connectedClients.add(client);
-		updatePlayerSet();
+		this.players.add(player);
+		return this;
 	}
 	
-	void removeConnection(PlayerIdentifier client)
-	{
-		connectedClients.remove(client);
-		updatePlayerSet();
-	}
-	
-	Session createSessionSplit(Set<PlayerIdentifier> clientPlayers)
+	Session createSessionSplit(Set<PlayerIdentifier> players)
 	{
 		double originalGutterMultiplier = this.gutter.gutterMultiplierForSession();
 		
 		Session newSession = new Session(skaianetHandler);
 		
-		for(PlayerIdentifier player : clientPlayers)
+		for(PlayerIdentifier player : players)
 		{
-			if(connectedClients.remove(player))
-				newSession.connectedClients.add(player);
+			this.players.remove(player);
+			newSession.players.add(player);
 		}
-		newSession.updatePlayerSet();
-		this.updatePlayerSet();
 		
 		double gutterMultiplier = newSession.gutter.gutterMultiplierForSession();
 		MutableGristSet takenGrist = this.gutter.takeFraction(gutterMultiplier/originalGutterMultiplier);
