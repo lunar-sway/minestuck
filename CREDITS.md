@@ -1,4 +1,6 @@
 
+This credits file is currently under construction. Join the conversation over at [issue #550](https://github.com/lunar-sway/minestuck/issues/550)!
+
 # Modeling
 
 - Badadamadaba: [Crumply hat](src/main/java/com/mraof/minestuck/client/model/armor/CrumplyHatModel.java)
