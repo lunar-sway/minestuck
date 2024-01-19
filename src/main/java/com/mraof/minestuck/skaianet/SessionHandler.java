@@ -48,7 +48,7 @@ public sealed abstract class SessionHandler
 	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		return MinestuckConfig.SERVER.allowSecondaryConnections.get()
-				&& skaianetHandler.hasPrimaryConnectionForClient(client)
+				&& skaianetHandler.primaryPartnerForClient(client).isPresent()
 				&& getPlayerSession(client) == getPlayerSession(server);
 	}
 	

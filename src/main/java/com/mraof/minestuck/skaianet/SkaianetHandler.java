@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -134,27 +135,24 @@ public final class SkaianetHandler extends SavedData
 	public void connectToServer(ISburbComputer computer, PlayerIdentifier server)
 	{
 		PlayerIdentifier player = computer.getOwner();
-		ComputerReference reference = computer.createReference();
-		if(reference.isInNether() || isConnectingBlocked(player, true)
-				|| !sessionHandler.getServerList(player).containsKey(server.getId()))
+		
+		if(computer.createReference().isInNether())
 			return;
 		
-		ISburbComputer serverComputer = openedServers.getComputer(mcServer, server);
+		if(isClientActive(player))
+			return;
 		
-		if(serverComputer == null)
+		if(!openedServers.contains(server))
 			return;
 		
 		SburbPlayerData playerData = getOrCreateData(player);
 		if(!playerData.hasPrimaryConnection())
 		{
 			if(!canMakeNewRegularConnectionAsServer(server))
-			{
-				LOGGER.warn("Connection failed between {} and {}", player.getUsername(), server.getUsername());
 				return;
-			}
 			
-			setActive(computer, serverComputer, SburbEvent.ConnectionType.REGULAR);
-			openedServers.remove(server);
+			removeAndUseOpenServerComputer(server, serverComputer ->
+					setActive(computer, serverComputer, SburbEvent.ConnectionType.REGULAR));
 			return;
 		}
 		
@@ -162,27 +160,51 @@ public final class SkaianetHandler extends SavedData
 		if(primaryServer.isEmpty())
 		{
 			if(!canMakeNewRegularConnectionAsServer(server))
-			{
-				LOGGER.warn("Connection between {} and {} denied because the latter is already in a connection", player.getUsername(), server.getUsername());
 				return;
-			}
 			
-			newServerForClient(player, server);
-			
-			setActive(computer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
-			openedServers.remove(server);
+			removeAndUseOpenServerComputer(server, serverComputer -> {
+				newServerForClient(player, server);
+				setActive(computer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
+			});
 			return;
 		}
 		
 		if(primaryServer.get().equals(server))
 		{
-			setActive(computer, serverComputer, SburbEvent.ConnectionType.RESUME);
-			openedServers.remove(server);
+			removeAndUseOpenServerComputer(server, serverComputer ->
+					setActive(computer, serverComputer, SburbEvent.ConnectionType.RESUME));
 		} else if(sessionHandler.canMakeSecondaryConnection(player, server))
 		{
-			setActive(computer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
-			openedServers.remove(server);
+			removeAndUseOpenServerComputer(server, serverComputer ->
+					setActive(computer, serverComputer, SburbEvent.ConnectionType.SECONDARY));
 		}
+	}
+	
+	private void removeAndUseResumingClientComputer(PlayerIdentifier client, Consumer<ISburbComputer> computerConsumer)
+	{
+		ISburbComputer clientComputer = resumingClients.getComputer(mcServer, client);
+		if(clientComputer == null)
+			return;
+		computerConsumer.accept(clientComputer);
+		resumingClients.remove(client);
+	}
+	
+	private void removeAndUseOpenServerComputer(PlayerIdentifier server, Consumer<ISburbComputer> computerConsumer)
+	{
+		ISburbComputer serverComputer = openedServers.getComputer(mcServer, server);
+		if(serverComputer == null)
+			return;
+		computerConsumer.accept(serverComputer);
+		openedServers.remove(server);
+	}
+	
+	private void removeAndUseResumingServerComputer(PlayerIdentifier server, Consumer<ISburbComputer> computerConsumer)
+	{
+		ISburbComputer serverComputer = resumingServers.getComputer(mcServer, server);
+		if(serverComputer == null)
+			return;
+		computerConsumer.accept(serverComputer);
+		resumingServers.remove(server);
 	}
 	
 	private void setActive(ISburbComputer client, ISburbComputer server, SburbEvent.ConnectionType type)
@@ -207,30 +229,24 @@ public final class SkaianetHandler extends SavedData
 	public void resumeClientConnection(ISburbComputer computer)
 	{
 		PlayerIdentifier player = computer.getOwner();
-		if(computer.createReference().isInNether() || isConnectingBlocked(player, true))
+		if(computer.createReference().isInNether() || isClientActive(player))
 			return;
 		
 		if(!hasPrimaryConnectionForClient(player))
 			return;
 		
 		Optional<PlayerIdentifier> server = primaryPartnerForClient(player);
-		if(server.isPresent())
+		if(server.isPresent() && resumingServers.contains(server.get()))
 		{
-			ISburbComputer otherComputer = resumingServers.getComputer(mcServer, server.get());
-			if(otherComputer != null)
-			{
-				setActive(computer, otherComputer, SburbEvent.ConnectionType.RESUME);
-				resumingServers.remove(server.get());
-				return;
-			}
-			
-			otherComputer = openedServers.getComputer(mcServer, server.get());
-			if(otherComputer != null)
-			{
-				setActive(computer, otherComputer, SburbEvent.ConnectionType.RESUME);
-				openedServers.remove(server.get());
-				return;
-			}
+			removeAndUseResumingServerComputer(server.get(), otherComputer ->
+					setActive(computer, otherComputer, SburbEvent.ConnectionType.RESUME));
+			return;
+		}
+		if(server.isPresent() && openedServers.contains(server.get()))
+		{
+			removeAndUseOpenServerComputer(server.get(), otherComputer ->
+					setActive(computer, otherComputer, SburbEvent.ConnectionType.RESUME));
+			return;
 		}
 		
 		resumingClients.put(player, computer);
@@ -239,22 +255,17 @@ public final class SkaianetHandler extends SavedData
 	public void resumeServerConnection(ISburbComputer computer)
 	{
 		PlayerIdentifier player = computer.getOwner();
-		if(computer.createReference().isInNether() || isConnectingBlocked(player, false))
+		if(computer.createReference().isInNether() || hasResumingServer(player))
 			return;
 		
-		Optional<PlayerIdentifier> optionalClient = primaryPartnerForServer(player);
-		if(optionalClient.isEmpty())
+		Optional<PlayerIdentifier> client = primaryPartnerForServer(player);
+		if(client.isEmpty())
 			return;
 		
-		PlayerIdentifier client = optionalClient.get();
-		if(getActiveConnection(client).isPresent())
-			return;
-		
-		ISburbComputer otherComputer = resumingClients.getComputer(mcServer, client);
-		if(otherComputer != null)
+		if(resumingClients.contains(client.get()))
 		{
-			setActive(otherComputer, computer, SburbEvent.ConnectionType.RESUME);
-			resumingClients.remove(client);
+			removeAndUseResumingClientComputer(client.get(), otherComputer ->
+					setActive(otherComputer, computer, SburbEvent.ConnectionType.RESUME));
 			return;
 		}
 		
@@ -265,7 +276,7 @@ public final class SkaianetHandler extends SavedData
 	{
 		PlayerIdentifier player = computer.getOwner();
 		ComputerReference reference = computer.createReference();
-		if(reference.isInNether() || isConnectingBlocked(player, false))
+		if(reference.isInNether() || hasResumingServer(player))
 			return;
 		
 		Optional<PlayerIdentifier> primaryClient = primaryPartnerForServer(player);
@@ -285,11 +296,9 @@ public final class SkaianetHandler extends SavedData
 		}
 	}
 	
-	private boolean isConnectingBlocked(PlayerIdentifier player, boolean isClient)
+	private boolean isClientActive(PlayerIdentifier player)
 	{
-		if(isClient)
-			return getActiveConnection(player).isPresent() || resumingClients.contains(player);
-		else return openedServers.contains(player) || resumingServers.contains(player);
+		return getActiveConnection(player).isPresent() || hasResumingClient(player);
 	}
 	
 	public void closeClientConnectionRemotely(PlayerIdentifier player)
