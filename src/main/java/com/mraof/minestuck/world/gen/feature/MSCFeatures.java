@@ -70,6 +70,7 @@ public final class MSCFeatures
 	//scarred variant tends to be a little more scraggly
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SCARRED_SHADEWOOD_TREE = key("scarred_shadewood_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ORNATE_SHADEWOOD_TREE = key("ornate_shadewood_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TREE_STUMP = key("tree_stump");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_TREE = key("petrified_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_TREE = key("dead_tree");
 	
