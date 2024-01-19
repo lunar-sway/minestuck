@@ -31,6 +31,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -689,6 +690,25 @@ public class MSItems
 	public static final RegistryObject<Item> CASSETTE_WARD = REGISTER.register("cassette_ward", () -> new CassetteItem(10, EnumCassetteType.WARD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 5020));
 	public static final RegistryObject<Item> CASSETTE_OTHERSIDE = REGISTER.register("cassette_otherside", () -> new CassetteItem(14, EnumCassetteType.OTHERSIDE, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1), 3900));
 	public static final RegistryObject<Item> CASSETTE_5 = REGISTER.register("cassette_5", () -> new CassetteItem(15, EnumCassetteType.FIVE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3560));
+	
+	
+	//Spawn Eggs
+	public static final RegistryObject<Item> IMP_SPAWN_EGG = REGISTER.register("imp_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.IMP, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> OGRE_SPAWN_EGG = REGISTER.register("ogre_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.OGRE, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> BASILISK_SPAWN_EGG = REGISTER.register("basilisk_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.BASILISK, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> LICH_SPAWN_EGG = REGISTER.register("lich_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.LICH, 0xffffff, 0xffffff, new Item.Properties()));
+	
+	public static final RegistryObject<Item> SALAMANDER_SPAWN_EGG = REGISTER.register("salamander_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.SALAMANDER, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> TURTLE_SPAWN_EGG = REGISTER.register("turtle_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.TURTLE, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> NAKAGATOR_SPAWN_EGG = REGISTER.register("nakagator_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.NAKAGATOR, 0xffffff, 0xfc5000, new Item.Properties()));
+	public static final RegistryObject<Item> IGUANA_SPAWN_EGG = REGISTER.register("iguana_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.IGUANA, 0xffffff, 0xffffff, new Item.Properties()));
+	
+	public static final RegistryObject<Item> DERSITE_PAWN_SPAWN_EGG = REGISTER.register("dersite_pawn_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.DERSITE_PAWN, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> DERSITE_BISHOP_SPAWN_EGG = REGISTER.register("dersite_bishop_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.DERSITE_BISHOP, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> DERSITE_ROOK_SPAWN_EGG = REGISTER.register("dersite_rook_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.DERSITE_ROOK, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> PROSPITIAN_PAWN_SPAWN_EGG = REGISTER.register("prospitian_pawn_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.PROSPITIAN_PAWN, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> PROSPITIAN_BISHOP_SPAWN_EGG = REGISTER.register("prospitian_bishop_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.PROSPITIAN_BISHOP, 0xffffff, 0xffffff, new Item.Properties()));
+	public static final RegistryObject<Item> PROSPITIAN_ROOK_SPAWN_EGG = REGISTER.register("prospitian_rook_spawn_egg", () -> new ForgeSpawnEggItem(MSEntityTypes.PROSPITIAN_ROOK, 0xffffff, 0xffffff, new Item.Properties()));
 	
 	
 	/** Start of block items **/
