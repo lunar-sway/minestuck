@@ -10,10 +10,12 @@ import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class ComputerWaitingList
 {
@@ -60,13 +62,14 @@ public class ComputerWaitingList
 		return list;
 	}
 	
+	@Nullable
 	ISburbComputer getComputer(MinecraftServer mcServer, PlayerIdentifier player)
 	{
 		ComputerReference reference = map.get(player);
 		if(reference != null)
 		{
 			ISburbComputer computer = reference.getComputer(mcServer);
-			if(computer != null)
+			if(computer != null && computer.getOwner().equals(player))
 				return computer;
 			else
 			{
@@ -75,6 +78,16 @@ public class ComputerWaitingList
 			}
 		}
 		return null;
+	}
+	
+	void useComputerAndRemoveOnSuccess(PlayerIdentifier player, MinecraftServer mcServer, Predicate<ISburbComputer> computerConsumer)
+	{
+		ISburbComputer clientComputer = this.getComputer(mcServer, player);
+		if(clientComputer == null)
+			return;
+		boolean result = computerConsumer.test(clientComputer);
+		if(result)
+			this.remove(player);
 	}
 	
 	void remove(PlayerIdentifier player)

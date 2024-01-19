@@ -45,13 +45,6 @@ public sealed abstract class SessionHandler
 		return session.completed;
 	}
 	
-	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
-	{
-		return MinestuckConfig.SERVER.allowSecondaryConnections.get()
-				&& skaianetHandler.primaryPartnerForClient(client).isPresent()
-				&& getPlayerSession(client) == getPlayerSession(server);
-	}
-	
 	abstract void onConnect(PlayerIdentifier client, PlayerIdentifier server);
 	
 	abstract void onDisconnect(PlayerIdentifier client, PlayerIdentifier server);
@@ -68,7 +61,7 @@ public sealed abstract class SessionHandler
 			
 			if(primaryServer.isPresent() && primaryServer.get().equals(server)
 					|| primaryServer.isEmpty() && skaianetHandler.canMakeNewRegularConnectionAsServer(server)
-					|| canMakeSecondaryConnection(client, server))
+					|| skaianetHandler.canMakeSecondaryConnection(client, server))
 				map.put(server.getId(), server.getUsername());
 		}
 		return map;

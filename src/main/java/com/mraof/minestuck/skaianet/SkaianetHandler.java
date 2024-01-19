@@ -126,7 +126,55 @@ public final class SkaianetHandler extends SavedData
 				.allMatch(connection -> getOrCreateData(connection.client()).hasPrimaryConnection());
 	}
 	
-	void setActive(ISburbComputer client, ISburbComputer server, SburbEvent.ConnectionType type)
+	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
+	{
+		return MinestuckConfig.SERVER.allowSecondaryConnections.get()
+				&& primaryPartnerForClient(client).isPresent()
+				&& sessionHandler.getPlayerSession(client) == sessionHandler.getPlayerSession(server);
+	}
+	
+	boolean tryConnect(ISburbComputer clientComputer, ISburbComputer serverComputer)
+	{
+		PlayerIdentifier clientPlayer = clientComputer.getOwner(), serverPlayer = serverComputer.getOwner();
+		
+		if(this.getActiveConnection(clientPlayer).isPresent())
+			return false;
+		
+		SburbPlayerData playerData = getOrCreateData(clientPlayer);
+		if(!playerData.hasPrimaryConnection())
+		{
+			if(!canMakeNewRegularConnectionAsServer(serverPlayer))
+				return false;
+			
+			newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.REGULAR);
+			return true;
+		}
+		
+		Optional<PlayerIdentifier> primaryServer = playerData.primaryServerPlayer();
+		if(primaryServer.isEmpty())
+		{
+			if(!canMakeNewRegularConnectionAsServer(serverPlayer))
+				return false;
+			
+			newServerForClient(clientPlayer, serverPlayer);
+			newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
+			return true;
+		}
+		
+		if(primaryServer.get().equals(serverPlayer))
+		{
+			newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.RESUME);
+			return true;
+		}
+		if(canMakeSecondaryConnection(clientPlayer, serverPlayer))
+		{
+			newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
+			return true;
+		}
+		return false;
+	}
+	
+	private void newActiveConnection(ISburbComputer client, ISburbComputer server, SburbEvent.ConnectionType type)
 	{
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
@@ -143,11 +191,6 @@ public final class SkaianetHandler extends SavedData
 		server.connected(client.getOwner(), false);
 		
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(this.mcServer, activeConnection, type));
-	}
-	
-	boolean isClientActive(PlayerIdentifier player)
-	{
-		return getActiveConnection(player).isPresent() || hasResumingClient(player);
 	}
 	
 	void closeConnection(ActiveConnection activeConnection)
