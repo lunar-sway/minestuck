@@ -32,6 +32,8 @@ public final class InfoTracker
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	public static final String PRIVATE_COMPUTER = "minestuck.private_computer";
+	
 	private final SkaianetHandler skaianet;
 	
 	private final Map<PlayerIdentifier, Set<PlayerIdentifier>> listenerMap = new HashMap<>();
@@ -97,7 +99,7 @@ public final class InfoTracker
 		
 		if(cannotAccess(player, p1))
 		{
-			player.sendSystemMessage(Component.literal("[Minestuck] ").withStyle(ChatFormatting.RED).append(Component.translatable(SkaianetHandler.PRIVATE_COMPUTER)));
+			player.sendSystemMessage(Component.literal("[Minestuck] ").withStyle(ChatFormatting.RED).append(Component.translatable(PRIVATE_COMPUTER)));
 			return;
 		}
 		if(!getSet(p1).add(p0))
