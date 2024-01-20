@@ -1934,7 +1934,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbClient.SELECT_COLOR, "Select a Color");
 		add(SburbClient.CONNECT, "Connected to %s");
 		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
-		add(SkaianetHandler.CLOSED, "Connection closed");
+		add(SkaianetConnectionInteractions.CLOSED, "Connection closed");
 		add(SburbServer.OFFLINE, "Server offline");
 		add(SburbClient.SELECT, "Select a server below");
 		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");

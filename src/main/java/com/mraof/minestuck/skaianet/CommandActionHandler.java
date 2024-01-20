@@ -42,17 +42,17 @@ public final class CommandActionHandler
 		
 		if(!clientData.hasPrimaryConnection() && skaianet.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
 		{
-			skaianet.trySetPrimaryConnection(client, server);
+			SkaianetConnectionInteractions.trySetPrimaryConnection(client, server, skaianet);
 			return true;
 		}
 		
-		skaianet.unlinkClientPlayer(client);
-		skaianet.unlinkServerPlayer(server);
+		SkaianetConnectionInteractions.unlinkClientPlayer(client, skaianet);
+		SkaianetConnectionInteractions.unlinkServerPlayer(server, skaianet);
 		
 		if(clientData.hasPrimaryConnection())
-			skaianet.newServerForClient(client, server);
+			SkaianetConnectionInteractions.newServerForClient(client, server, skaianet);
 		else
-			skaianet.trySetPrimaryConnection(client, server);
+			SkaianetConnectionInteractions.trySetPrimaryConnection(client, server, skaianet);
 		
 		return true;
 	}
@@ -65,8 +65,8 @@ public final class CommandActionHandler
 		if(!skaianet.getOrCreateData(identifier).hasEntered())
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		
-		skaianet.unlinkClientPlayer(identifier);
-		skaianet.unlinkServerPlayer(identifier);
+		SkaianetConnectionInteractions.unlinkClientPlayer(identifier, skaianet);
+		SkaianetConnectionInteractions.unlinkServerPlayer(identifier, skaianet);
 		
 		PlayerIdentifier lastPlayer = identifier;
 		int i = 0;
@@ -77,14 +77,14 @@ public final class CommandActionHandler
 				break;
 			
 			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-			skaianet.newServerForClient(lastPlayer, fakePlayer);
+			SkaianetConnectionInteractions.newServerForClient(lastPlayer, fakePlayer, skaianet);
 			
 			makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
 			lastPlayer = fakePlayer;
 		}
 		
 		if(i == landTypes.size())
-			skaianet.newServerForClient(lastPlayer, identifier);
+			SkaianetConnectionInteractions.newServerForClient(lastPlayer, identifier, skaianet);
 		else
 		{
 			PlayerIdentifier lastIdentifier = identifier;
@@ -104,7 +104,7 @@ public final class CommandActionHandler
 	
 	private static void makeConnectionWithLand(SkaianetHandler skaianet, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server)
 	{
-		skaianet.trySetPrimaryConnection(client, server);
+		SkaianetConnectionInteractions.trySetPrimaryConnection(client, server, skaianet);
 		
 		SburbPlayerData data = skaianet.getOrCreateData(client);
 		data.setLand(dimensionName);

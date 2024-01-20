@@ -3,24 +3,20 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -33,14 +29,12 @@ public final class SkaianetHandler extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final String CLOSED = "minestuck.closed_message";
-	
 	final InfoTracker infoTracker = new InfoTracker(this);
 	final ComputerWaitingList openedServers = new ComputerWaitingList(infoTracker, false, "opened server");
 	final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
 	final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
-	private final List<ActiveConnection> activeConnections = new ArrayList<>();
+	final List<ActiveConnection> activeConnections = new ArrayList<>();
 	final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
 	final SessionHandler sessionHandler;
 	
@@ -119,110 +113,6 @@ public final class SkaianetHandler extends SavedData
 		return playerDataMap.values().stream().filter(data -> data.isPrimaryServerPlayer(player)).findAny().map(SburbPlayerData::playerId);
 	}
 	
-	public boolean canMakeNewRegularConnectionAsServer(PlayerIdentifier serverPlayer)
-	{
-		return !hasPrimaryConnectionForServer(serverPlayer)
-				&& activeConnections().filter(connection -> connection.server().equals(serverPlayer))
-				.allMatch(connection -> getOrCreateData(connection.client()).hasPrimaryConnection());
-	}
-	
-	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
-	{
-		return MinestuckConfig.SERVER.allowSecondaryConnections.get()
-				&& primaryPartnerForClient(client).isPresent()
-				&& sessionHandler.getPlayerSession(client) == sessionHandler.getPlayerSession(server);
-	}
-	
-	boolean tryConnect(ISburbComputer clientComputer, ISburbComputer serverComputer)
-	{
-		PlayerIdentifier clientPlayer = clientComputer.getOwner(), serverPlayer = serverComputer.getOwner();
-		
-		if(this.getActiveConnection(clientPlayer).isPresent())
-			return false;
-		
-		SburbPlayerData playerData = getOrCreateData(clientPlayer);
-		if(!playerData.hasPrimaryConnection())
-		{
-			if(!canMakeNewRegularConnectionAsServer(serverPlayer))
-				return false;
-			
-			newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.REGULAR);
-			return true;
-		}
-		
-		Optional<PlayerIdentifier> primaryServer = playerData.primaryServerPlayer();
-		if(primaryServer.isEmpty())
-		{
-			if(!canMakeNewRegularConnectionAsServer(serverPlayer))
-				return false;
-			
-			newServerForClient(clientPlayer, serverPlayer);
-			newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
-			return true;
-		}
-		
-		if(primaryServer.get().equals(serverPlayer))
-		{
-			newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.RESUME);
-			return true;
-		}
-		if(canMakeSecondaryConnection(clientPlayer, serverPlayer))
-		{
-			newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
-			return true;
-		}
-		return false;
-	}
-	
-	private void newActiveConnection(ISburbComputer client, ISburbComputer server, SburbEvent.ConnectionType type)
-	{
-		Objects.requireNonNull(client);
-		Objects.requireNonNull(server);
-		
-		if(getActiveConnection(client.getOwner()).isPresent())
-			throw new IllegalStateException("Should not activate sburb connection when already active");
-		
-		ActiveConnection activeConnection = new ActiveConnection(client, server);
-		activeConnections.add(activeConnection);
-		sessionHandler.onConnect(activeConnection.client(), activeConnection.server());
-		this.infoTracker.markDirty(activeConnection);
-		
-		client.connected(server.getOwner(), true);
-		server.connected(client.getOwner(), false);
-		
-		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(this.mcServer, activeConnection, type));
-	}
-	
-	void closeConnection(ActiveConnection activeConnection)
-	{
-		closeConnection(activeConnection, null, null);
-	}
-	
-	void closeConnection(ActiveConnection connection, @Nullable ISburbComputer clientComputer, @Nullable ISburbComputer serverComputer)
-	{
-		if(clientComputer == null)
-			clientComputer = connection.clientComputer().getComputer(mcServer);
-		if(serverComputer == null)
-			serverComputer = connection.serverComputer().getComputer(mcServer);
-		
-		activeConnections.remove(connection);
-		sessionHandler.onDisconnect(connection.client(), connection.server());
-		infoTracker.markDirty(connection);
-		
-		if(clientComputer != null)
-		{
-			clientComputer.putClientBoolean("connectedToServer", false);
-			clientComputer.putClientMessage(CLOSED);
-		}
-		if(serverComputer != null)
-		{
-			serverComputer.clearConnectedClient();
-			serverComputer.putServerMessage(CLOSED);
-		}
-		
-		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(mcServer, connection));
-	}
-	
 	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)
 	{
 		checkData();
@@ -282,7 +172,7 @@ public final class SkaianetHandler extends SavedData
 					|| !cc.getClientBoolean("connectedToServer"))
 			{
 				LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", activeConnection.client(), activeConnection.server());
-				closeConnection(activeConnection, cc, sc);
+				SkaianetConnectionInteractions.closeConnection(activeConnection, cc, sc, this);
 			}
 		});
 	}
@@ -323,74 +213,6 @@ public final class SkaianetHandler extends SavedData
 	Stream<PlayerIdentifier> players()
 	{
 		return playerDataMap.keySet().stream();
-	}
-	
-	void trySetPrimaryConnection(ActiveConnection connection)
-	{
-		trySetPrimaryConnection(connection.client(), connection.server());
-	}
-	
-	void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
-	{
-		if(hasPrimaryConnectionForClient(client) || hasPrimaryConnectionForServer(server))
-			throw new IllegalStateException();
-		
-		Optional<ActiveConnection> activeConnection = getActiveConnection(client);
-		if(activeConnection.isPresent() && !activeConnection.get().server().equals(server))
-			throw new IllegalStateException();
-		
-		if(activeConnection.isEmpty()
-				&& !activeConnections().filter(connection -> connection.server().equals(server))
-				.allMatch(connection -> getOrCreateData(connection.client()).hasPrimaryConnection()))
-			throw new IllegalStateException();
-		
-		getOrCreateData(client).setHasPrimaryConnection(server);
-	}
-	
-	void unlinkClientPlayer(PlayerIdentifier clientPlayer)
-	{
-		getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
-		getOrCreateData(clientPlayer).removeServerPlayer();
-	}
-	
-	void unlinkServerPlayer(PlayerIdentifier serverPlayer)
-	{
-		primaryPartnerForServer(serverPlayer).ifPresent(this::unlinkClientPlayer);
-		activeConnections().filter(connection -> connection.server().equals(serverPlayer) && !getOrCreateData(connection.client()).hasPrimaryConnection())
-				.forEach(this::closeConnection);
-	}
-	
-	void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
-	{
-		getOrCreateData(clientPlayer).setNewServerPlayer(serverPlayer);
-	}
-	
-	/**
-	 * Prepares the sburb connection and data needed for after entry.
-	 * Should only be called by the cruxite artifact on trigger before teleportation
-	 * @param target the identifier of the player that is entering
-	 * @return The dimension type of the new land created, or null if the player can't enter at this time.
-	 */
-	public ResourceKey<Level> prepareEntry(PlayerIdentifier target)
-	{
-		SburbPlayerData playerData = getOrCreateData(target);
-		if(!playerData.hasPrimaryConnection())
-		{
-			Optional<ActiveConnection> connection = getActiveConnection(target);
-			if(connection.isPresent())
-				trySetPrimaryConnection(connection.get());
-			else
-			{
-				LOGGER.info("Player {} entered without connection.", target.getUsername());
-				
-				trySetPrimaryConnection(target, IdentifierHandler.NULL_IDENTIFIER);
-			}
-		}
-		
-		if(playerData.getLandDimension() == null)
-			SburbHandler.prepareEntry(playerData, mcServer);
-		
-		return playerData.getLandDimension();
 	}
 	
 	SburbPlayerData getOrCreateData(PlayerIdentifier player)

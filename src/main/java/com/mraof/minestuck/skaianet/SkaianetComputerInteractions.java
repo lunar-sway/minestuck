@@ -24,7 +24,7 @@ public final class SkaianetComputerInteractions
 			return;
 		
 		skaianet.openedServers.useComputerAndRemoveOnSuccess(serverPlayer, mcServer,
-				serverComputer -> skaianet.tryConnect(computer, serverComputer));
+				serverComputer -> SkaianetConnectionInteractions.tryConnect(computer, serverComputer, skaianet));
 	}
 	
 	public static void resumeClientConnection(ISburbComputer computer, MinecraftServer mcServer)
@@ -41,13 +41,13 @@ public final class SkaianetComputerInteractions
 		if(server.isPresent() && skaianet.resumingServers.contains(server.get()))
 		{
 			skaianet.resumingServers.useComputerAndRemoveOnSuccess(server.get(), mcServer, otherComputer ->
-					skaianet.tryConnect(computer, otherComputer));
+					SkaianetConnectionInteractions.tryConnect(computer, otherComputer, skaianet));
 			return;
 		}
 		if(server.isPresent() && skaianet.openedServers.contains(server.get()))
 		{
 			skaianet.openedServers.useComputerAndRemoveOnSuccess(server.get(), mcServer, otherComputer ->
-					skaianet.tryConnect(computer, otherComputer));
+					SkaianetConnectionInteractions.tryConnect(computer, otherComputer, skaianet));
 			return;
 		}
 		
@@ -68,7 +68,7 @@ public final class SkaianetComputerInteractions
 		if(skaianet.resumingClients.contains(client.get()))
 		{
 			skaianet.resumingClients.useComputerAndRemoveOnSuccess(client.get(), mcServer, otherComputer ->
-					skaianet.tryConnect(otherComputer, computer));
+					SkaianetConnectionInteractions.tryConnect(otherComputer, computer, skaianet));
 			return;
 		}
 		
@@ -86,7 +86,7 @@ public final class SkaianetComputerInteractions
 		if(primaryClient.isPresent() && skaianet.resumingClients.contains(primaryClient.get()))
 		{
 			skaianet.resumingClients.useComputerAndRemoveOnSuccess(primaryClient.get(), mcServer, clientComputer ->
-					skaianet.tryConnect(clientComputer, computer));
+					SkaianetConnectionInteractions.tryConnect(clientComputer, computer, skaianet));
 			return;
 		}
 		
@@ -105,7 +105,7 @@ public final class SkaianetComputerInteractions
 			});
 		} else
 		{
-			skaianet.getActiveConnection(player).ifPresent(skaianet::closeConnection);
+			skaianet.getActiveConnection(player).ifPresent(activeConnection -> SkaianetConnectionInteractions.closeConnection(activeConnection, skaianet));
 		}
 	}
 	
@@ -120,7 +120,7 @@ public final class SkaianetComputerInteractions
 		} else
 		{
 			skaianet.getClientConnection(computer).ifPresent(connection ->
-					skaianet.closeConnection(connection, computer, null));
+					SkaianetConnectionInteractions.closeConnection(connection, computer, null, skaianet));
 		}
 	}
 	
@@ -130,7 +130,7 @@ public final class SkaianetComputerInteractions
 		checkAndCloseFromServerList(computer, skaianet.resumingServers);
 		
 		skaianet.getServerConnection(computer).ifPresent(connection ->
-				skaianet.closeConnection(connection, null, computer));
+				SkaianetConnectionInteractions.closeConnection(connection, null, computer, skaianet));
 	}
 	
 	private static void checkAndCloseFromServerList(ISburbComputer computer, ComputerWaitingList map)

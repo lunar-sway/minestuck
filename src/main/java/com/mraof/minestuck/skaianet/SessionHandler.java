@@ -60,8 +60,8 @@ public sealed abstract class SessionHandler
 		{
 			
 			if(primaryServer.isPresent() && primaryServer.get().equals(server)
-					|| primaryServer.isEmpty() && skaianetHandler.canMakeNewRegularConnectionAsServer(server)
-					|| skaianetHandler.canMakeSecondaryConnection(client, server))
+					|| primaryServer.isEmpty() && SkaianetConnectionInteractions.canMakeNewRegularConnectionAsServer(server, skaianetHandler)
+					|| SkaianetConnectionInteractions.canMakeSecondaryConnection(client, server, skaianetHandler))
 				map.put(server.getId(), server.getUsername());
 		}
 		return map;

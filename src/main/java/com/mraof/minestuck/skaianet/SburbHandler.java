@@ -149,7 +149,7 @@ public final class SburbHandler
 		SkaianetHandler handler = SkaianetHandler.get(mcServer);
 		Optional<ActiveConnection> connection = handler.getActiveConnection(player);
 		if(connection.isPresent() && !handler.hasPrimaryConnectionForClient(player))
-			handler.trySetPrimaryConnection(connection.get());
+			SkaianetConnectionInteractions.trySetPrimaryConnection(connection.get(), handler);
 	}
 	
 	static void prepareEntry(SburbPlayerData playerData, MinecraftServer mcServer)
