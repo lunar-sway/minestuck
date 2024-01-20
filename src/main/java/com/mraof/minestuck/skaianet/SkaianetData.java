@@ -30,9 +30,7 @@ public final class SkaianetData extends SavedData
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	final InfoTracker infoTracker = new InfoTracker(this);
-	final ComputerWaitingList openedServers = new ComputerWaitingList(infoTracker, false, "opened server");
-	final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
-	final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
+	final SkaianetComputerInteractions computerInteractions;
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
 	final List<ActiveConnection> activeConnections = new ArrayList<>();
 	final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
@@ -44,16 +42,13 @@ public final class SkaianetData extends SavedData
 	{
 		this.mcServer = mcServer;
 		
+		computerInteractions = new SkaianetComputerInteractions(this);
 		sessionHandler = new SessionHandler.Multi(this).getActual();
 	}
 	
 	private SkaianetData(MinecraftServer mcServer, CompoundTag nbt)
 	{
 		this.mcServer = mcServer;
-		
-		openedServers.read(nbt.getList("serversOpen", Tag.TAG_COMPOUND));
-		resumingClients.read(nbt.getList("resumingClients", Tag.TAG_COMPOUND));
-		resumingServers.read(nbt.getList("resumingServers", Tag.TAG_COMPOUND));
 		
 		ListTag playerDataList = nbt.getList("player_data", Tag.TAG_COMPOUND);
 		for(int i = 0; i < playerDataList.size(); i++)
@@ -78,13 +73,14 @@ public final class SkaianetData extends SavedData
 		for(int i = 0; i < connectionList.size(); i++)
 			activeConnections.add(ActiveConnection.read(connectionList.getCompound(i)));
 		
+		computerInteractions = new SkaianetComputerInteractions(this, nbt);
+		
 		SessionHandler sessions;
 		if(nbt.contains("session", Tag.TAG_COMPOUND))
 			sessions = new SessionHandler.Global(this, nbt.getCompound("session"));
 		else sessions = new SessionHandler.Multi(this, nbt.getList("sessions", Tag.TAG_COMPOUND));
 		
 		sessionHandler = sessions.getActual();
-		
 		sessionHandler.getSessions().forEach(Session::checkIfCompleted);
 	}
 	
@@ -122,14 +118,6 @@ public final class SkaianetData extends SavedData
 	@Override
 	public CompoundTag save(CompoundTag compound)
 	{
-		//checkData();
-		
-		sessionHandler.write(compound);
-		
-		compound.put("serversOpen", openedServers.write());
-		compound.put("resumingClients", resumingClients.write());
-		compound.put("resumingServers", resumingServers.write());
-		
 		ListTag playerDataList = new ListTag();
 		for(SburbPlayerData playerData : playerDataMap.values())
 		{
@@ -150,6 +138,10 @@ public final class SkaianetData extends SavedData
 			connectionList.add(connection.write());
 		compound.put("connections", connectionList);
 		
+		computerInteractions.write(compound);
+		
+		sessionHandler.write(compound);
+		
 		return compound;
 	}
 	
@@ -158,9 +150,7 @@ public final class SkaianetData extends SavedData
 		if(!MinestuckConfig.SERVER.skaianetCheck.get())
 			return;
 		
-		openedServers.validate(mcServer);
-		resumingClients.validate(mcServer);
-		resumingServers.validate(mcServer);
+		computerInteractions.validate();
 		
 		activeConnections().forEach(activeConnection -> {
 			
@@ -175,16 +165,6 @@ public final class SkaianetData extends SavedData
 				SkaianetConnectionInteractions.closeConnection(activeConnection, cc, sc, this);
 			}
 		});
-	}
-	
-	boolean hasResumingClient(PlayerIdentifier identifier)
-	{
-		return resumingClients.contains(identifier);
-	}
-	
-	boolean hasResumingServer(PlayerIdentifier identifier)
-	{
-		return resumingServers.contains(identifier) || openedServers.contains(identifier);
 	}
 	
 	public Optional<ActiveConnection> getServerConnection(ISburbComputer computer)

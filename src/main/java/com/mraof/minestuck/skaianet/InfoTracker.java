@@ -244,8 +244,8 @@ public final class InfoTracker
 	
 	private SkaianetInfoPacket.Data generateClientInfoPacket(PlayerIdentifier player)
 	{
-		boolean clientResuming = skaianet.hasResumingClient(player);
-		boolean serverResuming = skaianet.hasResumingServer(player);
+		boolean clientResuming = skaianet.computerInteractions.hasResumingClient(player);
+		boolean serverResuming = skaianet.computerInteractions.hasResumingServer(player);
 		
 		boolean hasPrimaryConnectionAsClient = skaianet.hasPrimaryConnectionForClient(player);
 		boolean hasPrimaryConnectionAsServer = skaianet.hasPrimaryConnectionForServer(player);

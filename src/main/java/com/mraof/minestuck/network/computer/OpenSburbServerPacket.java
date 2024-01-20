@@ -37,6 +37,6 @@ public class OpenSburbServerPacket implements MSPacket.PlayToServer
 	public void execute(ServerPlayer player)
 	{
 		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> SkaianetComputerInteractions.openServer(computer, player.server));
+				computer -> SkaianetComputerInteractions.get(player.server).openServer(computer));
 	}
 }

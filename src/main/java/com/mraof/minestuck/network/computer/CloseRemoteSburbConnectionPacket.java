@@ -37,6 +37,6 @@ public class CloseRemoteSburbConnectionPacket implements MSPacket.PlayToServer
 	public void execute(ServerPlayer player)
 	{
 		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> SkaianetComputerInteractions.closeClientConnectionRemotely(computer.getOwner(), player.server));
+				computer -> SkaianetComputerInteractions.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
 	}
 }

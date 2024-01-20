@@ -56,7 +56,7 @@ public sealed abstract class SessionHandler
 	{
 		Optional<PlayerIdentifier> primaryServer = skaianetData.primaryPartnerForClient(client);
 		Map<Integer, String> map = new HashMap<>();
-		for(PlayerIdentifier server : skaianetData.openedServers.getPlayers())
+		for(PlayerIdentifier server : skaianetData.computerInteractions.openServerPlayers())
 		{
 			
 			if(primaryServer.isPresent() && primaryServer.get().equals(server)

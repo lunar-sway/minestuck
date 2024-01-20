@@ -42,6 +42,6 @@ public class ConnectToSburbServerPacket implements MSPacket.PlayToServer
 	public void execute(ServerPlayer player)
 	{
 		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> SkaianetComputerInteractions.connectToServerPlayer(computer, IdentifierHandler.getById(serverPlayer), player.server));
+				computer -> SkaianetComputerInteractions.get(player.server).connectToServerPlayer(computer, IdentifierHandler.getById(serverPlayer)));
 	}
 }
