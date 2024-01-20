@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:temple_scanner"
+  },
+  "input2": {
+    "item": "minecraft:emerald"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:nostrildamus"
+  }
+}

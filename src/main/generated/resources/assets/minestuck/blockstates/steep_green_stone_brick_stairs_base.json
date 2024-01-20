@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/steep_green_stone_brick_stairs_base",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/steep_green_stone_brick_stairs_base"
+    },
+    "facing=south": {
+      "model": "minestuck:block/steep_green_stone_brick_stairs_base",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/steep_green_stone_brick_stairs_base",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:wooden_spoon"
+  },
+  "input2": {
+    "item": "minecraft:iron_ingot"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:silver_spoon"
+  }
+}

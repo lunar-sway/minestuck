@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:marble": 3
+  },
+  "ingredient": {
+    "item": "minestuck:marble_jawbreaker"
+  }
+}

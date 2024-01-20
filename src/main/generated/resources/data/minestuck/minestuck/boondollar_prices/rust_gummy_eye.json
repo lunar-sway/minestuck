@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:rust_gummy_eye"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 210,
+      "min_inclusive": 175
+    }
+  }
+}

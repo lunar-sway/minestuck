@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:too_hot_to_handle"
+  },
+  "input2": {
+    "item": "minecraft:lapis_block"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:cobalt_sabre"
+  }
+}

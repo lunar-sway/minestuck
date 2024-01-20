@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 709,
+    "minestuck:mercury": 284,
+    "minestuck:tar": 355,
+    "minestuck:uranium": 284
+  },
+  "ingredient": {
+    "item": "minestuck:atomic_vaporizer"
+  }
+}

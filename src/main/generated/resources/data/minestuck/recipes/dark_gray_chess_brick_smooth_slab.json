@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wooden_slab",
+  "key": {
+    "#": {
+      "item": "minestuck:dark_gray_chess_brick_smooth"
+    }
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "item": "minestuck:dark_gray_chess_brick_smooth_slab"
+  },
+  "show_notification": true
+}

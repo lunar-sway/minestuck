@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_post",
+  "textures": {
+    "texture": "minestuck:block/blood_aspect_planks"
+  }
+}

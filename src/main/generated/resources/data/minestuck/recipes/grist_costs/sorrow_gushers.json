@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:tar": 50
+  },
+  "ingredient": {
+    "item": "minestuck:sorrow_gushers"
+  }
+}

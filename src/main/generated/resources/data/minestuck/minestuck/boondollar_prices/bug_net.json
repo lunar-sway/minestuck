@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:bug_net"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 600,
+      "min_inclusive": 500
+    }
+  }
+}

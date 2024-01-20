@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:mini_frog_statue"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 250,
+      "min_inclusive": 200
+    }
+  }
+}

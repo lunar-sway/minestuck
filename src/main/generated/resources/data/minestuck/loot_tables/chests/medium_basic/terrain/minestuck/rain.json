@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [],
+      "name": "weapons",
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [],
+      "name": "supplies",
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:beacon",
+          "quality": -2
+        }
+      ],
+      "name": "misc",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minestuck:chests/medium_basic/terrain/minestuck/rain"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 69,
+    "minestuck:cobalt": 69
+  },
+  "ingredient": {
+    "item": "minestuck:frosty_macuahuitl"
+  }
+}

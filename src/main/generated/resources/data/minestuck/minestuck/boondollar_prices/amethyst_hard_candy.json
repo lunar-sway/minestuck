@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:amethyst_hard_candy"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 210,
+      "min_inclusive": 175
+    }
+  }
+}

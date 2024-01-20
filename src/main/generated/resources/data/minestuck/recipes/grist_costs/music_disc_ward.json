@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 15,
+    "minestuck:caulk": 8,
+    "minestuck:gold": 2,
+    "minestuck:iodine": 5
+  },
+  "ingredient": {
+    "item": "minecraft:music_disc_ward"
+  }
+}

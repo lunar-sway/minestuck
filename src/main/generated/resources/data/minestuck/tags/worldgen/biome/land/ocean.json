@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minestuck:land_default_ocean",
+    "minestuck:land_no_rain_ocean",
+    "minestuck:land_snow_ocean",
+    "minestuck:land_high_humid_ocean"
+  ]
+}

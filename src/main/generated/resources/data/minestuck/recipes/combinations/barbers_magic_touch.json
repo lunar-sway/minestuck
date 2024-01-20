@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:barbasol"
+  },
+  "input2": {
+    "item": "minestuck:wizard_staff"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:barbers_magic_touch"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:rail"
+  },
+  "input2": {
+    "item": "minecraft:light_weighted_pressure_plate"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:detector_rail"
+  }
+}

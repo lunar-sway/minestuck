@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 12,
+    "minestuck:iodine": 20
+  },
+  "ingredient": {
+    "item": "minestuck:morel_mushroom"
+  }
+}

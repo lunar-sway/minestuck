@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:jungle_log"
+  },
+  "input2": {
+    "item": "minecraft:jungle_leaves"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:jungle_sapling"
+  }
+}

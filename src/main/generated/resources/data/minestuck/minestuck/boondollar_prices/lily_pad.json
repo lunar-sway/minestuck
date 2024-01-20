@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:lily_pad"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 31,
+      "min_inclusive": 24
+    }
+  }
+}

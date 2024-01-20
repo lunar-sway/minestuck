@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 47,
+    "minestuck:build": 180,
+    "minestuck:cobalt": 224,
+    "minestuck:diamond": 24
+  },
+  "ingredient": {
+    "item": "minecraft:trident"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/rainbow_planks_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/rainbow_planks"
+    },
+    "type=top": {
+      "model": "minestuck:block/rainbow_planks_slab_top"
+    }
+  }
+}

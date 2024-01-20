@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1,
+    "minestuck:mercury": 1
+  },
+  "ingredient": {
+    "item": "minecraft:hanging_roots"
+  }
+}

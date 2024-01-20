@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:gold_seeds"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 400,
+      "min_inclusive": 300
+    }
+  }
+}

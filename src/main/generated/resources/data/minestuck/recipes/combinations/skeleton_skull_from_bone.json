@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:wither_skeleton_skull"
+  },
+  "input2": {
+    "item": "minecraft:bone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:skeleton_skull"
+  }
+}

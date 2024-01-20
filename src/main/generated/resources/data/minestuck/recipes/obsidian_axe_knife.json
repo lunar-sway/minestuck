@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  O",
+    " Os",
+    "Os "
+  ],
+  "result": {
+    "item": "minestuck:obsidian_axe_knife"
+  },
+  "show_notification": true
+}

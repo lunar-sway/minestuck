@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 87,
+    "minestuck:build": 291,
+    "minestuck:tar": 145
+  },
+  "ingredient": {
+    "item": "minestuck:frosttooth"
+  }
+}

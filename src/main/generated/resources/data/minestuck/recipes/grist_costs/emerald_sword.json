@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:diamond": 76,
+    "minestuck:quartz": 44,
+    "minestuck:ruby": 72
+  },
+  "ingredient": {
+    "item": "minestuck:emerald_sword"
+  }
+}

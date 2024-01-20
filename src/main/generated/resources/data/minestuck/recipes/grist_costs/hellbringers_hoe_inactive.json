@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 420,
+    "minestuck:garnet": 378,
+    "minestuck:ruby": 252,
+    "minestuck:sulfur": 168,
+    "minestuck:tar": 420
+  },
+  "ingredient": {
+    "item": "minestuck:hellbringers_hoe_inactive"
+  }
+}

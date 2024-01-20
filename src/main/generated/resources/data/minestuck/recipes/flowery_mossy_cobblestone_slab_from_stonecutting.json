@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:flowery_mossy_cobblestone"
+  },
+  "result": "minestuck:flowery_mossy_cobblestone_slab"
+}

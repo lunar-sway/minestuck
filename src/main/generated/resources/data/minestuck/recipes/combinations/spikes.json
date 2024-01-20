@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:cactus"
+  },
+  "input2": {
+    "item": "minecraft:iron_sword"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:spikes"
+  }
+}

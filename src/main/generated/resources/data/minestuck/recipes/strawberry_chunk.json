@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minestuck:strawberry"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "minestuck:strawberry_chunk"
+  }
+}

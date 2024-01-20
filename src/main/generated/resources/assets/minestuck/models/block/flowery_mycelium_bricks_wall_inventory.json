@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "minestuck:block/flowery_mycelium_bricks"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:regilance"
+  },
+  "input2": {
+    "item": "minestuck:eightball"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cigarette_lance"
+  }
+}

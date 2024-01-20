@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:build": 4
+  },
+  "ingredient": {
+    "tag": "forge:ores/redstone"
+  },
+  "multiplier": 6.0,
+  "sources": [
+    "minecraft:redstone"
+  ]
+}

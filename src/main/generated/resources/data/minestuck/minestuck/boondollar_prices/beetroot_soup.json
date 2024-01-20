@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:beetroot_soup"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 90,
+      "min_inclusive": 70
+    }
+  }
+}

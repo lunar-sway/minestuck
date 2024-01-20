@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:claw_sickle"
+  },
+  "input2": {
+    "item": "minestuck:grimoire"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:claw_of_nrubyiglith"
+  }
+}

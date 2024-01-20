@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 25,
+    "minestuck:chalk": 20,
+    "minestuck:iodine": 30
+  },
+  "ingredient": {
+    "item": "minestuck:fudgesickle"
+  }
+}

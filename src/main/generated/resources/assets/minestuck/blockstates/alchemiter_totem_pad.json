@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "dowel=carved_dowel,facing=east": {
+      "model": "minestuck:block/alchemiter_totem_pad_totem",
+      "y": 90
+    },
+    "dowel=carved_dowel,facing=north": {
+      "model": "minestuck:block/alchemiter_totem_pad_totem"
+    },
+    "dowel=carved_dowel,facing=south": {
+      "model": "minestuck:block/alchemiter_totem_pad_totem",
+      "y": 180
+    },
+    "dowel=carved_dowel,facing=west": {
+      "model": "minestuck:block/alchemiter_totem_pad_totem",
+      "y": 270
+    },
+    "dowel=dowel,facing=east": {
+      "model": "minestuck:block/alchemiter_totem_pad_dowel",
+      "y": 90
+    },
+    "dowel=dowel,facing=north": {
+      "model": "minestuck:block/alchemiter_totem_pad_dowel"
+    },
+    "dowel=dowel,facing=south": {
+      "model": "minestuck:block/alchemiter_totem_pad_dowel",
+      "y": 180
+    },
+    "dowel=dowel,facing=west": {
+      "model": "minestuck:block/alchemiter_totem_pad_dowel",
+      "y": 270
+    },
+    "dowel=none,facing=east": {
+      "model": "minestuck:block/alchemiter_totem_pad",
+      "y": 90
+    },
+    "dowel=none,facing=north": {
+      "model": "minestuck:block/alchemiter_totem_pad"
+    },
+    "dowel=none,facing=south": {
+      "model": "minestuck:block/alchemiter_totem_pad",
+      "y": 180
+    },
+    "dowel=none,facing=west": {
+      "model": "minestuck:block/alchemiter_totem_pad",
+      "y": 270
+    }
+  }
+}

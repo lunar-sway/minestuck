@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:shuriken"
+  },
+  "input2": {
+    "item": "minestuck:ace_of_hearts"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:hearts_suitarang"
+  }
+}

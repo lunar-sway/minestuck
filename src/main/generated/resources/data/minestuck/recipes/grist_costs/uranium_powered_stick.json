@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:uranium": 1
+  },
+  "ingredient": {
+    "item": "minestuck:uranium_powered_stick"
+  }
+}

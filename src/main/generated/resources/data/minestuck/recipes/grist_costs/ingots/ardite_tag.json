@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "tag": "forge:ingots/ardite"
+  },
+  "sources": [
+    "#forge:raw_materials/ardite"
+  ]
+}

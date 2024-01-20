@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:chalk": 45,
+    "minestuck:mercury": 1,
+    "minestuck:shale": 5
+  },
+  "ingredient": {
+    "item": "minestuck:derse_shirt"
+  }
+}

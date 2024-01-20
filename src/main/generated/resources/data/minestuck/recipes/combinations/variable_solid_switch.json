@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:solid_switch"
+  },
+  "input2": {
+    "item": "minecraft:comparator"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:variable_solid_switch"
+  }
+}

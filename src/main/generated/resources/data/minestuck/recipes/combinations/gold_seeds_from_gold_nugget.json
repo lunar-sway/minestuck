@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "input2": {
+    "item": "minecraft:gold_nugget"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:gold_seeds"
+  }
+}

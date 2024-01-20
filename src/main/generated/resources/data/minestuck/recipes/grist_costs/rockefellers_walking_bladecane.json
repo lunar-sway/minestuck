@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 413,
+    "minestuck:diamond": 2,
+    "minestuck:rust": 222,
+    "minestuck:tar": 22
+  },
+  "ingredient": {
+    "item": "minestuck:rockefellers_walking_bladecane"
+  }
+}

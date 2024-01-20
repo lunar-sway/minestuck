@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 20,
+    "minestuck:marble": 12,
+    "minestuck:rust": 3,
+    "minestuck:shale": 5
+  },
+  "ingredient": {
+    "item": "minecraft:music_disc_relic"
+  }
+}

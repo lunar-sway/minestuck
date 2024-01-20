@@ -1,0 +1,4 @@
+{
+  "type": "minestuck:irradiating_fallback",
+  "fallback_type": "minecraft:smoking"
+}

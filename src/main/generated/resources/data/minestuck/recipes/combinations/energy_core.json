@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:raw_cruxite"
+  },
+  "input2": {
+    "item": "minestuck:raw_uranium"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:energy_core"
+  }
+}

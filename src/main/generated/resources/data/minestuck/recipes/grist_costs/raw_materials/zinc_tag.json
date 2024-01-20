@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 12,
+    "minestuck:shale": 4
+  },
+  "ingredient": {
+    "tag": "forge:raw_materials/zinc"
+  }
+}

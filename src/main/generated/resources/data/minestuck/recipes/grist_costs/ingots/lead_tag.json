@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "tag": "forge:ingots/lead"
+  },
+  "sources": [
+    "#forge:raw_materials/lead"
+  ]
+}

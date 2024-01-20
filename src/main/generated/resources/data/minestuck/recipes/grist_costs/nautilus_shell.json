@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:cobalt": 10,
+    "minestuck:iodine": 12,
+    "minestuck:quartz": 1,
+    "minestuck:shale": 5
+  },
+  "ingredient": {
+    "item": "minecraft:nautilus_shell"
+  }
+}

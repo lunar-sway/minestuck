@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 120,
+    "minestuck:build": 840,
+    "minestuck:caulk": 180,
+    "minestuck:shale": 180
+  },
+  "ingredient": {
+    "item": "minestuck:zephyr_cane"
+  }
+}

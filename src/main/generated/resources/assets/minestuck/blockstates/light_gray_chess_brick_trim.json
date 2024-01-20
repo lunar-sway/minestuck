@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "minestuck:block/light_gray_chess_brick_trim_flipped"
+    },
+    "facing=east": {
+      "model": "minestuck:block/light_gray_chess_brick_trim",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/light_gray_chess_brick_trim",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "minestuck:block/light_gray_chess_brick_trim_flipped",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "minestuck:block/light_gray_chess_brick_trim"
+    },
+    "facing=west": {
+      "model": "minestuck:block/light_gray_chess_brick_trim_flipped",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:mercury": 56,
+    "minestuck:shale": 87,
+    "minestuck:tar": 53
+  },
+  "ingredient": {
+    "item": "minestuck:telescopic_sassacrusher"
+  }
+}
