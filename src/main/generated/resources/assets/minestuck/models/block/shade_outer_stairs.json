@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "minestuck:block/shade_stone",
-    "side": "minestuck:block/shade_stone",
-    "top": "minestuck:block/shade_stone"
-  }
-}

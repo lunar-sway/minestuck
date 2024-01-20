@@ -532,8 +532,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FROST_TRAPDOOR, "Frost Trapdoor");
 		
 		addBlock(MSBlocks.RAINBOW_PLANKS, "Rainbow Planks");
-		addBlock(MSBlocks.RAINBOW_STAIRS, "Rainbow Stairs");
-		addBlock(MSBlocks.RAINBOW_SLAB, "Rainbow Slab");
 		addBlock(MSBlocks.RAINBOW_BUTTON, "Rainbow Button");
 		addBlock(MSBlocks.RAINBOW_PRESSURE_PLATE, "Rainbow Pressure Plate");
 		addBlock(MSBlocks.RAINBOW_FENCE, "Rainbow Fence");
@@ -542,8 +540,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_TRAPDOOR, "Rainbow Trapdoor");
 		
 		addBlock(MSBlocks.END_PLANKS, "End Planks");
-		addBlock(MSBlocks.END_STAIRS, "End Stairs");
-		addBlock(MSBlocks.END_SLAB, "End Slab");
 		addBlock(MSBlocks.END_BUTTON, "End Button");
 		addBlock(MSBlocks.END_PRESSURE_PLATE, "End Pressure Plate");
 		addBlock(MSBlocks.END_FENCE, "End Fence");
@@ -552,8 +548,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.END_TRAPDOOR, "End Trapdoor");
 		
 		addBlock(MSBlocks.DEAD_PLANKS, "Dead Planks");
-		addBlock(MSBlocks.DEAD_STAIRS, "Dead Stairs");
-		addBlock(MSBlocks.DEAD_SLAB, "Dead Slab");
 		addBlock(MSBlocks.DEAD_BUTTON, "Dead Button");
 		addBlock(MSBlocks.DEAD_PRESSURE_PLATE, "Dead Pressure Plate");
 		addBlock(MSBlocks.DEAD_FENCE, "Dead Fence");
@@ -562,8 +556,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
 		
 		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
-		addBlock(MSBlocks.TREATED_STAIRS, "Treated Stairs");
-		addBlock(MSBlocks.TREATED_SLAB, "Treated Slab");
 		addBlock(MSBlocks.TREATED_BUTTON, "Treated Button");
 		addBlock(MSBlocks.TREATED_PRESSURE_PLATE, "Treated Pressure Plate");
 		addBlock(MSBlocks.TREATED_FENCE, "Treated Fence");

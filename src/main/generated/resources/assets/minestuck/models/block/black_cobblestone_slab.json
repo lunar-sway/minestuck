@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "minestuck:block/black_cobblestone",
-    "side": "minestuck:block/black_cobblestone",
-    "top": "minestuck:block/black_cobblestone"
-  }
-}

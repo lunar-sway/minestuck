@@ -1174,8 +1174,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FROST_TRAPDOOR = registerBlockItem(MSBlocks.FROST_TRAPDOOR);
 	
 	public static final RegistryObject<BlockItem> RAINBOW_PLANKS = registerBlockItem(MSBlocks.RAINBOW_PLANKS);
-	public static final RegistryObject<BlockItem> RAINBOW_STAIRS = registerBlockItem(MSBlocks.RAINBOW_STAIRS);
-	public static final RegistryObject<BlockItem> RAINBOW_SLAB = registerBlockItem(MSBlocks.RAINBOW_SLAB);
 	public static final RegistryObject<BlockItem> RAINBOW_BUTTON = registerBlockItem(MSBlocks.RAINBOW_BUTTON);
 	public static final RegistryObject<BlockItem> RAINBOW_PRESSURE_PLATE = registerBlockItem(MSBlocks.RAINBOW_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> RAINBOW_FENCE = registerBlockItem(MSBlocks.RAINBOW_FENCE);
@@ -1184,8 +1182,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> RAINBOW_TRAPDOOR = registerBlockItem(MSBlocks.RAINBOW_TRAPDOOR);
 	
 	public static final RegistryObject<BlockItem> END_PLANKS = registerBlockItem(MSBlocks.END_PLANKS);
-	public static final RegistryObject<BlockItem> END_STAIRS = registerBlockItem(MSBlocks.END_STAIRS);
-	public static final RegistryObject<BlockItem> END_SLAB = registerBlockItem(MSBlocks.END_SLAB);
 	public static final RegistryObject<BlockItem> END_BUTTON = registerBlockItem(MSBlocks.END_BUTTON);
 	public static final RegistryObject<BlockItem> END_PRESSURE_PLATE = registerBlockItem(MSBlocks.END_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> END_FENCE = registerBlockItem(MSBlocks.END_FENCE);
@@ -1194,8 +1190,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> END_TRAPDOOR = registerBlockItem(MSBlocks.END_TRAPDOOR);
 	
 	public static final RegistryObject<BlockItem> DEAD_PLANKS = registerBlockItem(MSBlocks.DEAD_PLANKS);
-	public static final RegistryObject<BlockItem> DEAD_STAIRS = registerBlockItem(MSBlocks.DEAD_STAIRS);
-	public static final RegistryObject<BlockItem> DEAD_SLAB = registerBlockItem(MSBlocks.DEAD_SLAB);
 	public static final RegistryObject<BlockItem> DEAD_BUTTON = registerBlockItem(MSBlocks.DEAD_BUTTON);
 	public static final RegistryObject<BlockItem> DEAD_PRESSURE_PLATE = registerBlockItem(MSBlocks.DEAD_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> DEAD_FENCE = registerBlockItem(MSBlocks.DEAD_FENCE);
@@ -1204,8 +1198,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> DEAD_TRAPDOOR = registerBlockItem(MSBlocks.DEAD_TRAPDOOR);
 	
 	public static final RegistryObject<BlockItem> TREATED_PLANKS = registerBlockItem(MSBlocks.TREATED_PLANKS);
-	public static final RegistryObject<BlockItem> TREATED_STAIRS = registerBlockItem(MSBlocks.TREATED_STAIRS);
-	public static final RegistryObject<BlockItem> TREATED_SLAB = registerBlockItem(MSBlocks.TREATED_SLAB);
 	public static final RegistryObject<BlockItem> TREATED_BUTTON = registerBlockItem(MSBlocks.TREATED_BUTTON);
 	public static final RegistryObject<BlockItem> TREATED_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> TREATED_FENCE = registerBlockItem(MSBlocks.TREATED_FENCE);

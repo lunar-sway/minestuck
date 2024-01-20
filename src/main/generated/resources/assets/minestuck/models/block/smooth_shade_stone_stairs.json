@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "minestuck:block/smooth_shade_stone",
-    "side": "minestuck:block/smooth_shade_stone",
-    "top": "minestuck:block/smooth_shade_stone"
-  }
-}

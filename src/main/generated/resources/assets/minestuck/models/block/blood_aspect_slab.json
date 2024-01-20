@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "minestuck:block/blood_aspect_planks",
-    "side": "minestuck:block/blood_aspect_planks",
-    "top": "minestuck:block/blood_aspect_planks"
-  }
-}

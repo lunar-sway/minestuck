@@ -964,8 +964,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FROST_TRAPDOOR.get());
 		
 		output.accept(MSItems.RAINBOW_PLANKS.get());
-		output.accept(MSItems.RAINBOW_STAIRS.get());
-		output.accept(MSItems.RAINBOW_SLAB.get());
 		output.accept(MSItems.RAINBOW_BUTTON.get());
 		output.accept(MSItems.RAINBOW_PRESSURE_PLATE.get());
 		output.accept(MSItems.RAINBOW_FENCE.get());
@@ -974,8 +972,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.RAINBOW_TRAPDOOR.get());
 		
 		output.accept(MSItems.END_PLANKS.get());
-		output.accept(MSItems.END_STAIRS.get());
-		output.accept(MSItems.END_SLAB.get());
 		output.accept(MSItems.END_BUTTON.get());
 		output.accept(MSItems.END_PRESSURE_PLATE.get());
 		output.accept(MSItems.END_FENCE.get());
@@ -984,8 +980,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.END_TRAPDOOR.get());
 		
 		output.accept(MSItems.DEAD_PLANKS.get());
-		output.accept(MSItems.DEAD_STAIRS.get());
-		output.accept(MSItems.DEAD_SLAB.get());
 		output.accept(MSItems.DEAD_BUTTON.get());
 		output.accept(MSItems.DEAD_PRESSURE_PLATE.get());
 		output.accept(MSItems.DEAD_FENCE.get());
@@ -994,8 +988,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.DEAD_TRAPDOOR.get());
 		
 		output.accept(MSItems.TREATED_PLANKS.get());
-		output.accept(MSItems.TREATED_STAIRS.get());
-		output.accept(MSItems.TREATED_SLAB.get());
 		output.accept(MSItems.TREATED_BUTTON.get());
 		output.accept(MSItems.TREATED_PRESSURE_PLATE.get());
 		output.accept(MSItems.TREATED_FENCE.get());
@@ -1064,6 +1056,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.MYCELIUM_BRICK_STAIRS.get());
 		output.accept(MSItems.CHALK_STAIRS.get());
 		output.accept(MSItems.CHALK_BRICK_STAIRS.get());
+		output.accept(MSItems.FLOWERY_MOSSY_STONE_BRICK_STAIRS.get());
 		output.accept(MSItems.PINK_STONE_STAIRS.get());
 		output.accept(MSItems.PINK_STONE_BRICK_STAIRS.get());
 		output.accept(MSItems.BROWN_STONE_STAIRS.get());
@@ -1089,6 +1082,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BLACK_STONE_BRICK_SLAB.get());
 		output.accept(MSItems.MYCELIUM_SLAB.get());
 		output.accept(MSItems.MYCELIUM_BRICK_SLAB.get());
+		output.accept(MSItems.FLOWERY_MOSSY_STONE_BRICK_SLAB.get());
 		output.accept(MSItems.FROST_TILE_SLAB.get());
 		output.accept(MSItems.FROST_BRICK_SLAB.get());
 		output.accept(MSItems.SHADE_SLAB.get());

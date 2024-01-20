@@ -68,32 +68,28 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(BLACK_CHESS_BRICK_SMOOTH.get());
 		dropSelf(BLACK_CHESS_BRICK_SMOOTH_STAIRS.get());
-		this.add(BLACK_CHESS_BRICK_SMOOTH_SLAB.get(),
-				block -> createSlabItemTable(BLACK_CHESS_BRICK_SMOOTH_SLAB.get()));
+		add(BLACK_CHESS_BRICK_SMOOTH_SLAB.get(), this::createSlabItemTable);
 		dropSelf(BLACK_CHESS_BRICK_SMOOTH_WALL.get());
 		dropSelf(BLACK_CHESS_BRICK_SMOOTH_BUTTON.get());
 		dropSelf(BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
 		
 		dropSelf(WHITE_CHESS_BRICK_SMOOTH.get());
 		dropSelf(WHITE_CHESS_BRICK_SMOOTH_STAIRS.get());
-		this.add(WHITE_CHESS_BRICK_SMOOTH_SLAB.get(),
-				block -> createSlabItemTable(WHITE_CHESS_BRICK_SMOOTH_SLAB.get()));
+		add(WHITE_CHESS_BRICK_SMOOTH_SLAB.get(), this::createSlabItemTable);
 		dropSelf(WHITE_CHESS_BRICK_SMOOTH_WALL.get());
 		dropSelf(WHITE_CHESS_BRICK_SMOOTH_BUTTON.get());
 		dropSelf(WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
 		
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get());
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
-		this.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB.get(),
-				block -> createSlabItemTable(LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB.get()));
+		add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB.get(), this::createSlabItemTable);
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
 		
 		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH.get());
 		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
-		this.add(DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB.get(),
-				block -> createSlabItemTable(DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB.get()));
+		add(DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB.get(), this::createSlabItemTable);
 		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
 		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
 		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
@@ -146,31 +142,27 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(CRUXITE_BLOCK.get());
 		dropSelf(CRUXITE_STAIRS.get());
-		this.add(CRUXITE_SLAB.get(),
-				block -> createSlabItemTable(CRUXITE_SLAB.get()));
+		add(CRUXITE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(CRUXITE_WALL.get());
 		dropSelf(CRUXITE_BUTTON.get());
 		dropSelf(CRUXITE_PRESSURE_PLATE.get());
 		
 		dropSelf(URANIUM_BLOCK.get());
 		dropSelf(URANIUM_STAIRS.get());
-		this.add(URANIUM_SLAB.get(),
-				block -> createSlabItemTable(URANIUM_SLAB.get()));
+		add(URANIUM_SLAB.get(), this::createSlabItemTable);
 		dropSelf(URANIUM_WALL.get());
 		dropSelf(URANIUM_BUTTON.get());
 		dropSelf(URANIUM_PRESSURE_PLATE.get());
 		
 		dropSelf(GENERIC_OBJECT.get());
 		dropSelf(PERFECTLY_GENERIC_STAIRS.get());
-		this.add(PERFECTLY_GENERIC_SLAB.get(),
-				block -> createSlabItemTable(PERFECTLY_GENERIC_SLAB.get()));
+		add(PERFECTLY_GENERIC_SLAB.get(), this::createSlabItemTable);
 		dropSelf(PERFECTLY_GENERIC_WALL.get());
 		dropSelf(PERFECTLY_GENERIC_FENCE.get());
 		dropSelf(PERFECTLY_GENERIC_FENCE_GATE.get());
 		dropSelf(PERFECTLY_GENERIC_BUTTON.get());
 		dropSelf(PERFECTLY_GENERIC_PRESSURE_PLATE.get());
-		this.add(PERFECTLY_GENERIC_DOOR.get(),
-				block -> createDoorTable(CARVED_DOOR.get()));
+		add(PERFECTLY_GENERIC_DOOR.get(), this::createDoorTable);
 		dropSelf(PERFECTLY_GENERIC_TRAPDOOR.get());
 		
 		dropSelf(BLUE_DIRT.get());
@@ -198,8 +190,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(SMOOTH_SHADE_STONE.get());
 		dropSelf(SMOOTH_SHADE_STONE_STAIRS.get());
-		this.add(SMOOTH_SHADE_STONE_SLAB.get(),
-				block -> createSlabItemTable(SMOOTH_SHADE_STONE_SLAB.get()));
+		add(SMOOTH_SHADE_STONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(SMOOTH_SHADE_STONE_WALL.get());
 		
 		dropSelf(SHADE_BRICKS.get());
@@ -211,20 +202,17 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(MOSSY_SHADE_BRICKS.get());
 		dropSelf(MOSSY_SHADE_BRICK_STAIRS.get());
-		this.add(MOSSY_SHADE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(MOSSY_SHADE_BRICK_SLAB.get()));
+		add(MOSSY_SHADE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(MOSSY_SHADE_BRICK_WALL.get());
 		
 		dropSelf(BLOOD_SHADE_BRICKS.get());
 		dropSelf(BLOOD_SHADE_BRICK_STAIRS.get());
-		this.add(BLOOD_SHADE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(BLOOD_SHADE_BRICK_SLAB.get()));
+		add(BLOOD_SHADE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(BLOOD_SHADE_BRICK_WALL.get());
 		
 		dropSelf(TAR_SHADE_BRICKS.get());
 		dropSelf(TAR_SHADE_BRICK_STAIRS.get());
-		this.add(TAR_SHADE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(TAR_SHADE_BRICK_SLAB.get()));
+		add(TAR_SHADE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(TAR_SHADE_BRICK_WALL.get());
 		
 		dropSelf(FROST_TILE.get());
@@ -241,13 +229,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(FLOWERY_FROST_BRICKS.get());
 		dropSelf(FLOWERY_FROST_BRICK_STAIRS.get());
-		this.add(FLOWERY_FROST_BRICK_SLAB.get(),
-				block -> createSlabItemTable(FLOWERY_FROST_BRICK_SLAB.get()));
+		add(FLOWERY_FROST_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(FLOWERY_FROST_BRICK_WALL.get());
 		
 		dropSelf(CAST_IRON.get());
-		this.add(CAST_IRON_SLAB.get(),
-				block -> createSlabItemTable(CAST_IRON_SLAB.get()));
+		add(CAST_IRON_SLAB.get(), this::createSlabItemTable);
 		dropSelf(CAST_IRON_WALL.get());
 		dropSelf(CAST_IRON_BUTTON.get());
 		dropSelf(CAST_IRON_PRESSURE_PLATE.get());
@@ -257,8 +243,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(MYCELIUM_COBBLESTONE.get());
 		dropSelf(MYCELIUM_COBBLESTONE_STAIRS.get());
-		this.add(MYCELIUM_COBBLESTONE_SLAB.get(),
-				block -> createSlabItemTable(MYCELIUM_COBBLESTONE_SLAB.get()));
+		add(MYCELIUM_COBBLESTONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(MYCELIUM_COBBLESTONE_WALL.get());
 		
 		add(MYCELIUM_STONE.get(), createSingleItemTableWithSilkTouch(MYCELIUM_STONE.get(), MYCELIUM_COBBLESTONE.get()));
@@ -268,8 +253,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(POLISHED_MYCELIUM_STONE.get());
 		dropSelf(POLISHED_MYCELIUM_STONE_STAIRS.get());
-		this.add(POLISHED_MYCELIUM_STONE_SLAB.get(),
-				block -> createSlabItemTable(POLISHED_MYCELIUM_STONE_SLAB.get()));
+		add(POLISHED_MYCELIUM_STONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(POLISHED_MYCELIUM_STONE_WALL.get());
 		
 		dropSelf(MYCELIUM_BRICKS.get());
@@ -282,14 +266,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(MOSSY_MYCELIUM_BRICKS.get());
 		dropSelf(MOSSY_MYCELIUM_BRICK_STAIRS.get());
-		this.add(MOSSY_MYCELIUM_BRICK_SLAB.get(),
-				block -> createSlabItemTable(MOSSY_MYCELIUM_BRICK_SLAB.get()));
+		add(MOSSY_MYCELIUM_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(MOSSY_MYCELIUM_BRICK_WALL.get());
 		
 		dropSelf(FLOWERY_MYCELIUM_BRICKS.get());
 		dropSelf(FLOWERY_MYCELIUM_BRICK_STAIRS.get());
-		this.add(FLOWERY_MYCELIUM_BRICK_SLAB.get(),
-				block -> createSlabItemTable(FLOWERY_MYCELIUM_BRICK_SLAB.get()));
+		add(FLOWERY_MYCELIUM_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(FLOWERY_MYCELIUM_BRICK_WALL.get());
 		
 		add(BLACK_STONE.get(), createSingleItemTableWithSilkTouch(BLACK_STONE.get(), BLACK_COBBLESTONE.get()));
@@ -299,14 +281,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(BLACK_COBBLESTONE.get());
 		dropSelf(BLACK_COBBLESTONE_STAIRS.get());
-		this.add(BLACK_COBBLESTONE_SLAB.get(),
-				block -> createSlabItemTable(BLACK_COBBLESTONE_SLAB.get()));
+		add(BLACK_COBBLESTONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(BLACK_COBBLESTONE_WALL.get());
 		
 		dropSelf(POLISHED_BLACK_STONE.get());
 		dropSelf(POLISHED_BLACK_STONE_STAIRS.get());
-		this.add(POLISHED_BLACK_STONE_SLAB.get(),
-				block -> createSlabItemTable(POLISHED_BLACK_STONE_SLAB.get()));
+		add(POLISHED_BLACK_STONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(POLISHED_BLACK_STONE_WALL.get());
 		
 		dropSelf(BLACK_STONE_BRICKS.get());
@@ -319,26 +299,22 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(DECREPIT_STONE_BRICKS.get());
 		dropSelf(DECREPIT_STONE_BRICK_STAIRS.get());
-		this.add(DECREPIT_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(DECREPIT_STONE_BRICK_SLAB.get()));
+		add(DECREPIT_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(DECREPIT_STONE_BRICK_WALL.get());
 		
 		dropSelf(FLOWERY_MOSSY_COBBLESTONE.get());
 		dropSelf(FLOWERY_MOSSY_COBBLESTONE_STAIRS.get());
-		this.add(FLOWERY_MOSSY_COBBLESTONE_SLAB.get(),
-				block -> createSlabItemTable(FLOWERY_MOSSY_COBBLESTONE_SLAB.get()));
+		add(FLOWERY_MOSSY_COBBLESTONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(FLOWERY_MOSSY_COBBLESTONE_WALL.get());
 		
 		dropSelf(MOSSY_DECREPIT_STONE_BRICKS.get());
 		dropSelf(MOSSY_DECREPIT_STONE_BRICK_STAIRS.get());
-		this.add(MOSSY_DECREPIT_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(MOSSY_DECREPIT_STONE_BRICK_SLAB.get()));
+		add(MOSSY_DECREPIT_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(MOSSY_DECREPIT_STONE_BRICK_WALL.get());
 		
 		dropSelf(FLOWERY_MOSSY_STONE_BRICKS.get());
 		dropSelf(FLOWERY_MOSSY_STONE_BRICK_STAIRS.get());
-		this.add(FLOWERY_MOSSY_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(FLOWERY_MOSSY_STONE_BRICK_SLAB.get()));
+		add(FLOWERY_MOSSY_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(FLOWERY_MOSSY_STONE_BRICK_WALL.get());
 		
 		dropSelf(COARSE_END_STONE.get());
@@ -351,8 +327,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(POLISHED_CHALK.get());
 		dropSelf(POLISHED_CHALK_STAIRS.get());
-		this.add(POLISHED_CHALK_SLAB.get(),
-				block -> createSlabItemTable(POLISHED_CHALK_SLAB.get()));
+		add(POLISHED_CHALK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(POLISHED_CHALK_WALL.get());
 		
 		dropSelf(CHALK_BRICKS.get());
@@ -363,14 +338,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(MOSSY_CHALK_BRICKS.get());
 		dropSelf(MOSSY_CHALK_BRICK_STAIRS.get());
-		this.add(MOSSY_CHALK_BRICK_SLAB.get(),
-				block -> createSlabItemTable(MOSSY_CHALK_BRICK_SLAB.get()));
+		add(MOSSY_CHALK_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(MOSSY_CHALK_BRICK_WALL.get());
 		
 		dropSelf(FLOWERY_CHALK_BRICKS.get());
 		dropSelf(FLOWERY_CHALK_BRICK_STAIRS.get());
-		this.add(FLOWERY_CHALK_BRICK_SLAB.get(),
-				block -> createSlabItemTable(FLOWERY_CHALK_BRICK_SLAB.get()));
+		add(FLOWERY_CHALK_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(FLOWERY_CHALK_BRICK_WALL.get());
 		
 		dropSelf(PINK_STONE.get());
@@ -380,8 +353,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(POLISHED_PINK_STONE.get());
 		dropSelf(POLISHED_PINK_STONE_STAIRS.get());
-		this.add(POLISHED_PINK_STONE_SLAB.get(),
-				block -> createSlabItemTable(POLISHED_PINK_STONE_SLAB.get()));
+		add(POLISHED_PINK_STONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(POLISHED_PINK_STONE_WALL.get());
 		
 		dropSelf(PINK_STONE_BRICKS.get());
@@ -392,8 +364,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(MOSSY_PINK_STONE_BRICKS.get());
 		dropSelf(MOSSY_PINK_STONE_BRICK_STAIRS.get());
-		this.add(MOSSY_PINK_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(MOSSY_PINK_STONE_BRICK_SLAB.get()));
+		add(MOSSY_PINK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(MOSSY_PINK_STONE_BRICK_WALL.get());
 		
 		dropSelf(PINK_STONE_COLUMN.get());
@@ -405,8 +376,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(POLISHED_BROWN_STONE.get());
 		dropSelf(POLISHED_BROWN_STONE_STAIRS.get());
-		this.add(POLISHED_BROWN_STONE_SLAB.get(),
-				block -> createSlabItemTable(POLISHED_BROWN_STONE_SLAB.get()));
+		add(POLISHED_BROWN_STONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(POLISHED_BROWN_STONE_WALL.get());
 		
 		dropSelf(BROWN_STONE_BRICKS.get());
@@ -422,8 +392,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(POLISHED_GREEN_STONE.get());
 		dropSelf(POLISHED_GREEN_STONE_STAIRS.get());
-		this.add(POLISHED_GREEN_STONE_SLAB.get(),
-				block -> createSlabItemTable(POLISHED_GREEN_STONE_SLAB.get()));
+		add(POLISHED_GREEN_STONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(POLISHED_GREEN_STONE_WALL.get());
 		
 		dropSelf(GREEN_STONE_BRICKS.get());
@@ -434,14 +403,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(HORIZONTAL_GREEN_STONE_BRICKS.get());
 		dropSelf(HORIZONTAL_GREEN_STONE_BRICK_STAIRS.get());
-		this.add(HORIZONTAL_GREEN_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(HORIZONTAL_GREEN_STONE_BRICK_SLAB.get()));
+		add(HORIZONTAL_GREEN_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(HORIZONTAL_GREEN_STONE_BRICK_WALL.get());
 		
 		dropSelf(VERTICAL_GREEN_STONE_BRICKS.get());
 		dropSelf(VERTICAL_GREEN_STONE_BRICK_STAIRS.get());
-		this.add(VERTICAL_GREEN_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(VERTICAL_GREEN_STONE_BRICK_SLAB.get()));
+		add(VERTICAL_GREEN_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(VERTICAL_GREEN_STONE_BRICK_WALL.get());
 		
 		dropSelf(GREEN_STONE_BRICK_EMBEDDED_LADDER.get());
@@ -463,8 +430,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		add(UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(UNCARVED_WOOD.get(), CHIPBOARD.get()));
 		dropSelf(UNCARVED_WOOD_STAIRS.get());
-		this.add(UNCARVED_WOOD_SLAB.get(),
-				block -> createSlabItemTable(UNCARVED_WOOD_SLAB.get()));
+		add(UNCARVED_WOOD_SLAB.get(), this::createSlabItemTable);
 		dropSelf(UNCARVED_WOOD_BUTTON.get());
 		dropSelf(UNCARVED_WOOD_PRESSURE_PLATE.get());
 		dropSelf(UNCARVED_WOOD_FENCE.get());
@@ -472,8 +438,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(CHIPBOARD.get());
 		dropSelf(CHIPBOARD_STAIRS.get());
-		this.add(CHIPBOARD_SLAB.get(),
-				block -> createSlabItemTable(CHIPBOARD_SLAB.get()));
+		add(CHIPBOARD_SLAB.get(), this::createSlabItemTable);
 		dropSelf(CHIPBOARD_BUTTON.get());
 		dropSelf(CHIPBOARD_PRESSURE_PLATE.get());
 		dropSelf(CHIPBOARD_FENCE.get());
@@ -483,25 +448,21 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(CARVED_HEAVY_PLANKS.get());
 		dropSelf(CARVED_HEAVY_PLANK_STAIRS.get());
-		this.add(CARVED_HEAVY_PLANK_SLAB.get(),
-				block -> createSlabItemTable(CARVED_HEAVY_PLANK_SLAB.get()));
+		add(CARVED_HEAVY_PLANK_SLAB.get(), this::createSlabItemTable);
 		
 		dropSelf(CARVED_PLANKS.get());
 		dropSelf(CARVED_STAIRS.get());
-		this.add(CARVED_SLAB.get(),
-				block -> createSlabItemTable(CARVED_SLAB.get()));
+		add(CARVED_SLAB.get(), this::createSlabItemTable);
 		dropSelf(CARVED_BUTTON.get());
 		dropSelf(CARVED_PRESSURE_PLATE.get());
 		dropSelf(CARVED_FENCE.get());
 		dropSelf(CARVED_FENCE_GATE.get());
-		this.add(CARVED_DOOR.get(),
-				block -> createDoorTable(CARVED_DOOR.get()));
+		add(CARVED_DOOR.get(),this::createDoorTable);
 		dropSelf(CARVED_TRAPDOOR.get());
 		
 		dropSelf(POLISHED_UNCARVED_WOOD.get());
 		dropSelf(POLISHED_UNCARVED_STAIRS.get());
-		this.add(POLISHED_UNCARVED_SLAB.get(),
-				block -> createSlabItemTable(POLISHED_UNCARVED_SLAB.get()));
+		add(POLISHED_UNCARVED_SLAB.get(), this::createSlabItemTable);
 		
 		dropSelf(CARVED_KNOTTED_WOOD.get());
 		dropSelf(DENSE_CLOUD.get());
@@ -541,86 +502,64 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(GLOWING_PLANKS.get());
 		dropSelf(GLOWING_STAIRS.get());
-		this.add(GLOWING_SLAB.get(),
-				block -> createSlabItemTable(GLOWING_SLAB.get()));
+		add(GLOWING_SLAB.get(), this::createSlabItemTable);
 		dropSelf(GLOWING_BUTTON.get());
 		dropSelf(GLOWING_PRESSURE_PLATE.get());
 		dropSelf(GLOWING_FENCE.get());
 		dropSelf(GLOWING_FENCE_GATE.get());
-		this.add(GLOWING_DOOR.get(),
-				block -> createDoorTable(GLOWING_DOOR.get()));
+		add(GLOWING_DOOR.get(), this::createDoorTable);
 		dropSelf(GLOWING_TRAPDOOR.get());
 		
 		dropSelf(SHADEWOOD_PLANKS.get());
 		dropSelf(SHADEWOOD_STAIRS.get());
-		this.add(SHADEWOOD_SLAB.get(),
-				block -> createSlabItemTable(SHADEWOOD_SLAB.get()));
+		add(SHADEWOOD_SLAB.get(), this::createSlabItemTable);
 		dropSelf(SHADEWOOD_BUTTON.get());
 		dropSelf(SHADEWOOD_PRESSURE_PLATE.get());
 		dropSelf(SHADEWOOD_FENCE.get());
 		dropSelf(SHADEWOOD_FENCE_GATE.get());
-		this.add(SHADEWOOD_DOOR.get(),
-				block -> createDoorTable(SHADEWOOD_DOOR.get()));
+		add(SHADEWOOD_DOOR.get(), this::createDoorTable);
 		dropSelf(SHADEWOOD_TRAPDOOR.get());
 		
 		dropSelf(FROST_PLANKS.get());
 		dropSelf(FROST_STAIRS.get());
-		this.add(FROST_SLAB.get(),
-				block -> createSlabItemTable(FROST_SLAB.get()));
+		add(FROST_SLAB.get(), this::createSlabItemTable);
 		dropSelf(FROST_BUTTON.get());
 		dropSelf(FROST_PRESSURE_PLATE.get());
 		dropSelf(FROST_FENCE.get());
 		dropSelf(FROST_FENCE_GATE.get());
-		this.add(FROST_DOOR.get(),
-				block -> createDoorTable(FROST_DOOR.get()));
+		add(FROST_DOOR.get(), this::createDoorTable);
 		dropSelf(FROST_TRAPDOOR.get());
 		
 		dropSelf(RAINBOW_PLANKS.get());
-		dropSelf(RAINBOW_STAIRS.get());
-		this.add(RAINBOW_SLAB.get(),
-				block -> createSlabItemTable(RAINBOW_SLAB.get()));
 		dropSelf(RAINBOW_BUTTON.get());
 		dropSelf(RAINBOW_PRESSURE_PLATE.get());
 		dropSelf(RAINBOW_FENCE.get());
 		dropSelf(RAINBOW_FENCE_GATE.get());
-		this.add(RAINBOW_DOOR.get(),
-				block -> createDoorTable(RAINBOW_DOOR.get()));
+		add(RAINBOW_DOOR.get(), this::createDoorTable);
 		dropSelf(RAINBOW_TRAPDOOR.get());
 		
 		dropSelf(END_PLANKS.get());
-		dropSelf(END_STAIRS.get());
-		this.add(END_SLAB.get(),
-				block -> createSlabItemTable(END_SLAB.get()));
 		dropSelf(END_BUTTON.get());
 		dropSelf(END_PRESSURE_PLATE.get());
 		dropSelf(END_FENCE.get());
 		dropSelf(END_FENCE_GATE.get());
-		this.add(END_DOOR.get(),
-				block -> createDoorTable(END_DOOR.get()));
+		add(END_DOOR.get(), this::createDoorTable);
 		dropSelf(END_TRAPDOOR.get());
 		
 		dropSelf(DEAD_PLANKS.get());
-		dropSelf(DEAD_STAIRS.get());
-		this.add(DEAD_SLAB.get(),
-				block -> createSlabItemTable(DEAD_SLAB.get()));
 		dropSelf(DEAD_BUTTON.get());
 		dropSelf(DEAD_PRESSURE_PLATE.get());
 		dropSelf(DEAD_FENCE.get());
 		dropSelf(DEAD_FENCE_GATE.get());
-		this.add(DEAD_DOOR.get(),
-				block -> createDoorTable(DEAD_DOOR.get()));
+		add(DEAD_DOOR.get(), this::createDoorTable);
 		dropSelf(DEAD_TRAPDOOR.get());
 		
 		dropSelf(TREATED_PLANKS.get());
-		dropSelf(TREATED_STAIRS.get());
-		this.add(TREATED_SLAB.get(),
-				block -> createSlabItemTable(TREATED_SLAB.get()));
 		dropSelf(TREATED_BUTTON.get());
 		dropSelf(TREATED_PRESSURE_PLATE.get());
 		dropSelf(TREATED_FENCE.get());
 		dropSelf(TREATED_FENCE_GATE.get());
-		this.add(TREATED_DOOR.get(),
-				block -> createDoorTable(TREATED_DOOR.get()));
+		add(TREATED_DOOR.get(), this::createDoorTable);
 		dropSelf(TREATED_TRAPDOOR.get());
 		
 		add(FROST_LEAVES.get(), this::frostLeavesDrop);
@@ -647,146 +586,122 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(BLOOD_ASPECT_PLANKS.get());
 		dropSelf(BLOOD_ASPECT_STAIRS.get());
-		this.add(BLOOD_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(BLOOD_ASPECT_SLAB.get()));
+		add(BLOOD_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(BLOOD_ASPECT_BUTTON.get());
 		dropSelf(BLOOD_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(BLOOD_ASPECT_FENCE.get());
 		dropSelf(BLOOD_ASPECT_FENCE_GATE.get());
-		this.add(BLOOD_ASPECT_DOOR.get(),
-				block -> createDoorTable(BLOOD_ASPECT_DOOR.get()));
+		add(BLOOD_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(BLOOD_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(BREATH_ASPECT_PLANKS.get());
 		dropSelf(BREATH_ASPECT_STAIRS.get());
-		this.add(BREATH_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(BREATH_ASPECT_SLAB.get()));
+		add(BREATH_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(BREATH_ASPECT_BUTTON.get());
 		dropSelf(BREATH_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(BREATH_ASPECT_FENCE.get());
 		dropSelf(BREATH_ASPECT_FENCE_GATE.get());
-		this.add(BREATH_ASPECT_DOOR.get(),
-				block -> createDoorTable(BREATH_ASPECT_DOOR.get()));
+		add(BREATH_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(BREATH_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(DOOM_ASPECT_PLANKS.get());
 		dropSelf(DOOM_ASPECT_STAIRS.get());
-		this.add(DOOM_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(DOOM_ASPECT_SLAB.get()));
+		add(DOOM_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(DOOM_ASPECT_BUTTON.get());
 		dropSelf(DOOM_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(DOOM_ASPECT_FENCE.get());
 		dropSelf(DOOM_ASPECT_FENCE_GATE.get());
-		this.add(DOOM_ASPECT_DOOR.get(),
-				block -> createDoorTable(DOOM_ASPECT_DOOR.get()));
+		add(DOOM_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(DOOM_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(HEART_ASPECT_PLANKS.get());
 		dropSelf(HEART_ASPECT_STAIRS.get());
-		this.add(HEART_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(HEART_ASPECT_SLAB.get()));
+		add(HEART_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(HEART_ASPECT_BUTTON.get());
 		dropSelf(HEART_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(HEART_ASPECT_FENCE.get());
 		dropSelf(HEART_ASPECT_FENCE_GATE.get());
-		this.add(HEART_ASPECT_DOOR.get(),
-				block -> createDoorTable(HEART_ASPECT_DOOR.get()));
+		add(HEART_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(HEART_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(HOPE_ASPECT_PLANKS.get());
 		dropSelf(HOPE_ASPECT_STAIRS.get());
-		this.add(HOPE_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(HOPE_ASPECT_SLAB.get()));
+		add(HOPE_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(HOPE_ASPECT_BUTTON.get());
 		dropSelf(HOPE_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(HOPE_ASPECT_FENCE.get());
 		dropSelf(HOPE_ASPECT_FENCE_GATE.get());
-		this.add(HOPE_ASPECT_DOOR.get(),
-				block -> createDoorTable(HOPE_ASPECT_DOOR.get()));
+		add(HOPE_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(HOPE_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(LIFE_ASPECT_PLANKS.get());
 		dropSelf(LIFE_ASPECT_STAIRS.get());
-		this.add(LIFE_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(LIFE_ASPECT_SLAB.get()));
+		add(LIFE_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(LIFE_ASPECT_BUTTON.get());
 		dropSelf(LIFE_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(LIFE_ASPECT_FENCE.get());
 		dropSelf(LIFE_ASPECT_FENCE_GATE.get());
-		this.add(LIFE_ASPECT_DOOR.get(),
-				block -> createDoorTable(LIFE_ASPECT_DOOR.get()));
+		add(LIFE_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(LIFE_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(LIGHT_ASPECT_PLANKS.get());
 		dropSelf(LIGHT_ASPECT_STAIRS.get());
-		this.add(LIGHT_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(LIGHT_ASPECT_SLAB.get()));
+		add(LIGHT_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(LIGHT_ASPECT_BUTTON.get());
 		dropSelf(LIGHT_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(LIGHT_ASPECT_FENCE.get());
 		dropSelf(LIGHT_ASPECT_FENCE_GATE.get());
-		this.add(LIGHT_ASPECT_DOOR.get(),
-				block -> createDoorTable(LIGHT_ASPECT_DOOR.get()));
+		add(LIGHT_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(LIGHT_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(MIND_ASPECT_PLANKS.get());
 		dropSelf(MIND_ASPECT_STAIRS.get());
-		this.add(MIND_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(MIND_ASPECT_SLAB.get()));
+		add(MIND_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(MIND_ASPECT_BUTTON.get());
 		dropSelf(MIND_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(MIND_ASPECT_FENCE.get());
 		dropSelf(MIND_ASPECT_FENCE_GATE.get());
-		this.add(MIND_ASPECT_DOOR.get(),
-				block -> createDoorTable(MIND_ASPECT_DOOR.get()));
+		add(MIND_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(MIND_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(RAGE_ASPECT_PLANKS.get());
 		dropSelf(RAGE_ASPECT_STAIRS.get());
-		this.add(RAGE_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(RAGE_ASPECT_SLAB.get()));
+		add(RAGE_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(RAGE_ASPECT_BUTTON.get());
 		dropSelf(RAGE_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(RAGE_ASPECT_FENCE.get());
 		dropSelf(RAGE_ASPECT_FENCE_GATE.get());
-		this.add(RAGE_ASPECT_DOOR.get(),
-				block -> createDoorTable(RAGE_ASPECT_DOOR.get()));
+		add(RAGE_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(RAGE_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(SPACE_ASPECT_PLANKS.get());
 		dropSelf(SPACE_ASPECT_STAIRS.get());
-		this.add(SPACE_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(SPACE_ASPECT_SLAB.get()));
+		add(SPACE_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(SPACE_ASPECT_BUTTON.get());
 		dropSelf(SPACE_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(SPACE_ASPECT_FENCE.get());
 		dropSelf(SPACE_ASPECT_FENCE_GATE.get());
-		this.add(SPACE_ASPECT_DOOR.get(),
-				block -> createDoorTable(SPACE_ASPECT_DOOR.get()));
+		add(SPACE_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(SPACE_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(TIME_ASPECT_PLANKS.get());
 		dropSelf(TIME_ASPECT_STAIRS.get());
-		this.add(TIME_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(TIME_ASPECT_SLAB.get()));
+		add(TIME_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(TIME_ASPECT_BUTTON.get());
 		dropSelf(TIME_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(TIME_ASPECT_FENCE.get());
 		dropSelf(TIME_ASPECT_FENCE_GATE.get());
-		this.add(TIME_ASPECT_DOOR.get(),
-				block -> createDoorTable(TIME_ASPECT_DOOR.get()));
+		add(TIME_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(TIME_ASPECT_TRAPDOOR.get());
 		
 		dropSelf(VOID_ASPECT_PLANKS.get());
 		dropSelf(VOID_ASPECT_STAIRS.get());
-		this.add(VOID_ASPECT_SLAB.get(),
-				block -> createSlabItemTable(VOID_ASPECT_SLAB.get()));
+		add(VOID_ASPECT_SLAB.get(), this::createSlabItemTable);
 		dropSelf(VOID_ASPECT_BUTTON.get());
 		dropSelf(VOID_ASPECT_PRESSURE_PLATE.get());
 		dropSelf(VOID_ASPECT_FENCE.get());
 		dropSelf(VOID_ASPECT_FENCE_GATE.get());
-		this.add(VOID_ASPECT_DOOR.get(),
-				block -> createDoorTable(VOID_ASPECT_DOOR.get()));
+		add(VOID_ASPECT_DOOR.get(), this::createDoorTable);
 		dropSelf(VOID_ASPECT_TRAPDOOR.get());
 		
 		add(BLOOD_ASPECT_LEAVES.get(), this::bloodAspectLeavesDrop);
@@ -904,58 +819,32 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(TREATED_PLANKS_STAIRS.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get());
-		this.add(BLACK_CHESS_BRICK_SLAB.get(),
-				block -> createSlabItemTable(BLACK_CHESS_BRICK_SLAB.get()));
-		this.add(DARK_GRAY_CHESS_BRICK_SLAB.get(),
-				block -> createSlabItemTable(DARK_GRAY_CHESS_BRICK_SLAB.get()));
-		this.add(LIGHT_GRAY_CHESS_BRICK_SLAB.get(),
-				block -> createSlabItemTable(LIGHT_GRAY_CHESS_BRICK_SLAB.get()));
-		this.add(WHITE_CHESS_BRICK_SLAB.get(),
-				block -> createSlabItemTable(WHITE_CHESS_BRICK_SLAB.get()));
-		this.add(CHALK_SLAB.get(),
-				block -> createSlabItemTable(CHALK_SLAB.get()));
-		this.add(CHALK_BRICK_SLAB.get(),
-				block -> createSlabItemTable(CHALK_BRICK_SLAB.get()));
-		this.add(PINK_STONE_SLAB.get(),
-				block -> createSlabItemTable(PINK_STONE_SLAB.get()));
-		this.add(PINK_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(PINK_STONE_BRICK_SLAB.get()));
-		this.add(BROWN_STONE_SLAB.get(),
-				block -> createSlabItemTable(BROWN_STONE_SLAB.get()));
-		this.add(BROWN_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(BROWN_STONE_BRICK_SLAB.get()));
-		this.add(GREEN_STONE_SLAB.get(),
-				block -> createSlabItemTable(GREEN_STONE_SLAB.get()));
-		this.add(GREEN_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(GREEN_STONE_BRICK_SLAB.get()));
-		this.add(RAINBOW_PLANKS_SLAB.get(),
-				block -> createSlabItemTable(RAINBOW_PLANKS_SLAB.get()));
-		this.add(END_PLANKS_SLAB.get(),
-				block -> createSlabItemTable(END_PLANKS_SLAB.get()));
-		this.add(DEAD_PLANKS_SLAB.get(),
-				block -> createSlabItemTable(DEAD_PLANKS_SLAB.get()));
-		this.add(TREATED_PLANKS_SLAB.get(),
-				block -> createSlabItemTable(TREATED_PLANKS_SLAB.get()));
-		this.add(BLACK_STONE_SLAB.get(),
-				block -> createSlabItemTable(BLACK_STONE_SLAB.get()));
-		this.add(BLACK_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(BLACK_STONE_BRICK_SLAB.get()));
-		this.add(MYCELIUM_SLAB.get(),
-				block -> createSlabItemTable(MYCELIUM_SLAB.get()));
-		this.add(MYCELIUM_BRICK_SLAB.get(),
-				block -> createSlabItemTable(MYCELIUM_BRICK_SLAB.get()));
-		this.add(FROST_TILE_SLAB.get(),
-				block -> createSlabItemTable(FROST_TILE_SLAB.get()));
-		this.add(FROST_BRICK_SLAB.get(),
-				block -> createSlabItemTable(FROST_BRICK_SLAB.get()));
-		this.add(SHADE_SLAB.get(),
-				block -> createSlabItemTable(SHADE_SLAB.get()));
-		this.add(SHADE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(SHADE_BRICK_SLAB.get()));
-		this.add(COARSE_STONE_SLAB.get(),
-				block -> createSlabItemTable(COARSE_STONE_SLAB.get()));
-		this.add(COARSE_STONE_BRICK_SLAB.get(),
-				block -> createSlabItemTable(COARSE_STONE_BRICK_SLAB.get()));
+		add(BLACK_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(DARK_GRAY_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(LIGHT_GRAY_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(WHITE_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(CHALK_SLAB.get(), this::createSlabItemTable);
+		add(CHALK_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(PINK_STONE_SLAB.get(), this::createSlabItemTable);
+		add(PINK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(BROWN_STONE_SLAB.get(), this::createSlabItemTable);
+		add(BROWN_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(GREEN_STONE_SLAB.get(), this::createSlabItemTable);
+		add(GREEN_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(RAINBOW_PLANKS_SLAB.get(), this::createSlabItemTable);
+		add(END_PLANKS_SLAB.get(), this::createSlabItemTable);
+		add(DEAD_PLANKS_SLAB.get(), this::createSlabItemTable);
+		add(TREATED_PLANKS_SLAB.get(), this::createSlabItemTable);
+		add(BLACK_STONE_SLAB.get(), this::createSlabItemTable);
+		add(BLACK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(MYCELIUM_SLAB.get(), this::createSlabItemTable);
+		add(MYCELIUM_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(FROST_TILE_SLAB.get(), this::createSlabItemTable);
+		add(FROST_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(SHADE_SLAB.get(), this::createSlabItemTable);
+		add(SHADE_BRICK_SLAB.get(), this::createSlabItemTable);
+		add(COARSE_STONE_SLAB.get(), this::createSlabItemTable);
+		add(COARSE_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		
 		dropSelf(TRAJECTORY_BLOCK.get());
 		dropSelf(STAT_STORER.get());

@@ -391,27 +391,26 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_SLAB, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		wallWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_WALL, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		
-		//TODO update derivatives to use dynamic textures
 		variantsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, 4,
 				i -> models().cubeAll("flowery_mossy_stone_bricks" + (i + 1),
 						texture(id("flowery_mossy_stone_bricks/" + (i + 1)))));
-		//stairsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
-		//slabWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
-		//wallWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_WALL, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
+		stairsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "flowery_mossy_stone_brick", texture("flowery_mossy_stone_bricks/1"));
+		slabWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, "flowery_mossy_stone_bricks1", texture("flowery_mossy_stone_bricks/1"));
+		wallWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_WALL, "flowery_mossy_stone_brick", texture("flowery_mossy_stone_bricks/1"));
 		
 		variantsWithItem(MSBlocks.DECREPIT_STONE_BRICKS, 4,
 				i -> models().cubeAll("decrepit_stone_bricks" + (i + 1),
 						texture(id("decrepit_stone_bricks/" + (i + 1)))));
-		//stairsWithItem(MSBlocks.DECREPIT_STONE_BRICK_STAIRS, MSBlocks.DECREPIT_STONE_BRICKS);
-		//slabWithItem(MSBlocks.DECREPIT_STONE_BRICK_SLAB, MSBlocks.DECREPIT_STONE_BRICKS);
-		//wallWithItem(MSBlocks.DECREPIT_STONE_BRICK_WALL, MSBlocks.DECREPIT_STONE_BRICKS);
+		stairsWithItem(MSBlocks.DECREPIT_STONE_BRICK_STAIRS, "decrepit_stone_brick", texture("decrepit_stone_bricks/1"));
+		slabWithItem(MSBlocks.DECREPIT_STONE_BRICK_SLAB, "decrepit_stone_bricks1", texture("decrepit_stone_bricks/1"));
+		wallWithItem(MSBlocks.DECREPIT_STONE_BRICK_WALL, "decrepit_stone_brick", texture("decrepit_stone_bricks/1"));
 		
 		variantsWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS, 4,
 				i -> models().cubeAll("mossy_decrepit_stone_bricks" + (i + 1),
 						texture(id("mossy_decrepit_stone_bricks/" + (i + 1)))));
-		//stairsWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_STAIRS, MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
-		//slabWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_SLAB, MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
-		//wallWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_WALL, MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
+		stairsWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_STAIRS, "mossy_decrepit_stone_brick", texture("mossy_decrepit_stone_bricks/1"));
+		slabWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_SLAB, "mossy_decrepit_stone_bricks1", texture("mossy_decrepit_stone_bricks/1"));
+		wallWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_WALL, "mossy_decrepit_stone_brick", texture("mossy_decrepit_stone_bricks/1"));
 		
 		simpleBlockWithItem(MSBlocks.COARSE_END_STONE);
 		{
@@ -745,8 +744,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.FROST_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.RAINBOW_PLANKS);
-		stairsWithItem(MSBlocks.RAINBOW_STAIRS, MSBlocks.RAINBOW_PLANKS);
-		slabWithItem(MSBlocks.RAINBOW_SLAB, MSBlocks.RAINBOW_PLANKS);
 		buttonWithItem(MSBlocks.RAINBOW_BUTTON, MSBlocks.RAINBOW_PLANKS);
 		pressurePlateWithItem(MSBlocks.RAINBOW_PRESSURE_PLATE, MSBlocks.RAINBOW_PLANKS);
 		fenceWithItem(MSBlocks.RAINBOW_FENCE, MSBlocks.RAINBOW_PLANKS);
@@ -756,8 +753,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.RAINBOW_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.END_PLANKS);
-		stairsWithItem(MSBlocks.END_STAIRS, MSBlocks.END_PLANKS);
-		slabWithItem(MSBlocks.END_SLAB, MSBlocks.END_PLANKS);
 		buttonWithItem(MSBlocks.END_BUTTON, MSBlocks.END_PLANKS);
 		pressurePlateWithItem(MSBlocks.END_PRESSURE_PLATE, MSBlocks.END_PLANKS);
 		fenceWithItem(MSBlocks.END_FENCE, MSBlocks.END_PLANKS);
@@ -767,8 +762,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.END_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.DEAD_PLANKS);
-		stairsWithItem(MSBlocks.DEAD_STAIRS, MSBlocks.DEAD_PLANKS);
-		slabWithItem(MSBlocks.DEAD_SLAB, MSBlocks.DEAD_PLANKS);
 		buttonWithItem(MSBlocks.DEAD_BUTTON, MSBlocks.DEAD_PLANKS);
 		pressurePlateWithItem(MSBlocks.DEAD_PRESSURE_PLATE, MSBlocks.DEAD_PLANKS);
 		fenceWithItem(MSBlocks.DEAD_FENCE, MSBlocks.DEAD_PLANKS);
@@ -778,8 +771,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.DEAD_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.TREATED_PLANKS);
-		stairsWithItem(MSBlocks.TREATED_STAIRS, MSBlocks.TREATED_PLANKS);
-		slabWithItem(MSBlocks.TREATED_SLAB, MSBlocks.TREATED_PLANKS);
 		buttonWithItem(MSBlocks.TREATED_BUTTON, MSBlocks.TREATED_PLANKS);
 		pressurePlateWithItem(MSBlocks.TREATED_PRESSURE_PLATE, MSBlocks.TREATED_PLANKS);
 		fenceWithItem(MSBlocks.TREATED_FENCE, MSBlocks.TREATED_PLANKS);
@@ -1265,7 +1256,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.BROWN_STONE_SLAB, MSBlocks.BROWN_STONE);
 		slabWithItem(MSBlocks.BROWN_STONE_BRICK_SLAB, MSBlocks.BROWN_STONE_BRICKS);
 		slabWithItem(MSBlocks.GREEN_STONE_SLAB, MSBlocks.GREEN_STONE);
-		slabWithItem(MSBlocks.GREEN_STONE_BRICK_SLAB, MSBlocks.GREEN_STONE_BRICKS.getId(),
+		slabWithItem(MSBlocks.GREEN_STONE_BRICK_SLAB, MSBlocks.GREEN_STONE_BRICKS.getId().getPath(),
 				texture("horizontal_green_stone_bricks"), texture("polished_green_stone"));
 		slabWithItem(MSBlocks.RAINBOW_PLANKS_SLAB, MSBlocks.RAINBOW_PLANKS);
 		slabWithItem(MSBlocks.END_PLANKS_SLAB, MSBlocks.END_PLANKS);
@@ -1939,24 +1930,23 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), stairs);
 	}
 	
-	private void slabWithItem(RegistryObject<SlabBlock> block, RegistryObject<Block> sourceBlock)
+	private void slabWithItem(RegistryObject<SlabBlock> block, RegistryObject<? extends Block> sourceBlock)
 	{
-		slabWithItem(block, sourceBlock.getId());
+		slabWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void slabWithItem(RegistryObject<SlabBlock> block, ResourceLocation sourceBlock)
+	private void slabWithItem(RegistryObject<SlabBlock> block, String baseName, ResourceLocation texture)
 	{
-		ResourceLocation texture = texture(sourceBlock);
-		slabWithItem(block, sourceBlock, texture, texture);
+		slabWithItem(block, baseName, texture, texture);
 	}
 	
-	private void slabWithItem(RegistryObject<SlabBlock> block, ResourceLocation sourceBlock, ResourceLocation side, ResourceLocation topBottom)
+	private void slabWithItem(RegistryObject<SlabBlock> block, String baseName, ResourceLocation side, ResourceLocation topBottom)
 	{
-		ModelFile slab = models().slab(block.getId().getPath(), side, topBottom, topBottom);
-		slabBlock(block.get(), slab,
-				models().slabTop(block.getId().getPath() + "_top", side, topBottom, topBottom),
-				models().getExistingFile(sourceBlock));
-		simpleBlockItem(block.get(), slab);
+		ModelFile slabBottom = models().slab(baseName + "_slab", side, topBottom, topBottom);
+		ModelFile slabTop = models().slabTop(baseName + "_slab_top", side, topBottom, topBottom);
+		ModelFile doubleSlab = models().getExistingFile(new ResourceLocation("minestuck:" + baseName));
+		slabBlock(block.get(), slabBottom, slabTop, doubleSlab);
+		simpleBlockItem(block.get(), slabBottom);
 	}
 	
 	private void wallWithItem(RegistryObject<WallBlock> block, RegistryObject<? extends Block> sourceBlock)
