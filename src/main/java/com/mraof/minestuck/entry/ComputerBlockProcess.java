@@ -2,7 +2,7 @@ package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.skaianet.SkaianetComputerInteractions;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SkaianetData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,6 +16,6 @@ public class ComputerBlockProcess implements BlockCopier.CopyStep
 	public void copyOver(ServerLevel oldWorld, BlockPos oldPos, ServerLevel newWorld, BlockPos newPos, BlockState state, @Nullable BlockEntity oldBE, @Nullable BlockEntity newBE)
 	{
 		if(oldBE instanceof ComputerBlockEntity oldComputer && newBE instanceof ComputerBlockEntity newComputer)
-			SkaianetComputerInteractions.movingComputer(oldComputer, newComputer, SkaianetHandler.get(oldWorld));
+			SkaianetComputerInteractions.movingComputer(oldComputer, newComputer, SkaianetData.get(oldWorld));
 	}
 }

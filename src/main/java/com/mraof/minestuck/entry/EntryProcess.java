@@ -121,7 +121,7 @@ public class EntryProcess
 			return;
 		}
 		
-		ResourceKey<Level> landDimension = SkaianetConnectionInteractions.prepareEntry(identifier, SkaianetHandler.get(player.level()));
+		ResourceKey<Level> landDimension = SkaianetConnectionInteractions.prepareEntry(identifier, SkaianetData.get(player.level()));
 		if(landDimension == null)
 		{
 			player.sendSystemMessage(Component.translatable(CREATION_FAILED));

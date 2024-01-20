@@ -14,123 +14,123 @@ public final class SkaianetComputerInteractions
 	
 	public static void connectToServerPlayer(ISburbComputer computer, PlayerIdentifier serverPlayer, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianet = SkaianetHandler.get(mcServer);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		PlayerIdentifier player = computer.getOwner();
 		
 		if(computer.createReference().isInNether())
 			return;
 		
-		if(isClientActive(skaianet, player))
+		if(isClientActive(skaianetData, player))
 			return;
 		
-		skaianet.openedServers.useComputerAndRemoveOnSuccess(serverPlayer, mcServer,
-				serverComputer -> SkaianetConnectionInteractions.tryConnect(computer, serverComputer, skaianet));
+		skaianetData.openedServers.useComputerAndRemoveOnSuccess(serverPlayer, mcServer,
+				serverComputer -> SkaianetConnectionInteractions.tryConnect(computer, serverComputer, skaianetData));
 	}
 	
 	public static void resumeClientConnection(ISburbComputer computer, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianet = SkaianetHandler.get(mcServer);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		PlayerIdentifier player = computer.getOwner();
-		if(computer.createReference().isInNether() || isClientActive(skaianet, player))
+		if(computer.createReference().isInNether() || isClientActive(skaianetData, player))
 			return;
 		
-		if(!skaianet.hasPrimaryConnectionForClient(player))
+		if(!skaianetData.hasPrimaryConnectionForClient(player))
 			return;
 		
-		Optional<PlayerIdentifier> server = skaianet.primaryPartnerForClient(player);
-		if(server.isPresent() && skaianet.resumingServers.contains(server.get()))
+		Optional<PlayerIdentifier> server = skaianetData.primaryPartnerForClient(player);
+		if(server.isPresent() && skaianetData.resumingServers.contains(server.get()))
 		{
-			skaianet.resumingServers.useComputerAndRemoveOnSuccess(server.get(), mcServer, otherComputer ->
-					SkaianetConnectionInteractions.tryConnect(computer, otherComputer, skaianet));
+			skaianetData.resumingServers.useComputerAndRemoveOnSuccess(server.get(), mcServer, otherComputer ->
+					SkaianetConnectionInteractions.tryConnect(computer, otherComputer, skaianetData));
 			return;
 		}
-		if(server.isPresent() && skaianet.openedServers.contains(server.get()))
+		if(server.isPresent() && skaianetData.openedServers.contains(server.get()))
 		{
-			skaianet.openedServers.useComputerAndRemoveOnSuccess(server.get(), mcServer, otherComputer ->
-					SkaianetConnectionInteractions.tryConnect(computer, otherComputer, skaianet));
+			skaianetData.openedServers.useComputerAndRemoveOnSuccess(server.get(), mcServer, otherComputer ->
+					SkaianetConnectionInteractions.tryConnect(computer, otherComputer, skaianetData));
 			return;
 		}
 		
-		skaianet.resumingClients.put(player, computer);
+		skaianetData.resumingClients.put(player, computer);
 	}
 	
 	public static void resumeServerConnection(ISburbComputer computer, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianet = SkaianetHandler.get(mcServer);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		PlayerIdentifier player = computer.getOwner();
-		if(computer.createReference().isInNether() || skaianet.hasResumingServer(player))
+		if(computer.createReference().isInNether() || skaianetData.hasResumingServer(player))
 			return;
 		
-		Optional<PlayerIdentifier> client = skaianet.primaryPartnerForServer(player);
+		Optional<PlayerIdentifier> client = skaianetData.primaryPartnerForServer(player);
 		if(client.isEmpty())
 			return;
 		
-		if(skaianet.resumingClients.contains(client.get()))
+		if(skaianetData.resumingClients.contains(client.get()))
 		{
-			skaianet.resumingClients.useComputerAndRemoveOnSuccess(client.get(), mcServer, otherComputer ->
-					SkaianetConnectionInteractions.tryConnect(otherComputer, computer, skaianet));
+			skaianetData.resumingClients.useComputerAndRemoveOnSuccess(client.get(), mcServer, otherComputer ->
+					SkaianetConnectionInteractions.tryConnect(otherComputer, computer, skaianetData));
 			return;
 		}
 		
-		skaianet.resumingServers.put(player, computer);
+		skaianetData.resumingServers.put(player, computer);
 	}
 	
 	public static void openServer(ISburbComputer computer, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianet = SkaianetHandler.get(mcServer);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		PlayerIdentifier player = computer.getOwner();
-		if(computer.createReference().isInNether() || skaianet.hasResumingServer(player))
+		if(computer.createReference().isInNether() || skaianetData.hasResumingServer(player))
 			return;
 		
-		Optional<PlayerIdentifier> primaryClient = skaianet.primaryPartnerForServer(player);
-		if(primaryClient.isPresent() && skaianet.resumingClients.contains(primaryClient.get()))
+		Optional<PlayerIdentifier> primaryClient = skaianetData.primaryPartnerForServer(player);
+		if(primaryClient.isPresent() && skaianetData.resumingClients.contains(primaryClient.get()))
 		{
-			skaianet.resumingClients.useComputerAndRemoveOnSuccess(primaryClient.get(), mcServer, clientComputer ->
-					SkaianetConnectionInteractions.tryConnect(clientComputer, computer, skaianet));
+			skaianetData.resumingClients.useComputerAndRemoveOnSuccess(primaryClient.get(), mcServer, clientComputer ->
+					SkaianetConnectionInteractions.tryConnect(clientComputer, computer, skaianetData));
 			return;
 		}
 		
-		skaianet.openedServers.put(player, computer);
+		skaianetData.openedServers.put(player, computer);
 	}
 	
 	public static void closeClientConnectionRemotely(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianet = SkaianetHandler.get(mcServer);
-		if(skaianet.resumingClients.contains(player))
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		if(skaianetData.resumingClients.contains(player))
 		{
-			skaianet.resumingClients.useComputerAndRemoveOnSuccess(player, mcServer, computer -> {
+			skaianetData.resumingClients.useComputerAndRemoveOnSuccess(player, mcServer, computer -> {
 				computer.putClientBoolean("isResuming", false);
 				computer.putClientMessage(STOP_RESUME);
 				return true;
 			});
 		} else
 		{
-			skaianet.getActiveConnection(player).ifPresent(activeConnection -> SkaianetConnectionInteractions.closeConnection(activeConnection, skaianet));
+			skaianetData.getActiveConnection(player).ifPresent(activeConnection -> SkaianetConnectionInteractions.closeConnection(activeConnection, skaianetData));
 		}
 	}
 	
-	public static void closeClientConnection(ISburbComputer computer, SkaianetHandler skaianet)
+	public static void closeClientConnection(ISburbComputer computer, SkaianetData skaianetData)
 	{
 		PlayerIdentifier owner = computer.getOwner();
-		if(skaianet.resumingClients.contains(computer))
+		if(skaianetData.resumingClients.contains(computer))
 		{
-			skaianet.resumingClients.remove(owner);
+			skaianetData.resumingClients.remove(owner);
 			computer.putClientBoolean("isResuming", false);
 			computer.putClientMessage(STOP_RESUME);
 		} else
 		{
-			skaianet.getClientConnection(computer).ifPresent(connection ->
-					SkaianetConnectionInteractions.closeConnection(connection, computer, null, skaianet));
+			skaianetData.getClientConnection(computer).ifPresent(connection ->
+					SkaianetConnectionInteractions.closeConnection(connection, computer, null, skaianetData));
 		}
 	}
 	
-	public static void closeServerConnection(ISburbComputer computer, SkaianetHandler skaianet)
+	public static void closeServerConnection(ISburbComputer computer, SkaianetData skaianetData)
 	{
-		checkAndCloseFromServerList(computer, skaianet.openedServers);
-		checkAndCloseFromServerList(computer, skaianet.resumingServers);
+		checkAndCloseFromServerList(computer, skaianetData.openedServers);
+		checkAndCloseFromServerList(computer, skaianetData.resumingServers);
 		
-		skaianet.getServerConnection(computer).ifPresent(connection ->
-				SkaianetConnectionInteractions.closeConnection(connection, null, computer, skaianet));
+		skaianetData.getServerConnection(computer).ifPresent(connection ->
+				SkaianetConnectionInteractions.closeConnection(connection, null, computer, skaianetData));
 	}
 	
 	private static void checkAndCloseFromServerList(ISburbComputer computer, ComputerWaitingList map)
@@ -144,21 +144,21 @@ public final class SkaianetComputerInteractions
 		}
 	}
 	
-	public static void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE, SkaianetHandler skaianet)
+	public static void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE, SkaianetData skaianetData)
 	{
 		ComputerReference oldRef = ComputerReference.of(oldBE), newRef = ComputerReference.of(newBE);
 		if(!oldBE.owner.equals(newBE.owner))
 			throw new IllegalStateException("Moving computers with different owners! (" + oldBE.owner + " and " + newBE.owner + ")");
 		
-		skaianet.activeConnections().forEach(c -> c.updateComputer(oldBE, newRef));
+		skaianetData.activeConnections().forEach(c -> c.updateComputer(oldBE, newRef));
 		
-		skaianet.resumingClients.replace(oldBE.owner, oldRef, newRef);
-		skaianet.resumingServers.replace(oldBE.owner, oldRef, newRef);
-		skaianet.openedServers.replace(oldBE.owner, oldRef, newRef);
+		skaianetData.resumingClients.replace(oldBE.owner, oldRef, newRef);
+		skaianetData.resumingServers.replace(oldBE.owner, oldRef, newRef);
+		skaianetData.openedServers.replace(oldBE.owner, oldRef, newRef);
 	}
 	
-	private static boolean isClientActive(SkaianetHandler skaianet, PlayerIdentifier player)
+	private static boolean isClientActive(SkaianetData skaianetData, PlayerIdentifier player)
 	{
-		return skaianet.getActiveConnection(player).isPresent() || skaianet.hasResumingClient(player);
+		return skaianetData.getActiveConnection(player).isPresent() || skaianetData.hasResumingClient(player);
 	}
 }

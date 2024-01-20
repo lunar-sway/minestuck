@@ -46,7 +46,7 @@ public class TitleSelectionHook
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
-		if(SkaianetHandler.get(player.server).predefineData(identifier).map(data -> data.getTitle() != null).orElse(false)
+		if(SkaianetData.get(player.server).predefineData(identifier).map(data -> data.getTitle() != null).orElse(false)
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		

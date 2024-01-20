@@ -98,7 +98,7 @@ public final class PredefineData
 		if(title == null || !availableAspects.contains(title.getHeroAspect()))
 		{
 			Title previous = title;
-			title = Generator.generateTitle(player, availableAspects, SkaianetHandler.get(source.getServer()));
+			title = Generator.generateTitle(player, availableAspects, SkaianetData.get(source.getServer()));
 			
 			if(!availableAspects.contains(title.getHeroAspect()))
 			{
@@ -127,10 +127,10 @@ public final class PredefineData
 				throw new IllegalStateException("Had no title land types to generate when some were expected.");
 			}
 			
-			SkaianetHandler skaianetHandler = SkaianetHandler.get(source.getServer());
+			SkaianetData skaianetData = SkaianetData.get(source.getServer());
 			TitleLandType previous = titleLandType;
-			List<PlayerIdentifier> otherPlayers = skaianetHandler.sessionHandler.playersToCheckForDataSelection(player).toList();
-			titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), type, skaianetHandler);
+			List<PlayerIdentifier> otherPlayers = skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList();
+			titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), type, skaianetData);
 			
 			if(!titleLandType.isAspectCompatible(type))
 			{

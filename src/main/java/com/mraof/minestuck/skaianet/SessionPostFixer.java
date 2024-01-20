@@ -20,7 +20,7 @@ public final class SessionPostFixer
 	@SubscribeEvent
 	public static void onServerStarted(ServerStartedEvent event)
 	{
-		for(SburbPlayerData playerData : SkaianetHandler.get(event.getServer()).allPlayerData())
+		for(SburbPlayerData playerData : SkaianetData.get(event.getServer()).allPlayerData())
 			validate(event.getServer(), playerData);
 	}
 	

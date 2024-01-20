@@ -75,23 +75,23 @@ public class DataCheckerManager
 	
 	private static void writeConnectionData(CompoundTag tag, PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		
-		boolean isMain = skaianetHandler.hasPrimaryConnectionForClient(player);
+		boolean isMain = skaianetData.hasPrimaryConnectionForClient(player);
 		tag.putBoolean("isMain", isMain);
 		
 		if(isMain)
-			skaianetHandler.primaryPartnerForClient(player)
+			skaianetData.primaryPartnerForClient(player)
 					.ifPresent(serverPlayer -> tag.putString("server", serverPlayer.getUsername()));
 		else
-			skaianetHandler.getActiveConnection(player)
+			skaianetData.getActiveConnection(player)
 					.ifPresent(connection -> tag.putString("server", connection.server().getUsername()));
 	}
 	
 	private static void writeExtraData(CompoundTag tag, PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
-		SburbPlayerData playerData = skaianetHandler.getOrCreateData(player);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		SburbPlayerData playerData = skaianetData.getOrCreateData(player);
 		ResourceKey<Level> landDimensionKey = playerData.getLandDimension();
 		if(landDimensionKey != null)
 		{
@@ -99,7 +99,7 @@ public class DataCheckerManager
 			return;
 		}
 		
-		skaianetHandler.predefineData(player).ifPresent(data -> putPredefinedData(tag, data));
+		skaianetData.predefineData(player).ifPresent(predefineData -> putPredefinedData(tag, predefineData));
 	}
 	
 	/**

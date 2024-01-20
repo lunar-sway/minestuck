@@ -122,17 +122,17 @@ public final class SburbPlayerData
 	
 	void removeServerPlayer()
 	{
-		SkaianetHandler skaianet = SkaianetHandler.get(this.mcServer);
-		skaianet.getActiveConnection(this.playerId()).ifPresent(activeConnection -> SkaianetConnectionInteractions.closeConnection(activeConnection, skaianet));
+		SkaianetData skaianetData = SkaianetData.get(this.mcServer);
+		skaianetData.getActiveConnection(this.playerId()).ifPresent(activeConnection -> SkaianetConnectionInteractions.closeConnection(activeConnection, skaianetData));
 		if(this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER)
 		{
-			skaianet.infoTracker.markDirty(this.primaryServerPlayer);
+			skaianetData.infoTracker.markDirty(this.primaryServerPlayer);
 			if(this.hasEntered())
-				skaianet.infoTracker.markLandChainDirty();
+				skaianetData.infoTracker.markLandChainDirty();
 			
 			PlayerIdentifier oldServerPlayer = this.primaryServerPlayer;
 			this.primaryServerPlayer = IdentifierHandler.NULL_IDENTIFIER;
-			skaianet.sessionHandler.onDisconnect(this.playerId(), oldServerPlayer);
+			skaianetData.sessionHandler.onDisconnect(this.playerId(), oldServerPlayer);
 		}
 	}
 	
@@ -142,15 +142,15 @@ public final class SburbPlayerData
 			throw new IllegalStateException();
 		if(this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER)
 			throw new IllegalStateException("Connection already has a server player");
-		SkaianetHandler skaianet = SkaianetHandler.get(this.mcServer);
-		if(!SkaianetConnectionInteractions.canMakeNewRegularConnectionAsServer(server, skaianet))
+		SkaianetData skaianetData = SkaianetData.get(this.mcServer);
+		if(!SkaianetConnectionInteractions.canMakeNewRegularConnectionAsServer(server, skaianetData))
 			throw new IllegalStateException("Server player already has a connection");
 		
 		this.primaryServerPlayer = Objects.requireNonNull(server);
-		skaianet.sessionHandler.onConnect(this.playerId(), server);
-		skaianet.infoTracker.markDirty(server);
+		skaianetData.sessionHandler.onConnect(this.playerId(), server);
+		skaianetData.infoTracker.markDirty(server);
 		if(this.hasEntered())
-			skaianet.infoTracker.markLandChainDirty();
+			skaianetData.infoTracker.markLandChainDirty();
 	}
 	
 	/**
@@ -169,10 +169,10 @@ public final class SburbPlayerData
 		
 		hasPrimaryConnection = true;
 		primaryServerPlayer = serverPlayer;
-		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
-		skaianetHandler.sessionHandler.onConnect(this.playerId(), serverPlayer);
-		skaianetHandler.infoTracker.markDirty(this.playerId());
-		this.primaryServerPlayer().ifPresent(skaianetHandler.infoTracker::markDirty);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		skaianetData.sessionHandler.onConnect(this.playerId(), serverPlayer);
+		skaianetData.infoTracker.markDirty(this.playerId());
+		this.primaryServerPlayer().ifPresent(skaianetData.infoTracker::markDirty);
 	}
 	
 	public boolean hasEntered()
@@ -288,7 +288,7 @@ public final class SburbPlayerData
 	
 	public static SburbPlayerData get(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		return SkaianetHandler.get(mcServer).getOrCreateData(player);
+		return SkaianetData.get(mcServer).getOrCreateData(player);
 	}
 	
 	public static Optional<SburbPlayerData> getForLand(ServerLevel level)
@@ -298,7 +298,7 @@ public final class SburbPlayerData
 	
 	public static Optional<SburbPlayerData> getForLand(ResourceKey<Level> level, MinecraftServer mcServer)
 	{
-		return SkaianetHandler.get(mcServer).allPlayerData().stream().filter(data -> data.getLandDimension() == level).findAny();
+		return SkaianetData.get(mcServer).allPlayerData().stream().filter(data -> data.getLandDimension() == level).findAny();
 	}
 	
 	enum ArtifactType {

@@ -34,7 +34,7 @@ public final class InfoTracker
 	
 	public static final String PRIVATE_COMPUTER = "minestuck.private_computer";
 	
-	private final SkaianetHandler skaianet;
+	private final SkaianetData skaianet;
 	
 	private final Map<PlayerIdentifier, Set<PlayerIdentifier>> listenerMap = new HashMap<>();
 	private final Set<PlayerIdentifier> toUpdate = new HashSet<>();
@@ -44,7 +44,7 @@ public final class InfoTracker
 	 */
 	private boolean resendLandChains;
 	
-	InfoTracker(SkaianetHandler skaianet)
+	InfoTracker(SkaianetData skaianet)
 	{
 		this.skaianet = skaianet;
 	}
@@ -54,7 +54,7 @@ public final class InfoTracker
 	{
 		if(event.getEntity() instanceof ServerPlayer player)
 		{
-			SkaianetHandler.get(player.server).infoTracker.onPlayerLoggedIn(player);
+			SkaianetData.get(player.server).infoTracker.onPlayerLoggedIn(player);
 		}
 	}
 	
@@ -64,7 +64,7 @@ public final class InfoTracker
 		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
-			SkaianetHandler.get(player.server).infoTracker.listenerMap.values().forEach(set -> set.removeIf(identifier::equals));
+			SkaianetData.get(player.server).infoTracker.listenerMap.values().forEach(set -> set.removeIf(identifier::equals));
 		}
 	}
 	
@@ -73,7 +73,7 @@ public final class InfoTracker
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
-			SkaianetHandler.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
+			SkaianetData.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
 		}
 	}
 	

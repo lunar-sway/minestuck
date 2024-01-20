@@ -20,11 +20,11 @@ import java.util.stream.Stream;
  */
 public sealed abstract class SessionHandler
 {
-	final SkaianetHandler skaianetHandler;
+	final SkaianetData skaianetData;
 	
-	SessionHandler(SkaianetHandler skaianetHandler)
+	SessionHandler(SkaianetData skaianetData)
 	{
-		this.skaianetHandler = skaianetHandler;
+		this.skaianetData = skaianetData;
 	}
 	
 	abstract void write(CompoundTag compound);
@@ -54,14 +54,14 @@ public sealed abstract class SessionHandler
 	
 	Map<Integer, String> getServerList(PlayerIdentifier client)
 	{
-		Optional<PlayerIdentifier> primaryServer = skaianetHandler.primaryPartnerForClient(client);
+		Optional<PlayerIdentifier> primaryServer = skaianetData.primaryPartnerForClient(client);
 		Map<Integer, String> map = new HashMap<>();
-		for(PlayerIdentifier server : skaianetHandler.openedServers.getPlayers())
+		for(PlayerIdentifier server : skaianetData.openedServers.getPlayers())
 		{
 			
 			if(primaryServer.isPresent() && primaryServer.get().equals(server)
-					|| primaryServer.isEmpty() && SkaianetConnectionInteractions.canMakeNewRegularConnectionAsServer(server, skaianetHandler)
-					|| SkaianetConnectionInteractions.canMakeSecondaryConnection(client, server, skaianetHandler))
+					|| primaryServer.isEmpty() && SkaianetConnectionInteractions.canMakeNewRegularConnectionAsServer(server, skaianetData)
+					|| SkaianetConnectionInteractions.canMakeSecondaryConnection(client, server, skaianetData))
 				map.put(server.getId(), server.getUsername());
 		}
 		return map;
@@ -80,7 +80,7 @@ public sealed abstract class SessionHandler
 	
 	public static SessionHandler get(MinecraftServer server)
 	{
-		return SkaianetHandler.get(server).sessionHandler;
+		return SkaianetData.get(server).sessionHandler;
 	}
 	
 	/**
@@ -91,16 +91,16 @@ public sealed abstract class SessionHandler
 		@Nonnull
 		private final Session globalSession;
 		
-		Global(SkaianetHandler skaianetHandler, Session session)
+		Global(SkaianetData skaianetData, Session session)
 		{
-			super(skaianetHandler);
+			super(skaianetData);
 			globalSession = Objects.requireNonNull(session);
-			skaianetHandler.predefineData.keySet().forEach(globalSession::addPlayer);
+			skaianetData.predefineData.keySet().forEach(globalSession::addPlayer);
 		}
 		
-		Global(SkaianetHandler skaianetHandler, CompoundTag nbt)
+		Global(SkaianetData skaianetData, CompoundTag nbt)
 		{
-			this(skaianetHandler, Session.read(nbt, skaianetHandler));
+			this(skaianetData, Session.read(nbt, skaianetData));
 		}
 		
 		@Override
@@ -113,7 +113,7 @@ public sealed abstract class SessionHandler
 		SessionHandler getActual()
 		{
 			if(!MinestuckConfig.SERVER.globalSession.get())
-				return new Multi(skaianetHandler, globalSession);
+				return new Multi(skaianetData, globalSession);
 			else return this;
 		}
 		
@@ -164,23 +164,23 @@ public sealed abstract class SessionHandler
 		 */
 		private final Set<Session> sessions = new HashSet<>();
 		
-		Multi(SkaianetHandler skaianetHandler)
+		Multi(SkaianetData skaianetData)
 		{
-			super(skaianetHandler);
+			super(skaianetData);
 		}
 		
-		Multi(SkaianetHandler skaianetHandler, Session globalSession)
+		Multi(SkaianetData skaianetData, Session globalSession)
 		{
-			this(skaianetHandler);
+			this(skaianetData);
 			sessions.add(globalSession);
 			split(globalSession);
 		}
 		
-		Multi(SkaianetHandler skaianetHandler, ListTag list)
+		Multi(SkaianetData skaianetData, ListTag list)
 		{
-			super(skaianetHandler);
+			super(skaianetData);
 			for(int i = 0; i < list.size(); i++)
-				correctAndAddSession(Session.read(list.getCompound(i), skaianetHandler));
+				correctAndAddSession(Session.read(list.getCompound(i), skaianetData));
 		}
 		
 		@Override
@@ -198,8 +198,8 @@ public sealed abstract class SessionHandler
 		SessionHandler getActual()
 		{
 			if(MinestuckConfig.SERVER.globalSession.get())
-				return new Global(skaianetHandler,
-						Session.createMergedSession(this.sessions, this.skaianetHandler));
+				return new Global(skaianetData,
+						Session.createMergedSession(this.sessions, this.skaianetData));
 			
 			return this;
 		}
@@ -226,7 +226,7 @@ public sealed abstract class SessionHandler
 			if(sessions.size() > 1)
 			{
 				this.sessions.removeAll(sessions);
-				Session newSession = Session.createMergedSession(sessions, this.skaianetHandler);
+				Session newSession = Session.createMergedSession(sessions, this.skaianetData);
 				this.sessions.add(newSession);
 				return newSession;
 			} else if(sessions.size() == 1)
@@ -234,7 +234,7 @@ public sealed abstract class SessionHandler
 				return sessions.stream().findAny().get();
 			} else
 			{
-				Session session = new Session(skaianetHandler);
+				Session session = new Session(skaianetData);
 				this.sessions.add(session);
 				return session;
 			}
@@ -251,7 +251,7 @@ public sealed abstract class SessionHandler
 		{
 			Session s = Objects.requireNonNull(getPlayerSession(client));
 			
-			SburbPlayerData playerData = skaianetHandler.getOrCreateData(client);
+			SburbPlayerData playerData = skaianetData.getOrCreateData(client);
 			if(!playerData.isPrimaryServerPlayer(server))
 				split(s);
 		}
@@ -276,7 +276,7 @@ public sealed abstract class SessionHandler
 			while(!session.getPlayers().isEmpty())
 			{
 				PlayerIdentifier remainingPlayer = session.getPlayers().iterator().next();
-				Set<PlayerIdentifier> players = collectAllConnectedPlayers(remainingPlayer, skaianetHandler);
+				Set<PlayerIdentifier> players = collectAllConnectedPlayers(remainingPlayer, skaianetData);
 				Session newSession = session.createSessionSplit(players);
 				newSession.checkIfCompleted();
 				if(newSession.getPlayers().size() > 1 || newSession.getGristGutter().gutterMultiplierForSession() > 0)
@@ -284,7 +284,7 @@ public sealed abstract class SessionHandler
 			}
 		}
 		
-		static Set<PlayerIdentifier> collectAllConnectedPlayers(PlayerIdentifier player, SkaianetHandler skaianetHandler)
+		static Set<PlayerIdentifier> collectAllConnectedPlayers(PlayerIdentifier player, SkaianetData skaianetData)
 		{
 			Set<PlayerIdentifier> players = new HashSet<>();
 			Queue<PlayerIdentifier> uncheckedPlayers = new LinkedList<>();
@@ -293,7 +293,7 @@ public sealed abstract class SessionHandler
 			
 			for(PlayerIdentifier nextPlayer = player; nextPlayer != null; nextPlayer = uncheckedPlayers.poll())
 			{
-				findDirectlyConnectedPlayers(nextPlayer, skaianetHandler, connectedPlayer -> {
+				findDirectlyConnectedPlayers(nextPlayer, skaianetData, connectedPlayer -> {
 					if(players.add(connectedPlayer))
 						uncheckedPlayers.add(connectedPlayer);
 				});
@@ -302,13 +302,13 @@ public sealed abstract class SessionHandler
 			return players;
 		}
 		
-		private static void findDirectlyConnectedPlayers(PlayerIdentifier player, SkaianetHandler skaianetHandler, Consumer<PlayerIdentifier> playerConsumer)
+		private static void findDirectlyConnectedPlayers(PlayerIdentifier player, SkaianetData skaianetData, Consumer<PlayerIdentifier> playerConsumer)
 		{
-			skaianetHandler.primaryPartnerForClient(player).ifPresent(playerConsumer);
-			skaianetHandler.primaryPartnerForServer(player).ifPresent(playerConsumer);
+			skaianetData.primaryPartnerForClient(player).ifPresent(playerConsumer);
+			skaianetData.primaryPartnerForServer(player).ifPresent(playerConsumer);
 			
-			skaianetHandler.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
-			skaianetHandler.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));
+			skaianetData.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
+			skaianetData.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));
 		}
 	}
 }

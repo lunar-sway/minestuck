@@ -12,7 +12,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SkaianetData;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.nbt.CompoundTag;
@@ -431,7 +431,7 @@ public final class DeployList
 			if(currentDay != lastDay)
 			{
 				lastDay = currentDay;
-				SkaianetHandler.get(server).allPlayerData().forEach(SburbPlayerData::resetGivenItems);
+				SkaianetData.get(server).allPlayerData().forEach(SburbPlayerData::resetGivenItems);
 			}
 		}
 	}

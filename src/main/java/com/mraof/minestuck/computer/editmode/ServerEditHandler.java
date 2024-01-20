@@ -19,7 +19,10 @@ import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.*;
+import com.mraof.minestuck.skaianet.ActiveConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.skaianet.SkaianetData;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
@@ -105,7 +108,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent
 	public static void onEntry(OnEntryEvent event)
 	{
-		SkaianetHandler.get(event.getMcServer()).getActiveConnection(event.getPlayer())
+		SkaianetData.get(event.getMcServer()).getActiveConnection(event.getPlayer())
 				.ifPresent(connection -> connection.lastEditmodePosition = null);
 	}
 	
@@ -190,7 +193,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			player.sendSystemMessage(Component.literal("You may not activate editmode while riding something"));
 			return;    //Don't want to bother making the decoy able to ride anything right now.
 		}
-		Optional<ActiveConnection> connectionOptional = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
+		Optional<ActiveConnection> connectionOptional = SkaianetData.get(player.getServer()).getActiveConnection(computerTarget);
 		if(connectionOptional.isEmpty())
 			return;
 		ActiveConnection connection = connectionOptional.get();

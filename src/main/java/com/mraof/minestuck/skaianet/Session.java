@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public final class Session
 {
-	final SkaianetHandler skaianetHandler;
+	final SkaianetData skaianetData;
 	private final Set<PlayerIdentifier> players = new HashSet<>();
 	private final GristGutter gutter;
 	
@@ -28,9 +28,9 @@ public final class Session
 	 */
 	boolean completed;
 	
-	static Session createMergedSession(Collection<Session> sessions, SkaianetHandler skaianetHandler)
+	static Session createMergedSession(Collection<Session> sessions, SkaianetData skaianetData)
 	{
-		Session session = new Session(skaianetHandler);
+		Session session = new Session(skaianetData);
 		sessions.forEach(other -> {
 			session.players.addAll(other.players);
 			// Since the gutter capacity of the merged session should be the sum of the individual sessions,
@@ -54,21 +54,21 @@ public final class Session
 			return false;
 		
 		return this.players.stream().allMatch(player -> {
-			SburbPlayerData playerData = skaianetHandler.getOrCreateData(player);
+			SburbPlayerData playerData = skaianetData.getOrCreateData(player);
 			return playerData.hasEntered() && playerData.primaryServerPlayer().isPresent();
 		});
 	}
 	
-	Session(SkaianetHandler skaianetHandler)
+	Session(SkaianetData skaianetData)
 	{
-		this.skaianetHandler = skaianetHandler;
-		this.gutter = new GristGutter(skaianetHandler.mcServer, this);
+		this.skaianetData = skaianetData;
+		this.gutter = new GristGutter(skaianetData.mcServer, this);
 	}
 	
-	private Session(CompoundTag nbt, SkaianetHandler skaianetHandler)
+	private Session(CompoundTag nbt, SkaianetData skaianetData)
 	{
-		this.skaianetHandler = skaianetHandler;
-		this.gutter = new GristGutter(skaianetHandler.mcServer, this, nbt.getList("gutter", Tag.TAG_COMPOUND));
+		this.skaianetData = skaianetData;
+		this.gutter = new GristGutter(skaianetData.mcServer, this, nbt.getList("gutter", Tag.TAG_COMPOUND));
 	}
 	
 	/**
@@ -123,9 +123,9 @@ public final class Session
 	 * @param nbt An CompoundNBT to read from.
 	 * @return This.
 	 */
-	static Session read(CompoundTag nbt, SkaianetHandler handler)
+	static Session read(CompoundTag nbt, SkaianetData skaianetData)
 	{
-		Session s = new Session(nbt, handler);
+		Session s = new Session(nbt, skaianetData);
 		
 		ListTag list = nbt.getList("players", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
@@ -144,7 +144,7 @@ public final class Session
 	{
 		double originalGutterMultiplier = this.gutter.gutterMultiplierForSession();
 		
-		Session newSession = new Session(skaianetHandler);
+		Session newSession = new Session(skaianetData);
 		
 		for(PlayerIdentifier player : players)
 		{

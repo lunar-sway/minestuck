@@ -11,7 +11,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SkaianetData;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -270,7 +270,7 @@ public class EditData
 			SburbPlayerData.get(this.clientPlayer, mcServer).putEditmodeInventory(this.inventory);
 			if(editPlayer != null)
 			{
-				SkaianetHandler.get(mcServer).getActiveConnection(this.clientPlayer)
+				SkaianetData.get(mcServer).getActiveConnection(this.clientPlayer)
 						.ifPresent(connection -> connection.lastEditmodePosition = editPlayer.position());
 			}
 		}

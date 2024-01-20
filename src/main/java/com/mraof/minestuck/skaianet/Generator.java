@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
  */
 public class Generator
 {
-	static Title generateTitle(PlayerIdentifier player, Set<EnumAspect> availableAspects, SkaianetHandler skaianetHandler)
+	static Title generateTitle(PlayerIdentifier player, Set<EnumAspect> availableAspects, SkaianetData skaianetData)
 	{
 		Random random = new Random();	//TODO seed based on player and world in a good way
 		
-		Set<Title> usedTitles = titlesUsedBy(skaianetHandler.sessionHandler.playersToCheckForDataSelection(player).toList(), skaianetHandler);
+		Set<Title> usedTitles = titlesUsedBy(skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList(), skaianetData);
 		
 		List<EnumAspect> unusedAspects = unusedAspects(availableAspects, usedTitles);
 		List<EnumClass> unusedClasses = unusedClasses(usedTitles);
@@ -63,16 +63,16 @@ public class Generator
 		}
 	}
 	
-	static Set<Title> titlesUsedBy(Collection<PlayerIdentifier> players, SkaianetHandler skaianetHandler)
+	static Set<Title> titlesUsedBy(Collection<PlayerIdentifier> players, SkaianetData skaianetData)
 	{
-		return players.stream().flatMap(player -> titleForPlayer(player, skaianetHandler).stream()).collect(Collectors.toSet());
+		return players.stream().flatMap(player -> titleForPlayer(player, skaianetData).stream()).collect(Collectors.toSet());
 	}
 	
 	@NotNull
-	private static Optional<Title> titleForPlayer(PlayerIdentifier player, SkaianetHandler skaianetHandler)
+	private static Optional<Title> titleForPlayer(PlayerIdentifier player, SkaianetData skaianetData)
 	{
-		return Optional.ofNullable(PlayerSavedData.getData(player, skaianetHandler.mcServer).getTitle())
-				.or(() -> skaianetHandler.predefineData(player).flatMap(data -> Optional.ofNullable(data.getTitle())));
+		return Optional.ofNullable(PlayerSavedData.getData(player, skaianetData.mcServer).getTitle())
+				.or(() -> skaianetData.predefineData(player).flatMap(data -> Optional.ofNullable(data.getTitle())));
 	}
 	
 	private static List<EnumAspect> unusedAspects(Set<EnumAspect> base, Set<Title> usedTitles)
@@ -87,49 +87,49 @@ public class Generator
 		return EnumClass.valuesStream().filter(c -> !usedClasses.contains(c)).collect(Collectors.toList());
 	}
 	
-	static TitleLandType generateWeightedTitleLandType(Collection<PlayerIdentifier> otherPlayers, EnumAspect aspect, @Nullable TerrainLandType terrainType, SkaianetHandler skaianetHandler)
+	static TitleLandType generateWeightedTitleLandType(Collection<PlayerIdentifier> otherPlayers, EnumAspect aspect, @Nullable TerrainLandType terrainType, SkaianetData skaianetData)
 	{
 		Random random = new Random();
 		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
-		List<TitleLandType> usedTypes = titleLandTypesUsedBy(otherPlayers, skaianetHandler);
+		List<TitleLandType> usedTypes = titleLandTypesUsedBy(otherPlayers, skaianetData);
 		
 		return landGen.getTitleAspect(terrainType, aspect, usedTypes);
 	}
 	
-	static List<TitleLandType> titleLandTypesUsedBy(Collection<PlayerIdentifier> players, SkaianetHandler skaianetHandler)
+	static List<TitleLandType> titleLandTypesUsedBy(Collection<PlayerIdentifier> players, SkaianetData skaianetData)
 	{
-		return players.stream().flatMap(player -> titleLandTypeForPlayer(player, skaianetHandler).stream()).toList();
+		return players.stream().flatMap(player -> titleLandTypeForPlayer(player, skaianetData).stream()).toList();
 	}
 	
-	private static Optional<TitleLandType> titleLandTypeForPlayer(PlayerIdentifier player, SkaianetHandler skaianetHandler)
+	private static Optional<TitleLandType> titleLandTypeForPlayer(PlayerIdentifier player, SkaianetData skaianetData)
 	{
-		return LandTypePair.getTypes(skaianetHandler.mcServer, skaianetHandler.getOrCreateData(player).getLandDimension())
+		return LandTypePair.getTypes(skaianetData.mcServer, skaianetData.getOrCreateData(player).getLandDimension())
 				.map(LandTypePair::getTitle)
-				.or(() -> skaianetHandler.predefineData(player)
+				.or(() -> skaianetData.predefineData(player)
 						.flatMap(data -> Optional.ofNullable(data.getTitleLandType())));
 	}
 	
-	static TerrainLandType generateWeightedTerrainLandType(Collection<PlayerIdentifier> otherPlayers, TitleLandType titleType, SkaianetHandler skaianetHandler)
+	static TerrainLandType generateWeightedTerrainLandType(Collection<PlayerIdentifier> otherPlayers, TitleLandType titleType, SkaianetData skaianetData)
 	{
 		Random random = new Random();
 		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
-		List<TerrainLandType> usedTypes = terrainLandTypesUsedBy(otherPlayers, skaianetHandler);
+		List<TerrainLandType> usedTypes = terrainLandTypesUsedBy(otherPlayers, skaianetData);
 		
 		return landGen.getTerrainAspect(titleType, usedTypes);
 	}
 	
-	private static List<TerrainLandType> terrainLandTypesUsedBy(Collection<PlayerIdentifier> players, SkaianetHandler skaianetHandler)
+	private static List<TerrainLandType> terrainLandTypesUsedBy(Collection<PlayerIdentifier> players, SkaianetData skaianetData)
 	{
-		return players.stream().flatMap(player -> terrainLandTypeForPlayer(player, skaianetHandler).stream()).toList();
+		return players.stream().flatMap(player -> terrainLandTypeForPlayer(player, skaianetData).stream()).toList();
 	}
 	
-	private static Optional<TerrainLandType> terrainLandTypeForPlayer(PlayerIdentifier player, SkaianetHandler skaianetHandler)
+	private static Optional<TerrainLandType> terrainLandTypeForPlayer(PlayerIdentifier player, SkaianetData skaianetData)
 	{
-		return LandTypePair.getTypes(skaianetHandler.mcServer, skaianetHandler.getOrCreateData(player).getLandDimension())
+		return LandTypePair.getTypes(skaianetData.mcServer, skaianetData.getOrCreateData(player).getLandDimension())
 				.map(LandTypePair::getTerrain)
-				.or(() -> skaianetHandler.predefineData(player)
+				.or(() -> skaianetData.predefineData(player)
 						.flatMap(data -> Optional.ofNullable(data.getTerrainLandType())));
 	}
 	

@@ -45,15 +45,15 @@ public final class SburbHandler
 	
 	private static Title produceTitle(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		
 		Title title = null;
-		Optional<PredefineData> data = skaianetHandler.predefineData(player);
+		Optional<PredefineData> data = skaianetData.predefineData(player);
 		if(data.isPresent())
 			title = data.get().getTitle();
 		
 		if(title == null)
-			title = Generator.generateTitle(player, EnumAspect.valuesSet(), skaianetHandler);
+			title = Generator.generateTitle(player, EnumAspect.valuesSet(), skaianetData);
 		
 		return title;
 	}
@@ -74,7 +74,7 @@ public final class SburbHandler
 	public static void handlePredefineData(ServerPlayer player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SkaianetHandler.get(player.server).predefineCall(identifier, consumer);
+		SkaianetData.get(player.server).predefineCall(identifier, consumer);
 	}
 	
 	public static ItemStack getEntryItem(Level level, SburbPlayerData playerData)
@@ -110,13 +110,13 @@ public final class SburbHandler
 	
 	private static LandTypePair genLandAspects(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
-		List<PlayerIdentifier> otherPlayers = skaianetHandler.sessionHandler.playersToCheckForDataSelection(player).toList();
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		List<PlayerIdentifier> otherPlayers = skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList();
 		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		
-		Optional<PredefineData> data = skaianetHandler.predefineData(player);
+		Optional<PredefineData> data = skaianetData.predefineData(player);
 		if(data.isPresent())
 		{
 			titleLandType = data.get().getTitleLandType();
@@ -125,31 +125,31 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !Generator.titleLandTypesUsedBy(otherPlayers, skaianetHandler).contains(LandTypes.FROGS.get()) &&
+			if(title.getHeroAspect() == EnumAspect.SPACE && !Generator.titleLandTypesUsedBy(otherPlayers, skaianetData).contains(LandTypes.FROGS.get()) &&
 					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS.get();
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), terrainLandType, skaianetHandler);
+				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), terrainLandType, skaianetData);
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType));
-					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), null, skaianetHandler);
+					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), null, skaianetData);
 				}
 			}
 		}
 		if(terrainLandType == null)
-			terrainLandType = Generator.generateWeightedTerrainLandType(otherPlayers, titleLandType, skaianetHandler);
+			terrainLandType = Generator.generateWeightedTerrainLandType(otherPlayers, titleLandType, skaianetData);
 		
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
 	
 	public static void onEntryItemsDeployed(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		SkaianetHandler handler = SkaianetHandler.get(mcServer);
-		Optional<ActiveConnection> connection = handler.getActiveConnection(player);
-		if(connection.isPresent() && !handler.hasPrimaryConnectionForClient(player))
-			SkaianetConnectionInteractions.trySetPrimaryConnection(connection.get(), handler);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		Optional<ActiveConnection> connection = skaianetData.getActiveConnection(player);
+		if(connection.isPresent() && !skaianetData.hasPrimaryConnectionForClient(player))
+			SkaianetConnectionInteractions.trySetPrimaryConnection(connection.get(), skaianetData);
 	}
 	
 	static void prepareEntry(SburbPlayerData playerData, MinecraftServer mcServer)
@@ -168,11 +168,11 @@ public final class SburbHandler
 	public static void onEntry(MinecraftServer server, ServerPlayer player)
 	{
 		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
-		SkaianetHandler skaianetHandler = SkaianetHandler.get(server);
-		SburbPlayerData playerData = skaianetHandler.getOrCreateData(playerId);
+		SkaianetData skaianetData = SkaianetData.get(server);
+		SburbPlayerData playerData = skaianetData.getOrCreateData(playerId);
 		
 		playerData.setHasEntered();
-		skaianetHandler.infoTracker.markLandChainDirty();
+		skaianetData.infoTracker.markLandChainDirty();
 		
 		SessionHandler.get(server).getPlayerSession(playerData.playerId()).checkIfCompleted();
 		
@@ -195,8 +195,8 @@ public final class SburbHandler
 	
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		SkaianetHandler skaianetHandler = SkaianetHandler.get(mcServer);
-		return skaianetHandler.getActiveConnection(player).isEmpty() && !skaianetHandler.hasPrimaryConnectionForClient(player);
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		return skaianetData.getActiveConnection(player).isEmpty() && !skaianetData.hasPrimaryConnectionForClient(player);
 	}
 	
 	static void initNewData(SburbPlayerData playerData)

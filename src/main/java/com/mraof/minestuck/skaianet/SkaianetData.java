@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  * This class also handles the main saving and loading.
  * @author kirderf1
  */
-public final class SkaianetHandler extends SavedData
+public final class SkaianetData extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -40,14 +40,14 @@ public final class SkaianetHandler extends SavedData
 	
 	final MinecraftServer mcServer;
 	
-	private SkaianetHandler(MinecraftServer mcServer)
+	private SkaianetData(MinecraftServer mcServer)
 	{
 		this.mcServer = mcServer;
 		
 		sessionHandler = new SessionHandler.Multi(this).getActual();
 	}
 	
-	private SkaianetHandler(MinecraftServer mcServer, CompoundTag nbt)
+	private SkaianetData(MinecraftServer mcServer, CompoundTag nbt)
 	{
 		this.mcServer = mcServer;
 		
@@ -244,7 +244,7 @@ public final class SkaianetHandler extends SavedData
 		return this.playerDataMap.values();
 	}
 	
-	public static SkaianetHandler get(Level level)
+	public static SkaianetData get(Level level)
 	{
 		MinecraftServer server = level.getServer();
 		if(server == null)
@@ -254,7 +254,7 @@ public final class SkaianetHandler extends SavedData
 	
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_skaianet";
 	
-	public static SkaianetHandler get(MinecraftServer server)
+	public static SkaianetData get(MinecraftServer server)
 	{
 		Objects.requireNonNull(server);
 		
@@ -262,7 +262,7 @@ public final class SkaianetHandler extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(nbt -> new SkaianetHandler(server, nbt), () -> new SkaianetHandler(server), DATA_NAME);
+		return storage.computeIfAbsent(nbt -> new SkaianetData(server, nbt), () -> new SkaianetData(server), DATA_NAME);
 	}
 	
 	// Always save skaianet data, since it's difficult to reliably tell when skaianet data has changed.
