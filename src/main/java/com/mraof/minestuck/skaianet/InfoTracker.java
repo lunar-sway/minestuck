@@ -139,7 +139,7 @@ public final class InfoTracker
 		PlayerIdentifier lastPlayer = player;
 		while(true)
 		{
-			Optional<PlayerIdentifier> client = skaianet.primaryPartnerForServer(lastPlayer);
+			Optional<PlayerIdentifier> client = skaianet.connectionInteractions.primaryPartnerForServer(lastPlayer);
 			if(client.isEmpty())
 			{
 				chain.addLast(null);
@@ -163,7 +163,7 @@ public final class InfoTracker
 		lastPlayer = player;
 		while(true)
 		{
-			Optional<PlayerIdentifier> server = skaianet.primaryPartnerForClient(lastPlayer);
+			Optional<PlayerIdentifier> server = skaianet.connectionInteractions.primaryPartnerForClient(lastPlayer);
 			if(server.isEmpty())
 				break;
 			PlayerIdentifier nextPlayer = server.get();
@@ -247,8 +247,8 @@ public final class InfoTracker
 		boolean clientResuming = skaianet.computerInteractions.hasResumingClient(player);
 		boolean serverResuming = skaianet.computerInteractions.hasResumingServer(player);
 		
-		boolean hasPrimaryConnectionAsClient = skaianet.hasPrimaryConnectionForClient(player);
-		boolean hasPrimaryConnectionAsServer = skaianet.hasPrimaryConnectionForServer(player);
+		boolean hasPrimaryConnectionAsClient = skaianet.connectionInteractions.hasPrimaryConnectionForClient(player);
+		boolean hasPrimaryConnectionAsServer = skaianet.connectionInteractions.hasPrimaryConnectionForServer(player);
 		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
 		openedServersCache.put(player, serverMap.keySet());

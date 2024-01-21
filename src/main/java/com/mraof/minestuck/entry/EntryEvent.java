@@ -24,11 +24,10 @@ public class EntryEvent
 	{
 		if (server.overworld().getGameTime() % FREQUENCY == 0)
 		{
-			SkaianetConnectionInteractions skaianetConnectionInteractions = SkaianetConnectionInteractions.get(server);
-			skaianetConnectionInteractions.activeConnections().filter(connection -> {
-				SburbPlayerData playerData = SburbPlayerData.get(connection.client(), server);
-				return playerData.hasPrimaryConnection() && !playerData.hasEntered();
-			}).forEach(connection -> handleConnection(connection, server));
+			SkaianetConnectionInteractions connectionInteractions = SkaianetConnectionInteractions.get(server);
+			connectionInteractions.activeConnections().filter(connection ->
+					connectionInteractions.hasPrimaryConnectionForClient(connection.client())
+							&& !SburbPlayerData.get(connection.client(), server).hasEntered()).forEach(connection -> handleConnection(connection, server));
 		}
 	}
 	

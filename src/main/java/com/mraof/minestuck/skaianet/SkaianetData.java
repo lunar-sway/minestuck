@@ -13,8 +13,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -26,8 +24,6 @@ import java.util.stream.Stream;
  */
 public final class SkaianetData extends SavedData
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	final InfoTracker infoTracker = new InfoTracker(this);
 	final SkaianetComputerInteractions computerInteractions;
 	final SkaianetConnectionInteractions connectionInteractions;
@@ -79,26 +75,6 @@ public final class SkaianetData extends SavedData
 		
 		sessionHandler = sessions.getActual();
 		sessionHandler.getSessions().forEach(Session::checkIfCompleted);
-	}
-	
-	public boolean hasPrimaryConnectionForClient(PlayerIdentifier player)
-	{
-		return getOrCreateData(player).hasPrimaryConnection();
-	}
-	
-	public Optional<PlayerIdentifier> primaryPartnerForClient(PlayerIdentifier player)
-	{
-		return getOrCreateData(player).primaryServerPlayer();
-	}
-	
-	public boolean hasPrimaryConnectionForServer(PlayerIdentifier player)
-	{
-		return playerDataMap.values().stream().anyMatch(data -> data.isPrimaryServerPlayer(player));
-	}
-	
-	public Optional<PlayerIdentifier> primaryPartnerForServer(PlayerIdentifier player)
-	{
-		return playerDataMap.values().stream().filter(data -> data.isPrimaryServerPlayer(player)).findAny().map(SburbPlayerData::playerId);
 	}
 	
 	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)

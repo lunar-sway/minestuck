@@ -53,10 +53,9 @@ public final class Session
 		if(this.players.isEmpty())
 			return false;
 		
-		return this.players.stream().allMatch(player -> {
-			SburbPlayerData playerData = skaianetData.getOrCreateData(player);
-			return playerData.hasEntered() && playerData.primaryServerPlayer().isPresent();
-		});
+		return this.players.stream().allMatch(player ->
+				skaianetData.getOrCreateData(player).hasEntered()
+						&& skaianetData.connectionInteractions.primaryPartnerForClient(player).isPresent());
 	}
 	
 	Session(SkaianetData skaianetData)

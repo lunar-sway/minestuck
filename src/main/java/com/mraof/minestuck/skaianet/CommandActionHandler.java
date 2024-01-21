@@ -36,12 +36,12 @@ public final class CommandActionHandler
 	
 	private static boolean forceConnection(SkaianetData skaianetData, PlayerIdentifier client, PlayerIdentifier server)
 	{
-		SburbPlayerData clientData = skaianetData.getOrCreateData(client);
 		var connectionInteractions = skaianetData.connectionInteractions;
-		if(clientData.isPrimaryServerPlayer(server))
+		if(connectionInteractions.isPrimaryPair(client, server))
 			return false;
 		
-		if(!clientData.hasPrimaryConnection() && connectionInteractions.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
+		if(!connectionInteractions.hasPrimaryConnectionForClient(client)
+				&& connectionInteractions.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
 		{
 			connectionInteractions.trySetPrimaryConnection(client, server);
 			return true;
@@ -50,7 +50,7 @@ public final class CommandActionHandler
 		connectionInteractions.unlinkClientPlayer(client);
 		connectionInteractions.unlinkServerPlayer(server);
 		
-		if(clientData.hasPrimaryConnection())
+		if(connectionInteractions.hasPrimaryConnectionForClient(client))
 			connectionInteractions.newServerForClient(client, server);
 		else
 			connectionInteractions.trySetPrimaryConnection(client, server);

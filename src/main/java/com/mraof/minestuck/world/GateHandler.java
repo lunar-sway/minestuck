@@ -3,7 +3,7 @@ package com.mraof.minestuck.world;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetData;
+import com.mraof.minestuck.skaianet.SkaianetConnectionInteractions;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
@@ -97,7 +97,7 @@ public class GateHandler
 			return null;
 		}
 		
-		Optional<ResourceKey<Level>> clientLandOptional = SkaianetData.get(level.getServer())
+		Optional<ResourceKey<Level>> clientLandOptional = SkaianetConnectionInteractions.get(level.getServer())
 				.primaryPartnerForServer(landPlayer.get())
 				.flatMap(clientPlayer -> {
 					SburbPlayerData clientPlayerData = SburbPlayerData.get(clientPlayer, level.getServer());
@@ -124,14 +124,14 @@ public class GateHandler
 	
 	private static GlobalPos findServerSecondGate(ServerLevel level)
 	{
-		Optional<SburbPlayerData> landPlayerData = SburbPlayerData.getForLand(level);
-		if(landPlayerData.isEmpty())
+		Optional<PlayerIdentifier> landPlayer = SburbPlayerData.getForLand(level).map(SburbPlayerData::playerId);
+		if(landPlayer.isEmpty())
 		{
 			LOGGER.error("Unexpected error: Can't find player for land {}!", level.dimension());
 			return null;
 		}
 		
-		Optional<ResourceKey<Level>> serverLandOptional = landPlayerData.get().primaryServerPlayer()
+		Optional<ResourceKey<Level>> serverLandOptional = SkaianetConnectionInteractions.get(level.getServer()).primaryPartnerForClient(landPlayer.get())
 				.flatMap(serverPlayer -> {
 					SburbPlayerData serverPlayerData = SburbPlayerData.get(serverPlayer, level.getServer());
 					return Optional.ofNullable(serverPlayerData.getLandDimensionIfEntered());

@@ -89,10 +89,10 @@ public final class SkaianetComputerInteractions
 		if(computer.createReference().isInNether() || isClientActive(player))
 			return;
 		
-		if(!skaianetData.hasPrimaryConnectionForClient(player))
+		if(!skaianetData.connectionInteractions.hasPrimaryConnectionForClient(player))
 			return;
 		
-		Optional<PlayerIdentifier> server = skaianetData.primaryPartnerForClient(player);
+		Optional<PlayerIdentifier> server = skaianetData.connectionInteractions.primaryPartnerForClient(player);
 		if(server.isPresent() && resumingServers.contains(server.get()))
 		{
 			resumingServers.useComputerAndRemoveOnSuccess(server.get(), skaianetData.mcServer, otherComputer ->
@@ -115,7 +115,7 @@ public final class SkaianetComputerInteractions
 		if(computer.createReference().isInNether() || hasResumingServer(player))
 			return;
 		
-		Optional<PlayerIdentifier> client = skaianetData.primaryPartnerForServer(player);
+		Optional<PlayerIdentifier> client = skaianetData.connectionInteractions.primaryPartnerForServer(player);
 		if(client.isEmpty())
 			return;
 		
@@ -135,7 +135,7 @@ public final class SkaianetComputerInteractions
 		if(computer.createReference().isInNether() || hasResumingServer(player))
 			return;
 		
-		Optional<PlayerIdentifier> primaryClient = skaianetData.primaryPartnerForServer(player);
+		Optional<PlayerIdentifier> primaryClient = skaianetData.connectionInteractions.primaryPartnerForServer(player);
 		if(primaryClient.isPresent() && resumingClients.contains(primaryClient.get()))
 		{
 			resumingClients.useComputerAndRemoveOnSuccess(primaryClient.get(), skaianetData.mcServer, clientComputer ->

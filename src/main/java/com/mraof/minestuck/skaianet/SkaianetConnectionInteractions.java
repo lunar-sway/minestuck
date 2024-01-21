@@ -16,10 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public final class SkaianetConnectionInteractions
@@ -30,6 +27,7 @@ public final class SkaianetConnectionInteractions
 	
 	private final SkaianetData skaianetData;
 	private final List<ActiveConnection> activeConnections = new ArrayList<>();
+	private final Map<PlayerIdentifier, PlayerIdentifier> primaryClientToServerMap = new HashMap<>();
 	
 	SkaianetConnectionInteractions(SkaianetData skaianetData)
 	{
@@ -40,17 +38,36 @@ public final class SkaianetConnectionInteractions
 	{
 		this(skaianetData);
 		
-		ListTag connectionList = tag.getList("connections", Tag.TAG_COMPOUND);
-		for(int i = 0; i < connectionList.size(); i++)
-			activeConnections.add(ActiveConnection.read(connectionList.getCompound(i)));
+		ListTag activeConnectionList = tag.getList("connections", Tag.TAG_COMPOUND);
+		for(int i = 0; i < activeConnectionList.size(); i++)
+			this.activeConnections.add(ActiveConnection.read(activeConnectionList.getCompound(i)));
+		
+		ListTag primaryConnectionList = tag.getList("primary_connections", Tag.TAG_COMPOUND);
+		for(int i = 0; i < primaryConnectionList.size(); i++)
+		{
+			CompoundTag connectionTag = primaryConnectionList.getCompound(i);
+			PlayerIdentifier client = IdentifierHandler.load(connectionTag, "client");
+			PlayerIdentifier server = IdentifierHandler.load(connectionTag, "server");
+			this.primaryClientToServerMap.put(client, server);
+		}
 	}
 	
 	void write(CompoundTag tag)
 	{
-		ListTag connectionList = new ListTag();
+		ListTag activeConnectionList = new ListTag();
 		for(ActiveConnection connection : this.activeConnections)
-			connectionList.add(connection.write());
-		tag.put("connections", connectionList);
+			activeConnectionList.add(connection.write());
+		tag.put("connections", activeConnectionList);
+		
+		ListTag primaryConnectionList = new ListTag();
+		for(Map.Entry<PlayerIdentifier, PlayerIdentifier> entry : this.primaryClientToServerMap.entrySet())
+		{
+			CompoundTag connectionTag = new CompoundTag();
+			entry.getKey().saveToNBT(connectionTag, "client");
+			entry.getValue().saveToNBT(connectionTag, "server");
+			primaryConnectionList.add(connectionTag);
+		}
+		tag.put("primary_connections", primaryConnectionList);
 	}
 	
 	public static SkaianetConnectionInteractions get(MinecraftServer mcServer)
@@ -95,17 +112,42 @@ public final class SkaianetConnectionInteractions
 		return activeConnections.stream();
 	}
 	
+	public boolean hasPrimaryConnectionForClient(PlayerIdentifier player)
+	{
+		return primaryClientToServerMap.containsKey(player);
+	}
+	
+	public Optional<PlayerIdentifier> primaryPartnerForClient(PlayerIdentifier player)
+	{
+		return Optional.ofNullable(primaryClientToServerMap.get(player)).filter(server -> server != IdentifierHandler.NULL_IDENTIFIER);
+	}
+	
+	public boolean hasPrimaryConnectionForServer(PlayerIdentifier player)
+	{
+		return primaryClientToServerMap.containsValue(player);
+	}
+	
+	public Optional<PlayerIdentifier> primaryPartnerForServer(PlayerIdentifier player)
+	{
+		return primaryClientToServerMap.entrySet().stream().filter(entry -> player.equals(entry.getValue())).findAny().map(Map.Entry::getKey);
+	}
+	
+	public boolean isPrimaryPair(PlayerIdentifier client, PlayerIdentifier server)
+	{
+		return primaryPartnerForClient(client).map(server::equals).orElse(false);
+	}
+	
 	public boolean canMakeNewRegularConnectionAsServer(PlayerIdentifier serverPlayer)
 	{
-		return !skaianetData.hasPrimaryConnectionForServer(serverPlayer)
+		return !this.hasPrimaryConnectionForServer(serverPlayer)
 				&& this.activeConnections().filter(connection -> connection.server().equals(serverPlayer))
-				.allMatch(connection -> skaianetData.getOrCreateData(connection.client()).hasPrimaryConnection());
+				.allMatch(connection -> this.hasPrimaryConnectionForClient(connection.client()));
 	}
 	
 	boolean canMakeSecondaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		return MinestuckConfig.SERVER.allowSecondaryConnections.get()
-				&& skaianetData.primaryPartnerForClient(client).isPresent()
+				&& this.primaryPartnerForClient(client).isPresent()
 				&& skaianetData.sessionHandler.getPlayerSession(client) == skaianetData.sessionHandler.getPlayerSession(server);
 	}
 	
@@ -116,8 +158,7 @@ public final class SkaianetConnectionInteractions
 		if(this.getActiveConnection(clientPlayer).isPresent())
 			return false;
 		
-		SburbPlayerData playerData = skaianetData.getOrCreateData(clientPlayer);
-		if(!playerData.hasPrimaryConnection())
+		if(!this.hasPrimaryConnectionForClient(clientPlayer))
 		{
 			if(!this.canMakeNewRegularConnectionAsServer(serverPlayer))
 				return false;
@@ -126,7 +167,7 @@ public final class SkaianetConnectionInteractions
 			return true;
 		}
 		
-		Optional<PlayerIdentifier> primaryServer = playerData.primaryServerPlayer();
+		Optional<PlayerIdentifier> primaryServer = this.primaryPartnerForClient(clientPlayer);
 		if(primaryServer.isEmpty())
 		{
 			if(!this.canMakeNewRegularConnectionAsServer(serverPlayer))
@@ -207,7 +248,10 @@ public final class SkaianetConnectionInteractions
 	
 	void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		if(skaianetData.hasPrimaryConnectionForClient(client) || skaianetData.hasPrimaryConnectionForServer(server))
+		Objects.requireNonNull(client);
+		Objects.requireNonNull(server);
+		
+		if(this.hasPrimaryConnectionForClient(client) || this.hasPrimaryConnectionForServer(server))
 			throw new IllegalStateException();
 		
 		Optional<ActiveConnection> activeConnection = this.getActiveConnection(client);
@@ -216,28 +260,66 @@ public final class SkaianetConnectionInteractions
 		
 		if(activeConnection.isEmpty()
 				&& !this.activeConnections().filter(connection -> connection.server().equals(server))
-				.allMatch(connection -> skaianetData.getOrCreateData(connection.client()).hasPrimaryConnection()))
+				.allMatch(connection -> this.hasPrimaryConnectionForClient(connection.client())))
 			throw new IllegalStateException();
 		
-		skaianetData.getOrCreateData(client).setHasPrimaryConnection(server);
+		primaryClientToServerMap.put(client, server);
+		
+		skaianetData.sessionHandler.onConnect(client, server);
+		
+		skaianetData.infoTracker.markDirty(client);
+		if(server != IdentifierHandler.NULL_IDENTIFIER)
+			skaianetData.infoTracker.markDirty(server);
 	}
 	
 	void unlinkClientPlayer(PlayerIdentifier clientPlayer)
 	{
+		if(!primaryClientToServerMap.containsKey(clientPlayer))
+			throw new IllegalStateException();
+		PlayerIdentifier oldServerPlayer = primaryClientToServerMap.get(clientPlayer);
+		
+		if(oldServerPlayer == IdentifierHandler.NULL_IDENTIFIER)
+			return;
+		
 		this.getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
-		skaianetData.getOrCreateData(clientPlayer).removeServerPlayer();
+		primaryClientToServerMap.put(clientPlayer, IdentifierHandler.NULL_IDENTIFIER);
+		
+		skaianetData.sessionHandler.onDisconnect(clientPlayer, oldServerPlayer);
+		
+		skaianetData.infoTracker.markDirty(oldServerPlayer);
+		if(skaianetData.getOrCreateData(clientPlayer).hasEntered())
+			skaianetData.infoTracker.markLandChainDirty();
 	}
 	
 	void unlinkServerPlayer(PlayerIdentifier serverPlayer)
 	{
-		skaianetData.primaryPartnerForServer(serverPlayer).ifPresent(this::unlinkClientPlayer);
-		this.activeConnections().filter(connection -> connection.server().equals(serverPlayer) && !skaianetData.getOrCreateData(connection.client()).hasPrimaryConnection())
+		this.primaryPartnerForServer(serverPlayer).ifPresent(this::unlinkClientPlayer);
+		this.activeConnections().filter(connection -> connection.server().equals(serverPlayer)
+						&& !this.hasPrimaryConnectionForClient(connection.client()))
 				.forEach(this::closeConnection);
 	}
 	
 	void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
 	{
-		skaianetData.getOrCreateData(clientPlayer).setNewServerPlayer(serverPlayer);
+		Objects.requireNonNull(clientPlayer);
+		Objects.requireNonNull(serverPlayer);
+		
+		if(!primaryClientToServerMap.containsKey(clientPlayer))
+			throw new IllegalStateException();
+		
+		if(primaryClientToServerMap.get(clientPlayer) != IdentifierHandler.NULL_IDENTIFIER)
+			throw new IllegalStateException("Connection already has a server player");
+		
+		if(!this.canMakeNewRegularConnectionAsServer(serverPlayer))
+			throw new IllegalStateException("Server player already has a connection");
+		
+		primaryClientToServerMap.put(clientPlayer, serverPlayer);
+		
+		skaianetData.sessionHandler.onConnect(clientPlayer, serverPlayer);
+		
+		skaianetData.infoTracker.markDirty(serverPlayer);
+		if(skaianetData.getOrCreateData(clientPlayer).hasEntered())
+			skaianetData.infoTracker.markLandChainDirty();
 	}
 	
 	/**
@@ -249,8 +331,7 @@ public final class SkaianetConnectionInteractions
 	 */
 	public ResourceKey<Level> prepareEntry(PlayerIdentifier target)
 	{
-		SburbPlayerData playerData = skaianetData.getOrCreateData(target);
-		if(!playerData.hasPrimaryConnection())
+		if(!this.hasPrimaryConnectionForClient(target))
 		{
 			Optional<ActiveConnection> connection = this.getActiveConnection(target);
 			if(connection.isPresent())
@@ -263,6 +344,7 @@ public final class SkaianetConnectionInteractions
 			}
 		}
 		
+		SburbPlayerData playerData = skaianetData.getOrCreateData(target);
 		if(playerData.getLandDimension() == null)
 			SburbHandler.prepareEntry(playerData, skaianetData.mcServer);
 		

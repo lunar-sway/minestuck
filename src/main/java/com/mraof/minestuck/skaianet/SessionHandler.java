@@ -54,7 +54,7 @@ public sealed abstract class SessionHandler
 	
 	Map<Integer, String> getServerList(PlayerIdentifier client)
 	{
-		Optional<PlayerIdentifier> primaryServer = skaianetData.primaryPartnerForClient(client);
+		Optional<PlayerIdentifier> primaryServer = skaianetData.connectionInteractions.primaryPartnerForClient(client);
 		Map<Integer, String> map = new HashMap<>();
 		for(PlayerIdentifier server : skaianetData.computerInteractions.openServerPlayers())
 		{
@@ -251,8 +251,7 @@ public sealed abstract class SessionHandler
 		{
 			Session s = Objects.requireNonNull(getPlayerSession(client));
 			
-			SburbPlayerData playerData = skaianetData.getOrCreateData(client);
-			if(!playerData.isPrimaryServerPlayer(server))
+			if(!skaianetData.connectionInteractions.isPrimaryPair(client, server))
 				split(s);
 		}
 		
@@ -304,8 +303,8 @@ public sealed abstract class SessionHandler
 		
 		private static void findDirectlyConnectedPlayers(PlayerIdentifier player, SkaianetData skaianetData, Consumer<PlayerIdentifier> playerConsumer)
 		{
-			skaianetData.primaryPartnerForClient(player).ifPresent(playerConsumer);
-			skaianetData.primaryPartnerForServer(player).ifPresent(playerConsumer);
+			skaianetData.connectionInteractions.primaryPartnerForClient(player).ifPresent(playerConsumer);
+			skaianetData.connectionInteractions.primaryPartnerForServer(player).ifPresent(playerConsumer);
 			
 			skaianetData.connectionInteractions.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
 			skaianetData.connectionInteractions.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));

@@ -23,7 +23,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public final class SburbPlayerData
@@ -33,8 +36,6 @@ public final class SburbPlayerData
 	private final PlayerIdentifier playerId;
 	private final MinecraftServer mcServer;
 	
-	private boolean hasPrimaryConnection;
-	private PlayerIdentifier primaryServerPlayer = IdentifierHandler.NULL_IDENTIFIER;
 	private boolean hasEntered = false;
 	@Nullable
 	private ResourceKey<Level> landKey;
@@ -54,10 +55,6 @@ public final class SburbPlayerData
 	
 	void read(CompoundTag tag)
 	{
-		this.hasPrimaryConnection = tag.getBoolean("IsMain");
-		if(this.hasPrimaryConnection)
-			this.primaryServerPlayer = IdentifierHandler.load(tag, "server");
-		
 		if(tag.contains("inventory", Tag.TAG_LIST))
 			this.inventory = tag.getList("inventory", Tag.TAG_COMPOUND);
 		
@@ -78,10 +75,6 @@ public final class SburbPlayerData
 	
 	void write(CompoundTag tag)
 	{
-		tag.putBoolean("IsMain", this.hasPrimaryConnection);
-		if(this.hasPrimaryConnection)
-			this.primaryServerPlayer.saveToNBT(tag, "server");
-		
 		if(this.inventory != null)
 			tag.put("inventory", this.inventory);
 		
@@ -104,75 +97,6 @@ public final class SburbPlayerData
 	public PlayerIdentifier playerId()
 	{
 		return playerId;
-	}
-	
-	/**
-	 * @return the server player that is locked in to this player. If this exists, {@link SburbPlayerData#hasPrimaryConnection()} is assumed to return true.
-	 * Note that a primary server player might be missing even if {@link SburbPlayerData#hasPrimaryConnection()} returns true.
-	 */
-	public Optional<PlayerIdentifier> primaryServerPlayer()
-	{
-		return this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER ? Optional.of(this.primaryServerPlayer) : Optional.empty();
-	}
-	
-	public boolean isPrimaryServerPlayer(PlayerIdentifier serverPlayer)
-	{
-		return this.primaryServerPlayer().map(serverPlayer::equals).orElse(false);
-	}
-	
-	void removeServerPlayer()
-	{
-		SkaianetData skaianetData = SkaianetData.get(this.mcServer);
-		skaianetData.connectionInteractions.getActiveConnection(this.playerId()).ifPresent(skaianetData.connectionInteractions::closeConnection);
-		if(this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER)
-		{
-			skaianetData.infoTracker.markDirty(this.primaryServerPlayer);
-			if(this.hasEntered())
-				skaianetData.infoTracker.markLandChainDirty();
-			
-			PlayerIdentifier oldServerPlayer = this.primaryServerPlayer;
-			this.primaryServerPlayer = IdentifierHandler.NULL_IDENTIFIER;
-			skaianetData.sessionHandler.onDisconnect(this.playerId(), oldServerPlayer);
-		}
-	}
-	
-	void setNewServerPlayer(PlayerIdentifier server)
-	{
-		if(!this.hasPrimaryConnection())
-			throw new IllegalStateException();
-		if(this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER)
-			throw new IllegalStateException("Connection already has a server player");
-		SkaianetData skaianetData = SkaianetData.get(this.mcServer);
-		if(!skaianetData.connectionInteractions.canMakeNewRegularConnectionAsServer(server))
-			throw new IllegalStateException("Server player already has a connection");
-		
-		this.primaryServerPlayer = Objects.requireNonNull(server);
-		skaianetData.sessionHandler.onConnect(this.playerId(), server);
-		skaianetData.infoTracker.markDirty(server);
-		if(this.hasEntered())
-			skaianetData.infoTracker.markLandChainDirty();
-	}
-	
-	/**
-	 * @return true if this player has started getting items for entry and should be locked in with their current server player.
-	 * @see SburbPlayerData#primaryServerPlayer()
-	 */
-	public boolean hasPrimaryConnection()
-	{
-		return this.hasPrimaryConnection;
-	}
-	
-	void setHasPrimaryConnection(PlayerIdentifier serverPlayer)
-	{
-		if(hasPrimaryConnection)
-			return;
-		
-		hasPrimaryConnection = true;
-		primaryServerPlayer = serverPlayer;
-		SkaianetData skaianetData = SkaianetData.get(mcServer);
-		skaianetData.sessionHandler.onConnect(this.playerId(), serverPlayer);
-		skaianetData.infoTracker.markDirty(this.playerId());
-		this.primaryServerPlayer().ifPresent(skaianetData.infoTracker::markDirty);
 	}
 	
 	public boolean hasEntered()

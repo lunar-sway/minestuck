@@ -75,16 +75,16 @@ public class DataCheckerManager
 	
 	private static void writeConnectionData(CompoundTag tag, PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		var connectionInteractions = SkaianetConnectionInteractions.get(mcServer);
 		
-		boolean isMain = skaianetData.hasPrimaryConnectionForClient(player);
+		boolean isMain = connectionInteractions.hasPrimaryConnectionForClient(player);
 		tag.putBoolean("isMain", isMain);
 		
 		if(isMain)
-			skaianetData.primaryPartnerForClient(player)
+			connectionInteractions.primaryPartnerForClient(player)
 					.ifPresent(serverPlayer -> tag.putString("server", serverPlayer.getUsername()));
 		else
-			skaianetData.connectionInteractions.getActiveConnection(player)
+			connectionInteractions.getActiveConnection(player)
 					.ifPresent(connection -> tag.putString("server", connection.server().getUsername()));
 	}
 	
