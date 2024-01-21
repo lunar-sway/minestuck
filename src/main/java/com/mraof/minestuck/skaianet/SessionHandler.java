@@ -60,8 +60,8 @@ public sealed abstract class SessionHandler
 		{
 			
 			if(primaryServer.isPresent() && primaryServer.get().equals(server)
-					|| primaryServer.isEmpty() && SkaianetConnectionInteractions.canMakeNewRegularConnectionAsServer(server, skaianetData)
-					|| SkaianetConnectionInteractions.canMakeSecondaryConnection(client, server, skaianetData))
+					|| primaryServer.isEmpty() && skaianetData.connectionInteractions.canMakeNewRegularConnectionAsServer(server)
+					|| skaianetData.connectionInteractions.canMakeSecondaryConnection(client, server))
 				map.put(server.getId(), server.getUsername());
 		}
 		return map;
@@ -307,8 +307,8 @@ public sealed abstract class SessionHandler
 			skaianetData.primaryPartnerForClient(player).ifPresent(playerConsumer);
 			skaianetData.primaryPartnerForServer(player).ifPresent(playerConsumer);
 			
-			skaianetData.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
-			skaianetData.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));
+			skaianetData.connectionInteractions.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
+			skaianetData.connectionInteractions.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));
 		}
 	}
 }

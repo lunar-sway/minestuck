@@ -123,7 +123,7 @@ public final class SburbPlayerData
 	void removeServerPlayer()
 	{
 		SkaianetData skaianetData = SkaianetData.get(this.mcServer);
-		skaianetData.getActiveConnection(this.playerId()).ifPresent(activeConnection -> SkaianetConnectionInteractions.closeConnection(activeConnection, skaianetData));
+		skaianetData.connectionInteractions.getActiveConnection(this.playerId()).ifPresent(skaianetData.connectionInteractions::closeConnection);
 		if(this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER)
 		{
 			skaianetData.infoTracker.markDirty(this.primaryServerPlayer);
@@ -143,7 +143,7 @@ public final class SburbPlayerData
 		if(this.primaryServerPlayer != IdentifierHandler.NULL_IDENTIFIER)
 			throw new IllegalStateException("Connection already has a server player");
 		SkaianetData skaianetData = SkaianetData.get(this.mcServer);
-		if(!SkaianetConnectionInteractions.canMakeNewRegularConnectionAsServer(server, skaianetData))
+		if(!skaianetData.connectionInteractions.canMakeNewRegularConnectionAsServer(server))
 			throw new IllegalStateException("Server player already has a connection");
 		
 		this.primaryServerPlayer = Objects.requireNonNull(server);

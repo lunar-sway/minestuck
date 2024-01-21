@@ -9,7 +9,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetData;
+import com.mraof.minestuck.skaianet.SkaianetConnectionInteractions;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
@@ -88,7 +88,7 @@ public class ClientEditPacket implements MSPacket.PlayToServer
 			
 			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getLevel() >= 2))
 			{
-				Optional<ActiveConnection> c = SkaianetData.get(player.level()).getActiveConnection(target);
+				Optional<ActiveConnection> c = SkaianetConnectionInteractions.get(player.server).getActiveConnection(target);
 				if(c.isEmpty() || c.get().server() != user)
 					return;
 				

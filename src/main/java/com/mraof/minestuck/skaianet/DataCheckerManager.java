@@ -84,7 +84,7 @@ public class DataCheckerManager
 			skaianetData.primaryPartnerForClient(player)
 					.ifPresent(serverPlayer -> tag.putString("server", serverPlayer.getUsername()));
 		else
-			skaianetData.getActiveConnection(player)
+			skaianetData.connectionInteractions.getActiveConnection(player)
 					.ifPresent(connection -> tag.putString("server", connection.server().getUsername()));
 	}
 	

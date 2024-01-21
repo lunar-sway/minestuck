@@ -233,7 +233,7 @@ public final class InfoTracker
 			{
 				if(player.equals(listener))
 				{
-					if(skaianet.activeConnections().anyMatch(c -> c.hasPlayer(player)))
+					if(skaianet.connectionInteractions.activeConnections().anyMatch(c -> c.hasPlayer(player)))
 						MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerListener);
 				}
 				
@@ -257,7 +257,7 @@ public final class InfoTracker
 				hasPrimaryConnectionAsClient, hasPrimaryConnectionAsServer, serverMap);
 		
 		// create list with all connections that the player is in
-		List<ReducedConnection> list = skaianet.activeConnections().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
+		List<ReducedConnection> list = skaianet.connectionInteractions.activeConnections().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
 		
 		return new SkaianetInfoPacket.Data(player.getId(), playerState, list);
 	}

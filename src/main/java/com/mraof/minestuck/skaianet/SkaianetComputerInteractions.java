@@ -80,7 +80,7 @@ public final class SkaianetComputerInteractions
 			return;
 		
 		openedServers.useComputerAndRemoveOnSuccess(serverPlayer, skaianetData.mcServer,
-				serverComputer -> SkaianetConnectionInteractions.tryConnect(computer, serverComputer, skaianetData));
+				serverComputer -> skaianetData.connectionInteractions.tryConnect(computer, serverComputer));
 	}
 	
 	public void resumeClientConnection(ISburbComputer computer)
@@ -96,13 +96,13 @@ public final class SkaianetComputerInteractions
 		if(server.isPresent() && resumingServers.contains(server.get()))
 		{
 			resumingServers.useComputerAndRemoveOnSuccess(server.get(), skaianetData.mcServer, otherComputer ->
-					SkaianetConnectionInteractions.tryConnect(computer, otherComputer, skaianetData));
+					skaianetData.connectionInteractions.tryConnect(computer, otherComputer));
 			return;
 		}
 		if(server.isPresent() && openedServers.contains(server.get()))
 		{
 			openedServers.useComputerAndRemoveOnSuccess(server.get(), skaianetData.mcServer, otherComputer ->
-					SkaianetConnectionInteractions.tryConnect(computer, otherComputer, skaianetData));
+					skaianetData.connectionInteractions.tryConnect(computer, otherComputer));
 			return;
 		}
 		
@@ -122,7 +122,7 @@ public final class SkaianetComputerInteractions
 		if(resumingClients.contains(client.get()))
 		{
 			resumingClients.useComputerAndRemoveOnSuccess(client.get(), skaianetData.mcServer, otherComputer ->
-					SkaianetConnectionInteractions.tryConnect(otherComputer, computer, skaianetData));
+					skaianetData.connectionInteractions.tryConnect(otherComputer, computer));
 			return;
 		}
 		
@@ -139,7 +139,7 @@ public final class SkaianetComputerInteractions
 		if(primaryClient.isPresent() && resumingClients.contains(primaryClient.get()))
 		{
 			resumingClients.useComputerAndRemoveOnSuccess(primaryClient.get(), skaianetData.mcServer, clientComputer ->
-					SkaianetConnectionInteractions.tryConnect(clientComputer, computer, skaianetData));
+					skaianetData.connectionInteractions.tryConnect(clientComputer, computer));
 			return;
 		}
 		
@@ -157,7 +157,7 @@ public final class SkaianetComputerInteractions
 			});
 		} else
 		{
-			skaianetData.getActiveConnection(player).ifPresent(activeConnection -> SkaianetConnectionInteractions.closeConnection(activeConnection, skaianetData));
+			skaianetData.connectionInteractions.getActiveConnection(player).ifPresent(skaianetData.connectionInteractions::closeConnection);
 		}
 	}
 	
@@ -171,8 +171,8 @@ public final class SkaianetComputerInteractions
 			computer.putClientMessage(STOP_RESUME);
 		} else
 		{
-			skaianetData.getClientConnection(computer).ifPresent(connection ->
-					SkaianetConnectionInteractions.closeConnection(connection, computer, null, skaianetData));
+			skaianetData.connectionInteractions.getClientConnection(computer).ifPresent(connection ->
+					skaianetData.connectionInteractions.closeConnection(connection, computer, null));
 		}
 	}
 	
@@ -181,8 +181,8 @@ public final class SkaianetComputerInteractions
 		checkAndCloseFromServerList(computer, openedServers);
 		checkAndCloseFromServerList(computer, resumingServers);
 		
-		skaianetData.getServerConnection(computer).ifPresent(connection ->
-				SkaianetConnectionInteractions.closeConnection(connection, null, computer, skaianetData));
+		skaianetData.connectionInteractions.getServerConnection(computer).ifPresent(connection ->
+				skaianetData.connectionInteractions.closeConnection(connection, null, computer));
 	}
 	
 	private static void checkAndCloseFromServerList(ISburbComputer computer, ComputerWaitingList map)
@@ -202,7 +202,7 @@ public final class SkaianetComputerInteractions
 		if(!oldBE.owner.equals(newBE.owner))
 			throw new IllegalStateException("Moving computers with different owners! (" + oldBE.owner + " and " + newBE.owner + ")");
 		
-		skaianetData.activeConnections().forEach(c -> c.updateComputer(oldBE, newRef));
+		skaianetData.connectionInteractions.activeConnections().forEach(c -> c.updateComputer(oldBE, newRef));
 		
 		resumingClients.replace(oldBE.owner, oldRef, newRef);
 		resumingServers.replace(oldBE.owner, oldRef, newRef);
@@ -211,6 +211,6 @@ public final class SkaianetComputerInteractions
 	
 	private boolean isClientActive(PlayerIdentifier player)
 	{
-		return skaianetData.getActiveConnection(player).isPresent() || hasResumingClient(player);
+		return skaianetData.connectionInteractions.getActiveConnection(player).isPresent() || hasResumingClient(player);
 	}
 }

@@ -2,7 +2,6 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
@@ -31,8 +30,8 @@ public final class SkaianetData extends SavedData
 	
 	final InfoTracker infoTracker = new InfoTracker(this);
 	final SkaianetComputerInteractions computerInteractions;
+	final SkaianetConnectionInteractions connectionInteractions;
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
-	final List<ActiveConnection> activeConnections = new ArrayList<>();
 	final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
 	final SessionHandler sessionHandler;
 	
@@ -43,6 +42,7 @@ public final class SkaianetData extends SavedData
 		this.mcServer = mcServer;
 		
 		computerInteractions = new SkaianetComputerInteractions(this);
+		connectionInteractions = new SkaianetConnectionInteractions(this);
 		sessionHandler = new SessionHandler.Multi(this).getActual();
 	}
 	
@@ -69,11 +69,8 @@ public final class SkaianetData extends SavedData
 			}
 		}
 		
-		ListTag connectionList = nbt.getList("connections", Tag.TAG_COMPOUND);
-		for(int i = 0; i < connectionList.size(); i++)
-			activeConnections.add(ActiveConnection.read(connectionList.getCompound(i)));
-		
 		computerInteractions = new SkaianetComputerInteractions(this, nbt);
+		connectionInteractions = new SkaianetConnectionInteractions(this, nbt);
 		
 		SessionHandler sessions;
 		if(nbt.contains("session", Tag.TAG_COMPOUND))
@@ -82,11 +79,6 @@ public final class SkaianetData extends SavedData
 		
 		sessionHandler = sessions.getActual();
 		sessionHandler.getSessions().forEach(Session::checkIfCompleted);
-	}
-	
-	public Optional<ActiveConnection> getActiveConnection(PlayerIdentifier client)
-	{
-		return activeConnections().filter(c -> c.client().equals(client)).findAny();
 	}
 	
 	public boolean hasPrimaryConnectionForClient(PlayerIdentifier player)
@@ -133,12 +125,8 @@ public final class SkaianetData extends SavedData
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		compound.put("predefine_data", predefineList);
 		
-		ListTag connectionList = new ListTag();
-		for(ActiveConnection connection : this.activeConnections)
-			connectionList.add(connection.write());
-		compound.put("connections", connectionList);
-		
 		computerInteractions.write(compound);
+		connectionInteractions.write(compound);
 		
 		sessionHandler.write(compound);
 		
@@ -151,43 +139,7 @@ public final class SkaianetData extends SavedData
 			return;
 		
 		computerInteractions.validate();
-		
-		activeConnections().forEach(activeConnection -> {
-			
-			ISburbComputer cc = activeConnection.clientComputer().getComputer(mcServer),
-					sc = activeConnection.serverComputer().getComputer(mcServer);
-			if(cc == null || sc == null
-					|| activeConnection.clientComputer().isInNether() || activeConnection.serverComputer().isInNether()
-					|| !activeConnection.client().equals(cc.getOwner()) || !activeConnection.server().equals(sc.getOwner())
-					|| !cc.getClientBoolean("connectedToServer"))
-			{
-				LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", activeConnection.client(), activeConnection.server());
-				SkaianetConnectionInteractions.closeConnection(activeConnection, cc, sc, this);
-			}
-		});
-	}
-	
-	public Optional<ActiveConnection> getServerConnection(ISburbComputer computer)
-	{
-		return activeConnections().filter(c -> c.isServer(computer)).findAny();
-	}
-	
-	public Optional<ActiveConnection> getClientConnection(ISburbComputer computer)
-	{
-		return activeConnections().filter(c -> c.isClient(computer)).findAny();
-	}
-	
-	public Stream<ActiveConnection> activeConnections()
-	{
-		return activeConnections.stream();
-	}
-	
-	public Stream<ActiveConnection> getConnectionsInEntry()
-	{
-		return activeConnections().filter(connection -> {
-			SburbPlayerData playerData = getOrCreateData(connection.client());
-			return playerData.hasPrimaryConnection() && !playerData.hasEntered();
-		});
+		connectionInteractions.validate();
 	}
 	
 	Stream<PlayerIdentifier> players()

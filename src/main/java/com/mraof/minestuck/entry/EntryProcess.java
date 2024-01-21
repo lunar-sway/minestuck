@@ -11,7 +11,10 @@ import com.mraof.minestuck.network.EntryEffectPackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.*;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.skaianet.SkaianetConnectionInteractions;
+import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MSDimensions;
@@ -121,7 +124,7 @@ public class EntryProcess
 			return;
 		}
 		
-		ResourceKey<Level> landDimension = SkaianetConnectionInteractions.prepareEntry(identifier, SkaianetData.get(player.level()));
+		ResourceKey<Level> landDimension = SkaianetConnectionInteractions.get(player.server).prepareEntry(identifier);
 		if(landDimension == null)
 		{
 			player.sendSystemMessage(Component.translatable(CREATION_FAILED));
