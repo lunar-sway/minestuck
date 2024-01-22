@@ -2,22 +2,17 @@ package com.mraof.minestuck.world.lands.gen;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.lands.ILandType;
-import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.ResourceLocationException;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -120,27 +115,5 @@ public final class LandTypeGenerator
 			
 			throw new IllegalStateException("This should not happen!");
 		}
-	}
-	
-	/**
-	 * Registers a new dimension for a land. Returns the type of the new land.
-	 * @param player The player whose Land is being created
-	 * @param aspects Land aspects that the land should have
-	 * @return Returns the dimension of the newly created land.
-	 */
-	public static ResourceKey<Level> createLandDimension(MinecraftServer server, PlayerIdentifier player, LandTypePair aspects)
-	{
-		String base = "minestuck:land_"+player.getUsername().toLowerCase();
-		ResourceLocation dimensionName;
-		try
-		{
-			dimensionName = new ResourceLocation(base);
-		} catch(ResourceLocationException e)
-		{
-			base = "minestuck:land";
-			dimensionName = new ResourceLocation(base);
-		}
-		
-		return DynamicDimensions.createLand(server, dimensionName, aspects);
 	}
 }

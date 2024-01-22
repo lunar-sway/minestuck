@@ -8,10 +8,10 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
-import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.network.chat.Component;
@@ -151,12 +151,12 @@ public final class SburbHandler
 		PlayerIdentifier identifier = playerData.playerId();
 		
 		generateAndSetTitle(identifier, mcServer);
-		LandTypePair landTypes = genLandAspects(mcServer, identifier);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		
-		ResourceKey<Level> dimType = LandTypeGenerator.createLandDimension(mcServer, identifier, landTypes);
-		MSDimensions.sendLandTypesToAll(mcServer);
-		
+		LandTypePair landTypes = genLandAspects(mcServer, identifier);
+		ResourceKey<Level> dimType = DynamicDimensions.createLand(mcServer, DynamicDimensions.landIdBaseForPLayer(identifier), landTypes);
 		playerData.setLand(dimType);
+		
+		MSDimensions.sendLandTypesToAll(mcServer);
 		
 		SkaianetData.get(mcServer).predefineData.remove(identifier);
 	}

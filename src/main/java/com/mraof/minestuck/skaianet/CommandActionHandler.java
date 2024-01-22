@@ -1,11 +1,13 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.command.DebugLandsCommand;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -17,19 +19,20 @@ import java.util.List;
 
 public final class CommandActionHandler
 {
+	private static final ResourceLocation DEBUG_LAND_BASE_ID = new ResourceLocation(Minestuck.MOD_ID, "debug_land");
+	
 	public static void createDebugLandsChain(ServerPlayer player, List<LandTypePair> landTypes) throws CommandSyntaxException
 	{
-		SkaianetData skaianetData = SkaianetData.get(player.server);
-		var connectionInteractions = skaianetData.connectionInteractions;
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		var connections = SkaianetConnectionInteractions.get(player.server);
+		PlayerIdentifier playerId = IdentifierHandler.encode(player);
 		
-		if(!skaianetData.getOrCreateData(identifier).hasEntered())
+		if(!SburbPlayerData.get(playerId, player.server).hasEntered())
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		
-		connectionInteractions.unlinkClientPlayer(identifier);
-		connectionInteractions.unlinkServerPlayer(identifier);
+		connections.unlinkClientPlayer(playerId);
+		connections.unlinkServerPlayer(playerId);
 		
-		PlayerIdentifier lastPlayer = identifier;
+		PlayerIdentifier lastPlayer = playerId;
 		int i = 0;
 		for(; i < landTypes.size(); i++)
 		{
@@ -38,17 +41,17 @@ public final class CommandActionHandler
 				break;
 			
 			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-			connectionInteractions.newServerForClient(lastPlayer, fakePlayer);
+			connections.newServerForClient(lastPlayer, fakePlayer);
 			
-			makeConnectionWithLand(skaianetData, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
+			makeConnectionWithLand(land, fakePlayer, IdentifierHandler.NULL_IDENTIFIER, player.server);
 			lastPlayer = fakePlayer;
 		}
 		
 		if(i == landTypes.size())
-			connectionInteractions.newServerForClient(lastPlayer, identifier);
+			connections.newServerForClient(lastPlayer, playerId);
 		else
 		{
-			PlayerIdentifier lastIdentifier = identifier;
+			PlayerIdentifier lastIdentifier = playerId;
 			for(i = landTypes.size() - 1; i >= 0; i--)
 			{
 				LandTypePair land = landTypes.get(i);
@@ -56,26 +59,24 @@ public final class CommandActionHandler
 					break;
 				
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-				makeConnectionWithLand(skaianetData, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
+				makeConnectionWithLand(land, fakePlayer, lastIdentifier, player.server);
 				
 				lastIdentifier = fakePlayer;
 			}
 		}
+		
+		MSDimensions.sendLandTypesToAll(player.server);
 	}
 	
-	private static void makeConnectionWithLand(SkaianetData skaianetData, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server)
+	private static void makeConnectionWithLand(LandTypePair landTypes, PlayerIdentifier client, PlayerIdentifier server, MinecraftServer mcServer)
 	{
-		skaianetData.connectionInteractions.trySetPrimaryConnection(client, server);
+		SkaianetConnectionInteractions.get(mcServer).trySetPrimaryConnection(client, server);
 		
-		SburbPlayerData playerData = skaianetData.getOrCreateData(client);
+		SburbPlayerData playerData = SburbPlayerData.get(client, mcServer);
+		ResourceKey<Level> dimensionName = DynamicDimensions.createLand(mcServer, DEBUG_LAND_BASE_ID, landTypes);
 		playerData.setLand(dimensionName);
 		playerData.setHasEntered();
 		
-		EntryProcess.placeGates(skaianetData.mcServer.getLevel(dimensionName));
-	}
-	
-	private static ResourceKey<Level> createDebugLand(MinecraftServer server, LandTypePair landTypes)
-	{
-		return DynamicDimensions.createLand(server, new ResourceLocation("minestuck:debug_land"), landTypes);
+		EntryProcess.placeGates(mcServer.getLevel(dimensionName));
 	}
 }
