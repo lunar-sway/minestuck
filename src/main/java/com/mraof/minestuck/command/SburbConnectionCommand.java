@@ -4,11 +4,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.CommandActionHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SkaianetConnectionInteractions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public class SburbConnectionCommand
@@ -26,6 +28,39 @@ public class SburbConnectionCommand
 	
 	private static int connect(CommandSourceStack source, ServerPlayer client, ServerPlayer server) throws CommandSyntaxException
 	{
-		return CommandActionHandler.connectByCommand(source, IdentifierHandler.encode(client), IdentifierHandler.encode(server));
+		PlayerIdentifier clientId = IdentifierHandler.encode(client);
+		PlayerIdentifier serverId = IdentifierHandler.encode(server);
+		if(forceConnection(clientId, serverId, source.getServer()))
+		{
+			source.sendSuccess(() -> Component.translatable(SUCCESS, clientId.getUsername(), serverId.getUsername()), true);
+			return 1;
+		} else
+		{
+			throw CONNECTED_EXCEPTION.create();
+		}
+	}
+	
+	public static boolean forceConnection(PlayerIdentifier client, PlayerIdentifier server, MinecraftServer mcServer)
+	{
+		var connectionInteractions = SkaianetConnectionInteractions.get(mcServer);
+		if(connectionInteractions.isPrimaryPair(client, server))
+			return false;
+		
+		if(!connectionInteractions.hasPrimaryConnectionForClient(client)
+				&& connectionInteractions.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
+		{
+			connectionInteractions.trySetPrimaryConnection(client, server);
+			return true;
+		}
+		
+		connectionInteractions.unlinkClientPlayer(client);
+		connectionInteractions.unlinkServerPlayer(server);
+		
+		if(connectionInteractions.hasPrimaryConnectionForClient(client))
+			connectionInteractions.newServerForClient(client, server);
+		else
+			connectionInteractions.trySetPrimaryConnection(client, server);
+		
+		return true;
 	}
 }

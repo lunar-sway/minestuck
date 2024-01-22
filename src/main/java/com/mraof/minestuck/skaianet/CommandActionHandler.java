@@ -2,14 +2,11 @@ package com.mraof.minestuck.skaianet;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.command.DebugLandsCommand;
-import com.mraof.minestuck.command.SburbConnectionCommand;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -20,44 +17,6 @@ import java.util.List;
 
 public final class CommandActionHandler
 {
-	
-	public static int connectByCommand(CommandSourceStack source, PlayerIdentifier client, PlayerIdentifier server) throws CommandSyntaxException
-	{
-		SkaianetData skaianetData = SkaianetData.get(source.getServer());
-		if(forceConnection(skaianetData, client, server))
-		{
-			source.sendSuccess(() -> Component.translatable(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
-			return 1;
-		} else
-		{
-			throw SburbConnectionCommand.CONNECTED_EXCEPTION.create();
-		}
-	}
-	
-	private static boolean forceConnection(SkaianetData skaianetData, PlayerIdentifier client, PlayerIdentifier server)
-	{
-		var connectionInteractions = skaianetData.connectionInteractions;
-		if(connectionInteractions.isPrimaryPair(client, server))
-			return false;
-		
-		if(!connectionInteractions.hasPrimaryConnectionForClient(client)
-				&& connectionInteractions.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
-		{
-			connectionInteractions.trySetPrimaryConnection(client, server);
-			return true;
-		}
-		
-		connectionInteractions.unlinkClientPlayer(client);
-		connectionInteractions.unlinkServerPlayer(server);
-		
-		if(connectionInteractions.hasPrimaryConnectionForClient(client))
-			connectionInteractions.newServerForClient(client, server);
-		else
-			connectionInteractions.trySetPrimaryConnection(client, server);
-		
-		return true;
-	}
-	
 	public static void createDebugLandsChain(ServerPlayer player, List<LandTypePair> landTypes) throws CommandSyntaxException
 	{
 		SkaianetData skaianetData = SkaianetData.get(player.server);

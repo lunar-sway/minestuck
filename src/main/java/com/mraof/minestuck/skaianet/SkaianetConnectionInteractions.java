@@ -241,12 +241,12 @@ public final class SkaianetConnectionInteractions
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(skaianetData.mcServer, connection));
 	}
 	
-	void trySetPrimaryConnection(ActiveConnection connection)
+	public void trySetPrimaryConnection(ActiveConnection connection)
 	{
 		this.trySetPrimaryConnection(connection.client(), connection.server());
 	}
 	
-	void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
+	public void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
@@ -258,9 +258,7 @@ public final class SkaianetConnectionInteractions
 		if(activeConnection.isPresent() && !activeConnection.get().server().equals(server))
 			throw new IllegalStateException();
 		
-		if(activeConnection.isEmpty()
-				&& !this.activeConnections().filter(connection -> connection.server().equals(server))
-				.allMatch(connection -> this.hasPrimaryConnectionForClient(connection.client())))
+		if(activeConnection.isEmpty() && !this.canMakeNewRegularConnectionAsServer(server))
 			throw new IllegalStateException();
 		
 		primaryClientToServerMap.put(client, server);
@@ -272,7 +270,7 @@ public final class SkaianetConnectionInteractions
 			skaianetData.infoTracker.markDirty(server);
 	}
 	
-	void unlinkClientPlayer(PlayerIdentifier clientPlayer)
+	public void unlinkClientPlayer(PlayerIdentifier clientPlayer)
 	{
 		if(!primaryClientToServerMap.containsKey(clientPlayer))
 			throw new IllegalStateException();
@@ -291,7 +289,7 @@ public final class SkaianetConnectionInteractions
 			skaianetData.infoTracker.markLandChainDirty();
 	}
 	
-	void unlinkServerPlayer(PlayerIdentifier serverPlayer)
+	public void unlinkServerPlayer(PlayerIdentifier serverPlayer)
 	{
 		this.primaryPartnerForServer(serverPlayer).ifPresent(this::unlinkClientPlayer);
 		this.activeConnections().filter(connection -> connection.server().equals(serverPlayer)
@@ -299,7 +297,7 @@ public final class SkaianetConnectionInteractions
 				.forEach(this::closeConnection);
 	}
 	
-	void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
+	public void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
 	{
 		Objects.requireNonNull(clientPlayer);
 		Objects.requireNonNull(serverPlayer);
