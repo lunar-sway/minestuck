@@ -55,7 +55,7 @@ public class MSBlocks
 	public static final RegistryObject<WallBlock> BLACK_CHESS_BRICK_WALL = REGISTER.register("black_chess_brick_wall", () -> new WallBlock(copy(BLACK_CHESS_BRICKS.get())));
 	
 	public static final RegistryObject<Block> BLACK_CHESS_BRICK_SMOOTH = REGISTER.register("black_chess_brick_smooth", () -> new Block(copy(BLACK_CHESS_BRICKS.get())));
-	public static final RegistryObject<StairBlock> BLACK_CHESS_BRICK_SMOOTH_STAIRS = REGISTER.register("black_chess_brick_smooth_stairs", () -> new StairBlock(BLACK_CHESS_BRICK_SMOOTH.get().defaultBlockState(), copy(BLACK_CHESS_BRICK_SMOOTH.get())));
+	public static final RegistryObject<StairBlock> BLACK_CHESS_BRICK_SMOOTH_STAIRS = REGISTER.register("black_chess_brick_smooth_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_CHESS_BRICK_SMOOTH.get().defaultBlockState(), copy(BLACK_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<SlabBlock> BLACK_CHESS_BRICK_SMOOTH_SLAB = REGISTER.register("black_chess_brick_smooth_slab", () -> new SlabBlock(copy(BLACK_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<WallBlock> BLACK_CHESS_BRICK_SMOOTH_WALL = REGISTER.register("black_chess_brick_smooth_wall", () -> new WallBlock(copy(BLACK_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<ButtonBlock> BLACK_CHESS_BRICK_SMOOTH_BUTTON = REGISTER.register("black_chess_brick_smooth_button", () -> new ButtonBlock(copy(BLACK_CHESS_BRICK_SMOOTH.get()), BlockSetType.STONE, 10, true));
@@ -70,7 +70,7 @@ public class MSBlocks
 	public static final RegistryObject<WallBlock> DARK_GRAY_CHESS_BRICK_WALL = REGISTER.register("dark_gray_chess_brick_wall", () -> new WallBlock(copy(DARK_GRAY_CHESS_BRICKS.get())));
 	
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_SMOOTH = REGISTER.register("dark_gray_chess_brick_smooth", () -> new Block(copy(DARK_GRAY_CHESS_BRICKS.get())));
-	public static final RegistryObject<StairBlock> DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS = REGISTER.register("dark_gray_chess_brick_smooth_stairs", () -> new StairBlock(DARK_GRAY_CHESS_BRICK_SMOOTH.get().defaultBlockState(), copy(DARK_GRAY_CHESS_BRICK_SMOOTH.get())));
+	public static final RegistryObject<StairBlock> DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS = REGISTER.register("dark_gray_chess_brick_smooth_stairs", () -> new StairBlock(() -> MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH.get().defaultBlockState(), copy(DARK_GRAY_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<SlabBlock> DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB = REGISTER.register("dark_gray_chess_brick_smooth_slab", () -> new SlabBlock(copy(DARK_GRAY_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<WallBlock> DARK_GRAY_CHESS_BRICK_SMOOTH_WALL = REGISTER.register("dark_gray_chess_brick_smooth_wall", () -> new WallBlock(copy(DARK_GRAY_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<ButtonBlock> DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON = REGISTER.register("dark_gray_chess_brick_smooth_button", () -> new ButtonBlock(copy(DARK_GRAY_CHESS_BRICK_SMOOTH.get()), BlockSetType.STONE, 10, true));
@@ -85,7 +85,7 @@ public class MSBlocks
 	public static final RegistryObject<WallBlock> LIGHT_GRAY_CHESS_BRICK_WALL = REGISTER.register("light_gray_chess_brick_wall", () -> new WallBlock(copy(LIGHT_GRAY_CHESS_BRICKS.get())));
 	
 	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_SMOOTH = REGISTER.register("light_gray_chess_brick_smooth", () -> new Block(copy(LIGHT_GRAY_CHESS_BRICKS.get())));
-	public static final RegistryObject<StairBlock> LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS = REGISTER.register("light_gray_chess_brick_smooth_stairs", () -> new StairBlock(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get().defaultBlockState(), copy(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get())));
+	public static final RegistryObject<StairBlock> LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS = REGISTER.register("light_gray_chess_brick_smooth_stairs", () -> new StairBlock(() -> MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH.get().defaultBlockState(), copy(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<SlabBlock> LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB = REGISTER.register("light_gray_chess_brick_smooth_slab", () -> new SlabBlock(copy(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<WallBlock> LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL = REGISTER.register("light_gray_chess_brick_smooth_wall", () -> new WallBlock(copy(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<ButtonBlock> LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON = REGISTER.register("light_gray_chess_brick_smooth_button", () -> new ButtonBlock(copy(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get()), BlockSetType.STONE, 10, true));
@@ -100,7 +100,7 @@ public class MSBlocks
 	public static final RegistryObject<WallBlock> WHITE_CHESS_BRICK_WALL = REGISTER.register("white_chess_brick_wall", () -> new WallBlock(copy(WHITE_CHESS_BRICKS.get())));
 	
 	public static final RegistryObject<Block> WHITE_CHESS_BRICK_SMOOTH = REGISTER.register("white_chess_brick_smooth", () -> new Block(copy(WHITE_CHESS_BRICKS.get())));
-	public static final RegistryObject<StairBlock> WHITE_CHESS_BRICK_SMOOTH_STAIRS = REGISTER.register("white_chess_brick_smooth_stairs", () -> new StairBlock(WHITE_CHESS_BRICK_SMOOTH.get().defaultBlockState(), copy(WHITE_CHESS_BRICK_SMOOTH.get())));
+	public static final RegistryObject<StairBlock> WHITE_CHESS_BRICK_SMOOTH_STAIRS = REGISTER.register("white_chess_brick_smooth_stairs", () -> new StairBlock(() -> MSBlocks.WHITE_CHESS_BRICK_SMOOTH.get().defaultBlockState(), copy(WHITE_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<SlabBlock> WHITE_CHESS_BRICK_SMOOTH_SLAB = REGISTER.register("white_chess_brick_smooth_slab", () -> new SlabBlock(copy(WHITE_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<WallBlock> WHITE_CHESS_BRICK_SMOOTH_WALL = REGISTER.register("white_chess_brick_smooth_wall", () -> new WallBlock(copy(WHITE_CHESS_BRICK_SMOOTH.get())));
 	public static final RegistryObject<ButtonBlock> WHITE_CHESS_BRICK_SMOOTH_BUTTON = REGISTER.register("white_chess_brick_smooth_button", () -> new ButtonBlock(copy(WHITE_CHESS_BRICK_SMOOTH.get()), BlockSetType.STONE, 10, true));
@@ -174,21 +174,21 @@ public class MSBlocks
 	
 	//Resource Blocks
 	public static final RegistryObject<Block> CRUXITE_BLOCK = REGISTER.register("cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F).requiresCorrectToolForDrops()));
-	public static final RegistryObject<StairBlock> CRUXITE_STAIRS = REGISTER.register("cruxite_stairs", () -> new StairBlock(CRUXITE_BLOCK.get().defaultBlockState(), copy(CRUXITE_BLOCK.get())));
+	public static final RegistryObject<StairBlock> CRUXITE_STAIRS = REGISTER.register("cruxite_stairs", () -> new StairBlock(() -> MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), copy(CRUXITE_BLOCK.get())));
 	public static final RegistryObject<SlabBlock> CRUXITE_SLAB = REGISTER.register("cruxite_slab", () -> new SlabBlock(copy(CRUXITE_BLOCK.get())));
 	public static final RegistryObject<WallBlock> CRUXITE_WALL = REGISTER.register("cruxite_wall", () -> new WallBlock(copy(CRUXITE_BLOCK.get())));
 	public static final RegistryObject<ButtonBlock> CRUXITE_BUTTON = REGISTER.register("cruxite_button", () -> new ButtonBlock(copy(CRUXITE_BLOCK.get()), BlockSetType.STONE, 10, true));
 	public static final RegistryObject<PressurePlateBlock> CRUXITE_PRESSURE_PLATE = REGISTER.register("cruxite_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CRUXITE_BLOCK.get()), BlockSetType.OAK));
 	
 	public static final RegistryObject<Block> URANIUM_BLOCK = REGISTER.register("uranium_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIME).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F).requiresCorrectToolForDrops().lightLevel(state -> 7)));
-	public static final RegistryObject<StairBlock> URANIUM_STAIRS = REGISTER.register("uranium_stairs", () -> new StairBlock(URANIUM_BLOCK.get().defaultBlockState(), copy(URANIUM_BLOCK.get())));
+	public static final RegistryObject<StairBlock> URANIUM_STAIRS = REGISTER.register("uranium_stairs", () -> new StairBlock(() -> MSBlocks.URANIUM_BLOCK.get().defaultBlockState(), copy(URANIUM_BLOCK.get())));
 	public static final RegistryObject<SlabBlock> URANIUM_SLAB = REGISTER.register("uranium_slab", () -> new SlabBlock(copy(URANIUM_BLOCK.get())));
 	public static final RegistryObject<WallBlock> URANIUM_WALL = REGISTER.register("uranium_wall", () -> new WallBlock(copy(URANIUM_BLOCK.get())));
 	public static final RegistryObject<ButtonBlock> URANIUM_BUTTON = REGISTER.register("uranium_button", () -> new ButtonBlock(copy(URANIUM_BLOCK.get()), BlockSetType.STONE, 10, true));
 	public static final RegistryObject<PressurePlateBlock> URANIUM_PRESSURE_PLATE = REGISTER.register("uranium_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(URANIUM_BLOCK.get()), BlockSetType.OAK));
 	
 	public static final RegistryObject<Block> GENERIC_OBJECT = REGISTER.register("generic_object", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIME).strength(1.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<StairBlock> PERFECTLY_GENERIC_STAIRS = REGISTER.register("perfectly_generic_stairs", () -> new StairBlock(GENERIC_OBJECT.get().defaultBlockState(), copy(GENERIC_OBJECT.get())));
+	public static final RegistryObject<StairBlock> PERFECTLY_GENERIC_STAIRS = REGISTER.register("perfectly_generic_stairs", () -> new StairBlock(() -> MSBlocks.GENERIC_OBJECT.get().defaultBlockState(), copy(GENERIC_OBJECT.get())));
 	public static final RegistryObject<SlabBlock> PERFECTLY_GENERIC_SLAB = REGISTER.register("perfectly_generic_slab", () -> new SlabBlock(copy(GENERIC_OBJECT.get())));
 	public static final RegistryObject<WallBlock> PERFECTLY_GENERIC_WALL = REGISTER.register("perfectly_generic_wall", () -> new WallBlock(copy(GENERIC_OBJECT.get())));
 	public static final RegistryObject<FenceBlock> PERFECTLY_GENERIC_FENCE = REGISTER.register("perfectly_generic_fence", () -> new FenceBlock(copy(GENERIC_OBJECT.get())));
@@ -236,7 +236,7 @@ public class MSBlocks
 	public static final RegistryObject<WallBlock> SHADE_BRICK_WALL = REGISTER.register("shade_brick_wall", () -> new WallBlock(copy(SHADE_BRICKS.get())));
 	
 	public static final RegistryObject<Block> SMOOTH_SHADE_STONE = REGISTER.register("smooth_shade_stone", () -> new Block(copy(SHADE_STONE.get())));
-	public static final RegistryObject<StairBlock> SMOOTH_SHADE_STONE_STAIRS = REGISTER.register("smooth_shade_stone_stairs", () -> new StairBlock(SMOOTH_SHADE_STONE.get().defaultBlockState(), copy(SMOOTH_SHADE_STONE.get())));
+	public static final RegistryObject<StairBlock> SMOOTH_SHADE_STONE_STAIRS = REGISTER.register("smooth_shade_stone_stairs", () -> new StairBlock(() -> MSBlocks.SMOOTH_SHADE_STONE.get().defaultBlockState(), copy(SMOOTH_SHADE_STONE.get())));
 	public static final RegistryObject<SlabBlock> SMOOTH_SHADE_STONE_SLAB = REGISTER.register("smooth_shade_stone_slab", () -> new SlabBlock(copy(SMOOTH_SHADE_STONE.get())));
 	public static final RegistryObject<WallBlock> SMOOTH_SHADE_STONE_WALL = REGISTER.register("smooth_shade_stone_wall", () -> new WallBlock(copy(SMOOTH_SHADE_STONE.get())));
 	
@@ -245,17 +245,17 @@ public class MSBlocks
 	public static final RegistryObject<Block> CRACKED_SHADE_BRICKS = REGISTER.register("cracked_shade_bricks", () -> new Block(copy(SHADE_BRICKS.get())));
 	
 	public static final RegistryObject<Block> MOSSY_SHADE_BRICKS = REGISTER.register("mossy_shade_bricks", () -> new Block(copy(SHADE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> MOSSY_SHADE_BRICK_STAIRS = REGISTER.register("mossy_shade_brick_stairs", () -> new StairBlock(MOSSY_SHADE_BRICKS.get().defaultBlockState(), copy(MOSSY_SHADE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> MOSSY_SHADE_BRICK_STAIRS = REGISTER.register("mossy_shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_SHADE_BRICKS.get().defaultBlockState(), copy(MOSSY_SHADE_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> MOSSY_SHADE_BRICK_SLAB = REGISTER.register("mossy_shade_brick_slab", () -> new SlabBlock(copy(MOSSY_SHADE_BRICKS.get())));
 	public static final RegistryObject<WallBlock> MOSSY_SHADE_BRICK_WALL = REGISTER.register("mossy_shade_brick_wall", () -> new WallBlock(copy(MOSSY_SHADE_BRICKS.get())));
 	
 	public static final RegistryObject<Block> BLOOD_SHADE_BRICKS = REGISTER.register("blood_shade_bricks", () -> new Block(copy(SHADE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> BLOOD_SHADE_BRICK_STAIRS = REGISTER.register("blood_shade_brick_stairs", () -> new StairBlock(BLOOD_SHADE_BRICKS.get().defaultBlockState(), copy(BLOOD_SHADE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> BLOOD_SHADE_BRICK_STAIRS = REGISTER.register("blood_shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLOOD_SHADE_BRICKS.get().defaultBlockState(), copy(BLOOD_SHADE_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> BLOOD_SHADE_BRICK_SLAB = REGISTER.register("blood_shade_brick_slab", () -> new SlabBlock(copy(BLOOD_SHADE_BRICKS.get())));
 	public static final RegistryObject<WallBlock> BLOOD_SHADE_BRICK_WALL = REGISTER.register("blood_shade_brick_wall", () -> new WallBlock(copy(BLOOD_SHADE_BRICKS.get())));
 	
 	public static final RegistryObject<Block> TAR_SHADE_BRICKS = REGISTER.register("tar_shade_bricks", () -> new Block(copy(SHADE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> TAR_SHADE_BRICK_STAIRS = REGISTER.register("tar_shade_brick_stairs", () -> new StairBlock(TAR_SHADE_BRICKS.get().defaultBlockState(), copy(TAR_SHADE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> TAR_SHADE_BRICK_STAIRS = REGISTER.register("tar_shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.TAR_SHADE_BRICKS.get().defaultBlockState(), copy(TAR_SHADE_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> TAR_SHADE_BRICK_SLAB = REGISTER.register("tar_shade_brick_slab", () -> new SlabBlock(copy(TAR_SHADE_BRICKS.get())));
 	public static final RegistryObject<WallBlock> TAR_SHADE_BRICK_WALL = REGISTER.register("tar_shade_brick_wall", () -> new WallBlock(copy(TAR_SHADE_BRICKS.get())));
 	
@@ -276,7 +276,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> CRACKED_FROST_BRICKS = REGISTER.register("cracked_frost_bricks", () -> new Block(copy(FROST_BRICKS.get())));
 	
 	public static final RegistryObject<Block> FLOWERY_FROST_BRICKS = REGISTER.register("flowery_frost_bricks", () -> new Block(copy(FROST_BRICKS.get())));
-	public static final RegistryObject<StairBlock> FLOWERY_FROST_BRICK_STAIRS = REGISTER.register("flowery_frost_brick_stairs", () -> new StairBlock(FLOWERY_FROST_BRICKS.get().defaultBlockState(), copy(FLOWERY_FROST_BRICKS.get())));
+	public static final RegistryObject<StairBlock> FLOWERY_FROST_BRICK_STAIRS = REGISTER.register("flowery_frost_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_FROST_BRICKS.get().defaultBlockState(), copy(FLOWERY_FROST_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> FLOWERY_FROST_BRICK_SLAB = REGISTER.register("flowery_frost_brick_slab", () -> new SlabBlock(copy(FLOWERY_FROST_BRICKS.get())));
 	public static final RegistryObject<WallBlock> FLOWERY_FROST_BRICK_WALL = REGISTER.register("flowery_frost_brick_wall", () -> new WallBlock(copy(FLOWERY_FROST_BRICKS.get())));
 	
@@ -304,12 +304,12 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> MYCELIUM_STONE_PRESSURE_PLATE = REGISTER.register("mycelium_stone_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(MYCELIUM_STONE.get()), BlockSetType.STONE));
 	
 	public static final RegistryObject<Block> MYCELIUM_COBBLESTONE = REGISTER.register("mycelium_cobblestone", () -> new Block(copy(MYCELIUM_STONE.get())));
-	public static final RegistryObject<StairBlock> MYCELIUM_COBBLESTONE_STAIRS = REGISTER.register("mycelium_cobblestone_stairs", () -> new StairBlock(MYCELIUM_COBBLESTONE.get().defaultBlockState(), copy(MYCELIUM_COBBLESTONE.get())));
+	public static final RegistryObject<StairBlock> MYCELIUM_COBBLESTONE_STAIRS = REGISTER.register("mycelium_cobblestone_stairs", () -> new StairBlock(() -> MSBlocks.MYCELIUM_COBBLESTONE.get().defaultBlockState(), copy(MYCELIUM_COBBLESTONE.get())));
 	public static final RegistryObject<SlabBlock> MYCELIUM_COBBLESTONE_SLAB = REGISTER.register("mycelium_cobblestone_slab", () -> new SlabBlock(copy(MYCELIUM_COBBLESTONE.get())));
 	public static final RegistryObject<WallBlock> MYCELIUM_COBBLESTONE_WALL = REGISTER.register("mycelium_cobblestone_wall", () -> new WallBlock(copy(MYCELIUM_COBBLESTONE.get())));
 	
 	public static final RegistryObject<Block> POLISHED_MYCELIUM_STONE = REGISTER.register("polished_mycelium_stone", () -> new Block(copy(MYCELIUM_STONE.get())));
-	public static final RegistryObject<StairBlock> POLISHED_MYCELIUM_STONE_STAIRS = REGISTER.register("polished_mycelium_stone_stairs", () -> new StairBlock(POLISHED_MYCELIUM_STONE.get().defaultBlockState(), copy(POLISHED_MYCELIUM_STONE.get())));
+	public static final RegistryObject<StairBlock> POLISHED_MYCELIUM_STONE_STAIRS = REGISTER.register("polished_mycelium_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_MYCELIUM_STONE.get().defaultBlockState(), copy(POLISHED_MYCELIUM_STONE.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_MYCELIUM_STONE_SLAB = REGISTER.register("polished_mycelium_stone_slab", () -> new SlabBlock(copy(POLISHED_MYCELIUM_STONE.get())));
 	public static final RegistryObject<WallBlock> POLISHED_MYCELIUM_STONE_WALL = REGISTER.register("polished_mycelium_stone_wall", () -> new WallBlock(copy(POLISHED_MYCELIUM_STONE.get())));
 	
@@ -324,12 +324,12 @@ public class MSBlocks
 	public static final RegistryObject<Block> CRACKED_MYCELIUM_BRICKS = REGISTER.register("cracked_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	
 	public static final RegistryObject<Block> MOSSY_MYCELIUM_BRICKS = REGISTER.register("mossy_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
-	public static final RegistryObject<StairBlock> MOSSY_MYCELIUM_BRICK_STAIRS = REGISTER.register("mossy_mycelium_brick_stairs", () -> new StairBlock(MOSSY_MYCELIUM_BRICKS.get().defaultBlockState(), copy(MOSSY_MYCELIUM_BRICKS.get())));
+	public static final RegistryObject<StairBlock> MOSSY_MYCELIUM_BRICK_STAIRS = REGISTER.register("mossy_mycelium_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_MYCELIUM_BRICKS.get().defaultBlockState(), copy(MOSSY_MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> MOSSY_MYCELIUM_BRICK_SLAB = REGISTER.register("mossy_mycelium_brick_slab", () -> new SlabBlock(copy(MOSSY_MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<WallBlock> MOSSY_MYCELIUM_BRICK_WALL = REGISTER.register("mossy_mycelium_brick_wall", () -> new WallBlock(copy(MOSSY_MYCELIUM_BRICKS.get())));
 	
 	public static final RegistryObject<Block> FLOWERY_MYCELIUM_BRICKS = REGISTER.register("flowery_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
-	public static final RegistryObject<StairBlock> FLOWERY_MYCELIUM_BRICK_STAIRS = REGISTER.register("flowery_mycelium_brick_stairs", () -> new StairBlock(FLOWERY_MYCELIUM_BRICKS.get().defaultBlockState(), copy(FLOWERY_MYCELIUM_BRICKS.get())));
+	public static final RegistryObject<StairBlock> FLOWERY_MYCELIUM_BRICK_STAIRS = REGISTER.register("flowery_mycelium_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_MYCELIUM_BRICKS.get().defaultBlockState(), copy(FLOWERY_MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> FLOWERY_MYCELIUM_BRICK_SLAB = REGISTER.register("flowery_mycelium_brick_slab", () -> new SlabBlock(copy(FLOWERY_MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<WallBlock> FLOWERY_MYCELIUM_BRICK_WALL = REGISTER.register("flowery_mycelium_brick_wall", () -> new WallBlock(copy(FLOWERY_MYCELIUM_BRICKS.get())));
 	
@@ -344,12 +344,12 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> BLACK_STONE_PRESSURE_PLATE = REGISTER.register("black_stone_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BLACK_STONE.get()), BlockSetType.STONE));
 	
 	public static final RegistryObject<Block> BLACK_COBBLESTONE = REGISTER.register("black_cobblestone", () -> new Block(copy(BLACK_STONE.get())));
-	public static final RegistryObject<StairBlock> BLACK_COBBLESTONE_STAIRS = REGISTER.register("black_cobblestone_stairs", () -> new StairBlock(BLACK_COBBLESTONE.get().defaultBlockState(), copy(BLACK_COBBLESTONE.get())));
+	public static final RegistryObject<StairBlock> BLACK_COBBLESTONE_STAIRS = REGISTER.register("black_cobblestone_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_COBBLESTONE.get().defaultBlockState(), copy(BLACK_COBBLESTONE.get())));
 	public static final RegistryObject<SlabBlock> BLACK_COBBLESTONE_SLAB = REGISTER.register("black_cobblestone_slab", () -> new SlabBlock(copy(BLACK_COBBLESTONE.get())));
 	public static final RegistryObject<WallBlock> BLACK_COBBLESTONE_WALL = REGISTER.register("black_cobblestone_wall", () -> new WallBlock(copy(BLACK_COBBLESTONE.get())));
 	
 	public static final RegistryObject<Block> POLISHED_BLACK_STONE = REGISTER.register("polished_black_stone", () -> new Block(copy(BLACK_STONE.get())));
-	public static final RegistryObject<StairBlock> POLISHED_BLACK_STONE_STAIRS = REGISTER.register("polished_black_stone_stairs", () -> new StairBlock(POLISHED_BLACK_STONE.get().defaultBlockState(), copy(POLISHED_BLACK_STONE.get())));
+	public static final RegistryObject<StairBlock> POLISHED_BLACK_STONE_STAIRS = REGISTER.register("polished_black_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_BLACK_STONE.get().defaultBlockState(), copy(POLISHED_BLACK_STONE.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_BLACK_STONE_SLAB = REGISTER.register("polished_black_stone_slab", () -> new SlabBlock(copy(POLISHED_BLACK_STONE.get())));
 	public static final RegistryObject<WallBlock> POLISHED_BLACK_STONE_WALL = REGISTER.register("polished_black_stone_wall", () -> new WallBlock(copy(POLISHED_BLACK_STONE.get())));
 	
@@ -364,7 +364,7 @@ public class MSBlocks
 	
 	//Flowery
 	public static final RegistryObject<Block> FLOWERY_MOSSY_COBBLESTONE = REGISTER.register("flowery_mossy_cobblestone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final RegistryObject<StairBlock> FLOWERY_MOSSY_COBBLESTONE_STAIRS = REGISTER.register("flowery_mossy_cobblestone_stairs", () -> new StairBlock(FLOWERY_MOSSY_COBBLESTONE.get().defaultBlockState(), copy(FLOWERY_MOSSY_COBBLESTONE.get())));
+	public static final RegistryObject<StairBlock> FLOWERY_MOSSY_COBBLESTONE_STAIRS = REGISTER.register("flowery_mossy_cobblestone_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get().defaultBlockState(), copy(FLOWERY_MOSSY_COBBLESTONE.get())));
 	public static final RegistryObject<SlabBlock> FLOWERY_MOSSY_COBBLESTONE_SLAB = REGISTER.register("flowery_mossy_cobblestone_slab", () -> new SlabBlock(copy(FLOWERY_MOSSY_COBBLESTONE.get())));
 	public static final RegistryObject<WallBlock> FLOWERY_MOSSY_COBBLESTONE_WALL = REGISTER.register("flowery_mossy_cobblestone_wall", () -> new WallBlock(copy(FLOWERY_MOSSY_COBBLESTONE.get())));
 	
@@ -375,12 +375,12 @@ public class MSBlocks
 	
 	//Decrepit
 	public static final RegistryObject<Block> DECREPIT_STONE_BRICKS = REGISTER.register("decrepit_stone_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final RegistryObject<StairBlock> DECREPIT_STONE_BRICK_STAIRS = REGISTER.register("decrepit_stone_brick_stairs", () -> new StairBlock(DECREPIT_STONE_BRICKS.get().defaultBlockState(), copy(DECREPIT_STONE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> DECREPIT_STONE_BRICK_STAIRS = REGISTER.register("decrepit_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.DECREPIT_STONE_BRICKS.get().defaultBlockState(), copy(DECREPIT_STONE_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> DECREPIT_STONE_BRICK_SLAB = REGISTER.register("decrepit_stone_brick_slab", () -> new SlabBlock(copy(DECREPIT_STONE_BRICKS.get())));
 	public static final RegistryObject<WallBlock> DECREPIT_STONE_BRICK_WALL = REGISTER.register("decrepit_stone_brick_wall", () -> new WallBlock(copy(DECREPIT_STONE_BRICKS.get())));
 	
 	public static final RegistryObject<Block> MOSSY_DECREPIT_STONE_BRICKS = REGISTER.register("mossy_decrepit_stone_bricks", () -> new Block(copy(DECREPIT_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> MOSSY_DECREPIT_STONE_BRICK_STAIRS = REGISTER.register("mossy_decrepit_stone_brick_stairs", () -> new StairBlock(MOSSY_DECREPIT_STONE_BRICKS.get().defaultBlockState(), copy(MOSSY_DECREPIT_STONE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> MOSSY_DECREPIT_STONE_BRICK_STAIRS = REGISTER.register("mossy_decrepit_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.get().defaultBlockState(), copy(MOSSY_DECREPIT_STONE_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> MOSSY_DECREPIT_STONE_BRICK_SLAB = REGISTER.register("mossy_decrepit_stone_brick_slab", () -> new SlabBlock(copy(MOSSY_DECREPIT_STONE_BRICKS.get())));
 	public static final RegistryObject<WallBlock> MOSSY_DECREPIT_STONE_BRICK_WALL = REGISTER.register("mossy_decrepit_stone_brick_wall", () -> new WallBlock(copy(MOSSY_DECREPIT_STONE_BRICKS.get())));
 	
@@ -396,7 +396,7 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> CHALK_PRESSURE_PLATE = REGISTER.register("chalk_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CHALK.get()), BlockSetType.STONE));
 	
 	public static final RegistryObject<Block> POLISHED_CHALK = REGISTER.register("polished_chalk", () -> new Block(copy(CHALK.get())));
-	public static final RegistryObject<StairBlock> POLISHED_CHALK_STAIRS = REGISTER.register("polished_chalk_stairs", () -> new StairBlock(POLISHED_CHALK.get().defaultBlockState(), copy(POLISHED_CHALK.get())));
+	public static final RegistryObject<StairBlock> POLISHED_CHALK_STAIRS = REGISTER.register("polished_chalk_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_CHALK.get().defaultBlockState(), copy(POLISHED_CHALK.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_CHALK_SLAB = REGISTER.register("polished_chalk_slab", () -> new SlabBlock(copy(POLISHED_CHALK.get())));
 	public static final RegistryObject<WallBlock> POLISHED_CHALK_WALL = REGISTER.register("polished_chalk_wall", () -> new WallBlock(copy(POLISHED_CHALK.get())));
 	
@@ -409,12 +409,12 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_CHALK_BRICKS = REGISTER.register("chiseled_chalk_bricks", () -> new Block(copy(CHALK_BRICKS.get())));
 	
 	public static final RegistryObject<Block> MOSSY_CHALK_BRICKS = REGISTER.register("mossy_chalk_bricks", () -> new Block(copy(CHALK_BRICKS.get())));
-	public static final RegistryObject<StairBlock> MOSSY_CHALK_BRICK_STAIRS = REGISTER.register("mossy_chalk_brick_stairs", () -> new StairBlock(MOSSY_CHALK_BRICKS.get().defaultBlockState(), copy(MOSSY_CHALK_BRICKS.get())));
+	public static final RegistryObject<StairBlock> MOSSY_CHALK_BRICK_STAIRS = REGISTER.register("mossy_chalk_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_CHALK_BRICKS.get().defaultBlockState(), copy(MOSSY_CHALK_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> MOSSY_CHALK_BRICK_SLAB = REGISTER.register("mossy_chalk_brick_slab", () -> new SlabBlock(copy(MOSSY_CHALK_BRICKS.get())));
 	public static final RegistryObject<WallBlock> MOSSY_CHALK_BRICK_WALL = REGISTER.register("mossy_chalk_brick_wall", () -> new WallBlock(copy(MOSSY_CHALK_BRICKS.get())));
 	
 	public static final RegistryObject<Block> FLOWERY_CHALK_BRICKS = REGISTER.register("flowery_chalk_bricks", () -> new Block(copy(CHALK_BRICKS.get())));
-	public static final RegistryObject<StairBlock> FLOWERY_CHALK_BRICK_STAIRS = REGISTER.register("flowery_chalk_brick_stairs", () -> new StairBlock(FLOWERY_CHALK_BRICKS.get().defaultBlockState(), copy(FLOWERY_CHALK_BRICKS.get())));
+	public static final RegistryObject<StairBlock> FLOWERY_CHALK_BRICK_STAIRS = REGISTER.register("flowery_chalk_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_CHALK_BRICKS.get().defaultBlockState(), copy(FLOWERY_CHALK_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> FLOWERY_CHALK_BRICK_SLAB = REGISTER.register("flowery_chalk_brick_slab", () -> new SlabBlock(copy(FLOWERY_CHALK_BRICKS.get())));
 	public static final RegistryObject<WallBlock> FLOWERY_CHALK_BRICK_WALL = REGISTER.register("flowery_chalk_brick_wall", () -> new WallBlock(copy(FLOWERY_CHALK_BRICKS.get())));
 	
@@ -427,7 +427,7 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> PINK_STONE_PRESSURE_PLATE = REGISTER.register("pink_stone_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(PINK_STONE.get()), BlockSetType.STONE));
 	
 	public static final RegistryObject<Block> POLISHED_PINK_STONE = REGISTER.register("polished_pink_stone", () -> new Block(copy(PINK_STONE.get())));
-	public static final RegistryObject<StairBlock> POLISHED_PINK_STONE_STAIRS = REGISTER.register("polished_pink_stone_stairs", () -> new StairBlock(POLISHED_PINK_STONE.get().defaultBlockState(), copy(POLISHED_PINK_STONE.get())));
+	public static final RegistryObject<StairBlock> POLISHED_PINK_STONE_STAIRS = REGISTER.register("polished_pink_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_PINK_STONE.get().defaultBlockState(), copy(POLISHED_PINK_STONE.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_PINK_STONE_SLAB = REGISTER.register("polished_pink_stone_slab", () -> new SlabBlock(copy(POLISHED_PINK_STONE.get())));
 	public static final RegistryObject<WallBlock> POLISHED_PINK_STONE_WALL = REGISTER.register("polished_pink_stone_wall", () -> new WallBlock(copy(POLISHED_PINK_STONE.get())));
 	
@@ -441,7 +441,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> CRACKED_PINK_STONE_BRICKS = REGISTER.register("cracked_pink_stone_bricks", () -> new Block(copy(PINK_STONE_BRICKS.get())));
 	
 	public static final RegistryObject<Block> MOSSY_PINK_STONE_BRICKS = REGISTER.register("mossy_pink_stone_bricks", () -> new Block(copy(PINK_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> MOSSY_PINK_STONE_BRICK_STAIRS = REGISTER.register("mossy_pink_stone_brick_stairs", () -> new StairBlock(MOSSY_PINK_STONE_BRICKS.get().defaultBlockState(), copy(MOSSY_PINK_STONE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> MOSSY_PINK_STONE_BRICK_STAIRS = REGISTER.register("mossy_pink_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_PINK_STONE_BRICKS.get().defaultBlockState(), copy(MOSSY_PINK_STONE_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> MOSSY_PINK_STONE_BRICK_SLAB = REGISTER.register("mossy_pink_stone_brick_slab", () -> new SlabBlock(copy(MOSSY_PINK_STONE_BRICKS.get())));
 	public static final RegistryObject<WallBlock> MOSSY_PINK_STONE_BRICK_WALL = REGISTER.register("mossy_pink_stone_brick_wall", () -> new WallBlock(copy(MOSSY_PINK_STONE_BRICKS.get())));
 	
@@ -454,7 +454,7 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> BROWN_STONE_PRESSURE_PLATE = REGISTER.register("brown_stone_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BROWN_STONE.get()), BlockSetType.STONE));
 	
 	public static final RegistryObject<Block> POLISHED_BROWN_STONE = REGISTER.register("polished_brown_stone", () -> new Block(copy(BROWN_STONE.get())));
-	public static final RegistryObject<StairBlock> POLISHED_BROWN_STONE_STAIRS = REGISTER.register("polished_brown_stone_stairs", () -> new StairBlock(POLISHED_BROWN_STONE.get().defaultBlockState(), copy(POLISHED_BROWN_STONE.get())));
+	public static final RegistryObject<StairBlock> POLISHED_BROWN_STONE_STAIRS = REGISTER.register("polished_brown_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_BROWN_STONE.get().defaultBlockState(), copy(POLISHED_BROWN_STONE.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_BROWN_STONE_SLAB = REGISTER.register("polished_brown_stone_slab", () -> new SlabBlock(copy(POLISHED_BROWN_STONE.get())));
 	public static final RegistryObject<WallBlock> POLISHED_BROWN_STONE_WALL = REGISTER.register("polished_brown_stone_wall", () -> new WallBlock(copy(POLISHED_BROWN_STONE.get())));
 	
@@ -475,7 +475,7 @@ public class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> GREEN_STONE_PRESSURE_PLATE = REGISTER.register("green_stone_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(GREEN_STONE.get()), BlockSetType.STONE));
 	
 	public static final RegistryObject<Block> POLISHED_GREEN_STONE = REGISTER.register("polished_green_stone", () -> new Block(copy(GREEN_STONE.get())));
-	public static final RegistryObject<StairBlock> POLISHED_GREEN_STONE_STAIRS = REGISTER.register("polished_green_stone_stairs", () -> new StairBlock(POLISHED_GREEN_STONE.get().defaultBlockState(), copy(POLISHED_GREEN_STONE.get())));
+	public static final RegistryObject<StairBlock> POLISHED_GREEN_STONE_STAIRS = REGISTER.register("polished_green_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_GREEN_STONE.get().defaultBlockState(), copy(POLISHED_GREEN_STONE.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_GREEN_STONE_SLAB = REGISTER.register("polished_green_stone_slab", () -> new SlabBlock(copy(POLISHED_GREEN_STONE.get())));
 	public static final RegistryObject<WallBlock> POLISHED_GREEN_STONE_WALL = REGISTER.register("polished_green_stone_wall", () -> new WallBlock(copy(POLISHED_GREEN_STONE.get())));
 	
@@ -488,12 +488,12 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_GREEN_STONE_BRICKS = REGISTER.register("chiseled_green_stone_bricks", () -> new Block(copy(GREEN_STONE_BRICKS.get())));
 	
 	public static final RegistryObject<Block> HORIZONTAL_GREEN_STONE_BRICKS = REGISTER.register("horizontal_green_stone_bricks", () -> new Block(copy(GREEN_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> HORIZONTAL_GREEN_STONE_BRICK_STAIRS = REGISTER.register("horizontal_green_stone_brick_stairs", () -> new StairBlock(HORIZONTAL_GREEN_STONE_BRICKS.get().defaultBlockState(), copy(HORIZONTAL_GREEN_STONE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> HORIZONTAL_GREEN_STONE_BRICK_STAIRS = REGISTER.register("horizontal_green_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS.get().defaultBlockState(), copy(HORIZONTAL_GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> HORIZONTAL_GREEN_STONE_BRICK_SLAB = REGISTER.register("horizontal_green_stone_brick_slab", () -> new SlabBlock(copy(HORIZONTAL_GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<WallBlock> HORIZONTAL_GREEN_STONE_BRICK_WALL = REGISTER.register("horizontal_green_stone_brick_wall", () -> new WallBlock(copy(HORIZONTAL_GREEN_STONE_BRICKS.get())));
 	
 	public static final RegistryObject<Block> VERTICAL_GREEN_STONE_BRICKS = REGISTER.register("vertical_green_stone_bricks", () -> new Block(copy(GREEN_STONE_BRICKS.get())));
-	public static final RegistryObject<StairBlock> VERTICAL_GREEN_STONE_BRICK_STAIRS = REGISTER.register("vertical_green_stone_brick_stairs", () -> new StairBlock(VERTICAL_GREEN_STONE_BRICKS.get().defaultBlockState(), copy(VERTICAL_GREEN_STONE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> VERTICAL_GREEN_STONE_BRICK_STAIRS = REGISTER.register("vertical_green_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.VERTICAL_GREEN_STONE_BRICKS.get().defaultBlockState(), copy(VERTICAL_GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<SlabBlock> VERTICAL_GREEN_STONE_BRICK_SLAB = REGISTER.register("vertical_green_stone_brick_slab", () -> new SlabBlock(copy(VERTICAL_GREEN_STONE_BRICKS.get())));
 	public static final RegistryObject<WallBlock> VERTICAL_GREEN_STONE_BRICK_WALL = REGISTER.register("vertical_green_stone_brick_wall", () -> new WallBlock(copy(VERTICAL_GREEN_STONE_BRICKS.get())));
 	
@@ -521,7 +521,7 @@ public class MSBlocks
 	
 	//Wood
 	public static final RegistryObject<Block> UNCARVED_WOOD = REGISTER.register("uncarved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final RegistryObject<StairBlock> UNCARVED_WOOD_STAIRS = REGISTER.register("uncarved_wood_stairs", () -> new StairBlock(UNCARVED_WOOD.get().defaultBlockState(), copy(UNCARVED_WOOD.get())));
+	public static final RegistryObject<StairBlock> UNCARVED_WOOD_STAIRS = REGISTER.register("uncarved_wood_stairs", () -> new StairBlock(() -> MSBlocks.UNCARVED_WOOD.get().defaultBlockState(), copy(UNCARVED_WOOD.get())));
 	public static final RegistryObject<SlabBlock> UNCARVED_WOOD_SLAB = REGISTER.register("uncarved_wood_slab", () -> new SlabBlock(copy(UNCARVED_WOOD.get())));
 	public static final RegistryObject<ButtonBlock> UNCARVED_WOOD_BUTTON = REGISTER.register("uncarved_wood_button", () -> new ButtonBlock(copy(UNCARVED_WOOD.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> UNCARVED_WOOD_PRESSURE_PLATE = REGISTER.register("uncarved_wood_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(UNCARVED_WOOD.get()), BlockSetType.OAK));
@@ -529,7 +529,7 @@ public class MSBlocks
 	public static final RegistryObject<FenceGateBlock> UNCARVED_WOOD_FENCE_GATE = REGISTER.register("uncarved_wood_fence_gate", () -> new FenceGateBlock(copy(UNCARVED_WOOD.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	
 	public static final RegistryObject<Block> CHIPBOARD = REGISTER.register("chipboard", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
-	public static final RegistryObject<StairBlock> CHIPBOARD_STAIRS = REGISTER.register("chipboard_stairs", () -> new StairBlock(CHIPBOARD.get().defaultBlockState(), copy(CHIPBOARD.get())));
+	public static final RegistryObject<StairBlock> CHIPBOARD_STAIRS = REGISTER.register("chipboard_stairs", () -> new StairBlock(() -> MSBlocks.CHIPBOARD.get().defaultBlockState(), copy(CHIPBOARD.get())));
 	public static final RegistryObject<SlabBlock> CHIPBOARD_SLAB = REGISTER.register("chipboard_slab", () -> new SlabBlock(copy(CHIPBOARD.get())));
 	public static final RegistryObject<ButtonBlock> CHIPBOARD_BUTTON = REGISTER.register("chipboard_button", () -> new ButtonBlock(copy(CHIPBOARD.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> CHIPBOARD_PRESSURE_PLATE = REGISTER.register("chipboard_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CHIPBOARD.get()), BlockSetType.OAK));
@@ -538,11 +538,11 @@ public class MSBlocks
 	
 	public static final RegistryObject<Block> WOOD_SHAVINGS = REGISTER.register("wood_shavings", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(0.4F).sound(SoundType.SAND)));
 	public static final RegistryObject<Block> CARVED_HEAVY_PLANKS = REGISTER.register("carved_heavy_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final RegistryObject<StairBlock> CARVED_HEAVY_PLANK_STAIRS = REGISTER.register("carved_heavy_plank_stairs", () -> new StairBlock(CARVED_HEAVY_PLANKS.get().defaultBlockState(), copy(CARVED_HEAVY_PLANKS.get())));
+	public static final RegistryObject<StairBlock> CARVED_HEAVY_PLANK_STAIRS = REGISTER.register("carved_heavy_plank_stairs", () -> new StairBlock(() -> MSBlocks.CARVED_HEAVY_PLANKS.get().defaultBlockState(), copy(CARVED_HEAVY_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> CARVED_HEAVY_PLANK_SLAB = REGISTER.register("carved_heavy_plank_slab", () -> new SlabBlock(copy(CARVED_HEAVY_PLANKS.get())));
 	
 	public static final RegistryObject<Block> CARVED_PLANKS = REGISTER.register("carved_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final RegistryObject<StairBlock> CARVED_STAIRS = REGISTER.register("carved_stairs", () -> new StairBlock(CARVED_PLANKS.get().defaultBlockState(), copy(CARVED_PLANKS.get())));
+	public static final RegistryObject<StairBlock> CARVED_STAIRS = REGISTER.register("carved_stairs", () -> new StairBlock(() -> MSBlocks.CARVED_PLANKS.get().defaultBlockState(), copy(CARVED_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> CARVED_SLAB = REGISTER.register("carved_slab", () -> new SlabBlock(copy(CARVED_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> CARVED_BUTTON = REGISTER.register("carved_button", () -> new ButtonBlock(copy(CARVED_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> CARVED_PRESSURE_PLATE = REGISTER.register("carved_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CARVED_PLANKS.get()), BlockSetType.OAK));
@@ -552,7 +552,7 @@ public class MSBlocks
 	public static final RegistryObject<TrapDoorBlock> CARVED_TRAPDOOR = REGISTER.register("carved_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	public static final RegistryObject<Block> POLISHED_UNCARVED_WOOD = REGISTER.register("polished_carved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final RegistryObject<StairBlock> POLISHED_UNCARVED_STAIRS = REGISTER.register("polished_uncarved_stairs", () -> new StairBlock(POLISHED_UNCARVED_WOOD.get().defaultBlockState(), copy(POLISHED_UNCARVED_WOOD.get())));
+	public static final RegistryObject<StairBlock> POLISHED_UNCARVED_STAIRS = REGISTER.register("polished_uncarved_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_UNCARVED_WOOD.get().defaultBlockState(), copy(POLISHED_UNCARVED_WOOD.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_UNCARVED_SLAB = REGISTER.register("polished_uncarved_slab", () -> new SlabBlock(copy(POLISHED_UNCARVED_WOOD.get())));
 	
 	public static final RegistryObject<Block> CARVED_KNOTTED_WOOD = REGISTER.register("carved_knotted_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
@@ -569,7 +569,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> GLOWING_PLANKS = REGISTER.register("glowing_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> GLOWING_BOOKSHELF = REGISTER.register("glowing_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> GLOWING_LADDER = REGISTER.register("glowing_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<StairBlock> GLOWING_STAIRS = REGISTER.register("glowing_stairs", () -> new StairBlock(GLOWING_PLANKS.get().defaultBlockState(), copy(GLOWING_PLANKS.get())));
+	public static final RegistryObject<StairBlock> GLOWING_STAIRS = REGISTER.register("glowing_stairs", () -> new StairBlock(() -> MSBlocks.GLOWING_PLANKS.get().defaultBlockState(), copy(GLOWING_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> GLOWING_SLAB = REGISTER.register("glowing_slab", () -> new SlabBlock(copy(GLOWING_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> GLOWING_BUTTON = REGISTER.register("glowing_button", () -> new ButtonBlock(copy(GLOWING_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> GLOWING_PRESSURE_PLATE = REGISTER.register("glowing_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(GLOWING_PLANKS.get()), BlockSetType.OAK));
@@ -585,7 +585,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> FROST_LEAVES = REGISTER.register("frost_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> FROST_BOOKSHELF = REGISTER.register("frost_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FROST_LADDER = REGISTER.register("frost_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<StairBlock> FROST_STAIRS = REGISTER.register("frost_stairs", () -> new StairBlock(FROST_PLANKS.get().defaultBlockState(), copy(FROST_PLANKS.get())));
+	public static final RegistryObject<StairBlock> FROST_STAIRS = REGISTER.register("frost_stairs", () -> new StairBlock(() -> MSBlocks.FROST_PLANKS.get().defaultBlockState(), copy(FROST_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> FROST_SLAB = REGISTER.register("frost_slab", () -> new SlabBlock(copy(FROST_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> FROST_BUTTON = REGISTER.register("frost_button", () -> new ButtonBlock(copy(FROST_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> FROST_PRESSURE_PLATE = REGISTER.register("frost_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(FROST_PLANKS.get()), BlockSetType.OAK));
@@ -658,7 +658,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> SHADEWOOD_LOG = REGISTER.register("shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_SHADEWOOD_LOG.get().defaultBlockState()));
 	public static final RegistryObject<Block> SHADEWOOD = REGISTER.register("shadewood", () -> new StrippableFlammableLogBlock(copy(SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_SHADEWOOD.get().defaultBlockState()));
 	public static final RegistryObject<Block> SHADEWOOD_PLANKS = REGISTER.register("shadewood_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<StairBlock> SHADEWOOD_STAIRS = REGISTER.register("shadewood_stairs", () -> new StairBlock(SHADEWOOD_PLANKS.get().defaultBlockState(), copy(SHADEWOOD_PLANKS.get())));
+	public static final RegistryObject<StairBlock> SHADEWOOD_STAIRS = REGISTER.register("shadewood_stairs", () -> new StairBlock(() -> MSBlocks.SHADEWOOD_PLANKS.get().defaultBlockState(), copy(SHADEWOOD_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> SHADEWOOD_SLAB = REGISTER.register("shadewood_slab", () -> new SlabBlock(copy(SHADEWOOD_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> SHADEWOOD_BUTTON = REGISTER.register("shadewood_button", () -> new ButtonBlock(copy(SHADEWOOD_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> SHADEWOOD_PRESSURE_PLATE = REGISTER.register("shadewood_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(SHADEWOOD_PLANKS.get()), BlockSetType.OAK));
@@ -708,7 +708,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> BLOOD_ASPECT_LOG = REGISTER.register("blood_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> BLOOD_ASPECT_PLANKS = REGISTER.register("blood_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> BLOOD_ASPECT_SAPLING = REGISTER.register("blood_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> BLOOD_ASPECT_STAIRS = REGISTER.register("blood_aspect_stairs", () -> new StairBlock(BLOOD_ASPECT_PLANKS.get().defaultBlockState(), copy(BLOOD_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> BLOOD_ASPECT_STAIRS = REGISTER.register("blood_aspect_stairs", () -> new StairBlock(() -> MSBlocks.BLOOD_ASPECT_PLANKS.get().defaultBlockState(), copy(BLOOD_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> BLOOD_ASPECT_SLAB = REGISTER.register("blood_aspect_slab", () -> new SlabBlock(copy(BLOOD_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> BLOOD_ASPECT_BUTTON = REGISTER.register("blood_aspect_button", () -> new ButtonBlock(copy(BLOOD_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> BLOOD_ASPECT_PRESSURE_PLATE = REGISTER.register("blood_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BLOOD_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -724,7 +724,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> BREATH_ASPECT_LOG = REGISTER.register("breath_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> BREATH_ASPECT_PLANKS = REGISTER.register("breath_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> BREATH_ASPECT_SAPLING = REGISTER.register("breath_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> BREATH_ASPECT_STAIRS = REGISTER.register("breath_aspect_stairs", () -> new StairBlock(BREATH_ASPECT_PLANKS.get().defaultBlockState(), copy(BREATH_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> BREATH_ASPECT_STAIRS = REGISTER.register("breath_aspect_stairs", () -> new StairBlock(() -> MSBlocks.BREATH_ASPECT_PLANKS.get().defaultBlockState(), copy(BREATH_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> BREATH_ASPECT_SLAB = REGISTER.register("breath_aspect_slab", () -> new SlabBlock(copy(BREATH_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> BREATH_ASPECT_BUTTON = REGISTER.register("breath_aspect_button", () -> new ButtonBlock(copy(BREATH_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> BREATH_ASPECT_PRESSURE_PLATE = REGISTER.register("breath_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BREATH_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -740,7 +740,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> DOOM_ASPECT_LOG = REGISTER.register("doom_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> DOOM_ASPECT_PLANKS = REGISTER.register("doom_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> DOOM_ASPECT_SAPLING = REGISTER.register("doom_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> DOOM_ASPECT_STAIRS = REGISTER.register("doom_aspect_stairs", () -> new StairBlock(DOOM_ASPECT_PLANKS.get().defaultBlockState(), copy(DOOM_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> DOOM_ASPECT_STAIRS = REGISTER.register("doom_aspect_stairs", () -> new StairBlock(() -> MSBlocks.DOOM_ASPECT_PLANKS.get().defaultBlockState(), copy(DOOM_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> DOOM_ASPECT_SLAB = REGISTER.register("doom_aspect_slab", () -> new SlabBlock(copy(DOOM_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> DOOM_ASPECT_BUTTON = REGISTER.register("doom_aspect_button", () -> new ButtonBlock(copy(DOOM_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> DOOM_ASPECT_PRESSURE_PLATE = REGISTER.register("doom_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(DOOM_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -756,7 +756,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> HEART_ASPECT_LOG = REGISTER.register("heart_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> HEART_ASPECT_PLANKS = REGISTER.register("heart_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> HEART_ASPECT_SAPLING = REGISTER.register("heart_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> HEART_ASPECT_STAIRS = REGISTER.register("heart_aspect_stairs", () -> new StairBlock(HEART_ASPECT_PLANKS.get().defaultBlockState(), copy(HEART_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> HEART_ASPECT_STAIRS = REGISTER.register("heart_aspect_stairs", () -> new StairBlock(() -> MSBlocks.HEART_ASPECT_PLANKS.get().defaultBlockState(), copy(HEART_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> HEART_ASPECT_SLAB = REGISTER.register("heart_aspect_slab", () -> new SlabBlock(copy(HEART_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> HEART_ASPECT_BUTTON = REGISTER.register("heart_aspect_button", () -> new ButtonBlock(copy(HEART_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> HEART_ASPECT_PRESSURE_PLATE = REGISTER.register("heart_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(HEART_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -772,7 +772,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> HOPE_ASPECT_LOG = REGISTER.register("hope_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> HOPE_ASPECT_PLANKS = REGISTER.register("hope_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> HOPE_ASPECT_SAPLING = REGISTER.register("hope_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> HOPE_ASPECT_STAIRS = REGISTER.register("hope_aspect_stairs", () -> new StairBlock(HOPE_ASPECT_PLANKS.get().defaultBlockState(), copy(HOPE_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> HOPE_ASPECT_STAIRS = REGISTER.register("hope_aspect_stairs", () -> new StairBlock(() -> MSBlocks.HOPE_ASPECT_PLANKS.get().defaultBlockState(), copy(HOPE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> HOPE_ASPECT_SLAB = REGISTER.register("hope_aspect_slab", () -> new SlabBlock(copy(HOPE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> HOPE_ASPECT_BUTTON = REGISTER.register("hope_aspect_button", () -> new ButtonBlock(copy(HOPE_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> HOPE_ASPECT_PRESSURE_PLATE = REGISTER.register("hope_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(HOPE_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -788,7 +788,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> LIFE_ASPECT_LOG = REGISTER.register("life_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> LIFE_ASPECT_PLANKS = REGISTER.register("life_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> LIFE_ASPECT_SAPLING = REGISTER.register("life_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> LIFE_ASPECT_STAIRS = REGISTER.register("life_aspect_stairs", () -> new StairBlock(LIFE_ASPECT_PLANKS.get().defaultBlockState(), copy(LIFE_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> LIFE_ASPECT_STAIRS = REGISTER.register("life_aspect_stairs", () -> new StairBlock(() -> MSBlocks.LIFE_ASPECT_PLANKS.get().defaultBlockState(), copy(LIFE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> LIFE_ASPECT_SLAB = REGISTER.register("life_aspect_slab", () -> new SlabBlock(copy(LIFE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> LIFE_ASPECT_BUTTON = REGISTER.register("life_aspect_button", () -> new ButtonBlock(copy(LIFE_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> LIFE_ASPECT_PRESSURE_PLATE = REGISTER.register("life_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(LIFE_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -804,7 +804,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> LIGHT_ASPECT_LOG = REGISTER.register("light_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> LIGHT_ASPECT_PLANKS = REGISTER.register("light_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> LIGHT_ASPECT_SAPLING = REGISTER.register("light_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> LIGHT_ASPECT_STAIRS = REGISTER.register("light_aspect_stairs", () -> new StairBlock(LIGHT_ASPECT_PLANKS.get().defaultBlockState(), copy(LIGHT_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> LIGHT_ASPECT_STAIRS = REGISTER.register("light_aspect_stairs", () -> new StairBlock(() -> MSBlocks.LIGHT_ASPECT_PLANKS.get().defaultBlockState(), copy(LIGHT_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> LIGHT_ASPECT_SLAB = REGISTER.register("light_aspect_slab", () -> new SlabBlock(copy(LIGHT_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> LIGHT_ASPECT_BUTTON = REGISTER.register("light_aspect_button", () -> new ButtonBlock(copy(LIGHT_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> LIGHT_ASPECT_PRESSURE_PLATE = REGISTER.register("light_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(LIGHT_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -820,7 +820,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> MIND_ASPECT_LOG = REGISTER.register("mind_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> MIND_ASPECT_PLANKS = REGISTER.register("mind_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> MIND_ASPECT_SAPLING = REGISTER.register("mind_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> MIND_ASPECT_STAIRS = REGISTER.register("mind_aspect_stairs", () -> new StairBlock(MIND_ASPECT_PLANKS.get().defaultBlockState(), copy(MIND_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> MIND_ASPECT_STAIRS = REGISTER.register("mind_aspect_stairs", () -> new StairBlock(() -> MSBlocks.MIND_ASPECT_PLANKS.get().defaultBlockState(), copy(MIND_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> MIND_ASPECT_SLAB = REGISTER.register("mind_aspect_slab", () -> new SlabBlock(copy(MIND_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> MIND_ASPECT_BUTTON = REGISTER.register("mind_aspect_button", () -> new ButtonBlock(copy(MIND_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> MIND_ASPECT_PRESSURE_PLATE = REGISTER.register("mind_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(MIND_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -836,7 +836,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> RAGE_ASPECT_LOG = REGISTER.register("rage_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> RAGE_ASPECT_PLANKS = REGISTER.register("rage_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> RAGE_ASPECT_SAPLING = REGISTER.register("rage_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> RAGE_ASPECT_STAIRS = REGISTER.register("rage_aspect_stairs", () -> new StairBlock(RAGE_ASPECT_PLANKS.get().defaultBlockState(), copy(RAGE_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> RAGE_ASPECT_STAIRS = REGISTER.register("rage_aspect_stairs", () -> new StairBlock(() -> MSBlocks.RAGE_ASPECT_PLANKS.get().defaultBlockState(), copy(RAGE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> RAGE_ASPECT_SLAB = REGISTER.register("rage_aspect_slab", () -> new SlabBlock(copy(RAGE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> RAGE_ASPECT_BUTTON = REGISTER.register("rage_aspect_button", () -> new ButtonBlock(copy(RAGE_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> RAGE_ASPECT_PRESSURE_PLATE = REGISTER.register("rage_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(RAGE_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -852,7 +852,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> SPACE_ASPECT_LOG = REGISTER.register("space_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> SPACE_ASPECT_PLANKS = REGISTER.register("space_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> SPACE_ASPECT_SAPLING = REGISTER.register("space_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> SPACE_ASPECT_STAIRS = REGISTER.register("space_aspect_stairs", () -> new StairBlock(SPACE_ASPECT_PLANKS.get().defaultBlockState(), copy(SPACE_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> SPACE_ASPECT_STAIRS = REGISTER.register("space_aspect_stairs", () -> new StairBlock(() -> MSBlocks.SPACE_ASPECT_PLANKS.get().defaultBlockState(), copy(SPACE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> SPACE_ASPECT_SLAB = REGISTER.register("space_aspect_slab", () -> new SlabBlock(copy(SPACE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> SPACE_ASPECT_BUTTON = REGISTER.register("space_aspect_button", () -> new ButtonBlock(copy(SPACE_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> SPACE_ASPECT_PRESSURE_PLATE = REGISTER.register("space_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(SPACE_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -868,7 +868,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> TIME_ASPECT_LOG = REGISTER.register("time_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> TIME_ASPECT_PLANKS = REGISTER.register("time_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> TIME_ASPECT_SAPLING = REGISTER.register("time_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> TIME_ASPECT_STAIRS = REGISTER.register("time_aspect_stairs", () -> new StairBlock(TIME_ASPECT_PLANKS.get().defaultBlockState(), copy(TIME_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> TIME_ASPECT_STAIRS = REGISTER.register("time_aspect_stairs", () -> new StairBlock(() -> MSBlocks.TIME_ASPECT_PLANKS.get().defaultBlockState(), copy(TIME_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> TIME_ASPECT_SLAB = REGISTER.register("time_aspect_slab", () -> new SlabBlock(copy(TIME_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> TIME_ASPECT_BUTTON = REGISTER.register("time_aspect_button", () -> new ButtonBlock(copy(TIME_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> TIME_ASPECT_PRESSURE_PLATE = REGISTER.register("time_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(TIME_ASPECT_PLANKS.get()), BlockSetType.OAK));
@@ -884,7 +884,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> VOID_ASPECT_LOG = REGISTER.register("void_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> VOID_ASPECT_PLANKS = REGISTER.register("void_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> VOID_ASPECT_SAPLING = REGISTER.register("void_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<StairBlock> VOID_ASPECT_STAIRS = REGISTER.register("void_aspect_stairs", () -> new StairBlock(VOID_ASPECT_PLANKS.get().defaultBlockState(), copy(VOID_ASPECT_PLANKS.get())));
+	public static final RegistryObject<StairBlock> VOID_ASPECT_STAIRS = REGISTER.register("void_aspect_stairs", () -> new StairBlock(() -> MSBlocks.VOID_ASPECT_PLANKS.get().defaultBlockState(), copy(VOID_ASPECT_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> VOID_ASPECT_SLAB = REGISTER.register("void_aspect_slab", () -> new SlabBlock(copy(VOID_ASPECT_PLANKS.get())));
 	public static final RegistryObject<ButtonBlock> VOID_ASPECT_BUTTON = REGISTER.register("void_aspect_button", () -> new ButtonBlock(copy(VOID_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> VOID_ASPECT_PRESSURE_PLATE = REGISTER.register("void_aspect_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(VOID_ASPECT_PLANKS.get()), BlockSetType.OAK));
