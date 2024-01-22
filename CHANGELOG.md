@@ -9,10 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Spawn egg items for main Underling types, Consorts, and Carapacians
+- Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+
+### Fixed
+
+- Double slabs will now drop two slabs when broken
 
 ### Contributors for this release
 
-- rose_bushes_, hadean
+- rose_bushes_, hadean, glubtier
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
