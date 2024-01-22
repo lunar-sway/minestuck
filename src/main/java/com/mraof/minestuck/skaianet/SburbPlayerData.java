@@ -125,7 +125,7 @@ public final class SburbPlayerData
 		return this.landKey;
 	}
 	
-	void setLand(ResourceKey<Level> dimension)
+	public void setLand(ResourceKey<Level> dimension)
 	{
 		if(landKey != null)
 			throw new IllegalStateException("Can't set land twice");
@@ -139,7 +139,7 @@ public final class SburbPlayerData
 		resendEntryState();
 	}
 	
-	void setHasEntered()
+	public void setHasEntered()
 	{
 		if(landKey == null)
 			throw new IllegalStateException("Land has not been initiated, can't have entered now!");
