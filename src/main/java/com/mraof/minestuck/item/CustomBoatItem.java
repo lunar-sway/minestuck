@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
@@ -26,12 +25,12 @@ import java.util.function.Predicate;
 public class CustomBoatItem extends Item
 {
 	private static final Predicate<Entity> CAN_COLLIDE_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
-	protected final MetalBoatEntity.Type boatType;
+	protected final BoatProvider provider;
 	
-	public CustomBoatItem(MetalBoatEntity.Type boatType, Properties properties)
+	public CustomBoatItem(BoatProvider provider, Properties properties)
 	{
 		super(properties);
-		this.boatType = boatType;
+		this.provider = provider;
 		DispenserBlock.registerBehavior(this, new BehaviorDispenseCustomBoat());
 	}
 	
@@ -55,7 +54,7 @@ public class CustomBoatItem extends Item
 				return InteractionResultHolder.pass(itemstack);
 		}
 		
-		Entity boat = new MetalBoatEntity(level, rayTrace.getLocation().x, rayTrace.getLocation().y, rayTrace.getLocation().z, boatType);
+		Entity boat = provider.createBoat(itemstack, level, rayTrace.getLocation().x, rayTrace.getLocation().y, rayTrace.getLocation().z);
 		boat.setYRot(player.getYRot());
 		
 		if(!level.noCollision(boat, boat.getBoundingBox().inflate(-0.1D)))
@@ -87,11 +86,16 @@ public class CustomBoatItem extends Item
 			if(!level.getBlockState(pos).isAir() || !level.getFluidState(pos.below()).is(FluidTags.WATER))
 				return new DefaultDispenseItemBehavior().dispense(source, stack);
 			
-			Entity boat = new MetalBoatEntity(level, x, y + waterOffset, z, boatType);
+			Entity boat = provider.createBoat(stack, level, x, y + waterOffset, z);
 			boat.setYRot(direction.toYRot());
 			level.addFreshEntity(boat);
 			stack.shrink(1);
 			return stack;
 		}
+	}
+	
+	public interface BoatProvider
+	{
+		Entity createBoat(ItemStack stack, Level level, double x, double y, double z);
 	}
 }
