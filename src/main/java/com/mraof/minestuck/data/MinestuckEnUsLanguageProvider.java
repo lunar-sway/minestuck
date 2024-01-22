@@ -2007,6 +2007,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbPredefineCommand.SET_TERRAIN_LAND, "Predefined %s's terrain land type");
 		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
 		add(SburbPredefineCommand.DEFINE, "Predefined full data for %s");
+		add(SburbPredefineCommand.TOO_LATE, "It is too late to predefine data for this player");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");

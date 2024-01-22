@@ -132,19 +132,19 @@ public final class SkaianetData extends SavedData
 		});
 	}
 	
-	void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	/**
+	 * Gets/creates an instance of predefine data for the given player.
+	 * @return An empty optional if data can no longer be predefined for this player.
+	 */
+	public Optional<PredefineData> getOrCreatePredefineData(PlayerIdentifier player)
 	{
-		PredefineData data = predefineData.get(player);
-		if(data == null)    //TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
-			data = new PredefineData(player);
-		consumer.consume(data);
-		predefineData.put(player, data);
-		sessionHandler.newPredefineData(player);
-	}
-	
-	Optional<PredefineData> predefineData(PlayerIdentifier player)
-	{
-		return Optional.ofNullable(this.predefineData.get(player));
+		if(getOrCreateData(player).getLandDimension() != null)
+			return Optional.empty();
+		else
+			return Optional.of(this.predefineData.computeIfAbsent(player, newPlayer -> {
+				sessionHandler.newPredefineData(newPlayer);
+				return new PredefineData(newPlayer);
+			}));
 	}
 	
 	public Collection<SburbPlayerData> allPlayerData()

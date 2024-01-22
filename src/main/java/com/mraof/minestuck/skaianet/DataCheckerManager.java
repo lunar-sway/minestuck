@@ -99,7 +99,7 @@ public class DataCheckerManager
 			return;
 		}
 		
-		skaianetData.predefineData(player).ifPresent(predefineData -> putPredefinedData(tag, predefineData));
+		skaianetData.getOrCreatePredefineData(player).ifPresent(predefineData -> putPredefinedData(tag, predefineData));
 	}
 	
 	/**

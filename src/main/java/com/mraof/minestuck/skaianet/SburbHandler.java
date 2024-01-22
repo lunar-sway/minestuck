@@ -48,7 +48,7 @@ public final class SburbHandler
 		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		
 		Title title = null;
-		Optional<PredefineData> data = skaianetData.predefineData(player);
+		Optional<PredefineData> data = skaianetData.getOrCreatePredefineData(player);
 		if(data.isPresent())
 			title = data.get().getTitle();
 		
@@ -69,12 +69,6 @@ public final class SburbHandler
 			PlayerSavedData.getData(player, mcServer).setTitle(title);
 		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
-	}
-	
-	public static void handlePredefineData(ServerPlayer player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
-	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SkaianetData.get(player.server).predefineCall(identifier, consumer);
 	}
 	
 	public static ItemStack getEntryItem(Level level, SburbPlayerData playerData)
@@ -116,7 +110,7 @@ public final class SburbHandler
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		
-		Optional<PredefineData> data = skaianetData.predefineData(player);
+		Optional<PredefineData> data = skaianetData.getOrCreatePredefineData(player);
 		if(data.isPresent())
 		{
 			titleLandType = data.get().getTitleLandType();
@@ -163,6 +157,8 @@ public final class SburbHandler
 		MSDimensions.sendLandTypesToAll(mcServer);
 		
 		playerData.setLand(dimType);
+		
+		SkaianetData.get(mcServer).predefineData.remove(identifier);
 	}
 	
 	public static void onEntry(MinecraftServer server, ServerPlayer player)

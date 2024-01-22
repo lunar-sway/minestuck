@@ -72,7 +72,7 @@ public class Generator
 	private static Optional<Title> titleForPlayer(PlayerIdentifier player, SkaianetData skaianetData)
 	{
 		return Optional.ofNullable(PlayerSavedData.getData(player, skaianetData.mcServer).getTitle())
-				.or(() -> skaianetData.predefineData(player).flatMap(data -> Optional.ofNullable(data.getTitle())));
+				.or(() -> skaianetData.getOrCreatePredefineData(player).flatMap(data -> Optional.ofNullable(data.getTitle())));
 	}
 	
 	private static List<EnumAspect> unusedAspects(Set<EnumAspect> base, Set<Title> usedTitles)
@@ -106,7 +106,7 @@ public class Generator
 	{
 		return LandTypePair.getTypes(skaianetData.mcServer, skaianetData.getOrCreateData(player).getLandDimension())
 				.map(LandTypePair::getTitle)
-				.or(() -> skaianetData.predefineData(player)
+				.or(() -> skaianetData.getOrCreatePredefineData(player)
 						.flatMap(data -> Optional.ofNullable(data.getTitleLandType())));
 	}
 	
@@ -129,7 +129,7 @@ public class Generator
 	{
 		return LandTypePair.getTypes(skaianetData.mcServer, skaianetData.getOrCreateData(player).getLandDimension())
 				.map(LandTypePair::getTerrain)
-				.or(() -> skaianetData.predefineData(player)
+				.or(() -> skaianetData.getOrCreatePredefineData(player)
 						.flatMap(data -> Optional.ofNullable(data.getTerrainLandType())));
 	}
 	

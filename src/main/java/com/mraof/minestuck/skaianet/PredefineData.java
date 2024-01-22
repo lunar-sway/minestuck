@@ -63,22 +63,20 @@ public final class PredefineData
 		return nbt;
 	}
 	
-	public void predefineTitle(@Nonnull Title title, CommandSourceStack source) throws SkaianetException
+	public void predefineTitle(@Nonnull Title title)
 	{
-		if(title.equals(this.title))
-			throw new SkaianetException(TITLE_ALREADY_SET, title.asTextComponent());	//TODO when predefining with define, you wouldn't want this exception to get in the way. Fix this.
 		//TODO Take a look at the title land type and warn if it's not connected to the set land type
 		this.title = title;
 	}
 	
-	public void predefineTerrainLand(TerrainLandType landType, CommandSourceStack source) throws SkaianetException
+	public void predefineTerrainLand(TerrainLandType landType, CommandSourceStack source)
 	{
 		forceVerifyTitleLand(landType, source);
 		
 		this.terrainLandType = landType;
 	}
 	
-	public void predefineTitleLand(TitleLandType landType, CommandSourceStack source) throws SkaianetException
+	public void predefineTitleLand(TitleLandType landType, CommandSourceStack source)
 	{
 		forceVerifyTitle(Collections.singleton(landType), source);
 		
@@ -112,7 +110,7 @@ public final class PredefineData
 		}
 	}
 	
-	private void forceVerifyTitleLand(TerrainLandType type, CommandSourceStack source) throws SkaianetException
+	private void forceVerifyTitleLand(TerrainLandType type, CommandSourceStack source)
 	{
 		if(titleLandType == null || !titleLandType.isAspectCompatible(type))
 		{
