@@ -16,8 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -37,51 +35,39 @@ public class CustomBoatItem extends Item
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
 	{
 		float partialTicks = 1.0F;
-		ItemStack itemstack = playerIn.getItemInHand(handIn);
-		HitResult rayTrace = getPlayerPOVHitResult(level, playerIn, ClipContext.Fluid.ANY);
+		ItemStack itemstack = player.getItemInHand(hand);
+		HitResult rayTrace = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
 		
-		if(rayTrace.getType() == HitResult.Type.MISS)
+		if(rayTrace.getType() != HitResult.Type.BLOCK)
 			return InteractionResultHolder.pass(itemstack);
-		else
+		
+		Vec3 lookDirection = player.getViewVector(partialTicks);
+		List<Entity> list = level.getEntities(player, player.getBoundingBox().expandTowards(lookDirection.scale(5.0D)).inflate(1.0D), CAN_COLLIDE_PREDICATE);
+		
+		if(!list.isEmpty())
 		{
-			Vec3 lookDirection = playerIn.getViewVector(partialTicks);
-			List<Entity> list = level.getEntities(playerIn, playerIn.getBoundingBox().expandTowards(lookDirection.scale(5.0D)).inflate(1.0D), CAN_COLLIDE_PREDICATE);
-			
-			if(!list.isEmpty())
-			{
-				Vec3 eyePos = playerIn.getEyePosition(partialTicks);
-				for(Entity entity : list)
-				{
-					AABB axisalignedbb = entity.getBoundingBox().inflate(entity.getPickRadius());
-					
-					if(axisalignedbb.contains(eyePos))
-						return InteractionResultHolder.pass(itemstack);
-				}
-			}
-			
-			if(rayTrace.getType() == HitResult.Type.BLOCK)
-			{
-				Entity boat = provider.createBoat(itemstack, level, rayTrace.getLocation().x, rayTrace.getLocation().y, rayTrace.getLocation().z);
-				boat.setYRot(playerIn.getYRot());
-				
-				if(!level.noCollision(boat, boat.getBoundingBox().inflate(-0.1D)))
-					return InteractionResultHolder.fail(itemstack);
-				
-				if(!level.isClientSide)
-					level.addFreshEntity(boat);
-				
-				if(!playerIn.getAbilities().instabuild)
-					itemstack.shrink(1);
-				
-				playerIn.awardStat(Stats.ITEM_USED.get(this));
-				return InteractionResultHolder.success(itemstack);
-			}
-			
-			return InteractionResultHolder.pass(itemstack);
+			Vec3 eyePos = player.getEyePosition(partialTicks);
+			if(list.stream().anyMatch(entity -> entity.getBoundingBox().inflate(entity.getPickRadius()).contains(eyePos)))
+				return InteractionResultHolder.pass(itemstack);
 		}
+		
+		Entity boat = provider.createBoat(itemstack, level, rayTrace.getLocation().x, rayTrace.getLocation().y, rayTrace.getLocation().z);
+		boat.setYRot(player.getYRot());
+		
+		if(!level.noCollision(boat, boat.getBoundingBox().inflate(-0.1D)))
+			return InteractionResultHolder.fail(itemstack);
+		
+		if(!level.isClientSide)
+			level.addFreshEntity(boat);
+		
+		if(!player.getAbilities().instabuild)
+			itemstack.shrink(1);
+		
+		player.awardStat(Stats.ITEM_USED.get(this));
+		return InteractionResultHolder.success(itemstack);
 	}
 	
 	protected class BehaviorDispenseCustomBoat extends DefaultDispenseItemBehavior
@@ -91,31 +77,20 @@ public class CustomBoatItem extends Item
 		{
 			Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
 			Level level = source.getLevel();
-			double d0 = source.x() + (double)((float)direction.getStepX() * 1.125F);
-			double d1 = source.y() + (double)((float)direction.getStepY() * 1.125F);
-			double d2 = source.z() + (double)((float)direction.getStepZ() * 1.125F);
+			double x = source.x() + (double)((float)direction.getStepX() * 1.125F);
+			double y = source.y() + (double)((float)direction.getStepY() * 1.125F);
+			double z = source.z() + (double)((float)direction.getStepZ() * 1.125F);
 			BlockPos pos = source.getPos().relative(direction);
-			double d3;
+			double waterOffset = level.getFluidState(pos).is(FluidTags.WATER)? 1 : 0;
 			
-			if(level.getFluidState(pos).is(FluidTags.WATER))
-				d3 = 1.0D;
-			else
-			{
-				if (!level.getBlockState(pos).isAir() || !level.getFluidState(pos.below()).is(FluidTags.WATER))
-					return this.dispense(source, stack);
-				
-				d3 = 0.0D;
-			}
-			Entity boat = provider.createBoat(stack, level, d0, d1 + d3, d2);
+			if(!level.getBlockState(pos).isAir() || !level.getFluidState(pos.below()).is(FluidTags.WATER))
+				return new DefaultDispenseItemBehavior().dispense(source, stack);
+			
+			Entity boat = provider.createBoat(stack, level, x, y + waterOffset, z);
 			boat.setYRot(direction.toYRot());
 			level.addFreshEntity(boat);
 			stack.shrink(1);
 			return stack;
-		}
-		@Override
-		protected void playSound(BlockSource source)
-		{
-			source.getLevel().levelEvent(LevelEvent.SOUND_DISPENSER_DISPENSE, source.getPos(), 0);
 		}
 	}
 	
