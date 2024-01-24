@@ -7,6 +7,7 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.machine.TransportalizerBlock;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
@@ -534,6 +535,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockExtra(MSBlocks.TRANSPORTALIZER, "destId", "Destination: %s");
 		addBlockExtra(MSBlocks.TRANS_PORTALIZER, "idString", "ID: %s");
 		addBlockExtra(MSBlocks.TRANS_PORTALIZER, "destId", "Destination: %s");
+		add(TransportalizerBlock.LOCKED, "The transportalizer appears to be locked.");
+		addBlockExtra(MSBlocks.TRANSPORTALIZER, "locked_message", "Locked");
 		addBlock(MSBlocks.SENDIFICATOR, "Sendificator");
 		addBlockTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		addBlock(MSBlocks.GRIST_WIDGET, "GristWidget 12000");

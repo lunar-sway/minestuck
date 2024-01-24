@@ -554,6 +554,8 @@
   "block.minestuck.transportalizer": "Transportalizer",
   "block.minestuck.transportalizer.destId": "Destination: %s",
   "block.minestuck.transportalizer.idString": "ID: %s",
+  "block.minestuck.transportalizer.locked": "The transportalizer appears to be locked.",
+  "block.minestuck.transportalizer.locked_message": "Locked",
   "block.minestuck.treated_bookshelf": "Treated Bookshelf",
   "block.minestuck.treated_ladder": "Treated Ladder",
   "block.minestuck.treated_planks": "Treated Planks",

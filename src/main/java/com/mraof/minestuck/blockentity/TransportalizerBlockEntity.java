@@ -42,6 +42,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	
 	private boolean enabled = true;
 	private boolean active = true;
+	private boolean locked = false;
 	String id = "";
 	private String destId = "";
 	
@@ -273,6 +274,16 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		level.sendBlockUpdated(worldPosition, state, state, 0);
 	}
 	
+	public boolean isLocked()
+	{
+		return locked;
+	}
+	
+	public void lock()
+	{
+		locked = true;
+	}
+	
 	@Override
 	public Component getName()
 	{
@@ -300,6 +311,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		this.id = nbt.getString("idString");
 		if(nbt.contains("active"))
 			this.active = nbt.getBoolean("active");
+		this.locked = nbt.getBoolean("locked");
 	}
 	
 	@Override
@@ -312,6 +324,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		if (!destId.isEmpty())
 			compound.putString("destId", destId);
 		compound.putBoolean("active", active);
+		compound.putBoolean("locked", locked);
 	}
 	
 	@Override

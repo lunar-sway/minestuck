@@ -24,6 +24,11 @@
                   "op": "replace",
                   "source": "destId",
                   "target": "destId"
+                },
+                {
+                  "op": "replace",
+                  "source": "locked",
+                  "target": "locked"
                 }
               ],
               "source": "block_entity"

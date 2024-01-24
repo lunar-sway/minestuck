@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -31,6 +32,8 @@ public class TransportalizerItem extends BlockItem
 		{
 			transportalizer.setId(stack.getTag().getString("idString"));
 			transportalizer.setDestId(stack.getTag().getString("destId"));
+			if (stack.getTag().getBoolean("locked"))
+				transportalizer.lock();
 		}
 		return true;
 	}
@@ -40,9 +43,14 @@ public class TransportalizerItem extends BlockItem
 	{
 		if (!stack.hasTag())
 			return;
-		if (stack.getTag().contains("idString", Tag.TAG_STRING))
-			tooltip.add(Component.translatable("block.minestuck.transportalizer.idString", stack.getTag().getString("idString")));
-		if (stack.getTag().contains("destId", Tag.TAG_STRING))
-			tooltip.add(Component.translatable("block.minestuck.transportalizer.destId", stack.getTag().getString("destId")));
+		
+		if (stack.getTag().getBoolean("locked")) {
+			tooltip.add(Component.translatable("block.minestuck.transportalizer.locked_message").withStyle(ChatFormatting.GRAY));
+		} else {
+			if (stack.getTag().contains("idString", Tag.TAG_STRING))
+				tooltip.add(Component.translatable("block.minestuck.transportalizer.idString", stack.getTag().getString("idString")));
+			if (stack.getTag().contains("destId", Tag.TAG_STRING))
+				tooltip.add(Component.translatable("block.minestuck.transportalizer.destId", stack.getTag().getString("destId")));
+		}
 	}
 }

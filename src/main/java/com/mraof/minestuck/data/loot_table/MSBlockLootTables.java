@@ -642,7 +642,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	}
 	private LootTable.Builder droppingWithIds(Block block)
 	{
-		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("idString", "idString").copy("destId", "destId")))));
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("idString", "idString").copy("destId", "destId").copy("locked", "locked")))));
 	}
 	
 	@Override
