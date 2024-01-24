@@ -9,7 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Spawn egg items for main Underling types, Consorts, and Carapacians
-- All aspect tree-related blocks moved to `AspectTreeBlocks`
 - Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
 
 ### Fixed
