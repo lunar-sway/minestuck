@@ -37,43 +37,51 @@ public class TransportalizerScreen extends Screen
 	@Override
 	public void init()
 	{
-		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.destinationTextField = new EditBox(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, Component.translatable(DESTINATION_CODE_MESSAGE));	//TODO Maybe look at other text fields for what the text should be
-		this.destinationTextField.setCanLoseFocus(false);
-		this.destinationTextField.setMaxLength(4);
-		this.destinationTextField.setValue(be.getDestId());
+		int yOffset = (height / 2) - (guiHeight / 2);
+		destinationTextField = new EditBox(font, width / 2 - 20, yOffset + 25, 40, 20, Component.translatable(DESTINATION_CODE_MESSAGE));	//TODO Maybe look at other text fields for what the text should be
+		destinationTextField.setCanLoseFocus(false);
+		destinationTextField.setMaxLength(4);
+		destinationTextField.setValue(be.getDestId());
 		destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addRenderableWidget(destinationTextField);
 		setInitialFocus(destinationTextField);
 		
-		addRenderableWidget(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, Component.translatable(DONE_MESSAGE), button -> finish()));
+		addRenderableWidget(doneButton = new ExtendedButton(width / 2 - 20, yOffset + 50, 40, 20, Component.translatable(DONE_MESSAGE), button -> finish()));
 		doneButton.active = destinationTextField.getValue().length() == 4;
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
+		renderBackground(guiGraphics);
 		
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		int yOffset = (height / 2) - (guiHeight / 2);
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiBackground, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
+		guiGraphics.blit(guiBackground, (width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
 		
-		guiGraphics.drawString(font, be.getId(), (this.width / 2F) - font.width(be.getId()) / 2F, yOffset + 10, be.isActive() ? 0x404040 : 0xFF0000, false);
+		if(!be.hasId())
+			guiGraphics.drawString(font, "Enter ID:", width / 2F - font.width("Enter ID:") / 2F, yOffset + 10, 0x404040, false);
+		
+		guiGraphics.drawString(font, be.getId(), (width / 2F) - font.width(be.getId()) / 2F, yOffset + 10, be.isActive() ? 0x404040 : 0xFF0000, false);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 
 	private void finish()
 	{
-		if(this.destinationTextField.getValue().length() == 4)
-		{
+		String text = destinationTextField.getValue().toUpperCase();
+		if(text.length() != 4)
+			return;
+		
+		if(be.hasId()) {
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
-			TransportalizerPacket packet = new TransportalizerPacket(be.getBlockPos(), destinationTextField.getValue().toUpperCase());
+			TransportalizerPacket.DestId packet = new TransportalizerPacket.DestId(be.getBlockPos(), text);
 			MSPacketHandler.sendToServer(packet);
-			this.minecraft.setScreen(null);
+			minecraft.setScreen(null);
+		} else {
+			TransportalizerPacket.Id packet = new TransportalizerPacket.Id(be.getBlockPos(), text);
+			MSPacketHandler.sendToServer(packet);
+			minecraft.setScreen(null);
 		}
 	}
-
 }
-

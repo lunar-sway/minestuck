@@ -54,12 +54,8 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	public void clearRemoved()
 	{
 		super.clearRemoved();
-		if(!level.isClientSide && active)
-		{
-			if(id.isEmpty())
-				id = TransportalizerSavedData.get(level).findNewId(level.random, GlobalPos.of(level.dimension(), worldPosition));
-			else active = TransportalizerSavedData.get(level).set(id, GlobalPos.of(level.dimension(), worldPosition));
-		}
+		if(!level.isClientSide && active && this.hasId())
+			active = TransportalizerSavedData.get(level).set(id, GlobalPos.of(level.dimension(), worldPosition));
 	}
 	
 	private boolean unloaded = false;
@@ -81,7 +77,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		}
 	}
 	
-	public static <E extends Entity> void transportalizerTick(Level level, BlockPos pos, BlockState state, TransportalizerBlockEntity blockEntity)
+	public static void transportalizerTick(Level level, BlockPos pos, BlockState state, TransportalizerBlockEntity blockEntity)
 	{
 		if(level.isClientSide)
 			return;
@@ -212,6 +208,11 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				|| typeKey.isPresent() && forbiddenDimTypes.contains(String.valueOf(typeKey.get().location()));
 	}
 	
+	public boolean hasId()
+	{
+		return !id.isEmpty();
+	}
+	
 	public String getId()
 	{
 		return id;
@@ -221,12 +222,18 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	{
 		if(level != null && !level.isClientSide)
 		{
+			var data = TransportalizerSavedData.get(level);
 			GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
-			if(active && !this.id.isEmpty())
-				TransportalizerSavedData.get(level).remove(this.id, location);
+			if(data.get(id) != null)
+				return;
+			if(active && this.hasId())
+				data.remove(this.id, location);
 			
 			this.id = id;
-			active = TransportalizerSavedData.get(level).set(id, location);
+			BlockState state = level.getBlockState(worldPosition);
+			this.setChanged();
+			level.sendBlockUpdated(worldPosition, state, state, 0);
+			active = data.set(id, location);
 		}
 	}
 	
@@ -300,8 +307,10 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	{
 		super.saveAdditional(compound);
 		
-		compound.putString("idString", id);
-		compound.putString("destId", destId);
+		if (!id.isEmpty())
+			compound.putString("idString", id);
+		if (!destId.isEmpty())
+			compound.putString("destId", destId);
 		compound.putBoolean("active", active);
 	}
 	

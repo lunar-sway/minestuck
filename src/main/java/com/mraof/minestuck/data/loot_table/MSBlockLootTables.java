@@ -17,7 +17,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
@@ -476,8 +475,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(HUBTOP.get());
 		dropSelf(LUNCHTOP.get());
 		dropSelf(OLD_COMPUTER.get());
-		add(TRANSPORTALIZER.get(), MSBlockLootTables::droppingWithNameOnSilkTouch);
-		add(TRANS_PORTALIZER.get(), MSBlockLootTables::droppingWithNameOnSilkTouch);
+		add(TRANSPORTALIZER.get(), this::droppingWithIds);
+		add(TRANS_PORTALIZER.get(), this::droppingWithIds);
 		dropSelf(SENDIFICATOR.get());
 		dropSelf(GRIST_WIDGET.get());
 		dropSelf(URANIUM_COOKER.get());
@@ -641,9 +640,9 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	{
 		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackBlockEntity.ITEM_DYNAMIC))));
 	}
-	private static LootTable.Builder droppingWithNameOnSilkTouch(Block block)
+	private LootTable.Builder droppingWithIds(Block block)
 	{
-		return createSelfDropDispatchTable(block, SILK_TOUCH_CONDITION.invert(), LootItem.lootTableItem(block).apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("idString", "idString").copy("destId", "destId")))));
 	}
 	
 	@Override
