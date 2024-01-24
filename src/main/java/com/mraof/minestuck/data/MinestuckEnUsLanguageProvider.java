@@ -533,8 +533,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.TRANS_PORTALIZER, "TRANSportalizer");
 		addBlockExtra(MSBlocks.TRANSPORTALIZER, "idString", "ID: %s");
 		addBlockExtra(MSBlocks.TRANSPORTALIZER, "destId", "Destination: %s");
-		addBlockExtra(MSBlocks.TRANS_PORTALIZER, "idString", "ID: %s");
-		addBlockExtra(MSBlocks.TRANS_PORTALIZER, "destId", "Destination: %s");
 		add(TransportalizerBlock.LOCKED, "The transportalizer appears to be locked.");
 		addBlockExtra(MSBlocks.TRANSPORTALIZER, "locked_message", "Locked");
 		addBlock(MSBlocks.SENDIFICATOR, "Sendificator");

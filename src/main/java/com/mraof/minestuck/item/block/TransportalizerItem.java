@@ -48,9 +48,9 @@ public class TransportalizerItem extends BlockItem
 			tooltip.add(Component.translatable("block.minestuck.transportalizer.locked_message").withStyle(ChatFormatting.GRAY));
 		} else {
 			if (stack.getTag().contains("idString", Tag.TAG_STRING))
-				tooltip.add(Component.translatable("block.minestuck.transportalizer.idString", stack.getTag().getString("idString")));
+				tooltip.add(Component.translatable("block.minestuck.transportalizer.idString", stack.getTag().getString("idString")).withStyle(ChatFormatting.GRAY));
 			if (stack.getTag().contains("destId", Tag.TAG_STRING))
-				tooltip.add(Component.translatable("block.minestuck.transportalizer.destId", stack.getTag().getString("destId")));
+				tooltip.add(Component.translatable("block.minestuck.transportalizer.destId", stack.getTag().getString("destId")).withStyle(ChatFormatting.GRAY));
 		}
 	}
 }

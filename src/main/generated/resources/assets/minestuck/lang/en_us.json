@@ -549,8 +549,6 @@
   "block.minestuck.trajectory_block": "Trajectory Block",
   "block.minestuck.trajectory_block.tooltip": "Propels entities in the direction it faces, with an incoming redstone strength modifier.",
   "block.minestuck.trans_portalizer": "TRANSportalizer",
-  "block.minestuck.trans_portalizer.destId": "Destination: %s",
-  "block.minestuck.trans_portalizer.idString": "ID: %s",
   "block.minestuck.transportalizer": "Transportalizer",
   "block.minestuck.transportalizer.destId": "Destination: %s",
   "block.minestuck.transportalizer.idString": "ID: %s",
