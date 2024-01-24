@@ -1,14 +1,10 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.CruxiteDowelBlock;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.block.TrajectoryBlock;
+import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.client.model.Model;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -807,282 +803,282 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.SHADEWOOD_SAPLING, MSBlockStateProvider::texture);
 		
-		axisWithItem(MSBlocks.BLOOD_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.BLOOD_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.BREATH_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.BREATH_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.DOOM_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.DOOM_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.HEART_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.HEART_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.HOPE_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.HOPE_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.LIFE_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.LIFE_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.LIGHT_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.LIGHT_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.MIND_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.MIND_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.RAGE_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.RAGE_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.SPACE_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.SPACE_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.TIME_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.TIME_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		axisWithItem(MSBlocks.VOID_ASPECT_LOG,
+		axisWithItem(AspectTreeBlocks.VOID_ASPECT_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
 		
-		simpleBlockWithItem(MSBlocks.BLOOD_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.BLOOD_ASPECT_STAIRS, MSBlocks.BLOOD_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.BLOOD_ASPECT_SLAB, MSBlocks.BLOOD_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.BLOOD_ASPECT_BUTTON, MSBlocks.BLOOD_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.BLOOD_ASPECT_PRESSURE_PLATE, MSBlocks.BLOOD_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.BLOOD_ASPECT_FENCE, MSBlocks.BLOOD_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.BLOOD_ASPECT_FENCE_GATE, MSBlocks.BLOOD_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.BLOOD_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.BLOOD_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.BLOOD_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.BLOOD_ASPECT_STAIRS, AspectTreeBlocks.BLOOD_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.BLOOD_ASPECT_SLAB, AspectTreeBlocks.BLOOD_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.BLOOD_ASPECT_BUTTON, AspectTreeBlocks.BLOOD_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.BLOOD_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.BLOOD_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.BLOOD_ASPECT_FENCE, AspectTreeBlocks.BLOOD_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.BLOOD_ASPECT_FENCE_GATE, AspectTreeBlocks.BLOOD_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.BLOOD_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.BLOOD_ASPECT_TRAPDOOR);
 		flatItem(MSItems.BLOOD_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.BREATH_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.BREATH_ASPECT_STAIRS, MSBlocks.BREATH_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.BREATH_ASPECT_SLAB, MSBlocks.BREATH_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.BREATH_ASPECT_BUTTON, MSBlocks.BREATH_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.BREATH_ASPECT_PRESSURE_PLATE, MSBlocks.BREATH_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.BREATH_ASPECT_FENCE, MSBlocks.BREATH_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.BREATH_ASPECT_FENCE_GATE, MSBlocks.BREATH_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.BREATH_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.BREATH_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.BREATH_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.BREATH_ASPECT_STAIRS, AspectTreeBlocks.BREATH_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.BREATH_ASPECT_SLAB, AspectTreeBlocks.BREATH_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.BREATH_ASPECT_BUTTON, AspectTreeBlocks.BREATH_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.BREATH_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.BREATH_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.BREATH_ASPECT_FENCE, AspectTreeBlocks.BREATH_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.BREATH_ASPECT_FENCE_GATE, AspectTreeBlocks.BREATH_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.BREATH_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.BREATH_ASPECT_TRAPDOOR);
 		flatItem(MSItems.BREATH_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.DOOM_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.DOOM_ASPECT_STAIRS, MSBlocks.DOOM_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.DOOM_ASPECT_SLAB, MSBlocks.DOOM_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.DOOM_ASPECT_BUTTON, MSBlocks.DOOM_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.DOOM_ASPECT_PRESSURE_PLATE, MSBlocks.DOOM_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.DOOM_ASPECT_FENCE, MSBlocks.DOOM_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.DOOM_ASPECT_FENCE_GATE, MSBlocks.DOOM_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.DOOM_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.DOOM_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.DOOM_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.DOOM_ASPECT_STAIRS, AspectTreeBlocks.DOOM_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.DOOM_ASPECT_SLAB, AspectTreeBlocks.DOOM_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.DOOM_ASPECT_BUTTON, AspectTreeBlocks.DOOM_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.DOOM_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.DOOM_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.DOOM_ASPECT_FENCE, AspectTreeBlocks.DOOM_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.DOOM_ASPECT_FENCE_GATE, AspectTreeBlocks.DOOM_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.DOOM_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.DOOM_ASPECT_TRAPDOOR);
 		flatItem(MSItems.DOOM_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.HEART_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.HEART_ASPECT_STAIRS, MSBlocks.HEART_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.HEART_ASPECT_SLAB, MSBlocks.HEART_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.HEART_ASPECT_BUTTON, MSBlocks.HEART_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.HEART_ASPECT_PRESSURE_PLATE, MSBlocks.HEART_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.HEART_ASPECT_FENCE, MSBlocks.HEART_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.HEART_ASPECT_FENCE_GATE, MSBlocks.HEART_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.HEART_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.HEART_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.HEART_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.HEART_ASPECT_STAIRS, AspectTreeBlocks.HEART_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.HEART_ASPECT_SLAB, AspectTreeBlocks.HEART_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.HEART_ASPECT_BUTTON, AspectTreeBlocks.HEART_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.HEART_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.HEART_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.HEART_ASPECT_FENCE, AspectTreeBlocks.HEART_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.HEART_ASPECT_FENCE_GATE, AspectTreeBlocks.HEART_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.HEART_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.HEART_ASPECT_TRAPDOOR);
 		flatItem(MSItems.HEART_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.HOPE_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.HOPE_ASPECT_STAIRS, MSBlocks.HOPE_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.HOPE_ASPECT_SLAB, MSBlocks.HOPE_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.HOPE_ASPECT_BUTTON, MSBlocks.HOPE_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.HOPE_ASPECT_PRESSURE_PLATE, MSBlocks.HOPE_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.HOPE_ASPECT_FENCE, MSBlocks.HOPE_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.HOPE_ASPECT_FENCE_GATE, MSBlocks.HOPE_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.HOPE_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.HOPE_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.HOPE_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.HOPE_ASPECT_STAIRS, AspectTreeBlocks.HOPE_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.HOPE_ASPECT_SLAB, AspectTreeBlocks.HOPE_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.HOPE_ASPECT_BUTTON, AspectTreeBlocks.HOPE_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.HOPE_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.HOPE_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.HOPE_ASPECT_FENCE, AspectTreeBlocks.HOPE_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.HOPE_ASPECT_FENCE_GATE, AspectTreeBlocks.HOPE_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.HOPE_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.HOPE_ASPECT_TRAPDOOR);
 		flatItem(MSItems.HOPE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.LIFE_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.LIFE_ASPECT_STAIRS, MSBlocks.LIFE_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.LIFE_ASPECT_SLAB, MSBlocks.LIFE_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.LIFE_ASPECT_BUTTON, MSBlocks.LIFE_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.LIFE_ASPECT_PRESSURE_PLATE, MSBlocks.LIFE_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.LIFE_ASPECT_FENCE, MSBlocks.LIFE_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.LIFE_ASPECT_FENCE_GATE, MSBlocks.LIFE_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.LIFE_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.LIFE_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.LIFE_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.LIFE_ASPECT_STAIRS, AspectTreeBlocks.LIFE_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.LIFE_ASPECT_SLAB, AspectTreeBlocks.LIFE_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.LIFE_ASPECT_BUTTON, AspectTreeBlocks.LIFE_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.LIFE_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.LIFE_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.LIFE_ASPECT_FENCE, AspectTreeBlocks.LIFE_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.LIFE_ASPECT_FENCE_GATE, AspectTreeBlocks.LIFE_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.LIFE_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.LIFE_ASPECT_TRAPDOOR);
 		flatItem(MSItems.LIFE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.LIGHT_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.LIGHT_ASPECT_STAIRS, MSBlocks.LIGHT_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.LIGHT_ASPECT_SLAB, MSBlocks.LIGHT_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.LIGHT_ASPECT_BUTTON, MSBlocks.LIGHT_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.LIGHT_ASPECT_PRESSURE_PLATE, MSBlocks.LIGHT_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.LIGHT_ASPECT_FENCE, MSBlocks.LIGHT_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.LIGHT_ASPECT_FENCE_GATE, MSBlocks.LIGHT_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.LIGHT_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.LIGHT_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.LIGHT_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.LIGHT_ASPECT_STAIRS, AspectTreeBlocks.LIGHT_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.LIGHT_ASPECT_SLAB, AspectTreeBlocks.LIGHT_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.LIGHT_ASPECT_BUTTON, AspectTreeBlocks.LIGHT_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.LIGHT_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.LIGHT_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.LIGHT_ASPECT_FENCE, AspectTreeBlocks.LIGHT_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.LIGHT_ASPECT_FENCE_GATE, AspectTreeBlocks.LIGHT_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.LIGHT_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.LIGHT_ASPECT_TRAPDOOR);
 		flatItem(MSItems.LIGHT_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.MIND_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.MIND_ASPECT_STAIRS, MSBlocks.MIND_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.MIND_ASPECT_SLAB, MSBlocks.MIND_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.MIND_ASPECT_BUTTON, MSBlocks.MIND_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.MIND_ASPECT_PRESSURE_PLATE, MSBlocks.MIND_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.MIND_ASPECT_FENCE, MSBlocks.MIND_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.MIND_ASPECT_FENCE_GATE, MSBlocks.MIND_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.MIND_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.MIND_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.MIND_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.MIND_ASPECT_STAIRS, AspectTreeBlocks.MIND_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.MIND_ASPECT_SLAB, AspectTreeBlocks.MIND_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.MIND_ASPECT_BUTTON, AspectTreeBlocks.MIND_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.MIND_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.MIND_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.MIND_ASPECT_FENCE, AspectTreeBlocks.MIND_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.MIND_ASPECT_FENCE_GATE, AspectTreeBlocks.MIND_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.MIND_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.MIND_ASPECT_TRAPDOOR);
 		flatItem(MSItems.MIND_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.RAGE_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.RAGE_ASPECT_STAIRS, MSBlocks.RAGE_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.RAGE_ASPECT_SLAB, MSBlocks.RAGE_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.RAGE_ASPECT_BUTTON, MSBlocks.RAGE_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.RAGE_ASPECT_PRESSURE_PLATE, MSBlocks.RAGE_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.RAGE_ASPECT_FENCE, MSBlocks.RAGE_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.RAGE_ASPECT_FENCE_GATE, MSBlocks.RAGE_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.RAGE_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.RAGE_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.RAGE_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.RAGE_ASPECT_STAIRS, AspectTreeBlocks.RAGE_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.RAGE_ASPECT_SLAB, AspectTreeBlocks.RAGE_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.RAGE_ASPECT_BUTTON, AspectTreeBlocks.RAGE_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.RAGE_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.RAGE_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.RAGE_ASPECT_FENCE, AspectTreeBlocks.RAGE_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.RAGE_ASPECT_FENCE_GATE, AspectTreeBlocks.RAGE_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.RAGE_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.RAGE_ASPECT_TRAPDOOR);
 		flatItem(MSItems.RAGE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.SPACE_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.SPACE_ASPECT_STAIRS, MSBlocks.SPACE_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.SPACE_ASPECT_SLAB, MSBlocks.SPACE_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.SPACE_ASPECT_BUTTON, MSBlocks.SPACE_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.SPACE_ASPECT_PRESSURE_PLATE, MSBlocks.SPACE_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.SPACE_ASPECT_FENCE, MSBlocks.SPACE_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.SPACE_ASPECT_FENCE_GATE, MSBlocks.SPACE_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.SPACE_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.SPACE_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.SPACE_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.SPACE_ASPECT_STAIRS, AspectTreeBlocks.SPACE_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.SPACE_ASPECT_SLAB, AspectTreeBlocks.SPACE_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.SPACE_ASPECT_BUTTON, AspectTreeBlocks.SPACE_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.SPACE_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.SPACE_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.SPACE_ASPECT_FENCE, AspectTreeBlocks.SPACE_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.SPACE_ASPECT_FENCE_GATE, AspectTreeBlocks.SPACE_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.SPACE_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.SPACE_ASPECT_TRAPDOOR);
 		flatItem(MSItems.SPACE_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.TIME_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.TIME_ASPECT_STAIRS, MSBlocks.TIME_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.TIME_ASPECT_SLAB, MSBlocks.TIME_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.TIME_ASPECT_BUTTON, MSBlocks.TIME_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.TIME_ASPECT_PRESSURE_PLATE, MSBlocks.TIME_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.TIME_ASPECT_FENCE, MSBlocks.TIME_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.TIME_ASPECT_FENCE_GATE, MSBlocks.TIME_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.TIME_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.TIME_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.TIME_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.TIME_ASPECT_STAIRS, AspectTreeBlocks.TIME_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.TIME_ASPECT_SLAB, AspectTreeBlocks.TIME_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.TIME_ASPECT_BUTTON, AspectTreeBlocks.TIME_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.TIME_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.TIME_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.TIME_ASPECT_FENCE, AspectTreeBlocks.TIME_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.TIME_ASPECT_FENCE_GATE, AspectTreeBlocks.TIME_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.TIME_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.TIME_ASPECT_TRAPDOOR);
 		flatItem(MSItems.TIME_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.VOID_ASPECT_PLANKS);
-		stairsWithItem(MSBlocks.VOID_ASPECT_STAIRS, MSBlocks.VOID_ASPECT_PLANKS);
-		slabWithItem(MSBlocks.VOID_ASPECT_SLAB, MSBlocks.VOID_ASPECT_PLANKS);
-		buttonWithItem(MSBlocks.VOID_ASPECT_BUTTON, MSBlocks.VOID_ASPECT_PLANKS);
-		pressurePlateWithItem(MSBlocks.VOID_ASPECT_PRESSURE_PLATE, MSBlocks.VOID_ASPECT_PLANKS);
-		fenceWithItem(MSBlocks.VOID_ASPECT_FENCE, MSBlocks.VOID_ASPECT_PLANKS);
-		fenceGateWithItem(MSBlocks.VOID_ASPECT_FENCE_GATE, MSBlocks.VOID_ASPECT_PLANKS);
-		simpleDoorBlock(MSBlocks.VOID_ASPECT_DOOR);
-		trapDoorWithItem(MSBlocks.VOID_ASPECT_TRAPDOOR);
+		simpleBlockWithItem(AspectTreeBlocks.VOID_ASPECT_PLANKS);
+		stairsWithItem(AspectTreeBlocks.VOID_ASPECT_STAIRS, AspectTreeBlocks.VOID_ASPECT_PLANKS);
+		slabWithItem(AspectTreeBlocks.VOID_ASPECT_SLAB, AspectTreeBlocks.VOID_ASPECT_PLANKS);
+		buttonWithItem(AspectTreeBlocks.VOID_ASPECT_BUTTON, AspectTreeBlocks.VOID_ASPECT_PLANKS);
+		pressurePlateWithItem(AspectTreeBlocks.VOID_ASPECT_PRESSURE_PLATE, AspectTreeBlocks.VOID_ASPECT_PLANKS);
+		fenceWithItem(AspectTreeBlocks.VOID_ASPECT_FENCE, AspectTreeBlocks.VOID_ASPECT_PLANKS);
+		fenceGateWithItem(AspectTreeBlocks.VOID_ASPECT_FENCE_GATE, AspectTreeBlocks.VOID_ASPECT_PLANKS);
+		simpleDoorBlock(AspectTreeBlocks.VOID_ASPECT_DOOR);
+		trapDoorWithItem(AspectTreeBlocks.VOID_ASPECT_TRAPDOOR);
 		flatItem(MSItems.VOID_ASPECT_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.BLOOD_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.BREATH_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.DOOM_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.HEART_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.HOPE_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.LIFE_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.LIGHT_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.MIND_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.RAGE_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.SPACE_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.TIME_ASPECT_LEAVES);
-		simpleBlockWithItem(MSBlocks.VOID_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.BLOOD_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.BREATH_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.DOOM_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.HEART_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.HOPE_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.LIFE_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.LIGHT_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.MIND_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.RAGE_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.SPACE_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.TIME_ASPECT_LEAVES);
+		simpleBlockWithItem(AspectTreeBlocks.VOID_ASPECT_LEAVES);
 		
-		simpleBlock(MSBlocks.BLOOD_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.BLOOD_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.BLOOD_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.BREATH_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.BREATH_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.BREATH_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.DOOM_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.DOOM_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.DOOM_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.HEART_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.HEART_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.HEART_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.HOPE_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.HOPE_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.HOPE_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.LIFE_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.LIFE_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.LIFE_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.LIGHT_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.LIGHT_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.LIGHT_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.MIND_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.MIND_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.MIND_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.RAGE_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.RAGE_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.RAGE_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.SPACE_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.SPACE_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.SPACE_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.TIME_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.TIME_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.TIME_ASPECT_SAPLING, MSBlockStateProvider::texture);
-		simpleBlock(MSBlocks.VOID_ASPECT_SAPLING,
+		simpleBlock(AspectTreeBlocks.VOID_ASPECT_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.VOID_ASPECT_SAPLING, MSBlockStateProvider::texture);
 		
-		simpleBlockWithItem(MSBlocks.BLOOD_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.BLOOD_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("blood_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.BREATH_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.BREATH_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("breath_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.DOOM_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.DOOM_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("doom_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.HEART_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.HEART_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("heart_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.HOPE_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.HOPE_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("hope_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.LIFE_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.LIFE_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("life_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.LIGHT_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.LIGHT_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("light_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.MIND_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.MIND_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("mind_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.RAGE_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.RAGE_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("rage_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.SPACE_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.SPACE_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("space_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.TIME_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.TIME_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("time_aspect_planks")));
-		simpleBlockWithItem(MSBlocks.VOID_ASPECT_BOOKSHELF,
+		simpleBlockWithItem(AspectTreeBlocks.VOID_ASPECT_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("void_aspect_planks")));
@@ -1113,29 +1109,29 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture("treated_planks")));
 		
 		//Ladders
-		simpleHorizontal(MSBlocks.BLOOD_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.BLOOD_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.BLOOD_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.BREATH_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.BREATH_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.BREATH_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.DOOM_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.DOOM_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.DOOM_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.HEART_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.HEART_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.HEART_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.HOPE_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.HOPE_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.HOPE_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.LIFE_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.LIFE_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.LIFE_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.LIGHT_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.LIGHT_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.LIGHT_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.MIND_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.MIND_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.MIND_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.RAGE_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.RAGE_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.RAGE_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.SPACE_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.SPACE_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.SPACE_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.TIME_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.TIME_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.TIME_ASPECT_LADDER, MSBlockStateProvider::texture);
-		simpleHorizontal(MSBlocks.VOID_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(AspectTreeBlocks.VOID_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.VOID_ASPECT_LADDER, MSBlockStateProvider::texture);
 		
 		simpleHorizontal(MSBlocks.GLOWING_LADDER, this::ladder);
