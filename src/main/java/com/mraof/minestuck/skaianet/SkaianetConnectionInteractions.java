@@ -8,9 +8,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -324,28 +322,20 @@ public final class SkaianetConnectionInteractions
 	 * Prepares the sburb connection and data needed for after entry.
 	 * Should only be called by the cruxite artifact on trigger before teleportation
 	 *
-	 * @param target   the identifier of the player that is entering
-	 * @return The dimension type of the new land created, or null if the player can't enter at this time.
+	 * @param player   the identifier of the player that is entering
 	 */
-	public ResourceKey<Level> prepareEntry(PlayerIdentifier target)
+	public void setPrimaryConnectionForEntry(PlayerIdentifier player)
 	{
-		if(!this.hasPrimaryConnectionForClient(target))
+		if(this.hasPrimaryConnectionForClient(player))
+			return;
+		
+		Optional<ActiveConnection> connection = this.getActiveConnection(player);
+		if(connection.isPresent())
+			this.trySetPrimaryConnection(connection.get());
+		else
 		{
-			Optional<ActiveConnection> connection = this.getActiveConnection(target);
-			if(connection.isPresent())
-				this.trySetPrimaryConnection(connection.get());
-			else
-			{
-				LOGGER.info("Player {} entered without connection.", target.getUsername());
-				
-				this.trySetPrimaryConnection(target, IdentifierHandler.NULL_IDENTIFIER);
-			}
+			LOGGER.info("Player {} entered without connection.", player.getUsername());
+			this.trySetPrimaryConnection(player, IdentifierHandler.NULL_IDENTIFIER);
 		}
-		
-		SburbPlayerData playerData = skaianetData.getOrCreateData(target);
-		if(playerData.getLandDimension() == null)
-			SburbHandler.prepareEntry(playerData, skaianetData.mcServer);
-		
-		return playerData.getLandDimension();
 	}
 }

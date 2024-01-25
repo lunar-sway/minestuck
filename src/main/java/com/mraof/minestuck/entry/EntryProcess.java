@@ -124,7 +124,8 @@ public class EntryProcess
 			return;
 		}
 		
-		ResourceKey<Level> landDimension = SkaianetConnectionInteractions.get(player.server).prepareEntry(identifier);
+		SkaianetConnectionInteractions.get(player.server).setPrimaryConnectionForEntry(identifier);
+		ResourceKey<Level> landDimension = SburbHandler.prepareEntry(identifier, player.server);
 		if(landDimension == null)
 		{
 			player.sendSystemMessage(Component.translatable(CREATION_FAILED));

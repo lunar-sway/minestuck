@@ -146,19 +146,26 @@ public final class SburbHandler
 			connectionInteractions.trySetPrimaryConnection(connection.get());
 	}
 	
-	static void prepareEntry(SburbPlayerData playerData, MinecraftServer mcServer)
+	public static ResourceKey<Level> prepareEntry(PlayerIdentifier player, MinecraftServer mcServer)
 	{
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		SburbPlayerData playerData = skaianetData.getOrCreateData(player);
+		if(playerData.getLandDimension() != null)
+			return playerData.getLandDimension();
+		
 		PlayerIdentifier identifier = playerData.playerId();
 		
 		generateAndSetTitle(identifier, mcServer);
 		
 		LandTypePair landTypes = genLandAspects(mcServer, identifier);
-		ResourceKey<Level> dimType = DynamicDimensions.createLand(mcServer, DynamicDimensions.landIdBaseForPLayer(identifier), landTypes);
-		playerData.setLand(dimType);
 		
+		ResourceKey<Level> landDimension = DynamicDimensions.createLand(mcServer, DynamicDimensions.landIdBaseForPLayer(identifier), landTypes);
+		playerData.setLand(landDimension);
 		MSDimensions.sendLandTypesToAll(mcServer);
 		
-		SkaianetData.get(mcServer).predefineData.remove(identifier);
+		skaianetData.predefineData.remove(identifier);
+		
+		return landDimension;
 	}
 	
 	public static void onEntry(MinecraftServer server, ServerPlayer player)
