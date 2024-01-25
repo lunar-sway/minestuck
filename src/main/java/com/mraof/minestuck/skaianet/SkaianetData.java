@@ -10,7 +10,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
@@ -18,8 +17,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * This class handles server sided stuff about the sburb connection network.
- * This class also handles the main saving and loading.
+ * This class is the centerpoint of various sburb-related data, which all goes in the "minestuck_skaianet.dat" data file.
  * @author kirderf1
  */
 public final class SkaianetData extends SavedData
@@ -159,14 +157,6 @@ public final class SkaianetData extends SavedData
 	void removePredefineData(PlayerIdentifier player)
 	{
 		predefineData.remove(player);
-	}
-	
-	public static SkaianetData get(Level level)
-	{
-		MinecraftServer server = level.getServer();
-		if(server == null)
-			throw new IllegalArgumentException("Can't get skaianet instance on client side! (Got null server from level)");
-		return get(server);
 	}
 	
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_skaianet";

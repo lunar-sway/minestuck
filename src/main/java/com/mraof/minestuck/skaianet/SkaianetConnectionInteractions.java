@@ -17,6 +17,11 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * Handles active connections and primary connections.
+ * Sets the rules for when a player can connect to another player.
+ * @author kirderf1
+ */
 public final class SkaianetConnectionInteractions
 {
 	private static final Logger LOGGER = LogManager.getLogger();

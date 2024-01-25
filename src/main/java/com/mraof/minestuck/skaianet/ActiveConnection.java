@@ -10,6 +10,12 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+/**
+ * Represents an active sburb connection between two computers, which:
+ * - Is a condition for using editmode
+ * - Plays a role in determining the primary connection between players
+ * @author kirderf1
+ */
 public final class ActiveConnection
 {
 	private final PlayerIdentifier client;

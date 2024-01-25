@@ -29,6 +29,10 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Supplier;
 
+/**
+ * Contains various player-specific data that were originally stored in {@code SburbConnection}.
+ * @author kirderf1
+ */
 public final class SburbPlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -44,8 +48,7 @@ public final class SburbPlayerData
 	
 	private final Set<String> givenItemList = new HashSet<>();
 	
-	//Only used by the edit handler
-	private ListTag inventory;
+	private ListTag lastEditmodeInventory;
 	
 	SburbPlayerData(PlayerIdentifier playerId, MinecraftServer mcServer)
 	{
@@ -56,7 +59,7 @@ public final class SburbPlayerData
 	void read(CompoundTag tag)
 	{
 		if(tag.contains("inventory", Tag.TAG_LIST))
-			this.inventory = tag.getList("inventory", Tag.TAG_COMPOUND);
+			this.lastEditmodeInventory = tag.getList("inventory", Tag.TAG_COMPOUND);
 		
 		ListTag list = tag.getList("given_items", Tag.TAG_STRING);
 		for(int i = 0; i < list.size(); i++)
@@ -75,8 +78,8 @@ public final class SburbPlayerData
 	
 	void write(CompoundTag tag)
 	{
-		if(this.inventory != null)
-			tag.put("inventory", this.inventory);
+		if(this.lastEditmodeInventory != null)
+			tag.put("inventory", this.lastEditmodeInventory);
 		
 		ListTag list = new ListTag();
 		for(String name : this.givenItemList)
@@ -185,12 +188,12 @@ public final class SburbPlayerData
 	
 	public ListTag getEditmodeInventory()
 	{
-		return inventory == null ? null : inventory.copy();
+		return lastEditmodeInventory == null ? null : lastEditmodeInventory.copy();
 	}
 	
 	public void putEditmodeInventory(ListTag nbt)
 	{
-		inventory = nbt;
+		lastEditmodeInventory = nbt;
 	}
 	
 	public GristType getBaseGrist()

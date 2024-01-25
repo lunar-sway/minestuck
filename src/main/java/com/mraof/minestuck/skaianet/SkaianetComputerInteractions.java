@@ -10,6 +10,10 @@ import net.minecraft.server.MinecraftServer;
 
 import java.util.Optional;
 
+/**
+ * Forms the point of interaction for sburb computer programs, and maintains the lists of computers waiting to connect.
+ * @author kirderf1
+ */
 public final class SkaianetComputerInteractions
 {
 	public static final String STOP_RESUME = "minestuck.stop_resume_message";
@@ -157,7 +161,8 @@ public final class SkaianetComputerInteractions
 			});
 		} else
 		{
-			skaianetData.connectionInteractions.getActiveConnection(player).ifPresent(skaianetData.connectionInteractions::closeConnection);
+			skaianetData.connectionInteractions.getActiveConnection(player)
+					.ifPresent(skaianetData.connectionInteractions::closeConnection);
 		}
 	}
 	
