@@ -95,7 +95,7 @@ public sealed abstract class SessionHandler
 		{
 			super(skaianetData);
 			globalSession = Objects.requireNonNull(session);
-			skaianetData.predefineData.keySet().forEach(globalSession::addPlayer);
+			skaianetData.players().forEach(globalSession::addPlayer);
 		}
 		
 		Global(SkaianetData skaianetData, CompoundTag nbt)

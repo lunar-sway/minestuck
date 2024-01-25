@@ -27,9 +27,9 @@ public final class SkaianetData extends SavedData
 	final InfoTracker infoTracker = new InfoTracker(this);
 	final SkaianetComputerInteractions computerInteractions;
 	final SkaianetConnectionInteractions connectionInteractions;
-	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
-	final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
 	final SessionHandler sessionHandler;
+	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
+	private final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
 	
 	final MinecraftServer mcServer;
 	
@@ -132,6 +132,11 @@ public final class SkaianetData extends SavedData
 		});
 	}
 	
+	public Collection<SburbPlayerData> allPlayerData()
+	{
+		return this.playerDataMap.values();
+	}
+	
 	/**
 	 * Gets/creates an instance of predefine data for the given player.
 	 * @return An empty optional if data can no longer be predefined for this player.
@@ -147,9 +152,13 @@ public final class SkaianetData extends SavedData
 			}));
 	}
 	
-	public Collection<SburbPlayerData> allPlayerData()
+	/**
+	 * Predefine data is only meant to exist up until the actual land and title have been generated for the player (which happens during entry preparations).
+	 * After that, predefine data should be removed.
+	 */
+	void removePredefineData(PlayerIdentifier player)
 	{
-		return this.playerDataMap.values();
+		predefineData.remove(player);
 	}
 	
 	public static SkaianetData get(Level level)

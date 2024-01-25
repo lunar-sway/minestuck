@@ -163,7 +163,7 @@ public final class SburbHandler
 		playerData.setLand(landDimension);
 		MSDimensions.sendLandTypesToAll(mcServer);
 		
-		skaianetData.predefineData.remove(identifier);
+		skaianetData.removePredefineData(identifier);
 		
 		return landDimension;
 	}
