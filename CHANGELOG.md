@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
+- New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
+- Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
+
+### Changed
+- Transportalizers now stack to one instead of 64
+
+### Contributors for this release
+- hadean
+
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
 ### Added
