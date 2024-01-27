@@ -37,7 +37,7 @@ public final class SkaianetData extends SavedData
 		
 		computerInteractions = new SkaianetComputerInteractions(this);
 		connectionInteractions = new SkaianetConnectionInteractions(this);
-		sessionHandler = new SessionHandler.Multi(this).getActual();
+		sessionHandler = SessionHandler.init(this);
 	}
 	
 	private SkaianetData(MinecraftServer mcServer, CompoundTag nbt)
@@ -66,13 +66,7 @@ public final class SkaianetData extends SavedData
 		computerInteractions = new SkaianetComputerInteractions(this, nbt);
 		connectionInteractions = new SkaianetConnectionInteractions(this, nbt);
 		
-		SessionHandler sessions;
-		if(nbt.contains("session", Tag.TAG_COMPOUND))
-			sessions = new SessionHandler.Global(this, nbt.getCompound("session"));
-		else sessions = new SessionHandler.Multi(this, nbt.getList("sessions", Tag.TAG_COMPOUND));
-		
-		sessionHandler = sessions.getActual();
-		sessionHandler.getSessions().forEach(Session::checkIfCompleted);
+		sessionHandler = SessionHandler.load(nbt, this);
 	}
 	
 	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)

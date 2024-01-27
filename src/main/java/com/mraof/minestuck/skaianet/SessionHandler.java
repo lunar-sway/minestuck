@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,23 @@ public sealed abstract class SessionHandler
 	SessionHandler(SkaianetData skaianetData)
 	{
 		this.skaianetData = skaianetData;
+	}
+	
+	static SessionHandler init(SkaianetData skaianetData)
+	{
+		return new Multi(skaianetData).getActual();
+	}
+	
+	static SessionHandler load(CompoundTag tag, SkaianetData skaianetData)
+	{
+		SessionHandler loadedSessions;
+		if(tag.contains("session", Tag.TAG_COMPOUND))
+			loadedSessions = new SessionHandler.Global(skaianetData, tag.getCompound("session"));
+		else loadedSessions = new SessionHandler.Multi(skaianetData, tag.getList("sessions", Tag.TAG_COMPOUND));
+		
+		SessionHandler actual = loadedSessions.getActual();
+		actual.getSessions().forEach(Session::checkIfCompleted);
+		return actual;
 	}
 	
 	abstract void write(CompoundTag compound);
@@ -86,7 +104,7 @@ public sealed abstract class SessionHandler
 	/**
 	 * An implementation that only allows for a single, global session, which all players are assumed to be part of
 	 */
-	static final class Global extends SessionHandler
+	private static final class Global extends SessionHandler
 	{
 		@Nonnull
 		private final Session globalSession;
@@ -155,7 +173,7 @@ public sealed abstract class SessionHandler
 	/**
 	 * The standard implementation of SessionHandler which allows multiple sessions
 	 */
-	static final class Multi extends SessionHandler
+	private static final class Multi extends SessionHandler
 	{
 		private static final Logger LOGGER = LogManager.getLogger();
 		
