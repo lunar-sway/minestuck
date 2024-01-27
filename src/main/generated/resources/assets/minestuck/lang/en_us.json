@@ -2222,6 +2222,7 @@
   "minestuck.transportalizer.done": "DONE",
   "minestuck.transportalizer.forbidden": "Transportalizers have been disabled for this dimension.",
   "minestuck.transportalizer.forbidden_destination": "Transportalizers have been disabled for the destination dimension.",
+  "minestuck.transportalizer.taken": "The code \"%s\" has been taken by another transportalizer.",
   "minestuck.wireless_redstone": "Wireless Redstone",
   "store.block.minecraft.cactus.tooltip": "It's the quenchiest!",
   "store.block.minecraft.melon.tooltip": "How about something juicy? Melons sure are juicy.",

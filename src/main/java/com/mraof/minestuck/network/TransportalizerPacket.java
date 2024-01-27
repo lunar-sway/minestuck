@@ -29,7 +29,7 @@ public class TransportalizerPacket
 		{
 			if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 				if(player.level().getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
-					transportalizer.setId(id);
+					transportalizer.setId(id, player);
 		}
 	}
 	

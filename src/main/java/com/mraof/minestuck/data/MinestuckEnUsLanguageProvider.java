@@ -1917,6 +1917,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerBlockEntity.BLOCKED_DESTINATION, "The destination seems to be blocked.");
 		add(TransportalizerBlockEntity.FORBIDDEN, "Transportalizers have been disabled for this dimension.");
 		add(TransportalizerBlockEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
+		add(TransportalizerBlockEntity.TAKEN, "The code \"%s\" has been taken by another transportalizer.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
 		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
 		add(WirelessRedstoneTransmitterScreen.TITLE, "Wireless Redstone");

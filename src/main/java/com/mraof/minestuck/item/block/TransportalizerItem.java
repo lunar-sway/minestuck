@@ -30,7 +30,7 @@ public class TransportalizerItem extends BlockItem
 		BlockEntity be = level.getBlockEntity(pos);
 		if(stack.hasTag() && be instanceof TransportalizerBlockEntity transportalizer)
 		{
-			transportalizer.setId(stack.getTag().getString("idString"));
+			transportalizer.setId(stack.getTag().getString("idString"), player);
 			transportalizer.setDestId(stack.getTag().getString("destId"));
 			if (stack.getTag().getBoolean("locked"))
 				transportalizer.lock();

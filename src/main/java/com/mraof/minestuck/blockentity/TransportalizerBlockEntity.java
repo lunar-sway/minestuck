@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -39,11 +40,13 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	public static final String BLOCKED_DESTINATION = "minestuck.transportalizer.blocked_destination";
 	public static final String FORBIDDEN = "minestuck.transportalizer.forbidden";
 	public static final String FORBIDDEN_DESTINATION = "minestuck.transportalizer.forbidden_destination";
+	public static final String TAKEN = "minestuck.transportalizer.taken";
 	
 	private boolean enabled = true;
 	private boolean active = true;
 	private boolean locked = false;
-	String id = "";
+	private boolean unloaded = false;
+	private String id = "";
 	private String destId = "";
 	
 	public TransportalizerBlockEntity(BlockPos pos, BlockState state)
@@ -58,8 +61,6 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		if(!level.isClientSide && active && this.hasId())
 			active = TransportalizerSavedData.get(level).set(id, GlobalPos.of(level.dimension(), worldPosition));
 	}
-	
-	private boolean unloaded = false;
 	
 	@Override
 	public void onChunkUnloaded()
@@ -219,14 +220,18 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		return id;
 	}
 	
-	public void setId(String id)
+	public void setId(String id, Player player)
 	{
 		if(level != null && !level.isClientSide)
 		{
 			var data = TransportalizerSavedData.get(level);
 			GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
 			if(data.get(id) != null)
+			{
+				player.sendSystemMessage(Component.translatable(TAKEN, id));
 				return;
+			}
+			
 			if(active && this.hasId())
 				data.remove(this.id, location);
 			
