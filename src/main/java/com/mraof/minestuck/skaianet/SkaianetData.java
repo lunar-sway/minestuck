@@ -9,7 +9,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
@@ -67,12 +66,6 @@ public final class SkaianetData extends SavedData
 		connectionInteractions = new SkaianetConnectionInteractions(this, nbt);
 		
 		sessionHandler = SessionHandler.load(nbt, this);
-	}
-	
-	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)
-	{
-		checkData();
-		infoTracker.requestInfo(player, p1);
 	}
 	
 	@Override

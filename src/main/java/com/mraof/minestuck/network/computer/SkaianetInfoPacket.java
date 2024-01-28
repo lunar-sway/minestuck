@@ -2,7 +2,7 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.SkaianetData;
+import com.mraof.minestuck.skaianet.SkaianetComputerInteractions;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.ReducedPlayerState;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -83,7 +83,7 @@ public final class SkaianetInfoPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			SkaianetData.get(player.server).requestInfo(player, IdentifierHandler.getById(this.playerId));
+			SkaianetComputerInteractions.requestInfo(player, IdentifierHandler.getById(this.playerId));
 		}
 	}
 	

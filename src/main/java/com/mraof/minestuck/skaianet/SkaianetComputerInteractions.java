@@ -7,6 +7,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
@@ -223,5 +224,10 @@ public final class SkaianetComputerInteractions
 	private boolean isClientActive(PlayerIdentifier player)
 	{
 		return skaianetData.connectionInteractions.getActiveConnection(player).isPresent() || hasResumingClient(player);
+	}
+	
+	public static void requestInfo(ServerPlayer requestingPlayer, PlayerIdentifier requestedPlayer)
+	{
+		SkaianetData.get(requestingPlayer.server).infoTracker.requestInfo(requestingPlayer, requestedPlayer);
 	}
 }
