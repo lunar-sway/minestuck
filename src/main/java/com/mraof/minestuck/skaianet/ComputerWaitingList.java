@@ -23,14 +23,14 @@ public class ComputerWaitingList
 	
 	private final Map<PlayerIdentifier, ComputerReference> map = new HashMap<>();
 	
-	private final InfoTracker infoTracker;
-	private final boolean forClients;
+	private final SkaianetData skaianetData;
+	private final Predicate<ISburbComputer> computerValidator;
 	private final String name;
 	
-	ComputerWaitingList(InfoTracker infoTracker, boolean forClients, String name)
+	ComputerWaitingList(SkaianetData skaianetData, Predicate<ISburbComputer> computerValidator, String name)
 	{
-		this.infoTracker = infoTracker;
-		this.forClients = forClients;
+		this.skaianetData = skaianetData;
+		this.computerValidator = computerValidator;
 		this.name = name;
 	}
 	
@@ -63,12 +63,12 @@ public class ComputerWaitingList
 	}
 	
 	@Nullable
-	ISburbComputer getComputer(MinecraftServer mcServer, PlayerIdentifier player)
+	ISburbComputer getComputer(PlayerIdentifier player)
 	{
 		ComputerReference reference = map.get(player);
 		if(reference != null)
 		{
-			ISburbComputer computer = reference.getComputer(mcServer);
+			ISburbComputer computer = reference.getComputer(skaianetData.mcServer);
 			if(computer != null && computer.getOwner().equals(player))
 				return computer;
 			else
@@ -80,9 +80,9 @@ public class ComputerWaitingList
 		return null;
 	}
 	
-	void useComputerAndRemoveOnSuccess(PlayerIdentifier player, MinecraftServer mcServer, Predicate<ISburbComputer> computerConsumer)
+	void useComputerAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ISburbComputer> computerConsumer)
 	{
-		ISburbComputer clientComputer = this.getComputer(mcServer, player);
+		ISburbComputer clientComputer = this.getComputer(player);
 		if(clientComputer == null)
 			return;
 		boolean result = computerConsumer.test(clientComputer);
@@ -93,14 +93,13 @@ public class ComputerWaitingList
 	void remove(PlayerIdentifier player)
 	{
 		if(map.remove(player) != null)
-			infoTracker.markDirty(player);
+			skaianetData.infoTracker.markDirty(player);
 	}
 	
-	void put(PlayerIdentifier player, ISburbComputer computer)
+	void put(PlayerIdentifier player, ComputerReference reference)
 	{
-		computer.setIsResuming(forClients);
-		map.put(player, computer.createReference());
-		infoTracker.markDirty(player);
+		map.put(player, reference);
+		skaianetData.infoTracker.markDirty(player);
 	}
 	
 	boolean contains(PlayerIdentifier player)
@@ -128,8 +127,7 @@ public class ComputerWaitingList
 			Map.Entry<PlayerIdentifier, ComputerReference> data = i.next();
 			ISburbComputer computer = data.getValue().getComputer(mcServer);
 			if(computer == null || data.getValue().isInNether() || !computer.getOwner().equals(data.getKey())
-					|| !(forClients && computer.getClientBoolean("isResuming")
-					|| !forClients && computer.getServerBoolean("isOpen")))
+					|| !computerValidator.test(computer))
 			{
 				LOGGER.warn("[SKAIANET] Invalid computer in waiting list!");
 				i.remove();
