@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
@@ -30,13 +31,36 @@ public class TreeStumpFeature extends AbstractTemplateFeature<NoneFeatureConfigu
 	}
 	
 	@Override
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
+	{
+		//continue with normal placement only if the terrain is relatively even
+		if(isEvenTerrain(context))
+			return super.place(context);
+		else
+			return false;
+	}
+	
+	private boolean isEvenTerrain(FeaturePlaceContext<NoneFeatureConfiguration> context)
+	{
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		int minY = Integer.MAX_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		
+		for(BlockPos floorPos : BlockPos.betweenClosed(pos, pos.offset(8, 0, 8)))
+		{
+			int posHeight = level.getHeight(Heightmap.Types.OCEAN_FLOOR, floorPos.getX(), floorPos.getZ());
+			minY = Math.min(minY, posHeight);
+			maxY = Math.max(maxY, posHeight);
+		}
+		
+		//only considered even terrain for placement if theres a difference of 2 blocks or less between tallest and shortest points
+		return maxY - minY <= 2;
+	}
+	
+	@Override
 	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, RandomSource random)
 	{
-		//same as minWorldHeightInSize() but using ocean floor heightmap
-		int minY = Integer.MAX_VALUE;
-		for(BlockPos floorPos : BlockPos.betweenClosed(pos, pos.offset(templateSize.getX(), 0, templateSize.getZ())))
-			minY = Math.min(minY, level.getHeight(Heightmap.Types.OCEAN_FLOOR, floorPos.getX(), floorPos.getZ()));
-		
-		return minY;
+		return level.getHeight(Heightmap.Types.OCEAN_FLOOR, pos.getX(), pos.getZ()) - random.nextInt(1) - 4;
 	}
 }
