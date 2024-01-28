@@ -2,7 +2,7 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
-import com.mraof.minestuck.skaianet.SkaianetComputerInteractions;
+import com.mraof.minestuck.skaianet.ComputerInteractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -47,7 +47,7 @@ public class ResumeSburbConnectionPacket implements MSPacket.PlayToServer
 	{
 		ComputerBlockEntity.forNetworkIfPresent(player, pos,
 				computer -> {
-					var interactions = SkaianetComputerInteractions.get(player.server);
+					var interactions = ComputerInteractions.get(player.server);
 					if(isClient)
 						interactions.resumeClientConnection(computer);
 					else

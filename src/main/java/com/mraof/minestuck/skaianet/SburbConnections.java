@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * Sets the rules for when a player can connect to another player.
  * @author kirderf1
  */
-public final class SkaianetConnectionInteractions
+public final class SburbConnections
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -32,12 +32,12 @@ public final class SkaianetConnectionInteractions
 	private final List<ActiveConnection> activeConnections = new ArrayList<>();
 	private final Map<PlayerIdentifier, PlayerIdentifier> primaryClientToServerMap = new HashMap<>();
 	
-	SkaianetConnectionInteractions(SkaianetData skaianetData)
+	SburbConnections(SkaianetData skaianetData)
 	{
 		this.skaianetData = skaianetData;
 	}
 	
-	SkaianetConnectionInteractions(SkaianetData skaianetData, CompoundTag tag)
+	SburbConnections(SkaianetData skaianetData, CompoundTag tag)
 	{
 		this(skaianetData);
 		
@@ -73,9 +73,9 @@ public final class SkaianetConnectionInteractions
 		tag.put("primary_connections", primaryConnectionList);
 	}
 	
-	public static SkaianetConnectionInteractions get(MinecraftServer mcServer)
+	public static SburbConnections get(MinecraftServer mcServer)
 	{
-		return SkaianetData.get(mcServer).connectionInteractions;
+		return SkaianetData.get(mcServer).connections;
 	}
 	
 	Optional<ISburbComputer> clientComputerIfValid(ActiveConnection connection)

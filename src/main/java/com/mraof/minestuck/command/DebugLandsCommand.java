@@ -9,8 +9,8 @@ import com.mraof.minestuck.command.argument.ListArgument;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetConnectionInteractions;
 import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -49,7 +49,7 @@ public class DebugLandsCommand
 	
 	public static void createDebugLandsChain(ServerPlayer player, List<LandTypePair> landTypes) throws CommandSyntaxException
 	{
-		var connections = SkaianetConnectionInteractions.get(player.server);
+		var connections = SburbConnections.get(player.server);
 		PlayerIdentifier playerId = IdentifierHandler.encode(player);
 		
 		if(!SburbPlayerData.get(playerId, player.server).hasEntered())
@@ -98,7 +98,7 @@ public class DebugLandsCommand
 	
 	private static void makeConnectionWithLand(LandTypePair landTypes, PlayerIdentifier client, PlayerIdentifier server, MinecraftServer mcServer)
 	{
-		SkaianetConnectionInteractions.get(mcServer).trySetPrimaryConnection(client, server);
+		SburbConnections.get(mcServer).trySetPrimaryConnection(client, server);
 		
 		SburbPlayerData playerData = SburbPlayerData.get(client, mcServer);
 		ResourceKey<Level> dimensionName = DynamicDimensions.createLand(mcServer, DEBUG_LAND_BASE_ID, landTypes);

@@ -139,7 +139,7 @@ public final class InfoTracker
 		PlayerIdentifier lastPlayer = player;
 		while(true)
 		{
-			Optional<PlayerIdentifier> client = skaianet.connectionInteractions.primaryPartnerForServer(lastPlayer);
+			Optional<PlayerIdentifier> client = skaianet.connections.primaryPartnerForServer(lastPlayer);
 			if(client.isEmpty())
 			{
 				chain.addLast(null);
@@ -163,7 +163,7 @@ public final class InfoTracker
 		lastPlayer = player;
 		while(true)
 		{
-			Optional<PlayerIdentifier> server = skaianet.connectionInteractions.primaryPartnerForClient(lastPlayer);
+			Optional<PlayerIdentifier> server = skaianet.connections.primaryPartnerForClient(lastPlayer);
 			if(server.isEmpty())
 				break;
 			PlayerIdentifier nextPlayer = server.get();
@@ -230,7 +230,7 @@ public final class InfoTracker
 			{
 				if(player.equals(listener))
 				{
-					if(skaianet.connectionInteractions.activeConnections().anyMatch(c -> c.hasPlayer(player)))
+					if(skaianet.connections.activeConnections().anyMatch(c -> c.hasPlayer(player)))
 						MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerListener);
 				}
 				
@@ -244,8 +244,8 @@ public final class InfoTracker
 		boolean clientResuming = skaianet.computerInteractions.hasResumingClient(player);
 		boolean serverResuming = skaianet.computerInteractions.hasResumingServer(player);
 		
-		boolean hasPrimaryConnectionAsClient = skaianet.connectionInteractions.hasPrimaryConnectionForClient(player);
-		boolean hasPrimaryConnectionAsServer = skaianet.connectionInteractions.hasPrimaryConnectionForServer(player);
+		boolean hasPrimaryConnectionAsClient = skaianet.connections.hasPrimaryConnectionForClient(player);
+		boolean hasPrimaryConnectionAsServer = skaianet.connections.hasPrimaryConnectionForServer(player);
 		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
 		openedServersCache.put(player, serverMap.keySet());
@@ -254,7 +254,7 @@ public final class InfoTracker
 				hasPrimaryConnectionAsClient, hasPrimaryConnectionAsServer, serverMap);
 		
 		// create list with all connections that the player is in
-		List<ReducedConnection> list = skaianet.connectionInteractions.activeConnections().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
+		List<ReducedConnection> list = skaianet.connections.activeConnections().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
 		
 		return new SkaianetInfoPacket.Data(player.getId(), playerState, list);
 	}

@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SkaianetConnectionInteractions;
+import com.mraof.minestuck.skaianet.SburbConnections;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -42,24 +42,24 @@ public class SburbConnectionCommand
 	
 	public static boolean forceConnection(PlayerIdentifier client, PlayerIdentifier server, MinecraftServer mcServer)
 	{
-		var connectionInteractions = SkaianetConnectionInteractions.get(mcServer);
-		if(connectionInteractions.isPrimaryPair(client, server))
+		var connections = SburbConnections.get(mcServer);
+		if(connections.isPrimaryPair(client, server))
 			return false;
 		
-		if(!connectionInteractions.hasPrimaryConnectionForClient(client)
-				&& connectionInteractions.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
+		if(!connections.hasPrimaryConnectionForClient(client)
+				&& connections.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
 		{
-			connectionInteractions.trySetPrimaryConnection(client, server);
+			connections.trySetPrimaryConnection(client, server);
 			return true;
 		}
 		
-		connectionInteractions.unlinkClientPlayer(client);
-		connectionInteractions.unlinkServerPlayer(server);
+		connections.unlinkClientPlayer(client);
+		connections.unlinkServerPlayer(server);
 		
-		if(connectionInteractions.hasPrimaryConnectionForClient(client))
-			connectionInteractions.newServerForClient(client, server);
+		if(connections.hasPrimaryConnectionForClient(client))
+			connections.newServerForClient(client, server);
 		else
-			connectionInteractions.trySetPrimaryConnection(client, server);
+			connections.trySetPrimaryConnection(client, server);
 		
 		return true;
 	}

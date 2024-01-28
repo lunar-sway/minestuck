@@ -3,7 +3,7 @@ package com.mraof.minestuck.network.computer;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.SkaianetComputerInteractions;
+import com.mraof.minestuck.skaianet.ComputerInteractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,6 +42,6 @@ public class ConnectToSburbServerPacket implements MSPacket.PlayToServer
 	public void execute(ServerPlayer player)
 	{
 		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> SkaianetComputerInteractions.get(player.server).connectToServerPlayer(computer, IdentifierHandler.getById(serverPlayer)));
+				computer -> ComputerInteractions.get(player.server).connectToServerPlayer(computer, IdentifierHandler.getById(serverPlayer)));
 	}
 }

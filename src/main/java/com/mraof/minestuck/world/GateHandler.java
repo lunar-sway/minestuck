@@ -2,8 +2,8 @@ package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetConnectionInteractions;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
@@ -97,7 +97,7 @@ public class GateHandler
 			return null;
 		}
 		
-		Optional<ResourceKey<Level>> clientLandOptional = SkaianetConnectionInteractions.get(level.getServer())
+		Optional<ResourceKey<Level>> clientLandOptional = SburbConnections.get(level.getServer())
 				.primaryPartnerForServer(landPlayer.get())
 				.flatMap(clientPlayer -> {
 					SburbPlayerData clientPlayerData = SburbPlayerData.get(clientPlayer, level.getServer());
@@ -131,7 +131,7 @@ public class GateHandler
 			return null;
 		}
 		
-		Optional<ResourceKey<Level>> serverLandOptional = SkaianetConnectionInteractions.get(level.getServer()).primaryPartnerForClient(landPlayer.get())
+		Optional<ResourceKey<Level>> serverLandOptional = SburbConnections.get(level.getServer()).primaryPartnerForClient(landPlayer.get())
 				.flatMap(serverPlayer -> {
 					SburbPlayerData serverPlayerData = SburbPlayerData.get(serverPlayer, level.getServer());
 					return Optional.ofNullable(serverPlayerData.getLandDimensionIfEntered());

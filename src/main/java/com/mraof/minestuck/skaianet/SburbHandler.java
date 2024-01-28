@@ -140,10 +140,10 @@ public final class SburbHandler
 	
 	public static void onEntryItemsDeployed(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		var connectionInteractions = SkaianetConnectionInteractions.get(mcServer);
-		Optional<ActiveConnection> connection = connectionInteractions.getActiveConnection(player);
-		if(connection.isPresent() && !connectionInteractions.hasPrimaryConnectionForClient(player))
-			connectionInteractions.trySetPrimaryConnection(connection.get());
+		var connections = SburbConnections.get(mcServer);
+		Optional<ActiveConnection> connection = connections.getActiveConnection(player);
+		if(connection.isPresent() && !connections.hasPrimaryConnectionForClient(player))
+			connections.trySetPrimaryConnection(connection.get());
 	}
 	
 	public static ResourceKey<Level> prepareEntry(PlayerIdentifier player, MinecraftServer mcServer)
@@ -198,8 +198,8 @@ public final class SburbHandler
 	
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		var connectionInteractions = SkaianetConnectionInteractions.get(mcServer);
-		return connectionInteractions.getActiveConnection(player).isEmpty() && !connectionInteractions.hasPrimaryConnectionForClient(player);
+		var connections = SburbConnections.get(mcServer);
+		return connections.getActiveConnection(player).isEmpty() && !connections.hasPrimaryConnectionForClient(player);
 	}
 	
 	static void initNewData(SburbPlayerData playerData)

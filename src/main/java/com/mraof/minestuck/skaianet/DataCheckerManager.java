@@ -75,16 +75,16 @@ public class DataCheckerManager
 	
 	private static void writeConnectionData(CompoundTag tag, PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		var connectionInteractions = SkaianetConnectionInteractions.get(mcServer);
+		var connections = SburbConnections.get(mcServer);
 		
-		boolean isMain = connectionInteractions.hasPrimaryConnectionForClient(player);
+		boolean isMain = connections.hasPrimaryConnectionForClient(player);
 		tag.putBoolean("isMain", isMain);
 		
 		if(isMain)
-			connectionInteractions.primaryPartnerForClient(player)
+			connections.primaryPartnerForClient(player)
 					.ifPresent(serverPlayer -> tag.putString("server", serverPlayer.getUsername()));
 		else
-			connectionInteractions.getActiveConnection(player)
+			connections.getActiveConnection(player)
 					.ifPresent(connection -> tag.putString("server", connection.server().getUsername()));
 	}
 	

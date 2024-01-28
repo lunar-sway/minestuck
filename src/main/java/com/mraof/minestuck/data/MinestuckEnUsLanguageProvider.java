@@ -1934,7 +1934,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbClient.SELECT_COLOR, "Select a Color");
 		add(SburbClient.CONNECT, "Connected to %s");
 		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
-		add(SkaianetConnectionInteractions.CLOSED, "Connection closed");
+		add(SburbConnections.CLOSED, "Connection closed");
 		add(SburbServer.OFFLINE, "Server offline");
 		add(SburbClient.SELECT, "Select a server below");
 		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
@@ -1945,7 +1945,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurner.CHOOSE, "Choose disk type to write");
-		add(SkaianetComputerInteractions.STOP_RESUME, "Stopped resuming");
+		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
 		add(SettingsApp.THEME, "Theme: %s");
 		add(SettingsApp.TITLE, "Sburb Settings");
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");

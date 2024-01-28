@@ -3,6 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -11,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -18,11 +20,13 @@ import java.util.stream.Stream;
  * This class is the centerpoint of various sburb-related data, which all goes in the "minestuck_skaianet.dat" data file.
  * @author kirderf1
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public final class SkaianetData extends SavedData
 {
 	final InfoTracker infoTracker = new InfoTracker(this);
-	final SkaianetComputerInteractions computerInteractions;
-	final SkaianetConnectionInteractions connectionInteractions;
+	final ComputerInteractions computerInteractions;
+	final SburbConnections connections;
 	final SessionHandler sessionHandler;
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
 	private final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
@@ -33,8 +37,8 @@ public final class SkaianetData extends SavedData
 	{
 		this.mcServer = mcServer;
 		
-		computerInteractions = new SkaianetComputerInteractions(this);
-		connectionInteractions = new SkaianetConnectionInteractions(this);
+		computerInteractions = new ComputerInteractions(this);
+		connections = new SburbConnections(this);
 		sessionHandler = SessionHandler.init(this);
 	}
 	
@@ -61,8 +65,8 @@ public final class SkaianetData extends SavedData
 			}
 		}
 		
-		computerInteractions = new SkaianetComputerInteractions(this, nbt);
-		connectionInteractions = new SkaianetConnectionInteractions(this, nbt);
+		computerInteractions = new ComputerInteractions(this, nbt);
+		connections = new SburbConnections(this, nbt);
 		
 		sessionHandler = SessionHandler.load(nbt, this);
 	}
@@ -86,7 +90,7 @@ public final class SkaianetData extends SavedData
 		compound.put("predefine_data", predefineList);
 		
 		computerInteractions.write(compound);
-		connectionInteractions.write(compound);
+		connections.write(compound);
 		
 		sessionHandler.write(compound);
 		

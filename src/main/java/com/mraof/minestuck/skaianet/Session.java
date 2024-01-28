@@ -55,7 +55,7 @@ public final class Session
 		
 		return this.players.stream().allMatch(player ->
 				skaianetData.getOrCreateData(player).hasEntered()
-						&& skaianetData.connectionInteractions.primaryPartnerForClient(player).isPresent());
+						&& skaianetData.connections.primaryPartnerForClient(player).isPresent());
 	}
 	
 	Session(SkaianetData skaianetData)

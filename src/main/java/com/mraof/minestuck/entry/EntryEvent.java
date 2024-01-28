@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.skaianet.ActiveConnection;
+import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetConnectionInteractions;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -24,9 +24,9 @@ public class EntryEvent
 	{
 		if (server.overworld().getGameTime() % FREQUENCY == 0)
 		{
-			SkaianetConnectionInteractions connectionInteractions = SkaianetConnectionInteractions.get(server);
-			connectionInteractions.activeConnections().filter(connection ->
-					connectionInteractions.hasPrimaryConnectionForClient(connection.client())
+			SburbConnections connections = SburbConnections.get(server);
+			connections.activeConnections().filter(connection ->
+					connections.hasPrimaryConnectionForClient(connection.client())
 							&& !SburbPlayerData.get(connection.client(), server).hasEntered()).forEach(connection -> handleConnection(connection, server));
 		}
 	}
