@@ -50,9 +50,14 @@ public final class SburbConnections
 		for(int i = 0; i < primaryConnectionList.size(); i++)
 		{
 			CompoundTag connectionTag = primaryConnectionList.getCompound(i);
-			PlayerIdentifier client = IdentifierHandler.load(connectionTag, "client");
-			PlayerIdentifier server = IdentifierHandler.load(connectionTag, "server");
-			this.primaryClientToServerMap.put(client, server);
+			
+			Optional<PlayerIdentifier> client = IdentifierHandler.tryLoad(connectionTag, "client").resultOrPartial(LOGGER::error);
+			
+			if(client.isPresent())
+			{
+				Optional<PlayerIdentifier> server = IdentifierHandler.tryLoad(connectionTag, "server").resultOrPartial(LOGGER::error);
+				this.primaryClientToServerMap.put(client.get(), server.orElse(IdentifierHandler.NULL_IDENTIFIER));
+			}
 		}
 	}
 	
@@ -79,17 +84,20 @@ public final class SburbConnections
 		boolean isMain = connectionTag.getBoolean("IsMain");
 		boolean active = !isMain || connectionTag.getBoolean("IsActive");
 		
-		PlayerIdentifier client = IdentifierHandler.load(connectionTag, "client");
-		PlayerIdentifier server = IdentifierHandler.load(connectionTag, "server");
+		Optional<PlayerIdentifier> client = IdentifierHandler.tryLoad(connectionTag, "client").result();
+		if(client.isEmpty())
+			return;
 		
-		if(active)
+		Optional<PlayerIdentifier> server = IdentifierHandler.tryLoad(connectionTag, "server").result();
+		
+		if(active && server.isPresent())
 		{
 			ComputerReference clientComputer = ComputerReference.read(connectionTag.getCompound("client_computer"));
 			ComputerReference serverComputer = ComputerReference.read(connectionTag.getCompound("server_computer"));
-			activeConnections.add(new ActiveConnection(client, clientComputer, server, serverComputer));
+			activeConnections.add(new ActiveConnection(client.get(), clientComputer, server.get(), serverComputer));
 		}
 		if(isMain)
-			this.primaryClientToServerMap.put(client, server);
+			this.primaryClientToServerMap.put(client.get(), server.orElse(IdentifierHandler.NULL_IDENTIFIER));
 	}
 	
 	public static SburbConnections get(MinecraftServer mcServer)

@@ -132,7 +132,7 @@ public final class Session
 		
 		ListTag list = nbt.getList("players", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
-			s.players.add(IdentifierHandler.load(list.getCompound(i), "player"));
+			IdentifierHandler.tryLoad(list.getCompound(i), "player").resultOrPartial(LOGGER::error).ifPresent(s.players::add);
 		
 		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
 		if(nbt.contains("connections", Tag.TAG_LIST))
@@ -144,7 +144,8 @@ public final class Session
 			{
 				CompoundTag connectionTag = connections.getCompound(i);
 				skaianetData.connections.readOldConnectionData(connectionTag);
-				skaianetData.getOrCreateData(IdentifierHandler.load(connectionTag, "client")).readOldData(connectionTag);
+				IdentifierHandler.tryLoad(connectionTag, "client").result()
+						.ifPresent(client -> skaianetData.getOrCreateData(client).readOldData(connectionTag));
 			}
 		}
 		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))
@@ -153,8 +154,8 @@ public final class Session
 			for(int i = 0; i < predefinedPlayers.size(); i++)
 			{
 				CompoundTag compound = predefinedPlayers.getCompound(i);
-				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
-				skaianetData.readOldPredefineData(player, compound);
+				IdentifierHandler.tryLoad(compound, "player").resultOrPartial(LOGGER::error)
+						.ifPresent(player -> skaianetData.readOldPredefineData(player, compound));
 			}
 		}
 		

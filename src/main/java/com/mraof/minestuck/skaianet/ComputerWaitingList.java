@@ -38,7 +38,7 @@ public class ComputerWaitingList
 			CompoundTag cmp = list.getCompound(i);
 			try
 			{
-				map.put(IdentifierHandler.load(cmp, "player"), ComputerReference.read(cmp.getCompound("computer")));
+				map.put(IdentifierHandler.loadOrThrow(cmp, "player"), ComputerReference.read(cmp.getCompound("computer")));
 			} catch(Exception e)
 			{
 				LOGGER.error("Got exception when loading entry for the {} waiting list. NBT: {}", name, cmp, e);

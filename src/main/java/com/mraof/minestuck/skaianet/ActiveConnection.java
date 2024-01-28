@@ -97,8 +97,8 @@ public final class ActiveConnection
 	
 	static ActiveConnection read(CompoundTag tag)
 	{
-		PlayerIdentifier client = IdentifierHandler.load(tag, "client");
-		PlayerIdentifier server = IdentifierHandler.load(tag, "server");
+		PlayerIdentifier client = IdentifierHandler.loadOrThrow(tag, "client");
+		PlayerIdentifier server = IdentifierHandler.loadOrThrow(tag, "server");
 		ComputerReference clientComputer = ComputerReference.read(tag.getCompound("client_computer"));
 		ComputerReference serverComputer = ComputerReference.read(tag.getCompound("server_computer"));
 		

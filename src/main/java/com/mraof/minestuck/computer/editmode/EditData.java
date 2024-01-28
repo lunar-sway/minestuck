@@ -250,7 +250,7 @@ public class EditData
 		
 		private ConnectionRecovery(CompoundTag nbt)
 		{
-			clientPlayer = IdentifierHandler.load(nbt, "client");
+			clientPlayer = IdentifierHandler.loadOrThrow(nbt, "client");
 			inventory = nbt.getList("edit_inv", Tag.TAG_COMPOUND);
 		}
 		

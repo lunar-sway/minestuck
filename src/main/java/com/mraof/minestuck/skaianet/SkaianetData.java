@@ -11,6 +11,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
@@ -24,6 +26,8 @@ import java.util.stream.Stream;
 @MethodsReturnNonnullByDefault
 public final class SkaianetData extends SavedData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	final InfoTracker infoTracker = new InfoTracker(this);
 	final ComputerInteractions computerInteractions;
 	final SburbConnections connections;
@@ -50,8 +54,8 @@ public final class SkaianetData extends SavedData
 		for(int i = 0; i < playerDataList.size(); i++)
 		{
 			CompoundTag playerDataTag = playerDataList.getCompound(i);
-			PlayerIdentifier player = IdentifierHandler.load(playerDataTag, "player");
-			getOrCreateData(player).read(playerDataTag);
+			IdentifierHandler.tryLoad(playerDataTag, "player").resultOrPartial(LOGGER::error)
+					.ifPresent(player -> getOrCreateData(player).read(playerDataTag));
 		}
 		
 		if(nbt.contains("predefine_data", Tag.TAG_LIST))
@@ -60,8 +64,8 @@ public final class SkaianetData extends SavedData
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundTag compound = list.getCompound(i);
-				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
-				predefineData.put(player, new PredefineData(player).read(compound));
+				IdentifierHandler.tryLoad(compound, "player").resultOrPartial(LOGGER::error)
+						.ifPresent(player -> predefineData.put(player, new PredefineData(player).read(compound)));
 			}
 		}
 		

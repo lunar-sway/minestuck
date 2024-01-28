@@ -104,7 +104,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		if(nbt.contains("ownerId"))
 			ownerId = nbt.getInt("ownerId");
-		else this.owner = IdentifierHandler.load(nbt, "owner");
+		else this.owner = IdentifierHandler.loadOrThrow(nbt, "owner");
 		
 		//keep this after everything else has been loaded
 		if(gui != null)

@@ -152,7 +152,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		
 		this.progressTracker.load(nbt);
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
-			owner = IdentifierHandler.load(nbt, "owner");
+			owner = IdentifierHandler.loadOrThrow(nbt, "owner");
 	}
 	
 	@Override

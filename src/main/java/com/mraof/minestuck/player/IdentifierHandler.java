@@ -1,5 +1,6 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.DataResult;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
@@ -25,7 +26,7 @@ public class IdentifierHandler
 {
 	public static final PlayerIdentifier NULL_IDENTIFIER = new NullIdentifier();
 	
-	private static List<PlayerIdentifier> identifierList = new ArrayList<>();
+	private static final List<PlayerIdentifier> identifierList = new ArrayList<>();
 	private static int nextIdentifierId;
 	private static int fakePlayerIndex = 0;
 	
@@ -49,30 +50,36 @@ public class IdentifierHandler
 	}
 	
 	@Nonnull
-	public static PlayerIdentifier load(CompoundTag nbt, String key)
+	public static PlayerIdentifier loadOrThrow(CompoundTag tag, String key)
+	{
+		return tryLoad(tag, key).getOrThrow(false, message -> {});
+	}
+	
+	public static DataResult<PlayerIdentifier> tryLoad(CompoundTag tag, String key)
 	{
 		PlayerIdentifier identifier;
-		String type = nbt.getString(key);
+		String type = tag.getString(key);
 		switch(type)
 		{
 			case "null":
-				return NULL_IDENTIFIER;
+				return DataResult.success(NULL_IDENTIFIER);
 			case "uuid":
-				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUUID(key + "_uuid"));
+				identifier = new UUIDIdentifier(nextIdentifierId, tag.getUUID(key + "_uuid"));
 				break;
 			case "fake":
-				identifier = new FakeIdentifier(nextIdentifierId, nbt.getInt(key+"_count"));
+				identifier = new FakeIdentifier(nextIdentifierId, tag.getInt(key+"_count"));
 				break;
-			default: throw new IllegalArgumentException("Can't parse identifier type "+type);
+			default:
+				return DataResult.error(() -> "Can't parse identifier type " + type);
 		}
 		
 		for(PlayerIdentifier id : identifierList)
 			if(id.equals(identifier))
-				return id;
+				return DataResult.success(id);
 		
 		nextIdentifierId++;
 		identifierList.add(identifier);
-		return identifier;
+		return DataResult.success(identifier);
 	}
 	
 	public static PlayerIdentifier getById(int id)
