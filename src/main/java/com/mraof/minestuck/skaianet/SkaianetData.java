@@ -106,7 +106,6 @@ public final class SkaianetData extends SavedData
 		if(!MinestuckConfig.SERVER.skaianetCheck.get())
 			return;
 		
-		computerInteractions.validate();
 		connectionInteractions.validate();
 	}
 	

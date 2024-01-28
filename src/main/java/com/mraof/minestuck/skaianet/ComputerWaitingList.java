@@ -6,13 +6,10 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -62,30 +59,21 @@ public class ComputerWaitingList
 		return list;
 	}
 	
-	@Nullable
-	ISburbComputer getComputer(PlayerIdentifier player)
-	{
-		ComputerReference reference = map.get(player);
-		if(reference != null)
-		{
-			ISburbComputer computer = reference.getComputer(skaianetData.mcServer);
-			if(computer != null && computer.getOwner().equals(player))
-				return computer;
-			else
-			{
-				LOGGER.error("{} had an invalid computer in {} waiting list", player.getUsername(), name);
-				remove(player);
-			}
-		}
-		return null;
-	}
-	
 	void useComputerAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ISburbComputer> computerConsumer)
 	{
-		ISburbComputer clientComputer = this.getComputer(player);
-		if(clientComputer == null)
+		ComputerReference reference = map.get(player);
+		if(reference == null)
 			return;
-		boolean result = computerConsumer.test(clientComputer);
+		
+		ISburbComputer computer = reference.getComputer(skaianetData.mcServer);
+		if(computer == null || reference.isInNether() || !computer.getOwner().equals(player) || !computerValidator.test(computer))
+		{
+			LOGGER.error("{} had an invalid computer in {} waiting list", player.getUsername(), name);
+			remove(player);
+			return;
+		}
+		
+		boolean result = computerConsumer.test(computer);
 		if(result)
 			this.remove(player);
 	}
@@ -117,22 +105,6 @@ public class ComputerWaitingList
 	{
 		map.replace(player, oldRef, newRef);
 		//No need to mark dirty as long as we only update the player on IF they're on the list
-	}
-	
-	void validate(MinecraftServer mcServer)
-	{
-		Iterator<Map.Entry<PlayerIdentifier, ComputerReference>> i = map.entrySet().iterator();
-		while(i.hasNext())
-		{
-			Map.Entry<PlayerIdentifier, ComputerReference> data = i.next();
-			ISburbComputer computer = data.getValue().getComputer(mcServer);
-			if(computer == null || data.getValue().isInNether() || !computer.getOwner().equals(data.getKey())
-					|| !computerValidator.test(computer))
-			{
-				LOGGER.warn("[SKAIANET] Invalid computer in waiting list!");
-				i.remove();
-			}
-		}
 	}
 	
 	Set<PlayerIdentifier> getPlayers()

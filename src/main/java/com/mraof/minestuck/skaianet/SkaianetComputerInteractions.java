@@ -46,13 +46,6 @@ public final class SkaianetComputerInteractions
 		tag.put("resumingServers", resumingServers.write());
 	}
 	
-	void validate()
-	{
-		openedServers.validate(skaianetData.mcServer);
-		resumingClients.validate(skaianetData.mcServer);
-		resumingServers.validate(skaianetData.mcServer);
-	}
-	
 	private static boolean isValidClientResuming(ISburbComputer computer)
 	{
 		return computer.getClientBoolean("isResuming");
