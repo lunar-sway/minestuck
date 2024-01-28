@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "minestuck:block/cruxite_block",
+    "side": "minestuck:block/cruxite_block",
+    "top": "minestuck:block/cruxite_block"
+  }
+}

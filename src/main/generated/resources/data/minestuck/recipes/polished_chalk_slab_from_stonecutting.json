@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:polished_chalk"
+  },
+  "result": "minestuck:polished_chalk_slab"
+}

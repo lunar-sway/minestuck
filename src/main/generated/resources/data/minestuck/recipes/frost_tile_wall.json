@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_wall",
+  "key": {
+    "#": {
+      "item": "minestuck:frost_tile"
+    }
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "item": "minestuck:frost_tile_wall"
+  },
+  "show_notification": true
+}

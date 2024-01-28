@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:mycelium_cobblestone"
+  },
+  "result": "minestuck:mycelium_cobblestone_wall"
+}
