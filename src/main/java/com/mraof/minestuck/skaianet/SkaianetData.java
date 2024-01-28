@@ -131,6 +131,12 @@ public final class SkaianetData extends SavedData
 			}));
 	}
 	
+	void readOldPredefineData(PlayerIdentifier player, CompoundTag tag)
+	{
+		if(getOrCreateData(player).getLandDimension() == null)
+			this.predefineData.computeIfAbsent(player, PredefineData::new).read(tag);
+	}
+	
 	/**
 	 * Predefine data is only meant to exist up until the actual land and title have been generated for the player (which happens during entry preparations).
 	 * After that, predefine data should be removed.

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -71,6 +72,24 @@ public final class SburbConnections
 			primaryConnectionList.add(connectionTag);
 		}
 		tag.put("primary_connections", primaryConnectionList);
+	}
+	
+	void readOldConnectionData(CompoundTag connectionTag)
+	{
+		boolean isMain = connectionTag.getBoolean("IsMain");
+		boolean active = !isMain || connectionTag.getBoolean("IsActive");
+		
+		PlayerIdentifier client = IdentifierHandler.load(connectionTag, "client");
+		PlayerIdentifier server = IdentifierHandler.load(connectionTag, "server");
+		
+		if(active)
+		{
+			ComputerReference clientComputer = ComputerReference.read(connectionTag.getCompound("client_computer"));
+			ComputerReference serverComputer = ComputerReference.read(connectionTag.getCompound("server_computer"));
+			activeConnections.add(new ActiveConnection(client, clientComputer, server, serverComputer));
+		}
+		if(isMain)
+			this.primaryClientToServerMap.put(client, server);
 	}
 	
 	public static SburbConnections get(MinecraftServer mcServer)

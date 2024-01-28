@@ -97,6 +97,28 @@ public final class SburbPlayerData
 		MSNBTUtil.writeGristType(tag, "base_grist", this.baseGrist);
 	}
 	
+	void readOldData(CompoundTag tag)
+	{
+		if(tag.contains("Inventory", Tag.TAG_LIST))
+			lastEditmodeInventory = tag.getList("Inventory", Tag.TAG_COMPOUND);
+		
+		if(tag.contains("GivenItems", Tag.TAG_LIST))
+		{
+			ListTag list = tag.getList("GivenItems", Tag.TAG_STRING);
+			for(int i = 0; i < list.size(); i++)
+				givenItemList.add(list.getString(i));
+		}
+		
+		if(tag.contains("ClientLand"))
+		{
+			landKey = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, tag.get("ClientLand")).resultOrPartial(LOGGER::error).orElse(null);
+			hasEntered = tag.getBoolean("has_entered");
+		}
+		
+		artifactType = ArtifactType.fromInt(tag.getInt("artifact"));
+		baseGrist = MSNBTUtil.readGristType(tag, "base_grist", () -> SburbHandler.generateGristType(new Random()));
+	}
+	
 	public PlayerIdentifier playerId()
 	{
 		return playerId;

@@ -7,6 +7,8 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,6 +21,8 @@ import java.util.Set;
  */
 public final class Session
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	final SkaianetData skaianetData;
 	private final Set<PlayerIdentifier> players = new HashSet<>();
 	private final GristGutter gutter;
@@ -129,6 +133,30 @@ public final class Session
 		ListTag list = nbt.getList("players", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 			s.players.add(IdentifierHandler.load(list.getCompound(i), "player"));
+		
+		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
+		if(nbt.contains("connections", Tag.TAG_LIST))
+		{
+			ListTag connections = nbt.getList("connections", Tag.TAG_COMPOUND);
+			LOGGER.info("Loading old save data with {} sburb connections.", connections.size());
+			
+			for(int i = 0; i < connections.size(); i++)
+			{
+				CompoundTag connectionTag = connections.getCompound(i);
+				skaianetData.connections.readOldConnectionData(connectionTag);
+				skaianetData.getOrCreateData(IdentifierHandler.load(connectionTag, "client")).readOldData(connectionTag);
+			}
+		}
+		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))
+		{
+			ListTag predefinedPlayers = nbt.getList("predefinedPlayers", Tag.TAG_COMPOUND);
+			for(int i = 0; i < predefinedPlayers.size(); i++)
+			{
+				CompoundTag compound = predefinedPlayers.getCompound(i);
+				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
+				skaianetData.readOldPredefineData(player, compound);
+			}
+		}
 		
 		return s;
 	}
