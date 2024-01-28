@@ -193,7 +193,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			player.sendSystemMessage(Component.literal("You may not activate editmode while riding something"));
 			return;    //Don't want to bother making the decoy able to ride anything right now.
 		}
-		Optional<ActiveConnection> connectionOptional = SkaianetConnectionInteractions.get(player.getServer()).getActiveConnection(computerTarget);
+		Optional<ActiveConnection> connectionOptional = SkaianetConnectionInteractions.get(player.getServer()).getCheckedActiveConnection(computerTarget);
 		if(connectionOptional.isEmpty())
 			return;
 		ActiveConnection connection = connectionOptional.get();

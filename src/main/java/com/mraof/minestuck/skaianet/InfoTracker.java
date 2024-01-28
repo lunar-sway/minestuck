@@ -206,13 +206,10 @@ public final class InfoTracker
 		}
 		
 		if(!toUpdate.isEmpty())
-			skaianet.checkData();
-		
-		for(PlayerIdentifier identifier : toUpdate)
 		{
-			sendConnectionInfo(identifier);
+			toUpdate.forEach(this::sendConnectionInfo);
+			toUpdate.clear();
 		}
-		toUpdate.clear();
 		
 		if(resendLandChains)
 		{

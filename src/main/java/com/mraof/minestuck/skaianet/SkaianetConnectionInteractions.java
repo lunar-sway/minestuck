@@ -78,20 +78,30 @@ public final class SkaianetConnectionInteractions
 		return SkaianetData.get(mcServer).connectionInteractions;
 	}
 	
-	void validate()
+	Optional<ISburbComputer> clientComputerIfValid(ActiveConnection connection)
 	{
-		activeConnections().forEach(activeConnection -> {
-			
-			ISburbComputer cc = activeConnection.clientComputer().getComputer(skaianetData.mcServer),
-					sc = activeConnection.serverComputer().getComputer(skaianetData.mcServer);
-			if(cc == null || sc == null
-					|| activeConnection.clientComputer().isInNether() || activeConnection.serverComputer().isInNether()
-					|| !activeConnection.client().equals(cc.getOwner()) || !activeConnection.server().equals(sc.getOwner())
-					|| !cc.getClientBoolean("connectedToServer"))
+		return Optional.ofNullable(connection.clientComputer().getComputer(skaianetData.mcServer))
+				.filter(computer -> connection.client().equals(computer.getOwner()) && computer.getClientBoolean("connectedToServer"));
+	}
+	
+	Optional<ISburbComputer> serverComputerIfValid(ActiveConnection connection)
+	{
+		return Optional.ofNullable(connection.serverComputer().getComputer(skaianetData.mcServer))
+				.filter(computer -> connection.server().equals(computer.getOwner()));
+	}
+	
+	public Optional<ActiveConnection> getCheckedActiveConnection(PlayerIdentifier client)
+	{
+		return getActiveConnection(client).flatMap(connection -> {
+			Optional<ISburbComputer> cc = clientComputerIfValid(connection),
+					sc = serverComputerIfValid(connection);
+			if(cc.isEmpty() || sc.isEmpty())
 			{
-				LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", activeConnection.client(), activeConnection.server());
-				this.closeConnection(activeConnection, cc, sc);
+				this.closeConnection(connection, cc.orElse(null), sc.orElse(null));
+				return Optional.empty();
 			}
+			
+			return Optional.of(connection);
 		});
 	}
 	
@@ -222,9 +232,9 @@ public final class SkaianetConnectionInteractions
 	void closeConnection(ActiveConnection connection, @Nullable ISburbComputer clientComputer, @Nullable ISburbComputer serverComputer)
 	{
 		if(clientComputer == null)
-			clientComputer = connection.clientComputer().getComputer(skaianetData.mcServer);
+			clientComputer = clientComputerIfValid(connection).orElse(null);
 		if(serverComputer == null)
-			serverComputer = connection.serverComputer().getComputer(skaianetData.mcServer);
+			serverComputer = serverComputerIfValid(connection).orElse(null);
 		
 		this.activeConnections.remove(connection);
 		skaianetData.sessionHandler.onDisconnect(connection.client(), connection.server());

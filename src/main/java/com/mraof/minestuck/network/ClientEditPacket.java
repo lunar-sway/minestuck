@@ -88,7 +88,7 @@ public class ClientEditPacket implements MSPacket.PlayToServer
 			
 			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getLevel() >= 2))
 			{
-				Optional<ActiveConnection> c = SkaianetConnectionInteractions.get(player.server).getActiveConnection(target);
+				Optional<ActiveConnection> c = SkaianetConnectionInteractions.get(player.server).getCheckedActiveConnection(target);
 				if(c.isEmpty() || c.get().server() != user)
 					return;
 				

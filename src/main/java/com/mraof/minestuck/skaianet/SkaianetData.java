@@ -1,7 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
@@ -92,14 +91,6 @@ public final class SkaianetData extends SavedData
 		sessionHandler.write(compound);
 		
 		return compound;
-	}
-	
-	void checkData()
-	{
-		if(!MinestuckConfig.SERVER.skaianetCheck.get())
-			return;
-		
-		connectionInteractions.validate();
 	}
 	
 	Stream<PlayerIdentifier> players()

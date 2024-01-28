@@ -107,7 +107,6 @@ public class MinestuckConfig
 		//Computer
 		public final BooleanValue privateComputers;
 		public final BooleanValue globalSession;
-		public final BooleanValue skaianetCheck;
 		public final EnumValue<PermissionType> dataCheckerPermission;
 		
 		public final EnumValue<FailedEscapeMode> escapeFailureMode = null;	//TODO once a connection can close from meteor failure
@@ -161,8 +160,6 @@ public class MinestuckConfig
 					.define("privateComputers", true);
 			globalSession = builder.comment("Whenever all sburb connections should be put into a single session or not.")
 					.define("globalSession",false);
-			skaianetCheck = builder.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
-					.define("skaianetCheck",true);
 			dataCheckerPermission = builder.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
 					.defineEnum("dataCheckerPermission", PermissionType.OPS_OR_GAMEMODE);
 			builder.pop();
