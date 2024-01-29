@@ -14,12 +14,12 @@ public interface ComputerReference
 		return new BEComputerReference(GlobalPos.of(Objects.requireNonNull(be.getLevel()).dimension(), be.getBlockPos()));
 	}
 	
-	static ComputerReference read(CompoundTag nbt)
+	static ComputerReference readOrThrow(CompoundTag nbt) throws RuntimeException
 	{
 		String type = nbt.getString("type");
 		if(type.equals("block_entity"))
 			return BEComputerReference.create(nbt);
-		else throw new IllegalStateException("Invalid computer type: " + type);
+		else throw new RuntimeException("Invalid computer type: " + type);
 	}
 	
 	default CompoundTag write(CompoundTag nbt)

@@ -95,12 +95,12 @@ public final class ActiveConnection
 		return tag;
 	}
 	
-	static ActiveConnection read(CompoundTag tag)
+	static ActiveConnection read(CompoundTag tag) throws RuntimeException
 	{
 		PlayerIdentifier client = IdentifierHandler.loadOrThrow(tag, "client");
 		PlayerIdentifier server = IdentifierHandler.loadOrThrow(tag, "server");
-		ComputerReference clientComputer = ComputerReference.read(tag.getCompound("client_computer"));
-		ComputerReference serverComputer = ComputerReference.read(tag.getCompound("server_computer"));
+		ComputerReference clientComputer = ComputerReference.readOrThrow(tag.getCompound("client_computer"));
+		ComputerReference serverComputer = ComputerReference.readOrThrow(tag.getCompound("server_computer"));
 		
 		return new ActiveConnection(client, clientComputer, server, serverComputer);
 	}

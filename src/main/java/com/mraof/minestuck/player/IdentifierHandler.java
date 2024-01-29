@@ -50,7 +50,7 @@ public class IdentifierHandler
 	}
 	
 	@Nonnull
-	public static PlayerIdentifier loadOrThrow(CompoundTag tag, String key)
+	public static PlayerIdentifier loadOrThrow(CompoundTag tag, String key) throws RuntimeException
 	{
 		return tryLoad(tag, key).getOrThrow(false, message -> {});
 	}

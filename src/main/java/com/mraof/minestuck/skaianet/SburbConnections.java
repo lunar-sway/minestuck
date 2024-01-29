@@ -44,7 +44,15 @@ public final class SburbConnections
 		
 		ListTag activeConnectionList = tag.getList("connections", Tag.TAG_COMPOUND);
 		for(int i = 0; i < activeConnectionList.size(); i++)
-			this.activeConnections.add(ActiveConnection.read(activeConnectionList.getCompound(i)));
+		{
+			try
+			{
+				ActiveConnection connection = ActiveConnection.read(activeConnectionList.getCompound(i));
+				this.activeConnections.add(connection);
+			} catch(RuntimeException ignored)
+			{
+			}
+		}
 		
 		ListTag primaryConnectionList = tag.getList("primary_connections", Tag.TAG_COMPOUND);
 		for(int i = 0; i < primaryConnectionList.size(); i++)
@@ -92,9 +100,14 @@ public final class SburbConnections
 		
 		if(active && server.isPresent())
 		{
-			ComputerReference clientComputer = ComputerReference.read(connectionTag.getCompound("client_computer"));
-			ComputerReference serverComputer = ComputerReference.read(connectionTag.getCompound("server_computer"));
-			activeConnections.add(new ActiveConnection(client.get(), clientComputer, server.get(), serverComputer));
+			try
+			{
+				ComputerReference clientComputer = ComputerReference.readOrThrow(connectionTag.getCompound("client_computer"));
+				ComputerReference serverComputer = ComputerReference.readOrThrow(connectionTag.getCompound("server_computer"));
+				activeConnections.add(new ActiveConnection(client.get(), clientComputer, server.get(), serverComputer));
+			} catch(RuntimeException ignored)
+			{
+			}
 		}
 		if(isMain)
 			this.primaryClientToServerMap.put(client.get(), server.orElse(IdentifierHandler.NULL_IDENTIFIER));
