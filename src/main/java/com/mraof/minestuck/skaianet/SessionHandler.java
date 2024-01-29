@@ -6,8 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -30,24 +28,38 @@ public sealed abstract class SessionHandler
 	
 	static SessionHandler init(SkaianetData skaianetData)
 	{
-		return new Multi(skaianetData).getActual();
+		if(MinestuckConfig.SERVER.globalSession.get())
+			return new Global(skaianetData, new Session(skaianetData));
+		else
+			return new Multi(skaianetData, Collections.emptyList());
 	}
 	
 	static SessionHandler load(CompoundTag tag, SkaianetData skaianetData)
 	{
-		SessionHandler loadedSessions;
-		if(tag.contains("session", Tag.TAG_COMPOUND))
-			loadedSessions = new SessionHandler.Global(skaianetData, tag.getCompound("session"));
-		else loadedSessions = new SessionHandler.Multi(skaianetData, tag.getList("sessions", Tag.TAG_COMPOUND));
 		
-		SessionHandler actual = loadedSessions.getActual();
-		actual.getSessions().forEach(Session::checkIfCompleted);
-		return actual;
+		if(tag.contains("session", Tag.TAG_COMPOUND))
+		{
+			Session session = Session.read(tag.getCompound("session"), skaianetData);
+			
+			if(MinestuckConfig.SERVER.globalSession.get())
+				return new Global(skaianetData, session);
+			else
+				return new Multi(skaianetData, createSplitSessions(session));
+		} else
+		{
+			ListTag sessionsTag = tag.getList("sessions", Tag.TAG_COMPOUND);
+			List<Session> sessions = new ArrayList<>();
+			for(int i = 0; i < sessionsTag.size(); i++)
+				sessions.add(Session.read(sessionsTag.getCompound(i), skaianetData));
+			
+			if(MinestuckConfig.SERVER.globalSession.get())
+				return new Global(skaianetData, Session.createMergedSession(sessions, skaianetData));
+			else
+				return new Multi(skaianetData, sessions);
+		}
 	}
 	
 	abstract void write(CompoundTag compound);
-	
-	abstract SessionHandler getActual();
 	
 	/**
 	 * Looks for the session that the player is a part of.
@@ -116,23 +128,10 @@ public sealed abstract class SessionHandler
 			skaianetData.players().forEach(globalSession::addPlayer);
 		}
 		
-		Global(SkaianetData skaianetData, CompoundTag nbt)
-		{
-			this(skaianetData, Session.read(nbt, skaianetData));
-		}
-		
 		@Override
 		void write(CompoundTag compound)
 		{
 			compound.put("session", globalSession.write());
-		}
-		
-		@Override
-		SessionHandler getActual()
-		{
-			if(!MinestuckConfig.SERVER.globalSession.get())
-				return new Multi(skaianetData, globalSession);
-			else return this;
 		}
 		
 		@Override
@@ -175,30 +174,16 @@ public sealed abstract class SessionHandler
 	 */
 	private static final class Multi extends SessionHandler
 	{
-		private static final Logger LOGGER = LogManager.getLogger();
-		
 		/**
 		 * An array list of the current worlds sessions.
 		 */
 		private final Set<Session> sessions = new HashSet<>();
 		
-		Multi(SkaianetData skaianetData)
+		Multi(SkaianetData skaianetData, List<Session> sessions)
 		{
 			super(skaianetData);
-		}
-		
-		Multi(SkaianetData skaianetData, Session globalSession)
-		{
-			this(skaianetData);
-			sessions.add(globalSession);
-			split(globalSession);
-		}
-		
-		Multi(SkaianetData skaianetData, ListTag list)
-		{
-			super(skaianetData);
-			for(int i = 0; i < list.size(); i++)
-				correctAndAddSession(Session.read(list.getCompound(i), skaianetData));
+			this.sessions.addAll(sessions);
+			this.sessions.forEach(Session::checkIfCompleted);
 		}
 		
 		@Override
@@ -210,16 +195,6 @@ public sealed abstract class SessionHandler
 				list.add(s.write());
 			
 			compound.put("sessions", list);
-		}
-		
-		@Override
-		SessionHandler getActual()
-		{
-			if(MinestuckConfig.SERVER.globalSession.get())
-				return new Global(skaianetData,
-						Session.createMergedSession(this.sessions, this.skaianetData));
-			
-			return this;
 		}
 		
 		@Override
@@ -270,62 +245,52 @@ public sealed abstract class SessionHandler
 			Session s = Objects.requireNonNull(getPlayerSession(client));
 			
 			if(!skaianetData.connections.isPrimaryPair(client, server))
-				split(s);
-		}
-		
-		private void correctAndAddSession(Session session)
-		{
-			try
 			{
-				if(session.getPlayers().stream().anyMatch(player -> this.getPlayerSession(player) != null))
-					throw new IllegalStateException("Session contained connections that have already been added");
-				
-				sessions.add(session);
-			} catch(RuntimeException e)
-			{
-				LOGGER.error("Failed to add session. This might lead to loss of data, so I hope you've got a backup! Reason \"{}\"", e.getMessage());
+				this.sessions.remove(s);
+				this.sessions.addAll(createSplitSessions(s));
 			}
 		}
-		
-		private void split(Session session)
+	}
+	
+	private static List<Session> createSplitSessions(Session session)
+	{
+		List<Session> newSessions = new ArrayList<>();
+		while(!session.getPlayers().isEmpty())
 		{
-			sessions.remove(session);
-			while(!session.getPlayers().isEmpty())
-			{
-				PlayerIdentifier remainingPlayer = session.getPlayers().iterator().next();
-				Set<PlayerIdentifier> players = collectAllConnectedPlayers(remainingPlayer, skaianetData);
-				Session newSession = session.createSessionSplit(players);
-				newSession.checkIfCompleted();
-				if(newSession.getPlayers().size() > 1 || newSession.getGristGutter().gutterMultiplierForSession() > 0)
-					this.sessions.add(newSession);
-			}
+			PlayerIdentifier remainingPlayer = session.getPlayers().iterator().next();
+			Set<PlayerIdentifier> players = collectAllConnectedPlayers(remainingPlayer, session.skaianetData);
+			Session newSession = session.createSessionSplit(players);
+			newSession.checkIfCompleted();
+			if(newSession.getPlayers().size() > 1 || newSession.getGristGutter().gutterMultiplierForSession() > 0)
+				newSessions.add(newSession);
+		}
+		return newSessions;
+	}
+	
+	private static Set<PlayerIdentifier> collectAllConnectedPlayers(PlayerIdentifier player, SkaianetData skaianetData)
+	{
+		Set<PlayerIdentifier> players = new HashSet<>();
+		Queue<PlayerIdentifier> uncheckedPlayers = new LinkedList<>();
+		
+		players.add(player);
+		
+		for(PlayerIdentifier nextPlayer = player; nextPlayer != null; nextPlayer = uncheckedPlayers.poll())
+		{
+			findDirectlyConnectedPlayers(nextPlayer, skaianetData, connectedPlayer -> {
+				if(players.add(connectedPlayer))
+					uncheckedPlayers.add(connectedPlayer);
+			});
 		}
 		
-		static Set<PlayerIdentifier> collectAllConnectedPlayers(PlayerIdentifier player, SkaianetData skaianetData)
-		{
-			Set<PlayerIdentifier> players = new HashSet<>();
-			Queue<PlayerIdentifier> uncheckedPlayers = new LinkedList<>();
-			
-			players.add(player);
-			
-			for(PlayerIdentifier nextPlayer = player; nextPlayer != null; nextPlayer = uncheckedPlayers.poll())
-			{
-				findDirectlyConnectedPlayers(nextPlayer, skaianetData, connectedPlayer -> {
-					if(players.add(connectedPlayer))
-						uncheckedPlayers.add(connectedPlayer);
-				});
-			}
-			
-			return players;
-		}
+		return players;
+	}
+	
+	private static void findDirectlyConnectedPlayers(PlayerIdentifier player, SkaianetData skaianetData, Consumer<PlayerIdentifier> playerConsumer)
+	{
+		skaianetData.connections.primaryPartnerForClient(player).ifPresent(playerConsumer);
+		skaianetData.connections.primaryPartnerForServer(player).ifPresent(playerConsumer);
 		
-		private static void findDirectlyConnectedPlayers(PlayerIdentifier player, SkaianetData skaianetData, Consumer<PlayerIdentifier> playerConsumer)
-		{
-			skaianetData.connections.primaryPartnerForClient(player).ifPresent(playerConsumer);
-			skaianetData.connections.primaryPartnerForServer(player).ifPresent(playerConsumer);
-			
-			skaianetData.connections.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
-			skaianetData.connections.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));
-		}
+		skaianetData.connections.getActiveConnection(player).ifPresent(connection -> playerConsumer.accept(connection.server()));
+		skaianetData.connections.activeConnections().filter(connection -> connection.server().equals(player)).forEach(connection -> playerConsumer.accept(connection.client()));
 	}
 }
