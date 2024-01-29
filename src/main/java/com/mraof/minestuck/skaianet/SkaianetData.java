@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -99,6 +100,11 @@ public final class SkaianetData extends SavedData
 		sessionHandler.write(compound);
 		
 		return compound;
+	}
+	
+	static SkaianetData newInstanceForGameTest(GameTestHelper helper)
+	{
+		return new SkaianetData(helper.getLevel().getServer());
 	}
 	
 	Stream<PlayerIdentifier> players()

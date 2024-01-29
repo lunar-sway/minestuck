@@ -60,15 +60,20 @@ minecraft {
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
     runs {
-        client {
+        configureEach {
             workingDirectory project.file('run')
 
-            // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            mods {
+                minestuck {
+                    source sourceSets.main
+                }
+            }
+        }
+        client {
             // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
             if (project.hasProperty('mc_uuid')) {
                 args '--uuid', project.getProperty('mc_uuid')
@@ -78,44 +83,13 @@ minecraft {
             if (project.hasProperty('mc_username')) {
                 args '--username', project.getProperty('mc_username')
             }
-
-            mods {
-                minestuck {
-                    source sourceSets.main
-                }
-            }
         }
         server {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                minestuck {
-                    source sourceSets.main
-                }
-            }
+        }
+        gameTestServer {
         }
         data {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
             args '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
-
-            mods {
-                minestuck {
-                    source sourceSets.main
-                }
-            }
         }
     }
 }
