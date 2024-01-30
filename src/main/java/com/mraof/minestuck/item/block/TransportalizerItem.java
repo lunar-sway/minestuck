@@ -30,9 +30,9 @@ public class TransportalizerItem extends BlockItem
 		BlockEntity be = level.getBlockEntity(pos);
 		if(stack.hasTag() && be instanceof TransportalizerBlockEntity transportalizer)
 		{
-			transportalizer.setId(stack.getTag().getString("idString"), player);
-			transportalizer.setDestId(stack.getTag().getString("destId"));
-			if (stack.getTag().getBoolean("locked"))
+			transportalizer.setId(stack.getTag().getString(TransportalizerBlockEntity.ID));
+			transportalizer.setDestId(stack.getTag().getString(TransportalizerBlockEntity.DEST_ID));
+			if (stack.getTag().getBoolean(TransportalizerBlockEntity.LOCKED))
 				transportalizer.lock();
 		}
 		return true;
@@ -44,12 +44,12 @@ public class TransportalizerItem extends BlockItem
 		if (!stack.hasTag())
 			return;
 		
-		if (stack.getTag().getBoolean("locked")) {
+		if (stack.getTag().getBoolean(TransportalizerBlockEntity.LOCKED)) {
 			tooltip.add(Component.translatable("block.minestuck.transportalizer.locked_message").withStyle(ChatFormatting.GRAY));
 		} else {
-			if (stack.getTag().contains("idString", Tag.TAG_STRING))
+			if (stack.getTag().contains(TransportalizerBlockEntity.ID, Tag.TAG_STRING))
 				tooltip.add(Component.translatable("block.minestuck.transportalizer.idString", stack.getTag().getString("idString")).withStyle(ChatFormatting.GRAY));
-			if (stack.getTag().contains("destId", Tag.TAG_STRING))
+			if (stack.getTag().contains(TransportalizerBlockEntity.DEST_ID, Tag.TAG_STRING))
 				tooltip.add(Component.translatable("block.minestuck.transportalizer.destId", stack.getTag().getString("destId")).withStyle(ChatFormatting.GRAY));
 		}
 	}

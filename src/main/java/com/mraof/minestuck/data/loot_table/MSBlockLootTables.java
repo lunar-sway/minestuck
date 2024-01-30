@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -642,7 +643,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	}
 	private LootTable.Builder droppingWithIds(Block block)
 	{
-		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("idString", "idString").copy("destId", "destId").copy("locked", "locked")))));
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+				.add(LootItem.lootTableItem(block).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+						.copy(TransportalizerBlockEntity.ID, TransportalizerBlockEntity.ID)
+						.copy(TransportalizerBlockEntity.DEST_ID, TransportalizerBlockEntity.DEST_ID)
+						.copy(TransportalizerBlockEntity.LOCKED, TransportalizerBlockEntity.LOCKED))
+				)));
 	}
 	
 	@Override

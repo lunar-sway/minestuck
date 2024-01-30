@@ -62,8 +62,9 @@ public class TransportalizerScreen extends Screen
 		
 		if(!be.hasId())
 			guiGraphics.drawString(font, "Enter ID:", width / 2F - font.width("Enter ID:") / 2F, yOffset + 10, 0x404040, false);
+		else
+			guiGraphics.drawString(font, be.getId(), (width / 2F) - font.width(be.getId()) / 2F, yOffset + 10, be.isActive() ? 0x404040 : 0xFF0000, false);
 		
-		guiGraphics.drawString(font, be.getId(), (width / 2F) - font.width(be.getId()) / 2F, yOffset + 10, be.isActive() ? 0x404040 : 0xFF0000, false);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 

@@ -4,6 +4,7 @@ import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 
 public class TransportalizerPacket
 {
@@ -27,9 +28,11 @@ public class TransportalizerPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
+			if(player.getCommandSenderWorld().isAreaLoaded(pos, 0)
+					&& player.distanceToSqr(Vec3.atCenterOf(pos)) <= 8 * 8
+					&& id.length() == 4)
 				if(player.level().getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
-					transportalizer.setId(id, player);
+					transportalizer.trySetId(id, player);
 		}
 	}
 	
@@ -53,7 +56,9 @@ public class TransportalizerPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
+			if(player.getCommandSenderWorld().isAreaLoaded(pos, 0)
+					&& player.distanceToSqr(Vec3.atCenterOf(pos)) <= 8 * 8
+					&& destId.length() == 4)
 				if(player.level().getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
 					transportalizer.setDestId(destId);
 		}
