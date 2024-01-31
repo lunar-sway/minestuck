@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Only meant to be used skaianet-internally during entry preparations and during predefine data.
  * @author Kirderf1
  */
-public class Generator
+class Generator
 {
 	static Title generateTitle(PlayerIdentifier player, Set<EnumAspect> availableAspects, SkaianetData skaianetData)
 	{

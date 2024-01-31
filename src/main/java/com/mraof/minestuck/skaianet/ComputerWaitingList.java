@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public class ComputerWaitingList
+class ComputerWaitingList
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	

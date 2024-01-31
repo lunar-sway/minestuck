@@ -47,7 +47,7 @@ public final class ActiveConnection
 		return this.serverComputer().matches(computer) && this.server().equals(computer.getOwner());
 	}
 	
-	boolean hasPlayer(PlayerIdentifier player)
+	public boolean hasPlayer(PlayerIdentifier player)
 	{
 		return this.client().equals(player) || this.server().equals(player);
 	}

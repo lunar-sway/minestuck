@@ -264,7 +264,7 @@ public final class SburbConnections
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(skaianetData.mcServer, activeConnection, type));
 	}
 	
-	void closeConnection(ActiveConnection connection)
+	public void closeConnection(ActiveConnection connection)
 	{
 		this.closeConnection(connection, null, null);
 	}

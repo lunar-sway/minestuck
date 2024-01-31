@@ -45,14 +45,14 @@ public final class SkaianetTests
 					server2 = IdentifierHandler.createNewFakeIdentifier();
 			
 			skaianetData.connections.trySetPrimaryConnection(client, server1);
-			helper.assertTrue(skaianetData.connections.primaryPartnerForClient(client).equals(Optional.of(server1)), "Primary server player did not match");
+			helper.assertTrue(skaianetData.connections.isPrimaryPair(client, server1), "Primary server player did not match");
 			
 			skaianetData.connections.unlinkClientPlayer(client);
 			helper.assertTrue(skaianetData.connections.primaryPartnerForClient(client).isEmpty(), "Client player still has partner");
 			helper.assertTrue(skaianetData.connections.hasPrimaryConnectionForClient(client), "Client lost primary connection entirely");
 			
 			skaianetData.connections.newServerForClient(client, server2);
-			helper.assertTrue(skaianetData.connections.primaryPartnerForClient(client).equals(Optional.of(server2)), "Primary server player did not match");
+			helper.assertTrue(skaianetData.connections.isPrimaryPair(client, server2), "Primary server player did not match");
 		});
 	}
 }

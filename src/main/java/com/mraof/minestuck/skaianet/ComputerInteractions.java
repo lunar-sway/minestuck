@@ -62,12 +62,12 @@ public final class ComputerInteractions
 		return SkaianetData.get(mcServer).computerInteractions;
 	}
 	
-	boolean hasResumingClient(PlayerIdentifier identifier)
+	public boolean hasResumingClient(PlayerIdentifier identifier)
 	{
 		return resumingClients.contains(identifier);
 	}
 	
-	boolean hasResumingServer(PlayerIdentifier identifier)
+	public boolean hasResumingServer(PlayerIdentifier identifier)
 	{
 		return resumingServers.contains(identifier) || openedServers.contains(identifier);
 	}
@@ -221,7 +221,7 @@ public final class ComputerInteractions
 		openedServers.replace(oldBE.owner, oldRef, newRef);
 	}
 	
-	private boolean isClientActive(PlayerIdentifier player)
+	public boolean isClientActive(PlayerIdentifier player)
 	{
 		return skaianetData.connections.getActiveConnection(player).isPresent() || hasResumingClient(player);
 	}
