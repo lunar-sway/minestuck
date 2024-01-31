@@ -6,6 +6,8 @@ import com.mraof.minestuck.block.plant.FlammableLogBlock;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -13,16 +15,11 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
-import static com.mraof.minestuck.item.MSItems.registerBlockItem;
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 
-public class AspectTreeBlocks extends MSBlocks
+public final class AspectTreeBlocks
 {
-	
 	public static void init() {}
 	
 	//Blood

@@ -36,7 +36,7 @@ import java.util.function.Function;
 
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 
-public class MSBlocks
+public final class MSBlocks
 {
 	public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Minestuck.MOD_ID);
 	
