@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.MSEffects;
@@ -1256,192 +1257,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> DEAD_LADDER = registerBlockItem(MSBlocks.DEAD_LADDER);
 	public static final RegistryObject<BlockItem> TREATED_LADDER = registerBlockItem(MSBlocks.TREATED_LADDER);
 	
-	//Aspect Tree Blocks
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_LOG = registerBlockItem(MSBlocks.BLOOD_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_LOG = registerBlockItem(MSBlocks.BREATH_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_LOG = registerBlockItem(MSBlocks.DOOM_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_LOG = registerBlockItem(MSBlocks.HEART_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_LOG = registerBlockItem(MSBlocks.HOPE_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_LOG = registerBlockItem(MSBlocks.LIFE_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_LOG = registerBlockItem(MSBlocks.LIGHT_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_LOG = registerBlockItem(MSBlocks.MIND_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_LOG = registerBlockItem(MSBlocks.RAGE_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_LOG = registerBlockItem(MSBlocks.SPACE_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_LOG = registerBlockItem(MSBlocks.TIME_ASPECT_LOG);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_LOG = registerBlockItem(MSBlocks.VOID_ASPECT_LOG);
-	
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_PLANKS = registerBlockItem(MSBlocks.BLOOD_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_STAIRS = registerBlockItem(MSBlocks.BLOOD_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_SLAB = registerBlockItem(MSBlocks.BLOOD_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_BUTTON = registerBlockItem(MSBlocks.BLOOD_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.BLOOD_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_FENCE = registerBlockItem(MSBlocks.BLOOD_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.BLOOD_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_DOOR = registerBlockItem(MSBlocks.BLOOD_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.BLOOD_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_PLANKS = registerBlockItem(MSBlocks.BREATH_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_STAIRS = registerBlockItem(MSBlocks.BREATH_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_SLAB = registerBlockItem(MSBlocks.BREATH_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_BUTTON = registerBlockItem(MSBlocks.BREATH_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.BREATH_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_FENCE = registerBlockItem(MSBlocks.BREATH_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.BREATH_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_DOOR = registerBlockItem(MSBlocks.BREATH_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.BREATH_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_PLANKS = registerBlockItem(MSBlocks.DOOM_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_STAIRS = registerBlockItem(MSBlocks.DOOM_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_SLAB = registerBlockItem(MSBlocks.DOOM_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_BUTTON = registerBlockItem(MSBlocks.DOOM_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.DOOM_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_FENCE = registerBlockItem(MSBlocks.DOOM_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.DOOM_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_DOOR = registerBlockItem(MSBlocks.DOOM_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.DOOM_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> HEART_ASPECT_PLANKS = registerBlockItem(MSBlocks.HEART_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_STAIRS = registerBlockItem(MSBlocks.HEART_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_SLAB = registerBlockItem(MSBlocks.HEART_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_BUTTON = registerBlockItem(MSBlocks.HEART_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.HEART_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_FENCE = registerBlockItem(MSBlocks.HEART_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.HEART_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_DOOR = registerBlockItem(MSBlocks.HEART_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.HEART_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_PLANKS = registerBlockItem(MSBlocks.HOPE_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_STAIRS = registerBlockItem(MSBlocks.HOPE_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_SLAB = registerBlockItem(MSBlocks.HOPE_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_BUTTON = registerBlockItem(MSBlocks.HOPE_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.HOPE_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_FENCE = registerBlockItem(MSBlocks.HOPE_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.HOPE_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_DOOR = registerBlockItem(MSBlocks.HOPE_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.HOPE_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_PLANKS = registerBlockItem(MSBlocks.LIFE_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_STAIRS = registerBlockItem(MSBlocks.LIFE_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_SLAB = registerBlockItem(MSBlocks.LIFE_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_BUTTON = registerBlockItem(MSBlocks.LIFE_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.LIFE_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_FENCE = registerBlockItem(MSBlocks.LIFE_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.LIFE_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_DOOR = registerBlockItem(MSBlocks.LIFE_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.LIFE_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_PLANKS = registerBlockItem(MSBlocks.LIGHT_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_STAIRS = registerBlockItem(MSBlocks.LIGHT_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_SLAB = registerBlockItem(MSBlocks.LIGHT_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_BUTTON = registerBlockItem(MSBlocks.LIGHT_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.LIGHT_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_FENCE = registerBlockItem(MSBlocks.LIGHT_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.LIGHT_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_DOOR = registerBlockItem(MSBlocks.LIGHT_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.LIGHT_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> MIND_ASPECT_PLANKS = registerBlockItem(MSBlocks.MIND_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_STAIRS = registerBlockItem(MSBlocks.MIND_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_SLAB = registerBlockItem(MSBlocks.MIND_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_BUTTON = registerBlockItem(MSBlocks.MIND_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.MIND_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_FENCE = registerBlockItem(MSBlocks.MIND_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.MIND_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_DOOR = registerBlockItem(MSBlocks.MIND_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.MIND_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_PLANKS = registerBlockItem(MSBlocks.RAGE_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_STAIRS = registerBlockItem(MSBlocks.RAGE_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_SLAB = registerBlockItem(MSBlocks.RAGE_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_BUTTON = registerBlockItem(MSBlocks.RAGE_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.RAGE_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_FENCE = registerBlockItem(MSBlocks.RAGE_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.RAGE_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_DOOR = registerBlockItem(MSBlocks.RAGE_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.RAGE_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_PLANKS = registerBlockItem(MSBlocks.SPACE_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_STAIRS = registerBlockItem(MSBlocks.SPACE_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_SLAB = registerBlockItem(MSBlocks.SPACE_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_BUTTON = registerBlockItem(MSBlocks.SPACE_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.SPACE_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_FENCE = registerBlockItem(MSBlocks.SPACE_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.SPACE_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_DOOR = registerBlockItem(MSBlocks.SPACE_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.SPACE_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> TIME_ASPECT_PLANKS = registerBlockItem(MSBlocks.TIME_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_STAIRS = registerBlockItem(MSBlocks.TIME_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_SLAB = registerBlockItem(MSBlocks.TIME_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_BUTTON = registerBlockItem(MSBlocks.TIME_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.TIME_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_FENCE = registerBlockItem(MSBlocks.TIME_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.TIME_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_DOOR = registerBlockItem(MSBlocks.TIME_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.TIME_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> VOID_ASPECT_PLANKS = registerBlockItem(MSBlocks.VOID_ASPECT_PLANKS);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_STAIRS = registerBlockItem(MSBlocks.VOID_ASPECT_STAIRS);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_SLAB = registerBlockItem(MSBlocks.VOID_ASPECT_SLAB);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_BUTTON = registerBlockItem(MSBlocks.VOID_ASPECT_BUTTON);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_PRESSURE_PLATE = registerBlockItem(MSBlocks.VOID_ASPECT_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_FENCE = registerBlockItem(MSBlocks.VOID_ASPECT_FENCE);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_FENCE_GATE = registerBlockItem(MSBlocks.VOID_ASPECT_FENCE_GATE);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_DOOR = registerBlockItem(MSBlocks.VOID_ASPECT_DOOR);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_TRAPDOOR = registerBlockItem(MSBlocks.VOID_ASPECT_TRAPDOOR);
-	
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_LEAVES = registerBlockItem(MSBlocks.BLOOD_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_LEAVES = registerBlockItem(MSBlocks.BREATH_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_LEAVES = registerBlockItem(MSBlocks.DOOM_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_LEAVES = registerBlockItem(MSBlocks.HEART_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_LEAVES = registerBlockItem(MSBlocks.HOPE_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_LEAVES = registerBlockItem(MSBlocks.LIFE_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_LEAVES = registerBlockItem(MSBlocks.LIGHT_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_LEAVES = registerBlockItem(MSBlocks.MIND_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_LEAVES = registerBlockItem(MSBlocks.RAGE_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_LEAVES = registerBlockItem(MSBlocks.SPACE_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_LEAVES = registerBlockItem(MSBlocks.TIME_ASPECT_LEAVES);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_LEAVES = registerBlockItem(MSBlocks.VOID_ASPECT_LEAVES);
-	
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_SAPLING = registerBlockItem(MSBlocks.BLOOD_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_SAPLING = registerBlockItem(MSBlocks.BREATH_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_SAPLING = registerBlockItem(MSBlocks.DOOM_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> HEART_ASPECT_SAPLING = registerBlockItem(MSBlocks.HEART_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_SAPLING = registerBlockItem(MSBlocks.HOPE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_SAPLING = registerBlockItem(MSBlocks.LIFE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_SAPLING = registerBlockItem(MSBlocks.LIGHT_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> MIND_ASPECT_SAPLING = registerBlockItem(MSBlocks.MIND_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_SAPLING = registerBlockItem(MSBlocks.RAGE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_SAPLING = registerBlockItem(MSBlocks.SPACE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> TIME_ASPECT_SAPLING = registerBlockItem(MSBlocks.TIME_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final RegistryObject<BlockItem> VOID_ASPECT_SAPLING = registerBlockItem(MSBlocks.VOID_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.BLOOD_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.BREATH_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.DOOM_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.HEART_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.HOPE_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.LIFE_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.LIGHT_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.MIND_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.RAGE_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.SPACE_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.TIME_ASPECT_BOOKSHELF);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.VOID_ASPECT_BOOKSHELF);
-	
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_LADDER = registerBlockItem(MSBlocks.BLOOD_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_LADDER = registerBlockItem(MSBlocks.BREATH_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_LADDER = registerBlockItem(MSBlocks.DOOM_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> HEART_ASPECT_LADDER = registerBlockItem(MSBlocks.HEART_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_LADDER = registerBlockItem(MSBlocks.HOPE_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_LADDER = registerBlockItem(MSBlocks.LIFE_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_LADDER = registerBlockItem(MSBlocks.LIGHT_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> MIND_ASPECT_LADDER = registerBlockItem(MSBlocks.MIND_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_LADDER = registerBlockItem(MSBlocks.RAGE_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_LADDER = registerBlockItem(MSBlocks.SPACE_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> TIME_ASPECT_LADDER = registerBlockItem(MSBlocks.TIME_ASPECT_LADDER);
-	public static final RegistryObject<BlockItem> VOID_ASPECT_LADDER = registerBlockItem(MSBlocks.VOID_ASPECT_LADDER);
-	
 	//Land Plant Blocks
 	public static final RegistryObject<BlockItem> GLOWING_MUSHROOM = registerBlockItem(MSBlocks.GLOWING_MUSHROOM);
 	public static final RegistryObject<BlockItem> GLOWING_MUSHROOM_VINES = registerBlockItem(MSBlocks.GLOWING_MUSHROOM_VINES);
@@ -1628,7 +1443,7 @@ public class MSItems
 	/**
 	 * Helper function to register a standard BlockItem with just the source block, no item properties
 	 */
-	private static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block)
+	public static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block)
 	{
 		return registerBlockItem(block, block1 -> new BlockItem(block1, new Item.Properties()));
 	}
@@ -1636,7 +1451,7 @@ public class MSItems
 	/**
 	 * Helper function to register a standard BlockItem with a parameter for a unique item property
 	 */
-	private static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block, Item.Properties properties)
+	public static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block, Item.Properties properties)
 	{
 		return registerBlockItem(block, block1 -> new BlockItem(block1, properties));
 	}
@@ -1644,7 +1459,7 @@ public class MSItems
 	/**
 	 * Helper function to register custom classes extending BlockItem, or is fed a standard BlockItem through the other registerBlockItem() function
 	 */
-	private static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block, Function<Block, ? extends BlockItem> function)
+	public static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block, Function<Block, ? extends BlockItem> function)
 	{
 		return REGISTER.register(block.getId().getPath(), () -> function.apply(block.get())); //assumed getKey() will be non-null due to the way DeferredRegistry works
 	}

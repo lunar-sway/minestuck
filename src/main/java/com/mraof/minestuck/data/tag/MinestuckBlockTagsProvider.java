@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.CompletableFuture;
 
+import static com.mraof.minestuck.block.AspectTreeBlocks.*;
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.util.MSTags.Blocks.*;
 import static net.minecraft.tags.BlockTags.*;

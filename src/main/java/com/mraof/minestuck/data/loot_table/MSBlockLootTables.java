@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
@@ -571,177 +572,177 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(END_SAPLING.get());
 		dropSelf(SHADEWOOD_SAPLING.get());
 		
-		dropSelf(BLOOD_ASPECT_LOG.get());
-		dropSelf(BREATH_ASPECT_LOG.get());
-		dropSelf(DOOM_ASPECT_LOG.get());
-		dropSelf(HEART_ASPECT_LOG.get());
-		dropSelf(HOPE_ASPECT_LOG.get());
-		dropSelf(LIFE_ASPECT_LOG.get());
-		dropSelf(LIGHT_ASPECT_LOG.get());
-		dropSelf(MIND_ASPECT_LOG.get());
-		dropSelf(RAGE_ASPECT_LOG.get());
-		dropSelf(SPACE_ASPECT_LOG.get());
-		dropSelf(TIME_ASPECT_LOG.get());
-		dropSelf(VOID_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_LOG.get());
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_LOG.get());
 		
-		dropSelf(BLOOD_ASPECT_PLANKS.get());
-		dropSelf(BLOOD_ASPECT_STAIRS.get());
-		add(BLOOD_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(BLOOD_ASPECT_BUTTON.get());
-		dropSelf(BLOOD_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(BLOOD_ASPECT_FENCE.get());
-		dropSelf(BLOOD_ASPECT_FENCE_GATE.get());
-		add(BLOOD_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(BLOOD_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.BLOOD_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.BLOOD_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(BREATH_ASPECT_PLANKS.get());
-		dropSelf(BREATH_ASPECT_STAIRS.get());
-		add(BREATH_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(BREATH_ASPECT_BUTTON.get());
-		dropSelf(BREATH_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(BREATH_ASPECT_FENCE.get());
-		dropSelf(BREATH_ASPECT_FENCE_GATE.get());
-		add(BREATH_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(BREATH_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.BREATH_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.BREATH_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(DOOM_ASPECT_PLANKS.get());
-		dropSelf(DOOM_ASPECT_STAIRS.get());
-		add(DOOM_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(DOOM_ASPECT_BUTTON.get());
-		dropSelf(DOOM_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(DOOM_ASPECT_FENCE.get());
-		dropSelf(DOOM_ASPECT_FENCE_GATE.get());
-		add(DOOM_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(DOOM_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.DOOM_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.DOOM_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(HEART_ASPECT_PLANKS.get());
-		dropSelf(HEART_ASPECT_STAIRS.get());
-		add(HEART_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(HEART_ASPECT_BUTTON.get());
-		dropSelf(HEART_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(HEART_ASPECT_FENCE.get());
-		dropSelf(HEART_ASPECT_FENCE_GATE.get());
-		add(HEART_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(HEART_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.HEART_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.HEART_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(HOPE_ASPECT_PLANKS.get());
-		dropSelf(HOPE_ASPECT_STAIRS.get());
-		add(HOPE_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(HOPE_ASPECT_BUTTON.get());
-		dropSelf(HOPE_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(HOPE_ASPECT_FENCE.get());
-		dropSelf(HOPE_ASPECT_FENCE_GATE.get());
-		add(HOPE_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(HOPE_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.HOPE_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.HOPE_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(LIFE_ASPECT_PLANKS.get());
-		dropSelf(LIFE_ASPECT_STAIRS.get());
-		add(LIFE_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(LIFE_ASPECT_BUTTON.get());
-		dropSelf(LIFE_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(LIFE_ASPECT_FENCE.get());
-		dropSelf(LIFE_ASPECT_FENCE_GATE.get());
-		add(LIFE_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(LIFE_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.LIFE_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.LIFE_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(LIGHT_ASPECT_PLANKS.get());
-		dropSelf(LIGHT_ASPECT_STAIRS.get());
-		add(LIGHT_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(LIGHT_ASPECT_BUTTON.get());
-		dropSelf(LIGHT_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(LIGHT_ASPECT_FENCE.get());
-		dropSelf(LIGHT_ASPECT_FENCE_GATE.get());
-		add(LIGHT_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(LIGHT_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.LIGHT_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.LIGHT_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(MIND_ASPECT_PLANKS.get());
-		dropSelf(MIND_ASPECT_STAIRS.get());
-		add(MIND_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(MIND_ASPECT_BUTTON.get());
-		dropSelf(MIND_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(MIND_ASPECT_FENCE.get());
-		dropSelf(MIND_ASPECT_FENCE_GATE.get());
-		add(MIND_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(MIND_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.MIND_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.MIND_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(RAGE_ASPECT_PLANKS.get());
-		dropSelf(RAGE_ASPECT_STAIRS.get());
-		add(RAGE_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(RAGE_ASPECT_BUTTON.get());
-		dropSelf(RAGE_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(RAGE_ASPECT_FENCE.get());
-		dropSelf(RAGE_ASPECT_FENCE_GATE.get());
-		add(RAGE_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(RAGE_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.RAGE_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.RAGE_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(SPACE_ASPECT_PLANKS.get());
-		dropSelf(SPACE_ASPECT_STAIRS.get());
-		add(SPACE_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(SPACE_ASPECT_BUTTON.get());
-		dropSelf(SPACE_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(SPACE_ASPECT_FENCE.get());
-		dropSelf(SPACE_ASPECT_FENCE_GATE.get());
-		add(SPACE_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(SPACE_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.SPACE_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.SPACE_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(TIME_ASPECT_PLANKS.get());
-		dropSelf(TIME_ASPECT_STAIRS.get());
-		add(TIME_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(TIME_ASPECT_BUTTON.get());
-		dropSelf(TIME_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(TIME_ASPECT_FENCE.get());
-		dropSelf(TIME_ASPECT_FENCE_GATE.get());
-		add(TIME_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(TIME_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.TIME_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.TIME_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_TRAPDOOR.get());
 		
-		dropSelf(VOID_ASPECT_PLANKS.get());
-		dropSelf(VOID_ASPECT_STAIRS.get());
-		add(VOID_ASPECT_SLAB.get(), this::createSlabItemTable);
-		dropSelf(VOID_ASPECT_BUTTON.get());
-		dropSelf(VOID_ASPECT_PRESSURE_PLATE.get());
-		dropSelf(VOID_ASPECT_FENCE.get());
-		dropSelf(VOID_ASPECT_FENCE_GATE.get());
-		add(VOID_ASPECT_DOOR.get(), this::createDoorTable);
-		dropSelf(VOID_ASPECT_TRAPDOOR.get());
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_PLANKS.get());
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_STAIRS.get());
+		add(AspectTreeBlocks.VOID_ASPECT_SLAB.get(), this::createSlabItemTable);
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_BUTTON.get());
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_PRESSURE_PLATE.get());
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_FENCE.get());
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_FENCE_GATE.get());
+		add(AspectTreeBlocks.VOID_ASPECT_DOOR.get(), this::createDoorTable);
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_TRAPDOOR.get());
 		
-		add(BLOOD_ASPECT_LEAVES.get(), this::bloodAspectLeavesDrop);
-		add(BREATH_ASPECT_LEAVES.get(), this::breathAspectLeavesDrop);
-		add(DOOM_ASPECT_LEAVES.get(), this::doomAspectLeavesDrop);
-		add(HEART_ASPECT_LEAVES.get(), this::heartAspectLeavesDrop);
-		add(HOPE_ASPECT_LEAVES.get(), this::hopeAspectLeavesDrop);
-		add(LIFE_ASPECT_LEAVES.get(), this::lifeAspectLeavesDrop);
-		add(LIGHT_ASPECT_LEAVES.get(), this::lightAspectLeavesDrop);
-		add(MIND_ASPECT_LEAVES.get(), this::mindAspectLeavesDrop);
-		add(RAGE_ASPECT_LEAVES.get(), this::rageAspectLeavesDrop);
-		add(SPACE_ASPECT_LEAVES.get(), this::spaceAspectLeavesDrop);
-		add(TIME_ASPECT_LEAVES.get(), this::timeAspectLeavesDrop);
-		add(VOID_ASPECT_LEAVES.get(), this::voidAspectLeavesDrop);
+		add(AspectTreeBlocks.BLOOD_ASPECT_LEAVES.get(), this::bloodAspectLeavesDrop);
+		add(AspectTreeBlocks.BREATH_ASPECT_LEAVES.get(), this::breathAspectLeavesDrop);
+		add(AspectTreeBlocks.DOOM_ASPECT_LEAVES.get(), this::doomAspectLeavesDrop);
+		add(AspectTreeBlocks.HEART_ASPECT_LEAVES.get(), this::heartAspectLeavesDrop);
+		add(AspectTreeBlocks.HOPE_ASPECT_LEAVES.get(), this::hopeAspectLeavesDrop);
+		add(AspectTreeBlocks.LIFE_ASPECT_LEAVES.get(), this::lifeAspectLeavesDrop);
+		add(AspectTreeBlocks.LIGHT_ASPECT_LEAVES.get(), this::lightAspectLeavesDrop);
+		add(AspectTreeBlocks.MIND_ASPECT_LEAVES.get(), this::mindAspectLeavesDrop);
+		add(AspectTreeBlocks.RAGE_ASPECT_LEAVES.get(), this::rageAspectLeavesDrop);
+		add(AspectTreeBlocks.SPACE_ASPECT_LEAVES.get(), this::spaceAspectLeavesDrop);
+		add(AspectTreeBlocks.TIME_ASPECT_LEAVES.get(), this::timeAspectLeavesDrop);
+		add(AspectTreeBlocks.VOID_ASPECT_LEAVES.get(), this::voidAspectLeavesDrop);
 		
-		dropSelf(BLOOD_ASPECT_SAPLING.get());
-		dropSelf(BREATH_ASPECT_SAPLING.get());
-		dropSelf(DOOM_ASPECT_SAPLING.get());
-		dropSelf(HEART_ASPECT_SAPLING.get());
-		dropSelf(HOPE_ASPECT_SAPLING.get());
-		dropSelf(LIFE_ASPECT_SAPLING.get());
-		dropSelf(LIGHT_ASPECT_SAPLING.get());
-		dropSelf(MIND_ASPECT_SAPLING.get());
-		dropSelf(RAGE_ASPECT_SAPLING.get());
-		dropSelf(SPACE_ASPECT_SAPLING.get());
-		dropSelf(TIME_ASPECT_SAPLING.get());
-		dropSelf(VOID_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_SAPLING.get());
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_SAPLING.get());
 		
-		add(BLOOD_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(BREATH_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(DOOM_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(HEART_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(HOPE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(LIFE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(LIGHT_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(MIND_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(RAGE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(SPACE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(TIME_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
-		add(VOID_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.BLOOD_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.BREATH_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.DOOM_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.HEART_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.HOPE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.LIFE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.LIGHT_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.MIND_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.RAGE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.SPACE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.TIME_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(AspectTreeBlocks.VOID_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
 		
 		add(GLOWING_BOOKSHELF.get(), this::bookshelfDrop);
 		add(FROST_BOOKSHELF.get(), this::bookshelfDrop);
@@ -750,18 +751,18 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(DEAD_BOOKSHELF.get(), this::bookshelfDrop);
 		add(TREATED_BOOKSHELF.get(), this::bookshelfDrop);
 		
-		dropSelf(BLOOD_ASPECT_LADDER.get());
-		dropSelf(BREATH_ASPECT_LADDER.get());
-		dropSelf(DOOM_ASPECT_LADDER.get());
-		dropSelf(HEART_ASPECT_LADDER.get());
-		dropSelf(HOPE_ASPECT_LADDER.get());
-		dropSelf(LIFE_ASPECT_LADDER.get());
-		dropSelf(LIGHT_ASPECT_LADDER.get());
-		dropSelf(MIND_ASPECT_LADDER.get());
-		dropSelf(RAGE_ASPECT_LADDER.get());
-		dropSelf(SPACE_ASPECT_LADDER.get());
-		dropSelf(TIME_ASPECT_LADDER.get());
-		dropSelf(VOID_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.BLOOD_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.BREATH_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.DOOM_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.HEART_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.HOPE_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.LIFE_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.LIGHT_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.MIND_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.RAGE_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.SPACE_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.TIME_ASPECT_LADDER.get());
+		dropSelf(AspectTreeBlocks.VOID_ASPECT_LADDER.get());
 		dropSelf(GLOWING_LADDER.get());
 		dropSelf(FROST_LADDER.get());
 		dropSelf(RAINBOW_LADDER.get());
@@ -1009,62 +1010,62 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	
 	private LootTable.Builder bloodAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, BLOOD_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.BLOOD_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder breathAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, BREATH_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.BREATH_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder doomAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, DOOM_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.DOOM_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder heartAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, HEART_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.HEART_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder hopeAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, HOPE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.HOPE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder lifeAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, LIFE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.LIFE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder lightAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, LIGHT_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.LIGHT_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder mindAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, MIND_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.MIND_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder rageAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, RAGE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.RAGE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder spaceAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, SPACE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.SPACE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder timeAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, TIME_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.TIME_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder voidAspectLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, AspectTreeBlocks.VOID_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder bookshelfDrop(Block block)
