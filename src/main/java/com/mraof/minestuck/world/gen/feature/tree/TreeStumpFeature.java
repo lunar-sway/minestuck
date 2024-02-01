@@ -47,7 +47,7 @@ public class TreeStumpFeature extends AbstractTemplateFeature<NoneFeatureConfigu
 		int minY = Integer.MAX_VALUE;
 		int maxY = Integer.MIN_VALUE;
 		
-		for(BlockPos floorPos : BlockPos.betweenClosed(pos, pos.offset(8, 0, 8)))
+		for(BlockPos floorPos : BlockPos.betweenClosed(pos.offset(-4, 0, -4), pos.offset(4, 0, 4)))
 		{
 			int posHeight = level.getHeight(Heightmap.Types.OCEAN_FLOOR, floorPos.getX(), floorPos.getZ());
 			minY = Math.min(minY, posHeight);

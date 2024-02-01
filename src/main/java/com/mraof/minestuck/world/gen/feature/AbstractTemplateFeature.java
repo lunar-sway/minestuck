@@ -58,7 +58,7 @@ public abstract class AbstractTemplateFeature<T extends FeatureConfiguration> ex
 				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
 		
 		Vec3i size = template.getSize(rotation);
-		pos.offset(-size.getX()/2, 0, -size.getZ()/2);
+		pos = pos.offset(-size.getX()/2, 0, -size.getZ()/2);
 		
 		int y = this.pickY(level, pos, size, rand);
 		
