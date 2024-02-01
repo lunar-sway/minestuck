@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 public class SmallCogFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
@@ -25,6 +26,6 @@ public class SmallCogFeature extends AbstractTemplateFeature<NoneFeatureConfigur
 	@Override
 	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
 	{
-		return Math.max(0, minWorldHeightInSize(level, placement) - random.nextInt(3));
+		return Math.max(0, placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level) - random.nextInt(3));
 	}
 }

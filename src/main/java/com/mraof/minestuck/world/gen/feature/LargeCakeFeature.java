@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class LargeCakeFeature extends AbstractTemplateFeature<NoneFeatureConfigu
 	@Override
 	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
 	{
-		return Math.max(0, minWorldHeightInSize(level, placement) - random.nextInt(1));
+		return Math.max(0, placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level) - random.nextInt(1));
 	}
 	
 	@Override

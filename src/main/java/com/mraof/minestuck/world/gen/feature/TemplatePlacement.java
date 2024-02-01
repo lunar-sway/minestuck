@@ -5,9 +5,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -34,6 +36,48 @@ public record TemplatePlacement(StructureTemplate template, BlockPos cornerPos, 
 	{
 		Vec3i size = this.size();
 		return BlockPos.betweenClosed(this.cornerPos, this.cornerPos.offset(size.getX(), 0, size.getZ()));
+	}
+	
+	public int minHeight(Heightmap.Types type, LevelReader level)
+	{
+		int minY = Integer.MAX_VALUE;
+		for(BlockPos floorPos : this.xzPlacedRange())
+			minY = Math.min(minY, level.getHeight(type, floorPos.getX(), floorPos.getZ()));
+		
+		return minY;
+	}
+	
+	@SuppressWarnings("unused")
+	public int maxHeight(Heightmap.Types type, LevelReader level)
+	{
+		int maxY = Integer.MIN_VALUE;
+		for(BlockPos floorPos : this.xzPlacedRange())
+			maxY = Math.max(maxY, level.getHeight(type, floorPos.getX(), floorPos.getZ()));
+		
+		return maxY;
+	}
+	
+	public Range heightRange(Heightmap.Types type, LevelReader level)
+	{
+		int minY = Integer.MAX_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		for(BlockPos floorPos : this.xzPlacedRange())
+		{
+			int height = level.getHeight(type, floorPos.getX(), floorPos.getZ());
+			minY = Math.min(minY, height);
+			maxY = Math.max(maxY, height);
+		}
+		
+		return new Range(minY, maxY);
+	}
+	
+	public record Range(int min, int max)
+	{
+		@SuppressWarnings("unused")
+		public int difference()
+		{
+			return max - min;
+		}
 	}
 	
 	public void placeWithStructureBlockRegistry(int y, FeaturePlaceContext<?> context)

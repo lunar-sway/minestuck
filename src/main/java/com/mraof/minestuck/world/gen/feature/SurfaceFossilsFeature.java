@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -37,17 +36,11 @@ public class SurfaceFossilsFeature extends AbstractTemplateFeature<NoneFeatureCo
 	@Override
 	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
 	{
-		int yMin = level.getMaxBuildHeight(), yMax = level.getMinBuildHeight();
-		for(BlockPos floorPos : placement.xzPlacedRange())
-		{
-			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, floorPos.getX(), floorPos.getZ());
-			yMax = Math.max(yMax, y);
-			yMin = Math.min(yMin, y);
-		}
+		TemplatePlacement.Range heightRange = placement.heightRange(Heightmap.Types.WORLD_SURFACE_WG, level);
 		
-		if(yMin == yMax)
-			return yMin - placement.size().getY() + 1;
+		if(heightRange.min() == heightRange.max())
+			return heightRange.min() - placement.size().getY() + 1;
 		else
-			return yMin - placement.size().getY() + 2;
+			return heightRange.min() - placement.size().getY() + 2;
 	}
 }

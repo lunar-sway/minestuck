@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 public class CakePedestalFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
@@ -25,6 +26,6 @@ public class CakePedestalFeature extends AbstractTemplateFeature<NoneFeatureConf
 	@Override
 	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
 	{
-		return minWorldHeightInSize(level, placement);
+		return placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level);
 	}
 }
