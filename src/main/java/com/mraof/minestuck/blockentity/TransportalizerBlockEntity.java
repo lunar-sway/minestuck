@@ -226,48 +226,38 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	}
 	
 	/**
-	 * Attempt to set the id, failing if the id has already been taken
-	 * Does nothing if the transportalizer is locked or already has an id
+	 * Attempt to set the id, failing and warning the player if the id has already been taken
 	 */
 	public void trySetId(String id, Player player)
 	{
-		if(this.active && this.hasId() || this.locked)
+		if(level == null || level.isClientSide || this.locked || this.hasId() || id.isEmpty())
 			return;
 		
-		if(level != null && !level.isClientSide && !id.isEmpty())
-		{
-			var data = TransportalizerSavedData.get(level);
-			if(data.get(id) != null)
-			{
-				player.sendSystemMessage(Component.translatable(TAKEN, id));
-				return;
-			}
-			
-			this.id = id;
-			GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
-			BlockState state = level.getBlockState(worldPosition);
-			this.setChanged();
-			level.sendBlockUpdated(worldPosition, state, state, 0);
-			data.set(id, location);
-		}
+		if(TransportalizerSavedData.get(level).get(id) != null)
+			player.sendSystemMessage(Component.translatable(TAKEN, id));
+		else
+			setId(id);
 	}
 	
 	/**
 	 * Set the id, deactivating the transportalizer if it is already taken
 	 */
-	public void setId(String id)
+	public void setIdOrDeactivate(String id)
 	{
-		if(level != null && !level.isClientSide && !id.isEmpty())
-		{
-			var data = TransportalizerSavedData.get(level);
-			GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
-			BlockState state = level.getBlockState(worldPosition);
-			
-			this.id = id;
-			this.setChanged();
-			level.sendBlockUpdated(worldPosition, state, state, 0);
-			this.active = data.set(id, location);
-		}
+		if(level == null || level.isClientSide ||this.locked || this.hasId() || id.isEmpty())
+			return;
+		
+		this.active = setId(id);
+	}
+	
+	protected boolean setId(String id)
+	{
+		this.id = id;
+		GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
+		BlockState state = level.getBlockState(worldPosition);
+		this.setChanged();
+		level.sendBlockUpdated(worldPosition, state, state, 0);
+		return TransportalizerSavedData.get(level).set(id, location);
 	}
 	
 	public String getDestId()
