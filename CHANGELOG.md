@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Spawn egg items for main Underling types, Consorts, and Carapacians
 - Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+- Tree Stump feature in Forest Lands
 
 ### Fixed
 
@@ -17,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 

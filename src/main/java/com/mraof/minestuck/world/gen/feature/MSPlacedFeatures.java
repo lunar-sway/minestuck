@@ -92,6 +92,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SHADEWOOD_TREE = key("tree/shadewood");
 	public static final ResourceKey<PlacedFeature> SCARRED_SHADEWOOD_TREE = key("tree/scarred_shadewood");
 	public static final ResourceKey<PlacedFeature> ORNATE_SHADEWOOD_TREE = key("tree/ornate_shadewood");
+	public static final ResourceKey<PlacedFeature> TREE_STUMP = key("tree/tree_stump");
 	public static final ResourceKey<PlacedFeature> PETRIFIED_TREE = key("tree/petrified");
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_TREE = key("tree/petrified_sparse");
 	public static final ResourceKey<PlacedFeature> DEAD_TREE = key("tree/dead");
