@@ -35,7 +35,7 @@ public record TemplatePlacement(StructureTemplate template, BlockPos cornerPos, 
 	public Iterable<BlockPos> xzPlacedRange()
 	{
 		Vec3i size = this.size();
-		return BlockPos.betweenClosed(this.cornerPos, this.cornerPos.offset(size.getX(), 0, size.getZ()));
+		return BlockPos.betweenClosed(this.cornerPos, this.cornerPos.offset(size.getX() - 1, 0, size.getZ() - 1));
 	}
 	
 	public int minHeight(Heightmap.Types type, LevelReader level)
