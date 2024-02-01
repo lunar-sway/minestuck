@@ -3,8 +3,8 @@ package com.mraof.minestuck.world.gen.feature.tree;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.AbstractTemplateFeature;
+import com.mraof.minestuck.world.gen.feature.TemplatePlacement;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -41,11 +41,11 @@ public class OrnateShadewoodTreeFeature extends AbstractTemplateFeature<NoneFeat
 	}
 	
 	@Override
-	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, RandomSource random)
+	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
 	{
 		//same as minWorldHeightInSize() but using ocean floor heightmap
 		int minY = Integer.MAX_VALUE;
-		for(BlockPos floorPos : BlockPos.betweenClosed(pos, pos.offset(templateSize.getX(), 0, templateSize.getZ())))
+		for(BlockPos floorPos : placement.xzPlacedRange())
 			minY = Math.min(minY, level.getHeight(Heightmap.Types.OCEAN_FLOOR, floorPos.getX(), floorPos.getZ()));
 		
 		return minY;

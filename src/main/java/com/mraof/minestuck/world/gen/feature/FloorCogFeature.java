@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -27,19 +26,19 @@ public class FloorCogFeature extends AbstractTemplateFeature<NoneFeatureConfigur
 	}
 	
 	@Override
-	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, RandomSource random)
+	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
 	{
 		int yMin = level.getMaxBuildHeight(), yMax = level.getMinBuildHeight();
-		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, templateSize.getX(), 0, templateSize.getZ()))
+		for(BlockPos floorPos : placement.xzPlacedRange())
 		{
-			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX(), pos.getZ() + floorPos.getZ());
+			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, floorPos.getX(), floorPos.getZ());
 			yMax = Math.max(yMax, y);
 			yMin = Math.min(yMin, y);
 		}
 		
 		if(yMin == yMax)
-			return yMin - templateSize.getY() + 1;
+			return yMin - placement.size().getY() + 1;
 		else
-			return yMin - templateSize.getY() + 2;
+			return yMin - placement.size().getY() + 2;
 	}
 }

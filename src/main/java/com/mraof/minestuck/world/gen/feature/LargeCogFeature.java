@@ -2,8 +2,6 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -26,8 +24,8 @@ public class LargeCogFeature extends AbstractTemplateFeature<NoneFeatureConfigur
 	}
 	
 	@Override
-	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, RandomSource random)
+	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
 	{
-		return Math.max(0, minWorldHeightInSize(level, pos, templateSize) - random.nextInt(4));
+		return Math.max(0, minWorldHeightInSize(level, placement) - random.nextInt(4));
 	}
 }
