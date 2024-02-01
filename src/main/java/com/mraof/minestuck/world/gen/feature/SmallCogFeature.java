@@ -6,9 +6,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
-public class SmallCogFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
+public class SmallCogFeature extends Feature<NoneFeatureConfiguration>
 {
 	private static final ResourceLocation STRUCTURE_SMALL_COG = new ResourceLocation(Minestuck.MOD_ID, "small_cog");
 	
@@ -18,14 +21,16 @@ public class SmallCogFeature extends AbstractTemplateFeature<NoneFeatureConfigur
 	}
 	
 	@Override
-	public ResourceLocation pickTemplate(RandomSource random)
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
-		return STRUCTURE_SMALL_COG;
-	}
-	
-	@Override
-	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
-	{
-		return Math.max(0, placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level) - random.nextInt(3));
+		WorldGenLevel level = context.level();
+		RandomSource rand = context.random();
+		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(STRUCTURE_SMALL_COG);
+		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
+		
+		int y = Math.max(0, placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level) - rand.nextInt(3));
+		placement.placeWithStructureBlockRegistry(y, context);
+		
+		return true;
 	}
 }

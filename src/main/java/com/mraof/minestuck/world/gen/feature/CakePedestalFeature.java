@@ -6,9 +6,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
-public class CakePedestalFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
+public class CakePedestalFeature extends Feature<NoneFeatureConfiguration>
 {
 	private static final ResourceLocation STRUCTURE_CAKE_PEDESTAL = new ResourceLocation(Minestuck.MOD_ID, "cake_pedestal");
 	
@@ -18,14 +21,16 @@ public class CakePedestalFeature extends AbstractTemplateFeature<NoneFeatureConf
 	}
 	
 	@Override
-	protected ResourceLocation pickTemplate(RandomSource random)
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
-		return STRUCTURE_CAKE_PEDESTAL;
-	}
-	
-	@Override
-	protected int pickY(WorldGenLevel level, TemplatePlacement placement, RandomSource random)
-	{
-		return placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level);
+		WorldGenLevel level = context.level();
+		RandomSource rand = context.random();
+		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(STRUCTURE_CAKE_PEDESTAL);
+		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
+		
+		int y = placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level);
+		placement.placeWithStructureBlockRegistry(y, context);
+		
+		return true;
 	}
 }

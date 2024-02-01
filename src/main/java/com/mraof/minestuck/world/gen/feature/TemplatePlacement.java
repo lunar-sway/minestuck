@@ -73,7 +73,6 @@ public record TemplatePlacement(StructureTemplate template, BlockPos cornerPos, 
 	
 	public record Range(int min, int max)
 	{
-		@SuppressWarnings("unused")
 		public int difference()
 		{
 			return max - min;
