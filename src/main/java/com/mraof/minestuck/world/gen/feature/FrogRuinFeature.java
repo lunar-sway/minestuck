@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
  */
 public class FrogRuinFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
 {
+	private static final ResourceLocation FROG_RUINS_0 = new ResourceLocation(Minestuck.MOD_ID, "frog_ruins_0");
 	private static final ResourceLocation FROG_RUINS_1 = new ResourceLocation(Minestuck.MOD_ID, "frog_ruins_1");
 	
 	public FrogRuinFeature(Codec<NoneFeatureConfiguration> codec)
@@ -26,7 +27,7 @@ public class FrogRuinFeature extends AbstractTemplateFeature<NoneFeatureConfigur
 	@Override
 	protected ResourceLocation pickTemplate(RandomSource random)
 	{
-		return FROG_RUINS_1;
+		return random.nextBoolean() ? FROG_RUINS_0: FROG_RUINS_1;
 	}
 	
 	@Override
