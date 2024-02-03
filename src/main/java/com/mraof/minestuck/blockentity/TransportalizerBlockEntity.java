@@ -48,7 +48,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	public static final String LOCKED = "locked";
 	
 	private boolean enabled = true;
-	private boolean active = true;
+	private boolean active = false;
 	private boolean locked = false;
 	private boolean unloaded = false;
 	private String id = "";
@@ -239,25 +239,17 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 			setId(id);
 	}
 	
-	/**
-	 * Set the id, deactivating the transportalizer if it is already taken
-	 */
-	public void setIdOrDeactivate(String id)
+	public void setId(String id)
 	{
 		if(level == null || level.isClientSide ||this.locked || this.hasId() || id.isEmpty())
 			return;
 		
-		this.active = setId(id);
-	}
-	
-	protected boolean setId(String id)
-	{
 		this.id = id;
 		GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
 		BlockState state = level.getBlockState(worldPosition);
 		this.setChanged();
 		level.sendBlockUpdated(worldPosition, state, state, 0);
-		return TransportalizerSavedData.get(level).set(id, location);
+		this.active = TransportalizerSavedData.get(level).set(id, location);
 	}
 	
 	public String getDestId()
