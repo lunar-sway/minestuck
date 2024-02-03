@@ -105,7 +105,7 @@ public class IronLassArmorItem extends ArmorItem implements GeoItem
 		{
 			Entity entity = state.getData(DataTickets.ENTITY);
 			
-			if(entity instanceof LivingEntity)
+			if(((LivingEntity) entity).isFallFlying())
 				return state.setAndContinue(FLY);
 			else
 				return state.setAndContinue(IDLE);
