@@ -24,12 +24,11 @@ public class ThrustControllerItem extends Item
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		ItemStack jetpackItemStack = playerIn.getItemBySlot(EquipmentSlot.CHEST);
-		Item thrustController = MSItems.THRUST_CONTROLLER.get();
 		
-		boolean hasController = playerIn.getItemInHand(InteractionHand.MAIN_HAND).is(thrustController);
-		boolean hasControllerOffhand =  playerIn.getItemInHand(InteractionHand.OFF_HAND).is(thrustController);
+		boolean hasController = playerIn.getItemInHand(InteractionHand.MAIN_HAND).is(this);
+		boolean hasControllerOffhand =  playerIn.getItemInHand(InteractionHand.OFF_HAND).is(this);
 		
-		if(hasController && hasControllerOffhand && !isBoostingTagTrue(jetpackItemStack))
+		if(hasController && hasControllerOffhand && !jetpackItemStack.isBoostingTagTrue())
 		{
 			jetpackItemStack.getOrCreateTag().putBoolean("is_boosting", true);
 			return InteractionResultHolder.success(item);
@@ -38,13 +37,5 @@ public class ThrustControllerItem extends Item
 		jetpackItemStack.getOrCreateTag().putBoolean("is_boosting", false);
 		return InteractionResultHolder.success(item);
 	}
-	
-	public boolean isBoostingTagTrue(ItemStack stack)
-	{
-		CompoundTag nbt = stack.getTag();
-		
-		return nbt != null && nbt.contains("is_boosting") && nbt.getBoolean("is_boosting");
-	}
-	
 	
 }

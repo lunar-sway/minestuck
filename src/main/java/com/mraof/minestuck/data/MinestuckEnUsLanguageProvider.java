@@ -1341,7 +1341,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.GOLD_BOAT, "Golden Boat");
 		addItem(MSItems.FLARP_MANUAL, "Flarp Manual");
 		addItem(MSItems.SASSACRE_TEXT, "Sassacre Text");
-		addItem(MSItems.THRUST_CONTROLLER, "Jet Pack Joysticks");
+		addItem(MSItems.THRUST_CONTROLLER, "Jetpack Joysticks");
 		addItem(MSItems.JETPACK, "Jetpack");
 		addItem(MSItems.WISEGUY, "Wise Guy");
 		addItem(MSItems.TABLESTUCK_MANUAL, "Tablestuck Manual");

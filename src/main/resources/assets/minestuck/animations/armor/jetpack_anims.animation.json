@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"jetpack.idle": {
+		"misc.idle": {
 			"loop": true,
 			"bones": {
 				"R_flames": {
@@ -21,7 +21,7 @@
 				}
 			}
 		},
-		"jetpack.flight": {
+		"move.fly": {
 			"loop": true,
 			"animation_length": 0.08333,
 			"bones": {

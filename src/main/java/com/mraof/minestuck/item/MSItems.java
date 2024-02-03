@@ -456,8 +456,6 @@ public class MSItems
 	public static final RegistryObject<Item> IRON_LASS_CHESTPLATE = REGISTER.register("iron_lass_chestplate", () -> new MSArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
 	public static final RegistryObject<Item> IRON_LASS_SKIRT = REGISTER.register("iron_lass_skirt", () -> new MSArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
 	public static final RegistryObject<Item> IRON_LASS_SHOES = REGISTER.register("iron_lass_shoes", () -> new MSArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
-	public static final RegistryObject<Item> JETPACK = REGISTER.register("jetpack", () -> new JetPackItem(MSItemTypes.JETPACK, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
-	
 	public static final RegistryObject<MSArmorItem> PROSPIT_CIRCLET = REGISTER.register("prospit_circlet", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.HELMET, new Item.Properties()));
 	public static final RegistryObject<MSArmorItem> PROSPIT_SHIRT = REGISTER.register("prospit_shirt", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
 	public static final RegistryObject<MSArmorItem> PROSPIT_PANTS = REGISTER.register("prospit_pants", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.LEGGINGS, new Item.Properties()));

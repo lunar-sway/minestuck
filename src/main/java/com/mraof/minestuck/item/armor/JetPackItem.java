@@ -23,22 +23,24 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
+import static software.bernie.geckolib.constant.DefaultAnimations.FLY;
+import static software.bernie.geckolib.constant.DefaultAnimations.IDLE;
+
 public class JetPackItem extends ArmorItem implements GeoItem
 {
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private static final RawAnimation IDLE = RawAnimation.begin().thenPlay("jetpack.idle");
-	private static final RawAnimation PRIMED = RawAnimation.begin().thenPlay("jetpack.primed");
-	private static final RawAnimation FLIGHT = RawAnimation.begin().thenPlay("jetpack.flight");
 	private int EXPLOSION_BUFFER = 0;
 	
 	public static final Logger LOGGER = LogUtils.getLogger();
+	private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 	
 	public JetPackItem(ArmorMaterial mat, ArmorItem.Type slot, Properties props)
 	{
@@ -55,6 +57,7 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		if(player.getInventory().getFreeSlot() <= 2)
 		{
 			player.getInventory().add(thrustController);
+			return InteractionResultHolder.success(this.getDefaultInstance());
 		}
 		
 		return super.use(level, player, hand);
@@ -83,17 +86,17 @@ public class JetPackItem extends ArmorItem implements GeoItem
 			EXPLOSION_BUFFER = 0;
 		}
 		
-		animationStateChange(pStack, pLevel, pEntity);
+	//	animationStateChange(pStack, pLevel, pEntity);
 		
+		if(!isBoostingTagTrue(pStack))
+		{
+			EXPLOSION_BUFFER = 0;
+		}
 		if(pEntity instanceof Player player && isBoostingTagTrue(pStack) && isHoldingControllers((LivingEntity) pEntity))
 		{
 			boost(player);
 			player.startFallFlying();
 			EXPLOSION_BUFFER += 1;
-		}
-		if(!isBoostingTagTrue(pStack))
-		{
-			EXPLOSION_BUFFER = 0;
 		}
 		
 		super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
@@ -126,7 +129,11 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		ItemStack jetpackItemStack = player.getItemBySlot(EquipmentSlot.CHEST);
 		
 		jetpackItemStack.getOrCreateTag().putBoolean("is_boosting", false);
-		level.explode(player,player.getX() + 0.5D, player.getY() + 0.5D, player.getZ() + 0.5D, 3F, Level.ExplosionInteraction.BLOCK);
+		
+		if(!level.isClientSide)
+		{
+			level.explode(player,player.getX() + 0.5D, player.getY() + 0.5D, player.getZ() + 0.5D, 3F, Level.ExplosionInteraction.BLOCK);
+		}
 	}
 	
 	public boolean isHoldingControllers(LivingEntity entity)
@@ -152,27 +159,7 @@ public class JetPackItem extends ArmorItem implements GeoItem
 			player.level().playSound(player, player.blockPosition(), MSSoundEvents.JETPACK_THRUST.get(), SoundSource.PLAYERS, 1, 0);
 			
 			Vec3 look = player.getLookAngle();
-			Vec3 movement = player.getDeltaMovement();
-			player.setDeltaMovement(movement.add(
-					look.x * 0.2D + (look.x * 2D - movement.x) * 0.3D,
-					look.y * 0.2D + (look.y * 2D - movement.y) * 0.3D,
-					look.z * 0.2D + (look.z * 2D - movement.z) * 0.3D));
-		}
-	}
-	
-	public void animationStateChange(ItemStack pStack, Level pLevel, Entity pEntity)
-	{
-		if(!isHoldingControllers((LivingEntity) pEntity) && pLevel instanceof ServerLevel serverLevel)
-		{
-			triggerAnim(pEntity, GeoItem.getOrAssignId(pStack, serverLevel), "jetpack_controller", "idle");
-		}
-		if(isHoldingControllers((LivingEntity) pEntity) && pLevel instanceof ServerLevel serverLevel)
-		{
-			triggerAnim(pEntity, GeoItem.getOrAssignId(pStack, serverLevel), "jetpack_controller", "primed");
-		}
-		if(isHoldingControllers((LivingEntity) pEntity) && isBoostingTagTrue(pStack) && pLevel instanceof ServerLevel serverLevel)
-		{
-			triggerAnim(pEntity, GeoItem.getOrAssignId(pStack, serverLevel), "jetpack_controller", "flight");
+			player.push(look.x, look.y, look.z);
 		}
 	}
 	
@@ -182,6 +169,14 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		
 		return nbt != null && nbt.contains("is_boosting") && nbt.getBoolean("is_boosting");
 	}
+	
+	public boolean isBoostingSetter(ItemStack stack)
+	{
+		CompoundTag nbt = stack.getTag();
+		
+		return nbt != null && nbt.contains("is_boosting") && nbt.getBoolean("is_boosting");
+	}
+	
 	
 	@Override
 	public void initializeClient(Consumer<IClientItemExtensions> consumer)
@@ -200,13 +195,19 @@ public class JetPackItem extends ArmorItem implements GeoItem
 			}
 		});
 	}
-	
 	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "jetpack_controller", state -> PlayState.CONTINUE)
-				.triggerableAnim("idle", IDLE)
-				.triggerableAnim("primed", PRIMED)
-				.triggerableAnim("flight", FLIGHT));
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+	{
+	controllers.add(new AnimationController<>(this, "Fly/Idle", 0, state ->
+	{
+		Entity entity = state.getData(DataTickets.ENTITY);
+		
+		if(((LivingEntity) entity).isFallFlying())
+			return state.setAndContinue(FLY);
+		else
+			return state.setAndContinue(IDLE);
+	}
+	));
 	}
 	
 	@Override
