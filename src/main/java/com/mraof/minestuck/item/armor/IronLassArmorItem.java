@@ -1,8 +1,11 @@
 package com.mraof.minestuck.item.armor;
 
+import com.mraof.minestuck.client.renderer.armor.IronLassArmorRenderer;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -10,12 +13,28 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.*;
+import software.bernie.geckolib.core.object.PlayState;
 
-public class IronLassArmorItem extends ArmorItem
+import java.util.function.Consumer;
+
+import static software.bernie.geckolib.constant.DefaultAnimations.FLY;
+import static software.bernie.geckolib.constant.DefaultAnimations.IDLE;
+
+public class IronLassArmorItem extends ArmorItem implements GeoItem
 {
+	private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 	public IronLassArmorItem(ArmorMaterial mat, ArmorItem.Type slot, Properties props)
 	{
 		super(mat, slot, props);
+		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 	
 	@Override
@@ -56,7 +75,47 @@ public class IronLassArmorItem extends ArmorItem
 					feet.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(EquipmentSlot.FEET));
 			}
 		}
-		
 		return true;
+	}
+	
+	@Override
+	public void initializeClient(Consumer<IClientItemExtensions> consumer)
+	{
+		consumer.accept(new IClientItemExtensions()
+		{
+			private IronLassArmorRenderer renderer;
+			
+			@Override
+			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
+			{
+				if(this.renderer == null)
+					this.renderer = new IronLassArmorRenderer();
+				
+				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
+				return this.renderer;
+			}
+		});
+	}
+	
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
+	{
+		
+		controllerRegistrar.add(new AnimationController<>(this, "Fly/Idle", 0, state ->
+		{
+			Entity entity = state.getData(DataTickets.ENTITY);
+			
+			if(entity instanceof LivingEntity)
+				return state.setAndContinue(FLY);
+			else
+				return state.setAndContinue(IDLE);
+		}
+		));
+	}
+	
+	@Override
+	public AnimatableInstanceCache getAnimatableInstanceCache()
+	{
+		return cache;
 	}
 }

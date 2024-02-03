@@ -9,10 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Metal Boats no longer crash the game when dispensed
+- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
 
 ### Contributors for this release
 
-- hadean
+- hadean, Doro
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
