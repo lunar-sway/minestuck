@@ -651,8 +651,8 @@ public class MSItems
 	
 	//Incredibly Useful Items
 	public static final RegistryObject<Item> URANIUM_POWERED_STICK = REGISTER.register("uranium_powered_stick", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final RegistryObject<Item> IRON_BOAT = REGISTER.register("iron_boat", () -> new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.IRON), new Item.Properties().stacksTo(1)));
-	public static final RegistryObject<Item> GOLD_BOAT = REGISTER.register("gold_boat", () -> new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.GOLD), new Item.Properties().stacksTo(1)));
+	public static final RegistryObject<Item> IRON_BOAT = REGISTER.register("iron_boat", () -> new CustomBoatItem(MetalBoatEntity.Type.IRON, new Item.Properties().stacksTo(1)));
+	public static final RegistryObject<Item> GOLD_BOAT = REGISTER.register("gold_boat", () -> new CustomBoatItem(MetalBoatEntity.Type.GOLD, new Item.Properties().stacksTo(1)));
 	public static final RegistryObject<Item> COCOA_WART = REGISTER.register("cocoa_wart", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<MultiblockItem> HORSE_CLOCK = REGISTER.register("horse_clock", () -> new MultiblockItem(MSBlocks.HORSE_CLOCK, new Item.Properties()));
 	
