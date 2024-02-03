@@ -7,6 +7,10 @@ import software.bernie.geckolib.model.GeoModel;
 
 public class IronLassArmorModel extends GeoModel<IronLassArmorItem>
 {
+	/**
+	 * Model made by DORO with edits by Riotmode
+	 */
+	
 	@Override
 	public ResourceLocation getModelResource(IronLassArmorItem animatable)
 	{

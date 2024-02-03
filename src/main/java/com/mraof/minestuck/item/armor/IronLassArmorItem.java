@@ -101,7 +101,7 @@ public class IronLassArmorItem extends ArmorItem implements GeoItem
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
 	{
 		
-		controllerRegistrar.add(new AnimationController<>(this, "Fly/Idle", 0, state ->
+		controllerRegistrar.add(new AnimationController<>(this, "Fly/Idle", 3, state ->
 		{
 			Entity entity = state.getData(DataTickets.ENTITY);
 			
