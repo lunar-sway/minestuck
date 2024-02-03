@@ -85,6 +85,12 @@ public record TemplatePlacement(StructureTemplate template, BlockPos cornerPos, 
 		this.placeAt(y, context, new StructurePlaceSettings().addProcessor(new StructureBlockRegistryProcessor(structureBlockRegistry)));
 	}
 	
+	@SuppressWarnings("unused")
+	public void placeAt(int y, FeaturePlaceContext<?> context)
+	{
+		this.placeAt(y, context, new StructurePlaceSettings());
+	}
+	
 	public void placeAt(int y, FeaturePlaceContext<?> context, StructurePlaceSettings settings)
 	{
 		ChunkPos chunkPos = new ChunkPos(context.origin());
