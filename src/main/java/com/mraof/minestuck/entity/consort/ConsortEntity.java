@@ -13,6 +13,8 @@ import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
+import com.mraof.minestuck.util.DialogueJson;
+import com.mraof.minestuck.util.DialogueJsonManager;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -56,7 +58,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @ParametersAreNonnullByDefault
@@ -147,7 +151,12 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 				
 				if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
 				{
-					if(message == null)
+					DialogueJson dialogue = DialogueJsonManager.getInstance().doRandomDialogue(random);
+					List<String> responses = new ArrayList<>();
+					dialogue.getResponses().forEach(response -> responses.add(response.getResponse()));
+					LOGGER.debug("Message: {}\n Responses: {}", dialogue.getMessage(), responses);
+					
+					/*if(message == null)
 					{
 						message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
 						hasHadMessage = true;
@@ -166,7 +175,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 					} catch(Exception e)
 					{
 						LOGGER.error("Got exception when getting dialogue message for consort for player {}.", serverPlayer.getGameProfile().getName(), e);
-					}
+					}*/
 				}
 			}
 			
