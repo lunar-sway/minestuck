@@ -1,8 +1,27 @@
 {
+  "animation": "test1animation",
+  "gui_location": "test1GuiPath",
   "message": "test1message",
   "responses": [
-    "test1response1",
-    "test1response2",
-    "test1response3"
+    {
+      "conditions": [
+        "test1response1condition1"
+      ],
+      "next_path": "test1response1",
+      "response_message": "test1response1"
+    },
+    {
+      "conditions": [
+        "test1response2condition1",
+        "test1response2condition2"
+      ],
+      "next_path": "test1response2",
+      "response_message": "test1response2"
+    },
+    {
+      "conditions": [],
+      "next_path": "test1response3",
+      "response_message": "test1response3"
+    }
   ]
 }
