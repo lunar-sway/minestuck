@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.armor;
 
 import com.mraof.minestuck.client.renderer.armor.PrismarineArmorRenderer;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,8 +9,8 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
@@ -50,7 +49,7 @@ public class PrismarineArmorItem extends ArmorItem implements GeoItem
 	
 	private PlayState predicate(AnimationState animationState)
 	{
-		animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+		animationState.setAndContinue(DefaultAnimations.IDLE);
 		return PlayState.CONTINUE;
 	}
 	

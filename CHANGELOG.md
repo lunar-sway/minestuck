@@ -6,13 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+- Prismarine armor model and texture
+
 ### Fixed
 
 - Metal Boats no longer crash the game when dispensed
 
 ### Contributors for this release
 
-- hadean
+- hadean, DORO
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
