@@ -3,43 +3,38 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
-          "type": "minecraft:alternatives",
-          "children": [
+          "type": "minecraft:item",
+          "functions": [
             {
-              "type": "minecraft:item",
-              "conditions": [
+              "function": "minecraft:copy_nbt",
+              "ops": [
                 {
-                  "condition": "minecraft:inverted",
-                  "term": {
-                    "condition": "minecraft:match_tool",
-                    "predicate": {
-                      "enchantments": [
-                        {
-                          "enchantment": "minecraft:silk_touch",
-                          "levels": {
-                            "min": 1
-                          }
-                        }
-                      ]
-                    }
-                  }
+                  "op": "replace",
+                  "source": "idString",
+                  "target": "idString"
+                },
+                {
+                  "op": "replace",
+                  "source": "destId",
+                  "target": "destId"
+                },
+                {
+                  "op": "replace",
+                  "source": "locked",
+                  "target": "locked"
                 }
               ],
-              "name": "minestuck:trans_portalizer"
-            },
-            {
-              "type": "minecraft:item",
-              "functions": [
-                {
-                  "function": "minecraft:copy_name",
-                  "source": "block_entity"
-                }
-              ],
-              "name": "minestuck:trans_portalizer"
+              "source": "block_entity"
             }
-          ]
+          ],
+          "name": "minestuck:trans_portalizer"
         }
       ],
       "rolls": 1.0

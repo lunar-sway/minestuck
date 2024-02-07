@@ -1380,8 +1380,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> HUBTOP = registerBlockItem(MSBlocks.HUBTOP);
 	public static final RegistryObject<BlockItem> LUNCHTOP = registerBlockItem(MSBlocks.LUNCHTOP);
 	public static final RegistryObject<BlockItem> OLD_COMPUTER = registerBlockItem(MSBlocks.OLD_COMPUTER);
-	public static final RegistryObject<BlockItem> TRANSPORTALIZER = registerBlockItem(MSBlocks.TRANSPORTALIZER, block -> new TransportalizerItem(block, new Item.Properties()));
-	public static final RegistryObject<BlockItem> TRANS_PORTALIZER = registerBlockItem(MSBlocks.TRANS_PORTALIZER, block -> new TransportalizerItem(block, new Item.Properties()));
+	public static final RegistryObject<BlockItem> TRANSPORTALIZER = registerBlockItem(MSBlocks.TRANSPORTALIZER, block -> new TransportalizerItem(block, new Item.Properties().stacksTo(1)));
+	public static final RegistryObject<BlockItem> TRANS_PORTALIZER = registerBlockItem(MSBlocks.TRANS_PORTALIZER, block -> new TransportalizerItem(block, new Item.Properties().stacksTo(1)));
 	public static final RegistryObject<BlockItem> SENDIFICATOR = registerBlockItem(MSBlocks.SENDIFICATOR, block -> new SendificatorBlockItem(block, new Item.Properties().stacksTo(1)));
 	public static final RegistryObject<BlockItem> GRIST_WIDGET = registerBlockItem(MSBlocks.GRIST_WIDGET, new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final RegistryObject<BlockItem> URANIUM_COOKER = registerBlockItem(MSBlocks.URANIUM_COOKER);
