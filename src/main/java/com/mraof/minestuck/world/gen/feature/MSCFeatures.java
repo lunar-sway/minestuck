@@ -28,6 +28,7 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_LIBRARY = key("small_library");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TOWER = key("tower");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PARCEL_PYXIS = key("parcel_pyxis");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> FROG_RUINS = key("frog_ruins");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_POOL = key("blood_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OIL_POOL = key("oil_pool");
@@ -70,6 +71,7 @@ public final class MSCFeatures
 	//scarred variant tends to be a little more scraggly
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SCARRED_SHADEWOOD_TREE = key("scarred_shadewood_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ORNATE_SHADEWOOD_TREE = key("ornate_shadewood_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TREE_STUMP = key("tree_stump");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_TREE = key("petrified_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_TREE = key("dead_tree");
 	

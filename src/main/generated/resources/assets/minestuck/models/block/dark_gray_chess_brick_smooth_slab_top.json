@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "minestuck:block/dark_gray_chess_brick_smooth",
+    "side": "minestuck:block/dark_gray_chess_brick_smooth",
+    "top": "minestuck:block/dark_gray_chess_brick_smooth"
+  }
+}

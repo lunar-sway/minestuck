@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/polished_pink_stone_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/polished_pink_stone"
+    },
+    "type=top": {
+      "model": "minestuck:block/polished_pink_stone_slab_top"
+    }
+  }
+}
