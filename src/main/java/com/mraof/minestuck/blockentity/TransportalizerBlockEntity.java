@@ -247,9 +247,10 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		this.id = id;
 		GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
 		BlockState state = level.getBlockState(worldPosition);
+		this.active = TransportalizerSavedData.get(level).set(id, location);
+		
 		this.setChanged();
 		level.sendBlockUpdated(worldPosition, state, state, 0);
-		this.active = TransportalizerSavedData.get(level).set(id, location);
 	}
 	
 	public String getDestId()
