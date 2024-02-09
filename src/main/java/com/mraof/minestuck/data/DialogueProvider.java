@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data;
 
-import com.mraof.minestuck.util.BoondollarPriceManager;
-import com.mraof.minestuck.util.BoondollarPricing;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.DialogueJson;
 import com.mraof.minestuck.util.DialogueJsonManager;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -33,17 +32,17 @@ public class DialogueProvider implements DataProvider
 	{
 		String test1Name = "test1name";
 		List<DialogueJson.Response> test1Responses = new ArrayList<>();
-		test1Responses.add(new DialogueJson.Response("test1response1", List.of("test1response1condition1"), "test2name"));
-		test1Responses.add(new DialogueJson.Response("test1response2", List.of("test1response2condition1","test1response2condition2"), "test2name"));
-		test1Responses.add(new DialogueJson.Response("test1response3", List.of(), "test2name"));
-		add(test1Name, new DialogueJson("test1message", "test1animation", "test1GuiPath", test1Responses));
+		test1Responses = addResponse(test1Responses, "test1response1", List.of("test1response1condition1"), "test2name");
+		test1Responses = addResponse(test1Responses, "test1response2", List.of("test1response2condition1","test1response2condition2"), "test2name");
+		test1Responses = addResponse(test1Responses, "test1response3", List.of(), "test2name");
+		add(test1Name, "test1message", "test1animation", "generic_extra_large", test1Responses);
 		
 		String test2Name = "test2name";
 		List<DialogueJson.Response> test2Responses = new ArrayList<>();
-		test2Responses.add(new DialogueJson.Response("test2response1", List.of("test2response1condition1"), test1Name));
-		test2Responses.add(new DialogueJson.Response("test2response2", List.of("test2response2condition1","test2response2condition2"), test1Name));
-		test2Responses.add(new DialogueJson.Response("test2response3", List.of("test2response3condition1"), test1Name));
-		add(test2Name, new DialogueJson("test2message", "test2animation", "test2GuiPath", test2Responses));
+		test2Responses = addResponse(test2Responses, "test2response1", List.of("test2response1condition1"), test1Name);
+		test2Responses = addResponse(test2Responses,"test2response2", List.of("test2response2condition1","test2response2condition2"), test1Name);
+		test2Responses = addResponse(test2Responses,"test2response3", List.of("test2response3condition1"), test1Name);
+		add(test2Name, "test2message", "test2animation", "generic_extra_large", test2Responses);
 	}
 	
 	/*private void addResponse(String... response)
@@ -53,9 +52,15 @@ public class DialogueProvider implements DataProvider
 		responses.add(new DialogueJson.Response());
 	}*/
 	
-	protected void add(String name, DialogueJson dialogue)
+	protected List<DialogueJson.Response> addResponse(List<DialogueJson.Response> responses, String response, List<String> conditions, String nextDialoguePath)
 	{
-		dialogues.put(new ResourceLocation(modid, name), dialogue);
+		responses.add(new DialogueJson.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, "minestuck/dialogue/" + nextDialoguePath + ".json")));
+		return responses;
+	}
+	
+	protected void add(String name, String message, String animation, String gui, List<DialogueJson.Response> responses)
+	{
+		dialogues.put(new ResourceLocation(modid, name), new DialogueJson(message, animation, new ResourceLocation(Minestuck.MOD_ID, "textures/gui/" + gui + ".png"), responses));
 	}
 	
 	@Override

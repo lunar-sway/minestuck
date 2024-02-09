@@ -12,9 +12,11 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.util.DialogueJson;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 
@@ -134,6 +136,11 @@ public class MSScreenFactories
 			SylladexScreen screen = SYLLADEX_FACTORIES.get(modus.getType()).apply(modus);
 			Minecraft.getInstance().setScreen(screen);
 		}
+	}
+	
+	public static void displayDialogueScreen(LivingEntity entity, DialogueJson dialogue)
+	{
+		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialogue));
 	}
 	
 	public static void updateSylladexScreen()

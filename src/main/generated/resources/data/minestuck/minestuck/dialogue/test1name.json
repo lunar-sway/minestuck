@@ -1,13 +1,13 @@
 {
   "animation": "test1animation",
-  "gui_location": "test1GuiPath",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
   "message": "test1message",
   "responses": [
     {
       "conditions": [
         "test1response1condition1"
       ],
-      "next_path": "test1response1",
+      "next_path": "minestuck:minestuck/dialogue/test2name.json",
       "response_message": "test1response1"
     },
     {
@@ -15,12 +15,12 @@
         "test1response2condition1",
         "test1response2condition2"
       ],
-      "next_path": "test1response2",
+      "next_path": "minestuck:minestuck/dialogue/test2name.json",
       "response_message": "test1response2"
     },
     {
       "conditions": [],
-      "next_path": "test1response3",
+      "next_path": "minestuck:minestuck/dialogue/test2name.json",
       "response_message": "test1response3"
     }
   ]

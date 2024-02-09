@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
@@ -145,18 +146,29 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
 		{
-			if(!level().isClientSide && player instanceof ServerPlayer serverPlayer)
+			DialogueJson dialogue = DialogueJsonManager.getInstance().doRandomDialogue(random);
+			
+			if(dialogue != null)
+			{
+				List<String> responses = new ArrayList<>();
+				dialogue.getResponses().forEach(response -> responses.add(response.getResponse()));
+				LOGGER.debug("Message: {}\n Responses: {}", dialogue.getMessage(), responses);
+				
+				if(level().isClientSide)
+				{
+					MSScreenFactories.displayDialogueScreen(this, dialogue);
+				} else
+				{
+					setCurrentAnimation(TALK_PROPERTIES);
+				}
+				
+			/*if(!level().isClientSide && player instanceof ServerPlayer serverPlayer)
 			{
 				PlayerData playerData = PlayerSavedData.getData(serverPlayer);
 				
 				if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
 				{
-					DialogueJson dialogue = DialogueJsonManager.getInstance().doRandomDialogue(random);
-					List<String> responses = new ArrayList<>();
-					dialogue.getResponses().forEach(response -> responses.add(response.getResponse()));
-					LOGGER.debug("Message: {}\n Responses: {}", dialogue.getMessage(), responses);
-					
-					/*if(message == null)
+					if(message == null)
 					{
 						message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
 						hasHadMessage = true;
@@ -175,8 +187,9 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 					} catch(Exception e)
 					{
 						LOGGER.error("Got exception when getting dialogue message for consort for player {}.", serverPlayer.getGameProfile().getName(), e);
-					}*/
+					}
 				}
+			}*/
 			}
 			
 			return InteractionResult.SUCCESS;
@@ -501,8 +514,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		{
 			state.getController().setAnimation(JUMP_ANIMATION);
 			return PlayState.CONTINUE;
-		}
-		else {
+		} else
+		{
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}

@@ -9,7 +9,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,8 +17,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DialogueJsonManager extends SimpleJsonResourceReloadListener
@@ -53,17 +50,20 @@ public class DialogueJsonManager extends SimpleJsonResourceReloadListener
 				dialogues.add(dialogue);
 			} catch(Exception e)
 			{
-				LOGGER.error("Couldn't parse boondollar pricing {}", entry.getKey(), e);
+				LOGGER.error("Couldn't parse dialogue {}", entry.getKey(), e);
 			}
 		}
 		
 		this.dialogues = dialogues.build();
-		LOGGER.info("Loaded {} boondollar prices", this.dialogues.size());
+		LOGGER.info("Loaded {} dialogues", this.dialogues.size());
 	}
 	
 	public DialogueJson doRandomDialogue(RandomSource rand)
 	{
-		return dialogues.stream().toList().get(rand.nextInt(dialogues.size()));
+		if(dialogues.isEmpty())
+			return null;
+		else
+			return dialogues.stream().toList().get(rand.nextInt(dialogues.size()));
 	}
 	
 	public static JsonElement parsePrice(DialogueJson dialogue)
