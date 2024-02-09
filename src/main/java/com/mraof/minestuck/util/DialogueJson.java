@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import org.slf4j.Logger;
 
@@ -17,10 +18,10 @@ public class DialogueJson
 	
 	private final String message;
 	private final String animation;
-	private final String guiPath;
+	private final ResourceLocation guiPath;
 	private final List<Response> responses;
 	
-	public DialogueJson(String message, String animation, String guiPath, List<Response> responses)
+	public DialogueJson(String message, String animation, ResourceLocation guiPath, List<Response> responses)
 	{
 		this.message = message;
 		this.animation = animation;
@@ -38,7 +39,7 @@ public class DialogueJson
 		return animation;
 	}
 	
-	public String getGuiPath()
+	public ResourceLocation getGuiPath()
 	{
 		return guiPath;
 	}
@@ -52,9 +53,9 @@ public class DialogueJson
 	{
 		private final String response;
 		private final List<String> conditions;
-		private final String nextDialoguePath;
+		private final ResourceLocation nextDialoguePath;
 		
-		public Response(String response, List<String> conditions, String nextDialoguePath)
+		public Response(String response, List<String> conditions, ResourceLocation nextDialoguePath)
 		{
 			this.response = response;
 			this.conditions = conditions;
@@ -71,7 +72,7 @@ public class DialogueJson
 			return conditions;
 		}
 		
-		public String getNextDialoguePath()
+		public ResourceLocation getNextDialoguePath()
 		{
 			return nextDialoguePath;
 		}
@@ -86,8 +87,7 @@ public class DialogueJson
 			
 			String messageProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("message")).getOrThrow(false, LOGGER::error);
 			String animationProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("animation")).getOrThrow(false, LOGGER::error);
-			//ResourceLocation nextDialogueProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("next_gui_location")).getOrThrow(false, LOGGER::error);
-			String nextDialogueProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("gui_location")).getOrThrow(false, LOGGER::error);
+			ResourceLocation guiProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("gui")).getOrThrow(false, LOGGER::error);
 			
 			JsonArray responsesObject = json.getAsJsonArray("responses");
 			List<Response> responses = new ArrayList<>();
@@ -102,24 +102,14 @@ public class DialogueJson
 				conditionsObject.forEach(conditionElement ->
 				{
 					conditions.add(conditionElement.getAsString());
-					//String conditionProvider = Codec.STRING.parse(JsonOps.INSTANCE, responseObject.get("responseMessage")).getOrThrow(false, LOGGER::error);
 				});
 				
-				//ResourceLocation nextPathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, responseObject.get("nextPath")).getOrThrow(false, LOGGER::error);
-				String nextPathProvider = Codec.STRING.parse(JsonOps.INSTANCE, responseObject.get("next_path")).getOrThrow(false, LOGGER::error);
+				ResourceLocation nextPathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, responseObject.get("next_path")).getOrThrow(false, LOGGER::error);
 				
 				responses.add(new Response(responseProvider, conditions, nextPathProvider));
-				
-				
-				/*String responseProvider = GsonHelper.convertToString(element, "responseMessage");
-				
-				JsonArray responsesObject = json.getAsJsonArray("responses");
-				
-				String nextPathProvider = GsonHelper.convertToString(element, "nextPath");
-				responses.add(new Response(responseProvider, , ));*/
 			});
 			
-			return new DialogueJson(messageProvider, animationProvider, nextDialogueProvider, responses);
+			return new DialogueJson(messageProvider, animationProvider, guiProvider, responses);
 		}
 		
 		@Override
@@ -129,8 +119,7 @@ public class DialogueJson
 			
 			json.add("message", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogueJson.message).getOrThrow(false, LOGGER::error));
 			json.add("animation", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogueJson.animation).getOrThrow(false, LOGGER::error));
-			//json.add("next_gui_location", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogueJson.guiPath).getOrThrow(false, LOGGER::error));
-			json.add("gui_location", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogueJson.guiPath).getOrThrow(false, LOGGER::error));
+			json.add("gui", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogueJson.guiPath).getOrThrow(false, LOGGER::error));
 			
 			JsonArray responses = new JsonArray(dialogueJson.responses.size());
 			for(Response response : dialogueJson.responses)
@@ -145,7 +134,7 @@ public class DialogueJson
 				}
 				responseObject.add("conditions", conditions);
 				
-				responseObject.add("next_path", Codec.STRING.encodeStart(JsonOps.INSTANCE, response.response).getOrThrow(false, LOGGER::error));
+				responseObject.add("next_path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, response.nextDialoguePath).getOrThrow(false, LOGGER::error));
 				responses.add(responseObject);
 			}
 			json.add("responses", responses);
