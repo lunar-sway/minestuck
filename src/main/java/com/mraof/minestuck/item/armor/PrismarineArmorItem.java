@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.armor;
 
-import com.mraof.minestuck.client.renderer.armor.PrismarineArmorRenderer;
+import com.mraof.minestuck.client.model.armor.PrismarineArmorModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +15,7 @@ import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 import java.util.function.Consumer;
 
@@ -32,31 +32,23 @@ public class PrismarineArmorItem extends ArmorItem implements GeoItem
 	{
 		consumer.accept(new IClientItemExtensions()
 		{
-			private PrismarineArmorRenderer renderer;
+			private GeoArmorRenderer<?> renderer;
 			
 			@Override
 			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
 			{
 				if(this.renderer == null)
-					this.renderer = new PrismarineArmorRenderer();
+					this.renderer = new GeoArmorRenderer<>(new PrismarineArmorModel());
 				
 				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
 				return this.renderer;
 			}
 		});
 	}
-
-	
-	private PlayState predicate(AnimationState animationState)
-	{
-		animationState.setAndContinue(DefaultAnimations.IDLE);
-		return PlayState.CONTINUE;
-	}
-	
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
 	{
-		controllerRegistrar.add(new AnimationController<GeoAnimatable>(this, "idle", 0, this::predicate));
+		controllerRegistrar.add(new AnimationController<GeoAnimatable>(this, "idle", 0,  state -> state.setAndContinue(DefaultAnimations.IDLE)));
 	}
 	
 	@Override
