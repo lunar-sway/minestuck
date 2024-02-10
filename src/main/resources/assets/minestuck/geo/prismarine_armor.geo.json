@@ -4,6 +4,7 @@
 		{
 			"description": {
 				"identifier": "geometry.unknown",
+				"credit": "Made with Blockbench by DORO (with edits by Riotmode)",
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 3,
