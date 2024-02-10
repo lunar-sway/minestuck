@@ -1,7 +1,7 @@
 {
   "animation": "test1animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "test1message",
+  "message": "minestuck.test1message",
   "responses": [
     {
       "conditions": [
