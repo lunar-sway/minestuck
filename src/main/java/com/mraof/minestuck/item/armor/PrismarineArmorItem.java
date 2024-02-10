@@ -13,15 +13,17 @@ import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.*;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
 public class PrismarineArmorItem extends ArmorItem implements GeoItem
 {
-	private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	
 	public PrismarineArmorItem(ArmorMaterial pMaterial, Type pType, Properties pProperties)
 	{
 		super(pMaterial, pType, pProperties);
