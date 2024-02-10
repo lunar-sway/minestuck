@@ -2484,6 +2484,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSimpleDeathMessage(MSDamageTypeProvider.DECAPITATION_MSG, "%s had their head chopped off",
 				"%1$s lost their head whilst engaged with %2$s");
 		
+		add("minestuck.test1message", "Press §eSHIFT§r for more info");
+		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");
 		addDialogue("thanks", "Thanks!");

@@ -51,14 +51,16 @@ public class DialogueScreen extends Screen
 		this.renderBackground(guiGraphics);
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		guiGraphics.drawString(font, entity.getDisplayName().getString(), (this.width / 2F) - font.width(entity.getDisplayName()) / 2F, yOffset + 10, 0xFF0000, false);
-		
+		if(guiBackground != null)
+			guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		String dialogueMessage = dialogue.getMessage();
 		if(dialogueMessage != null && !dialogueMessage.isEmpty())
-			guiGraphics.drawString(font, dialogueMessage, (this.width / 2F) - font.width(dialogueMessage) / 2F, yOffset + 40, 0xFF000F, false);
+		{
+			Component entityMessage = entity.getDisplayName().plainCopy().append(" : ").append(Component.translatable(dialogueMessage));
+			guiGraphics.drawString(font, entityMessage, (int) ((this.width / 2F) - font.width(entityMessage) / 2F), yOffset + 40, 0x000000, false);
+		}
 		
 		List<DialogueJson.Response> dialogueResponses = dialogue.getResponses();
 		if(dialogueResponses != null && !dialogueResponses.isEmpty())
@@ -67,7 +69,7 @@ public class DialogueScreen extends Screen
 			for(DialogueJson.Response response : dialogueResponses)
 			{
 				String dialogueResponse = response.getResponse();
-				guiGraphics.drawString(font, dialogueResponse, (this.width / 2F) - font.width(dialogueResponse) / 2F, yOffset + 60 + (i * 10), 0xFFF000, false);
+				guiGraphics.drawString(font, Component.translatable(dialogueResponse), (int) ((this.width / 2F) - font.width(Component.translatable(dialogueResponse)) / 2F), yOffset + 60 + (i * 10), 0xFFF000, false);
 				i++;
 			}
 		}

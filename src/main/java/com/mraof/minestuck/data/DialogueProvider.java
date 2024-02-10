@@ -35,7 +35,7 @@ public class DialogueProvider implements DataProvider
 		test1Responses = addResponse(test1Responses, "test1response1", List.of("test1response1condition1"), "test2name");
 		test1Responses = addResponse(test1Responses, "test1response2", List.of("test1response2condition1","test1response2condition2"), "test2name");
 		test1Responses = addResponse(test1Responses, "test1response3", List.of(), "test2name");
-		add(test1Name, "test1message", "test1animation", "generic_extra_large", test1Responses);
+		add(test1Name, "minestuck.test1message", "test1animation", "generic_extra_large", test1Responses);
 		
 		String test2Name = "test2name";
 		List<DialogueJson.Response> test2Responses = new ArrayList<>();
