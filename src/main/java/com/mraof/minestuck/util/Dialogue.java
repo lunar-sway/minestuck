@@ -12,21 +12,28 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DialogueJson
+public class Dialogue
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
+	private final ResourceLocation path;
 	private final String message;
 	private final String animation;
 	private final ResourceLocation guiPath;
 	private final List<Response> responses;
 	
-	public DialogueJson(String message, String animation, ResourceLocation guiPath, List<Response> responses)
+	public Dialogue(ResourceLocation path, String message, String animation, ResourceLocation guiPath, List<Response> responses)
 	{
+		this.path = path;
 		this.message = message;
 		this.animation = animation;
 		this.guiPath = guiPath;
 		this.responses = responses;
+	}
+	
+	public ResourceLocation getPath()
+	{
+		return path;
 	}
 	
 	public String getMessage()
@@ -78,12 +85,14 @@ public class DialogueJson
 		}
 	}
 	
-	public static class Serializer implements JsonDeserializer<DialogueJson>, JsonSerializer<DialogueJson>
+	public static class Serializer implements JsonDeserializer<Dialogue>, JsonSerializer<Dialogue>
 	{
 		@Override
-		public DialogueJson deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException
+		public Dialogue deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException
 		{
 			JsonObject json = GsonHelper.convertToJsonObject(jsonElement, "entry");
+			
+			ResourceLocation pathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("path")).getOrThrow(false, LOGGER::error);
 			
 			String messageProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("message")).getOrThrow(false, LOGGER::error);
 			String animationProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("animation")).getOrThrow(false, LOGGER::error);
@@ -109,20 +118,22 @@ public class DialogueJson
 				responses.add(new Response(responseProvider, conditions, nextPathProvider));
 			});
 			
-			return new DialogueJson(messageProvider, animationProvider, guiProvider, responses);
+			return new Dialogue(pathProvider, messageProvider, animationProvider, guiProvider, responses);
 		}
 		
 		@Override
-		public JsonElement serialize(DialogueJson dialogueJson, Type type, JsonSerializationContext context)
+		public JsonElement serialize(Dialogue dialogue, Type type, JsonSerializationContext context)
 		{
 			JsonObject json = new JsonObject();
 			
-			json.add("message", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogueJson.message).getOrThrow(false, LOGGER::error));
-			json.add("animation", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogueJson.animation).getOrThrow(false, LOGGER::error));
-			json.add("gui", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogueJson.guiPath).getOrThrow(false, LOGGER::error));
+			json.add("path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogue.path).getOrThrow(false, LOGGER::error));
 			
-			JsonArray responses = new JsonArray(dialogueJson.responses.size());
-			for(Response response : dialogueJson.responses)
+			json.add("message", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogue.message).getOrThrow(false, LOGGER::error));
+			json.add("animation", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogue.animation).getOrThrow(false, LOGGER::error));
+			json.add("gui", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogue.guiPath).getOrThrow(false, LOGGER::error));
+			
+			JsonArray responses = new JsonArray(dialogue.responses.size());
+			for(Response response : dialogue.responses)
 			{
 				JsonObject responseObject = new JsonObject();
 				responseObject.add("response_message", Codec.STRING.encodeStart(JsonOps.INSTANCE, response.response).getOrThrow(false, LOGGER::error));

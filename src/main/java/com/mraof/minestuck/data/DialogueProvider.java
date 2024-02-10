@@ -1,8 +1,8 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.DialogueJson;
-import com.mraof.minestuck.util.DialogueJsonManager;
+import com.mraof.minestuck.util.Dialogue;
+import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 @MethodsReturnNonnullByDefault
 public class DialogueProvider implements DataProvider
 {
-	private final Map<ResourceLocation, DialogueJson> dialogues = new HashMap<>();
+	private final Map<ResourceLocation, Dialogue> dialogues = new HashMap<>();
 	private final PackOutput output;
 	private final String modid;
 	
@@ -31,14 +31,14 @@ public class DialogueProvider implements DataProvider
 	protected void registerDialogues()
 	{
 		String test1Name = "test1name";
-		List<DialogueJson.Response> test1Responses = new ArrayList<>();
+		List<Dialogue.Response> test1Responses = new ArrayList<>();
 		test1Responses = addResponse(test1Responses, "test1response1", List.of("test1response1condition1"), "test2name");
 		test1Responses = addResponse(test1Responses, "test1response2", List.of("test1response2condition1","test1response2condition2"), "test2name");
 		test1Responses = addResponse(test1Responses, "test1response3", List.of(), "test2name");
 		add(test1Name, "minestuck.test1message", "test1animation", "generic_extra_large", test1Responses);
 		
 		String test2Name = "test2name";
-		List<DialogueJson.Response> test2Responses = new ArrayList<>();
+		List<Dialogue.Response> test2Responses = new ArrayList<>();
 		test2Responses = addResponse(test2Responses, "test2response1", List.of("test2response1condition1"), test1Name);
 		test2Responses = addResponse(test2Responses,"test2response2", List.of("test2response2condition1","test2response2condition2"), test1Name);
 		test2Responses = addResponse(test2Responses,"test2response3", List.of("test2response3condition1"), test1Name);
@@ -52,15 +52,17 @@ public class DialogueProvider implements DataProvider
 		responses.add(new DialogueJson.Response());
 	}*/
 	
-	protected List<DialogueJson.Response> addResponse(List<DialogueJson.Response> responses, String response, List<String> conditions, String nextDialoguePath)
+	protected List<Dialogue.Response> addResponse(List<Dialogue.Response> responses, String response, List<String> conditions, String nextDialoguePath)
 	{
-		responses.add(new DialogueJson.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, "minestuck/dialogue/" + nextDialoguePath + ".json")));
+		//responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, "minestuck/dialogue/" + nextDialoguePath + ".json")));
+		responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath)));
 		return responses;
 	}
 	
-	protected void add(String name, String message, String animation, String gui, List<DialogueJson.Response> responses)
+	protected void add(String name, String message, String animation, String gui, List<Dialogue.Response> responses)
 	{
-		dialogues.put(new ResourceLocation(modid, name), new DialogueJson(message, animation, new ResourceLocation(Minestuck.MOD_ID, "textures/gui/" + gui + ".png"), responses));
+		ResourceLocation location = new ResourceLocation(modid, name);
+		dialogues.put(location, new Dialogue(location, message, animation, new ResourceLocation(Minestuck.MOD_ID, "textures/gui/" + gui + ".png"), responses));
 	}
 	
 	@Override
@@ -71,10 +73,10 @@ public class DialogueProvider implements DataProvider
 		Path outputPath = output.getOutputFolder();
 		List<CompletableFuture<?>> futures = new ArrayList<>(dialogues.size());
 		
-		for(Map.Entry<ResourceLocation, DialogueJson> entry : dialogues.entrySet())
+		for(Map.Entry<ResourceLocation, Dialogue> entry : dialogues.entrySet())
 		{
 			Path pricingPath = getPath(outputPath, entry.getKey());
-			futures.add(DataProvider.saveStable(cache, DialogueJsonManager.parsePrice(entry.getValue()), pricingPath));
+			futures.add(DataProvider.saveStable(cache, DialogueManager.parseDialogue(entry.getValue()), pricingPath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}

@@ -17,23 +17,24 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class DialogueJsonManager extends SimpleJsonResourceReloadListener
+public class DialogueManager extends SimpleJsonResourceReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(DialogueJson.class, new DialogueJson.Serializer()).create();
+	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Dialogue.class, new Dialogue.Serializer()).create();
 	
-	private List<DialogueJson> dialogues;
+	private List<Dialogue> dialogues;
 	
-	public DialogueJsonManager()
+	public DialogueManager()
 	{
 		super(GSON, "minestuck/dialogue");
 	}
 	
-	private static DialogueJsonManager INSTANCE;
+	private static DialogueManager INSTANCE;
 	
-	public static DialogueJsonManager getInstance()
+	public static DialogueManager getInstance()
 	{
 		return INSTANCE;
 	}
@@ -41,12 +42,12 @@ public class DialogueJsonManager extends SimpleJsonResourceReloadListener
 	@Override
 	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ImmutableList.Builder<DialogueJson> dialogues = ImmutableList.builder();
+		ImmutableList.Builder<Dialogue> dialogues = ImmutableList.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
 			try
 			{
-				DialogueJson dialogue = GSON.fromJson(entry.getValue(), DialogueJson.class);
+				Dialogue dialogue = GSON.fromJson(entry.getValue(), Dialogue.class);
 				dialogues.add(dialogue);
 			} catch(Exception e)
 			{
@@ -58,7 +59,7 @@ public class DialogueJsonManager extends SimpleJsonResourceReloadListener
 		LOGGER.info("Loaded {} dialogues", this.dialogues.size());
 	}
 	
-	public DialogueJson doRandomDialogue(RandomSource rand)
+	public Dialogue doRandomDialogue(RandomSource rand)
 	{
 		if(dialogues.isEmpty())
 			return null;
@@ -66,7 +67,14 @@ public class DialogueJsonManager extends SimpleJsonResourceReloadListener
 			return dialogues.stream().toList().get(rand.nextInt(dialogues.size()));
 	}
 	
-	public static JsonElement parsePrice(DialogueJson dialogue)
+	public Dialogue getDialogue(ResourceLocation location)
+	{
+		Optional<Dialogue> potentialDialogue = dialogues.stream().filter(dialogue ->
+				dialogue.getPath().equals(location)).findAny();
+		return potentialDialogue.orElse(null);
+	}
+	
+	public static JsonElement parseDialogue(Dialogue dialogue)
 	{
 		return GSON.toJsonTree(dialogue);
 	}
@@ -74,6 +82,6 @@ public class DialogueJsonManager extends SimpleJsonResourceReloadListener
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		event.addListener(INSTANCE = new DialogueJsonManager());
+		event.addListener(INSTANCE = new DialogueManager());
 	}
 }
