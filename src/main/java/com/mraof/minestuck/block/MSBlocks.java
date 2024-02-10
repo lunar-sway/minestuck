@@ -344,7 +344,7 @@ public class MSBlocks
 	
 	//Wood
 	public static final RegistryObject<Block> CARVED_LOG = REGISTER.register("carved_log", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> CARVED_WOODEN_LEAF = REGISTER.register("carved_wooden_leaf", () -> new DirectionalCustomShapeBlock(Block.Properties.of().mapColor(MapColor.WOOD).strength(0.4F).sound(SoundType.WOOD), MSBlockShapes.CARVED_WOODEN_LEAF));
+	public static final RegistryObject<Block> CARVED_WOODEN_LEAF = REGISTER.register("carved_wooden_leaf", () -> new CustomShapeBlock(Block.Properties.of().mapColor(MapColor.WOOD).strength(0.4F).sound(SoundType.WOOD), MSBlockShapes.CARVED_WOODEN_LEAF));
 	public static final RegistryObject<Block> UNCARVED_WOOD = REGISTER.register("uncarved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CHIPBOARD = REGISTER.register("chipboard", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
 	public static final RegistryObject<Block> WOOD_SHAVINGS = REGISTER.register("wood_shavings", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(0.4F).sound(SoundType.SAND)));
