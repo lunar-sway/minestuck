@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- hadean, Doro
+- hadean, DORO
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
