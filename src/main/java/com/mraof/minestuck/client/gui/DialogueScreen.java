@@ -2,13 +2,16 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.util.Dialogue;
+import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DialogueScreen extends Screen
@@ -23,6 +26,8 @@ public class DialogueScreen extends Screen
 	
 	private int xOffset;
 	private int yOffset;
+	
+	private final List<Button> responseButtons = new ArrayList<>();
 	
 	private Button doneButton;
 	
@@ -41,8 +46,47 @@ public class DialogueScreen extends Screen
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
 		
+		recreateResponseButtons();
 		//addRenderableWidget(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, Component.translatable(DONE_MESSAGE), button -> finish()));
 		//doneButton.active = destinationTextField.getValue().length() == 4;
+	}
+	
+	public void recreateResponseButtons()
+	{
+		responseButtons.forEach(this::removeWidget);
+		responseButtons.clear();
+		
+		List<Dialogue.Response> responses = dialogue.getResponses();
+		
+		for(int i = 0; i < responses.size(); i++)
+		{
+			String response = responses.get(i).getResponse();
+			int yPositionOffset = 20 * i;
+			
+			Component buttonComponent = Component.translatable(response);
+			
+			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
+					button -> clickResponse(response));
+			responseButtons.add(addRenderableWidget(entryButton));
+		}
+	}
+	
+	private void clickResponse(String responseMessage)
+	{
+		for(Dialogue.Response response : dialogue.getResponses())
+		{
+			if(response.getResponse().equals(responseMessage))
+			{
+				Dialogue nextDialogue = DialogueManager.getInstance().getDialogue(response.getNextDialoguePath());
+				
+				if(nextDialogue != null)
+				{
+					onClose();
+					MSScreenFactories.displayDialogueScreen(entity, nextDialogue);
+					break;
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -59,21 +103,8 @@ public class DialogueScreen extends Screen
 		if(dialogueMessage != null && !dialogueMessage.isEmpty())
 		{
 			Component entityMessage = entity.getDisplayName().plainCopy().append(" : ").append(Component.translatable(dialogueMessage));
-			guiGraphics.drawString(font, entityMessage, (int) ((this.width / 2F) - font.width(entityMessage) / 2F), yOffset + 40, 0x000000, false);
+			guiGraphics.drawString(font, entityMessage, (int) ((this.width / 2F) - font.width(entityMessage) / 2F), yOffset + 20, 0x000000, false);
 		}
-		
-		List<Dialogue.Response> dialogueResponses = dialogue.getResponses();
-		if(dialogueResponses != null && !dialogueResponses.isEmpty())
-		{
-			int i = 1;
-			for(Dialogue.Response response : dialogueResponses)
-			{
-				String dialogueResponse = response.getResponse();
-				guiGraphics.drawString(font, Component.translatable(dialogueResponse), (int) ((this.width / 2F) - font.width(Component.translatable(dialogueResponse)) / 2F), yOffset + 60 + (i * 10), 0xFFF000, false);
-				i++;
-			}
-		}
-		 
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
