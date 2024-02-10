@@ -6,15 +6,20 @@
   "responses": [
     {
       "conditions": [
-        "test1response1condition1"
+        {
+          "type": "consort_type",
+          "content": "turtle"
+        }
       ],
       "next_path": "minestuck:test2name",
       "response_message": "test1response1"
     },
     {
       "conditions": [
-        "test1response2condition1",
-        "test1response2condition2"
+        {
+          "type": "consort_type",
+          "content": "nakagator"
+        }
       ],
       "next_path": "minestuck:test2name",
       "response_message": "test1response2"

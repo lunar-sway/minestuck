@@ -4,13 +4,16 @@ import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.LivingEntity;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Dialogue
 {
@@ -59,10 +62,10 @@ public class Dialogue
 	public static class Response
 	{
 		private final String response;
-		private final List<String> conditions;
+		private final List<Condition> conditions;
 		private final ResourceLocation nextDialoguePath;
 		
-		public Response(String response, List<String> conditions, ResourceLocation nextDialoguePath)
+		public Response(String response, List<Condition> conditions, ResourceLocation nextDialoguePath)
 		{
 			this.response = response;
 			this.conditions = conditions;
@@ -74,7 +77,7 @@ public class Dialogue
 			return response;
 		}
 		
-		public List<String> getConditions()
+		public List<Condition> getConditions()
 		{
 			return conditions;
 		}
@@ -82,6 +85,49 @@ public class Dialogue
 		public ResourceLocation getNextDialoguePath()
 		{
 			return nextDialoguePath;
+		}
+		
+		public boolean matchesAllConditions(LivingEntity entity)
+		{
+			for(Condition condition : conditions)
+			{
+				if(condition.type.equals(Condition.Type.CONSORT_TYPE))
+				{
+					boolean consortMatches = entity instanceof ConsortEntity consortEntity && condition.content.equals(consortEntity.getConsortType().getName());
+					if(!consortMatches)
+						return false;
+				}
+			}
+			
+			return true;
+		}
+	}
+	
+	public static class Condition
+	{
+		public enum Type
+		{
+			CONSORT_TYPE
+		}
+		
+		private final Type type;
+		private final String content;
+		
+		public Condition(Type type, String content)
+		{
+			this.type = type;
+			this.content = content;
+		}
+		
+		public static boolean enumExists(String enumName)
+		{
+			for(Type type : Type.values())
+			{
+				if(type.name().toLowerCase(Locale.ROOT).equals(enumName.toLowerCase(Locale.ROOT)))
+					return true;
+			}
+			
+			return false;
 		}
 	}
 	
@@ -107,10 +153,18 @@ public class Dialogue
 				String responseProvider = Codec.STRING.parse(JsonOps.INSTANCE, responseObject.get("response_message")).getOrThrow(false, LOGGER::error);
 				
 				JsonArray conditionsObject = responseObject.getAsJsonArray("conditions");
-				List<String> conditions = new ArrayList<>();
+				List<Condition> conditions = new ArrayList<>();
 				conditionsObject.forEach(conditionElement ->
 				{
-					conditions.add(conditionElement.getAsString());
+					JsonObject conditionObject = conditionElement.getAsJsonObject();
+					
+					String conditionTypeProvider = Codec.STRING.parse(JsonOps.INSTANCE, conditionObject.get("type")).getOrThrow(false, LOGGER::error);
+					String conditionContentProvider = Codec.STRING.parse(JsonOps.INSTANCE, conditionObject.get("content")).getOrThrow(false, LOGGER::error);
+					
+					//TODO may throw errors when its not filled in correctly
+					String conditionTypeName = conditionTypeProvider.toUpperCase(Locale.ROOT);
+					if(Condition.enumExists(conditionTypeName))
+						conditions.add(new Condition(Condition.Type.valueOf(conditionTypeName), conditionContentProvider));
 				});
 				
 				ResourceLocation nextPathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, responseObject.get("next_path")).getOrThrow(false, LOGGER::error);
@@ -139,9 +193,15 @@ public class Dialogue
 				responseObject.add("response_message", Codec.STRING.encodeStart(JsonOps.INSTANCE, response.response).getOrThrow(false, LOGGER::error));
 				
 				JsonArray conditions = new JsonArray(response.conditions.size());
-				for(String condition : response.conditions)
+				for(Condition condition : response.conditions)
 				{
-					conditions.add(condition);
+					JsonObject conditionObject = new JsonObject();
+					
+					String conditionType = condition.type.toString().toLowerCase(Locale.ROOT);
+					conditionObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, conditionType).getOrThrow(false, LOGGER::error));
+					conditionObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, condition.content).getOrThrow(false, LOGGER::error));
+					
+					conditions.add(conditionObject);
 				}
 				responseObject.add("conditions", conditions);
 				

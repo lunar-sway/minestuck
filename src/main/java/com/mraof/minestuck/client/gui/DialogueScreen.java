@@ -62,13 +62,15 @@ public class DialogueScreen extends Screen
 		
 		for(int i = 0; i < responses.size(); i++)
 		{
-			String response = responses.get(i).getResponse();
+			Dialogue.Response response = responses.get(i);
+			String responseMessage = response.getResponse();
 			int yPositionOffset = 20 * i;
 			
-			Component buttonComponent = Component.translatable(response);
+			Component buttonComponent = Component.translatable(responseMessage);
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
-					button -> clickResponse(response));
+					button -> clickResponse(responseMessage));
+			entryButton.active = response.matchesAllConditions(entity);
 			responseButtons.add(addRenderableWidget(entryButton));
 		}
 	}

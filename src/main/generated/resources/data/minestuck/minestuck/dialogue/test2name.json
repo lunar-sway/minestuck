@@ -6,23 +6,21 @@
   "responses": [
     {
       "conditions": [
-        "test2response1condition1"
+        {
+          "type": "consort_type",
+          "content": "salamander"
+        }
       ],
       "next_path": "minestuck:test1name",
       "response_message": "test2response1"
     },
     {
-      "conditions": [
-        "test2response2condition1",
-        "test2response2condition2"
-      ],
+      "conditions": [],
       "next_path": "minestuck:test1name",
       "response_message": "test2response2"
     },
     {
-      "conditions": [
-        "test2response3condition1"
-      ],
+      "conditions": [],
       "next_path": "minestuck:test1name",
       "response_message": "test2response3"
     }

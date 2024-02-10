@@ -275,7 +275,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.addAdditionalSaveData(compound);
 		
-		compound.putString(DIALOGUE_NBT_TAG, dialogue.getPath().toString());
+		if(dialogue != null)
+			compound.putString(DIALOGUE_NBT_TAG, dialogue.getPath().toString());
 		
 		/*if(message != null)
 		{

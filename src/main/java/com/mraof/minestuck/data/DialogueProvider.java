@@ -48,16 +48,16 @@ public class DialogueProvider implements DataProvider
 		
 		String test1Name = "test1name";
 		List<Dialogue.Response> test1Responses = new ArrayList<>();
-		test1Responses = addResponse(test1Responses, "test1response1", List.of("test1response1condition1"), "test2name");
-		test1Responses = addResponse(test1Responses, "test1response2", List.of("test1response2condition1","test1response2condition2"), "test2name");
+		test1Responses = addResponse(test1Responses, "test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")), "test2name");
+		test1Responses = addResponse(test1Responses, "test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")), "test2name");
 		test1Responses = addResponse(test1Responses, "test1response3", List.of(), "test2name");
 		add(test1Name, "minestuck.test1message", "test1animation", "generic_extra_large", test1Responses);
 		
 		String test2Name = "test2name";
 		List<Dialogue.Response> test2Responses = new ArrayList<>();
-		test2Responses = addResponse(test2Responses, "test2response1", List.of("test2response1condition1"), test1Name);
-		test2Responses = addResponse(test2Responses,"test2response2", List.of("test2response2condition1","test2response2condition2"), test1Name);
-		test2Responses = addResponse(test2Responses,"test2response3", List.of("test2response3condition1"), test1Name);
+		test2Responses = addResponse(test2Responses, "test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander")), test1Name);
+		test2Responses = addResponse(test2Responses,"test2response2", List.of(), test1Name);
+		test2Responses = addResponse(test2Responses,"test2response3", List.of(), test1Name);
 		add(test2Name, "test2message", "test2animation", "generic_extra_large", test2Responses);
 	}
 	
@@ -68,7 +68,7 @@ public class DialogueProvider implements DataProvider
 		responses.add(new DialogueJson.Response());
 	}*/
 	
-	protected List<Dialogue.Response> addResponse(List<Dialogue.Response> responses, String response, List<String> conditions, String nextDialoguePath)
+	protected List<Dialogue.Response> addResponse(List<Dialogue.Response> responses, String response, List<Dialogue.Condition> conditions, String nextDialoguePath)
 	{
 		//responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, "minestuck/dialogue/" + nextDialoguePath + ".json")));
 		responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath)));
