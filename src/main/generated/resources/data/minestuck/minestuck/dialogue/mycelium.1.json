@@ -1,0 +1,13 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "consort.mycelium.1",
+  "path": "minestuck:mycelium.1",
+  "responses": [
+    {
+      "conditions": [],
+      "next_path": "minestuck:mycelium.2",
+      "response_message": "=>"
+    }
+  ]
+}

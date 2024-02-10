@@ -30,6 +30,22 @@ public class DialogueProvider implements DataProvider
 	
 	protected void registerDialogues()
 	{
+		String mycelium1 = "mycelium.1";
+		String mycelium2 = "mycelium.2";
+		List<Dialogue.Response> mycelium1Response = new ArrayList<>();
+		mycelium1Response = addResponse(mycelium1Response, "=>", List.of(), mycelium2);
+		addSimple(mycelium1, mycelium1Response);
+		addSimpleEnd(mycelium2);
+		
+		List<Dialogue.Response> camelResponses = new ArrayList<>();
+		camelResponses = addResponse(camelResponses, "consort.camel.yes", List.of(), "camel.no_camel");
+		camelResponses = addResponse(camelResponses, "consort.camel.no", List.of(), "camel.dancing_camel");
+		addSimple("camel", camelResponses);
+		addSimpleEnd("camel.no_camel");
+		addSimpleEnd("camel.dancing_camel");
+		
+		
+		
 		String test1Name = "test1name";
 		List<Dialogue.Response> test1Responses = new ArrayList<>();
 		test1Responses = addResponse(test1Responses, "test1response1", List.of("test1response1condition1"), "test2name");
@@ -57,6 +73,16 @@ public class DialogueProvider implements DataProvider
 		//responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, "minestuck/dialogue/" + nextDialoguePath + ".json")));
 		responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath)));
 		return responses;
+	}
+	
+	protected void addSimple(String name, List<Dialogue.Response> responses)
+	{
+		add(name, "consort." + name, "generic_animation", "generic_extra_large", responses);
+	}
+	
+	protected void addSimpleEnd(String name)
+	{
+		addSimple(name, new ArrayList<>());
 	}
 	
 	protected void add(String name, String message, String animation, String gui, List<Dialogue.Response> responses)
