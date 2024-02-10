@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
@@ -124,8 +123,7 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Ro
 	
 	public void placeWithStructureBlockRegistry(int y, FeaturePlaceContext<?> context)
 	{
-		StructureBlockRegistry structureBlockRegistry = StructureBlockRegistry.getOrDefault(context.chunkGenerator());
-		this.placeAt(y, context, new StructurePlaceSettings().addProcessor(new StructureBlockRegistryProcessor(structureBlockRegistry)));
+		this.placeAt(y, context, new StructurePlaceSettings().addProcessor(StructureBlockRegistryProcessor.from(context)));
 	}
 	
 	@SuppressWarnings("unused")

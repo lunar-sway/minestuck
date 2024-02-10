@@ -60,7 +60,7 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		ChunkPos chunkPos = new ChunkPos(pos);
 		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, level.getMinBuildHeight(), chunkPos.getMinBlockZ() - 16, chunkPos.getMaxBlockX() + 16, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
 		StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(rotation).setBoundingBox(boundingBox).setRandom(rand)
-				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(context.chunkGenerator())));
+				.addProcessor(StructureBlockRegistryProcessor.from(context));
 		
 		BlockState bucketFluid;
 		if(rand.nextBoolean())
