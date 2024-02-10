@@ -38,7 +38,7 @@ public class TreeStumpFeature extends Feature<NoneFeatureConfiguration>
 			return false;
 		
 		int y = level.getHeight(Heightmap.Types.OCEAN_FLOOR, centerPos.getX(), centerPos.getZ()) - rand.nextInt(1) - 4;
-		placement.placeWithStructureBlockRegistry(y, context);
+		placement.placeWithStructureBlockRegistryAt(y, context);
 		
 		return true;
 	}

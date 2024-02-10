@@ -29,7 +29,7 @@ public class CakePedestalFeature extends Feature<NoneFeatureConfiguration>
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
 		
 		int y = placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level);
-		placement.placeWithStructureBlockRegistry(y, context);
+		placement.placeWithStructureBlockRegistryAt(y, context);
 		
 		return true;
 	}

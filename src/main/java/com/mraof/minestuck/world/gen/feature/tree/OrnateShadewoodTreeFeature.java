@@ -49,7 +49,7 @@ public class OrnateShadewoodTreeFeature extends Feature<NoneFeatureConfiguration
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
 		
 		int y = placement.minHeight(Heightmap.Types.OCEAN_FLOOR, level);
-		placement.placeWithStructureBlockRegistry(y, context);
+		placement.placeWithStructureBlockRegistryAt(y, context);
 		
 		return true;
 	}

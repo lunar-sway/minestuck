@@ -6,14 +6,18 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.properties.StructureMode;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+
+import java.util.function.BiConsumer;
 
 /**
  * A helper class for placing a structure template from a {@link Feature}.
@@ -33,10 +37,17 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Mi
 	public static TemplatePlacement centeredWithRandomRotation(StructureTemplate template, BlockPos centerPos, RandomSource randomSource, Mirror mirror)
 	{
 		Rotation rotation = Rotation.getRandom(randomSource);
-		Vec3i size = template.getSize(rotation);
-		BlockPos cornerPos = centerPos.offset(-size.getX() / 2, 0, -size.getZ() / 2);
-		BlockPos zeroPos = template.getZeroPositionWithTransform(cornerPos, mirror, rotation);
+		BlockPos zeroPos = centerPos.subtract(StructureTemplate.transform(new BlockPos(template.getSize().getX() / 2, 0, template.getSize().getZ() / 2), mirror, rotation, BlockPos.ZERO));
 		return new TemplatePlacement(template, zeroPos, mirror, rotation);
+	}
+	
+	/**
+	 * Positions the template so that the given position is at the center of the z=0 edge with the given rotation.
+	 */
+	public static TemplatePlacement edgeCentered(StructureTemplate template, BlockPos edgePos, Rotation rotation)
+	{
+		BlockPos zeroPos = edgePos.subtract(StructureTemplate.transform(new BlockPos(template.getSize().getX() / 2, 0, 0), Mirror.NONE, rotation, BlockPos.ZERO));
+		return new TemplatePlacement(template, zeroPos, Mirror.NONE, rotation);
 	}
 	
 	public Vec3i size()
@@ -126,12 +137,26 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Mi
 		}
 	}
 	
-	public void placeWithStructureBlockRegistry(int y, FeaturePlaceContext<?> context)
+	public void placeWithStructureBlockRegistry(FeaturePlaceContext<?> context)
+	{
+		this.place(context, new StructurePlaceSettings().addProcessor(StructureBlockRegistryProcessor.from(context)));
+	}
+	
+	public void place(FeaturePlaceContext<?> context)
+	{
+		this.place(context, new StructurePlaceSettings());
+	}
+	
+	public void place(FeaturePlaceContext<?> context, StructurePlaceSettings settings)
+	{
+		this.place(this.zeroPos, context, settings);
+	}
+	
+	public void placeWithStructureBlockRegistryAt(int y, FeaturePlaceContext<?> context)
 	{
 		this.placeAt(y, context, new StructurePlaceSettings().addProcessor(StructureBlockRegistryProcessor.from(context)));
 	}
 	
-	@SuppressWarnings("unused")
 	public void placeAt(int y, FeaturePlaceContext<?> context)
 	{
 		this.placeAt(y, context, new StructurePlaceSettings());
@@ -139,13 +164,35 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Mi
 	
 	public void placeAt(int y, FeaturePlaceContext<?> context, StructurePlaceSettings settings)
 	{
+		this.place(this.zeroPos.atY(y), context, settings);
+	}
+	
+	private static BoundingBox chunkGenBoundingBox(FeaturePlaceContext<?> context)
+	{
 		ChunkPos chunkPos = new ChunkPos(context.origin());
-		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, context.level().getMinBuildHeight(), chunkPos.getMinBlockZ() - 16,
+		return new BoundingBox(chunkPos.getMinBlockX() - 16, context.level().getMinBuildHeight(), chunkPos.getMinBlockZ() - 16,
 				chunkPos.getMaxBlockX() + 16, context.level().getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
-		
-		BlockPos structurePos = this.zeroPos.atY(y);
-		this.template.placeInWorld(context.level(), structurePos, structurePos,
-				settings.setMirror(this.mirror).setRotation(this.rotation).setRandom(context.random()).setBoundingBox(boundingBox),
+	}
+	
+	private void place(BlockPos pos, FeaturePlaceContext<?> context, StructurePlaceSettings settings)
+	{
+		this.template.placeInWorld(context.level(), pos, pos,
+				settings.setMirror(this.mirror).setRotation(this.rotation).setRandom(context.random()).setBoundingBox(chunkGenBoundingBox(context)),
 				context.random(), Block.UPDATE_INVISIBLE);
+	}
+	
+	public void handleDataMarkers(FeaturePlaceContext<?> context, BiConsumer<BlockPos, String> dataHandler)
+	{
+		StructurePlaceSettings settings = new StructurePlaceSettings().setMirror(this.mirror).setRotation(this.rotation).setBoundingBox(chunkGenBoundingBox(context));
+		
+		for(StructureTemplate.StructureBlockInfo blockInfo : this.template.filterBlocks(this.zeroPos, settings, Blocks.STRUCTURE_BLOCK))
+		{
+			if(blockInfo.nbt() == null)
+				continue;
+			
+			StructureMode structuremode = StructureMode.valueOf(blockInfo.nbt().getString("mode"));
+			if(structuremode == StructureMode.DATA)
+				dataHandler.accept(blockInfo.pos(), blockInfo.nbt().getString("metadata"));
+		}
 	}
 }
