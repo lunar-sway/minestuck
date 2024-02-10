@@ -18,13 +18,15 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 /**
  * A helper class for placing a structure template from a {@link net.minecraft.world.level.levelgen.feature.Feature}.
  */
-public record TemplatePlacement(StructureTemplate template, BlockPos cornerPos, Rotation rotation)
+public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Rotation rotation)
 {
 	public static TemplatePlacement centeredWithRandomRotation(StructureTemplate template, BlockPos centerPos, RandomSource randomSource)
 	{
 		Rotation rotation = Rotation.getRandom(randomSource);
 		Vec3i size = template.getSize(rotation);
-		return new TemplatePlacement(template, centerPos.offset(-size.getX() / 2, 0, -size.getZ() / 2), rotation);
+		BlockPos cornerPos = centerPos.offset(-size.getX() / 2, 0, -size.getZ() / 2);
+		BlockPos zeroPos = template.getZeroPositionWithTransform(cornerPos, Mirror.NONE, rotation);
+		return new TemplatePlacement(template, zeroPos, rotation);
 	}
 	
 	public Vec3i size()
@@ -32,10 +34,17 @@ public record TemplatePlacement(StructureTemplate template, BlockPos cornerPos, 
 		return this.template.getSize(this.rotation);
 	}
 	
+	public BlockPos actualFromRelative(BlockPos templatePos)
+	{
+		return this.zeroPos.offset(StructureTemplate.transform(templatePos, Mirror.NONE, this.rotation, BlockPos.ZERO));
+	}
+	
 	public Iterable<BlockPos> xzPlacedRange()
 	{
-		Vec3i size = this.size();
-		return BlockPos.betweenClosed(this.cornerPos, this.cornerPos.offset(size.getX() - 1, 0, size.getZ() - 1));
+		Vec3i unrotatedSize = this.template.getSize();
+		return BlockPos.betweenClosed(
+				actualFromRelative(BlockPos.ZERO),
+				actualFromRelative(new BlockPos(unrotatedSize.getX() - 1, 0, unrotatedSize.getZ() - 1)));
 	}
 	
 	public int minHeight(Heightmap.Types type, LevelReader level)
@@ -97,9 +106,9 @@ public record TemplatePlacement(StructureTemplate template, BlockPos cornerPos, 
 		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, context.level().getMinBuildHeight(), chunkPos.getMinBlockZ() - 16,
 				chunkPos.getMaxBlockX() + 16, context.level().getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
 		
-		BlockPos structurePos = this.template.getZeroPositionWithTransform(this.cornerPos.atY(y), Mirror.NONE, this.rotation);
+		BlockPos structurePos = this.zeroPos.atY(y);
 		this.template.placeInWorld(context.level(), structurePos, structurePos,
-				settings.setRotation(this.rotation).setRandom(context.random()).setBoundingBox(boundingBox),
+				settings.setMirror(Mirror.NONE).setRotation(this.rotation).setRandom(context.random()).setBoundingBox(boundingBox),
 				context.random(), Block.UPDATE_INVISIBLE);
 	}
 }
