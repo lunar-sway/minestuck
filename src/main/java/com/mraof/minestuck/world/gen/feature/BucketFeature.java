@@ -5,21 +5,15 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -44,60 +38,58 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		BlockPos pos = context.origin();
 		WorldGenLevel level = context.level();
 		RandomSource rand = context.random();
-		ResourceLocation structure;
-		if(rand.nextFloat() < 0.6F)
-		{
-			structure = rand.nextFloat() < 0.7F ? STRUCTURE_BUCKET_0 : STRUCTURE_BUCKET_1;
-		} else
-		{
-			structure = rand.nextFloat() < 0.7F ? STRUCTURE_BUCKET_WITH_HANDLE_0 : STRUCTURE_BUCKET_WITH_HANDLE_1;
-		}
-		
-		Rotation rotation = Rotation.getRandom(rand);
-		StructureTemplateManager templates = context.level().getLevel().getStructureManager();
-		StructureTemplate template = templates.getOrCreate(structure);
-		
-		ChunkPos chunkPos = new ChunkPos(pos);
-		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, level.getMinBuildHeight(), chunkPos.getMinBlockZ() - 16, chunkPos.getMaxBlockX() + 16, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
-		StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(rotation).setBoundingBox(boundingBox).setRandom(rand)
-				.addProcessor(StructureBlockRegistryProcessor.from(context));
-		
-		BlockState bucketFluid;
-		if(rand.nextBoolean())
-		{
-			SimpleWeightedRandomList.Builder<BlockState> list = SimpleWeightedRandomList.builder();
-			list.add(Blocks.AIR.defaultBlockState(), 50);
-			for(Fluid fluid : ForgeRegistries.FLUIDS)
-			{
-				FluidState fluidState = fluid.defaultFluidState();
-				if(fluidState.isSource())
-				{
-					BlockState fluidBlock = fluidState.createLegacyBlock();
-					switch(fluid.getFluidType().getRarity())
-					{
-						case COMMON -> list.add(fluidBlock, 50);
-						case UNCOMMON -> list.add(fluidBlock, 10);
-						case RARE -> list.add(fluidBlock, 1);
-					}
-				}
-			}
-			
-			bucketFluid = list.build().getRandomValue(rand).orElseThrow();
-		} else
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(context.chunkGenerator());
-			bucketFluid = blocks.getBlockState(rand.nextBoolean() ? "ocean" : "river");
-		}
-		
-		settings.addProcessor(new RuleProcessor(ImmutableList.of(new ProcessorRule(new BlockMatchTest(Blocks.BLUE_STAINED_GLASS), AlwaysTrueTest.INSTANCE, bucketFluid))));
 		
 		if(!level.getFluidState(pos.below()).isEmpty())
 			return false;
 		
-		Vec3i size = template.getSize(rotation);
-		BlockPos structurePos = template.getZeroPositionWithTransform(pos.offset(-size.getX()/2, -rand.nextInt(3), -size.getZ()/2), Mirror.NONE, rotation);
-		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
+		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(pickTemplate(rand));
+		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, pos, rand);
+		
+		StructurePlaceSettings settings = new StructurePlaceSettings()
+				.addProcessor(StructureBlockRegistryProcessor.from(context))
+				.addProcessor(new RuleProcessor(ImmutableList.of(
+						new ProcessorRule(new BlockMatchTest(Blocks.BLUE_STAINED_GLASS), AlwaysTrueTest.INSTANCE, pickBucketFluid(context))
+				)));
+		
+		placement.placeAt(pos.getY() - rand.nextInt(3), context, settings);
 		
 		return true;
+	}
+	
+	private static ResourceLocation pickTemplate(RandomSource rand)
+	{
+		if(rand.nextFloat() < 0.6F)
+			return rand.nextFloat() < 0.7F ? STRUCTURE_BUCKET_0 : STRUCTURE_BUCKET_1;
+		else
+			return rand.nextFloat() < 0.7F ? STRUCTURE_BUCKET_WITH_HANDLE_0 : STRUCTURE_BUCKET_WITH_HANDLE_1;
+	}
+	
+	private static BlockState pickBucketFluid(FeaturePlaceContext<NoneFeatureConfiguration> context)
+	{
+		RandomSource rand = context.random();
+		if(rand.nextBoolean())
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(context.chunkGenerator());
+			return blocks.getBlockState(rand.nextBoolean() ? "ocean" : "river");
+		}
+		
+		SimpleWeightedRandomList.Builder<BlockState> list = SimpleWeightedRandomList.builder();
+		list.add(Blocks.AIR.defaultBlockState(), 50);
+		for(Fluid fluid : ForgeRegistries.FLUIDS)
+		{
+			FluidState fluidState = fluid.defaultFluidState();
+			if(!fluidState.isSource())
+				continue;
+			
+			BlockState fluidBlock = fluidState.createLegacyBlock();
+			switch(fluid.getFluidType().getRarity())
+			{
+				case COMMON -> list.add(fluidBlock, 50);
+				case UNCOMMON -> list.add(fluidBlock, 10);
+				case RARE -> list.add(fluidBlock, 1);
+			}
+		}
+		
+		return list.build().getRandomValue(rand).orElseThrow();
 	}
 }
