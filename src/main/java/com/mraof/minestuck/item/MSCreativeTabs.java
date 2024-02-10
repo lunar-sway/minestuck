@@ -469,6 +469,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CHISELED_SANDSTONE_COLUMN.get());
 		output.accept(MSItems.RED_SANDSTONE_COLUMN.get());
 		output.accept(MSItems.CHISELED_RED_SANDSTONE_COLUMN.get());
+		output.accept(MSItems.CARVED_LOG.get());
+		output.accept(MSItems.CARVED_WOODEN_LEAF.get());
 		output.accept(MSItems.UNCARVED_WOOD.get());
 		output.accept(MSItems.CHIPBOARD.get());
 		output.accept(MSItems.WOOD_SHAVINGS.get());

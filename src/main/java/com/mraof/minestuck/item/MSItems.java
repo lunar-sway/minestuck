@@ -880,6 +880,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CHISELED_SANDSTONE_COLUMN = registerBlockItem(MSBlocks.CHISELED_SANDSTONE_COLUMN);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_COLUMN = registerBlockItem(MSBlocks.RED_SANDSTONE_COLUMN);
 	public static final RegistryObject<BlockItem> CHISELED_RED_SANDSTONE_COLUMN = registerBlockItem(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN);
+	public static final RegistryObject<BlockItem> CARVED_LOG = registerBlockItem(MSBlocks.CARVED_LOG);
+	public static final RegistryObject<BlockItem> CARVED_WOODEN_LEAF = registerBlockItem(MSBlocks.CARVED_WOODEN_LEAF);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD = registerBlockItem(MSBlocks.UNCARVED_WOOD);
 	public static final RegistryObject<BlockItem> CHIPBOARD = registerBlockItem(MSBlocks.CHIPBOARD);
 	public static final RegistryObject<BlockItem> WOOD_SHAVINGS = registerBlockItem(MSBlocks.WOOD_SHAVINGS);

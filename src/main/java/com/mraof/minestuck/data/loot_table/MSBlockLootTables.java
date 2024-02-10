@@ -206,6 +206,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CHISELED_SANDSTONE_COLUMN.get());
 		dropSelf(RED_SANDSTONE_COLUMN.get());
 		dropSelf(CHISELED_RED_SANDSTONE_COLUMN.get());
+		dropSelf(CARVED_LOG.get());
+		dropSelf(CARVED_WOODEN_LEAF.get());
 		add(UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(UNCARVED_WOOD.get(), CHIPBOARD.get()));
 		dropSelf(CHIPBOARD.get());
 		dropSelf(WOOD_SHAVINGS.get());

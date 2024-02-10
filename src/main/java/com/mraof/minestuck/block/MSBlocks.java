@@ -343,13 +343,20 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_COLUMN = REGISTER.register("chiseled_red_sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.COLOR_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)));
 	
 	//Wood
+	public static final RegistryObject<Block> CARVED_LOG = REGISTER.register("carved_log", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> CARVED_WOODEN_LEAF = REGISTER.register("carved_wooden_leaf", () -> new DirectionalCustomShapeBlock(Block.Properties.of().mapColor(MapColor.WOOD).strength(0.4F).sound(SoundType.WOOD), MSBlockShapes.CARVED_WOODEN_LEAF));
 	public static final RegistryObject<Block> UNCARVED_WOOD = REGISTER.register("uncarved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CHIPBOARD = REGISTER.register("chipboard", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
 	public static final RegistryObject<Block> WOOD_SHAVINGS = REGISTER.register("wood_shavings", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(0.4F).sound(SoundType.SAND)));
 	public static final RegistryObject<Block> CARVED_HEAVY_PLANKS = REGISTER.register("carved_heavy_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> CARVED_PLANKS = REGISTER.register("carved_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> CARVED_PLANKS = REGISTER.register("carved_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> POLISHED_UNCARVED_WOOD = REGISTER.register("polished_carved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CARVED_KNOTTED_WOOD = REGISTER.register("carved_knotted_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> TREATED_PLANKS = REGISTER.register("treated_planks", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<StairBlock> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), copy(TREATED_PLANKS.get())));
+	public static final RegistryObject<SlabBlock> TREATED_PLANKS_SLAB = REGISTER.register("treated_planks_slab", () -> new SlabBlock(copy(TREATED_PLANKS.get())));
+	public static final RegistryObject<Block> TREATED_BOOKSHELF = REGISTER.register("treated_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> TREATED_LADDER = REGISTER.register("treated_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	//Cloud
 	public static final RegistryObject<Block> DENSE_CLOUD = REGISTER.register("dense_cloud", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.HAT).strength(0.5F).sound(SoundType.SNOW).isRedstoneConductor(MSBlocks::never)));
@@ -438,13 +445,6 @@ public class MSBlocks
 	
 	public static final RegistryObject<Block> STRIPPED_ROTTED_SHADEWOOD_LOG = REGISTER.register("stripped_rotted_shadewood_log", () -> new FlammableLogBlock(copy(ROTTED_SHADEWOOD_LOG.get())));
 	public static final RegistryObject<Block> STRIPPED_ROTTED_SHADEWOOD = REGISTER.register("stripped_rotted_shadewood", () -> new FlammableLogBlock(copy(ROTTED_SHADEWOOD_LOG.get())));
-	
-	//Treated
-	public static final RegistryObject<Block> TREATED_PLANKS = REGISTER.register("treated_planks", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<StairBlock> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), copy(TREATED_PLANKS.get())));
-	public static final RegistryObject<SlabBlock> TREATED_PLANKS_SLAB = REGISTER.register("treated_planks_slab", () -> new SlabBlock(copy(TREATED_PLANKS.get())));
-	public static final RegistryObject<Block> TREATED_BOOKSHELF = REGISTER.register("treated_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> TREATED_LADDER = REGISTER.register("treated_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	//Aspect tree blocks
 	//Blood

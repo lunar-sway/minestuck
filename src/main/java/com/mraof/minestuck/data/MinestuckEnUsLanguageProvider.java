@@ -217,8 +217,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RED_SANDSTONE_COLUMN, "Red Sandstone Column");
 		addBlock(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
 		addBlock(MSBlocks.NATIVE_SULFUR, "Native Sulfur");
+		addBlock(MSBlocks.CARVED_LOG, "Carved Log");
+		addBlock(MSBlocks.CARVED_WOODEN_LEAF, "Carved Wooden Leaf");
 		addBlock(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
-		addBlockTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
 		addBlock(MSBlocks.CHIPBOARD, "Chipboard");
 		addBlock(MSBlocks.WOOD_SHAVINGS, "Wood Shavings");
 		addBlock(MSBlocks.CARVED_HEAVY_PLANKS, "Carved Heavy Planks");

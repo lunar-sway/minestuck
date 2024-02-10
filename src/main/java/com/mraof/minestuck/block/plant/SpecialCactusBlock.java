@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -33,6 +34,6 @@ public class SpecialCactusBlock extends CactusBlock
 	
 	protected boolean isSustainableSoil(BlockState soil)
 	{
-		return soil.is(this) || soil.is(BlockTags.SAND);
+		return soil.is(this) || soil.is(MSTags.Blocks.WOOD_TERRAIN_BLOCKS) || soil.is(BlockTags.PLANKS);
 	}
 }

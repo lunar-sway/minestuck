@@ -6,14 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Added Carved Logs, Carved Wooden Leaf, Treated variants of Carved Wood blocks, and Lacquered variants of Carved Wood blocks
+
+### Changed
+
+- Wooden Cactus is now placeable on Carved Planks, Uncarved Wood, and Treated planks
+- Wooden Cactus is no longer placeable on Sand
+- Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus. Textures by Vinnelli and Riotmode
+- Updated colors of Treated Bookshelf and Treated Ladder to fit updated Treated Planks.
+
 ### Fixed
 
+- Wooden Cactus block model now has proper transparency
 - Metal Boats no longer crash the game when dispensed
 - Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
 
+### Removed
+
+- Uncarved Wood no longer has a tooltip
+
 ### Contributors for this release
 
-- hadean, Dweblenod
+- hadean, Dweblenod, Vinnelli, Riotmode, Akisephila
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 

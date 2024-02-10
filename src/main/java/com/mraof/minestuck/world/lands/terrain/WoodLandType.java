@@ -37,16 +37,22 @@ public class WoodLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("upper", Blocks.OAK_LOG);
+		registry.setBlock("ground", MSBlocks.UNCARVED_WOOD);
+		registry.setBlock("upper", MSBlocks.CHIPBOARD);
 		registry.setBlock("surface", MSBlocks.TREATED_PLANKS);
-		registry.setBlock("structure_primary", Blocks.JUNGLE_WOOD);
+		registry.setBlock("ocean", Blocks.HONEY_BLOCK);
+		registry.setBlock("village_path", MSBlocks.WOOD_SHAVINGS);
+		registry.setBlock("structure_primary", MSBlocks.CARVED_HEAVY_PLANKS);
 		registry.setBlock("structure_primary_decorative", Blocks.DARK_OAK_LOG);
+		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_column", MSBlocks.CARVED_LOG);
 		registry.setBlock("structure_primary_stairs", Blocks.DARK_OAK_STAIRS);
-		registry.setBlock("structure_secondary", Blocks.JUNGLE_PLANKS);
+		registry.setBlock("structure_secondary", MSBlocks.POLISHED_UNCARVED_WOOD);
 		registry.setBlock("structure_secondary_decorative", Blocks.DARK_OAK_PLANKS);
 		registry.setBlock("structure_secondary_stairs", Blocks.JUNGLE_STAIRS);
 		registry.setBlock("light_block", MSBlocks.GLOWING_WOOD);
-		registry.setBlock("bush", Blocks.RED_MUSHROOM);
+		registry.setBlock("bush", MSBlocks.WOODEN_CACTUS);
 		registry.setBlock("structure_wool_1", Blocks.PURPLE_WOOL);
 		registry.setBlock("structure_wool_3", Blocks.GREEN_WOOL);
 	}

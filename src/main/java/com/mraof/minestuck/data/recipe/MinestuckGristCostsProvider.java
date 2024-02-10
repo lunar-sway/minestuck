@@ -852,6 +852,8 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).grist(BUILD, 2).grist(SULFUR, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.COARSE_END_STONE.get()).grist(BUILD, 4).grist(CAULK, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CHALK.get()).grist(BUILD, 2).grist(CHALK, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.CARVED_LOG.get()).grist(BUILD, 6).grist(AMBER, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.CARVED_WOODEN_LEAF.get()).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.UNCARVED_WOOD.get()).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CHIPBOARD.get()).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS.get()).grist(BUILD, 4).build(recipeSaver);

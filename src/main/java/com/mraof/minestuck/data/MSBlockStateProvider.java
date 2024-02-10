@@ -368,13 +368,19 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id),
 						texture("red_sandstone_column_end")));
 		
+		axisWithItem(MSBlocks.CARVED_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		simpleHorizontal(MSBlocks.CARVED_WOODEN_LEAF, this::existing);
+		flatItem(MSItems.CARVED_WOODEN_LEAF, MSBlockStateProvider::texture);
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD);
 		simpleBlockWithItem(MSBlocks.CHIPBOARD);
 		simpleBlockWithItem(MSBlocks.WOOD_SHAVINGS);
 		simpleBlockWithItem(MSBlocks.CARVED_HEAVY_PLANKS);
 		simpleBlockWithItem(MSBlocks.CARVED_PLANKS);
 		simpleBlockWithItem(MSBlocks.POLISHED_UNCARVED_WOOD);
-		simpleBlockWithItem(MSBlocks.CARVED_KNOTTED_WOOD);
+		horizontalBlock(MSBlocks.CARVED_KNOTTED_WOOD);
 		
 		simpleBlockWithItem(MSBlocks.DENSE_CLOUD);
 		simpleBlockWithItem(MSBlocks.BRIGHT_DENSE_CLOUD);
@@ -1194,10 +1200,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.GOLD_SEEDS, MSBlockStateProvider::itemTexture);
 		simpleBlockWithItem(MSBlocks.WOODEN_CACTUS,
 				id -> models().withExistingParent(id.getPath(), "block/cactus")
-						.texture("particle", texture(id.withSuffix("_side")))
-						.texture("bottom", texture(id.withSuffix("_bottom")))
-						.texture("top", texture(id.withSuffix("_top")))
-						.texture("side", texture(id.withSuffix("_side"))));
+						.texture("particle", texture(id.withSuffix("_side"))).renderType("cutout")
+						.texture("bottom", texture(id.withSuffix("_bottom"))).renderType("cutout")
+						.texture("top", texture(id.withSuffix("_top"))).renderType("cutout")
+						.texture("side", texture(id.withSuffix("_side"))).renderType("cutout"));
 		
 		cake(MSBlocks.APPLE_CAKE);
 		flatItem(MSItems.APPLE_CAKE, MSBlockStateProvider::itemTexture);
@@ -1261,6 +1267,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		fluid(MSBlocks.ENDER);
 		fluid(MSBlocks.LIGHT_WATER);
 		
+	}
+	
+	private void horizontalBlock(RegistryObject<Block> carvedKnottedWood)
+	{
 	}
 	
 	private ModelFile existing(ResourceLocation id)
