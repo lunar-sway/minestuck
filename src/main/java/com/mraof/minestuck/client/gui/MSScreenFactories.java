@@ -12,7 +12,7 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.util.DialogueJson;
+import com.mraof.minestuck.util.Dialogue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;
@@ -138,7 +138,7 @@ public class MSScreenFactories
 		}
 	}
 	
-	public static void displayDialogueScreen(LivingEntity entity, DialogueJson dialogue)
+	public static void displayDialogueScreen(LivingEntity entity, Dialogue dialogue)
 	{
 		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialogue));
 	}

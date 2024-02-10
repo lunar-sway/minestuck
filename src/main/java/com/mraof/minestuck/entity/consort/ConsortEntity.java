@@ -2,25 +2,23 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
+import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
-import com.mraof.minestuck.util.DialogueJson;
-import com.mraof.minestuck.util.DialogueJsonManager;
+import com.mraof.minestuck.util.Dialogue;
+import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -66,7 +64,7 @@ import java.util.Set;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, GeoEntity
+public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, GeoEntity, DialogueEntity
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
@@ -82,6 +80,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private final EnumConsort consortType;
+	private Dialogue dialogue;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
@@ -146,7 +145,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
 		{
-			DialogueJson dialogue = DialogueJsonManager.getInstance().doRandomDialogue(random);
+			Dialogue dialogue = getDialogue();
 			
 			if(dialogue != null)
 			{
@@ -276,7 +275,9 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.addAdditionalSaveData(compound);
 		
-		if(message != null)
+		compound.putString(DIALOGUE_NBT_TAG, dialogue.getPath().toString());
+		
+		/*if(message != null)
 		{
 			compound.putString("Dialogue", message.getString());
 			if(messageData != null)
@@ -290,6 +291,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			}
 		}
 		compound.putBoolean("HasHadMessage", hasHadMessage);
+		 */
 		
 		compound.putInt("Type", merchantType.ordinal());
 		ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, homeDimension.location()).resultOrPartial(LOGGER::error)
@@ -317,7 +319,10 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.readAdditionalSaveData(compound);
 		
-		if(compound.contains("Dialogue", Tag.TAG_STRING))
+		if(compound.contains(DIALOGUE_NBT_TAG, Tag.TAG_STRING))
+			setDialogue(compound.getString(DIALOGUE_NBT_TAG));
+		
+		/*if(compound.contains("Dialogue", Tag.TAG_STRING))
 		{
 			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
 			if(compound.contains("MessageData", Tag.TAG_COMPOUND))
@@ -333,6 +338,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			
 			hasHadMessage = true;
 		} else hasHadMessage = compound.getBoolean("HasHadMessage");
+		 */
 		
 		merchantType = EnumConsort.MerchantType.values()[Mth.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
@@ -470,6 +476,22 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random)
 	{
 		return true;
+	}
+	
+	@Override
+	public Dialogue getDialogue()
+	{
+		if(dialogue == null)
+			dialogue = getDialogueFromEntity(this);
+		if(dialogue == null)
+			dialogue = DialogueManager.getInstance().doRandomDialogue(random);
+		return dialogue;
+	}
+	
+	@Override
+	public void setDialogue(String location)
+	{
+		dialogue = dialogueFromLocation(location);
 	}
 	
 	@Override

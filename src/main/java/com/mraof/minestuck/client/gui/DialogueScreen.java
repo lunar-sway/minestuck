@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.util.DialogueJson;
+import com.mraof.minestuck.util.Dialogue;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,14 +19,14 @@ public class DialogueScreen extends Screen
 	private final ResourceLocation guiBackground;
 	
 	private final LivingEntity entity;
-	private final DialogueJson dialogue;
+	private final Dialogue dialogue;
 	
 	private int xOffset;
 	private int yOffset;
 	
 	private Button doneButton;
 	
-	DialogueScreen(LivingEntity entity, DialogueJson dialogue)
+	DialogueScreen(LivingEntity entity, Dialogue dialogue)
 	{
 		super(Component.empty());
 		
@@ -62,11 +62,11 @@ public class DialogueScreen extends Screen
 			guiGraphics.drawString(font, entityMessage, (int) ((this.width / 2F) - font.width(entityMessage) / 2F), yOffset + 40, 0x000000, false);
 		}
 		
-		List<DialogueJson.Response> dialogueResponses = dialogue.getResponses();
+		List<Dialogue.Response> dialogueResponses = dialogue.getResponses();
 		if(dialogueResponses != null && !dialogueResponses.isEmpty())
 		{
 			int i = 1;
-			for(DialogueJson.Response response : dialogueResponses)
+			for(Dialogue.Response response : dialogueResponses)
 			{
 				String dialogueResponse = response.getResponse();
 				guiGraphics.drawString(font, Component.translatable(dialogueResponse), (int) ((this.width / 2F) - font.width(Component.translatable(dialogueResponse)) / 2F), yOffset + 60 + (i * 10), 0xFFF000, false);
