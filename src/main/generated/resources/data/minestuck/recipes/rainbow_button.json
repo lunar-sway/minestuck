@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:rainbow_planks"
+    }
+  ],
+  "result": {
+    "item": "minestuck:rainbow_button"
+  }
+}

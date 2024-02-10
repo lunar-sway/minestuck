@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:tar_shade_bricks"
+  },
+  "result": "minestuck:tar_shade_brick_slab"
+}
