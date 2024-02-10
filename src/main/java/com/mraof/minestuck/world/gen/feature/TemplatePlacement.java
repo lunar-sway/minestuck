@@ -23,15 +23,20 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  * "level space" instead refers to the actual, in-world position of a block.
  */
 @SuppressWarnings("unused")
-public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Rotation rotation)
+public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Mirror mirror, Rotation rotation)
 {
 	public static TemplatePlacement centeredWithRandomRotation(StructureTemplate template, BlockPos centerPos, RandomSource randomSource)
+	{
+		return centeredWithRandomRotation(template, centerPos, randomSource, Mirror.NONE);
+	}
+	
+	public static TemplatePlacement centeredWithRandomRotation(StructureTemplate template, BlockPos centerPos, RandomSource randomSource, Mirror mirror)
 	{
 		Rotation rotation = Rotation.getRandom(randomSource);
 		Vec3i size = template.getSize(rotation);
 		BlockPos cornerPos = centerPos.offset(-size.getX() / 2, 0, -size.getZ() / 2);
-		BlockPos zeroPos = template.getZeroPositionWithTransform(cornerPos, Mirror.NONE, rotation);
-		return new TemplatePlacement(template, zeroPos, rotation);
+		BlockPos zeroPos = template.getZeroPositionWithTransform(cornerPos, mirror, rotation);
+		return new TemplatePlacement(template, zeroPos, mirror, rotation);
 	}
 	
 	public Vec3i size()
@@ -49,7 +54,7 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Ro
 	 */
 	public BlockPos actualFromRelative(BlockPos templatePos)
 	{
-		return this.zeroPos.offset(StructureTemplate.transform(templatePos, Mirror.NONE, this.rotation, BlockPos.ZERO));
+		return this.zeroPos.offset(StructureTemplate.transform(templatePos, this.mirror, this.rotation, BlockPos.ZERO));
 	}
 	
 	public Iterable<BlockPos> xzPlacedRange()
@@ -140,7 +145,7 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Ro
 		
 		BlockPos structurePos = this.zeroPos.atY(y);
 		this.template.placeInWorld(context.level(), structurePos, structurePos,
-				settings.setMirror(Mirror.NONE).setRotation(this.rotation).setRandom(context.random()).setBoundingBox(boundingBox),
+				settings.setMirror(this.mirror).setRotation(this.rotation).setRandom(context.random()).setBoundingBox(boundingBox),
 				context.random(), Block.UPDATE_INVISIBLE);
 	}
 }
