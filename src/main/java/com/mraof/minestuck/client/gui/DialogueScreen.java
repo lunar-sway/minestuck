@@ -1,12 +1,14 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -102,8 +104,15 @@ public class DialogueScreen extends Screen
 		String dialogueMessage = dialogue.getMessage();
 		if(dialogueMessage != null && !dialogueMessage.isEmpty())
 		{
-			Component entityMessage = entity.getDisplayName().plainCopy().append(" : ").append(Component.translatable(dialogueMessage));
-			guiGraphics.drawString(font, entityMessage, (int) ((this.width / 2F) - font.width(entityMessage) / 2F), yOffset + 20, 0x000000, false);
+			MutableComponent entityName = entity.getDisplayName().plainCopy();
+			
+			if(entity instanceof ConsortEntity consortEntity)
+			{
+				entityName.withStyle(consortEntity.getConsortType().getColor());
+			}
+			
+			Component entityMessage = entityName.append(": ").append(Component.translatable(dialogueMessage));
+			guiGraphics.drawWordWrap(font, entityMessage, xOffset + 10, yOffset + 20, 210, 0x000000);
 		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
