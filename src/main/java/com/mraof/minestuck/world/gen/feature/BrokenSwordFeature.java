@@ -15,12 +15,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class BrokenSwordFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation STRUCTURE_SWORD_HILT_0 = new ResourceLocation(Minestuck.MOD_ID, "sword_hilt_0");
-	private static final ResourceLocation STRUCTURE_SWORD_HILT_1 = new ResourceLocation(Minestuck.MOD_ID, "sword_hilt_1");
-	private static final ResourceLocation STRUCTURE_VALUABLE_SWORD_HILT = new ResourceLocation(Minestuck.MOD_ID, "valuable_sword_hilt");
-	private static final ResourceLocation STRUCTURE_SWORD_BLADE_0 = new ResourceLocation(Minestuck.MOD_ID, "sword_blade_0");
-	private static final ResourceLocation STRUCTURE_SWORD_BLADE_1 = new ResourceLocation(Minestuck.MOD_ID, "sword_blade_1");
-	private static final ResourceLocation STRUCTURE_VALUABLE_SWORD_BLADE = new ResourceLocation(Minestuck.MOD_ID, "valuable_sword_blade");
 	
 	public BrokenSwordFeature(Codec<NoneFeatureConfiguration> codec)
 	{
@@ -34,33 +28,44 @@ public class BrokenSwordFeature extends Feature<NoneFeatureConfiguration>
 		RandomSource rand = context.random();
 		StructureTemplateManager templates = level.getLevel().getStructureManager();
 		
-		ResourceLocation hilt, blade;
-		if(rand.nextInt(600) == 0)
-		{
-			hilt = STRUCTURE_VALUABLE_SWORD_HILT;
-			blade = STRUCTURE_VALUABLE_SWORD_BLADE;
-		} else if(rand.nextBoolean())
-		{
-			hilt = STRUCTURE_SWORD_HILT_0;
-			blade = STRUCTURE_SWORD_BLADE_0;
-		} else
-		{
-			hilt = STRUCTURE_SWORD_HILT_1;
-			blade = STRUCTURE_SWORD_BLADE_1;
-		}
+		Type type = pickType(rand);
 		
 		BlockPos hiltPos = context.origin();
-		TemplatePlacement hiltPlacement = TemplatePlacement.centeredWithRandomRotation(templates.getOrCreate(hilt), hiltPos, rand);
+		TemplatePlacement hiltPlacement = TemplatePlacement.centeredWithRandomRotation(templates.getOrCreate(type.hiltId), hiltPos, rand);
 		int hiltY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, hiltPos.getX(), hiltPos.getZ()) - 2 - rand.nextInt(3);
 		
 		BlockPos bladePos = context.origin().offset(rand.nextInt(8), 0, rand.nextInt(8));
 		Mirror bladeMirror = rand.nextBoolean() ? Mirror.NONE : Mirror.LEFT_RIGHT;
-		TemplatePlacement bladePlacement = TemplatePlacement.centeredWithRandomRotation(templates.getOrCreate(blade), bladePos, rand, bladeMirror);
+		TemplatePlacement bladePlacement = TemplatePlacement.centeredWithRandomRotation(templates.getOrCreate(type.bladeId), bladePos, rand, bladeMirror);
 		int bladeY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, bladePos.getX(), bladePos.getZ()) - rand.nextInt(3);
 		
 		hiltPlacement.placeAt(hiltY, context);
 		bladePlacement.placeAt(bladeY, context);
 		
 		return true;
+	}
+	
+	private static Type pickType(RandomSource rand)
+	{
+		if(rand.nextInt(600) == 0)
+			return Type.VALUABLE;
+		else
+			return rand.nextBoolean() ? Type.REGULAR_0 : Type.REGULAR_1;
+	}
+	
+	private enum Type
+	{
+		REGULAR_0(new ResourceLocation(Minestuck.MOD_ID, "sword_hilt_0"), new ResourceLocation(Minestuck.MOD_ID, "sword_blade_0")),
+		REGULAR_1(new ResourceLocation(Minestuck.MOD_ID, "sword_hilt_1"), new ResourceLocation(Minestuck.MOD_ID, "sword_blade_1")),
+		VALUABLE(new ResourceLocation(Minestuck.MOD_ID, "valuable_sword_hilt"), new ResourceLocation(Minestuck.MOD_ID, "valuable_sword_blade")),
+		;
+		
+		private final ResourceLocation hiltId, bladeId;
+		
+		Type(ResourceLocation hiltId, ResourceLocation bladeId)
+		{
+			this.hiltId = hiltId;
+			this.bladeId = bladeId;
+		}
 	}
 }
