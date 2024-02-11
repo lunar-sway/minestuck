@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Transportalizers now stack to one instead of 64
 - Prismarine armor remodel and retexture
+- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
+
 
 ### Fixed
 
@@ -31,16 +33,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Changed
-- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
-
 ### Fixed
 
 - Metal Boats no longer crash the game when dispensed
 
 ### Contributors for this release
 
-- hadean, DORO
+- hadean
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
