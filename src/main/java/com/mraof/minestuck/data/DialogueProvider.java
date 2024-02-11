@@ -29,15 +29,15 @@ public class DialogueProvider implements DataProvider
 	protected void registerDialogues()
 	{
 		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large")
-				.addResponse("test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle", null)), "test2", true)
-				.addResponse("test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator", null)), "test2", true)
-				.addResponse("test1response3", List.of(), "test2", true)
+				.addResponse("test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")), List.of(), "test2", true)
+				.addResponse("test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")), List.of(), "test2", true)
+				.addResponse("test1response3", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "summon minestuck:grist ~ ~ ~ {Value:200}")), "test2", true)
 		);
 		
 		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large")
-				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", "Was not salamander")), "test1", false)
-				.addResponse("test2response2", List.of(), "test1", false)
-				.addResponse("test2response3", List.of(), "test1", false)
+				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", "Was not salamander")), List.of(), "test1", false)
+				.addResponse("test2response2", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "say hi")), "test1", false)
+				.addResponse("test2response3", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "tellraw @a [\"\",{\"text\":\"Welcome\",\"color\":\"aqua\"},{\"text\":\" to \"},{\"text\":\"Minecraft\",\"color\":\"#9B9B17\"},{\"text\":\" Tools \"},{\"text\":\"partner.\",\"obfuscated\":true},{\"text\":\" \"},{\"selector\":\"@s\"},{\"text\":\" fs\"}]")), "test1", false)
 		);
 		
 		
@@ -81,15 +81,15 @@ public class DialogueProvider implements DataProvider
 			this.responses = new ArrayList<>();
 		}
 		
-		public DialogueBuilder addResponse(String response, List<Dialogue.Condition> conditions, String nextDialoguePath, boolean hideIfFailed)
+		public DialogueBuilder addResponse(String response, List<Dialogue.Condition> conditions, List<Dialogue.Trigger> triggers, String nextDialoguePath, boolean hideIfFailed)
 		{
-			this.responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath), hideIfFailed));
+			this.responses.add(new Dialogue.Response(response, conditions, triggers, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath), hideIfFailed));
 			return this;
 		}
 		
 		public DialogueBuilder addResponse(String response, String nextDialoguePath)
 		{
-			this.responses.add(new Dialogue.Response(response, List.of(), new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath), true));
+			this.responses.add(new Dialogue.Response(response, List.of(), List.of(), new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath), true));
 			return this;
 		}
 	}
