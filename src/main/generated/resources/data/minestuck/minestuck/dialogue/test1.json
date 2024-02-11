@@ -1,8 +1,8 @@
 {
   "animation": "test1animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.test1message",
-  "path": "minestuck:test1name",
+  "message": "dialogue.test1",
+  "path": "minestuck:test1",
   "responses": [
     {
       "conditions": [
@@ -11,7 +11,7 @@
           "content": "turtle"
         }
       ],
-      "next_path": "minestuck:test2name",
+      "next_path": "minestuck:test2",
       "response_message": "test1response1"
     },
     {
@@ -21,12 +21,12 @@
           "content": "nakagator"
         }
       ],
-      "next_path": "minestuck:test2name",
+      "next_path": "minestuck:test2",
       "response_message": "test1response2"
     },
     {
       "conditions": [],
-      "next_path": "minestuck:test2name",
+      "next_path": "minestuck:test2",
       "response_message": "test1response3"
     }
   ]

@@ -1,7 +1,7 @@
 {
   "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "consort.camel.no_camel",
+  "message": "dialogue.camel.no_camel",
   "path": "minestuck:camel.no_camel",
   "responses": []
 }

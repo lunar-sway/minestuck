@@ -1,18 +1,18 @@
 {
   "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "consort.camel",
+  "message": "dialogue.camel",
   "path": "minestuck:camel",
   "responses": [
     {
       "conditions": [],
       "next_path": "minestuck:camel.no_camel",
-      "response_message": "consort.camel.yes"
+      "response_message": "dialogue.camel.yes"
     },
     {
       "conditions": [],
       "next_path": "minestuck:camel.dancing_camel",
-      "response_message": "consort.camel.no"
+      "response_message": "dialogue.camel.no"
     }
   ]
 }
