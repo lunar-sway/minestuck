@@ -1,0 +1,133 @@
+{
+	"credit": "Model made with Blockbench by DORO",
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 4.5,
+				"visible_bounds_offset": [0, 1.75, 0]
+			},
+			"bones": [
+				{
+					"name": "armorHead",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-2, 27, -4.25], "size": [4, 2, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "leftLens",
+					"parent": "armorHead",
+					"pivot": [-3, 27.5, -4.5],
+					"cubes": [
+						{"origin": [-5.5, 25, -4.5], "size": [5, 5, 0], "uv": [44, 60]}
+					]
+				},
+				{
+					"name": "rightLens",
+					"parent": "armorHead",
+					"pivot": [3, 27.5, -4.5],
+					"cubes": [
+						{"origin": [0.5, 25, -4.5], "size": [5, 5, 0], "uv": [72, 33]}
+					]
+				},
+				{
+					"name": "leftLensFront",
+					"parent": "armorHead",
+					"pivot": [-3, 27.5, -4.75],
+					"cubes": [
+						{"origin": [-5.5, 25, -4.75], "size": [5, 5, 0], "uv": [28, 76]}
+					]
+				},
+				{
+					"name": "rightLensFront",
+					"parent": "armorHead",
+					"pivot": [3, 27.5, -4.75],
+					"cubes": [
+						{"origin": [0.5, 25, -4.75], "size": [5, 5, 0], "uv": [0, 64]}
+					]
+				},
+				{
+					"name": "armorBody",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "inflate": 0.1, "uv": [0, 32]},
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "inflate": 0.3, "uv": [28, 28]},
+						{"origin": [-4, 10, -2], "size": [8, 3, 4], "inflate": 0.4, "uv": [104, 0]},
+						{"origin": [-6, 22, -2], "size": [12, 2, 4], "inflate": 0.4, "uv": [24, 16]}
+					]
+				},
+				{
+					"name": "armorRightArm",
+					"pivot": [-4, 22, 0],
+					"cubes": [
+						{"origin": [-8, 14, -2], "size": [4, 10, 4], "inflate": 0.11, "pivot": [-6, 19, 0], "rotation": [0, 180, 0], "uv": [44, 68]}
+					]
+				},
+				{
+					"name": "armorLeftArm",
+					"pivot": [4, 22, 0],
+					"cubes": [
+						{"origin": [4, 14, -2], "size": [4, 10, 4], "inflate": 0.11, "pivot": [6, 19, 0], "rotation": [0, 180, 0], "uv": [68, 12]}
+					]
+				},
+				{
+					"name": "armorLeftLeg",
+					"pivot": [-2, 12, 0],
+					"cubes": [
+						{"origin": [0, 10, -2], "size": [4, 2, 4], "inflate": 0.1, "uv": [12, 76]},
+						{"origin": [0.1, 7.7, -2], "size": [4, 2, 4], "inflate": 0.2, "uv": [60, 75]},
+						{"origin": [0.2, 5.2, -2], "size": [4, 2, 4], "inflate": 0.3, "uv": [72, 62]},
+						{"origin": [0.3, 2.5, -2], "size": [4, 2, 4], "inflate": 0.4, "uv": [72, 56]}
+					]
+				},
+				{
+					"name": "armorLeftBoot",
+					"pivot": [-2, 12, 0],
+					"cubes": [
+						{"origin": [0, 0, -2], "size": [4, 3, 4], "inflate": 0.1, "uv": [68, 68]}
+					]
+				},
+				{
+					"name": "leftFlame",
+					"parent": "armorLeftBoot",
+					"pivot": [2, 0, 0],
+					"cubes": [
+						{"origin": [0, -6, 0], "size": [4, 6, 0], "pivot": [2, -3, 0], "rotation": [0, 90, 0], "uv": [120, 39]},
+						{"origin": [0, -6, 0], "size": [4, 6, 0], "pivot": [2, -3, 0], "rotation": [0, 180, 0], "uv": [120, 39]}
+					]
+				},
+				{
+					"name": "armorRightLeg",
+					"pivot": [2, 12, 0],
+					"cubes": [
+						{"origin": [-4.3, 2.5, -2], "size": [4, 2, 4], "inflate": 0.4, "uv": [32, 22]},
+						{"origin": [-4, 10, -2], "size": [4, 2, 4], "inflate": 0.1, "uv": [0, 72]},
+						{"origin": [-4.1, 7.7, -2], "size": [4, 2, 4], "inflate": 0.2, "uv": [72, 0]},
+						{"origin": [-4.2, 5.2, -2], "size": [4, 2, 4], "inflate": 0.3, "uv": [72, 6]}
+					]
+				},
+				{
+					"name": "armorRightBoot",
+					"pivot": [2, 12, 0],
+					"cubes": [
+						{"origin": [-4, 0, -2], "size": [4, 3, 4], "inflate": 0.1, "uv": [68, 26]}
+					]
+				},
+				{
+					"name": "rightFlame",
+					"parent": "armorRightBoot",
+					"pivot": [-2, 0, 0],
+					"cubes": [
+						{"origin": [-4, -6, 0], "size": [4, 6, 0], "uv": [120, 39]},
+						{"origin": [-4, -6, 0], "size": [4, 6, 0], "pivot": [-2, 0, 0], "rotation": [0, -90, 0], "uv": [120, 39]}
+					]
+				}
+			]
+		}
+	]
+}
