@@ -14,19 +14,32 @@
       ],
       "hide_if_failed": false,
       "next_path": "minestuck:test1",
-      "response_message": "test2response1"
+      "response_message": "test2response1",
+      "triggers": []
     },
     {
       "conditions": [],
       "hide_if_failed": false,
       "next_path": "minestuck:test1",
-      "response_message": "test2response2"
+      "response_message": "test2response2",
+      "triggers": [
+        {
+          "type": "command",
+          "content": "say hi"
+        }
+      ]
     },
     {
       "conditions": [],
       "hide_if_failed": false,
       "next_path": "minestuck:test1",
-      "response_message": "test2response3"
+      "response_message": "test2response3",
+      "triggers": [
+        {
+          "type": "command",
+          "content": "tellraw @a [\"\",{\"text\":\"Welcome\",\"color\":\"aqua\"},{\"text\":\" to \"},{\"text\":\"Minecraft\",\"color\":\"#9B9B17\"},{\"text\":\" Tools \"},{\"text\":\"partner.\",\"obfuscated\":true},{\"text\":\" \"},{\"selector\":\"@s\"},{\"text\":\" fs\"}]"
+        }
+      ]
     }
   ]
 }

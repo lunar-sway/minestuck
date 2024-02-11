@@ -8,7 +8,8 @@
       "conditions": [],
       "hide_if_failed": true,
       "next_path": "minestuck:mycelium.2",
-      "response_message": "=>"
+      "response_message": "=>",
+      "triggers": []
     }
   ]
 }

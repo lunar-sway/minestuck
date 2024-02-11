@@ -40,6 +40,7 @@ public class MSPacketHandler
 		registerToServerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
 		registerToServerMessage(RGBColorSelectPacket.class, RGBColorSelectPacket::decode);
 		registerToBothMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
+		registerToServerMessage(DialoguePacket.class, DialoguePacket::decode);
 		registerToServerMessage(ConnectToSburbServerPacket.class, ConnectToSburbServerPacket::decode);
 		registerToServerMessage(OpenSburbServerPacket.class, OpenSburbServerPacket::decode);
 		registerToServerMessage(ResumeSburbConnectionPacket.class, ResumeSburbConnectionPacket::decode);

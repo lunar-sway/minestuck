@@ -2,6 +2,8 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.network.DialoguePacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.client.gui.GuiGraphics;
@@ -109,6 +111,14 @@ public class DialogueScreen extends Screen
 				
 				if(nextDialogue != null)
 				{
+					List<Dialogue.Trigger> triggers = response.getTriggers();
+					if(!triggers.isEmpty())
+					{
+						DialoguePacket packet = DialoguePacket.createPacket(triggers.get(0), entity);
+						MSPacketHandler.sendToServer(packet);
+						//MSPacketHandler.sendToServer(new DialoguePacket());
+					}
+					
 					onClose();
 					MSScreenFactories.displayDialogueScreen(entity, player, nextDialogue);
 					break;
