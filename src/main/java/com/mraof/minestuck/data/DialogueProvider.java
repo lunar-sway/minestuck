@@ -20,75 +20,78 @@ public class DialogueProvider implements DataProvider
 {
 	private final Map<ResourceLocation, Dialogue> dialogues = new HashMap<>();
 	private final PackOutput output;
-	private final String modid;
 	
-	public DialogueProvider(PackOutput output, String modid)
+	public DialogueProvider(PackOutput output)
 	{
 		this.output = output;
-		this.modid = modid;
 	}
 	
 	protected void registerDialogues()
 	{
-		String mycelium1 = "mycelium.1";
-		String mycelium2 = "mycelium.2";
-		List<Dialogue.Response> mycelium1Response = new ArrayList<>();
-		mycelium1Response = addResponse(mycelium1Response, "=>", List.of(), mycelium2);
-		addSimple(mycelium1, mycelium1Response);
-		addSimpleEnd(mycelium2);
+		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large")
+				.addResponse("test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")), "test2")
+				.addResponse("test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")), "test2")
+				.addResponse("test1response3", "test2")
+		);
 		
-		List<Dialogue.Response> camelResponses = new ArrayList<>();
-		camelResponses = addResponse(camelResponses, "consort.camel.yes", List.of(), "camel.no_camel");
-		camelResponses = addResponse(camelResponses, "consort.camel.no", List.of(), "camel.dancing_camel");
-		addSimple("camel", camelResponses);
-		addSimpleEnd("camel.no_camel");
-		addSimpleEnd("camel.dancing_camel");
+		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large")
+				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander")), "test1")
+				.addResponse("test2response2", "test1")
+				.addResponse("test2response3", "test1")
+		);
 		
 		
 		
-		String test1Name = "test1name";
-		List<Dialogue.Response> test1Responses = new ArrayList<>();
-		test1Responses = addResponse(test1Responses, "test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")), "test2name");
-		test1Responses = addResponse(test1Responses, "test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")), "test2name");
-		test1Responses = addResponse(test1Responses, "test1response3", List.of(), "test2name");
-		add(test1Name, "minestuck.test1message", "test1animation", "generic_extra_large", test1Responses);
+		add(new DialogueBuilder("mycelium.1")
+				.addResponse("=>", "mycelium.2"));
+		add(new DialogueBuilder("mycelium.2"));
 		
-		String test2Name = "test2name";
-		List<Dialogue.Response> test2Responses = new ArrayList<>();
-		test2Responses = addResponse(test2Responses, "test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander")), test1Name);
-		test2Responses = addResponse(test2Responses,"test2response2", List.of(), test1Name);
-		test2Responses = addResponse(test2Responses,"test2response3", List.of(), test1Name);
-		add(test2Name, "test2message", "test2animation", "generic_extra_large", test2Responses);
+		add(new DialogueBuilder("camel")
+				.addResponse("dialogue.camel.yes", "camel.no_camel")
+				.addResponse("dialogue.camel.no", "camel.dancing_camel")
+		);
+		add(new DialogueBuilder("camel.no_camel"));
+		add(new DialogueBuilder("camel.dancing_camel"));
 	}
 	
-	/*private void addResponse(String... response)
+	protected void add(DialogueBuilder builder)
 	{
-		List<DialogueJson.Response> responses = new ArrayList<>();
-		response.forEach
-		responses.add(new DialogueJson.Response());
-	}*/
-	
-	protected List<Dialogue.Response> addResponse(List<Dialogue.Response> responses, String response, List<Dialogue.Condition> conditions, String nextDialoguePath)
-	{
-		//responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, "minestuck/dialogue/" + nextDialoguePath + ".json")));
-		responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath)));
-		return responses;
+		dialogues.put(builder.path, new Dialogue(builder.path, builder.message, builder.animation, builder.guiPath, builder.responses));
 	}
 	
-	protected void addSimple(String name, List<Dialogue.Response> responses)
+	public static class DialogueBuilder
 	{
-		add(name, "consort." + name, "generic_animation", "generic_extra_large", responses);
-	}
-	
-	protected void addSimpleEnd(String name)
-	{
-		addSimple(name, new ArrayList<>());
-	}
-	
-	protected void add(String name, String message, String animation, String gui, List<Dialogue.Response> responses)
-	{
-		ResourceLocation location = new ResourceLocation(modid, name);
-		dialogues.put(location, new Dialogue(location, message, animation, new ResourceLocation(Minestuck.MOD_ID, "textures/gui/" + gui + ".png"), responses));
+		private final ResourceLocation path;
+		private final String message;
+		private final String animation;
+		private final ResourceLocation guiPath;
+		private final List<Dialogue.Response> responses;
+		
+		DialogueBuilder(String message)
+		{
+			this(message, "generic_animation", "generic_extra_large");
+		}
+		
+		DialogueBuilder(String message, String animation, String gui)
+		{
+			this.path = new ResourceLocation(Minestuck.MOD_ID, message);
+			this.message = "dialogue." + message;
+			this.animation = animation;
+			this.guiPath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/" + gui + ".png");
+			this.responses = new ArrayList<>();
+		}
+		
+		public DialogueBuilder addResponse(String response, List<Dialogue.Condition> conditions, String nextDialoguePath)
+		{
+			this.responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath)));
+			return this;
+		}
+		
+		public DialogueBuilder addResponse(String response, String nextDialoguePath)
+		{
+			this.responses.add(new Dialogue.Response(response, List.of(), new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath)));
+			return this;
+		}
 	}
 	
 	@Override
@@ -101,8 +104,8 @@ public class DialogueProvider implements DataProvider
 		
 		for(Map.Entry<ResourceLocation, Dialogue> entry : dialogues.entrySet())
 		{
-			Path pricingPath = getPath(outputPath, entry.getKey());
-			futures.add(DataProvider.saveStable(cache, DialogueManager.parseDialogue(entry.getValue()), pricingPath));
+			Path dialoguePath = getPath(outputPath, entry.getKey());
+			futures.add(DataProvider.saveStable(cache, DialogueManager.parseDialogue(entry.getValue()), dialoguePath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}

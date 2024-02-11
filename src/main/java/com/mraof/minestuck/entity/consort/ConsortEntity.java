@@ -149,10 +149,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			
 			if(dialogue != null)
 			{
-				List<String> responses = new ArrayList<>();
-				dialogue.getResponses().forEach(response -> responses.add(response.getResponse()));
-				LOGGER.debug("Message: {}\n Responses: {}", dialogue.getMessage(), responses);
-				
 				if(level().isClientSide)
 				{
 					MSScreenFactories.displayDialogueScreen(this, dialogue);

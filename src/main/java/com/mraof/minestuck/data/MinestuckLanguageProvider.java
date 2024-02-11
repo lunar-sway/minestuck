@@ -146,7 +146,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addDialogue(String key, String value)
 	{
-		add("consort."+key, value);
+		add("dialogue."+key, value);
 	}
 	protected void addSubtitles(String key, String value)
 	{
