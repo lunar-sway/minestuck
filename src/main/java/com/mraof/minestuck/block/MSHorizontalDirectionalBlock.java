@@ -13,8 +13,7 @@ import javax.annotation.Nullable;
 /**
  * A copy of {@link HorizontalDirectionalBlock} that is no longer abstract
  */
-public class MSHorizontalDirectionalBlock extends HorizontalDirectionalBlock
-{
+public class MSHorizontalDirectionalBlock extends HorizontalDirectionalBlock {
 	
 	protected MSHorizontalDirectionalBlock(Properties properties)
 	{
@@ -23,7 +22,7 @@ public class MSHorizontalDirectionalBlock extends HorizontalDirectionalBlock
 	}
 	
 	@Override
-	public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation direction)
+	public BlockState rotate(BlockState state, Rotation direction)
 	{
 		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
@@ -31,14 +30,14 @@ public class MSHorizontalDirectionalBlock extends HorizontalDirectionalBlock
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn)
 	{
-		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
+		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
 	}
 	
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
-		return this.defaultBlockState().setValue(FACING, context.getClickedFace());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
 	}
 	
 	@Override

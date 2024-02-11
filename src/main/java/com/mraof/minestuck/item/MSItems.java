@@ -889,6 +889,23 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CARVED_PLANKS = registerBlockItem(MSBlocks.CARVED_PLANKS);
 	public static final RegistryObject<BlockItem> POLISHED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_UNCARVED_WOOD);
 	public static final RegistryObject<BlockItem> CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.CARVED_KNOTTED_WOOD);
+	public static final RegistryObject<BlockItem> WOODEN_GRASS = registerBlockItem(MSBlocks.WOODEN_GRASS);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD = registerBlockItem(MSBlocks.TREATED_CHIPBOARD);
+	public static final RegistryObject<BlockItem> TREATED_WOOD_SHAVINGS = registerBlockItem(MSBlocks.TREATED_WOOD_SHAVINGS);
+	public static final RegistryObject<BlockItem> TREATED_HEAVY_PLANKS = registerBlockItem(MSBlocks.TREATED_HEAVY_PLANKS);
+	public static final RegistryObject<BlockItem> POLISHED_TREATED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> TREATED_CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD);
+	public static final RegistryObject<BlockItem> TREATED_WOODEN_GRASS = registerBlockItem(MSBlocks.TREATED_WOODEN_GRASS);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD);
+	public static final RegistryObject<BlockItem> LACQUERED_WOOD_SHAVINGS = registerBlockItem(MSBlocks.LACQUERED_WOOD_SHAVINGS);
+	public static final RegistryObject<BlockItem> LACQUERED_HEAVY_PLANKS = registerBlockItem(MSBlocks.LACQUERED_HEAVY_PLANKS);
+	public static final RegistryObject<BlockItem> LACQUERED_PLANKS = registerBlockItem(MSBlocks.LACQUERED_PLANKS);
+	public static final RegistryObject<BlockItem> POLISHED_LACQUERED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> LACQUERED_CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD);
+	public static final RegistryObject<BlockItem> LACQUERED_WOODEN_MUSHROOM = registerBlockItem(MSBlocks.LACQUERED_WOODEN_MUSHROOM);
+	
 	public static final RegistryObject<BlockItem> DENSE_CLOUD = registerBlockItem(MSBlocks.DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> BRIGHT_DENSE_CLOUD = registerBlockItem(MSBlocks.BRIGHT_DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> SUGAR_CUBE = registerBlockItem(MSBlocks.SUGAR_CUBE);

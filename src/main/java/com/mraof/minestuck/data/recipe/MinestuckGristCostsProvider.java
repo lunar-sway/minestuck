@@ -857,6 +857,15 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.UNCARVED_WOOD.get()).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CHIPBOARD.get()).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS.get()).grist(BUILD, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.WOODEN_GRASS.get()).grist(BUILD, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.TREATED_UNCARVED_WOOD.get()).grist(BUILD, 3).grist(AMBER, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.TREATED_CHIPBOARD.get()).grist(BUILD, 3).grist(AMBER, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.TREATED_WOOD_SHAVINGS.get()).grist(BUILD, 3).grist(AMBER, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.TREATED_WOODEN_GRASS.get()).grist(BUILD, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.LACQUERED_UNCARVED_WOOD.get()).grist(BUILD, 3).grist(AMBER, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.LACQUERED_CHIPBOARD.get()).grist(BUILD, 3).grist(AMBER, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.LACQUERED_WOOD_SHAVINGS.get()).grist(BUILD, 3).grist(AMBER, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.LACQUERED_WOODEN_MUSHROOM.get()).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.END_GRASS.get()).grist(BUILD, 4).grist(CAULK, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FLOWERY_VINE_LOG.get()).grist(BUILD, 7).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_LOG.get()).grist(BUILD, 7).grist(COBALT, 1).build(recipeSaver);

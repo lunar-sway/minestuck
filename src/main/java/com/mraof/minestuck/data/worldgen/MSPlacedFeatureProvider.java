@@ -97,6 +97,14 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(NETHERRACK_DISK, placed(features, MSCFeatures.NETHERRACK_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+		context.register(CARVED_PLANKS_DISK, placed(features, MSCFeatures.CARVED_PLANKS_DISK,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+		context.register(TREATED_UNCARVED_WOOD_DISK, placed(features, MSCFeatures.TREATED_UNCARVED_WOOD_DISK,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+		context.register(TREATED_CHIPBOARD_DISK, placed(features, MSCFeatures.TREATED_CHIPBOARD_DISK,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+		context.register(UNCARVED_WOOD_DISK, placed(features, MSCFeatures.UNCARVED_WOOD_DISK,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(COAGULATED_BLOOD_DISK, placed(features, MSCFeatures.COAGULATED_BLOOD_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(56), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(COBBLESTONE_SURFACE_DISK, placed(features, MSCFeatures.COBBLESTONE_SURFACE_DISK,
@@ -210,6 +218,10 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(120), PlacementUtils.HEIGHTMAP)));
 		context.register(RED_MUSHROOM_PATCH, placed(features, VegetationFeatures.PATCH_RED_MUSHROOM,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(120), PlacementUtils.HEIGHTMAP)));
+		context.register(WOODEN_GRASS_PATCH, placed(features, MSCFeatures.WOODEN_GRASS_PATCH,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(1), PlacementUtils.HEIGHTMAP)));
+		context.register(TREATED_WOODEN_GRASS_PATCH, placed(features, MSCFeatures.TREATED_WOODEN_GRASS_PATCH,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(1), PlacementUtils.HEIGHTMAP)));
 		context.register(TALL_END_GRASS_PATCH, placed(features, MSCFeatures.TALL_END_GRASS_PATCH,
 				worldGenModifiers(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.TALL_END_GRASS.get()))));
 		context.register(PETRIFIED_GRASS_PATCH, placed(features, MSCFeatures.PETRIFIED_GRASS_PATCH,

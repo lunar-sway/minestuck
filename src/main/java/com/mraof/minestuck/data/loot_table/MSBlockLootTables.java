@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
+import static com.mraof.minestuck.block.MSBlocks.LACQUERED_WOOD_SHAVINGS;
 
 public final class MSBlockLootTables extends BlockLootSubProvider
 {
@@ -215,6 +216,22 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CARVED_PLANKS.get());
 		dropSelf(POLISHED_UNCARVED_WOOD.get());
 		dropSelf(CARVED_KNOTTED_WOOD.get());
+		dropSelf(WOODEN_GRASS.get());
+		add(TREATED_UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(TREATED_UNCARVED_WOOD.get(), CHIPBOARD.get()));
+		dropSelf(TREATED_CHIPBOARD.get());
+		dropSelf(TREATED_WOOD_SHAVINGS.get());
+		dropSelf(TREATED_HEAVY_PLANKS.get());
+		dropSelf(POLISHED_TREATED_UNCARVED_WOOD.get());
+		dropSelf(TREATED_CARVED_KNOTTED_WOOD.get());
+		dropSelf(TREATED_WOODEN_GRASS.get());
+		add(LACQUERED_UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(LACQUERED_UNCARVED_WOOD.get(), CHIPBOARD.get()));
+		dropSelf(LACQUERED_CHIPBOARD.get());
+		dropSelf(LACQUERED_WOOD_SHAVINGS.get());
+		dropSelf(LACQUERED_HEAVY_PLANKS.get());
+		dropSelf(LACQUERED_PLANKS.get());
+		dropSelf(POLISHED_LACQUERED_UNCARVED_WOOD.get());
+		dropSelf(LACQUERED_CARVED_KNOTTED_WOOD.get());
+		dropSelf(LACQUERED_WOODEN_MUSHROOM.get());
 		dropSelf(DENSE_CLOUD.get());
 		dropSelf(BRIGHT_DENSE_CLOUD.get());
 		dropSelf(SUGAR_CUBE.get());

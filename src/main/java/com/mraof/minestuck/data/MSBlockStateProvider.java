@@ -380,7 +380,29 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.CARVED_HEAVY_PLANKS);
 		simpleBlockWithItem(MSBlocks.CARVED_PLANKS);
 		simpleBlockWithItem(MSBlocks.POLISHED_UNCARVED_WOOD);
-		horizontalBlock(MSBlocks.CARVED_KNOTTED_WOOD);
+		simpleHorizontalWithItem(MSBlocks.CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
+		simpleBlock(MSBlocks.WOODEN_GRASS,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.WOODEN_GRASS, MSBlockStateProvider::texture);
+		simpleBlockWithItem(MSBlocks.TREATED_UNCARVED_WOOD);
+		simpleBlockWithItem(MSBlocks.TREATED_CHIPBOARD);
+		simpleBlockWithItem(MSBlocks.TREATED_WOOD_SHAVINGS);
+		simpleBlockWithItem(MSBlocks.TREATED_HEAVY_PLANKS);
+		simpleBlockWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+		simpleHorizontalWithItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
+		simpleBlock(MSBlocks.TREATED_WOODEN_GRASS,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.TREATED_WOODEN_GRASS, MSBlockStateProvider::texture);
+		simpleBlockWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD);
+		simpleBlockWithItem(MSBlocks.LACQUERED_CHIPBOARD);
+		simpleBlockWithItem(MSBlocks.LACQUERED_WOOD_SHAVINGS);
+		simpleBlockWithItem(MSBlocks.LACQUERED_HEAVY_PLANKS);
+		simpleBlockWithItem(MSBlocks.LACQUERED_PLANKS);
+		simpleBlockWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+		simpleHorizontalWithItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
+		simpleBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.TREATED_WOODEN_GRASS, MSBlockStateProvider::texture);
 		
 		simpleBlockWithItem(MSBlocks.DENSE_CLOUD);
 		simpleBlockWithItem(MSBlocks.BRIGHT_DENSE_CLOUD);
@@ -1267,10 +1289,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		fluid(MSBlocks.ENDER);
 		fluid(MSBlocks.LIGHT_WATER);
 		
-	}
-	
-	private void horizontalBlock(RegistryObject<Block> carvedKnottedWood)
-	{
 	}
 	
 	private ModelFile existing(ResourceLocation id)

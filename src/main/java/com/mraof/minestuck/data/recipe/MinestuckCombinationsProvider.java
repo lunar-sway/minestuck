@@ -858,11 +858,27 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.CARVED_HEAVY_PLANKS.get()).input(ItemTags.LOGS).and().input(Items.STONE_BRICKS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CARVED_KNOTTED_WOOD.get()).input(ItemTags.LOGS).and().input(Items.CHISELED_STONE_BRICKS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.POLISHED_UNCARVED_WOOD.get()).input(ItemTags.LOGS).and().input(Items.POLISHED_ANDESITE).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.CARVED_PLANKS.get()).input(ItemTags.LOGS).and().input(Items.STONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CARVED_PLANKS.get()).input(ItemTags.PLANKS).and().input(Items.STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHIPBOARD.get()).input(ItemTags.LOGS).and().input(Items.COBBLESTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS.get()).input(ItemTags.LOGS).or().namedInput(Items.STONECUTTER).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS.get()).input(ItemTags.LOGS).or().namedInput(MSItems.CARVING_TOOL.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.TREATED_PLANKS.get()).input(ItemTags.PLANKS).or().input(Items.NETHERRACK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.WOODEN_GRASS.get()).input(ItemTags.PLANKS).or().input(Items.GRASS).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.TREATED_UNCARVED_WOOD.get()).input(MSItems.UNCARVED_WOOD.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
+		CombinationRecipeBuilder.of(MSBlocks.TREATED_CHIPBOARD.get()).input(MSItems.CHIPBOARD.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
+		CombinationRecipeBuilder.of(MSBlocks.TREATED_WOOD_SHAVINGS.get()).input(MSItems.WOOD_SHAVINGS.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
+		CombinationRecipeBuilder.of(MSBlocks.TREATED_HEAVY_PLANKS.get()).input(MSItems.CARVED_HEAVY_PLANKS.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
+		CombinationRecipeBuilder.of(MSBlocks.TREATED_PLANKS.get()).input(MSItems.CARVED_PLANKS.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
+		CombinationRecipeBuilder.of(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD.get()).input(MSItems.POLISHED_UNCARVED_WOOD.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
+		CombinationRecipeBuilder.of(MSBlocks.TREATED_CARVED_KNOTTED_WOOD.get()).input(MSItems.CARVED_KNOTTED_WOOD.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
+		CombinationRecipeBuilder.of(MSBlocks.TREATED_WOODEN_GRASS.get()).input(MSItems.WOODEN_GRASS.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
+		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_UNCARVED_WOOD.get()).input(MSItems.TREATED_UNCARVED_WOOD.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_CHIPBOARD.get()).input(MSItems.TREATED_CHIPBOARD.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_WOOD_SHAVINGS.get()).input(MSItems.TREATED_WOOD_SHAVINGS.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_HEAVY_PLANKS.get()).input(MSItems.TREATED_HEAVY_PLANKS.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_PLANKS.get()).input(MSItems.TREATED_PLANKS.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD.get()).input(MSItems.POLISHED_TREATED_UNCARVED_WOOD.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD.get()).input(MSItems.TREATED_CARVED_KNOTTED_WOOD.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_WOODEN_MUSHROOM.get()).input(Items.BROWN_MUSHROOM).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.SNOW_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.SNOW).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.SNOWBALL).build(consumer);
