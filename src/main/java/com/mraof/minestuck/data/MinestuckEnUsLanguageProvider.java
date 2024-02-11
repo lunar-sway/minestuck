@@ -8,6 +8,7 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.machine.TransportalizerBlock;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
@@ -983,6 +984,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.OLD_COMPUTER, "Old Computer");
 		addBlock(MSBlocks.TRANSPORTALIZER, "Transportalizer");
 		addBlock(MSBlocks.TRANS_PORTALIZER, "TRANSportalizer");
+		addBlockExtra(MSBlocks.TRANSPORTALIZER, "idString", "ID: %s");
+		addBlockExtra(MSBlocks.TRANSPORTALIZER, "destId", "Destination: %s");
+		add(TransportalizerBlock.LOCKED, "The transportalizer appears to be locked.");
+		addBlockExtra(MSBlocks.TRANSPORTALIZER, "locked_message", "Locked");
 		addBlock(MSBlocks.SENDIFICATOR, "Sendificator");
 		addBlockTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		addBlock(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
@@ -2379,6 +2384,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerBlockEntity.BLOCKED_DESTINATION, "The destination seems to be blocked.");
 		add(TransportalizerBlockEntity.FORBIDDEN, "Transportalizers have been disabled for this dimension.");
 		add(TransportalizerBlockEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
+		add(TransportalizerBlockEntity.TAKEN, "The code \"%s\" has been taken by another transportalizer.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
 		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
 		add(WirelessRedstoneTransmitterScreen.TITLE, "Wireless Redstone");
