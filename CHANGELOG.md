@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Transportalizers now stack to one instead of 64
+- Prismarine armor remodel and retexture
 
 ### Fixed
 
@@ -26,7 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO
 
 ## [Unreleased]
 
