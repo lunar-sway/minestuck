@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.armor;
 
-import com.mraof.minestuck.client.renderer.armor.IronLassArmorRenderer;
+import com.mraof.minestuck.client.model.armor.IronLassArmorModel;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.model.HumanoidModel;
@@ -20,8 +20,9 @@ import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 import java.util.function.Consumer;
 
@@ -83,13 +84,13 @@ public class IronLassArmorItem extends ArmorItem implements GeoItem
 	{
 		consumer.accept(new IClientItemExtensions()
 		{
-			private IronLassArmorRenderer renderer;
+			private GeoArmorRenderer<?> renderer;
 			
 			@Override
 			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
 			{
 				if(this.renderer == null)
-					this.renderer = new IronLassArmorRenderer();
+					this.renderer = new GeoArmorRenderer<>(new IronLassArmorModel());
 				
 				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
 				return this.renderer;
