@@ -11,6 +11,7 @@
           "content": "turtle"
         }
       ],
+      "hide_if_failed": true,
       "next_path": "minestuck:test2",
       "response_message": "test1response1"
     },
@@ -21,11 +22,13 @@
           "content": "nakagator"
         }
       ],
+      "hide_if_failed": true,
       "next_path": "minestuck:test2",
       "response_message": "test1response2"
     },
     {
       "conditions": [],
+      "hide_if_failed": true,
       "next_path": "minestuck:test2",
       "response_message": "test1response3"
     }
