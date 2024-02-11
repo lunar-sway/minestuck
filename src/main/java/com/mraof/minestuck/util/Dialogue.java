@@ -8,6 +8,8 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.util.TriPredicate;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
@@ -98,20 +100,18 @@ public class Dialogue
 			return hideIfFailed;
 		}
 		
-		public boolean failsWhileImportant(LivingEntity entity)
+		public boolean failsWhileImportant(LivingEntity entity, Player player)
 		{
-			return !matchesAllConditions(entity) && isHideIfFailed();
+			return !matchesAllConditions(entity, player) && isHideIfFailed();
 		}
 		
-		public boolean matchesAllConditions(LivingEntity entity)
+		public boolean matchesAllConditions(LivingEntity entity, Player player)
 		{
 			for(Condition condition : conditions)
 			{
-				if(condition.type.equals(Condition.Type.CONSORT_TYPE))
+				if(!condition.type.conditions.test(entity, player, condition.getContent()))
 				{
-					boolean consortMatches = entity instanceof ConsortEntity consortEntity && condition.content.equals(consortEntity.getConsortType().getName());
-					if(!consortMatches)
-						return false;
+					return false;
 				}
 			}
 			
@@ -126,7 +126,14 @@ public class Dialogue
 	{
 		public enum Type
 		{
-			CONSORT_TYPE
+			CONSORT_TYPE((entity, player, content) -> entity instanceof ConsortEntity consortEntity && content.equals(consortEntity.getConsortType().getName()));
+			
+			private final TriPredicate<LivingEntity, Player, String> conditions;
+			
+			Type(TriPredicate<LivingEntity, Player, String> conditions)
+			{
+				this.conditions = conditions;
+			}
 		}
 		
 		private final Type type;

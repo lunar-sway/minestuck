@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class DialogueScreen extends Screen
 	private final ResourceLocation guiBackground;
 	
 	private final LivingEntity entity;
+	private final Player player;
 	private final Dialogue dialogue;
 	
 	private int xOffset;
@@ -32,11 +34,12 @@ public class DialogueScreen extends Screen
 	
 	private final List<Button> responseButtons = new ArrayList<>();
 	
-	DialogueScreen(LivingEntity entity, Dialogue dialogue)
+	DialogueScreen(LivingEntity entity, Player player, Dialogue dialogue)
 	{
 		super(Component.empty());
 		
 		this.entity = entity;
+		this.player = player;
 		this.guiBackground = dialogue.getGuiPath();
 		this.dialogue = dialogue;
 	}
@@ -60,7 +63,7 @@ public class DialogueScreen extends Screen
 		//removes responses if they fail their conditions and should be hidden when that happens
 		for(Dialogue.Response response : dialogue.getResponses())
 		{
-			if(response.failsWhileImportant(entity))
+			if(response.failsWhileImportant(entity, player))
 				continue;
 			
 			filteredResponses.add(response);
@@ -77,7 +80,7 @@ public class DialogueScreen extends Screen
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));
 			
-			if(!response.matchesAllConditions(entity))
+			if(!response.matchesAllConditions(entity, player))
 			{
 				MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
 				
@@ -107,7 +110,7 @@ public class DialogueScreen extends Screen
 				if(nextDialogue != null)
 				{
 					onClose();
-					MSScreenFactories.displayDialogueScreen(entity, nextDialogue);
+					MSScreenFactories.displayDialogueScreen(entity, player, nextDialogue);
 					break;
 				}
 			}

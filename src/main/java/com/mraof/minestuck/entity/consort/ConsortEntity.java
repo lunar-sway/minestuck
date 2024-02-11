@@ -151,7 +151,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			{
 				if(level().isClientSide)
 				{
-					MSScreenFactories.displayDialogueScreen(this, dialogue);
+					MSScreenFactories.displayDialogueScreen(this, player, dialogue);
 				} else
 				{
 					setCurrentAnimation(TALK_PROPERTIES);

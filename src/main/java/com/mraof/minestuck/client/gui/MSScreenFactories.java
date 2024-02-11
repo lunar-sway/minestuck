@@ -138,9 +138,9 @@ public class MSScreenFactories
 		}
 	}
 	
-	public static void displayDialogueScreen(LivingEntity entity, Dialogue dialogue)
+	public static void displayDialogueScreen(LivingEntity entity, Player player, Dialogue dialogue)
 	{
-		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialogue));
+		Minecraft.getInstance().setScreen(new DialogueScreen(entity, player, dialogue));
 	}
 	
 	public static void updateSylladexScreen()
