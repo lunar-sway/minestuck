@@ -13,6 +13,7 @@ public class MSCriteriaTriggers
 	public static final CaptchalogueTrigger CAPTCHALOGUE = new CaptchalogueTrigger();
 	public static final ChangeModusTrigger CHANGE_MODUS = new ChangeModusTrigger();
 	public static final TreeModusRootTrigger TREE_MODUS_ROOT = new TreeModusRootTrigger();
+	public static final EcheladderTrigger ECHELADDER = new EcheladderTrigger();
 	public static final ConsortItemTrigger CONSORT_ITEM = new ConsortItemTrigger();
 	public static final ConsortTalkTrigger CONSORT_TALK = new ConsortTalkTrigger();
 	
@@ -30,6 +31,7 @@ public class MSCriteriaTriggers
 		CriteriaTriggers.register(CAPTCHALOGUE);
 		CriteriaTriggers.register(CHANGE_MODUS);
 		CriteriaTriggers.register(TREE_MODUS_ROOT);
+		CriteriaTriggers.register(ECHELADDER);
 		CriteriaTriggers.register(CONSORT_ITEM);
 		CriteriaTriggers.register(CONSORT_TALK);
 	}

@@ -2,6 +2,7 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -135,6 +136,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
+				MSCriteriaTriggers.ECHELADDER.trigger(player, rung);
 				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE.get(), SoundSource.AMBIENT, 1F, 1F);
 			}
 		}

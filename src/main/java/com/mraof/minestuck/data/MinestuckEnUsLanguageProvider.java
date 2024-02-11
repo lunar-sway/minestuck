@@ -5,6 +5,7 @@ import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
@@ -36,7 +37,6 @@ import com.mraof.minestuck.item.StructureScannerItem;
 import com.mraof.minestuck.item.loot.MSLootEvents;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
-import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
@@ -1714,6 +1714,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
 		addAdvancement(MSAdvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
 		addAdvancement(MSAdvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
+		addAdvancement(MSAdvancementProvider.FIRST_STEP, "The First Step", "Begin climbing your Echeladder");
+		addAdvancement(MSAdvancementProvider.DOUBLE_DIGITS, "Double Digits", "Reach the tenth rung of your Echeladder");
+		addAdvancement(MSAdvancementProvider.HALFWAY_POINT, "Halfway Point", "Reach the twenty-fifth rung of your Echeladder");
+		addAdvancement(MSAdvancementProvider.BIG_ONE_MIL, "The Big 1 Mil", "Reach a Grist Cache capable of storing one million units of grist");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");

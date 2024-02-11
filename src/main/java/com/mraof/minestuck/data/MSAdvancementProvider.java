@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
+import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
@@ -54,6 +55,10 @@ public class MSAdvancementProvider implements ForgeAdvancementProvider.Advanceme
 	public static final String COMMUNE = "minestuck.commune";
 	public static final String BUGS = "minestuck.bugs";
 	public static final String SHADY_BUYER = "minestuck.shady_buyer";
+	public static final String FIRST_STEP = "minestuck.first_step";
+	public static final String DOUBLE_DIGITS = "minestuck.double_digits";
+	public static final String HALFWAY_POINT = "minestuck.halfway_point";
+	public static final String BIG_ONE_MIL = "minestuck.big_one_mil";
 	
 	public static DataProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper)
 	{
@@ -82,6 +87,10 @@ public class MSAdvancementProvider implements ForgeAdvancementProvider.Advanceme
 		Advancement commune = Advancement.Builder.advancement().parent(entry).display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.inStructure(MSStructures.CONSORT_VILLAGE))).save(saver, Minestuck.MOD_ID+":minestuck/commune");
 		Advancement bugs = consumeBugCriteria(Advancement.Builder.advancement().parent(commune).display(MSItems.CHOCOLATE_BEETLE.get(), Component.translatable(title(BUGS)), Component.translatable(desc(BUGS)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.OR)).save(saver, Minestuck.MOD_ID+":minestuck/bugs");
 		Advancement shadyBuyer = Advancement.Builder.advancement().parent(commune).display(MSItems.ROCK_COOKIE.get(), Component.translatable(title(SHADY_BUYER)), Component.translatable(desc(SHADY_BUYER)), null, FrameType.TASK, true, true, false).addCriterion("buy_item", ConsortItemTrigger.Instance.forType(EnumConsort.MerchantType.SHADY)).save(saver, Minestuck.MOD_ID+":minestuck/shady_buyer");
+		Advancement firstStep = Advancement.Builder.advancement().parent(root).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1), Component.translatable(title(FIRST_STEP)), Component.translatable(desc(FIRST_STEP)), null, FrameType.TASK, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(1))).save(saver, Minestuck.MOD_ID+":minestuck/first_steps");
+		Advancement doubleDigits = Advancement.Builder.advancement().parent(firstStep).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 100), Component.translatable(title(DOUBLE_DIGITS)), Component.translatable(desc(DOUBLE_DIGITS)), null, FrameType.TASK, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(10))).save(saver, Minestuck.MOD_ID+":minestuck/double_digits");
+		Advancement halfwayPoint = Advancement.Builder.advancement().parent(doubleDigits).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1000), Component.translatable(title(HALFWAY_POINT)), Component.translatable(desc(HALFWAY_POINT)), null, FrameType.TASK, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(25))).save(saver, Minestuck.MOD_ID+":minestuck/halfway_point");
+		Advancement bigOneMil = Advancement.Builder.advancement().parent(halfwayPoint).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1_000_000), Component.translatable(title(BIG_ONE_MIL)), Component.translatable(desc(BIG_ONE_MIL)), null, FrameType.GOAL, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(44))).save(saver, Minestuck.MOD_ID+":minestuck/big_one_mil");
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)
