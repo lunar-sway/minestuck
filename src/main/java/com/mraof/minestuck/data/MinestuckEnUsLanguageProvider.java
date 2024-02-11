@@ -1703,7 +1703,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
 		addAdvancement(MSAdvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
-		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type");
+		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try every modus type");
 		addAdvancement(MSAdvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
 		addAdvancement(MSAdvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
 		addAdvancement(MSAdvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
