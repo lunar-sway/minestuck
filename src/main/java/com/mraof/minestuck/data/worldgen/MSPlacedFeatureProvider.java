@@ -62,6 +62,8 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		context.register(PARCEL_PYXIS, placed(features, MSCFeatures.PARCEL_PYXIS,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(60), PlacementUtils.HEIGHTMAP)));
+		context.register(FROG_RUINS, placed(features, MSCFeatures.FROG_RUINS,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(60), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR)));
 		
 		context.register(LARGE_CAKE, placed(features, MSCFeatures.LARGE_CAKE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(50))));
@@ -177,7 +179,7 @@ public final class MSPlacedFeatureProvider
 		context.register(ORNATE_SHADEWOOD_TREE, placed(features, MSCFeatures.ORNATE_SHADEWOOD_TREE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(6), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), MSBlocks.BLUE_DIRT.get())))));
 		context.register(TREE_STUMP, placed(features, MSCFeatures.TREE_STUMP,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(50), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.PODZOL, Blocks.ROOTED_DIRT)))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(40), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.PODZOL, Blocks.ROOTED_DIRT)))));
 		context.register(PETRIFIED_TREE, placed(features, MSCFeatures.PETRIFIED_TREE,
 				worldGenModifiers(PlacementUtils.countExtra(2, 0.5F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.PETRIFIED_GRASS.get()))));
 		context.register(SPARSE_PETRIFIED_TREE, placed(features, MSCFeatures.PETRIFIED_TREE,

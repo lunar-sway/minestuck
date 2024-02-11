@@ -31,6 +31,7 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SMALL_LIBRARY = REGISTER.register("small_library", () -> new SmallLibraryFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TOWER = REGISTER.register("tower", () -> new TowerFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> new ParcelPyxisFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> FROG_RUINS = REGISTER.register("frog_ruins", () -> new FrogRuinFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OASIS = REGISTER.register("oasis", () -> new OasisFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> new OceanRundownFeature(NoneFeatureConfiguration.CODEC));
