@@ -29,15 +29,15 @@ public class DialogueProvider implements DataProvider
 	protected void registerDialogues()
 	{
 		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large")
-				.addResponse("test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")), "test2")
-				.addResponse("test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")), "test2")
-				.addResponse("test1response3", "test2")
+				.addResponse("test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle", null)), "test2", true)
+				.addResponse("test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator", null)), "test2", true)
+				.addResponse("test1response3", List.of(), "test2", true)
 		);
 		
 		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large")
-				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander")), "test1")
-				.addResponse("test2response2", "test1")
-				.addResponse("test2response3", "test1")
+				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", "Was not salamander")), "test1", false)
+				.addResponse("test2response2", List.of(), "test1", false)
+				.addResponse("test2response3", List.of(), "test1", false)
 		);
 		
 		
@@ -81,15 +81,15 @@ public class DialogueProvider implements DataProvider
 			this.responses = new ArrayList<>();
 		}
 		
-		public DialogueBuilder addResponse(String response, List<Dialogue.Condition> conditions, String nextDialoguePath)
+		public DialogueBuilder addResponse(String response, List<Dialogue.Condition> conditions, String nextDialoguePath, boolean hideIfFailed)
 		{
-			this.responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath)));
+			this.responses.add(new Dialogue.Response(response, conditions, new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath), hideIfFailed));
 			return this;
 		}
 		
 		public DialogueBuilder addResponse(String response, String nextDialoguePath)
 		{
-			this.responses.add(new Dialogue.Response(response, List.of(), new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath)));
+			this.responses.add(new Dialogue.Response(response, List.of(), new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath), true));
 			return this;
 		}
 	}

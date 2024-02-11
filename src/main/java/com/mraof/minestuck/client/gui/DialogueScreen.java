@@ -6,6 +6,7 @@ import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -31,8 +32,6 @@ public class DialogueScreen extends Screen
 	
 	private final List<Button> responseButtons = new ArrayList<>();
 	
-	private Button doneButton;
-	
 	DialogueScreen(LivingEntity entity, Dialogue dialogue)
 	{
 		super(Component.empty());
@@ -49,8 +48,6 @@ public class DialogueScreen extends Screen
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
 		
 		recreateResponseButtons();
-		//addRenderableWidget(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, Component.translatable(DONE_MESSAGE), button -> finish()));
-		//doneButton.active = destinationTextField.getValue().length() == 4;
 	}
 	
 	public void recreateResponseButtons()
@@ -58,11 +55,20 @@ public class DialogueScreen extends Screen
 		responseButtons.forEach(this::removeWidget);
 		responseButtons.clear();
 		
-		List<Dialogue.Response> responses = dialogue.getResponses();
+		List<Dialogue.Response> filteredResponses = new ArrayList<>();
 		
-		for(int i = 0; i < responses.size(); i++)
+		//removes responses if they fail their conditions and should be hidden when that happens
+		for(Dialogue.Response response : dialogue.getResponses())
 		{
-			Dialogue.Response response = responses.get(i);
+			if(response.failsWhileImportant(entity))
+				continue;
+			
+			filteredResponses.add(response);
+		}
+		
+		for(int i = 0; i < filteredResponses.size(); i++)
+		{
+			Dialogue.Response response = filteredResponses.get(i);
 			String responseMessage = response.getResponse();
 			int yPositionOffset = 20 * i;
 			
@@ -70,7 +76,22 @@ public class DialogueScreen extends Screen
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));
-			entryButton.active = response.matchesAllConditions(entity);
+			
+			if(!response.matchesAllConditions(entity))
+			{
+				MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
+				
+				for(Dialogue.Condition condition : response.getConditions())
+				{
+					String tooltip = condition.getFailureTooltip();
+					if(tooltip != null && !tooltip.isEmpty())
+						tooltipMessage.append("\n").append(Component.translatable(tooltip));
+				}
+				
+				entryButton.setTooltip(Tooltip.create(tooltipMessage));
+				entryButton.active = false;
+			}
+			
 			responseButtons.add(addRenderableWidget(entryButton));
 		}
 	}
@@ -118,17 +139,6 @@ public class DialogueScreen extends Screen
 		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-	}
-
-	private void finish()
-	{
-		/*if(this.destinationTextField.getValue().length() == 4)
-		{
-			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
-			TransportalizerPacket packet = new TransportalizerPacket(be.getBlockPos(), destinationTextField.getValue().toUpperCase());
-			MSPacketHandler.sendToServer(packet);
-			this.minecraft.setScreen(null);
-		}*/
 	}
 	
 	@Override

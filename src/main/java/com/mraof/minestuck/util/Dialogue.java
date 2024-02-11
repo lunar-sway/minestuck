@@ -10,11 +10,15 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
+ */
 public class Dialogue
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -64,12 +68,14 @@ public class Dialogue
 		private final String response;
 		private final List<Condition> conditions;
 		private final ResourceLocation nextDialoguePath;
+		private final boolean hideIfFailed;
 		
-		public Response(String response, List<Condition> conditions, ResourceLocation nextDialoguePath)
+		public Response(String response, List<Condition> conditions, ResourceLocation nextDialoguePath, boolean hideIfFailed)
 		{
 			this.response = response;
 			this.conditions = conditions;
 			this.nextDialoguePath = nextDialoguePath;
+			this.hideIfFailed = hideIfFailed;
 		}
 		
 		public String getResponse()
@@ -85,6 +91,16 @@ public class Dialogue
 		public ResourceLocation getNextDialoguePath()
 		{
 			return nextDialoguePath;
+		}
+		
+		public boolean isHideIfFailed()
+		{
+			return hideIfFailed;
+		}
+		
+		public boolean failsWhileImportant(LivingEntity entity)
+		{
+			return !matchesAllConditions(entity) && isHideIfFailed();
 		}
 		
 		public boolean matchesAllConditions(LivingEntity entity)
@@ -103,6 +119,9 @@ public class Dialogue
 		}
 	}
 	
+	/**
+	 * A Condition controls whether a piece of dialogue will show up
+	 */
 	public static class Condition
 	{
 		public enum Type
@@ -112,11 +131,25 @@ public class Dialogue
 		
 		private final Type type;
 		private final String content;
+		@Nullable
+		private final String failureTooltip;
 		
-		public Condition(Type type, String content)
+		public Condition(Type type, String content, @Nullable String failureTooltip)
 		{
 			this.type = type;
 			this.content = content;
+			this.failureTooltip = failureTooltip;
+		}
+		
+		public String getContent()
+		{
+			return content;
+		}
+		
+		@Nullable
+		public String getFailureTooltip()
+		{
+			return failureTooltip;
 		}
 		
 		public static boolean enumExists(String enumName)
@@ -144,6 +177,13 @@ public class Dialogue
 			String animationProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("animation")).getOrThrow(false, LOGGER::error);
 			ResourceLocation guiProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("gui")).getOrThrow(false, LOGGER::error);
 			
+			List<Response> responses = getResponses(json);
+			
+			return new Dialogue(pathProvider, messageProvider, animationProvider, guiProvider, responses);
+		}
+		
+		private static List<Response> getResponses(JsonObject json)
+		{
 			JsonArray responsesObject = json.getAsJsonArray("responses");
 			List<Response> responses = new ArrayList<>();
 			responsesObject.forEach(element ->
@@ -161,18 +201,21 @@ public class Dialogue
 					String conditionTypeProvider = Codec.STRING.parse(JsonOps.INSTANCE, conditionObject.get("type")).getOrThrow(false, LOGGER::error);
 					String conditionContentProvider = Codec.STRING.parse(JsonOps.INSTANCE, conditionObject.get("content")).getOrThrow(false, LOGGER::error);
 					
+					String conditionFailureTooltipProvider = GsonHelper.getAsString(conditionObject, "failure_tooltip", null);
+					
 					//TODO may throw errors when its not filled in correctly
 					String conditionTypeName = conditionTypeProvider.toUpperCase(Locale.ROOT);
 					if(Condition.enumExists(conditionTypeName))
-						conditions.add(new Condition(Condition.Type.valueOf(conditionTypeName), conditionContentProvider));
+						conditions.add(new Condition(Condition.Type.valueOf(conditionTypeName), conditionContentProvider, conditionFailureTooltipProvider));
 				});
 				
 				ResourceLocation nextPathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, responseObject.get("next_path")).getOrThrow(false, LOGGER::error);
 				
-				responses.add(new Response(responseProvider, conditions, nextPathProvider));
+				boolean hideIfFailedProvider = responseObject.get("hide_if_failed").getAsBoolean();
+				
+				responses.add(new Response(responseProvider, conditions, nextPathProvider, hideIfFailedProvider));
 			});
-			
-			return new Dialogue(pathProvider, messageProvider, animationProvider, guiProvider, responses);
+			return responses;
 		}
 		
 		@Override
@@ -200,12 +243,17 @@ public class Dialogue
 					String conditionType = condition.type.toString().toLowerCase(Locale.ROOT);
 					conditionObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, conditionType).getOrThrow(false, LOGGER::error));
 					conditionObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, condition.content).getOrThrow(false, LOGGER::error));
+					if(condition.failureTooltip != null)
+						conditionObject.add("failure_tooltip", Codec.STRING.encodeStart(JsonOps.INSTANCE, condition.failureTooltip).getOrThrow(false, LOGGER::error));
 					
 					conditions.add(conditionObject);
 				}
 				responseObject.add("conditions", conditions);
 				
 				responseObject.add("next_path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, response.nextDialoguePath).getOrThrow(false, LOGGER::error));
+				
+				responseObject.addProperty("hide_if_failed", response.hideIfFailed);
+				
 				responses.add(responseObject);
 			}
 			json.add("responses", responses);

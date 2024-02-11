@@ -6,11 +6,13 @@
   "responses": [
     {
       "conditions": [],
+      "hide_if_failed": true,
       "next_path": "minestuck:camel.no_camel",
       "response_message": "dialogue.camel.yes"
     },
     {
       "conditions": [],
+      "hide_if_failed": true,
       "next_path": "minestuck:camel.dancing_camel",
       "response_message": "dialogue.camel.no"
     }

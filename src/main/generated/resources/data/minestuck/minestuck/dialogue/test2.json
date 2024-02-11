@@ -8,19 +8,23 @@
       "conditions": [
         {
           "type": "consort_type",
-          "content": "salamander"
+          "content": "salamander",
+          "failure_tooltip": "Was not salamander"
         }
       ],
+      "hide_if_failed": false,
       "next_path": "minestuck:test1",
       "response_message": "test2response1"
     },
     {
       "conditions": [],
+      "hide_if_failed": false,
       "next_path": "minestuck:test1",
       "response_message": "test2response2"
     },
     {
       "conditions": [],
+      "hide_if_failed": false,
       "next_path": "minestuck:test1",
       "response_message": "test2response3"
     }
