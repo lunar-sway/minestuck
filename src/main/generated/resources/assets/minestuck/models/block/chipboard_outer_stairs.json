@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/chipboard",
+    "side": "minestuck:block/chipboard",
+    "top": "minestuck:block/chipboard"
+  }
+}

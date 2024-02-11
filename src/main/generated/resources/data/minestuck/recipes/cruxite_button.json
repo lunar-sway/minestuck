@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:cruxite_block"
+    }
+  ],
+  "result": {
+    "item": "minestuck:cruxite_button"
+  }
+}

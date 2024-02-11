@@ -54,6 +54,8 @@ public class FrogsLandType extends TitleLandType
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WATERLILY_PATCH, LandBiomeType.OCEAN);
+		
+		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.FROG_RUINS, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 	}
 	
 	@Override

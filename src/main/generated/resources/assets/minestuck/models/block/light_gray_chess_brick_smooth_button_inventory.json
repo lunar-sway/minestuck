@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button_inventory",
+  "textures": {
+    "texture": "minestuck:block/light_gray_chess_brick_smooth"
+  }
+}
