@@ -375,6 +375,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.CARVED_PLANKS);
 		simpleBlockWithItem(MSBlocks.POLISHED_UNCARVED_WOOD);
 		simpleBlockWithItem(MSBlocks.CARVED_KNOTTED_WOOD);
+		simpleBlock(MSBlocks.CARVED_BUSH,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.CARVED_BUSH, MSBlockStateProvider::texture);
 		
 		simpleBlockWithItem(MSBlocks.DENSE_CLOUD);
 		simpleBlockWithItem(MSBlocks.BRIGHT_DENSE_CLOUD);

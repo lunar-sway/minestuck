@@ -213,6 +213,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CARVED_PLANKS.get());
 		dropSelf(POLISHED_UNCARVED_WOOD.get());
 		dropSelf(CARVED_KNOTTED_WOOD.get());
+		dropSelf(CARVED_BUSH.get());
 		dropSelf(DENSE_CLOUD.get());
 		dropSelf(BRIGHT_DENSE_CLOUD.get());
 		dropSelf(SUGAR_CUBE.get());

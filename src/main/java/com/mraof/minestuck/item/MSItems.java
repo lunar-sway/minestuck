@@ -887,6 +887,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CARVED_PLANKS = registerBlockItem(MSBlocks.CARVED_PLANKS);
 	public static final RegistryObject<BlockItem> POLISHED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_UNCARVED_WOOD);
 	public static final RegistryObject<BlockItem> CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.CARVED_KNOTTED_WOOD);
+	public static final RegistryObject<BlockItem> CARVED_BUSH = registerBlockItem(MSBlocks.CARVED_BUSH);
 	public static final RegistryObject<BlockItem> DENSE_CLOUD = registerBlockItem(MSBlocks.DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> BRIGHT_DENSE_CLOUD = registerBlockItem(MSBlocks.BRIGHT_DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> SUGAR_CUBE = registerBlockItem(MSBlocks.SUGAR_CUBE);

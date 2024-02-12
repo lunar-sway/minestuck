@@ -225,6 +225,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CARVED_PLANKS, "Carved Planks");
 		addBlock(MSBlocks.POLISHED_UNCARVED_WOOD, "Polished Uncarved Wood");
 		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
+		addBlock(MSBlocks.CARVED_BUSH, "Carved Bush");
+		addBlockTooltip(MSBlocks.CARVED_BUSH, "Someone lovingly carved this bush.");
 		addBlock(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		addBlock(MSBlocks.SUGAR_CUBE, "Sugar Cube");
