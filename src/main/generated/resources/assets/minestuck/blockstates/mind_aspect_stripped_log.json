@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minestuck:block/mind_aspect_stripped_log",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minestuck:block/mind_aspect_stripped_log"
+    },
+    "axis=z": {
+      "model": "minestuck:block/mind_aspect_stripped_log",
+      "x": 90
+    }
+  }
+}
