@@ -38,7 +38,7 @@ public class DialogueProvider implements DataProvider
 		);
 		
 		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large")
-				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", "Was not salamander")), List.of(), "test1", false)
+				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", null, "Was not salamander")), List.of(), "test1", false)
 				.addResponse("test2response2", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "say hi")), "test1", false)
 				.addResponse("test2response3", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "tellraw @a [\"\",{\"text\":\"Welcome\",\"color\":\"aqua\"},{\"text\":\" to \"},{\"text\":\"Minecraft\",\"color\":\"#9B9B17\"},{\"text\":\" Tools \"},{\"text\":\"partner.\",\"obfuscated\":true},{\"text\":\" \"},{\"selector\":\"@s\"},{\"text\":\" fs\"}]")), "test1", false)
 		);
@@ -47,11 +47,15 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("me_want_cookie")
 				.addResponse("im sorry fellow, I have no cookie for you", "")
 				.addResponse("why do you want cookie?", "")
-				.addResponse("here have a cookie chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "Has no cookie")), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.TAKE_ITEM, "minecraft:cookie"), new Dialogue.Trigger(Dialogue.Trigger.Type.SET_DIALOGUE, "minestuck:hunger_filled")), "oh_yippee", false)
+				.addResponse("here have a cookie chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", null, "Has no cookie")), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.TAKE_ITEM, "minecraft:cookie"), new Dialogue.Trigger(Dialogue.Trigger.Type.SET_DIALOGUE, "minestuck:hunger_filled")), "oh_yippee", false)
 		);
 		add(new DialogueBuilder("oh_yippee"));
 		add(new DialogueBuilder("hunger_filled"));
 		
+		add(new DialogueBuilder("me_want_5_cookies")
+				.addResponse("im sorry fellow, I have no cookie for you", "")
+				.addResponse("here have 5 cookies chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "5", "Has no cookie")), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.TAKE_ITEM, "minecraft:cookie", "5")), "oh_yippee", false)
+		);
 		
 		
 		add(new DialogueBuilder("mycelium.1")
