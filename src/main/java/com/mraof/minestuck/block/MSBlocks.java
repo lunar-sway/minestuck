@@ -541,6 +541,7 @@ public final class MSBlocks
 	public static final RegistryObject<StairBlock> CARVED_HEAVY_PLANK_STAIRS = REGISTER.register("carved_heavy_plank_stairs", () -> new StairBlock(() -> MSBlocks.CARVED_HEAVY_PLANKS.get().defaultBlockState(), copy(CARVED_HEAVY_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> CARVED_HEAVY_PLANK_SLAB = REGISTER.register("carved_heavy_plank_slab", () -> new SlabBlock(copy(CARVED_HEAVY_PLANKS.get())));
 	
+	
 	public static final RegistryObject<Block> CARVED_PLANKS = REGISTER.register("carved_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> CARVED_STAIRS = REGISTER.register("carved_stairs", () -> new StairBlock(() -> MSBlocks.CARVED_PLANKS.get().defaultBlockState(), copy(CARVED_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> CARVED_SLAB = REGISTER.register("carved_slab", () -> new SlabBlock(copy(CARVED_PLANKS.get())));
@@ -556,6 +557,7 @@ public final class MSBlocks
 	public static final RegistryObject<SlabBlock> POLISHED_UNCARVED_SLAB = REGISTER.register("polished_uncarved_slab", () -> new SlabBlock(copy(POLISHED_UNCARVED_WOOD.get())));
 	
 	public static final RegistryObject<Block> CARVED_KNOTTED_WOOD = REGISTER.register("carved_knotted_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> CARVED_BUSH = REGISTER.register("carved_bush", () -> new CarvedFloraBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASEDRUM).strength(0.6F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY).noCollission().offsetType(BlockBehaviour.OffsetType.XZ)));
 	
 	//Cloud
 	public static final RegistryObject<Block> DENSE_CLOUD = REGISTER.register("dense_cloud", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.HAT).strength(0.5F).sound(SoundType.SNOW).isRedstoneConductor(MSBlocks::never)));
@@ -866,22 +868,22 @@ public final class MSBlocks
 	public static final RegistryObject<LiquidBlock> LIGHT_WATER = REGISTER.register("light_water", () -> new MSLiquidBlock(MSFluids.LIGHT_WATER, new Vec3(0.2, 0.3, 1.0), 0.20f, true, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 8).noLootTable().sound(SoundType.EMPTY)));
 	
 	
-	protected static Function<BlockState, MapColor> logColors(MapColor topColor, MapColor barkColor)
+	private static Function<BlockState, MapColor> logColors(MapColor topColor, MapColor barkColor)
 	{
 		return state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? topColor : barkColor;
 	}
 	
-	protected static Boolean leafSpawns(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> type)
+	private static Boolean leafSpawns(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> type)
 	{
 		return type == EntityType.OCELOT || type == EntityType.PARROT;
 	}
 	
-	protected static boolean never(BlockState state, BlockGetter level, BlockPos pos)
+	static boolean never(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return false;
 	}
 	
-	protected static Boolean never(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> type)
+	private static Boolean never(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> type)
 	{
 		return false;
 	}

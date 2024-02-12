@@ -466,6 +466,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(POLISHED_UNCARVED_SLAB.get(), this::createSlabItemTable);
 		
 		dropSelf(CARVED_KNOTTED_WOOD.get());
+		dropSelf(CARVED_BUSH.get());
+		
 		dropSelf(DENSE_CLOUD.get());
 		dropSelf(BRIGHT_DENSE_CLOUD.get());
 		dropSelf(SUGAR_CUBE.get());
