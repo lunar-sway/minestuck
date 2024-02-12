@@ -109,16 +109,15 @@ public class DialogueScreen extends Screen
 			{
 				Dialogue nextDialogue = DialogueManager.getInstance().getDialogue(response.getNextDialoguePath());
 				
+				List<Dialogue.Trigger> triggers = response.getTriggers();
+				for(Dialogue.Trigger trigger : triggers)
+				{
+					DialoguePacket packet = DialoguePacket.createPacket(trigger, entity);
+					MSPacketHandler.sendToServer(packet);
+				}
+				
 				if(nextDialogue != null)
 				{
-					List<Dialogue.Trigger> triggers = response.getTriggers();
-					if(!triggers.isEmpty())
-					{
-						DialoguePacket packet = DialoguePacket.createPacket(triggers.get(0), entity);
-						MSPacketHandler.sendToServer(packet);
-						//MSPacketHandler.sendToServer(new DialoguePacket());
-					}
-					
 					onClose();
 					MSScreenFactories.displayDialogueScreen(entity, player, nextDialogue);
 					break;

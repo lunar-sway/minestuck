@@ -26,14 +26,8 @@ public class DialoguePacket implements MSPacket.PlayToServer
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		int type = 0;
-		String content = "";
-		
-		if(trigger != null)
-		{
-			type = trigger.getType().ordinal();
-			content = trigger.getContent();
-		}
+		int type = trigger.getType().ordinal();
+		String content = trigger.getContent();
 		
 		buffer.writeInt(type);
 		buffer.writeUtf(content, 500);

@@ -147,6 +147,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		{
 			Dialogue dialogue = getDialogue();
 			
+			//TODO there is server side data that needs to be made accessible client side
 			if(dialogue != null)
 			{
 				if(level().isClientSide)
@@ -316,6 +317,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.readAdditionalSaveData(compound);
 		
+		//TODO dialogue (at least on client side) seems to randomize on reloads
 		if(compound.contains(DIALOGUE_NBT_TAG, Tag.TAG_STRING))
 			setDialogue(compound.getString(DIALOGUE_NBT_TAG));
 		
