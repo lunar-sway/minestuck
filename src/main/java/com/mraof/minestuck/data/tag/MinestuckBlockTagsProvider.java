@@ -128,7 +128,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(MINEABLE_WITH_AXE).add(FLOWERY_VINE_LOG.get(), FLOWERY_VINE_WOOD.get());
 		tag(MINEABLE_WITH_AXE).add(DEAD_LOG.get(), DEAD_WOOD.get(), DEAD_PLANKS.get());
 		tag(MINEABLE_WITH_AXE).add(PETRIFIED_LOG.get(), PETRIFIED_WOOD.get());
-		tag(MINEABLE_WITH_AXE).add(TREATED_PLANKS.get());
+		tag(MINEABLE_WITH_AXE).add(TREATED_PLANKS.get(), CARVED_BUSH.get());
 		tag(MINEABLE_WITH_AXE).add(GLOWING_BOOKSHELF.get(), FROST_BOOKSHELF.get(), RAINBOW_BOOKSHELF.get(), END_BOOKSHELF.get(), DEAD_BOOKSHELF.get(), TREATED_BOOKSHELF.get());
 		tag(MINEABLE_WITH_AXE).add(GLOWING_LADDER.get(), FROST_LADDER.get(), RAINBOW_LADDER.get(), END_LADDER.get(), DEAD_LADDER.get(), TREATED_LADDER.get());
 		tag(MINEABLE_WITH_AXE).add(BLOOD_ASPECT_LOG.get(), BREATH_ASPECT_LOG.get(), DOOM_ASPECT_LOG.get(), HEART_ASPECT_LOG.get(), HOPE_ASPECT_LOG.get(), LIFE_ASPECT_LOG.get(),
@@ -239,6 +239,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(PUSHABLE_BLOCK_REPLACEABLE).addTags(SAPLINGS, FLOWERS);
 		tag(PETRIFIED_FLORA_PLACEABLE).addTags(Tags.Blocks.STONE, Tags.Blocks.COBBLESTONE, Tags.Blocks.GRAVEL);
 		tag(EDITMODE_BREAK_BLACKLIST).addTags(BlockTags.PORTALS);
+		tag(WOOD_TERRAIN_BLOCKS).add(UNCARVED_WOOD.get(), CARVED_PLANKS.get(), CARVED_KNOTTED_WOOD.get());
 	}
 	
 	private void needsWoodPickaxe(Block... blocks)
