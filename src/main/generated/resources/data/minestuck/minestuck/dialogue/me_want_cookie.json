@@ -1,0 +1,44 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "dialogue.me_want_cookie",
+  "path": "minestuck:me_want_cookie",
+  "responses": [
+    {
+      "conditions": [],
+      "hide_if_failed": true,
+      "next_path": "minestuck:",
+      "response_message": "im sorry fellow, I have no cookie for you",
+      "triggers": []
+    },
+    {
+      "conditions": [],
+      "hide_if_failed": true,
+      "next_path": "minestuck:",
+      "response_message": "why do you want cookie?",
+      "triggers": []
+    },
+    {
+      "conditions": [
+        {
+          "type": "has_item",
+          "content": "minecraft:cookie",
+          "failure_tooltip": "Has no cookie"
+        }
+      ],
+      "hide_if_failed": false,
+      "next_path": "minestuck:oh_yippee",
+      "response_message": "here have a cookie chap",
+      "triggers": [
+        {
+          "type": "take_item",
+          "content": "minecraft:cookie"
+        },
+        {
+          "type": "set_dialogue",
+          "content": "minestuck:hunger_filled"
+        }
+      ]
+    }
+  ]
+}

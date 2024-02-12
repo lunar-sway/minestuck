@@ -26,6 +26,9 @@ public class DialogueProvider implements DataProvider
 		this.output = output;
 	}
 	
+	/**
+	 * Since a Response can be used to link the current Dialogue with any other Dialogue, its important to make a habit of commenting where a Dialogue is used
+	 */
 	protected void registerDialogues()
 	{
 		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large")
@@ -39,6 +42,15 @@ public class DialogueProvider implements DataProvider
 				.addResponse("test2response2", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "say hi")), "test1", false)
 				.addResponse("test2response3", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "tellraw @a [\"\",{\"text\":\"Welcome\",\"color\":\"aqua\"},{\"text\":\" to \"},{\"text\":\"Minecraft\",\"color\":\"#9B9B17\"},{\"text\":\" Tools \"},{\"text\":\"partner.\",\"obfuscated\":true},{\"text\":\" \"},{\"selector\":\"@s\"},{\"text\":\" fs\"}]")), "test1", false)
 		);
+		
+		//builder can take empty strings for nextDialoguePath
+		add(new DialogueBuilder("me_want_cookie")
+				.addResponse("im sorry fellow, I have no cookie for you", "")
+				.addResponse("why do you want cookie?", "")
+				.addResponse("here have a cookie chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "Has no cookie")), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.TAKE_ITEM, "minecraft:cookie"), new Dialogue.Trigger(Dialogue.Trigger.Type.SET_DIALOGUE, "minestuck:hunger_filled")), "oh_yippee", false)
+		);
+		add(new DialogueBuilder("oh_yippee"));
+		add(new DialogueBuilder("hunger_filled"));
 		
 		
 		
@@ -90,6 +102,8 @@ public class DialogueProvider implements DataProvider
 		public DialogueBuilder addResponse(String response, String nextDialoguePath)
 		{
 			this.responses.add(new Dialogue.Response(response, List.of(), List.of(), new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath), true));
+			//ResourceLocation testedLocation = (nextDialoguePath == null || nextDialoguePath.isEmpty()) ? null : new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath);
+			//this.responses.add(new Dialogue.Response(response, List.of(), List.of(), testedLocation, true));
 			return this;
 		}
 	}

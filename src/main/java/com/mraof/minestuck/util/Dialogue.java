@@ -4,13 +4,17 @@ import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.TriPredicate;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.slf4j.Logger;
 
@@ -139,7 +143,14 @@ public class Dialogue
 	{
 		public enum Type
 		{
-			CONSORT_TYPE((entity, player, content) -> entity instanceof ConsortEntity consortEntity && content.equals(consortEntity.getConsortType().getName()));
+			CONSORT_TYPE((entity, player, content) ->
+					entity instanceof ConsortEntity consortEntity && content.equals(consortEntity.getConsortType().getName())
+			),
+			HAS_ITEM((entity, player, content) ->
+			{
+				ItemStack stack = findPlayerItem(content, player);
+				return stack != null;
+			});
 			
 			private final TriPredicate<LivingEntity, Player, String> conditions;
 			
@@ -189,6 +200,19 @@ public class Dialogue
 		}
 	}
 	
+	public static ItemStack findPlayerItem(String registryName, Player player)
+	{
+		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
+		
+		for(ItemStack invItem : player.getInventory().items)
+		{
+			if(invItem.is(item))
+				return invItem;
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * A Trigger allows for new code to be called when a dialogue option is picked
 	 */
@@ -206,6 +230,22 @@ public class Dialogue
 						//TODO using the entity for this instead of the player failed
 						level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), s);
 					}
+				}
+			}),
+			TAKE_ITEM((entity, player, s) ->
+			{
+				if(player != null)
+				{
+					ItemStack stack = findPlayerItem(s, player);
+					if(stack != null)
+						stack.shrink(1);
+				}
+			}),
+			SET_DIALOGUE((entity, player, s) ->
+			{
+				if(entity instanceof DialogueEntity dialogueEntity)
+				{
+					dialogueEntity.setDialogue(s);
 				}
 			});
 			
