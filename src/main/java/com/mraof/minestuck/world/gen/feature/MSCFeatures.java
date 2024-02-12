@@ -29,6 +29,8 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TOWER = key("tower");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PARCEL_PYXIS = key("parcel_pyxis");
 	
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_CHERRY_TREE = key("carved_cherry_tree");
+	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_POOL = key("blood_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OIL_POOL = key("oil_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OASIS = key("oasis");

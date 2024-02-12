@@ -32,6 +32,8 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> TOWER = key("tower");
 	public static final ResourceKey<PlacedFeature> PARCEL_PYXIS = key("parcel_pyxis");
 	
+	public static final ResourceKey<PlacedFeature> CARVED_CHERRY_TREE = key("carved_cherry_tree");
+	
 	public static final ResourceKey<PlacedFeature> LARGE_CAKE = key("large_cake");
 	
 	public static final ResourceKey<PlacedFeature> BLOOD_POOL = key("blood_pool");

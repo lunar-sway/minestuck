@@ -63,6 +63,9 @@ public final class MSPlacedFeatureProvider
 		context.register(PARCEL_PYXIS, placed(features, MSCFeatures.PARCEL_PYXIS,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(60), PlacementUtils.HEIGHTMAP)));
 		
+		context.register(CARVED_CHERRY_TREE, placed(features, MSCFeatures.CARVED_CHERRY_TREE,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
+		
 		context.register(LARGE_CAKE, placed(features, MSCFeatures.LARGE_CAKE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(50))));
 		
