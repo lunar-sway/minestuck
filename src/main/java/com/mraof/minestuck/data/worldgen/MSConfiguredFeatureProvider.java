@@ -87,6 +87,8 @@ public final class MSConfiguredFeatureProvider
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.NETHERRACK), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 1)));
 		context.register(CARVED_PLANKS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.CARVED_PLANKS.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 2)));
+		context.register(LACQUERED_PLANKS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.LACQUERED_PLANKS.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 2)));
 		context.register(TREATED_UNCARVED_WOOD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.TREATED_UNCARVED_WOOD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 4)));
 		context.register(TREATED_CHIPBOARD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
@@ -161,6 +163,8 @@ public final class MSConfiguredFeatureProvider
 				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.WOODEN_GRASS.get().defaultBlockState()))))));
 		context.register(TREATED_WOODEN_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TREATED_WOODEN_GRASS.get().defaultBlockState()))))));
+		context.register(LACQUERED_WOODEN_MUSHROOM_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.LACQUERED_WOODEN_MUSHROOM.get().defaultBlockState()))))));
 		context.register(TALL_END_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TALL_END_GRASS.get().defaultBlockState())))));
 		context.register(PETRIFIED_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,

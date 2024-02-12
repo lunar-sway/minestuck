@@ -68,10 +68,10 @@ public class WoodLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.TREATED_UNCARVED_WOOD_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL);
 		
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WOODEN_GRASS_PATCH, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LACQUERED_WOODEN_MUSHROOM_PATCH, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREATED_WOODEN_GRASS_PATCH, LandBiomeType.ROUGH);
 		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.CARVED_PLANKS_DISK,
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.LACQUERED_PLANKS_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.UNCARVED_WOOD_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
