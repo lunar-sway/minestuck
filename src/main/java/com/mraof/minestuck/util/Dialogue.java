@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import com.google.gson.*;
+import com.ibm.icu.impl.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -19,6 +20,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +128,7 @@ public class Dialogue
 		{
 			for(Condition condition : conditions)
 			{
-				if(!condition.type.conditions.test(entity, player, condition.getContent()))
+				if(!condition.type.conditions.test(entity, player, Pair.of(condition.getContent(), condition.getContentExtra())))
 				{
 					return false;
 				}
@@ -144,17 +146,17 @@ public class Dialogue
 		public enum Type
 		{
 			CONSORT_TYPE((entity, player, content) ->
-					entity instanceof ConsortEntity consortEntity && content.equals(consortEntity.getConsortType().getName())
+					entity instanceof ConsortEntity consortEntity && content.first.equals(consortEntity.getConsortType().getName())
 			),
 			HAS_ITEM((entity, player, content) ->
 			{
-				ItemStack stack = findPlayerItem(content, player);
+				ItemStack stack = findPlayerItem(content.first, player, parseIntFromContentExtra(content.second, 1));
 				return stack != null;
 			});
 			
-			private final TriPredicate<LivingEntity, Player, String> conditions;
+			private final TriPredicate<LivingEntity, Player, Pair<String, String>> conditions;
 			
-			Type(TriPredicate<LivingEntity, Player, String> conditions)
+			Type(TriPredicate<LivingEntity, Player, Pair<String, String>> conditions)
 			{
 				this.conditions = conditions;
 			}
@@ -163,17 +165,20 @@ public class Dialogue
 		private final Type type;
 		private final String content;
 		@Nullable
+		private final String contentExtra;
+		@Nullable
 		private final String failureTooltip;
 		
 		public Condition(Type type, String content)
 		{
-			this(type, content, null);
+			this(type, content, null, null);
 		}
 		
-		public Condition(Type type, String content, @Nullable String failureTooltip)
+		public Condition(Type type, String content, @Nullable String contentExtra, @Nullable String failureTooltip)
 		{
 			this.type = type;
 			this.content = content;
+			this.contentExtra = contentExtra;
 			this.failureTooltip = failureTooltip;
 		}
 		
@@ -182,35 +187,48 @@ public class Dialogue
 			return content;
 		}
 		
+		public String getContentExtra()
+		{
+			return contentExtra == null ? "" : contentExtra;
+		}
+		
 		@Nullable
 		public String getFailureTooltip()
 		{
 			return failureTooltip;
 		}
-		
-		public static boolean enumExists(String enumName)
-		{
-			for(Type type : Type.values())
-			{
-				if(type.name().toLowerCase(Locale.ROOT).equals(enumName.toLowerCase(Locale.ROOT)))
-					return true;
-			}
-			
-			return false;
-		}
 	}
 	
-	public static ItemStack findPlayerItem(String registryName, Player player)
+	public static ItemStack findPlayerItem(String registryName, Player player, int minAmount)
 	{
 		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
 		
 		for(ItemStack invItem : player.getInventory().items)
 		{
 			if(invItem.is(item))
-				return invItem;
+			{
+				if(invItem.getCount() >= minAmount)
+					return invItem;
+			}
 		}
 		
 		return null;
+	}
+	
+	private static int parseIntFromContentExtra(String contentExtra, int amount)
+	{
+		if(contentExtra != null && !contentExtra.isEmpty())
+		{
+			try
+			{
+				amount = Integer.parseInt(contentExtra);
+			} catch(NumberFormatException ignored)
+			{
+				LOGGER.debug("Failed to parse content_extra into an integer");
+			}
+		}
+		
+		return amount;
 	}
 	
 	/**
@@ -224,11 +242,16 @@ public class Dialogue
 			{
 				if(player != null)
 				{
-					Level level = player.level();
-					if(level != null && !level.isClientSide)
+					try(Level level = player.level())
 					{
-						//TODO using the entity for this instead of the player failed
-						level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), s);
+						if(!level.isClientSide)
+						{
+							//TODO using the entity for this instead of the player failed
+							level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), s.first);
+						}
+					} catch(IOException e)
+					{
+						LOGGER.debug("Trigger in Dialogue tried to get null level from player");
 					}
 				}
 			}),
@@ -236,22 +259,25 @@ public class Dialogue
 			{
 				if(player != null)
 				{
-					ItemStack stack = findPlayerItem(s, player);
+					int amount = parseIntFromContentExtra(s.second, 1);
+					ItemStack stack = findPlayerItem(s.first, player, amount);
 					if(stack != null)
-						stack.shrink(1);
+					{
+						stack.shrink(amount);
+					}
 				}
 			}),
 			SET_DIALOGUE((entity, player, s) ->
 			{
 				if(entity instanceof DialogueEntity dialogueEntity)
 				{
-					dialogueEntity.setDialogue(s);
+					dialogueEntity.setDialogue(s.first);
 				}
 			});
 			
-			private final TriConsumer<LivingEntity, Player, String> conditions;
+			private final TriConsumer<LivingEntity, Player, Pair<String, String>> conditions;
 			
-			Type(TriConsumer<LivingEntity, Player, String> conditions)
+			Type(TriConsumer<LivingEntity, Player, Pair<String, String>> conditions)
 			{
 				this.conditions = conditions;
 			}
@@ -267,11 +293,19 @@ public class Dialogue
 		
 		private final Type type;
 		private final String content;
+		@Nullable
+		private final String contentExtra;
 		
 		public Trigger(Type type, String content)
 		{
+			this(type, content, null);
+		}
+		
+		public Trigger(Type type, String content, @Nullable String contentExtra)
+		{
 			this.type = type;
 			this.content = content;
+			this.contentExtra = contentExtra;
 		}
 		
 		public Type getType()
@@ -284,22 +318,27 @@ public class Dialogue
 			return content;
 		}
 		
+		public String getContentExtra()
+		{
+			return contentExtra == null ? "" : contentExtra;
+		}
+		
 		//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
 		public void testConditions(LivingEntity entity, Player player)
 		{
-			type.conditions.accept(entity, player, content);
+			type.conditions.accept(entity, player, Pair.of(content, getContentExtra()));
+		}
+	}
+	
+	public static <T extends Enum<T>> boolean enumExists(Class<T> enumClass, String enumName)
+	{
+		for(T enumConstant : enumClass.getEnumConstants())
+		{
+			if(enumConstant.name().equalsIgnoreCase(enumName))
+				return true;
 		}
 		
-		public static boolean enumExists(String enumName)
-		{
-			for(Type type : Type.values())
-			{
-				if(type.name().toLowerCase(Locale.ROOT).equals(enumName.toLowerCase(Locale.ROOT)))
-					return true;
-			}
-			
-			return false;
-		}
+		return false;
 	}
 	
 	public static class Serializer implements JsonDeserializer<Dialogue>, JsonSerializer<Dialogue>
@@ -310,7 +349,6 @@ public class Dialogue
 			JsonObject json = GsonHelper.convertToJsonObject(jsonElement, "entry");
 			
 			ResourceLocation pathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("path")).getOrThrow(false, LOGGER::error);
-			
 			String messageProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("message")).getOrThrow(false, LOGGER::error);
 			String animationProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("animation")).getOrThrow(false, LOGGER::error);
 			ResourceLocation guiProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("gui")).getOrThrow(false, LOGGER::error);
@@ -334,7 +372,6 @@ public class Dialogue
 				List<Trigger> triggers = deserializeTriggers(responseObject);
 				
 				ResourceLocation nextPathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, responseObject.get("next_path")).getOrThrow(false, LOGGER::error);
-				
 				boolean hideIfFailedProvider = responseObject.get("hide_if_failed").getAsBoolean();
 				
 				responses.add(new Response(responseProvider, conditions, triggers, nextPathProvider, hideIfFailedProvider));
@@ -352,13 +389,13 @@ public class Dialogue
 				
 				String conditionTypeProvider = Codec.STRING.parse(JsonOps.INSTANCE, conditionObject.get("type")).getOrThrow(false, LOGGER::error);
 				String conditionContentProvider = Codec.STRING.parse(JsonOps.INSTANCE, conditionObject.get("content")).getOrThrow(false, LOGGER::error);
-				
+				String conditionContentExtraProvider = GsonHelper.getAsString(conditionObject, "content_extra", null);
 				String conditionFailureTooltipProvider = GsonHelper.getAsString(conditionObject, "failure_tooltip", null);
 				
 				//TODO may throw errors when its not filled in correctly
 				String conditionTypeName = conditionTypeProvider.toUpperCase(Locale.ROOT);
-				if(Condition.enumExists(conditionTypeName))
-					conditions.add(new Condition(Condition.Type.valueOf(conditionTypeName), conditionContentProvider, conditionFailureTooltipProvider));
+				if(enumExists(Condition.Type.class, conditionTypeName))
+					conditions.add(new Condition(Condition.Type.valueOf(conditionTypeName), conditionContentProvider, conditionContentExtraProvider, conditionFailureTooltipProvider));
 			});
 			return conditions;
 		}
@@ -373,11 +410,12 @@ public class Dialogue
 				
 				String triggerTypeProvider = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("type")).getOrThrow(false, LOGGER::error);
 				String triggerContentProvider = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("content")).getOrThrow(false, LOGGER::error);
+				String triggerContentExtraProvider = GsonHelper.getAsString(triggerObject, "content_extra", null);
 				
 				//TODO may throw errors when its not filled in correctly
 				String triggerTypeName = triggerTypeProvider.toUpperCase(Locale.ROOT);
-				if(Trigger.enumExists(triggerTypeName))
-					triggers.add(new Trigger(Trigger.Type.valueOf(triggerTypeName), triggerContentProvider));
+				if(enumExists(Trigger.Type.class, triggerTypeName))
+					triggers.add(new Trigger(Trigger.Type.valueOf(triggerTypeName), triggerContentProvider, triggerContentExtraProvider));
 			});
 			return triggers;
 		}
@@ -388,7 +426,6 @@ public class Dialogue
 			JsonObject json = new JsonObject();
 			
 			json.add("path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogue.path).getOrThrow(false, LOGGER::error));
-			
 			json.add("message", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogue.message).getOrThrow(false, LOGGER::error));
 			json.add("animation", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogue.animation).getOrThrow(false, LOGGER::error));
 			json.add("gui", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogue.guiPath).getOrThrow(false, LOGGER::error));
@@ -414,7 +451,6 @@ public class Dialogue
 				responseObject.add("triggers", triggers);
 				
 				responseObject.add("next_path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, response.nextDialoguePath).getOrThrow(false, LOGGER::error));
-				
 				responseObject.addProperty("hide_if_failed", response.hideIfFailed);
 				
 				responses.add(responseObject);
@@ -432,8 +468,8 @@ public class Dialogue
 				String conditionType = condition.type.toString().toLowerCase(Locale.ROOT);
 				conditionObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, conditionType).getOrThrow(false, LOGGER::error));
 				conditionObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, condition.content).getOrThrow(false, LOGGER::error));
-				if(condition.failureTooltip != null)
-					conditionObject.add("failure_tooltip", Codec.STRING.encodeStart(JsonOps.INSTANCE, condition.failureTooltip).getOrThrow(false, LOGGER::error));
+				conditionObject.addProperty("content_extra", condition.contentExtra);
+				conditionObject.addProperty("failure_tooltip", condition.failureTooltip);
 				
 				conditions.add(conditionObject);
 			}
@@ -450,6 +486,7 @@ public class Dialogue
 				String triggerType = trigger.type.toString().toLowerCase(Locale.ROOT);
 				triggerObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, triggerType).getOrThrow(false, LOGGER::error));
 				triggerObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, trigger.content).getOrThrow(false, LOGGER::error));
+				triggerObject.addProperty("content_extra", trigger.contentExtra);
 				
 				triggers.add(triggerObject);
 			}

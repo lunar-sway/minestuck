@@ -45,7 +45,7 @@ public class DialogueScreen extends Screen
 		this.guiBackground = dialogue.getGuiPath();
 		this.dialogue = dialogue;
 	}
-
+	
 	@Override
 	public void init()
 	{

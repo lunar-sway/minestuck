@@ -28,15 +28,17 @@ public class DialoguePacket implements MSPacket.PlayToServer
 	{
 		int type = trigger.getType().ordinal();
 		String content = trigger.getContent();
+		String contentExtra = trigger.getContentExtra();
 		
 		buffer.writeInt(type);
 		buffer.writeUtf(content, 500);
+		buffer.writeUtf(contentExtra, 500);
 		buffer.writeInt(entityID);
 	}
 	
 	public static DialoguePacket decode(FriendlyByteBuf buffer)
 	{
-		Dialogue.Trigger trigger = new Dialogue.Trigger(Dialogue.Trigger.Type.fromInt(buffer.readInt()), buffer.readUtf());
+		Dialogue.Trigger trigger = new Dialogue.Trigger(Dialogue.Trigger.Type.fromInt(buffer.readInt()), buffer.readUtf(500), buffer.readUtf(500));
 		return new DialoguePacket(trigger, buffer.readInt());
 	}
 	
