@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_post",
+  "textures": {
+    "wall": "minestuck:block/light_gray_chess_brick_smooth"
+  }
+}

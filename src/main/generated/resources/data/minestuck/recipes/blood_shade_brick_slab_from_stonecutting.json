@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:blood_shade_bricks"
+  },
+  "result": "minestuck:blood_shade_brick_slab"
+}

@@ -1,0 +1,141 @@
+{
+	"credit": "Animation made by DORO",
+	"format_version": "1.8.0",
+	"animations": {
+		"misc.idle": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"leftLensFront": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.0833": {
+							"vector": [0, 0, 360],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"rightLensFront": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.0833": {
+							"vector": [0, 0, 360],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"leftFlame": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"rightFlame": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"move.fly": {
+			"loop": true,
+			"animation_length": 0.08333,
+			"bones": {
+				"leftLensFront": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.0833": {
+							"vector": [0, 0, 360],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"rightLensFront": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.0833": {
+							"vector": [0, 0, 360],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"leftFlame": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.0417": {
+							"vector": [0, 117, 0],
+							"easing": "step",
+							"easingArgs": [2]
+						},
+						"0.0833": {
+							"vector": [0, 42, 0],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.0417": {
+							"vector": [1, 1.1, 1],
+							"easing": "step",
+							"easingArgs": [2]
+						},
+						"0.0833": {
+							"vector": [1, 0.8, 1],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"rightFlame": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.0417": {
+							"vector": [0, -27, 0],
+							"easing": "step",
+							"easingArgs": [2]
+						},
+						"0.0833": {
+							"vector": [0, -252, 0],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.0417": {
+							"vector": [1, 0.6, 1],
+							"easing": "step",
+							"easingArgs": [2]
+						},
+						"0.0833": {
+							"vector": [1, 1.2, 1],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
