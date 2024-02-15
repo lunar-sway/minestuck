@@ -55,7 +55,7 @@ public final class SkaianetData extends SavedData
 		for(int i = 0; i < playerDataList.size(); i++)
 		{
 			CompoundTag playerDataTag = playerDataList.getCompound(i);
-			IdentifierHandler.tryLoad(playerDataTag, "player").resultOrPartial(LOGGER::error)
+			IdentifierHandler.load(playerDataTag, "player").resultOrPartial(LOGGER::error)
 					.ifPresent(player -> getOrCreateData(player).read(playerDataTag));
 		}
 		
@@ -65,7 +65,7 @@ public final class SkaianetData extends SavedData
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundTag compound = list.getCompound(i);
-				IdentifierHandler.tryLoad(compound, "player").resultOrPartial(LOGGER::error)
+				IdentifierHandler.load(compound, "player").resultOrPartial(LOGGER::error)
 						.ifPresent(player -> predefineData.put(player, new PredefineData(player).read(compound)));
 			}
 		}

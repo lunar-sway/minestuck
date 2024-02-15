@@ -47,8 +47,7 @@ public final class SburbConnections
 		{
 			try
 			{
-				ActiveConnection connection = ActiveConnection.read(activeConnectionList.getCompound(i));
-				this.activeConnections.add(connection);
+				ActiveConnection.read(activeConnectionList.getCompound(i)).resultOrPartial(LOGGER::error).ifPresent(this.activeConnections::add);
 			} catch(RuntimeException ignored)
 			{
 			}
@@ -59,13 +58,16 @@ public final class SburbConnections
 		{
 			CompoundTag connectionTag = primaryConnectionList.getCompound(i);
 			
-			Optional<PlayerIdentifier> client = IdentifierHandler.tryLoad(connectionTag, "client").resultOrPartial(LOGGER::error);
+			Optional<PlayerIdentifier> client = IdentifierHandler.load(connectionTag, "client").resultOrPartial(LOGGER::error);
 			
-			if(client.isPresent())
+			if(client.isEmpty())
 			{
-				Optional<PlayerIdentifier> server = IdentifierHandler.tryLoad(connectionTag, "server").resultOrPartial(LOGGER::error);
-				this.primaryClientToServerMap.put(client.get(), server.orElse(IdentifierHandler.NULL_IDENTIFIER));
+				LOGGER.error("Unable to load client id for primary connection from data: {}", connectionTag);
+				continue;
 			}
+			
+			Optional<PlayerIdentifier> server = IdentifierHandler.loadNullable(connectionTag, "server").resultOrPartial(LOGGER::error);
+			this.primaryClientToServerMap.put(client.get(), server.orElse(IdentifierHandler.NULL_IDENTIFIER));
 		}
 	}
 	
@@ -92,11 +94,14 @@ public final class SburbConnections
 		boolean isMain = connectionTag.getBoolean("IsMain");
 		boolean active = !isMain || connectionTag.getBoolean("IsActive");
 		
-		Optional<PlayerIdentifier> client = IdentifierHandler.tryLoad(connectionTag, "client").result();
+		Optional<PlayerIdentifier> client = IdentifierHandler.load(connectionTag, "client").resultOrPartial(LOGGER::error);
 		if(client.isEmpty())
+		{
+			LOGGER.error("Unable to load client id for old connection from data: {}", connectionTag);
 			return;
+		}
 		
-		Optional<PlayerIdentifier> server = IdentifierHandler.tryLoad(connectionTag, "server").result();
+		Optional<PlayerIdentifier> server = IdentifierHandler.loadNullable(connectionTag, "server").resultOrPartial(LOGGER::error);
 		
 		if(active && server.isPresent())
 		{

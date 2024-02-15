@@ -24,6 +24,7 @@ import java.util.UUID;
  */
 public class IdentifierHandler
 {
+	@Deprecated	//Prefer nullable value or optional value
 	public static final PlayerIdentifier NULL_IDENTIFIER = new NullIdentifier();
 	
 	private static final List<PlayerIdentifier> identifierList = new ArrayList<>();
@@ -49,13 +50,22 @@ public class IdentifierHandler
 		return nbt.contains(key, Tag.TAG_STRING) || nbt.contains(key + "Most", Tag.TAG_LONG) && nbt.contains(key + "Least", Tag.TAG_LONG);
 	}
 	
+	@Deprecated	//Prefer the DataResult functions
 	@Nonnull
 	public static PlayerIdentifier loadOrThrow(CompoundTag tag, String key) throws RuntimeException
 	{
-		return tryLoad(tag, key).getOrThrow(false, message -> {});
+		return loadNullable(tag, key).getOrThrow(false, message -> {});
 	}
 	
-	public static DataResult<PlayerIdentifier> tryLoad(CompoundTag tag, String key)
+	/**
+	 * Tries to parse a player identifier and returns the result. It will not return a {@code NULL_IDENTIFIER}.
+	 */
+	public static DataResult<PlayerIdentifier> load(CompoundTag tag, String key)
+	{
+		return loadNullable(tag, key).flatMap(id -> id == NULL_IDENTIFIER ? DataResult.error(() -> "Null identifiers not supported here") : DataResult.success(id));
+	}
+	
+	public static DataResult<PlayerIdentifier> loadNullable(CompoundTag tag, String key)
 	{
 		PlayerIdentifier identifier;
 		String type = tag.getString(key);

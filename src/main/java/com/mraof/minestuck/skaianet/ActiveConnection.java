@@ -1,5 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mojang.serialization.DataResult;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -95,13 +96,15 @@ public final class ActiveConnection
 		return tag;
 	}
 	
-	static ActiveConnection read(CompoundTag tag) throws RuntimeException
+	static DataResult<ActiveConnection> read(CompoundTag tag) throws RuntimeException
 	{
-		PlayerIdentifier client = IdentifierHandler.loadOrThrow(tag, "client");
-		PlayerIdentifier server = IdentifierHandler.loadOrThrow(tag, "server");
-		ComputerReference clientComputer = ComputerReference.readOrThrow(tag.getCompound("client_computer"));
-		ComputerReference serverComputer = ComputerReference.readOrThrow(tag.getCompound("server_computer"));
-		
-		return new ActiveConnection(client, clientComputer, server, serverComputer);
+		return IdentifierHandler.load(tag, "client").flatMap(client -> {
+			return IdentifierHandler.load(tag, "server").map(server -> {
+				ComputerReference clientComputer = ComputerReference.readOrThrow(tag.getCompound("client_computer"));
+				ComputerReference serverComputer = ComputerReference.readOrThrow(tag.getCompound("server_computer"));
+				
+				return new ActiveConnection(client, clientComputer, server, serverComputer);
+			});
+		});
 	}
 }
