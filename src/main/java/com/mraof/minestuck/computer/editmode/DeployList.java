@@ -7,7 +7,6 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
 import com.mraof.minestuck.skaianet.SburbHandler;
@@ -417,7 +416,6 @@ public final class DeployList
 	@SubscribeEvent
 	public static void serverStarting(ServerStartingEvent event)
 	{
-		ConsortDialogue.serverStarting();
 		lastDay = event.getServer().overworld().getGameTime() / 24000L;
 	}
 	

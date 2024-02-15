@@ -24,7 +24,8 @@ import java.util.List;
 
 import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_FOOD_STOCK;
 import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_GENERAL_STOCK;
-import static com.mraof.minestuck.world.lands.LandTypeConditions.*;
+import static com.mraof.minestuck.world.lands.LandTypeConditions.terrainLand;
+import static com.mraof.minestuck.world.lands.LandTypeConditions.titleLand;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 /**
@@ -576,11 +577,6 @@ public class ConsortDialogue
 	public interface ConsortRequirement
 	{
 		boolean apply(ConsortEntity consort);
-	}
-	
-	public static void serverStarting()
-	{
-		//debugPrintAll();
 	}
 	
 	@SuppressWarnings("unused")
