@@ -1,5 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mojang.serialization.DataResult;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
@@ -8,6 +9,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,12 +47,8 @@ public final class SburbConnections
 		ListTag activeConnectionList = tag.getList("connections", Tag.TAG_COMPOUND);
 		for(int i = 0; i < activeConnectionList.size(); i++)
 		{
-			try
-			{
-				ActiveConnection.read(activeConnectionList.getCompound(i)).resultOrPartial(LOGGER::error).ifPresent(this.activeConnections::add);
-			} catch(RuntimeException ignored)
-			{
-			}
+			ActiveConnection.read(activeConnectionList.getCompound(i))
+					.resultOrPartial(LOGGER::error).ifPresent(this.activeConnections::add);
 		}
 		
 		ListTag primaryConnectionList = tag.getList("primary_connections", Tag.TAG_COMPOUND);
@@ -105,14 +103,11 @@ public final class SburbConnections
 		
 		if(active && server.isPresent())
 		{
-			try
-			{
-				ComputerReference clientComputer = ComputerReference.readOrThrow(connectionTag.getCompound("client_computer"));
-				ComputerReference serverComputer = ComputerReference.readOrThrow(connectionTag.getCompound("server_computer"));
-				activeConnections.add(new ActiveConnection(client.get(), clientComputer, server.get(), serverComputer));
-			} catch(RuntimeException ignored)
-			{
-			}
+			DataResult.unbox(DataResult.instance().apply2(
+					(clientComputer, serverComputer) -> new ActiveConnection(client.get(), clientComputer, server.get(), serverComputer),
+					ComputerReference.CODEC.parse(NbtOps.INSTANCE, connectionTag.getCompound("client_computer")),
+					ComputerReference.CODEC.parse(NbtOps.INSTANCE, connectionTag.getCompound("server_computer")))
+			).resultOrPartial(LOGGER::error).ifPresent(activeConnections::add);
 		}
 		if(isMain)
 			this.primaryClientToServerMap.put(client.get(), server.orElse(IdentifierHandler.NULL_IDENTIFIER));

@@ -6,11 +6,14 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -36,13 +39,12 @@ class ComputerWaitingList
 		for(int i = 0; i < list.size(); i++)
 		{
 			CompoundTag cmp = list.getCompound(i);
-			try
-			{
-				map.put(IdentifierHandler.loadOrThrow(cmp, "player"), ComputerReference.readOrThrow(cmp.getCompound("computer")));
-			} catch(Exception e)
-			{
-				LOGGER.error("Got exception when loading entry for the {} waiting list. NBT: {}", name, cmp, e);
-			}
+			Optional<PlayerIdentifier> player = IdentifierHandler.load(cmp, "player").resultOrPartial(LOGGER::error);
+			Optional<ComputerReference> computerReference = ComputerReference.CODEC.parse(NbtOps.INSTANCE, cmp.get("computer")).resultOrPartial(LOGGER::error);
+			if(player.isEmpty() || computerReference.isEmpty())
+				continue;
+			
+			map.put(player.get(), computerReference.get());
 		}
 	}
 	
@@ -51,8 +53,12 @@ class ComputerWaitingList
 		ListTag list = new ListTag();
 		for(Map.Entry<PlayerIdentifier, ComputerReference> entry : map.entrySet())
 		{
+			Optional<Tag> computerTag = ComputerReference.CODEC.encodeStart(NbtOps.INSTANCE, entry.getValue()).resultOrPartial(LOGGER::error);
+			if(computerTag.isEmpty())
+				continue;
+			
 			CompoundTag nbt = new CompoundTag();
-			nbt.put("computer", entry.getValue().write(new CompoundTag()));
+			nbt.put("computer", computerTag.get());
 			entry.getKey().saveToNBT(nbt, "player");
 			list.add(nbt);
 		}

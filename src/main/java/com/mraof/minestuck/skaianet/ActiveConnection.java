@@ -6,7 +6,10 @@ import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -19,6 +22,8 @@ import java.util.Objects;
  */
 public final class ActiveConnection
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final PlayerIdentifier client;
 	private ComputerReference clientComputer;
 	private final PlayerIdentifier server;
@@ -90,21 +95,22 @@ public final class ActiveConnection
 		CompoundTag tag = new CompoundTag();
 		client.saveToNBT(tag, "client");
 		server.saveToNBT(tag, "server");
-		tag.put("client_computer", clientComputer.write(new CompoundTag()));
-		tag.put("server_computer", serverComputer.write(new CompoundTag()));
+		ComputerReference.CODEC.encodeStart(NbtOps.INSTANCE, clientComputer).resultOrPartial(LOGGER::error)
+				.ifPresent(computerTag -> tag.put("client_computer", computerTag));
+		ComputerReference.CODEC.encodeStart(NbtOps.INSTANCE, serverComputer).resultOrPartial(LOGGER::error)
+				.ifPresent(computerTag -> tag.put("server_computer", computerTag));
 		
 		return tag;
 	}
 	
-	static DataResult<ActiveConnection> read(CompoundTag tag) throws RuntimeException
+	static DataResult<ActiveConnection> read(CompoundTag tag)
 	{
-		return IdentifierHandler.load(tag, "client").flatMap(client -> {
-			return IdentifierHandler.load(tag, "server").map(server -> {
-				ComputerReference clientComputer = ComputerReference.readOrThrow(tag.getCompound("client_computer"));
-				ComputerReference serverComputer = ComputerReference.readOrThrow(tag.getCompound("server_computer"));
-				
-				return new ActiveConnection(client, clientComputer, server, serverComputer);
-			});
-		});
+		return DataResult.unbox(DataResult.instance().apply4(
+				ActiveConnection::new,
+				IdentifierHandler.load(tag, "client"),
+				ComputerReference.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("client_computer")),
+				IdentifierHandler.load(tag, "server"),
+				ComputerReference.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("server_computer"))
+		));
 	}
 }
