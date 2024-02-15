@@ -9,6 +9,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,12 +60,31 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 		LOGGER.info("Loaded {} dialogues", this.dialogues.size());
 	}
 	
-	public Dialogue doRandomDialogue(RandomSource rand)
+	public Dialogue doRandomDialogue(LivingEntity entity, RandomSource rand)
 	{
 		if(dialogues.isEmpty())
 			return null;
 		else
-			return dialogues.stream().toList().get(rand.nextInt(dialogues.size()));
+		{
+			//random dialogue from the ones available given the entities immediate context
+			List<Dialogue> filteredDialogues = dialogues.stream().filter(dialogue -> {
+				Dialogue.UseContext useContext = dialogue.getUseContext(); //TODO useContext is null when empty
+				if(useContext == null)
+					return false;
+				else
+				{
+					if(useContext.getConditions().isEmpty())
+						return true;
+					else
+						return Dialogue.Condition.matchesAllConditions(entity, null, useContext.getConditions());
+				}
+			}).toList();
+			
+			if(!filteredDialogues.isEmpty())
+				return filteredDialogues.get(rand.nextInt(filteredDialogues.size()));
+			else
+				return null;
+		}
 	}
 	
 	public Dialogue getDialogue(ResourceLocation location)

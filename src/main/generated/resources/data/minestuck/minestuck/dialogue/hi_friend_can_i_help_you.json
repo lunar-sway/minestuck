@@ -1,0 +1,73 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "dialogue.hi_friend_can_i_help_you",
+  "path": "minestuck:hi_friend_can_i_help_you",
+  "responses": [
+    {
+      "conditions": [],
+      "hide_if_failed": false,
+      "next_path": "minestuck:hi_friend_can_i_help_you",
+      "response_message": "I hate you",
+      "triggers": [
+        {
+          "type": "add_consort_reputation",
+          "content": "-100"
+        }
+      ]
+    },
+    {
+      "conditions": [],
+      "hide_if_failed": false,
+      "next_path": "minestuck:hi_friend_can_i_help_you",
+      "response_message": "I love you",
+      "triggers": [
+        {
+          "type": "add_consort_reputation",
+          "content": "100"
+        }
+      ]
+    },
+    {
+      "conditions": [
+        {
+          "type": "has_minimum_reputation",
+          "content": "500",
+          "failure_tooltip": "Rep too low"
+        }
+      ],
+      "hide_if_failed": false,
+      "next_path": "minestuck:hi_friend_can_i_help_you",
+      "response_message": "Rep above 500",
+      "triggers": []
+    },
+    {
+      "conditions": [
+        {
+          "type": "has_maximum_reputation",
+          "content": "200",
+          "failure_tooltip": "Rep too high"
+        }
+      ],
+      "hide_if_failed": false,
+      "next_path": "minestuck:hi_friend_can_i_help_you",
+      "response_message": "Rep below 200",
+      "triggers": []
+    },
+    {
+      "conditions": [],
+      "hide_if_failed": true,
+      "next_path": "minecraft:",
+      "response_message": "bye",
+      "triggers": []
+    }
+  ],
+  "use_context": {
+    "conditions": [
+      {
+        "type": "placeholder",
+        "content": ""
+      }
+    ]
+  }
+}

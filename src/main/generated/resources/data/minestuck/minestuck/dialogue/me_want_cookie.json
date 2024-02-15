@@ -7,14 +7,14 @@
     {
       "conditions": [],
       "hide_if_failed": true,
-      "next_path": "minestuck:",
-      "response_message": "im sorry fellow, I have no cookie for you",
+      "next_path": "minecraft:",
+      "response_message": "im sorry fellow, I have no cookie for you. Bye",
       "triggers": []
     },
     {
       "conditions": [],
       "hide_if_failed": true,
-      "next_path": "minestuck:",
+      "next_path": "minestuck:me_want_cookie",
       "response_message": "why do you want cookie?",
       "triggers": []
     },
@@ -40,5 +40,13 @@
         }
       ]
     }
-  ]
+  ],
+  "use_context": {
+    "conditions": [
+      {
+        "type": "placeholder",
+        "content": ""
+      }
+    ]
+  }
 }

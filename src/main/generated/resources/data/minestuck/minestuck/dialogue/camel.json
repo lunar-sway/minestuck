@@ -18,5 +18,13 @@
       "response_message": "dialogue.camel.no",
       "triggers": []
     }
-  ]
+  ],
+  "use_context": {
+    "conditions": [
+      {
+        "type": "placeholder",
+        "content": ""
+      }
+    ]
+  }
 }

@@ -7,8 +7,8 @@
     {
       "conditions": [],
       "hide_if_failed": true,
-      "next_path": "minestuck:",
-      "response_message": "im sorry fellow, I have no cookie for you",
+      "next_path": "minecraft:",
+      "response_message": "im sorry fellow, I have no cookie for you. Bye",
       "triggers": []
     },
     {
@@ -31,5 +31,13 @@
         }
       ]
     }
-  ]
+  ],
+  "use_context": {
+    "conditions": [
+      {
+        "type": "placeholder",
+        "content": ""
+      }
+    ]
+  }
 }
