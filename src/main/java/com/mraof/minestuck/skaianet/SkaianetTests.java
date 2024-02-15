@@ -29,7 +29,7 @@ public final class SkaianetTests
 			helper.assertFalse(connections.hasPrimaryConnectionForClient(client), "Client player has primary connection on initialization");
 			helper.assertFalse(connections.hasPrimaryConnectionForServer(server), "Server player has primary connection on initialization");
 			
-			connections.trySetPrimaryConnection(client, server);
+			connections.setPrimaryConnection(client, server);
 			helper.assertTrue(connections.hasPrimaryConnectionForClient(client), "Client player is missing primary connection");
 			helper.assertTrue(connections.hasPrimaryConnectionForServer(server), "Server player is missing primary connection");
 			
@@ -49,7 +49,7 @@ public final class SkaianetTests
 					server1 = IdentifierHandler.createNewFakeIdentifier(),
 					server2 = IdentifierHandler.createNewFakeIdentifier();
 			
-			connections.trySetPrimaryConnection(client, server1);
+			connections.setPrimaryConnection(client, server1);
 			helper.assertTrue(connections.isPrimaryPair(client, server1), "Primary server player did not match");
 			
 			connections.unlinkClientPlayer(client);

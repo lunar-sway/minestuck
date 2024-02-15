@@ -49,7 +49,7 @@ public class SburbConnectionCommand
 		if(!connections.hasPrimaryConnectionForClient(client)
 				&& connections.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
 		{
-			connections.trySetPrimaryConnection(client, server);
+			connections.setPrimaryConnection(client, server);
 			return true;
 		}
 		
@@ -59,7 +59,7 @@ public class SburbConnectionCommand
 		if(connections.hasPrimaryConnectionForClient(client))
 			connections.newServerForClient(client, server);
 		else
-			connections.trySetPrimaryConnection(client, server);
+			connections.setPrimaryConnection(client, server);
 		
 		return true;
 	}

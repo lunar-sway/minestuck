@@ -2,6 +2,7 @@ package com.mraof.minestuck.player;
 
 import com.mojang.serialization.DataResult;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -11,10 +12,7 @@ import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
@@ -48,7 +46,14 @@ public class IdentifierHandler
 	@Nonnull
 	public static PlayerIdentifier loadOrThrow(CompoundTag tag, String key) throws RuntimeException
 	{
-		return loadNullable(tag, key).getOrThrow(false, message -> {});
+		return load(tag, key).getOrThrow(false, message -> {});
+	}
+	
+	public static DataResult<Optional<PlayerIdentifier>> loadOptional(CompoundTag tag, String key)
+	{
+		if(!tag.contains(key, Tag.TAG_STRING))
+			return DataResult.success(Optional.empty());
+		return load(tag, key).map(Optional::of);
 	}
 	
 	/**

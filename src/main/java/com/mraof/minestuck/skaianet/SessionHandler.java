@@ -75,6 +75,8 @@ public sealed abstract class SessionHandler
 		return session.completed;
 	}
 	
+	abstract void onConnect(PlayerIdentifier client);
+	
 	abstract void onConnect(PlayerIdentifier client, PlayerIdentifier server);
 	
 	abstract void onDisconnect(PlayerIdentifier client, PlayerIdentifier server);
@@ -150,6 +152,12 @@ public sealed abstract class SessionHandler
 		boolean doesSessionHaveMaxTier(Session session)
 		{
 			return false;
+		}
+		
+		@Override
+		void onConnect(PlayerIdentifier client)
+		{
+			globalSession.addPlayer(client);
 		}
 		
 		@Override
@@ -231,6 +239,12 @@ public sealed abstract class SessionHandler
 				this.sessions.add(session);
 				return session;
 			}
+		}
+		
+		@Override
+		void onConnect(PlayerIdentifier client)
+		{
+			prepareSessionFor(client).addPlayer(client);
 		}
 		
 		@Override

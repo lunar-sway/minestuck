@@ -143,7 +143,7 @@ public final class SburbHandler
 		var connections = SburbConnections.get(mcServer);
 		Optional<ActiveConnection> connection = connections.getActiveConnection(player);
 		if(connection.isPresent() && !connections.hasPrimaryConnectionForClient(player))
-			connections.trySetPrimaryConnection(connection.get());
+			connections.setPrimaryConnection(connection.get());
 	}
 	
 	public static ResourceKey<Level> prepareEntry(PlayerIdentifier player, MinecraftServer mcServer)

@@ -67,9 +67,12 @@ public class DebugLandsCommand
 				break;
 			
 			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-			connections.newServerForClient(lastPlayer, fakePlayer);
 			
-			makeConnectionWithLand(land, fakePlayer, IdentifierHandler.NULL_IDENTIFIER, player.server);
+			connections.newServerForClient(lastPlayer, fakePlayer);
+			connections.setPrimaryConnectionForEntry(fakePlayer);
+			
+			createAndSetLand(land, fakePlayer, player.server);
+			
 			lastPlayer = fakePlayer;
 		}
 		
@@ -85,7 +88,9 @@ public class DebugLandsCommand
 					break;
 				
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-				makeConnectionWithLand(land, fakePlayer, lastIdentifier, player.server);
+				
+				connections.setPrimaryConnection(fakePlayer, lastIdentifier);
+				createAndSetLand(land, fakePlayer, player.server);
 				
 				lastIdentifier = fakePlayer;
 			}
@@ -96,10 +101,8 @@ public class DebugLandsCommand
 	
 	private static final ResourceLocation DEBUG_LAND_BASE_ID = new ResourceLocation(Minestuck.MOD_ID, "debug_land");
 	
-	private static void makeConnectionWithLand(LandTypePair landTypes, PlayerIdentifier client, PlayerIdentifier server, MinecraftServer mcServer)
+	private static void createAndSetLand(LandTypePair landTypes, PlayerIdentifier client, MinecraftServer mcServer)
 	{
-		SburbConnections.get(mcServer).trySetPrimaryConnection(client, server);
-		
 		SburbPlayerData playerData = SburbPlayerData.get(client, mcServer);
 		ResourceKey<Level> dimensionName = DynamicDimensions.createLand(mcServer, DEBUG_LAND_BASE_ID, landTypes);
 		playerData.setLand(dimensionName);

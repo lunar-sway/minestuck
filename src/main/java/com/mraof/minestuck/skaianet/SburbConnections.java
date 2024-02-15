@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -33,7 +34,7 @@ public final class SburbConnections
 	
 	private final SkaianetData skaianetData;
 	private final List<ActiveConnection> activeConnections = new ArrayList<>();
-	private final Map<PlayerIdentifier, PlayerIdentifier> primaryClientToServerMap = new HashMap<>();
+	private final Map<PlayerIdentifier, Optional<PlayerIdentifier>> primaryClientToServerMap = new HashMap<>();
 	
 	SburbConnections(SkaianetData skaianetData)
 	{
@@ -64,8 +65,9 @@ public final class SburbConnections
 				continue;
 			}
 			
-			Optional<PlayerIdentifier> server = IdentifierHandler.loadNullable(connectionTag, "server").resultOrPartial(LOGGER::error);
-			this.primaryClientToServerMap.put(client.get(), server.orElse(IdentifierHandler.NULL_IDENTIFIER));
+			Optional<PlayerIdentifier> server = IdentifierHandler.loadOptional(connectionTag, "server")
+					.resultOrPartial(LOGGER::error).flatMap(Function.identity());
+			this.primaryClientToServerMap.put(client.get(), server);
 		}
 	}
 	
@@ -77,11 +79,11 @@ public final class SburbConnections
 		tag.put("connections", activeConnectionList);
 		
 		ListTag primaryConnectionList = new ListTag();
-		for(Map.Entry<PlayerIdentifier, PlayerIdentifier> entry : this.primaryClientToServerMap.entrySet())
+		for(Map.Entry<PlayerIdentifier, Optional<PlayerIdentifier>> entry : this.primaryClientToServerMap.entrySet())
 		{
 			CompoundTag connectionTag = new CompoundTag();
 			entry.getKey().saveToNBT(connectionTag, "client");
-			entry.getValue().saveToNBT(connectionTag, "server");
+			entry.getValue().ifPresent(server -> server.saveToNBT(connectionTag, "server"));
 			primaryConnectionList.add(connectionTag);
 		}
 		tag.put("primary_connections", primaryConnectionList);
@@ -99,7 +101,8 @@ public final class SburbConnections
 			return;
 		}
 		
-		Optional<PlayerIdentifier> server = IdentifierHandler.loadNullable(connectionTag, "server").resultOrPartial(LOGGER::error);
+		Optional<PlayerIdentifier> server = IdentifierHandler.loadNullable(connectionTag, "server")
+				.resultOrPartial(LOGGER::error).filter(id -> id != IdentifierHandler.NULL_IDENTIFIER);
 		
 		if(active && server.isPresent())
 		{
@@ -110,7 +113,7 @@ public final class SburbConnections
 			).resultOrPartial(LOGGER::error).ifPresent(activeConnections::add);
 		}
 		if(isMain)
-			this.primaryClientToServerMap.put(client.get(), server.orElse(IdentifierHandler.NULL_IDENTIFIER));
+			this.primaryClientToServerMap.put(client.get(), server);
 	}
 	
 	public static SburbConnections get(MinecraftServer mcServer)
@@ -172,17 +175,17 @@ public final class SburbConnections
 	
 	public Optional<PlayerIdentifier> primaryPartnerForClient(PlayerIdentifier player)
 	{
-		return Optional.ofNullable(primaryClientToServerMap.get(player)).filter(server -> server != IdentifierHandler.NULL_IDENTIFIER);
+		return Objects.requireNonNullElse(primaryClientToServerMap.get(player), Optional.empty());
 	}
 	
 	public boolean hasPrimaryConnectionForServer(PlayerIdentifier player)
 	{
-		return primaryClientToServerMap.containsValue(player);
+		return primaryClientToServerMap.containsValue(Optional.of(player));
 	}
 	
 	public Optional<PlayerIdentifier> primaryPartnerForServer(PlayerIdentifier player)
 	{
-		return primaryClientToServerMap.entrySet().stream().filter(entry -> player.equals(entry.getValue())).findAny().map(Map.Entry::getKey);
+		return primaryClientToServerMap.entrySet().stream().filter(entry -> Optional.of(player).equals(entry.getValue())).findAny().map(Map.Entry::getKey);
 	}
 	
 	public boolean isPrimaryPair(PlayerIdentifier client, PlayerIdentifier server)
@@ -294,12 +297,12 @@ public final class SburbConnections
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(skaianetData.mcServer, connection));
 	}
 	
-	public void trySetPrimaryConnection(ActiveConnection connection)
+	public void setPrimaryConnection(ActiveConnection connection)
 	{
-		this.trySetPrimaryConnection(connection.client(), connection.server());
+		this.setPrimaryConnection(connection.client(), connection.server());
 	}
 	
-	public void trySetPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
+	public void setPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
@@ -314,30 +317,46 @@ public final class SburbConnections
 		if(activeConnection.isEmpty() && !this.canMakeNewRegularConnectionAsServer(server))
 			throw new IllegalStateException();
 		
-		primaryClientToServerMap.put(client, server);
+		primaryClientToServerMap.put(client, Optional.of(server));
 		
 		skaianetData.sessionHandler.onConnect(client, server);
 		
 		skaianetData.infoTracker.markDirty(client);
-		if(server != IdentifierHandler.NULL_IDENTIFIER)
-			skaianetData.infoTracker.markDirty(server);
+		skaianetData.infoTracker.markDirty(server);
+	}
+	
+	public void setPrimaryWithoutPartner(PlayerIdentifier client)
+	{
+		Objects.requireNonNull(client);
+		
+		if(this.hasPrimaryConnectionForClient(client))
+			throw new IllegalStateException();
+		
+		if(this.getActiveConnection(client).isPresent())
+			throw new IllegalStateException();
+		
+		primaryClientToServerMap.put(client, Optional.empty());
+		
+		skaianetData.sessionHandler.onConnect(client);
+		
+		skaianetData.infoTracker.markDirty(client);
 	}
 	
 	public void unlinkClientPlayer(PlayerIdentifier clientPlayer)
 	{
 		if(!primaryClientToServerMap.containsKey(clientPlayer))
 			throw new IllegalStateException();
-		PlayerIdentifier oldServerPlayer = primaryClientToServerMap.get(clientPlayer);
+		Optional<PlayerIdentifier> oldServerPlayer = primaryClientToServerMap.get(clientPlayer);
 		
-		if(oldServerPlayer == IdentifierHandler.NULL_IDENTIFIER)
+		if(oldServerPlayer.isEmpty())
 			return;
 		
 		this.getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
-		primaryClientToServerMap.put(clientPlayer, IdentifierHandler.NULL_IDENTIFIER);
+		primaryClientToServerMap.put(clientPlayer, Optional.empty());
 		
-		skaianetData.sessionHandler.onDisconnect(clientPlayer, oldServerPlayer);
+		skaianetData.sessionHandler.onDisconnect(clientPlayer, oldServerPlayer.get());
 		
-		skaianetData.infoTracker.markDirty(oldServerPlayer);
+		skaianetData.infoTracker.markDirty(oldServerPlayer.get());
 		if(skaianetData.getOrCreateData(clientPlayer).hasEntered())
 			skaianetData.infoTracker.markLandChainDirty();
 	}
@@ -358,13 +377,13 @@ public final class SburbConnections
 		if(!primaryClientToServerMap.containsKey(clientPlayer))
 			throw new IllegalStateException();
 		
-		if(primaryClientToServerMap.get(clientPlayer) != IdentifierHandler.NULL_IDENTIFIER)
+		if(primaryClientToServerMap.get(clientPlayer).isPresent())
 			throw new IllegalStateException("Connection already has a server player");
 		
 		if(!this.canMakeNewRegularConnectionAsServer(serverPlayer))
 			throw new IllegalStateException("Server player already has a connection");
 		
-		primaryClientToServerMap.put(clientPlayer, serverPlayer);
+		primaryClientToServerMap.put(clientPlayer, Optional.of(serverPlayer));
 		
 		skaianetData.sessionHandler.onConnect(clientPlayer, serverPlayer);
 		
@@ -374,7 +393,7 @@ public final class SburbConnections
 	}
 	
 	/**
-	 * Prepares the sburb connection and data needed for after entry.
+	 * Prepares the primary connection needed for after entry.
 	 * Should only be called by the cruxite artifact on trigger before teleportation
 	 *
 	 * @param player   the identifier of the player that is entering
@@ -386,11 +405,11 @@ public final class SburbConnections
 		
 		Optional<ActiveConnection> connection = this.getActiveConnection(player);
 		if(connection.isPresent())
-			this.trySetPrimaryConnection(connection.get());
+			this.setPrimaryConnection(connection.get());
 		else
 		{
 			LOGGER.info("Player {} entered without connection.", player.getUsername());
-			this.trySetPrimaryConnection(player, IdentifierHandler.NULL_IDENTIFIER);
+			this.setPrimaryWithoutPartner(player);
 		}
 	}
 }
