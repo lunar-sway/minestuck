@@ -10,6 +10,9 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import java.util.Optional;
 
+/**
+ * A collection of {@link GameTest}s which focus on testing the core systems in the skaianet package.
+ */
 @PrefixGameTestTemplate(false)
 @GameTestHolder(Minestuck.MOD_ID)
 public final class SkaianetTests
@@ -19,18 +22,19 @@ public final class SkaianetTests
 	{
 		helper.succeedIf(() -> {
 			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(helper);
+			SburbConnections connections = skaianetData.connections;
 			
 			PlayerIdentifier client = IdentifierHandler.createNewFakeIdentifier(),
 					server = IdentifierHandler.createNewFakeIdentifier();
-			helper.assertFalse(skaianetData.connections.hasPrimaryConnectionForClient(client), "Client player has primary connection on initialization");
-			helper.assertFalse(skaianetData.connections.hasPrimaryConnectionForServer(server), "Server player has primary connection on initialization");
+			helper.assertFalse(connections.hasPrimaryConnectionForClient(client), "Client player has primary connection on initialization");
+			helper.assertFalse(connections.hasPrimaryConnectionForServer(server), "Server player has primary connection on initialization");
 			
-			skaianetData.connections.trySetPrimaryConnection(client, server);
-			helper.assertTrue(skaianetData.connections.hasPrimaryConnectionForClient(client), "Client player is missing primary connection");
-			helper.assertTrue(skaianetData.connections.hasPrimaryConnectionForServer(server), "Server player is missing primary connection");
+			connections.trySetPrimaryConnection(client, server);
+			helper.assertTrue(connections.hasPrimaryConnectionForClient(client), "Client player is missing primary connection");
+			helper.assertTrue(connections.hasPrimaryConnectionForServer(server), "Server player is missing primary connection");
 			
-			helper.assertTrue(skaianetData.connections.primaryPartnerForClient(client).equals(Optional.of(server)), "Primary partner does not match for client player");
-			helper.assertTrue(skaianetData.connections.primaryPartnerForServer(server).equals(Optional.of(client)), "Primary partner does not match for server player");
+			helper.assertTrue(connections.primaryPartnerForClient(client).equals(Optional.of(server)), "Primary partner does not match for client player");
+			helper.assertTrue(connections.primaryPartnerForServer(server).equals(Optional.of(client)), "Primary partner does not match for server player");
 		});
 	}
 	
@@ -39,20 +43,21 @@ public final class SkaianetTests
 	{
 		helper.succeedIf(() -> {
 			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(helper);
+			SburbConnections connections = skaianetData.connections;
 			
 			PlayerIdentifier client = IdentifierHandler.createNewFakeIdentifier(),
 					server1 = IdentifierHandler.createNewFakeIdentifier(),
 					server2 = IdentifierHandler.createNewFakeIdentifier();
 			
-			skaianetData.connections.trySetPrimaryConnection(client, server1);
-			helper.assertTrue(skaianetData.connections.isPrimaryPair(client, server1), "Primary server player did not match");
+			connections.trySetPrimaryConnection(client, server1);
+			helper.assertTrue(connections.isPrimaryPair(client, server1), "Primary server player did not match");
 			
-			skaianetData.connections.unlinkClientPlayer(client);
-			helper.assertTrue(skaianetData.connections.primaryPartnerForClient(client).isEmpty(), "Client player still has partner");
-			helper.assertTrue(skaianetData.connections.hasPrimaryConnectionForClient(client), "Client lost primary connection entirely");
+			connections.unlinkClientPlayer(client);
+			helper.assertTrue(connections.primaryPartnerForClient(client).isEmpty(), "Client player still has partner");
+			helper.assertTrue(connections.hasPrimaryConnectionForClient(client), "Client lost primary connection entirely");
 			
-			skaianetData.connections.newServerForClient(client, server2);
-			helper.assertTrue(skaianetData.connections.isPrimaryPair(client, server2), "Primary server player did not match");
+			connections.newServerForClient(client, server2);
+			helper.assertTrue(connections.isPrimaryPair(client, server2), "Primary server player did not match");
 		});
 	}
 }
