@@ -2,7 +2,6 @@ package com.mraof.minestuck.player;
 
 import com.mojang.serialization.DataResult;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -43,11 +42,6 @@ public class IdentifierHandler
 		PlayerIdentifier identifier = new UUIDIdentifier(nextIdentifierId++, player.getGameProfile().getId());
 		identifierList.add(identifier);
 		return identifier;
-	}
-	
-	public static boolean hasIdentifier(CompoundTag nbt, String key)
-	{
-		return nbt.contains(key, Tag.TAG_STRING) || nbt.contains(key + "Most", Tag.TAG_LONG) && nbt.contains(key + "Least", Tag.TAG_LONG);
 	}
 	
 	@Deprecated	//Prefer the DataResult functions

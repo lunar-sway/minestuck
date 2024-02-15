@@ -19,6 +19,7 @@ and they no longer receive grist from the gutter
 - Fixes some niche issues with connections
 - `/sburbpredefine` now gives an error when applied to a player that already has a land
 - Fixed missing data sync for land types after using `/debuglands`
+- Fixed player owner id not loading for mini alchemiter and grist widget
 
 ### Contributors for this release
 

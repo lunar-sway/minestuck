@@ -65,6 +65,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	};
 	
 	private int ticks_since_update = 0;
+	@Nullable
 	private PlayerIdentifier owner;
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	
@@ -152,8 +153,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		this.wildcardGrist = MSNBTUtil.readGristType(nbt, "gristType");
 		
-		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
-			owner = IdentifierHandler.loadOrThrow(nbt, "owner");
+		owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
 	}
 	
 	@Override
@@ -259,6 +259,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		this.owner = identifier;
 	}
 	
+	@Nullable
 	@Override
 	public PlayerIdentifier getOwner()
 	{
