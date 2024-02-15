@@ -8,6 +8,11 @@ import net.minecraft.server.MinecraftServer;
 
 import java.util.Objects;
 
+/**
+ * The interface for a reference to an in-world computer that can interact with sburb computers.
+ * This reference is primarily used to find the actual computer to update data or validate that the computer exists.
+ * This interface is sealed because the allowed variants are hardcoded inside the codec.
+ */
 public sealed interface ComputerReference permits BEComputerReference
 {
 	Codec<ComputerReference> CODEC = Codec.STRING.partialDispatch("type",
