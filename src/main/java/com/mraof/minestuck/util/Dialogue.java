@@ -7,7 +7,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -38,14 +43,16 @@ public class Dialogue
 	private final String animation;
 	private final ResourceLocation guiPath;
 	private final List<Response> responses;
+	private final UseContext useContext;
 	
-	public Dialogue(ResourceLocation path, String message, String animation, ResourceLocation guiPath, List<Response> responses)
+	public Dialogue(ResourceLocation path, String message, String animation, ResourceLocation guiPath, List<Response> responses, @Nullable UseContext useContext)
 	{
 		this.path = path;
 		this.message = message;
 		this.animation = animation;
 		this.guiPath = guiPath;
 		this.responses = responses;
+		this.useContext = useContext;
 	}
 	
 	public ResourceLocation getPath()
@@ -71,6 +78,11 @@ public class Dialogue
 	public List<Response> getResponses()
 	{
 		return responses;
+	}
+	
+	public UseContext getUseContext()
+	{
+		return useContext;
 	}
 	
 	/**
@@ -121,20 +133,7 @@ public class Dialogue
 		
 		public boolean failsWhileImportant(LivingEntity entity, Player player)
 		{
-			return !matchesAllConditions(entity, player) && isHideIfFailed();
-		}
-		
-		public boolean matchesAllConditions(LivingEntity entity, Player player)
-		{
-			for(Condition condition : conditions)
-			{
-				if(!condition.type.conditions.test(entity, player, Pair.of(condition.getContent(), condition.getContentExtra())))
-				{
-					return false;
-				}
-			}
-			
-			return true;
+			return !Dialogue.Condition.matchesAllConditions(entity, player, conditions) && isHideIfFailed();
 		}
 	}
 	
@@ -143,15 +142,81 @@ public class Dialogue
 	 */
 	public static class Condition
 	{
+		//TODO conditions are used in both server and client side context. When they are used to help pick dialogue, players are inherently null
 		public enum Type
 		{
+			PLACEHOLDER((entity, player, stringStringPair) -> true),
 			CONSORT_TYPE((entity, player, content) ->
 					entity instanceof ConsortEntity consortEntity && content.first.equals(consortEntity.getConsortType().getName())
 			),
 			HAS_ITEM((entity, player, content) ->
 			{
-				ItemStack stack = findPlayerItem(content.first, player, parseIntFromContentExtra(content.second, 1));
+				if(player == null)
+					return false;
+				
+				ItemStack stack = findPlayerItem(content.first, player, parseIntFromString(content.second, 1));
 				return stack != null;
+			}),
+			IN_LAND((entity, player, content) ->
+			{
+				try(Level level = player.level())
+				{
+					if(!level.isClientSide)
+					{
+						return MSDimensions.isLandDimension(player.getServer(), level.dimension());
+					}
+				} catch(IOException e)
+				{
+					LOGGER.debug("Condition in Dialogue tried to get null level from entity");
+				}
+				
+				return false;
+			}),
+			HAS_MINIMUM_REPUTATION((entity, player, content) ->
+			{
+				if(player == null)
+					return false;
+				
+				try(Level level = player.level())
+				{
+					if(level.isClientSide)
+					{
+						return ClientPlayerData.getConsortReputation() > parseIntFromString(content.first, -9999);
+					} else
+					{
+						PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
+						if(data != null)
+							return data.getConsortReputation(level.dimension()) > parseIntFromString(content.first, -9999);
+					}
+				} catch(IOException e)
+				{
+					LOGGER.debug("Condition in Dialogue tried to get null level from player");
+				}
+				
+				return false;
+			}),
+			HAS_MAXIMUM_REPUTATION((entity, player, content) ->
+			{
+				if(player == null)
+					return false;
+				
+				try(Level level = player.level())
+				{
+					if(level.isClientSide)
+					{
+						return ClientPlayerData.getConsortReputation() < parseIntFromString(content.first, 9999);
+					} else
+					{
+						PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
+						if(data != null)
+							return data.getConsortReputation(level.dimension()) < parseIntFromString(content.first, 9999);
+					}
+				} catch(IOException e)
+				{
+					LOGGER.debug("Condition in Dialogue tried to get null level from player");
+				}
+				
+				return false;
 			});
 			
 			private final TriPredicate<LivingEntity, Player, Pair<String, String>> conditions;
@@ -197,6 +262,37 @@ public class Dialogue
 		{
 			return failureTooltip;
 		}
+		
+		public static boolean matchesAllConditions(LivingEntity entity, Player player, List<Condition> conditions)
+		{
+			if(conditions == null)
+				return false;
+			
+			for(Condition condition : conditions)
+			{
+				if(!condition.type.conditions.test(entity, player, Pair.of(condition.getContent(), condition.getContentExtra())))
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
+	}
+	
+	public static class UseContext
+	{
+		private final List<Condition> conditions;
+		
+		public UseContext(List<Condition> conditions)
+		{
+			this.conditions = conditions;
+		}
+		
+		public List<Condition> getConditions()
+		{
+			return conditions;
+		}
 	}
 	
 	public static ItemStack findPlayerItem(String registryName, Player player, int minAmount)
@@ -215,16 +311,16 @@ public class Dialogue
 		return null;
 	}
 	
-	private static int parseIntFromContentExtra(String contentExtra, int amount)
+	private static int parseIntFromString(String member, int amount)
 	{
-		if(contentExtra != null && !contentExtra.isEmpty())
+		if(member != null && !member.isEmpty())
 		{
 			try
 			{
-				amount = Integer.parseInt(contentExtra);
+				amount = Integer.parseInt(member);
 			} catch(NumberFormatException ignored)
 			{
-				LOGGER.debug("Failed to parse content_extra into an integer");
+				LOGGER.debug("Failed to parse string from a Dialogue into an integer");
 			}
 		}
 		
@@ -259,7 +355,7 @@ public class Dialogue
 			{
 				if(player != null)
 				{
-					int amount = parseIntFromContentExtra(s.second, 1);
+					int amount = parseIntFromString(s.second, 1);
 					ItemStack stack = findPlayerItem(s.first, player, amount);
 					if(stack != null)
 					{
@@ -272,6 +368,25 @@ public class Dialogue
 				if(entity instanceof DialogueEntity dialogueEntity)
 				{
 					dialogueEntity.setDialogue(s.first);
+				}
+			}),
+			ADD_CONSORT_REPUTATION((entity, player, s) ->
+			{
+				//TODO freezes server-side
+				
+				if(entity instanceof ConsortEntity consortEntity && player instanceof ServerPlayer serverPlayer)
+				{
+					PlayerData data = PlayerSavedData.getData(serverPlayer);
+					if(data != null)
+					{
+						try
+						{
+							data.addConsortReputation(Integer.parseInt(s.first), consortEntity.getHomeDimension());
+						} catch(NumberFormatException ignored)
+						{
+							LOGGER.debug("Failed to parse string from a Dialogue into an integer");
+						}
+					}
 				}
 			});
 			
@@ -353,9 +468,18 @@ public class Dialogue
 			String animationProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("animation")).getOrThrow(false, LOGGER::error);
 			ResourceLocation guiProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("gui")).getOrThrow(false, LOGGER::error);
 			
+			UseContext useContext = null;
+			JsonObject useContextObject = json.getAsJsonObject("use_context");
+			List<Condition> conditions;
+			if(useContextObject != null)
+			{
+				conditions = deserializeConditions(useContextObject);
+				useContext = new UseContext(conditions);
+			}
+			
 			List<Response> responsesProvider = deserializeResponses(json);
 			
-			return new Dialogue(pathProvider, messageProvider, animationProvider, guiProvider, responsesProvider);
+			return new Dialogue(pathProvider, messageProvider, animationProvider, guiProvider, responsesProvider, useContext);
 		}
 		
 		private static List<Response> deserializeResponses(JsonObject json)
@@ -433,6 +557,14 @@ public class Dialogue
 			JsonArray responses = serializeResponses(dialogue);
 			json.add("responses", responses);
 			
+			if(dialogue.useContext != null)
+			{
+				JsonObject useContextObject = new JsonObject();
+				JsonArray conditions = serializeConditions(dialogue.useContext.conditions);
+				useContextObject.add("conditions", conditions);
+				json.add("use_context", useContextObject);
+			}
+			
 			return json;
 		}
 		
@@ -444,7 +576,7 @@ public class Dialogue
 				JsonObject responseObject = new JsonObject();
 				responseObject.add("response_message", Codec.STRING.encodeStart(JsonOps.INSTANCE, response.response).getOrThrow(false, LOGGER::error));
 				
-				JsonArray conditions = serializeConditions(response);
+				JsonArray conditions = serializeConditions(response.conditions);
 				responseObject.add("conditions", conditions);
 				
 				JsonArray triggers = serializeTriggers(response);
@@ -458,10 +590,10 @@ public class Dialogue
 			return responses;
 		}
 		
-		private static JsonArray serializeConditions(Response response)
+		private static JsonArray serializeConditions(List<Condition> conditions)
 		{
-			JsonArray conditions = new JsonArray(response.conditions.size());
-			for(Condition condition : response.conditions)
+			JsonArray conditionsArray = new JsonArray(conditions.size());
+			for(Condition condition : conditions)
 			{
 				JsonObject conditionObject = new JsonObject();
 				
@@ -471,9 +603,9 @@ public class Dialogue
 				conditionObject.addProperty("content_extra", condition.contentExtra);
 				conditionObject.addProperty("failure_tooltip", condition.failureTooltip);
 				
-				conditions.add(conditionObject);
+				conditionsArray.add(conditionObject);
 			}
-			return conditions;
+			return conditionsArray;
 		}
 		
 		private static JsonArray serializeTriggers(Response response)

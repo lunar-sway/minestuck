@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.network.DialoguePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -82,7 +83,7 @@ public class DialogueScreen extends Screen
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));
 			
-			if(!response.matchesAllConditions(entity, player))
+			if(!Dialogue.Condition.matchesAllConditions(entity, player, response.getConditions()))
 			{
 				MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
 				
@@ -107,7 +108,11 @@ public class DialogueScreen extends Screen
 		{
 			if(response.getResponse().equals(responseMessage))
 			{
-				Dialogue nextDialogue = DialogueManager.getInstance().getDialogue(response.getNextDialoguePath());
+				ResourceLocation nextPath = response.getNextDialoguePath();
+				
+				Dialogue nextDialogue = null;
+				if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
+					nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
 				
 				List<Dialogue.Trigger> triggers = response.getTriggers();
 				for(Dialogue.Trigger trigger : triggers)
@@ -116,12 +121,12 @@ public class DialogueScreen extends Screen
 					MSPacketHandler.sendToServer(packet);
 				}
 				
+				onClose();
 				if(nextDialogue != null)
 				{
-					onClose();
 					MSScreenFactories.displayDialogueScreen(entity, player, nextDialogue);
-					break;
 				}
+				break;
 			}
 		}
 	}

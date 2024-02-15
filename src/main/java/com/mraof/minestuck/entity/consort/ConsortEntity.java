@@ -486,7 +486,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			dialogue = getDialogueFromEntity(this);
 		
 		if(dialogue == null)
-			dialogue = DialogueManager.getInstance().doRandomDialogue(random);
+			dialogue = DialogueManager.getInstance().doRandomDialogue(this, random);
 		return dialogue;
 	}
 	

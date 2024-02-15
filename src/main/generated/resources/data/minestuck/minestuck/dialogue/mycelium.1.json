@@ -11,5 +11,13 @@
       "response_message": "=>",
       "triggers": []
     }
-  ]
+  ],
+  "use_context": {
+    "conditions": [
+      {
+        "type": "placeholder",
+        "content": ""
+      }
+    ]
+  }
 }
