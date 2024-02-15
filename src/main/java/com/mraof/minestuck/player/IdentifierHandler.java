@@ -21,9 +21,6 @@ import java.util.*;
  */
 public class IdentifierHandler
 {
-	@Deprecated	//Prefer nullable value or optional value
-	public static final PlayerIdentifier NULL_IDENTIFIER = new NullIdentifier();
-	
 	private static final List<PlayerIdentifier> identifierList = new ArrayList<>();
 	private static int nextIdentifierId;
 	private static int fakePlayerIndex = 0;
@@ -61,34 +58,34 @@ public class IdentifierHandler
 	 */
 	public static DataResult<PlayerIdentifier> load(CompoundTag tag, String key)
 	{
-		return loadNullable(tag, key).flatMap(id -> id == NULL_IDENTIFIER ? DataResult.error(() -> "Null identifiers not supported here") : DataResult.success(id));
+		return loadNullable(tag, key).flatMap(id -> id.map(DataResult::success).orElse(DataResult.error(() -> "Null identifiers not supported here")));
 	}
 	
-	public static DataResult<PlayerIdentifier> loadNullable(CompoundTag tag, String key)
+	public static DataResult<Optional<PlayerIdentifier>> loadNullable(CompoundTag tag, String key)
 	{
-		PlayerIdentifier identifier;
 		String type = tag.getString(key);
+		PlayerIdentifier identifier;
 		switch(type)
 		{
-			case "null":
-				return DataResult.success(NULL_IDENTIFIER);
-			case "uuid":
-				identifier = new UUIDIdentifier(nextIdentifierId, tag.getUUID(key + "_uuid"));
-				break;
-			case "fake":
-				identifier = new FakeIdentifier(nextIdentifierId, tag.getInt(key+"_count"));
-				break;
-			default:
+			case "null" ->
+			{
+				return DataResult.success(Optional.empty());
+			}
+			case "uuid" -> identifier = new UUIDIdentifier(nextIdentifierId, tag.getUUID(key + "_uuid"));
+			case "fake" -> identifier = new FakeIdentifier(nextIdentifierId, tag.getInt(key + "_count"));
+			default ->
+			{
 				return DataResult.error(() -> "Can't parse identifier type " + type);
+			}
 		}
 		
 		for(PlayerIdentifier id : identifierList)
 			if(id.equals(identifier))
-				return DataResult.success(id);
+				return DataResult.success(Optional.of(id));
 		
 		nextIdentifierId++;
 		identifierList.add(identifier);
-		return DataResult.success(identifier);
+		return DataResult.success(Optional.of(identifier));
 	}
 	
 	public static PlayerIdentifier getById(int id)
@@ -164,7 +161,7 @@ public class IdentifierHandler
 	
 	private static class UUIDIdentifier extends PlayerIdentifier
 	{
-		private UUID uuid;
+		private final UUID uuid;
 		
 		private UUIDIdentifier(int id, UUID uuid)
 		{
@@ -226,51 +223,6 @@ public class IdentifierHandler
 		public int hashCode()
 		{
 			return Objects.hash(uuid);
-		}
-	}
-	
-	private static class NullIdentifier extends PlayerIdentifier
-	{
-		public NullIdentifier()
-		{
-			super(-1);
-		}
-		
-		@Override
-		public boolean appliesTo(Player player)
-		{
-			return false;
-		}
-		
-		@Override
-		public String getUsername()
-		{
-			return "Invalid Player";
-		}
-		
-		@Override
-		public ServerPlayer getPlayer(MinecraftServer server)
-		{
-			return null;
-		}
-		
-		@Override
-		public String getCommandString()
-		{
-			return "null";
-		}
-		
-		@Override
-		public CompoundTag saveToNBT(CompoundTag nbt, String key)
-		{
-			nbt.putString(key, "null");
-			return nbt;
-		}
-		
-		@Override
-		public String toString()
-		{
-			return "Identifier:null";
 		}
 	}
 	

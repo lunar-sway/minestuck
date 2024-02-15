@@ -102,7 +102,7 @@ public final class SburbConnections
 		}
 		
 		Optional<PlayerIdentifier> server = IdentifierHandler.loadNullable(connectionTag, "server")
-				.resultOrPartial(LOGGER::error).filter(id -> id != IdentifierHandler.NULL_IDENTIFIER);
+				.resultOrPartial(LOGGER::error).flatMap(Function.identity());
 		
 		if(active && server.isPresent())
 		{
