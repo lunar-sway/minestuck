@@ -35,22 +35,22 @@ public sealed abstract class SessionHandler
 		this.skaianetData = skaianetData;
 	}
 	
-	static SessionHandler init(SkaianetData skaianetData)
+	static SessionHandler init(boolean globalSession, SkaianetData skaianetData)
 	{
-		if(MinestuckConfig.SERVER.globalSession.get())
+		if(globalSession)
 			return new Global(skaianetData, new Session(skaianetData));
 		else
 			return new Multi(skaianetData, Collections.emptyList());
 	}
 	
-	static SessionHandler load(CompoundTag tag, SkaianetData skaianetData)
+	static SessionHandler load(CompoundTag tag, boolean globalSession, SkaianetData skaianetData)
 	{
 		
 		if(tag.contains("session", Tag.TAG_COMPOUND))
 		{
 			Session session = Session.read(tag.getCompound("session"), skaianetData);
 			
-			if(MinestuckConfig.SERVER.globalSession.get())
+			if(globalSession)
 				return new Global(skaianetData, session);
 			else
 				return new Multi(skaianetData, createSplitSessions(session));

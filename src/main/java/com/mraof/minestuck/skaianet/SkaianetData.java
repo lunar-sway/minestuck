@@ -1,6 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -37,13 +38,13 @@ public final class SkaianetData extends SavedData
 	
 	final MinecraftServer mcServer;
 	
-	private SkaianetData(MinecraftServer mcServer)
+	private SkaianetData(boolean globalSession, MinecraftServer mcServer)
 	{
 		this.mcServer = mcServer;
 		
 		computerInteractions = new ComputerInteractions(this);
 		connections = new SburbConnections(this);
-		sessionHandler = SessionHandler.init(this);
+		sessionHandler = SessionHandler.init(globalSession, this);
 	}
 	
 	private SkaianetData(MinecraftServer mcServer, CompoundTag nbt)
@@ -72,7 +73,7 @@ public final class SkaianetData extends SavedData
 		computerInteractions = new ComputerInteractions(this, nbt);
 		connections = new SburbConnections(this, nbt);
 		
-		sessionHandler = SessionHandler.load(nbt, this);
+		sessionHandler = SessionHandler.load(nbt, MinestuckConfig.SERVER.globalSession.get(), this);
 	}
 	
 	@Override
@@ -101,9 +102,9 @@ public final class SkaianetData extends SavedData
 		return compound;
 	}
 	
-	static SkaianetData newInstanceForGameTest(GameTestHelper helper)
+	static SkaianetData newInstanceForGameTest(boolean globalSession, GameTestHelper helper)
 	{
-		return new SkaianetData(helper.getLevel().getServer());
+		return new SkaianetData(globalSession, helper.getLevel().getServer());
 	}
 	
 	SburbPlayerData getOrCreateData(PlayerIdentifier player)
@@ -165,7 +166,7 @@ public final class SkaianetData extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(nbt -> new SkaianetData(server, nbt), () -> new SkaianetData(server), DATA_NAME);
+		return storage.computeIfAbsent(nbt -> new SkaianetData(server, nbt), () -> new SkaianetData(MinestuckConfig.SERVER.globalSession.get(), server), DATA_NAME);
 	}
 	
 	// Always save skaianet data, since it's difficult to reliably tell when skaianet data has changed.

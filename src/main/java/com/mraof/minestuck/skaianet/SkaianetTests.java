@@ -21,7 +21,7 @@ public final class SkaianetTests
 	public static void primaryConnection(GameTestHelper helper)
 	{
 		helper.succeedIf(() -> {
-			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(helper);
+			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(false, helper);
 			SburbConnections connections = skaianetData.connections;
 			
 			PlayerIdentifier client = IdentifierHandler.createNewFakeIdentifier(),
@@ -42,7 +42,7 @@ public final class SkaianetTests
 	public static void changePrimaryServerPlayer(GameTestHelper helper)
 	{
 		helper.succeedIf(() -> {
-			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(helper);
+			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(false, helper);
 			SburbConnections connections = skaianetData.connections;
 			
 			PlayerIdentifier client = IdentifierHandler.createNewFakeIdentifier(),
