@@ -1,11 +1,17 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -19,6 +25,7 @@ import java.util.stream.Stream;
  * while the other dynamically creates, merges and splits up multiple sessions as players connect and disconnect to each other.
  * @author kirderf1
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public sealed abstract class SessionHandler
 {
 	final SkaianetData skaianetData;
@@ -129,6 +136,19 @@ public sealed abstract class SessionHandler
 	}
 	
 	/**
+	 * A dirty fix to make sure that a player is in the global session. Should eventually be replaced with a better solution.
+	 */
+	@SubscribeEvent
+	public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		if(!(event.getEntity() instanceof ServerPlayer player))
+			return;
+		PlayerIdentifier playerId = IdentifierHandler.encode(player);
+		if(playerId != null && SessionHandler.get(player.server) instanceof Global global)
+			global.onNewPlayer(playerId);
+	}
+	
+	/**
 	 * An implementation that only allows for a single, global session, which all players are assumed to be part of
 	 */
 	private static final class Global extends SessionHandler
@@ -140,7 +160,14 @@ public sealed abstract class SessionHandler
 		{
 			super(skaianetData);
 			globalSession = Objects.requireNonNull(session);
+			
+			// Complements what onNewPlayer() does, but for all players and at server-start only.
 			skaianetData.players().forEach(globalSession::addPlayer);
+		}
+		
+		void onNewPlayer(PlayerIdentifier player)
+		{
+			globalSession.addPlayer(player);
 		}
 		
 		@Override
