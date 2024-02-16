@@ -309,6 +309,13 @@ public sealed abstract class SessionHandler
 		{
 			PlayerIdentifier remainingPlayer = session.getPlayers().iterator().next();
 			Set<PlayerIdentifier> players = collectAllConnectedPlayers(remainingPlayer, session.skaianetData);
+			
+			if(players.size() == session.getPlayers().size())
+			{
+				newSessions.add(session);
+				break;
+			}
+			
 			Session newSession = session.createSessionSplit(players);
 			newSession.checkIfCompleted();
 			newSessions.add(newSession);
