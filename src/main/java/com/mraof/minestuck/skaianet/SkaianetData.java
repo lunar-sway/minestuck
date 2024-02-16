@@ -17,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * This class is the centerpoint of various sburb-related data, which all goes in the "minestuck_skaianet.dat" data file.
@@ -107,11 +106,6 @@ public final class SkaianetData extends SavedData
 		return new SkaianetData(helper.getLevel().getServer());
 	}
 	
-	Stream<PlayerIdentifier> players()
-	{
-		return playerDataMap.keySet().stream();
-	}
-	
 	SburbPlayerData getOrCreateData(PlayerIdentifier player)
 	{
 		return this.playerDataMap.computeIfAbsent(player, playerId -> {
@@ -119,6 +113,11 @@ public final class SkaianetData extends SavedData
 			SburbHandler.initNewData(data);
 			return data;
 		});
+	}
+	
+	Collection<PlayerIdentifier> players()
+	{
+		return List.copyOf(playerDataMap.keySet());
 	}
 	
 	public Collection<SburbPlayerData> allPlayerData()
