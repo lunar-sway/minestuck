@@ -109,8 +109,6 @@ public class MinestuckConfig
 		public final BooleanValue globalSession;
 		public final EnumValue<PermissionType> dataCheckerPermission;
 		
-		public final EnumValue<FailedEscapeMode> escapeFailureMode = null;	//TODO once a connection can close from meteor failure
-		
 		//Edit Mode
 		public final BooleanValue showGristChanges;
 		public final BooleanValue gristRefund;
@@ -317,17 +315,5 @@ public class MinestuckConfig
 		{
 			return factor;
 		}
-	}
-	
-	public enum FailedEscapeMode
-	{
-		/**
-		 * Make the player's new server player his/her old server player's server player
-		 */
-		CLOSE,
-		/**
-		 * The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
-		 */
-		OPEN
 	}
 }
