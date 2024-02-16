@@ -53,7 +53,6 @@ public class SendGristCommand
 			return false;
 		
 		SessionHandler sessionHandler = SessionHandler.get(player.server);
-		return sessionHandler.getPlayerSession(IdentifierHandler.encode(player))
-				== sessionHandler.getPlayerSession(IdentifierHandler.encode(player2));
+		return sessionHandler.isInSameSession(IdentifierHandler.encode(player), IdentifierHandler.encode(player2));
 	}
 }

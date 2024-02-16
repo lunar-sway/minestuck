@@ -204,7 +204,7 @@ public final class SburbConnections
 	{
 		return MinestuckConfig.SERVER.allowSecondaryConnections.get()
 				&& this.primaryPartnerForClient(client).isPresent()
-				&& skaianetData.sessionHandler.getPlayerSession(client) == skaianetData.sessionHandler.getPlayerSession(server);
+				&& skaianetData.sessionHandler.isInSameSession(client, server);
 	}
 	
 	boolean tryConnect(ISburbComputer clientComputer, ISburbComputer serverComputer)
@@ -336,8 +336,6 @@ public final class SburbConnections
 			throw new IllegalStateException();
 		
 		primaryClientToServerMap.put(client, Optional.empty());
-		
-		skaianetData.sessionHandler.onConnect(client);
 		
 		skaianetData.infoTracker.markDirty(client);
 	}

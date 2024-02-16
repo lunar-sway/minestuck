@@ -86,9 +86,8 @@ public final class SburbHandler
 	public static int availableTier(MinecraftServer mcServer, PlayerIdentifier client)
 	{
 		SessionHandler handler = SessionHandler.get(mcServer);
-		Session s = handler.getPlayerSession(client);
-		if(s == null)
-			return -1;
+		Session s = handler.getOrCreateSession(client);
+		
 		if(handler.doesSessionHaveMaxTier(s))
 			return Integer.MAX_VALUE;
 		
@@ -177,7 +176,7 @@ public final class SburbHandler
 		playerData.setHasEntered();
 		skaianetData.infoTracker.markLandChainDirty();
 		
-		SessionHandler.get(server).getPlayerSession(playerData.playerId()).checkIfCompleted();
+		SessionHandler.get(server).getOrCreateSession(playerData.playerId()).checkIfCompleted();
 		
 		MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 		

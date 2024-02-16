@@ -10,7 +10,6 @@ import net.minecraft.nbt.Tag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,16 +31,13 @@ public final class Session
 	 */
 	boolean completed;
 	
-	static Session createMergedSession(Collection<Session> sessions, SkaianetData skaianetData)
+	Session merge(Session other)
 	{
-		Session session = new Session(skaianetData);
-		sessions.forEach(other -> {
-			session.players.addAll(other.players);
-			// Since the gutter capacity of the merged session should be the sum of the individual sessions,
-			// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
-			session.gutter.addGristUnchecked(other.gutter.getCache());
-		});
-		return session;
+		this.players.addAll(other.players);
+		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
+		// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
+		this.gutter.addGristUnchecked(other.gutter.getCache());
+		return this;
 	}
 	
 	/**
@@ -74,12 +70,7 @@ public final class Session
 		this.gutter = new GristGutter(skaianetData.mcServer, this, nbt.getList("gutter", Tag.TAG_COMPOUND));
 	}
 	
-	/**
-	 * Checks if a certain player is in the connection list.
-	 * @param player The username of the player.
-	 * @return If the player was found.
-	 */
-	public boolean containsPlayer(PlayerIdentifier player)
+	boolean containsPlayer(PlayerIdentifier player)
 	{
 		return players.contains(player);
 	}
@@ -98,12 +89,6 @@ public final class Session
 		return gutter;
 	}
 	
-	/**
-	 * Writes this session to an nbt tag.
-	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.
-	 *
-	 * @return An CompoundNBT representing this session.
-	 */
 	CompoundTag write()
 	{
 		CompoundTag nbt = new CompoundTag();
@@ -120,12 +105,6 @@ public final class Session
 		return nbt;
 	}
 	
-	/**
-	 * Reads data from the given nbt tag.
-	 *
-	 * @param nbt An CompoundNBT to read from.
-	 * @return This.
-	 */
 	static Session read(CompoundTag nbt, SkaianetData skaianetData)
 	{
 		Session s = new Session(nbt, skaianetData);

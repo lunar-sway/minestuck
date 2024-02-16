@@ -158,10 +158,8 @@ public final class GristCache
 		
 		if(!overflowedGrist.isEmpty())
 		{
-			GristGutter.get(data.identifier, mcServer).ifPresent(gutter -> {
-				gutter.addGristFrom(overflowedGrist);
-				GristToastPacket.notify(mcServer, data.identifier, set, GristHelper.EnumSource.GUTTER); //still send a grist toast when adding to gutter
-			});
+			GristGutter.get(data.identifier, mcServer).addGristFrom(overflowedGrist);
+			GristToastPacket.notify(mcServer, data.identifier, set, GristHelper.EnumSource.GUTTER); //still send a grist toast when adding to gutter
 			
 			ServerPlayer player = data.getPlayer();
 			if(player != null && !overflowedGrist.isEmpty())

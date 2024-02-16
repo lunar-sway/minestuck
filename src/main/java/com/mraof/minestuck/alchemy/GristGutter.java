@@ -70,13 +70,12 @@ public class GristGutter
 		if(playerIdentifier == null)
 			return Optional.empty();
 		
-		return get(playerIdentifier, player.server);
+		return Optional.of(get(playerIdentifier, player.server));
 	}
 	
-	public static Optional<GristGutter> get(PlayerIdentifier player, MinecraftServer mcServer)
+	public static GristGutter get(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		return Optional.ofNullable(SessionHandler.get(mcServer).getPlayerSession(player))
-				.map(Session::getGristGutter);
+		return SessionHandler.get(mcServer).getOrCreateSession(player).getGristGutter();
 	}
 	
 	public GristSet getCache()

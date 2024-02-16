@@ -10,11 +10,13 @@ import net.minecraft.server.MinecraftServer;
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * An extension to SkaianetHandler with a focus on sessions
+ * Object that manages access to sessions.
+ * It has two distinct implementations that are used based on the "globalSession" config option.
+ * One maintains a "global session" that gets used for all players,
+ * while the other dynamically creates, merges and splits up multiple sessions as players connect and disconnect to each other.
  * @author kirderf1
  */
 public sealed abstract class SessionHandler
@@ -53,7 +55,7 @@ public sealed abstract class SessionHandler
 				sessions.add(Session.read(sessionsTag.getCompound(i), skaianetData));
 			
 			if(MinestuckConfig.SERVER.globalSession.get())
-				return new Global(skaianetData, Session.createMergedSession(sessions, skaianetData));
+				return new Global(skaianetData, sessions.stream().reduce(new Session(skaianetData), Session::merge));
 			else
 				return new Multi(skaianetData, sessions);
 		}
@@ -62,11 +64,26 @@ public sealed abstract class SessionHandler
 	abstract void write(CompoundTag compound);
 	
 	/**
-	 * Looks for the session that the player is a part of.
-	 * @param player A string of the player's username.
-	 * @return A session that contains at least one connection, that the player is a part of.
+	 * Looks for the session that the player is a part of, and returns it within an optional if present.
+	 * This function should not have any side effects.
+	 * While a session should only be absent if the player is not connected to any other player,
+	 * a session is not necessarily absent because the player is not connected to any other player.
+	 * @see SessionHandler#getOrCreateSession(PlayerIdentifier)
 	 */
-	public abstract Session getPlayerSession(PlayerIdentifier player);
+	public abstract Optional<Session> getSession(PlayerIdentifier player);
+	
+	/**
+	 * Looks for the session that the player is a part of, creates one if there is none, and returns it.
+	 * This function may create and add a new session as a side effect.
+	 * @see SessionHandler#getSession(PlayerIdentifier)
+	 */
+	public abstract Session getOrCreateSession(PlayerIdentifier player);
+	
+	public boolean isInSameSession(PlayerIdentifier player1, PlayerIdentifier player2)
+	{
+		Optional<Session> session = this.getSession(player1);
+		return session.isPresent() && session.get().containsPlayer(player2);
+	}
 	
 	public abstract Set<Session> getSessions();
 	
@@ -74,8 +91,6 @@ public sealed abstract class SessionHandler
 	{
 		return session.completed;
 	}
-	
-	abstract void onConnect(PlayerIdentifier client);
 	
 	abstract void onConnect(PlayerIdentifier client, PlayerIdentifier server);
 	
@@ -104,10 +119,8 @@ public sealed abstract class SessionHandler
 	 */
 	Stream<PlayerIdentifier> playersToCheckForDataSelection(PlayerIdentifier player)
 	{
-		Session session = this.getPlayerSession(player);
-		return session != null
-				? session.getPlayers().stream().filter(otherPlayer -> !otherPlayer.equals(player))
-				: Stream.empty();
+		return this.getSession(player).stream()
+				.flatMap(session -> session.getPlayers().stream().filter(otherPlayer -> !otherPlayer.equals(player)));
 	}
 	
 	public static SessionHandler get(MinecraftServer server)
@@ -137,9 +150,21 @@ public sealed abstract class SessionHandler
 		}
 		
 		@Override
-		public Session getPlayerSession(PlayerIdentifier player)
+		public Optional<Session> getSession(PlayerIdentifier player)
+		{
+			return Optional.of(globalSession);
+		}
+		
+		@Override
+		public Session getOrCreateSession(PlayerIdentifier player)
 		{
 			return globalSession;
+		}
+		
+		@Override
+		public boolean isInSameSession(PlayerIdentifier player1, PlayerIdentifier player2)
+		{
+			return true;
 		}
 		
 		@Override
@@ -152,12 +177,6 @@ public sealed abstract class SessionHandler
 		boolean doesSessionHaveMaxTier(Session session)
 		{
 			return false;
-		}
-		
-		@Override
-		void onConnect(PlayerIdentifier client)
-		{
-			globalSession.addPlayer(client);
 		}
 		
 		@Override
@@ -182,9 +201,6 @@ public sealed abstract class SessionHandler
 	 */
 	private static final class Multi extends SessionHandler
 	{
-		/**
-		 * An array list of the current worlds sessions.
-		 */
 		private final Set<Session> sessions = new HashSet<>();
 		
 		Multi(SkaianetData skaianetData, List<Session> sessions)
@@ -206,12 +222,22 @@ public sealed abstract class SessionHandler
 		}
 		
 		@Override
-		public Session getPlayerSession(PlayerIdentifier player)
+		public Optional<Session> getSession(PlayerIdentifier player)
 		{
-			for(Session s : sessions)
-				if(s.containsPlayer(player))
-					return s;
-			return null;
+			return sessions.stream().filter(s -> s.containsPlayer(player)).findAny();
+		}
+		
+		@Override
+		public Session getOrCreateSession(PlayerIdentifier player)
+		{
+			Optional<Session> session = this.getSession(player);
+			
+			if(session.isPresent())
+				return session.get();
+			
+			Session newSession = new Session(skaianetData).addPlayer(player);
+			this.sessions.add(newSession);
+			return newSession;
 		}
 		
 		@Override
@@ -220,48 +246,31 @@ public sealed abstract class SessionHandler
 			return Collections.unmodifiableSet(sessions);
 		}
 		
-		Session prepareSessionFor(PlayerIdentifier... players)
-		{
-			Set<Session> sessions = Arrays.stream(players).map(this::getPlayerSession).filter(Objects::nonNull).collect(Collectors.toSet());
-			
-			if(sessions.size() > 1)
-			{
-				this.sessions.removeAll(sessions);
-				Session newSession = Session.createMergedSession(sessions, this.skaianetData);
-				this.sessions.add(newSession);
-				return newSession;
-			} else if(sessions.size() == 1)
-			{
-				return sessions.stream().findAny().get();
-			} else
-			{
-				Session session = new Session(skaianetData);
-				this.sessions.add(session);
-				return session;
-			}
-		}
-		
-		@Override
-		void onConnect(PlayerIdentifier client)
-		{
-			prepareSessionFor(client).addPlayer(client);
-		}
-		
 		@Override
 		void onConnect(PlayerIdentifier client, PlayerIdentifier server)
 		{
-			prepareSessionFor(client, server).addPlayer(client).addPlayer(server);
+			Session clientSession = this.getOrCreateSession(client), serverSession = this.getOrCreateSession(server);
+			
+			if(clientSession.getPlayers().size() < serverSession.getPlayers().size())
+			{
+				this.sessions.remove(clientSession);
+				serverSession.merge(clientSession);
+			} else
+			{
+				this.sessions.remove(serverSession);
+				clientSession.merge(serverSession);
+			}
 		}
 		
 		@Override
 		void onDisconnect(PlayerIdentifier client, PlayerIdentifier server)
 		{
-			Session s = Objects.requireNonNull(getPlayerSession(client));
+			Optional<Session> s = this.getSession(client);
 			
-			if(!skaianetData.connections.isPrimaryPair(client, server))
+			if(s.isPresent() && s.get().containsPlayer(server) && !skaianetData.connections.isPrimaryPair(client, server))
 			{
-				this.sessions.remove(s);
-				this.sessions.addAll(createSplitSessions(s));
+				this.sessions.remove(s.get());
+				this.sessions.addAll(createSplitSessions(s.get()));
 			}
 		}
 	}
@@ -275,8 +284,7 @@ public sealed abstract class SessionHandler
 			Set<PlayerIdentifier> players = collectAllConnectedPlayers(remainingPlayer, session.skaianetData);
 			Session newSession = session.createSessionSplit(players);
 			newSession.checkIfCompleted();
-			if(newSession.getPlayers().size() > 1 || newSession.getGristGutter().gutterMultiplierForSession() > 0)
-				newSessions.add(newSession);
+			newSessions.add(newSession);
 		}
 		return newSessions;
 	}
