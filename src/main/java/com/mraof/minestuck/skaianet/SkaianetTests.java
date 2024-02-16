@@ -60,4 +60,54 @@ public final class SkaianetTests
 			helper.assertTrue(connections.isPrimaryPair(client, server2), "Primary server player did not match");
 		});
 	}
+	
+	@GameTest(timeoutTicks = 0, template = "empty_gametest")
+	public static void multiSessionAdaptions(GameTestHelper helper)
+	{
+		helper.succeedIf(() -> {
+			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(false, helper);
+			SessionHandler sessions = skaianetData.sessionHandler;
+			SburbConnections connections = skaianetData.connections;
+			
+			PlayerIdentifier client = IdentifierHandler.createNewFakeIdentifier(),
+					server = IdentifierHandler.createNewFakeIdentifier();
+			
+			helper.assertFalse(sessions.getOrCreateSession(client) == sessions.getOrCreateSession(server), "Started in the same session");
+			
+			connections.setPrimaryConnection(client, server);
+			
+			helper.assertTrue(sessions.getOrCreateSession(client) == sessions.getOrCreateSession(server), "Sessions were not same after connecting");
+			
+			connections.unlinkClientPlayer(client);
+			
+			helper.assertFalse(sessions.getOrCreateSession(client) == sessions.getOrCreateSession(server), "Remained in the same session after unlinking");
+		});
+	}
+	
+	@GameTest(timeoutTicks = 0, template = "empty_gametest")
+	public static void globalSession(GameTestHelper helper)
+	{
+		helper.succeedIf(() -> {
+			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(true, helper);
+			SessionHandler sessions = skaianetData.sessionHandler;
+			SburbConnections connections = skaianetData.connections;
+			
+			PlayerIdentifier client = IdentifierHandler.createNewFakeIdentifier(),
+					server = IdentifierHandler.createNewFakeIdentifier();
+			
+			Session session = sessions.getOrCreateSession(client);
+			
+			helper.assertTrue(session == sessions.getOrCreateSession(server), "Started in different sessions");
+			
+			connections.setPrimaryConnection(client, server);
+			
+			helper.assertTrue(session == sessions.getOrCreateSession(client)
+					&& session == sessions.getOrCreateSession(server), "Session changed after connecting");
+			
+			connections.unlinkClientPlayer(client);
+			
+			helper.assertTrue(session == sessions.getOrCreateSession(client)
+					&& session == sessions.getOrCreateSession(server), "Session changed after disconnecting");
+		});
+	}
 }
