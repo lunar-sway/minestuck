@@ -77,6 +77,10 @@ public final class MSConfiguredFeatureProvider
 		context.register(UNFINISHED_CARVED_TUNNEL, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_TUNNEL.get(), FeatureConfiguration.NONE));
 		context.register(WOOD_SHAVINGS_PILE, new ConfiguredFeature<>(MSFeatures.WOOD_SHAVINGS_PILE.get(), FeatureConfiguration.NONE));
 		context.register(WOODEN_CACTUS_PAIR, new ConfiguredFeature<>(MSFeatures.WOODEN_CACTUS_PAIR.get(), FeatureConfiguration.NONE));
+		context.register(MASSIVE_CHAIR, new ConfiguredFeature<>(MSFeatures.MASSIVE_CHAIR.get(), FeatureConfiguration.NONE));
+		context.register(MASSIVE_FRAMING, new ConfiguredFeature<>(MSFeatures.MASSIVE_FRAMING.get(), FeatureConfiguration.NONE));
+		context.register(MASSIVE_STOOL, new ConfiguredFeature<>(MSFeatures.MASSIVE_STOOL.get(), FeatureConfiguration.NONE));
+		context.register(MASSIVE_TABLE, new ConfiguredFeature<>(MSFeatures.MASSIVE_TABLE.get(), FeatureConfiguration.NONE));
 		
 		context.register(BLOOD_POOL, new ConfiguredFeature<>(Feature.LAKE,
 				new LakeFeature.Configuration(BlockStateProvider.simple(MSBlocks.BLOOD.get()), BlockStateProvider.simple(Blocks.AIR))));

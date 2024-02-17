@@ -1762,8 +1762,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(SandstoneLandType.STONY_DESERTS, "Stony Deserts");
 		addLand(ShadeLandType.SHADE, "Shade");
 		addLand(WoodLandType.WOOD, "Wood");
-		addLand(WoodLandType.OAK, "Oak");
-		addLand(WoodLandType.LUMBER, "Lumber");
+		addLand(WoodLandType.OAK, "Planks");
+		addLand(WoodLandType.LUMBER, "Carvings");
 		addLand(FloraLandType.FLORA, "Flora");
 		addLand(FloraLandType.FLOWERS, "Flowers");
 		addLand(FloraLandType.THORNS, "Thorns");
