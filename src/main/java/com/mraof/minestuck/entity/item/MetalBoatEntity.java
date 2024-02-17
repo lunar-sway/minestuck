@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.CustomBoatItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -9,10 +10,12 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -145,7 +148,7 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
-	public enum Type
+	public enum Type implements CustomBoatItem.BoatProvider
 	{
 		IRON(1 / 1.5F, () -> Items.IRON_INGOT, MSItems.IRON_BOAT, new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
 		GOLD(1.0F, () -> Items.GOLD_INGOT, MSItems.GOLD_BOAT, new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
@@ -181,6 +184,12 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 		public ResourceLocation getBoatTexture()
 		{
 			return boatTexture;
+		}
+		
+		@Override
+		public Entity createBoat(ItemStack stack, Level level, double x, double y, double z)
+		{
+			return new MetalBoatEntity(level, x, y, z, this);
 		}
 	}
 }
