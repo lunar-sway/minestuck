@@ -495,6 +495,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.POLISHED_LACQUERED_UNCARVED_WOOD.get());
 		output.accept(MSItems.LACQUERED_CARVED_KNOTTED_WOOD.get());
 		output.accept(MSItems.LACQUERED_WOODEN_MUSHROOM.get());
+		output.accept(MSItems.WOODEN_LAMP.get());
 		output.accept(MSItems.DENSE_CLOUD.get());
 		output.accept(MSItems.BRIGHT_DENSE_CLOUD.get());
 		output.accept(MSItems.SUGAR_CUBE.get());

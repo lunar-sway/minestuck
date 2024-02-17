@@ -30,6 +30,22 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PARCEL_PYXIS = key("parcel_pyxis");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_CHERRY_TREE = key("carved_cherry_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_HOUSE = key("carved_house");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_LOG = key("carved_log");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_CARVED_LOG = key("large_carved_log");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_UNFINISHED_TABLE = key("large_unfinished_table");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_CHAIR = key("treated_chair");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_TABLE = key("treated_table");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_BOOKSHELF = key("unfinished_carved_bookshelf");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_CHAIR = key("unfinished_carved_chair");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_CREEPER = key("unfinished_carved_creeper");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_DRAWER = key("unfinished_carved_drawer");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_SALAMANDER = key("unfinished_carved_salamander");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_TABLE = key("unfinished_carved_table");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_TREE = key("unfinished_carved_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_TUNNEL = key("unfinished_carved_tunnel");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> WOOD_SHAVINGS_PILE = key("wood_shavings_pile");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> WOODEN_CACTUS_PAIR = key("wooden_cactus_pair");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_POOL = key("blood_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OIL_POOL = key("oil_pool");

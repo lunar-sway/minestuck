@@ -5,8 +5,10 @@ import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipeBuild
 import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -878,7 +880,11 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_PLANKS.get()).input(MSItems.TREATED_PLANKS.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD.get()).input(MSItems.POLISHED_TREATED_UNCARVED_WOOD.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD.get()).input(MSItems.TREATED_CARVED_KNOTTED_WOOD.get()).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_WOODEN_MUSHROOM.get()).input(Items.BROWN_MUSHROOM).or().input(Items.HONEYCOMB_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.LACQUERED_WOODEN_MUSHROOM.get()).input(MSItems.LACQUERED_UNCARVED_WOOD.get()).or().input(Items.BROWN_MUSHROOM).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.WOODEN_LAMP.get()).input(MSItems.LACQUERED_UNCARVED_WOOD.get()).or().namedInput(Items.OCHRE_FROGLIGHT).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.WOODEN_LAMP.get()).input(MSItems.LACQUERED_UNCARVED_WOOD.get()).or().namedInput(Items.PEARLESCENT_FROGLIGHT).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.WOODEN_LAMP.get()).input(MSItems.LACQUERED_UNCARVED_WOOD.get()).or().namedInput(Items.VERDANT_FROGLIGHT).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.SNOW_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.SNOW).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.SNOWBALL).build(consumer);

@@ -242,6 +242,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD, "Polished Lacquered Uncarved Wood");
 		addBlock(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD, "Lacquered Carved Knotted Wood");
 		addBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM, "Lacquered Wooden Mushroom");
+		addBlock(MSBlocks.WOODEN_LAMP, "Wooden Lamp");
 		addBlock(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		addBlock(MSBlocks.SUGAR_CUBE, "Sugar Cube");

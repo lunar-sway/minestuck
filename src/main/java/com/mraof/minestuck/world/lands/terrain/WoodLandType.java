@@ -51,7 +51,7 @@ public class WoodLandType extends TerrainLandType
 		registry.setBlock("structure_secondary", MSBlocks.POLISHED_UNCARVED_WOOD);
 		registry.setBlock("structure_secondary_decorative", MSBlocks.TREATED_PLANKS);
 		registry.setBlock("structure_secondary_stairs", MSBlocks.TREATED_PLANKS_STAIRS);
-		registry.setBlock("light_block", MSBlocks.GLOWING_WOOD);
+		registry.setBlock("light_block", MSBlocks.WOODEN_LAMP);
 		registry.setBlock("bush", MSBlocks.WOODEN_CACTUS);
 		registry.setBlock("structure_wool_1", Blocks.PURPLE_WOOL);
 		registry.setBlock("structure_wool_3", Blocks.GREEN_WOOL);
@@ -63,6 +63,22 @@ public class WoodLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WOODEN_GRASS_PATCH, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREATED_WOODEN_GRASS_PATCH, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CARVED_CHERRY_TREE, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CARVED_HOUSE, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CARVED_LOG, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LARGE_CARVED_LOG, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_LARGE_UNFINISHED_TABLE, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_TREATED_CHAIR, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_TREATED_TABLE, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_BOOKSHELF, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_UNFINISHED_CARVED_CHAIR, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_CREEPER, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_UNFINISHED_CARVED_DRAWER, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_SALAMANDER, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_UNFINISHED_CARVED_TABLE, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_TREE, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_TUNNEL, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WOOD_SHAVINGS_PILE, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WOODEN_CACTUS_PAIR, LandBiomeType.NORMAL);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.CARVED_PLANKS_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL);
@@ -72,6 +88,25 @@ public class WoodLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LACQUERED_WOODEN_MUSHROOM_PATCH, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREATED_WOODEN_GRASS_PATCH, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CARVED_CHERRY_TREE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CARVED_LOG, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_LARGE_UNFINISHED_TABLE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LARGE_UNFINISHED_TABLE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_TREATED_CHAIR, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREATED_CHAIR, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_TREATED_TABLE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREATED_TABLE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_BOOKSHELF, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_UNFINISHED_CARVED_CHAIR, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_CHAIR, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_CREEPER, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_DRAWER, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_SALAMANDER, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_UNFINISHED_CARVED_TABLE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_TABLE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_TREE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.UNFINISHED_CARVED_TUNNEL, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WOOD_SHAVINGS_PILE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WOODEN_CACTUS_PAIR, LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.LACQUERED_PLANKS_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);

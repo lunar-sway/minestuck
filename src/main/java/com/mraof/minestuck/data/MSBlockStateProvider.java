@@ -403,6 +403,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.LACQUERED_WOODEN_MUSHROOM, MSBlockStateProvider::texture);
+		simpleBlockWithItem(MSBlocks.WOODEN_LAMP);
 		
 		simpleBlockWithItem(MSBlocks.DENSE_CLOUD);
 		simpleBlockWithItem(MSBlocks.BRIGHT_DENSE_CLOUD);

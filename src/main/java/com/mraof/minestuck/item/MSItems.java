@@ -905,6 +905,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> POLISHED_LACQUERED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
 	public static final RegistryObject<BlockItem> LACQUERED_CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD);
 	public static final RegistryObject<BlockItem> LACQUERED_WOODEN_MUSHROOM = registerBlockItem(MSBlocks.LACQUERED_WOODEN_MUSHROOM);
+	public static final RegistryObject<BlockItem> WOODEN_LAMP = registerBlockItem(MSBlocks.WOODEN_LAMP);
 	
 	public static final RegistryObject<BlockItem> DENSE_CLOUD = registerBlockItem(MSBlocks.DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> BRIGHT_DENSE_CLOUD = registerBlockItem(MSBlocks.BRIGHT_DENSE_CLOUD);

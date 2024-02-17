@@ -61,6 +61,22 @@ public final class MSConfiguredFeatureProvider
 		context.register(TOWER, new ConfiguredFeature<>(MSFeatures.TOWER.get(), FeatureConfiguration.NONE));
 		context.register(PARCEL_PYXIS, new ConfiguredFeature<>(MSFeatures.PARCEL_PYXIS.get(), FeatureConfiguration.NONE));
 		context.register(CARVED_CHERRY_TREE, new ConfiguredFeature<>(MSFeatures.CARVED_CHERRY_TREE.get(), FeatureConfiguration.NONE));
+		context.register(CARVED_HOUSE, new ConfiguredFeature<>(MSFeatures.CARVED_HOUSE.get(), FeatureConfiguration.NONE));
+		context.register(CARVED_LOG, new ConfiguredFeature<>(MSFeatures.CARVED_LOG.get(), FeatureConfiguration.NONE));
+		context.register(LARGE_CARVED_LOG, new ConfiguredFeature<>(MSFeatures.LARGE_CARVED_LOG.get(), FeatureConfiguration.NONE));
+		context.register(LARGE_UNFINISHED_TABLE, new ConfiguredFeature<>(MSFeatures.LARGE_UNFINISHED_TABLE.get(), FeatureConfiguration.NONE));
+		context.register(TREATED_CHAIR, new ConfiguredFeature<>(MSFeatures.TREATED_CHAIR.get(), FeatureConfiguration.NONE));
+		context.register(TREATED_TABLE, new ConfiguredFeature<>(MSFeatures.TREATED_TABLE.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_BOOKSHELF, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_BOOKSHELF.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_CHAIR, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_CHAIR.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_CREEPER, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_CREEPER.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_DRAWER, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_DRAWER.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_SALAMANDER, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_SALAMANDER.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_TABLE, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_TABLE.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_TREE, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_TREE.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_TUNNEL, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_TUNNEL.get(), FeatureConfiguration.NONE));
+		context.register(WOOD_SHAVINGS_PILE, new ConfiguredFeature<>(MSFeatures.WOOD_SHAVINGS_PILE.get(), FeatureConfiguration.NONE));
+		context.register(WOODEN_CACTUS_PAIR, new ConfiguredFeature<>(MSFeatures.WOODEN_CACTUS_PAIR.get(), FeatureConfiguration.NONE));
 		
 		context.register(BLOOD_POOL, new ConfiguredFeature<>(Feature.LAKE,
 				new LakeFeature.Configuration(BlockStateProvider.simple(MSBlocks.BLOOD.get()), BlockStateProvider.simple(Blocks.AIR))));
