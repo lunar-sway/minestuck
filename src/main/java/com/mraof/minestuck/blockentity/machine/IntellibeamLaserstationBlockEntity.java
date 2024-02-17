@@ -1,5 +1,6 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
@@ -12,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -86,6 +88,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 				waitTimer = 10;
 			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
 			{
+				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.trigger((ServerPlayer) player, analyzedCard);
 				applyReadableNBT(analyzedCard);
 				takeCard(player);
 				

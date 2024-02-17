@@ -15,7 +15,7 @@
     "description": {
       "translate": "advancements.minestuck.big_one_mil.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
       "item": "minestuck:boondollars",

@@ -1718,6 +1718,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.DOUBLE_DIGITS, "Double Digits", "Reach the tenth rung of your Echeladder");
 		addAdvancement(MSAdvancementProvider.HALFWAY_POINT, "Halfway Point", "Reach the twenty-fifth rung of your Echeladder");
 		addAdvancement(MSAdvancementProvider.BIG_ONE_MIL, "The Big 1 Mil", "Reach a Grist Cache capable of storing one million units of grist");
+		addAdvancement(MSAdvancementProvider.INTELLIBEAM, "Captcha Captured", "Use an Intellibeam Laserstation to decode a particularly challenging captcha");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");

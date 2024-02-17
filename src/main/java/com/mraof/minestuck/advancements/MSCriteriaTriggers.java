@@ -10,6 +10,7 @@ public class MSCriteriaTriggers
 	public static final EventTrigger MELON_OVERLOAD = new EventTrigger(EventTrigger.MELON_OVERLOAD_ID);
 	
 	public static final PunchDesignixTrigger PUNCH_DESIGNIX = new PunchDesignixTrigger();
+	public static final IntellibeamLaserstationTrigger INTELLIBEAM_LASERSTATION = new IntellibeamLaserstationTrigger();
 	public static final CaptchalogueTrigger CAPTCHALOGUE = new CaptchalogueTrigger();
 	public static final ChangeModusTrigger CHANGE_MODUS = new ChangeModusTrigger();
 	public static final TreeModusRootTrigger TREE_MODUS_ROOT = new TreeModusRootTrigger();
@@ -28,6 +29,7 @@ public class MSCriteriaTriggers
 		CriteriaTriggers.register(MELON_OVERLOAD);
 		
 		CriteriaTriggers.register(PUNCH_DESIGNIX);
+		CriteriaTriggers.register(INTELLIBEAM_LASERSTATION);
 		CriteriaTriggers.register(CAPTCHALOGUE);
 		CriteriaTriggers.register(CHANGE_MODUS);
 		CriteriaTriggers.register(TREE_MODUS_ROOT);

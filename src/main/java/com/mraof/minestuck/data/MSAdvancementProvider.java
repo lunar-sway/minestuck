@@ -10,6 +10,7 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
@@ -59,6 +60,8 @@ public class MSAdvancementProvider implements ForgeAdvancementProvider.Advanceme
 	public static final String DOUBLE_DIGITS = "minestuck.double_digits";
 	public static final String HALFWAY_POINT = "minestuck.halfway_point";
 	public static final String BIG_ONE_MIL = "minestuck.big_one_mil";
+	public static final String INTELLIBEAM = "minestuck.intellibeam";
+	public static final String LEGENDARY_WEAPON = "minestuck.legendary_weapon";
 	
 	public static DataProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper)
 	{
@@ -91,6 +94,8 @@ public class MSAdvancementProvider implements ForgeAdvancementProvider.Advanceme
 		Advancement doubleDigits = Advancement.Builder.advancement().parent(firstStep).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 100), Component.translatable(title(DOUBLE_DIGITS)), Component.translatable(desc(DOUBLE_DIGITS)), null, FrameType.TASK, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(10))).save(saver, Minestuck.MOD_ID+":minestuck/double_digits");
 		Advancement halfwayPoint = Advancement.Builder.advancement().parent(doubleDigits).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1000), Component.translatable(title(HALFWAY_POINT)), Component.translatable(desc(HALFWAY_POINT)), null, FrameType.TASK, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(25))).save(saver, Minestuck.MOD_ID+":minestuck/halfway_point");
 		Advancement bigOneMil = Advancement.Builder.advancement().parent(halfwayPoint).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1_000_000), Component.translatable(title(BIG_ONE_MIL)), Component.translatable(desc(BIG_ONE_MIL)), null, FrameType.GOAL, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(44))).save(saver, Minestuck.MOD_ID+":minestuck/big_one_mil");
+		Advancement intellibeam = Advancement.Builder.advancement().parent(alchemy).display(MSItems.INTELLIBEAM_LASERSTATION.get(), Component.translatable(title(INTELLIBEAM)), Component.translatable(desc(INTELLIBEAM)), null, FrameType.TASK, true, true, false).addCriterion("use_intellibeam", IntellibeamLaserstationTrigger.Instance.any()).save(saver, Minestuck.MOD_ID+":minestuck/intellibeam");
+		Advancement strongWeapon = Advancement.Builder.advancement().parent(alchemy).display(MSItems.CALEDFWLCH.get(), Component.translatable(title(LEGENDARY_WEAPON)), Component.translatable(desc(LEGENDARY_WEAPON)), null, FrameType.TASK, true, true, false).addCriterion("get_max_tier_weapon", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(MSTags.Items.LEGENDARY).build())).save(saver, Minestuck.MOD_ID+":minestuck/legendary_weapon");
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)
