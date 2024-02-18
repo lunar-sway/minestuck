@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
+import com.mraof.minestuck.util.Trigger;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -12,7 +13,10 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
@@ -58,13 +62,13 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")), List.of(), "test2", true)
 				.addResponse("test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")), List.of(), "test2", true)
-				.addResponse("test1response3", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "summon minestuck:grist ~ ~ ~ {Value:200}")), "test2", true)
+				.addResponse("test1response3", List.of(), List.of(new Trigger(Trigger.Type.COMMAND, "summon minestuck:grist ~ ~ ~ {Value:200}")), "test2", true)
 		);
 		
 		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", null, "Was not salamander")), List.of(), "test1", false)
-				.addResponse("test2response2", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "say hi")), "test1", false)
-				.addResponse("test2response3", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, """
+				.addResponse("test2response2", List.of(), List.of(new Trigger(Trigger.Type.COMMAND, "say hi")), "test1", false)
+				.addResponse("test2response3", List.of(), List.of(new Trigger(Trigger.Type.COMMAND, """
 						tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]""")), "test1", false)
 		);
 		
@@ -76,19 +80,19 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("me_want_cookie", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("im sorry fellow, I have no cookie for you. Bye", "")
 				.addResponse("why do you want cookie?", null)
-				.addResponse("here have a cookie chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", null, "Has no cookie")), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.TAKE_ITEM, "minecraft:cookie"), new Dialogue.Trigger(Dialogue.Trigger.Type.SET_DIALOGUE, "minestuck:hunger_filled")), "oh_yippee", false)
+				.addResponse("here have a cookie chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", null, "Has no cookie")), List.of(new Trigger(Trigger.Type.TAKE_ITEM, "minecraft:cookie"), new Trigger(Trigger.Type.SET_DIALOGUE, "minestuck:hunger_filled")), "oh_yippee", false)
 		);
 		add(new DialogueBuilder("oh_yippee"));
 		add(new DialogueBuilder("hunger_filled"));
 		
 		add(new DialogueBuilder("me_want_5_cookies", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("im sorry fellow, I have no cookie for you. Bye", "")
-				.addResponse("here have 5 cookies chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "5", "Has no cookie")), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.TAKE_ITEM, "minecraft:cookie", "5")), "oh_yippee", false)
+				.addResponse("here have 5 cookies chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "5", "Has no cookie")), List.of(new Trigger(Trigger.Type.TAKE_ITEM, "minecraft:cookie", "5")), "oh_yippee", false)
 		);
 		
 		add(new DialogueBuilder("hi_friend_can_i_help_you", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("I hate you", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.ADD_CONSORT_REPUTATION, "-100")), null, false)
-				.addResponse("I love you", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.ADD_CONSORT_REPUTATION, "100")), null, false)
+				.addResponse("I hate you", List.of(), List.of(new Trigger(Trigger.Type.ADD_CONSORT_REPUTATION, "-100")), null, false)
+				.addResponse("I love you", List.of(), List.of(new Trigger(Trigger.Type.ADD_CONSORT_REPUTATION, "100")), null, false)
 				.addResponse("Rep above 500", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_MINIMUM_REPUTATION, "500", null, "Rep too low")), List.of(), null, false)
 				.addResponse("Rep below 200", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_MAXIMUM_REPUTATION, "200", null, "Rep too high")), List.of(), null, false)
 				.addResponse("bye", "")
@@ -130,7 +134,7 @@ public class DialogueProvider implements DataProvider
 			this.useContext = useContext;
 		}
 		
-		public DialogueBuilder addResponse(String response, List<Dialogue.Condition> conditions, List<Dialogue.Trigger> triggers, @Nullable String nextDialoguePath, boolean hideIfFailed)
+		public DialogueBuilder addResponse(String response, List<Dialogue.Condition> conditions, List<Trigger> triggers, @Nullable String nextDialoguePath, boolean hideIfFailed)
 		{
 			ResourceLocation nextPath = getNextPath(nextDialoguePath);
 			this.responses.add(new Dialogue.Response(response, conditions, triggers, nextPath, hideIfFailed));
