@@ -1,0 +1,36 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "minestuck.dialogue.tasty_welcome",
+  "path": "minestuck:tasty_welcome",
+  "responses": [
+    {
+      "conditions": [],
+      "hide_if_failed": true,
+      "next_path": "minecraft:",
+      "response_message": "Goodbye",
+      "triggers": []
+    },
+    {
+      "conditions": [],
+      "hide_if_failed": false,
+      "next_path": "minecraft:",
+      "response_message": "Let me see your wares",
+      "triggers": [
+        {
+          "type": "open_consort_merchant_gui",
+          "content": "minestuck:gameplay/consort_food",
+          "content_extra": "food"
+        }
+      ]
+    }
+  ],
+  "use_context": {
+    "conditions": [
+      {
+        "type": "consort_type",
+        "content": "turtle"
+      }
+    ]
+  }
+}
