@@ -29,11 +29,11 @@ import java.util.function.Function;
 /**
  * A Trigger allows for new code to be called when a dialogue option is picked
  */
-public sealed abstract class Trigger
+public sealed interface Trigger
 {
-	private static final Logger LOGGER = LogUtils.getLogger();
+	Logger LOGGER = LogUtils.getLogger();
 	
-	public static List<Trigger> deserializeTriggers(JsonObject responseObject)
+	static List<Trigger> deserializeTriggers(JsonObject responseObject)
 	{
 		JsonArray triggersObject = responseObject.getAsJsonArray("triggers");
 		List<Trigger> triggers = new ArrayList<>();
@@ -54,14 +54,14 @@ public sealed abstract class Trigger
 		return triggers;
 	}
 	
-	public static JsonArray serializeTriggers(List<Trigger> triggers)
+	static JsonArray serializeTriggers(List<Trigger> triggers)
 	{
 		JsonArray triggersObject = new JsonArray(triggers.size());
 		for(Trigger trigger : triggers)
 		{
 			JsonObject triggerObject = new JsonObject();
 			
-			String triggerType = trigger.type.toString().toLowerCase(Locale.ROOT);
+			String triggerType = trigger.getType().toString().toLowerCase(Locale.ROOT);
 			triggerObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, triggerType).getOrThrow(false, LOGGER::error));
 			trigger.serialize(triggerObject);
 			
@@ -70,23 +70,23 @@ public sealed abstract class Trigger
 		return triggersObject;
 	}
 	
-	abstract void serialize(JsonObject triggerObject);
+	void serialize(JsonObject triggerObject);
 	
-	public static Trigger read(FriendlyByteBuf buffer)
+	static Trigger read(FriendlyByteBuf buffer)
 	{
 		Type type = Type.fromInt(buffer.readInt());
 		return type.bufferReader.apply(buffer);
 	}
 	
-	public final void write(FriendlyByteBuf buffer)
+	default void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(this.getType().ordinal());
 		this.writeTrigger(buffer);
 	}
 	
-	abstract void writeTrigger(FriendlyByteBuf buffer);
+	void writeTrigger(FriendlyByteBuf buffer);
 	
-	public enum Type
+	enum Type
 	{
 		COMMAND(Command::deserialize, Command::readTrigger),
 		TAKE_ITEM(TakeItem::deserialize, TakeItem::readTrigger),
@@ -111,29 +111,17 @@ public sealed abstract class Trigger
 		}
 	}
 	
-	private final Type type;
-	
-	public Trigger(Type type)
-	{
-		this.type = type;
-	}
-	
-	public Type getType()
-	{
-		return type;
-	}
+	Type getType();
 	
 	//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
-	public abstract void triggerEffect(LivingEntity entity, Player player);
+	void triggerEffect(LivingEntity entity, Player player);
 	
-	public static final class Command extends Trigger
+	record Command(String command) implements Trigger
 	{
-		private final String command;
-		
-		public Command(String command)
+		@Override
+		public Type getType()
 		{
-			super(Type.COMMAND);
-			this.command = command;
+			return Type.COMMAND;
 		}
 		
 		static Command deserialize(JsonObject triggerObject)
@@ -143,7 +131,7 @@ public sealed abstract class Trigger
 		}
 		
 		@Override
-		void serialize(JsonObject triggerObject)
+		public void serialize(JsonObject triggerObject)
 		{
 			triggerObject.addProperty("command", this.command);
 		}
@@ -155,7 +143,7 @@ public sealed abstract class Trigger
 		}
 		
 		@Override
-		void writeTrigger(FriendlyByteBuf buffer)
+		public void writeTrigger(FriendlyByteBuf buffer)
 		{
 			buffer.writeUtf(this.command, 500);
 		}
@@ -176,21 +164,17 @@ public sealed abstract class Trigger
 		}
 	}
 	
-	public static final class TakeItem extends Trigger
+	record TakeItem(Item item, int amount) implements Trigger
 	{
-		private final Item item;
-		private final int amount;
-		
 		public TakeItem(Item item)
 		{
 			this(item, 1);
 		}
 		
-		public TakeItem(Item item, int amount)
+		@Override
+		public Type getType()
 		{
-			super(Type.TAKE_ITEM);
-			this.item = item;
-			this.amount = amount;
+			return Type.TAKE_ITEM;
 		}
 		
 		static TakeItem deserialize(JsonObject triggerObject)
@@ -201,7 +185,7 @@ public sealed abstract class Trigger
 		}
 		
 		@Override
-		void serialize(JsonObject triggerObject)
+		public void serialize(JsonObject triggerObject)
 		{
 			triggerObject.add("item", ForgeRegistries.ITEMS.getCodec().encodeStart(JsonOps.INSTANCE, this.item).getOrThrow(false, LOGGER::error));
 			if(this.amount != 1)
@@ -216,7 +200,7 @@ public sealed abstract class Trigger
 		}
 		
 		@Override
-		void writeTrigger(FriendlyByteBuf buffer)
+		public void writeTrigger(FriendlyByteBuf buffer)
 		{
 			buffer.writeRegistryId(ForgeRegistries.ITEMS, this.item);
 			buffer.writeInt(this.amount);
@@ -234,14 +218,12 @@ public sealed abstract class Trigger
 		}
 	}
 	
-	public static final class SetDialogue extends Trigger
+	record SetDialogue(ResourceLocation newPath) implements Trigger
 	{
-		private final ResourceLocation newPath;
-		
-		public SetDialogue(ResourceLocation newPath)
+		@Override
+		public Type getType()
 		{
-			super(Type.SET_DIALOGUE);
-			this.newPath = newPath;
+			return Type.SET_DIALOGUE;
 		}
 		
 		static SetDialogue deserialize(JsonObject triggerObject)
@@ -251,7 +233,7 @@ public sealed abstract class Trigger
 		}
 		
 		@Override
-		void serialize(JsonObject triggerObject)
+		public void serialize(JsonObject triggerObject)
 		{
 			triggerObject.add("new_path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, this.newPath).getOrThrow(false, LOGGER::error));
 		}
@@ -262,7 +244,7 @@ public sealed abstract class Trigger
 		}
 		
 		@Override
-		void writeTrigger(FriendlyByteBuf buffer)
+		public void writeTrigger(FriendlyByteBuf buffer)
 		{
 			buffer.writeResourceLocation(this.newPath);
 		}
@@ -275,14 +257,12 @@ public sealed abstract class Trigger
 		}
 	}
 	
-	public static final class AddConsortReputation extends Trigger
+	record AddConsortReputation(int reputation) implements Trigger
 	{
-		private final int reputation;
-		
-		public AddConsortReputation(int reputation)
+		@Override
+		public Type getType()
 		{
-			super(Type.ADD_CONSORT_REPUTATION);
-			this.reputation = reputation;
+			return Type.ADD_CONSORT_REPUTATION;
 		}
 		
 		static AddConsortReputation deserialize(JsonObject triggerObject)
@@ -292,7 +272,7 @@ public sealed abstract class Trigger
 		}
 		
 		@Override
-		void serialize(JsonObject triggerObject)
+		public void serialize(JsonObject triggerObject)
 		{
 			triggerObject.addProperty("reputation", this.reputation);
 		}
@@ -303,7 +283,7 @@ public sealed abstract class Trigger
 		}
 		
 		@Override
-		void writeTrigger(FriendlyByteBuf buffer)
+		public void writeTrigger(FriendlyByteBuf buffer)
 		{
 			buffer.writeInt(this.reputation);
 		}
