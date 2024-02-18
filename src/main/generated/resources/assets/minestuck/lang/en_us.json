@@ -144,6 +144,8 @@
   "block.minestuck.brown_stone_stairs": "Brown Stone Stairs",
   "block.minestuck.brown_stone_wall": "Brown Stone Wall",
   "block.minestuck.carrot_cake": "Carrot Cake",
+  "block.minestuck.carved_bush": "Carved Bush",
+  "block.minestuck.carved_bush.tooltip": "Someone lovingly carved this bush.",
   "block.minestuck.carved_button": "Carved Button",
   "block.minestuck.carved_door": "Carved Door",
   "block.minestuck.carved_fence": "Carved Fence",
