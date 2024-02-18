@@ -39,9 +39,6 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		WorldGenLevel level = context.level();
 		RandomSource rand = context.random();
 		
-		if(!level.getFluidState(pos.below()).isEmpty())
-			return false;
-		
 		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(pickTemplate(rand));
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, pos, rand);
 		
@@ -50,7 +47,7 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 						new ProcessorRule(new BlockMatchTest(Blocks.BLUE_STAINED_GLASS), AlwaysTrueTest.INSTANCE, pickBucketFluid(context))
 				)));
 		
-		placement.placeWithStructureBlockRegistryAt(pos.getY() - rand.nextInt(3), context, settings);
+		placement.placeWithStructureBlockRegistry(context, settings);
 		
 		return true;
 	}

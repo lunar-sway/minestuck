@@ -2,10 +2,8 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -33,17 +31,14 @@ public class FrogRuinFeature extends Feature<NoneFeatureConfiguration>
 	@Override
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
-		WorldGenLevel level = context.level();
 		RandomSource rand = context.random();
-		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(pickTemplate(rand));
-		BlockPos centerPos = context.origin();
-		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, centerPos, rand);
+		StructureTemplate template = context.level().getLevel().getStructureManager().getOrCreate(pickTemplate(rand));
+		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
 		
 		if(placement.heightRange(Heightmap.Types.OCEAN_FLOOR, context.level()).difference() > 3)
 			return false;
 		
-		int y = level.getHeight(Heightmap.Types.OCEAN_FLOOR, centerPos.getX(), centerPos.getZ()) - rand.nextInt(1) - 3;
-		placement.placeWithStructureBlockRegistryAt(y, context);
+		placement.placeWithStructureBlockRegistry(context);
 		
 		return true;
 	}
