@@ -46,12 +46,11 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, pos, rand);
 		
 		StructurePlaceSettings settings = new StructurePlaceSettings()
-				.addProcessor(StructureBlockRegistryProcessor.from(context))
 				.addProcessor(new RuleProcessor(ImmutableList.of(
 						new ProcessorRule(new BlockMatchTest(Blocks.BLUE_STAINED_GLASS), AlwaysTrueTest.INSTANCE, pickBucketFluid(context))
 				)));
 		
-		placement.placeAt(pos.getY() - rand.nextInt(3), context, settings);
+		placement.placeWithStructureBlockRegistryAt(pos.getY() - rand.nextInt(3), context, settings);
 		
 		return true;
 	}

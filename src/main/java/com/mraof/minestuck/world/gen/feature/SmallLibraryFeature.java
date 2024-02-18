@@ -31,8 +31,7 @@ public class SmallLibraryFeature extends Feature<NoneFeatureConfiguration>
 		StructureTemplate template = templates.getOrCreate(STRUCTURE_SMALL_LIBRARY);
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
 		
-		StructurePlaceSettings settings = new StructurePlaceSettings().addProcessor(StructureBlockRegistryProcessor.from(context));
-		
+		StructurePlaceSettings settings = new StructurePlaceSettings();
 		if(rand.nextBoolean())
 		{	//Replace 20% of bookcases with air
 			settings.addProcessor(new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockMatchTest(Blocks.BOOKSHELF, 0.2F), AlwaysTrueTest.INSTANCE, Blocks.AIR.defaultBlockState()))));
@@ -43,7 +42,7 @@ public class SmallLibraryFeature extends Feature<NoneFeatureConfiguration>
 		int door1Height = TemplatePlacement.maxHeight(Heightmap.Types.OCEAN_FLOOR_WG, level, placement.xzRange(centerX - 1, 0, centerX + 1, 0));
 		int door2Height = TemplatePlacement.maxHeight(Heightmap.Types.OCEAN_FLOOR_WG, level, placement.xzRange(centerX - 1, endZ, centerX + 1, endZ));
 		
-		placement.placeAt(Math.min(door1Height, door2Height) - 1, context, settings);
+		placement.placeWithStructureBlockRegistryAt(Math.min(door1Height, door2Height) - 1, context, settings);
 		
 		return true;
 	}
