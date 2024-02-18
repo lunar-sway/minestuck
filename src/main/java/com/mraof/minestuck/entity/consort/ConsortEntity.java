@@ -439,7 +439,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		else return null;
 	}
 	
-	protected void writeShopMenuBuffer(FriendlyByteBuf buffer)
+	public void writeShopMenuBuffer(FriendlyByteBuf buffer)
 	{
 		ConsortMerchantMenu.write(buffer, this);
 	}
