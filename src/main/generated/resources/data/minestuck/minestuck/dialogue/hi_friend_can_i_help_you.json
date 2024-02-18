@@ -1,7 +1,7 @@
 {
   "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "dialogue.hi_friend_can_i_help_you",
+  "message": "minestuck.dialogue.hi_friend_can_i_help_you",
   "path": "minestuck:hi_friend_can_i_help_you",
   "responses": [
     {
@@ -65,7 +65,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "placeholder",
+        "type": "conditionless",
         "content": ""
       }
     ]

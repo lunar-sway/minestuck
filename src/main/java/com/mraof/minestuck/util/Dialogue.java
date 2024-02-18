@@ -1,11 +1,12 @@
 package com.mraof.minestuck.util;
 
 import com.google.gson.*;
-import com.ibm.icu.impl.Pair;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.entity.DialogueEntity;
+import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerData;
@@ -14,6 +15,7 @@ import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -145,16 +147,24 @@ public class Dialogue
 		//TODO conditions are used in both server and client side context. When they are used to help pick dialogue, players are inherently null
 		public enum Type
 		{
-			PLACEHOLDER((entity, player, stringStringPair) -> true),
+			CONDITIONLESS((entity, player, stringStringPair) -> true),
+			IS_CONSORT((entity, player, content) -> entity instanceof ConsortEntity),
+			IS_CARAPACIAN((entity, player, content) -> entity instanceof CarapacianEntity),
+			IS_ENTITY_TYPE((entity, player, content) ->
+			{
+				EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(content.getFirst()));
+				return entityType != null;
+			}),
 			CONSORT_TYPE((entity, player, content) ->
-					entity instanceof ConsortEntity consortEntity && content.first.equals(consortEntity.getConsortType().getName())
+					//distinct in that it uses consort type, not the entity type
+					entity instanceof ConsortEntity consortEntity && content.getFirst().equals(consortEntity.getConsortType().getName())
 			),
 			HAS_ITEM((entity, player, content) ->
 			{
 				if(player == null)
 					return false;
 				
-				ItemStack stack = findPlayerItem(content.first, player, parseIntFromString(content.second, 1));
+				ItemStack stack = findPlayerItem(content.getFirst(), player, parseIntFromString(content.getSecond(), 1));
 				return stack != null;
 			}),
 			IN_LAND((entity, player, content) ->
@@ -181,12 +191,12 @@ public class Dialogue
 				{
 					if(level.isClientSide)
 					{
-						return ClientPlayerData.getConsortReputation() > parseIntFromString(content.first, -9999);
+						return ClientPlayerData.getConsortReputation() > parseIntFromString(content.getFirst(), -9999);
 					} else
 					{
 						PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
 						if(data != null)
-							return data.getConsortReputation(level.dimension()) > parseIntFromString(content.first, -9999);
+							return data.getConsortReputation(level.dimension()) > parseIntFromString(content.getFirst(), -9999);
 					}
 				} catch(IOException e)
 				{
@@ -204,12 +214,12 @@ public class Dialogue
 				{
 					if(level.isClientSide)
 					{
-						return ClientPlayerData.getConsortReputation() < parseIntFromString(content.first, 9999);
+						return ClientPlayerData.getConsortReputation() < parseIntFromString(content.getFirst(), 9999);
 					} else
 					{
 						PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
 						if(data != null)
-							return data.getConsortReputation(level.dimension()) < parseIntFromString(content.first, 9999);
+							return data.getConsortReputation(level.dimension()) < parseIntFromString(content.getFirst(), 9999);
 					}
 				} catch(IOException e)
 				{
@@ -233,6 +243,11 @@ public class Dialogue
 		private final String contentExtra;
 		@Nullable
 		private final String failureTooltip;
+		
+		public Condition(Type type)
+		{
+			this(type, "", null, null);
+		}
 		
 		public Condition(Type type, String content)
 		{
@@ -343,7 +358,7 @@ public class Dialogue
 						if(!level.isClientSide)
 						{
 							//TODO using the entity for this instead of the player failed
-							level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), s.first);
+							level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), s.getFirst());
 						}
 					} catch(IOException e)
 					{
@@ -355,8 +370,8 @@ public class Dialogue
 			{
 				if(player != null)
 				{
-					int amount = parseIntFromString(s.second, 1);
-					ItemStack stack = findPlayerItem(s.first, player, amount);
+					int amount = parseIntFromString(s.getSecond(), 1);
+					ItemStack stack = findPlayerItem(s.getFirst(), player, amount);
 					if(stack != null)
 					{
 						stack.shrink(amount);
@@ -367,7 +382,7 @@ public class Dialogue
 			{
 				if(entity instanceof DialogueEntity dialogueEntity)
 				{
-					dialogueEntity.setDialogue(s.first);
+					dialogueEntity.setDialogue(s.getFirst());
 				}
 			}),
 			ADD_CONSORT_REPUTATION((entity, player, s) ->
@@ -381,7 +396,7 @@ public class Dialogue
 					{
 						try
 						{
-							data.addConsortReputation(Integer.parseInt(s.first), consortEntity.getHomeDimension());
+							data.addConsortReputation(Integer.parseInt(s.getFirst()), consortEntity.getHomeDimension());
 						} catch(NumberFormatException ignored)
 						{
 							LOGGER.debug("Failed to parse string from a Dialogue into an integer");

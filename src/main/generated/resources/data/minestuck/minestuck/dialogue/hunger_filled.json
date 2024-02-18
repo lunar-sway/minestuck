@@ -1,7 +1,7 @@
 {
   "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "dialogue.hunger_filled",
+  "message": "minestuck.dialogue.hunger_filled",
   "path": "minestuck:hunger_filled",
   "responses": []
 }

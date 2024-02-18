@@ -1,7 +1,7 @@
 {
   "animation": "test1animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "dialogue.test1",
+  "message": "minestuck.dialogue.test1",
   "path": "minestuck:test1",
   "responses": [
     {
@@ -44,7 +44,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "placeholder",
+        "type": "conditionless",
         "content": ""
       }
     ]

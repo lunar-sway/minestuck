@@ -1,7 +1,7 @@
 {
   "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "dialogue.me_want_5_cookies",
+  "message": "minestuck.dialogue.me_want_5_cookies",
   "path": "minestuck:me_want_5_cookies",
   "responses": [
     {
@@ -35,7 +35,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "placeholder",
+        "type": "conditionless",
         "content": ""
       }
     ]
