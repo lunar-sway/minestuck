@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:generic_object"
+    }
+  ],
+  "result": {
+    "item": "minestuck:perfectly_generic_button"
+  }
+}

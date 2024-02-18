@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_post",
+  "textures": {
+    "wall": "minestuck:block/horizontal_green_stone_bricks"
+  }
+}

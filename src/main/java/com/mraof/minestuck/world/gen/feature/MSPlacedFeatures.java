@@ -31,6 +31,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SMALL_LIBRARY = key("small_library");
 	public static final ResourceKey<PlacedFeature> TOWER = key("tower");
 	public static final ResourceKey<PlacedFeature> PARCEL_PYXIS = key("parcel_pyxis");
+	public static final ResourceKey<PlacedFeature> FROG_RUINS = key("frog_ruins");
 	
 	public static final ResourceKey<PlacedFeature> CARVED_CHERRY_TREE = key("carved_cherry_tree");
 	public static final ResourceKey<PlacedFeature> CARVED_LOG = key("carved_log");
@@ -125,6 +126,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SHADEWOOD_TREE = key("tree/shadewood");
 	public static final ResourceKey<PlacedFeature> SCARRED_SHADEWOOD_TREE = key("tree/scarred_shadewood");
 	public static final ResourceKey<PlacedFeature> ORNATE_SHADEWOOD_TREE = key("tree/ornate_shadewood");
+	public static final ResourceKey<PlacedFeature> TREE_STUMP = key("tree/tree_stump");
 	public static final ResourceKey<PlacedFeature> PETRIFIED_TREE = key("tree/petrified");
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_TREE = key("tree/petrified_sparse");
 	public static final ResourceKey<PlacedFeature> DEAD_TREE = key("tree/dead");

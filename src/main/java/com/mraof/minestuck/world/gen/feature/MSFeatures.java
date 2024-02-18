@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
 import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;
 import com.mraof.minestuck.world.gen.feature.tree.OrnateShadewoodTreeFeature;
+import com.mraof.minestuck.world.gen.feature.tree.TreeStumpFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
@@ -30,6 +31,7 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SMALL_LIBRARY = REGISTER.register("small_library", () -> new SmallLibraryFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TOWER = REGISTER.register("tower", () -> new TowerFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> new ParcelPyxisFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> FROG_RUINS = REGISTER.register("frog_ruins", () -> new FrogRuinFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CARVED_CHERRY_TREE = REGISTER.register("carved_cherry_tree", () -> new CarvedCherryTreeFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CARVED_HOUSE = REGISTER.register("carved_house", () -> new CarvedHouseFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CARVED_LOG = REGISTER.register("carved_log", () -> new CarvedLogFeature(NoneFeatureConfiguration.CODEC));
@@ -71,6 +73,7 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> END_TREE = REGISTER.register("end_tree", () -> new EndTreeFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<BlockStateConfiguration>> LEAFLESS_TREE = REGISTER.register("leafless_tree", () -> new LeaflessTreeFeature(BlockStateConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> ORNATE_SHADEWOOD_TREE = REGISTER.register("ornate_shadewood_tree", () -> new OrnateShadewoodTreeFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TREE_STUMP = REGISTER.register("tree_stump", () -> new TreeStumpFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<ProbabilityFeatureConfiguration>> CAKE = REGISTER.register("cake", () -> new CakeFeature(ProbabilityFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_CAKE = REGISTER.register("large_cake", () -> new LargeCakeFeature(NoneFeatureConfiguration.CODEC));

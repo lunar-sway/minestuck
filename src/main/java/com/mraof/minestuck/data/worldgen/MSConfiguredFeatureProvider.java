@@ -60,6 +60,7 @@ public final class MSConfiguredFeatureProvider
 		context.register(SMALL_LIBRARY, new ConfiguredFeature<>(MSFeatures.SMALL_LIBRARY.get(), FeatureConfiguration.NONE));
 		context.register(TOWER, new ConfiguredFeature<>(MSFeatures.TOWER.get(), FeatureConfiguration.NONE));
 		context.register(PARCEL_PYXIS, new ConfiguredFeature<>(MSFeatures.PARCEL_PYXIS.get(), FeatureConfiguration.NONE));
+		context.register(FROG_RUINS, new ConfiguredFeature<>(MSFeatures.FROG_RUINS.get(), FeatureConfiguration.NONE));
 		context.register(CARVED_CHERRY_TREE, new ConfiguredFeature<>(MSFeatures.CARVED_CHERRY_TREE.get(), FeatureConfiguration.NONE));
 		context.register(CARVED_HOUSE, new ConfiguredFeature<>(MSFeatures.CARVED_HOUSE.get(), FeatureConfiguration.NONE));
 		context.register(CARVED_LOG, new ConfiguredFeature<>(MSFeatures.CARVED_LOG.get(), FeatureConfiguration.NONE));
@@ -166,6 +167,7 @@ public final class MSConfiguredFeatureProvider
 				.decorators(List.of(new AttachedToLeavesDecorator(0.1F, 1, 0, new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)), 2, List.of(Direction.DOWN)),
 						new AttachedToLeavesDecorator(0.4F, 1, 0, BlockStateProvider.simple(MSBlocks.GLOWING_MUSHROOM_VINES.get().defaultBlockState()), 1, List.of(Direction.DOWN)))).build()));
 		context.register(ORNATE_SHADEWOOD_TREE, new ConfiguredFeature<>(MSFeatures.ORNATE_SHADEWOOD_TREE.get(), FeatureConfiguration.NONE));
+		context.register(TREE_STUMP, new ConfiguredFeature<>(MSFeatures.TREE_STUMP.get(), FeatureConfiguration.NONE));
 		context.register(PETRIFIED_TREE, new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 				new BlockStateConfiguration(MSBlocks.PETRIFIED_LOG.get().defaultBlockState())));
 		context.register(DEAD_TREE, new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),

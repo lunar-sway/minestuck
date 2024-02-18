@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wooden_trapdoor",
+  "key": {
+    "#": {
+      "item": "minestuck:carved_planks"
+    }
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 2,
+    "item": "minestuck:carved_trapdoor"
+  },
+  "show_notification": true
+}

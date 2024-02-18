@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "minestuck:block/mossy_decrepit_stone_bricks/1"
+  }
+}
