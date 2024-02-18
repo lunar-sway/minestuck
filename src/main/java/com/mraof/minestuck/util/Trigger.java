@@ -1,10 +1,12 @@
 package com.mraof.minestuck.util;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.PlayerData;
@@ -13,7 +15,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A Trigger allows for new code to be called when a dialogue option is picked
@@ -46,9 +48,9 @@ public sealed interface Trigger
 			JsonObject triggerObject = triggerElement.getAsJsonObject();
 			
 			Optional<Type> optionalType = Type.CODEC.parse(JsonOps.INSTANCE, triggerObject.get("type")).resultOrPartial(LOGGER::error);
+			Optional<Trigger> optionalTrigger = optionalType.flatMap(type -> type.codec.get().parse(JsonOps.INSTANCE, triggerObject).resultOrPartial(LOGGER::error));
 			
-			//TODO may throw errors when its not filled in correctly
-			optionalType.ifPresent(type -> triggers.add(type.deserializer.apply(triggerObject)));
+			optionalTrigger.ifPresent(triggers::add);
 		});
 		return triggers;
 	}
@@ -61,14 +63,13 @@ public sealed interface Trigger
 			JsonObject triggerObject = new JsonObject();
 			
 			triggerObject.add("type", Type.CODEC.encodeStart(JsonOps.INSTANCE, trigger.getType()).getOrThrow(false, LOGGER::error));
-			trigger.serialize(triggerObject);
+			//noinspection unchecked
+			JsonElement triggerElement = ((Codec<Trigger>) trigger.getType().codec.get()).encode(trigger, JsonOps.INSTANCE, triggerObject).getOrThrow(false, LOGGER::error);
 			
-			triggersObject.add(triggerObject);
+			triggersObject.add(triggerElement);
 		}
 		return triggersObject;
 	}
-	
-	void serialize(JsonObject triggerObject);
 	
 	static Trigger read(FriendlyByteBuf buffer)
 	{
@@ -82,23 +83,21 @@ public sealed interface Trigger
 		this.writeTrigger(buffer);
 	}
 	
-	void writeTrigger(FriendlyByteBuf buffer);
-	
 	enum Type implements StringRepresentable
 	{
-		COMMAND(Command::deserialize, Command::readTrigger),
-		TAKE_ITEM(TakeItem::deserialize, TakeItem::readTrigger),
-		SET_DIALOGUE(SetDialogue::deserialize, SetDialogue::readTrigger),
-		ADD_CONSORT_REPUTATION(AddConsortReputation::deserialize, AddConsortReputation::readTrigger);
+		COMMAND(() -> Command.CODEC, Command::readTrigger),
+		TAKE_ITEM(() -> TakeItem.CODEC, TakeItem::readTrigger),
+		SET_DIALOGUE(() -> SetDialogue.CODEC, SetDialogue::readTrigger),
+		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC, AddConsortReputation::readTrigger);
 		
 		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 		
-		private final Function<JsonObject, Trigger> deserializer;
+		private final Supplier<Codec<? extends Trigger>> codec;
 		private final Function<FriendlyByteBuf, Trigger> bufferReader;
 		
-		Type(Function<JsonObject, Trigger> deserializer, Function<FriendlyByteBuf, Trigger> bufferReader)
+		Type(Supplier<Codec<? extends Trigger>> codec, Function<FriendlyByteBuf, Trigger> bufferReader)
 		{
-			this.deserializer = deserializer;
+			this.codec = codec;
 			this.bufferReader = bufferReader;
 		}
 		
@@ -117,29 +116,23 @@ public sealed interface Trigger
 		}
 	}
 	
+	void writeTrigger(FriendlyByteBuf buffer);
+	
 	Type getType();
 	
 	//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
 	void triggerEffect(LivingEntity entity, Player player);
 	
-	record Command(String command) implements Trigger
+	record Command(String commandText) implements Trigger
 	{
+		static final Codec<Command> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("command").forGetter(Command::commandText)
+		).apply(instance, Command::new));
+		
 		@Override
 		public Type getType()
 		{
 			return Type.COMMAND;
-		}
-		
-		static Command deserialize(JsonObject triggerObject)
-		{
-			String contentString = GsonHelper.getAsString(triggerObject, "command");
-			return new Command(contentString);
-		}
-		
-		@Override
-		public void serialize(JsonObject triggerObject)
-		{
-			triggerObject.addProperty("command", this.command);
 		}
 		
 		static Command readTrigger(FriendlyByteBuf buffer)
@@ -151,7 +144,7 @@ public sealed interface Trigger
 		@Override
 		public void writeTrigger(FriendlyByteBuf buffer)
 		{
-			buffer.writeUtf(this.command, 500);
+			buffer.writeUtf(this.commandText, 500);
 		}
 		
 		@Override
@@ -165,13 +158,18 @@ public sealed interface Trigger
 			if(!level.isClientSide)
 			{
 				//TODO using the entity for this instead of the player failed
-				level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), this.command);
+				level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), this.commandText);
 			}
 		}
 	}
 	
 	record TakeItem(Item item, int amount) implements Trigger
 	{
+		static final Codec<TakeItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(TakeItem::item),
+				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(TakeItem::amount)
+		).apply(instance, TakeItem::new));
+		
 		public TakeItem(Item item)
 		{
 			this(item, 1);
@@ -181,21 +179,6 @@ public sealed interface Trigger
 		public Type getType()
 		{
 			return Type.TAKE_ITEM;
-		}
-		
-		static TakeItem deserialize(JsonObject triggerObject)
-		{
-			Item item = ForgeRegistries.ITEMS.getCodec().parse(JsonOps.INSTANCE, triggerObject.get("item")).getOrThrow(false, LOGGER::error);
-			int amount = GsonHelper.getAsInt(triggerObject, "amount", 1);
-			return new TakeItem(item, amount);
-		}
-		
-		@Override
-		public void serialize(JsonObject triggerObject)
-		{
-			triggerObject.add("item", ForgeRegistries.ITEMS.getCodec().encodeStart(JsonOps.INSTANCE, this.item).getOrThrow(false, LOGGER::error));
-			if(this.amount != 1)
-				triggerObject.addProperty("amount", this.amount);
 		}
 		
 		static TakeItem readTrigger(FriendlyByteBuf buffer)
@@ -226,22 +209,14 @@ public sealed interface Trigger
 	
 	record SetDialogue(ResourceLocation newPath) implements Trigger
 	{
+		static final Codec<SetDialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("new_path").forGetter(SetDialogue::newPath)
+		).apply(instance, SetDialogue::new));
+		
 		@Override
 		public Type getType()
 		{
 			return Type.SET_DIALOGUE;
-		}
-		
-		static SetDialogue deserialize(JsonObject triggerObject)
-		{
-			ResourceLocation newPath = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, triggerObject.get("new_path")).getOrThrow(false, LOGGER::error);
-			return new SetDialogue(newPath);
-		}
-		
-		@Override
-		public void serialize(JsonObject triggerObject)
-		{
-			triggerObject.add("new_path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, this.newPath).getOrThrow(false, LOGGER::error));
 		}
 		
 		static SetDialogue readTrigger(FriendlyByteBuf buffer)
@@ -265,22 +240,14 @@ public sealed interface Trigger
 	
 	record AddConsortReputation(int reputation) implements Trigger
 	{
+		static final Codec<AddConsortReputation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.INT.fieldOf("reputation").forGetter(AddConsortReputation::reputation)
+		).apply(instance, AddConsortReputation::new));
+		
 		@Override
 		public Type getType()
 		{
 			return Type.ADD_CONSORT_REPUTATION;
-		}
-		
-		static AddConsortReputation deserialize(JsonObject triggerObject)
-		{
-			int reputation = GsonHelper.getAsInt(triggerObject, "reputation");
-			return new AddConsortReputation(reputation);
-		}
-		
-		@Override
-		public void serialize(JsonObject triggerObject)
-		{
-			triggerObject.addProperty("reputation", this.reputation);
 		}
 		
 		static AddConsortReputation readTrigger(FriendlyByteBuf buffer)
