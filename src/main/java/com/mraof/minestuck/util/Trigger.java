@@ -39,6 +39,8 @@ public sealed interface Trigger
 {
 	Logger LOGGER = LogUtils.getLogger();
 	
+	Codec<Trigger> CODEC = Type.CODEC.dispatch(Trigger::getType, type -> type.codec.get());
+	
 	static List<Trigger> deserializeTriggers(JsonObject responseObject)
 	{
 		JsonArray triggersObject = responseObject.getAsJsonArray("triggers");
@@ -47,8 +49,7 @@ public sealed interface Trigger
 		{
 			JsonObject triggerObject = triggerElement.getAsJsonObject();
 			
-			Optional<Type> optionalType = Type.CODEC.parse(JsonOps.INSTANCE, triggerObject.get("type")).resultOrPartial(LOGGER::error);
-			Optional<Trigger> optionalTrigger = optionalType.flatMap(type -> type.codec.get().parse(JsonOps.INSTANCE, triggerObject).resultOrPartial(LOGGER::error));
+			Optional<Trigger> optionalTrigger = Trigger.CODEC.parse(JsonOps.INSTANCE, triggerObject).resultOrPartial(LOGGER::error);
 			
 			optionalTrigger.ifPresent(triggers::add);
 		});
@@ -60,12 +61,7 @@ public sealed interface Trigger
 		JsonArray triggersObject = new JsonArray(triggers.size());
 		for(Trigger trigger : triggers)
 		{
-			JsonObject triggerObject = new JsonObject();
-			
-			triggerObject.add("type", Type.CODEC.encodeStart(JsonOps.INSTANCE, trigger.getType()).getOrThrow(false, LOGGER::error));
-			//noinspection unchecked
-			JsonElement triggerElement = ((Codec<Trigger>) trigger.getType().codec.get()).encode(trigger, JsonOps.INSTANCE, triggerObject).getOrThrow(false, LOGGER::error);
-			
+			JsonElement triggerElement = Trigger.CODEC.encodeStart(JsonOps.INSTANCE, trigger).getOrThrow(false, LOGGER::error);
 			triggersObject.add(triggerElement);
 		}
 		return triggersObject;
