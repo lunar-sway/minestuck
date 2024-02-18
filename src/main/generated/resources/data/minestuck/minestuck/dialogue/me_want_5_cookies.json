@@ -26,8 +26,8 @@
       "triggers": [
         {
           "type": "take_item",
-          "content": "minecraft:cookie",
-          "content_extra": "5"
+          "amount": 5,
+          "item": "minecraft:cookie"
         }
       ]
     }

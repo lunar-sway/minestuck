@@ -12,7 +12,7 @@
       "triggers": [
         {
           "type": "add_consort_reputation",
-          "content": "-100"
+          "reputation": -100
         }
       ]
     },
@@ -24,7 +24,7 @@
       "triggers": [
         {
           "type": "add_consort_reputation",
-          "content": "100"
+          "reputation": 100
         }
       ]
     },

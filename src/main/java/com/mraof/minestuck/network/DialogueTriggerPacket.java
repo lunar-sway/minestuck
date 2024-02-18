@@ -51,7 +51,7 @@ public class DialogueTriggerPacket implements MSPacket.PlayToServer
 		Entity entity = player.level().getEntity(entityID);
 		if(entity instanceof LivingEntity livingEntity && entity instanceof DialogueEntity)
 		{
-			trigger.testConditions(livingEntity, player);
+			trigger.triggerEffect(livingEntity, player);
 		}
 	}
 }
