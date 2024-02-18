@@ -2,7 +2,6 @@ package com.mraof.minestuck.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -16,21 +15,22 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.apache.logging.log4j.util.TriConsumer;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 
 /**
  * A Trigger allows for new code to be called when a dialogue option is picked
  */
-public class Trigger
+public sealed abstract class Trigger
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
@@ -43,13 +43,14 @@ public class Trigger
 			JsonObject triggerObject = triggerElement.getAsJsonObject();
 			
 			String triggerTypeProvider = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("type")).getOrThrow(false, LOGGER::error);
-			String triggerContentProvider = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("content")).getOrThrow(false, LOGGER::error);
-			String triggerContentExtraProvider = GsonHelper.getAsString(triggerObject, "content_extra", null);
 			
 			//TODO may throw errors when its not filled in correctly
 			String triggerTypeName = triggerTypeProvider.toUpperCase(Locale.ROOT);
 			if(Dialogue.enumExists(Type.class, triggerTypeName))
-				triggers.add(new Trigger(Type.valueOf(triggerTypeName), triggerContentProvider, triggerContentExtraProvider));
+			{
+				Type type = Type.valueOf(triggerTypeName);
+				triggers.add(type.deserializer.apply(triggerObject));
+			}
 		});
 		return triggers;
 	}
@@ -63,95 +64,43 @@ public class Trigger
 			
 			String triggerType = trigger.type.toString().toLowerCase(Locale.ROOT);
 			triggerObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, triggerType).getOrThrow(false, LOGGER::error));
-			triggerObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, trigger.content).getOrThrow(false, LOGGER::error));
-			triggerObject.addProperty("content_extra", trigger.contentExtra);
+			trigger.serialize(triggerObject);
 			
 			triggersObject.add(triggerObject);
 		}
 		return triggersObject;
 	}
 	
+	abstract void serialize(JsonObject triggerObject);
+	
 	public static Trigger read(FriendlyByteBuf buffer)
 	{
-		return new Trigger(Trigger.Type.fromInt(buffer.readInt()), buffer.readUtf(500), buffer.readUtf(500));
+		Type type = Type.fromInt(buffer.readInt());
+		return type.bufferReader.apply(buffer);
 	}
 	
-	public void write(FriendlyByteBuf buffer)
+	public final void write(FriendlyByteBuf buffer)
 	{
-		int type = this.getType().ordinal();
-		String content = this.getContent();
-		String contentExtra = this.getContentExtra();
-		
-		buffer.writeInt(type);
-		buffer.writeUtf(content, 500);
-		buffer.writeUtf(contentExtra, 500);
+		buffer.writeInt(this.getType().ordinal());
+		this.writeTrigger(buffer);
 	}
+	
+	abstract void writeTrigger(FriendlyByteBuf buffer);
 	
 	public enum Type
 	{
-		COMMAND((entity, player, s) ->
-		{
-			//TODO has been causing server side crashes the second time it is run
-			if(player != null)
-			{
-				try(Level level = player.level())
-				{
-					if(!level.isClientSide)
-					{
-						//TODO using the entity for this instead of the player failed
-						level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), s.getFirst());
-					}
-				} catch(IOException e)
-				{
-					LOGGER.debug("Trigger in Dialogue tried to get null level from player");
-				}
-			}
-		}),
-		TAKE_ITEM((entity, player, s) ->
-		{
-			if(player != null)
-			{
-				int amount = Dialogue.parseIntFromString(s.getSecond(), 1);
-				ItemStack stack = Dialogue.findPlayerItem(s.getFirst(), player, amount);
-				if(stack != null)
-				{
-					stack.shrink(amount);
-				}
-			}
-		}),
-		SET_DIALOGUE((entity, player, s) ->
-		{
-			if(entity instanceof DialogueEntity dialogueEntity)
-			{
-				ResourceLocation newPath = ResourceLocation.tryParse(s.getFirst());
-				if(newPath != null)
-					dialogueEntity.setDialoguePath(newPath);
-			}
-		}),
-		ADD_CONSORT_REPUTATION((entity, player, s) ->
-		{
-			//TODO has been causing server side crashes the second time it is run
-			if(entity instanceof ConsortEntity consortEntity && player instanceof ServerPlayer serverPlayer)
-			{
-				PlayerData data = PlayerSavedData.getData(serverPlayer);
-				if(data != null)
-				{
-					try
-					{
-						data.addConsortReputation(Integer.parseInt(s.getFirst()), consortEntity.getHomeDimension());
-					} catch(NumberFormatException ignored)
-					{
-						LOGGER.debug("Failed to parse string from a Dialogue into an integer");
-					}
-				}
-			}
-		});
+		COMMAND(Command::deserialize, Command::readTrigger),
+		TAKE_ITEM(TakeItem::deserialize, TakeItem::readTrigger),
+		SET_DIALOGUE(SetDialogue::deserialize, SetDialogue::readTrigger),
+		ADD_CONSORT_REPUTATION(AddConsortReputation::deserialize, AddConsortReputation::readTrigger);
 		
-		private final TriConsumer<LivingEntity, Player, Pair<String, String>> conditions;
+		private final Function<JsonObject, Trigger> deserializer;
+		private final Function<FriendlyByteBuf, Trigger> bufferReader;
 		
-		Type(TriConsumer<LivingEntity, Player, Pair<String, String>> conditions)
+		Type(Function<JsonObject, Trigger> deserializer, Function<FriendlyByteBuf, Trigger> bufferReader)
 		{
-			this.conditions = conditions;
+			this.deserializer = deserializer;
+			this.bufferReader = bufferReader;
 		}
 		
 		public static Type fromInt(int ordinal) //converts int back into enum
@@ -164,20 +113,10 @@ public class Trigger
 	}
 	
 	private final Type type;
-	private final String content;
-	@Nullable
-	private final String contentExtra;
 	
-	public Trigger(Type type, String content)
-	{
-		this(type, content, null);
-	}
-	
-	public Trigger(Type type, String content, @Nullable String contentExtra)
+	public Trigger(Type type)
 	{
 		this.type = type;
-		this.content = content;
-		this.contentExtra = contentExtra;
 	}
 	
 	public Type getType()
@@ -185,19 +124,219 @@ public class Trigger
 		return type;
 	}
 	
-	public String getContent()
-	{
-		return content;
-	}
-	
-	public String getContentExtra()
-	{
-		return contentExtra == null ? "" : contentExtra;
-	}
-	
 	//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
-	public void testConditions(LivingEntity entity, Player player)
+	public abstract void testConditions(LivingEntity entity, Player player);
+	
+	public static final class Command extends Trigger
 	{
-		type.conditions.accept(entity, player, Pair.of(content, getContentExtra()));
+		private final String command;
+		
+		public Command(String command)
+		{
+			super(Type.COMMAND);
+			this.command = command;
+		}
+		
+		static Command deserialize(JsonObject triggerObject)
+		{
+			String contentString = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("content")).getOrThrow(false, LOGGER::error);
+			return new Command(contentString);
+		}
+		
+		@Override
+		void serialize(JsonObject triggerObject)
+		{
+			triggerObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, this.command).getOrThrow(false, LOGGER::error));
+		}
+		
+		static Command readTrigger(FriendlyByteBuf buffer)
+		{
+			String contentString = buffer.readUtf(500);
+			return new Command(contentString);
+		}
+		
+		@Override
+		void writeTrigger(FriendlyByteBuf buffer)
+		{
+			buffer.writeUtf(this.command, 500);
+		}
+		
+		@Override
+		public void testConditions(LivingEntity entity, Player player)
+		{
+			//TODO has been causing server side crashes the second time it is run
+			if(player != null)
+			{
+				try(Level level = player.level())
+				{
+					if(!level.isClientSide)
+					{
+						//TODO using the entity for this instead of the player failed
+						level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), this.command);
+					}
+				} catch(IOException e)
+				{
+					LOGGER.debug("Trigger in Dialogue tried to get null level from player");
+				}
+			}
+		}
+	}
+	
+	public static final class TakeItem extends Trigger
+	{
+		private final Item item;
+		private final int amount;
+		
+		public TakeItem(Item item)
+		{
+			this(item, 1);
+		}
+		
+		public TakeItem(Item item, int amount)
+		{
+			super(Type.TAKE_ITEM);
+			this.item = item;
+			this.amount = amount;
+		}
+		
+		static TakeItem deserialize(JsonObject triggerObject)
+		{
+			String contentString = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("content")).getOrThrow(false, LOGGER::error);
+			String extraContentString = GsonHelper.getAsString(triggerObject, "content_extra", "");
+			Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(contentString));
+			int amount = Dialogue.parseIntFromString(extraContentString, 1);
+			return new TakeItem(item, amount);
+		}
+		
+		@Override
+		void serialize(JsonObject triggerObject)
+		{
+			triggerObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, String.valueOf(ForgeRegistries.ITEMS.getKey(this.item))).getOrThrow(false, LOGGER::error));
+			if(this.amount != 1)
+				triggerObject.addProperty("content_extra", String.valueOf(this.amount));
+		}
+		
+		static TakeItem readTrigger(FriendlyByteBuf buffer)
+		{
+			String contentString = buffer.readUtf(500);
+			String extraContentString = buffer.readUtf(500);
+			Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(contentString));
+			int amount = Dialogue.parseIntFromString(extraContentString, 1);
+			return new TakeItem(item, amount);
+		}
+		
+		@Override
+		void writeTrigger(FriendlyByteBuf buffer)
+		{
+			buffer.writeUtf(String.valueOf(ForgeRegistries.ITEMS.getKey(this.item)), 500);
+			buffer.writeUtf(String.valueOf(this.amount), 500);
+		}
+		
+		@Override
+		public void testConditions(LivingEntity entity, Player player)
+		{
+			if(player != null)
+			{
+				ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
+				if(stack != null)
+				{
+					stack.shrink(this.amount);
+				}
+			}
+		}
+	}
+	
+	public static final class SetDialogue extends Trigger
+	{
+		private final ResourceLocation newPath;
+		
+		public SetDialogue(ResourceLocation newPath)
+		{
+			super(Type.SET_DIALOGUE);
+			this.newPath = newPath;
+		}
+		
+		static SetDialogue deserialize(JsonObject triggerObject)
+		{
+			String contentString = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("content")).getOrThrow(false, LOGGER::error);
+			return new SetDialogue(ResourceLocation.tryParse(contentString));
+		}
+		
+		@Override
+		void serialize(JsonObject triggerObject)
+		{
+			triggerObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, String.valueOf(this.newPath)).getOrThrow(false, LOGGER::error));
+		}
+		
+		static SetDialogue readTrigger(FriendlyByteBuf buffer)
+		{
+			String contentString = buffer.readUtf(500);
+			return new SetDialogue(ResourceLocation.tryParse(contentString));
+		}
+		
+		@Override
+		void writeTrigger(FriendlyByteBuf buffer)
+		{
+			buffer.writeUtf(String.valueOf(this.newPath), 500);
+		}
+		
+		@Override
+		public void testConditions(LivingEntity entity, Player player)
+		{
+			if(entity instanceof DialogueEntity dialogueEntity)
+			{
+				if(this.newPath != null)
+					dialogueEntity.setDialoguePath(this.newPath);
+			}
+		}
+	}
+	
+	public static final class AddConsortReputation extends Trigger
+	{
+		private final int reputation;
+		
+		public AddConsortReputation(int reputation)
+		{
+			super(Type.ADD_CONSORT_REPUTATION);
+			this.reputation = reputation;
+		}
+		
+		static AddConsortReputation deserialize(JsonObject triggerObject)
+		{
+			String contentString = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("content")).getOrThrow(false, LOGGER::error);
+			return new AddConsortReputation(Integer.parseInt(contentString));
+		}
+		
+		@Override
+		void serialize(JsonObject triggerObject)
+		{
+			triggerObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, String.valueOf(this.reputation)).getOrThrow(false, LOGGER::error));
+		}
+		
+		static AddConsortReputation readTrigger(FriendlyByteBuf buffer)
+		{
+			String contentString = buffer.readUtf(500);
+			return new AddConsortReputation(Integer.parseInt(contentString));
+		}
+		
+		@Override
+		void writeTrigger(FriendlyByteBuf buffer)
+		{
+			buffer.writeUtf(String.valueOf(this.reputation), 500);
+		}
+		
+		@Override
+		public void testConditions(LivingEntity entity, Player player)
+		{
+			//TODO has been causing server side crashes the second time it is run
+			if(entity instanceof ConsortEntity consortEntity && player instanceof ServerPlayer serverPlayer)
+			{
+				PlayerData data = PlayerSavedData.getData(serverPlayer);
+				if(data != null)
+				{
+					data.addConsortReputation(this.reputation, consortEntity.getHomeDimension());
+				}
+			}
+		}
 	}
 }
