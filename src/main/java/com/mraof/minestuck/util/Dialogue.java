@@ -308,10 +308,15 @@ public class Dialogue
 		}
 	}
 	
+	@Nullable
 	public static ItemStack findPlayerItem(String registryName, Player player, int minAmount)
 	{
-		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
-		
+		return findPlayerItem(ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName)), player, minAmount);
+	}
+	
+	@Nullable
+	public static ItemStack findPlayerItem(Item item, Player player, int minAmount)
+	{
 		for(ItemStack invItem : player.getInventory().items)
 		{
 			if(invItem.is(item))
