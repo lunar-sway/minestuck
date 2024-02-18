@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -23,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
@@ -326,7 +324,7 @@ public class Dialogue
 		return null;
 	}
 	
-	private static int parseIntFromString(String member, int amount)
+	static int parseIntFromString(String member, int amount)
 	{
 		if(member != null && !member.isEmpty())
 		{
@@ -340,126 +338,6 @@ public class Dialogue
 		}
 		
 		return amount;
-	}
-	
-	/**
-	 * A Trigger allows for new code to be called when a dialogue option is picked
-	 */
-	public static class Trigger
-	{
-		public enum Type
-		{
-			COMMAND((entity, player, s) ->
-			{
-				//TODO has been causing server side crashes the second time it is run
-				if(player != null)
-				{
-					try(Level level = player.level())
-					{
-						if(!level.isClientSide)
-						{
-							//TODO using the entity for this instead of the player failed
-							level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), s.getFirst());
-						}
-					} catch(IOException e)
-					{
-						LOGGER.debug("Trigger in Dialogue tried to get null level from player");
-					}
-				}
-			}),
-			TAKE_ITEM((entity, player, s) ->
-			{
-				if(player != null)
-				{
-					int amount = parseIntFromString(s.getSecond(), 1);
-					ItemStack stack = findPlayerItem(s.getFirst(), player, amount);
-					if(stack != null)
-					{
-						stack.shrink(amount);
-					}
-				}
-			}),
-			SET_DIALOGUE((entity, player, s) ->
-			{
-				if(entity instanceof DialogueEntity dialogueEntity)
-				{
-					ResourceLocation newPath = ResourceLocation.tryParse(s.getFirst());
-					if(newPath != null)
-						dialogueEntity.setDialoguePath(newPath);
-				}
-			}),
-			ADD_CONSORT_REPUTATION((entity, player, s) ->
-			{
-				//TODO has been causing server side crashes the second time it is run
-				if(entity instanceof ConsortEntity consortEntity && player instanceof ServerPlayer serverPlayer)
-				{
-					PlayerData data = PlayerSavedData.getData(serverPlayer);
-					if(data != null)
-					{
-						try
-						{
-							data.addConsortReputation(Integer.parseInt(s.getFirst()), consortEntity.getHomeDimension());
-						} catch(NumberFormatException ignored)
-						{
-							LOGGER.debug("Failed to parse string from a Dialogue into an integer");
-						}
-					}
-				}
-			});
-			
-			private final TriConsumer<LivingEntity, Player, Pair<String, String>> conditions;
-			
-			Type(TriConsumer<LivingEntity, Player, Pair<String, String>> conditions)
-			{
-				this.conditions = conditions;
-			}
-			
-			public static Type fromInt(int ordinal) //converts int back into enum
-			{
-				if(0 <= ordinal && ordinal < Type.values().length)
-					return Type.values()[ordinal];
-				else
-					throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for Trigger type!");
-			}
-		}
-		
-		private final Type type;
-		private final String content;
-		@Nullable
-		private final String contentExtra;
-		
-		public Trigger(Type type, String content)
-		{
-			this(type, content, null);
-		}
-		
-		public Trigger(Type type, String content, @Nullable String contentExtra)
-		{
-			this.type = type;
-			this.content = content;
-			this.contentExtra = contentExtra;
-		}
-		
-		public Type getType()
-		{
-			return type;
-		}
-		
-		public String getContent()
-		{
-			return content;
-		}
-		
-		public String getContentExtra()
-		{
-			return contentExtra == null ? "" : contentExtra;
-		}
-		
-		//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
-		public void testConditions(LivingEntity entity, Player player)
-		{
-			type.conditions.accept(entity, player, Pair.of(content, getContentExtra()));
-		}
 	}
 	
 	public static <T extends Enum<T>> boolean enumExists(Class<T> enumClass, String enumName)
@@ -510,7 +388,7 @@ public class Dialogue
 				String responseProvider = Codec.STRING.parse(JsonOps.INSTANCE, responseObject.get("response_message")).getOrThrow(false, LOGGER::error);
 				
 				List<Condition> conditions = deserializeConditions(responseObject);
-				List<Trigger> triggers = deserializeTriggers(responseObject);
+				List<Trigger> triggers = Trigger.deserializeTriggers(responseObject);
 				
 				ResourceLocation nextPathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, responseObject.get("next_path")).getOrThrow(false, LOGGER::error);
 				boolean hideIfFailedProvider = responseObject.get("hide_if_failed").getAsBoolean();
@@ -539,26 +417,6 @@ public class Dialogue
 					conditions.add(new Condition(Condition.Type.valueOf(conditionTypeName), conditionContentProvider, conditionContentExtraProvider, conditionFailureTooltipProvider));
 			});
 			return conditions;
-		}
-		
-		private static List<Trigger> deserializeTriggers(JsonObject responseObject)
-		{
-			JsonArray triggersObject = responseObject.getAsJsonArray("triggers");
-			List<Trigger> triggers = new ArrayList<>();
-			triggersObject.forEach(triggerElement ->
-			{
-				JsonObject triggerObject = triggerElement.getAsJsonObject();
-				
-				String triggerTypeProvider = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("type")).getOrThrow(false, LOGGER::error);
-				String triggerContentProvider = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("content")).getOrThrow(false, LOGGER::error);
-				String triggerContentExtraProvider = GsonHelper.getAsString(triggerObject, "content_extra", null);
-				
-				//TODO may throw errors when its not filled in correctly
-				String triggerTypeName = triggerTypeProvider.toUpperCase(Locale.ROOT);
-				if(enumExists(Trigger.Type.class, triggerTypeName))
-					triggers.add(new Trigger(Trigger.Type.valueOf(triggerTypeName), triggerContentProvider, triggerContentExtraProvider));
-			});
-			return triggers;
 		}
 		
 		@Override
@@ -596,7 +454,7 @@ public class Dialogue
 				JsonArray conditions = serializeConditions(response.conditions);
 				responseObject.add("conditions", conditions);
 				
-				JsonArray triggers = serializeTriggers(response);
+				JsonArray triggers = Trigger.serializeTriggers(response.triggers);
 				responseObject.add("triggers", triggers);
 				
 				responseObject.add("next_path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, response.nextDialoguePath).getOrThrow(false, LOGGER::error));
@@ -623,23 +481,6 @@ public class Dialogue
 				conditionsArray.add(conditionObject);
 			}
 			return conditionsArray;
-		}
-		
-		private static JsonArray serializeTriggers(Response response)
-		{
-			JsonArray triggers = new JsonArray(response.triggers.size());
-			for(Trigger trigger : response.triggers)
-			{
-				JsonObject triggerObject = new JsonObject();
-				
-				String triggerType = trigger.type.toString().toLowerCase(Locale.ROOT);
-				triggerObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, triggerType).getOrThrow(false, LOGGER::error));
-				triggerObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, trigger.content).getOrThrow(false, LOGGER::error));
-				triggerObject.addProperty("content_extra", trigger.contentExtra);
-				
-				triggers.add(triggerObject);
-			}
-			return triggers;
 		}
 	}
 }

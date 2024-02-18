@@ -7,6 +7,7 @@ import com.mraof.minestuck.network.DialogueTriggerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
+import com.mraof.minestuck.util.Trigger;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -124,8 +125,8 @@ public class DialogueScreen extends Screen
 				if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
 					nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
 				
-				List<Dialogue.Trigger> triggers = response.getTriggers();
-				for(Dialogue.Trigger trigger : triggers)
+				List<Trigger> triggers = response.getTriggers();
+				for(Trigger trigger : triggers)
 				{
 					DialogueTriggerPacket packet = DialogueTriggerPacket.createPacket(trigger, entity);
 					MSPacketHandler.sendToServer(packet);
