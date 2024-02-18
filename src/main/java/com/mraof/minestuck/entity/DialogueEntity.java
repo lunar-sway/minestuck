@@ -2,19 +2,20 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 
+/**
+ * Can be implemented by entities to help standardize storage/retrieval of dialogue
+ */
 public interface DialogueEntity
 {
 	String DIALOGUE_NBT_TAG = "Dialogue";
 	
 	Dialogue getDialogue();
 	
-	void setDialogue(String location);
+	void setDialoguePath(ResourceLocation location);
 	
-	default Dialogue getDialogueFromEntity(LivingEntity entity)
+	/*default Dialogue getDialogueFromEntity(LivingEntity entity)
 	{
 		CompoundTag entityNBT = entity.getPersistentData();
 		if(entityNBT.contains(DIALOGUE_NBT_TAG))
@@ -25,10 +26,10 @@ public interface DialogueEntity
 		}
 		
 		return null;
-	}
+	}*/
 	
-	default Dialogue dialogueFromLocation(String location)
+	default Dialogue dialogueFromLocation(ResourceLocation location)
 	{
-		return DialogueManager.getInstance().getDialogue(ResourceLocation.tryParse(location));
+		return DialogueManager.getInstance().getDialogue(location);
 	}
 }

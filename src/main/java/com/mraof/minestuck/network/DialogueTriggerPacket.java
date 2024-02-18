@@ -2,22 +2,21 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.util.Dialogue;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-public class DialoguePacket implements MSPacket.PlayToServer
+public class DialogueTriggerPacket implements MSPacket.PlayToServer
 {
 	private final Dialogue.Trigger trigger;
 	private final int entityID;
 	
-	public static DialoguePacket createPacket(Dialogue.Trigger trigger, LivingEntity entity)
+	public static DialogueTriggerPacket createPacket(Dialogue.Trigger trigger, LivingEntity entity)
 	{
-		return new DialoguePacket(trigger, entity.getId());
+		return new DialogueTriggerPacket(trigger, entity.getId());
 	}
-	public DialoguePacket(Dialogue.Trigger trigger, int entityID)
+	public DialogueTriggerPacket(Dialogue.Trigger trigger, int entityID)
 	{
 		this.trigger = trigger;
 		this.entityID = entityID;
@@ -36,16 +35,26 @@ public class DialoguePacket implements MSPacket.PlayToServer
 		buffer.writeInt(entityID);
 	}
 	
-	public static DialoguePacket decode(FriendlyByteBuf buffer)
+	public static DialogueTriggerPacket decode(FriendlyByteBuf buffer)
 	{
-		Dialogue.Trigger trigger = new Dialogue.Trigger(Dialogue.Trigger.Type.fromInt(buffer.readInt()), buffer.readUtf(500), buffer.readUtf(500));
-		return new DialoguePacket(trigger, buffer.readInt());
+		try {
+			Dialogue.Trigger trigger = new Dialogue.Trigger(Dialogue.Trigger.Type.fromInt(buffer.readInt()), buffer.readUtf(500), buffer.readUtf(500));
+			return new DialogueTriggerPacket(trigger, buffer.readInt());
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
+		if(trigger == null)
+			return;
+		
+		Entity entity = player.level().getEntity(entityID);
 		if(entity instanceof LivingEntity livingEntity && entity instanceof DialogueEntity)
 		{
 			trigger.testConditions(livingEntity, player);
