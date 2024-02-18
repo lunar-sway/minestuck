@@ -393,7 +393,7 @@ public class Dialogue
 				String responseProvider = Codec.STRING.parse(JsonOps.INSTANCE, responseObject.get("response_message")).getOrThrow(false, LOGGER::error);
 				
 				List<Condition> conditions = deserializeConditions(responseObject);
-				List<Trigger> triggers = Trigger.deserializeTriggers(responseObject);
+				List<Trigger> triggers = Trigger.LIST_CODEC.parse(JsonOps.INSTANCE, responseObject).getOrThrow(true, LOGGER::error);
 				
 				ResourceLocation nextPathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, responseObject.get("next_path")).getOrThrow(false, LOGGER::error);
 				boolean hideIfFailedProvider = responseObject.get("hide_if_failed").getAsBoolean();
@@ -459,8 +459,7 @@ public class Dialogue
 				JsonArray conditions = serializeConditions(response.conditions);
 				responseObject.add("conditions", conditions);
 				
-				JsonArray triggers = Trigger.serializeTriggers(response.triggers);
-				responseObject.add("triggers", triggers);
+				responseObject.add("triggers", Trigger.LIST_CODEC.encodeStart(JsonOps.INSTANCE, response.triggers).getOrThrow(false, LOGGER::error));
 				
 				responseObject.add("next_path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, response.nextDialoguePath).getOrThrow(false, LOGGER::error));
 				responseObject.addProperty("hide_if_failed", response.hideIfFailed);
