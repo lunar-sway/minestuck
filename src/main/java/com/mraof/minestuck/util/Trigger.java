@@ -1,11 +1,6 @@
 package com.mraof.minestuck.util;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -22,12 +17,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.slf4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -37,35 +29,8 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public sealed interface Trigger
 {
-	Logger LOGGER = LogUtils.getLogger();
-	
 	Codec<Trigger> CODEC = Type.CODEC.dispatch(Trigger::getType, type -> type.codec.get());
-	
-	static List<Trigger> deserializeTriggers(JsonObject responseObject)
-	{
-		JsonArray triggersObject = responseObject.getAsJsonArray("triggers");
-		List<Trigger> triggers = new ArrayList<>();
-		triggersObject.forEach(triggerElement ->
-		{
-			JsonObject triggerObject = triggerElement.getAsJsonObject();
-			
-			Optional<Trigger> optionalTrigger = Trigger.CODEC.parse(JsonOps.INSTANCE, triggerObject).resultOrPartial(LOGGER::error);
-			
-			optionalTrigger.ifPresent(triggers::add);
-		});
-		return triggers;
-	}
-	
-	static JsonArray serializeTriggers(List<Trigger> triggers)
-	{
-		JsonArray triggersObject = new JsonArray(triggers.size());
-		for(Trigger trigger : triggers)
-		{
-			JsonElement triggerElement = Trigger.CODEC.encodeStart(JsonOps.INSTANCE, trigger).getOrThrow(false, LOGGER::error);
-			triggersObject.add(triggerElement);
-		}
-		return triggersObject;
-	}
+	Codec<List<Trigger>> LIST_CODEC = Trigger.CODEC.listOf();
 	
 	static Trigger read(FriendlyByteBuf buffer)
 	{
