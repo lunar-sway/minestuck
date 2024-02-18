@@ -9,10 +9,12 @@ import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -24,11 +26,13 @@ import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
  * A Trigger allows for new code to be called when a dialogue option is picked
  */
+@MethodsReturnNonnullByDefault
 public sealed interface Trigger
 {
 	Logger LOGGER = LogUtils.getLogger();
@@ -41,15 +45,10 @@ public sealed interface Trigger
 		{
 			JsonObject triggerObject = triggerElement.getAsJsonObject();
 			
-			String triggerTypeProvider = Codec.STRING.parse(JsonOps.INSTANCE, triggerObject.get("type")).getOrThrow(false, LOGGER::error);
+			Optional<Type> optionalType = Type.CODEC.parse(JsonOps.INSTANCE, triggerObject.get("type")).resultOrPartial(LOGGER::error);
 			
 			//TODO may throw errors when its not filled in correctly
-			String triggerTypeName = triggerTypeProvider.toUpperCase(Locale.ROOT);
-			if(Dialogue.enumExists(Type.class, triggerTypeName))
-			{
-				Type type = Type.valueOf(triggerTypeName);
-				triggers.add(type.deserializer.apply(triggerObject));
-			}
+			optionalType.ifPresent(type -> triggers.add(type.deserializer.apply(triggerObject)));
 		});
 		return triggers;
 	}
@@ -61,8 +60,7 @@ public sealed interface Trigger
 		{
 			JsonObject triggerObject = new JsonObject();
 			
-			String triggerType = trigger.getType().toString().toLowerCase(Locale.ROOT);
-			triggerObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, triggerType).getOrThrow(false, LOGGER::error));
+			triggerObject.add("type", Type.CODEC.encodeStart(JsonOps.INSTANCE, trigger.getType()).getOrThrow(false, LOGGER::error));
 			trigger.serialize(triggerObject);
 			
 			triggersObject.add(triggerObject);
@@ -86,12 +84,14 @@ public sealed interface Trigger
 	
 	void writeTrigger(FriendlyByteBuf buffer);
 	
-	enum Type
+	enum Type implements StringRepresentable
 	{
 		COMMAND(Command::deserialize, Command::readTrigger),
 		TAKE_ITEM(TakeItem::deserialize, TakeItem::readTrigger),
 		SET_DIALOGUE(SetDialogue::deserialize, SetDialogue::readTrigger),
 		ADD_CONSORT_REPUTATION(AddConsortReputation::deserialize, AddConsortReputation::readTrigger);
+		
+		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 		
 		private final Function<JsonObject, Trigger> deserializer;
 		private final Function<FriendlyByteBuf, Trigger> bufferReader;
@@ -108,6 +108,12 @@ public sealed interface Trigger
 				return Type.values()[ordinal];
 			else
 				throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for Trigger type!");
+		}
+		
+		@Override
+		public String getSerializedName()
+		{
+			return this.name().toLowerCase(Locale.ROOT);
 		}
 	}
 	
