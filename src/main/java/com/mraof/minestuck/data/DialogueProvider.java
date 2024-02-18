@@ -123,7 +123,7 @@ public class DialogueProvider implements DataProvider
 		DialogueBuilder(String message, String animation, String gui, @Nullable Dialogue.UseContext useContext)
 		{
 			this.path = new ResourceLocation(Minestuck.MOD_ID, message);
-			this.message = "minestuck.dialogue." + message.replace("/",".");
+			this.message = "minestuck.dialogue." + message.replace("/", ".");
 			this.animation = animation;
 			this.guiPath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/" + gui + ".png");
 			this.responses = new ArrayList<>();

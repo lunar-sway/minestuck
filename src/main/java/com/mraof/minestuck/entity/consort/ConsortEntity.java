@@ -57,9 +57,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @ParametersAreNonnullByDefault
@@ -80,7 +78,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private final EnumConsort consortType;
-	private Dialogue dialogue;
+	private ResourceLocation dialoguePath;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
@@ -272,8 +270,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.addAdditionalSaveData(compound);
 		
-		if(dialogue != null)
-			compound.putString(DIALOGUE_NBT_TAG, dialogue.getPath().toString());
+		if(dialoguePath != null)
+			compound.putString(DIALOGUE_NBT_TAG, dialoguePath.toString());
 		
 		/*if(message != null)
 		{
@@ -319,7 +317,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		//TODO dialogue (at least on client side) seems to randomize on reloads
 		if(compound.contains(DIALOGUE_NBT_TAG, Tag.TAG_STRING))
-			setDialogue(compound.getString(DIALOGUE_NBT_TAG));
+			dialoguePath = ResourceLocation.tryParse(compound.getString(DIALOGUE_NBT_TAG));
 		
 		/*if(compound.contains("Dialogue", Tag.TAG_STRING))
 		{
@@ -480,20 +478,27 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	@Override
 	public Dialogue getDialogue()
 	{
-		if(dialogue != null)
-			return dialogue;
-		else
-			dialogue = getDialogueFromEntity(this);
+		//tries to get the dialogue from dialoguePath and failing that will choose a random one, setting the new dialoguePath in the process
+		Dialogue dialogue;
 		
-		if(dialogue == null)
+		if(dialoguePath != null)
+		{
+			dialogue = dialogueFromLocation(dialoguePath);
+		} else
+		{
 			dialogue = DialogueManager.getInstance().doRandomDialogue(this, random);
+			
+			if(dialogue != null)
+				dialoguePath = dialogue.getPath();
+		}
+		
 		return dialogue;
 	}
 	
 	@Override
-	public void setDialogue(String location)
+	public void setDialoguePath(ResourceLocation location)
 	{
-		dialogue = dialogueFromLocation(location);
+		dialoguePath = location;
 	}
 	
 	@Override

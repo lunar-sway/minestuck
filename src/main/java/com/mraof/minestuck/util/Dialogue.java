@@ -153,7 +153,7 @@ public class Dialogue
 			IS_ENTITY_TYPE((entity, player, content) ->
 			{
 				EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(content.getFirst()));
-				return entityType != null;
+				return entityType != null && entity.getType().equals(entityType);
 			}),
 			CONSORT_TYPE((entity, player, content) ->
 					//distinct in that it uses consort type, not the entity type
@@ -351,6 +351,7 @@ public class Dialogue
 		{
 			COMMAND((entity, player, s) ->
 			{
+				//TODO has been causing server side crashes the second time it is run
 				if(player != null)
 				{
 					try(Level level = player.level())
@@ -382,13 +383,14 @@ public class Dialogue
 			{
 				if(entity instanceof DialogueEntity dialogueEntity)
 				{
-					dialogueEntity.setDialogue(s.getFirst());
+					ResourceLocation newPath = ResourceLocation.tryParse(s.getFirst());
+					if(newPath != null)
+						dialogueEntity.setDialoguePath(newPath);
 				}
 			}),
 			ADD_CONSORT_REPUTATION((entity, player, s) ->
 			{
-				//TODO freezes server-side
-				
+				//TODO has been causing server side crashes the second time it is run
 				if(entity instanceof ConsortEntity consortEntity && player instanceof ServerPlayer serverPlayer)
 				{
 					PlayerData data = PlayerSavedData.getData(serverPlayer);

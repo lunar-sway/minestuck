@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.network.DialoguePacket;
+import com.mraof.minestuck.network.DialogueTriggerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
@@ -21,6 +21,10 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays a screen when interacting with any dialogue capable entity that has a valid dialogue.
+ * It is configurable in terms of what the gui image is, what sort of animated talk sprite shows up, and how many response options there are.
+ */
 public class DialogueScreen extends Screen
 {
 	private static final int GUI_WIDTH = 224;
@@ -50,6 +54,7 @@ public class DialogueScreen extends Screen
 	@Override
 	public void init()
 	{
+		//TODO static gui height/width may not make sense with customizable gui sizing
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
 		
@@ -85,21 +90,26 @@ public class DialogueScreen extends Screen
 			
 			if(!Dialogue.Condition.matchesAllConditions(entity, player, response.getConditions()))
 			{
-				MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
-				
-				for(Dialogue.Condition condition : response.getConditions())
-				{
-					String tooltip = condition.getFailureTooltip();
-					if(tooltip != null && !tooltip.isEmpty())
-						tooltipMessage.append("\n").append(Component.translatable(tooltip));
-				}
-				
-				entryButton.setTooltip(Tooltip.create(tooltipMessage));
-				entryButton.active = false;
+				createFailedTooltip(response, entryButton);
 			}
 			
 			responseButtons.add(addRenderableWidget(entryButton));
 		}
+	}
+	
+	private static void createFailedTooltip(Dialogue.Response response, ExtendedButton entryButton)
+	{
+		MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
+		
+		for(Dialogue.Condition condition : response.getConditions())
+		{
+			String tooltip = condition.getFailureTooltip();
+			if(tooltip != null && !tooltip.isEmpty())
+				tooltipMessage.append("\n").append(Component.translatable(tooltip));
+		}
+		
+		entryButton.setTooltip(Tooltip.create(tooltipMessage));
+		entryButton.active = false;
 	}
 	
 	private void clickResponse(String responseMessage)
@@ -117,7 +127,7 @@ public class DialogueScreen extends Screen
 				List<Dialogue.Trigger> triggers = response.getTriggers();
 				for(Dialogue.Trigger trigger : triggers)
 				{
-					DialoguePacket packet = DialoguePacket.createPacket(trigger, entity);
+					DialogueTriggerPacket packet = DialogueTriggerPacket.createPacket(trigger, entity);
 					MSPacketHandler.sendToServer(packet);
 				}
 				
@@ -146,6 +156,7 @@ public class DialogueScreen extends Screen
 		{
 			MutableComponent entityName = entity.getDisplayName().plainCopy();
 			
+			//consort names will have the same color as their type
 			if(entity instanceof ConsortEntity consortEntity)
 			{
 				entityName.withStyle(consortEntity.getConsortType().getColor());
@@ -161,6 +172,6 @@ public class DialogueScreen extends Screen
 	@Override
 	public boolean isPauseScreen()
 	{
-		return false;
+		return false; //should make experience consistent between singleplayer and multiplayer and should help prevent issues with the use of Triggers
 	}
 }
