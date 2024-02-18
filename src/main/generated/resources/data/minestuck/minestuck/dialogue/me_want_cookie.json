@@ -32,11 +32,11 @@
       "triggers": [
         {
           "type": "take_item",
-          "content": "minecraft:cookie"
+          "item": "minecraft:cookie"
         },
         {
           "type": "set_dialogue",
-          "content": "minestuck:hunger_filled"
+          "new_path": "minestuck:hunger_filled"
         }
       ]
     }

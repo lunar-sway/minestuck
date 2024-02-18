@@ -36,7 +36,7 @@
       "triggers": [
         {
           "type": "command",
-          "content": "summon minestuck:grist ~ ~ ~ {Value:200}"
+          "command": "summon minestuck:grist ~ ~ ~ {Value:200}"
         }
       ]
     }
