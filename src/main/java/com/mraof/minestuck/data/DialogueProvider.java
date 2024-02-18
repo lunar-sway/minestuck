@@ -40,28 +40,28 @@ public class DialogueProvider implements DataProvider
 	
 	private void consortDialogues()
 	{
-		add(new DialogueBuilder("mycelium.1", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.PLACEHOLDER, ""))))
+		add(new DialogueBuilder("mycelium.1", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("=>", "mycelium.2")
 		);
 		add(new DialogueBuilder("mycelium.2"));
 		
-		add(new DialogueBuilder("camel", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.PLACEHOLDER, ""))))
-				.addResponse("dialogue.camel.yes", "camel.no_camel")
-				.addResponse("dialogue.camel.no", "camel.dancing_camel")
+		add(new DialogueBuilder("camel/start", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
+				.addResponse("dialogue.camel.yes", "camel/no_camel")
+				.addResponse("dialogue.camel.no", "camel/dancing_camel")
 		);
-		add(new DialogueBuilder("camel.no_camel"));
-		add(new DialogueBuilder("camel.dancing_camel"));
+		add(new DialogueBuilder("camel/no_camel"));
+		add(new DialogueBuilder("camel/dancing_camel"));
 	}
 	
 	private void testDialogues()
 	{
-		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.PLACEHOLDER, ""))))
+		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")), List.of(), "test2", true)
 				.addResponse("test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")), List.of(), "test2", true)
 				.addResponse("test1response3", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "summon minestuck:grist ~ ~ ~ {Value:200}")), "test2", true)
 		);
 		
-		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.PLACEHOLDER, ""))))
+		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", null, "Was not salamander")), List.of(), "test1", false)
 				.addResponse("test2response2", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, "say hi")), "test1", false)
 				.addResponse("test2response3", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.COMMAND, """
@@ -70,10 +70,10 @@ public class DialogueProvider implements DataProvider
 		
 		add(new DialogueBuilder("turtle_only", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")))));
 		
-		add(new DialogueBuilder("nakagator_only", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")))));
+		add(new DialogueBuilder("nakagator_only", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.IS_ENTITY_TYPE, "minestuck:nakagator")))));
 		
 		//builder can take empty strings for nextDialoguePath
-		add(new DialogueBuilder("me_want_cookie", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.PLACEHOLDER, ""))))
+		add(new DialogueBuilder("me_want_cookie", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("im sorry fellow, I have no cookie for you. Bye", "")
 				.addResponse("why do you want cookie?", null)
 				.addResponse("here have a cookie chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", null, "Has no cookie")), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.TAKE_ITEM, "minecraft:cookie"), new Dialogue.Trigger(Dialogue.Trigger.Type.SET_DIALOGUE, "minestuck:hunger_filled")), "oh_yippee", false)
@@ -81,12 +81,12 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("oh_yippee"));
 		add(new DialogueBuilder("hunger_filled"));
 		
-		add(new DialogueBuilder("me_want_5_cookies", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.PLACEHOLDER, ""))))
+		add(new DialogueBuilder("me_want_5_cookies", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("im sorry fellow, I have no cookie for you. Bye", "")
 				.addResponse("here have 5 cookies chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "5", "Has no cookie")), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.TAKE_ITEM, "minecraft:cookie", "5")), "oh_yippee", false)
 		);
 		
-		add(new DialogueBuilder("hi_friend_can_i_help_you", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.PLACEHOLDER, ""))))
+		add(new DialogueBuilder("hi_friend_can_i_help_you", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
 				.addResponse("I hate you", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.ADD_CONSORT_REPUTATION, "-100")), null, false)
 				.addResponse("I love you", List.of(), List.of(new Dialogue.Trigger(Dialogue.Trigger.Type.ADD_CONSORT_REPUTATION, "100")), null, false)
 				.addResponse("Rep above 500", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_MINIMUM_REPUTATION, "500", null, "Rep too low")), List.of(), null, false)
@@ -123,7 +123,7 @@ public class DialogueProvider implements DataProvider
 		DialogueBuilder(String message, String animation, String gui, @Nullable Dialogue.UseContext useContext)
 		{
 			this.path = new ResourceLocation(Minestuck.MOD_ID, message);
-			this.message = "dialogue." + message;
+			this.message = "minestuck.dialogue." + message.replace("/",".");
 			this.animation = animation;
 			this.guiPath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/" + gui + ".png");
 			this.responses = new ArrayList<>();

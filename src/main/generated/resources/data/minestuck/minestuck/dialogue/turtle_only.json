@@ -1,7 +1,7 @@
 {
   "animation": "test2animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "dialogue.turtle_only",
+  "message": "minestuck.dialogue.turtle_only",
   "path": "minestuck:turtle_only",
   "responses": [],
   "use_context": {

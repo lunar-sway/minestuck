@@ -1,20 +1,20 @@
 {
   "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "dialogue.camel",
-  "path": "minestuck:camel",
+  "message": "minestuck.dialogue.camel.start",
+  "path": "minestuck:camel/start",
   "responses": [
     {
       "conditions": [],
       "hide_if_failed": true,
-      "next_path": "minestuck:camel.no_camel",
+      "next_path": "minestuck:camel/no_camel",
       "response_message": "dialogue.camel.yes",
       "triggers": []
     },
     {
       "conditions": [],
       "hide_if_failed": true,
-      "next_path": "minestuck:camel.dancing_camel",
+      "next_path": "minestuck:camel/dancing_camel",
       "response_message": "dialogue.camel.no",
       "triggers": []
     }
@@ -22,7 +22,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "placeholder",
+        "type": "conditionless",
         "content": ""
       }
     ]

@@ -1,7 +1,7 @@
 {
   "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "dialogue.mycelium.2",
+  "message": "minestuck.dialogue.mycelium.2",
   "path": "minestuck:mycelium.2",
   "responses": []
 }

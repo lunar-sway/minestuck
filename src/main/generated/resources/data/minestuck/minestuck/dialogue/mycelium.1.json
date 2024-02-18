@@ -1,7 +1,7 @@
 {
   "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "dialogue.mycelium.1",
+  "message": "minestuck.dialogue.mycelium.1",
   "path": "minestuck:mycelium.1",
   "responses": [
     {
@@ -15,7 +15,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "placeholder",
+        "type": "conditionless",
         "content": ""
       }
     ]
