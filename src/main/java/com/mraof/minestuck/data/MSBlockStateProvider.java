@@ -617,14 +617,41 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.WOODEN_GRASS, MSBlockStateProvider::texture);
 		
 		simpleBlockWithItem(MSBlocks.TREATED_UNCARVED_WOOD);
+		stairsWithItem(MSBlocks.TREATED_UNCARVED_WOOD_STAIRS, MSBlocks.TREATED_UNCARVED_WOOD);
+		slabWithItem(MSBlocks.TREATED_UNCARVED_WOOD_SLAB, MSBlocks.TREATED_UNCARVED_WOOD);
+		buttonWithItem(MSBlocks.TREATED_UNCARVED_WOOD_BUTTON, MSBlocks.TREATED_UNCARVED_WOOD);
+		pressurePlateWithItem(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.TREATED_UNCARVED_WOOD);
+		fenceWithItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE, MSBlocks.TREATED_UNCARVED_WOOD);
+		fenceGateWithItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE, MSBlocks.TREATED_UNCARVED_WOOD);
 		
 		simpleBlockWithItem(MSBlocks.TREATED_CHIPBOARD);
+		stairsWithItem(MSBlocks.TREATED_CHIPBOARD_STAIRS, MSBlocks.TREATED_CHIPBOARD);
+		slabWithItem(MSBlocks.TREATED_CHIPBOARD_SLAB, MSBlocks.TREATED_CHIPBOARD);
+		buttonWithItem(MSBlocks.TREATED_CHIPBOARD_BUTTON, MSBlocks.TREATED_CHIPBOARD);
+		pressurePlateWithItem(MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE, MSBlocks.TREATED_CHIPBOARD);
+		fenceWithItem(MSBlocks.TREATED_CHIPBOARD_FENCE, MSBlocks.TREATED_CHIPBOARD);
+		fenceGateWithItem(MSBlocks.TREATED_CHIPBOARD_FENCE_GATE, MSBlocks.TREATED_CHIPBOARD);
 		
 		simpleBlockWithItem(MSBlocks.TREATED_WOOD_SHAVINGS);
 		
 		simpleBlockWithItem(MSBlocks.TREATED_HEAVY_PLANKS);
+		stairsWithItem(MSBlocks.TREATED_HEAVY_PLANK_STAIRS, MSBlocks.TREATED_HEAVY_PLANKS);
+		slabWithItem(MSBlocks.TREATED_HEAVY_PLANK_SLAB, MSBlocks.TREATED_HEAVY_PLANKS);
+		
+		simpleBlockWithItem(MSBlocks.TREATED_PLANKS);
+		stairsWithItem(MSBlocks.TREATED_PLANKS_STAIRS, MSBlocks.TREATED_PLANKS);
+		slabWithItem(MSBlocks.TREATED_PLANKS_SLAB, MSBlocks.TREATED_PLANKS);
+		buttonWithItem(MSBlocks.TREATED_BUTTON, MSBlocks.TREATED_PLANKS);
+		pressurePlateWithItem(MSBlocks.TREATED_PRESSURE_PLATE, MSBlocks.TREATED_PLANKS);
+		fenceWithItem(MSBlocks.TREATED_FENCE, MSBlocks.TREATED_PLANKS);
+		fenceGateWithItem(MSBlocks.TREATED_FENCE_GATE, MSBlocks.TREATED_PLANKS);
+		simpleDoorBlock(MSBlocks.TREATED_DOOR);
+		trapDoorWithItem(MSBlocks.TREATED_TRAPDOOR);
+		flatItem(MSItems.TREATED_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+		stairsWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+		slabWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
 		
 		simpleHorizontalWithItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
 		simpleBlock(MSBlocks.TREATED_WOODEN_GRASS,
@@ -632,16 +659,41 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.TREATED_WOODEN_GRASS, MSBlockStateProvider::texture);
 		
 		simpleBlockWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD);
+		stairsWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_STAIRS, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		slabWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_SLAB, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		buttonWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_BUTTON, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		pressurePlateWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		fenceWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		fenceGateWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE, MSBlocks.LACQUERED_UNCARVED_WOOD);
 		
 		simpleBlockWithItem(MSBlocks.LACQUERED_CHIPBOARD);
+		stairsWithItem(MSBlocks.LACQUERED_CHIPBOARD_STAIRS, MSBlocks.LACQUERED_CHIPBOARD);
+		slabWithItem(MSBlocks.LACQUERED_CHIPBOARD_SLAB, MSBlocks.LACQUERED_CHIPBOARD);
+		buttonWithItem(MSBlocks.LACQUERED_CHIPBOARD_BUTTON, MSBlocks.LACQUERED_CHIPBOARD);
+		pressurePlateWithItem(MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE, MSBlocks.LACQUERED_CHIPBOARD);
+		fenceWithItem(MSBlocks.LACQUERED_CHIPBOARD_FENCE, MSBlocks.LACQUERED_CHIPBOARD);
+		fenceGateWithItem(MSBlocks.LACQUERED_CHIPBOARD_FENCE_GATE, MSBlocks.LACQUERED_CHIPBOARD);
 		
 		simpleBlockWithItem(MSBlocks.LACQUERED_WOOD_SHAVINGS);
 		
 		simpleBlockWithItem(MSBlocks.LACQUERED_HEAVY_PLANKS);
+		stairsWithItem(MSBlocks.LACQUERED_HEAVY_PLANK_STAIRS, MSBlocks.LACQUERED_HEAVY_PLANKS);
+		slabWithItem(MSBlocks.LACQUERED_HEAVY_PLANK_SLAB, MSBlocks.LACQUERED_HEAVY_PLANKS);
 		
 		simpleBlockWithItem(MSBlocks.LACQUERED_PLANKS);
+		stairsWithItem(MSBlocks.LACQUERED_STAIRS, MSBlocks.LACQUERED_PLANKS);
+		slabWithItem(MSBlocks.LACQUERED_SLAB, MSBlocks.LACQUERED_PLANKS);
+		buttonWithItem(MSBlocks.LACQUERED_BUTTON, MSBlocks.LACQUERED_PLANKS);
+		pressurePlateWithItem(MSBlocks.LACQUERED_PRESSURE_PLATE, MSBlocks.LACQUERED_PLANKS);
+		fenceWithItem(MSBlocks.LACQUERED_FENCE, MSBlocks.LACQUERED_PLANKS);
+		fenceGateWithItem(MSBlocks.LACQUERED_FENCE_GATE, MSBlocks.LACQUERED_PLANKS);
+		simpleDoorBlock(MSBlocks.LACQUERED_DOOR);
+		trapDoorWithItem(MSBlocks.LACQUERED_TRAPDOOR);
+		flatItem(MSItems.LACQUERED_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+		stairsWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+		slabWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
 		
 		simpleHorizontalWithItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
 		simpleBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM,
@@ -809,15 +861,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.DEAD_DOOR);
 		trapDoorWithItem(MSBlocks.DEAD_TRAPDOOR);
 		flatItem(MSItems.DEAD_DOOR, MSBlockStateProvider::itemTexture);
-		
-		simpleBlockWithItem(MSBlocks.TREATED_PLANKS);
-		buttonWithItem(MSBlocks.TREATED_BUTTON, MSBlocks.TREATED_PLANKS);
-		pressurePlateWithItem(MSBlocks.TREATED_PRESSURE_PLATE, MSBlocks.TREATED_PLANKS);
-		fenceWithItem(MSBlocks.TREATED_FENCE, MSBlocks.TREATED_PLANKS);
-		fenceGateWithItem(MSBlocks.TREATED_FENCE_GATE, MSBlocks.TREATED_PLANKS);
-		simpleDoorBlock(MSBlocks.TREATED_DOOR);
-		trapDoorWithItem(MSBlocks.TREATED_TRAPDOOR);
-		flatItem(MSItems.TREATED_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.SHADEWOOD_PLANKS);
 		stairsWithItem(MSBlocks.SHADEWOOD_STAIRS, MSBlocks.SHADEWOOD_PLANKS);
@@ -1269,7 +1312,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.RAINBOW_PLANKS_STAIRS, MSBlocks.RAINBOW_PLANKS);
 		stairsWithItem(MSBlocks.END_PLANKS_STAIRS, MSBlocks.END_PLANKS);
 		stairsWithItem(MSBlocks.DEAD_PLANKS_STAIRS, MSBlocks.DEAD_PLANKS);
-		stairsWithItem(MSBlocks.TREATED_PLANKS_STAIRS, MSBlocks.TREATED_PLANKS);
 		
 		simpleHorizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, this::existing);
 		simpleHorizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, this::existing);
@@ -1301,7 +1343,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.RAINBOW_PLANKS_SLAB, MSBlocks.RAINBOW_PLANKS);
 		slabWithItem(MSBlocks.END_PLANKS_SLAB, MSBlocks.END_PLANKS);
 		slabWithItem(MSBlocks.DEAD_PLANKS_SLAB, MSBlocks.DEAD_PLANKS);
-		slabWithItem(MSBlocks.TREATED_PLANKS_SLAB, MSBlocks.TREATED_PLANKS);
 		
 		{
 			ModelFile verticalUnpowered = models()

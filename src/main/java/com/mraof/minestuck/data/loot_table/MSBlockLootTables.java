@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
+import static com.mraof.minestuck.block.MSBlocks.TREATED_UNCARVED_WOOD_BUTTON;
 
 public final class MSBlockLootTables extends BlockLootSubProvider
 {
@@ -431,6 +432,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(CARVED_LOG.get());
 		dropSelf(CARVED_WOODEN_LEAF.get());
+		
 		add(UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(UNCARVED_WOOD.get(), CHIPBOARD.get()));
 		dropSelf(UNCARVED_WOOD_STAIRS.get());
 		add(UNCARVED_WOOD_SLAB.get(), this::createSlabItemTable);
@@ -469,22 +471,87 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		
 		dropSelf(CARVED_KNOTTED_WOOD.get());
 		dropSelf(WOODEN_GRASS.get());
-		add(TREATED_UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(TREATED_UNCARVED_WOOD.get(), CHIPBOARD.get()));
+		
+		add(TREATED_UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(TREATED_UNCARVED_WOOD.get(), TREATED_CHIPBOARD.get()));
+		dropSelf(TREATED_UNCARVED_WOOD_STAIRS.get());
+		add(TREATED_UNCARVED_WOOD_SLAB.get(), this::createSlabItemTable);
+		dropSelf(TREATED_UNCARVED_WOOD_BUTTON.get());
+		dropSelf(TREATED_UNCARVED_WOOD_PRESSURE_PLATE.get());
+		dropSelf(TREATED_UNCARVED_WOOD_FENCE.get());
+		dropSelf(TREATED_UNCARVED_WOOD_FENCE_GATE.get());
+		
 		dropSelf(TREATED_CHIPBOARD.get());
+		dropSelf(TREATED_CHIPBOARD_STAIRS.get());
+		add(TREATED_CHIPBOARD_SLAB.get(), this::createSlabItemTable);
+		dropSelf(TREATED_CHIPBOARD_BUTTON.get());
+		dropSelf(TREATED_CHIPBOARD_PRESSURE_PLATE.get());
+		dropSelf(TREATED_CHIPBOARD_FENCE.get());
+		dropSelf(TREATED_CHIPBOARD_FENCE_GATE.get());
+		
 		dropSelf(TREATED_WOOD_SHAVINGS.get());
+		
 		dropSelf(TREATED_HEAVY_PLANKS.get());
+		dropSelf(TREATED_HEAVY_PLANK_STAIRS.get());
+		add(TREATED_HEAVY_PLANK_SLAB.get(), this::createSlabItemTable);
+		
+		dropSelf(TREATED_PLANKS.get());
+		dropSelf(TREATED_PLANKS_STAIRS.get());
+		add(TREATED_PLANKS_SLAB.get(), this::createSlabItemTable);
+		dropSelf(TREATED_BUTTON.get());
+		dropSelf(TREATED_PRESSURE_PLATE.get());
+		dropSelf(TREATED_FENCE.get());
+		dropSelf(TREATED_FENCE_GATE.get());
+		add(TREATED_DOOR.get(), this::createDoorTable);
+		dropSelf(TREATED_TRAPDOOR.get());
+		
 		dropSelf(POLISHED_TREATED_UNCARVED_WOOD.get());
+		dropSelf(POLISHED_TREATED_UNCARVED_STAIRS.get());
+		add(POLISHED_TREATED_UNCARVED_SLAB.get(), this::createSlabItemTable);
+		
 		dropSelf(TREATED_CARVED_KNOTTED_WOOD.get());
 		dropSelf(TREATED_WOODEN_GRASS.get());
-		add(LACQUERED_UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(LACQUERED_UNCARVED_WOOD.get(), CHIPBOARD.get()));
+		
+		add(LACQUERED_UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(LACQUERED_UNCARVED_WOOD.get(), LACQUERED_CHIPBOARD.get()));
+		dropSelf(LACQUERED_UNCARVED_WOOD_STAIRS.get());
+		add(LACQUERED_UNCARVED_WOOD_SLAB.get(), this::createSlabItemTable);
+		dropSelf(LACQUERED_UNCARVED_WOOD_BUTTON.get());
+		dropSelf(LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE.get());
+		dropSelf(LACQUERED_UNCARVED_WOOD_FENCE.get());
+		dropSelf(LACQUERED_UNCARVED_WOOD_FENCE_GATE.get());
+		
 		dropSelf(LACQUERED_CHIPBOARD.get());
+		dropSelf(LACQUERED_CHIPBOARD_STAIRS.get());
+		add(LACQUERED_CHIPBOARD_SLAB.get(), this::createSlabItemTable);
+		dropSelf(LACQUERED_CHIPBOARD_BUTTON.get());
+		dropSelf(LACQUERED_CHIPBOARD_PRESSURE_PLATE.get());
+		dropSelf(LACQUERED_CHIPBOARD_FENCE.get());
+		dropSelf(LACQUERED_CHIPBOARD_FENCE_GATE.get());
+		
 		dropSelf(LACQUERED_WOOD_SHAVINGS.get());
+		
 		dropSelf(LACQUERED_HEAVY_PLANKS.get());
+		dropSelf(LACQUERED_HEAVY_PLANK_STAIRS.get());
+		add(LACQUERED_HEAVY_PLANK_SLAB.get(), this::createSlabItemTable);
+		
 		dropSelf(LACQUERED_PLANKS.get());
+		dropSelf(LACQUERED_STAIRS.get());
+		add(LACQUERED_SLAB.get(), this::createSlabItemTable);
+		dropSelf(LACQUERED_BUTTON.get());
+		dropSelf(LACQUERED_PRESSURE_PLATE.get());
+		dropSelf(LACQUERED_FENCE.get());
+		dropSelf(LACQUERED_FENCE_GATE.get());
+		add(LACQUERED_DOOR.get(), this::createDoorTable);
+		dropSelf(LACQUERED_TRAPDOOR.get());
+		
 		dropSelf(POLISHED_LACQUERED_UNCARVED_WOOD.get());
+		dropSelf(POLISHED_LACQUERED_UNCARVED_STAIRS.get());
+		add(POLISHED_LACQUERED_UNCARVED_SLAB.get(), this::createSlabItemTable);
+		
 		dropSelf(LACQUERED_CARVED_KNOTTED_WOOD.get());
 		dropSelf(LACQUERED_WOODEN_MUSHROOM.get());
+		
 		dropSelf(WOODEN_LAMP.get());
+		
 		dropSelf(DENSE_CLOUD.get());
 		dropSelf(BRIGHT_DENSE_CLOUD.get());
 		dropSelf(SUGAR_CUBE.get());
@@ -573,14 +640,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(DEAD_FENCE_GATE.get());
 		add(DEAD_DOOR.get(), this::createDoorTable);
 		dropSelf(DEAD_TRAPDOOR.get());
-		
-		dropSelf(TREATED_PLANKS.get());
-		dropSelf(TREATED_BUTTON.get());
-		dropSelf(TREATED_PRESSURE_PLATE.get());
-		dropSelf(TREATED_FENCE.get());
-		dropSelf(TREATED_FENCE_GATE.get());
-		add(TREATED_DOOR.get(), this::createDoorTable);
-		dropSelf(TREATED_TRAPDOOR.get());
 		
 		add(FROST_LEAVES.get(), this::frostLeavesDrop);
 		add(RAINBOW_LEAVES.get(), this::rainbowLeavesDrop);
@@ -836,7 +895,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(RAINBOW_PLANKS_STAIRS.get());
 		dropSelf(END_PLANKS_STAIRS.get());
 		dropSelf(DEAD_PLANKS_STAIRS.get());
-		dropSelf(TREATED_PLANKS_STAIRS.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get());
 		add(BLACK_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
@@ -854,7 +912,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(RAINBOW_PLANKS_SLAB.get(), this::createSlabItemTable);
 		add(END_PLANKS_SLAB.get(), this::createSlabItemTable);
 		add(DEAD_PLANKS_SLAB.get(), this::createSlabItemTable);
-		add(TREATED_PLANKS_SLAB.get(), this::createSlabItemTable);
 		add(BLACK_STONE_SLAB.get(), this::createSlabItemTable);
 		add(BLACK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(MYCELIUM_SLAB.get(), this::createSlabItemTable);

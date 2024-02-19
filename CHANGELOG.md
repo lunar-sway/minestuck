@@ -10,45 +10,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Spawn egg items for main Underling types, Consorts, and Carapacians
 - Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+- Carved Logs, Carved Wooden Leaf, and Treated and Lacquered variants of Carved blocks
 - Tree Stump feature in Forest Lands
 - Frog Ruins feature in Frog Lands
+- Various Unfinished and Carved features in Wood Lands
 - Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
 - New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 
 ### Changed
 
+- Wooden Cactus is now only placeable on the Wood Terrain Blocks tag instead of Sand
+- Carved Planks no longer need to be mined with a Stone Axe or better
 - Transportalizers now stack to one instead of 64
 - Prismarine armor remodel and retexture
-- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
-
+- Iron Lass Armor has now been remodeled, and retextured; with additional new animations
+- Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
+- Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
 
 ### Fixed
 
 - Double slabs will now drop two slabs when broken
-
-### Contributors for this release
-
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO
-
-## [Unreleased]
-
-### Added
-
-- Added Carved Logs, Carved Wooden Leaf, Treated variants of Carved Wood blocks, and Lacquered variants of Carved Wood blocks
-
-### Changed
-
-- Wooden Cactus is now placeable on Carved Planks, Uncarved Wood, and Treated planks
-- Wooden Cactus is no longer placeable on Sand
-- Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus. Textures by Vinnelli and Riotmode
-- Updated colors of Treated Bookshelf and Treated Ladder to fit updated Treated Planks.
-
-### Fixed
-
-- Wooden Cactus block model now has proper transparency
-- Metal Boats no longer crash the game when dispensed
-- Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
 
 ### Removed
 
@@ -56,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- hadean, Dweblenod, Vinnelli, Riotmode, glubtier, Akisephila
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 

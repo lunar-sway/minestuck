@@ -444,8 +444,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addBlock(MSBlocks.CARVED_LOG, "Carved Log");
 		addBlock(MSBlocks.CARVED_WOODEN_LEAF, "Carved Wooden Leaf");
+		
 		addBlock(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
-		addBlockTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
 		addBlock(MSBlocks.UNCARVED_WOOD_STAIRS, "Uncarved Wood Stairs");
 		addBlock(MSBlocks.UNCARVED_WOOD_SLAB, "Uncarved Wood Slab");
 		addBlock(MSBlocks.UNCARVED_WOOD_BUTTON, "Uncarved Wood Button");
@@ -483,22 +483,87 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
 		addBlock(MSBlocks.WOODEN_GRASS, "Wooden Grass");
+		
 		addBlock(MSBlocks.TREATED_UNCARVED_WOOD, "Treated Uncarved Wood");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_STAIRS, "Treated Uncarved Wood Stairs");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_SLAB, "Treated Uncarved Wood Slab");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_BUTTON, "Treated Uncarved Wood Button");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE, "Treated Uncarved Wood Pressure Plate");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_FENCE, "Treated Uncarved Wood Fence");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE, "Treated Uncarved Wood Fence Gate");
+		
 		addBlock(MSBlocks.TREATED_CHIPBOARD, "Treated Chipboard");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_STAIRS, "Treated Chipboard Stairs");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_SLAB, "Treated Chipboard Slab");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_BUTTON, "Treated Chipboard Button");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE, "Treated Chipboard Pressure Plate");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_FENCE, "Treated Chipboard Fence");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_FENCE_GATE, "Treated Chipboard Fence Gate");
+		
 		addBlock(MSBlocks.TREATED_WOOD_SHAVINGS, "Treated Wood Shavings");
+		
 		addBlock(MSBlocks.TREATED_HEAVY_PLANKS, "Treated Heavy Planks");
+		addBlock(MSBlocks.TREATED_HEAVY_PLANK_STAIRS, "Treated Heavy Stairs");
+		addBlock(MSBlocks.TREATED_HEAVY_PLANK_SLAB, "Treated Heavy Slab");
+		
+		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
+		addBlock(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Stairs");
+		addBlock(MSBlocks.TREATED_PLANKS_SLAB, "Treated Slab");
+		addBlock(MSBlocks.TREATED_BUTTON, "Treated Button");
+		addBlock(MSBlocks.TREATED_PRESSURE_PLATE, "Treated Pressure Plate");
+		addBlock(MSBlocks.TREATED_FENCE, "Treated Fence");
+		addBlock(MSBlocks.TREATED_FENCE_GATE, "Treated Fence Gate");
+		addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
+		addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
+		
 		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD, "Polished Treated Uncarved Wood");
+		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS, "Polished Treated Uncarved Stairs");
+		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB, "Polished Treated Uncarved Slab");
+		
 		addBlock(MSBlocks.TREATED_CARVED_KNOTTED_WOOD, "Treated Carved Knotted Wood");
 		addBlock(MSBlocks.TREATED_WOODEN_GRASS, "Treated Wooden Grass");
+		
 		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD, "Lacquered Uncarved Wood");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_STAIRS, "Lacquered Uncarved Wood Stairs");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_SLAB, "Lacquered Uncarved Wood Slab");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_BUTTON, "Lacquered Uncarved Wood Button");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE, "Lacquered Uncarved Wood Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE, "Lacquered Uncarved Wood Fence");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE, "Lacquered Uncarved Wood Fence Gate");
+		
 		addBlock(MSBlocks.LACQUERED_CHIPBOARD, "Lacquered Chipboard");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_STAIRS, "Lacquered Chipboard Stairs");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_SLAB, "Lacquered Chipboard Slab");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_BUTTON, "Lacquered Chipboard Button");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE, "Lacquered Chipboard Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_FENCE, "Lacquered Chipboard Fence");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_FENCE_GATE, "Lacquered Chipboard Fence Gate");
+		
 		addBlock(MSBlocks.LACQUERED_WOOD_SHAVINGS, "Lacquered Wood Shavings");
+		
 		addBlock(MSBlocks.LACQUERED_HEAVY_PLANKS, "Lacquered Heavy Planks");
+		addBlock(MSBlocks.LACQUERED_HEAVY_PLANK_STAIRS, "Lacquered Heavy Stairs");
+		addBlock(MSBlocks.LACQUERED_HEAVY_PLANK_SLAB, "Lacquered Heavy Slab");
+		
 		addBlock(MSBlocks.LACQUERED_PLANKS, "Lacquered Planks");
+		addBlock(MSBlocks.LACQUERED_STAIRS, "Lacquered Stairs");
+		addBlock(MSBlocks.LACQUERED_SLAB, "Lacquered Slab");
+		addBlock(MSBlocks.LACQUERED_BUTTON, "Lacquered Button");
+		addBlock(MSBlocks.LACQUERED_PRESSURE_PLATE, "Lacquered Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_FENCE, "Lacquered Fence");
+		addBlock(MSBlocks.LACQUERED_FENCE_GATE, "Lacquered Fence Gate");
+		addBlock(MSBlocks.LACQUERED_DOOR, "Lacquered Door");
+		addBlock(MSBlocks.LACQUERED_TRAPDOOR, "Lacquered Trapdoor");
+		
 		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD, "Polished Lacquered Uncarved Wood");
+		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS, "Polished Lacquered Uncarved Stairs");
+		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB, "Polished Lacquered Uncarved Slab");
+		
 		addBlock(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD, "Lacquered Carved Knotted Wood");
 		addBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM, "Lacquered Wooden Mushroom");
+		
 		addBlock(MSBlocks.WOODEN_LAMP, "Wooden Lamp");
+		
 		addBlock(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		addBlock(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -575,14 +640,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_FENCE_GATE, "Dead Fence Gate");
 		addBlock(MSBlocks.DEAD_DOOR, "Dead Door");
 		addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
-		
-		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
-		addBlock(MSBlocks.TREATED_BUTTON, "Treated Button");
-		addBlock(MSBlocks.TREATED_PRESSURE_PLATE, "Treated Pressure Plate");
-		addBlock(MSBlocks.TREATED_FENCE, "Treated Fence");
-		addBlock(MSBlocks.TREATED_FENCE_GATE, "Treated Fence Gate");
-		addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
-		addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
 		
 		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
 		addBlock(MSBlocks.SHADEWOOD_STAIRS, "Shadewood Stairs");
@@ -854,7 +911,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_PLANKS_STAIRS, "Rainbow Planks Stairs");
 		addBlock(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
 		addBlock(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
-		addBlock(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Planks Stairs");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, "Steep Green Stone Brick Stairs Base");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, "Steep Green Stone Brick Stairs Top");
 		addBlock(MSBlocks.BLACK_CHESS_BRICK_SLAB, "Black Chess Brick Slab");
@@ -872,7 +928,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
 		addBlock(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
 		addBlock(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
-		addBlock(MSBlocks.TREATED_PLANKS_SLAB, "Treated Planks Slab");
 		addBlock(MSBlocks.BLACK_STONE_SLAB, "Black Stone Slab");
 		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");

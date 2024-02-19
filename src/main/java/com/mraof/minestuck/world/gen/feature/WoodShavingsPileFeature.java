@@ -2,16 +2,17 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.feature.AbstractTemplateFeature;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
-public class WoodShavingsPileFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
+public class WoodShavingsPileFeature extends Feature<NoneFeatureConfiguration>
 {
 	private static final ResourceLocation WOOD_SHAVINGS_PILE = new ResourceLocation(Minestuck.MOD_ID, "wood_shavings_pile");
 	
@@ -21,14 +22,16 @@ public class WoodShavingsPileFeature extends AbstractTemplateFeature<NoneFeature
 	}
 	
 	@Override
-	protected ResourceLocation pickTemplate(RandomSource random)
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
-		return WOOD_SHAVINGS_PILE;
-	}
-	
-	@Override
-	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, RandomSource random)
-	{
-		return minWorldHeightInSize(level, pos, templateSize);
+		WorldGenLevel level = context.level();
+		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(WOOD_SHAVINGS_PILE);
+		BlockPos centerPos = context.origin();
+		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, centerPos, context.random());
+		
+		int y = placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level);
+		placement.placeAt(y, context);
+		
+		return true;
 	}
 }

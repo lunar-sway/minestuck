@@ -922,14 +922,30 @@ public final class MSCreativeTabs
 		output.accept(MSItems.WOODEN_GRASS.get());
 		
 		output.accept(MSItems.TREATED_UNCARVED_WOOD.get());
+		output.accept(MSItems.TREATED_UNCARVED_WOOD_STAIRS.get());
+		output.accept(MSItems.TREATED_UNCARVED_WOOD_SLAB.get());
+		output.accept(MSItems.TREATED_UNCARVED_WOOD_BUTTON.get());
+		output.accept(MSItems.TREATED_UNCARVED_WOOD_PRESSURE_PLATE.get());
+		output.accept(MSItems.TREATED_UNCARVED_WOOD_FENCE.get());
+		output.accept(MSItems.TREATED_UNCARVED_WOOD_FENCE_GATE.get());
 		
 		output.accept(MSItems.TREATED_CHIPBOARD.get());
+		output.accept(MSItems.TREATED_CHIPBOARD_STAIRS.get());
+		output.accept(MSItems.TREATED_CHIPBOARD_SLAB.get());
+		output.accept(MSItems.TREATED_CHIPBOARD_BUTTON.get());
+		output.accept(MSItems.TREATED_CHIPBOARD_PRESSURE_PLATE.get());
+		output.accept(MSItems.TREATED_CHIPBOARD_FENCE.get());
+		output.accept(MSItems.TREATED_CHIPBOARD_FENCE_GATE.get());
 		
 		output.accept(MSItems.TREATED_WOOD_SHAVINGS.get());
 		
 		output.accept(MSItems.TREATED_HEAVY_PLANKS.get());
+		output.accept(MSItems.TREATED_HEAVY_PLANK_STAIRS.get());
+		output.accept(MSItems.TREATED_HEAVY_PLANK_SLAB.get());
 		
 		output.accept(MSItems.TREATED_PLANKS.get());
+		output.accept(MSItems.TREATED_PLANKS_STAIRS.get());
+		output.accept(MSItems.TREATED_PLANKS_SLAB.get());
 		output.accept(MSItems.TREATED_BUTTON.get());
 		output.accept(MSItems.TREATED_PRESSURE_PLATE.get());
 		output.accept(MSItems.TREATED_FENCE.get());
@@ -938,21 +954,47 @@ public final class MSCreativeTabs
 		output.accept(MSItems.TREATED_TRAPDOOR.get());
 		
 		output.accept(MSItems.POLISHED_TREATED_UNCARVED_WOOD.get());
+		output.accept(MSItems.POLISHED_TREATED_UNCARVED_STAIRS.get());
+		output.accept(MSItems.POLISHED_TREATED_UNCARVED_SLAB.get());
 		
 		output.accept(MSItems.TREATED_CARVED_KNOTTED_WOOD.get());
 		output.accept(MSItems.TREATED_WOODEN_GRASS.get());
 		
 		output.accept(MSItems.LACQUERED_UNCARVED_WOOD.get());
+		output.accept(MSItems.LACQUERED_UNCARVED_WOOD_STAIRS.get());
+		output.accept(MSItems.LACQUERED_UNCARVED_WOOD_SLAB.get());
+		output.accept(MSItems.LACQUERED_UNCARVED_WOOD_BUTTON.get());
+		output.accept(MSItems.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE.get());
+		output.accept(MSItems.LACQUERED_UNCARVED_WOOD_FENCE.get());
+		output.accept(MSItems.LACQUERED_UNCARVED_WOOD_FENCE_GATE.get());
 		
 		output.accept(MSItems.LACQUERED_CHIPBOARD.get());
+		output.accept(MSItems.LACQUERED_CHIPBOARD_STAIRS.get());
+		output.accept(MSItems.LACQUERED_CHIPBOARD_SLAB.get());
+		output.accept(MSItems.LACQUERED_CHIPBOARD_BUTTON.get());
+		output.accept(MSItems.LACQUERED_CHIPBOARD_PRESSURE_PLATE.get());
+		output.accept(MSItems.LACQUERED_CHIPBOARD_FENCE.get());
+		output.accept(MSItems.LACQUERED_CHIPBOARD_FENCE_GATE.get());
 		
 		output.accept(MSItems.LACQUERED_WOOD_SHAVINGS.get());
 		
 		output.accept(MSItems.LACQUERED_HEAVY_PLANKS.get());
+		output.accept(MSItems.LACQUERED_HEAVY_PLANK_STAIRS.get());
+		output.accept(MSItems.LACQUERED_HEAVY_PLANK_SLAB.get());
 		
 		output.accept(MSItems.LACQUERED_PLANKS.get());
+		output.accept(MSItems.LACQUERED_STAIRS.get());
+		output.accept(MSItems.LACQUERED_SLAB.get());
+		output.accept(MSItems.LACQUERED_BUTTON.get());
+		output.accept(MSItems.LACQUERED_PRESSURE_PLATE.get());
+		output.accept(MSItems.LACQUERED_FENCE.get());
+		output.accept(MSItems.LACQUERED_FENCE_GATE.get());
+		output.accept(MSItems.LACQUERED_DOOR.get());
+		output.accept(MSItems.LACQUERED_TRAPDOOR.get());
 		
 		output.accept(MSItems.POLISHED_LACQUERED_UNCARVED_WOOD.get());
+		output.accept(MSItems.POLISHED_LACQUERED_UNCARVED_STAIRS.get());
+		output.accept(MSItems.POLISHED_LACQUERED_UNCARVED_SLAB.get());
 		
 		output.accept(MSItems.LACQUERED_CARVED_KNOTTED_WOOD.get());
 		output.accept(MSItems.LACQUERED_WOODEN_MUSHROOM.get());
@@ -1106,7 +1148,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.RAINBOW_PLANKS_STAIRS.get());
 		output.accept(MSItems.END_PLANKS_STAIRS.get());
 		output.accept(MSItems.DEAD_PLANKS_STAIRS.get());
-		output.accept(MSItems.TREATED_PLANKS_STAIRS.get());
 		
 		output.accept(MSItems.COARSE_STONE_SLAB.get());
 		output.accept(MSItems.COARSE_STONE_BRICK_SLAB.get());
@@ -1119,7 +1160,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.RAINBOW_PLANKS_SLAB.get());
 		output.accept(MSItems.END_PLANKS_SLAB.get());
 		output.accept(MSItems.DEAD_PLANKS_SLAB.get());
-		output.accept(MSItems.TREATED_PLANKS_SLAB.get());
 		output.accept(MSItems.BLACK_STONE_SLAB.get());
 		output.accept(MSItems.BLACK_STONE_BRICK_SLAB.get());
 		output.accept(MSItems.MYCELIUM_SLAB.get());

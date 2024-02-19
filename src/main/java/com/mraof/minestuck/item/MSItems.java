@@ -1146,29 +1146,79 @@ public class MSItems
 	public static final RegistryObject<BlockItem> WOODEN_GRASS = registerBlockItem(MSBlocks.WOODEN_GRASS);
 	
 	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_STAIRS = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_STAIRS);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_SLAB = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_SLAB);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_BUTTON = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_BUTTON);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_FENCE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE);
 	
 	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD = registerBlockItem(MSBlocks.TREATED_CHIPBOARD);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_STAIRS = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_STAIRS);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_SLAB = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_SLAB);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_BUTTON = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_BUTTON);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_FENCE = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_FENCE);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_FENCE_GATE);
 	
 	public static final RegistryObject<BlockItem> TREATED_WOOD_SHAVINGS = registerBlockItem(MSBlocks.TREATED_WOOD_SHAVINGS);
 	
 	public static final RegistryObject<BlockItem> TREATED_HEAVY_PLANKS = registerBlockItem(MSBlocks.TREATED_HEAVY_PLANKS);
+	public static final RegistryObject<BlockItem> TREATED_HEAVY_PLANK_STAIRS = registerBlockItem(MSBlocks.TREATED_HEAVY_PLANK_STAIRS);
+	public static final RegistryObject<BlockItem> TREATED_HEAVY_PLANK_SLAB = registerBlockItem(MSBlocks.TREATED_HEAVY_PLANK_SLAB);
+	
+	public static final RegistryObject<BlockItem> TREATED_PLANKS = registerBlockItem(MSBlocks.TREATED_PLANKS);
+	public static final RegistryObject<BlockItem> TREATED_PLANKS_STAIRS = registerBlockItem(MSBlocks.TREATED_PLANKS_STAIRS);
+	public static final RegistryObject<BlockItem> TREATED_PLANKS_SLAB = registerBlockItem(MSBlocks.TREATED_PLANKS_SLAB);
+	public static final RegistryObject<BlockItem> TREATED_BUTTON = registerBlockItem(MSBlocks.TREATED_BUTTON);
+	public static final RegistryObject<BlockItem> TREATED_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> TREATED_FENCE = registerBlockItem(MSBlocks.TREATED_FENCE);
+	public static final RegistryObject<BlockItem> TREATED_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_FENCE_GATE);
+	public static final RegistryObject<BlockItem> TREATED_DOOR = registerBlockItem(MSBlocks.TREATED_DOOR);
+	public static final RegistryObject<BlockItem> TREATED_TRAPDOOR = registerBlockItem(MSBlocks.TREATED_TRAPDOOR);
 	
 	public static final RegistryObject<BlockItem> POLISHED_TREATED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> POLISHED_TREATED_UNCARVED_STAIRS = registerBlockItem(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_TREATED_UNCARVED_SLAB = registerBlockItem(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB);
 	
 	public static final RegistryObject<BlockItem> TREATED_CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD);
 	public static final RegistryObject<BlockItem> TREATED_WOODEN_GRASS = registerBlockItem(MSBlocks.TREATED_WOODEN_GRASS);
 	
 	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_STAIRS = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_STAIRS);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_SLAB = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_SLAB);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_BUTTON = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_BUTTON);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_FENCE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_FENCE_GATE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE);
 	
 	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_STAIRS = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_STAIRS);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_SLAB = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_SLAB);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_BUTTON = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_BUTTON);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_PRESSURE_PLATE = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_FENCE = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_FENCE);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_FENCE_GATE = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_FENCE_GATE);
 	
 	public static final RegistryObject<BlockItem> LACQUERED_WOOD_SHAVINGS = registerBlockItem(MSBlocks.LACQUERED_WOOD_SHAVINGS);
 	
 	public static final RegistryObject<BlockItem> LACQUERED_HEAVY_PLANKS = registerBlockItem(MSBlocks.LACQUERED_HEAVY_PLANKS);
+	public static final RegistryObject<BlockItem> LACQUERED_HEAVY_PLANK_STAIRS = registerBlockItem(MSBlocks.LACQUERED_HEAVY_PLANK_STAIRS);
+	public static final RegistryObject<BlockItem> LACQUERED_HEAVY_PLANK_SLAB = registerBlockItem(MSBlocks.LACQUERED_HEAVY_PLANK_SLAB);
 	
 	public static final RegistryObject<BlockItem> LACQUERED_PLANKS = registerBlockItem(MSBlocks.LACQUERED_PLANKS);
+	public static final RegistryObject<BlockItem> LACQUERED_STAIRS = registerBlockItem(MSBlocks.LACQUERED_STAIRS);
+	public static final RegistryObject<BlockItem> LACQUERED_SLAB = registerBlockItem(MSBlocks.LACQUERED_SLAB);
+	public static final RegistryObject<BlockItem> LACQUERED_BUTTON = registerBlockItem(MSBlocks.LACQUERED_BUTTON);
+	public static final RegistryObject<BlockItem> LACQUERED_PRESSURE_PLATE = registerBlockItem(MSBlocks.LACQUERED_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> LACQUERED_FENCE = registerBlockItem(MSBlocks.LACQUERED_FENCE);
+	public static final RegistryObject<BlockItem> LACQUERED_FENCE_GATE = registerBlockItem(MSBlocks.LACQUERED_FENCE_GATE);
+	public static final RegistryObject<BlockItem> LACQUERED_DOOR = registerBlockItem(MSBlocks.LACQUERED_DOOR);
+	public static final RegistryObject<BlockItem> LACQUERED_TRAPDOOR = registerBlockItem(MSBlocks.LACQUERED_TRAPDOOR);
 	
 	public static final RegistryObject<BlockItem> POLISHED_LACQUERED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> POLISHED_LACQUERED_UNCARVED_STAIRS = registerBlockItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_LACQUERED_UNCARVED_SLAB = registerBlockItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB);
 	
 	public static final RegistryObject<BlockItem> LACQUERED_CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD);
 	public static final RegistryObject<BlockItem> LACQUERED_WOODEN_MUSHROOM = registerBlockItem(MSBlocks.LACQUERED_WOODEN_MUSHROOM);
@@ -1254,14 +1304,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> DEAD_DOOR = registerBlockItem(MSBlocks.DEAD_DOOR);
 	public static final RegistryObject<BlockItem> DEAD_TRAPDOOR = registerBlockItem(MSBlocks.DEAD_TRAPDOOR);
 	
-	public static final RegistryObject<BlockItem> TREATED_PLANKS = registerBlockItem(MSBlocks.TREATED_PLANKS);
-	public static final RegistryObject<BlockItem> TREATED_BUTTON = registerBlockItem(MSBlocks.TREATED_BUTTON);
-	public static final RegistryObject<BlockItem> TREATED_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> TREATED_FENCE = registerBlockItem(MSBlocks.TREATED_FENCE);
-	public static final RegistryObject<BlockItem> TREATED_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_FENCE_GATE);
-	public static final RegistryObject<BlockItem> TREATED_DOOR = registerBlockItem(MSBlocks.TREATED_DOOR);
-	public static final RegistryObject<BlockItem> TREATED_TRAPDOOR = registerBlockItem(MSBlocks.TREATED_TRAPDOOR);
-	
 	public static final RegistryObject<BlockItem> SHADEWOOD_PLANKS = registerBlockItem(MSBlocks.SHADEWOOD_PLANKS);
 	public static final RegistryObject<BlockItem> SHADEWOOD_STAIRS = registerBlockItem(MSBlocks.SHADEWOOD_STAIRS);
 	public static final RegistryObject<BlockItem> SHADEWOOD_SLAB = registerBlockItem(MSBlocks.SHADEWOOD_SLAB);
@@ -1342,7 +1384,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> RAINBOW_PLANKS_STAIRS = registerBlockItem(MSBlocks.RAINBOW_PLANKS_STAIRS);
 	public static final RegistryObject<BlockItem> END_PLANKS_STAIRS = registerBlockItem(MSBlocks.END_PLANKS_STAIRS);
 	public static final RegistryObject<BlockItem> DEAD_PLANKS_STAIRS = registerBlockItem(MSBlocks.DEAD_PLANKS_STAIRS);
-	public static final RegistryObject<BlockItem> TREATED_PLANKS_STAIRS = registerBlockItem(MSBlocks.TREATED_PLANKS_STAIRS);
 	
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE);
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP);
@@ -1364,7 +1405,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> RAINBOW_PLANKS_SLAB = registerBlockItem(MSBlocks.RAINBOW_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> END_PLANKS_SLAB = registerBlockItem(MSBlocks.END_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> DEAD_PLANKS_SLAB = registerBlockItem(MSBlocks.DEAD_PLANKS_SLAB);
-	public static final RegistryObject<BlockItem> TREATED_PLANKS_SLAB = registerBlockItem(MSBlocks.TREATED_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> BLACK_STONE_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_SLAB);
 	public static final RegistryObject<BlockItem> BLACK_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> MYCELIUM_SLAB = registerBlockItem(MSBlocks.MYCELIUM_SLAB);
