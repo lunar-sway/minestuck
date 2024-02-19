@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.entity.DialogueEntity;
-import com.mraof.minestuck.util.Trigger;
+import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.Trigger;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
