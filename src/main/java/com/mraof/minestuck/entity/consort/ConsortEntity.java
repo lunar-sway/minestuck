@@ -2,14 +2,17 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
+import com.mraof.minestuck.network.DialogueScreenPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
@@ -29,10 +32,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
+import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -143,47 +143,24 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
 		{
-			Dialogue dialogue = getDialogue();
-			
 			//TODO there is server side data that needs to be made accessible client side
-			if(dialogue != null)
+			if(!level().isClientSide && player instanceof ServerPlayer serverPlayer)
 			{
-				if(level().isClientSide)
-				{
-					MSScreenFactories.displayDialogueScreen(this, player, dialogue);
-				} else
-				{
-					setCurrentAnimation(TALK_PROPERTIES);
-				}
+				Dialogue dialogue = getDialogue();
 				
-			/*if(!level().isClientSide && player instanceof ServerPlayer serverPlayer)
-			{
-				PlayerData playerData = PlayerSavedData.getData(serverPlayer);
-				
-				if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
+				if(dialogue != null)
 				{
-					if(message == null)
+					PlayerData playerData = PlayerSavedData.getData(serverPlayer);
+					if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
 					{
-						message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
-						hasHadMessage = true;
-					}
-					
-					checkMessageData();
-					
-					try
-					{
-						Component text = message.getMessage(this, serverPlayer);
-						if(text != null)
-							player.sendSystemMessage(text);
 						handleConsortRepFromTalking(serverPlayer);
 						setCurrentAnimation(TALK_PROPERTIES);
-						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
-					} catch(Exception e)
-					{
-						LOGGER.error("Got exception when getting dialogue message for consort for player {}.", serverPlayer.getGameProfile().getName(), e);
+						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.getMessage(), this);
+						
+						DialogueScreenPacket packet = DialogueScreenPacket.createPacket(this, dialogue);
+						MSPacketHandler.sendToPlayer(packet, serverPlayer);
 					}
 				}
-			}*/
 			}
 			
 			return InteractionResult.SUCCESS;
@@ -476,6 +453,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	}
 	
 	@Override
+	@Nullable
 	public Dialogue getDialogue()
 	{
 		//tries to get the dialogue from dialoguePath and failing that will choose a random one, setting the new dialoguePath in the process
