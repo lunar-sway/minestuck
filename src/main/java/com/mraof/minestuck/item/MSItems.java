@@ -1143,6 +1143,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> POLISHED_UNCARVED_SLAB = registerBlockItem(MSBlocks.POLISHED_UNCARVED_SLAB);
 	
 	public static final RegistryObject<BlockItem> CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.CARVED_KNOTTED_WOOD);
+	public static final RegistryObject<BlockItem> CARVED_BUSH = registerBlockItem(MSBlocks.CARVED_BUSH);
 	public static final RegistryObject<BlockItem> WOODEN_GRASS = registerBlockItem(MSBlocks.WOODEN_GRASS);
 	
 	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD);

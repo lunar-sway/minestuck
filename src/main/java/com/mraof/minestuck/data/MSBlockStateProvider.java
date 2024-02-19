@@ -611,6 +611,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.POLISHED_UNCARVED_STAIRS, MSBlocks.POLISHED_UNCARVED_WOOD);
 		slabWithItem(MSBlocks.POLISHED_UNCARVED_SLAB, MSBlocks.POLISHED_UNCARVED_WOOD);
 		
+		simpleBlockWithItem(MSBlocks.CARVED_KNOTTED_WOOD);
+		simpleBlock(MSBlocks.CARVED_BUSH,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.CARVED_BUSH, MSBlockStateProvider::texture);
 		simpleHorizontalWithItem(MSBlocks.CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
 		simpleBlock(MSBlocks.WOODEN_GRASS,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
