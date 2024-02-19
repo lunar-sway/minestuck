@@ -1,14 +1,14 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

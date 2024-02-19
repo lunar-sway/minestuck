@@ -12,7 +12,7 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.util.Dialogue;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;

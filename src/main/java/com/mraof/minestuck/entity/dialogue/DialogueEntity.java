@@ -1,6 +1,5 @@
-package com.mraof.minestuck.entity;
+package com.mraof.minestuck.entity.dialogue;
 
-import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.resources.ResourceLocation;
 

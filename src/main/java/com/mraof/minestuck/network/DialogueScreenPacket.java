@@ -2,8 +2,8 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.entity.DialogueEntity;
-import com.mraof.minestuck.util.Dialogue;
+import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

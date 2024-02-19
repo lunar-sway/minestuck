@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.entity.dialogue;
 
 import com.google.gson.*;
 import com.mojang.datafixers.util.Pair;
