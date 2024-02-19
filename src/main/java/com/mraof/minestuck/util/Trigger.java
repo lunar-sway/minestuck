@@ -4,18 +4,24 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.DialogueEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
+import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -46,9 +52,10 @@ public sealed interface Trigger
 	
 	enum Type implements StringRepresentable
 	{
+		SET_DIALOGUE(() -> SetDialogue.CODEC, SetDialogue::readTrigger),
+		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC, OpenConsortMerchantGui::readTrigger),
 		COMMAND(() -> Command.CODEC, Command::readTrigger),
 		TAKE_ITEM(() -> TakeItem.CODEC, TakeItem::readTrigger),
-		SET_DIALOGUE(() -> SetDialogue.CODEC, SetDialogue::readTrigger),
 		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC, AddConsortReputation::readTrigger);
 		
 		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
@@ -84,6 +91,82 @@ public sealed interface Trigger
 	//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
 	void triggerEffect(LivingEntity entity, Player player);
 	
+	record SetDialogue(ResourceLocation newPath) implements Trigger
+	{
+		static final Codec<SetDialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("new_path").forGetter(SetDialogue::newPath)
+		).apply(instance, SetDialogue::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.SET_DIALOGUE;
+		}
+		
+		static SetDialogue readTrigger(FriendlyByteBuf buffer)
+		{
+			return new SetDialogue(buffer.readResourceLocation());
+		}
+		
+		@Override
+		public void writeTrigger(FriendlyByteBuf buffer)
+		{
+			buffer.writeResourceLocation(this.newPath);
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, Player player)
+		{
+			if(entity instanceof DialogueEntity dialogueEntity)
+				dialogueEntity.setDialoguePath(this.newPath);
+		}
+	}
+	
+	record OpenConsortMerchantGui(ResourceLocation lootTable, String merchantTypeName) implements Trigger
+	{
+		static final Codec<OpenConsortMerchantGui> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("loot_table").forGetter(OpenConsortMerchantGui::lootTable),
+				Codec.STRING.fieldOf("merchant_type").forGetter(OpenConsortMerchantGui::merchantTypeName)
+		).apply(instance, OpenConsortMerchantGui::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.OPEN_CONSORT_MERCHANT_GUI;
+		}
+		
+		static OpenConsortMerchantGui readTrigger(FriendlyByteBuf buffer)
+		{
+			return new OpenConsortMerchantGui(buffer.readResourceLocation(), buffer.readUtf(500));
+		}
+		
+		@Override
+		public void writeTrigger(FriendlyByteBuf buffer)
+		{
+			buffer.writeResourceLocation(this.lootTable);
+			buffer.writeUtf(this.merchantTypeName, 500);
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, Player player)
+		{
+			if(entity instanceof ConsortEntity consortEntity && player instanceof ServerPlayer serverPlayer)
+			{
+				//TODO if(consortEntity.merchantType == EnumConsort.MerchantType.NONE) ?
+				for(EnumConsort.MerchantType type : EnumConsort.MerchantType.values())
+					if(type.name().toLowerCase().equals(this.merchantTypeName))
+						consortEntity.merchantType = type;
+				
+				if(consortEntity.stocks == null)
+				{
+					consortEntity.stocks = new ConsortMerchantInventory(consortEntity, ConsortRewardHandler.generateStock(this.lootTable, consortEntity, consortEntity.level().random));
+				}
+				
+				NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(consortEntity, Component.literal("Consort shop")), consortEntity::writeShopMenuBuffer);
+			}
+		}
+	}
+	
 	record Command(String commandText) implements Trigger
 	{
 		static final Codec<Command> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -111,7 +194,6 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, Player player)
 		{
-			//TODO has been causing server side crashes the second time it is run
 			if(player == null)
 				return;
 			
@@ -165,37 +247,6 @@ public sealed interface Trigger
 			ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
 			if(stack != null)
 				stack.shrink(this.amount);
-		}
-	}
-	
-	record SetDialogue(ResourceLocation newPath) implements Trigger
-	{
-		static final Codec<SetDialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("new_path").forGetter(SetDialogue::newPath)
-		).apply(instance, SetDialogue::new));
-		
-		@Override
-		public Type getType()
-		{
-			return Type.SET_DIALOGUE;
-		}
-		
-		static SetDialogue readTrigger(FriendlyByteBuf buffer)
-		{
-			return new SetDialogue(buffer.readResourceLocation());
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
-			buffer.writeResourceLocation(this.newPath);
-		}
-		
-		@Override
-		public void triggerEffect(LivingEntity entity, Player player)
-		{
-			if(entity instanceof DialogueEntity dialogueEntity)
-				dialogueEntity.setDialoguePath(this.newPath);
 		}
 	}
 	

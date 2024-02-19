@@ -8,14 +8,14 @@
       "conditions": [],
       "hide_if_failed": true,
       "next_path": "minestuck:camel/no_camel",
-      "response_message": "dialogue.camel.yes",
+      "response_message": "minestuck.dialogue.camel.yes",
       "triggers": []
     },
     {
       "conditions": [],
       "hide_if_failed": true,
       "next_path": "minestuck:camel/dancing_camel",
-      "response_message": "dialogue.camel.no",
+      "response_message": "minestuck.dialogue.camel.no",
       "triggers": []
     }
   ],

@@ -1,6 +1,8 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.util.Trigger;
@@ -51,11 +53,28 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("mycelium.2"));
 		
 		add(new DialogueBuilder("camel/start", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("dialogue.camel.yes", "camel/no_camel")
-				.addResponse("dialogue.camel.no", "camel/dancing_camel")
+				.addResponse("minestuck.dialogue.camel.yes", "camel/no_camel")
+				.addResponse("minestuck.dialogue.camel.no", "camel/dancing_camel")
 		);
 		add(new DialogueBuilder("camel/no_camel"));
 		add(new DialogueBuilder("camel/dancing_camel"));
+		
+		add(new DialogueBuilder("food_shop", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander"))))
+				.addResponse("Never mind")
+				.addResponse("What do you have?", List.of(), List.of(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())), "", false)
+		);
+		add(new DialogueBuilder("fast_food", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator"))))
+				.addResponse("I'm good")
+				.addResponse("Show me your menu", List.of(), List.of(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())), "", false)
+		);
+		add(new DialogueBuilder("grocery_store", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "iguana"))))
+				.addResponse("No thanks")
+				.addResponse("What do you have to sell?", List.of(), List.of(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())), "", false)
+		);
+		add(new DialogueBuilder("tasty_welcome", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle"))))
+				.addResponse("Goodbye")
+				.addResponse("Let me see your wares", List.of(), List.of(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())), "", false)
+		);
 	}
 	
 	private void testDialogues()
@@ -79,7 +98,7 @@ public class DialogueProvider implements DataProvider
 		
 		//builder can take empty strings for nextDialoguePath
 		add(new DialogueBuilder("me_want_cookie", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("im sorry fellow, I have no cookie for you. Bye", "")
+				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse("why do you want cookie?", null)
 				.addResponse("here have a cookie chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", null, "Has no cookie")), List.of(new Trigger.TakeItem(Items.COOKIE), new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled"))), "oh_yippee", false)
 		);
@@ -87,7 +106,7 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("hunger_filled"));
 		
 		add(new DialogueBuilder("me_want_5_cookies", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("im sorry fellow, I have no cookie for you. Bye", "")
+				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse("here have 5 cookies chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "5", "Has no cookie")), List.of(new Trigger.TakeItem(Items.COOKIE, 5)), "oh_yippee", false)
 		);
 		
@@ -96,7 +115,7 @@ public class DialogueProvider implements DataProvider
 				.addResponse("I love you", List.of(), List.of(new Trigger.AddConsortReputation(100)), null, false)
 				.addResponse("Rep above 500", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_MINIMUM_REPUTATION, "500", null, "Rep too low")), List.of(), null, false)
 				.addResponse("Rep below 200", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_MAXIMUM_REPUTATION, "200", null, "Rep too high")), List.of(), null, false)
-				.addResponse("bye", "")
+				.addResponse("bye")
 		);
 	}
 	
@@ -146,6 +165,12 @@ public class DialogueProvider implements DataProvider
 		{
 			ResourceLocation nextPath = getNextPath(nextDialoguePath);
 			this.responses.add(new Dialogue.Response(response, List.of(), List.of(), nextPath, true));
+			return this;
+		}
+		
+		public DialogueBuilder addResponse(String response)
+		{
+			this.responses.add(new Dialogue.Response(response, List.of(), List.of(), EMPTY_NEXT_PATH, true));
 			return this;
 		}
 		

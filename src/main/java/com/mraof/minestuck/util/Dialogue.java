@@ -393,7 +393,8 @@ public class Dialogue
 				String responseProvider = Codec.STRING.parse(JsonOps.INSTANCE, responseObject.get("response_message")).getOrThrow(false, LOGGER::error);
 				
 				List<Condition> conditions = deserializeConditions(responseObject);
-				List<Trigger> triggers = Trigger.LIST_CODEC.parse(JsonOps.INSTANCE, responseObject).getOrThrow(true, LOGGER::error);
+				
+				List<Trigger> triggers = deserializeTriggers(responseObject);
 				
 				ResourceLocation nextPathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, responseObject.get("next_path")).getOrThrow(false, LOGGER::error);
 				boolean hideIfFailedProvider = responseObject.get("hide_if_failed").getAsBoolean();
@@ -401,6 +402,22 @@ public class Dialogue
 				responses.add(new Response(responseProvider, conditions, triggers, nextPathProvider, hideIfFailedProvider));
 			});
 			return responses;
+		}
+		
+		private static List<Trigger> deserializeTriggers(JsonObject responseObject)
+		{
+			JsonElement triggersElement = responseObject.get("triggers");
+			JsonArray triggersArray;
+			if(triggersElement.isJsonArray())
+			{
+				triggersArray = (JsonArray) triggersElement;
+			} else
+			{
+				//empty single-element array to keep it standardized. Dialogue fails to deserialize if the element is not an array
+				triggersArray = new JsonArray();
+				triggersArray.add(triggersElement);
+			}
+			return Trigger.LIST_CODEC.parse(JsonOps.INSTANCE, triggersArray).getOrThrow(true, LOGGER::error);
 		}
 		
 		private static List<Condition> deserializeConditions(JsonObject responseObject)

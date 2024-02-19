@@ -19,8 +19,8 @@
       "triggers": [
         {
           "type": "open_consort_merchant_gui",
-          "content": "minestuck:gameplay/consort_food",
-          "content_extra": "food"
+          "loot_table": "minestuck:gameplay/consort_food",
+          "merchant_type": "food"
         }
       ]
     }
