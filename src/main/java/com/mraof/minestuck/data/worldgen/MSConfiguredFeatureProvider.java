@@ -61,6 +61,7 @@ public final class MSConfiguredFeatureProvider
 		context.register(TOWER, new ConfiguredFeature<>(MSFeatures.TOWER.get(), FeatureConfiguration.NONE));
 		context.register(PARCEL_PYXIS, new ConfiguredFeature<>(MSFeatures.PARCEL_PYXIS.get(), FeatureConfiguration.NONE));
 		context.register(FROG_RUINS, new ConfiguredFeature<>(MSFeatures.FROG_RUINS.get(), FeatureConfiguration.NONE));
+		
 		context.register(CARVED_CHERRY_TREE, new ConfiguredFeature<>(MSFeatures.CARVED_CHERRY_TREE.get(), FeatureConfiguration.NONE));
 		context.register(CARVED_HOUSE, new ConfiguredFeature<>(MSFeatures.CARVED_HOUSE.get(), FeatureConfiguration.NONE));
 		context.register(CARVED_LOG, new ConfiguredFeature<>(MSFeatures.CARVED_LOG.get(), FeatureConfiguration.NONE));
