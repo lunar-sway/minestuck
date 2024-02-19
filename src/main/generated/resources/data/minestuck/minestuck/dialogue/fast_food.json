@@ -7,14 +7,14 @@
     {
       "conditions": [],
       "hide_if_failed": true,
-      "next_path": "minecraft:",
+      "next_path": "minecraft:close_menu",
       "response_message": "I'm good",
       "triggers": []
     },
     {
       "conditions": [],
-      "hide_if_failed": false,
-      "next_path": "minecraft:",
+      "hide_if_failed": true,
+      "next_path": "minecraft:close_menu",
       "response_message": "Show me your menu",
       "triggers": [
         {

@@ -122,7 +122,9 @@ public class DialogueScreen extends Screen
 				ResourceLocation nextPath = response.getNextDialoguePath();
 				
 				Dialogue nextDialogue = null;
-				if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
+				if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
+					nextDialogue = this.dialogue;
+				else if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
 					nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
 				
 				List<Trigger> triggers = response.getTriggers();

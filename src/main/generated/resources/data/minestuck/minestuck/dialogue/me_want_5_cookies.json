@@ -7,7 +7,7 @@
     {
       "conditions": [],
       "hide_if_failed": true,
-      "next_path": "minecraft:",
+      "next_path": "minecraft:close_menu",
       "response_message": "im sorry fellow, I have no cookie for you. Bye",
       "triggers": []
     },
