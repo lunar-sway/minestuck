@@ -26,7 +26,14 @@ import java.util.concurrent.CompletableFuture;
 @MethodsReturnNonnullByDefault
 public class DialogueProvider implements DataProvider
 {
-	public static final ResourceLocation EMPTY_NEXT_PATH = new ResourceLocation("");
+	/**
+	 * Can be used as a dead end to close the screen
+	 */
+	public static final ResourceLocation EMPTY_NEXT_PATH = new ResourceLocation("close_menu");
+	/**
+	 * Can be used to activate triggers but return to the same screen
+	 */
+	public static final ResourceLocation LOOP_NEXT_PATH = new ResourceLocation("loop_menu");
 	
 	private final Map<ResourceLocation, Dialogue> dialogues = new HashMap<>();
 	private final PackOutput output;
@@ -47,74 +54,83 @@ public class DialogueProvider implements DataProvider
 	
 	private void consortDialogues()
 	{
-		add(new DialogueBuilder("mycelium.1", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("=>", "mycelium.2")
+		add(new DialogueBuilder("mycelium.1", Dialogue.Condition.Type.CONDITIONLESS)
+				.addResponse(new ResponseBuilder("=>", "mycelium.2"))
 		);
 		add(new DialogueBuilder("mycelium.2"));
 		
-		add(new DialogueBuilder("camel/start", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("minestuck.dialogue.camel.yes", "camel/no_camel")
-				.addResponse("minestuck.dialogue.camel.no", "camel/dancing_camel")
+		add(new DialogueBuilder("camel/start", Dialogue.Condition.Type.CONDITIONLESS)
+				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.yes", "camel/no_camel"))
+				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.no", "camel/dancing_camel"))
 		);
 		add(new DialogueBuilder("camel/no_camel"));
 		add(new DialogueBuilder("camel/dancing_camel"));
 		
-		add(new DialogueBuilder("food_shop", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander"))))
+		add(new DialogueBuilder("food_shop", new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander"))
 				.addResponse("Never mind")
-				.addResponse("What do you have?", List.of(), List.of(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())), "", false)
+				.addResponse(new ResponseBuilder("What do you have?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
 		);
-		add(new DialogueBuilder("fast_food", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator"))))
+		add(new DialogueBuilder("fast_food", new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator"))
 				.addResponse("I'm good")
-				.addResponse("Show me your menu", List.of(), List.of(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())), "", false)
+				.addResponse(new ResponseBuilder("Show me your menu").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
 		);
-		add(new DialogueBuilder("grocery_store", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "iguana"))))
+		add(new DialogueBuilder("grocery_store", new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "iguana"))
 				.addResponse("No thanks")
-				.addResponse("What do you have to sell?", List.of(), List.of(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())), "", false)
+				.addResponse(new ResponseBuilder("What do you have to sell?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
 		);
-		add(new DialogueBuilder("tasty_welcome", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle"))))
+		add(new DialogueBuilder("tasty_welcome", new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle"))
 				.addResponse("Goodbye")
-				.addResponse("Let me see your wares", List.of(), List.of(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())), "", false)
+				.addResponse(new ResponseBuilder("Let me see your wares").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
 		);
 	}
 	
 	private void testDialogues()
 	{
 		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("test1response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")), List.of(), "test2", true)
-				.addResponse("test1response2", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator")), List.of(), "test2", true)
-				.addResponse("test1response3", List.of(), List.of(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")), "test2", true)
+				.addResponse(new ResponseBuilder("test1response1", "test2").addCondition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle"))
+				.addResponse(new ResponseBuilder("test1response2", "test2").addCondition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator"))
+				.addResponse(new ResponseBuilder("test1response3", "test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 		);
 		
 		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("test2response1", List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", null, "Was not salamander")), List.of(), "test1", false)
-				.addResponse("test2response2", List.of(), List.of(new Trigger.Command("say hi")), "test1", false)
-				.addResponse("test2response3", List.of(), List.of(new Trigger.Command("""
-						tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]""")), "test1", false)
+				.addResponse(new ResponseBuilder("test2response1", "test1")
+						.addCondition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", null, "Was not salamander")
+						.dontHideFailed())
+				.addResponse(new ResponseBuilder("test2response2", "test1").addTrigger(new Trigger.Command("say hi")))
+				.addResponse(new ResponseBuilder("test2response3", "test1")
+						.addTrigger(new Trigger.Command("""
+								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]""")))
 		);
 		
 		add(new DialogueBuilder("turtle_only", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")))));
 		
 		add(new DialogueBuilder("nakagator_only", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.IS_ENTITY_TYPE, "minestuck:nakagator")))));
 		
-		//builder can take empty strings for nextDialoguePath
-		add(new DialogueBuilder("me_want_cookie", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
+		add(new DialogueBuilder("me_want_cookie", Dialogue.Condition.Type.CONDITIONLESS)
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
-				.addResponse("why do you want cookie?", null)
-				.addResponse("here have a cookie chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", null, "Has no cookie")), List.of(new Trigger.TakeItem(Items.COOKIE), new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled"))), "oh_yippee", false)
+				.addResponse(new ResponseBuilder("why do you want cookie?", LOOP_NEXT_PATH))
+				.addResponse(new ResponseBuilder("here have a cookie chap", "oh_yippee")
+						.addCondition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", null, "Has no cookie")
+						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
+						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))
+						.dontHideFailed())
 		);
 		add(new DialogueBuilder("oh_yippee"));
 		add(new DialogueBuilder("hunger_filled"));
 		
-		add(new DialogueBuilder("me_want_5_cookies", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
+		add(new DialogueBuilder("me_want_5_cookies", Dialogue.Condition.Type.CONDITIONLESS)
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
-				.addResponse("here have 5 cookies chap", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "5", "Has no cookie")), List.of(new Trigger.TakeItem(Items.COOKIE, 5)), "oh_yippee", false)
+				.addResponse(new ResponseBuilder("here have 5 cookies chap", "oh_yippee")
+						.addCondition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "5", "Has no cookie")
+						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))
+						.dontHideFailed())
 		);
 		
-		add(new DialogueBuilder("hi_friend_can_i_help_you", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse("I hate you", List.of(), List.of(new Trigger.AddConsortReputation(-100)), null, false)
-				.addResponse("I love you", List.of(), List.of(new Trigger.AddConsortReputation(100)), null, false)
-				.addResponse("Rep above 500", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_MINIMUM_REPUTATION, "500", null, "Rep too low")), List.of(), null, false)
-				.addResponse("Rep below 200", List.of(new Dialogue.Condition(Dialogue.Condition.Type.HAS_MAXIMUM_REPUTATION, "200", null, "Rep too high")), List.of(), null, false)
+		add(new DialogueBuilder("hi_friend_can_i_help_you", Dialogue.Condition.Type.CONDITIONLESS)
+				.addResponse(new ResponseBuilder("I hate you").addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
+				.addResponse(new ResponseBuilder("I love you").addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
+				.addResponse(new ResponseBuilder("Rep above 500").addCondition(Dialogue.Condition.Type.HAS_MINIMUM_REPUTATION, "500", null, "Rep too low").dontHideFailed())
+				.addResponse(new ResponseBuilder("Rep below 200").addCondition(Dialogue.Condition.Type.HAS_MAXIMUM_REPUTATION, "200", null, "Rep too high").dontHideFailed())
 				.addResponse("bye")
 		);
 	}
@@ -139,6 +155,16 @@ public class DialogueProvider implements DataProvider
 			this(message, "generic_animation", "generic_extra_large", null);
 		}
 		
+		DialogueBuilder(String message, Dialogue.Condition.Type useConditionType)
+		{
+			this(message, "generic_animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(useConditionType))));
+		}
+		
+		DialogueBuilder(String message, Dialogue.Condition useCondition)
+		{
+			this(message, "generic_animation", "generic_extra_large", new Dialogue.UseContext(List.of(useCondition)));
+		}
+		
 		DialogueBuilder(String message, Dialogue.UseContext useContext)
 		{
 			this(message, "generic_animation", "generic_extra_large", useContext);
@@ -154,39 +180,77 @@ public class DialogueProvider implements DataProvider
 			this.useContext = useContext;
 		}
 		
-		public DialogueBuilder addResponse(String response, List<Dialogue.Condition> conditions, List<Trigger> triggers, @Nullable String nextDialoguePath, boolean hideIfFailed)
-		{
-			ResourceLocation nextPath = getNextPath(nextDialoguePath);
-			this.responses.add(new Dialogue.Response(response, conditions, triggers, nextPath, hideIfFailed));
-			return this;
-		}
-		
-		public DialogueBuilder addResponse(String response, @Nullable String nextDialoguePath)
-		{
-			ResourceLocation nextPath = getNextPath(nextDialoguePath);
-			this.responses.add(new Dialogue.Response(response, List.of(), List.of(), nextPath, true));
-			return this;
-		}
-		
 		public DialogueBuilder addResponse(String response)
 		{
-			this.responses.add(new Dialogue.Response(response, List.of(), List.of(), EMPTY_NEXT_PATH, true));
+			return addResponse(new ResponseBuilder(response));
+		}
+		
+		public DialogueBuilder addResponse(ResponseBuilder responseBuilder)
+		{
+			this.responses.add(new Dialogue.Response(responseBuilder.response, responseBuilder.conditions, responseBuilder.triggers, responseBuilder.nextDialoguePath, responseBuilder.hideIfFailed));
+			return this;
+		}
+	}
+	
+	public static class ResponseBuilder
+	{
+		private final String response;
+		private final List<Dialogue.Condition> conditions;
+		private final List<Trigger> triggers;
+		private final ResourceLocation nextDialoguePath;
+		private boolean hideIfFailed;
+		
+		ResponseBuilder(String response)
+		{
+			this(response, EMPTY_NEXT_PATH);
+		}
+		
+		ResponseBuilder(String response, ResourceLocation nextDialoguePath)
+		{
+			this.response = response;
+			this.conditions = new ArrayList<>();
+			this.triggers = new ArrayList<>();
+			this.nextDialoguePath = nextDialoguePath;
+			this.hideIfFailed = true;
+		}
+		
+		ResponseBuilder(String response, String nextDialoguePath)
+		{
+			this.response = response;
+			this.conditions = new ArrayList<>();
+			this.triggers = new ArrayList<>();
+			this.nextDialoguePath = new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath);
+			this.hideIfFailed = true;
+		}
+		
+		public ResponseBuilder addCondition(Dialogue.Condition.Type type)
+		{
+			this.conditions.add(new Dialogue.Condition(type));
 			return this;
 		}
 		
-		/**
-		 * Tries and creates the next path resource location. If its null it will be the empty form which will close the screen, if its empty then it will be replaced with itself, else it will make it like normal
-		 */
-		private ResourceLocation getNextPath(@Nullable String nextDialoguePath)
+		public ResponseBuilder addCondition(Dialogue.Condition.Type type, String content)
 		{
-			ResourceLocation nextPath;
-			if(nextDialoguePath == null)
-				nextPath = this.path;
-			else if(nextDialoguePath.isEmpty())
-				nextPath = EMPTY_NEXT_PATH;
-			else
-				nextPath = new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath);
-			return nextPath;
+			this.conditions.add(new Dialogue.Condition(type, content));
+			return this;
+		}
+		
+		public ResponseBuilder addCondition(Dialogue.Condition.Type type, String content, String contentExtra, String failureTooltip)
+		{
+			this.conditions.add(new Dialogue.Condition(type, content, contentExtra, failureTooltip));
+			return this;
+		}
+		
+		public ResponseBuilder addTrigger(Trigger trigger)
+		{
+			this.triggers.add(trigger);
+			return this;
+		}
+		
+		public ResponseBuilder dontHideFailed()
+		{
+			this.hideIfFailed = false;
+			return this;
 		}
 	}
 	

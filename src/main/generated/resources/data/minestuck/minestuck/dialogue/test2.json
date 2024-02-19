@@ -19,7 +19,7 @@
     },
     {
       "conditions": [],
-      "hide_if_failed": false,
+      "hide_if_failed": true,
       "next_path": "minestuck:test1",
       "response_message": "test2response2",
       "triggers": [
@@ -31,7 +31,7 @@
     },
     {
       "conditions": [],
-      "hide_if_failed": false,
+      "hide_if_failed": true,
       "next_path": "minestuck:test1",
       "response_message": "test2response3",
       "triggers": [

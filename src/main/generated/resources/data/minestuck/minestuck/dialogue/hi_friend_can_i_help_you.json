@@ -7,7 +7,7 @@
     {
       "conditions": [],
       "hide_if_failed": false,
-      "next_path": "minestuck:hi_friend_can_i_help_you",
+      "next_path": "minecraft:close_menu",
       "response_message": "I hate you",
       "triggers": [
         {
@@ -19,7 +19,7 @@
     {
       "conditions": [],
       "hide_if_failed": false,
-      "next_path": "minestuck:hi_friend_can_i_help_you",
+      "next_path": "minecraft:close_menu",
       "response_message": "I love you",
       "triggers": [
         {
@@ -37,7 +37,7 @@
         }
       ],
       "hide_if_failed": false,
-      "next_path": "minestuck:hi_friend_can_i_help_you",
+      "next_path": "minecraft:close_menu",
       "response_message": "Rep above 500",
       "triggers": []
     },
@@ -50,14 +50,14 @@
         }
       ],
       "hide_if_failed": false,
-      "next_path": "minestuck:hi_friend_can_i_help_you",
+      "next_path": "minecraft:close_menu",
       "response_message": "Rep below 200",
       "triggers": []
     },
     {
       "conditions": [],
       "hide_if_failed": true,
-      "next_path": "minecraft:",
+      "next_path": "minecraft:close_menu",
       "response_message": "bye",
       "triggers": []
     }
