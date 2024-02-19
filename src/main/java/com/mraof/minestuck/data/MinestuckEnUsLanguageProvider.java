@@ -484,6 +484,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.POLISHED_UNCARVED_STAIRS, "Polished Uncarved Stairs");
 		addBlock(MSBlocks.POLISHED_UNCARVED_SLAB, "Polished Uncarved Slab");
 		
+		addBlock(MSBlocks.CARVED_BUSH, "Carved Bush");
 		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
 		addBlock(MSBlocks.WOODEN_GRASS, "Wooden Grass");
 		

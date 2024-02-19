@@ -287,6 +287,8 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(1), PlacementUtils.HEIGHTMAP)));
 		context.register(LACQUERED_WOODEN_MUSHROOM_PATCH, placed(features, MSCFeatures.LACQUERED_WOODEN_MUSHROOM_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
+		context.register(CARVED_BUSH_PATCH, placed(features, MSCFeatures.CARVED_BUSH_PATCH,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 		context.register(TALL_END_GRASS_PATCH, placed(features, MSCFeatures.TALL_END_GRASS_PATCH,
 				worldGenModifiers(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.TALL_END_GRASS.get()))));
 		context.register(PETRIFIED_GRASS_PATCH, placed(features, MSCFeatures.PETRIFIED_GRASS_PATCH,

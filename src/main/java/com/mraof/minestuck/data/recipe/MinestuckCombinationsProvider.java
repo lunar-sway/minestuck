@@ -865,6 +865,8 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS.get()).input(ItemTags.LOGS).or().namedInput(Items.STONECUTTER).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS.get()).input(ItemTags.LOGS).or().namedInput(MSItems.CARVING_TOOL.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.WOODEN_GRASS.get()).input(ItemTags.PLANKS).or().input(Items.GRASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CARVED_BUSH.get()).input(MSItems.UNCARVED_WOOD.get()).or().namedInput(ItemTags.SAPLINGS).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSItems.CARVED_BUSH.get()).input(MSItems.UNCARVED_WOOD.get()).or().namedInput(ItemTags.LEAVES).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.TREATED_UNCARVED_WOOD.get()).input(MSItems.UNCARVED_WOOD.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
 		CombinationRecipeBuilder.of(MSBlocks.TREATED_CHIPBOARD.get()).input(MSItems.CHIPBOARD.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin
 		CombinationRecipeBuilder.of(MSBlocks.TREATED_WOOD_SHAVINGS.get()).input(MSItems.WOOD_SHAVINGS.get()).or().input(Items.HONEY_BOTTLE).build(consumer); //TODO: replace honey bottle with amber resin

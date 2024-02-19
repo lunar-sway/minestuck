@@ -149,7 +149,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> WOODEN_GRASS_PATCH = key("wooden_grass_patch");
 	public static final ResourceKey<PlacedFeature> TREATED_WOODEN_GRASS_PATCH = key("treated_wooden_grass_patch");
 	public static final ResourceKey<PlacedFeature> LACQUERED_WOODEN_MUSHROOM_PATCH = key("lacquered_wooden_mushroom");
-	public static final ResourceKey<PlacedFeature> CARVED_BUSH_PATCH = key("carved_bush_mushroom");
+	public static final ResourceKey<PlacedFeature> CARVED_BUSH_PATCH = key("carved_bush_patch");
 	public static final ResourceKey<PlacedFeature> TALL_END_GRASS_PATCH = key("tall_end_grass_patch");
 	public static final ResourceKey<PlacedFeature> PETRIFIED_GRASS_PATCH = key("petrified_grass_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_GRASS_PATCH = key("sparse_petrified_grass_patch");
