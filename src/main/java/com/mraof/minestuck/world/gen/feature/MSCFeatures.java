@@ -66,10 +66,11 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> RED_SAND_DISK = key("red_sand_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SLIME_DISK = key("slime_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> NETHERRACK_DISK = key("netherrack_disk");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_PLANKS_DISK = key("carved_planks_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_PLANKS_DISK = key("treated_planks_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LACQUERED_PLANKS_DISK = key("lacquered_planks_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_UNCARVED_WOOD_DISK = key("treated_uncarved_wood_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_CHIPBOARD_DISK = key("treated_chipboard_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CHIPBOARD_DISK = key("chipboard_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> UNCARVED_WOOD_DISK = key("uncarved_wood_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> COAGULATED_BLOOD_DISK = key("coagulated_blood_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> COBBLESTONE_SURFACE_DISK = key("cobblestone_surface_disk");
@@ -110,6 +111,7 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> WOODEN_GRASS_PATCH = key("wooden_grass_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_WOODEN_GRASS_PATCH = key("treated_wooden_grass_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LACQUERED_WOODEN_MUSHROOM_PATCH = key("lacquered_wooden_mushroom_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_BUSH_PATCH = key("carved_bush_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_END_GRASS_PATCH = key("tall_end_grass_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_GRASS_PATCH = key("petrified_grass_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_POPPY_PATCH = key("petrified_poppy_patch");

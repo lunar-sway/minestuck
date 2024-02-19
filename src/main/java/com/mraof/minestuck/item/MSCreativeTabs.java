@@ -647,14 +647,17 @@ public final class MSCreativeTabs
 		output.accept(MSItems.END_STONE_IRON_ORE.get());
 		output.accept(MSItems.SANDSTONE_IRON_ORE.get());
 		output.accept(MSItems.RED_SANDSTONE_IRON_ORE.get());
+		output.accept(MSItems.UNCARVED_WOOD_IRON_ORE.get());
 		output.accept(MSItems.SANDSTONE_GOLD_ORE.get());
 		output.accept(MSItems.RED_SANDSTONE_GOLD_ORE.get());
 		output.accept(MSItems.SHADE_STONE_GOLD_ORE.get());
 		output.accept(MSItems.PINK_STONE_GOLD_ORE.get());
 		output.accept(MSItems.END_STONE_REDSTONE_ORE.get());
+		output.accept(MSItems.UNCARVED_WOOD_REDSTONE_ORE.get());
 		output.accept(MSItems.STONE_QUARTZ_ORE.get());
 		output.accept(MSItems.PINK_STONE_LAPIS_ORE.get());
 		output.accept(MSItems.PINK_STONE_DIAMOND_ORE.get());
+		output.accept(MSItems.UNCARVED_WOOD_EMERALD_ORE.get());
 		
 		output.accept(MSItems.BLUE_DIRT.get());
 		output.accept(MSItems.THOUGHT_DIRT.get());

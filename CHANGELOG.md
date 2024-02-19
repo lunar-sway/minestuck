@@ -17,11 +17,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
 - New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
-- Added Carved Bush.
+- Added Carved Bush
+- Added Uncarved Wood Iron, Redstone, and Emerald ores
 
 ### Changed
 
 - Wooden Cactus is now only placeable on the Wood Terrain Blocks tag instead of Sand
+- Carved Planks are now the surface block of Wood Lands instead of Treated Planks
 - Carved Planks no longer need to be mined with a Stone Axe or better
 - Transportalizers now stack to one instead of 64
 - Prismarine armor remodel and retexture

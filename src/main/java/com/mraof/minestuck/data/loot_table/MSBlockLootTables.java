@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
-import static com.mraof.minestuck.block.MSBlocks.TREATED_UNCARVED_WOOD_BUTTON;
 
 public final class MSBlockLootTables extends BlockLootSubProvider
 {
@@ -133,14 +132,17 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(SANDSTONE_IRON_ORE.get(), this::ironOreDrop);
 		add(RED_SANDSTONE_IRON_ORE.get(), this::ironOreDrop);
 		add(END_STONE_IRON_ORE.get(), this::ironOreDrop);
+		add(UNCARVED_WOOD_IRON_ORE.get(), this::ironOreDrop);
 		add(SANDSTONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(RED_SANDSTONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(SHADE_STONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(PINK_STONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(END_STONE_REDSTONE_ORE.get(), this::redstoneOreDrop);
+		add(UNCARVED_WOOD_REDSTONE_ORE.get(), this::redstoneOreDrop);
 		add(STONE_QUARTZ_ORE.get(), this::quartzOreDrop);
 		add(PINK_STONE_LAPIS_ORE.get(), this::lapisOreDrop);
 		add(PINK_STONE_DIAMOND_ORE.get(), this::diamondOreDrop);
+		add(UNCARVED_WOOD_EMERALD_ORE.get(), this::emeraldOreDrop);
 		
 		dropSelf(CRUXITE_BLOCK.get());
 		dropSelf(CRUXITE_STAIRS.get());
@@ -1059,6 +1061,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	{
 		return createOreDrop(block, Items.DIAMOND);
 	}
+	
+	private LootTable.Builder emeraldOreDrop(Block block) { return createOreDrop(block, Items.EMERALD); }
 	
 	private LootTable.Builder endGrassDrop(Block block)
 	{

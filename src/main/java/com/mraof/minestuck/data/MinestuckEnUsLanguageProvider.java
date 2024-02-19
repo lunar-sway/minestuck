@@ -145,14 +145,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SANDSTONE_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.RED_SANDSTONE_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.END_STONE_IRON_ORE, "Iron Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.SANDSTONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.RED_SANDSTONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.SHADE_STONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.PINK_STONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.END_STONE_REDSTONE_ORE, "Redstone Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE, "Redstone Ore");
 		addBlock(MSBlocks.STONE_QUARTZ_ORE, "Quartz Ore");
 		addBlock(MSBlocks.PINK_STONE_LAPIS_ORE, "Lapis Ore");
 		addBlock(MSBlocks.PINK_STONE_DIAMOND_ORE, "Diamond Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_EMERALD_ORE, "Emerald Ore");
 		
 		addBlock(MSBlocks.CRUXITE_BLOCK, "Cruxite Block");
 		addBlock(MSBlocks.CRUXITE_STAIRS, "Cruxite Stairs");

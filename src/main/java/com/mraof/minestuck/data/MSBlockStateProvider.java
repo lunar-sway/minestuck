@@ -181,6 +181,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_side")),
 						texture(id.withSuffix("_bottom")),
 						texture(id.withSuffix("_top"))));
+		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_IRON_ORE);
 		
 		simpleBlockWithItem(MSBlocks.SANDSTONE_GOLD_ORE,
 				id -> models().cubeBottomTop(id.getPath(),
@@ -196,9 +197,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.PINK_STONE_GOLD_ORE);
 		
 		simpleBlockWithItem(MSBlocks.END_STONE_REDSTONE_ORE);
+		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE);
 		simpleBlockWithItem(MSBlocks.STONE_QUARTZ_ORE);
 		simpleBlockWithItem(MSBlocks.PINK_STONE_LAPIS_ORE);
 		simpleBlockWithItem(MSBlocks.PINK_STONE_DIAMOND_ORE);
+		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_EMERALD_ORE);
 		
 		//Resource Blocks
 		simpleBlockWithItem(MSBlocks.CRUXITE_BLOCK);

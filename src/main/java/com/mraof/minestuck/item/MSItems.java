@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.MSEffects;
@@ -111,6 +110,7 @@ public class MSItems
 	public static final RegistryObject<Item> THORN_IN_YOUR_SIDE = REGISTER.register("thorn_in_your_side", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties()));
 	public static final RegistryObject<Item> ROSE_PROTOCOL = REGISTER.register("rose_protocol", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(6)), new Item.Properties().rarity(Rarity.UNCOMMON)));
 	
+	
 	//Knives
 	public static final RegistryObject<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties()));
 	public static final RegistryObject<Item> DIAMOND_DAGGER = REGISTER.register("diamond_dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties()));
@@ -153,6 +153,7 @@ public class MSItems
 	public static final RegistryObject<Item> KEYTAR = REGISTER.register("keytar", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(SoundEvents.NOTE_BLOCK_GUITAR)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 10, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(265)));
 	public static final RegistryObject<Item> ALLWEDDOL = REGISTER.register("allweddol", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.WELSH_TIER, 6, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
 	
+	
 	//Batons
 	public static final RegistryObject<Item> CONDUCTORS_BATON = REGISTER.register("conductors_baton", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 1.0F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 10, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(200)));
 	public static final RegistryObject<Item> SHARP_NOTE = REGISTER.register("sharp_note", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 2.0F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 12, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(350)));
@@ -160,6 +161,7 @@ public class MSItems
 	public static final RegistryObject<Item> WIND_WAKER = REGISTER.register("wind_waker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.STANDARD_MAGIC).add(OnHitEffect.enemyKnockback(1.3F)).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 1.2F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 8, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(750)));
 	public static final RegistryObject<Item> CELESTIAL_FULCRUM = REGISTER.register("celestial_fulcrum", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 3, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.STANDARD_MAGIC).add(OnHitEffect.enemyKnockback(2.0F)).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 1.5F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 14, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(1200)));
 	public static final RegistryObject<Item> HYMN_FOR_HORRORTERRORS = REGISTER.register("hymn_for_horrorterrors", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.HORRORTERROR_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.HORRORTERROR).set(MagicRangedRightClickEffect.HORRORTERROR_MAGIC).add(OnHitEffect.enemyKnockback(2.0F)).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 0.2F)).add(OnHitEffect.spawnParticles(ParticleTypes.SCULK_SOUL, 15, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(2500).rarity(Rarity.RARE)));
+	
 	
 	//Axes
 	public static final RegistryObject<Item> BATLEACKS = REGISTER.register("batleacks", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -3.5F).efficiency(1.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties()));
@@ -391,7 +393,6 @@ public class MSItems
 	public static final RegistryObject<Item> CROCKER_FORK = REGISTER.register("crocker_fork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 6, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.CROCKER_SPOON)), new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> EDISONS_FURY = REGISTER.register("edisons_fury", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.EDISONS_SERENITY)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER).add(OnHitEffect.playSound(MSSoundEvents.EVENT_ELECTRIC_SHOCK, 0.6F, 1.0F)), new Item.Properties()));
 	public static final RegistryObject<Item> EDISONS_SERENITY = REGISTER.register("edisons_serenity", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.EDISONS_FURY)), new Item.Properties()));
-	
 	public static final RegistryObject<Item> SKAIA_FORK = REGISTER.register("skaia_fork", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 9, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> SKAIAN_CROCKER_ROCKER = REGISTER.register("skaian_crocker_rocker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 10, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(2048).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> FORK = REGISTER.register("fork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
@@ -422,6 +423,7 @@ public class MSItems
 	public static final RegistryObject<Item> THISTLE_OF_ZILLYWICH = REGISTER.register("thistle_of_zillywich", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.ZILLY_MAGIC), new Item.Properties().rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> QUILL_OF_ECHIDNA = REGISTER.register("quill_of_echidna", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, -1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.ECHIDNA_MAGIC), new Item.Properties().rarity(Rarity.EPIC)));
 	
+	
 	//Projectiles
 	public static final RegistryObject<Item> SBAHJARANG = REGISTER.register("sbahjarang", () -> new ConsumableProjectileWeaponItem(new Item.Properties(), 0.5F, 20.0F, 1));
 	public static final RegistryObject<Item> SHURIKEN = REGISTER.register("shuriken", () -> new ConsumableProjectileWeaponItem(new Item.Properties(), 1.0F, 2.8F, 2));
@@ -443,6 +445,7 @@ public class MSItems
 	public static final RegistryObject<Item> EMERALD_SHOVEL = REGISTER.register("emerald_shovel", () -> new ShovelItem(MSItemTypes.EMERALD_TIER, 1.5F, -3.0F, new Item.Properties()));
 	public static final RegistryObject<Item> EMERALD_HOE = REGISTER.register("emerald_hoe", () -> new HoeItem(MSItemTypes.EMERALD_TIER, -3, 0.0F, new Item.Properties()));
 	public static final RegistryObject<Item> MINE_AND_GRIST = REGISTER.register("mine_and_grist", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -2.8F).efficiency(10.0F).set(MSItemTypes.PICKAXE_TOOL).add(MSItemTypes.GRIST_HARVEST), new Item.Properties()));
+	
 	
 	//Armor
 	public static final RegistryObject<Item> PRISMARINE_HELMET = REGISTER.register("prismarine_helmet", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.HELMET, new Item.Properties()));
@@ -574,6 +577,7 @@ public class MSItems
 	public static final RegistryObject<Item> ANCIENT_THUMB_DRIVE = REGISTER.register("ancient_thumb_drive", () -> new AncientThumbDrive(new Item.Properties().stacksTo(1)));
 	public static final RegistryObject<Item> GUTTER_BALL = REGISTER.register("gutter_ball", () -> new GutterBallItem(new Item.Properties().stacksTo(5).rarity(Rarity.UNCOMMON)));
 	
+	
 	//Buckets
 	public static final RegistryObject<Item> OIL_BUCKET = REGISTER.register("oil_bucket", () -> new BucketItem(MSFluids.OIL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final RegistryObject<Item> BLOOD_BUCKET = REGISTER.register("blood_bucket", () -> new BucketItem(MSFluids.BLOOD, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
@@ -642,6 +646,7 @@ public class MSItems
 	public static final RegistryObject<Item> SCALEMATE_PYRALSPITE = REGISTER.register("scalemate_pyralspite", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_WITNESS = REGISTER.register("scalemate_witness", () -> new ScalemateItem(new Item.Properties()));
 	
+	
 	//Consort Plushies
 	public static final RegistryObject<Item> PLUSH_SALAMANDER = REGISTER.register("plush_salamander", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> PLUSH_NAKAGATOR = REGISTER.register("plush_nakagator", () -> new Item(new Item.Properties()));
@@ -649,6 +654,7 @@ public class MSItems
 	public static final RegistryObject<Item> PLUSH_TURTLE = REGISTER.register("plush_turtle", () -> new Item(new Item.Properties()));
 	
 	public static final RegistryObject<Item> PLUSH_MUTATED_CAT = REGISTER.register("plush_mutated_cat", () -> new Item(new Item.Properties()));
+	
 	
 	//Incredibly Useful Items
 	public static final RegistryObject<Item> URANIUM_POWERED_STICK = REGISTER.register("uranium_powered_stick", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -810,14 +816,17 @@ public class MSItems
 	public static final RegistryObject<BlockItem> END_STONE_IRON_ORE = registerBlockItem(MSBlocks.END_STONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> SANDSTONE_IRON_ORE = registerBlockItem(MSBlocks.SANDSTONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_IRON_ORE = registerBlockItem(MSBlocks.RED_SANDSTONE_IRON_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_IRON_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_IRON_ORE);
 	public static final RegistryObject<BlockItem> SANDSTONE_GOLD_ORE = registerBlockItem(MSBlocks.SANDSTONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_GOLD_ORE = registerBlockItem(MSBlocks.RED_SANDSTONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_GOLD_ORE = registerBlockItem(MSBlocks.SHADE_STONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_GOLD_ORE = registerBlockItem(MSBlocks.PINK_STONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> END_STONE_REDSTONE_ORE = registerBlockItem(MSBlocks.END_STONE_REDSTONE_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_REDSTONE_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE);
 	public static final RegistryObject<BlockItem> STONE_QUARTZ_ORE = registerBlockItem(MSBlocks.STONE_QUARTZ_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_LAPIS_ORE = registerBlockItem(MSBlocks.PINK_STONE_LAPIS_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_DIAMOND_ORE = registerBlockItem(MSBlocks.PINK_STONE_DIAMOND_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_EMERALD_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_EMERALD_ORE);
 	
 	
 	//Resource Blocks

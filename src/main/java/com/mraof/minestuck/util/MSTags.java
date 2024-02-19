@@ -58,6 +58,7 @@ public class MSTags
 		public static final TagKey<Block> QUARTZ_ORES = tag("ores/quartz");
 		public static final TagKey<Block> LAPIS_ORES = tag("ores/lapis");
 		public static final TagKey<Block> DIAMOND_ORES = tag("ores/diamond");
+		public static final TagKey<Block> EMERALD_ORES = tag("ores/emerald");
 		public static final TagKey<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final TagKey<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final TagKey<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
@@ -65,7 +66,6 @@ public class MSTags
 		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
 		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		public static final TagKey<Block> EDITMODE_BREAK_BLACKLIST = tag("editmode_break_blacklist");
-		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");
 		
 		private static TagKey<Block> tag(String name)
 		{
@@ -98,6 +98,7 @@ public class MSTags
 		public static final TagKey<Item> QUARTZ_ORES = tag("ores/quartz");
 		public static final TagKey<Item> LAPIS_ORES = tag("ores/lapis");
 		public static final TagKey<Item> DIAMOND_ORES = tag("ores/diamond");
+		public static final TagKey<Item> EMERALD_ORES = tag("ores/emerald");
 		public static final TagKey<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final TagKey<Item> GRIST_CANDY = tag("grist_candy");
 		public static final TagKey<Item> FAYGO = tag("faygo");

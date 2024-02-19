@@ -79,10 +79,11 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SLIME_DISK = key("slime_disk");
 	public static final ResourceKey<PlacedFeature> EXTRA_SLIME_DISK = key("extra_slime_disk");
 	public static final ResourceKey<PlacedFeature> NETHERRACK_DISK = key("netherrack_disk");
-	public static final ResourceKey<PlacedFeature> CARVED_PLANKS_DISK = key("carved_planks_disk");
+	public static final ResourceKey<PlacedFeature> TREATED_PLANKS_DISK = key("treated_planks_disk");
 	public static final ResourceKey<PlacedFeature> LACQUERED_PLANKS_DISK = key("lacquered_planks_disk");
 	public static final ResourceKey<PlacedFeature> TREATED_UNCARVED_WOOD_DISK = key("treated_uncarved_wood_disk");
 	public static final ResourceKey<PlacedFeature> TREATED_CHIPBOARD_DISK = key("treated_chipboard_disk");
+	public static final ResourceKey<PlacedFeature> CHIPBOARD_DISK = key("chipboard_disk");
 	public static final ResourceKey<PlacedFeature> UNCARVED_WOOD_DISK = key("uncarved_wood_disk");
 	public static final ResourceKey<PlacedFeature> COAGULATED_BLOOD_DISK = key("coagulated_blood_disk");
 	public static final ResourceKey<PlacedFeature> COBBLESTONE_SURFACE_DISK = key("cobblestone_surface_disk");
@@ -148,6 +149,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> WOODEN_GRASS_PATCH = key("wooden_grass_patch");
 	public static final ResourceKey<PlacedFeature> TREATED_WOODEN_GRASS_PATCH = key("treated_wooden_grass_patch");
 	public static final ResourceKey<PlacedFeature> LACQUERED_WOODEN_MUSHROOM_PATCH = key("lacquered_wooden_mushroom");
+	public static final ResourceKey<PlacedFeature> CARVED_BUSH_PATCH = key("carved_bush_mushroom");
 	public static final ResourceKey<PlacedFeature> TALL_END_GRASS_PATCH = key("tall_end_grass_patch");
 	public static final ResourceKey<PlacedFeature> PETRIFIED_GRASS_PATCH = key("petrified_grass_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_GRASS_PATCH = key("sparse_petrified_grass_patch");

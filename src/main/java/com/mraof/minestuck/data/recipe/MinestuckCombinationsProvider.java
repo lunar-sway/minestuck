@@ -958,14 +958,17 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.END_STONE_IRON_ORE.get()).input(Items.IRON_INGOT).and().input(Items.END_STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SANDSTONE_IRON_ORE.get()).input(Items.IRON_INGOT).and().input(Items.SANDSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.RED_SANDSTONE_IRON_ORE.get()).input(Items.IRON_INGOT).and().input(Items.RED_SANDSTONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD_IRON_ORE.get()).input(Items.IRON_INGOT).and().input(MSBlocks.UNCARVED_WOOD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SANDSTONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(Items.SANDSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.RED_SANDSTONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(Items.RED_SANDSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SHADE_STONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(MSBlocks.SHADE_STONE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(MSBlocks.PINK_STONE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.END_STONE_REDSTONE_ORE.get()).input(Items.REDSTONE).and().input(Items.END_STONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE.get()).input(Items.REDSTONE).and().input(MSBlocks.UNCARVED_WOOD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.STONE_QUARTZ_ORE.get()).input(Items.QUARTZ).and().input(Items.STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_LAPIS_ORE.get()).input(Items.LAPIS_LAZULI).and().input(MSBlocks.PINK_STONE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_DIAMOND_ORE.get()).input(Items.DIAMOND).and().input(MSBlocks.PINK_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD_EMERALD_ORE.get()).input(Items.EMERALD).and().input(MSBlocks.UNCARVED_WOOD.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.EMERALD_SWORD.get()).input(Items.DIAMOND_SWORD).or().input(Items.EMERALD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.EMERALD_AXE.get()).input(Items.DIAMOND_AXE).or().input(Items.EMERALD).build(consumer);

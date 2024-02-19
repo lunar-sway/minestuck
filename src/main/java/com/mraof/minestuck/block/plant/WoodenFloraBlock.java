@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.plant;
 
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
@@ -25,7 +26,7 @@ public class WoodenFloraBlock extends BushBlock
 	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
 	{
-		return state.is(MSTags.Blocks.WOOD_TERRAIN_BLOCKS);
+		return state.is(BlockTags.PLANKS) || state.is(MSTags.Blocks.WOOD_TERRAIN_BLOCKS);
 	}
 	
 	@Override

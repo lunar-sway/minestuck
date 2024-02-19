@@ -59,6 +59,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(BlockTags.LAPIS_ORES, ORES_LAPIS);
 		copy(Tags.Blocks.ORES_QUARTZ, ORES_QUARTZ);
 		copy(BlockTags.REDSTONE_ORES, ORES_REDSTONE);
+		copy(BlockTags.EMERALD_ORES, ORES_EMERALD);
 		copy(Tags.Blocks.STONE, STONE);
 		copy(Tags.Blocks.STORAGE_BLOCKS, STORAGE_BLOCKS);
 		copy(ExtraForgeTags.Blocks.URANIUM_ORES, ExtraForgeTags.Items.URANIUM_ORES);
@@ -87,6 +88,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.QUARTZ_ORES, QUARTZ_ORES);
 		copy(MSTags.Blocks.LAPIS_ORES, MSTags.Items.LAPIS_ORES);
 		copy(MSTags.Blocks.DIAMOND_ORES, MSTags.Items.DIAMOND_ORES);
+		copy(MSTags.Blocks.EMERALD_ORES, MSTags.Items.EMERALD_ORES);
 		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 		
 		tag(SWORDS).add(EMERALD_SWORD.get(), SORD.get(), PAPER_SWORD.get(), CACTACEAE_CUTLASS.get(), STEAK_SWORD.get(), BEEF_SWORD.get(), IRRADIATED_STEAK_SWORD.get(), MACUAHUITL.get(), FROSTY_MACUAHUITL.get(), KATANA.get(), UNBREAKABLE_KATANA.get(), ANGEL_APOCALYPSE.get(), FIRE_POKER.get(), TOO_HOT_TO_HANDLE.get(), CALEDSCRATCH.get(), CALEDFWLCH.get(), ROYAL_DERINGER.get(), CLAYMORE.get(), CUTLASS_OF_ZILLYWAIR.get(), REGISWORD.get(), CRUEL_FATE_CRUCIBLE.get(), SCARLET_RIBBITAR.get(), DOGG_MACHETE.get(), COBALT_SABRE.get(), QUANTUM_SABRE.get(), SHATTER_BEACON.get(), SHATTER_BACON.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get(), MUSIC_SWORD.get(), PILLOW_TALK.get(), KRAKENS_EYE.get(), CINNAMON_SWORD.get());

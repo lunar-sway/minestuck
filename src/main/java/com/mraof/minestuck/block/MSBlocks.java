@@ -161,6 +161,8 @@ public final class MSBlocks
 	public static final RegistryObject<Block> END_STONE_IRON_ORE = REGISTER.register("end_stone_iron_ore", () -> new DropExperienceBlock(copy(Blocks.IRON_ORE)));
 	public static final RegistryObject<Block> SANDSTONE_IRON_ORE = REGISTER.register("sandstone_iron_ore", () -> new DropExperienceBlock(copy(Blocks.IRON_ORE)));
 	public static final RegistryObject<Block> RED_SANDSTONE_IRON_ORE = REGISTER.register("red_sandstone_iron_ore", () -> new DropExperienceBlock(copy(Blocks.IRON_ORE)));
+	public static final RegistryObject<Block> UNCARVED_WOOD_IRON_ORE = REGISTER.register("uncarved_wood_iron_ore", () -> new DropExperienceBlock(copy(Blocks.IRON_ORE)));
+	
 	
 	public static final RegistryObject<Block> SANDSTONE_GOLD_ORE = REGISTER.register("sandstone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
 	public static final RegistryObject<Block> RED_SANDSTONE_GOLD_ORE = REGISTER.register("red_sandstone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
@@ -168,9 +170,16 @@ public final class MSBlocks
 	public static final RegistryObject<Block> PINK_STONE_GOLD_ORE = REGISTER.register("pink_stone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
 	
 	public static final RegistryObject<Block> END_STONE_REDSTONE_ORE = REGISTER.register("end_stone_redstone_ore", () -> new RedStoneOreBlock(copy(Blocks.REDSTONE_ORE)));
+	public static final RegistryObject<Block> UNCARVED_WOOD_REDSTONE_ORE = REGISTER.register("uncarved_wood_redstone_ore", () -> new RedStoneOreBlock(copy(Blocks.REDSTONE_ORE)));
+	
+	
 	public static final RegistryObject<Block> STONE_QUARTZ_ORE = REGISTER.register("stone_quartz_ore", () -> new DropExperienceBlock(copy(Blocks.NETHER_QUARTZ_ORE), UniformInt.of(2, 5)));
+	
 	public static final RegistryObject<Block> PINK_STONE_LAPIS_ORE = REGISTER.register("pink_stone_lapis_ore", () -> new DropExperienceBlock(copy(Blocks.LAPIS_ORE), UniformInt.of(2, 5)));
+	
 	public static final RegistryObject<Block> PINK_STONE_DIAMOND_ORE = REGISTER.register("pink_stone_diamond_ore", () -> new DropExperienceBlock(copy(Blocks.DIAMOND_ORE), UniformInt.of(3, 7)));
+	
+	public static final RegistryObject<Block> UNCARVED_WOOD_EMERALD_ORE = REGISTER.register("uncarved_wood_emerald_ore", () -> new DropExperienceBlock(copy(Blocks.EMERALD_ORE), UniformInt.of(3, 7)));
 	
 	//Resource Blocks
 	public static final RegistryObject<Block> CRUXITE_BLOCK = REGISTER.register("cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F).requiresCorrectToolForDrops()));
@@ -558,7 +567,7 @@ public final class MSBlocks
 	public static final RegistryObject<StairBlock> POLISHED_UNCARVED_STAIRS = REGISTER.register("polished_uncarved_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_UNCARVED_WOOD.get().defaultBlockState(), copy(POLISHED_UNCARVED_WOOD.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_UNCARVED_SLAB = REGISTER.register("polished_uncarved_slab", () -> new SlabBlock(copy(POLISHED_UNCARVED_WOOD.get())));
 	
-	public static final RegistryObject<Block> CARVED_BUSH = REGISTER.register("carved_bush", () -> new CarvedFloraBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASEDRUM).strength(0.6F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY).noCollission().offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> CARVED_BUSH = REGISTER.register("carved_bush", () -> new WoodenFloraBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASEDRUM).strength(0.6F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY).noCollission().offsetType(BlockBehaviour.OffsetType.XZ), WoodenFloraBlock.FLOWER_SHAPE));
 	public static final RegistryObject<Block> CARVED_KNOTTED_WOOD = REGISTER.register("carved_knotted_wood", () -> new MSHorizontalDirectionalBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> WOODEN_GRASS = REGISTER.register("wooden_grass", () -> new WoodenFloraBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).noCollission().strength(0.1F, 2.5F).requiresCorrectToolForDrops().sound(SoundType.WOOD).offsetType(BlockBehaviour.OffsetType.XYZ), WoodenFloraBlock.GRASS_SHAPE));
 	
