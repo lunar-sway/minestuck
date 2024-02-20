@@ -7,7 +7,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -78,24 +77,6 @@ public class TransportalizerSavedData extends SavedData
 		if(removed)
 			this.setDirty();
 		return removed;
-	}
-	
-	public String findNewId(RandomSource random, GlobalPos location)
-	{
-		String unusedId;
-		do
-		{
-			unusedId = "";
-			for(int i = 0; i < 4; i++)
-			{
-				unusedId += (char) (random.nextInt(26) + 'A');
-			}
-		}
-		while(locations.containsKey(unusedId));
-		
-		locations.put(unusedId, location);
-		this.setDirty();
-		return unusedId;
 	}
 	
 	public void replace(String id, GlobalPos oldPos, GlobalPos newPos)

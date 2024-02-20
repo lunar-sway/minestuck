@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:frost_planks"
+    }
+  ],
+  "result": {
+    "item": "minestuck:frost_button"
+  }
+}

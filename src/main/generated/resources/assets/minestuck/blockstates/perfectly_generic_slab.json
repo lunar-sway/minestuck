@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/generic_object_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/generic_object"
+    },
+    "type=top": {
+      "model": "minestuck:block/generic_object_slab_top"
+    }
+  }
+}
