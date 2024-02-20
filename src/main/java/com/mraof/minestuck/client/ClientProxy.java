@@ -17,6 +17,7 @@ import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
@@ -90,8 +91,8 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.DERSITE_BISHOP.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(manager.bakeLayer(MSModelLayers.BISHOP)), 1.8F, MSEntityTypes.DERSITE_BISHOP.get()));
 		EntityRenderers.register(MSEntityTypes.PROSPITIAN_ROOK.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(manager.bakeLayer(MSModelLayers.ROOK)), 2.5F, MSEntityTypes.PROSPITIAN_ROOK.get()));
 		EntityRenderers.register(MSEntityTypes.DERSITE_ROOK.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(manager.bakeLayer(MSModelLayers.ROOK)), 2.5F, MSEntityTypes.DERSITE_ROOK.get()));
-		EntityRenderers.register(MSEntityTypes.PROSPITIAN_PAWN.get(), PawnRenderer::new);
-		EntityRenderers.register(MSEntityTypes.DERSITE_PAWN.get(), PawnRenderer::new);
+		EntityRenderers.register(MSEntityTypes.PROSPITIAN_PAWN.get(), context -> new PawnRenderer(context, EnumEntityKingdom.PROSPITIAN));
+		EntityRenderers.register(MSEntityTypes.DERSITE_PAWN.get(), context -> new PawnRenderer(context, EnumEntityKingdom.DERSITE));
 		EntityRenderers.register(MSEntityTypes.GRIST.get(), GristRenderer::new);
 		EntityRenderers.register(MSEntityTypes.VITALITY_GEL.get(), VitalityGelRenderer::new);
 		EntityRenderers.register(MSEntityTypes.PLAYER_DECOY.get(), DecoyRenderer::new);
