@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.entity.UnderlingModel;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -29,13 +30,17 @@ import java.io.InputStream;
 /**
  * A renderer that applies the correct grist texture/color to the underlings
  */
+@MethodsReturnNonnullByDefault
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T>
 {
-	public UnderlingRenderer(EntityRendererProvider.Context context)
+	private final String underlingName;
+	
+	public UnderlingRenderer(EntityRendererProvider.Context context, String underlingName)
 	{
 		// this renderer does two simple things :
-		super(context, new UnderlingModel<>()); // render the entity with the base layer merged with a grist texture
-		this.addRenderLayer(new UnderlingDetailsLayer(this)); // render a second layer with details (eyes, mouth, etc)
+		super(context, new UnderlingModel<>(underlingName)); // render the entity with the base layer merged with a grist texture
+		this.addRenderLayer(new UnderlingDetailsLayer<>(this, underlingName)); // render a second layer with details (eyes, mouth, etc)
+		this.underlingName = underlingName;
 	}
 	
 	@Override
@@ -58,8 +63,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	@Override
 	public ResourceLocation getTextureLocation(T entity)
 	{
-		String underlingName = UnderlingModel.getName(entity);
-		ResourceLocation resource = entity.getGristType().getTextureId().withPath(gristName -> "textures/entity/underlings/%s_%s.png".formatted(underlingName, gristName));
+		ResourceLocation resource = entity.getGristType().getTextureId().withPath(gristName -> "textures/entity/underlings/%s_%s.png".formatted(this.underlingName, gristName));
 		
 		// the texture manager will cache the computed textures so they're effectively computed once (at least in theory)
 		SimpleTexture nullTexture = new SimpleTexture(resource);
@@ -110,8 +114,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	
 	private ResourceLocation getGristTexture(T entity)
 	{
-		String textureName = entity.getGristType().getTextureId().getPath();
-		var textureLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
+		var textureLocation = entity.getGristType().getTextureId().withPath(textureName -> "textures/entity/underlings/" + textureName + ".png");
 		if (Minecraft.getInstance().getResourceManager().getResource(textureLocation).isEmpty()) {
 			return this.model.getTextureResource(entity);
 		}
@@ -121,17 +124,20 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	/**
 	 * Detail layer for the underling
 	 */
-	public class UnderlingDetailsLayer extends GeoRenderLayer<T>
+	private static class UnderlingDetailsLayer<T extends UnderlingEntity> extends GeoRenderLayer<T>
 	{
-		public UnderlingDetailsLayer(GeoRenderer<T> entityRendererIn)
+		private final ResourceLocation textureId;
+		
+		public UnderlingDetailsLayer(GeoRenderer<T> entityRendererIn, String underlingName)
 		{
 			super(entityRendererIn);
+			this.textureId = Minestuck.id("textures/entity/underlings/" + underlingName + "_details.png");
 		}
 		
 		@Override
 		public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay)
 		{
-			RenderType layerRenderType = RenderType.armorCutoutNoCull(new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(animatable) + "_details.png"));
+			RenderType layerRenderType = RenderType.armorCutoutNoCull(this.textureId);
 			float color = getContrastModifier(animatable);
 			poseStack.pushPose();
 			
