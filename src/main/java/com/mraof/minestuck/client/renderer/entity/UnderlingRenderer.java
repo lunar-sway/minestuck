@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.model.entity.UnderlingModel;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
@@ -20,6 +19,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.FastColor;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.core.object.Color;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
@@ -38,8 +38,10 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	public UnderlingRenderer(EntityRendererProvider.Context context, String underlingName)
 	{
 		// this renderer does two simple things :
-		super(context, new UnderlingModel<>(underlingName)); // render the entity with the base layer merged with a grist texture
-		this.addRenderLayer(new UnderlingDetailsLayer<>(this, underlingName)); // render a second layer with details (eyes, mouth, etc)
+		// render the entity with the base layer merged with a grist texture
+		super(context, new DefaultedEntityGeoModel<>(Minestuck.id("underlings/" + underlingName), true));
+		// render a second layer with details (eyes, mouth, etc)
+		this.addRenderLayer(new UnderlingDetailsLayer<>(this, underlingName));
 		this.underlingName = underlingName;
 	}
 	

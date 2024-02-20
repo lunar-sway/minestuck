@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.model.entity;
 
+import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
@@ -16,7 +17,7 @@ public abstract class RotatingHeadAnimatedModel<T extends GeoAnimatable> extends
 	{
 		CoreGeoBone head = this.getAnimationProcessor().getBone("head");
 		EntityModelData extraData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-		head.setRotX(extraData.headPitch() * ((float) Math.PI / 180F));
-		head.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180F));
+		head.setRotX(extraData.headPitch() * Mth.DEG_TO_RAD);
+		head.setRotY(extraData.netHeadYaw() * Mth.DEG_TO_RAD);
 	}
 }
