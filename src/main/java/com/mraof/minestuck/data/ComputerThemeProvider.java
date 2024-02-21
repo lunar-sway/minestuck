@@ -3,7 +3,7 @@ package com.mraof.minestuck.data;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
-import com.mraof.minestuck.computer.theme.ComputerThemeManager;
+import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
@@ -67,7 +67,7 @@ public class ComputerThemeProvider implements DataProvider
 	{
 		registerThemes();
 		
-		Path outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(modid).resolve(ComputerThemeManager.PATH_W_SLASH);
+		Path outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(modid).resolve(ComputerThemes.PATH + "/");
 		List<CompletableFuture<?>> futures = new ArrayList<>(computerThemes.size());
 		
 		for(Map.Entry<ResourceLocation, ComputerTheme.Data> entry : computerThemes.entrySet())

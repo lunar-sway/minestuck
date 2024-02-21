@@ -5,7 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
-import com.mraof.minestuck.computer.theme.ComputerThemeManager;
+import com.mraof.minestuck.computer.theme.ComputerThemes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -47,7 +47,7 @@ public class ComputerScreen extends Screen
 		this.font = minecraft.font;
 		this.be = be;
 		this.icons = new ArrayList<>();
-		this.cachedTheme = ComputerThemeManager.instance().lookup(be.getTheme());
+		this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
 		be.gui = this;
 	}
 	
@@ -98,7 +98,7 @@ public class ComputerScreen extends Screen
 	public void updateGui()
 	{
 		if(!this.cachedTheme.id().equals(be.getTheme()))
-			this.cachedTheme = ComputerThemeManager.instance().lookup(be.getTheme());
+			this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
 		if(program!=null) program.onUpdateGui(this);
 	}
 	

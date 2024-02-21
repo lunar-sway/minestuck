@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
-import com.mraof.minestuck.computer.theme.ComputerThemeManager;
+import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ThemeSelectPacket;
@@ -63,7 +63,7 @@ public class ComputerThemeScreen extends Screen
 		super(Component.translatable(TITLE));
 		
 		this.computer = computer;
-		this.selectedTheme = ComputerThemeManager.instance().lookup(computer.getTheme());
+		this.selectedTheme = ComputerThemes.instance().lookup(computer.getTheme());
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public class ComputerThemeScreen extends Screen
 		
 		//gets the full list of themes, and reorders it so the default theme is first
 		themes.clear();
-		ComputerThemeManager.instance().allThemes().stream().sorted(THEME_SORTER).forEach(themes::add);
+		ComputerThemes.instance().allThemes().stream().sorted(THEME_SORTER).forEach(themes::add);
 		
 		this.previousButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 108, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal("<"), button -> prevPage());
 		this.nextButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 133, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal(">"), button -> nextPage());

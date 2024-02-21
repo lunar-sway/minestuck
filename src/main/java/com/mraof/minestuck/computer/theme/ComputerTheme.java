@@ -7,10 +7,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * The combination of theme data and the id name of the theme.
+ */
 public record ComputerTheme(ResourceLocation id, Data data)
 {
 	/**
-	 * This class is used to define json files that will be used to determine what wallpaper and text color appears on in-game computers.
+	 * Represents the json data of a theme, which determine what wallpaper and text color appears on in-game computers.
 	 */
 	public record Data(ResourceLocation texturePath, int textColor)
 	{
@@ -21,7 +24,6 @@ public record ComputerTheme(ResourceLocation id, Data data)
 				).apply(instance, Data::new));
 		
 		public static final Data DEFAULT = new Data(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/default.png"), 0x404040);
-		
 	}
 	
 	public MutableComponent name()

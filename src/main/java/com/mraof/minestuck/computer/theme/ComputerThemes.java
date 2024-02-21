@@ -25,30 +25,32 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Helps acquire json files in assets/minestuck/minestuck/computer_themes/
- * ComputerThemes are data driven resource pack files that determine a computers wallpaper and text color.
+ * This class provides access to all computer themes loaded from resource packs.
+ * This includes theme data such as a computers wallpaper and text color.
+ * These themes are loaded from individual json files found in loaded resource packs, so any changes to computer themes has to happen through a resource pack.
+ * Because this is specifically loaded from resource packs, this class should only be used client-side.
+ * @see com.mraof.minestuck.data.ComputerThemeProvider
  */
 @ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ComputerThemeManager
+public class ComputerThemes
 {
 	public static final String PATH = "minestuck/computer_themes";
-	public static final String PATH_W_SLASH = PATH + "/";
 	
 	private final Map<ResourceLocation, ComputerTheme> themes;
 	private final ComputerTheme.Data defaultThemeData;
 	
 	@Nullable
-	private static ComputerThemeManager INSTANCE;
+	private static ComputerThemes INSTANCE;
 	
-	public ComputerThemeManager(Map<ResourceLocation, ComputerTheme> themes)
+	public ComputerThemes(Map<ResourceLocation, ComputerTheme> themes)
 	{
 		this.themes = themes;
 		defaultThemeData = Optional.ofNullable(themes.get(MSComputerThemes.DEFAULT))
 				.map(ComputerTheme::data).orElse(ComputerTheme.Data.DEFAULT);
 	}
 	
-	public static ComputerThemeManager instance()
+	public static ComputerThemes instance()
 	{
 		return Objects.requireNonNull(INSTANCE, "Computer themes haven't been loaded yet!");
 	}
@@ -91,7 +93,7 @@ public class ComputerThemeManager
 						.ifPresent(data -> computerThemes.put(id, new ComputerTheme(id, data)));
 			}
 			
-			INSTANCE = new ComputerThemeManager(computerThemes.build());
+			INSTANCE = new ComputerThemes(computerThemes.build());
 			LOGGER.info("Loaded {} computer themes", INSTANCE.themes.size());
 		}
 	}
