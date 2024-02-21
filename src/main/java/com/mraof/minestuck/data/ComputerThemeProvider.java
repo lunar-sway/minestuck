@@ -29,12 +29,10 @@ public class ComputerThemeProvider implements DataProvider
 {
 	private final Map<ResourceLocation, ComputerTheme.Data> computerThemes = new HashMap<>();
 	private final PackOutput output;
-	private final String modid;
 	
-	public ComputerThemeProvider(PackOutput output, String modid)
+	public ComputerThemeProvider(PackOutput output)
 	{
 		this.output = output;
-		this.modid = modid;
 	}
 	
 	protected void registerThemes()
@@ -67,7 +65,7 @@ public class ComputerThemeProvider implements DataProvider
 	{
 		registerThemes();
 		
-		Path outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(modid).resolve(ComputerThemes.PATH + "/");
+		Path outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK);
 		List<CompletableFuture<?>> futures = new ArrayList<>(computerThemes.size());
 		
 		for(Map.Entry<ResourceLocation, ComputerTheme.Data> entry : computerThemes.entrySet())
@@ -81,7 +79,7 @@ public class ComputerThemeProvider implements DataProvider
 	
 	private static Path getPath(Path outputPath, ResourceLocation id)
 	{
-		return outputPath.resolve(id.getPath() + ".json");
+		return outputPath.resolve(id.getNamespace() + "/" + ComputerThemes.PATH + "/" + id.getPath() + ".json");
 	}
 	
 	@Override
