@@ -22,7 +22,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Helps acquire json files in assets/minestuck/minestuck/computer_themes/
@@ -45,30 +44,25 @@ public class ComputerThemeManager
 		this.themes = themes;
 	}
 	
-	public static ComputerThemeManager getInstance()
+	public static ComputerThemeManager instance()
 	{
 		return Objects.requireNonNull(INSTANCE, "Computer themes haven't been loaded yet!");
+	}
+	
+	public ComputerTheme lookup(ResourceLocation themeId)
+	{
+		return Objects.requireNonNullElseGet(this.themes.get(themeId), () -> new ComputerTheme(themeId, ComputerTheme.Data.DEFAULT));
+	}
+	
+	public Collection<ComputerTheme> allThemes()
+	{
+		return this.themes.values();
 	}
 	
 	@SubscribeEvent
 	public static void registerLoader(RegisterClientReloadListenersEvent event)
 	{
 		event.registerReloadListener(new Loader());
-	}
-	
-	public ResourceLocation findTexturePath(ResourceLocation themeId)
-	{
-		return Optional.ofNullable(this.themes.get(themeId)).map(ComputerTheme::texturePath).orElse(ComputerTheme.DEFAULT_TEXTURE_PATH);
-	}
-	
-	public int findTextColor(ResourceLocation themeId)
-	{
-		return Optional.ofNullable(this.themes.get(themeId)).map(ComputerTheme::textColor).orElse(ComputerTheme.DEFAULT_TEXT_COLOR);
-	}
-	
-	public Collection<ResourceLocation> allThemes()
-	{
-		return this.themes.keySet();
 	}
 	
 	private static final class Loader extends SimpleJsonResourceReloadListener
@@ -87,9 +81,10 @@ public class ComputerThemeManager
 			ImmutableMap.Builder<ResourceLocation, ComputerTheme> computerThemes = ImmutableMap.builder();
 			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 			{
-				ComputerTheme.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
+				ResourceLocation id = entry.getKey();
+				ComputerTheme.Data.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
 						.resultOrPartial(LOGGER::error)
-						.ifPresent(theme -> computerThemes.put(entry.getKey(), theme));
+						.ifPresent(data -> computerThemes.put(id, new ComputerTheme(id, data)));
 			}
 			
 			INSTANCE = new ComputerThemeManager(computerThemes.build());

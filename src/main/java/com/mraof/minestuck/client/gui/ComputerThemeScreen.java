@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
@@ -42,21 +41,21 @@ public class ComputerThemeScreen extends Screen
 	private static final int ENTRIES_DOWN = 4;
 	private static final int ENTRIES_PER_PAGE = ENTRIES_ACROSS * ENTRIES_DOWN;
 	
-	private static final Comparator<ResourceLocation> THEME_SORTER = Comparator.comparing(themeId -> !themeId.equals(ComputerThemes.DEFAULT));
+	private static final Comparator<ComputerTheme> THEME_SORTER = Comparator.comparing(theme -> !theme.id().equals(ComputerThemes.DEFAULT));
 	
 	private int page = 0;
 	private Button previousButton;
 	private Button nextButton;
 	
 	private final ComputerBlockEntity computer;
-	private ResourceLocation selectedTheme;
+	private ComputerTheme selectedTheme;
 	
 	private int xOffset;
 	private int yOffset;
 	
 	private final List<Button> entryButtons = new ArrayList<>();
 	
-	private final List<ResourceLocation> themes = new ArrayList<>();
+	private final List<ComputerTheme> themes = new ArrayList<>();
 	
 	
 	public ComputerThemeScreen(ComputerBlockEntity computer)
@@ -64,7 +63,7 @@ public class ComputerThemeScreen extends Screen
 		super(Component.translatable(TITLE));
 		
 		this.computer = computer;
-		this.selectedTheme = computer.getTheme();
+		this.selectedTheme = ComputerThemeManager.instance().lookup(computer.getTheme());
 	}
 	
 	@Override
@@ -75,7 +74,7 @@ public class ComputerThemeScreen extends Screen
 		
 		//gets the full list of themes, and reorders it so the default theme is first
 		themes.clear();
-		ComputerThemeManager.getInstance().allThemes().stream().sorted(THEME_SORTER).forEach(themes::add);
+		ComputerThemeManager.instance().allThemes().stream().sorted(THEME_SORTER).forEach(themes::add);
 		
 		this.previousButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 108, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal("<"), button -> prevPage());
 		this.nextButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 133, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal(">"), button -> nextPage());
@@ -96,14 +95,12 @@ public class ComputerThemeScreen extends Screen
 		
 		for(int i = 0; i < themes.size(); i++)
 		{
-			ResourceLocation themeId = themes.get(i);
+			ComputerTheme theme = themes.get(i);
 			int yPositionOffset = 18 * ((i / ENTRIES_ACROSS) % ENTRIES_DOWN);
 			int xPositionOffset = 76 * (i % ENTRIES_ACROSS);
 			
-			Component buttonComponent = Component.translatable(ComputerTheme.translationKeyFromId(themeId));
-			
-			ExtendedButton entryButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 5 + xPositionOffset, yOffset + SCREEN_OFFSET_Y + 30 + yPositionOffset, 72, 14, buttonComponent,
-					button -> selectedTheme = themeId);
+			ExtendedButton entryButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 5 + xPositionOffset, yOffset + SCREEN_OFFSET_Y + 30 + yPositionOffset, 72, 14, theme.name(),
+					button -> selectedTheme = theme);
 			entryButtons.add(addRenderableWidget(entryButton));
 		}
 		
@@ -119,11 +116,11 @@ public class ComputerThemeScreen extends Screen
 		
 		//TODO theme texture keeps getting placed on top
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(ComputerThemeManager.getInstance().findTexturePath(selectedTheme), xOffset + SCREEN_OFFSET_X, yOffset + SCREEN_OFFSET_Y, 0, 0, COMPUTER_SCREEN_WIDTH, COMPUTER_SCREEN_HEIGHT);
+		guiGraphics.blit(selectedTheme.data().texturePath(), xOffset + SCREEN_OFFSET_X, yOffset + SCREEN_OFFSET_Y, 0, 0, COMPUTER_SCREEN_WIDTH, COMPUTER_SCREEN_HEIGHT);
 		guiGraphics.blit(ComputerScreen.guiMain, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		guiGraphics.drawString(font, Component.translatable(SELECTED_THEME), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 8, ComputerThemeManager.getInstance().findTextColor(selectedTheme), false);
-		guiGraphics.drawString(font, Component.translatable(ComputerTheme.translationKeyFromId(selectedTheme)), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 18, ComputerThemeManager.getInstance().findTextColor(selectedTheme), false);
+		guiGraphics.drawString(font, Component.translatable(SELECTED_THEME), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 8, selectedTheme.data().textColor(), false);
+		guiGraphics.drawString(font, selectedTheme.name(), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 18, selectedTheme.data().textColor(), false);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
@@ -174,9 +171,9 @@ public class ComputerThemeScreen extends Screen
 	
 	private void finish()
 	{
-		if(!selectedTheme.equals(computer.getTheme()))
+		if(!selectedTheme.id().equals(computer.getTheme()))
 		{
-			MSPacketHandler.sendToServer(ThemeSelectPacket.create(computer, selectedTheme));
+			MSPacketHandler.sendToServer(ThemeSelectPacket.create(computer, selectedTheme.id()));
 		}
 		
 		onClose();

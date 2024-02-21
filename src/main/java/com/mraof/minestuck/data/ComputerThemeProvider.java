@@ -27,7 +27,7 @@ import java.util.concurrent.CompletableFuture;
 @MethodsReturnNonnullByDefault
 public class ComputerThemeProvider implements DataProvider
 {
-	private final Map<ResourceLocation, ComputerTheme> computerThemes = new HashMap<>();
+	private final Map<ResourceLocation, ComputerTheme.Data> computerThemes = new HashMap<>();
 	private final PackOutput output;
 	private final String modid;
 	
@@ -39,7 +39,7 @@ public class ComputerThemeProvider implements DataProvider
 	
 	protected void registerThemes()
 	{
-		add(ComputerThemes.DEFAULT, ComputerTheme.DEFAULT_TEXT_COLOR);
+		add(ComputerThemes.DEFAULT, ComputerTheme.Data.DEFAULT_TEXT_COLOR);
 		add(ComputerThemes.PESTERCHUM, 0x404040);
 		add(ComputerThemes.TROLLIAN, 0xFF0000);
 		add(ComputerThemes.CROCKER, 0x000000);
@@ -54,12 +54,12 @@ public class ComputerThemeProvider implements DataProvider
 	protected void add(ResourceLocation id, int textColor)
 	{
 		ResourceLocation textureLocation = id.withPath(name -> "textures/gui/theme/" + name + ".png");
-		add(id, new ComputerTheme(textureLocation, textColor));
+		add(id, new ComputerTheme.Data(textureLocation, textColor));
 	}
 	
-	protected void add(ResourceLocation id, ComputerTheme computerTheme)
+	protected void add(ResourceLocation id, ComputerTheme.Data data)
 	{
-		computerThemes.put(id, computerTheme);
+		computerThemes.put(id, data);
 	}
 	
 	@Override
@@ -70,10 +70,10 @@ public class ComputerThemeProvider implements DataProvider
 		Path outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(modid).resolve(ComputerThemeManager.PATH_W_SLASH);
 		List<CompletableFuture<?>> futures = new ArrayList<>(computerThemes.size());
 		
-		for(Map.Entry<ResourceLocation, ComputerTheme> entry : computerThemes.entrySet())
+		for(Map.Entry<ResourceLocation, ComputerTheme.Data> entry : computerThemes.entrySet())
 		{
 			Path themePath = getPath(outputPath, entry.getKey());
-			JsonElement encodedTheme = ComputerTheme.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			JsonElement encodedTheme = ComputerTheme.Data.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
 			futures.add(DataProvider.saveStable(cache, encodedTheme, themePath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
