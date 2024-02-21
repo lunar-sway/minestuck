@@ -8,28 +8,16 @@ import net.minecraft.resources.ResourceLocation;
  */
 public enum ComputerThemes
 {
-	DEFAULT		(ComputerTheme.DEFAULT_TEXT_COLOR),
-	PESTERCHUM	(0x404040),
-	TROLLIAN	(0xFF0000),
-	CROCKER		(0x000000),
-	TYPHEUS		(0x6DAFAD),
-	CETUS		(0x9081EE),
-	HEPHAESTUS	(0xFFFFFF),
-	ECHIDNA		(0x005DFF),
-	JOY			(0x282828),
-	SBURB_95	(0x282828);
-	
-	private final int textColor;
-	
-	ComputerThemes(int textColor)
-	{
-		this.textColor = textColor;
-	}
-	
-	public int getTextColor()
-	{
-		return this.textColor;
-	}
+	DEFAULT		(),
+	PESTERCHUM	(),
+	TROLLIAN	(),
+	CROCKER		(),
+	TYPHEUS		(),
+	CETUS		(),
+	HEPHAESTUS	(),
+	ECHIDNA		(),
+	JOY			(),
+	SBURB_95	();
 	
 	/**
 	 * Used for short handed references

@@ -40,10 +40,16 @@ public class ComputerThemeProvider implements DataProvider
 	
 	protected void registerThemes()
 	{
-		for(ComputerThemes theme : ComputerThemes.values())
-		{
-			add(theme, theme.getTextColor());
-		}
+		add(ComputerThemes.DEFAULT, ComputerTheme.DEFAULT_TEXT_COLOR);
+		add(ComputerThemes.PESTERCHUM, 0x404040);
+		add(ComputerThemes.TROLLIAN, 0xFF0000);
+		add(ComputerThemes.CROCKER, 0x000000);
+		add(ComputerThemes.TYPHEUS, 0x6DAFAD);
+		add(ComputerThemes.CETUS, 0x9081EE);
+		add(ComputerThemes.HEPHAESTUS, 0xFFFFFF);
+		add(ComputerThemes.ECHIDNA, 0x005DFF);
+		add(ComputerThemes.JOY, 0x282828);
+		add(ComputerThemes.SBURB_95, 0x282828);
 	}
 	
 	protected void add(ComputerThemes theme, int textColor)
