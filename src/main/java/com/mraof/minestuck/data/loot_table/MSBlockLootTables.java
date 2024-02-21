@@ -301,6 +301,9 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CRACKED_BLACK_STONE_BRICKS.get());
 		dropSelf(BLACK_SAND.get());
 		
+		dropSelf(IGNEOUS_STONE.get());
+		dropSelf(PUMICE_STONE.get());
+		
 		dropSelf(DECREPIT_STONE_BRICKS.get());
 		dropSelf(DECREPIT_STONE_BRICK_STAIRS.get());
 		add(DECREPIT_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
@@ -576,6 +579,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(STRIPPED_SHADEWOOD_LOG.get());
 		dropSelf(STRIPPED_SCARRED_SHADEWOOD_LOG.get());
 		dropSelf(STRIPPED_ROTTED_SHADEWOOD_LOG.get());
+		dropSelf(CINDERED_LOG.get());
 		dropSelf(SHADEWOOD.get());
 		dropSelf(SCARRED_SHADEWOOD.get());
 		dropSelf(ROTTED_SHADEWOOD.get());
@@ -589,6 +593,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(FLOWERY_VINE_WOOD.get());
 		dropSelf(DEAD_WOOD.get());
 		dropSelf(PETRIFIED_WOOD.get());
+		dropSelf(CINDERED_WOOD.get());
 		
 		dropSelf(GLOWING_PLANKS.get());
 		dropSelf(GLOWING_STAIRS.get());
@@ -854,8 +859,16 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(GLOWING_MUSHROOM.get());
 		add(DESERT_BUSH.get(), this::desertBushDrop);
 		dropSelf(BLOOMING_CACTUS.get());
+		add(SANDY_GRASS.get(), noDrop());
+		add(TALL_SANDY_GRASS.get(), noDrop());
+		add(DEAD_FOLIAGE.get(), noDrop());
+		add(TALL_DEAD_BUSH.get(), noDrop());
 		dropSelf(PETRIFIED_GRASS.get());
 		dropSelf(PETRIFIED_POPPY.get());
+		dropSelf(IGNEOUS_SPIKE.get());
+		add(SINGED_GRASS.get(), noDrop());
+		add(SINGED_FOLIAGE.get(), noDrop());
+		dropSelf(SULFUR_BUBBLE.get());
 		dropSelf(GLOWING_MUSHROOM_VINES.get());
 		dropSelf(STRAWBERRY.get());
 		add(ATTACHED_STRAWBERRY_STEM.get(), (stemBlock) -> createAttachedStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));

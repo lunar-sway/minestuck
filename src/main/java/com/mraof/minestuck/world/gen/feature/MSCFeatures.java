@@ -102,6 +102,7 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREE_STUMP = key("tree_stump");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_TREE = key("petrified_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_TREE = key("dead_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CINDERED_TREE = key("cindered_tree");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FOREST_LAND_TREES = key("forest_land_trees");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TAIGA_LAND_TREES = key("taiga_land_trees");
@@ -115,8 +116,13 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_END_GRASS_PATCH = key("tall_end_grass_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_GRASS_PATCH = key("petrified_grass_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_POPPY_PATCH = key("petrified_poppy_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SINGED_GRASS_PATCH = key("singed_grass_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> IGNEOUS_SPIKE_PATCH = key("igneous_spike_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOMING_CACTUS_PATCH = key("blooming_cactus_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DESERT_BUSH_PATCH = key("desert_bush_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SANDY_GRASS_PATCH = key("sandy_grass_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_SANDY_GRASS_PATCH = key("tall_sandy_grass_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_DEAD_BUSH_PATCH = key("tall_dead_bush_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MOSS_CARPET_PATCH = key("moss_carpet_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> AZALEA_PATCH = key("azalea_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CRIMSON_FUNGUS_PATCH = key("crimson_fungus_patch");

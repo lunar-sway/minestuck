@@ -132,6 +132,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_TREE = key("tree/petrified_sparse");
 	public static final ResourceKey<PlacedFeature> DEAD_TREE = key("tree/dead");
 	public static final ResourceKey<PlacedFeature> EXTRA_DEAD_TREE = key("tree/dead_extra");
+	public static final ResourceKey<PlacedFeature> CINDERED_TREE = key("tree/cindered");
 	
 	public static final ResourceKey<PlacedFeature> FOREST_LAND_TREES = key("tree/forest_land");
 	public static final ResourceKey<PlacedFeature> DENSE_FOREST_LAND_TREES = key("tree/forest_land_dense");
@@ -155,7 +156,12 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_GRASS_PATCH = key("sparse_petrified_grass_patch");
 	public static final ResourceKey<PlacedFeature> PETRIFIED_POPPY_PATCH = key("petrified_poppy_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_POPPY_PATCH = key("sparse_petrified_poppy_patch");
+	public static final ResourceKey<PlacedFeature> SINGED_GRASS_PATCH = key("singed_grass_patch");
+	public static final ResourceKey<PlacedFeature> IGNEOUS_SPIKE_PATCH = key("igneous_spike_patch");
 	public static final ResourceKey<PlacedFeature> DESERT_BUSH_PATCH = key("desert_bush_patch");
+	public static final ResourceKey<PlacedFeature> SANDY_GRASS_PATCH = key("sandy_grass_patch");
+	public static final ResourceKey<PlacedFeature> TALL_SANDY_GRASS_PATCH = key("tall_sandy_grass_patch");
+	public static final ResourceKey<PlacedFeature> TALL_DEAD_BUSH_PATCH = key("tall_dead_bush_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_DESERT_BUSH_PATCH = key("sparse_desert_bush_patch");
 	public static final ResourceKey<PlacedFeature> MOSS_CARPET_PATCH = key("moss_carpet_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_MOSS_CARPET_PATCH = key("sparse_moss_carpet_patch");

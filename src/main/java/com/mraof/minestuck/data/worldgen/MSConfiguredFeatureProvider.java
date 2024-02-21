@@ -175,6 +175,8 @@ public final class MSConfiguredFeatureProvider
 				new BlockStateConfiguration(MSBlocks.PETRIFIED_LOG.get().defaultBlockState())));
 		context.register(DEAD_TREE, new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 				new BlockStateConfiguration(MSBlocks.DEAD_LOG.get().defaultBlockState())));
+		context.register(CINDERED_TREE, new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
+				new BlockStateConfiguration(MSBlocks.CINDERED_LOG.get().defaultBlockState())));
 		
 		context.register(FOREST_LAND_TREES, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
 				new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(placedFeatures.getOrThrow(TreePlacements.BIRCH_CHECKED), 0.2F), new WeightedPlacedFeature(placedFeatures.getOrThrow(TreePlacements.FANCY_OAK_CHECKED), 0.1F)), placedFeatures.getOrThrow(TreePlacements.OAK_CHECKED))));
@@ -199,10 +201,20 @@ public final class MSConfiguredFeatureProvider
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.PETRIFIED_GRASS.get().defaultBlockState()))))));
 		context.register(PETRIFIED_POPPY_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.PETRIFIED_POPPY.get().defaultBlockState()))))));
+		context.register(SINGED_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.SINGED_GRASS.get().defaultBlockState()))))));
+		context.register(IGNEOUS_SPIKE_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.IGNEOUS_SPIKE.get().defaultBlockState()))))));
 		context.register(BLOOMING_CACTUS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.BLOOMING_CACTUS.get()))))));
 		context.register(DESERT_BUSH_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.DESERT_BUSH.get()))))));
+		context.register(SANDY_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.SANDY_GRASS.get().defaultBlockState()))))));
+		context.register(TALL_SANDY_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TALL_SANDY_GRASS.get().defaultBlockState())))));
+		context.register(TALL_DEAD_BUSH_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TALL_DEAD_BUSH.get().defaultBlockState())))));
 		context.register(MOSS_CARPET_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MOSS_CARPET.defaultBlockState())), BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), Blocks.GRASS_BLOCK)))));
 		context.register(AZALEA_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
