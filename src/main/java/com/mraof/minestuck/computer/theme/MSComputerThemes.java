@@ -19,4 +19,24 @@ public final class MSComputerThemes
 			ECHIDNA = new ResourceLocation(Minestuck.MOD_ID, "echidna"),
 			JOY = new ResourceLocation(Minestuck.MOD_ID, "joy"),
 			SBURB_95 = new ResourceLocation(Minestuck.MOD_ID, "sburb_95");
+	
+	/**
+	 * Used for backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
+	 */
+	public static ResourceLocation getThemeFromOldOrdinal(int ordinal)
+	{
+		return switch(ordinal)
+		{
+			case 1 -> PESTERCHUM;
+			case 2 -> TROLLIAN;
+			case 3 -> CROCKER;
+			case 4 -> TYPHEUS;
+			case 5 -> CETUS;
+			case 6 -> HEPHAESTUS;
+			case 7 -> ECHIDNA;
+			case 8 -> JOY;
+			case 9 -> SBURB_95;
+			default -> DEFAULT;
+		};
+	}
 }

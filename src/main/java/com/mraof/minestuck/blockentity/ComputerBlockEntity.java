@@ -14,6 +14,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -34,6 +35,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map.Entry;
@@ -41,6 +43,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 {
 	//TODO The implementation of this class need a serious rewrite
@@ -97,6 +101,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		programData = nbt.getCompound("programData");
 		if(nbt.contains("theme", Tag.TAG_STRING))
 			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(nbt.getString("theme")), computerTheme);
+		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
+		else if(nbt.contains("theme", Tag.TAG_INT))
+			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(nbt.getInt("theme"));
 		
 		hieroglyphsStored = MSNBTUtil.readBlockSet(nbt, "hieroglyphsStored");
 		if(nbt.contains("hasParadoxInfoStored"))
