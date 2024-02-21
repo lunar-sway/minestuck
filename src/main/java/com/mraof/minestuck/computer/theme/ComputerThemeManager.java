@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +28,12 @@ import java.util.Optional;
  * Helps acquire json files in assets/minestuck/minestuck/computer_themes/
  * ComputerThemes are data driven resource pack files that determine a computers wallpaper and text color.
  */
+@ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ComputerThemeManager extends SimpleJsonResourceReloadListener implements PreparableReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ComputerTheme.class, new ComputerTheme.Serializer()).create();
+	private static final Gson GSON = new GsonBuilder().create();
 	
 	public static final String PATH = "minestuck/computer_themes";
 	public static final String PATH_W_SLASH = PATH + "/";
@@ -61,14 +64,9 @@ public class ComputerThemeManager extends SimpleJsonResourceReloadListener imple
 		ImmutableList.Builder<ComputerTheme> computerThemes = ImmutableList.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
-			try
-			{
-				ComputerTheme computerTheme = GSON.fromJson(entry.getValue(), ComputerTheme.class);
-				computerThemes.add(computerTheme);
-			} catch(Exception e)
-			{
-				LOGGER.error("Couldn't parse computer theme {}", entry.getKey(), e);
-			}
+			ComputerTheme.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
+					.resultOrPartial(LOGGER::error)
+					.ifPresent(computerThemes::add);
 		}
 		
 		this.themes = computerThemes.build();
@@ -93,10 +91,5 @@ public class ComputerThemeManager extends SimpleJsonResourceReloadListener imple
 		List<String> themeNames = new ArrayList<>();
 		themes.forEach(computerTheme -> themeNames.add(computerTheme.themeName()));
 		return themeNames;
-	}
-	
-	public static JsonElement parseTheme(ComputerTheme theme)
-	{
-		return GSON.toJsonTree(theme);
 	}
 }

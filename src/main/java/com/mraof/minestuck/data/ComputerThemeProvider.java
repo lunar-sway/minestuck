@@ -1,5 +1,7 @@
 package com.mraof.minestuck.data;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemeManager;
@@ -71,7 +73,8 @@ public class ComputerThemeProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, ComputerTheme> entry : computerThemes.entrySet())
 		{
 			Path themePath = getPath(outputPath, entry.getKey());
-			futures.add(DataProvider.saveStable(cache, ComputerThemeManager.parseTheme(entry.getValue()), themePath));
+			JsonElement encodedTheme = ComputerTheme.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			futures.add(DataProvider.saveStable(cache, encodedTheme, themePath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}

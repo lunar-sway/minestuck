@@ -1,47 +1,22 @@
 package com.mraof.minestuck.computer.theme;
 
-import com.google.gson.*;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import org.slf4j.Logger;
-
-import java.lang.reflect.Type;
 
 /**
  * This class is used to define json files that will be used to determine what wallpaper and text color appears on in-game computers.
  */
 public record ComputerTheme(ResourceLocation texturePath, int textColor, String themeName)
 {
-	private static final Logger LOGGER = LogUtils.getLogger();
+	public static final Codec<ComputerTheme> CODEC = RecordCodecBuilder.create(instance ->
+			instance.group(
+					ResourceLocation.CODEC.fieldOf("texture_location").forGetter(ComputerTheme::texturePath),
+					Codec.INT.fieldOf("text_color").forGetter(ComputerTheme::textColor),
+					Codec.STRING.fieldOf("theme_name").forGetter(ComputerTheme::themeName)
+			).apply(instance, ComputerTheme::new));
 	
 	public static final int DEFAULT_TEXT_COLOR = 0x404040;
 	public static final ResourceLocation DEFAULT_TEXTURE_PATH = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/default.png");
-	
-	
-	public static class Serializer implements JsonDeserializer<ComputerTheme>, JsonSerializer<ComputerTheme>
-	{
-		@Override
-		public ComputerTheme deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException
-		{
-			JsonObject json = GsonHelper.convertToJsonObject(jsonElement, "entry");
-			ResourceLocation texturePath = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("texture_location")).getOrThrow(false, LOGGER::error);
-			int textColor = Codec.INT.parse(JsonOps.INSTANCE, json.get("text_color")).getOrThrow(false, LOGGER::error);
-			String themeName = Codec.STRING.parse(JsonOps.INSTANCE, json.get("theme_name")).getOrThrow(false, LOGGER::error);
-			return new ComputerTheme(texturePath, textColor, themeName);
-		}
-		
-		@Override
-		public JsonElement serialize(ComputerTheme themeData, Type type, JsonSerializationContext context)
-		{
-			JsonObject json = new JsonObject();
-			json.add("texture_location", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, themeData.texturePath).getOrThrow(false, LOGGER::error));
-			json.add("text_color", Codec.INT.encodeStart(JsonOps.INSTANCE, themeData.textColor).getOrThrow(false, LOGGER::error));
-			json.add("theme_name", Codec.STRING.encodeStart(JsonOps.INSTANCE, themeData.themeName).getOrThrow(false, LOGGER::error));
-			return json;
-		}
-	}
 }
