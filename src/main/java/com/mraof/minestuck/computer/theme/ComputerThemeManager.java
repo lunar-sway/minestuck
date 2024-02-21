@@ -22,6 +22,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Helps acquire json files in assets/minestuck/minestuck/computer_themes/
@@ -35,6 +36,7 @@ public class ComputerThemeManager
 	public static final String PATH_W_SLASH = PATH + "/";
 	
 	private final Map<ResourceLocation, ComputerTheme> themes;
+	private final ComputerTheme.Data defaultThemeData;
 	
 	@Nullable
 	private static ComputerThemeManager INSTANCE;
@@ -42,6 +44,8 @@ public class ComputerThemeManager
 	public ComputerThemeManager(Map<ResourceLocation, ComputerTheme> themes)
 	{
 		this.themes = themes;
+		defaultThemeData = Optional.ofNullable(themes.get(ComputerThemes.DEFAULT))
+				.map(ComputerTheme::data).orElse(ComputerTheme.Data.DEFAULT);
 	}
 	
 	public static ComputerThemeManager instance()
@@ -51,7 +55,7 @@ public class ComputerThemeManager
 	
 	public ComputerTheme lookup(ResourceLocation themeId)
 	{
-		return Objects.requireNonNullElseGet(this.themes.get(themeId), () -> new ComputerTheme(themeId, ComputerTheme.Data.DEFAULT));
+		return Objects.requireNonNullElseGet(this.themes.get(themeId), () -> new ComputerTheme(themeId, defaultThemeData));
 	}
 	
 	public Collection<ComputerTheme> allThemes()

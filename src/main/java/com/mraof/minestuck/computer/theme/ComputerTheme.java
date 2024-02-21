@@ -20,9 +20,7 @@ public record ComputerTheme(ResourceLocation id, Data data)
 						Codec.INT.fieldOf("text_color").forGetter(Data::textColor)
 				).apply(instance, Data::new));
 		
-		public static final int DEFAULT_TEXT_COLOR = 0x404040;
-		public static final ResourceLocation DEFAULT_TEXTURE_PATH = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/default.png");
-		public static final Data DEFAULT = new Data(DEFAULT_TEXTURE_PATH, DEFAULT_TEXT_COLOR);
+		public static final Data DEFAULT = new Data(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/default.png"), 0x404040);
 		
 	}
 	

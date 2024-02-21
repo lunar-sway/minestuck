@@ -39,7 +39,7 @@ public class ComputerThemeProvider implements DataProvider
 	
 	protected void registerThemes()
 	{
-		add(ComputerThemes.DEFAULT, ComputerTheme.Data.DEFAULT_TEXT_COLOR);
+		add(ComputerThemes.DEFAULT, ComputerTheme.Data.DEFAULT);
 		add(ComputerThemes.PESTERCHUM, 0x404040);
 		add(ComputerThemes.TROLLIAN, 0xFF0000);
 		add(ComputerThemes.CROCKER, 0x000000);
