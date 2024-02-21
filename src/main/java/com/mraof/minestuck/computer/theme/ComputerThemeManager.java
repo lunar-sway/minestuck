@@ -7,7 +7,6 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -18,11 +17,9 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Helps acquire json files in assets/minestuck/minestuck/computer_themes/
@@ -30,47 +27,30 @@ import java.util.Optional;
  */
 @ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ComputerThemeManager extends SimpleJsonResourceReloadListener implements PreparableReloadListener
+public class ComputerThemeManager
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().create();
-	
 	public static final String PATH = "minestuck/computer_themes";
 	public static final String PATH_W_SLASH = PATH + "/";
 	
-	private List<ComputerTheme> themes;
+	private final List<ComputerTheme> themes;
 	
-	public ComputerThemeManager()
-	{
-		super(GSON, PATH);
-	}
-	
+	@Nullable
 	private static ComputerThemeManager INSTANCE;
+	
+	public ComputerThemeManager(List<ComputerTheme> themes)
+	{
+		this.themes = themes;
+	}
 	
 	public static ComputerThemeManager getInstance()
 	{
-		return INSTANCE;
+		return Objects.requireNonNull(INSTANCE, "Computer themes haven't been loaded yet!");
 	}
 	
 	@SubscribeEvent
-	public static void initUploader(RegisterClientReloadListenersEvent event)
+	public static void registerLoader(RegisterClientReloadListenersEvent event)
 	{
-		event.registerReloadListener(INSTANCE = new ComputerThemeManager());
-	}
-	
-	@Override
-	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
-	{
-		ImmutableList.Builder<ComputerTheme> computerThemes = ImmutableList.builder();
-		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
-		{
-			ComputerTheme.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
-					.resultOrPartial(LOGGER::error)
-					.ifPresent(computerThemes::add);
-		}
-		
-		this.themes = computerThemes.build();
-		LOGGER.info("Loaded {} computer themes", this.themes.size());
+		event.registerReloadListener(new Loader());
 	}
 	
 	public ResourceLocation findTexturePath(String name)
@@ -91,5 +71,31 @@ public class ComputerThemeManager extends SimpleJsonResourceReloadListener imple
 		List<String> themeNames = new ArrayList<>();
 		themes.forEach(computerTheme -> themeNames.add(computerTheme.themeName()));
 		return themeNames;
+	}
+	
+	private static final class Loader extends SimpleJsonResourceReloadListener
+	{
+		private static final Logger LOGGER = LogManager.getLogger();
+		private static final Gson GSON = new GsonBuilder().create();
+		
+		Loader()
+		{
+			super(GSON, PATH);
+		}
+		
+		@Override
+		protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
+		{
+			ImmutableList.Builder<ComputerTheme> computerThemes = ImmutableList.builder();
+			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
+			{
+				ComputerTheme.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
+						.resultOrPartial(LOGGER::error)
+						.ifPresent(computerThemes::add);
+			}
+			
+			INSTANCE = new ComputerThemeManager(computerThemes.build());
+			LOGGER.info("Loaded {} computer themes", INSTANCE.themes.size());
+		}
 	}
 }
