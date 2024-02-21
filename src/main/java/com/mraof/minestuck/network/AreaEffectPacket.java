@@ -10,7 +10,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AreaEffectPacket implements PlayToServerPacket
+public class AreaEffectPacket implements MSPacket.PlayToServer
 {
 	private final MobEffect effect;
 	private final int effectAmp;

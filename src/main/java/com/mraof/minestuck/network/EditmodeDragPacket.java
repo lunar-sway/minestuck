@@ -72,7 +72,7 @@ public final class EditmodeDragPacket
 	}
 	
 	
-	public record Fill(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements PlayToServerPacket
+	public record Fill(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements MSPacket.PlayToServer
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)
@@ -154,7 +154,7 @@ public final class EditmodeDragPacket
 		}
 	}
 	
-	public record Destroy(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements PlayToServerPacket
+	public record Destroy(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements MSPacket.PlayToServer
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)
@@ -226,7 +226,7 @@ public final class EditmodeDragPacket
 		}
 	}
 	
-	public record Cursor(boolean isDown, BlockPos positionStart, BlockPos positionEnd) implements PlayToServerPacket
+	public record Cursor(boolean isDown, BlockPos positionStart, BlockPos positionEnd) implements MSPacket.PlayToServer
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)
@@ -259,7 +259,7 @@ public final class EditmodeDragPacket
 		}
 	}
 	
-	public record Reset() implements PlayToServerPacket
+	public record Reset() implements MSPacket.PlayToServer
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)

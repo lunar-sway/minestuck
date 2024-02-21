@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.world.item.ItemStack;
 
-public class ClientEditPacket implements PlayToServerPacket
+public class ClientEditPacket implements MSPacket.PlayToServer
 {
 	private final int user;
 	private final int target;

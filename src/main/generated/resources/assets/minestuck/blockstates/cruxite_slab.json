@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/cruxite_block_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/cruxite_block"
+    },
+    "type=top": {
+      "model": "minestuck:block/cruxite_block_slab_top"
+    }
+  }
+}

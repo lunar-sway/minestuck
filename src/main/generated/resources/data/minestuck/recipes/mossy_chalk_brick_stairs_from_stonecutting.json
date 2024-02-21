@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "minestuck:mossy_chalk_bricks"
+  },
+  "result": "minestuck:mossy_chalk_brick_stairs"
+}

@@ -2,13 +2,20 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.block.AspectTreeBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class MSCreativeTabs
 {
 	public static final String MAIN_KEY = "minestuck.item_group.main";
@@ -200,17 +207,49 @@ public final class MSCreativeTabs
 		output.accept(MSItems.LIGHT_GRAY_CHESS_DIRT.get());
 		output.accept(MSItems.SKAIA_PORTAL.get());
 		output.accept(MSItems.BLACK_CHESS_BRICKS.get());
+		output.accept(MSItems.BLACK_CHESS_BRICK_WALL.get());
 		output.accept(MSItems.DARK_GRAY_CHESS_BRICKS.get());
+		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_WALL.get());
+		
 		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICKS.get());
+		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_WALL.get());
+		
 		output.accept(MSItems.WHITE_CHESS_BRICKS.get());
+		output.accept(MSItems.WHITE_CHESS_BRICK_WALL.get());
+		
 		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH.get());
+		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_STAIRS.get());
+		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_SLAB.get());
+		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_WALL.get());
+		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_BUTTON.get());
+		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH.get());
+		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
+		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB.get());
+		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
+		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
+		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH.get());
+		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
+		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB.get());
+		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
+		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
+		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH.get());
+		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_STAIRS.get());
+		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_SLAB.get());
+		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_WALL.get());
+		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_BUTTON.get());
+		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.BLACK_CHESS_BRICK_TRIM.get());
 		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_TRIM.get());
 		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_TRIM.get());
 		output.accept(MSItems.WHITE_CHESS_BRICK_TRIM.get());
+		
 		output.accept(MSItems.CHECKERED_STAINED_GLASS.get());
 		output.accept(MSItems.BLACK_CROWN_STAINED_GLASS.get());
 		output.accept(MSItems.BLACK_PAWN_STAINED_GLASS.get());
@@ -218,16 +257,46 @@ public final class MSCreativeTabs
 		output.accept(MSItems.WHITE_PAWN_STAINED_GLASS.get());
 		
 		output.accept(MSItems.CRUXITE_BLOCK.get());
+		output.accept(MSItems.CRUXITE_STAIRS.get());
+		output.accept(MSItems.CRUXITE_SLAB.get());
+		output.accept(MSItems.CRUXITE_WALL.get());
+		output.accept(MSItems.CRUXITE_BUTTON.get());
+		output.accept(MSItems.CRUXITE_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.URANIUM_BLOCK.get());
+		output.accept(MSItems.URANIUM_STAIRS.get());
+		output.accept(MSItems.URANIUM_SLAB.get());
+		output.accept(MSItems.URANIUM_WALL.get());
+		output.accept(MSItems.URANIUM_BUTTON.get());
+		output.accept(MSItems.URANIUM_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.GENERIC_OBJECT.get());
 		
 		output.accept(MSItems.GREEN_STONE.get());
+		output.accept(MSItems.GREEN_STONE_WALL.get());
+		output.accept(MSItems.GREEN_STONE_BUTTON.get());
+		output.accept(MSItems.GREEN_STONE_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.GREEN_STONE_BRICKS.get());
+		output.accept(MSItems.GREEN_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.GREEN_STONE_COLUMN.get());
 		output.accept(MSItems.POLISHED_GREEN_STONE.get());
+		output.accept(MSItems.POLISHED_GREEN_STONE_STAIRS.get());
+		output.accept(MSItems.POLISHED_GREEN_STONE_SLAB.get());
+		output.accept(MSItems.POLISHED_GREEN_STONE_WALL.get());
 		output.accept(MSItems.CHISELED_GREEN_STONE_BRICKS.get());
+		
 		output.accept(MSItems.HORIZONTAL_GREEN_STONE_BRICKS.get());
+		output.accept(MSItems.HORIZONTAL_GREEN_STONE_BRICK_STAIRS.get());
+		output.accept(MSItems.HORIZONTAL_GREEN_STONE_BRICK_SLAB.get());
+		output.accept(MSItems.HORIZONTAL_GREEN_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.VERTICAL_GREEN_STONE_BRICKS.get());
+		output.accept(MSItems.VERTICAL_GREEN_STONE_BRICK_STAIRS.get());
+		output.accept(MSItems.VERTICAL_GREEN_STONE_BRICK_SLAB.get());
+		output.accept(MSItems.VERTICAL_GREEN_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.GREEN_STONE_BRICK_EMBEDDED_LADDER.get());
 		output.accept(MSItems.GREEN_STONE_BRICK_TRIM.get());
 		output.accept(MSItems.GREEN_STONE_BRICK_FROG.get());
@@ -315,6 +384,198 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CASSETTE_PLAYER.get());
 		output.accept(MSItems.GLOWYSTONE_DUST.get());
 		output.accept(MSItems.MIRROR.get());
+		
+		//DERIVATIVE BLOCKS
+		output.accept(MSItems.PERFECTLY_GENERIC_STAIRS.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_SLAB.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_WALL.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_FENCE.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_FENCE_GATE.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_BUTTON.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_PRESSURE_PLATE.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_DOOR.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_TRAPDOOR.get());
+		
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.HEART_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.MIND_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.TIME_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_LADDER.get());
+		
+		output.accept(AspectTreeBlocks.VOID_ASPECT_LOG.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_PLANKS.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_SAPLING.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_LEAVES.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_STAIRS.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_SLAB.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_PRESSURE_PLATE.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_FENCE.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_FENCE_GATE.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_DOOR.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_TRAPDOOR.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_BOOKSHELF.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_LADDER.get());
+		
 	}
 	
 	private static void buildLandsTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output)
@@ -341,7 +602,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BUG_NET.get());
 		output.accept(MSItems.FROG.get());
 		// FROG TYPES
-		for (int i : new int[]{1,2,5,6}) {
+		for(int i : new int[]{1, 2, 5, 6})
+		{
 			ItemStack item = new ItemStack(MSItems.FROG.get());
 			item.getOrCreateTag().putInt("Type", i);
 			output.accept(item);
@@ -396,86 +658,265 @@ public final class MSCreativeTabs
 		
 		output.accept(MSItems.BLUE_DIRT.get());
 		output.accept(MSItems.THOUGHT_DIRT.get());
+		
 		output.accept(MSItems.COARSE_STONE.get());
+		output.accept(MSItems.COARSE_STONE_WALL.get());
+		output.accept(MSItems.COARSE_STONE_BUTTON.get());
+		output.accept(MSItems.COARSE_STONE_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.CHISELED_COARSE_STONE.get());
+		
 		output.accept(MSItems.COARSE_STONE_BRICKS.get());
+		output.accept(MSItems.COARSE_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.COARSE_STONE_COLUMN.get());
 		output.accept(MSItems.CHISELED_COARSE_STONE_BRICKS.get());
 		output.accept(MSItems.CRACKED_COARSE_STONE_BRICKS.get());
 		output.accept(MSItems.MOSSY_COARSE_STONE_BRICKS.get());
+		
 		output.accept(MSItems.SHADE_STONE.get());
+		output.accept(MSItems.SHADE_WALL.get());
+		output.accept(MSItems.SHADE_BUTTON.get());
+		output.accept(MSItems.SHADE_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.SMOOTH_SHADE_STONE.get());
+		output.accept(MSItems.SMOOTH_SHADE_STONE_STAIRS.get());
+		output.accept(MSItems.SMOOTH_SHADE_STONE_SLAB.get());
+		output.accept(MSItems.SMOOTH_SHADE_STONE_WALL.get());
+		
 		output.accept(MSItems.SHADE_BRICKS.get());
+		output.accept(MSItems.SHADE_BRICK_WALL.get());
+		
 		output.accept(MSItems.SHADE_COLUMN.get());
 		output.accept(MSItems.CHISELED_SHADE_BRICKS.get());
 		output.accept(MSItems.CRACKED_SHADE_BRICKS.get());
+		
 		output.accept(MSItems.MOSSY_SHADE_BRICKS.get());
+		output.accept(MSItems.MOSSY_SHADE_BRICK_STAIRS.get());
+		output.accept(MSItems.MOSSY_SHADE_BRICK_SLAB.get());
+		output.accept(MSItems.MOSSY_SHADE_BRICK_WALL.get());
+		
 		output.accept(MSItems.BLOOD_SHADE_BRICKS.get());
+		output.accept(MSItems.BLOOD_SHADE_BRICK_STAIRS.get());
+		output.accept(MSItems.BLOOD_SHADE_BRICK_SLAB.get());
+		output.accept(MSItems.BLOOD_SHADE_BRICK_WALL.get());
+		
 		output.accept(MSItems.TAR_SHADE_BRICKS.get());
+		output.accept(MSItems.TAR_SHADE_BRICK_STAIRS.get());
+		output.accept(MSItems.TAR_SHADE_BRICK_SLAB.get());
+		output.accept(MSItems.TAR_SHADE_BRICK_WALL.get());
+		
 		output.accept(MSItems.FROST_TILE.get());
+		output.accept(MSItems.FROST_TILE_WALL.get());
+		
 		output.accept(MSItems.CHISELED_FROST_TILE.get());
+		
 		output.accept(MSItems.FROST_BRICKS.get());
+		output.accept(MSItems.FROST_BRICK_WALL.get());
+		
 		output.accept(MSItems.FROST_COLUMN.get());
 		output.accept(MSItems.CHISELED_FROST_BRICKS.get());
 		output.accept(MSItems.CRACKED_FROST_BRICKS.get());
+		
 		output.accept(MSItems.FLOWERY_FROST_BRICKS.get());
+		output.accept(MSItems.FLOWERY_FROST_BRICK_STAIRS.get());
+		output.accept(MSItems.FLOWERY_FROST_BRICK_SLAB.get());
+		output.accept(MSItems.FLOWERY_FROST_BRICK_WALL.get());
+		
 		output.accept(MSItems.CAST_IRON.get());
+		output.accept(MSItems.CAST_IRON_SLAB.get());
+		output.accept(MSItems.CAST_IRON_WALL.get());
+		output.accept(MSItems.CAST_IRON_BUTTON.get());
+		output.accept(MSItems.CAST_IRON_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.CHISELED_CAST_IRON.get());
 		output.accept(MSItems.STEEL_BEAM.get());
+		
 		output.accept(MSItems.MYCELIUM_COBBLESTONE.get());
+		output.accept(MSItems.MYCELIUM_COBBLESTONE_STAIRS.get());
+		output.accept(MSItems.MYCELIUM_COBBLESTONE_SLAB.get());
+		output.accept(MSItems.MYCELIUM_COBBLESTONE_WALL.get());
+		
 		output.accept(MSItems.MYCELIUM_STONE.get());
+		output.accept(MSItems.MYCELIUM_STONE_WALL.get());
+		output.accept(MSItems.MYCELIUM_STONE_BUTTON.get());
+		output.accept(MSItems.MYCELIUM_STONE_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.POLISHED_MYCELIUM_STONE.get());
+		output.accept(MSItems.POLISHED_MYCELIUM_STONE_STAIRS.get());
+		output.accept(MSItems.POLISHED_MYCELIUM_STONE_SLAB.get());
+		output.accept(MSItems.POLISHED_MYCELIUM_STONE_WALL.get());
+		
 		output.accept(MSItems.MYCELIUM_BRICKS.get());
+		output.accept(MSItems.MYCELIUM_BRICK_WALL.get());
+		
 		output.accept(MSItems.MYCELIUM_COLUMN.get());
 		output.accept(MSItems.CHISELED_MYCELIUM_BRICKS.get());
 		output.accept(MSItems.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get());
 		output.accept(MSItems.CRACKED_MYCELIUM_BRICKS.get());
+		
 		output.accept(MSItems.MOSSY_MYCELIUM_BRICKS.get());
+		output.accept(MSItems.MOSSY_MYCELIUM_BRICK_STAIRS.get());
+		output.accept(MSItems.MOSSY_MYCELIUM_BRICK_SLAB.get());
+		output.accept(MSItems.MOSSY_MYCELIUM_BRICK_WALL.get());
+		
 		output.accept(MSItems.FLOWERY_MYCELIUM_BRICKS.get());
+		output.accept(MSItems.FLOWERY_MYCELIUM_BRICK_STAIRS.get());
+		output.accept(MSItems.FLOWERY_MYCELIUM_BRICK_SLAB.get());
+		output.accept(MSItems.FLOWERY_MYCELIUM_BRICK_WALL.get());
+		
 		output.accept(MSItems.BLACK_STONE.get());
+		output.accept(MSItems.BLACK_STONE_WALL.get());
+		output.accept(MSItems.BLACK_STONE_BUTTON.get());
+		output.accept(MSItems.BLACK_STONE_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.POLISHED_BLACK_STONE.get());
+		output.accept(MSItems.POLISHED_BLACK_STONE_STAIRS.get());
+		output.accept(MSItems.POLISHED_BLACK_STONE_SLAB.get());
+		output.accept(MSItems.POLISHED_BLACK_STONE_WALL.get());
+		
 		output.accept(MSItems.BLACK_COBBLESTONE.get());
+		output.accept(MSItems.BLACK_COBBLESTONE_STAIRS.get());
+		output.accept(MSItems.BLACK_COBBLESTONE_SLAB.get());
+		output.accept(MSItems.BLACK_COBBLESTONE_WALL.get());
+		
 		output.accept(MSItems.BLACK_STONE_BRICKS.get());
+		output.accept(MSItems.BLACK_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.BLACK_STONE_COLUMN.get());
 		output.accept(MSItems.CHISELED_BLACK_STONE_BRICKS.get());
 		output.accept(MSItems.CRACKED_BLACK_STONE_BRICKS.get());
 		output.accept(MSItems.BLACK_SAND.get());
 		output.accept(MSItems.DECREPIT_STONE_BRICKS.get());
+		output.accept(MSItems.DECREPIT_STONE_BRICK_STAIRS.get());
+		output.accept(MSItems.DECREPIT_STONE_BRICK_SLAB.get());
+		output.accept(MSItems.DECREPIT_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.FLOWERY_MOSSY_COBBLESTONE.get());
+		output.accept(MSItems.FLOWERY_MOSSY_COBBLESTONE_STAIRS.get());
+		output.accept(MSItems.FLOWERY_MOSSY_COBBLESTONE_SLAB.get());
+		output.accept(MSItems.FLOWERY_MOSSY_COBBLESTONE_WALL.get());
+		
 		output.accept(MSItems.MOSSY_DECREPIT_STONE_BRICKS.get());
+		output.accept(MSItems.MOSSY_DECREPIT_STONE_BRICK_STAIRS.get());
+		output.accept(MSItems.MOSSY_DECREPIT_STONE_BRICK_SLAB.get());
+		output.accept(MSItems.MOSSY_DECREPIT_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.FLOWERY_MOSSY_STONE_BRICKS.get());
+		output.accept(MSItems.FLOWERY_MOSSY_STONE_BRICK_STAIRS.get());
+		output.accept(MSItems.FLOWERY_MOSSY_STONE_BRICK_SLAB.get());
+		output.accept(MSItems.FLOWERY_MOSSY_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.COARSE_END_STONE.get());
 		output.accept(MSItems.END_GRASS.get());
+		
 		output.accept(MSItems.CHALK.get());
+		output.accept(MSItems.CHALK_WALL.get());
+		output.accept(MSItems.CHALK_BUTTON.get());
+		output.accept(MSItems.CHALK_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.POLISHED_CHALK.get());
+		output.accept(MSItems.POLISHED_CHALK_STAIRS.get());
+		output.accept(MSItems.POLISHED_CHALK_SLAB.get());
+		output.accept(MSItems.POLISHED_CHALK_WALL.get());
+		
 		output.accept(MSItems.CHALK_BRICKS.get());
+		output.accept(MSItems.CHALK_BRICK_WALL.get());
+		
 		output.accept(MSItems.CHALK_COLUMN.get());
 		output.accept(MSItems.CHISELED_CHALK_BRICKS.get());
+		
 		output.accept(MSItems.MOSSY_CHALK_BRICKS.get());
+		output.accept(MSItems.MOSSY_CHALK_BRICK_STAIRS.get());
+		output.accept(MSItems.MOSSY_CHALK_BRICK_SLAB.get());
+		output.accept(MSItems.MOSSY_CHALK_BRICK_WALL.get());
+		
 		output.accept(MSItems.FLOWERY_CHALK_BRICKS.get());
+		output.accept(MSItems.FLOWERY_CHALK_BRICK_STAIRS.get());
+		output.accept(MSItems.FLOWERY_CHALK_BRICK_SLAB.get());
+		output.accept(MSItems.FLOWERY_CHALK_BRICK_WALL.get());
+		
 		output.accept(MSItems.PINK_STONE.get());
+		output.accept(MSItems.PINK_STONE_WALL.get());
+		output.accept(MSItems.PINK_STONE_BUTTON.get());
+		output.accept(MSItems.PINK_STONE_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.PINK_STONE_BRICKS.get());
+		output.accept(MSItems.PINK_STONE_BRICK_WALL.get());
+		output.accept(MSItems.MOSSY_PINK_STONE_BRICK_STAIRS.get());
+		output.accept(MSItems.MOSSY_PINK_STONE_BRICK_SLAB.get());
+		output.accept(MSItems.MOSSY_PINK_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.CHISELED_PINK_STONE_BRICKS.get());
 		output.accept(MSItems.CRACKED_PINK_STONE_BRICKS.get());
 		output.accept(MSItems.MOSSY_PINK_STONE_BRICKS.get());
+		
 		output.accept(MSItems.POLISHED_PINK_STONE.get());
+		output.accept(MSItems.POLISHED_PINK_STONE_STAIRS.get());
+		output.accept(MSItems.POLISHED_PINK_STONE_SLAB.get());
+		output.accept(MSItems.POLISHED_PINK_STONE_WALL.get());
+		
 		output.accept(MSItems.PINK_STONE_COLUMN.get());
+		
 		output.accept(MSItems.BROWN_STONE.get());
+		output.accept(MSItems.BROWN_STONE_WALL.get());
+		output.accept(MSItems.BROWN_STONE_BUTTON.get());
+		output.accept(MSItems.BROWN_STONE_PRESSURE_PLATE.get());
+		
 		output.accept(MSItems.BROWN_STONE_BRICKS.get());
+		output.accept(MSItems.BROWN_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.BROWN_STONE_COLUMN.get());
 		output.accept(MSItems.CRACKED_BROWN_STONE_BRICKS.get());
+		
 		output.accept(MSItems.POLISHED_BROWN_STONE.get());
+		output.accept(MSItems.POLISHED_BROWN_STONE_STAIRS.get());
+		output.accept(MSItems.POLISHED_BROWN_STONE_SLAB.get());
+		output.accept(MSItems.POLISHED_BROWN_STONE_WALL.get());
+		
 		output.accept(MSItems.SANDSTONE_COLUMN.get());
 		output.accept(MSItems.CHISELED_SANDSTONE_COLUMN.get());
 		output.accept(MSItems.RED_SANDSTONE_COLUMN.get());
 		output.accept(MSItems.CHISELED_RED_SANDSTONE_COLUMN.get());
+		
 		output.accept(MSItems.UNCARVED_WOOD.get());
+		output.accept(MSItems.UNCARVED_WOOD_STAIRS.get());
+		output.accept(MSItems.UNCARVED_WOOD_SLAB.get());
+		output.accept(MSItems.UNCARVED_WOOD_BUTTON.get());
+		output.accept(MSItems.UNCARVED_WOOD_PRESSURE_PLATE.get());
+		output.accept(MSItems.UNCARVED_WOOD_FENCE.get());
+		output.accept(MSItems.UNCARVED_WOOD_FENCE_GATE.get());
+		
 		output.accept(MSItems.CHIPBOARD.get());
+		output.accept(MSItems.CHIPBOARD_STAIRS.get());
+		output.accept(MSItems.CHIPBOARD_SLAB.get());
+		output.accept(MSItems.CHIPBOARD_BUTTON.get());
+		output.accept(MSItems.CHIPBOARD_PRESSURE_PLATE.get());
+		output.accept(MSItems.CHIPBOARD_FENCE.get());
+		output.accept(MSItems.CHIPBOARD_FENCE_GATE.get());
+		
 		output.accept(MSItems.WOOD_SHAVINGS.get());
+		
 		output.accept(MSItems.CARVED_HEAVY_PLANKS.get());
+		output.accept(MSItems.CARVED_HEAVY_PLANK_STAIRS.get());
+		output.accept(MSItems.CARVED_HEAVY_PLANK_SLAB.get());
+		
 		output.accept(MSItems.CARVED_PLANKS.get());
+		output.accept(MSItems.CARVED_STAIRS.get());
+		output.accept(MSItems.CARVED_SLAB.get());
+		output.accept(MSItems.CARVED_BUTTON.get());
+		output.accept(MSItems.CARVED_PRESSURE_PLATE.get());
+		output.accept(MSItems.CARVED_FENCE.get());
+		output.accept(MSItems.CARVED_FENCE_GATE.get());
+		output.accept(MSItems.CARVED_DOOR.get());
+		output.accept(MSItems.CARVED_TRAPDOOR.get());
+		
 		output.accept(MSItems.POLISHED_UNCARVED_WOOD.get());
+		output.accept(MSItems.POLISHED_UNCARVED_STAIRS.get());
+		output.accept(MSItems.POLISHED_UNCARVED_SLAB.get());
+		
 		output.accept(MSItems.CARVED_KNOTTED_WOOD.get());
+		output.accept(MSItems.CARVED_BUSH.get());
 		output.accept(MSItems.DENSE_CLOUD.get());
 		output.accept(MSItems.BRIGHT_DENSE_CLOUD.get());
 		output.accept(MSItems.SUGAR_CUBE.get());
@@ -509,13 +950,69 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FLOWERY_VINE_WOOD.get());
 		output.accept(MSItems.DEAD_WOOD.get());
 		output.accept(MSItems.PETRIFIED_WOOD.get());
+		
 		output.accept(MSItems.GLOWING_PLANKS.get());
+		output.accept(MSItems.GLOWING_STAIRS.get());
+		output.accept(MSItems.GLOWING_SLAB.get());
+		output.accept(MSItems.GLOWING_BUTTON.get());
+		output.accept(MSItems.GLOWING_PRESSURE_PLATE.get());
+		output.accept(MSItems.GLOWING_FENCE.get());
+		output.accept(MSItems.GLOWING_FENCE_GATE.get());
+		output.accept(MSItems.GLOWING_DOOR.get());
+		output.accept(MSItems.GLOWING_TRAPDOOR.get());
+		
 		output.accept(MSItems.FROST_PLANKS.get());
+		output.accept(MSItems.FROST_STAIRS.get());
+		output.accept(MSItems.FROST_SLAB.get());
+		output.accept(MSItems.FROST_BUTTON.get());
+		output.accept(MSItems.FROST_PRESSURE_PLATE.get());
+		output.accept(MSItems.FROST_FENCE.get());
+		output.accept(MSItems.FROST_FENCE_GATE.get());
+		output.accept(MSItems.FROST_DOOR.get());
+		output.accept(MSItems.FROST_TRAPDOOR.get());
+		
 		output.accept(MSItems.RAINBOW_PLANKS.get());
+		output.accept(MSItems.RAINBOW_BUTTON.get());
+		output.accept(MSItems.RAINBOW_PRESSURE_PLATE.get());
+		output.accept(MSItems.RAINBOW_FENCE.get());
+		output.accept(MSItems.RAINBOW_FENCE_GATE.get());
+		output.accept(MSItems.RAINBOW_DOOR.get());
+		output.accept(MSItems.RAINBOW_TRAPDOOR.get());
+		
 		output.accept(MSItems.END_PLANKS.get());
+		output.accept(MSItems.END_BUTTON.get());
+		output.accept(MSItems.END_PRESSURE_PLATE.get());
+		output.accept(MSItems.END_FENCE.get());
+		output.accept(MSItems.END_FENCE_GATE.get());
+		output.accept(MSItems.END_DOOR.get());
+		output.accept(MSItems.END_TRAPDOOR.get());
+		
 		output.accept(MSItems.DEAD_PLANKS.get());
+		output.accept(MSItems.DEAD_BUTTON.get());
+		output.accept(MSItems.DEAD_PRESSURE_PLATE.get());
+		output.accept(MSItems.DEAD_FENCE.get());
+		output.accept(MSItems.DEAD_FENCE_GATE.get());
+		output.accept(MSItems.DEAD_DOOR.get());
+		output.accept(MSItems.DEAD_TRAPDOOR.get());
+		
 		output.accept(MSItems.TREATED_PLANKS.get());
+		output.accept(MSItems.TREATED_BUTTON.get());
+		output.accept(MSItems.TREATED_PRESSURE_PLATE.get());
+		output.accept(MSItems.TREATED_FENCE.get());
+		output.accept(MSItems.TREATED_FENCE_GATE.get());
+		output.accept(MSItems.TREATED_DOOR.get());
+		output.accept(MSItems.TREATED_TRAPDOOR.get());
+		
 		output.accept(MSItems.SHADEWOOD_PLANKS.get());
+		output.accept(MSItems.SHADEWOOD_STAIRS.get());
+		output.accept(MSItems.SHADEWOOD_SLAB.get());
+		output.accept(MSItems.SHADEWOOD_BUTTON.get());
+		output.accept(MSItems.SHADEWOOD_PRESSURE_PLATE.get());
+		output.accept(MSItems.SHADEWOOD_FENCE.get());
+		output.accept(MSItems.SHADEWOOD_FENCE_GATE.get());
+		output.accept(MSItems.SHADEWOOD_DOOR.get());
+		output.accept(MSItems.SHADEWOOD_TRAPDOOR.get());
+		
 		output.accept(MSItems.FROST_LEAVES.get());
 		output.accept(MSItems.RAINBOW_LEAVES.get());
 		output.accept(MSItems.END_LEAVES.get());
@@ -971,5 +1468,27 @@ public final class MSCreativeTabs
 		output.accept(MSItems.AMPHIBEANIE.get());
 		output.accept(MSItems.NOSTRILDAMUS.get());
 		output.accept(MSItems.PONYTAIL.get());
+	}
+	
+	@SubscribeEvent
+	public static void buildSpawnEggs(BuildCreativeModeTabContentsEvent event) {
+		if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+			event.accept(MSItems.IMP_SPAWN_EGG);
+			event.accept(MSItems.OGRE_SPAWN_EGG);
+			event.accept(MSItems.BASILISK_SPAWN_EGG);
+			event.accept(MSItems.LICH_SPAWN_EGG);
+			
+			event.accept(MSItems.SALAMANDER_SPAWN_EGG);
+			event.accept(MSItems.TURTLE_SPAWN_EGG);
+			event.accept(MSItems.NAKAGATOR_SPAWN_EGG);
+			event.accept(MSItems.IGUANA_SPAWN_EGG);
+			
+			event.accept(MSItems.DERSITE_PAWN_SPAWN_EGG);
+			event.accept(MSItems.DERSITE_BISHOP_SPAWN_EGG);
+			event.accept(MSItems.DERSITE_ROOK_SPAWN_EGG);
+			event.accept(MSItems.PROSPITIAN_PAWN_SPAWN_EGG);
+			event.accept(MSItems.PROSPITIAN_BISHOP_SPAWN_EGG);
+			event.accept(MSItems.PROSPITIAN_ROOK_SPAWN_EGG);
+		}
 	}
 }

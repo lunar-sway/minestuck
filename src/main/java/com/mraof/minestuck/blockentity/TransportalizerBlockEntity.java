@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -39,10 +40,18 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	public static final String BLOCKED_DESTINATION = "minestuck.transportalizer.blocked_destination";
 	public static final String FORBIDDEN = "minestuck.transportalizer.forbidden";
 	public static final String FORBIDDEN_DESTINATION = "minestuck.transportalizer.forbidden_destination";
+	public static final String TAKEN = "minestuck.transportalizer.taken";
+	
+	public static final String ID = "idString";
+	public static final String DEST_ID = "destId";
+	public static final String ACTIVE = "active";
+	public static final String LOCKED = "locked";
 	
 	private boolean enabled = true;
-	private boolean active = true;
-	String id = "";
+	private boolean active = false;
+	private boolean locked = false;
+	private boolean unloaded = false;
+	private String id = "";
 	private String destId = "";
 	
 	public TransportalizerBlockEntity(BlockPos pos, BlockState state)
@@ -54,15 +63,9 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	public void clearRemoved()
 	{
 		super.clearRemoved();
-		if(!level.isClientSide && active)
-		{
-			if(id.isEmpty())
-				id = TransportalizerSavedData.get(level).findNewId(level.random, GlobalPos.of(level.dimension(), worldPosition));
-			else active = TransportalizerSavedData.get(level).set(id, GlobalPos.of(level.dimension(), worldPosition));
-		}
+		if(!level.isClientSide && active && this.hasId())
+			active = TransportalizerSavedData.get(level).set(id, GlobalPos.of(level.dimension(), worldPosition));
 	}
-	
-	private boolean unloaded = false;
 	
 	@Override
 	public void onChunkUnloaded()
@@ -81,7 +84,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		}
 	}
 	
-	public static <E extends Entity> void transportalizerTick(Level level, BlockPos pos, BlockState state, TransportalizerBlockEntity blockEntity)
+	public static void transportalizerTick(Level level, BlockPos pos, BlockState state, TransportalizerBlockEntity blockEntity)
 	{
 		if(level.isClientSide)
 			return;
@@ -212,22 +215,42 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				|| typeKey.isPresent() && forbiddenDimTypes.contains(String.valueOf(typeKey.get().location()));
 	}
 	
+	public boolean hasId()
+	{
+		return !id.isEmpty();
+	}
+	
 	public String getId()
 	{
 		return id;
 	}
 	
+	/**
+	 * Attempt to set the id, failing and warning the player if the id has already been taken
+	 */
+	public void trySetId(String id, Player player)
+	{
+		if(level == null || level.isClientSide || this.locked || this.hasId() || id.isEmpty())
+			return;
+		
+		if(TransportalizerSavedData.get(level).get(id) != null)
+			player.sendSystemMessage(Component.translatable(TAKEN, id));
+		else
+			setId(id);
+	}
+	
 	public void setId(String id)
 	{
-		if(level != null && !level.isClientSide)
-		{
-			GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
-			if(active && !this.id.isEmpty())
-				TransportalizerSavedData.get(level).remove(this.id, location);
-			
-			this.id = id;
-			active = TransportalizerSavedData.get(level).set(id, location);
-		}
+		if(level == null || level.isClientSide ||this.locked || this.hasId() || id.isEmpty())
+			return;
+		
+		this.id = id;
+		GlobalPos location = GlobalPos.of(level.dimension(), worldPosition);
+		BlockState state = level.getBlockState(worldPosition);
+		this.active = TransportalizerSavedData.get(level).set(id, location);
+		
+		this.setChanged();
+		level.sendBlockUpdated(worldPosition, state, state, 0);
 	}
 	
 	public String getDestId()
@@ -237,6 +260,8 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	
 	public void setDestId(String destId)
 	{
+		if(this.locked)
+			return;
 		this.destId = destId;
 		BlockState state = level.getBlockState(worldPosition);
 		this.setChanged();
@@ -266,6 +291,16 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		level.sendBlockUpdated(worldPosition, state, state, 0);
 	}
 	
+	public boolean isLocked()
+	{
+		return locked;
+	}
+	
+	public void lock()
+	{
+		locked = true;
+	}
+	
 	@Override
 	public Component getName()
 	{
@@ -289,10 +324,11 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
-		this.destId = nbt.getString("destId");
-		this.id = nbt.getString("idString");
-		if(nbt.contains("active"))
-			this.active = nbt.getBoolean("active");
+		this.destId = nbt.getString(DEST_ID);
+		this.id = nbt.getString(ID);
+		if(nbt.contains(ACTIVE))
+			this.active = nbt.getBoolean(ACTIVE);
+		this.locked = nbt.getBoolean(LOCKED);
 	}
 	
 	@Override
@@ -300,9 +336,12 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	{
 		super.saveAdditional(compound);
 		
-		compound.putString("idString", id);
-		compound.putString("destId", destId);
-		compound.putBoolean("active", active);
+		if (!id.isEmpty())
+			compound.putString(ID, id);
+		if (!destId.isEmpty())
+			compound.putString(DEST_ID, destId);
+		compound.putBoolean(ACTIVE, active);
+		compound.putBoolean(LOCKED, locked);
 	}
 	
 	@Override

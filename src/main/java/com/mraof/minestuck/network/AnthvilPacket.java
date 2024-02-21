@@ -6,7 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
-public class AnthvilPacket implements PlayToServerPacket
+public class AnthvilPacket implements MSPacket.PlayToServer
 {
 	@Override
 	public void encode(FriendlyByteBuf buffer)

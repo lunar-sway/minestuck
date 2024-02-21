@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 
-public class MagicAOEEffectPacket implements PlayToClientPacket
+public class MagicAOEEffectPacket implements MSPacket.PlayToClient
 {
 	private final MagicEffect.AOEType type;
 	private final Vec3 minAOEBound, maxAOEBound;

@@ -2,7 +2,7 @@ package com.mraof.minestuck.network.data;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.client.ClientDimensionData;
-import com.mraof.minestuck.network.PlayToClientPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.Map;
 
-public class LandTypesDataPacket implements PlayToClientPacket
+public class LandTypesDataPacket implements MSPacket.PlayToClient
 {
 	private final Map<ResourceKey<Level>, LandTypePair> types;
 	

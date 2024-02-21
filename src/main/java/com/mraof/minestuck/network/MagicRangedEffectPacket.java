@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 
-public class MagicRangedEffectPacket implements PlayToClientPacket
+public class MagicRangedEffectPacket implements MSPacket.PlayToClient
 {
 	private final MagicEffect.RangedType type;
 	private final Vec3 pos, lookVec;

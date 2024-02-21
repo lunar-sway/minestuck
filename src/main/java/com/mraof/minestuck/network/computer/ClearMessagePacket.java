@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network.computer;
 
-import com.mraof.minestuck.network.PlayToServerPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
  * @author kirderf1
  *
  */
-public class ClearMessagePacket implements PlayToServerPacket
+public class ClearMessagePacket implements MSPacket.PlayToServer
 {
 	private final BlockPos pos;
 	private final int program;

@@ -4,7 +4,48 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased upcoming-content]
+
+### Added
+
+- Spawn egg items for main Underling types, Consorts, and Carapacians
+- Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+- Tree Stump feature in Forest Lands
+- Frog Ruins feature in Frog Lands
+- Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
+- New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
+- Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
+- Added Carved Bush.
+
+### Changed
+
+- Transportalizers now stack to one instead of 64
+- Prismarine armor remodel and retexture
+- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
+- Computer Themes can now be added and rendered via resource pack
+- Default computer Theme for crockertop is now Crocker
+- Computer Theme is now chosen from a list of available Themes in separate GUI
+
+### Fixed
+
+- Double slabs will now drop two slabs when broken
+
+### Contributors for this release
+
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO
+
 ## [Unreleased]
+
+### Fixed
+
+- Metal Boats no longer crash the game when dispensed
+- Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
+
+### Contributors for this release
+
+- hadean, Dweblenod
+
+## [1.20.1-1.11.2.0] - 2024-01-13
 
 ### Added
 
@@ -17,6 +58,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Sopor Slime Pie food item
 - Land type extensions for datapacks, which can be used to add worldgen features, carvers and mob spawn to lands
 - New editmode settings screen, which can be used to teleport between different areas where editmode can function
+- Behaviour for buckets and barbasol bombs when used in dispensers
+- Minestuck fluids now have sound effects in situations reminiscent of water
+- Light water now acts as a light source and has underwater fog appear closer
+- All Minestuck fluids besides ender fluid now support boats
+- All Minestuck fluids besides oil now extinguish on fire entities, entities touching oil while on fire extends fire duration
+- Brain juice now forms an infinite source, it also now cannot be drowned in
+- Blood and brain juice now hydrate crops
+- Minestuck fluids now have custom tick rates
+- Blood/brain juice/light water now have underwater particles
+- Minestuck fluids now have improved mod compatibility
+- The Iron Lass armor set has the ability to glide like an elytra and boost with the sneak key
 
 ### Changed
 
@@ -25,15 +77,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed `/setrung` command into `/rung set`
 - Minor changes and polish to the temple scanner
 - The area around which an editmode player can move has been made more flexible, each computer can act as a source to extend reach
-- Computer Themes can now be added and rendered via resource pack
-- Default computer Theme for crockertop is now Crocker
-- Computer Theme is now chosen from a list of available Themes in separate GUI
+- Entities now move through and sink in Minestuck fluids at rates specific to the fluid
+- The texture for oil and blood are now more transparent than they were in previous versions
+- Underwater fog appears closer for oil/blood/water colors/light water
 
 ### Fixed
 
 - Fixed multiple sources of crashes involving fake players
 - Creative Shock effect is no longer cured by drinking milk
 - Right-clicking an item outside the atheneum menu no longer crashes the client
+- Suspicion effect now correctly stops the affected mob from summoning zombie reinforcements
+- Respawning mid-entry no longer spawns you in your land
+- Fixed a performance issue with land gate placement
+- Minestuck fluids now prevent fall damage
+- Minestuck fluids no longer have a breaking sound effect and now have bucket/extinguish sound effects
+- Minestuck fluids now use their translatable name
+- All Minestuck fluids besides ender fluid now have transparency
+- Water colors underwater fog is a rave again
 
 ### Contributors for this release
 

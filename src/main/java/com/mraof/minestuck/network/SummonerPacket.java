@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class SummonerPacket implements PlayToServerPacket
+public class SummonerPacket implements MSPacket.PlayToServer
 {
 	private final boolean isUntriggerable;
 	private final int summonRange;
