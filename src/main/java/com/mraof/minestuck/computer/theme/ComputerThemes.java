@@ -6,37 +6,17 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * Official ComputerTheme instances
  */
-public enum ComputerThemes
+public final class ComputerThemes
 {
-	DEFAULT		(),
-	PESTERCHUM	(),
-	TROLLIAN	(),
-	CROCKER		(),
-	TYPHEUS		(),
-	CETUS		(),
-	HEPHAESTUS	(),
-	ECHIDNA		(),
-	JOY			(),
-	SBURB_95	();
-	
-	/**
-	 * Used for short handed references
-	 */
-	public String getLowercaseName()
-	{
-		return this.name().toLowerCase();
-	}
-	
-	/**
-	 * Used for referencing actual theme. The translatable version stored in computers
-	 */
-	public String getLangLocation()
-	{
-		return ComputerTheme.translationKeyFromId(this.id());
-	}
-	
-	public ResourceLocation id()
-	{
-		return new ResourceLocation(Minestuck.MOD_ID, this.getLowercaseName());
-	}
+	public static final ResourceLocation
+			DEFAULT = new ResourceLocation(Minestuck.MOD_ID, "default"),
+			PESTERCHUM = new ResourceLocation(Minestuck.MOD_ID, "pesterchum"),
+			TROLLIAN = new ResourceLocation(Minestuck.MOD_ID, "trollian"),
+			CROCKER = new ResourceLocation(Minestuck.MOD_ID, "crocker"),
+			TYPHEUS = new ResourceLocation(Minestuck.MOD_ID, "typheus"),
+			CETUS = new ResourceLocation(Minestuck.MOD_ID, "cetus"),
+			HEPHAESTUS = new ResourceLocation(Minestuck.MOD_ID, "hephaestus"),
+			ECHIDNA = new ResourceLocation(Minestuck.MOD_ID, "echidna"),
+			JOY = new ResourceLocation(Minestuck.MOD_ID, "joy"),
+			SBURB_95 = new ResourceLocation(Minestuck.MOD_ID, "sburb_95");
 }

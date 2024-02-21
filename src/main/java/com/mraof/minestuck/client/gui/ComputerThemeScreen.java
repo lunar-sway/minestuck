@@ -72,8 +72,8 @@ public class ComputerThemeScreen extends Screen
 		
 		//gets the full list of themes, and reorders it so the default theme is first
 		themes.clear();
-		themes.add(ComputerThemes.DEFAULT.id());
-		themes.addAll(ComputerThemeManager.getInstance().allThemes().stream().filter(themeId -> !themeId.equals(ComputerThemes.DEFAULT.id())).toList());
+		themes.add(ComputerThemes.DEFAULT);
+		themes.addAll(ComputerThemeManager.getInstance().allThemes().stream().filter(themeId -> !themeId.equals(ComputerThemes.DEFAULT)).toList());
 		
 		this.previousButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 108, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal("<"), button -> prevPage());
 		this.nextButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 133, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal(">"), button -> nextPage());

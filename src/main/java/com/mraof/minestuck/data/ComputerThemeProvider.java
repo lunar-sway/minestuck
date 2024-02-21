@@ -2,7 +2,6 @@ package com.mraof.minestuck.data;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemeManager;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
@@ -52,15 +51,10 @@ public class ComputerThemeProvider implements DataProvider
 		add(ComputerThemes.SBURB_95, 0x282828);
 	}
 	
-	protected void add(ComputerThemes theme, int textColor)
+	protected void add(ResourceLocation id, int textColor)
 	{
-		//Just set the name manually if this throws an exception
-		add(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + theme.getLowercaseName() + ".png"), textColor, theme);
-	}
-	
-	protected void add(ResourceLocation textureLocation, int textColor, ComputerThemes theme)
-	{
-		add(theme.id(), new ComputerTheme(textureLocation, textColor));
+		ResourceLocation textureLocation = id.withPath(name -> "textures/gui/theme/" + name + ".png");
+		add(id, new ComputerTheme(textureLocation, textColor));
 	}
 	
 	protected void add(ResourceLocation id, ComputerTheme computerTheme)

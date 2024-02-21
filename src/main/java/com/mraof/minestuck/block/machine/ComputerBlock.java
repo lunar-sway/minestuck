@@ -12,6 +12,7 @@ import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -51,20 +52,20 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	
 	public final Map<Direction, VoxelShape> shapeOn, shapeOff;
 	
-	public final ComputerThemes computerTheme;
+	public final ResourceLocation defaultTheme;
 	
 	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, Properties properties)
 	{
 		this(shapeOn, shapeOff, ComputerThemes.DEFAULT, properties);
 	}
 	
-	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, ComputerThemes computerTheme, Properties properties)
+	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, ResourceLocation defaultTheme, Properties properties)
 	{
 		super(properties);
 		registerDefaultState(defaultBlockState().setValue(STATE, State.OFF));
 		this.shapeOn = shapeOn;
 		this.shapeOff = shapeOff;
-		this.computerTheme = computerTheme;
+		this.defaultTheme = defaultTheme;
 	}
 	
 	@Override
@@ -120,7 +121,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			{
 				computer.owner = IdentifierHandler.encode(player);
 				
-				computer.setTheme(computerTheme.id());
+				computer.setTheme(defaultTheme);
 			}
 			
 			newState.use(level, player, handIn, hit);
