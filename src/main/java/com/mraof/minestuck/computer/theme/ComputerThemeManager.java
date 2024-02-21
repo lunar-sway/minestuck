@@ -1,6 +1,6 @@
 package com.mraof.minestuck.computer.theme;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -19,7 +19,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Helps acquire json files in assets/minestuck/minestuck/computer_themes/
@@ -32,12 +35,12 @@ public class ComputerThemeManager
 	public static final String PATH = "minestuck/computer_themes";
 	public static final String PATH_W_SLASH = PATH + "/";
 	
-	private final List<ComputerTheme> themes;
+	private final Map<ResourceLocation, ComputerTheme> themes;
 	
 	@Nullable
 	private static ComputerThemeManager INSTANCE;
 	
-	public ComputerThemeManager(List<ComputerTheme> themes)
+	public ComputerThemeManager(Map<ResourceLocation, ComputerTheme> themes)
 	{
 		this.themes = themes;
 	}
@@ -53,24 +56,24 @@ public class ComputerThemeManager
 		event.registerReloadListener(new Loader());
 	}
 	
-	public ResourceLocation findTexturePath(String name)
+	public ResourceLocation findTexturePath(ResourceLocation themeId)
 	{
-		Optional<ResourceLocation> potentialPath = themes.stream().filter(theme ->
-				theme.themeName().equals(name)).findAny().map(ComputerTheme::texturePath);
-		return potentialPath.orElse(ComputerTheme.DEFAULT_TEXTURE_PATH);
+		return Optional.ofNullable(this.themes.get(themeId)).map(ComputerTheme::texturePath).orElse(ComputerTheme.DEFAULT_TEXTURE_PATH);
 	}
 	
-	public int findTextColor(String name)
+	public int findTextColor(ResourceLocation themeId)
 	{
-		Optional<Integer> potentialColor = themes.stream().filter(theme -> theme.themeName().equals(name)).findAny().map(ComputerTheme::textColor);
-		return potentialColor.orElse(ComputerTheme.DEFAULT_TEXT_COLOR);
+		return Optional.ofNullable(this.themes.get(themeId)).map(ComputerTheme::textColor).orElse(ComputerTheme.DEFAULT_TEXT_COLOR);
 	}
 	
-	public List<String> getThemeNames()
+	public String findThemeName(ResourceLocation themeId)
 	{
-		List<String> themeNames = new ArrayList<>();
-		themes.forEach(computerTheme -> themeNames.add(computerTheme.themeName()));
-		return themeNames;
+		return this.themes.get(themeId).themeName();
+	}
+	
+	public Collection<ResourceLocation> allThemes()
+	{
+		return this.themes.keySet();
 	}
 	
 	private static final class Loader extends SimpleJsonResourceReloadListener
@@ -86,12 +89,12 @@ public class ComputerThemeManager
 		@Override
 		protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
 		{
-			ImmutableList.Builder<ComputerTheme> computerThemes = ImmutableList.builder();
+			ImmutableMap.Builder<ResourceLocation, ComputerTheme> computerThemes = ImmutableMap.builder();
 			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 			{
 				ComputerTheme.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
 						.resultOrPartial(LOGGER::error)
-						.ifPresent(computerThemes::add);
+						.ifPresent(theme -> computerThemes.put(entry.getKey(), theme));
 			}
 			
 			INSTANCE = new ComputerThemeManager(computerThemes.build());

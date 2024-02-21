@@ -5,7 +5,6 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -13,8 +12,6 @@ import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.GlobalPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -123,7 +120,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			{
 				computer.owner = IdentifierHandler.encode(player);
 				
-				computer.setTheme(computerTheme.getLangLocation());
+				computer.setTheme(computerTheme.id());
 			}
 			
 			newState.use(level, player, handIn, hit);

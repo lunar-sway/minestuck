@@ -1,5 +1,8 @@
 package com.mraof.minestuck.computer.theme;
 
+import com.mraof.minestuck.Minestuck;
+import net.minecraft.resources.ResourceLocation;
+
 /**
  * Official ComputerTheme instances
  */
@@ -42,5 +45,10 @@ public enum ComputerThemes
 	public String getLangLocation()
 	{
 		return "theme." + getLowercaseName() + ".name";
+	}
+	
+	public ResourceLocation id()
+	{
+		return new ResourceLocation(Minestuck.MOD_ID, this.getLowercaseName());
 	}
 }

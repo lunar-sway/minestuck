@@ -10,17 +10,19 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Shows the list of computer Themes which are available from the given client's resource pack.
  * The currently active theme is rendered and its name is shown on screen.
  */
+@ParametersAreNonnullByDefault
 public class ComputerThemeScreen extends Screen
 {
 	public static final String TITLE = "minestuck.computer_themes";
@@ -43,14 +45,14 @@ public class ComputerThemeScreen extends Screen
 	private Button nextButton;
 	
 	private final ComputerBlockEntity computer;
-	private String selectedTheme;
+	private ResourceLocation selectedTheme;
 	
 	private int xOffset;
 	private int yOffset;
 	
 	private final List<Button> entryButtons = new ArrayList<>();
 	
-	private List<String> themes = new ArrayList<>();
+	private final List<ResourceLocation> themes = new ArrayList<>();
 	
 	
 	public ComputerThemeScreen(ComputerBlockEntity computer)
@@ -69,9 +71,8 @@ public class ComputerThemeScreen extends Screen
 		
 		//gets the full list of themes, and reorders it so the default theme is first
 		themes.clear();
-		List<String> tempThemes = ComputerThemeManager.getInstance().getThemeNames();
-		themes.add(ComputerThemes.DEFAULT.getLangLocation());
-		themes.addAll(tempThemes.stream().filter(theme -> !theme.equals(ComputerThemes.DEFAULT.getLangLocation())).collect(Collectors.toList()));
+		themes.add(ComputerThemes.DEFAULT.id());
+		themes.addAll(ComputerThemeManager.getInstance().allThemes().stream().filter(themeId -> !themeId.equals(ComputerThemes.DEFAULT.id())).toList());
 		
 		this.previousButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 108, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal("<"), button -> prevPage());
 		this.nextButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 133, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal(">"), button -> nextPage());
@@ -92,23 +93,18 @@ public class ComputerThemeScreen extends Screen
 		
 		for(int i = 0; i < themes.size(); i++)
 		{
-			String theme = themes.get(i);
+			ResourceLocation themeId = themes.get(i);
 			int yPositionOffset = 18 * ((i / ENTRIES_ACROSS) % ENTRIES_DOWN);
 			int xPositionOffset = 76 * (i % ENTRIES_ACROSS);
 			
-			Component buttonComponent = Component.translatable(theme);
+			Component buttonComponent = Component.translatable(ComputerThemeManager.getInstance().findThemeName(themeId));
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 5 + xPositionOffset, yOffset + SCREEN_OFFSET_Y + 30 + yPositionOffset, 72, 14, buttonComponent,
-					button -> clickEntry(theme));
+					button -> selectedTheme = themeId);
 			entryButtons.add(addRenderableWidget(entryButton));
 		}
 		
 		updateButtonStates();
-	}
-	
-	private void clickEntry(String theme)
-	{
-		selectedTheme = theme;
 	}
 	
 	@Override
@@ -124,7 +120,7 @@ public class ComputerThemeScreen extends Screen
 		guiGraphics.blit(ComputerScreen.guiMain, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		guiGraphics.drawString(font, Component.translatable(SELECTED_THEME), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 8, ComputerThemeManager.getInstance().findTextColor(selectedTheme), false);
-		guiGraphics.drawString(font, Component.translatable(selectedTheme), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 18, ComputerThemeManager.getInstance().findTextColor(selectedTheme), false);
+		guiGraphics.drawString(font, Component.translatable(ComputerThemeManager.getInstance().findThemeName(selectedTheme)), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 18, ComputerThemeManager.getInstance().findTextColor(selectedTheme), false);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	

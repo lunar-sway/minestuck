@@ -7,6 +7,7 @@ import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -20,6 +21,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
@@ -66,7 +68,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public Set<Block> hieroglyphsStored = new HashSet<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
-	private String computerTheme = "default";
+	private ResourceLocation computerTheme = ComputerThemes.DEFAULT.id();
 	
 	@Override
 	public void load(CompoundTag nbt)
@@ -93,8 +95,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			latestmessage.put(id, nbt.getString("text" + id));
 		
 		programData = nbt.getCompound("programData");
-		if(nbt.contains("theme"))
-			computerTheme = nbt.getString("theme");
+		if(nbt.contains("theme", Tag.TAG_STRING))
+			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(nbt.getString("theme")), computerTheme);
 		
 		hieroglyphsStored = MSNBTUtil.readBlockSet(nbt, "hieroglyphsStored");
 		if(nbt.contains("hasParadoxInfoStored"))
@@ -131,7 +133,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		compound.putInt("blankDisksStored", blankDisksStored);
 		
-		compound.putString("theme", computerTheme);
+		compound.putString("theme", computerTheme.toString());
 	}
 	
 	@Override
@@ -267,16 +269,14 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		markBlockForUpdate();
 	}
 	
-	@Override
-	public String getTheme()
+	public ResourceLocation getTheme()
 	{
 		return computerTheme;
 	}
 	
-	@Override
-	public void setTheme(String theme)
+	public void setTheme(ResourceLocation themeId)
 	{
-		this.computerTheme = theme;
+		this.computerTheme = themeId;
 		setChanged();
 		markBlockForUpdate();
 	}
