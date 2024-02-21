@@ -7,26 +7,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class ThemeSelectPacket implements PlayToServerPacket
+public record ThemeSelectPacket(BlockPos pos, ResourceLocation themeId) implements PlayToServerPacket
 {
-	private final BlockPos pos;
-	private final ResourceLocation themeId;
-	
-	public ThemeSelectPacket(BlockPos pos, ResourceLocation themeId)
-	{
-		this.pos = pos;
-		this.themeId = themeId;
-	}
-	
 	public static ThemeSelectPacket create(ComputerBlockEntity be, ResourceLocation themeId)
 	{
 		return new ThemeSelectPacket(be.getBlockPos(), themeId);
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> computer.setTheme(themeId));
 	}
 	
 	@Override
@@ -44,4 +29,9 @@ public class ThemeSelectPacket implements PlayToServerPacket
 		return new ThemeSelectPacket(computer, themeId);
 	}
 	
+	@Override
+	public void execute(ServerPlayer player)
+	{
+		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> computer.setTheme(themeId));
+	}
 }
