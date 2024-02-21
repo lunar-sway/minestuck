@@ -9,11 +9,13 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.valueproviders.ConstantInt;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -42,15 +44,15 @@ public class ComputerThemeProvider implements DataProvider
 		}
 	}
 	
-	protected void add(ComputerThemes theme, int value)
+	protected void add(ComputerThemes theme, int textColor)
 	{
 		//Just set the name manually if this throws an exception
-		add(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + theme.getLowercaseName() + ".png"), ConstantInt.of(value), theme);
+		add(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + theme.getLowercaseName() + ".png"), textColor, theme);
 	}
 	
-	protected void add(ResourceLocation textureLocation, ConstantInt range, ComputerThemes theme)
+	protected void add(ResourceLocation textureLocation, int textColor, ComputerThemes theme)
 	{
-		add(new ComputerTheme(textureLocation, range, theme.getLangLocation()), new ResourceLocation(modid, theme.getLowercaseName()));
+		add(new ComputerTheme(textureLocation, textColor, theme.getLangLocation()), new ResourceLocation(modid, theme.getLowercaseName()));
 	}
 	
 	protected void add(ComputerTheme computerTheme, ResourceLocation name)
