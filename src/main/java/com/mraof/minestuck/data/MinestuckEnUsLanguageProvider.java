@@ -1087,12 +1087,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.MINI_TYPHEUS_STATUE, "Small Denizen Statue"); //Referred to as typheus in all code except name here. Its generic now but more denizen statues may get added
 		addBlock(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
 		addBlock(MSBlocks.MIRROR, "Mirror");
-		addBlock(MSBlocks.OIL, "Oil");
+		
+		addBlock(MSBlocks.OIL, "Shale Oil");
 		addBlock(MSBlocks.BLOOD, "Blood");
 		addBlock(MSBlocks.BRAIN_JUICE, "Brain Juice");
 		addBlock(MSBlocks.WATER_COLORS, "Paint");
 		addBlock(MSBlocks.ENDER, "End Fluid");
 		addBlock(MSBlocks.LIGHT_WATER, "Light Water");
+		addBlock(MSBlocks.CAULK, "Silicone Caulk");
 		
 		addItem(MSItems.CLAW_HAMMER, "Claw Hammer");
 		addItemTooltip(MSItems.CLAW_HAMMER, "An average hammer found in about any garage. It can also destroy blocks");
@@ -1799,7 +1801,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.STONE_TABLET, "carved", "Looks like something has been carved into it!");
 		addItemStoreTooltip(MSItems.STONE_TABLET, "It's pretty rock, but I wouldn't advise rolling on it.");
 		addItem(MSItems.SHOP_POSTER, "Shop Poster");
-		addItem(MSItems.OIL_BUCKET, "Bucket of Oil");
+		addItem(MSItems.OIL_BUCKET, "Bucket of Shale Oil");
 		addItem(MSItems.BLOOD_BUCKET, "Bucket of Blood");
 		addItemTooltip(MSItems.BLOOD_BUCKET, "It looks like Kool-Aid... But you're too scared to try it yourself.");
 		addItem(MSItems.BRAIN_JUICE_BUCKET, "Bucket of Brain Juice");
@@ -1810,6 +1812,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.LIGHT_WATER_BUCKET, "Bucket of Glimmering Water");
 		addItemTooltip(MSItems.LIGHT_WATER_BUCKET, "You're not convinced this is water. It's unnatural.");
 		addItem(MSItems.OBSIDIAN_BUCKET, "Obsidian Bucket");
+		addItem(MSItems.CAULK_BUCKET, "Bucket of Silicone Caulk");
 		addItem(MSItems.CAPTCHAROID_CAMERA, "Captcharoid Camera");
 		addItem(MSItems.GRIMOIRE, "Grimoire for Summoning the Zoologically Dubious");
 		addItemExtra(MSItems.GRIMOIRE, "message", "After flipping through some pages, you feel significantly more insignificant.");

@@ -120,6 +120,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.ENDER_BUCKET.get());
 		output.accept(MSItems.LIGHT_WATER_BUCKET.get());
 		output.accept(MSItems.OBSIDIAN_BUCKET.get());
+		output.accept(MSItems.CAULK_BUCKET.get());
 		
 		output.accept(MSItems.DICE.get());
 		output.accept(MSItems.PLUTONIUM_CORE.get());

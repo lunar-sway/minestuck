@@ -947,6 +947,7 @@ public final class MSBlocks
 	public static final RegistryObject<LiquidBlock> WATER_COLORS = REGISTER.register("water_colors", () -> new WaterColorsBlock(MSFluids.WATER_COLORS, 0.20f, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
 	public static final RegistryObject<LiquidBlock> ENDER = REGISTER.register("ender", () -> new MSLiquidBlock(MSFluids.ENDER, new Vec3(0, 0.35, 0.35), (Float.MAX_VALUE), false, Block.Properties.of().mapColor(MapColor.COLOR_CYAN).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
 	public static final RegistryObject<LiquidBlock> LIGHT_WATER = REGISTER.register("light_water", () -> new MSLiquidBlock(MSFluids.LIGHT_WATER, new Vec3(0.2, 0.3, 1.0), 0.20f, true, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 8).noLootTable().sound(SoundType.EMPTY)));
+	public static final RegistryObject<LiquidBlock> CAULK = REGISTER.register("caulk", () -> new MSLiquidBlock(MSFluids.CAULK, new Vec3(0.79, 0.74, 0.63), 0.80f, false, Block.Properties.of().mapColor(MapColor.COLOR_GRAY).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
 	
 	
 	protected static Function<BlockState, MapColor> logColors(MapColor topColor, MapColor barkColor)

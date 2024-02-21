@@ -1758,6 +1758,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		fluid(MSBlocks.WATER_COLORS);
 		fluid(MSBlocks.ENDER);
 		fluid(MSBlocks.LIGHT_WATER);
+		fluid(MSBlocks.CAULK);
 		
 		//DERIVATIVE BLOCKS
 		stairsWithItem(MSBlocks.PERFECTLY_GENERIC_STAIRS, MSBlocks.GENERIC_OBJECT);

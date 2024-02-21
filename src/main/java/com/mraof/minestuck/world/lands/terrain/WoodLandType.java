@@ -43,12 +43,12 @@ public class WoodLandType extends TerrainLandType
 		registry.setBlock("ocean", Blocks.HONEY_BLOCK);
 		registry.setBlock("village_path", MSBlocks.WOOD_SHAVINGS);
 		registry.setBlock("structure_primary", MSBlocks.TREATED_HEAVY_PLANKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+		registry.setBlock("structure_primary_decorative", MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
 		registry.setBlock("structure_primary_cracked", MSBlocks.TREATED_CHIPBOARD);
 		registry.setBlock("structure_primary_mossy", MSBlocks.TREATED_WOOD_SHAVINGS);
 		registry.setBlock("structure_primary_column", MSBlocks.CARVED_LOG);
 		registry.setBlock("structure_primary_stairs", MSBlocks.TREATED_HEAVY_PLANK_STAIRS);
-		registry.setBlock("structure_secondary", MSBlocks.POLISHED_UNCARVED_WOOD);
+		registry.setBlock("structure_secondary", MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
 		registry.setBlock("structure_secondary_decorative", MSBlocks.TREATED_PLANKS);
 		registry.setBlock("structure_secondary_stairs", MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS);
 		registry.setBlock("light_block", MSBlocks.WOODEN_LAMP);

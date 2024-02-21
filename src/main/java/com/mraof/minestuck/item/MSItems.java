@@ -586,6 +586,7 @@ public class MSItems
 	public static final RegistryObject<Item> ENDER_BUCKET = REGISTER.register("ender_bucket", () -> new BucketItem(MSFluids.ENDER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final RegistryObject<Item> LIGHT_WATER_BUCKET = REGISTER.register("light_water_bucket", () -> new BucketItem(MSFluids.LIGHT_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final RegistryObject<Item> OBSIDIAN_BUCKET = REGISTER.register("obsidian_bucket", () -> new ObsidianBucketItem(new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
+	public static final RegistryObject<Item> CAULK_BUCKET = REGISTER.register("caulk_bucket", () -> new BucketItem(MSFluids.CAULK, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	
 	
 	//Alchemy Items

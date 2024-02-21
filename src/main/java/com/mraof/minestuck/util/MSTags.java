@@ -123,6 +123,7 @@ public class MSTags
 		public static final TagKey<Fluid> WATER_COLORS = tag("water_colors");
 		public static final TagKey<Fluid> ENDER = tag("ender");
 		public static final TagKey<Fluid> LIGHT_WATER = tag("light_water");
+		public static final TagKey<Fluid> CAULK = tag("caulk");
 		
 		private static TagKey<Fluid> tag(String name)
 		{

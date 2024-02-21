@@ -933,12 +933,13 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.BLENDER.get()).grist(BUILD, 16).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get()).grist(BUILD, 2).build(recipeSaver);
 		
-		ContainerGristCostBuilder.of(MSItems.OIL_BUCKET.get()).grist(TAR, 8).grist(SHALE, 8).build(recipeSaver);
+		ContainerGristCostBuilder.of(MSItems.OIL_BUCKET.get()).grist(SHALE, 16).build(recipeSaver);
 		ContainerGristCostBuilder.of(MSItems.BLOOD_BUCKET.get()).grist(GARNET, 8).grist(IODINE, 8).build(recipeSaver);
 		ContainerGristCostBuilder.of(MSItems.BRAIN_JUICE_BUCKET.get()).grist(AMETHYST, 8).grist(CHALK, 8).build(recipeSaver);
 		ContainerGristCostBuilder.of(MSItems.WATER_COLORS_BUCKET.get()).grist(AMETHYST, 4).grist(CHALK, 4).grist(GARNET, 4).grist(AMBER, 4).build(recipeSaver);
 		ContainerGristCostBuilder.of(MSItems.ENDER_BUCKET.get()).grist(MERCURY, 8).grist(URANIUM, 8).build(recipeSaver);
 		ContainerGristCostBuilder.of(MSItems.OBSIDIAN_BUCKET.get()).grist(BUILD, 4).grist(COBALT, 8).grist(TAR, 16).build(recipeSaver);
+		ContainerGristCostBuilder.of(MSItems.CAULK_BUCKET.get()).grist(CAULK, 16).build(recipeSaver);
 		
 		WildcardGristCostBuilder.of(MSItems.CAPTCHA_CARD.get()).cost(1).build(recipeSaver);
 		

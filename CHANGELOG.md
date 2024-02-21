@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 - Added Carved Bush
 - Added Uncarved Wood Iron, Redstone, and Emerald ores
+- Silicone Caulk fluid, used in Wood lands
 
 ### Changed
 
@@ -30,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Iron Lass Armor has now been remodeled, and retextured; with additional new animations
 - Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
 - Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
+- Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
 
 ### Fixed
 

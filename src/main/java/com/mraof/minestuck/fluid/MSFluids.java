@@ -128,6 +128,32 @@ public final class MSFluids
 			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH), MSFluidType.Style.VISCOUS));
 	public static final RegistryObject<FlowingFluid> ENDER = REGISTER.register("ender", () -> new ForgeFlowingFluid.Source(MSFluids.ENDER_PROPERTIES));
 	public static final RegistryObject<FlowingFluid> FLOWING_ENDER = REGISTER.register("flowing_ender", () -> new ForgeFlowingFluid.Flowing(MSFluids.ENDER_PROPERTIES));
-	
 	public static final ForgeFlowingFluid.Properties ENDER_PROPERTIES = new ForgeFlowingFluid.Properties(ENDER_TYPE, ENDER, FLOWING_ENDER).bucket(MSItems.ENDER_BUCKET).block(MSBlocks.ENDER).tickRate(15).slopeFindDistance(2).levelDecreasePerBlock(2).explosionResistance(100F);
+	
+	public static final RegistryObject<FluidType> CAULK_TYPE = TYPE_REGISTER.register("caulk", () -> new MSFluidType(FluidType.Properties.create()
+			.density(3000)
+			.viscosity(4500)
+			.descriptionId("block.minestuck.caulk")
+			.fallDistanceModifier(0F)
+			.motionScale(0.002)
+			.supportsBoating(true)
+			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH),
+			MSFluidType.Style.VISCOUS)
+	{
+		@Override
+		public boolean canExtinguish(Entity entity)
+		{
+			//extends length of fire
+			if(entity.isOnFire() && entity.getRemainingFireTicks() <= 100)
+				entity.setRemainingFireTicks(100);
+			
+			return false;
+		}
+	});
+	public static final RegistryObject<FlowingFluid> CAULK = REGISTER.register("caulk", () -> new ForgeFlowingFluid.Source(MSFluids.CAULK_PROPERTIES));
+	public static final RegistryObject<FlowingFluid> FLOWING_CAULK = REGISTER.register("flowing_caulk", () -> new ForgeFlowingFluid.Flowing(MSFluids.CAULK_PROPERTIES));
+	public static final ForgeFlowingFluid.Properties CAULK_PROPERTIES = new ForgeFlowingFluid.Properties(CAULK_TYPE, CAULK, FLOWING_CAULK).bucket(MSItems.CAULK_BUCKET).block(MSBlocks.CAULK).tickRate(20).slopeFindDistance(3).explosionResistance(100F);
+	
 }
