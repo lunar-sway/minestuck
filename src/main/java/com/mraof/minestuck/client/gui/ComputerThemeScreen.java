@@ -17,6 +17,7 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -40,6 +41,8 @@ public class ComputerThemeScreen extends Screen
 	private static final int ENTRIES_ACROSS = 2;
 	private static final int ENTRIES_DOWN = 4;
 	private static final int ENTRIES_PER_PAGE = ENTRIES_ACROSS * ENTRIES_DOWN;
+	
+	private static final Comparator<ResourceLocation> THEME_SORTER = Comparator.comparing(themeId -> !themeId.equals(ComputerThemes.DEFAULT));
 	
 	private int page = 0;
 	private Button previousButton;
@@ -72,8 +75,7 @@ public class ComputerThemeScreen extends Screen
 		
 		//gets the full list of themes, and reorders it so the default theme is first
 		themes.clear();
-		themes.add(ComputerThemes.DEFAULT);
-		themes.addAll(ComputerThemeManager.getInstance().allThemes().stream().filter(themeId -> !themeId.equals(ComputerThemes.DEFAULT)).toList());
+		ComputerThemeManager.getInstance().allThemes().stream().sorted(THEME_SORTER).forEach(themes::add);
 		
 		this.previousButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 108, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal("<"), button -> prevPage());
 		this.nextButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 133, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal(">"), button -> nextPage());
