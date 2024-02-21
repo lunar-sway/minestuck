@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemeManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,9 +18,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class ComputerScreen extends Screen
 {
 	
@@ -34,6 +37,7 @@ public class ComputerScreen extends Screen
 	private final List<ComputerIcon> icons;
 	private PowerButton powerButton;
 	private ComputerProgram program;
+	private ComputerTheme cachedTheme;
 	
 	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
@@ -43,6 +47,7 @@ public class ComputerScreen extends Screen
 		this.font = minecraft.font;
 		this.be = be;
 		this.icons = new ArrayList<>();
+		this.cachedTheme = ComputerThemeManager.instance().lookup(be.getTheme());
 		be.gui = this;
 	}
 	
@@ -73,7 +78,7 @@ public class ComputerScreen extends Screen
 		} else
 		{
 			//desktop background
-			guiGraphics.blit(ComputerThemeManager.instance().lookup(this.be.getTheme()).data().texturePath(), xOffset + 9, yOffset + 38, 0, 0, 158, 120);
+			guiGraphics.blit(this.getTheme().data().texturePath(), xOffset + 9, yOffset + 38, 0, 0, 158, 120);
 			
 			//program and widgets
 			if(program != null) program.paintGui(guiGraphics, this, be);
@@ -85,8 +90,15 @@ public class ComputerScreen extends Screen
 		guiGraphics.blit(guiMain, xOffset + 164, yOffset + 38, xSize + 3, 0, 3, 3);
 	}
 	
+	public ComputerTheme getTheme()
+	{
+		return cachedTheme;
+	}
+	
 	public void updateGui()
 	{
+		if(!this.cachedTheme.id().equals(be.getTheme()))
+			this.cachedTheme = ComputerThemeManager.instance().lookup(be.getTheme());
 		if(program!=null) program.onUpdateGui(this);
 	}
 	
