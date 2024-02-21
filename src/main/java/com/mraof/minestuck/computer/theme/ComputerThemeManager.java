@@ -66,11 +66,6 @@ public class ComputerThemeManager
 		return Optional.ofNullable(this.themes.get(themeId)).map(ComputerTheme::textColor).orElse(ComputerTheme.DEFAULT_TEXT_COLOR);
 	}
 	
-	public String findThemeName(ResourceLocation themeId)
-	{
-		return this.themes.get(themeId).themeName();
-	}
-	
 	public Collection<ResourceLocation> allThemes()
 	{
 		return this.themes.keySet();

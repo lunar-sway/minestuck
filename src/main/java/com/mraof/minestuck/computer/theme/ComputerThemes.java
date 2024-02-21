@@ -32,7 +32,7 @@ public enum ComputerThemes
 	 */
 	public String getLangLocation()
 	{
-		return "theme." + getLowercaseName() + ".name";
+		return ComputerTheme.translationKeyFromId(this.id());
 	}
 	
 	public ResourceLocation id()

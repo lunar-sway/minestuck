@@ -1,5 +1,4 @@
 {
   "text_color": 4210752,
-  "texture_location": "minestuck:textures/gui/theme/default.png",
-  "theme_name": "theme.default.name"
+  "texture_location": "minestuck:textures/gui/theme/default.png"
 }

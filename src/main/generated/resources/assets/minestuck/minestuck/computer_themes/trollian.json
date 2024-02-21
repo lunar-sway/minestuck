@@ -1,5 +1,4 @@
 {
   "text_color": 16711680,
-  "texture_location": "minestuck:textures/gui/theme/trollian.png",
-  "theme_name": "theme.trollian.name"
+  "texture_location": "minestuck:textures/gui/theme/trollian.png"
 }

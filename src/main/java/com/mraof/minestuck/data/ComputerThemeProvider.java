@@ -60,7 +60,7 @@ public class ComputerThemeProvider implements DataProvider
 	
 	protected void add(ResourceLocation textureLocation, int textColor, ComputerThemes theme)
 	{
-		add(theme.id(), new ComputerTheme(textureLocation, textColor, theme.getLangLocation()));
+		add(theme.id(), new ComputerTheme(textureLocation, textColor));
 	}
 	
 	protected void add(ResourceLocation id, ComputerTheme computerTheme)

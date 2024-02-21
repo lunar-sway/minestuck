@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemeManager;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -97,7 +98,7 @@ public class ComputerThemeScreen extends Screen
 			int yPositionOffset = 18 * ((i / ENTRIES_ACROSS) % ENTRIES_DOWN);
 			int xPositionOffset = 76 * (i % ENTRIES_ACROSS);
 			
-			Component buttonComponent = Component.translatable(ComputerThemeManager.getInstance().findThemeName(themeId));
+			Component buttonComponent = Component.translatable(ComputerTheme.translationKeyFromId(themeId));
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 5 + xPositionOffset, yOffset + SCREEN_OFFSET_Y + 30 + yPositionOffset, 72, 14, buttonComponent,
 					button -> selectedTheme = themeId);
@@ -120,7 +121,7 @@ public class ComputerThemeScreen extends Screen
 		guiGraphics.blit(ComputerScreen.guiMain, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		guiGraphics.drawString(font, Component.translatable(SELECTED_THEME), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 8, ComputerThemeManager.getInstance().findTextColor(selectedTheme), false);
-		guiGraphics.drawString(font, Component.translatable(ComputerThemeManager.getInstance().findThemeName(selectedTheme)), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 18, ComputerThemeManager.getInstance().findTextColor(selectedTheme), false);
+		guiGraphics.drawString(font, Component.translatable(ComputerTheme.translationKeyFromId(selectedTheme)), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 18, ComputerThemeManager.getInstance().findTextColor(selectedTheme), false);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
