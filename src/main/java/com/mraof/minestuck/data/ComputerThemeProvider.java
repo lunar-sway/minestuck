@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemeManager;
-import com.mraof.minestuck.computer.theme.ComputerThemes;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -39,16 +39,16 @@ public class ComputerThemeProvider implements DataProvider
 	
 	protected void registerThemes()
 	{
-		add(ComputerThemes.DEFAULT, ComputerTheme.Data.DEFAULT);
-		add(ComputerThemes.PESTERCHUM, 0x404040);
-		add(ComputerThemes.TROLLIAN, 0xFF0000);
-		add(ComputerThemes.CROCKER, 0x000000);
-		add(ComputerThemes.TYPHEUS, 0x6DAFAD);
-		add(ComputerThemes.CETUS, 0x9081EE);
-		add(ComputerThemes.HEPHAESTUS, 0xFFFFFF);
-		add(ComputerThemes.ECHIDNA, 0x005DFF);
-		add(ComputerThemes.JOY, 0x282828);
-		add(ComputerThemes.SBURB_95, 0x282828);
+		add(MSComputerThemes.DEFAULT, ComputerTheme.Data.DEFAULT);
+		add(MSComputerThemes.PESTERCHUM, 0x404040);
+		add(MSComputerThemes.TROLLIAN, 0xFF0000);
+		add(MSComputerThemes.CROCKER, 0x000000);
+		add(MSComputerThemes.TYPHEUS, 0x6DAFAD);
+		add(MSComputerThemes.CETUS, 0x9081EE);
+		add(MSComputerThemes.HEPHAESTUS, 0xFFFFFF);
+		add(MSComputerThemes.ECHIDNA, 0x005DFF);
+		add(MSComputerThemes.JOY, 0x282828);
+		add(MSComputerThemes.SBURB_95, 0x282828);
 	}
 	
 	protected void add(ResourceLocation id, int textColor)

@@ -26,7 +26,7 @@ import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
-import com.mraof.minestuck.computer.theme.ComputerThemes;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -2417,16 +2417,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
 		add(EditmodeLocations.REMOVED_LOCATION_MESSAGE, "The location you were in is no longer in range, and you have now been teleported to a valid location.");
 		
-		addThemeName(ComputerThemes.DEFAULT, "Default");
-		addThemeName(ComputerThemes.PESTERCHUM, "Pesterchum");
-		addThemeName(ComputerThemes.TROLLIAN, "Trollian");
-		addThemeName(ComputerThemes.CROCKER, "Crocker");
-		addThemeName(ComputerThemes.TYPHEUS, "Typheus");
-		addThemeName(ComputerThemes.CETUS, "Cetus");
-		addThemeName(ComputerThemes.HEPHAESTUS, "Hephaestus");
-		addThemeName(ComputerThemes.ECHIDNA, "Echidna");
-		addThemeName(ComputerThemes.JOY, "Joy");
-		addThemeName(ComputerThemes.SBURB_95, "SBURB 95");
+		addThemeName(MSComputerThemes.DEFAULT, "Default");
+		addThemeName(MSComputerThemes.PESTERCHUM, "Pesterchum");
+		addThemeName(MSComputerThemes.TROLLIAN, "Trollian");
+		addThemeName(MSComputerThemes.CROCKER, "Crocker");
+		addThemeName(MSComputerThemes.TYPHEUS, "Typheus");
+		addThemeName(MSComputerThemes.CETUS, "Cetus");
+		addThemeName(MSComputerThemes.HEPHAESTUS, "Hephaestus");
+		addThemeName(MSComputerThemes.ECHIDNA, "Echidna");
+		addThemeName(MSComputerThemes.JOY, "Joy");
+		addThemeName(MSComputerThemes.SBURB_95, "SBURB 95");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemeManager;
-import com.mraof.minestuck.computer.theme.ComputerThemes;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ThemeSelectPacket;
 import net.minecraft.client.gui.GuiGraphics;
@@ -41,7 +41,7 @@ public class ComputerThemeScreen extends Screen
 	private static final int ENTRIES_DOWN = 4;
 	private static final int ENTRIES_PER_PAGE = ENTRIES_ACROSS * ENTRIES_DOWN;
 	
-	private static final Comparator<ComputerTheme> THEME_SORTER = Comparator.comparing(theme -> !theme.id().equals(ComputerThemes.DEFAULT));
+	private static final Comparator<ComputerTheme> THEME_SORTER = Comparator.comparing(theme -> !theme.id().equals(MSComputerThemes.DEFAULT));
 	
 	private int page = 0;
 	private Button previousButton;

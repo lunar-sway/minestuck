@@ -44,7 +44,7 @@ public class ComputerThemeManager
 	public ComputerThemeManager(Map<ResourceLocation, ComputerTheme> themes)
 	{
 		this.themes = themes;
-		defaultThemeData = Optional.ofNullable(themes.get(ComputerThemes.DEFAULT))
+		defaultThemeData = Optional.ofNullable(themes.get(MSComputerThemes.DEFAULT))
 				.map(ComputerTheme::data).orElse(ComputerTheme.Data.DEFAULT);
 	}
 	

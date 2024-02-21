@@ -7,7 +7,7 @@ import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.computer.theme.ComputerThemes;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -68,7 +68,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public Set<Block> hieroglyphsStored = new HashSet<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
-	private ResourceLocation computerTheme = ComputerThemes.DEFAULT;
+	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
 	
 	@Override
 	public void load(CompoundTag nbt)

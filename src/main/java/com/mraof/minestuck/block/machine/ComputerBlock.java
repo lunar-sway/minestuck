@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.theme.ComputerThemes;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -56,7 +56,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	
 	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, Properties properties)
 	{
-		this(shapeOn, shapeOff, ComputerThemes.DEFAULT, properties);
+		this(shapeOn, shapeOff, MSComputerThemes.DEFAULT, properties);
 	}
 	
 	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, ResourceLocation defaultTheme, Properties properties)

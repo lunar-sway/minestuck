@@ -4,9 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * Official ComputerTheme instances
+ * Ids for computer themes added by minestuck.
  */
-public final class ComputerThemes
+public final class MSComputerThemes
 {
 	public static final ResourceLocation
 			DEFAULT = new ResourceLocation(Minestuck.MOD_ID, "default"),
