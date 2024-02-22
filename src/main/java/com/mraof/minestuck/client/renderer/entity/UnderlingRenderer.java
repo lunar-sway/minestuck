@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -139,12 +138,12 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		@Override
 		public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay)
 		{
-			RenderType layerRenderType = RenderType.armorCutoutNoCull(this.textureId);
+			RenderType layerRenderType = RenderType.entityCutoutNoCullZOffset(this.textureId);
 			float color = getContrastModifier(animatable);
 			poseStack.pushPose();
 			
 			this.getRenderer().reRender(bakedModel, poseStack, bufferSource, animatable, layerRenderType, bufferSource.getBuffer(layerRenderType),
-					partialTick, packedLight, OverlayTexture.NO_OVERLAY, color, color, color, 1);
+					partialTick, packedLight, packedOverlay, color, color, color, 1);
 			
 			poseStack.popPose();
 		}
