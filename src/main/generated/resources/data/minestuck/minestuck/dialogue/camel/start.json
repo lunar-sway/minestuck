@@ -22,8 +22,8 @@
   "use_context": {
     "conditions": [
       {
-        "type": "conditionless",
-        "content": ""
+        "type": "in_terrain_land_type",
+        "land_type": "minestuck:sand"
       }
     ]
   }

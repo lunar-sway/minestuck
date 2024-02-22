@@ -1,5 +1,5 @@
 {
-  "animation": "test2animation",
+  "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
   "message": "minestuck.dialogue.turtle_only",
   "path": "minestuck:turtle_only",
@@ -7,8 +7,8 @@
   "use_context": {
     "conditions": [
       {
-        "type": "consort_type",
-        "content": "turtle"
+        "type": "is_entity_type",
+        "entity_type": "minestuck:turtle"
       }
     ]
   }

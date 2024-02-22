@@ -1,5 +1,5 @@
 {
-  "animation": "test2animation",
+  "animation": "generic_animation",
   "gui": "minestuck:textures/gui/generic_extra_large.png",
   "message": "minestuck.dialogue.nakagator_only",
   "path": "minestuck:nakagator_only",
@@ -8,7 +8,7 @@
     "conditions": [
       {
         "type": "is_entity_type",
-        "content": "minestuck:nakagator"
+        "entity_type": "minestuck:nakagator"
       }
     ]
   }

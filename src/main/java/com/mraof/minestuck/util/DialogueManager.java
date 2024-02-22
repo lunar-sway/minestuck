@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -77,7 +78,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 					if(useContext.getConditions().isEmpty())
 						return true;
 					else
-						return Dialogue.Condition.matchesAllConditions(entity, null, useContext.getConditions());
+						return Condition.matchesAllConditions(entity, null, useContext.getConditions());
 				}
 			}).toList();
 			
