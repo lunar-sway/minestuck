@@ -16,6 +16,7 @@ and they no longer receive grist from the gutter
 ### Fixed
 
 - Metal Boats no longer crash the game when dispensed
+- Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
 - Fixes some niche issues with connections
 - `/sburbpredefine` now gives an error when applied to a player that already has a land
 - Fixed missing data sync for land types after using `/debuglands`
@@ -23,7 +24,7 @@ and they no longer receive grist from the gutter
 
 ### Contributors for this release
 
-- hadean, kirderf1
+- hadean, Dweblenod, kirderf1
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
