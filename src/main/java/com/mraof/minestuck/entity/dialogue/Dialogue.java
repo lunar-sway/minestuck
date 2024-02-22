@@ -133,169 +133,18 @@ public class Dialogue
 		
 		public boolean failsWhileImportant(LivingEntity entity, Player player)
 		{
-			return !Dialogue.Condition.matchesAllConditions(entity, player, conditions) && isHideIfFailed();
-		}
-	}
-	
-	/**
-	 * A Condition controls whether a piece of dialogue will show up
-	 */
-	public static class Condition
-	{
-		//TODO conditions are used in both server and client side context. When they are used to help pick dialogue, players are inherently null
-		public enum Type
-		{
-			CONDITIONLESS((entity, player, stringStringPair) -> true),
-			IS_CONSORT((entity, player, content) -> entity instanceof ConsortEntity),
-			IS_CARAPACIAN((entity, player, content) -> entity instanceof CarapacianEntity),
-			IS_ENTITY_TYPE((entity, player, content) ->
-			{
-				EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(content.getFirst()));
-				return entityType != null && entity.getType().equals(entityType);
-			}),
-			CONSORT_TYPE((entity, player, content) ->
-					//distinct in that it uses consort type, not the entity type
-					entity instanceof ConsortEntity consortEntity && content.getFirst().equals(consortEntity.getConsortType().getName())
-			),
-			HAS_ITEM((entity, player, content) ->
-			{
-				if(player == null)
-					return false;
-				
-				ItemStack stack = findPlayerItem(content.getFirst(), player, parseIntFromString(content.getSecond(), 1));
-				return stack != null;
-			}),
-			IN_LAND((entity, player, content) ->
-			{
-				try(Level level = player.level())
-				{
-					if(!level.isClientSide)
-					{
-						return MSDimensions.isLandDimension(player.getServer(), level.dimension());
-					}
-				} catch(IOException e)
-				{
-					LOGGER.debug("Condition in Dialogue tried to get null level from entity");
-				}
-				
-				return false;
-			}),
-			HAS_MINIMUM_REPUTATION((entity, player, content) ->
-			{
-				if(player == null)
-					return false;
-				
-				try(Level level = player.level())
-				{
-					if(level.isClientSide)
-					{
-						return ClientPlayerData.getConsortReputation() > parseIntFromString(content.getFirst(), -9999);
-					} else
-					{
-						PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
-						if(data != null)
-							return data.getConsortReputation(level.dimension()) > parseIntFromString(content.getFirst(), -9999);
-					}
-				} catch(IOException e)
-				{
-					LOGGER.debug("Condition in Dialogue tried to get null level from player");
-				}
-				
-				return false;
-			}),
-			HAS_MAXIMUM_REPUTATION((entity, player, content) ->
-			{
-				if(player == null)
-					return false;
-				
-				try(Level level = player.level())
-				{
-					if(level.isClientSide)
-					{
-						return ClientPlayerData.getConsortReputation() < parseIntFromString(content.getFirst(), 9999);
-					} else
-					{
-						PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
-						if(data != null)
-							return data.getConsortReputation(level.dimension()) < parseIntFromString(content.getFirst(), 9999);
-					}
-				} catch(IOException e)
-				{
-					LOGGER.debug("Condition in Dialogue tried to get null level from player");
-				}
-				
-				return false;
-			});
-			
-			private final TriPredicate<LivingEntity, Player, Pair<String, String>> conditions;
-			
-			Type(TriPredicate<LivingEntity, Player, Pair<String, String>> conditions)
-			{
-				this.conditions = conditions;
-			}
-		}
-		
-		private final Type type;
-		private final String content;
-		@Nullable
-		private final String contentExtra;
-		@Nullable
-		private final String failureTooltip;
-		
-		public Condition(Type type)
-		{
-			this(type, "", null, null);
-		}
-		
-		public Condition(Type type, String content)
-		{
-			this(type, content, null, null);
-		}
-		
-		public Condition(Type type, String content, @Nullable String contentExtra, @Nullable String failureTooltip)
-		{
-			this.type = type;
-			this.content = content;
-			this.contentExtra = contentExtra;
-			this.failureTooltip = failureTooltip;
-		}
-		
-		public String getContent()
-		{
-			return content;
-		}
-		
-		public String getContentExtra()
-		{
-			return contentExtra == null ? "" : contentExtra;
-		}
-		
-		@Nullable
-		public String getFailureTooltip()
-		{
-			return failureTooltip;
-		}
-		
-		public static boolean matchesAllConditions(LivingEntity entity, Player player, List<Condition> conditions)
-		{
-			if(conditions == null)
-				return false;
-			
-			for(Condition condition : conditions)
-			{
-				if(!condition.type.conditions.test(entity, player, Pair.of(condition.getContent(), condition.getContentExtra())))
-				{
-					return false;
-				}
-			}
-			
-			return true;
+			return !Condition.matchesAllConditions(entity, player, conditions) && isHideIfFailed();
 		}
 	}
 	
 	public static class UseContext
 	{
 		private final List<Condition> conditions;
+		
+		public UseContext(Condition condition)
+		{
+			this.conditions = List.of(condition);
+		}
 		
 		public UseContext(List<Condition> conditions)
 		{
@@ -306,12 +155,6 @@ public class Dialogue
 		{
 			return conditions;
 		}
-	}
-	
-	@Nullable
-	public static ItemStack findPlayerItem(String registryName, Player player, int minAmount)
-	{
-		return findPlayerItem(ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName)), player, minAmount);
 	}
 	
 	@Nullable
@@ -327,33 +170,6 @@ public class Dialogue
 		}
 		
 		return null;
-	}
-	
-	static int parseIntFromString(String member, int amount)
-	{
-		if(member != null && !member.isEmpty())
-		{
-			try
-			{
-				amount = Integer.parseInt(member);
-			} catch(NumberFormatException ignored)
-			{
-				LOGGER.debug("Failed to parse string from a Dialogue into an integer");
-			}
-		}
-		
-		return amount;
-	}
-	
-	public static <T extends Enum<T>> boolean enumExists(Class<T> enumClass, String enumName)
-	{
-		for(T enumConstant : enumClass.getEnumConstants())
-		{
-			if(enumConstant.name().equalsIgnoreCase(enumName))
-				return true;
-		}
-		
-		return false;
 	}
 	
 	public static class Serializer implements JsonDeserializer<Dialogue>, JsonSerializer<Dialogue>
@@ -422,23 +238,18 @@ public class Dialogue
 		
 		private static List<Condition> deserializeConditions(JsonObject responseObject)
 		{
-			JsonArray conditionsObject = responseObject.getAsJsonArray("conditions");
-			List<Condition> conditions = new ArrayList<>();
-			conditionsObject.forEach(conditionElement ->
+			JsonElement conditionsElement = responseObject.get("conditions");
+			JsonArray conditionsArray;
+			if(conditionsElement.isJsonArray())
 			{
-				JsonObject conditionObject = conditionElement.getAsJsonObject();
-				
-				String conditionTypeProvider = Codec.STRING.parse(JsonOps.INSTANCE, conditionObject.get("type")).getOrThrow(false, LOGGER::error);
-				String conditionContentProvider = Codec.STRING.parse(JsonOps.INSTANCE, conditionObject.get("content")).getOrThrow(false, LOGGER::error);
-				String conditionContentExtraProvider = GsonHelper.getAsString(conditionObject, "content_extra", null);
-				String conditionFailureTooltipProvider = GsonHelper.getAsString(conditionObject, "failure_tooltip", null);
-				
-				//TODO may throw errors when its not filled in correctly
-				String conditionTypeName = conditionTypeProvider.toUpperCase(Locale.ROOT);
-				if(enumExists(Condition.Type.class, conditionTypeName))
-					conditions.add(new Condition(Condition.Type.valueOf(conditionTypeName), conditionContentProvider, conditionContentExtraProvider, conditionFailureTooltipProvider));
-			});
-			return conditions;
+				conditionsArray = (JsonArray) conditionsElement;
+			} else
+			{
+				//empty single-element array to keep it standardized. Dialogue fails to deserialize if the element is not an array
+				conditionsArray = new JsonArray();
+				conditionsArray.add(conditionsElement);
+			}
+			return Condition.LIST_CODEC.parse(JsonOps.INSTANCE, conditionsArray).getOrThrow(true, LOGGER::error);
 		}
 		
 		@Override
@@ -457,8 +268,7 @@ public class Dialogue
 			if(dialogue.useContext != null)
 			{
 				JsonObject useContextObject = new JsonObject();
-				JsonArray conditions = serializeConditions(dialogue.useContext.conditions);
-				useContextObject.add("conditions", conditions);
+				useContextObject.add("conditions", Condition.LIST_CODEC.encodeStart(JsonOps.INSTANCE, dialogue.useContext.conditions).getOrThrow(false, LOGGER::error));
 				json.add("use_context", useContextObject);
 			}
 			
@@ -473,8 +283,7 @@ public class Dialogue
 				JsonObject responseObject = new JsonObject();
 				responseObject.add("response_message", Codec.STRING.encodeStart(JsonOps.INSTANCE, response.response).getOrThrow(false, LOGGER::error));
 				
-				JsonArray conditions = serializeConditions(response.conditions);
-				responseObject.add("conditions", conditions);
+				responseObject.add("conditions", Condition.LIST_CODEC.encodeStart(JsonOps.INSTANCE, response.conditions).getOrThrow(false, LOGGER::error));
 				
 				responseObject.add("triggers", Trigger.LIST_CODEC.encodeStart(JsonOps.INSTANCE, response.triggers).getOrThrow(false, LOGGER::error));
 				
@@ -484,24 +293,6 @@ public class Dialogue
 				responses.add(responseObject);
 			}
 			return responses;
-		}
-		
-		private static JsonArray serializeConditions(List<Condition> conditions)
-		{
-			JsonArray conditionsArray = new JsonArray(conditions.size());
-			for(Condition condition : conditions)
-			{
-				JsonObject conditionObject = new JsonObject();
-				
-				String conditionType = condition.type.toString().toLowerCase(Locale.ROOT);
-				conditionObject.add("type", Codec.STRING.encodeStart(JsonOps.INSTANCE, conditionType).getOrThrow(false, LOGGER::error));
-				conditionObject.add("content", Codec.STRING.encodeStart(JsonOps.INSTANCE, condition.content).getOrThrow(false, LOGGER::error));
-				conditionObject.addProperty("content_extra", condition.contentExtra);
-				conditionObject.addProperty("failure_tooltip", condition.failureTooltip);
-				
-				conditionsArray.add(conditionObject);
-			}
-			return conditionsArray;
 		}
 	}
 }

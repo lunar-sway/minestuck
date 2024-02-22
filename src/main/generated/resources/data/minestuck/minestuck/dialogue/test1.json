@@ -7,8 +7,8 @@
     {
       "conditions": [
         {
-          "type": "consort_type",
-          "content": "turtle"
+          "type": "is_entity_type",
+          "entity_type": "minestuck:turtle"
         }
       ],
       "hide_if_failed": true,
@@ -19,8 +19,8 @@
     {
       "conditions": [
         {
-          "type": "consort_type",
-          "content": "nakagator"
+          "type": "is_entity_type",
+          "entity_type": "minestuck:nakagator"
         }
       ],
       "hide_if_failed": true,
@@ -44,8 +44,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "conditionless",
-        "content": ""
+        "type": "conditionless"
       }
     ]
   }

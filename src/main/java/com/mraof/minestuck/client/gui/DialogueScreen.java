@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.network.DialogueTriggerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
@@ -89,7 +90,7 @@ public class DialogueScreen extends Screen
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));
 			
-			if(!Dialogue.Condition.matchesAllConditions(entity, player, response.getConditions()))
+			if(!Condition.matchesAllConditions(entity, player, response.getConditions()))
 			{
 				createFailedTooltip(response, entryButton);
 			}
@@ -102,10 +103,10 @@ public class DialogueScreen extends Screen
 	{
 		MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
 		
-		for(Dialogue.Condition condition : response.getConditions())
+		for(Condition condition : response.getConditions())
 		{
 			String tooltip = condition.getFailureTooltip();
-			if(tooltip != null && !tooltip.isEmpty())
+			if(!tooltip.isEmpty())
 				tooltipMessage.append("\n").append(Component.translatable(tooltip));
 		}
 		

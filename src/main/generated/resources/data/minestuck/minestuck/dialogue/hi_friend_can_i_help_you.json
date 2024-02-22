@@ -31,9 +31,8 @@
     {
       "conditions": [
         {
-          "type": "has_minimum_reputation",
-          "content": "500",
-          "failure_tooltip": "Rep too low"
+          "type": "player_has_reputation",
+          "amount": 500
         }
       ],
       "hide_if_failed": false,
@@ -44,9 +43,9 @@
     {
       "conditions": [
         {
-          "type": "has_maximum_reputation",
-          "content": "200",
-          "failure_tooltip": "Rep too high"
+          "type": "player_has_reputation",
+          "amount": 200,
+          "greater_than": false
         }
       ],
       "hide_if_failed": false,
@@ -65,8 +64,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "conditionless",
-        "content": ""
+        "type": "conditionless"
       }
     ]
   }

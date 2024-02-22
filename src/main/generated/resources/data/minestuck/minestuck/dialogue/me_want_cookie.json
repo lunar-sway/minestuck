@@ -21,9 +21,8 @@
     {
       "conditions": [
         {
-          "type": "has_item",
-          "content": "minecraft:cookie",
-          "failure_tooltip": "Has no cookie"
+          "type": "player_has_item",
+          "item": "minecraft:cookie"
         }
       ],
       "hide_if_failed": false,
@@ -44,8 +43,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "conditionless",
-        "content": ""
+        "type": "conditionless"
       }
     ]
   }

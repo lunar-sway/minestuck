@@ -1,11 +1,14 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.entity.dialogue.Trigger;
+import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -54,31 +57,32 @@ public class DialogueProvider implements DataProvider
 	
 	private void consortDialogues()
 	{
-		add(new DialogueBuilder("mycelium.1", Dialogue.Condition.Type.CONDITIONLESS)
+		add(new DialogueBuilder("mycelium.1", new Condition.InTerrainLandType(LandTypes.FUNGI.get()))
 				.addResponse(new ResponseBuilder("=>", "mycelium.2"))
 		);
 		add(new DialogueBuilder("mycelium.2"));
 		
-		add(new DialogueBuilder("camel/start", Dialogue.Condition.Type.CONDITIONLESS)
+		//TODO was originally in MSTags.TerrainLandTypes.SAND
+		add(new DialogueBuilder("camel/start", new Condition.InTerrainLandType(LandTypes.SAND.get()))
 				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.yes", "camel/no_camel"))
 				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.no", "camel/dancing_camel"))
 		);
 		add(new DialogueBuilder("camel/no_camel"));
 		add(new DialogueBuilder("camel/dancing_camel"));
 		
-		add(new DialogueBuilder("food_shop", new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander"))
+		add(new DialogueBuilder("food_shop", new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
 				.addResponse("Never mind")
 				.addResponse(new ResponseBuilder("What do you have?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
 		);
-		add(new DialogueBuilder("fast_food", new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator"))
+		add(new DialogueBuilder("fast_food", new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get()))
 				.addResponse("I'm good")
 				.addResponse(new ResponseBuilder("Show me your menu").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
 		);
-		add(new DialogueBuilder("grocery_store", new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "iguana"))
+		add(new DialogueBuilder("grocery_store", new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
 				.addResponse("No thanks")
 				.addResponse(new ResponseBuilder("What do you have to sell?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
 		);
-		add(new DialogueBuilder("tasty_welcome", new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle"))
+		add(new DialogueBuilder("tasty_welcome", new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
 				.addResponse("Goodbye")
 				.addResponse(new ResponseBuilder("Let me see your wares").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
 		);
@@ -86,31 +90,30 @@ public class DialogueProvider implements DataProvider
 	
 	private void testDialogues()
 	{
-		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
-				.addResponse(new ResponseBuilder("test1response1", "test2").addCondition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle"))
-				.addResponse(new ResponseBuilder("test1response2", "test2").addCondition(Dialogue.Condition.Type.CONSORT_TYPE, "nakagator"))
+		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large", new Dialogue.UseContext(new Condition.Conditionless()))
+				.addResponse(new ResponseBuilder("test1response1", "test2").addCondition(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())))
+				.addResponse(new ResponseBuilder("test1response2", "test2").addCondition(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())))
 				.addResponse(new ResponseBuilder("test1response3", "test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 		);
 		
-		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONDITIONLESS))))
+		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large", new Dialogue.UseContext(new Condition.Conditionless()))
 				.addResponse(new ResponseBuilder("test2response1", "test1")
-						.addCondition(Dialogue.Condition.Type.CONSORT_TYPE, "salamander", null, "Was not salamander")
+						.addCondition(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
 						.dontHideFailed())
 				.addResponse(new ResponseBuilder("test2response2", "test1").addTrigger(new Trigger.Command("say hi")))
 				.addResponse(new ResponseBuilder("test2response3", "test1")
 						.addTrigger(new Trigger.Command("""
 								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]""")))
 		);
+		add(new DialogueBuilder("turtle_only", new Condition.IsEntityType(MSEntityTypes.TURTLE.get())));
 		
-		add(new DialogueBuilder("turtle_only", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.CONSORT_TYPE, "turtle")))));
+		add(new DialogueBuilder("nakagator_only", new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())));
 		
-		add(new DialogueBuilder("nakagator_only", "test2animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(Dialogue.Condition.Type.IS_ENTITY_TYPE, "minestuck:nakagator")))));
-		
-		add(new DialogueBuilder("me_want_cookie", Dialogue.Condition.Type.CONDITIONLESS)
+		add(new DialogueBuilder("me_want_cookie", new Condition.Conditionless())
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder("why do you want cookie?", LOOP_NEXT_PATH))
 				.addResponse(new ResponseBuilder("here have a cookie chap", "oh_yippee")
-						.addCondition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", null, "Has no cookie")
+						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 1))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
 						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))
 						.dontHideFailed())
@@ -118,19 +121,19 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("oh_yippee"));
 		add(new DialogueBuilder("hunger_filled"));
 		
-		add(new DialogueBuilder("me_want_5_cookies", Dialogue.Condition.Type.CONDITIONLESS)
+		add(new DialogueBuilder("me_want_5_cookies", new Condition.Conditionless())
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder("here have 5 cookies chap", "oh_yippee")
-						.addCondition(Dialogue.Condition.Type.HAS_ITEM, "minecraft:cookie", "5", "Has no cookie")
+						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))
 						.dontHideFailed())
 		);
 		
-		add(new DialogueBuilder("hi_friend_can_i_help_you", Dialogue.Condition.Type.CONDITIONLESS)
+		add(new DialogueBuilder("hi_friend_can_i_help_you", new Condition.Conditionless())
 				.addResponse(new ResponseBuilder("I hate you").addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
 				.addResponse(new ResponseBuilder("I love you").addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
-				.addResponse(new ResponseBuilder("Rep above 500").addCondition(Dialogue.Condition.Type.HAS_MINIMUM_REPUTATION, "500", null, "Rep too low").dontHideFailed())
-				.addResponse(new ResponseBuilder("Rep below 200").addCondition(Dialogue.Condition.Type.HAS_MAXIMUM_REPUTATION, "200", null, "Rep too high").dontHideFailed())
+				.addResponse(new ResponseBuilder("Rep above 500").addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
+				.addResponse(new ResponseBuilder("Rep below 200").addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
 				.addResponse("bye")
 		);
 	}
@@ -155,12 +158,7 @@ public class DialogueProvider implements DataProvider
 			this(message, "generic_animation", "generic_extra_large", null);
 		}
 		
-		DialogueBuilder(String message, Dialogue.Condition.Type useConditionType)
-		{
-			this(message, "generic_animation", "generic_extra_large", new Dialogue.UseContext(List.of(new Dialogue.Condition(useConditionType))));
-		}
-		
-		DialogueBuilder(String message, Dialogue.Condition useCondition)
+		DialogueBuilder(String message, Condition useCondition)
 		{
 			this(message, "generic_animation", "generic_extra_large", new Dialogue.UseContext(List.of(useCondition)));
 		}
@@ -195,7 +193,7 @@ public class DialogueProvider implements DataProvider
 	public static class ResponseBuilder
 	{
 		private final String response;
-		private final List<Dialogue.Condition> conditions;
+		private final List<Condition> conditions;
 		private final List<Trigger> triggers;
 		private final ResourceLocation nextDialoguePath;
 		private boolean hideIfFailed;
@@ -223,21 +221,9 @@ public class DialogueProvider implements DataProvider
 			this.hideIfFailed = true;
 		}
 		
-		public ResponseBuilder addCondition(Dialogue.Condition.Type type)
+		public ResponseBuilder addCondition(Condition condition)
 		{
-			this.conditions.add(new Dialogue.Condition(type));
-			return this;
-		}
-		
-		public ResponseBuilder addCondition(Dialogue.Condition.Type type, String content)
-		{
-			this.conditions.add(new Dialogue.Condition(type, content));
-			return this;
-		}
-		
-		public ResponseBuilder addCondition(Dialogue.Condition.Type type, String content, String contentExtra, String failureTooltip)
-		{
-			this.conditions.add(new Dialogue.Condition(type, content, contentExtra, failureTooltip));
+			this.conditions.add(condition);
 			return this;
 		}
 		

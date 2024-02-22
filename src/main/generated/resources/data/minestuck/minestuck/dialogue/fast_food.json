@@ -28,8 +28,8 @@
   "use_context": {
     "conditions": [
       {
-        "type": "consort_type",
-        "content": "nakagator"
+        "type": "is_entity_type",
+        "entity_type": "minestuck:nakagator"
       }
     ]
   }

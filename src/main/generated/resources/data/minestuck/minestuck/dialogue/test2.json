@@ -7,9 +7,8 @@
     {
       "conditions": [
         {
-          "type": "consort_type",
-          "content": "salamander",
-          "failure_tooltip": "Was not salamander"
+          "type": "is_entity_type",
+          "entity_type": "minestuck:salamander"
         }
       ],
       "hide_if_failed": false,
@@ -45,8 +44,7 @@
   "use_context": {
     "conditions": [
       {
-        "type": "conditionless",
-        "content": ""
+        "type": "conditionless"
       }
     ]
   }
