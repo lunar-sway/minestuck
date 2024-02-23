@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Carved Bush
 - Added Uncarved Wood Iron, Redstone, and Emerald ores
 - Added Silicone Caulk fluid, used in Wood lands
-- Added Cindered woodset
+- Added Cindered woodset and Trees in Heat lands
 - Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, Dead Foliage, and Sandy Grass
 - Added Molten Amber fluid, used in Heat lands
 
