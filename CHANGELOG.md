@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Silicone Caulk fluid, used in Wood lands
 - Added Cindered woodset
 - Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, Dead Foliage, and Sandy Grass
-- Added Molten Amber
+- Added Molten Amber fluid, used in Heat lands
 
 ### Changed
 
@@ -35,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
 - Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
+- Pumord is now alchemized with Pumice Stone instead of any regular Stone
 
 ### Fixed
 

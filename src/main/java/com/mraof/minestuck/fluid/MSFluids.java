@@ -140,7 +140,7 @@ public final class MSFluids
 			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH),
-			MSFluidType.Style.VISCOUS)
+			MSFluidType.Style.PARTIALLY_VISCOUS)
 	{
 		@Override
 		public boolean canExtinguish(Entity entity)
@@ -157,11 +157,11 @@ public final class MSFluids
 	public static final ForgeFlowingFluid.Properties CAULK_PROPERTIES = new ForgeFlowingFluid.Properties(CAULK_TYPE, CAULK, FLOWING_CAULK).bucket(MSItems.CAULK_BUCKET).block(MSBlocks.CAULK).tickRate(20).explosionResistance(100F);
 	
 	public static final RegistryObject<FluidType> MOLTEN_AMBER_TYPE = TYPE_REGISTER.register("molten_amber", () -> new MSFluidType(FluidType.Properties.create()
-			.density(3000)
+			.density(4500)
 			.viscosity(4500)
 			.descriptionId("block.minestuck.molten_amber")
 			.fallDistanceModifier(0F)
-			.motionScale(0.002)
+			.motionScale(0.001)
 			.supportsBoating(true)
 			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
@@ -171,9 +171,10 @@ public final class MSFluids
 		@Override
 		public boolean canExtinguish(Entity entity)
 		{
-			//sets target on fire, hopefully...?
-			if(!entity.isOnFire())
-				entity.setSecondsOnFire(10);
+			//sets target on fire
+			if(entity.getRemainingFireTicks() <= 100)
+				entity.setRemainingFireTicks(100);
+			entity.setSecondsOnFire(100);
 			
 			return false;
 		}
