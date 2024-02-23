@@ -39,6 +39,7 @@ public class MSTags
 		public static final TagKey<Block> VINE_LOGS = tag("logs/vine");
 		public static final TagKey<Block> FLOWERY_VINE_LOGS = tag("logs/flowery_vine");
 		public static final TagKey<Block> DEAD_LOGS = tag("logs/dead");
+		public static final TagKey<Block> CINDERED_LOGS = tag("logs/cindered");
 		public static final TagKey<Block> PETRIFIED_LOGS = tag("logs/petrified");
 		public static final TagKey<Block> ASPECT_LOGS = tag("logs/aspect");
 		public static final TagKey<Block> ASPECT_PLANKS = tag("planks/aspect");
@@ -82,6 +83,7 @@ public class MSTags
 		public static final TagKey<Item> VINE_LOGS = tag("logs/vine");
 		public static final TagKey<Item> FLOWERY_VINE_LOGS = tag("logs/flowery_vine");
 		public static final TagKey<Item> DEAD_LOGS = tag("logs/dead");
+		public static final TagKey<Item> CINDERED_LOGS = tag("logs/cindered");
 		public static final TagKey<Item> PETRIFIED_LOGS = tag("logs/petrified");
 		public static final TagKey<Item> ASPECT_LOGS = tag("logs/aspect");
 		public static final TagKey<Item> ASPECT_PLANKS = tag("planks/aspect");

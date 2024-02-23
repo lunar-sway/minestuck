@@ -605,6 +605,16 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(GLOWING_DOOR.get(), this::createDoorTable);
 		dropSelf(GLOWING_TRAPDOOR.get());
 		
+		dropSelf(CINDERED_PLANKS.get());
+		dropSelf(CINDERED_STAIRS.get());
+		add(CINDERED_SLAB.get(), this::createSlabItemTable);
+		dropSelf(CINDERED_BUTTON.get());
+		dropSelf(CINDERED_PRESSURE_PLATE.get());
+		dropSelf(CINDERED_FENCE.get());
+		dropSelf(CINDERED_FENCE_GATE.get());
+		add(CINDERED_DOOR.get(), this::createDoorTable);
+		dropSelf(CINDERED_TRAPDOOR.get());
+		
 		dropSelf(SHADEWOOD_PLANKS.get());
 		dropSelf(SHADEWOOD_STAIRS.get());
 		add(SHADEWOOD_SLAB.get(), this::createSlabItemTable);

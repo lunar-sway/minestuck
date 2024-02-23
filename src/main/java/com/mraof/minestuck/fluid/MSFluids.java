@@ -154,6 +154,31 @@ public final class MSFluids
 	});
 	public static final RegistryObject<FlowingFluid> CAULK = REGISTER.register("caulk", () -> new ForgeFlowingFluid.Source(MSFluids.CAULK_PROPERTIES));
 	public static final RegistryObject<FlowingFluid> FLOWING_CAULK = REGISTER.register("flowing_caulk", () -> new ForgeFlowingFluid.Flowing(MSFluids.CAULK_PROPERTIES));
-	public static final ForgeFlowingFluid.Properties CAULK_PROPERTIES = new ForgeFlowingFluid.Properties(CAULK_TYPE, CAULK, FLOWING_CAULK).bucket(MSItems.CAULK_BUCKET).block(MSBlocks.CAULK).tickRate(20).slopeFindDistance(3).explosionResistance(100F);
+	public static final ForgeFlowingFluid.Properties CAULK_PROPERTIES = new ForgeFlowingFluid.Properties(CAULK_TYPE, CAULK, FLOWING_CAULK).bucket(MSItems.CAULK_BUCKET).block(MSBlocks.CAULK).tickRate(20).explosionResistance(100F);
 	
+	public static final RegistryObject<FluidType> MOLTEN_AMBER_TYPE = TYPE_REGISTER.register("molten_amber", () -> new MSFluidType(FluidType.Properties.create()
+			.density(3000)
+			.viscosity(4500)
+			.descriptionId("block.minestuck.molten_amber")
+			.fallDistanceModifier(0F)
+			.motionScale(0.002)
+			.supportsBoating(true)
+			.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+			.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+			.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH),
+			MSFluidType.Style.VISCOUS)
+	{
+		@Override
+		public boolean canExtinguish(Entity entity)
+		{
+			//sets target on fire, hopefully...?
+			if(!entity.isOnFire())
+				entity.setSecondsOnFire(10);
+			
+			return false;
+		}
+	});
+	public static final RegistryObject<FlowingFluid> MOLTEN_AMBER = REGISTER.register("molten_amber", () -> new ForgeFlowingFluid.Source(MSFluids.MOLTEN_AMBER_PROPERTIES));
+	public static final RegistryObject<FlowingFluid> FLOWING_MOLTEN_AMBER = REGISTER.register("flowing_molten_amber", () -> new ForgeFlowingFluid.Flowing(MSFluids.MOLTEN_AMBER_PROPERTIES));
+	public static final ForgeFlowingFluid.Properties MOLTEN_AMBER_PROPERTIES = new ForgeFlowingFluid.Properties(MOLTEN_AMBER_TYPE, MOLTEN_AMBER, FLOWING_MOLTEN_AMBER).bucket(MSItems.MOLTEN_AMBER_BUCKET).block(MSBlocks.MOLTEN_AMBER).tickRate(20).explosionResistance(100F);
 }

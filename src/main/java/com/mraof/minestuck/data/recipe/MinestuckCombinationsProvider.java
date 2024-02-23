@@ -382,7 +382,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.PAPER_SWORD.get()).input(Items.PAPER).or().namedInput(Items.WOODEN_SWORD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PAPER_SWORD.get()).input(Items.PAPER).or().namedInput(Items.STONE_SWORD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SWONGE.get()).input(Items.WOODEN_SWORD).and().namedInput(Items.SPONGE).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.PUMORD.get()).input(MSItems.SWONGE.get()).or().namedInput(Tags.Items.STONE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PUMORD.get()).input(MSItems.SWONGE.get()).or().input(MSBlocks.PUMICE_STONE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CACTACEAE_CUTLASS.get()).input(Items.WOODEN_SWORD).and().namedInput(Items.CACTUS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CACTACEAE_CUTLASS.get()).input(Items.WOODEN_SWORD).and().namedInput(MSBlocks.BLOOMING_CACTUS.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.STEAK_SWORD.get()).namedInput(Items.WOODEN_SWORD).or().input(Items.COOKED_BEEF).build(consumer);
@@ -809,6 +809,12 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.PETRIFIED_LOG.get()).namedInput(Items.STONE).or().input(ItemTags.LOGS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PETRIFIED_LOG.get()).namedInput(Items.GRAVEL).or().input(ItemTags.LOGS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PETRIFIED_LOG.get()).namedInput(Items.COBBLESTONE).or().input(ItemTags.LOGS).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CINDERED_LOG.get()).input(ItemTags.LOGS).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CINDERED_LOG.get()).input(ItemTags.LOGS).or().namedInput(Items.MAGMA_CREAM).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CINDERED_LOG.get()).input(ItemTags.LOGS).or().namedInput(Items.LAVA_BUCKET).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CINDERED_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CINDERED_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.MAGMA_CREAM).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CINDERED_PLANKS.get()).input(ItemTags.PLANKS).or().namedInput(Items.LAVA_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLOOMING_CACTUS.get()).input(Items.CACTUS).and().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWFLOWER.get()).input(Items.GLOWSTONE_DUST).and().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SUGAR_CUBE.get()).input(Items.COOKIE).and().input(Items.REDSTONE_BLOCK).build(consumer);
@@ -848,6 +854,10 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE.get()).input(Items.STONE).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).input(Items.SAND).and().namedInput(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).input(Items.SAND).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.IGNEOUS_STONE.get()).input(Items.BLACKSTONE).or().input(MSBlocks.BLACK_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.IGNEOUS_SPIKE.get()).input(MSBlocks.IGNEOUS_STONE.get()).or().input(Items.POINTED_DRIPSTONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.PUMICE_STONE.get()).input(Items.SPONGE).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get()).input(Items.MOSSY_COBBLESTONE).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get()).input(Items.MOSSY_STONE_BRICKS).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHALK.get()).input(Tags.Items.STONE).or().namedInput(Items.NAUTILUS_SHELL).build(consumer);

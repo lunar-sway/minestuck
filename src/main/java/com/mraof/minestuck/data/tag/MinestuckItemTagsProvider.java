@@ -72,6 +72,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.VINE_LOGS, VINE_LOGS);
 		copy(MSTags.Blocks.FLOWERY_VINE_LOGS, FLOWERY_VINE_LOGS);
 		copy(MSTags.Blocks.DEAD_LOGS, DEAD_LOGS);
+		copy(MSTags.Blocks.CINDERED_LOGS, CINDERED_LOGS);
 		copy(MSTags.Blocks.PETRIFIED_LOGS, PETRIFIED_LOGS);
 		copy(MSTags.Blocks.ASPECT_LOGS, ASPECT_LOGS);
 		copy(MSTags.Blocks.ASPECT_PLANKS, ASPECT_PLANKS);

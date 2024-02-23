@@ -121,6 +121,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.LIGHT_WATER_BUCKET.get());
 		output.accept(MSItems.OBSIDIAN_BUCKET.get());
 		output.accept(MSItems.CAULK_BUCKET.get());
+		output.accept(MSItems.MOLTEN_AMBER_BUCKET.get());
 		
 		output.accept(MSItems.DICE.get());
 		output.accept(MSItems.PLUTONIUM_CORE.get());
@@ -1042,6 +1043,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FLOWERY_VINE_WOOD.get());
 		output.accept(MSItems.DEAD_WOOD.get());
 		output.accept(MSItems.PETRIFIED_WOOD.get());
+		output.accept(MSItems.CINDERED_WOOD.get());
 		
 		output.accept(MSItems.GLOWING_PLANKS.get());
 		output.accept(MSItems.GLOWING_STAIRS.get());
@@ -1086,6 +1088,16 @@ public final class MSCreativeTabs
 		output.accept(MSItems.DEAD_FENCE_GATE.get());
 		output.accept(MSItems.DEAD_DOOR.get());
 		output.accept(MSItems.DEAD_TRAPDOOR.get());
+		
+		output.accept(MSItems.CINDERED_PLANKS.get());
+		output.accept(MSItems.CINDERED_STAIRS.get());
+		output.accept(MSItems.CINDERED_SLAB.get());
+		output.accept(MSItems.CINDERED_BUTTON.get());
+		output.accept(MSItems.CINDERED_PRESSURE_PLATE.get());
+		output.accept(MSItems.CINDERED_FENCE.get());
+		output.accept(MSItems.CINDERED_FENCE_GATE.get());
+		output.accept(MSItems.CINDERED_DOOR.get());
+		output.accept(MSItems.CINDERED_TRAPDOOR.get());
 		
 		output.accept(MSItems.SHADEWOOD_PLANKS.get());
 		output.accept(MSItems.SHADEWOOD_STAIRS.get());

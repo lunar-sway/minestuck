@@ -589,6 +589,7 @@ public class MSItems
 	public static final RegistryObject<Item> LIGHT_WATER_BUCKET = REGISTER.register("light_water_bucket", () -> new BucketItem(MSFluids.LIGHT_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final RegistryObject<Item> OBSIDIAN_BUCKET = REGISTER.register("obsidian_bucket", () -> new ObsidianBucketItem(new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
 	public static final RegistryObject<Item> CAULK_BUCKET = REGISTER.register("caulk_bucket", () -> new BucketItem(MSFluids.CAULK, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final RegistryObject<Item> MOLTEN_AMBER_BUCKET = REGISTER.register("molten_amber_bucket", () -> new BucketItem(MSFluids.MOLTEN_AMBER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	
 	
 	//Alchemy Items
@@ -1275,6 +1276,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FLOWERY_VINE_WOOD = registerBlockItem(MSBlocks.FLOWERY_VINE_WOOD);
 	public static final RegistryObject<BlockItem> DEAD_WOOD = registerBlockItem(MSBlocks.DEAD_WOOD);
 	public static final RegistryObject<BlockItem> PETRIFIED_WOOD = registerBlockItem(MSBlocks.PETRIFIED_WOOD);
+	public static final RegistryObject<BlockItem> CINDERED_WOOD = registerBlockItem(MSBlocks.CINDERED_WOOD);
 	
 	public static final RegistryObject<BlockItem> GLOWING_PLANKS = registerBlockItem(MSBlocks.GLOWING_PLANKS);
 	public static final RegistryObject<BlockItem> GLOWING_STAIRS = registerBlockItem(MSBlocks.GLOWING_STAIRS);
@@ -1319,6 +1321,16 @@ public class MSItems
 	public static final RegistryObject<BlockItem> DEAD_FENCE_GATE = registerBlockItem(MSBlocks.DEAD_FENCE_GATE);
 	public static final RegistryObject<BlockItem> DEAD_DOOR = registerBlockItem(MSBlocks.DEAD_DOOR);
 	public static final RegistryObject<BlockItem> DEAD_TRAPDOOR = registerBlockItem(MSBlocks.DEAD_TRAPDOOR);
+	
+	public static final RegistryObject<BlockItem> CINDERED_PLANKS = registerBlockItem(MSBlocks.CINDERED_PLANKS);
+	public static final RegistryObject<BlockItem> CINDERED_STAIRS = registerBlockItem(MSBlocks.CINDERED_STAIRS);
+	public static final RegistryObject<BlockItem> CINDERED_SLAB = registerBlockItem(MSBlocks.CINDERED_SLAB);
+	public static final RegistryObject<BlockItem> CINDERED_BUTTON = registerBlockItem(MSBlocks.CINDERED_BUTTON);
+	public static final RegistryObject<BlockItem> CINDERED_PRESSURE_PLATE = registerBlockItem(MSBlocks.CINDERED_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> CINDERED_FENCE = registerBlockItem(MSBlocks.CINDERED_FENCE);
+	public static final RegistryObject<BlockItem> CINDERED_FENCE_GATE = registerBlockItem(MSBlocks.CINDERED_FENCE_GATE);
+	public static final RegistryObject<BlockItem> CINDERED_DOOR = registerBlockItem(MSBlocks.CINDERED_DOOR);
+	public static final RegistryObject<BlockItem> CINDERED_TRAPDOOR = registerBlockItem(MSBlocks.CINDERED_TRAPDOOR);
 	
 	public static final RegistryObject<BlockItem> SHADEWOOD_PLANKS = registerBlockItem(MSBlocks.SHADEWOOD_PLANKS);
 	public static final RegistryObject<BlockItem> SHADEWOOD_STAIRS = registerBlockItem(MSBlocks.SHADEWOOD_STAIRS);
