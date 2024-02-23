@@ -35,6 +35,7 @@ import java.util.Optional;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ComputerThemes
 {
+	private static final Logger LOGGER = LogManager.getLogger("minestuck/ComputerThemes");
 	public static final String PATH = "minestuck/computer_themes";
 	
 	private final Map<ResourceLocation, ComputerTheme> themes;
@@ -73,7 +74,6 @@ public class ComputerThemes
 	
 	private static final class Loader extends SimpleJsonResourceReloadListener
 	{
-		private static final Logger LOGGER = LogManager.getLogger();
 		private static final Gson GSON = new GsonBuilder().create();
 		
 		Loader()
