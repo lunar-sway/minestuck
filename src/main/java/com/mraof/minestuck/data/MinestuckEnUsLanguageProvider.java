@@ -583,6 +583,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_VINE_LOG, "Flowery Vine Oak Log");
 		addBlock(MSBlocks.DEAD_LOG, "Dead Log");
 		addBlock(MSBlocks.PETRIFIED_LOG, "Petrified Log");
+		addBlock(MSBlocks.CINDERED_LOG, "Cindered Log");
 		addBlock(MSBlocks.GLOWING_WOOD, "Glowing Wood");
 		addBlock(MSBlocks.SHADEWOOD_LOG, "Shadewood Log");
 		addBlock(MSBlocks.SCARRED_SHADEWOOD_LOG, "Scarred Shadewood Log");
@@ -603,7 +604,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_VINE_WOOD, "Flowery Vine Wood");
 		addBlock(MSBlocks.DEAD_WOOD, "Dead Wood");
 		addBlock(MSBlocks.PETRIFIED_WOOD, "Petrified Wood");
-		addBlock(MSBlocks.CINDERED_LOG, "Cindered Log");
+		addBlock(MSBlocks.CINDERED_WOOD, "Cindered Wood");
 		
 		addBlock(MSBlocks.GLOWING_PLANKS, "Glowing Planks");
 		addBlock(MSBlocks.GLOWING_STAIRS, "Glowing Stairs");
@@ -649,15 +650,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_DOOR, "Dead Door");
 		addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
 		
-		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
-		addBlock(MSBlocks.SHADEWOOD_STAIRS, "Shadewood Stairs");
-		addBlock(MSBlocks.SHADEWOOD_SLAB, "Shadewood Slab");
-		addBlock(MSBlocks.SHADEWOOD_BUTTON, "Shadewood Button");
-		addBlock(MSBlocks.SHADEWOOD_PRESSURE_PLATE, "Shadewood Pressure Plate");
-		addBlock(MSBlocks.SHADEWOOD_FENCE, "Shadewood Fence");
-		addBlock(MSBlocks.SHADEWOOD_FENCE_GATE, "Shadewood Fence Gate");
-		addBlock(MSBlocks.SHADEWOOD_DOOR, "Shadewood Door");
-		addBlock(MSBlocks.SHADEWOOD_TRAPDOOR, "Shadewood Trapdoor");
+		addBlock(MSBlocks.CINDERED_PLANKS, "Cindered Planks");
+		addBlock(MSBlocks.CINDERED_STAIRS, "Cindered Stairs");
+		addBlock(MSBlocks.CINDERED_SLAB, "Cindered Slab");
+		addBlock(MSBlocks.CINDERED_BUTTON, "Cindered Button");
+		addBlock(MSBlocks.CINDERED_PRESSURE_PLATE, "Cindered Pressure Plate");
+		addBlock(MSBlocks.CINDERED_FENCE, "Cindered Fence");
+		addBlock(MSBlocks.CINDERED_FENCE_GATE, "Cindered Fence Gate");
+		addBlock(MSBlocks.CINDERED_DOOR, "Cindered Door");
+		addBlock(MSBlocks.CINDERED_TRAPDOOR, "Cindered Trapdoor");
 		
 		addBlock(MSBlocks.FROST_LEAVES, "Frost Leaves");
 		addBlock(MSBlocks.RAINBOW_LEAVES, "Rainbow Leaves");
@@ -1107,6 +1108,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.ENDER, "End Fluid");
 		addBlock(MSBlocks.LIGHT_WATER, "Light Water");
 		addBlock(MSBlocks.CAULK, "Silicone Caulk");
+		addBlock(MSBlocks.MOLTEN_AMBER, "Molten Amber");
 		
 		addItem(MSItems.CLAW_HAMMER, "Claw Hammer");
 		addItemTooltip(MSItems.CLAW_HAMMER, "An average hammer found in about any garage. It can also destroy blocks");
@@ -1828,6 +1830,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.LIGHT_WATER_BUCKET, "You're not convinced this is water. It's unnatural.");
 		addItem(MSItems.OBSIDIAN_BUCKET, "Obsidian Bucket");
 		addItem(MSItems.CAULK_BUCKET, "Bucket of Silicone Caulk");
+		addItem(MSItems.MOLTEN_AMBER_BUCKET, "Bucket of Molten Amber");
 		addItem(MSItems.CAPTCHAROID_CAMERA, "Captcharoid Camera");
 		addItem(MSItems.GRIMOIRE, "Grimoire for Summoning the Zoologically Dubious");
 		addItemExtra(MSItems.GRIMOIRE, "message", "After flipping through some pages, you feel significantly more insignificant.");

@@ -852,6 +852,10 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.CAST_IRON.get()).grist(BUILD, 3).grist(RUST, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.STEEL_BEAM.get()).grist(BUILD, 2).grist(RUST, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).grist(BUILD, 2).grist(SULFUR, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.IGNEOUS_STONE.get()).grist(TAR, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.IGNEOUS_SPIKE.get()).grist(TAR, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.PUMICE_STONE.get()).grist(TAR, 2).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSBlocks.COARSE_END_STONE.get()).grist(BUILD, 4).grist(CAULK, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CHALK.get()).grist(BUILD, 2).grist(CHALK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CARVED_LOG.get()).grist(BUILD, 6).grist(AMBER, 2).build(recipeSaver);
@@ -870,6 +874,11 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.LACQUERED_WOODEN_MUSHROOM.get()).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.WOODEN_LAMP.get()).grist(AMBER, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.END_GRASS.get()).grist(BUILD, 4).grist(CAULK, 3).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.SINGED_FOLIAGE.get()).grist(AMBER, 3).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.SINGED_GRASS.get()).grist(AMBER, 3).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.DEAD_FOLIAGE.get()).grist(AMBER, 2).grist(SULFUR, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.SANDY_GRASS.get()).grist(AMBER, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.SULFUR_BUBBLE.get()).grist(SULFUR, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FLOWERY_VINE_LOG.get()).grist(BUILD, 7).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_LOG.get()).grist(BUILD, 7).grist(COBALT, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.NATIVE_SULFUR.get()).grist(SULFUR, 30).build(recipeSaver);
@@ -942,6 +951,7 @@ public final class MinestuckGristCostsProvider
 		ContainerGristCostBuilder.of(MSItems.ENDER_BUCKET.get()).grist(MERCURY, 8).grist(URANIUM, 8).build(recipeSaver);
 		ContainerGristCostBuilder.of(MSItems.OBSIDIAN_BUCKET.get()).grist(BUILD, 4).grist(COBALT, 8).grist(TAR, 16).build(recipeSaver);
 		ContainerGristCostBuilder.of(MSItems.CAULK_BUCKET.get()).grist(CAULK, 16).build(recipeSaver);
+		ContainerGristCostBuilder.of(MSItems.MOLTEN_AMBER_BUCKET.get()).grist(AMBER, 16).build(recipeSaver);
 		
 		WildcardGristCostBuilder.of(MSItems.CAPTCHA_CARD.get()).cost(1).build(recipeSaver);
 		

@@ -41,7 +41,7 @@ public class HeatLandType extends TerrainLandType
 	{
 		registry.setBlock("ground", MSBlocks.PUMICE_STONE);
 		registry.setBlock("upper", MSBlocks.IGNEOUS_STONE);
-		registry.setBlock("ocean", Blocks.LAVA);
+		registry.setBlock("ocean", MSBlocks.MOLTEN_AMBER);
 		registry.setBlock("structure_primary", MSBlocks.BLACK_STONE_BRICKS);
 		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_BLACK_STONE_BRICKS);

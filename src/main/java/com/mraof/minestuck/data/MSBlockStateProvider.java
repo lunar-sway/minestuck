@@ -385,6 +385,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 		simpleBlockWithItem(MSBlocks.CRACKED_BLACK_STONE_BRICKS);
 		
+		simpleBlockWithItem(MSBlocks.IGNEOUS_STONE);
+		simpleBlockWithItem(MSBlocks.PUMICE_STONE);
+		
 		simpleBlockWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		stairsWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_STAIRS, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		slabWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_SLAB, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
@@ -737,6 +740,15 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.CINDERED_LOG,
+				id -> models().cube(id.getPath(),
+						texture(id.withSuffix("_bottom")),
+						texture(id.withSuffix("_top")),
+						texture(id.withSuffix("_north")),
+						texture(id.withSuffix("_south")),
+						texture(id.withSuffix("_east")),
+						texture(id.withSuffix("_west")))
+				.texture("particle", texture(id.withSuffix("_north"))));
 		axisWithItem(MSBlocks.PETRIFIED_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
@@ -814,6 +826,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture("dead_log"),
 						texture("dead_log")));
+		axisWithItem(MSBlocks.CINDERED_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("cindered_log_west"),
+						texture("cindered_log_west")));
 		axisWithItem(MSBlocks.PETRIFIED_WOOD,
 				id -> models().cubeColumn(id.getPath(),
 						texture("petrified_log"),
@@ -867,6 +883,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.DEAD_DOOR);
 		trapDoorWithItem(MSBlocks.DEAD_TRAPDOOR);
 		flatItem(MSItems.DEAD_DOOR, MSBlockStateProvider::itemTexture);
+		
+		simpleBlockWithItem(MSBlocks.CINDERED_PLANKS);
+		stairsWithItem(MSBlocks.CINDERED_STAIRS, MSBlocks.CINDERED_PLANKS);
+		slabWithItem(MSBlocks.CINDERED_SLAB, MSBlocks.CINDERED_PLANKS);
+		buttonWithItem(MSBlocks.CINDERED_BUTTON, MSBlocks.CINDERED_PLANKS);
+		pressurePlateWithItem(MSBlocks.CINDERED_PRESSURE_PLATE, MSBlocks.CINDERED_PLANKS);
+		fenceWithItem(MSBlocks.CINDERED_FENCE, MSBlocks.CINDERED_PLANKS);
+		fenceGateWithItem(MSBlocks.CINDERED_FENCE_GATE, MSBlocks.CINDERED_PLANKS);
+		simpleDoorBlock(MSBlocks.CINDERED_DOOR);
+		trapDoorWithItem(MSBlocks.CINDERED_TRAPDOOR);
+		flatItem(MSItems.CINDERED_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.SHADEWOOD_PLANKS);
 		stairsWithItem(MSBlocks.SHADEWOOD_STAIRS, MSBlocks.SHADEWOOD_PLANKS);
@@ -1250,12 +1277,30 @@ public class MSBlockStateProvider extends BlockStateProvider
 		getVariantBuilder(MSBlocks.BLOOMING_CACTUS.get()).partialState().setModels(variantModels(3,
 				i -> models().cross("blooming_cactus" + i, texture("blooming_cactus_" + i)).renderType("cutout")));
 		flatItem(MSItems.BLOOMING_CACTUS, id -> texture("blooming_cactus_2"));
+		getVariantBuilder(MSBlocks.SANDY_GRASS.get()).partialState().setModels(variantModels(2,
+				i -> models().cross("sandy_grass" + i, texture("sandy_grass_" + i)).renderType("cutout")));
+		flatItem(MSItems.SANDY_GRASS, id -> texture("sandy_grass_0"));
+		simpleBlock(MSBlocks.DEAD_FOLIAGE,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.DEAD_FOLIAGE, MSBlockStateProvider::texture);
 		simpleBlock(MSBlocks.PETRIFIED_GRASS,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.PETRIFIED_GRASS, MSBlockStateProvider::texture);
 		simpleBlock(MSBlocks.PETRIFIED_POPPY,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.PETRIFIED_POPPY, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.IGNEOUS_SPIKE,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.IGNEOUS_SPIKE, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.SINGED_GRASS,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.SINGED_GRASS, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.SINGED_FOLIAGE,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.SINGED_FOLIAGE, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.SULFUR_BUBBLE,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.SULFUR_BUBBLE, MSBlockStateProvider::texture);
 		
 		simpleBlock(MSBlocks.GLOWING_MUSHROOM_VINES,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
@@ -1274,6 +1319,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 			return ConfiguredModel.builder().modelFile(model).build();
 		});
 		
+		flatItem(MSItems.TALL_DEAD_BUSH, id -> texture(id.withSuffix("_top")));
+		flatItem(MSItems.TALL_SANDY_GRASS, id -> texture(id.withSuffix("_top")));
 		flatItem(MSItems.TALL_END_GRASS, id -> texture(id.withSuffix("_top")));
 		simpleBlock(MSBlocks.GLOWFLOWER,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));

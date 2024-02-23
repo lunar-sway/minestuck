@@ -19,7 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 - Added Carved Bush
 - Added Uncarved Wood Iron, Redstone, and Emerald ores
-- Silicone Caulk fluid, used in Wood lands
+- Added Silicone Caulk fluid, used in Wood lands
+- Added Cindered woodset
+- Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, Dead Foliage, and Sandy Grass
+- Added Molten Amber
 
 ### Changed
 
