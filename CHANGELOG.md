@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Metal Boats no longer crash the game when dispensed
 - Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
 - Fixed underling texture layer that on hurt wasn't tinted red with the rest of the underling
+- Fixed fall damage for minestuck fluids
 
 ### Contributors for this release
 
