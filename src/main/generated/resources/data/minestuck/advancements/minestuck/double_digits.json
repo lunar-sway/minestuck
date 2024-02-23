@@ -1,5 +1,5 @@
 {
-  "parent": "minestuck:minestuck/first_steps",
+  "parent": "minestuck:minestuck/first_step",
   "criteria": {
     "reach_rung": {
       "conditions": {

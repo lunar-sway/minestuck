@@ -8,6 +8,7 @@ public class MSCriteriaTriggers
 	public static final EventTrigger CRUXITE_ARTIFACT = new EventTrigger(EventTrigger.CRUXITE_ARTIFACT_ID);
 	public static final EventTrigger RETURN_NODE = new EventTrigger(EventTrigger.RETURN_NODE_ID);
 	public static final EventTrigger MELON_OVERLOAD = new EventTrigger(EventTrigger.MELON_OVERLOAD_ID);
+	public static final EventTrigger BUY_OUT_SHOP = new EventTrigger(EventTrigger.BUY_OUT_SHOP_ID);
 	
 	public static final PunchDesignixTrigger PUNCH_DESIGNIX = new PunchDesignixTrigger();
 	public static final IntellibeamLaserstationTrigger INTELLIBEAM_LASERSTATION = new IntellibeamLaserstationTrigger();
@@ -27,6 +28,7 @@ public class MSCriteriaTriggers
 		CriteriaTriggers.register(CRUXITE_ARTIFACT);
 		CriteriaTriggers.register(RETURN_NODE);
 		CriteriaTriggers.register(MELON_OVERLOAD);
+		CriteriaTriggers.register(BUY_OUT_SHOP);
 		
 		CriteriaTriggers.register(PUNCH_DESIGNIX);
 		CriteriaTriggers.register(INTELLIBEAM_LASERSTATION);
