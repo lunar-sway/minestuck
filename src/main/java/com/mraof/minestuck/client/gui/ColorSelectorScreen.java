@@ -166,6 +166,7 @@ public class ColorSelectorScreen extends Screen
 			// spirograph color preview
 			RenderSystem.setShaderColor((float)redSlider.getValue()/255F, (float)greenSlider.getValue()/255, (float)blueSlider.getValue()/255, 0.5F);
 			guiGraphics.blit(guiBackground, xOffset+106, yOffset+57, 47, 47, guiWidth, 20, 64, 64, 256, 256);
+			
 		} else
 		{
 			for(ColorSelector canonColor : canonColors)
@@ -177,6 +178,8 @@ public class ColorSelectorScreen extends Screen
 			}
 		}
 		
+		//resets shader color to avoid tinting the whole gui
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		if(tab==Tab.Canon)
