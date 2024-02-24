@@ -6,14 +6,15 @@ import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -21,6 +22,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
@@ -33,6 +35,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map.Entry;
@@ -40,6 +43,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 {
 	//TODO The implementation of this class need a serious rewrite
@@ -67,7 +72,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public Set<Block> hieroglyphsStored = new HashSet<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
-	private Theme theme = Theme.DEFAULT;
+	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
 	
 	@Override
 	public void load(CompoundTag nbt)
@@ -94,8 +99,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			latestmessage.put(id, nbt.getString("text" + id));
 		
 		programData = nbt.getCompound("programData");
-		if(nbt.contains("theme"))
-			theme = Theme.values()[nbt.getInt("theme")];
+		if(nbt.contains("theme", Tag.TAG_STRING))
+			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(nbt.getString("theme")), computerTheme);
+		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
+		else if(nbt.contains("theme", Tag.TAG_INT))
+			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(nbt.getInt("theme"));
 		
 		hieroglyphsStored = MSNBTUtil.readBlockSet(nbt, "hieroglyphsStored");
 		if(nbt.contains("hasParadoxInfoStored"))
@@ -132,7 +140,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		compound.putInt("blankDisksStored", blankDisksStored);
 		
-		compound.putInt("theme", theme.ordinal());
+		compound.putString("theme", computerTheme.toString());
 	}
 	
 	@Override
@@ -268,16 +276,14 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		markBlockForUpdate();
 	}
 	
-	@Override
-	public Theme getTheme()
+	public ResourceLocation getTheme()
 	{
-		return theme;
+		return computerTheme;
 	}
 	
-	@Override
-	public void setTheme(Theme theme)
+	public void setTheme(ResourceLocation themeId)
 	{
-		this.theme = theme;
+		this.computerTheme = themeId;
 		setChanged();
 		markBlockForUpdate();
 	}
