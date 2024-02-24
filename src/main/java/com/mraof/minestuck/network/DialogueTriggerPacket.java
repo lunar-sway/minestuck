@@ -16,6 +16,7 @@ public class DialogueTriggerPacket implements MSPacket.PlayToServer
 	{
 		return new DialogueTriggerPacket(trigger, entity.getId());
 	}
+	
 	public DialogueTriggerPacket(Trigger trigger, int entityID)
 	{
 		this.trigger = trigger;
@@ -31,10 +32,11 @@ public class DialogueTriggerPacket implements MSPacket.PlayToServer
 	
 	public static DialogueTriggerPacket decode(FriendlyByteBuf buffer)
 	{
-		try {
+		try
+		{
 			Trigger trigger = Trigger.read(buffer);
 			return new DialogueTriggerPacket(trigger, buffer.readInt());
-		} catch (Exception e)
+		} catch(Exception e)
 		{
 			e.printStackTrace();
 		}
