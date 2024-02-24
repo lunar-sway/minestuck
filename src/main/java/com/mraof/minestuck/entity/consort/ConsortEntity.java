@@ -155,7 +155,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 					{
 						handleConsortRepFromTalking(serverPlayer);
 						setCurrentAnimation(TALK_PROPERTIES);
-						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.getMessage(), this);
+						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.message(), this);
 						
 						DialogueScreenPacket packet = DialogueScreenPacket.createPacket(this, dialogue);
 						MSPacketHandler.sendToPlayer(packet, serverPlayer);
@@ -467,7 +467,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			dialogue = DialogueManager.getInstance().doRandomDialogue(this, random);
 			
 			if(dialogue != null)
-				dialoguePath = dialogue.getPath();
+				dialoguePath = dialogue.path();
 		}
 		
 		return dialogue;

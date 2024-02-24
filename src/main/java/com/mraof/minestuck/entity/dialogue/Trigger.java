@@ -276,7 +276,6 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, Player player)
 		{
-			//TODO has been causing server side crashes the second time it is run
 			if(!(entity instanceof ConsortEntity consortEntity) || !(player instanceof ServerPlayer serverPlayer))
 				return;
 			

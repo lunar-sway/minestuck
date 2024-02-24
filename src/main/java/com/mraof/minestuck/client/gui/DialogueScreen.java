@@ -49,7 +49,7 @@ public class DialogueScreen extends Screen
 		
 		this.entity = entity;
 		this.player = player;
-		this.guiBackground = dialogue.getGuiPath();
+		this.guiBackground = dialogue.guiPath();
 		this.dialogue = dialogue;
 	}
 	
@@ -71,7 +71,7 @@ public class DialogueScreen extends Screen
 		List<Dialogue.Response> filteredResponses = new ArrayList<>();
 		
 		//removes responses if they fail their conditions and should be hidden when that happens
-		for(Dialogue.Response response : dialogue.getResponses())
+		for(Dialogue.Response response : dialogue.responses())
 		{
 			if(response.failsWhileImportant(entity, player))
 				continue;
@@ -82,7 +82,7 @@ public class DialogueScreen extends Screen
 		for(int i = 0; i < filteredResponses.size(); i++)
 		{
 			Dialogue.Response response = filteredResponses.get(i);
-			String responseMessage = response.getResponse();
+			String responseMessage = response.response();
 			int yPositionOffset = 20 * i;
 			
 			Component buttonComponent = Component.translatable(responseMessage);
@@ -90,7 +90,7 @@ public class DialogueScreen extends Screen
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));
 			
-			if(!Condition.matchesAllConditions(entity, player, response.getConditions()))
+			if(!Condition.matchesAllConditions(entity, player, response.conditions()))
 			{
 				createFailedTooltip(response, entryButton);
 			}
@@ -103,7 +103,7 @@ public class DialogueScreen extends Screen
 	{
 		MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
 		
-		for(Condition condition : response.getConditions())
+		for(Condition condition : response.conditions())
 		{
 			String tooltip = condition.getFailureTooltip();
 			if(!tooltip.isEmpty())
@@ -116,11 +116,11 @@ public class DialogueScreen extends Screen
 	
 	private void clickResponse(String responseMessage)
 	{
-		for(Dialogue.Response response : dialogue.getResponses())
+		for(Dialogue.Response response : dialogue.responses())
 		{
-			if(response.getResponse().equals(responseMessage))
+			if(response.response().equals(responseMessage))
 			{
-				ResourceLocation nextPath = response.getNextDialoguePath();
+				ResourceLocation nextPath = response.nextDialoguePath();
 				
 				Dialogue nextDialogue = null;
 				if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
@@ -128,7 +128,7 @@ public class DialogueScreen extends Screen
 				else if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
 					nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
 				
-				List<Trigger> triggers = response.getTriggers();
+				List<Trigger> triggers = response.triggers();
 				for(Trigger trigger : triggers)
 				{
 					DialogueTriggerPacket packet = DialogueTriggerPacket.createPacket(trigger, entity);
@@ -155,7 +155,7 @@ public class DialogueScreen extends Screen
 		if(guiBackground != null)
 			guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		String dialogueMessage = dialogue.getMessage();
+		String dialogueMessage = dialogue.message();
 		if(dialogueMessage != null && !dialogueMessage.isEmpty())
 		{
 			MutableComponent entityName = entity.getDisplayName().plainCopy();

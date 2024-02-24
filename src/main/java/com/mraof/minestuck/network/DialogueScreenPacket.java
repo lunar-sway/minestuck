@@ -18,7 +18,7 @@ public class DialogueScreenPacket implements MSPacket.PlayToClient
 	
 	public static DialogueScreenPacket createPacket(LivingEntity entity, Dialogue dialogue)
 	{
-		return new DialogueScreenPacket(entity.getId(), dialogue.getPath());
+		return new DialogueScreenPacket(entity.getId(), dialogue.path());
 	}
 	
 	public DialogueScreenPacket(int entityID, ResourceLocation dialogueLocation)

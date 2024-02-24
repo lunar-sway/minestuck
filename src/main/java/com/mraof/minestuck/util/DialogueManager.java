@@ -70,7 +70,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 		{
 			//random dialogue from the ones available given the entities immediate context
 			List<Dialogue> filteredDialogues = dialogues.stream().filter(dialogue -> {
-				Dialogue.UseContext useContext = dialogue.getUseContext(); //TODO useContext is null when empty
+				Dialogue.UseContext useContext = dialogue.useContext(); //TODO useContext is null when empty
 				if(useContext == null)
 					return false;
 				else
@@ -92,7 +92,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	public Dialogue getDialogue(ResourceLocation location)
 	{
 		Optional<Dialogue> potentialDialogue = dialogues.stream().filter(dialogue ->
-				dialogue.getPath().equals(location)).findAny();
+				dialogue.path().equals(location)).findAny();
 		return potentialDialogue.orElse(null);
 	}
 	

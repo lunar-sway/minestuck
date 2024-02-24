@@ -1,49 +1,38 @@
 package com.mraof.minestuck.entity.dialogue;
 
 import com.google.gson.*;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.world.MSDimensions;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.TriPredicate;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
-public class Dialogue
+public record Dialogue(ResourceLocation path, String message, String animation, ResourceLocation guiPath, List<Response> responses, UseContext useContext)
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	private final ResourceLocation path;
-	private final String message;
-	private final String animation;
-	private final ResourceLocation guiPath;
-	private final List<Response> responses;
-	private final UseContext useContext;
+	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance ->
+			instance.group(ResourceLocation.CODEC.fieldOf("path").forGetter(Dialogue::path),
+							Codec.STRING.fieldOf("message").forGetter(Dialogue::message),
+							Codec.STRING.fieldOf("animation").forGetter(Dialogue::animation),
+							ResourceLocation.CODEC.fieldOf("gui_path").forGetter(Dialogue::guiPath),
+							Codec.list(Response.CODEC).fieldOf("responses").forGetter(Dialogue::responses),
+							UseContext.CODEC.fieldOf("use_context").forGetter(Dialogue::useContext))
+					.apply(instance, Dialogue::new));
 	
 	public Dialogue(ResourceLocation path, String message, String animation, ResourceLocation guiPath, List<Response> responses, @Nullable UseContext useContext)
 	{
@@ -55,90 +44,35 @@ public class Dialogue
 		this.useContext = useContext;
 	}
 	
-	public ResourceLocation getPath()
-	{
-		return path;
-	}
-	
-	public String getMessage()
-	{
-		return message;
-	}
-	
-	public String getAnimation()
-	{
-		return animation;
-	}
-	
-	public ResourceLocation getGuiPath()
-	{
-		return guiPath;
-	}
-	
-	public List<Response> getResponses()
-	{
-		return responses;
-	}
-	
-	public UseContext getUseContext()
-	{
-		return useContext;
-	}
 	
 	/**
 	 * A Response contains all possible Dialogues that can be reached from the present Dialogue.
 	 * It contains the message that represents the Response, any Conditions/Triggers, the location of the next Dialogue, and a boolean determining whether the Response should be visible when it fails to meet the Conditions
 	 */
-	public static class Response
+	public record Response(String response, List<Condition> conditions, List<Trigger> triggers,
+						   ResourceLocation nextDialoguePath, boolean hideIfFailed)
 	{
-		private final String response;
-		private final List<Condition> conditions;
-		private final List<Trigger> triggers;
-		private final ResourceLocation nextDialoguePath;
-		private final boolean hideIfFailed;
-		
-		public Response(String response, List<Condition> conditions, List<Trigger> triggers, ResourceLocation nextDialoguePath, boolean hideIfFailed)
-		{
-			this.response = response;
-			this.conditions = conditions;
-			this.triggers = triggers;
-			this.nextDialoguePath = nextDialoguePath;
-			this.hideIfFailed = hideIfFailed;
-		}
-		
-		public String getResponse()
-		{
-			return response;
-		}
-		
-		public List<Condition> getConditions()
-		{
-			return conditions;
-		}
-		
-		public List<Trigger> getTriggers()
-		{
-			return triggers;
-		}
-		
-		public ResourceLocation getNextDialoguePath()
-		{
-			return nextDialoguePath;
-		}
-		
-		public boolean isHideIfFailed()
-		{
-			return hideIfFailed;
-		}
+		static Codec<Response> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(Codec.STRING.fieldOf("response").forGetter(Response::response),
+								Codec.list(Condition.CODEC).fieldOf("conditions").forGetter(Response::conditions),
+								Codec.list(Trigger.CODEC).fieldOf("triggers").forGetter(Response::triggers),
+								ResourceLocation.CODEC.fieldOf("next_dialogue_path").forGetter(Response::nextDialoguePath),
+								Codec.BOOL.fieldOf("hide_if_failed").forGetter(Response::hideIfFailed)
+						)
+						.apply(instance, Response::new));
 		
 		public boolean failsWhileImportant(LivingEntity entity, Player player)
 		{
-			return !Condition.matchesAllConditions(entity, player, conditions) && isHideIfFailed();
+			return !Condition.matchesAllConditions(entity, player, conditions) && hideIfFailed();
 		}
 	}
 	
 	public static class UseContext
 	{
+		static Codec<UseContext> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(Codec.list(Condition.CODEC).fieldOf("conditions").forGetter(UseContext::getConditions))
+						.apply(instance, UseContext::new));
+		
 		private final List<Condition> conditions;
 		
 		public UseContext(Condition condition)
