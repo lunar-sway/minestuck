@@ -105,7 +105,6 @@ public sealed interface Condition
 		return getType().failureTooltip;
 	}
 	
-	//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
 	boolean testCondition(LivingEntity entity, ServerPlayer player);
 	
 	static boolean matchesAllConditions(LivingEntity entity, ServerPlayer player, List<Condition> conditions)
