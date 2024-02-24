@@ -88,8 +88,7 @@ public sealed interface Trigger
 	
 	Type getType();
 	
-	//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
-	void triggerEffect(LivingEntity entity, Player player);
+	void triggerEffect(LivingEntity entity, ServerPlayer player);
 	
 	record SetDialogue(ResourceLocation newPath) implements Trigger
 	{
@@ -115,7 +114,7 @@ public sealed interface Trigger
 		}
 		
 		@Override
-		public void triggerEffect(LivingEntity entity, Player player)
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
 				dialogueEntity.setDialoguePath(this.newPath);
@@ -148,9 +147,9 @@ public sealed interface Trigger
 		}
 		
 		@Override
-		public void triggerEffect(LivingEntity entity, Player player)
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			if(entity instanceof ConsortEntity consortEntity && player instanceof ServerPlayer serverPlayer)
+			if(entity instanceof ConsortEntity consortEntity)
 			{
 				//TODO if(consortEntity.merchantType == EnumConsort.MerchantType.NONE) ?
 				for(EnumConsort.MerchantType type : EnumConsort.MerchantType.values())
@@ -162,7 +161,7 @@ public sealed interface Trigger
 					consortEntity.stocks = new ConsortMerchantInventory(consortEntity, ConsortRewardHandler.generateStock(this.lootTable, consortEntity, consortEntity.level().random));
 				}
 				
-				NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(consortEntity, Component.literal("Consort shop")), consortEntity::writeShopMenuBuffer);
+				NetworkHooks.openScreen(player, new SimpleMenuProvider(consortEntity, Component.literal("Consort shop")), consortEntity::writeShopMenuBuffer);
 			}
 		}
 	}
@@ -192,7 +191,7 @@ public sealed interface Trigger
 		}
 		
 		@Override
-		public void triggerEffect(LivingEntity entity, Player player)
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
 			if(player == null)
 				return;
@@ -239,7 +238,7 @@ public sealed interface Trigger
 		}
 		
 		@Override
-		public void triggerEffect(LivingEntity entity, Player player)
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
 			if(player == null)
 				return;
@@ -274,12 +273,12 @@ public sealed interface Trigger
 		}
 		
 		@Override
-		public void triggerEffect(LivingEntity entity, Player player)
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			if(!(entity instanceof ConsortEntity consortEntity) || !(player instanceof ServerPlayer serverPlayer))
+			if(!(entity instanceof ConsortEntity consortEntity))
 				return;
 			
-			PlayerData data = PlayerSavedData.getData(serverPlayer);
+			PlayerData data = PlayerSavedData.getData(player);
 			if(data != null)
 				data.addConsortReputation(this.reputation, consortEntity.getHomeDimension());
 		}

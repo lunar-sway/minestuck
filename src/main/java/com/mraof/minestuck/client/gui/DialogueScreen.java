@@ -140,7 +140,7 @@ public class DialogueScreen extends Screen
 				List<Trigger> triggers = response.triggers();
 				for(Trigger trigger : triggers)
 				{
-					DialogueTriggerPacket packet = DialogueTriggerPacket.createPacket(trigger, entity);
+					DialogueTriggerPacket packet = DialogueTriggerPacket.createPacket(trigger, dialogue.path(), entity);
 					MSPacketHandler.sendToServer(packet);
 				}
 				
