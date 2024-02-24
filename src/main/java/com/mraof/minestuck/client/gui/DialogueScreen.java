@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Condition;
+import com.mraof.minestuck.network.DialogueFromClientScreenPacket;
 import com.mraof.minestuck.network.DialogueTriggerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
@@ -13,11 +14,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
@@ -35,22 +36,22 @@ public class DialogueScreen extends Screen
 	private final ResourceLocation guiBackground;
 	
 	private final LivingEntity entity;
-	private final Player player;
 	private final Dialogue dialogue;
+	private final CompoundTag conditionChecks;
 	
 	private int xOffset;
 	private int yOffset;
 	
 	private final List<Button> responseButtons = new ArrayList<>();
 	
-	DialogueScreen(LivingEntity entity, Player player, Dialogue dialogue)
+	DialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks)
 	{
 		super(Component.empty());
 		
 		this.entity = entity;
-		this.player = player;
 		this.guiBackground = dialogue.guiPath();
 		this.dialogue = dialogue;
+		this.conditionChecks = conditionChecks;
 	}
 	
 	@Override
@@ -73,7 +74,7 @@ public class DialogueScreen extends Screen
 		//removes responses if they fail their conditions and should be hidden when that happens
 		for(Dialogue.Response response : dialogue.responses())
 		{
-			if(response.failsWhileImportant(entity, player))
+			if(responseFailedCheck(response.response()) && response.hideIfFailed())
 				continue;
 			
 			filteredResponses.add(response);
@@ -90,13 +91,21 @@ public class DialogueScreen extends Screen
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));
 			
-			if(!Condition.matchesAllConditions(entity, player, response.conditions()))
-			{
+			if(responseFailedCheck(responseMessage))
 				createFailedTooltip(response, entryButton);
-			}
 			
 			responseButtons.add(addRenderableWidget(entryButton));
 		}
+	}
+	
+	private boolean responseFailedCheck(String responseMessage)
+	{
+		if(conditionChecks.contains(responseMessage))
+		{
+			return !conditionChecks.getBoolean(responseMessage);
+		}
+		
+		return true;
 	}
 	
 	private static void createFailedTooltip(Dialogue.Response response, ExtendedButton entryButton)
@@ -138,7 +147,8 @@ public class DialogueScreen extends Screen
 				onClose();
 				if(nextDialogue != null)
 				{
-					MSScreenFactories.displayDialogueScreen(entity, player, nextDialogue);
+					DialogueFromClientScreenPacket packet = DialogueFromClientScreenPacket.createPacket(entity, nextDialogue);
+					MSPacketHandler.sendToServer(packet);
 				}
 				break;
 			}

@@ -9,8 +9,6 @@ import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
-import com.mraof.minestuck.network.DialogueScreenPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -157,8 +155,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 						setCurrentAnimation(TALK_PROPERTIES);
 						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.message(), this);
 						
-						DialogueScreenPacket packet = DialogueScreenPacket.createPacket(this, dialogue);
-						MSPacketHandler.sendToPlayer(packet, serverPlayer);
+						Dialogue.openScreen(this, serverPlayer, dialogue);
 					}
 				}
 			}

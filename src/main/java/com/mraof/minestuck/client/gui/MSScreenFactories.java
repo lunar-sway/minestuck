@@ -15,6 +15,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -138,9 +139,9 @@ public class MSScreenFactories
 		}
 	}
 	
-	public static void displayDialogueScreen(LivingEntity entity, Player player, Dialogue dialogue)
+	public static void displayDialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks)
 	{
-		Minecraft.getInstance().setScreen(new DialogueScreen(entity, player, dialogue));
+		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialogue, conditionChecks));
 	}
 	
 	public static void updateSylladexScreen()

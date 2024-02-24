@@ -5,7 +5,11 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.network.DialogueScreenPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,6 +48,16 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 		this.useContext = useContext;
 	}
 	
+	/**
+	 * Opens up the dialogue screen and includes an nbt object containing whether all the conditions are matched
+	 */
+	public static void openScreen(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
+	{
+		CompoundTag nbt = new CompoundTag();
+		dialogue.responses().forEach(response -> nbt.putBoolean(response.response(), Condition.matchesAllConditions(entity, serverPlayer, response.conditions())));
+		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, nbt);
+		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+	}
 	
 	/**
 	 * A Response contains all possible Dialogues that can be reached from the present Dialogue.
@@ -52,7 +66,7 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 	public record Response(String response, List<Condition> conditions, List<Trigger> triggers,
 						   ResourceLocation nextDialoguePath, boolean hideIfFailed)
 	{
-		static Codec<Response> CODEC = RecordCodecBuilder.create(instance ->
+		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(Codec.STRING.fieldOf("response").forGetter(Response::response),
 								Codec.list(Condition.CODEC).fieldOf("conditions").forGetter(Response::conditions),
 								Codec.list(Trigger.CODEC).fieldOf("triggers").forGetter(Response::triggers),
@@ -60,11 +74,6 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 								Codec.BOOL.fieldOf("hide_if_failed").forGetter(Response::hideIfFailed)
 						)
 						.apply(instance, Response::new));
-		
-		public boolean failsWhileImportant(LivingEntity entity, Player player)
-		{
-			return !Condition.matchesAllConditions(entity, player, conditions) && hideIfFailed();
-		}
 	}
 	
 	public static class UseContext
