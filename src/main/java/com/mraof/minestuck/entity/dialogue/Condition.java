@@ -27,7 +27,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -266,15 +265,9 @@ public sealed interface Condition
 		@Override
 		public boolean testCondition(LivingEntity entity, Player player)
 		{
-			try(Level level = entity.level())
+			if(!entity.level().isClientSide)
 			{
-				if(!level.isClientSide)
-				{
-					return MSDimensions.isLandDimension(entity.getServer(), level.dimension());
-				}
-			} catch(IOException e)
-			{
-				LOGGER.debug("Condition in Dialogue tried to get null level from entity");
+				return MSDimensions.isLandDimension(entity.getServer(), entity.level().dimension());
 			}
 			
 			return false;
@@ -309,23 +302,14 @@ public sealed interface Condition
 		@Override
 		public boolean testCondition(LivingEntity entity, Player player)
 		{
-			//TODO may be source for client side crashing
-			try(Level level = entity.level())
+			if(landType == null)
+				return false;
+			
+			if(entity.level() instanceof ServerLevel serverLevel)
 			{
-				if(level instanceof ServerLevel serverLevel)
-				{
-					Optional<LandTypePair.Named> potentialLandTypes = LandTypePair.getNamed(serverLevel);
-					if(potentialLandTypes.isPresent())
-						return potentialLandTypes.get().landTypes().getTerrain().equals(landType);
-					
-					//if(serverLevel.getChunkSource().getGenerator() instanceof LandChunkGenerator chunkGenerator)
-					//	chunkGenerator.namedTypes.
-					
-					//return MSDimensions.isLandDimension(player.getServer(), level.dimension());
-				}
-			} catch(IOException e)
-			{
-				LOGGER.debug("Condition in Dialogue tried to get null level from entity");
+				Optional<LandTypePair.Named> potentialLandTypes = LandTypePair.getNamed(serverLevel);
+				if(potentialLandTypes.isPresent())
+					return potentialLandTypes.get().landTypes().getTerrain() == landType;
 			}
 			
 			return false;
@@ -402,20 +386,16 @@ public sealed interface Condition
 			if(player == null)
 				return false;
 			
-			try(Level level = player.level())
+			Level level = player.level();
+			
+			if(level.isClientSide)
 			{
-				if(level.isClientSide)
-				{
-					return greaterThan ? ClientPlayerData.getConsortReputation() > amount : ClientPlayerData.getConsortReputation() < amount;
-				} else
-				{
-					PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
-					if(data != null)
-						return greaterThan ? data.getConsortReputation(level.dimension()) > amount : data.getConsortReputation(level.dimension()) < amount;
-				}
-			} catch(IOException e)
+				return greaterThan ? ClientPlayerData.getConsortReputation() > amount : ClientPlayerData.getConsortReputation() < amount;
+			} else
 			{
-				LOGGER.debug("Condition in Dialogue tried to get null level from player");
+				PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
+				if(data != null)
+					return greaterThan ? data.getConsortReputation(level.dimension()) > amount : data.getConsortReputation(level.dimension()) < amount;
 			}
 			
 			return false;
