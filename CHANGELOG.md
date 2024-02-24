@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed underling texture layer that on hurt wasn't tinted red with the rest of the underling
 - Fluids no longer break gates and return nodes
 - Advanced color selection screen no longer tints buttons
+- Round the displayed max health value on the echeladder screen
 
 ### Contributors for this release
 

@@ -211,7 +211,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		double health = mc.player.getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
 		guiGraphics.drawString(font, I18n.get(HEALTH), xOffset + 24, yOffset + 84, 0x404040, false);
-		guiGraphics.drawString(font, String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF, false);
+		guiGraphics.drawString(font, String.format(Locale.ROOT, "%.1f", health), xOffset + 26, yOffset + 93, 0x0094FF, false);
 		
 		guiGraphics.drawString(font, "=", xOffset + 25, yOffset + 12, 0x404040, false);	//Should this be black, or the same blue as the numbers?
 		guiGraphics.drawString(font, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.font.width("="), yOffset + 12, 0x0094FF, false);
