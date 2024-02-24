@@ -177,7 +177,7 @@ public final class CaptchaDeckHandler
 		
 		Slot slot = player.containerMenu.getSlot(slotIndex);
 		
-		ItemStack stack = slot.safeTake(slot.getItem().getCount(), Integer.MAX_VALUE, player);
+		ItemStack stack = slot.safeTake(slot.getItem().getCount(), slot.getItem().getMaxStackSize(), player);
 		if(stack.isEmpty())
 			return;
 		
