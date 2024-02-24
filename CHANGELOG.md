@@ -12,10 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
 - Fixed underling texture layer that on hurt wasn't tinted red with the rest of the underling
 - Fluids no longer break gates and return nodes
+- Advanced color selection screen no longer tints buttons
 
 ### Contributors for this release
 
-- hadean, Dweblenod, kirderf1
+- hadean, Dweblenod, kirderf1, glubtier
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
