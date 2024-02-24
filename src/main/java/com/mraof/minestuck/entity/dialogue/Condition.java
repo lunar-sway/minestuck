@@ -106,9 +106,9 @@ public sealed interface Condition
 	}
 	
 	//TODO since activation of these conditions occurs from a client packet to the server, we may want to check validity
-	boolean testCondition(LivingEntity entity, Player player);
+	boolean testCondition(LivingEntity entity, ServerPlayer player);
 	
-	static boolean matchesAllConditions(LivingEntity entity, Player player, List<Condition> conditions)
+	static boolean matchesAllConditions(LivingEntity entity, ServerPlayer player, List<Condition> conditions)
 	{
 		if(conditions == null)
 			return false;
@@ -150,7 +150,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, Player player)
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			return true;
 		}
@@ -177,7 +177,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, Player player)
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			return entity instanceof ConsortEntity;
 		}
@@ -204,7 +204,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, Player player)
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			return entity instanceof CarapacianEntity;
 		}
@@ -236,7 +236,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, Player player)
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			return entityType != null && entity.getType().equals(entityType);
 		}
@@ -263,14 +263,9 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, Player player)
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
-			if(!entity.level().isClientSide)
-			{
-				return MSDimensions.isLandDimension(entity.getServer(), entity.level().dimension());
-			}
-			
-			return false;
+			return MSDimensions.isLandDimension(entity.getServer(), entity.level().dimension());
 		}
 	}
 	
@@ -300,7 +295,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, Player player)
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			if(landType == null)
 				return false;
@@ -345,7 +340,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, Player player)
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
 			return stack != null;
@@ -381,22 +376,16 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, Player player)
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			if(player == null)
 				return false;
 			
 			Level level = player.level();
 			
-			if(level.isClientSide)
-			{
-				return greaterThan ? ClientPlayerData.getConsortReputation() > amount : ClientPlayerData.getConsortReputation() < amount;
-			} else
-			{
-				PlayerData data = PlayerSavedData.getData((ServerPlayer) player);
-				if(data != null)
-					return greaterThan ? data.getConsortReputation(level.dimension()) > amount : data.getConsortReputation(level.dimension()) < amount;
-			}
+			PlayerData data = PlayerSavedData.getData(player);
+			if(data != null)
+				return greaterThan ? data.getConsortReputation(level.dimension()) > amount : data.getConsortReputation(level.dimension()) < amount;
 			
 			return false;
 		}
