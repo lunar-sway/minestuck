@@ -11,6 +11,8 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -83,9 +86,13 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 				}
 			}).toList();
 			
+			List<WeightedDialogue> weightedFilteredDialogue = new ArrayList<>();
+			filteredDialogues.forEach(dialogue -> weightedFilteredDialogue.add(new WeightedDialogue(dialogue, dialogue.useContext().getWeight())));
+			
 			if(!filteredDialogues.isEmpty())
-				return filteredDialogues.get(rand.nextInt(filteredDialogues.size()));
-			else
+			{
+				return WeightedRandom.getRandomItem(rand, weightedFilteredDialogue).orElseThrow().dialogue;
+			} else
 				return null;
 		}
 	}
@@ -106,5 +113,16 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
 		event.addListener(INSTANCE = new DialogueManager());
+	}
+	
+	public static class WeightedDialogue extends WeightedEntry.IntrusiveBase
+	{
+		public final Dialogue dialogue;
+		
+		public WeightedDialogue(Dialogue dialogue, int pWeight)
+		{
+			super(pWeight);
+			this.dialogue = dialogue;
+		}
 	}
 }

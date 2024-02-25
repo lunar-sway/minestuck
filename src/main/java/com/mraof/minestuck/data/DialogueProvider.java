@@ -39,6 +39,9 @@ public class DialogueProvider implements DataProvider
 	 */
 	public static final ResourceLocation LOOP_NEXT_PATH = new ResourceLocation("loop_menu");
 	
+	public static final String DEFAULT_ANIMATION = "generic_animation";
+	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
+	
 	private final Map<ResourceLocation, Dialogue> dialogues = new HashMap<>();
 	private final PackOutput output;
 	
@@ -91,7 +94,7 @@ public class DialogueProvider implements DataProvider
 	
 	private void testDialogues()
 	{
-		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large", new Dialogue.UseContext(new Condition.Conditionless()))
+		add(new DialogueBuilder("test1", "test1animation", DEFAULT_GUI, new Dialogue.UseContext(new Condition.Conditionless()))
 				.addResponse(new ResponseBuilder("test1response1", "test2")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
@@ -100,7 +103,7 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder("test1response3", "test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 		);
 		
-		add(new DialogueBuilder("test2", "test2animation", "generic_extra_large", new Dialogue.UseContext(new Condition.Conditionless()))
+		add(new DialogueBuilder("test2", "test2animation", DEFAULT_GUI, new Dialogue.UseContext(new Condition.Conditionless()))
 				.addResponse(new ResponseBuilder("test2response1", "test1")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
 						.dontHideFailed())
@@ -131,7 +134,7 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("oh_yippee"));
 		add(new DialogueBuilder("hunger_filled"));
 		
-		add(new DialogueBuilder("me_want_5_cookies", new Condition.Conditionless())
+		add(new DialogueBuilder("me_want_5_cookies", new Condition.Conditionless(), 5)
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder("here have 5 cookies chap", "oh_yippee")
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
@@ -139,7 +142,7 @@ public class DialogueProvider implements DataProvider
 						.dontHideFailed())
 		);
 		
-		add(new DialogueBuilder("hi_friend_can_i_help_you", new Condition.Conditionless())
+		add(new DialogueBuilder("hi_friend_can_i_help_you", new Condition.Conditionless(), 11)
 				.addResponse(new ResponseBuilder("I hate you").addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
 				.addResponse(new ResponseBuilder("I love you").addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
 				.addResponse(new ResponseBuilder("Rep above 500").addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
@@ -165,17 +168,22 @@ public class DialogueProvider implements DataProvider
 		
 		DialogueBuilder(String message)
 		{
-			this(message, "generic_animation", "generic_extra_large", null);
+			this(message, DEFAULT_ANIMATION, DEFAULT_GUI, null);
+		}
+		
+		DialogueBuilder(String message, Condition useCondition, int weight)
+		{
+			this(message, DEFAULT_ANIMATION, DEFAULT_GUI, new Dialogue.UseContext(useCondition, weight));
 		}
 		
 		DialogueBuilder(String message, Condition useCondition)
 		{
-			this(message, "generic_animation", "generic_extra_large", new Dialogue.UseContext(useCondition));
+			this(message, DEFAULT_ANIMATION, DEFAULT_GUI, new Dialogue.UseContext(useCondition));
 		}
 		
 		DialogueBuilder(String message, Dialogue.UseContext useContext)
 		{
-			this(message, "generic_animation", "generic_extra_large", useContext);
+			this(message, DEFAULT_ANIMATION, DEFAULT_GUI, useContext);
 		}
 		
 		DialogueBuilder(String message, String animation, String gui, @Nullable Dialogue.UseContext useContext)
@@ -184,6 +192,16 @@ public class DialogueProvider implements DataProvider
 			this.message = "minestuck.dialogue." + message.replace("/", ".");
 			this.animation = animation;
 			this.guiPath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/" + gui + ".png");
+			this.responses = new ArrayList<>();
+			this.useContext = useContext;
+		}
+		
+		DialogueBuilder(String message, String animation, ResourceLocation guiPath, @Nullable Dialogue.UseContext useContext)
+		{
+			this.path = new ResourceLocation(Minestuck.MOD_ID, message);
+			this.message = "minestuck.dialogue." + message.replace("/", ".");
+			this.animation = animation;
+			this.guiPath = guiPath;
 			this.responses = new ArrayList<>();
 			this.useContext = useContext;
 		}

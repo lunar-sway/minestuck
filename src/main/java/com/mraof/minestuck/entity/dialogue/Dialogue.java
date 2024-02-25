@@ -5,8 +5,10 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,12 +31,13 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
+	//TODO animation and gui_path do not currently benefit from PreservingOptionalFieldCodec
 	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(ResourceLocation.CODEC.fieldOf("path").forGetter(Dialogue::path),
 							Codec.STRING.fieldOf("message").forGetter(Dialogue::message),
-							Codec.STRING.fieldOf("animation").forGetter(Dialogue::animation),
-							ResourceLocation.CODEC.fieldOf("gui_path").forGetter(Dialogue::guiPath),
-							Codec.list(Response.CODEC).fieldOf("responses").forGetter(Dialogue::responses),
+							PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DialogueProvider.DEFAULT_ANIMATION).forGetter(Dialogue::animation),
+							PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui_path", DialogueProvider.DEFAULT_GUI).forGetter(Dialogue::guiPath),
+							Response.LIST_CODEC.fieldOf("responses").forGetter(Dialogue::responses),
 							UseContext.CODEC.fieldOf("use_context").forGetter(Dialogue::useContext))
 					.apply(instance, Dialogue::new));
 	
@@ -69,9 +72,9 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(Codec.STRING.fieldOf("response_message").forGetter(Response::response),
 								Conditions.CODEC.fieldOf("conditions").forGetter(Response::conditions),
-								Codec.list(Trigger.CODEC).fieldOf("triggers").forGetter(Response::triggers),
-								ResourceLocation.CODEC.fieldOf("next_dialogue_path").forGetter(Response::nextDialoguePath),
-								Codec.BOOL.fieldOf("hide_if_failed").forGetter(Response::hideIfFailed)
+								PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
+								PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "next_dialogue_path", DialogueProvider.EMPTY_NEXT_PATH).forGetter(Response::nextDialoguePath),
+								PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed)
 						)
 						.apply(instance, Response::new));
 		
@@ -81,24 +84,42 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 	public static class UseContext
 	{
 		static Codec<UseContext> CODEC = RecordCodecBuilder.create(instance ->
-				instance.group(Conditions.CODEC.fieldOf("conditions").forGetter(UseContext::getConditions))
+				instance.group(Conditions.CODEC.fieldOf("conditions").forGetter(UseContext::getConditions),
+								PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", 10).forGetter(UseContext::getWeight))
 						.apply(instance, UseContext::new));
 		
 		private final Conditions conditions;
+		private final int weight;
 		
 		public UseContext(Condition condition)
 		{
-			this.conditions = new Conditions(List.of(condition), Conditions.Type.ALL);
+			this(new Conditions(List.of(condition), Conditions.Type.ALL), 10);
+		}
+		
+		public UseContext(Condition condition, int weight)
+		{
+			this(new Conditions(List.of(condition), Conditions.Type.ALL), weight);
 		}
 		
 		public UseContext(Conditions conditions)
 		{
+			this(conditions, 10);
+		}
+		
+		public UseContext(Conditions conditions, int weight)
+		{
 			this.conditions = conditions;
+			this.weight = weight;
 		}
 		
 		public Conditions getConditions()
 		{
 			return conditions;
+		}
+		
+		public int getWeight()
+		{
+			return weight;
 		}
 	}
 	

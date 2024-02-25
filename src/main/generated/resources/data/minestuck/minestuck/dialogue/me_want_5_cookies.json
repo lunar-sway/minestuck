@@ -6,17 +6,12 @@
   "responses": [
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
-      "hide_if_failed": true,
-      "next_dialogue_path": "minecraft:close_menu",
-      "response_message": "im sorry fellow, I have no cookie for you. Bye",
-      "triggers": []
+      "response_message": "im sorry fellow, I have no cookie for you. Bye"
     },
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": [
           {
             "type": "player_has_item",
@@ -39,12 +34,12 @@
   ],
   "use_context": {
     "conditions": {
-      "type": "ALL",
       "condition_list": [
         {
           "type": "conditionless"
         }
       ]
-    }
+    },
+    "dialogue_weight": 5
   }
 }

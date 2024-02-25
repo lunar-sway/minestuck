@@ -6,28 +6,21 @@
   "responses": [
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
-      "hide_if_failed": true,
       "next_dialogue_path": "minestuck:camel/no_camel",
-      "response_message": "minestuck.dialogue.camel.yes",
-      "triggers": []
+      "response_message": "minestuck.dialogue.camel.yes"
     },
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
-      "hide_if_failed": true,
       "next_dialogue_path": "minestuck:camel/dancing_camel",
-      "response_message": "minestuck.dialogue.camel.no",
-      "triggers": []
+      "response_message": "minestuck.dialogue.camel.no"
     }
   ],
   "use_context": {
     "conditions": {
-      "type": "ALL",
       "condition_list": [
         {
           "type": "in_terrain_land_type",
