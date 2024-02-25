@@ -68,7 +68,8 @@ public class MSPacketHandler
 		registerToServerMessage(PunchDesignixPacket.class, PunchDesignixPacket::decode);
 		registerToServerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerToServerMessage(SendificatorPacket.class, SendificatorPacket::decode);
-		registerToServerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
+		registerToServerMessage(TransportalizerPacket.Id.class, TransportalizerPacket.Id::decode);
+		registerToServerMessage(TransportalizerPacket.DestId.class, TransportalizerPacket.DestId::decode);
 		registerToServerMessage(AreaEffectPacket.class, AreaEffectPacket::decode);
 		registerToServerMessage(WirelessRedstoneTransmitterPacket.class, WirelessRedstoneTransmitterPacket::decode);
 		registerToServerMessage(StatStorerPacket.class, StatStorerPacket::decode);

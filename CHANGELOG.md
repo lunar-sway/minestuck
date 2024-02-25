@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased upcoming-content]
+
+### Added
+
+- Spawn egg items for main Underling types, Consorts, and Carapacians
+- Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+- Tree Stump feature in Forest Lands
+- Frog Ruins feature in Frog Lands
+- Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
+- New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
+- Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
+- Added Carved Bush.
+
+### Changed
+
+- Transportalizers now stack to one instead of 64
+- Prismarine armor remodel and retexture
+- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
+- Computer Themes can now be added and rendered via resource pack
+- Default computer Theme for crockertop is now Crocker
+- Computer Theme is now chosen from a list of available Themes in separate GUI
+
+### Fixed
+
+- Double slabs will now drop two slabs when broken
+
+### Contributors for this release
+
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO
+
 ## [Unreleased]
 
 ### Added

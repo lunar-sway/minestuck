@@ -129,9 +129,13 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		Font font = Minecraft.getInstance().font;
 		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
-			guiGraphics.drawString(font, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor(), false);
+		{
+			guiGraphics.drawString(font, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
+		}
 		else
-			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor(), false);
+		{
+			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
+		}
 	}
 	
 	/**
@@ -178,7 +182,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 			if(active)
 			{
 				RenderSystem.setShaderColor(1, 1, 1, 1);
-				guiGraphics.blit(gui.be.getTheme().getTexture(), getX(), getY(), 158 + (active ? 0 : 20), reverse ? 0 : 20, 20, 20);
+				guiGraphics.blit(gui.getTheme().data().texturePath(), getX(), getY(), 158 + (active ? 0 : 20), reverse ? 0 : 20, 20, 20);
 			} else
 			{
 				// use default minecraft button rendering to draw inactive buttons

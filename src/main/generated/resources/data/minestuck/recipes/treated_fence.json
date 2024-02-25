@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wooden_fence",
+  "key": {
+    "#": {
+      "item": "minestuck:treated_planks"
+    },
+    "$": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#$#",
+    "#$#"
+  ],
+  "result": {
+    "count": 3,
+    "item": "minestuck:treated_fence"
+  },
+  "show_notification": true
+}
