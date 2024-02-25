@@ -244,8 +244,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.addAdditionalSaveData(compound);
 		
-		if(dialoguePath != null)
-			compound.putString(DIALOGUE_NBT_TAG, dialoguePath.toString());
+		ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, dialoguePath).resultOrPartial(LOGGER::error).ifPresent(tag -> compound.put(DIALOGUE_NBT_TAG, tag));
 		
 		/*if(message != null)
 		{
@@ -290,8 +289,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		super.readAdditionalSaveData(compound);
 		
 		//TODO dialogue (at least on client side) seems to randomize on reloads
-		if(compound.contains(DIALOGUE_NBT_TAG, Tag.TAG_STRING))
-			dialoguePath = ResourceLocation.tryParse(compound.getString(DIALOGUE_NBT_TAG));
+		dialoguePath = ResourceLocation.CODEC.parse(NbtOps.INSTANCE, compound.get(DIALOGUE_NBT_TAG)).resultOrPartial(LOGGER::error).orElse(null);
 		
 		/*if(compound.contains("Dialogue", Tag.TAG_STRING))
 		{
@@ -454,12 +452,14 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public Dialogue getDialogue()
 	{
 		//tries to get the dialogue from dialoguePath and failing that will choose a random one, setting the new dialoguePath in the process
-		Dialogue dialogue;
+		Dialogue dialogue = null;
 		
 		if(dialoguePath != null)
 		{
 			dialogue = dialogueFromLocation(dialoguePath);
-		} else
+		}
+		
+		if(dialogue == null)
 		{
 			dialogue = DialogueManager.getInstance().doRandomDialogue(this, random);
 			

@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.Condition;
+import com.mraof.minestuck.entity.dialogue.Conditions;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
@@ -91,7 +92,10 @@ public class DialogueProvider implements DataProvider
 	private void testDialogues()
 	{
 		add(new DialogueBuilder("test1", "test1animation", "generic_extra_large", new Dialogue.UseContext(new Condition.Conditionless()))
-				.addResponse(new ResponseBuilder("test1response1", "test2").addCondition(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())))
+				.addResponse(new ResponseBuilder("test1response1", "test2")
+						.addCondition(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
+						.addCondition(new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
+						.conditionType(Conditions.Type.ANY))
 				.addResponse(new ResponseBuilder("test1response2", "test2").addCondition(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())))
 				.addResponse(new ResponseBuilder("test1response3", "test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 		);
@@ -100,7 +104,13 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder("test2response1", "test1")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
 						.dontHideFailed())
-				.addResponse(new ResponseBuilder("test2response2", "test1").addTrigger(new Trigger.Command("say hi")))
+				.addResponse(new ResponseBuilder("test2response2", "test1")
+						.addCondition(new Condition.IsCarapacian())
+						.addCondition(new Condition.InTerrainLandType(LandTypes.END.get()))
+						.addCondition(new Condition.InTerrainLandType(LandTypes.SHADE.get()))
+						.addTrigger(new Trigger.Command("say hi"))
+						.conditionType(Conditions.Type.NONE)
+						.dontHideFailed())
 				.addResponse(new ResponseBuilder("test2response3", "test1")
 						.addTrigger(new Trigger.Command("""
 								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]""")))
@@ -160,7 +170,7 @@ public class DialogueProvider implements DataProvider
 		
 		DialogueBuilder(String message, Condition useCondition)
 		{
-			this(message, "generic_animation", "generic_extra_large", new Dialogue.UseContext(List.of(useCondition)));
+			this(message, "generic_animation", "generic_extra_large", new Dialogue.UseContext(useCondition));
 		}
 		
 		DialogueBuilder(String message, Dialogue.UseContext useContext)
@@ -185,7 +195,7 @@ public class DialogueProvider implements DataProvider
 		
 		public DialogueBuilder addResponse(ResponseBuilder responseBuilder)
 		{
-			this.responses.add(new Dialogue.Response(responseBuilder.response, responseBuilder.conditions, responseBuilder.triggers, responseBuilder.nextDialoguePath, responseBuilder.hideIfFailed));
+			this.responses.add(new Dialogue.Response(responseBuilder.response, new Conditions(responseBuilder.conditions, responseBuilder.conditionsType), responseBuilder.triggers, responseBuilder.nextDialoguePath, responseBuilder.hideIfFailed));
 			return this;
 		}
 	}
@@ -194,6 +204,7 @@ public class DialogueProvider implements DataProvider
 	{
 		private final String response;
 		private final List<Condition> conditions;
+		private Conditions.Type conditionsType;
 		private final List<Trigger> triggers;
 		private final ResourceLocation nextDialoguePath;
 		private boolean hideIfFailed;
@@ -207,6 +218,7 @@ public class DialogueProvider implements DataProvider
 		{
 			this.response = response;
 			this.conditions = new ArrayList<>();
+			this.conditionsType = Conditions.Type.ALL;
 			this.triggers = new ArrayList<>();
 			this.nextDialoguePath = nextDialoguePath;
 			this.hideIfFailed = true;
@@ -216,6 +228,7 @@ public class DialogueProvider implements DataProvider
 		{
 			this.response = response;
 			this.conditions = new ArrayList<>();
+			this.conditionsType = Conditions.Type.ALL;
 			this.triggers = new ArrayList<>();
 			this.nextDialoguePath = new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath);
 			this.hideIfFailed = true;
@@ -224,6 +237,12 @@ public class DialogueProvider implements DataProvider
 		public ResponseBuilder addCondition(Condition condition)
 		{
 			this.conditions.add(condition);
+			return this;
+		}
+		
+		public ResponseBuilder conditionType(Conditions.Type type)
+		{
+			this.conditionsType = type;
 			return this;
 		}
 		

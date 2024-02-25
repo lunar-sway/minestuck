@@ -5,33 +5,46 @@
   "path": "minestuck:test1",
   "responses": [
     {
-      "conditions": [
-        {
-          "type": "is_entity_type",
-          "entity_type": "minestuck:turtle"
-        }
-      ],
+      "conditions": {
+        "type": "ANY",
+        "condition_list": [
+          {
+            "type": "is_entity_type",
+            "entity_type": "minestuck:turtle"
+          },
+          {
+            "type": "is_entity_type",
+            "entity_type": "minestuck:iguana"
+          }
+        ]
+      },
       "hide_if_failed": true,
-      "next_path": "minestuck:test2",
+      "next_dialogue_path": "minestuck:test2",
       "response_message": "test1response1",
       "triggers": []
     },
     {
-      "conditions": [
-        {
-          "type": "is_entity_type",
-          "entity_type": "minestuck:nakagator"
-        }
-      ],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": [
+          {
+            "type": "is_entity_type",
+            "entity_type": "minestuck:nakagator"
+          }
+        ]
+      },
       "hide_if_failed": true,
-      "next_path": "minestuck:test2",
+      "next_dialogue_path": "minestuck:test2",
       "response_message": "test1response2",
       "triggers": []
     },
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minestuck:test2",
+      "next_dialogue_path": "minestuck:test2",
       "response_message": "test1response3",
       "triggers": [
         {
@@ -42,10 +55,13 @@
     }
   ],
   "use_context": {
-    "conditions": [
-      {
-        "type": "conditionless"
-      }
-    ]
+    "conditions": {
+      "type": "ALL",
+      "condition_list": [
+        {
+          "type": "conditionless"
+        }
+      ]
+    }
   }
 }

@@ -110,9 +110,10 @@ public class DialogueScreen extends Screen
 	
 	private static void createFailedTooltip(Dialogue.Response response, ExtendedButton entryButton)
 	{
+		//TODO Does not make sense linguistically with a hard coded failure tooltip in Condition and a Conditions.Type other than ALL
 		MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
 		
-		for(Condition condition : response.conditions())
+		for(Condition condition : response.conditions().conditionList())
 		{
 			String tooltip = condition.getFailureTooltip();
 			if(!tooltip.isEmpty())
