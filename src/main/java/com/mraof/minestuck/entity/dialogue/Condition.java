@@ -5,8 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -64,6 +63,8 @@ public sealed interface Condition
 		IN_TERRAIN_LAND_TYPE(() -> InTerrainLandType.CODEC, InTerrainLandType::readCondition, "Is not in specific Land"),
 		IN_TITLE_LAND_TYPE(() -> InTitleLandType.CODEC, InTitleLandType::readCondition, "Is not in specific Land"),
 		PLAYER_HAS_ITEM(() -> PlayerHasItem.CODEC, PlayerHasItem::readCondition, "You don't have the required item(s)"),
+		PLAYER_IS_CLASS(() -> PlayerIsClass.CODEC, PlayerIsClass::readCondition, "You aren't the required Class"),
+		PLAYER_IS_ASPECT(() -> PlayerIsAspect.CODEC, PlayerIsAspect::readCondition, "You aren't the required Aspect"),
 		PLAYER_HAS_REPUTATION(() -> PlayerHasReputation.CODEC, PlayerHasReputation::readCondition, "Your reputation doesn't meet requirement"),
 		PLAYER_HAS_BOONDOLLARS(() -> PlayerHasBoondollars.CODEC, PlayerHasBoondollars::readCondition, "Your porkhollow doesn't meet requirement");
 		
@@ -404,6 +405,82 @@ public sealed interface Condition
 		{
 			ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
 			return stack != null;
+		}
+	}
+	
+	record PlayerIsClass(EnumClass enumClass) implements Condition
+	{
+		static final Codec<PlayerIsClass> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Title.CLASS_CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
+		).apply(instance, PlayerIsClass::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.PLAYER_IS_CLASS;
+		}
+		
+		static PlayerIsClass readCondition(FriendlyByteBuf buffer)
+		{
+			int ordinal = buffer.readInt();
+			return new PlayerIsClass(EnumClass.getClassFromInt(ordinal));
+		}
+		
+		@Override
+		public void writeCondition(FriendlyByteBuf buffer)
+		{
+			buffer.writeInt(this.enumClass.ordinal());
+		}
+		
+		@Override
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			PlayerData data = PlayerSavedData.getData(player);
+			if(data != null)
+				return data.getTitle().getHeroClass().equals(enumClass);
+			
+			return false;
+		}
+	}
+	
+	record PlayerIsAspect(EnumAspect enumAspect) implements Condition
+	{
+		static final Codec<PlayerIsAspect> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Title.ASPECT_CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
+		).apply(instance, PlayerIsAspect::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.PLAYER_IS_ASPECT;
+		}
+		
+		static PlayerIsAspect readCondition(FriendlyByteBuf buffer)
+		{
+			int ordinal = buffer.readInt();
+			return new PlayerIsAspect(EnumAspect.getAspectFromInt(ordinal));
+		}
+		
+		@Override
+		public void writeCondition(FriendlyByteBuf buffer)
+		{
+			buffer.writeInt(this.enumAspect.ordinal());
+		}
+		
+		@Override
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			PlayerData data = PlayerSavedData.getData(player);
+			if(data != null)
+				return data.getTitle().getHeroAspect().equals(enumAspect);
+			
+			return false;
 		}
 	}
 	

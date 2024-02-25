@@ -7,6 +7,8 @@ import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.entity.dialogue.Conditions;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.world.lands.LandTypes;
@@ -153,7 +155,17 @@ public class DialogueProvider implements DataProvider
 						.dontHideFailed())
 				.addResponse(new ResponseBuilder("test2response3", "test1")
 						.addTrigger(new Trigger.Command("""
-								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]"""))));
+								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]"""))
+				)
+				.addResponse(new ResponseBuilder("test2response4")
+						.addCondition(new Condition.IsCarapacian())
+						.addCondition(new Condition.PlayerIsClass(EnumClass.WITCH))
+						.addCondition(new Condition.PlayerIsClass(EnumClass.MAGE))
+						.addCondition(new Condition.PlayerIsAspect(EnumAspect.HEART))
+						.addCondition(new Condition.PlayerIsAspect(EnumAspect.DOOM))
+						.addCondition(new Condition.InTerrainLandType(LandTypes.RAIN.get()))
+						.conditionType(Conditions.Type.ONE)
+						.dontHideFailed()));
 		add(new DialogueBuilder("turtle_only", new Condition.IsEntityType(MSEntityTypes.TURTLE.get())));
 		
 		add(new DialogueBuilder("nakagator_only", new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())));
