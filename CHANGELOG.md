@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 - Added Carved Bush.
+- New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
 
 ### Changed
 
@@ -36,10 +37,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Added
-
-- New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
-
 ### Fixed
 
 - Metal Boats no longer crash the game when dispensed
@@ -47,7 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- hadean, Dweblenod
+- Dweblenod
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
