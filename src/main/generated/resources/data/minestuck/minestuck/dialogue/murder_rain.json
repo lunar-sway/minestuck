@@ -1,0 +1,17 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "minestuck.dialogue.murder_rain",
+  "path": "minestuck:murder_rain",
+  "responses": [],
+  "use_context": {
+    "conditions": {
+      "condition_list": [
+        {
+          "type": "in_title_land_type",
+          "land_type": "minestuck:pulse"
+        }
+      ]
+    }
+  }
+}

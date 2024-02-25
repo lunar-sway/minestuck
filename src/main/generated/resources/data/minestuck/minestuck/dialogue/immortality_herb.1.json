@@ -1,0 +1,25 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "minestuck.dialogue.immortality_herb.1",
+  "path": "minestuck:immortality_herb.1",
+  "responses": [
+    {
+      "conditions": {
+        "condition_list": []
+      },
+      "next_dialogue_path": "minestuck:immortality_herb.2",
+      "response_message": "=>"
+    }
+  ],
+  "use_context": {
+    "conditions": {
+      "condition_list": [
+        {
+          "type": "in_terrain_land_type",
+          "land_type": "minestuck:flora"
+        }
+      ]
+    }
+  }
+}
