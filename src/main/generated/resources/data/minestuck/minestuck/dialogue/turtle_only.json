@@ -6,7 +6,6 @@
   "responses": [],
   "use_context": {
     "conditions": {
-      "type": "ALL",
       "condition_list": [
         {
           "type": "is_entity_type",

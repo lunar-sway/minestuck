@@ -6,21 +6,14 @@
   "responses": [
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
-      "hide_if_failed": true,
-      "next_dialogue_path": "minecraft:close_menu",
-      "response_message": "No thanks",
-      "triggers": []
+      "response_message": "No thanks"
     },
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
-      "hide_if_failed": true,
-      "next_dialogue_path": "minecraft:close_menu",
       "response_message": "What do you have to sell?",
       "triggers": [
         {
@@ -33,7 +26,6 @@
   ],
   "use_context": {
     "conditions": {
-      "type": "ALL",
       "condition_list": [
         {
           "type": "is_entity_type",

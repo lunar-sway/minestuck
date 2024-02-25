@@ -6,18 +6,14 @@
   "responses": [
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
-      "hide_if_failed": true,
       "next_dialogue_path": "minestuck:mycelium.2",
-      "response_message": "=>",
-      "triggers": []
+      "response_message": "=>"
     }
   ],
   "use_context": {
     "conditions": {
-      "type": "ALL",
       "condition_list": [
         {
           "type": "in_terrain_land_type",

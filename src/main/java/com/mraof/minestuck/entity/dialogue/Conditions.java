@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +17,7 @@ public record Conditions(List<Condition> conditionList, Type type)
 {
 	public static Codec<Conditions> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(Condition.LIST_CODEC.fieldOf("condition_list").forGetter(Conditions::conditionList),
-							Type.CODEC.fieldOf("type").forGetter(Conditions::type))
+							PreservingOptionalFieldCodec.withDefault(Type.CODEC, "type", Type.ALL).forGetter(Conditions::type))
 					.apply(instance, Conditions::new));
 	
 	public boolean testWithContext(LivingEntity entity, ServerPlayer player)

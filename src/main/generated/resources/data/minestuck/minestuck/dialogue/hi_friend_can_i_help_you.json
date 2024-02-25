@@ -6,11 +6,9 @@
   "responses": [
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
       "hide_if_failed": false,
-      "next_dialogue_path": "minecraft:close_menu",
       "response_message": "I hate you",
       "triggers": [
         {
@@ -21,11 +19,9 @@
     },
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
       "hide_if_failed": false,
-      "next_dialogue_path": "minecraft:close_menu",
       "response_message": "I love you",
       "triggers": [
         {
@@ -36,7 +32,6 @@
     },
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": [
           {
             "type": "player_has_reputation",
@@ -45,13 +40,10 @@
         ]
       },
       "hide_if_failed": false,
-      "next_dialogue_path": "minecraft:close_menu",
-      "response_message": "Rep above 500",
-      "triggers": []
+      "response_message": "Rep above 500"
     },
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": [
           {
             "type": "player_has_reputation",
@@ -61,29 +53,23 @@
         ]
       },
       "hide_if_failed": false,
-      "next_dialogue_path": "minecraft:close_menu",
-      "response_message": "Rep below 200",
-      "triggers": []
+      "response_message": "Rep below 200"
     },
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
-      "hide_if_failed": true,
-      "next_dialogue_path": "minecraft:close_menu",
-      "response_message": "bye",
-      "triggers": []
+      "response_message": "bye"
     }
   ],
   "use_context": {
     "conditions": {
-      "type": "ALL",
       "condition_list": [
         {
           "type": "conditionless"
         }
       ]
-    }
+    },
+    "dialogue_weight": 11
   }
 }

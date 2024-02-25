@@ -6,7 +6,6 @@
   "responses": [
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": [
           {
             "type": "is_entity_type",
@@ -16,8 +15,7 @@
       },
       "hide_if_failed": false,
       "next_dialogue_path": "minestuck:test1",
-      "response_message": "test2response1",
-      "triggers": []
+      "response_message": "test2response1"
     },
     {
       "conditions": {
@@ -48,10 +46,8 @@
     },
     {
       "conditions": {
-        "type": "ALL",
         "condition_list": []
       },
-      "hide_if_failed": true,
       "next_dialogue_path": "minestuck:test1",
       "response_message": "test2response3",
       "triggers": [
@@ -64,7 +60,6 @@
   ],
   "use_context": {
     "conditions": {
-      "type": "ALL",
       "condition_list": [
         {
           "type": "conditionless"
