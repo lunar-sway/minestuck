@@ -1,0 +1,25 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "minestuck.dialogue.reckoning.1",
+  "path": "minestuck:reckoning.1",
+  "responses": [
+    {
+      "conditions": {
+        "condition_list": []
+      },
+      "next_dialogue_path": "minestuck:reckoning.2",
+      "response_message": "=>"
+    }
+  ],
+  "use_context": {
+    "conditions": {
+      "condition_list": [
+        {
+          "type": "in_title_land_type",
+          "land_type": "minestuck:thunder"
+        }
+      ]
+    }
+  }
+}

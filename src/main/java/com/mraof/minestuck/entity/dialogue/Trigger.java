@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
@@ -52,10 +53,14 @@ public sealed interface Trigger
 	enum Type implements StringRepresentable
 	{
 		SET_DIALOGUE(() -> SetDialogue.CODEC, SetDialogue::readTrigger),
+		SET_DIALOGUE_FROM_LIST(() -> SetDialogueFromList.CODEC, SetDialogueFromList::readTrigger),
+		SET_RANDOM_DIALOGUE(() -> SetRandomDialogue.CODEC, SetRandomDialogue::readTrigger),
 		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC, OpenConsortMerchantGui::readTrigger),
 		COMMAND(() -> Command.CODEC, Command::readTrigger),
 		TAKE_ITEM(() -> TakeItem.CODEC, TakeItem::readTrigger),
-		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC, AddConsortReputation::readTrigger);
+		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC, AddConsortReputation::readTrigger),
+		ADD_BOONDOLLARS(() -> AddBoondollars.CODEC, AddBoondollars::readTrigger),
+		EXPLODE(() -> Explode.CODEC, Explode::readTrigger);
 		
 		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 		
@@ -117,6 +122,69 @@ public sealed interface Trigger
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
 				dialogueEntity.setDialoguePath(this.newPath);
+		}
+	}
+	
+	record SetDialogueFromList(List<ResourceLocation> newPaths) implements Trigger
+	{
+		static final Codec<SetDialogueFromList> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.list(ResourceLocation.CODEC).fieldOf("new_paths").forGetter(SetDialogueFromList::newPaths)
+		).apply(instance, SetDialogueFromList::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.SET_DIALOGUE_FROM_LIST;
+		}
+		
+		static SetDialogueFromList readTrigger(FriendlyByteBuf buffer)
+		{
+			return new SetDialogueFromList(buffer.readList(FriendlyByteBuf::readResourceLocation));
+		}
+		
+		@Override
+		public void writeTrigger(FriendlyByteBuf buffer)
+		{
+			buffer.writeCollection(newPaths, FriendlyByteBuf::writeResourceLocation);
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(entity instanceof DialogueEntity dialogueEntity)
+			{
+				dialogueEntity.setDialoguePath(newPaths.get(entity.level().random.nextInt(newPaths().size())));
+			}
+		}
+	}
+	
+	record SetRandomDialogue() implements Trigger
+	{
+		static final Codec<SetRandomDialogue> CODEC = Codec.unit(SetRandomDialogue::new);
+		
+		@Override
+		public Type getType()
+		{
+			return Type.SET_RANDOM_DIALOGUE;
+		}
+		
+		static SetRandomDialogue readTrigger(FriendlyByteBuf buffer)
+		{
+			return new SetRandomDialogue();
+		}
+		
+		@Override
+		public void writeTrigger(FriendlyByteBuf buffer)
+		{
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(entity instanceof DialogueEntity dialogueEntity)
+			{
+				dialogueEntity.setDialoguePath(DialogueManager.getInstance().doRandomDialogue(entity, entity.getRandom()).path());
+			}
 		}
 	}
 	
@@ -280,6 +348,71 @@ public sealed interface Trigger
 			PlayerData data = PlayerSavedData.getData(player);
 			if(data != null)
 				data.addConsortReputation(this.reputation, consortEntity.getHomeDimension());
+		}
+	}
+	
+	record AddBoondollars(int boondollars) implements Trigger
+	{
+		static final Codec<AddBoondollars> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.INT.fieldOf("boondollars").forGetter(AddBoondollars::boondollars)
+		).apply(instance, AddBoondollars::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.ADD_BOONDOLLARS;
+		}
+		
+		static AddBoondollars readTrigger(FriendlyByteBuf buffer)
+		{
+			return new AddBoondollars(buffer.readInt());
+		}
+		
+		@Override
+		public void writeTrigger(FriendlyByteBuf buffer)
+		{
+			buffer.writeInt(this.boondollars);
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			PlayerData data = PlayerSavedData.getData(player);
+			if(data != null && boondollars != 0)
+			{
+				if(boondollars > 0)
+					data.addBoondollars(boondollars);
+				else
+					data.takeBoondollars(boondollars);
+			}
+		}
+	}
+	
+	record Explode() implements Trigger
+	{
+		static final Codec<Explode> CODEC = Codec.unit(Explode::new);
+		
+		@Override
+		public Type getType()
+		{
+			return Type.EXPLODE;
+		}
+		
+		static Explode readTrigger(FriendlyByteBuf buffer)
+		{
+			return new Explode();
+		}
+		
+		@Override
+		public void writeTrigger(FriendlyByteBuf buffer)
+		{
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(entity instanceof ConsortEntity consortEntity)
+				consortEntity.setExplosionTimer();
 		}
 	}
 }

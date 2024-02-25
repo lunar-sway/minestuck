@@ -1,0 +1,19 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "minestuck.dialogue.immortality_herb.3",
+  "path": "minestuck:immortality_herb.3",
+  "responses": [
+    {
+      "conditions": {
+        "condition_list": []
+      },
+      "response_message": "...",
+      "triggers": [
+        {
+          "type": "explode"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "minestuck.dialogue.lightning_strike",
+  "path": "minestuck:lightning_strike",
+  "responses": [],
+  "use_context": {
+    "conditions": {
+      "condition_list": [
+        {
+          "type": "in_title_land_type",
+          "land_type": "minestuck:thunder"
+        }
+      ]
+    }
+  }
+}

@@ -61,35 +61,73 @@ public class DialogueProvider implements DataProvider
 	
 	private void consortDialogues()
 	{
+		//Wind
+		//add(new DialogueBuilder("dad_wind", new Condition.InTitleLandType(LandTypes.WIND.get())));
+		add(new DialogueBuilder("pyre.1", List.of(
+				new Condition.InTitleLandType(LandTypes.WIND.get()),
+				new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get()))))
+				.addResponse(new ResponseBuilder("=>", "pyre.2")));
+		add(new DialogueBuilder("pyre.2"));
+		
+		//Pulse
+		add(new DialogueBuilder("koolaid", new Condition.InTitleLandType(LandTypes.PULSE.get())));
+		add(new DialogueBuilder("murder_rain", new Condition.InTitleLandType(LandTypes.PULSE.get())));
+		add(new DialogueBuilder("swimming", new Condition.InTitleLandType(LandTypes.PULSE.get())));
+		add(new DialogueBuilder("blood_surprise", new Condition.InTitleLandType(LandTypes.PULSE.get())));
+		
+		//Thunder
+		add(new DialogueBuilder("skeleton_horse", new Condition.InTitleLandType(LandTypes.THUNDER.get())));
+		add(new DialogueBuilder("blue_moon", new Condition.InTitleLandType(LandTypes.THUNDER.get())));
+		add(new DialogueBuilder("lightning_strike", new Condition.InTitleLandType(LandTypes.THUNDER.get())));
+		add(new DialogueBuilder("reckoning.1", new Condition.InTitleLandType(LandTypes.THUNDER.get()))
+				.addResponse(new ResponseBuilder("=>", "reckoning.2")));
+		add(new DialogueBuilder("reckoning.2")
+				.addResponse(new ResponseBuilder("=>", "reckoning.3")));
+		add(new DialogueBuilder("reckoning.3"));
+		add(new DialogueBuilder("thunder_death.1", new Dialogue.UseContext(new Conditions(List.of(
+				new Condition.InTitleLandType(LandTypes.THUNDER.get()),
+				new Condition.InTerrainLandType(LandTypes.WOOD.get())),
+				Conditions.Type.ALL)))
+				.addResponse(new ResponseBuilder("=>", "thunder_death.2")));
+		add(new DialogueBuilder("thunder_death.2")
+				.addResponse(new ResponseBuilder("=>", "thunder_death.3")));
+		add(new DialogueBuilder("thunder_death.3"));
+		add(new DialogueBuilder("hardcore", new Dialogue.UseContext(new Conditions(List.of(
+				new Condition.InTitleLandType(LandTypes.THUNDER.get()),
+				new Condition.InTerrainLandType(LandTypes.HEAT.get())),
+				Conditions.Type.ALL))));
+		
+		
 		add(new DialogueBuilder("mycelium.1", new Condition.InTerrainLandType(LandTypes.FUNGI.get()))
-				.addResponse(new ResponseBuilder("=>", "mycelium.2"))
-		);
+				.addResponse(new ResponseBuilder("=>", "mycelium.2")));
 		add(new DialogueBuilder("mycelium.2"));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
 		add(new DialogueBuilder("camel/start", new Condition.InTerrainLandType(LandTypes.SAND.get()))
 				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.yes", "camel/no_camel"))
-				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.no", "camel/dancing_camel"))
-		);
+				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.no", "camel/dancing_camel")));
 		add(new DialogueBuilder("camel/no_camel"));
 		add(new DialogueBuilder("camel/dancing_camel"));
 		
 		add(new DialogueBuilder("food_shop", new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
 				.addResponse("Never mind")
-				.addResponse(new ResponseBuilder("What do you have?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
-		);
+				.addResponse(new ResponseBuilder("What do you have?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
 		add(new DialogueBuilder("fast_food", new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get()))
 				.addResponse("I'm good")
-				.addResponse(new ResponseBuilder("Show me your menu").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
-		);
+				.addResponse(new ResponseBuilder("Show me your menu").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
 		add(new DialogueBuilder("grocery_store", new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
 				.addResponse("No thanks")
-				.addResponse(new ResponseBuilder("What do you have to sell?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
-		);
+				.addResponse(new ResponseBuilder("What do you have to sell?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
 		add(new DialogueBuilder("tasty_welcome", new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
 				.addResponse("Goodbye")
-				.addResponse(new ResponseBuilder("Let me see your wares").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName())))
-		);
+				.addResponse(new ResponseBuilder("Let me see your wares").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
+		
+		add(new DialogueBuilder("immortality_herb.1", new Condition.InTerrainLandType(LandTypes.FLORA.get()))
+				.addResponse(new ResponseBuilder("=>", "immortality_herb.2")));
+		add(new DialogueBuilder("immortality_herb.2")
+				.addResponse(new ResponseBuilder("=>", "immortality_herb.3")));
+		add(new DialogueBuilder("immortality_herb.3")
+				.addResponse(new ResponseBuilder("...").addTrigger(new Trigger.Explode())));
 	}
 	
 	private void testDialogues()
@@ -100,8 +138,7 @@ public class DialogueProvider implements DataProvider
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
 						.conditionType(Conditions.Type.ANY))
 				.addResponse(new ResponseBuilder("test1response2", "test2").addCondition(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())))
-				.addResponse(new ResponseBuilder("test1response3", "test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
-		);
+				.addResponse(new ResponseBuilder("test1response3", "test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}"))));
 		
 		add(new DialogueBuilder("test2", "test2animation", DEFAULT_GUI, new Dialogue.UseContext(new Condition.Conditionless()))
 				.addResponse(new ResponseBuilder("test2response1", "test1")
@@ -116,8 +153,7 @@ public class DialogueProvider implements DataProvider
 						.dontHideFailed())
 				.addResponse(new ResponseBuilder("test2response3", "test1")
 						.addTrigger(new Trigger.Command("""
-								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]""")))
-		);
+								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]"""))));
 		add(new DialogueBuilder("turtle_only", new Condition.IsEntityType(MSEntityTypes.TURTLE.get())));
 		
 		add(new DialogueBuilder("nakagator_only", new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())));
@@ -129,8 +165,7 @@ public class DialogueProvider implements DataProvider
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 1))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
 						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))
-						.dontHideFailed())
-		);
+						.dontHideFailed()));
 		add(new DialogueBuilder("oh_yippee"));
 		add(new DialogueBuilder("hunger_filled"));
 		
@@ -139,16 +174,14 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder("here have 5 cookies chap", "oh_yippee")
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))
-						.dontHideFailed())
-		);
+						.dontHideFailed()));
 		
 		add(new DialogueBuilder("hi_friend_can_i_help_you", new Condition.Conditionless(), 11)
 				.addResponse(new ResponseBuilder("I hate you").addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
 				.addResponse(new ResponseBuilder("I love you").addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
 				.addResponse(new ResponseBuilder("Rep above 500").addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
 				.addResponse(new ResponseBuilder("Rep below 200").addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
-				.addResponse("bye")
-		);
+				.addResponse("bye"));
 	}
 	
 	private void add(DialogueBuilder builder)
@@ -179,6 +212,11 @@ public class DialogueProvider implements DataProvider
 		DialogueBuilder(String message, Condition useCondition)
 		{
 			this(message, DEFAULT_ANIMATION, DEFAULT_GUI, new Dialogue.UseContext(useCondition));
+		}
+		
+		DialogueBuilder(String message, List<Condition> useConditions)
+		{
+			this(message, DEFAULT_ANIMATION, DEFAULT_GUI, new Dialogue.UseContext(new Conditions(useConditions, Conditions.Type.ALL)));
 		}
 		
 		DialogueBuilder(String message, Dialogue.UseContext useContext)

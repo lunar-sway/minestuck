@@ -1,0 +1,32 @@
+{
+  "animation": "generic_animation",
+  "gui": "minestuck:textures/gui/generic_extra_large.png",
+  "message": "minestuck.dialogue.pyre.1",
+  "path": "minestuck:pyre.1",
+  "responses": [
+    {
+      "conditions": {
+        "condition_list": []
+      },
+      "next_dialogue_path": "minestuck:pyre.2",
+      "response_message": "=>"
+    }
+  ],
+  "use_context": {
+    "conditions": {
+      "condition_list": [
+        {
+          "type": "in_title_land_type",
+          "land_type": "minestuck:wind"
+        },
+        {
+          "type": "is_one_of_entity_type",
+          "entity_type": [
+            "minestuck:salamander",
+            "minestuck:turtle"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -192,7 +192,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		}
 	}
 	
-	protected void setExplosionTimer()
+	public void setExplosionTimer()
 	{
 		//Start a timer of one second: 20 ticks.
 		//Consorts explode when the timer hits zero.
