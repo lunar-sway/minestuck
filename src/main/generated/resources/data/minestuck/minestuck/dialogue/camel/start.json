@@ -5,26 +5,35 @@
   "path": "minestuck:camel/start",
   "responses": [
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minestuck:camel/no_camel",
+      "next_dialogue_path": "minestuck:camel/no_camel",
       "response_message": "minestuck.dialogue.camel.yes",
       "triggers": []
     },
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minestuck:camel/dancing_camel",
+      "next_dialogue_path": "minestuck:camel/dancing_camel",
       "response_message": "minestuck.dialogue.camel.no",
       "triggers": []
     }
   ],
   "use_context": {
-    "conditions": [
-      {
-        "type": "in_terrain_land_type",
-        "land_type": "minestuck:sand"
-      }
-    ]
+    "conditions": {
+      "type": "ALL",
+      "condition_list": [
+        {
+          "type": "in_terrain_land_type",
+          "land_type": "minestuck:sand"
+        }
+      ]
+    }
   }
 }

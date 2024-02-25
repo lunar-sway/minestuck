@@ -5,16 +5,22 @@
   "path": "minestuck:tasty_welcome",
   "responses": [
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minecraft:close_menu",
+      "next_dialogue_path": "minecraft:close_menu",
       "response_message": "Goodbye",
       "triggers": []
     },
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minecraft:close_menu",
+      "next_dialogue_path": "minecraft:close_menu",
       "response_message": "Let me see your wares",
       "triggers": [
         {
@@ -26,11 +32,14 @@
     }
   ],
   "use_context": {
-    "conditions": [
-      {
-        "type": "is_entity_type",
-        "entity_type": "minestuck:turtle"
-      }
-    ]
+    "conditions": {
+      "type": "ALL",
+      "condition_list": [
+        {
+          "type": "is_entity_type",
+          "entity_type": "minestuck:turtle"
+        }
+      ]
+    }
   }
 }

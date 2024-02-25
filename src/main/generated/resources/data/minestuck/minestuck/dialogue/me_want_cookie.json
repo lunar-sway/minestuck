@@ -5,28 +5,37 @@
   "path": "minestuck:me_want_cookie",
   "responses": [
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minecraft:close_menu",
+      "next_dialogue_path": "minecraft:close_menu",
       "response_message": "im sorry fellow, I have no cookie for you. Bye",
       "triggers": []
     },
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minecraft:loop_menu",
+      "next_dialogue_path": "minecraft:loop_menu",
       "response_message": "why do you want cookie?",
       "triggers": []
     },
     {
-      "conditions": [
-        {
-          "type": "player_has_item",
-          "item": "minecraft:cookie"
-        }
-      ],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": [
+          {
+            "type": "player_has_item",
+            "item": "minecraft:cookie"
+          }
+        ]
+      },
       "hide_if_failed": false,
-      "next_path": "minestuck:oh_yippee",
+      "next_dialogue_path": "minestuck:oh_yippee",
       "response_message": "here have a cookie chap",
       "triggers": [
         {
@@ -41,10 +50,13 @@
     }
   ],
   "use_context": {
-    "conditions": [
-      {
-        "type": "conditionless"
-      }
-    ]
+    "conditions": {
+      "type": "ALL",
+      "condition_list": [
+        {
+          "type": "conditionless"
+        }
+      ]
+    }
   }
 }

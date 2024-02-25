@@ -5,19 +5,25 @@
   "path": "minestuck:mycelium.1",
   "responses": [
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minestuck:mycelium.2",
+      "next_dialogue_path": "minestuck:mycelium.2",
       "response_message": "=>",
       "triggers": []
     }
   ],
   "use_context": {
-    "conditions": [
-      {
-        "type": "in_terrain_land_type",
-        "land_type": "minestuck:fungi"
-      }
-    ]
+    "conditions": {
+      "type": "ALL",
+      "condition_list": [
+        {
+          "type": "in_terrain_land_type",
+          "land_type": "minestuck:fungi"
+        }
+      ]
+    }
   }
 }

@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
@@ -20,7 +19,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -106,22 +104,6 @@ public sealed interface Condition
 	}
 	
 	boolean testCondition(LivingEntity entity, ServerPlayer player);
-	
-	static boolean matchesAllConditions(LivingEntity entity, ServerPlayer player, List<Condition> conditions)
-	{
-		if(conditions == null)
-			return false;
-		
-		for(Condition condition : conditions)
-		{
-			if(!condition.testCondition(entity, player))
-			{
-				return false;
-			}
-		}
-		
-		return true;
-	}
 	
 	
 	/**

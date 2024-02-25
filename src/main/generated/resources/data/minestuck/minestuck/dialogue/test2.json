@@ -5,21 +5,39 @@
   "path": "minestuck:test2",
   "responses": [
     {
-      "conditions": [
-        {
-          "type": "is_entity_type",
-          "entity_type": "minestuck:salamander"
-        }
-      ],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": [
+          {
+            "type": "is_entity_type",
+            "entity_type": "minestuck:salamander"
+          }
+        ]
+      },
       "hide_if_failed": false,
-      "next_path": "minestuck:test1",
+      "next_dialogue_path": "minestuck:test1",
       "response_message": "test2response1",
       "triggers": []
     },
     {
-      "conditions": [],
-      "hide_if_failed": true,
-      "next_path": "minestuck:test1",
+      "conditions": {
+        "type": "NONE",
+        "condition_list": [
+          {
+            "type": "is_carapacian"
+          },
+          {
+            "type": "in_terrain_land_type",
+            "land_type": "minestuck:end"
+          },
+          {
+            "type": "in_terrain_land_type",
+            "land_type": "minestuck:shade"
+          }
+        ]
+      },
+      "hide_if_failed": false,
+      "next_dialogue_path": "minestuck:test1",
       "response_message": "test2response2",
       "triggers": [
         {
@@ -29,9 +47,12 @@
       ]
     },
     {
-      "conditions": [],
+      "conditions": {
+        "type": "ALL",
+        "condition_list": []
+      },
       "hide_if_failed": true,
-      "next_path": "minestuck:test1",
+      "next_dialogue_path": "minestuck:test1",
       "response_message": "test2response3",
       "triggers": [
         {
@@ -42,10 +63,13 @@
     }
   ],
   "use_context": {
-    "conditions": [
-      {
-        "type": "conditionless"
-      }
-    ]
+    "conditions": {
+      "type": "ALL",
+      "condition_list": [
+        {
+          "type": "conditionless"
+        }
+      ]
+    }
   }
 }

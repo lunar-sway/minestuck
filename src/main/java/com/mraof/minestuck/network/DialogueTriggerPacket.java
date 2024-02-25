@@ -78,7 +78,7 @@ public class DialogueTriggerPacket implements MSPacket.PlayToServer
 			for(Dialogue.Response response : dialogue.responses())
 				for(Trigger triggerIterate : response.triggers())
 					if(triggerIterate.equals(trigger))
-						if(Condition.matchesAllConditions(livingEntity, player, response.conditions()))
+						if(response.conditions().testWithContext(livingEntity, player))
 							trigger.triggerEffect(livingEntity, player);
 		}
 	}
