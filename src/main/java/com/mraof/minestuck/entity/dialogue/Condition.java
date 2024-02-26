@@ -56,6 +56,7 @@ public sealed interface Condition
 	enum Type implements StringRepresentable
 	{
 		CONDITIONLESS(() -> Conditionless.CODEC, Conditionless::readCondition, ""),
+		HAS_CONDITIONS(() -> HasConditions.CODEC, HasConditions::readCondition, ""),
 		IS_CONSORT(() -> IsConsort.CODEC, IsConsort::readCondition, "NPC is not consort"),
 		IS_CARAPACIAN(() -> IsCarapacian.CODEC, IsCarapacian::readCondition, "NPC is not carapacian"),
 		IS_ENTITY_TYPE(() -> IsEntityType.CODEC, IsEntityType::readCondition, "NPC is wrong entity type"),
@@ -112,7 +113,7 @@ public sealed interface Condition
 	
 	
 	/**
-	 *
+	 * CONDITIONS
 	 */
 	
 	record Conditionless() implements Condition
@@ -139,6 +140,50 @@ public sealed interface Condition
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			return true;
+		}
+	}
+	
+	record HasConditions(Conditions conditions) implements Condition
+	{
+		static final Codec<HasConditions> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Conditions.CODEC.fieldOf("conditions").forGetter(HasConditions::conditions)
+		).apply(instance, HasConditions::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.HAS_CONDITIONS;
+		}
+		
+		static HasConditions readCondition(FriendlyByteBuf buffer)
+		{
+			int ordinal = buffer.readInt();
+			
+			List<Condition> conditionList = new ArrayList<>();
+			while(buffer.isReadable())
+			{
+				conditionList.add(Condition.read(buffer));
+			}
+			
+			Conditions conditions = new Conditions(conditionList, Conditions.Type.fromInt(ordinal));
+			
+			return new HasConditions(conditions);
+		}
+		
+		@Override
+		public void writeCondition(FriendlyByteBuf buffer)
+		{
+			buffer.writeInt(conditions.type().ordinal());
+			conditions.conditionList().forEach(condition -> condition.write(buffer));
+		}
+		
+		@Override
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		{
+			if(conditions.conditionList().isEmpty())
+				return true;
+			
+			return conditions.testWithContext(entity, player);
 		}
 	}
 	

@@ -96,6 +96,14 @@ public record Conditions(List<Condition> conditionList, Type type)
 			return this.name().toLowerCase(Locale.ROOT);
 		}
 		
+		public static Type fromInt(int ordinal) //converts int back into enum
+		{
+			if(0 <= ordinal && ordinal < Type.values().length)
+				return Type.values()[ordinal];
+			else
+				throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for Conditions type!");
+		}
+		
 		interface TriPredicate<A, B, C>
 		{
 			boolean test(A a, B b, C c);
