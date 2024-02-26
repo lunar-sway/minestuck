@@ -11,6 +11,7 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.entity.dialogue.Trigger;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
@@ -105,7 +106,7 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("mycelium.2"));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
-		add(new DialogueBuilder("camel/start", new Condition.InTerrainLandType(LandTypes.SAND.get()))
+		add(new DialogueBuilder("camel/start", new Condition.InTerrainLandTypeTag(MSTags.TerrainLandTypes.SAND))
 				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.yes", "camel/no_camel"))
 				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.no", "camel/dancing_camel")));
 		add(new DialogueBuilder("camel/no_camel"));

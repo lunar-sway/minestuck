@@ -16,6 +16,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -61,7 +62,9 @@ public sealed interface Condition
 		IS_ONE_OF_ENTITY_TYPE(() -> IsOneOfEntityType.CODEC, IsOneOfEntityType::readCondition, "NPC is wrong entity type"),
 		IN_ANY_LAND(() -> InAnyLand.CODEC, InAnyLand::readCondition, "Is not in a Land"),
 		IN_TERRAIN_LAND_TYPE(() -> InTerrainLandType.CODEC, InTerrainLandType::readCondition, "Is not in specific Land"),
+		IN_TERRAIN_LAND_TYPE_TAG(() -> InTerrainLandTypeTag.CODEC, InTerrainLandTypeTag::readCondition, "Is not in specific Land tag"),
 		IN_TITLE_LAND_TYPE(() -> InTitleLandType.CODEC, InTitleLandType::readCondition, "Is not in specific Land"),
+		IN_TITLE_LAND_TYPE_TAG(() -> InTitleLandTypeTag.CODEC, InTitleLandTypeTag::readCondition, "Is not in specific Land tag"),
 		PLAYER_HAS_ITEM(() -> PlayerHasItem.CODEC, PlayerHasItem::readCondition, "You don't have the required item(s)"),
 		PLAYER_IS_CLASS(() -> PlayerIsClass.CODEC, PlayerIsClass::readCondition, "You aren't the required Class"),
 		PLAYER_IS_ASPECT(() -> PlayerIsAspect.CODEC, PlayerIsAspect::readCondition, "You aren't the required Aspect"),
@@ -332,6 +335,46 @@ public sealed interface Condition
 		}
 	}
 	
+	record InTerrainLandTypeTag(TagKey<TerrainLandType> landTypeTag) implements Condition
+	{
+		static final Codec<InTerrainLandTypeTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				TagKey.codec(LandTypes.TERRAIN_REGISTRY.get().getRegistryKey()).fieldOf("land_type_tag").forGetter(InTerrainLandTypeTag::landTypeTag)
+		).apply(instance, InTerrainLandTypeTag::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.IN_TERRAIN_LAND_TYPE_TAG;
+		}
+		
+		static InTerrainLandTypeTag readCondition(FriendlyByteBuf buffer)
+		{
+			return new InTerrainLandTypeTag(TagKey.create(LandTypes.TERRAIN_REGISTRY.get().getRegistryKey(), buffer.readResourceLocation()));
+		}
+		
+		@Override
+		public void writeCondition(FriendlyByteBuf buffer)
+		{
+			buffer.writeResourceLocation(landTypeTag.location());
+		}
+		
+		@Override
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		{
+			if(landTypeTag == null)
+				return false;
+			
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				Optional<LandTypePair.Named> potentialLandTypes = LandTypePair.getNamed(serverLevel);
+				if(potentialLandTypes.isPresent())
+					return potentialLandTypes.get().landTypes().getTerrain().is(landTypeTag);
+			}
+			
+			return false;
+		}
+	}
+	
 	record InTitleLandType(TitleLandType landType) implements Condition
 	{
 		static final Codec<InTitleLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -367,6 +410,46 @@ public sealed interface Condition
 				Optional<LandTypePair.Named> potentialLandTypes = LandTypePair.getNamed(serverLevel);
 				if(potentialLandTypes.isPresent())
 					return potentialLandTypes.get().landTypes().getTitle() == landType;
+			}
+			
+			return false;
+		}
+	}
+	
+	record InTitleLandTypeTag(TagKey<TitleLandType> landTypeTag) implements Condition
+	{
+		static final Codec<InTitleLandTypeTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				TagKey.codec(LandTypes.TITLE_REGISTRY.get().getRegistryKey()).fieldOf("land_type_tag").forGetter(InTitleLandTypeTag::landTypeTag)
+		).apply(instance, InTitleLandTypeTag::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.IN_TITLE_LAND_TYPE_TAG;
+		}
+		
+		static InTitleLandTypeTag readCondition(FriendlyByteBuf buffer)
+		{
+			return new InTitleLandTypeTag(TagKey.create(LandTypes.TITLE_REGISTRY.get().getRegistryKey(), buffer.readResourceLocation()));
+		}
+		
+		@Override
+		public void writeCondition(FriendlyByteBuf buffer)
+		{
+			buffer.writeResourceLocation(landTypeTag.location());
+		}
+		
+		@Override
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		{
+			if(landTypeTag == null)
+				return false;
+			
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				Optional<LandTypePair.Named> potentialLandTypes = LandTypePair.getNamed(serverLevel);
+				if(potentialLandTypes.isPresent())
+					return potentialLandTypes.get().landTypes().getTitle().is(landTypeTag);
 			}
 			
 			return false;
