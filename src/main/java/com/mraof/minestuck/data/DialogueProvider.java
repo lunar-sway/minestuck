@@ -5,6 +5,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.entity.dialogue.Conditions;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.player.EnumAspect;
@@ -141,7 +142,12 @@ public class DialogueProvider implements DataProvider
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
 						.conditionType(Conditions.Type.ANY))
 				.addResponse(new ResponseBuilder("test1response2", "test2").addCondition(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())))
-				.addResponse(new ResponseBuilder("test1response3", "test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}"))));
+				.addResponse(new ResponseBuilder("test1response3", "test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
+				.addResponse(new ResponseBuilder("test1response4")
+						.addCondition(new Condition.HasConditions(new Conditions(List.of(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get()), new Condition.IsEntityType(MSEntityTypes.TURTLE.get()), new Condition.IsEntityType(MSEntityTypes.IGUANA.get()), new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get())), Conditions.Type.ONE)))
+						.addCondition(new Condition.HasConditions(new Conditions(List.of(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1)), Conditions.Type.ONE)))
+						.conditionType(Conditions.Type.ONE)
+						.dontHideFailed()));
 		
 		add(new DialogueBuilder("test2", "test2animation", DEFAULT_GUI, new Dialogue.UseContext(new Condition.Conditionless()))
 				.addResponse(new ResponseBuilder("test2response1", "test1")
