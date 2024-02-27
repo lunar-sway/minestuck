@@ -31,7 +31,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Carved Planks no longer need to be mined with a Stone Axe or better
 - Transportalizers now stack to one instead of 64
 - Prismarine armor remodel and retexture
-- Iron Lass Armor has now been remodeled, and retextured; with additional new animations
+- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
+- Computer Themes can now be added and rendered via resource pack
+- Default computer Theme for crockertop is now Crocker
+- Computer Theme is now chosen from a list of available Themes in separate GUI
 - Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
 - Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale

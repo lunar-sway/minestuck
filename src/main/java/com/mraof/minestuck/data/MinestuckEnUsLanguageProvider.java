@@ -26,6 +26,7 @@ import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -2391,6 +2392,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(RemoteObserverScreen.TITLE, "Remote Observer");
 		add(RemoteObserverScreen.CURRENT_ENTITY_TYPE_MESSAGE, "Current Entity Type");
 		add(ComputerScreen.TITLE, "Computer");
+		add(ComputerThemeScreen.TITLE, "Computer Themes");
+		add(ComputerThemeScreen.SELECTED_THEME, "Selected theme:");
+		add(ComputerThemeScreen.DONE_MESSAGE, "DONE");
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
@@ -2483,7 +2487,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurner.CHOOSE, "Choose disk type to write");
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
-		add(SettingsApp.THEME, "Theme: %s");
+		add(SettingsApp.THEME, "Choose Theme");
 		add(SettingsApp.TITLE, "Sburb Settings");
 		add(MergeResult.ABLE, "Able to merge");
 		add(MergeResult.LOCKED, "Either session is locked");
@@ -2510,16 +2514,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
 		add(EditmodeLocations.REMOVED_LOCATION_MESSAGE, "The location you were in is no longer in range, and you have now been teleported to a valid location.");
 		
-		add(Theme.DEFAULT.getName(), "Default");
-		add(Theme.PESTERCHUM.getName(), "Pesterchum");
-		add(Theme.TROLLIAN.getName(), "Trollian");
-		add(Theme.CROCKER.getName(), "Crocker");
-		add(Theme.TYPHEUS.getName(), "Typheus");
-		add(Theme.CETUS.getName(), "Cetus");
-		add(Theme.HEPHAESTUS.getName(), "Hephaestus");
-		add(Theme.ECHIDNA.getName(), "Echidna");
-		add(Theme.JOY.getName(), "Joy");
-		add(Theme.SBURB_95.getName(), "SBURB 95");
+		addThemeName(MSComputerThemes.DEFAULT, "Default");
+		addThemeName(MSComputerThemes.PESTERCHUM, "Pesterchum");
+		addThemeName(MSComputerThemes.TROLLIAN, "Trollian");
+		addThemeName(MSComputerThemes.CROCKER, "Crocker");
+		addThemeName(MSComputerThemes.TYPHEUS, "Typheus");
+		addThemeName(MSComputerThemes.CETUS, "Cetus");
+		addThemeName(MSComputerThemes.HEPHAESTUS, "Hephaestus");
+		addThemeName(MSComputerThemes.ECHIDNA, "Echidna");
+		addThemeName(MSComputerThemes.JOY, "Joy");
+		addThemeName(MSComputerThemes.SBURB_95, "SBURB 95");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
