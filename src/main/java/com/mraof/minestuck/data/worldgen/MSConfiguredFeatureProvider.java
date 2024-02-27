@@ -118,7 +118,7 @@ public final class MSConfiguredFeatureProvider
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.TREATED_CHIPBOARD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 4)));
 		context.register(CHIPBOARD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.CHIPBOARD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 4)));
-		context.register(UNCARVED_WOOD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+		context.register(CARVED_PLANKS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.UNCARVED_WOOD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 4)));
 		context.register(COAGULATED_BLOOD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.COAGULATED_BLOOD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 5), 2)));

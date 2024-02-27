@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "minestuck:block/cindered_planks",
+    "side": "minestuck:block/cindered_planks",
+    "top": "minestuck:block/cindered_planks"
+  }
+}
