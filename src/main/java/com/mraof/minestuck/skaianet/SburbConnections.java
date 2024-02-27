@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -267,6 +268,11 @@ public final class SburbConnections
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(skaianetData.mcServer, activeConnection, type));
 	}
 	
+	private void closeConnectionIf(Predicate<ActiveConnection> predicate)
+	{
+		this.activeConnections().filter(predicate).toList().forEach(this::closeConnection);
+	}
+	
 	public void closeConnection(ActiveConnection connection)
 	{
 		this.closeConnection(connection, null, null);
@@ -310,12 +316,8 @@ public final class SburbConnections
 		if(this.hasPrimaryConnectionForClient(client) || this.hasPrimaryConnectionForServer(server))
 			throw new IllegalStateException();
 		
-		Optional<ActiveConnection> activeConnection = this.getActiveConnection(client);
-		if(activeConnection.isPresent() && !activeConnection.get().server().equals(server))
-			throw new IllegalStateException();
-		
-		if(activeConnection.isEmpty() && !this.canMakeNewRegularConnectionAsServer(server))
-			throw new IllegalStateException();
+		this.closeConnectionIf(connection -> !connection.client().equals(client) && connection.server().equals(server)
+						&& !this.hasPrimaryConnectionForClient(connection.client()));
 		
 		primaryClientToServerMap.put(client, Optional.of(server));
 		
@@ -323,21 +325,6 @@ public final class SburbConnections
 		
 		skaianetData.infoTracker.markDirty(client);
 		skaianetData.infoTracker.markDirty(server);
-	}
-	
-	public void setPrimaryWithoutPartner(PlayerIdentifier client)
-	{
-		Objects.requireNonNull(client);
-		
-		if(this.hasPrimaryConnectionForClient(client))
-			throw new IllegalStateException();
-		
-		if(this.getActiveConnection(client).isPresent())
-			throw new IllegalStateException();
-		
-		primaryClientToServerMap.put(client, Optional.empty());
-		
-		skaianetData.infoTracker.markDirty(client);
 	}
 	
 	public void unlinkClientPlayer(PlayerIdentifier clientPlayer)
@@ -362,9 +349,8 @@ public final class SburbConnections
 	public void unlinkServerPlayer(PlayerIdentifier serverPlayer)
 	{
 		this.primaryPartnerForServer(serverPlayer).ifPresent(this::unlinkClientPlayer);
-		this.activeConnections().filter(connection -> connection.server().equals(serverPlayer)
-						&& !this.hasPrimaryConnectionForClient(connection.client()))
-				.forEach(this::closeConnection);
+		this.closeConnectionIf(connection -> connection.server().equals(serverPlayer)
+						&& !this.hasPrimaryConnectionForClient(connection.client()));
 	}
 	
 	public void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
@@ -378,8 +364,11 @@ public final class SburbConnections
 		if(primaryClientToServerMap.get(clientPlayer).isPresent())
 			throw new IllegalStateException("Connection already has a server player");
 		
-		if(!this.canMakeNewRegularConnectionAsServer(serverPlayer))
+		if(this.hasPrimaryConnectionForServer(serverPlayer))
 			throw new IllegalStateException("Server player already has a connection");
+		
+		this.closeConnectionIf(connection -> connection.server().equals(serverPlayer)
+						&& !this.hasPrimaryConnectionForClient(connection.client()));
 		
 		primaryClientToServerMap.put(clientPlayer, Optional.of(serverPlayer));
 		
@@ -407,7 +396,9 @@ public final class SburbConnections
 		else
 		{
 			LOGGER.info("Player {} entered without connection.", player.getUsername());
-			this.setPrimaryWithoutPartner(player);
+			
+			primaryClientToServerMap.put(player, Optional.empty());
+			skaianetData.infoTracker.markDirty(player);
 		}
 	}
 }
