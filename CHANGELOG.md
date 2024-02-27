@@ -9,9 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Minor changes to what is shown in the data checker
-- Duplicate titles are now allowed in the same session
+- Duplicate titles are now allowed in the same session,
+and consequently the session size limit has been removed
 - Pre-entry players no longer play a part in grist gutter capacity,
 and they no longer receive grist from the gutter
+
+### Removed
+
+- Removed "skaianetCheck" config option
 
 ### Fixed
 
