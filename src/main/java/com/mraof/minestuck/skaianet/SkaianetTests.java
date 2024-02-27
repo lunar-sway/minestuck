@@ -56,7 +56,7 @@ public final class SkaianetTests
 			helper.assertTrue(connections.primaryPartnerForClient(client).isEmpty(), "Client player still has partner");
 			helper.assertTrue(connections.hasPrimaryConnectionForClient(client), "Client lost primary connection entirely");
 			
-			connections.newServerForClient(client, server2);
+			connections.setPrimaryConnection(client, server2);
 			helper.assertTrue(connections.isPrimaryPair(client, server2), "Primary server player did not match");
 		});
 	}

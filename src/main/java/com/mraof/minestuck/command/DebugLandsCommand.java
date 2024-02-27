@@ -68,7 +68,7 @@ public class DebugLandsCommand
 			
 			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 			
-			connections.newServerForClient(lastPlayer, fakePlayer);
+			connections.setPrimaryConnection(lastPlayer, fakePlayer);
 			connections.setPrimaryConnectionForEntry(fakePlayer);
 			
 			createAndSetLand(land, fakePlayer, player.server);
@@ -77,7 +77,7 @@ public class DebugLandsCommand
 		}
 		
 		if(i == landTypes.size())
-			connections.newServerForClient(lastPlayer, playerId);
+			connections.setPrimaryConnection(lastPlayer, playerId);
 		else
 		{
 			PlayerIdentifier lastIdentifier = playerId;

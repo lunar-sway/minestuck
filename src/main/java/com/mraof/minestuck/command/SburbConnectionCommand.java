@@ -56,10 +56,7 @@ public class SburbConnectionCommand
 		connections.unlinkClientPlayer(client);
 		connections.unlinkServerPlayer(server);
 		
-		if(connections.hasPrimaryConnectionForClient(client))
-			connections.newServerForClient(client, server);
-		else
-			connections.setPrimaryConnection(client, server);
+		connections.setPrimaryConnection(client, server);
 		
 		return true;
 	}

@@ -230,7 +230,7 @@ public final class SburbConnections
 			if(!this.canMakeNewRegularConnectionAsServer(serverPlayer))
 				return false;
 			
-			this.newServerForClient(clientPlayer, serverPlayer);
+			this.setPrimaryConnection(clientPlayer, serverPlayer);
 			this.newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
 			return true;
 		}
@@ -308,13 +308,27 @@ public final class SburbConnections
 		this.setPrimaryConnection(connection.client(), connection.server());
 	}
 	
+	/**
+	 * Makes sure that the given client and server players has a primary connection.
+	 * It may close any incompatible active connections.
+	 * This function will avoid replacing any existing primary partner,
+	 * throwing an exception if either player already has a different primary partner.
+	 * If you want to replace an existing primary partner,
+	 * you should first call {@link #unlinkClientPlayer(PlayerIdentifier)} or {@link #unlinkServerPlayer(PlayerIdentifier)}.
+	 */
 	public void setPrimaryConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
 		
-		if(this.hasPrimaryConnectionForClient(client) || this.hasPrimaryConnectionForServer(server))
-			throw new IllegalStateException();
+		if(this.isPrimaryPair(client, server))
+			return;
+		
+		if(this.primaryPartnerForClient(client).isPresent())
+			throw new IllegalStateException("Client player " + client.getUsername() + " already has a primary partner");
+		
+		if(this.hasPrimaryConnectionForServer(server))
+			throw new IllegalStateException("Server player " + server.getUsername() + " already has a primary partner");
 		
 		this.closeConnectionIf(connection -> !connection.client().equals(client) && connection.server().equals(server)
 						&& !this.hasPrimaryConnectionForClient(connection.client()));
@@ -325,6 +339,8 @@ public final class SburbConnections
 		
 		skaianetData.infoTracker.markDirty(client);
 		skaianetData.infoTracker.markDirty(server);
+		if(skaianetData.getOrCreateData(client).hasEntered())
+			skaianetData.infoTracker.markLandChainDirty();
 	}
 	
 	public void unlinkClientPlayer(PlayerIdentifier clientPlayer)
@@ -351,32 +367,6 @@ public final class SburbConnections
 		this.primaryPartnerForServer(serverPlayer).ifPresent(this::unlinkClientPlayer);
 		this.closeConnectionIf(connection -> connection.server().equals(serverPlayer)
 						&& !this.hasPrimaryConnectionForClient(connection.client()));
-	}
-	
-	public void newServerForClient(PlayerIdentifier clientPlayer, PlayerIdentifier serverPlayer)
-	{
-		Objects.requireNonNull(clientPlayer);
-		Objects.requireNonNull(serverPlayer);
-		
-		if(!primaryClientToServerMap.containsKey(clientPlayer))
-			throw new IllegalStateException();
-		
-		if(primaryClientToServerMap.get(clientPlayer).isPresent())
-			throw new IllegalStateException("Connection already has a server player");
-		
-		if(this.hasPrimaryConnectionForServer(serverPlayer))
-			throw new IllegalStateException("Server player already has a connection");
-		
-		this.closeConnectionIf(connection -> connection.server().equals(serverPlayer)
-						&& !this.hasPrimaryConnectionForClient(connection.client()));
-		
-		primaryClientToServerMap.put(clientPlayer, Optional.of(serverPlayer));
-		
-		skaianetData.sessionHandler.onConnect(clientPlayer, serverPlayer);
-		
-		skaianetData.infoTracker.markDirty(serverPlayer);
-		if(skaianetData.getOrCreateData(clientPlayer).hasEntered())
-			skaianetData.infoTracker.markLandChainDirty();
 	}
 	
 	/**
