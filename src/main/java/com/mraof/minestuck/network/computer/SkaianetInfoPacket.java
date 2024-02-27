@@ -92,21 +92,29 @@ public final class SkaianetInfoPacket
 		@Override
 		public void encode(FriendlyByteBuf buffer)
 		{
-			buffer.writeCollection(landChains, (buffer1, list) ->
-					buffer1.writeCollection(list, (buffer2, land) ->
-							buffer2.writeOptional(Optional.ofNullable(land),
-									FriendlyByteBuf::writeResourceKey)));
+			buffer.writeCollection(landChains, LandChains::writeLandChain);
 		}
 		
 		public static LandChains decode(FriendlyByteBuf buffer)
 		{
-			List<List<ResourceKey<Level>>> landChains = buffer.readList(buffer1 ->
-					buffer1.readList(buffer2 ->
-							buffer2.readOptional(buffer3 ->
-									buffer3.readResourceKey(Registries.DIMENSION)
-							).orElse(null)));
+			List<List<ResourceKey<Level>>> landChains = buffer.readList(LandChains::readLandChain);
 			
 			return new LandChains(landChains);
+		}
+		
+		private static void writeLandChain(FriendlyByteBuf buffer, List<ResourceKey<Level>> landChain)
+		{
+			buffer.writeCollection(landChain, (buffer1, land) ->
+					buffer1.writeOptional(Optional.ofNullable(land),
+							FriendlyByteBuf::writeResourceKey));
+		}
+		
+		private static List<ResourceKey<Level>> readLandChain(FriendlyByteBuf buffer)
+		{
+			return buffer.readList(buffer1 ->
+					buffer1.readOptional(buffer2 ->
+							buffer2.readResourceKey(Registries.DIMENSION)
+					).orElse(null));
 		}
 		
 		@Override
