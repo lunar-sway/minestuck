@@ -88,7 +88,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 				waitTimer = 10;
 			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
 			{
-				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.trigger((ServerPlayer) player, analyzedCard);
+				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.trigger((ServerPlayer) player, AlchemyHelper.getDecodedItem(analyzedCard));
 				applyReadableNBT(analyzedCard);
 				takeCard(player);
 				
