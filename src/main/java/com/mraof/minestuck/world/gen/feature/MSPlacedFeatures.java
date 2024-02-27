@@ -84,7 +84,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> TREATED_UNCARVED_WOOD_DISK = key("treated_uncarved_wood_disk");
 	public static final ResourceKey<PlacedFeature> TREATED_CHIPBOARD_DISK = key("treated_chipboard_disk");
 	public static final ResourceKey<PlacedFeature> CHIPBOARD_DISK = key("chipboard_disk");
-	public static final ResourceKey<PlacedFeature> UNCARVED_WOOD_DISK = key("uncarved_wood_disk");
+	public static final ResourceKey<PlacedFeature> CARVED_PLANKS_DISK = key("carved_planks_disk");
 	public static final ResourceKey<PlacedFeature> COAGULATED_BLOOD_DISK = key("coagulated_blood_disk");
 	public static final ResourceKey<PlacedFeature> COBBLESTONE_SURFACE_DISK = key("cobblestone_surface_disk");
 	public static final ResourceKey<PlacedFeature> STONE_SURFACE_DISK = key("stone_surface_disk");

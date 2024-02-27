@@ -71,7 +71,7 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_UNCARVED_WOOD_DISK = key("treated_uncarved_wood_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_CHIPBOARD_DISK = key("treated_chipboard_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CHIPBOARD_DISK = key("chipboard_disk");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> UNCARVED_WOOD_DISK = key("uncarved_wood_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_PLANKS_DISK = key("carved_planks_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> COAGULATED_BLOOD_DISK = key("coagulated_blood_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> COBBLESTONE_SURFACE_DISK = key("cobblestone_surface_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> STONE_SURFACE_DISK = key("stone_surface_disk");

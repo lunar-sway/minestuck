@@ -39,7 +39,7 @@ public class WoodLandType extends TerrainLandType
 	{
 		registry.setBlock("ground", MSBlocks.UNCARVED_WOOD);
 		registry.setBlock("upper", MSBlocks.CHIPBOARD);
-		registry.setBlock("surface", MSBlocks.CARVED_PLANKS);
+		registry.setBlock("surface", MSBlocks.UNCARVED_WOOD);
 		registry.setBlock("ocean", MSBlocks.CAULK);
 		registry.setBlock("village_path", MSBlocks.WOOD_SHAVINGS);
 		registry.setBlock("structure_primary", MSBlocks.TREATED_HEAVY_PLANKS);
@@ -83,7 +83,7 @@ public class WoodLandType extends TerrainLandType
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.TREATED_PLANKS_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL);
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.UNCARVED_WOOD_DISK,
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.CARVED_PLANKS_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.CHIPBOARD_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL);

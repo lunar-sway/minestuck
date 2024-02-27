@@ -164,7 +164,7 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(CHIPBOARD_DISK, placed(features, MSCFeatures.TREATED_CHIPBOARD_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-		context.register(UNCARVED_WOOD_DISK, placed(features, MSCFeatures.UNCARVED_WOOD_DISK,
+		context.register(CARVED_PLANKS_DISK, placed(features, MSCFeatures.CARVED_PLANKS_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(COAGULATED_BLOOD_DISK, placed(features, MSCFeatures.COAGULATED_BLOOD_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(56), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
