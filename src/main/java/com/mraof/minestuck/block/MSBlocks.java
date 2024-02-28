@@ -925,7 +925,7 @@ public final class MSBlocks
 	
 	//Misc Alchemy Semi-Plants
 	public static final RegistryObject<Block> GOLD_SEEDS = REGISTER.register("gold_seeds", () -> new GoldSeedsBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).strength(0.1F).sound(SoundType.METAL).noCollission()));
-	public static final RegistryObject<Block> WOODEN_CACTUS = REGISTER.register("wooden_cactus", () -> new SpecialCactusBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).randomTicks().strength(1.0F, 2.5F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> WOODEN_CACTUS = REGISTER.register("wooden_cactus", () -> new WoodenCactusBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).randomTicks().strength(1.0F, 2.5F).sound(SoundType.WOOD)));
 	
 	
 	//Cakes

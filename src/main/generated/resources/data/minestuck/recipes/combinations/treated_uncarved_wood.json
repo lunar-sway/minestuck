@@ -4,7 +4,7 @@
     "item": "minestuck:uncarved_wood"
   },
   "input2": {
-    "item": "minecraft:honey_bottle"
+    "item": "minestuck:molten_amber_bucket"
   },
   "mode": "or",
   "output": {

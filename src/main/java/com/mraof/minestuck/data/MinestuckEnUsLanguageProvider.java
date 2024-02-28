@@ -661,6 +661,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CINDERED_DOOR, "Cindered Door");
 		addBlock(MSBlocks.CINDERED_TRAPDOOR, "Cindered Trapdoor");
 		
+		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
+		addBlock(MSBlocks.SHADEWOOD_STAIRS, "Shadewood Stairs");
+		addBlock(MSBlocks.SHADEWOOD_SLAB, "Shadewood Slab");
+		addBlock(MSBlocks.SHADEWOOD_BUTTON, "Shadewood Button");
+		addBlock(MSBlocks.SHADEWOOD_PRESSURE_PLATE, "Shadewood Pressure Plate");
+		addBlock(MSBlocks.SHADEWOOD_FENCE, "Shadewood Fence");
+		addBlock(MSBlocks.SHADEWOOD_FENCE_GATE, "Shadewood Fence Gate");
+		addBlock(MSBlocks.SHADEWOOD_DOOR, "Shadewood Door");
+		addBlock(MSBlocks.SHADEWOOD_TRAPDOOR, "Shadewood Trapdoor");
+		
 		addBlock(MSBlocks.FROST_LEAVES, "Frost Leaves");
 		addBlock(MSBlocks.RAINBOW_LEAVES, "Rainbow Leaves");
 		addBlock(MSBlocks.END_LEAVES, "End Leaves");
@@ -2280,8 +2290,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(SandstoneLandType.STONY_DESERTS, "Stony Deserts");
 		addLand(ShadeLandType.SHADE, "Shade");
 		addLand(WoodLandType.WOOD, "Wood");
-		addLand(WoodLandType.OAK, "Planks");
-		addLand(WoodLandType.LUMBER, "Carvings");
+		addLand(WoodLandType.PLANKS, "Planks");
+		addLand(WoodLandType.CARVINGS, "Carvings");
 		addLand(FloraLandType.FLORA, "Flora");
 		addLand(FloraLandType.FLOWERS, "Flowers");
 		addLand(FloraLandType.THORNS, "Thorns");

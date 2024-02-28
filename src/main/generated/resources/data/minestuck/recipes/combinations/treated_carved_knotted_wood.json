@@ -4,7 +4,7 @@
     "item": "minestuck:carved_knotted_wood"
   },
   "input2": {
-    "item": "minecraft:honey_bottle"
+    "item": "minestuck:molten_amber_bucket"
   },
   "mode": "or",
   "output": {

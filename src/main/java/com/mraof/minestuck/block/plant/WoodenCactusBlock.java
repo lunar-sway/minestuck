@@ -9,9 +9,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SpecialCactusBlock extends CactusBlock
+public class WoodenCactusBlock extends CactusBlock
 {
-	public SpecialCactusBlock(Properties properties)
+	public WoodenCactusBlock(Properties properties)
 	{
 		super(properties);
 	}

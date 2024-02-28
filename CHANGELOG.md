@@ -21,7 +21,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Uncarved Wood Iron, Redstone, and Emerald ores
 - Added Silicone Caulk fluid, used in Wood lands
 - Added Cindered woodset and Trees in Heat lands
-- Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, Dead Foliage, and Sandy Grass
+- Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
+- Added Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
+- Added Coffee Claws
+- Added TV Antenna
 - Added Molten Amber fluid, used in Heat lands
 
 ### Changed
@@ -38,7 +41,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
 - Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
+- Renamed Oil to Shale Oil
 - Pumord is now alchemized with Pumice Stone instead of any regular Stone
+- Cruxite block retexture
 
 ### Fixed
 
@@ -50,8 +55,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, sipherNil
 
+## [Unreleased]
+
+### Fixed
+
+- Metal Boats no longer crash the game when dispensed
+- Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
+
+### Contributors for this release
+
+- hadean, Dweblenod
+- 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
 ### Added

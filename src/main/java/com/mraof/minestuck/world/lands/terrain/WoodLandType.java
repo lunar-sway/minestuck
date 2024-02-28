@@ -24,12 +24,12 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 public class WoodLandType extends TerrainLandType
 {
 	public static final String WOOD = "minestuck.wood";
-	public static final String OAK = "minestuck.oak";
-	public static final String LUMBER = "minestuck.lumber";
+	public static final String PLANKS = "minestuck.planks";
+	public static final String CARVINGS = "minestuck.carvings";
 	
 	public WoodLandType()
 	{
-		super(new Builder(MSEntityTypes.SALAMANDER).names(WOOD, OAK, LUMBER)
+		super(new Builder(MSEntityTypes.SALAMANDER).names(WOOD, PLANKS, CARVINGS)
 				.skylight(1/2F).fogColor(0.0, 0.16, 0.38).skyColor(0.0, 0.3, 0.4)
 				.music(MSSoundEvents.MUSIC_WOOD));
 	}

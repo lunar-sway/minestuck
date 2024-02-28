@@ -172,9 +172,8 @@ public final class MSFluids
 		public boolean canExtinguish(Entity entity)
 		{
 			//sets target on fire
-			if(entity.getRemainingFireTicks() <= 100)
-				entity.setRemainingFireTicks(100);
-			entity.setSecondsOnFire(100);
+			entity.setSecondsOnFire(15);
+			entity.lavaHurt();
 			
 			return false;
 		}

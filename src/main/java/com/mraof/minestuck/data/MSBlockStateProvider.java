@@ -1738,11 +1738,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().crop(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.GOLD_SEEDS, MSBlockStateProvider::itemTexture);
 		simpleBlockWithItem(MSBlocks.WOODEN_CACTUS,
-				id -> models().withExistingParent(id.getPath(), "block/cactus")
-						.texture("particle", texture(id.withSuffix("_side"))).renderType("cutout")
-						.texture("bottom", texture(id.withSuffix("_bottom"))).renderType("cutout")
-						.texture("top", texture(id.withSuffix("_top"))).renderType("cutout")
-						.texture("side", texture(id.withSuffix("_side"))).renderType("cutout"));
+				id -> models().withExistingParent(id.getPath(), "block/cactus").renderType("cutout")
+						.texture("particle", texture(id.withSuffix("_side")))
+						.texture("bottom", texture(id.withSuffix("_bottom")))
+						.texture("top", texture(id.withSuffix("_top")))
+						.texture("side", texture(id.withSuffix("_side"))));
 		
 		cake(MSBlocks.APPLE_CAKE);
 		flatItem(MSItems.APPLE_CAKE, MSBlockStateProvider::itemTexture);
