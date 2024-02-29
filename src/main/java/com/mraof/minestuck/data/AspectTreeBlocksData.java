@@ -1,5 +1,7 @@
 package com.mraof.minestuck.data;
 
+import com.mraof.minestuck.data.loot_table.MSBlockLootTables;
+
 import static com.mraof.minestuck.block.AspectTreeBlocks.*;
 import static com.mraof.minestuck.data.MSBlockStateProvider.texture;
 
@@ -512,5 +514,200 @@ public final class AspectTreeBlocksData
 						texture("void_aspect_planks")));
 		provider.simpleHorizontal(VOID_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(VOID_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
+	}
+	
+	public static void addLootTables(MSBlockLootTables provider)
+	{
+		provider.dropSelf(BLOOD_ASPECT_LOG.get());
+		provider.add(BLOOD_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, BLOOD_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(BLOOD_ASPECT_SAPLING.get());
+		provider.dropSelf(BLOOD_ASPECT_PLANKS.get());
+		provider.dropSelf(BLOOD_ASPECT_STAIRS.get());
+		provider.add(BLOOD_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(BLOOD_ASPECT_FENCE.get());
+		provider.dropSelf(BLOOD_ASPECT_FENCE_GATE.get());
+		provider.add(BLOOD_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(BLOOD_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(BLOOD_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(BLOOD_ASPECT_BUTTON.get());
+		provider.add(BLOOD_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(BLOOD_ASPECT_LADDER.get());
+		
+		provider.dropSelf(BREATH_ASPECT_LOG.get());
+		provider.add(BREATH_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, BREATH_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(BREATH_ASPECT_SAPLING.get());
+		provider.dropSelf(BREATH_ASPECT_PLANKS.get());
+		provider.dropSelf(BREATH_ASPECT_STAIRS.get());
+		provider.add(BREATH_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(BREATH_ASPECT_FENCE.get());
+		provider.dropSelf(BREATH_ASPECT_FENCE_GATE.get());
+		provider.add(BREATH_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(BREATH_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(BREATH_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(BREATH_ASPECT_BUTTON.get());
+		provider.add(BREATH_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(BREATH_ASPECT_LADDER.get());
+		
+		provider.dropSelf(DOOM_ASPECT_LOG.get());
+		provider.add(DOOM_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, DOOM_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(DOOM_ASPECT_SAPLING.get());
+		provider.dropSelf(DOOM_ASPECT_PLANKS.get());
+		provider.dropSelf(DOOM_ASPECT_STAIRS.get());
+		provider.add(DOOM_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(DOOM_ASPECT_FENCE.get());
+		provider.dropSelf(DOOM_ASPECT_FENCE_GATE.get());
+		provider.add(DOOM_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(DOOM_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(DOOM_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(DOOM_ASPECT_BUTTON.get());
+		provider.add(DOOM_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(DOOM_ASPECT_LADDER.get());
+		
+		provider.dropSelf(HEART_ASPECT_LOG.get());
+		provider.add(HEART_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, HEART_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(HEART_ASPECT_SAPLING.get());
+		provider.dropSelf(HEART_ASPECT_PLANKS.get());
+		provider.dropSelf(HEART_ASPECT_STAIRS.get());
+		provider.add(HEART_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(HEART_ASPECT_FENCE.get());
+		provider.dropSelf(HEART_ASPECT_FENCE_GATE.get());
+		provider.add(HEART_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(HEART_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(HEART_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(HEART_ASPECT_BUTTON.get());
+		provider.add(HEART_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(HEART_ASPECT_LADDER.get());
+		
+		provider.dropSelf(HOPE_ASPECT_LOG.get());
+		provider.add(HOPE_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, HOPE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(HOPE_ASPECT_SAPLING.get());
+		provider.dropSelf(HOPE_ASPECT_PLANKS.get());
+		provider.dropSelf(HOPE_ASPECT_STAIRS.get());
+		provider.add(HOPE_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(HOPE_ASPECT_FENCE.get());
+		provider.dropSelf(HOPE_ASPECT_FENCE_GATE.get());
+		provider.add(HOPE_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(HOPE_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(HOPE_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(HOPE_ASPECT_BUTTON.get());
+		provider.add(HOPE_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(HOPE_ASPECT_LADDER.get());
+		
+		provider.dropSelf(LIFE_ASPECT_LOG.get());
+		provider.add(LIFE_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, LIFE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(LIFE_ASPECT_SAPLING.get());
+		provider.dropSelf(LIFE_ASPECT_PLANKS.get());
+		provider.dropSelf(LIFE_ASPECT_STAIRS.get());
+		provider.add(LIFE_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(LIFE_ASPECT_FENCE.get());
+		provider.dropSelf(LIFE_ASPECT_FENCE_GATE.get());
+		provider.add(LIFE_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(LIFE_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(LIFE_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(LIFE_ASPECT_BUTTON.get());
+		provider.add(LIFE_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(LIFE_ASPECT_LADDER.get());
+		
+		provider.dropSelf(LIGHT_ASPECT_LOG.get());
+		provider.add(LIGHT_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, LIGHT_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(LIGHT_ASPECT_SAPLING.get());
+		provider.dropSelf(LIGHT_ASPECT_PLANKS.get());
+		provider.dropSelf(LIGHT_ASPECT_STAIRS.get());
+		provider.add(LIGHT_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(LIGHT_ASPECT_FENCE.get());
+		provider.dropSelf(LIGHT_ASPECT_FENCE_GATE.get());
+		provider.add(LIGHT_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(LIGHT_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(LIGHT_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(LIGHT_ASPECT_BUTTON.get());
+		provider.add(LIGHT_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(LIGHT_ASPECT_LADDER.get());
+		
+		provider.dropSelf(MIND_ASPECT_LOG.get());
+		provider.add(MIND_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, MIND_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(MIND_ASPECT_SAPLING.get());
+		provider.dropSelf(MIND_ASPECT_PLANKS.get());
+		provider.dropSelf(MIND_ASPECT_STAIRS.get());
+		provider.add(MIND_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(MIND_ASPECT_FENCE.get());
+		provider.dropSelf(MIND_ASPECT_FENCE_GATE.get());
+		provider.add(MIND_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(MIND_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(MIND_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(MIND_ASPECT_BUTTON.get());
+		provider.add(MIND_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(MIND_ASPECT_LADDER.get());
+		
+		provider.dropSelf(RAGE_ASPECT_LOG.get());
+		provider.add(RAGE_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, RAGE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(RAGE_ASPECT_SAPLING.get());
+		provider.dropSelf(RAGE_ASPECT_PLANKS.get());
+		provider.dropSelf(RAGE_ASPECT_STAIRS.get());
+		provider.add(RAGE_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(RAGE_ASPECT_FENCE.get());
+		provider.dropSelf(RAGE_ASPECT_FENCE_GATE.get());
+		provider.add(RAGE_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(RAGE_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(RAGE_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(RAGE_ASPECT_BUTTON.get());
+		provider.add(RAGE_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(RAGE_ASPECT_LADDER.get());
+		
+		provider.dropSelf(SPACE_ASPECT_LOG.get());
+		provider.add(SPACE_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, SPACE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(SPACE_ASPECT_SAPLING.get());
+		provider.dropSelf(SPACE_ASPECT_PLANKS.get());
+		provider.dropSelf(SPACE_ASPECT_STAIRS.get());
+		provider.add(SPACE_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(SPACE_ASPECT_FENCE.get());
+		provider.dropSelf(SPACE_ASPECT_FENCE_GATE.get());
+		provider.add(SPACE_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(SPACE_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(SPACE_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(SPACE_ASPECT_BUTTON.get());
+		provider.add(SPACE_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(SPACE_ASPECT_LADDER.get());
+		
+		provider.dropSelf(TIME_ASPECT_LOG.get());
+		provider.add(TIME_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, TIME_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(TIME_ASPECT_SAPLING.get());
+		provider.dropSelf(TIME_ASPECT_PLANKS.get());
+		provider.dropSelf(TIME_ASPECT_STAIRS.get());
+		provider.add(TIME_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(TIME_ASPECT_FENCE.get());
+		provider.dropSelf(TIME_ASPECT_FENCE_GATE.get());
+		provider.add(TIME_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(TIME_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(TIME_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(TIME_ASPECT_BUTTON.get());
+		provider.add(TIME_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(TIME_ASPECT_LADDER.get());
+		
+		provider.dropSelf(VOID_ASPECT_LOG.get());
+		provider.add(VOID_ASPECT_LEAVES.get(), block ->
+				provider.createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
+		provider.dropSelf(VOID_ASPECT_SAPLING.get());
+		provider.dropSelf(VOID_ASPECT_PLANKS.get());
+		provider.dropSelf(VOID_ASPECT_STAIRS.get());
+		provider.add(VOID_ASPECT_SLAB.get(), provider::createSlabItemTable);
+		provider.dropSelf(VOID_ASPECT_FENCE.get());
+		provider.dropSelf(VOID_ASPECT_FENCE_GATE.get());
+		provider.add(VOID_ASPECT_DOOR.get(), provider::createDoorTable);
+		provider.dropSelf(VOID_ASPECT_TRAPDOOR.get());
+		provider.dropSelf(VOID_ASPECT_PRESSURE_PLATE.get());
+		provider.dropSelf(VOID_ASPECT_BUTTON.get());
+		provider.add(VOID_ASPECT_BOOKSHELF.get(), provider::bookshelfDrop);
+		provider.dropSelf(VOID_ASPECT_LADDER.get());
 	}
 }
