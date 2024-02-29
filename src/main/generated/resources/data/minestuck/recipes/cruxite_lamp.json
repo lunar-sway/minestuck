@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "cruxite_blocks",
+  "key": {
+    "#": {
+      "item": "minestuck:raw_cruxite"
+    },
+    "%": {
+      "item": "minecraft:torch"
+    }
+  },
+  "pattern": [
+    "###",
+    "#%#",
+    "###"
+  ],
+  "result": {
+    "item": "minestuck:cruxite_lamp"
+  },
+  "show_notification": true
+}

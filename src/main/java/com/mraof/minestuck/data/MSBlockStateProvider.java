@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.client.model.Model;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -208,6 +210,27 @@ public class MSBlockStateProvider extends BlockStateProvider
 		buttonWithItem(MSBlocks.CRUXITE_BUTTON, MSBlocks.CRUXITE_BLOCK);
 		pressurePlateWithItem(MSBlocks.CRUXITE_PRESSURE_PLATE, MSBlocks.CRUXITE_BLOCK);
 		
+		simpleDoorBlock(MSBlocks.CRUXITE_DOOR);
+		flatItem(MSItems.CRUXITE_DOOR, MSBlockStateProvider::itemTexture);
+		trapDoorWithItem(MSBlocks.CRUXITE_TRAPDOOR);
+		simpleBlockWithItem(MSBlocks.POLISHED_CRUXITE_BLOCK);
+		stairsWithItem(MSBlocks.POLISHED_CRUXITE_STAIRS, MSBlocks.POLISHED_CRUXITE_BLOCK);
+		slabWithItem(MSBlocks.POLISHED_CRUXITE_SLAB, MSBlocks.POLISHED_CRUXITE_BLOCK);
+		wallWithItem(MSBlocks.POLISHED_CRUXITE_WALL, MSBlocks.POLISHED_CRUXITE_BLOCK);
+		simpleBlockWithItem(MSBlocks.CRUXITE_BRICKS);
+		stairsWithItem(MSBlocks.CRUXITE_BRICK_STAIRS, MSBlocks.CRUXITE_BRICKS);
+		slabWithItem(MSBlocks.CRUXITE_BRICK_SLAB, MSBlocks.CRUXITE_BRICKS);
+		wallWithItem(MSBlocks.CRUXITE_BRICK_WALL, MSBlocks.CRUXITE_BRICKS);
+		simpleBlockWithItem(MSBlocks.SMOOTH_CRUXITE_BLOCK);
+		simpleBlockWithItem(MSBlocks.CHISELED_CRUXITE_BLOCK);
+		unflippedColumnWithItem(MSBlocks.CRUXITE_PILLAR,
+				id -> models().cubeColumn(
+						id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		customLampWithItem(MSBlocks.CRUXITE_LAMP);
+		
+				
 		simpleBlockWithItem(MSBlocks.URANIUM_BLOCK);
 		stairsWithItem(MSBlocks.URANIUM_STAIRS, MSBlocks.URANIUM_BLOCK);
 		slabWithItem(MSBlocks.URANIUM_SLAB, MSBlocks.URANIUM_BLOCK);
@@ -2030,6 +2053,26 @@ public class MSBlockStateProvider extends BlockStateProvider
 		ModelFile pressurePlateInventory = models().pressurePlate(baseName + "_pressure_plate", texture);
 		pressurePlateBlock(block.get(), texture);
 		simpleBlockItem(block.get(), pressurePlateInventory);
+	}
+	
+	private void customLampWithItem(RegistryObject<Block> block) {
+		customLampWithItem(block, block.getId().getPath(), texture(block));
+	}
+	
+	private void customLampWithItem(RegistryObject<Block> block, String baseName, ResourceLocation texture) {
+		ModelFile lampOn = models().cubeAll(baseName + "_on", new ResourceLocation(Minestuck.MOD_ID, "block/" + baseName + "_on"));
+		ModelFile lampOff = models().cubeAll(baseName + "_off", new ResourceLocation(Minestuck.MOD_ID, "block/" + baseName + "_off"));
+		
+		getVariantBuilder(MSBlocks.CRUXITE_LAMP.get()).forAllStates(state -> {
+			if(state.getValue(CustomLampBlock.CLICKED) ) {
+				return ConfiguredModel.builder().modelFile(lampOn).build();
+			} else {
+				return ConfiguredModel.builder().modelFile(lampOff).build();
+			}
+		});
+		
+		simpleBlockItem(MSBlocks.CRUXITE_LAMP.get(), models().cubeAll("cruxite_lamp_on",
+				new ResourceLocation(Minestuck.MOD_ID, "block/" +"cruxite_lamp_on")));
 	}
 	
 	private void powerVariableWithItem(RegistryObject<Block> block, ModelFile highPowerModel, ModelFile mediumPowerModel, ModelFile lowPowerModel, ModelFile unpoweredModel)

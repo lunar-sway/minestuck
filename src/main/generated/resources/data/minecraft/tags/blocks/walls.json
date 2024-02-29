@@ -50,6 +50,9 @@
     "minestuck:green_stone_brick_wall",
     "minestuck:horizontal_green_stone_brick_wall",
     "minestuck:vertical_green_stone_brick_wall",
-    "minestuck:flowery_mossy_stone_brick_wall"
+    "minestuck:flowery_mossy_stone_brick_wall",
+    "minestuck:cruxite_wall",
+    "minestuck:cruxite_brick_wall",
+    "minestuck:polished_cruxite_wall"
   ]
 }
