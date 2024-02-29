@@ -7,7 +7,6 @@ import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayingCapabilityProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.*;
@@ -49,13 +48,13 @@ public class MSCapabilities
 	{
 		if(attachCapabilitiesEvent.getObject() instanceof Player)
 		{
-			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "musicplaying"),
+			attachCapabilitiesEvent.addCapability(Minestuck.id("musicplaying"),
 					new MusicPlayingCapabilityProvider());
-			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "edit_tools"),
+			attachCapabilitiesEvent.addCapability(Minestuck.id("edit_tools"),
 					new EditToolsCapabilityProvider());
 		}
 		
-		attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "last_fluid_tick"),
+		attachCapabilitiesEvent.addCapability(Minestuck.id("last_fluid_tick"),
 				new ICapabilityProvider()
 				{
 					private final LazyOptional<MSFluidType.LastFluidTickData> lazyOptional = LazyOptional.of(() -> this.data);
