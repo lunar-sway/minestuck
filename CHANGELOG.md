@@ -43,7 +43,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
 - Renamed Oil to Shale Oil
 - Pumord is now alchemized with Pumice Stone instead of any regular Stone
-- Cruxite block retexture
 
 ### Fixed
 
@@ -55,7 +54,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, sipherNil
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode
 
 ## [Unreleased]
 
