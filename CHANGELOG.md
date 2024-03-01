@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Double slabs will now drop two slabs when broken
+- Sneaking now prevents trajectory blocks from moving the player
 
 ### Contributors for this release
 
