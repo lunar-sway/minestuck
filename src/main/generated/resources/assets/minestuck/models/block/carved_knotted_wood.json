@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/cube_column",
+  "parent": "minecraft:block/template_glazed_terracotta",
   "textures": {
-    "end": "minestuck:block/carved_knotted_wood",
-    "side": "minestuck:block/carved_knotted_wood"
+    "pattern": "minestuck:block/carved_knotted_wood"
   }
 }
