@@ -3,11 +3,19 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.data.loot_table.MSBlockLootTables;
 import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
+
+import java.util.function.Consumer;
 
 import static com.mraof.minestuck.block.AspectTreeBlocks.*;
 import static com.mraof.minestuck.data.MSBlockStateProvider.texture;
+import static com.mraof.minestuck.data.recipe.MinestuckRecipeProvider.has;
 
 public final class AspectTreeBlocksData
 {
@@ -812,5 +820,296 @@ public final class AspectTreeBlocksData
 				RAGE_ASPECT_PRESSURE_PLATE.get(), SPACE_ASPECT_PRESSURE_PLATE.get(), TIME_ASPECT_PRESSURE_PLATE.get(), VOID_ASPECT_PRESSURE_PLATE.get());
 		provider.tag(Tags.Blocks.BOOKSHELVES).addTag(MSTags.Blocks.ASPECT_BOOKSHELVES);
 		provider.tag(BlockTags.CLIMBABLE).addTag(MSTags.Blocks.ASPECT_LADDERS);
+	}
+	
+	public static void addRecipes(Consumer<FinishedRecipe> recipeSaver)
+	{
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', BLOOD_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', BLOOD_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', BLOOD_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', BLOOD_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', BLOOD_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', BLOOD_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', BLOOD_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_BUTTON.get()).requires(BLOOD_ASPECT_PLANKS.get())
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', BREATH_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', BREATH_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', BREATH_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', BREATH_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', BREATH_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', BREATH_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', BREATH_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_BUTTON.get()).requires(BREATH_ASPECT_PLANKS.get())
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', DOOM_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', DOOM_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', DOOM_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', DOOM_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', DOOM_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', DOOM_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', DOOM_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_BUTTON.get()).requires(DOOM_ASPECT_PLANKS.get())
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', HEART_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', HEART_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', HEART_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', HEART_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', HEART_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', HEART_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', HEART_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_BUTTON.get()).requires(HEART_ASPECT_PLANKS.get())
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', HOPE_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', HOPE_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', HOPE_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', HOPE_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', HOPE_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', HOPE_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', HOPE_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_BUTTON.get()).requires(HOPE_ASPECT_PLANKS.get())
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', LIFE_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', LIFE_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', LIFE_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', LIFE_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', LIFE_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', LIFE_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', LIFE_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_BUTTON.get()).requires(LIFE_ASPECT_PLANKS.get())
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', LIGHT_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', LIGHT_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', LIGHT_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', LIGHT_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', LIGHT_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', LIGHT_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', LIGHT_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_BUTTON.get()).requires(LIGHT_ASPECT_PLANKS.get())
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', MIND_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', MIND_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', MIND_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', MIND_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', MIND_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', MIND_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', MIND_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_BUTTON.get()).requires(MIND_ASPECT_PLANKS.get())
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', RAGE_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', RAGE_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', RAGE_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', RAGE_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', RAGE_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', RAGE_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', RAGE_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_BUTTON.get()).requires(RAGE_ASPECT_PLANKS.get())
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', SPACE_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', SPACE_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', SPACE_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', SPACE_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', SPACE_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', SPACE_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', SPACE_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_BUTTON.get()).requires(SPACE_ASPECT_PLANKS.get())
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', TIME_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', TIME_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', TIME_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', TIME_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', TIME_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', TIME_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', TIME_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_BUTTON.get()).requires(TIME_ASPECT_PLANKS.get())
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_STAIRS.get(), 4).group("wooden_stairs")
+				.define('#', VOID_ASPECT_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###")
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_SLAB.get(), 6).group("wooden_slab")
+				.define('#', VOID_ASPECT_PLANKS.get()).pattern("###")
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_FENCE.get(), 3).group("wooden_fence")
+				.define('#', VOID_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#")
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_FENCE_GATE.get(), 1).group("wooden_fence_gate")
+				.define('#', VOID_ASPECT_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$")
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_DOOR.get(), 3).group("wooden_door")
+				.define('#', VOID_ASPECT_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ")
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
+				.define('#', VOID_ASPECT_PLANKS.get()).pattern("###").pattern("###")
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
+				.define('#', VOID_ASPECT_PLANKS.get()).pattern("##")
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_BUTTON.get()).requires(VOID_ASPECT_PLANKS.get())
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
 	}
 }
