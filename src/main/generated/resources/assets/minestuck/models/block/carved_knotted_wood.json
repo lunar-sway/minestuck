@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "minestuck:block/carved_knotted_wood"
+    "end": "minestuck:block/carved_knotted_wood",
+    "side": "minestuck:block/carved_knotted_wood"
   }
 }

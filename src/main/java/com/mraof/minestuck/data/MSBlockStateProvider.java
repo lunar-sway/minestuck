@@ -620,7 +620,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlock(MSBlocks.CARVED_BUSH,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.CARVED_BUSH, MSBlockStateProvider::texture);
-		simpleHorizontalWithItem(MSBlocks.CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
+		axisWithItem(MSBlocks.CARVED_KNOTTED_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id)));
 		simpleBlock(MSBlocks.WOODEN_GRASS,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.WOODEN_GRASS, MSBlockStateProvider::texture);
@@ -662,7 +665,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
 		slabWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
 		
-		simpleHorizontalWithItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
+		axisWithItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id)));
 		simpleBlock(MSBlocks.TREATED_WOODEN_GRASS,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.TREATED_WOODEN_GRASS, MSBlockStateProvider::texture);
@@ -704,7 +710,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
 		slabWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
 		
-		simpleHorizontalWithItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD, id -> models().cubeAll(id.getPath(), texture(id)));
+		axisWithItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id)));
 		simpleBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.LACQUERED_WOODEN_MUSHROOM, MSBlockStateProvider::texture);

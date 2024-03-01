@@ -1,19 +1,16 @@
 {
   "variants": {
-    "facing=east": {
+    "axis=x": {
       "model": "minestuck:block/carved_knotted_wood",
+      "x": 90,
       "y": 90
     },
-    "facing=north": {
+    "axis=y": {
       "model": "minestuck:block/carved_knotted_wood"
     },
-    "facing=south": {
+    "axis=z": {
       "model": "minestuck:block/carved_knotted_wood",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "minestuck:block/carved_knotted_wood",
-      "y": 270
+      "x": 90
     }
   }
 }
