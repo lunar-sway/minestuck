@@ -22,6 +22,10 @@ and they no longer receive grist from the gutter
 
 - Metal Boats no longer crash the game when dispensed
 - Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
+- Fixed underling texture layer that on hurt wasn't tinted red with the rest of the underling
+- Fluids no longer break gates and return nodes
+- Advanced color selection screen no longer tints buttons
+- Round the displayed max health value on the echeladder screen
 - Fixes some niche issues with connections
 - `/sburbpredefine` now gives an error when applied to a player that already has a land
 - Fixed missing data sync for land types after using `/debuglands`
@@ -29,7 +33,7 @@ and they no longer receive grist from the gutter
 
 ### Contributors for this release
 
-- hadean, Dweblenod, kirderf1
+- hadean, Dweblenod, kirderf1, glubtier
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
