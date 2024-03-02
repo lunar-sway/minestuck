@@ -72,7 +72,7 @@ public class DebugLandsCommand
 				connections.setPrimaryConnection(landEntries.get(landEntries.size() - 1).playerId, playerId);
 			}
 			
-			connectAndCreateLands(player, landEntries, connections);
+			connectAndCreateLands(landEntries, connections, player.server);
 		} else
 		{
 			if(landTypes.lastIndexOf(null) != openChainIndex)
@@ -86,19 +86,19 @@ public class DebugLandsCommand
 			if(!landEntries2.isEmpty())
 				connections.setPrimaryConnection(landEntries2.get(landEntries2.size() - 1).playerId, playerId);
 			
-			connectAndCreateLands(player, landEntries1, connections);
-			connectAndCreateLands(player, landEntries2, connections);
+			connectAndCreateLands(landEntries1, connections, player.server);
+			connectAndCreateLands(landEntries2, connections, player.server);
 		}
 		
 		MSDimensions.sendLandTypesToAll(player.server);
 	}
 	
-	private static void connectAndCreateLands(ServerPlayer player, List<LandEntry> landEntries2, SburbConnections connections)
+	private static void connectAndCreateLands(List<LandEntry> landEntries2, SburbConnections connections, MinecraftServer mcServer)
 	{
 		for(int i = 0; i < landEntries2.size() - 1; i++)
 			connections.setPrimaryConnection(landEntries2.get(i).playerId, landEntries2.get(i + 1).playerId);
 		for(LandEntry entry : landEntries2)
-			createAndSetLand(entry.landTypes, entry.playerId, player.server);
+			createAndSetLand(entry.landTypes, entry.playerId, mcServer);
 	}
 	
 	private record LandEntry(PlayerIdentifier playerId, LandTypePair landTypes)
