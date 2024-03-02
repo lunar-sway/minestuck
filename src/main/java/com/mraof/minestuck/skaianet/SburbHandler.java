@@ -158,6 +158,7 @@ public final class SburbHandler
 		
 		LandTypePair landTypes = genLandAspects(mcServer, identifier);
 		
+		skaianetData.connections.setPrimaryConnectionForEntry(identifier);
 		ResourceKey<Level> landDimension = DynamicDimensions.createLand(mcServer, DynamicDimensions.landIdBaseForPLayer(identifier), landTypes);
 		playerData.setLand(landDimension);
 		MSDimensions.sendLandTypesToAll(mcServer);
