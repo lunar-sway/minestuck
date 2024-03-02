@@ -1,7 +1,10 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.koolaid"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.koolaid",
   "path": "minestuck:koolaid",
   "responses": [],
   "use_context": {

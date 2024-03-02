@@ -1,20 +1,29 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.tasty_welcome"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.tasty_welcome",
   "path": "minestuck:tasty_welcome",
   "responses": [
     {
       "conditions": {
         "condition_list": []
       },
-      "response_message": "Goodbye"
+      "response_message": {
+        "arguments": [],
+        "message": "Goodbye"
+      }
     },
     {
       "conditions": {
         "condition_list": []
       },
-      "response_message": "Let me see your wares",
+      "response_message": {
+        "arguments": [],
+        "message": "Let me see your wares"
+      },
       "triggers": [
         {
           "type": "open_consort_merchant_gui",

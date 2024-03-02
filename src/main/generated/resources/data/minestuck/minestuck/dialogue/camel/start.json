@@ -1,7 +1,10 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.camel.start"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.camel.start",
   "path": "minestuck:camel/start",
   "responses": [
     {
@@ -9,14 +12,20 @@
         "condition_list": []
       },
       "next_dialogue_path": "minestuck:camel/no_camel",
-      "response_message": "minestuck.dialogue.camel.yes"
+      "response_message": {
+        "arguments": [],
+        "message": "minestuck.dialogue.camel.yes"
+      }
     },
     {
       "conditions": {
         "condition_list": []
       },
       "next_dialogue_path": "minestuck:camel/dancing_camel",
-      "response_message": "minestuck.dialogue.camel.no"
+      "response_message": {
+        "arguments": [],
+        "message": "minestuck.dialogue.camel.no"
+      }
     }
   ],
   "use_context": {

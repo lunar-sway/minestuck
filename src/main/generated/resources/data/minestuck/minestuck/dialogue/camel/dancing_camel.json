@@ -1,7 +1,10 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.camel.dancing_camel"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.camel.dancing_camel",
   "path": "minestuck:camel/dancing_camel",
   "responses": []
 }

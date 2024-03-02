@@ -1,7 +1,10 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.hardcore"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.hardcore",
   "path": "minestuck:hardcore",
   "responses": [],
   "use_context": {

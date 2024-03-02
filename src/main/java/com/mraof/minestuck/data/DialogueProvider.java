@@ -3,15 +3,12 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.entity.dialogue.Condition;
-import com.mraof.minestuck.entity.dialogue.Conditions;
+import com.mraof.minestuck.entity.dialogue.*;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.util.DialogueManager;
-import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -201,11 +198,15 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder("Rep above 500").addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
 				.addResponse(new ResponseBuilder("Rep below 200").addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
 				.addResponse("bye"));
+		
+		add(new DialogueBuilder("test_arguments", new Dialogue.UseContext(new Condition.Conditionless()))
+				.addMessageArg(DialogueMessage.Argument.PLAYER_NAME_LAND)
+				.addResponse(new ResponseBuilder("Player name land: %s").addMessageArg(DialogueMessage.Argument.PLAYER_NAME_LAND)));
 	}
 	
 	private void add(DialogueBuilder builder)
 	{
-		Dialogue dialogue = new Dialogue(builder.path, builder.message, builder.animation, builder.guiPath, builder.responses, builder.useContext);
+		Dialogue dialogue = new Dialogue(builder.path, new DialogueMessage(builder.message, builder.messageArgs), builder.animation, builder.guiPath, builder.responses, builder.useContext);
 		dialogues.put(builder.path, dialogue);
 	}
 	
@@ -213,6 +214,7 @@ public class DialogueProvider implements DataProvider
 	{
 		private final ResourceLocation path;
 		private final String message;
+		private final List<DialogueMessage.Argument> messageArgs = new ArrayList<>();
 		private final String animation;
 		private final ResourceLocation guiPath;
 		private final List<Dialogue.Response> responses;
@@ -270,28 +272,35 @@ public class DialogueProvider implements DataProvider
 		
 		public DialogueBuilder addResponse(ResponseBuilder responseBuilder)
 		{
-			this.responses.add(new Dialogue.Response(responseBuilder.response, new Conditions(responseBuilder.conditions, responseBuilder.conditionsType), responseBuilder.triggers, responseBuilder.nextDialoguePath, responseBuilder.hideIfFailed));
+			this.responses.add(new Dialogue.Response(new DialogueMessage(responseBuilder.responseMessage, responseBuilder.messageArgs), new Conditions(responseBuilder.conditions, responseBuilder.conditionsType), responseBuilder.triggers, responseBuilder.nextDialoguePath, responseBuilder.hideIfFailed));
+			return this;
+		}
+		
+		public DialogueBuilder addMessageArg(DialogueMessage.Argument argument)
+		{
+			this.messageArgs.add(argument);
 			return this;
 		}
 	}
 	
 	public static class ResponseBuilder
 	{
-		private final String response;
+		private final String responseMessage;
+		private final List<DialogueMessage.Argument> messageArgs = new ArrayList<>();
 		private final List<Condition> conditions;
 		private Conditions.Type conditionsType;
 		private final List<Trigger> triggers;
 		private final ResourceLocation nextDialoguePath;
 		private boolean hideIfFailed;
 		
-		ResponseBuilder(String response)
+		ResponseBuilder(String responseMessage)
 		{
-			this(response, EMPTY_NEXT_PATH);
+			this(responseMessage, EMPTY_NEXT_PATH);
 		}
 		
-		ResponseBuilder(String response, ResourceLocation nextDialoguePath)
+		ResponseBuilder(String responseMessage, ResourceLocation nextDialoguePath)
 		{
-			this.response = response;
+			this.responseMessage = responseMessage;
 			this.conditions = new ArrayList<>();
 			this.conditionsType = Conditions.Type.ALL;
 			this.triggers = new ArrayList<>();
@@ -299,9 +308,9 @@ public class DialogueProvider implements DataProvider
 			this.hideIfFailed = true;
 		}
 		
-		ResponseBuilder(String response, String nextDialoguePath)
+		ResponseBuilder(String responseMessage, String nextDialoguePath)
 		{
-			this.response = response;
+			this.responseMessage = responseMessage;
 			this.conditions = new ArrayList<>();
 			this.conditionsType = Conditions.Type.ALL;
 			this.triggers = new ArrayList<>();
@@ -324,6 +333,12 @@ public class DialogueProvider implements DataProvider
 		public ResponseBuilder addTrigger(Trigger trigger)
 		{
 			this.triggers.add(trigger);
+			return this;
+		}
+		
+		public ResponseBuilder addMessageArg(DialogueMessage.Argument argument)
+		{
+			this.messageArgs.add(argument);
 			return this;
 		}
 		

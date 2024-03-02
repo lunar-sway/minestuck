@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Condition;
+import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.network.DialogueFromClientScreenPacket;
 import com.mraof.minestuck.network.DialogueTriggerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -38,13 +39,14 @@ public class DialogueScreen extends Screen
 	private final LivingEntity entity;
 	private final Dialogue dialogue;
 	private final CompoundTag conditionChecks;
+	private final CompoundTag messageArgs;
 	
 	private int xOffset;
 	private int yOffset;
 	
 	private final List<Button> responseButtons = new ArrayList<>();
 	
-	DialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks)
+	DialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks, CompoundTag messageArgs)
 	{
 		super(Component.empty());
 		
@@ -52,6 +54,7 @@ public class DialogueScreen extends Screen
 		this.guiBackground = dialogue.guiPath();
 		this.dialogue = dialogue;
 		this.conditionChecks = conditionChecks;
+		this.messageArgs = messageArgs;
 	}
 	
 	@Override
@@ -74,7 +77,7 @@ public class DialogueScreen extends Screen
 		//removes responses if they fail their conditions and should be hidden when that happens
 		for(Dialogue.Response response : dialogue.responses())
 		{
-			if(responseFailedCheck(response.response()) && response.hideIfFailed())
+			if(responseFailedCheck(response.response().message()) && response.hideIfFailed())
 				continue;
 			
 			filteredResponses.add(response);
@@ -83,10 +86,10 @@ public class DialogueScreen extends Screen
 		for(int i = 0; i < filteredResponses.size(); i++)
 		{
 			Dialogue.Response response = filteredResponses.get(i);
-			String responseMessage = response.response();
+			String responseMessage = response.response().message();
 			int yPositionOffset = 20 * i;
 			
-			Component buttonComponent = Component.translatable(responseMessage);
+			Component buttonComponent = Component.translatable(responseMessage, DialogueMessage.readResponseArgumentsFromCompound(messageArgs, responseMessage));
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));
@@ -128,7 +131,7 @@ public class DialogueScreen extends Screen
 	{
 		for(Dialogue.Response response : dialogue.responses())
 		{
-			if(response.response().equals(responseMessage))
+			if(response.response().message().equals(responseMessage))
 			{
 				ResourceLocation nextPath = response.nextDialoguePath();
 				
@@ -166,7 +169,7 @@ public class DialogueScreen extends Screen
 		if(guiBackground != null)
 			guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		String dialogueMessage = dialogue.message();
+		String dialogueMessage = dialogue.message().message();
 		if(dialogueMessage != null && !dialogueMessage.isEmpty())
 		{
 			MutableComponent entityName = entity.getDisplayName().plainCopy();
@@ -177,7 +180,7 @@ public class DialogueScreen extends Screen
 				entityName.withStyle(consortEntity.getConsortType().getColor());
 			}
 			
-			Component entityMessage = entityName.append(": ").append(Component.translatable(dialogueMessage));
+			Component entityMessage = entityName.append(": ").append(Component.translatable(dialogueMessage, DialogueMessage.readDialogueArgumentsFromCompound(messageArgs)));
 			guiGraphics.drawWordWrap(font, entityMessage, xOffset + 10, yOffset + 20, 210, 0x000000);
 		}
 		

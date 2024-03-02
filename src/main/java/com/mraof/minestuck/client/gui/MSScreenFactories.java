@@ -139,9 +139,9 @@ public class MSScreenFactories
 		}
 	}
 	
-	public static void displayDialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks)
+	public static void displayDialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks, CompoundTag messageArgs)
 	{
-		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialogue, conditionChecks));
+		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialogue, conditionChecks, messageArgs));
 	}
 	
 	public static void updateSylladexScreen()

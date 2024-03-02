@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
-public record Dialogue(ResourceLocation path, String message, String animation, ResourceLocation guiPath,
+public record Dialogue(ResourceLocation path, DialogueMessage message, String animation, ResourceLocation guiPath,
 					   List<Response> responses, UseContext useContext)
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -34,14 +34,14 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 	//TODO animation and gui_path do not currently benefit from PreservingOptionalFieldCodec
 	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(ResourceLocation.CODEC.fieldOf("path").forGetter(Dialogue::path),
-							Codec.STRING.fieldOf("message").forGetter(Dialogue::message),
+							DialogueMessage.CODEC.fieldOf("dialogue_message").forGetter(Dialogue::message),
 							PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DialogueProvider.DEFAULT_ANIMATION).forGetter(Dialogue::animation),
 							PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui_path", DialogueProvider.DEFAULT_GUI).forGetter(Dialogue::guiPath),
 							Response.LIST_CODEC.fieldOf("responses").forGetter(Dialogue::responses),
 							UseContext.CODEC.fieldOf("use_context").forGetter(Dialogue::useContext))
 					.apply(instance, Dialogue::new));
 	
-	public Dialogue(ResourceLocation path, String message, String animation, ResourceLocation guiPath, List<Response> responses, @Nullable UseContext useContext)
+	public Dialogue(ResourceLocation path, DialogueMessage message, String animation, ResourceLocation guiPath, List<Response> responses, @Nullable UseContext useContext)
 	{
 		this.path = path;
 		this.message = message;
@@ -56,9 +56,12 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 	 */
 	public static void openScreen(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
 	{
-		CompoundTag nbt = new CompoundTag();
-		dialogue.responses().forEach(response -> nbt.putBoolean(response.response(), response.conditions().testWithContext(entity, serverPlayer)));
-		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, nbt);
+		CompoundTag conditionChecks = new CompoundTag();
+		dialogue.responses().forEach(response -> conditionChecks.putBoolean(response.response().message(), response.conditions().testWithContext(entity, serverPlayer)));
+		
+		CompoundTag messageArgs = DialogueMessage.writeAllMessagesToCompound(entity, serverPlayer, dialogue);
+		
+		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, conditionChecks, messageArgs);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
@@ -66,11 +69,11 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 	 * A Response contains all possible Dialogues that can be reached from the present Dialogue.
 	 * It contains the message that represents the Response, any Conditions/Triggers, the location of the next Dialogue, and a boolean determining whether the Response should be visible when it fails to meet the Conditions
 	 */
-	public record Response(String response, Conditions conditions, List<Trigger> triggers,
+	public record Response(DialogueMessage response, Conditions conditions, List<Trigger> triggers,
 						   ResourceLocation nextDialoguePath, boolean hideIfFailed)
 	{
 		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance ->
-				instance.group(Codec.STRING.fieldOf("response_message").forGetter(Response::response),
+				instance.group(DialogueMessage.CODEC.fieldOf("response_message").forGetter(Response::response),
 								Conditions.CODEC.fieldOf("conditions").forGetter(Response::conditions),
 								PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
 								PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "next_dialogue_path", DialogueProvider.EMPTY_NEXT_PATH).forGetter(Response::nextDialoguePath),
@@ -146,7 +149,7 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 			JsonObject json = GsonHelper.convertToJsonObject(jsonElement, "entry");
 			
 			ResourceLocation pathProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("path")).getOrThrow(false, LOGGER::error);
-			String messageProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("message")).getOrThrow(false, LOGGER::error);
+			DialogueMessage messageProvider = DialogueMessage.CODEC.parse(JsonOps.INSTANCE, json.get("dialogue_message")).getOrThrow(false, LOGGER::error);
 			String animationProvider = Codec.STRING.parse(JsonOps.INSTANCE, json.get("animation")).getOrThrow(false, LOGGER::error);
 			ResourceLocation guiProvider = ResourceLocation.CODEC.parse(JsonOps.INSTANCE, json.get("gui")).getOrThrow(false, LOGGER::error);
 			
@@ -168,7 +171,7 @@ public record Dialogue(ResourceLocation path, String message, String animation, 
 			JsonObject json = new JsonObject();
 			
 			json.add("path", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogue.path).getOrThrow(false, LOGGER::error));
-			json.add("message", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogue.message).getOrThrow(false, LOGGER::error));
+			json.add("dialogue_message", DialogueMessage.CODEC.encodeStart(JsonOps.INSTANCE, dialogue.message).getOrThrow(false, LOGGER::error));
 			json.add("animation", Codec.STRING.encodeStart(JsonOps.INSTANCE, dialogue.animation).getOrThrow(false, LOGGER::error));
 			json.add("gui", ResourceLocation.CODEC.encodeStart(JsonOps.INSTANCE, dialogue.guiPath).getOrThrow(false, LOGGER::error));
 			
