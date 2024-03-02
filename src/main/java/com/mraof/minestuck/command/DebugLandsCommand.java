@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A command that is useful for testing the land skybox as it creates debug lands that is connected to the user
@@ -45,17 +46,17 @@ public class DebugLandsCommand
 	private static int createDebugLands(CommandSourceStack source, List<LandTypePair> landTypes) throws CommandSyntaxException
 	{
 		ServerPlayer player = source.getPlayerOrException();
-		createDebugLandsChain(player, landTypes);
+		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player), "Command was executed on a fake player");
+		createDebugLandsChain(playerId, landTypes, source.getServer());
 		return 1;
 	}
 	
-	public static void createDebugLandsChain(ServerPlayer player, List<LandTypePair> landTypes) throws CommandSyntaxException
+	private static void createDebugLandsChain(PlayerIdentifier playerId, List<LandTypePair> landTypes, MinecraftServer mcServer) throws CommandSyntaxException
 	{
-		var connections = SburbConnections.get(player.server);
-		PlayerIdentifier playerId = IdentifierHandler.encode(player);
-		
-		if(!SburbPlayerData.get(playerId, player.server).hasEntered())
+		if(!SburbPlayerData.get(playerId, mcServer).hasEntered())
 			throw MUST_ENTER_EXCEPTION.create();
+		
+		var connections = SburbConnections.get(mcServer);
 		
 		connections.unlinkClientPlayer(playerId);
 		connections.unlinkServerPlayer(playerId);
@@ -72,7 +73,7 @@ public class DebugLandsCommand
 				connections.setPrimaryConnection(landEntries.get(landEntries.size() - 1).playerId, playerId);
 			}
 			
-			connectAndCreateLands(landEntries, connections, player.server);
+			connectAndCreateLands(landEntries, connections, mcServer);
 		} else
 		{
 			if(landTypes.lastIndexOf(null) != openChainIndex)
@@ -86,11 +87,11 @@ public class DebugLandsCommand
 			if(!landEntries2.isEmpty())
 				connections.setPrimaryConnection(landEntries2.get(landEntries2.size() - 1).playerId, playerId);
 			
-			connectAndCreateLands(landEntries1, connections, player.server);
-			connectAndCreateLands(landEntries2, connections, player.server);
+			connectAndCreateLands(landEntries1, connections, mcServer);
+			connectAndCreateLands(landEntries2, connections, mcServer);
 		}
 		
-		MSDimensions.sendLandTypesToAll(player.server);
+		MSDimensions.sendLandTypesToAll(mcServer);
 	}
 	
 	private static void connectAndCreateLands(List<LandEntry> landEntries2, SburbConnections connections, MinecraftServer mcServer)
