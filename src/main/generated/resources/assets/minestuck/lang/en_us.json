@@ -594,6 +594,7 @@
   "block.minestuck.xor_gate_block": "XOR Gate",
   "commands.minestuck.check_land": "You are currently in %s.",
   "commands.minestuck.check_land.fail": "You are currently not in a land dimension.",
+  "commands.minestuck.debuglands.invalid_chain": "The given land list is not valid for this command",
   "commands.minestuck.debuglands.must_enter": "You must have entered before you can create debug lands",
   "commands.minestuck.get_rung": "%s's current echeladder rung is: %d.",
   "commands.minestuck.grist.add": "Successfully modified the grist cache for %s players.",

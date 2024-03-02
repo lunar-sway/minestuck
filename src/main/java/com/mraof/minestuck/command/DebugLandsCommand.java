@@ -32,6 +32,8 @@ public class DebugLandsCommand
 {
 	public static final String MUST_ENTER = "commands.minestuck.debuglands.must_enter";
 	public static final SimpleCommandExceptionType MUST_ENTER_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(MUST_ENTER));
+	public static final String INVALID_CHAIN = "commands.minestuck.debuglands.invalid_chain";
+	public static final SimpleCommandExceptionType INVALID_CHAIN_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(INVALID_CHAIN));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
@@ -58,52 +60,62 @@ public class DebugLandsCommand
 		connections.unlinkClientPlayer(playerId);
 		connections.unlinkServerPlayer(playerId);
 		
-		PlayerIdentifier lastPlayer = playerId;
-		int i = 0;
-		for(; i < landTypes.size(); i++)
-		{
-			LandTypePair land = landTypes.get(i);
-			if(land == null)
-				break;
-			
-			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-			
-			connections.setPrimaryConnection(lastPlayer, fakePlayer);
-			connections.setPrimaryConnectionForEntry(fakePlayer);
-			
-			createAndSetLand(land, fakePlayer, player.server);
-			
-			lastPlayer = fakePlayer;
-		}
+		int openChainIndex = landTypes.indexOf(null);
 		
-		if(i == landTypes.size())
-			connections.setPrimaryConnection(lastPlayer, playerId);
-		else
+		if(openChainIndex == -1)
 		{
-			PlayerIdentifier lastIdentifier = playerId;
-			for(i = landTypes.size() - 1; i >= 0; i--)
+			List<LandEntry> landEntries = withFakePlayers(landTypes);
+			
+			if(!landEntries.isEmpty())
 			{
-				LandTypePair land = landTypes.get(i);
-				if(land == null)
-					break;
-				
-				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-				
-				connections.setPrimaryConnection(fakePlayer, lastIdentifier);
-				createAndSetLand(land, fakePlayer, player.server);
-				
-				lastIdentifier = fakePlayer;
+				connections.setPrimaryConnection(playerId, landEntries.get(0).playerId);
+				connections.setPrimaryConnection(landEntries.get(landEntries.size() - 1).playerId, playerId);
 			}
+			
+			connectAndCreateLands(player, landEntries, connections);
+		} else
+		{
+			if(landTypes.lastIndexOf(null) != openChainIndex)
+				throw INVALID_CHAIN_EXCEPTION.create();
+			
+			List<LandEntry> landEntries1 = withFakePlayers(landTypes.subList(0, openChainIndex));
+			List<LandEntry> landEntries2 = withFakePlayers(landTypes.subList(openChainIndex + 1, landTypes.size()));
+			
+			if(!landEntries1.isEmpty())
+				connections.setPrimaryConnection(playerId, landEntries1.get(0).playerId);
+			if(!landEntries2.isEmpty())
+				connections.setPrimaryConnection(landEntries2.get(landEntries2.size() - 1).playerId, playerId);
+			
+			connectAndCreateLands(player, landEntries1, connections);
+			connectAndCreateLands(player, landEntries2, connections);
 		}
 		
 		MSDimensions.sendLandTypesToAll(player.server);
 	}
 	
+	private static void connectAndCreateLands(ServerPlayer player, List<LandEntry> landEntries2, SburbConnections connections)
+	{
+		for(int i = 0; i < landEntries2.size() - 1; i++)
+			connections.setPrimaryConnection(landEntries2.get(i).playerId, landEntries2.get(i + 1).playerId);
+		for(LandEntry entry : landEntries2)
+			createAndSetLand(entry.landTypes, entry.playerId, player.server);
+	}
+	
+	private record LandEntry(PlayerIdentifier playerId, LandTypePair landTypes)
+	{
+	}
+	
+	private static List<LandEntry> withFakePlayers(List<LandTypePair> landTypes)
+	{
+		return landTypes.stream().map(landType -> new LandEntry(IdentifierHandler.createNewFakeIdentifier(), landType)).toList();
+	}
+	
 	private static final ResourceLocation DEBUG_LAND_BASE_ID = new ResourceLocation(Minestuck.MOD_ID, "debug_land");
 	
-	private static void createAndSetLand(LandTypePair landTypes, PlayerIdentifier client, MinecraftServer mcServer)
+	private static void createAndSetLand(LandTypePair landTypes, PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		SburbPlayerData playerData = SburbPlayerData.get(client, mcServer);
+		SburbConnections.get(mcServer).setPrimaryConnectionForEntry(player);
+		SburbPlayerData playerData = SburbPlayerData.get(player, mcServer);
 		ResourceKey<Level> dimensionName = DynamicDimensions.createLand(mcServer, DEBUG_LAND_BASE_ID, landTypes);
 		playerData.setLand(dimensionName);
 		playerData.setHasEntered();

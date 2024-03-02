@@ -2002,6 +2002,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
 		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
 		add(DebugLandsCommand.MUST_ENTER, "You must have entered before you can create debug lands");
+		add(DebugLandsCommand.INVALID_CHAIN, "The given land list is not valid for this command");
 		add(SburbPredefineCommand.SET_TITLE, "Predefined %s's title as %s");
 		add(SburbPredefineCommand.SET_TERRAIN_LAND, "Predefined %s's terrain land type");
 		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
