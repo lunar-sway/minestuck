@@ -1,20 +1,29 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.fast_food"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.fast_food",
   "path": "minestuck:fast_food",
   "responses": [
     {
       "conditions": {
         "condition_list": []
       },
-      "response_message": "I'm good"
+      "response_message": {
+        "arguments": [],
+        "message": "I'm good"
+      }
     },
     {
       "conditions": {
         "condition_list": []
       },
-      "response_message": "Show me your menu",
+      "response_message": {
+        "arguments": [],
+        "message": "Show me your menu"
+      },
       "triggers": [
         {
           "type": "open_consort_merchant_gui",

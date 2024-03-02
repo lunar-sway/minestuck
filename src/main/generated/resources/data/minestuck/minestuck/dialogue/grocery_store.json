@@ -1,20 +1,29 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.grocery_store"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.grocery_store",
   "path": "minestuck:grocery_store",
   "responses": [
     {
       "conditions": {
         "condition_list": []
       },
-      "response_message": "No thanks"
+      "response_message": {
+        "arguments": [],
+        "message": "No thanks"
+      }
     },
     {
       "conditions": {
         "condition_list": []
       },
-      "response_message": "What do you have to sell?",
+      "response_message": {
+        "arguments": [],
+        "message": "What do you have to sell?"
+      },
       "triggers": [
         {
           "type": "open_consort_merchant_gui",

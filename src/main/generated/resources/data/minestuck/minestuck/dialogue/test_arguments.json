@@ -1,20 +1,23 @@
 {
   "animation": "generic_animation",
   "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.immortality_herb.1"
+    "arguments": [
+      "PLAYER_NAME_LAND"
+    ],
+    "message": "minestuck.dialogue.test_arguments"
   },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "path": "minestuck:immortality_herb.1",
+  "path": "minestuck:test_arguments",
   "responses": [
     {
       "conditions": {
         "condition_list": []
       },
-      "next_dialogue_path": "minestuck:immortality_herb.2",
       "response_message": {
-        "arguments": [],
-        "message": "=>"
+        "arguments": [
+          "PLAYER_NAME_LAND"
+        ],
+        "message": "Player name land: %s"
       }
     }
   ],
@@ -22,8 +25,7 @@
     "conditions": {
       "condition_list": [
         {
-          "type": "in_terrain_land_type",
-          "land_type": "minestuck:flora"
+          "type": "conditionless"
         }
       ]
     }

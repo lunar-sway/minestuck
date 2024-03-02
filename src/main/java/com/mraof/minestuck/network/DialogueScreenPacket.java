@@ -17,17 +17,19 @@ public class DialogueScreenPacket implements MSPacket.PlayToClient
 	private final int entityID;
 	private final ResourceLocation dialogueLocation;
 	private final CompoundTag conditionChecks;
+	private final CompoundTag messageArgs;
 	
-	public static DialogueScreenPacket createPacket(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks)
+	public static DialogueScreenPacket createPacket(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks, CompoundTag messageArgs)
 	{
-		return new DialogueScreenPacket(entity.getId(), dialogue.path(), conditionChecks);
+		return new DialogueScreenPacket(entity.getId(), dialogue.path(), conditionChecks, messageArgs);
 	}
 	
-	public DialogueScreenPacket(int entityID, ResourceLocation dialogueLocation, CompoundTag conditionChecks)
+	public DialogueScreenPacket(int entityID, ResourceLocation dialogueLocation, CompoundTag conditionChecks, CompoundTag messageArgs)
 	{
 		this.entityID = entityID;
 		this.dialogueLocation = dialogueLocation;
 		this.conditionChecks = conditionChecks;
+		this.messageArgs = messageArgs;
 	}
 	
 	@Override
@@ -37,6 +39,7 @@ public class DialogueScreenPacket implements MSPacket.PlayToClient
 		buffer.writeUtf(dialogueLocation.toString(), 500);
 		
 		buffer.writeNbt(conditionChecks);
+		buffer.writeNbt(messageArgs);
 	}
 	
 	public static DialogueScreenPacket decode(FriendlyByteBuf buffer)
@@ -44,8 +47,9 @@ public class DialogueScreenPacket implements MSPacket.PlayToClient
 		int entityID = buffer.readInt();
 		ResourceLocation dialogueLocation = ResourceLocation.tryParse(buffer.readUtf(500));
 		
-		CompoundTag nbt = buffer.readNbt();
-		return new DialogueScreenPacket(entityID, dialogueLocation, nbt);
+		CompoundTag conditionChecks = buffer.readNbt();
+		CompoundTag messageArgs = buffer.readNbt();
+		return new DialogueScreenPacket(entityID, dialogueLocation, conditionChecks, messageArgs);
 	}
 	
 	@Override
@@ -56,7 +60,7 @@ public class DialogueScreenPacket implements MSPacket.PlayToClient
 		{
 			Entity entity = playerEntity.level().getEntity(entityID);
 			if(entity instanceof LivingEntity livingEntity && entity instanceof DialogueEntity)
-				MSScreenFactories.displayDialogueScreen(livingEntity, DialogueManager.getInstance().getDialogue(dialogueLocation), conditionChecks);
+				MSScreenFactories.displayDialogueScreen(livingEntity, DialogueManager.getInstance().getDialogue(dialogueLocation), conditionChecks, messageArgs);
 		}
 	}
 }

@@ -1,7 +1,10 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.reckoning.1"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.reckoning.1",
   "path": "minestuck:reckoning.1",
   "responses": [
     {
@@ -9,7 +12,10 @@
         "condition_list": []
       },
       "next_dialogue_path": "minestuck:reckoning.2",
-      "response_message": "=>"
+      "response_message": {
+        "arguments": [],
+        "message": "=>"
+      }
     }
   ],
   "use_context": {

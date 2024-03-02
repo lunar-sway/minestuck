@@ -1,7 +1,10 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.immortality_herb.2"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.immortality_herb.2",
   "path": "minestuck:immortality_herb.2",
   "responses": [
     {
@@ -9,7 +12,10 @@
         "condition_list": []
       },
       "next_dialogue_path": "minestuck:immortality_herb.3",
-      "response_message": "=>"
+      "response_message": {
+        "arguments": [],
+        "message": "=>"
+      }
     }
   ]
 }

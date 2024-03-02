@@ -1,7 +1,10 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.thunder_death.2"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.thunder_death.2",
   "path": "minestuck:thunder_death.2",
   "responses": [
     {
@@ -9,7 +12,10 @@
         "condition_list": []
       },
       "next_dialogue_path": "minestuck:thunder_death.3",
-      "response_message": "=>"
+      "response_message": {
+        "arguments": [],
+        "message": "=>"
+      }
     }
   ]
 }

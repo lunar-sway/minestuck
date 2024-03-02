@@ -2341,6 +2341,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 				"%1$s lost their head whilst engaged with %2$s");
 		
 		addDialogue("test1", "Press §eSHIFT§r for more info");
+		addDialogue("test_arguments", "Player name land: %s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(DialogueProvider.ARROW.key(), "=>");

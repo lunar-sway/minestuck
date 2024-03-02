@@ -1,20 +1,29 @@
 {
   "animation": "generic_animation",
+  "dialogue_message": {
+    "arguments": [],
+    "message": "minestuck.dialogue.food_shop"
+  },
   "gui": "minestuck:textures/gui/generic_extra_large.png",
-  "message": "minestuck.dialogue.food_shop",
   "path": "minestuck:food_shop",
   "responses": [
     {
       "conditions": {
         "condition_list": []
       },
-      "response_message": "Never mind"
+      "response_message": {
+        "arguments": [],
+        "message": "Never mind"
+      }
     },
     {
       "conditions": {
         "condition_list": []
       },
-      "response_message": "What do you have?",
+      "response_message": {
+        "arguments": [],
+        "message": "What do you have?"
+      },
       "triggers": [
         {
           "type": "open_consort_merchant_gui",
