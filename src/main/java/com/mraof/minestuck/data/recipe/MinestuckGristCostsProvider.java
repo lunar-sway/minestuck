@@ -852,9 +852,9 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.CAST_IRON.get()).grist(BUILD, 3).grist(RUST, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.STEEL_BEAM.get()).grist(BUILD, 2).grist(RUST, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).grist(BUILD, 2).grist(SULFUR, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.IGNEOUS_STONE.get()).grist(TAR, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.IGNEOUS_SPIKE.get()).grist(TAR, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.PUMICE_STONE.get()).grist(TAR, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.IGNEOUS_STONE.get()).grist(BUILD, 2).grist(TAR, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.IGNEOUS_SPIKE.get()).grist(BUILD, 1).grist(TAR, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.PUMICE_STONE.get()).grist(BUILD, 2).grist(TAR, 1).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.COARSE_END_STONE.get()).grist(BUILD, 4).grist(CAULK, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CHALK.get()).grist(BUILD, 2).grist(CHALK, 1).build(recipeSaver);

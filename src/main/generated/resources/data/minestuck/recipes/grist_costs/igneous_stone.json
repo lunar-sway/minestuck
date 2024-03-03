@@ -1,7 +1,8 @@
 {
   "type": "minestuck:grist_cost",
   "grist_cost": {
-    "minestuck:tar": 2
+    "minestuck:build": 2,
+    "minestuck:tar": 1
   },
   "ingredient": {
     "item": "minestuck:igneous_stone"

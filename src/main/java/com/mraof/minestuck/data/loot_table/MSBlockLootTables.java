@@ -114,6 +114,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(SHADE_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(PINK_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(MYCELIUM_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(UNCARVED_WOOD_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		
 		add(STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(DEEPSLATE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(COBBLESTONE_URANIUM_ORE.get(), this::uraniumOreDrop);
@@ -124,6 +126,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(SHADE_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(PINK_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(MYCELIUM_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(UNCARVED_WOOD_URANIUM_ORE.get(), this::uraniumOreDrop);
 		
 		add(NETHERRACK_COAL_ORE.get(), this::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), this::coalOreDrop);

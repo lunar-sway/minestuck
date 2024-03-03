@@ -130,6 +130,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.PINK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE, "Cruxite Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.DEEPSLATE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.COBBLESTONE_URANIUM_ORE, "Uranium Ore");
@@ -140,6 +141,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.PINK_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_URANIUM_ORE, "Uranium Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.NETHERRACK_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.SHADE_STONE_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.PINK_STONE_COAL_ORE, "Coal Ore");

@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 - Added Carved Bush
-- Added Uncarved Wood Iron, Redstone, and Emerald ores
+- Added Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
 - Added Silicone Caulk fluid, used in Wood lands
 - Added Cindered woodset and Trees in Heat lands
 - Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.

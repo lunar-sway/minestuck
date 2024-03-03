@@ -335,8 +335,8 @@ public class MSItems
 	public static final RegistryObject<Item> ACE_OF_CLUBS = REGISTER.register("ace_of_clubs", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(MSItems.CLUB_OF_FELONY)), new Item.Properties().defaultDurability(500)));
 	public static final RegistryObject<Item> CUESTICK = REGISTER.register("cuestick", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 5, -2.0F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.ACE_OF_DIAMONDS)), new Item.Properties().defaultDurability(500).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> ACE_OF_DIAMONDS = REGISTER.register("ace_of_diamonds", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(MSItems.CUESTICK)), new Item.Properties().defaultDurability(500)));
-	public static final RegistryObject<Item> TV_ANTENNA = REGISTER.register("tv_antenna", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -1.4F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.ACE_OF_HEARTS)), new Item.Properties().defaultDurability(500)));
-	public static final RegistryObject<Item> ACE_OF_HEARTS = REGISTER.register("ace_of_hearts", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(MSItems.TV_ANTENNA)), new Item.Properties().defaultDurability(500).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> TV_ANTENNA = REGISTER.register("tv_antenna", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -1.4F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.ACE_OF_HEARTS)), new Item.Properties().defaultDurability(500).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> ACE_OF_HEARTS = REGISTER.register("ace_of_hearts", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(MSItems.TV_ANTENNA)), new Item.Properties().defaultDurability(500)));
 	
 	//Staffs
 	public static final RegistryObject<Item> BO_STAFF = REGISTER.register("bo_staff", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.enemyKnockback(0.5F)), new Item.Properties().defaultDurability(100)));
@@ -804,6 +804,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.SHADE_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.PINK_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_CRUXITE_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
+	
 	public static final RegistryObject<BlockItem> STONE_URANIUM_ORE = registerBlockItem(MSBlocks.STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> DEEPSLATE_URANIUM_ORE = registerBlockItem(MSBlocks.DEEPSLATE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> NETHERRACK_URANIUM_ORE = registerBlockItem(MSBlocks.NETHERRACK_URANIUM_ORE);
@@ -814,6 +816,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.SHADE_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.PINK_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_URANIUM_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+	
 	public static final RegistryObject<BlockItem> NETHERRACK_COAL_ORE = registerBlockItem(MSBlocks.NETHERRACK_COAL_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_COAL_ORE = registerBlockItem(MSBlocks.SHADE_STONE_COAL_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_COAL_ORE = registerBlockItem(MSBlocks.PINK_STONE_COAL_ORE);

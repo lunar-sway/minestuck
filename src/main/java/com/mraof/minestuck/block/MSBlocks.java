@@ -126,6 +126,7 @@ public final class MSBlocks
 	public static final RegistryObject<Block> SHADE_STONE_CRUXITE_ORE = REGISTER.register("shade_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> PINK_STONE_CRUXITE_ORE = REGISTER.register("pink_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> MYCELIUM_STONE_CRUXITE_ORE = REGISTER.register("mycelium_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
+	public static final RegistryObject<Block> UNCARVED_WOOD_CRUXITE_ORE = REGISTER.register("uncarved_wood_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	
 	private static Block cruxiteOre(BlockBehaviour.Properties properties)
 	{
@@ -134,15 +135,16 @@ public final class MSBlocks
 	
 	//Uranium ores
 	public static final RegistryObject<Block> STONE_URANIUM_ORE = REGISTER.register("stone_uranium_ore", () -> uraniumOre(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F, 3.0F).requiresCorrectToolForDrops().lightLevel(state -> 3)));
-	public static final RegistryObject<Block> DEEPSLATE_URANIUM_ORE = REGISTER.register("deepslate_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get()).mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE)));
-	public static final RegistryObject<Block> NETHERRACK_URANIUM_ORE = REGISTER.register("netherrack_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
-	public static final RegistryObject<Block> COBBLESTONE_URANIUM_ORE = REGISTER.register("cobblestone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
-	public static final RegistryObject<Block> SANDSTONE_URANIUM_ORE = REGISTER.register("sandstone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
-	public static final RegistryObject<Block> RED_SANDSTONE_URANIUM_ORE = REGISTER.register("red_sandstone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
-	public static final RegistryObject<Block> END_STONE_URANIUM_ORE = REGISTER.register("end_stone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
-	public static final RegistryObject<Block> SHADE_STONE_URANIUM_ORE = REGISTER.register("shade_stone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
-	public static final RegistryObject<Block> PINK_STONE_URANIUM_ORE = REGISTER.register("pink_stone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
-	public static final RegistryObject<Block> MYCELIUM_STONE_URANIUM_ORE = REGISTER.register("mycelium_stone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
+	public static final RegistryObject<Block> DEEPSLATE_URANIUM_ORE = REGISTER.register("deepslate_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get()).mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE)));
+	public static final RegistryObject<Block> NETHERRACK_URANIUM_ORE = REGISTER.register("netherrack_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> COBBLESTONE_URANIUM_ORE = REGISTER.register("cobblestone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> SANDSTONE_URANIUM_ORE = REGISTER.register("sandstone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> RED_SANDSTONE_URANIUM_ORE = REGISTER.register("red_sandstone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> END_STONE_URANIUM_ORE = REGISTER.register("end_stone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> SHADE_STONE_URANIUM_ORE = REGISTER.register("shade_stone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> PINK_STONE_URANIUM_ORE = REGISTER.register("pink_stone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> MYCELIUM_STONE_URANIUM_ORE = REGISTER.register("mycelium_stone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> UNCARVED_WOOD_URANIUM_ORE = REGISTER.register("uncarved_wood_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
 	
 	private static Block uraniumOre(BlockBehaviour.Properties properties)
 	{
