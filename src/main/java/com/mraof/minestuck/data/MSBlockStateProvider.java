@@ -230,7 +230,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_top"))));
 		customLampWithItem(MSBlocks.CRUXITE_LAMP);
 		
-				
+		
 		simpleBlockWithItem(MSBlocks.URANIUM_BLOCK);
 		stairsWithItem(MSBlocks.URANIUM_STAIRS, MSBlocks.URANIUM_BLOCK);
 		slabWithItem(MSBlocks.URANIUM_SLAB, MSBlocks.URANIUM_BLOCK);
@@ -2060,10 +2060,12 @@ public class MSBlockStateProvider extends BlockStateProvider
 	}
 	
 	private void customLampWithItem(RegistryObject<Block> block, String baseName, ResourceLocation texture) {
-		ModelFile lampOn = models().cubeAll(baseName + "_on", new ResourceLocation(Minestuck.MOD_ID, "block/" + baseName + "_on"));
-		ModelFile lampOff = models().cubeAll(baseName + "_off", new ResourceLocation(Minestuck.MOD_ID, "block/" + baseName + "_off"));
+		ModelFile lampOn = models().cubeAll(baseName + "_on", new ResourceLocation(texture + "_on"));
+		ModelFile lampOff = models().cubeAll(baseName + "_off", new ResourceLocation(texture + "_off"));
 		
-		getVariantBuilder(MSBlocks.CRUXITE_LAMP.get()).forAllStates(state -> {
+		System.out.println("TEXTURE: " + texture);
+		
+		getVariantBuilder(block.get()).forAllStates(state -> {
 			if(state.getValue(CustomLampBlock.CLICKED) ) {
 				return ConfiguredModel.builder().modelFile(lampOn).build();
 			} else {
@@ -2071,8 +2073,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 			}
 		});
 		
-		simpleBlockItem(MSBlocks.CRUXITE_LAMP.get(), models().cubeAll("cruxite_lamp_on",
-				new ResourceLocation(Minestuck.MOD_ID, "block/" +"cruxite_lamp_on")));
+		simpleBlockItem(block.get(), models().cubeAll(baseName + "_on",
+				new ResourceLocation(Minestuck.MOD_ID, "block/" + baseName + "_on")));
 	}
 	
 	private void powerVariableWithItem(RegistryObject<Block> block, ModelFile highPowerModel, ModelFile mediumPowerModel, ModelFile lowPowerModel, ModelFile unpoweredModel)

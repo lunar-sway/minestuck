@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "minestuck:block/mossy_decrepit_stone_bricks/1",
-    "side": "minestuck:block/mossy_decrepit_stone_bricks/1",
-    "top": "minestuck:block/mossy_decrepit_stone_bricks/1"
-  }
-}

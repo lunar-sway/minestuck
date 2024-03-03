@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "minestuck:block/uncarved_wood",
-    "side": "minestuck:block/uncarved_wood",
-    "top": "minestuck:block/uncarved_wood"
-  }
-}
