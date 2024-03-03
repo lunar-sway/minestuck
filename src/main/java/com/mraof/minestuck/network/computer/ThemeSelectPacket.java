@@ -1,47 +1,37 @@
 package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class ThemeSelectPacket implements MSPacket.PlayToServer
+public record ThemeSelectPacket(BlockPos pos, ResourceLocation themeId) implements MSPacket.PlayToServer
 {
-	private final BlockPos pos;
-	private final int themeId;
-	
-	public ThemeSelectPacket(BlockPos pos, int themeId)
+	public static ThemeSelectPacket create(ComputerBlockEntity be, ResourceLocation themeId)
 	{
-		this.pos = pos;
-		this.themeId = themeId;
-	}
-	
-	public static ThemeSelectPacket create(ComputerBlockEntity be, Theme theme)
-	{
-		return new ThemeSelectPacket(be.getBlockPos(), theme.ordinal());
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> computer.setTheme(Theme.values()[themeId]));
+		return new ThemeSelectPacket(be.getBlockPos(), themeId);
 	}
 	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(pos);
-		buffer.writeInt(themeId);
+		buffer.writeResourceLocation(themeId);
 	}
 	
 	public static ThemeSelectPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos computer = buffer.readBlockPos();
-		int themeId = buffer.readInt();
+		ResourceLocation themeId = buffer.readResourceLocation();
 		
 		return new ThemeSelectPacket(computer, themeId);
 	}
 	
+	@Override
+	public void execute(ServerPlayer player)
+	{
+		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> computer.setTheme(themeId));
+	}
 }

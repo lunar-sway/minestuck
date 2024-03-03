@@ -27,7 +27,4 @@ public interface ISburbComputer
 	void connected(PlayerIdentifier player, boolean isClient);
 	
 	ComputerReference createReference();
-	
-	Theme getTheme();
-	void setTheme(Theme theme);
 }
