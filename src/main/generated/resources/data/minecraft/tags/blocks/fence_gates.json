@@ -10,18 +10,6 @@
     "minestuck:end_fence_gate",
     "minestuck:dead_fence_gate",
     "minestuck:shadewood_fence_gate",
-    "minestuck:treated_fence_gate",
-    "minestuck:blood_aspect_fence_gate",
-    "minestuck:breath_aspect_fence_gate",
-    "minestuck:doom_aspect_fence_gate",
-    "minestuck:heart_aspect_fence_gate",
-    "minestuck:hope_aspect_fence_gate",
-    "minestuck:life_aspect_fence_gate",
-    "minestuck:light_aspect_fence_gate",
-    "minestuck:mind_aspect_fence_gate",
-    "minestuck:rage_aspect_fence_gate",
-    "minestuck:space_aspect_fence_gate",
-    "minestuck:time_aspect_fence_gate",
-    "minestuck:void_aspect_fence_gate"
+    "minestuck:treated_fence_gate"
   ]
 }
