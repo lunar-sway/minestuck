@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "minestuck:block/flowery_chalk_bricks",
-    "side": "minestuck:block/flowery_chalk_bricks",
-    "top": "minestuck:block/flowery_chalk_bricks"
-  }
-}

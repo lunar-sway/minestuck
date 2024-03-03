@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "minestuck:block/brown_stone_bricks",
-    "side": "minestuck:block/brown_stone_bricks",
-    "top": "minestuck:block/brown_stone_bricks"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:grist_cost",
-  "grist_cost": {
-    "minestuck:build": 1000
-  },
-  "ingredient": {
-    "item": "minestuck:gutter_ball"
-  }
-}
