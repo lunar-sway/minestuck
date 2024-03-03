@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:plutonium_core"
+  },
+  "input2": {
+    "item": "minecraft:fishing_rod"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:item_magnet"
+  }
+}

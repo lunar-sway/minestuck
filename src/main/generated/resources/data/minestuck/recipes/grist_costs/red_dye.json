@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:garnet": 4
+  },
+  "ingredient": {
+    "item": "minecraft:red_dye"
+  }
+}

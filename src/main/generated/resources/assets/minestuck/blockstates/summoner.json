@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "triggered=false": {
+      "model": "minestuck:block/summoner_untriggered"
+    },
+    "triggered=true": {
+      "model": "minestuck:block/summoner_triggered"
+    }
+  }
+}

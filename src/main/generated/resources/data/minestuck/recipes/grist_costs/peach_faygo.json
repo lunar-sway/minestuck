@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:cobalt": 1,
+    "minestuck:garnet": 1
+  },
+  "ingredient": {
+    "item": "minestuck:peach_faygo"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 85,
+    "minestuck:caulk": 85,
+    "minestuck:garnet": 85,
+    "minestuck:mercury": 85,
+    "minestuck:quartz": 5
+  },
+  "ingredient": {
+    "item": "minestuck:water_staff"
+  }
+}

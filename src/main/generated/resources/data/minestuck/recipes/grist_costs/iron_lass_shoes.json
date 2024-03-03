@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 350,
+    "minestuck:build": 3500,
+    "minestuck:ruby": 700,
+    "minestuck:uranium": 125
+  },
+  "ingredient": {
+    "item": "minestuck:iron_lass_shoes"
+  }
+}

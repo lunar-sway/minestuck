@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:rock_cookie"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 20,
+      "min_inclusive": 15
+    }
+  }
+}

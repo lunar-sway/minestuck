@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 40,
+    "minestuck:garnet": 2,
+    "minestuck:iodine": 3
+  },
+  "ingredient": {
+    "item": "minestuck:spiked_club"
+  }
+}

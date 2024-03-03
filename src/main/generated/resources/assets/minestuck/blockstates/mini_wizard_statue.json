@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/mini_wizard_statue",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/mini_wizard_statue"
+    },
+    "facing=south": {
+      "model": "minestuck:block/mini_wizard_statue",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/mini_wizard_statue",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:vine"
+  },
+  "input2": {
+    "item": "minecraft:warped_roots"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:twisting_vines"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:wizard_staff"
+  },
+  "input2": {
+    "item": "minecraft:heart_of_the_sea"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:water_staff"
+  }
+}

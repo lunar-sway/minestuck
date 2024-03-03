@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 666,
+    "minestuck:sulfur": 821
+  },
+  "ingredient": {
+    "item": "minestuck:devil_fork"
+  }
+}

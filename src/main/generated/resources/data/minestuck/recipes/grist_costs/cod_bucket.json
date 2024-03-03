@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "item": "minecraft:cod_bucket"
+  },
+  "sources": [
+    "minecraft:cod",
+    "minecraft:water_bucket"
+  ]
+}

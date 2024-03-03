@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:end_leaves"
+  },
+  "input2": {
+    "item": "minestuck:end_log"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:end_sapling"
+  }
+}

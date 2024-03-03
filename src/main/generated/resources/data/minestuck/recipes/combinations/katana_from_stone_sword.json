@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:stone_sword"
+  },
+  "input2": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:katana"
+  }
+}

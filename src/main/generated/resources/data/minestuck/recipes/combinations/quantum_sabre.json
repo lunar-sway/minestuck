@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:uranium_powered_stick"
+  },
+  "input2": {
+    "item": "minestuck:energy_core"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:quantum_sabre"
+  }
+}

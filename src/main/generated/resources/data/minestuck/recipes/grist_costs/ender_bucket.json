@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "grist_cost": {
+    "minestuck:mercury": 8,
+    "minestuck:uranium": 8
+  },
+  "ingredient": {
+    "item": "minestuck:ender_bucket"
+  }
+}

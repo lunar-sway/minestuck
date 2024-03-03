@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:glowing_mushroom_vines"
+  },
+  "input2": {
+    "item": "minecraft:vine"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:glowing_mushroom_vines"
+  }
+}

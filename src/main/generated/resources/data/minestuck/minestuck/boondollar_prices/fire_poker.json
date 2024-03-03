@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:fire_poker"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 2000,
+      "min_inclusive": 1500
+    }
+  }
+}

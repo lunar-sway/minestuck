@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 7,
+    "minestuck:build": 99
+  },
+  "ingredient": {
+    "item": "minestuck:eating_fork_gem"
+  }
+}

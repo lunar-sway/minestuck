@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 5500,
+    "minestuck:diamond": 5500,
+    "minestuck:quartz": 13200
+  },
+  "ingredient": {
+    "item": "minestuck:popamatic_vrillyhoo"
+  }
+}

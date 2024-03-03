@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:ruby": 77,
+    "minestuck:rust": 77,
+    "minestuck:tar": 85
+  },
+  "ingredient": {
+    "item": "minestuck:gothy_axe"
+  }
+}

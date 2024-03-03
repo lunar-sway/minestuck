@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 5,
+    "minestuck:chalk": 40,
+    "minestuck:quartz": 1
+  },
+  "ingredient": {
+    "item": "minestuck:prospit_pants"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,state=broken": {
+      "model": "minestuck:block/crockertop_bsod",
+      "y": 90
+    },
+    "facing=east,state=game_loaded": {
+      "model": "minestuck:block/crockertop_game_loaded",
+      "y": 90
+    },
+    "facing=east,state=off": {
+      "model": "minestuck:block/crockertop_off",
+      "y": 90
+    },
+    "facing=east,state=on": {
+      "model": "minestuck:block/crockertop_on",
+      "y": 90
+    },
+    "facing=north,state=broken": {
+      "model": "minestuck:block/crockertop_bsod"
+    },
+    "facing=north,state=game_loaded": {
+      "model": "minestuck:block/crockertop_game_loaded"
+    },
+    "facing=north,state=off": {
+      "model": "minestuck:block/crockertop_off"
+    },
+    "facing=north,state=on": {
+      "model": "minestuck:block/crockertop_on"
+    },
+    "facing=south,state=broken": {
+      "model": "minestuck:block/crockertop_bsod",
+      "y": 180
+    },
+    "facing=south,state=game_loaded": {
+      "model": "minestuck:block/crockertop_game_loaded",
+      "y": 180
+    },
+    "facing=south,state=off": {
+      "model": "minestuck:block/crockertop_off",
+      "y": 180
+    },
+    "facing=south,state=on": {
+      "model": "minestuck:block/crockertop_on",
+      "y": 180
+    },
+    "facing=west,state=broken": {
+      "model": "minestuck:block/crockertop_bsod",
+      "y": 270
+    },
+    "facing=west,state=game_loaded": {
+      "model": "minestuck:block/crockertop_game_loaded",
+      "y": 270
+    },
+    "facing=west,state=off": {
+      "model": "minestuck:block/crockertop_off",
+      "y": 270
+    },
+    "facing=west,state=on": {
+      "model": "minestuck:block/crockertop_on",
+      "y": 270
+    }
+  }
+}

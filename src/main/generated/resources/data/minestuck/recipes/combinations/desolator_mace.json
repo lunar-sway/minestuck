@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:mace"
+  },
+  "input2": {
+    "item": "minecraft:flint"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:desolator_mace"
+  }
+}

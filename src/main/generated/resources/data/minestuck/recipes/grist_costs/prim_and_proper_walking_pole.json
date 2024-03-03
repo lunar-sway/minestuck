@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 15,
+    "minestuck:iodine": 10
+  },
+  "ingredient": {
+    "item": "minestuck:prim_and_proper_walking_pole"
+  }
+}

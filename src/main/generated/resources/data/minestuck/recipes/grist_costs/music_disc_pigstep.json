@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 20,
+    "minestuck:caulk": 12,
+    "minestuck:gold": 3,
+    "minestuck:sulfur": 7
+  },
+  "ingredient": {
+    "item": "minecraft:music_disc_pigstep"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:poisonous_potato"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 60,
+      "min_inclusive": 50
+    }
+  }
+}

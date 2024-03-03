@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:cactaceae_cutlass"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 700,
+      "min_inclusive": 500
+    }
+  }
+}

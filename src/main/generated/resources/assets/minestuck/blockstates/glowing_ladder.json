@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/glowing_ladder",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/glowing_ladder"
+    },
+    "facing=south": {
+      "model": "minestuck:block/glowing_ladder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/glowing_ladder",
+      "y": 270
+    }
+  }
+}

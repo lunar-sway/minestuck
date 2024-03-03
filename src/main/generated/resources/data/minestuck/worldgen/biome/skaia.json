@@ -1,0 +1,63 @@
+{
+  "carvers": {},
+  "downfall": 0.5,
+  "effects": {
+    "fog_color": 13487615,
+    "sky_color": 8037631,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "features": [],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "consort": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minestuck:dersite_pawn",
+        "maxCount": 10,
+        "minCount": 1,
+        "weight": 2
+      },
+      {
+        "type": "minestuck:dersite_bishop",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      },
+      {
+        "type": "minestuck:dersite_rook",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      },
+      {
+        "type": "minestuck:prospitian_pawn",
+        "maxCount": 10,
+        "minCount": 1,
+        "weight": 2
+      },
+      {
+        "type": "minestuck:prospitian_bishop",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      },
+      {
+        "type": "minestuck:prospitian_rook",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      }
+    ],
+    "underground_water_creature": [],
+    "underling": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.5
+}

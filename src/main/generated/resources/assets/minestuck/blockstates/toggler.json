@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "minestuck:block/toggler",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "minestuck:block/toggler",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/toggler",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "minestuck:block/toggler",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "minestuck:block/toggler"
+    },
+    "facing=west": {
+      "model": "minestuck:block/toggler",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

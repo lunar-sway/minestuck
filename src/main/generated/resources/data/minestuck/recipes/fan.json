@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  p",
+    " pp",
+    "pps"
+  ],
+  "result": {
+    "item": "minestuck:fan"
+  },
+  "show_notification": true
+}

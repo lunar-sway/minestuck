@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:diamond": 474,
+    "minestuck:uranium": 474
+  },
+  "ingredient": {
+    "item": "minestuck:starshard_tri_blade"
+  }
+}

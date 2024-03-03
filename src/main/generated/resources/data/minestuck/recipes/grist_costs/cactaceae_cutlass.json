@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 20,
+    "minestuck:marble": 4
+  },
+  "ingredient": {
+    "item": "minestuck:cactaceae_cutlass"
+  }
+}

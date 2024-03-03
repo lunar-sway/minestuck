@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:anvil"
+  },
+  "input2": {
+    "item": "minecraft:ice"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:powder_snow_bucket"
+  }
+}

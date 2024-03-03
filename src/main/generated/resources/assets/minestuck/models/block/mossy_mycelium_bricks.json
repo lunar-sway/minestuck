@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "minestuck:block/mossy_mycelium_bricks"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/mossy_chalk_bricks_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/mossy_chalk_bricks"
+    },
+    "type=top": {
+      "model": "minestuck:block/mossy_chalk_bricks_slab_top"
+    }
+  }
+}

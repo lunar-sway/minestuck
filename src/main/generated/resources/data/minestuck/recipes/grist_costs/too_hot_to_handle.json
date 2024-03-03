@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 40,
+    "minestuck:ruby": 36,
+    "minestuck:sulfur": 24
+  },
+  "ingredient": {
+    "item": "minestuck:too_hot_to_handle"
+  }
+}

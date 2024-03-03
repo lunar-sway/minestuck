@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 44,
+    "minestuck:cobalt": 26
+  },
+  "ingredient": {
+    "item": "minestuck:club_zero"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:mind_aspect_planks"
+    }
+  ],
+  "result": {
+    "item": "minestuck:mind_aspect_button"
+  }
+}

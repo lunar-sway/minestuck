@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "item": "minecraft:pufferfish_bucket"
+  },
+  "sources": [
+    "minecraft:pufferfish",
+    "minecraft:water_bucket"
+  ]
+}

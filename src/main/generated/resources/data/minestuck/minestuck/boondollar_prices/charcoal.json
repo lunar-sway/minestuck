@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:charcoal"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 70,
+      "min_inclusive": 50
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:cobalt_gum"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 180,
+      "min_inclusive": 150
+    }
+  }
+}

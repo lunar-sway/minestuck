@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:tar": 800,
+    "minestuck:uranium": 800,
+    "minestuck:zillium": 10
+  },
+  "ingredient": {
+    "item": "minecraft:dragon_egg"
+  }
+}

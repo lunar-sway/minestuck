@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:garnet": 5,
+    "minestuck:marble": 125
+  },
+  "ingredient": {
+    "item": "minestuck:pumord"
+  }
+}

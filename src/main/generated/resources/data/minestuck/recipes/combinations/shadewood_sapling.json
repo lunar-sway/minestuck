@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:shadewood_leaves"
+  },
+  "input2": {
+    "item": "minestuck:shadewood_log"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:shadewood_sapling"
+  }
+}

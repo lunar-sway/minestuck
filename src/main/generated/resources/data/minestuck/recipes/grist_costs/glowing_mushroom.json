@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 5,
+    "minestuck:mercury": 2,
+    "minestuck:shale": 3
+  },
+  "ingredient": {
+    "item": "minestuck:glowing_mushroom"
+  }
+}

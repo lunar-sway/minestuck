@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:sporeo"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 25,
+      "min_inclusive": 15
+    }
+  }
+}

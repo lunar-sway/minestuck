@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "forge:rods/wooden"
+    },
+    {
+      "tag": "forge:rods/wooden"
+    },
+    {
+      "tag": "forge:rods/wooden"
+    },
+    {
+      "item": "minestuck:jar_of_bugs"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "item": "minestuck:bug_on_a_stick"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:thresh_dvd"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 400,
+      "min_inclusive": 350
+    }
+  }
+}
