@@ -1,10 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.CruxiteDowelBlock;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.block.TrajectoryBlock;
+import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.item.MSItems;
