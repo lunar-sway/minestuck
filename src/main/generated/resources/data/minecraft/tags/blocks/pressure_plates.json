@@ -10,6 +10,18 @@
     "minestuck:end_pressure_plate",
     "minestuck:dead_pressure_plate",
     "minestuck:shadewood_pressure_plate",
-    "minestuck:treated_pressure_plate"
+    "minestuck:treated_pressure_plate",
+    "minestuck:blood_aspect_pressure_plate",
+    "minestuck:breath_aspect_pressure_plate",
+    "minestuck:doom_aspect_pressure_plate",
+    "minestuck:heart_aspect_pressure_plate",
+    "minestuck:hope_aspect_pressure_plate",
+    "minestuck:life_aspect_pressure_plate",
+    "minestuck:light_aspect_pressure_plate",
+    "minestuck:mind_aspect_pressure_plate",
+    "minestuck:rage_aspect_pressure_plate",
+    "minestuck:space_aspect_pressure_plate",
+    "minestuck:time_aspect_pressure_plate",
+    "minestuck:void_aspect_pressure_plate"
   ]
 }
