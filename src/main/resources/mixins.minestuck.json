@@ -1,0 +1,5 @@
+{
+  "package": "com.mraof.minestuck.mixin",
+  "refmap": "mixins.minestuck.refmap.json",
+  "mixins": [ "LivingEntityMixin" ]
+}
