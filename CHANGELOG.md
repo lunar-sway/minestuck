@@ -43,7 +43,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
 - Renamed Oil to Shale Oil
 - Pumord is now alchemized with Pumice Stone instead of any regular Stone
-- Cruxite block retexture
 
 ### Fixed
 
@@ -55,7 +54,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, sipherNil
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode
 
 ## [Unreleased]
 
@@ -63,11 +62,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Metal Boats no longer crash the game when dispensed
 - Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
+- Fixed underling texture layer that on hurt wasn't tinted red with the rest of the underling
+- Fluids no longer break gates and return nodes
+- Advanced color selection screen no longer tints buttons
+- Round the displayed max health value on the echeladder screen
 
 ### Contributors for this release
 
-- hadean, Dweblenod
-- 
+- hadean, Dweblenod, kirderf1, glubtier
+
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
 ### Added
