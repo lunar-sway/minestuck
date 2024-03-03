@@ -6,10 +6,14 @@ import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillagePieces;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+
+import java.util.function.Consumer;
 
 /**
  * Simple interface for all functions that are available for both types of land types.
@@ -39,6 +43,13 @@ public interface ILandType
 	 * Override this to set various world-generation settings on lands, such as the land gate structure and biome selection settings.
 	 */
 	default void setGenSettings(LandGenSettings settings)
+	{}
+	
+	/**
+	 * When you register a structure set normally, it will show up in all lands.
+	 * Creating a structure set and giving it to the consumer lets the structure set be used by lands with this land type specifically.
+	 */
+	default void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{}
 	
 	/**
