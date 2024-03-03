@@ -23,11 +23,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Transportalizers now stack to one instead of 64
 - Prismarine armor remodel and retexture
 - Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
-
+- Computer Themes can now be added and rendered via resource pack
+- Default computer Theme for crockertop is now Crocker
+- Computer Theme is now chosen from a list of available Themes in separate GUI
 
 ### Fixed
 
 - Double slabs will now drop two slabs when broken
+- Sneaking now prevents trajectory blocks from moving the player
 
 ### Contributors for this release
 
@@ -41,10 +44,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
 - Fixed underling texture layer that on hurt wasn't tinted red with the rest of the underling
 - Fluids no longer break gates and return nodes
+- Advanced color selection screen no longer tints buttons
+- Round the displayed max health value on the echeladder screen
 
 ### Contributors for this release
 
-- hadean, Dweblenod, kirderf1
+- hadean, Dweblenod, kirderf1, glubtier
 
 ## [1.20.1-1.11.2.0] - 2024-01-13
 
@@ -258,7 +263,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Added 75 more blocks to the default atheneum list.
 - Config option for delaying entry from when the land dimension is generated, which can help with performance.
-Note that this option is found in the common config and not the world config.
+  Note that this option is found in the common config and not the world config.
 - Particle effect while entering
 - Transportalizer particle
 
@@ -352,7 +357,7 @@ Note that this option is found in the common config and not the world config.
 - The "minestuck:land_type" loot condition now uses tags instead of land type groups
 - Some consort dialogue conditions now uses tags instead of land type groups
 - New way to determine which land types that can get picked at random,
-defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
+  defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
 - Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
@@ -405,7 +410,7 @@ defined using data files `data/<namespace>/minestuck/terrain_land_types.json` an
 ### Removed
 
 - Removed config options "generateCruxiteOre" and "generateUraniumOre".
-For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
+  For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
 
 ### Fixed
 
