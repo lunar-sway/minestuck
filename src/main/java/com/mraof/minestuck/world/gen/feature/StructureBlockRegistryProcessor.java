@@ -38,7 +38,7 @@ public class StructureBlockRegistryProcessor extends StructureProcessor
 	@Override	//TODO figure out blockpos difference
 	public StructureTemplate.StructureBlockInfo process(LevelReader level, BlockPos blockPos, BlockPos blockPos2, StructureTemplate.StructureBlockInfo original, StructureTemplate.StructureBlockInfo current, StructurePlaceSettings placementSettings, @Nullable StructureTemplate template)
 	{
-		BlockState newState = blocks.getTemplateState(original.state());
+		BlockState newState = blocks.getTemplateState(current.state());
 		return new StructureTemplate.StructureBlockInfo(current.pos(), newState, current.nbt());
 	}
 	
