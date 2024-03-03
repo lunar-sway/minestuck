@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:build": 4
+  },
+  "ingredient": {
+    "tag": "forge:ores/iron"
+  },
+  "multiplier": 3.0,
+  "sources": [
+    "minecraft:raw_iron"
+  ]
+}

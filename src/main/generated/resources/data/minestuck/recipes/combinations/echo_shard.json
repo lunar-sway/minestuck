@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:sculk"
+  },
+  "input2": {
+    "item": "minecraft:diamond"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:echo_shard"
+  }
+}

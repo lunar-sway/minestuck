@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:spyglass"
+  },
+  "input2": {
+    "item": "minecraft:lily_pad"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:small_dripleaf"
+  }
+}

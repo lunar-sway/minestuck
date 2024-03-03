@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:slime_block"
+  },
+  "input2": {
+    "item": "minestuck:blood_bucket"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:coagulated_blood"
+  }
+}

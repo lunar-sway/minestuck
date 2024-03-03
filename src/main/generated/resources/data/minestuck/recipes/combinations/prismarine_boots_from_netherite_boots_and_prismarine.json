@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:netherite_boots"
+  },
+  "input2": {
+    "item": "minecraft:prismarine"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:prismarine_boots"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:thorn_in_your_side"
+  },
+  "input2": {
+    "item": "minestuck:computer_parts"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:rose_protocol"
+  }
+}

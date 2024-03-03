@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 10,
+    "minestuck:uranium": 4
+  },
+  "ingredient": {
+    "item": "minestuck:nonbinary_code"
+  }
+}

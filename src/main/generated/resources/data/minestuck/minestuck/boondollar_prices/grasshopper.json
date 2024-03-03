@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:grasshopper"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 110,
+      "min_inclusive": 90
+    }
+  }
+}

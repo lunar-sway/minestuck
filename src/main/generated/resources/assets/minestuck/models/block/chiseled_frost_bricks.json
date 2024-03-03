@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/chiseled_frost_bricks",
+    "side": "minestuck:block/chiseled_frost_bricks_side"
+  }
+}

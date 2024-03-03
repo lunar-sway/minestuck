@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:fork"
+  },
+  "input2": {
+    "item": "minestuck:battery"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:electric_fork"
+  }
+}

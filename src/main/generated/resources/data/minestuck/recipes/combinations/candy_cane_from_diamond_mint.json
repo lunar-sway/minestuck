@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:vaudeville_hook"
+  },
+  "input2": {
+    "item": "minestuck:diamond_mint"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:candy_cane"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:energy_core"
+  },
+  "input2": {
+    "item": "minestuck:battery"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:power_hub"
+  }
+}

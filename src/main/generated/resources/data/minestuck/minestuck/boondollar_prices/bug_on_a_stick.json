@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:bug_on_a_stick"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 6,
+      "min_inclusive": 4
+    }
+  }
+}

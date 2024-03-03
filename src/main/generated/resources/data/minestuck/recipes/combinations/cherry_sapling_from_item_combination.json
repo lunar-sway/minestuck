@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:cherry_log"
+  },
+  "input2": {
+    "item": "minecraft:cherry_leaves"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:cherry_sapling"
+  }
+}

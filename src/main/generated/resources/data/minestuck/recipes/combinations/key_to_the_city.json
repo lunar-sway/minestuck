@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:democratic_demolitioner"
+  },
+  "input2": {
+    "item": "minestuck:key_to_the_machine"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:key_to_the_city"
+  }
+}

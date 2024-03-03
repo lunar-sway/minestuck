@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 198,
+    "minestuck:ruby": 59,
+    "minestuck:tar": 99
+  },
+  "ingredient": {
+    "item": "minestuck:emerald_immolator"
+  }
+}

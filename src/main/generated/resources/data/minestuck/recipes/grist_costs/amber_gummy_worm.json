@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 3
+  },
+  "ingredient": {
+    "item": "minestuck:amber_gummy_worm"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:sickle"
+  },
+  "input2": {
+    "item": "minestuck:candy_corn"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:candy_sickle"
+  }
+}

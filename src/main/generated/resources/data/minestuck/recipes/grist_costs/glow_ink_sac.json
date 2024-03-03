@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:cobalt": 7
+  },
+  "ingredient": {
+    "item": "minecraft:glow_ink_sac"
+  }
+}

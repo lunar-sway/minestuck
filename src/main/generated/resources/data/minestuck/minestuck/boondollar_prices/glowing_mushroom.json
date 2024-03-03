@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:glowing_mushroom"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 15,
+      "min_inclusive": 10
+    }
+  }
+}

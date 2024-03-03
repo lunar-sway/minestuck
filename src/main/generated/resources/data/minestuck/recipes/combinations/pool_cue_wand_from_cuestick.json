@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:needle_wand"
+  },
+  "input2": {
+    "item": "minestuck:cuestick"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:pool_cue_wand"
+  }
+}

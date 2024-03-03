@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 8,
+    "minestuck:chalk": 8
+  },
+  "ingredient": {
+    "item": "minestuck:brain_juice_bucket"
+  }
+}

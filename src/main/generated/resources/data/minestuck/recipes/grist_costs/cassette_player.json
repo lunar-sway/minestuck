@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 20,
+    "minestuck:build": 400,
+    "minestuck:marble": 40,
+    "minestuck:rust": 20
+  },
+  "ingredient": {
+    "item": "minestuck:cassette_player"
+  }
+}

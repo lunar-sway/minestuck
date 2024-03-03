@@ -1,0 +1,68 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:melon_slice",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:stick",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:egg",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dirt",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:pumpkin",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cobblestone",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:redstone",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:surprise_embryo",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gamegrl_magazine",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gamebro_magazine",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dead_horn_coral",
+          "weight": 10
+        }
+      ],
+      "name": "computer",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minestuck:gameplay/kundler_suprises"
+}

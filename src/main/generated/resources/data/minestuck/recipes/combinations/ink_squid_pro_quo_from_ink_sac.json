@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:paper_sword"
+  },
+  "input2": {
+    "item": "minecraft:ink_sac"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:ink_squid_pro_quo"
+  }
+}

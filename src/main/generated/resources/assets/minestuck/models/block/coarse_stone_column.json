@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/coarse_stone_column_top",
+    "side": "minestuck:block/coarse_stone_column"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "minestuck:block/dark_gray_chess_brick_smooth"
+  }
+}

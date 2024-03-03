@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 70,
+    "minestuck:gold": 14,
+    "minestuck:rust": 21
+  },
+  "ingredient": {
+    "item": "minestuck:motor_fan"
+  }
+}

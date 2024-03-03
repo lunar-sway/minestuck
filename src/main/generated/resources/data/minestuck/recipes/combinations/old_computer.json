@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:computer"
+  },
+  "input2": {
+    "item": "minecraft:clock"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:old_computer"
+  }
+}

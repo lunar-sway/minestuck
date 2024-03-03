@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:gold": 240
+  },
+  "ingredient": {
+    "item": "minestuck:hereticus_aururm"
+  }
+}

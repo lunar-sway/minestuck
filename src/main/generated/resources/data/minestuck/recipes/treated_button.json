@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:treated_planks"
+    }
+  ],
+  "result": {
+    "item": "minestuck:treated_button"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:fission_focused_fault_feller"
+  },
+  "input2": {
+    "item": "minestuck:gamegrl_magazine"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:estrogen_empowered_everything_eradicator"
+  }
+}

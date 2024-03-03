@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:piston_powered_pogo_axehammer"
+  },
+  "input2": {
+    "item": "minestuck:energy_core"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:fission_focused_fault_feller"
+  }
+}

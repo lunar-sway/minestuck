@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 3,
+    "minestuck:build": 8,
+    "minestuck:chalk": 1
+  },
+  "ingredient": {
+    "item": "minestuck:wooden_carrot"
+  }
+}

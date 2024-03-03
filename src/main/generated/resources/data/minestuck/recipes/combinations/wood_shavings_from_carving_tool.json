@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:logs"
+  },
+  "input2": {
+    "item": "minestuck:carving_tool"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:wood_shavings"
+  }
+}

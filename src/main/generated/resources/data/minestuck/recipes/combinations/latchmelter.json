@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:blazing_glory"
+  },
+  "input2": {
+    "item": "minestuck:house_key"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:latchmelter"
+  }
+}

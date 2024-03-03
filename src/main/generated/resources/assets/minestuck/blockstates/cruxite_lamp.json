@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "clicked=false": {
+      "model": "minestuck:block/cruxite_lamp_off"
+    },
+    "clicked=true": {
+      "model": "minestuck:block/cruxite_lamp_on"
+    }
+  }
+}

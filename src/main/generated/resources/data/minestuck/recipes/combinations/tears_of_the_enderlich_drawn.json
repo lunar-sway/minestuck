@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:skeleton_displacer_drawn"
+  },
+  "input2": {
+    "item": "minecraft:ghast_tear"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:tears_of_the_enderlich_drawn"
+  }
+}

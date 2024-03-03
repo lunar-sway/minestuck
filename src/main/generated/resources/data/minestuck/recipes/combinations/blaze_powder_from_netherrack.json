@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:redstone"
+  },
+  "input2": {
+    "item": "minecraft:netherrack"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:blaze_powder"
+  }
+}

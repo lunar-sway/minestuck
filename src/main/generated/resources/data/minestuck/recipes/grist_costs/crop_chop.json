@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 22,
+    "minestuck:build": 78,
+    "minestuck:gold": 9,
+    "minestuck:iodine": 39
+  },
+  "ingredient": {
+    "item": "minestuck:crop_chop"
+  }
+}

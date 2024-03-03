@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 8,
+    "minestuck:cobalt": 8,
+    "minestuck:ruby": 2,
+    "minestuck:tar": 20
+  },
+  "ingredient": {
+    "item": "minecraft:crying_obsidian"
+  }
+}

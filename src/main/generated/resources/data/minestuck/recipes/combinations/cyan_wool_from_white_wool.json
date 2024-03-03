@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "forge:dyes/cyan"
+  },
+  "input2": {
+    "item": "minecraft:white_wool"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:cyan_wool"
+  }
+}

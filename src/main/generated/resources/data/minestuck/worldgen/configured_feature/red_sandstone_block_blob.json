@@ -1,0 +1,8 @@
+{
+  "type": "minestuck:block_blob",
+  "config": {
+    "state": {
+      "Name": "minecraft:red_sandstone"
+    }
+  }
+}

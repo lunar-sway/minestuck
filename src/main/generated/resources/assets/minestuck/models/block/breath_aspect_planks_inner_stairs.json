@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "minestuck:block/breath_aspect_planks",
+    "side": "minestuck:block/breath_aspect_planks",
+    "top": "minestuck:block/breath_aspect_planks"
+  }
+}

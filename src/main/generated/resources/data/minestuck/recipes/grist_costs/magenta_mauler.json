@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 16,
+    "minestuck:amethyst": 38,
+    "minestuck:garnet": 28,
+    "minestuck:iodine": 16
+  },
+  "ingredient": {
+    "item": "minestuck:magenta_mauler"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 4,
+    "minestuck:caulk": 4,
+    "minestuck:cobalt": 2
+  },
+  "ingredient": {
+    "item": "minecraft:cod"
+  }
+}

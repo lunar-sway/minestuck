@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "minestuck:block/solid_switch_unpowered"
+    },
+    "powered=true": {
+      "model": "minestuck:block/solid_switch_powered"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 53
+  },
+  "ingredient": {
+    "item": "minestuck:barber_basher"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:iodine": 5
+  },
+  "ingredient": {
+    "item": "minecraft:brown_mushroom_block"
+  }
+}

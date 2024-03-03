@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 6,
+    "minestuck:build": 12,
+    "minestuck:iodine": 8
+  },
+  "ingredient": {
+    "item": "minestuck:upper_crust_crust_cane"
+  }
+}

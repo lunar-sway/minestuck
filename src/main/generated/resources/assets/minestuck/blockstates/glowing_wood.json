@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minestuck:block/glowing_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minestuck:block/glowing_wood"
+    },
+    "axis=z": {
+      "model": "minestuck:block/glowing_wood",
+      "x": 90
+    }
+  }
+}

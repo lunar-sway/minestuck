@@ -1,0 +1,14 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1374,
+    "minestuck:garnet": 1236,
+    "minestuck:ruby": 824,
+    "minestuck:rust": 413,
+    "minestuck:sulfur": 666,
+    "minestuck:tar": 1374
+  },
+  "ingredient": {
+    "item": "minestuck:demonbane_ragripper"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:artifact_warhead"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 270,
+      "min_inclusive": 225
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "item": "minecraft:salmon_bucket"
+  },
+  "sources": [
+    "minecraft:salmon",
+    "minecraft:water_bucket"
+  ]
+}

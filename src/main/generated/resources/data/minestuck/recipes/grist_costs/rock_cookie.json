@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 10,
+    "minestuck:marble": 5
+  },
+  "ingredient": {
+    "item": "minestuck:rock_cookie"
+  }
+}

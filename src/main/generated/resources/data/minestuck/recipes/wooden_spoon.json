@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "item": "minecraft:bowl"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    "b",
+    "s",
+    "s"
+  ],
+  "result": {
+    "item": "minestuck:wooden_spoon"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/chalk_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/chalk"
+    },
+    "type=top": {
+      "model": "minestuck:block/chalk_slab_top"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:diamond": 16,
+    "minestuck:tar": 48,
+    "minestuck:uranium": 35
+  },
+  "ingredient": {
+    "item": "minecraft:wither_skeleton_skull"
+  }
+}

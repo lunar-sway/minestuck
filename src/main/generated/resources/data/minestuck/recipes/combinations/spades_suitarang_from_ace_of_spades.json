@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:shuriken"
+  },
+  "input2": {
+    "item": "minestuck:ace_of_spades"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:spades_suitarang"
+  }
+}

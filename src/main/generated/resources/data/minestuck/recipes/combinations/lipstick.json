@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:lip_balm"
+  },
+  "input2": {
+    "item": "minecraft:green_dye"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:lipstick"
+  }
+}

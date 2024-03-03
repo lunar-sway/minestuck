@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:pink_wool"
+  },
+  "input2": {
+    "item": "minecraft:scute"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:plush_turtle"
+  }
+}

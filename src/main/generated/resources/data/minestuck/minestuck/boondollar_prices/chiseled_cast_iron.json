@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:chiseled_cast_iron"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 15,
+      "min_inclusive": 8
+    }
+  }
+}

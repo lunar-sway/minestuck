@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  s",
+    " s ",
+    "s  "
+  ],
+  "result": {
+    "item": "minestuck:cane"
+  },
+  "show_notification": true
+}

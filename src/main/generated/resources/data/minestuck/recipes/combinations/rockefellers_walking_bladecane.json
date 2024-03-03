@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:less_proper_walking_stick"
+  },
+  "input2": {
+    "item": "minecraft:obsidian"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:rockefellers_walking_bladecane"
+  }
+}

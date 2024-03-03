@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 280,
+    "minestuck:ruby": 23
+  },
+  "ingredient": {
+    "item": "minestuck:hashmap_modus_card"
+  }
+}

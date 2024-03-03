@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 40
+  },
+  "ingredient": {
+    "item": "minecraft:iron_horse_armor"
+  }
+}

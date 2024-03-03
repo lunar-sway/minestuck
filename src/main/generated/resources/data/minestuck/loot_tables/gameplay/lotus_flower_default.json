@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:computer_parts",
+          "quality": 3,
+          "weight": 10
+        }
+      ],
+      "name": "computer",
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:sburb_code",
+          "quality": 3,
+          "weight": 10
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:set_nbt",
+          "tag": "{hasParadoxInfo:1b}"
+        }
+      ],
+      "name": "code",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minestuck:gameplay/lotus_flower_default"
+}

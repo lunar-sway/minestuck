@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:moss_block"
+  },
+  "input2": {
+    "item": "minecraft:soul_soil"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:sculk"
+  }
+}
