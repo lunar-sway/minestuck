@@ -2236,16 +2236,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addThemeName(MSComputerThemes.ECHIDNA, "Echidna");
 		addThemeName(MSComputerThemes.JOY, "Joy");
 		addThemeName(MSComputerThemes.SBURB_95, "SBURB 95");
-		add(Theme.SCOURGING_HEAT.getName(), "Scourging Heat");
-		add(Theme.LIFDOFF.getName(), "Lifdoff,,");
-		add(Theme.SKAIANET_GREEN.getName(), "Skaianet Green");
-		add(Theme.SKAIANET_WHITE.getName(), "Skaianet White");
-		add(Theme.SKAIANET_BLACK.getName(), "Skaianet Black");
-		add(Theme.ASTRAL_CHARTS.getName(), "Astral Charts");
-		add(Theme.TILLDEATH.getName(), "~ATH");
-		add(Theme.LOWAS.getName(), "LOWAS");
-		add(Theme.SPIROGRAPH.getName(), "Spirograph");
-		add(Theme.MINESTUCK.getName(), "Minestuck");
+		addThemeName(MSComputerThemes.SBURB_10, "SBURB 10");
+		addThemeName(MSComputerThemes.SCOURGING_HEAT, "Scourging Heat");
+		addThemeName(MSComputerThemes.LIFDOFF, "Lifdoff,,");
+		addThemeName(MSComputerThemes.SKAIANET_GREEN, "Skaianet Green");
+		addThemeName(MSComputerThemes.SKAIANET_WHITE, "Skaianet White");
+		addThemeName(MSComputerThemes.SKAIANET_BLACK, "Skaianet Black");
+		addThemeName(MSComputerThemes.ASTRAL_CHARTS, "Astral Charts");
+		addThemeName(MSComputerThemes.TILLDEATH, "~ATH");
+		addThemeName(MSComputerThemes.LOWAS, "LOWAS");
+		addThemeName(MSComputerThemes.SPIROGRAPH, "Spirograph");
+		addThemeName(MSComputerThemes.MINESTUCK, "Minestuck");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
