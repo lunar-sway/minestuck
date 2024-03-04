@@ -16,9 +16,9 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 
-public class SmithingInterpreter implements RecipeInterpreter
+public enum SmithingInterpreter implements RecipeInterpreter
 {
-	public static final SmithingInterpreter INSTANCE = new SmithingInterpreter();
+	INSTANCE;
 	
 	private static final Field templateField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265949_");
 	private static final Field baseField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265888_");
@@ -39,29 +39,28 @@ public class SmithingInterpreter implements RecipeInterpreter
 		{
 			MutableGristSet totalCost = MutableGristSet.newDefault();
 			
-			Ingredient template = (Ingredient)templateField.get(recipe);
+			Ingredient template = (Ingredient) templateField.get(recipe);
 			GristSet templateCost = callback.lookupCostFor(template);
 			if(templateCost == null)
 				return null;
 			totalCost.add(templateCost);
-
-			Ingredient base = (Ingredient)baseField.get(recipe);
+			
+			Ingredient base = (Ingredient) baseField.get(recipe);
 			GristSet baseCost = callback.lookupCostFor(base);
 			if(baseCost == null)
 				return null;
 			totalCost.add(baseCost);
-
-			Ingredient addition = (Ingredient)additionField.get(recipe);
+			
+			Ingredient addition = (Ingredient) additionField.get(recipe);
 			GristSet additionCost = callback.lookupCostFor(addition);
 			if(additionCost == null)
 				return null;
 			totalCost.add(additionCost);
-
-			totalCost.scale(1F/recipe.getResultItem(null).getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
-
+			
+			totalCost.scale(1F / recipe.getResultItem(null).getCount(), false);    //Do not round down because it's better to have something cost a little to much than it possibly costing nothing
+			
 			return totalCost;
-		}
-		catch (IllegalAccessException e)
+		} catch(IllegalAccessException e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -72,7 +71,7 @@ public class SmithingInterpreter implements RecipeInterpreter
 	{
 		return InterpreterSerializers.SMITHING.get();
 	}
-
+	
 	public static class Serializer extends InterpreterSerializer<SmithingInterpreter>
 	{
 		@Override
@@ -80,7 +79,7 @@ public class SmithingInterpreter implements RecipeInterpreter
 		{
 			return INSTANCE;
 		}
-
+		
 		@Override
 		public JsonElement write(SmithingInterpreter interpreter)
 		{

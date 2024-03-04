@@ -14,9 +14,9 @@ import net.minecraft.world.item.crafting.Recipe;
 import java.util.Collections;
 import java.util.List;
 
-public class DefaultInterpreter implements RecipeInterpreter
+public enum DefaultInterpreter implements RecipeInterpreter
 {
-	public static final DefaultInterpreter INSTANCE = new DefaultInterpreter();
+	INSTANCE;
 	
 	//TODO interpreter (perhaps setting) that makes the interpreter not remove container cost for ingredient
 	
@@ -32,7 +32,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 	{
 		if(recipe.isSpecial())
 			return null;
-
+		
 		MutableGristSet totalCost = MutableGristSet.newDefault();
 		for(Ingredient ingredient : recipe.getIngredients())
 		{
@@ -42,7 +42,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 			else totalCost.add(ingredientCost);
 		}
 		
-		totalCost.scale(1F/recipe.getResultItem(null).getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
+		totalCost.scale(1F / recipe.getResultItem(null).getCount(), false);    //Do not round down because it's better to have something cost a little to much than it possibly costing nothing
 		
 		return totalCost;
 	}
