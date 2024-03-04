@@ -18,7 +18,18 @@ public final class MSComputerThemes
 			HEPHAESTUS = new ResourceLocation(Minestuck.MOD_ID, "hephaestus"),
 			ECHIDNA = new ResourceLocation(Minestuck.MOD_ID, "echidna"),
 			JOY = new ResourceLocation(Minestuck.MOD_ID, "joy"),
-			SBURB_95 = new ResourceLocation(Minestuck.MOD_ID, "sburb_95");
+			SBURB_95 = new ResourceLocation(Minestuck.MOD_ID, "sburb_95"),
+			SBURB_10 = new ResourceLocation(Minestuck.MOD_ID, "sburb_10"),
+			SCOURGING_HEAT = new ResourceLocation(Minestuck.MOD_ID, "scourging_heat"),
+			LIFDOFF = new ResourceLocation(Minestuck.MOD_ID, "lifdoff"),
+			SKAIANET_GREEN = new ResourceLocation(Minestuck.MOD_ID, "skaianet_green"),
+			SKAIANET_WHITE = new ResourceLocation(Minestuck.MOD_ID, "skaianet_white"),
+			SKAIANET_BLACK = new ResourceLocation(Minestuck.MOD_ID, "skaianet_black"),
+			ASTRAL_CHARTS = new ResourceLocation(Minestuck.MOD_ID, "astral_charts"),
+			TILLDEATH = new ResourceLocation(Minestuck.MOD_ID, "tilldeath"),
+			LOWAS = new ResourceLocation(Minestuck.MOD_ID, "lowas"),
+			SPIROGRAPH = new ResourceLocation(Minestuck.MOD_ID, "spirograph"),
+			MINESTUCK = new ResourceLocation(Minestuck.MOD_ID, "minestuck");
 	
 	/**
 	 * Used for backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier

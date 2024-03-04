@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 - Added Carved Bush.
 - New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
+- New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
 
 ### Changed
 
@@ -26,6 +27,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer Themes can now be added and rendered via resource pack
 - Default computer Theme for crockertop is now Crocker
 - Computer Theme is now chosen from a list of available Themes in separate GUI
+- Changes to computer Theme texture Crocker
+- Computer programs now always use Theme specific texture for arrow buttons
 
 ### Fixed
 
@@ -34,7 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, pavizi
 
 ## [Unreleased]
 

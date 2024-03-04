@@ -2243,6 +2243,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addThemeName(MSComputerThemes.ECHIDNA, "Echidna");
 		addThemeName(MSComputerThemes.JOY, "Joy");
 		addThemeName(MSComputerThemes.SBURB_95, "SBURB 95");
+		addThemeName(MSComputerThemes.SBURB_10, "SBURB 10");
+		addThemeName(MSComputerThemes.SCOURGING_HEAT, "Scourging Heat");
+		addThemeName(MSComputerThemes.LIFDOFF, "Lifdoff,,");
+		addThemeName(MSComputerThemes.SKAIANET_GREEN, "Skaianet Green");
+		addThemeName(MSComputerThemes.SKAIANET_WHITE, "Skaianet White");
+		addThemeName(MSComputerThemes.SKAIANET_BLACK, "Skaianet Black");
+		addThemeName(MSComputerThemes.ASTRAL_CHARTS, "Astral Charts");
+		addThemeName(MSComputerThemes.TILLDEATH, "~ATH");
+		addThemeName(MSComputerThemes.LOWAS, "LOWAS");
+		addThemeName(MSComputerThemes.SPIROGRAPH, "Spirograph");
+		addThemeName(MSComputerThemes.MINESTUCK, "Minestuck");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
