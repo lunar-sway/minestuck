@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Default computer Theme for crockertop is now Crocker
 - Computer Theme is now chosen from a list of available Themes in separate GUI
 - Changes to computer Theme texture Crocker
+- Computer programs now always use Theme specific texture for arrow buttons
 
 ### Fixed
 
@@ -35,7 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, pavizi
 
 ## [Unreleased]
 
