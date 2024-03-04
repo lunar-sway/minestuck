@@ -31,7 +31,7 @@ public class LargeCogFeature extends Feature<NoneFeatureConfiguration>
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
 		
 		int y = Math.max(0, placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level) - rand.nextInt(4));
-		placement.placeWithStructureBlockRegistry(y, context);
+		placement.placeWithStructureBlockRegistryAt(y, context);
 		
 		return true;
 	}
