@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -74,7 +75,11 @@ public class ConsortMerchantInventory implements Container
 				playerData.addConsortReputation(5, consort.getHomeDimension());
 				ItemStack items = stack.split(amountPurchased);
 				if(stack.isEmpty())
+				{
 					prices[index] = 0;
+					if (Arrays.stream(prices).sum() == 0)
+						MSCriteriaTriggers.BUY_OUT_SHOP.trigger(player);
+				}
 				
 				if (player.addItem(items))
 					player.inventoryMenu.broadcastChanges();

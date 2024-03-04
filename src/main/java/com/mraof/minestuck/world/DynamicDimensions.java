@@ -32,7 +32,7 @@ public class DynamicDimensions
 			LandTypePair.Named named = landTypes.createNamedRandomly(random.fork());
 			
 			RegistryAccess registryAccess = server.registryAccess();
-			LandChunkGenerator chunkGenerator = LandChunkGenerator.create(registryAccess.lookupOrThrow(Registries.NOISE), registryAccess.lookupOrThrow(Registries.DENSITY_FUNCTION),
+			LandChunkGenerator chunkGenerator = LandChunkGenerator.create(registryAccess.lookupOrThrow(Registries.NOISE), registryAccess.lookupOrThrow(Registries.DENSITY_FUNCTION), registryAccess.lookupOrThrow(Registries.STRUCTURE),
 					named, registryAccess.lookupOrThrow(Registries.BIOME), registryAccess.lookupOrThrow(Registries.PLACED_FEATURE), registryAccess.lookupOrThrow(Registries.CONFIGURED_CARVER));
 			chunkGenerator.tryInit(LandTypeExtensions.get());
 			Holder<DimensionType> dimensionType = registryAccess.lookupOrThrow(Registries.DIMENSION_TYPE).getOrThrow(LAND_TYPE);

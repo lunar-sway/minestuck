@@ -6,19 +6,26 @@ import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -27,6 +34,11 @@ import java.util.function.Supplier;
 public abstract class TerrainLandType implements ILandType
 {
 	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(LandTypes.TERRAIN_REGISTRY);
+	
+	protected static final RandomSpreadStructurePlacement SMALL_RUIN_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 59273643);
+	protected static final RandomSpreadStructurePlacement IMP_DUNGEON_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 34527185);
+	protected static final RandomSpreadStructurePlacement CONSORT_VILLAGE_PLACEMENT = new RandomSpreadStructurePlacement(24, 5, RandomSpreadType.LINEAR, 10387312);
+	
 	private final String[] names;
 	
 	private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
@@ -103,6 +115,14 @@ public abstract class TerrainLandType implements ILandType
 	
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{}
+	
+	@Override
+	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
+	{
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), SMALL_RUIN_PLACEMENT));
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.IMP_DUNGEON), IMP_DUNGEON_PLACEMENT));
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.CONSORT_VILLAGE), CONSORT_VILLAGE_PLACEMENT));
+	}
 	
 	public final boolean is(TagKey<TerrainLandType> tag)
 	{

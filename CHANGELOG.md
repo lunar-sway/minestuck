@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 - Added Carved Bush.
+- New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
 - New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
 
 ### Changed

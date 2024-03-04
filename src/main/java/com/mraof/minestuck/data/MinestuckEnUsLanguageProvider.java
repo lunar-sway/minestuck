@@ -1951,7 +1951,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
 		addAdvancement(MSAdvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
-		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type");
+		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try every modus type");
 		addAdvancement(MSAdvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
 		addAdvancement(MSAdvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
 		addAdvancement(MSAdvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
@@ -1962,6 +1962,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
 		addAdvancement(MSAdvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
 		addAdvancement(MSAdvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
+		addAdvancement(MSAdvancementProvider.FIRST_STEP, "The First Step", "Begin climbing your Echeladder");
+		addAdvancement(MSAdvancementProvider.DOUBLE_DIGITS, "Double Digits", "Reach the tenth rung of your Echeladder");
+		addAdvancement(MSAdvancementProvider.HALFWAY_POINT, "Halfway Point", "Reach the twenty-fifth rung of your Echeladder");
+		addAdvancement(MSAdvancementProvider.BIG_ONE_MIL, "The Big 1 Mil", "Reach a Grist Cache capable of storing one million units of grist");
+		addAdvancement(MSAdvancementProvider.INTELLIBEAM, "Captcha Captured", "Use an Intellibeam Laserstation to decode a particularly challenging captcha");
+		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
+		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
