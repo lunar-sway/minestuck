@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -139,5 +140,19 @@ public class MSFluidType extends FluidType
 	public static final class LastFluidTickData
 	{
 		private final Map<MSFluidType, Long> lastTickMap = new HashMap<>();
+	}
+	
+	/**
+	 * Called to apply fall distance resetting for fluids added by us.
+	 */
+	public static void handleExtraFallReset(LivingEntity entity)
+	{
+		if(entity.fallDistance <= 0 || !entity.isInFluidType())
+			return;
+		
+		entity.fallDistance *= MSFluids.TYPE_REGISTER.getEntries().stream().map(RegistryObject::get)
+				.filter(entity::isInFluidType)
+				.map(entity::getFluidFallDistanceModifier)
+				.min(Float::compare).orElse(1F);
 	}
 }
