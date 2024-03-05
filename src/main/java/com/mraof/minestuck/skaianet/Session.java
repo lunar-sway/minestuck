@@ -122,7 +122,7 @@ public final class Session
 			for(int i = 0; i < connections.size(); i++)
 			{
 				CompoundTag connectionTag = connections.getCompound(i);
-				skaianetData.connections.readOldConnectionData(connectionTag);
+				skaianetData.connections.readOldConnectionData(connectionTag, s::addPlayer);
 				IdentifierHandler.load(connectionTag, "client").result()
 						.ifPresent(client -> skaianetData.getOrCreateData(client).readOldData(connectionTag));
 			}

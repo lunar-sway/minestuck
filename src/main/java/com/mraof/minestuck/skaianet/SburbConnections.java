@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -90,12 +91,13 @@ public final class SburbConnections
 		tag.put("primary_connections", primaryConnectionList);
 	}
 	
-	void readOldConnectionData(CompoundTag connectionTag)
+	void readOldConnectionData(CompoundTag connectionTag, Consumer<PlayerIdentifier> playerConsumer)
 	{
 		boolean isMain = connectionTag.getBoolean("IsMain");
 		boolean active = !isMain || connectionTag.getBoolean("IsActive");
 		
 		Optional<PlayerIdentifier> client = IdentifierHandler.load(connectionTag, "client").resultOrPartial(LOGGER::error);
+		client.ifPresent(playerConsumer);
 		if(client.isEmpty())
 		{
 			LOGGER.error("Unable to load client id for old connection from data: {}", connectionTag);
@@ -104,6 +106,7 @@ public final class SburbConnections
 		
 		Optional<PlayerIdentifier> server = IdentifierHandler.loadNullable(connectionTag, "server")
 				.resultOrPartial(LOGGER::error).flatMap(Function.identity());
+		server.ifPresent(playerConsumer);
 		
 		if(active && server.isPresent())
 		{
