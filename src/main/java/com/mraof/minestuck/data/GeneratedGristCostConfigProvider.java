@@ -1,9 +1,6 @@
 package com.mraof.minestuck.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.*;
 import com.mraof.minestuck.api.alchemy.GristTypes;
@@ -17,7 +14,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +23,9 @@ import java.util.concurrent.CompletableFuture;
 @MethodsReturnNonnullByDefault
 public class GeneratedGristCostConfigProvider implements DataProvider
 {
-	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	private final PackOutput output;
 	private final String modid;
-	private final List<JsonElement> entries = new ArrayList<>();
+	private final List<RecipeGeneratedCostHandler.SourceEntry> entries = new ArrayList<>();
 	
 	public GeneratedGristCostConfigProvider(PackOutput output, String modid)
 	{
@@ -57,14 +52,10 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 		Path jsonPath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK)
 				.resolve(modid).resolve(RecipeGeneratedCostHandler.PATH);
 		
-		JsonElement json = serialize();
+		JsonElement json = RecipeGeneratedCostHandler.SourceEntry.LIST_CODEC.encodeStart(JsonOps.INSTANCE, this.entries)
+				.getOrThrow(false, LOGGER::error);
+		
 		return DataProvider.saveStable(cache, json, jsonPath);
-	}
-	
-	private JsonElement serialize()
-	{
-		Type type = new TypeToken<List<JsonElement>>(){}.getType();
-		return GSON.toJsonTree(entries, type);
 	}
 	
 	protected void recipe(ResourceLocation location)
@@ -99,10 +90,7 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	
 	private void addEntry(RecipeSource source, RecipeInterpreter interpreter)
 	{
-		var entry = new RecipeGeneratedCostHandler.SourceEntry(source, interpreter);
-		
-		entries.add(RecipeGeneratedCostHandler.SourceEntry.CODEC.encodeStart(JsonOps.INSTANCE, entry)
-				.getOrThrow(false, LOGGER::error));
+		entries.add(new RecipeGeneratedCostHandler.SourceEntry(source, interpreter));
 	}
 	
 	@Override

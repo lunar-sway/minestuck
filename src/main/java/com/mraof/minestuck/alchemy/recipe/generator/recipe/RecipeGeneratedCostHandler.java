@@ -1,9 +1,8 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -35,9 +34,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -52,8 +49,6 @@ import java.util.function.BiConsumer;
 public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<List<RecipeGeneratedCostHandler.SourceEntry>> implements GeneratedCostProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(SourceEntry.class, (JsonDeserializer<SourceEntry>) RecipeGeneratedCostHandler::deserializeSourceEntry).create();
 	
 	public static final String PATH = "minestuck/grist_cost_generation_recipes.json";
 	
@@ -132,48 +127,23 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(String namespace : resourceManagerIn.getNamespaces())
 		{
 			resourceManagerIn.getResource(new ResourceLocation(namespace, PATH)).ifPresent(resource -> {
-				try
+				try(
+						Reader reader = resource.openAsReader()
+				)
 				{
-					try(
-							Reader reader = resource.openAsReader()
-					)
-					{
-						sources.addAll(readEntries(reader));
-						
-					} catch(RuntimeException runtimeexception)
-					{
-						LOGGER.warn("Invalid grist_cost_generation.json in data pack: '{}'", resource.sourcePackId(), runtimeexception);
-					}
-				} catch(IOException ignored)
+					JsonElement json = JsonParser.parseReader(reader);
+					SourceEntry.LIST_CODEC.parse(JsonOps.INSTANCE, json)
+							.resultOrPartial(LOGGER::error)
+							.ifPresent(sources::addAll);
+					
+				} catch(Exception runtimeexception)
 				{
+					LOGGER.warn("Unable to load grist_cost_generation.json in data pack: '{}'", resource.sourcePackId(), runtimeexception);
 				}
 			});
 		}
 		
 		return sources;
-	}
-	
-	private static List<SourceEntry> readEntries(Reader reader)
-	{
-		TypeToken<List<SourceEntry>> type = new TypeToken<>()
-		{
-		};
-		try
-		{
-			JsonReader jsonreader = new JsonReader(reader);
-			jsonreader.setLenient(false);
-			
-			return GSON.getAdapter(type).read(jsonreader);
-		} catch(IOException e)
-		{
-			throw new JsonParseException(e);
-		}
-	}
-	
-	private static SourceEntry deserializeSourceEntry(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-	{
-		return SourceEntry.CODEC.parse(JsonOps.INSTANCE, json)
-				.getOrThrow(true, LOGGER::error);
 	}
 	
 	@Override
@@ -284,5 +254,6 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 				RecipeSource.DISPATCH_CODEC.fieldOf("source").forGetter(SourceEntry::source),
 				RecipeInterpreter.DISPATCH_CODEC.fieldOf("interpreter").forGetter(SourceEntry::interpreter)
 		).apply(instance, SourceEntry::new));
+		public static final Codec<List<SourceEntry>> LIST_CODEC = CODEC.listOf();
 	}
 }
