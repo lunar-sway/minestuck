@@ -3,7 +3,6 @@ package com.mraof.minestuck.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.*;
@@ -31,7 +30,7 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	private final PackOutput output;
 	private final String modid;
-	private final List<JsonObject> entries = new ArrayList<>();
+	private final List<JsonElement> entries = new ArrayList<>();
 	
 	public GeneratedGristCostConfigProvider(PackOutput output, String modid)
 	{
@@ -64,7 +63,7 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	
 	private JsonElement serialize()
 	{
-		Type type = new TypeToken<List<JsonObject>>(){}.getType();
+		Type type = new TypeToken<List<JsonElement>>(){}.getType();
 		return GSON.toJsonTree(entries, type);
 	}
 	
@@ -100,13 +99,10 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	
 	private void addEntry(RecipeSource source, RecipeInterpreter interpreter)
 	{
-		JsonObject entry = new JsonObject();
+		var entry = new RecipeGeneratedCostHandler.SourceEntry(source, interpreter);
 		
-		entry.add("source", RecipeSource.DISPATCH_CODEC.encodeStart(JsonOps.INSTANCE, source).getOrThrow(false, LOGGER::error));
-		
-		entry.add("interpreter", RecipeInterpreter.DISPATCH_CODEC.encodeStart(JsonOps.INSTANCE, interpreter).getOrThrow(false, LOGGER::error));
-		
-		entries.add(entry);
+		entries.add(RecipeGeneratedCostHandler.SourceEntry.CODEC.encodeStart(JsonOps.INSTANCE, entry)
+				.getOrThrow(false, LOGGER::error));
 	}
 	
 	@Override

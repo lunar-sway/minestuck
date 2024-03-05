@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
@@ -18,7 +20,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -171,15 +172,8 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	
 	private static SourceEntry deserializeSourceEntry(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 	{
-		JsonObject obj = GsonHelper.convertToJsonObject(json, "source entry");
-		
-		RecipeSource source = RecipeSource.DISPATCH_CODEC.parse(JsonOps.INSTANCE, obj.get("source"))
+		return SourceEntry.CODEC.parse(JsonOps.INSTANCE, json)
 				.getOrThrow(true, LOGGER::error);
-		
-		RecipeInterpreter interpreter = RecipeInterpreter.DISPATCH_CODEC.parse(JsonOps.INSTANCE, obj.get("interpreter"))
-				.getOrThrow(true, LOGGER::error);
-		
-		return new SourceEntry(source, interpreter);
 	}
 	
 	@Override
@@ -284,15 +278,11 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		return itemLookupMap;
 	}
 	
-	public static class SourceEntry
+	public record SourceEntry(RecipeSource source, RecipeInterpreter interpreter)
 	{
-		private final RecipeSource source;
-		private final RecipeInterpreter interpreter;
-		
-		private SourceEntry(RecipeSource source, RecipeInterpreter interpreter)
-		{
-			this.source = source;
-			this.interpreter = interpreter;
-		}
+		public static final Codec<SourceEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				RecipeSource.DISPATCH_CODEC.fieldOf("source").forGetter(SourceEntry::source),
+				RecipeInterpreter.DISPATCH_CODEC.fieldOf("interpreter").forGetter(SourceEntry::interpreter)
+		).apply(instance, SourceEntry::new));
 	}
 }
