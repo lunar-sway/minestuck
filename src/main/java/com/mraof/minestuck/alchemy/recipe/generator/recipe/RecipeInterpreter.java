@@ -1,5 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
@@ -17,5 +18,5 @@ public interface RecipeInterpreter
 	default void reportPreliminaryLookups(Recipe<?> recipe, LookupTracker tracker)
 	{}
 	
-	InterpreterSerializer<?> getSerializer();
+	Codec<? extends RecipeInterpreter> codec();
 }

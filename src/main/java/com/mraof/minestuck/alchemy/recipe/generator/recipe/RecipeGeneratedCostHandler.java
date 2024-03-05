@@ -4,15 +4,16 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
-import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
-import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +39,7 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -176,13 +178,17 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		Source source = deserializeSource(obj);
 		
 		ResourceLocation name = new ResourceLocation(GsonHelper.getAsString(obj, "interpreter_type"));
-		InterpreterSerializer<?> serializer = InterpreterSerializers.REGISTRY.get().getValue(name);
+		Codec<? extends RecipeInterpreter> codec = InterpreterTypes.REGISTRY.get().getValue(name);
 		
-		if(serializer == null)
+		if(codec == null)
 		{
-			LOGGER.error("No interpreter serializer by name {}. Using default interpreter instead.", name);
+			LOGGER.error("No interpreter type by name {}. Using default interpreter instead.", name);
 			return new SourceEntry(source, DefaultInterpreter.INSTANCE);
-		} else return new SourceEntry(source, serializer.read(obj.get("interpreter")));
+		}
+		
+		RecipeInterpreter interpreter = codec.parse(JsonOps.INSTANCE, obj.get("interpreter")).resultOrPartial(LOGGER::error)
+				.<RecipeInterpreter>map(Function.identity()).orElse(DefaultInterpreter.INSTANCE);
+		return new SourceEntry(source, interpreter);
 	}
 	
 	private static Source deserializeSource(JsonObject json)

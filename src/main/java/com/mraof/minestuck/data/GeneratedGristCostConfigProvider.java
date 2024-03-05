@@ -5,7 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.*;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
@@ -113,9 +114,9 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	@SuppressWarnings("unchecked")
 	private <T extends RecipeInterpreter> void addEntry(JsonObject entry, T interpreter)
 	{
-		ResourceLocation type = Objects.requireNonNull(InterpreterSerializers.REGISTRY.get().getKey(interpreter.getSerializer()));
+		ResourceLocation type = Objects.requireNonNull(InterpreterTypes.REGISTRY.get().getKey(interpreter.codec()));
 		entry.addProperty("interpreter_type", type.toString());
-		entry.add("interpreter", ((InterpreterSerializer<T>) interpreter.getSerializer()).write(interpreter));
+		entry.add("interpreter", ((Codec<T>) interpreter.codec()).encodeStart(JsonOps.INSTANCE, interpreter).getOrThrow(false, LOGGER::error));
 		
 		entries.add(entry);
 	}

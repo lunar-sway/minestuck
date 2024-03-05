@@ -1,11 +1,11 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
+import com.mraof.minestuck.util.EmptyEncodedUnitCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -14,11 +14,12 @@ import net.minecraft.world.item.crafting.Recipe;
 import java.util.Collections;
 import java.util.List;
 
+//TODO interpreter (perhaps setting) that makes the interpreter not remove container cost for ingredient
 public enum DefaultInterpreter implements RecipeInterpreter
 {
 	INSTANCE;
 	
-	//TODO interpreter (perhaps setting) that makes the interpreter not remove container cost for ingredient
+	public static final Codec<DefaultInterpreter> CODEC = new EmptyEncodedUnitCodec<>(INSTANCE);
 	
 	@Override
 	public List<Item> getOutputItems(Recipe<?> recipe)
@@ -54,23 +55,8 @@ public enum DefaultInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public InterpreterSerializer<?> getSerializer()
+	public Codec<? extends RecipeInterpreter> codec()
 	{
-		return InterpreterSerializers.DEFAULT.get();
-	}
-	
-	public static class Serializer extends InterpreterSerializer<DefaultInterpreter>
-	{
-		@Override
-		public DefaultInterpreter read(JsonElement json)
-		{
-			return INSTANCE;
-		}
-		
-		@Override
-		public JsonElement write(DefaultInterpreter interpreter)
-		{
-			return JsonNull.INSTANCE;
-		}
+		return CODEC;
 	}
 }

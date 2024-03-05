@@ -1,10 +1,10 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
+import com.mraof.minestuck.util.EmptyEncodedUnitCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -19,6 +19,8 @@ import java.util.List;
 public enum SmithingInterpreter implements RecipeInterpreter
 {
 	INSTANCE;
+	
+	public static final Codec<SmithingInterpreter> CODEC = new EmptyEncodedUnitCodec<>(INSTANCE);
 	
 	private static final Field templateField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265949_");
 	private static final Field baseField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265888_");
@@ -67,23 +69,8 @@ public enum SmithingInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public InterpreterSerializer<?> getSerializer()
+	public Codec<? extends RecipeInterpreter> codec()
 	{
-		return InterpreterSerializers.SMITHING.get();
-	}
-	
-	public static class Serializer extends InterpreterSerializer<SmithingInterpreter>
-	{
-		@Override
-		public SmithingInterpreter read(JsonElement json)
-		{
-			return INSTANCE;
-		}
-		
-		@Override
-		public JsonElement write(SmithingInterpreter interpreter)
-		{
-			return JsonNull.INSTANCE;
-		}
+		return CODEC;
 	}
 }

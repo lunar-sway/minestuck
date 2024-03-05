@@ -1,7 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
@@ -9,14 +8,13 @@ import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public record CookingCostInterpreter(ImmutableGristSet fuelCost) implements RecipeInterpreter
 {
-	private static final Logger LOGGER = LogManager.getLogger();
+	public static final Codec<CookingCostInterpreter> CODEC = ImmutableGristSet.MAP_CODEC.xmap(CookingCostInterpreter::new, CookingCostInterpreter::fuelCost);
+	
 	private static final int STANDARD_COOKING_TIME = 200;
 	
 	@Override
@@ -46,24 +44,8 @@ public record CookingCostInterpreter(ImmutableGristSet fuelCost) implements Reci
 	}
 	
 	@Override
-	public InterpreterSerializer<?> getSerializer()
+	public Codec<? extends RecipeInterpreter> codec()
 	{
-		return InterpreterSerializers.COOKING.get();
-	}
-	
-	public static class Serializer extends InterpreterSerializer<CookingCostInterpreter>
-	{
-		@Override
-		public CookingCostInterpreter read(JsonElement json)
-		{
-			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
-			return new CookingCostInterpreter(cost);
-		}
-		
-		@Override
-		public JsonElement write(CookingCostInterpreter interpreter)
-		{
-			return ImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, interpreter.fuelCost).getOrThrow(false, LOGGER::error);
-		}
+		return CODEC;
 	}
 }
