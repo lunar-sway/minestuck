@@ -175,9 +175,10 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	{
 		JsonObject obj = GsonHelper.convertToJsonObject(json, "source entry");
 		
-		Source source = deserializeSource(obj);
+		Source source = deserializeSource(GsonHelper.getAsJsonObject(obj, "source"));
 		
-		ResourceLocation name = new ResourceLocation(GsonHelper.getAsString(obj, "interpreter_type"));
+		JsonObject interpreterObj = GsonHelper.getAsJsonObject(obj, "interpreter");
+		ResourceLocation name = new ResourceLocation(GsonHelper.getAsString(interpreterObj, "type"));
 		Codec<? extends RecipeInterpreter> codec = InterpreterTypes.REGISTRY.get().getValue(name);
 		
 		if(codec == null)
@@ -186,24 +187,24 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 			return new SourceEntry(source, DefaultInterpreter.INSTANCE);
 		}
 		
-		RecipeInterpreter interpreter = codec.parse(JsonOps.INSTANCE, obj.get("interpreter")).resultOrPartial(LOGGER::error)
+		RecipeInterpreter interpreter = codec.parse(JsonOps.INSTANCE, interpreterObj.get("value")).resultOrPartial(LOGGER::error)
 				.<RecipeInterpreter>map(Function.identity()).orElse(DefaultInterpreter.INSTANCE);
 		return new SourceEntry(source, interpreter);
 	}
 	
 	private static Source deserializeSource(JsonObject json)
 	{
-		String type = GsonHelper.getAsString(json, "source_type");
+		String type = GsonHelper.getAsString(json, "type");
 		switch(type)
 		{
 			case "recipe" ->
 			{
-				ResourceLocation recipe = new ResourceLocation(GsonHelper.getAsString(json, "source"));
+				ResourceLocation recipe = new ResourceLocation(GsonHelper.getAsString(json, "recipe"));
 				return new RecipeSource(recipe);
 			}
 			case "recipe_serializer" ->
 			{
-				ResourceLocation serializerName = new ResourceLocation(GsonHelper.getAsString(json, "source"));
+				ResourceLocation serializerName = new ResourceLocation(GsonHelper.getAsString(json, "serializer"));
 				RecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
 				if(recipeSerializer == null)
 					throw new JsonParseException("No recipe type by name " + serializerName);
@@ -211,7 +212,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 			}
 			case "recipe_type" ->
 			{
-				ResourceLocation typeName = new ResourceLocation(GsonHelper.getAsString(json, "source"));
+				ResourceLocation typeName = new ResourceLocation(GsonHelper.getAsString(json, "recipe_type"));
 				RecipeType<?> recipeType = ForgeRegistries.RECIPE_TYPES.getValue(typeName);
 				if(recipeType == null)
 					throw new JsonParseException("No recipe type by name " + typeName);

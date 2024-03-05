@@ -89,34 +89,39 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	protected void recipe(ResourceLocation location, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
-		entry.addProperty("source_type", "recipe");
-		entry.addProperty("source", location.toString());
+		entry.addProperty("type", "recipe");
+		entry.addProperty("recipe", location.toString());
 		addEntry(entry, interpreter);
 	}
 	
 	protected void serializer(RecipeSerializer<?> serializer, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
-		entry.addProperty("source_type", "recipe_serializer");
+		entry.addProperty("type", "recipe_serializer");
 		ResourceLocation serializerId = Objects.requireNonNull(ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer));
-		entry.addProperty("source", serializerId.toString());
+		entry.addProperty("serializer", serializerId.toString());
 		addEntry(entry, interpreter);
 	}
 	
 	protected void type(RecipeType<?> type, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
-		entry.addProperty("source_type", "recipe_type");
-		entry.addProperty("source", type.toString());
+		entry.addProperty("type", "recipe_type");
+		entry.addProperty("recipe_type", type.toString());
 		addEntry(entry, interpreter);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T extends RecipeInterpreter> void addEntry(JsonObject entry, T interpreter)
+	private <T extends RecipeInterpreter> void addEntry(JsonObject source, T interpreter)
 	{
+		JsonObject entry = new JsonObject();
+		entry.add("source", source);
+		
 		ResourceLocation type = Objects.requireNonNull(InterpreterTypes.REGISTRY.get().getKey(interpreter.codec()));
-		entry.addProperty("interpreter_type", type.toString());
-		entry.add("interpreter", ((Codec<T>) interpreter.codec()).encodeStart(JsonOps.INSTANCE, interpreter).getOrThrow(false, LOGGER::error));
+		JsonObject interpreterObj = new JsonObject();
+		interpreterObj.addProperty("type", type.toString());
+		interpreterObj.add("value", ((Codec<T>) interpreter.codec()).encodeStart(JsonOps.INSTANCE, interpreter).getOrThrow(false, LOGGER::error));
+		entry.add("interpreter", interpreterObj);
 		
 		entries.add(entry);
 	}
