@@ -85,36 +85,24 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	
 	protected void recipe(ResourceLocation location, RecipeInterpreter interpreter)
 	{
-		JsonObject entry = new JsonObject();
-		entry.addProperty("type", "recipe");
-		JsonElement encodedSource = RecipeSource.SingleRecipe.CODEC.encode(new RecipeSource.SingleRecipe(location), JsonOps.INSTANCE, entry)
-				.getOrThrow(false, LOGGER::error);
-		addEntry(encodedSource, interpreter);
+		addEntry(new RecipeSource.SingleRecipe(location), interpreter);
 	}
 	
 	protected void serializer(RecipeSerializer<?> serializer, RecipeInterpreter interpreter)
 	{
-		JsonObject entry = new JsonObject();
-		entry.addProperty("type", "recipe_serializer");
-		JsonElement encodedSource = RecipeSource.BySerializer.CODEC.encode(new RecipeSource.BySerializer(serializer), JsonOps.INSTANCE, entry)
-				.getOrThrow(false, LOGGER::error);
-		addEntry(encodedSource, interpreter);
+		addEntry(new RecipeSource.BySerializer(serializer), interpreter);
 	}
 	
 	protected void type(RecipeType<?> type, RecipeInterpreter interpreter)
 	{
-		JsonObject entry = new JsonObject();
-		entry.addProperty("type", "recipe_type");
-		JsonElement encodedSource = RecipeSource.ByType.CODEC.encode(new RecipeSource.ByType(type), JsonOps.INSTANCE, entry)
-				.getOrThrow(false, LOGGER::error);
-		addEntry(encodedSource, interpreter);
+		addEntry(new RecipeSource.ByType(type), interpreter);
 	}
 	
-	private void addEntry(JsonElement source, RecipeInterpreter interpreter)
+	private void addEntry(RecipeSource source, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
 		
-		entry.add("source", source);
+		entry.add("source", RecipeSource.DISPATCH_CODEC.encodeStart(JsonOps.INSTANCE, source).getOrThrow(false, LOGGER::error));
 		
 		entry.add("interpreter", RecipeInterpreter.DISPATCH_CODEC.encodeStart(JsonOps.INSTANCE, interpreter).getOrThrow(false, LOGGER::error));
 		

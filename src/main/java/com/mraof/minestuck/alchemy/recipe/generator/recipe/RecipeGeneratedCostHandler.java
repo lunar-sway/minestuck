@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -174,25 +173,13 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	{
 		JsonObject obj = GsonHelper.convertToJsonObject(json, "source entry");
 		
-		RecipeSource source = deserializeSource(GsonHelper.getAsJsonObject(obj, "source"));
+		RecipeSource source = RecipeSource.DISPATCH_CODEC.parse(JsonOps.INSTANCE, obj.get("source"))
+				.getOrThrow(true, LOGGER::error);
 		
 		RecipeInterpreter interpreter = RecipeInterpreter.DISPATCH_CODEC.parse(JsonOps.INSTANCE, obj.get("interpreter"))
 				.resultOrPartial(LOGGER::error).orElse(DefaultInterpreter.INSTANCE);
 		
 		return new SourceEntry(source, interpreter);
-	}
-	
-	private static RecipeSource deserializeSource(JsonObject json)
-	{
-		String type = GsonHelper.getAsString(json, "type");
-		Codec<? extends RecipeSource> codec = switch(type)
-		{
-			case "recipe" -> RecipeSource.SingleRecipe.CODEC;
-			case "recipe_serializer" -> RecipeSource.BySerializer.CODEC;
-			case "recipe_type" -> RecipeSource.ByType.CODEC;
-			default -> throw new JsonParseException("Invalid source type " + type);
-		};
-		return codec.parse(JsonOps.INSTANCE, json).getOrThrow(true, LOGGER::error);
 	}
 	
 	@Override
