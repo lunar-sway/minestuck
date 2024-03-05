@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
-import com.mraof.minestuck.util.EmptyEncodedUnitCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -20,7 +19,7 @@ public enum SmithingInterpreter implements RecipeInterpreter
 {
 	INSTANCE;
 	
-	public static final Codec<SmithingInterpreter> CODEC = new EmptyEncodedUnitCodec<>(INSTANCE);
+	public static final Codec<SmithingInterpreter> CODEC = Codec.unit(INSTANCE);
 	
 	private static final Field templateField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265949_");
 	private static final Field baseField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265888_");

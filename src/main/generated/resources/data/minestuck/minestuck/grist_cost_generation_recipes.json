@@ -47,7 +47,7 @@
   {
     "interpreter": {
       "type": "minestuck:cooking",
-      "value": {
+      "added_cost": {
         "minestuck:tar": 1
       }
     },
@@ -59,7 +59,7 @@
   {
     "interpreter": {
       "type": "minestuck:cooking",
-      "value": {
+      "added_cost": {
         "minestuck:uranium": 1
       }
     },

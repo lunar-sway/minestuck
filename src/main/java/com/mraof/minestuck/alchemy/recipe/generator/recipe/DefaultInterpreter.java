@@ -5,7 +5,6 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
-import com.mraof.minestuck.util.EmptyEncodedUnitCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -19,7 +18,7 @@ public enum DefaultInterpreter implements RecipeInterpreter
 {
 	INSTANCE;
 	
-	public static final Codec<DefaultInterpreter> CODEC = new EmptyEncodedUnitCodec<>(INSTANCE);
+	public static final Codec<DefaultInterpreter> CODEC = Codec.unit(INSTANCE);
 	
 	@Override
 	public List<Item> getOutputItems(Recipe<?> recipe)

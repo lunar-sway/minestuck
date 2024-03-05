@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -39,7 +38,6 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -177,18 +175,9 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		
 		Source source = deserializeSource(GsonHelper.getAsJsonObject(obj, "source"));
 		
-		JsonObject interpreterObj = GsonHelper.getAsJsonObject(obj, "interpreter");
-		ResourceLocation name = new ResourceLocation(GsonHelper.getAsString(interpreterObj, "type"));
-		Codec<? extends RecipeInterpreter> codec = InterpreterTypes.REGISTRY.get().getValue(name);
+		RecipeInterpreter interpreter = RecipeInterpreter.DISPATCH_CODEC.parse(JsonOps.INSTANCE, obj.get("interpreter"))
+				.resultOrPartial(LOGGER::error).orElse(DefaultInterpreter.INSTANCE);
 		
-		if(codec == null)
-		{
-			LOGGER.error("No interpreter type by name {}. Using default interpreter instead.", name);
-			return new SourceEntry(source, DefaultInterpreter.INSTANCE);
-		}
-		
-		RecipeInterpreter interpreter = codec.parse(JsonOps.INSTANCE, interpreterObj.get("value")).resultOrPartial(LOGGER::error)
-				.<RecipeInterpreter>map(Function.identity()).orElse(DefaultInterpreter.INSTANCE);
 		return new SourceEntry(source, interpreter);
 	}
 	
