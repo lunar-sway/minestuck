@@ -38,7 +38,6 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 /**
  * A portion of the grist cost generation process responsible for generating grist costs from recipes.
@@ -173,7 +172,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	{
 		JsonObject obj = GsonHelper.convertToJsonObject(json, "source entry");
 		
-		Source source = deserializeSource(GsonHelper.getAsJsonObject(obj, "source"));
+		RecipeSource source = deserializeSource(GsonHelper.getAsJsonObject(obj, "source"));
 		
 		RecipeInterpreter interpreter = RecipeInterpreter.DISPATCH_CODEC.parse(JsonOps.INSTANCE, obj.get("interpreter"))
 				.resultOrPartial(LOGGER::error).orElse(DefaultInterpreter.INSTANCE);
@@ -181,7 +180,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		return new SourceEntry(source, interpreter);
 	}
 	
-	private static Source deserializeSource(JsonObject json)
+	private static RecipeSource deserializeSource(JsonObject json)
 	{
 		String type = GsonHelper.getAsString(json, "type");
 		switch(type)
@@ -189,7 +188,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 			case "recipe" ->
 			{
 				ResourceLocation recipe = new ResourceLocation(GsonHelper.getAsString(json, "recipe"));
-				return new RecipeSource(recipe);
+				return new RecipeSource.SingleRecipe(recipe);
 			}
 			case "recipe_serializer" ->
 			{
@@ -197,7 +196,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 				RecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
 				if(recipeSerializer == null)
 					throw new JsonParseException("No recipe type by name " + serializerName);
-				return new RecipeSerializerSource(recipeSerializer);
+				return new RecipeSource.BySerializer(recipeSerializer);
 			}
 			case "recipe_type" ->
 			{
@@ -205,7 +204,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 				RecipeType<?> recipeType = ForgeRegistries.RECIPE_TYPES.getValue(typeName);
 				if(recipeType == null)
 					throw new JsonParseException("No recipe type by name " + typeName);
-				return new RecipeTypeSource(recipeType);
+				return new RecipeSource.ByType(recipeType);
 			}
 		}
 		throw new JsonParseException("Invalid source type " + type);
@@ -313,66 +312,15 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		return itemLookupMap;
 	}
 	
-	static class SourceEntry
+	public static class SourceEntry
 	{
-		private final Source source;
+		private final RecipeSource source;
 		private final RecipeInterpreter interpreter;
 		
-		private SourceEntry(Source source, RecipeInterpreter interpreter)
+		private SourceEntry(RecipeSource source, RecipeInterpreter interpreter)
 		{
 			this.source = source;
 			this.interpreter = interpreter;
-		}
-	}
-	
-	public interface Source
-	{
-		List<Recipe<?>> findRecipes(RecipeManager recipeManager);
-	}
-	
-	private record RecipeSource(ResourceLocation recipe) implements Source
-	{
-		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
-		{
-			Optional<? extends Recipe<?>> recipe = recipeManager.byKey(this.recipe);
-			return recipe.<List<Recipe<?>>>map(Collections::singletonList).orElse(Collections.emptyList());
-		}
-		
-		@Override
-		public String toString()
-		{
-			return "recipe_source[recipe=" + recipe + "]";
-		}
-	}
-	
-	private record RecipeSerializerSource(RecipeSerializer<?> serializer) implements Source
-	{
-		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
-		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getSerializer() == serializer).collect(Collectors.toList());
-		}
-		
-		@Override
-		public String toString()
-		{
-			return "recipe_source[serializer=" + ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer) + "]";
-		}
-	}
-	
-	private record RecipeTypeSource(RecipeType<?> recipeType) implements Source
-	{
-		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
-		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getType() == recipeType).collect(Collectors.toList());
-		}
-		
-		@Override
-		public String toString()
-		{
-			return "recipe_source[type=" + recipeType + "]";
 		}
 	}
 }
