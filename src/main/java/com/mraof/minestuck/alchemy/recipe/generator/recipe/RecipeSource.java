@@ -7,22 +7,22 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public sealed interface RecipeSource
 {
-	List<Recipe<?>> findRecipes(RecipeManager recipeManager);
+	Collection<Recipe<?>> findRecipes(RecipeManager recipeManager);
 	
 	record SingleRecipe(ResourceLocation recipe) implements RecipeSource
 	{
 		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
+		public Collection<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
 			Optional<? extends Recipe<?>> recipe = recipeManager.byKey(this.recipe);
-			return recipe.<List<Recipe<?>>>map(Collections::singletonList).orElse(Collections.emptyList());
+			return recipe.map(Collections::<Recipe<?>>singleton).orElse(Collections.emptySet());
 		}
 		
 		@Override
@@ -35,9 +35,9 @@ public sealed interface RecipeSource
 	record BySerializer(RecipeSerializer<?> serializer) implements RecipeSource
 	{
 		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
+		public Collection<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getSerializer() == serializer).collect(Collectors.toList());
+			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getSerializer() == serializer).toList();
 		}
 		
 		@Override
@@ -52,7 +52,7 @@ public sealed interface RecipeSource
 		@Override
 		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getType() == recipeType).collect(Collectors.toList());
+			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getType() == recipeType).toList();
 		}
 		
 		@Override

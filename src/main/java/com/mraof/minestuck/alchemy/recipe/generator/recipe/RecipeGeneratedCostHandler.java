@@ -283,17 +283,17 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	private Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
 	{
 		//Step 1: sort recipe interpreters paired with their recipes in the order depending on the number of recipes in the list
-		List<Pair<List<Recipe<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
+		List<Pair<Collection<Recipe<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
 		for(SourceEntry entry : sources)
 		{
-			List<Recipe<?>> recipes = entry.source.findRecipes(recipeManager);
+			Collection<Recipe<?>> recipes = entry.source.findRecipes(recipeManager);
 			recipeLists.add(Pair.of(recipes, entry.interpreter));
 		}
 		recipeLists.sort(Comparator.comparingInt(pair -> -pair.getLeft().size()));
 		
 		//Step 2: Map recipes to interpreters such that each recipe only has one interpreter
 		Map<Recipe<?>, RecipeInterpreter> recipeMap = new HashMap<>();
-		for(Pair<List<Recipe<?>>, RecipeInterpreter> pair : recipeLists)
+		for(Pair<Collection<Recipe<?>>, RecipeInterpreter> pair : recipeLists)
 		{
 			for(Recipe<?> recipe : pair.getLeft())
 				recipeMap.put(recipe, pair.getRight());
