@@ -32,7 +32,7 @@
     },
     "source": {
       "type": "recipe_type",
-      "recipe_type": "stonecutting"
+      "recipe_type": "minecraft:stonecutting"
     }
   },
   {
@@ -53,7 +53,7 @@
     },
     "source": {
       "type": "recipe_type",
-      "recipe_type": "smelting"
+      "recipe_type": "minecraft:smelting"
     }
   },
   {

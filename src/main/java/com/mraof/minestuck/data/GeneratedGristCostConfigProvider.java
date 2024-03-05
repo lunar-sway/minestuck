@@ -16,14 +16,12 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
@@ -89,28 +87,30 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	{
 		JsonObject entry = new JsonObject();
 		entry.addProperty("type", "recipe");
-		entry.addProperty("recipe", location.toString());
-		addEntry(entry, interpreter);
+		JsonElement encodedSource = RecipeSource.SingleRecipe.CODEC.encode(new RecipeSource.SingleRecipe(location), JsonOps.INSTANCE, entry)
+				.getOrThrow(false, LOGGER::error);
+		addEntry(encodedSource, interpreter);
 	}
 	
 	protected void serializer(RecipeSerializer<?> serializer, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
 		entry.addProperty("type", "recipe_serializer");
-		ResourceLocation serializerId = Objects.requireNonNull(ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer));
-		entry.addProperty("serializer", serializerId.toString());
-		addEntry(entry, interpreter);
+		JsonElement encodedSource = RecipeSource.BySerializer.CODEC.encode(new RecipeSource.BySerializer(serializer), JsonOps.INSTANCE, entry)
+				.getOrThrow(false, LOGGER::error);
+		addEntry(encodedSource, interpreter);
 	}
 	
 	protected void type(RecipeType<?> type, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
 		entry.addProperty("type", "recipe_type");
-		entry.addProperty("recipe_type", type.toString());
-		addEntry(entry, interpreter);
+		JsonElement encodedSource = RecipeSource.ByType.CODEC.encode(new RecipeSource.ByType(type), JsonOps.INSTANCE, entry)
+				.getOrThrow(false, LOGGER::error);
+		addEntry(encodedSource, interpreter);
 	}
 	
-	private void addEntry(JsonObject source, RecipeInterpreter interpreter)
+	private void addEntry(JsonElement source, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
 		

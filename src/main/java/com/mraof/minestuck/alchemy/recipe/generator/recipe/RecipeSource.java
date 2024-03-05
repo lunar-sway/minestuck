@@ -1,5 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -18,6 +19,9 @@ public sealed interface RecipeSource
 	
 	record SingleRecipe(ResourceLocation recipe) implements RecipeSource
 	{
+		public static final Codec<SingleRecipe> CODEC = ResourceLocation.CODEC.fieldOf("recipe")
+				.xmap(SingleRecipe::new, SingleRecipe::recipe).codec();
+		
 		@Override
 		public Collection<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
@@ -34,6 +38,9 @@ public sealed interface RecipeSource
 	
 	record BySerializer(RecipeSerializer<?> serializer) implements RecipeSource
 	{
+		public static final Codec<BySerializer> CODEC = ForgeRegistries.RECIPE_SERIALIZERS.getCodec().fieldOf("serializer")
+				.xmap(BySerializer::new, BySerializer::serializer).codec();
+		
 		@Override
 		public Collection<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
@@ -49,6 +56,9 @@ public sealed interface RecipeSource
 	
 	record ByType(RecipeType<?> recipeType) implements RecipeSource
 	{
+		public static final Codec<ByType> CODEC = ForgeRegistries.RECIPE_TYPES.getCodec().fieldOf("recipe_type")
+				.xmap(ByType::new, ByType::recipeType).codec();
+		
 		@Override
 		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -21,12 +22,13 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -183,31 +185,14 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	private static RecipeSource deserializeSource(JsonObject json)
 	{
 		String type = GsonHelper.getAsString(json, "type");
-		switch(type)
+		Codec<? extends RecipeSource> codec = switch(type)
 		{
-			case "recipe" ->
-			{
-				ResourceLocation recipe = new ResourceLocation(GsonHelper.getAsString(json, "recipe"));
-				return new RecipeSource.SingleRecipe(recipe);
-			}
-			case "recipe_serializer" ->
-			{
-				ResourceLocation serializerName = new ResourceLocation(GsonHelper.getAsString(json, "serializer"));
-				RecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
-				if(recipeSerializer == null)
-					throw new JsonParseException("No recipe type by name " + serializerName);
-				return new RecipeSource.BySerializer(recipeSerializer);
-			}
-			case "recipe_type" ->
-			{
-				ResourceLocation typeName = new ResourceLocation(GsonHelper.getAsString(json, "recipe_type"));
-				RecipeType<?> recipeType = ForgeRegistries.RECIPE_TYPES.getValue(typeName);
-				if(recipeType == null)
-					throw new JsonParseException("No recipe type by name " + typeName);
-				return new RecipeSource.ByType(recipeType);
-			}
-		}
-		throw new JsonParseException("Invalid source type " + type);
+			case "recipe" -> RecipeSource.SingleRecipe.CODEC;
+			case "recipe_serializer" -> RecipeSource.BySerializer.CODEC;
+			case "recipe_type" -> RecipeSource.ByType.CODEC;
+			default -> throw new JsonParseException("Invalid source type " + type);
+		};
+		return codec.parse(JsonOps.INSTANCE, json).getOrThrow(true, LOGGER::error);
 	}
 	
 	@Override
