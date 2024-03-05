@@ -64,6 +64,7 @@ public class MSTags
 		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
 		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		public static final TagKey<Block> EDITMODE_BREAK_BLACKLIST = tag("editmode_break_blacklist");
+		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");
 		
 		private static TagKey<Block> tag(String name)
 		{
@@ -105,6 +106,7 @@ public class MSTags
 		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
+		public static final TagKey<Item> LEGENDARY = tag("legendary");
 
 		private static TagKey<Item> tag(String name)
 		{

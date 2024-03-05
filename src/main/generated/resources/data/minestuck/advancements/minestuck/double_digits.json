@@ -1,0 +1,35 @@
+{
+  "parent": "minestuck:minestuck/first_step",
+  "criteria": {
+    "reach_rung": {
+      "conditions": {
+        "rung": {
+          "min": 10
+        }
+      },
+      "trigger": "minestuck:echeladder"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.minestuck.double_digits.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minestuck:boondollars",
+      "nbt": "{value:100}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.minestuck.double_digits.title"
+    }
+  },
+  "requirements": [
+    [
+      "reach_rung"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

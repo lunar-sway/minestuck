@@ -25,7 +25,7 @@ public class PillarFeature extends Feature<BlockStateConfiguration>
 		BlockState state = context.config().state;
 		int height = 4 + rand.nextInt(4);
 		
-		if(level.getBlockState(pos.above(height - 1)).liquid())
+		if(!level.getFluidState(pos.above(height - 1)).isEmpty())
 			return false;
 		
 		for(int i = 0; i < height + 3; i++)

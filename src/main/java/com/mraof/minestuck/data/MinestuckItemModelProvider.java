@@ -606,6 +606,21 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CASSETTE_OTHERSIDE, "cassette/cassette_otherside");
 		simpleItem(MSItems.CASSETTE_5, "cassette/cassette_5");
 		
+		//Spawn Eggs
+		simpleItem(MSItems.IMP_SPAWN_EGG);
+		simpleItem(MSItems.OGRE_SPAWN_EGG);
+		simpleItem(MSItems.BASILISK_SPAWN_EGG);
+		simpleItem(MSItems.LICH_SPAWN_EGG);
+		simpleItem(MSItems.SALAMANDER_SPAWN_EGG);
+		simpleItem(MSItems.TURTLE_SPAWN_EGG);
+		simpleItem(MSItems.NAKAGATOR_SPAWN_EGG);
+		simpleItem(MSItems.IGUANA_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_PAWN_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_BISHOP_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_ROOK_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_PAWN_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_BISHOP_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_ROOK_SPAWN_EGG);
 	}
 	
 	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/breath_aspect_planks_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/breath_aspect_planks"
+    },
+    "type=top": {
+      "model": "minestuck:block/breath_aspect_planks_slab_top"
+    }
+  }
+}

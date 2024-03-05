@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:uncarved_wood_stairs"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_uncarved_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:uncarved_wood"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_uncarved_wood",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:uncarved_wood_stairs"
+    ]
+  },
+  "sends_telemetry_event": false
+}

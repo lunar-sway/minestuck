@@ -3,26 +3,18 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.block.state.properties.StructureMode;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import javax.annotation.Nonnull;
 
@@ -44,83 +36,46 @@ public class TowerFeature extends Feature<NoneFeatureConfiguration>
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
 		WorldGenLevel level = context.level();
-		BlockPos pos = context.origin().below(2);
+		BlockPos towerPos = context.origin().below(2);
 		RandomSource rand = context.random();
-		Rotation rotation = Rotation.getRandom(rand);
-		ResourceLocation tower = rand.nextInt(50) == 0 ? STRUCTURE_TOWER_WITH_CHEST : STRUCTURE_TOWER;
-		StructureTemplateManager templates = level.getLevel().getStructureManager();
-		StructureTemplate template = templates.getOrCreate(tower);
 		
-		ChunkPos chunkPos = new ChunkPos(pos);
-		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, level.getMinBuildHeight(), chunkPos.getMinBlockZ() - 16, chunkPos.getMaxBlockX() + 16, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
-		StructurePlaceSettings settings = new StructurePlaceSettings().setBoundingBox(boundingBox).setRandom(rand)
-				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(context.chunkGenerator())));
+		ResourceLocation templateId = rand.nextInt(50) == 0 ? STRUCTURE_TOWER_WITH_CHEST : STRUCTURE_TOWER;
+		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(templateId);
+		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, towerPos, rand);
+		placement.placeWithStructureBlockRegistry(context);
+		
+		placement.handleDataMarkers(context, (pos, data) -> handleDataMarker(level, rand, pos, data));
 		
 		for(Rotation doorRotation : Rotation.values())
-		{
-			placeDoor(level, rand, templates, settings, pos, doorRotation);
-		}
-		
-		Vec3i size = template.getSize(rotation);
-		settings.setRotation(rotation);
-		BlockPos structurePos = template.getZeroPositionWithTransform(pos.offset(-size.getX()/2, 0, -size.getZ()/2), Mirror.NONE, rotation);
-		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
-		
-		handleDataMarkers(level, rand, template, settings, structurePos);
+			placeDoor(context, towerPos, doorRotation);
 		
 		return true;
 	}
 	
-	private static final BlockPos DOOR_CHECK_OFFSET = new BlockPos(0, 0, 4), DOOR_PLACE_OFFSET = new BlockPos(-1, 0, 3);
+	private static final BlockPos DOOR_CHECK_OFFSET = new BlockPos(0, 0, 4), DOOR_PLACE_OFFSET = new BlockPos(0, 0, 3);
 	
-	private void placeDoor(WorldGenLevel level, RandomSource rand, StructureTemplateManager templates, StructurePlaceSettings settings, BlockPos towerCenter, Rotation rotation)
+	private void placeDoor(FeaturePlaceContext<?> context, BlockPos towerCenter, Rotation rotation)
 	{
-		StructureTemplate door = templates.getOrCreate(getDoorTemplate(level, towerCenter, rotation));
+		BlockPos doorPos = towerCenter.offset(DOOR_PLACE_OFFSET.rotate(rotation));
+		StructureTemplate template = context.level().getLevel().getStructureManager().getOrCreate(getDoorTemplate(context.level(), towerCenter, rotation));
 		
-		BlockPos structurePos = towerCenter.offset(DOOR_PLACE_OFFSET.rotate(rotation));
-		door.placeInWorld(level, structurePos, structurePos, settings.setRotation(rotation), rand, Block.UPDATE_INVISIBLE);
+		TemplatePlacement.edgeCentered(template, doorPos, rotation).placeWithStructureBlockRegistry(context);
 	}
 	
 	@Nonnull
 	private ResourceLocation getDoorTemplate(WorldGenLevel level, BlockPos towerCenter, Rotation rotation)
 	{
 		BlockPos doorCheckPos = towerCenter.offset(DOOR_CHECK_OFFSET.rotate(rotation));
+		if(level.getBlockState(doorCheckPos.above(3)).canOcclude())
+			return STRUCTURE_TOWER_WALL;
 		
 		if(level.getBlockState(doorCheckPos.above(2)).canOcclude())
-		{
-			if(level.getBlockState(doorCheckPos.above(3)).canOcclude())
-			{
-				return STRUCTURE_TOWER_WALL;
-			} else
-			{
-				return STRUCTURE_ELEVATED_TOWER_DOOR;
-			}
-		} else
-		{
-			if(level.getBlockState(doorCheckPos.above()).canOcclude())
-			{
-				return STRUCTURE_TOWER_DOOR;
-			} else
-			{
-				return STRUCTURE_TOWER_BALCONY;
-			}
-		}
-	}
-	
-	private void handleDataMarkers(WorldGenLevel level, RandomSource rand, StructureTemplate template, StructurePlaceSettings settings, BlockPos structurePos)
-	{
-		for(StructureTemplate.StructureBlockInfo blockInfo : template.filterBlocks(structurePos, settings, Blocks.STRUCTURE_BLOCK))
-		{
-			//noinspection ConstantConditions
-			if(blockInfo.nbt() != null)
-			{
-				StructureMode structuremode = StructureMode.valueOf(blockInfo.nbt().getString("mode"));
-				if (structuremode == StructureMode.DATA)
-				{
-					handleDataMarker(level, rand, blockInfo.pos(), blockInfo.nbt().getString("metadata"));
-				}
-			}
-		}
+			return STRUCTURE_ELEVATED_TOWER_DOOR;
+		
+		if(level.getBlockState(doorCheckPos.above()).canOcclude())
+			return STRUCTURE_TOWER_DOOR;
+		else
+			return STRUCTURE_TOWER_BALCONY;
 	}
 	
 	private void handleDataMarker(WorldGenLevel level, RandomSource rand, BlockPos pos, String data)
@@ -129,9 +84,7 @@ public class TowerFeature extends Feature<NoneFeatureConfiguration>
 		{
 			level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 			if (level.getBlockEntity(pos.below()) instanceof ChestBlockEntity chest)
-			{
 				chest.setLootTable(MSLootTables.BASIC_MEDIUM_CHEST, rand.nextLong());
-			}
 		}
 	}
 }

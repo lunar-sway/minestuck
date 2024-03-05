@@ -3,6 +3,7 @@ package com.mraof.minestuck;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterTypes;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
@@ -69,6 +70,7 @@ public class Minestuck
 		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		AspectTreeBlocks.init();
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
