@@ -177,7 +177,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 				.getOrThrow(true, LOGGER::error);
 		
 		RecipeInterpreter interpreter = RecipeInterpreter.DISPATCH_CODEC.parse(JsonOps.INSTANCE, obj.get("interpreter"))
-				.resultOrPartial(LOGGER::error).orElse(DefaultInterpreter.INSTANCE);
+				.getOrThrow(true, LOGGER::error);
 		
 		return new SourceEntry(source, interpreter);
 	}
