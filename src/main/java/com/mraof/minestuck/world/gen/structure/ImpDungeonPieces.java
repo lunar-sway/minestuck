@@ -84,16 +84,14 @@ public final class ImpDungeonPieces
 			StructureContext ctxt = new StructureContext(compoPos, builder, rand);
 			
 			Direction orientation = Objects.requireNonNull(getOrientation());
-			int xOffset = orientation.getStepX();
-			int zOffset = orientation.getStepZ();
 			if(rand.nextBoolean())
 			{
-				isFrontBlocked = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, orientation, 0);
-				isBackBlocked = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, orientation.getOpposite(), 0);
+				isFrontBlocked = !generatePartInDirection(6, 6, orientation, 0, ctxt);
+				isBackBlocked = !generatePartInDirection(6, 6, orientation.getOpposite(), 0, ctxt);
 			} else
 			{
-				isBackBlocked = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, orientation.getOpposite(), 0);
-				isFrontBlocked = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, orientation, 0);
+				isBackBlocked = !generatePartInDirection(6, 6, orientation.getOpposite(), 0, ctxt);
+				isFrontBlocked = !generatePartInDirection(6, 6, orientation, 0, ctxt);
 			}
 		}
 		
@@ -140,7 +138,12 @@ public final class ImpDungeonPieces
 		}
 	}
 	
-	static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, Direction direction, int generationDepth)
+	static boolean generatePartInDirection(int xIndex, int zIndex, Direction direction, int generationDepth, StructureContext ctxt)
+	{
+		return generatePartAt(xIndex + direction.getStepX(), zIndex + direction.getStepZ(), direction, generationDepth, ctxt);
+	}
+	
+	static boolean generatePartAt(int xIndex, int zIndex, Direction direction, int generationDepth, StructureContext ctxt)
 	{
 		if(xIndex < 0 || 13 <= xIndex || zIndex < 0 || 13 <= zIndex)
 			return false;
@@ -157,7 +160,7 @@ public final class ImpDungeonPieces
 			ctxt.builder.addPiece(piece);
 			if(piece instanceof ConnectablePiece connectablePiece)
 				connectablePiece.generateAdjacentPieces(
-						(genDirection, depthIncrement) -> generatePart(ctxt, xIndex + genDirection.getStepX(), zIndex + genDirection.getStepZ(), genDirection, generationDepth + depthIncrement), ctxt.rand);
+						(genDirection, depthIncrement) -> generatePartInDirection(xIndex, zIndex, genDirection, generationDepth + depthIncrement, ctxt), ctxt.rand);
 		});
 		
 		ctxt.corridors = corridors;
