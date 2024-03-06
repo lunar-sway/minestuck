@@ -86,12 +86,12 @@ public final class ImpDungeonPieces
 			Direction orientation = Objects.requireNonNull(getOrientation());
 			if(rand.nextBoolean())
 			{
-				isFrontBlocked = !generatePartInDirection(6, 6, orientation, 0, ctxt);
-				isBackBlocked = !generatePartInDirection(6, 6, orientation.getOpposite(), 0, ctxt);
+				isFrontBlocked = !generatePartInDirection(0, 0, orientation, 0, ctxt);
+				isBackBlocked = !generatePartInDirection(0, 0, orientation.getOpposite(), 0, ctxt);
 			} else
 			{
-				isBackBlocked = !generatePartInDirection(6, 6, orientation.getOpposite(), 0, ctxt);
-				isFrontBlocked = !generatePartInDirection(6, 6, orientation, 0, ctxt);
+				isBackBlocked = !generatePartInDirection(0, 0, orientation.getOpposite(), 0, ctxt);
+				isFrontBlocked = !generatePartInDirection(0, 0, orientation, 0, ctxt);
 			}
 		}
 		
@@ -145,7 +145,7 @@ public final class ImpDungeonPieces
 	
 	static boolean generatePartAt(int xIndex, int zIndex, Direction direction, int generationDepth, StructureContext ctxt)
 	{
-		if(xIndex < 0 || 13 <= xIndex || zIndex < 0 || 13 <= zIndex)
+		if(Math.abs(xIndex) > 6 || Math.abs(zIndex) > 6)
 			return false;
 		
 		if(ctxt.findPieceInGridSlot(xIndex, zIndex) instanceof ConnectablePiece piece)
@@ -237,7 +237,7 @@ public final class ImpDungeonPieces
 		
 		public StructureContext(BlockPos centerPos, StructurePieceAccessor builder, RandomSource rand)
 		{
-			this.zeroPos = centerPos.offset(-60, 0, -60);
+			this.zeroPos = centerPos;
 			this.builder = builder;
 			this.rand = rand;
 		}
