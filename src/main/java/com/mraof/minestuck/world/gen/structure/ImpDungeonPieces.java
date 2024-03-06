@@ -3,9 +3,9 @@ package com.mraof.minestuck.world.gen.structure;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.OgreEntity;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
-import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +24,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -32,8 +31,10 @@ import java.util.Objects;
 @ParametersAreNonnullByDefault
 public class ImpDungeonPieces
 {
-	public static class EntryCorridor extends ImpDungeonPiece
+	public static class EntryCorridor extends ImprovedStructurePiece implements ConnectablePiece
 	{
+		private boolean isFrontBlocked, isBackBlocked;
+		
 		public static EntryCorridor create(Direction orientation, int posX, int posZ, RandomSource rand)
 		{
 			int offset = orientation.getAxisDirection().equals(Direction.AxisDirection.POSITIVE) ? 4 : -3;
@@ -45,22 +46,31 @@ public class ImpDungeonPieces
 		
 		private EntryCorridor(Direction orientation, int x, int y, int z)
 		{
-			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), 0, makeBoundingBox(x, y, z, orientation, 6, 7, 10), 2);
+			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), 0, makeBoundingBox(x, y, z, orientation, 6, 7, 10));
 			setOrientation(orientation);
 		}
 		
 		public EntryCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), nbt, 2);
+			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), nbt);
+			this.isFrontBlocked = nbt.getBoolean("bl0");
+			this.isBackBlocked = nbt.getBoolean("bl1");
 		}
 		
 		@Override
-		protected boolean connectFrom(Direction facing)
+		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
+		{
+			tagCompound.putBoolean("bl0", isFrontBlocked);
+			tagCompound.putBoolean("bl1", isBackBlocked);
+		}
+		
+		@Override
+		public boolean connectFrom(Direction facing)
 		{
 			if(getOrientation().equals(facing))
-				corridors[0] = false;
+				isFrontBlocked = false;
 			else if(getOrientation().getOpposite().equals(facing))
-				corridors[1] = false;
+				isBackBlocked = false;
 			return getOrientation().getAxis().equals(facing.getAxis());
 		}
 		
@@ -77,12 +87,12 @@ public class ImpDungeonPieces
 			int zOffset = orientation.getStepZ();
 			if(rand.nextBoolean())
 			{
-				corridors[0] = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.offset(xOffset*10, 0, zOffset*10), orientation, 0);
-				corridors[1] = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.offset(-xOffset*10, 0, -zOffset*10), orientation.getOpposite(), 0);
+				isFrontBlocked = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.offset(xOffset*10, 0, zOffset*10), orientation, 0);
+				isBackBlocked = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.offset(-xOffset*10, 0, -zOffset*10), orientation.getOpposite(), 0);
 			} else
 			{
-				corridors[1] = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.offset(-xOffset*10, 0, -zOffset*10), orientation.getOpposite(), 0);
-				corridors[0] = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.offset(xOffset*10, 0, zOffset*10), orientation, 0);
+				isBackBlocked = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.offset(-xOffset*10, 0, -zOffset*10), orientation.getOpposite(), 0);
+				isFrontBlocked = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.offset(xOffset*10, 0, zOffset*10), orientation, 0);
 			}
 		}
 		
@@ -122,14 +132,14 @@ public class ImpDungeonPieces
 			generateAirBox(level, structureBoundingBoxIn, 2, 1, 0, 3, 3, 3);
 			generateAirBox(level, structureBoundingBoxIn, 2, 1, 7, 3, 3, 9);
 
-			if(corridors[0])
+			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 2, 1, 9, 3, 3, 9, wallBlock, wallBlock, false);
-			if(corridors[1])
+			if(isBackBlocked)
 				generateBox(level, structureBoundingBoxIn, 2, 1, 0, 3, 3, 0, wallBlock, wallBlock, false);
 		}
 	}
 	
-	public static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, BlockPos pos, Direction facing, int index)
+	static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, BlockPos pos, Direction facing, int index)
 	{
 		if(xIndex >= ctxt.compoGen.length || zIndex >= ctxt.compoGen[0].length
 				|| xIndex < 0 || zIndex < 0)
@@ -145,7 +155,7 @@ public class ImpDungeonPieces
 				return true;
 			} else return false;
 		
-		ImpDungeonPiece component;
+		StructurePiece component;
 		
 		int corridors = ctxt.corridors;
 		double i = ctxt.rand.nextDouble();
@@ -184,7 +194,7 @@ public class ImpDungeonPieces
 		return true;
 	}
 	
-	protected static ImpDungeonPiece genRoom(Direction facing, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+	protected static StructurePiece genRoom(Direction facing, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 	{
 		float i = ctxt.rand.nextFloat();
 		if(i < 0.2 || !ctxt.generatedReturn)
@@ -200,7 +210,7 @@ public class ImpDungeonPieces
 	
 	protected static class StructureContext
 	{
-		ImpDungeonPiece[][] compoGen = new ImpDungeonPiece[13][13];
+		final ConnectablePiece[][] compoGen = new ConnectablePiece[13][13];
 		StructurePieceAccessor builder;
 		RandomSource rand;
 		int corridors = 3;
@@ -214,43 +224,20 @@ public class ImpDungeonPieces
 		}
 	}
 	
-	public static abstract class ImpDungeonPiece extends ImprovedStructurePiece
+	public interface ConnectablePiece
 	{
-		protected final boolean[] corridors;
-		
-		public ImpDungeonPiece(StructurePieceType structurePieceTypeIn, int componentTypeIn, BoundingBox boundingBox, int corridors)
-		{
-			super(structurePieceTypeIn, componentTypeIn, boundingBox);
-			this.corridors = new boolean[corridors];
-		}
-		
-		public ImpDungeonPiece(StructurePieceType structurePieceTypeIn, CompoundTag nbt, int corridors)
-		{
-			super(structurePieceTypeIn, nbt);
-			this.corridors = new boolean[corridors];
-			for(int i = 0; i < corridors; i++)
-				this.corridors[i] = nbt.getBoolean("bl"+i);
-		}
-		
-		protected abstract boolean connectFrom(Direction facing);
-		
-		@Override
-		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				tagCompound.putBoolean("bl"+i, corridors[i]);
-		}
+		boolean connectFrom(Direction facing);
 	}
 	
-	public static class StraightCorridor extends ImpDungeonPiece
+	public static class StraightCorridor extends ImprovedStructurePiece implements ConnectablePiece
 	{
+		private boolean isFrontBlocked;
+		private boolean light;
+		private byte lightPos;
 		
-		boolean light;
-		byte lightPos;
-		
-		public StraightCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		StraightCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeGridBoundingBox(3, 0, 0, 4, 5, 10, pos, coordBaseMode), 1);
+			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeGridBoundingBox(3, 0, 0, 4, 5, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
 			light = true;//ctxt.rand.nextFloat() < 0.1F;
@@ -260,12 +247,13 @@ public class ImpDungeonPieces
 			ctxt.compoGen[xIndex][zIndex] = this;
 			int xOffset = coordBaseMode.getStepX();
 			int zOffset = coordBaseMode.getStepZ();
-			corridors[0] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
+			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
 		}
 		
 		public StraightCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), nbt, 1);
+			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), nbt);
+			this.isFrontBlocked = nbt.getBoolean("bl0");
 			light = nbt.getBoolean("l");
 			if(light)
 				lightPos = nbt.getByte("lpos");
@@ -274,7 +262,7 @@ public class ImpDungeonPieces
 		@Override
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
-			super.addAdditionalSaveData(context, tagCompound);
+			tagCompound.putBoolean("bl0", isFrontBlocked);
 			tagCompound.putBoolean("l", light);
 			if(light)
 				tagCompound.putByte("lpos", lightPos);
@@ -294,7 +282,7 @@ public class ImpDungeonPieces
 			generateBox(level, structureBoundingBoxIn, 3, 0, 0, 3, 4, 9, wallBlock, wallBlock, false);
 			generateAirBox(level, structureBoundingBoxIn, 1, 1, 0, 2, 3, 9);
 
-			if(corridors[0])
+			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 1, 1, 9, 2, 3, 9, wallBlock, wallBlock, false);
 
 			if(light)
@@ -307,21 +295,22 @@ public class ImpDungeonPieces
 		}
 
 		@Override
-		protected boolean connectFrom(Direction facing)
+		public boolean connectFrom(Direction facing)
 		{
 			if(getOrientation().equals(facing))
-				corridors[0] = false;
+				isFrontBlocked = false;
 			return getOrientation().getAxis().equals(facing.getAxis());
 		}
 	}
 	
-	public static class CrossCorridor extends ImpDungeonPiece
+	public static class CrossCorridor extends ImprovedStructurePiece implements ConnectablePiece
 	{
+		private boolean isFrontBlocked, isLeftBlocked, isRightBlocked;
 		boolean light;
 		
-		public CrossCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		CrossCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 6, 10, pos, coordBaseMode), 3);
+			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 6, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
 			light = ctxt.rand.nextFloat() < 0.3F;
@@ -332,27 +321,44 @@ public class ImpDungeonPieces
 			
 			if(ctxt.rand.nextBoolean())
 			{
-				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), coordBaseMode.getClockWise(), index + 1);
-				corridors[2] = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), coordBaseMode.getCounterClockWise(), index + 1);
+				isRightBlocked = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), coordBaseMode.getClockWise(), index + 1);
+				isLeftBlocked = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), coordBaseMode.getCounterClockWise(), index + 1);
 			} else
 			{
-				corridors[2] = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), coordBaseMode.getCounterClockWise(), index + 1);
-				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), coordBaseMode.getClockWise(), index + 1);
+				isLeftBlocked = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), coordBaseMode.getCounterClockWise(), index + 1);
+				isRightBlocked = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), coordBaseMode.getClockWise(), index + 1);
 			}
-			corridors[1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 2);
+			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 2);
 		}
 		
 		public CrossCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), nbt, 3);
+			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), nbt);
+			this.isRightBlocked = nbt.getBoolean("bl0");
+			this.isFrontBlocked = nbt.getBoolean("bl1");
+			this.isLeftBlocked = nbt.getBoolean("bl2");
 			light = nbt.getBoolean("l");
 		}
 		
 		@Override
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
-			super.addAdditionalSaveData(context, tagCompound);
+			tagCompound.putBoolean("bl0", isRightBlocked);
+			tagCompound.putBoolean("bl1", isFrontBlocked);
+			tagCompound.putBoolean("bl2", isLeftBlocked);
 			tagCompound.putBoolean("l", light);
+		}
+		
+		@Override
+		public boolean connectFrom(Direction facing)
+		{
+			if(getOrientation().getClockWise().equals(facing))
+				isRightBlocked = false;
+			else if(getOrientation().equals(facing))
+				isFrontBlocked = false;
+			else if(getOrientation().getCounterClockWise().equals(facing))
+				isLeftBlocked = false;
+			return true;
 		}
 
 		@Override
@@ -394,11 +400,11 @@ public class ImpDungeonPieces
 
 			generateBox(level, structureBoundingBoxIn, 3, 5, 3, 6, 5, 6, wallBlock, wallBlock, false);
 
-			if(corridors[0])
+			if(isRightBlocked)
 				generateBox(level, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
-			if(corridors[1])
+			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 4, 1, 9, 5, 3, 9, wallBlock, wallBlock, false);
-			if(corridors[2])
+			if(isLeftBlocked)
 				generateBox(level, structureBoundingBoxIn, 9, 1, 4, 9, 3, 5, wallBlock, wallBlock, false);
 
 			if(light)
@@ -407,25 +413,14 @@ public class ImpDungeonPieces
 				generateBox(level, structureBoundingBoxIn, 4, 5, 4, 5, 5, 5, lightBlock, lightBlock, false);
 			}
 		}
-
-		@Override
-		protected boolean connectFrom(Direction facing)
-		{
-			if(getOrientation().getClockWise().equals(facing))
-				corridors[0] = false;
-			else if(getOrientation().equals(facing))
-				corridors[1] = false;
-			else if(getOrientation().getCounterClockWise().equals(facing))
-				corridors[2] = false;
-			return true;
-		}
 	}
 	
-	public static class TurnCorridor extends ImpDungeonPiece
+	public static class TurnCorridor extends ImprovedStructurePiece implements ConnectablePiece
 	{
+		private boolean isBackBlocked, isRightBlocked;
 		boolean light;
 		
-		public static ImpDungeonPiece create(Direction orientation, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		static TurnCorridor create(Direction orientation, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			boolean direction = ctxt.rand.nextBoolean();
 			return new TurnCorridor(direction, direction ? orientation.getClockWise() : orientation, pos, xIndex, zIndex, index, ctxt);
@@ -433,7 +428,7 @@ public class ImpDungeonPieces
 		
 		private TurnCorridor(boolean direction, Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 7, 5, 7, pos, coordBaseMode), 2);
+			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 7, 5, 7, pos, coordBaseMode));
 			
 			setOrientation(coordBaseMode);
 			
@@ -443,20 +438,38 @@ public class ImpDungeonPieces
 			Direction newFacing = direction ? coordBaseMode.getOpposite() : coordBaseMode.getClockWise();
 			int xOffset = newFacing.getStepX();
 			int zOffset = newFacing.getStepZ();
-			corridors[direction ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), newFacing, index + 1);
+			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset * 10, 0, zOffset * 10), newFacing, index + 1);
+			if(direction)
+				isBackBlocked = isBlocked;
+			else
+				isRightBlocked = isBlocked;
 		}
 		
 		public TurnCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), nbt, 2);
+			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), nbt);
+			this.isBackBlocked = nbt.getBoolean("bl0");
+			this.isRightBlocked = nbt.getBoolean("bl1");
 			light = nbt.getBoolean("l");
 		}
 		
 		@Override
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
-			super.addAdditionalSaveData(context, tagCompound);
+			tagCompound.putBoolean("bl0", isBackBlocked);
+			tagCompound.putBoolean("bl1", isRightBlocked);
 			tagCompound.putBoolean("l", light);
+		}
+		
+		@Override
+		public boolean connectFrom(Direction facing)
+		{
+			if(getOrientation().getClockWise().equals(facing))
+				isRightBlocked = false;
+			else if(getOrientation().getOpposite().equals(facing))
+				isBackBlocked = false;
+			else return false;
+			return true;
 		}
 
 		@Override
@@ -479,9 +492,9 @@ public class ImpDungeonPieces
 			generateAirBox(level, structureBoundingBoxIn, 4, 1, 0, 5, 3, 5);
 			generateAirBox(level, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
 
-			if(corridors[0])
+			if(isBackBlocked)
 				generateBox(level, structureBoundingBoxIn, 4, 1, 0, 5, 3, 0, wallBlock, wallBlock, false);
-			if(corridors[1])
+			if(isRightBlocked)
 				generateBox(level, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
 
 			if(light)
@@ -491,24 +504,13 @@ public class ImpDungeonPieces
 				placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 3, 2, 5, structureBoundingBoxIn);
 			}
 		}
-
-		@Override
-		protected boolean connectFrom(Direction facing)
-		{
-			if(getOrientation().getClockWise().equals(facing))
-				corridors[1] = false;
-			else if(getOrientation().getOpposite().equals(facing))
-				corridors[0] = false;
-			else return false;
-			return true;
-		}
 	}
 	
-	public static class ReturnRoom extends ImpDungeonPiece
+	public static class ReturnRoom extends ImprovedStructurePiece implements ConnectablePiece
 	{
-		public ReturnRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		ReturnRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 11, 8, pos, coordBaseMode), 0);
+			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 11, 8, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
 			ctxt.generatedReturn = true;
@@ -517,11 +519,16 @@ public class ImpDungeonPieces
 		
 		public ReturnRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM.get(), nbt, 0);
+			super(MSStructurePieces.IMP_RETURN_ROOM.get(), nbt);
 		}
 		
 		@Override
-		protected boolean connectFrom(Direction facing)
+		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
+		{
+		}
+		
+		@Override
+		public boolean connectFrom(Direction facing)
 		{
 			return getOrientation().getOpposite().equals(facing);
 		}
@@ -565,11 +572,11 @@ public class ImpDungeonPieces
 		}
 	}
 	
-	public static class ReturnRoomAlt extends ImpDungeonPiece
+	public static class ReturnRoomAlt extends ImprovedStructurePiece implements ConnectablePiece
 	{
-		public ReturnRoomAlt(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		ReturnRoomAlt(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeGridBoundingBox(1, -1, 0, 8, 8, 10, pos, coordBaseMode), 0);
+			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeGridBoundingBox(1, -1, 0, 8, 8, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
 			ctxt.generatedReturn = true;
@@ -578,15 +585,19 @@ public class ImpDungeonPieces
 		
 		public ReturnRoomAlt(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), nbt, 0);
+			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), nbt);
 		}
 		
 		@Override
-		protected boolean connectFrom(Direction facing)
+		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
+		{
+		}
+		
+		@Override
+		public boolean connectFrom(Direction facing)
 		{
 			return getOrientation().getOpposite().equals(facing);
 		}
-		
 		
 		@Override
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
@@ -631,13 +642,14 @@ public class ImpDungeonPieces
 			placeReturnNode(level, structureBoundingBoxIn, 3, 2, 7);
 		}
 	}
-	public static class SpawnerRoom extends ImpDungeonPiece
+	
+	public static class SpawnerRoom extends ImprovedStructurePiece implements ConnectablePiece
 	{
 		private boolean spawner1, spawner2;
 		
-		public SpawnerRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		SpawnerRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 7, pos, coordBaseMode), 0);
+			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 7, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -655,7 +667,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), nbt, 0);
+			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), nbt);
 			spawner1 = nbt.getBoolean("sp1");
 			spawner2 = nbt.getBoolean("sp2");
 		}
@@ -663,17 +675,15 @@ public class ImpDungeonPieces
 		@Override
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
-			super.addAdditionalSaveData(context, tagCompound);
 			tagCompound.putBoolean("sp1", spawner1);
 			tagCompound.putBoolean("sp2", spawner2);
 		}
 		
 		@Override
-		protected boolean connectFrom(Direction facing)
+		public boolean connectFrom(Direction facing)
 		{
 			return getOrientation().getOpposite().equals(facing);
 		}
-		
 		
 		@Override
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
@@ -726,15 +736,15 @@ public class ImpDungeonPieces
 		}
 	}
 	
-	public static class BookcaseRoom extends ImpDungeonPiece
+	public static class BookcaseRoom extends ImprovedStructurePiece implements ConnectablePiece
 	{
 		float bookChance;
 		boolean light;
 		
-		public BookcaseRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		BookcaseRoom(Direction direction, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 8, pos, coordBaseMode), 0);
-			setOrientation(coordBaseMode);
+			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 8, pos, direction));
+			setOrientation(direction);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
 			
@@ -744,7 +754,7 @@ public class ImpDungeonPieces
 		
 		public BookcaseRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), nbt, 0);
+			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), nbt);
 			bookChance = nbt.getFloat("b");
 			light = nbt.getBoolean("l");
 		}
@@ -752,17 +762,15 @@ public class ImpDungeonPieces
 		@Override
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
-			super.addAdditionalSaveData(context, tagCompound);
 			tagCompound.putFloat("b", bookChance);
 			tagCompound.putBoolean("l", light);
 		}
 		
 		@Override
-		protected boolean connectFrom(Direction facing)
+		public boolean connectFrom(Direction facing)
 		{
 			return getOrientation().getOpposite().equals(facing);
 		}
-		
 		
 		@Override
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
@@ -823,13 +831,15 @@ public class ImpDungeonPieces
 		}
 	}
 	
-	public static class SpawnerCorridor extends ImpDungeonPiece
+	public static class SpawnerCorridor extends ImprovedStructurePiece implements ConnectablePiece
 	{
-		private boolean spawner1, spawner2, chestPos;
+		private boolean isFrontBlocked, isBackBlocked;
+		private boolean spawner1, spawner2;
+		private final boolean chestPos;
 		
-		public SpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		SpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 5, 10, pos, coordBaseMode), 2);
+			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 5, 10, pos, coordBaseMode));
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
 				setOrientation(coordBaseMode.getOpposite());
@@ -850,13 +860,18 @@ public class ImpDungeonPieces
 			
 			int xOffset = coordBaseMode.getStepX();
 			int zOffset = coordBaseMode.getStepZ();
-			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
-			
+			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset * 10, 0, zOffset * 10), coordBaseMode, index + 1);
+			if(mirror)
+				isBackBlocked = isBlocked;
+			else
+				isFrontBlocked = isBlocked;
 		}
 		
 		public SpawnerCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), nbt, 2);
+			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), nbt);
+			this.isBackBlocked = nbt.getBoolean("bl0");
+			this.isFrontBlocked = nbt.getBoolean("bl1");
 			spawner1 = nbt.getBoolean("sp1");
 			spawner2 = nbt.getBoolean("sp2");
 			chestPos = nbt.getBoolean("ch");
@@ -865,23 +880,26 @@ public class ImpDungeonPieces
 		@Override
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
-			super.addAdditionalSaveData(context, tagCompound);
+			tagCompound.putBoolean("bl0", isBackBlocked);
+			tagCompound.putBoolean("bl1",isFrontBlocked);
 			tagCompound.putBoolean("sp1", spawner1);
 			tagCompound.putBoolean("sp2", spawner2);
 			tagCompound.putBoolean("ch", chestPos);
 		}
 		
 		@Override
-		protected boolean connectFrom(Direction facing)
+		public boolean connectFrom(Direction facing)
 		{
 			if(getOrientation().getAxis().equals(facing.getAxis()))
 			{
-				corridors[getOrientation().equals(facing)?1:0] = false;
+				if(getOrientation().equals(facing))
+					isFrontBlocked = false;
+				else
+					isBackBlocked = false;
 				return true;
 			}
 			return false;
 		}
-		
 		
 		@Override
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
@@ -925,21 +943,22 @@ public class ImpDungeonPieces
 			BlockPos chestPos = new BlockPos(this.getWorldX(4, z), this.getWorldY(1), this.getWorldZ(4, z));
 			StructureBlockUtil.placeLootChest(chestPos, level, structureBoundingBoxIn, getOrientation().getClockWise(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
-			if(corridors[0])
+			if(isBackBlocked)
 				generateBox(level, structureBoundingBoxIn, 2, 0, 0, 3, 3, 0, wallBlock, wallBlock, false);
-			if(corridors[1])
+			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 2, 0, 9, 3, 3, 9, wallBlock, wallBlock, false);
 		}
 	}
 	
-	public static class OgreCorridor extends ImpDungeonPiece
+	public static class OgreCorridor extends ImprovedStructurePiece implements ConnectablePiece
 	{
-		private boolean chestPos;
+		private boolean isFrontBlocked;
+		private final boolean chestPos;
 		private boolean ogreSpawned;
 		
-		public OgreCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		OgreCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 10, pos, coordBaseMode), 1);
+			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -950,12 +969,13 @@ public class ImpDungeonPieces
 			int xOffset = coordBaseMode.getStepX();
 			int zOffset = coordBaseMode.getStepZ();
 			
-			corridors[0] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
+			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
 		}
 		
 		public OgreCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), nbt, 1);
+			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), nbt);
+			isFrontBlocked = nbt.getBoolean("bl0");
 			chestPos = nbt.getBoolean("ch");
 			ogreSpawned = nbt.getBoolean("spwn");
 		}
@@ -963,17 +983,17 @@ public class ImpDungeonPieces
 		@Override
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
-			super.addAdditionalSaveData(context, tagCompound);
+			tagCompound.putBoolean("bl0", isFrontBlocked);
 			tagCompound.putBoolean("ch", chestPos);
 			tagCompound.putBoolean("spwn", ogreSpawned);
 		}
 		
 		@Override
-		protected boolean connectFrom(Direction facing)
+		public boolean connectFrom(Direction facing)
 		{
 			if(getOrientation().equals(facing.getOpposite()))
 			{
-				corridors[0] = false;
+				isFrontBlocked = false;
 				return true;
 			}
 			return false;
@@ -1030,7 +1050,7 @@ public class ImpDungeonPieces
 			if(!ogreSpawned && structureBoundingBoxIn.isInside(new BlockPos(getWorldX(3, 4), getWorldY(1), getWorldZ(3, 4))))
 				spawnOgre(3, 1, 4, level, randomIn);
 			
-			if(corridors[0])
+			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 3, 0, 9, 4, 3, 9, wallBlock, wallBlock, false);
 		}
 		
@@ -1045,17 +1065,19 @@ public class ImpDungeonPieces
 		}
 	}
 	
-	public static class LargeSpawnerCorridor extends ImpDungeonPiece
+	public static class LargeSpawnerCorridor extends ImprovedStructurePiece implements ConnectablePiece
 	{
-		private boolean spawner1, spawner2, chestPos;
+		private boolean isFrontBlocked, isBackBlocked;
+		private boolean spawner1, spawner2;
+		private final boolean chestPos;
 		
-		public LargeSpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		LargeSpawnerCorridor(Direction direction, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 5, 10, pos, coordBaseMode), 2);
+			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 5, 10, pos, direction));
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
-				setOrientation(coordBaseMode.getOpposite());
-			else setOrientation(coordBaseMode);
+				setOrientation(direction.getOpposite());
+			else setOrientation(direction);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
 			
@@ -1070,15 +1092,20 @@ public class ImpDungeonPieces
 			}
 			chestPos = ctxt.rand.nextBoolean();
 			
-			int xOffset = coordBaseMode.getStepX();
-			int zOffset = coordBaseMode.getStepZ();
-			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
-			
+			int xOffset = direction.getStepX();
+			int zOffset = direction.getStepZ();
+			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset * 10, 0, zOffset * 10), direction, index + 1);
+			if(mirror)
+				isBackBlocked = isBlocked;
+			else
+				isFrontBlocked = isBlocked;
 		}
 		
 		public LargeSpawnerCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), nbt, 2);
+			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), nbt);
+			this.isBackBlocked = nbt.getBoolean("bl0");
+			this.isFrontBlocked = nbt.getBoolean("bl1");
 			spawner1 = nbt.getBoolean("sp1");
 			spawner2 = nbt.getBoolean("sp2");
 			chestPos = nbt.getBoolean("ch");
@@ -1087,18 +1114,22 @@ public class ImpDungeonPieces
 		@Override
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
-			super.addAdditionalSaveData(context, tagCompound);
+			tagCompound.putBoolean("bl0", isBackBlocked);
+			tagCompound.putBoolean("bl1", isFrontBlocked);
 			tagCompound.putBoolean("sp1", spawner1);
 			tagCompound.putBoolean("sp2", spawner2);
 			tagCompound.putBoolean("ch", chestPos);
 		}
 		
 		@Override
-		protected boolean connectFrom(Direction facing)
+		public boolean connectFrom(Direction facing)
 		{
 			if(getOrientation().getAxis().equals(facing.getAxis()))
 			{
-				corridors[getOrientation().equals(facing)?1:0] = false;
+				if(getOrientation().equals(facing))
+					isFrontBlocked = false;
+				else
+					isBackBlocked = false;
 				return true;
 			}
 			return false;
@@ -1150,9 +1181,9 @@ public class ImpDungeonPieces
 			chestPos = new BlockPos(this.getWorldX(5, 4), this.getWorldY(1), this.getWorldZ(5, 4));
 			StructureBlockUtil.placeLootChest(chestPos, level, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
-			if(corridors[0])
+			if(isBackBlocked)
 				generateBox(level, structureBoundingBoxIn, 4, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);
-			if(corridors[1])
+			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 4, 0, 9, 5, 3, 9, wallBlock, wallBlock, false);
 		}	
 	}
