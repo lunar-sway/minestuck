@@ -151,61 +151,115 @@ public class ImpDungeonPieces
 		if(ctxt.rand.nextDouble() >= (1.4 - index*0.1))
 			if(ctxt.rand.nextDouble() < 1/3D)
 			{
-				ctxt.builder.addPiece(genRoom(facing, pos, xIndex, zIndex, index, ctxt));
+				ctxt.builder.addPiece(genRoom(facing, pos, xIndex, zIndex, ctxt));
 				return true;
 			} else return false;
 		
-		StructurePiece component;
+		StructurePiece piece;
 		
 		int corridors = ctxt.corridors;
 		double i = ctxt.rand.nextDouble();
 		if(i < 1.2 - corridors*0.12)	//Cross corridor
 		{
 			ctxt.corridors += 3;
-			component = new CrossCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+			
+			var corridor = new CrossCorridor(facing, pos, ctxt.rand);
+			
+			ctxt.compoGen[xIndex][zIndex] = corridor;
+			corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
+			
+			piece = corridor;
 		} else if(i < 0.96 - corridors*0.06)	//Any room
 		{
-			component = genRoom(facing, pos, xIndex, zIndex, index, ctxt);
+			piece = genRoom(facing, pos, xIndex, zIndex, ctxt);
 		} else	//Straight or corner corridor
 		{
 			ctxt.corridors -= 1;
 			if(ctxt.rand.nextBoolean())
-				component = TurnCorridor.create(facing, pos, xIndex, zIndex, index, ctxt);
-			else
+			{
+				TurnCorridor corridor = TurnCorridor.create(facing, pos, ctxt.rand);
+				
+				ctxt.compoGen[xIndex][zIndex] = corridor;
+				corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
+				
+				piece = corridor;
+			} else
 			{	//Corridor
 				i = ctxt.rand.nextFloat();
 				if(i < 0.2)
-					component = new SpawnerCorridor(facing, pos, xIndex, zIndex, index, ctxt);
-				else if (i < 0.3 && !ctxt.generatedOgreRoom)
 				{
-					component = new OgreCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+					SpawnerCorridor corridor = new SpawnerCorridor(facing, pos, ctxt.rand);
+					
+					ctxt.compoGen[xIndex][zIndex] = corridor;
+					corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
+					
+					piece = corridor;
+				} else if (i < 0.3 && !ctxt.generatedOgreRoom)
+				{
+					OgreCorridor corridor = new OgreCorridor(facing, pos, ctxt.rand);
+					
+					ctxt.compoGen[xIndex][zIndex] = corridor;
+					ctxt.generatedOgreRoom = true;
+					corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
+					
+					piece = corridor;
 				}
 				else if (i < 0.4)
 				{
-					component = new LargeSpawnerCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+					LargeSpawnerCorridor corridor = new LargeSpawnerCorridor(facing, pos, ctxt.rand);
+					
+					ctxt.compoGen[xIndex][zIndex] = corridor;
+					corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
+					
+					piece = corridor;
 				}
-				else component = new StraightCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+				else
+				{
+					StraightCorridor corridor = new StraightCorridor(facing, pos, ctxt.rand);
+					
+					ctxt.compoGen[xIndex][zIndex] = corridor;
+					corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
+					
+					piece = corridor;
+				}
 			}
 		}
 		
 		ctxt.corridors = corridors;
-		ctxt.builder.addPiece(component);
+		ctxt.builder.addPiece(piece);
 		
 		return true;
 	}
 	
-	protected static StructurePiece genRoom(Direction facing, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+	protected static StructurePiece genRoom(Direction facing, BlockPos pos, int xIndex, int zIndex, StructureContext ctxt)
 	{
 		float i = ctxt.rand.nextFloat();
 		if(i < 0.2 || !ctxt.generatedReturn)
 		{
+			ctxt.generatedReturn = true;
 			if(ctxt.rand.nextBoolean())
-				return new ReturnRoom(facing, pos, xIndex, zIndex, index, ctxt);
-			else return new ReturnRoomAlt(facing, pos, xIndex, zIndex, index, ctxt);
+			{
+				var room = new ReturnRoom(facing, pos);
+				ctxt.compoGen[xIndex][zIndex] = room;
+				return room;
+			} else
+			{
+				var room = new ReturnRoomAlt(facing, pos);
+				ctxt.compoGen[xIndex][zIndex] = room;
+				return room;
+			}
 		}
 		else if(i < 0.5)
-			return new BookcaseRoom(facing, pos, xIndex, zIndex, index, ctxt);
-		else return new SpawnerRoom(facing, pos, xIndex, zIndex, index, ctxt);
+		{
+			BookcaseRoom room = new BookcaseRoom(facing, pos, ctxt.rand);
+			ctxt.compoGen[xIndex][zIndex] = room;
+			return room;
+		} else
+		{
+			SpawnerRoom room = new SpawnerRoom(facing, pos, ctxt.rand);
+			ctxt.compoGen[xIndex][zIndex] = room;
+			return room;
+		}
 	}
 	
 	protected static class StructureContext
@@ -235,19 +289,23 @@ public class ImpDungeonPieces
 		private boolean light;
 		private byte lightPos;
 		
-		StraightCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		StraightCorridor(Direction coordBaseMode, BlockPos pos, RandomSource rand)
 		{
 			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeGridBoundingBox(3, 0, 0, 4, 5, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
-			light = true;//ctxt.rand.nextFloat() < 0.1F;
+			light = true;//rand.nextFloat() < 0.1F;
 			if(light)
-				lightPos = (byte) ctxt.rand.nextInt(4);
+				lightPos = (byte) rand.nextInt(4);
+		}
+		
+		void generateAdjacentPieces(BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			Direction orientation = Objects.requireNonNull(this.getOrientation());
+			int xOffset = orientation.getStepX();
+			int zOffset = orientation.getStepZ();
 			
-			ctxt.compoGen[xIndex][zIndex] = this;
-			int xOffset = coordBaseMode.getStepX();
-			int zOffset = coordBaseMode.getStepZ();
-			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
+			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), orientation, index + 1);
 		}
 		
 		public StraightCorridor(CompoundTag nbt)
@@ -308,27 +366,30 @@ public class ImpDungeonPieces
 		private boolean isFrontBlocked, isLeftBlocked, isRightBlocked;
 		boolean light;
 		
-		CrossCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		CrossCorridor(Direction direction, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 6, 10, pos, coordBaseMode));
-			setOrientation(coordBaseMode);
+			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 6, 10, pos, direction));
+			setOrientation(direction);
 			
-			light = ctxt.rand.nextFloat() < 0.3F;
-			
-			ctxt.compoGen[xIndex][zIndex] = this;
-			int xOffset = coordBaseMode.getStepX();
-			int zOffset = coordBaseMode.getStepZ();
+			light = rand.nextFloat() < 0.3F;
+		}
+		
+		void generateAdjacentPieces(BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			Direction orientation = Objects.requireNonNull(this.getOrientation());
+			int xOffset = orientation.getStepX();
+			int zOffset = orientation.getStepZ();
 			
 			if(ctxt.rand.nextBoolean())
 			{
-				isRightBlocked = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), coordBaseMode.getClockWise(), index + 1);
-				isLeftBlocked = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), coordBaseMode.getCounterClockWise(), index + 1);
+				isRightBlocked = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), orientation.getClockWise(), index + 1);
+				isLeftBlocked = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), orientation.getCounterClockWise(), index + 1);
 			} else
 			{
-				isLeftBlocked = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), coordBaseMode.getCounterClockWise(), index + 1);
-				isRightBlocked = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), coordBaseMode.getClockWise(), index + 1);
+				isLeftBlocked = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), orientation.getCounterClockWise(), index + 1);
+				isRightBlocked = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), orientation.getClockWise(), index + 1);
 			}
-			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 2);
+			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), orientation, index + 2);
 		}
 		
 		public CrossCorridor(CompoundTag nbt)
@@ -418,24 +479,30 @@ public class ImpDungeonPieces
 	public static class TurnCorridor extends ImprovedStructurePiece implements ConnectablePiece
 	{
 		private boolean isBackBlocked, isRightBlocked;
-		boolean light;
+		private final boolean light;
+		private boolean direction;
 		
-		static TurnCorridor create(Direction orientation, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		static TurnCorridor create(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			boolean direction = ctxt.rand.nextBoolean();
-			return new TurnCorridor(direction, direction ? orientation.getClockWise() : orientation, pos, xIndex, zIndex, index, ctxt);
+			boolean direction = rand.nextBoolean();
+			return new TurnCorridor(direction, direction ? orientation.getClockWise() : orientation, pos, rand);
 		}
 		
-		private TurnCorridor(boolean direction, Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		private TurnCorridor(boolean direction, Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 7, 5, 7, pos, coordBaseMode));
+			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 7, 5, 7, pos, orientation));
 			
-			setOrientation(coordBaseMode);
+			setOrientation(orientation);
+			this.direction = direction;
 			
-			light = ctxt.rand.nextFloat() < 0.2F;
+			light = rand.nextFloat() < 0.2F;
+		}
+		
+		void generateAdjacentPieces(BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
-			ctxt.compoGen[xIndex][zIndex] = this;
-			Direction newFacing = direction ? coordBaseMode.getOpposite() : coordBaseMode.getClockWise();
+			Direction newFacing = direction ? orientation.getOpposite() : orientation.getClockWise();
 			int xOffset = newFacing.getStepX();
 			int zOffset = newFacing.getStepZ();
 			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset * 10, 0, zOffset * 10), newFacing, index + 1);
@@ -508,13 +575,10 @@ public class ImpDungeonPieces
 	
 	public static class ReturnRoom extends ImprovedStructurePiece implements ConnectablePiece
 	{
-		ReturnRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		ReturnRoom(Direction orientation, BlockPos pos)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 11, 8, pos, coordBaseMode));
-			setOrientation(coordBaseMode);
-			
-			ctxt.generatedReturn = true;
-			ctxt.compoGen[xIndex][zIndex] = this;
+			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 11, 8, pos, orientation));
+			setOrientation(orientation);
 		}
 		
 		public ReturnRoom(CompoundTag nbt)
@@ -574,13 +638,10 @@ public class ImpDungeonPieces
 	
 	public static class ReturnRoomAlt extends ImprovedStructurePiece implements ConnectablePiece
 	{
-		ReturnRoomAlt(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		ReturnRoomAlt(Direction coordBaseMode, BlockPos pos)
 		{
 			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeGridBoundingBox(1, -1, 0, 8, 8, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
-			
-			ctxt.generatedReturn = true;
-			ctxt.compoGen[xIndex][zIndex] = this;
 		}
 		
 		public ReturnRoomAlt(CompoundTag nbt)
@@ -647,20 +708,18 @@ public class ImpDungeonPieces
 	{
 		private boolean spawner1, spawner2;
 		
-		SpawnerRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		SpawnerRoom(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 7, pos, coordBaseMode));
-			setOrientation(coordBaseMode);
+			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 7, pos, orientation));
+			setOrientation(orientation);
 			
-			ctxt.compoGen[xIndex][zIndex] = this;
-			
-			if(ctxt.rand.nextBoolean())
+			if(rand.nextBoolean())
 			{
 				spawner1 = true;
 				spawner2 = true;
 			} else
 			{
-				spawner1 = ctxt.rand.nextBoolean();
+				spawner1 = rand.nextBoolean();
 				spawner2 = !spawner1;
 			}
 		}
@@ -741,15 +800,13 @@ public class ImpDungeonPieces
 		float bookChance;
 		boolean light;
 		
-		BookcaseRoom(Direction direction, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		BookcaseRoom(Direction direction, BlockPos pos, RandomSource rand)
 		{
 			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 8, pos, direction));
 			setOrientation(direction);
 			
-			ctxt.compoGen[xIndex][zIndex] = this;
-			
-			light = ctxt.rand.nextFloat() < 0.4F;
-			bookChance = ctxt.rand.nextBoolean() ? 0 : 0.8F;
+			light = rand.nextFloat() < 0.4F;
+			bookChance = rand.nextBoolean() ? 0 : 0.8F;
 		}
 		
 		public BookcaseRoom(CompoundTag nbt)
@@ -837,30 +894,36 @@ public class ImpDungeonPieces
 		private boolean spawner1, spawner2;
 		private final boolean chestPos;
 		
-		SpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		SpawnerCorridor(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 5, 10, pos, coordBaseMode));
-			boolean mirror = ctxt.rand.nextBoolean();
-			if(mirror)
-				setOrientation(coordBaseMode.getOpposite());
-			else setOrientation(coordBaseMode);
+			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 5, 10, pos, orientation));
 			
-			ctxt.compoGen[xIndex][zIndex] = this;
+			setOrientation(orientation);
 			
-			if(ctxt.rand.nextBoolean())
+			if(rand.nextBoolean())
 			{
 				spawner1 = true;
 				spawner2 = true;
 			} else
 			{
-				spawner1 = ctxt.rand.nextBoolean();
+				spawner1 = rand.nextBoolean();
 				spawner2 = !spawner1;
 			}
-			chestPos = ctxt.rand.nextBoolean();
+			chestPos = rand.nextBoolean();
+		}
+		
+		void generateAdjacentPieces(BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
-			int xOffset = coordBaseMode.getStepX();
-			int zOffset = coordBaseMode.getStepZ();
-			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset * 10, 0, zOffset * 10), coordBaseMode, index + 1);
+			boolean mirror = ctxt.rand.nextBoolean();
+			if(mirror)
+				setOrientation(orientation.getOpposite());
+			
+			int xOffset = orientation.getStepX();
+			int zOffset = orientation.getStepZ();
+			
+			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset * 10, 0, zOffset * 10), orientation, index + 1);
 			if(mirror)
 				isBackBlocked = isBlocked;
 			else
@@ -956,20 +1019,21 @@ public class ImpDungeonPieces
 		private final boolean chestPos;
 		private boolean ogreSpawned;
 		
-		OgreCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		OgreCorridor(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 10, pos, coordBaseMode));
-			setOrientation(coordBaseMode);
+			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 10, pos, orientation));
+			setOrientation(orientation);
 			
-			ctxt.compoGen[xIndex][zIndex] = this;
-			ctxt.generatedOgreRoom = true;
+			chestPos = rand.nextBoolean();
+		}
+		
+		void generateAdjacentPieces(BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			Direction orientation = Objects.requireNonNull(this.getOrientation());
+			int xOffset = orientation.getStepX();
+			int zOffset = orientation.getStepZ();
 			
-			chestPos = ctxt.rand.nextBoolean();
-			
-			int xOffset = coordBaseMode.getStepX();
-			int zOffset = coordBaseMode.getStepZ();
-			
-			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
+			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), orientation, index + 1);
 		}
 		
 		public OgreCorridor(CompoundTag nbt)
@@ -1071,30 +1135,35 @@ public class ImpDungeonPieces
 		private boolean spawner1, spawner2;
 		private final boolean chestPos;
 		
-		LargeSpawnerCorridor(Direction direction, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		LargeSpawnerCorridor(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 5, 10, pos, direction));
-			boolean mirror = ctxt.rand.nextBoolean();
-			if(mirror)
-				setOrientation(direction.getOpposite());
-			else setOrientation(direction);
+			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 5, 10, pos, orientation));
 			
-			ctxt.compoGen[xIndex][zIndex] = this;
+			setOrientation(orientation);
 			
-			if(ctxt.rand.nextBoolean())
+			if(rand.nextBoolean())
 			{
 				spawner1 = true;
 				spawner2 = true;
 			} else
 			{
-				spawner1 = ctxt.rand.nextBoolean();
+				spawner1 = rand.nextBoolean();
 				spawner2 = !spawner1;
 			}
-			chestPos = ctxt.rand.nextBoolean();
+			chestPos = rand.nextBoolean();
+		}
+		
+		void generateAdjacentPieces(BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
-			int xOffset = direction.getStepX();
-			int zOffset = direction.getStepZ();
-			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset * 10, 0, zOffset * 10), direction, index + 1);
+			boolean mirror = ctxt.rand.nextBoolean();
+			if(mirror)
+				setOrientation(orientation.getOpposite());
+			
+			int xOffset = orientation.getStepX();
+			int zOffset = orientation.getStepZ();
+			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset * 10, 0, zOffset * 10), orientation, index + 1);
 			if(mirror)
 				isBackBlocked = isBlocked;
 			else
