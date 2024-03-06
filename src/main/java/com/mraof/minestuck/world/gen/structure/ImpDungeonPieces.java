@@ -173,7 +173,7 @@ public final class ImpDungeonPieces
 		if(ctxt.rand.nextDouble() >= (1.4 - generationDepth*0.1))
 		{
 			if(ctxt.rand.nextDouble() < 1/3D)
-				return Optional.of(pickRoom(direction, pos, ctxt));
+				return Optional.of(pickRoom(pos, direction, ctxt));
 			else
 				return Optional.empty();
 		}
@@ -185,45 +185,50 @@ public final class ImpDungeonPieces
 			return Optional.of(new CrossCorridor(direction, pos, ctxt.rand));
 		} else if(i < 0.96 - ctxt.corridors*0.06)	//Any room
 		{
-			return Optional.of(pickRoom(direction, pos, ctxt));
+			return Optional.of(pickRoom(pos, direction, ctxt));
 		} else	//Straight or corner corridor
 		{
 			ctxt.corridors -= 1;
-			if(ctxt.rand.nextBoolean())
-				return Optional.of(TurnCorridor.create(direction, pos, ctxt.rand));
-			else
-			{	//Corridor
-				i = ctxt.rand.nextFloat();
-				if(i < 0.2)
-					return Optional.of(new SpawnerCorridor(direction, pos, ctxt.rand));
-				else if (i < 0.3 && !ctxt.generatedOgreRoom)
-				{
-					ctxt.generatedOgreRoom = true;
-					return Optional.of(new OgreCorridor(direction, pos, ctxt.rand));
-				}
-				else if (i < 0.4)
-					return Optional.of(new LargeSpawnerCorridor(direction, pos, ctxt.rand));
-				else
-					return Optional.of(new StraightCorridor(direction, pos, ctxt.rand));
-			}
+			return Optional.of(pickCorridor(pos, direction, ctxt));
 		}
 	}
 	
-	private static StructurePiece pickRoom(Direction facing, BlockPos pos, StructureContext ctxt)
+	private static StructurePiece pickCorridor(BlockPos pos, Direction direction, StructureContext ctxt)
+	{
+		if(ctxt.rand.nextBoolean())
+			return TurnCorridor.create(direction, pos, ctxt.rand);
+		else
+		{	//Corridor
+			double i = ctxt.rand.nextFloat();
+			if(i < 0.2)
+				return new SpawnerCorridor(direction, pos, ctxt.rand);
+			else if (i < 0.3 && !ctxt.generatedOgreRoom)
+			{
+				ctxt.generatedOgreRoom = true;
+				return new OgreCorridor(direction, pos, ctxt.rand);
+			}
+			else if (i < 0.4)
+				return new LargeSpawnerCorridor(direction, pos, ctxt.rand);
+			else
+				return new StraightCorridor(direction, pos, ctxt.rand);
+		}
+	}
+	
+	private static StructurePiece pickRoom(BlockPos pos, Direction direction, StructureContext ctxt)
 	{
 		float i = ctxt.rand.nextFloat();
 		if(!ctxt.generatedReturn || i < 0.2)
 		{
 			ctxt.generatedReturn = true;
 			if(ctxt.rand.nextBoolean())
-				return new ReturnRoom(facing, pos);
+				return new ReturnRoom(direction, pos);
 			else
-				return new ReturnRoomAlt(facing, pos);
+				return new ReturnRoomAlt(direction, pos);
 		}
 		else if(i < 0.5)
-			return new BookcaseRoom(facing, pos, ctxt.rand);
+			return new BookcaseRoom(direction, pos, ctxt.rand);
 		else
-			return new SpawnerRoom(facing, pos, ctxt.rand);
+			return new SpawnerRoom(direction, pos, ctxt.rand);
 	}
 	
 	public static class StructureContext
