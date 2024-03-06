@@ -281,7 +281,7 @@ public final class ImpDungeonPieces
 			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeGridBoundingBox(3, 0, 0, 4, 5, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
-			light = true;//rand.nextFloat() < 0.1F;
+			light = rand.nextFloat() < 0.4F;
 			if(light)
 				lightPos = (byte) rand.nextInt(4);
 		}
