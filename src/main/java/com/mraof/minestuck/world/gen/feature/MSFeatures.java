@@ -22,14 +22,11 @@ public final class MSFeatures
 	
 	public static final RegistryObject<Feature<SimpleTemplateFeature.Config>> SIMPLE_TEMPLATE = REGISTER.register("simple_template", () -> new SimpleTemplateFeature(SimpleTemplateFeature.Config.CODEC));
 	
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SMALL_COG = REGISTER.register("small_cog", () -> new SmallCogFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_COG = REGISTER.register("large_cog", () -> new LargeCogFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> FLOOR_COG = REGISTER.register("floor_cog", () -> new FloorCogFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SURFACE_FOSSIL = REGISTER.register("surface_fossil", () -> new SurfaceFossilsFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> BROKEN_SWORD = REGISTER.register("broken_sword", () -> new BrokenSwordFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> BUCKET = REGISTER.register("bucket", () -> new BucketFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CAKE_PEDESTAL = REGISTER.register("cake_pedestal", () -> new CakePedestalFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SMALL_LIBRARY = REGISTER.register("small_library", () -> new SmallLibraryFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TOWER = REGISTER.register("tower", () -> new TowerFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> new ParcelPyxisFeature(NoneFeatureConfiguration.CODEC));

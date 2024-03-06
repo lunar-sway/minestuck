@@ -17,6 +17,8 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> RETURN_NODE = key("return_node");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_COG = key("small_cog");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_COG_1 = key("large_cog_1");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_COG_2 = key("large_cog_2");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_COG = key("large_cog");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> COG = key("cog");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FLOOR_COG = key("floor_cog");

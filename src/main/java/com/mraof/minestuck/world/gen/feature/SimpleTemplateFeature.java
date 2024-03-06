@@ -80,6 +80,16 @@ public final class SimpleTemplateFeature extends Feature<SimpleTemplateFeature.C
 				Codec.BOOL.fieldOf("land_block_replacement").forGetter(Config::useLandBlocks),
 				TemplateHeightPlacement.CODEC.optionalFieldOf("height_placement").forGetter(Config::heightPlacement)
 		).apply(instance, Config::new));
+		
+		public Config(ResourceLocation templateId, boolean useLandBlocks)
+		{
+			this(templateId, useLandBlocks, Optional.empty());
+		}
+		
+		public Config(ResourceLocation templateId, boolean useLandBlocks, TemplateHeightPlacement heightPlacement)
+		{
+			this(templateId, useLandBlocks, Optional.of(heightPlacement));
+		}
 	}
 	
 	public record TemplateHeightPlacement(HeightQueryType queryType, Heightmap.Types heightmapType, IntProvider offset)
@@ -119,6 +129,11 @@ public final class SimpleTemplateFeature extends Feature<SimpleTemplateFeature.C
 		public String getSerializedName()
 		{
 			return this.name().toLowerCase(Locale.ROOT);
+		}
+		
+		public TemplateHeightPlacement with(Heightmap.Types heightmapType, IntProvider offset)
+		{
+			return new TemplateHeightPlacement(this, heightmapType, offset);
 		}
 	}
 }
