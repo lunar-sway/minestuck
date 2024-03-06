@@ -25,6 +25,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
@@ -80,7 +81,6 @@ public final class ImpDungeonPieces
 			BlockPos compoPos = new BlockPos(boundingBox.minX() + (boundingBox.getXSpan()/2 - 1), boundingBox.minY(), boundingBox.minZ() + (boundingBox.getZSpan()/2 - 1));
 			
 			StructureContext ctxt = new StructureContext(compoPos, builder, rand);
-			ctxt.compoGen[6][6] = this;
 			
 			Direction orientation = Objects.requireNonNull(getOrientation());
 			int xOffset = orientation.getStepX();
@@ -142,129 +142,86 @@ public final class ImpDungeonPieces
 	static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, Direction facing, int index)
 	{
 		
-		if(xIndex >= ctxt.compoGen.length || zIndex >= ctxt.compoGen[0].length
-				|| xIndex < 0 || zIndex < 0)
+		if(xIndex < 0 || 13 <= xIndex || zIndex < 0 || 13 <= zIndex)
 			return false;
 		
-		if(ctxt.compoGen[xIndex][zIndex] != null)
-			return ctxt.compoGen[xIndex][zIndex].connectFrom(facing.getOpposite());
+		if(ctxt.findPieceInGridSlot(xIndex, zIndex) instanceof ConnectablePiece piece)
+			return piece.connectFrom(facing.getOpposite());
+		
+		BlockPos pos = ctxt.centerPosForGridSlot(xIndex, zIndex);
 		
 		if(ctxt.rand.nextDouble() >= (1.4 - index*0.1))
 			if(ctxt.rand.nextDouble() < 1/3D)
 			{
-				genRoom(facing, xIndex, zIndex, ctxt);
+				StructurePiece room = genRoom(facing, pos, ctxt);
+				ctxt.builder.addPiece(room);
 				return true;
 			} else return false;
 		
 		int corridors = ctxt.corridors;
 		
-		BlockPos pos = ctxt.centerPosForGridSlot(xIndex, zIndex);
+		StructurePiece piece;
 		double i = ctxt.rand.nextDouble();
 		if(i < 1.2 - corridors*0.12)	//Cross corridor
 		{
 			ctxt.corridors += 3;
-			
-			var corridor = new CrossCorridor(facing, pos, ctxt.rand);
-			
-			ctxt.compoGen[xIndex][zIndex] = corridor;
-			ctxt.builder.addPiece(corridor);
-			corridor.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
-			
+			piece = new CrossCorridor(facing, pos, ctxt.rand);
 		} else if(i < 0.96 - corridors*0.06)	//Any room
 		{
-			genRoom(facing, xIndex, zIndex, ctxt);
+			piece = genRoom(facing, pos, ctxt);
 		} else	//Straight or corner corridor
 		{
 			ctxt.corridors -= 1;
 			if(ctxt.rand.nextBoolean())
-			{
-				TurnCorridor corridor = TurnCorridor.create(facing, pos, ctxt.rand);
-				
-				ctxt.compoGen[xIndex][zIndex] = corridor;
-				ctxt.builder.addPiece(corridor);
-				corridor.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
-			} else
+				piece = TurnCorridor.create(facing, pos, ctxt.rand);
+			else
 			{	//Corridor
 				i = ctxt.rand.nextFloat();
 				if(i < 0.2)
-				{
-					SpawnerCorridor corridor = new SpawnerCorridor(facing, pos, ctxt.rand);
-					
-					ctxt.compoGen[xIndex][zIndex] = corridor;
-					ctxt.builder.addPiece(corridor);
-					corridor.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
-					
-				} else if (i < 0.3 && !ctxt.generatedOgreRoom)
+					piece = new SpawnerCorridor(facing, pos, ctxt.rand);
+				else if (i < 0.3 && !ctxt.generatedOgreRoom)
 				{
 					ctxt.generatedOgreRoom = true;
-					
-					OgreCorridor corridor = new OgreCorridor(facing, pos, ctxt.rand);
-					
-					ctxt.compoGen[xIndex][zIndex] = corridor;
-					ctxt.builder.addPiece(corridor);
-					corridor.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
-					
+					piece = new OgreCorridor(facing, pos, ctxt.rand);
 				}
 				else if (i < 0.4)
-				{
-					LargeSpawnerCorridor corridor = new LargeSpawnerCorridor(facing, pos, ctxt.rand);
-					
-					ctxt.compoGen[xIndex][zIndex] = corridor;
-					ctxt.builder.addPiece(corridor);
-					corridor.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
-				}
+					piece = new LargeSpawnerCorridor(facing, pos, ctxt.rand);
 				else
-				{
-					StraightCorridor corridor = new StraightCorridor(facing, pos, ctxt.rand);
-					
-					ctxt.compoGen[xIndex][zIndex] = corridor;
-					ctxt.builder.addPiece(corridor);
-					corridor.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
-				}
+					piece = new StraightCorridor(facing, pos, ctxt.rand);
 			}
 		}
+		
+		ctxt.builder.addPiece(piece);
+		if(piece instanceof ConnectablePiece connectablePiece)
+			connectablePiece.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
 		
 		ctxt.corridors = corridors;
 		
 		return true;
 	}
 	
-	private static void genRoom(Direction facing, int xIndex, int zIndex, StructureContext ctxt)
+	private static StructurePiece genRoom(Direction facing, BlockPos pos, StructureContext ctxt)
 	{
-		BlockPos pos = ctxt.centerPosForGridSlot(xIndex, zIndex);
+		StructurePiece piece;
 		float i = ctxt.rand.nextFloat();
 		if(i < 0.2 || !ctxt.generatedReturn)
 		{
 			ctxt.generatedReturn = true;
 			if(ctxt.rand.nextBoolean())
-			{
-				var room = new ReturnRoom(facing, pos);
-				ctxt.compoGen[xIndex][zIndex] = room;
-				ctxt.builder.addPiece(room);
-			} else
-			{
-				var room = new ReturnRoomAlt(facing, pos);
-				ctxt.compoGen[xIndex][zIndex] = room;
-				ctxt.builder.addPiece(room);
-			}
+				piece = new ReturnRoom(facing, pos);
+			else
+				piece = new ReturnRoomAlt(facing, pos);
 		}
 		else if(i < 0.5)
-		{
-			BookcaseRoom room = new BookcaseRoom(facing, pos, ctxt.rand);
-			ctxt.compoGen[xIndex][zIndex] = room;
-			ctxt.builder.addPiece(room);
-		} else
-		{
-			SpawnerRoom room = new SpawnerRoom(facing, pos, ctxt.rand);
-			ctxt.compoGen[xIndex][zIndex] = room;
-			ctxt.builder.addPiece(room);
-		}
+			piece = new BookcaseRoom(facing, pos, ctxt.rand);
+		else
+			piece = new SpawnerRoom(facing, pos, ctxt.rand);
+		return piece;
 	}
 	
-	static class StructureContext
+	public static class StructureContext
 	{
 		final BlockPos zeroPos;
-		final ConnectablePiece[][] compoGen = new ConnectablePiece[13][13];
 		final StructurePieceAccessor builder;
 		final RandomSource rand;
 		int corridors = 3;
@@ -282,11 +239,23 @@ public final class ImpDungeonPieces
 		{
 			return this.zeroPos.offset(10*xIndex, 0, 10*zIndex);
 		}
+		
+		@Nullable
+		StructurePiece findPieceInGridSlot(int xIndex, int zIndex)
+		{
+			BlockPos centerPos = this.centerPosForGridSlot(xIndex, zIndex);
+			BoundingBox box = makeGridBoundingBox(0, 0, 0, 10, 2, 10, centerPos, Direction.NORTH);
+			return this.builder.findCollisionPiece(box);
+		}
 	}
 	
 	public interface ConnectablePiece
 	{
 		boolean connectFrom(Direction facing);
+		
+		default void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+		}
 	}
 	
 	public static class StraightCorridor extends ImprovedStructurePiece implements ConnectablePiece
@@ -305,7 +274,8 @@ public final class ImpDungeonPieces
 				lightPos = (byte) rand.nextInt(4);
 		}
 		
-		void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		@Override
+		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			int xOffset = orientation.getStepX();
@@ -380,7 +350,8 @@ public final class ImpDungeonPieces
 			light = rand.nextFloat() < 0.3F;
 		}
 		
-		void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		@Override
+		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			int xOffset = orientation.getStepX();
@@ -504,7 +475,8 @@ public final class ImpDungeonPieces
 			light = rand.nextFloat() < 0.2F;
 		}
 		
-		void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		@Override
+		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
@@ -918,7 +890,8 @@ public final class ImpDungeonPieces
 			chestPos = rand.nextBoolean();
 		}
 		
-		void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		@Override
+		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
@@ -1033,7 +1006,8 @@ public final class ImpDungeonPieces
 			chestPos = rand.nextBoolean();
 		}
 		
-		void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		@Override
+		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			int xOffset = orientation.getStepX();
@@ -1160,7 +1134,8 @@ public final class ImpDungeonPieces
 			chestPos = rand.nextBoolean();
 		}
 		
-		void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		@Override
+		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
