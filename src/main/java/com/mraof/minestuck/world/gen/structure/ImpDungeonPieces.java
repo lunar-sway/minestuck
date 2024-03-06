@@ -140,7 +140,7 @@ public final class ImpDungeonPieces
 		}
 	}
 	
-	static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, Direction direction, int index)
+	static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, Direction direction, int generationDepth)
 	{
 		if(xIndex < 0 || 13 <= xIndex || zIndex < 0 || 13 <= zIndex)
 			return false;
@@ -151,12 +151,13 @@ public final class ImpDungeonPieces
 		int corridors = ctxt.corridors;
 		
 		BlockPos pos = ctxt.centerPosForGridSlot(xIndex, zIndex);
-		Optional<StructurePiece> optionalPiece = nextPiece(pos, direction, index, ctxt);
+		Optional<StructurePiece> optionalPiece = nextPiece(pos, direction, generationDepth, ctxt);
 		
 		optionalPiece.ifPresent(piece -> {
 			ctxt.builder.addPiece(piece);
 			if(piece instanceof ConnectablePiece connectablePiece)
-				connectablePiece.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
+				connectablePiece.generateAdjacentPieces(
+						(genDirection, depthIncrement) -> generatePart(ctxt, xIndex + genDirection.getStepX(), zIndex + genDirection.getStepZ(), genDirection, generationDepth + depthIncrement), ctxt.rand);
 		});
 		
 		ctxt.corridors = corridors;
@@ -256,9 +257,14 @@ public final class ImpDungeonPieces
 	{
 		boolean connectFrom(Direction facing);
 		
-		default void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		default void generateAdjacentPieces(LocalPieceGenerator generator, RandomSource rand)
 		{
 		}
+	}
+	
+	public interface LocalPieceGenerator
+	{
+		boolean tryGenerateInDirection(Direction direction, int depthIncrement);
 	}
 	
 	public static class StraightCorridor extends ImprovedStructurePiece implements ConnectablePiece
@@ -278,13 +284,10 @@ public final class ImpDungeonPieces
 		}
 		
 		@Override
-		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		public void generateAdjacentPieces(LocalPieceGenerator generator, RandomSource rand)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
-			int xOffset = orientation.getStepX();
-			int zOffset = orientation.getStepZ();
-			
-			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, orientation, index + 1);
+			isFrontBlocked = !generator.tryGenerateInDirection(orientation, 1);
 		}
 		
 		public StraightCorridor(CompoundTag nbt)
@@ -354,22 +357,19 @@ public final class ImpDungeonPieces
 		}
 		
 		@Override
-		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		public void generateAdjacentPieces(LocalPieceGenerator generator, RandomSource rand)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
-			int xOffset = orientation.getStepX();
-			int zOffset = orientation.getStepZ();
-			
-			if(ctxt.rand.nextBoolean())
+			if(rand.nextBoolean())
 			{
-				isRightBlocked = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, orientation.getClockWise(), index + 1);
-				isLeftBlocked = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, orientation.getCounterClockWise(), index + 1);
+				isRightBlocked = !generator.tryGenerateInDirection(orientation.getClockWise(), 1);
+				isLeftBlocked = !generator.tryGenerateInDirection(orientation.getCounterClockWise(), 1);
 			} else
 			{
-				isLeftBlocked = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, orientation.getCounterClockWise(), index + 1);
-				isRightBlocked = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, orientation.getClockWise(), index + 1);
+				isLeftBlocked = !generator.tryGenerateInDirection(orientation.getCounterClockWise(), 1);
+				isRightBlocked = !generator.tryGenerateInDirection(orientation.getClockWise(), 1);
 			}
-			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, orientation, index + 2);
+			isFrontBlocked = !generator.tryGenerateInDirection(orientation, 2);
 		}
 		
 		public CrossCorridor(CompoundTag nbt)
@@ -479,14 +479,12 @@ public final class ImpDungeonPieces
 		}
 		
 		@Override
-		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		public void generateAdjacentPieces(LocalPieceGenerator generator, RandomSource rand)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
 			Direction newFacing = direction ? orientation.getOpposite() : orientation.getClockWise();
-			int xOffset = newFacing.getStepX();
-			int zOffset = newFacing.getStepZ();
-			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, newFacing, index + 1);
+			boolean isBlocked = !generator.tryGenerateInDirection(newFacing, 1);
 			if(direction)
 				isBackBlocked = isBlocked;
 			else
@@ -894,18 +892,15 @@ public final class ImpDungeonPieces
 		}
 		
 		@Override
-		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		public void generateAdjacentPieces(LocalPieceGenerator generator, RandomSource rand)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
-			boolean mirror = ctxt.rand.nextBoolean();
+			boolean mirror = rand.nextBoolean();
 			if(mirror)
 				setOrientation(orientation.getOpposite());
 			
-			int xOffset = orientation.getStepX();
-			int zOffset = orientation.getStepZ();
-			
-			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, orientation, index + 1);
+			boolean isBlocked = !generator.tryGenerateInDirection(orientation, 1);
 			if(mirror)
 				isBackBlocked = isBlocked;
 			else
@@ -1010,13 +1005,10 @@ public final class ImpDungeonPieces
 		}
 		
 		@Override
-		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		public void generateAdjacentPieces(LocalPieceGenerator generator, RandomSource rand)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
-			int xOffset = orientation.getStepX();
-			int zOffset = orientation.getStepZ();
-			
-			isFrontBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, orientation, index + 1);
+			isFrontBlocked = !generator.tryGenerateInDirection(orientation, 1);
 		}
 		
 		public OgreCorridor(CompoundTag nbt)
@@ -1138,17 +1130,15 @@ public final class ImpDungeonPieces
 		}
 		
 		@Override
-		public void generateAdjacentPieces(int xIndex, int zIndex, int index, StructureContext ctxt)
+		public void generateAdjacentPieces(LocalPieceGenerator generator, RandomSource rand)
 		{
 			Direction orientation = Objects.requireNonNull(this.getOrientation());
 			
-			boolean mirror = ctxt.rand.nextBoolean();
+			boolean mirror = rand.nextBoolean();
 			if(mirror)
 				setOrientation(orientation.getOpposite());
 			
-			int xOffset = orientation.getStepX();
-			int zOffset = orientation.getStepZ();
-			boolean isBlocked = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, orientation, index + 1);
+			boolean isBlocked = !generator.tryGenerateInDirection(orientation, 1);
 			if(mirror)
 				isBackBlocked = isBlocked;
 			else
