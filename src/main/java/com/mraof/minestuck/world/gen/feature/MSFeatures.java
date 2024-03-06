@@ -20,6 +20,8 @@ public final class MSFeatures
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> RETURN_NODE = REGISTER.register("return_node", () -> new ReturnNodeFeature(NoneFeatureConfiguration.CODEC));
 	
+	public static final RegistryObject<Feature<SimpleTemplateFeature.Config>> SIMPLE_TEMPLATE = REGISTER.register("simple_template", () -> new SimpleTemplateFeature(SimpleTemplateFeature.Config.CODEC));
+	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SMALL_COG = REGISTER.register("small_cog", () -> new SmallCogFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_COG = REGISTER.register("large_cog", () -> new LargeCogFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> FLOOR_COG = REGISTER.register("floor_cog", () -> new FloorCogFeature(NoneFeatureConfiguration.CODEC));
