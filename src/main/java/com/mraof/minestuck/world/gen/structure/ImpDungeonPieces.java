@@ -28,6 +28,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 public final class ImpDungeonPieces
@@ -139,84 +140,86 @@ public final class ImpDungeonPieces
 		}
 	}
 	
-	static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, Direction facing, int index)
+	static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, Direction direction, int index)
 	{
-		
 		if(xIndex < 0 || 13 <= xIndex || zIndex < 0 || 13 <= zIndex)
 			return false;
 		
 		if(ctxt.findPieceInGridSlot(xIndex, zIndex) instanceof ConnectablePiece piece)
-			return piece.connectFrom(facing.getOpposite());
-		
-		BlockPos pos = ctxt.centerPosForGridSlot(xIndex, zIndex);
-		
-		if(ctxt.rand.nextDouble() >= (1.4 - index*0.1))
-			if(ctxt.rand.nextDouble() < 1/3D)
-			{
-				StructurePiece room = genRoom(facing, pos, ctxt);
-				ctxt.builder.addPiece(room);
-				return true;
-			} else return false;
+			return piece.connectFrom(direction.getOpposite());
 		
 		int corridors = ctxt.corridors;
 		
-		StructurePiece piece;
+		BlockPos pos = ctxt.centerPosForGridSlot(xIndex, zIndex);
+		Optional<StructurePiece> optionalPiece = nextPiece(pos, direction, index, ctxt);
+		
+		optionalPiece.ifPresent(piece -> {
+			ctxt.builder.addPiece(piece);
+			if(piece instanceof ConnectablePiece connectablePiece)
+				connectablePiece.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
+		});
+		
+		ctxt.corridors = corridors;
+		
+		return optionalPiece.isPresent();
+	}
+	
+	private static Optional<StructurePiece> nextPiece(BlockPos pos, Direction direction, int generationDepth, StructureContext ctxt)
+	{
+		if(ctxt.rand.nextDouble() >= (1.4 - generationDepth*0.1))
+		{
+			if(ctxt.rand.nextDouble() < 1/3D)
+				return Optional.of(pickRoom(direction, pos, ctxt));
+			else
+				return Optional.empty();
+		}
+		
 		double i = ctxt.rand.nextDouble();
-		if(i < 1.2 - corridors*0.12)	//Cross corridor
+		if(i < 1.2 - ctxt.corridors*0.12)	//Cross corridor
 		{
 			ctxt.corridors += 3;
-			piece = new CrossCorridor(facing, pos, ctxt.rand);
-		} else if(i < 0.96 - corridors*0.06)	//Any room
+			return Optional.of(new CrossCorridor(direction, pos, ctxt.rand));
+		} else if(i < 0.96 - ctxt.corridors*0.06)	//Any room
 		{
-			piece = genRoom(facing, pos, ctxt);
+			return Optional.of(pickRoom(direction, pos, ctxt));
 		} else	//Straight or corner corridor
 		{
 			ctxt.corridors -= 1;
 			if(ctxt.rand.nextBoolean())
-				piece = TurnCorridor.create(facing, pos, ctxt.rand);
+				return Optional.of(TurnCorridor.create(direction, pos, ctxt.rand));
 			else
 			{	//Corridor
 				i = ctxt.rand.nextFloat();
 				if(i < 0.2)
-					piece = new SpawnerCorridor(facing, pos, ctxt.rand);
+					return Optional.of(new SpawnerCorridor(direction, pos, ctxt.rand));
 				else if (i < 0.3 && !ctxt.generatedOgreRoom)
 				{
 					ctxt.generatedOgreRoom = true;
-					piece = new OgreCorridor(facing, pos, ctxt.rand);
+					return Optional.of(new OgreCorridor(direction, pos, ctxt.rand));
 				}
 				else if (i < 0.4)
-					piece = new LargeSpawnerCorridor(facing, pos, ctxt.rand);
+					return Optional.of(new LargeSpawnerCorridor(direction, pos, ctxt.rand));
 				else
-					piece = new StraightCorridor(facing, pos, ctxt.rand);
+					return Optional.of(new StraightCorridor(direction, pos, ctxt.rand));
 			}
 		}
-		
-		ctxt.builder.addPiece(piece);
-		if(piece instanceof ConnectablePiece connectablePiece)
-			connectablePiece.generateAdjacentPieces(xIndex, zIndex, index, ctxt);
-		
-		ctxt.corridors = corridors;
-		
-		return true;
 	}
 	
-	private static StructurePiece genRoom(Direction facing, BlockPos pos, StructureContext ctxt)
+	private static StructurePiece pickRoom(Direction facing, BlockPos pos, StructureContext ctxt)
 	{
-		StructurePiece piece;
 		float i = ctxt.rand.nextFloat();
-		if(i < 0.2 || !ctxt.generatedReturn)
+		if(!ctxt.generatedReturn || i < 0.2)
 		{
 			ctxt.generatedReturn = true;
 			if(ctxt.rand.nextBoolean())
-				piece = new ReturnRoom(facing, pos);
+				return new ReturnRoom(facing, pos);
 			else
-				piece = new ReturnRoomAlt(facing, pos);
+				return new ReturnRoomAlt(facing, pos);
 		}
 		else if(i < 0.5)
-			piece = new BookcaseRoom(facing, pos, ctxt.rand);
+			return new BookcaseRoom(facing, pos, ctxt.rand);
 		else
-			piece = new SpawnerRoom(facing, pos, ctxt.rand);
-		return piece;
+			return new SpawnerRoom(facing, pos, ctxt.rand);
 	}
 	
 	public static class StructureContext
