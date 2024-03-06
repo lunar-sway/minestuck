@@ -151,11 +151,9 @@ public class ImpDungeonPieces
 		if(ctxt.rand.nextDouble() >= (1.4 - index*0.1))
 			if(ctxt.rand.nextDouble() < 1/3D)
 			{
-				ctxt.builder.addPiece(genRoom(facing, pos, xIndex, zIndex, ctxt));
+				genRoom(facing, pos, xIndex, zIndex, ctxt);
 				return true;
 			} else return false;
-		
-		StructurePiece piece;
 		
 		int corridors = ctxt.corridors;
 		double i = ctxt.rand.nextDouble();
@@ -166,12 +164,12 @@ public class ImpDungeonPieces
 			var corridor = new CrossCorridor(facing, pos, ctxt.rand);
 			
 			ctxt.compoGen[xIndex][zIndex] = corridor;
+			ctxt.builder.addPiece(corridor);
 			corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
 			
-			piece = corridor;
 		} else if(i < 0.96 - corridors*0.06)	//Any room
 		{
-			piece = genRoom(facing, pos, xIndex, zIndex, ctxt);
+			genRoom(facing, pos, xIndex, zIndex, ctxt);
 		} else	//Straight or corner corridor
 		{
 			ctxt.corridors -= 1;
@@ -180,9 +178,8 @@ public class ImpDungeonPieces
 				TurnCorridor corridor = TurnCorridor.create(facing, pos, ctxt.rand);
 				
 				ctxt.compoGen[xIndex][zIndex] = corridor;
+				ctxt.builder.addPiece(corridor);
 				corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
-				
-				piece = corridor;
 			} else
 			{	//Corridor
 				i = ctxt.rand.nextFloat();
@@ -191,47 +188,45 @@ public class ImpDungeonPieces
 					SpawnerCorridor corridor = new SpawnerCorridor(facing, pos, ctxt.rand);
 					
 					ctxt.compoGen[xIndex][zIndex] = corridor;
+					ctxt.builder.addPiece(corridor);
 					corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
 					
-					piece = corridor;
 				} else if (i < 0.3 && !ctxt.generatedOgreRoom)
 				{
+					ctxt.generatedOgreRoom = true;
+					
 					OgreCorridor corridor = new OgreCorridor(facing, pos, ctxt.rand);
 					
 					ctxt.compoGen[xIndex][zIndex] = corridor;
-					ctxt.generatedOgreRoom = true;
+					ctxt.builder.addPiece(corridor);
 					corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
 					
-					piece = corridor;
 				}
 				else if (i < 0.4)
 				{
 					LargeSpawnerCorridor corridor = new LargeSpawnerCorridor(facing, pos, ctxt.rand);
 					
 					ctxt.compoGen[xIndex][zIndex] = corridor;
+					ctxt.builder.addPiece(corridor);
 					corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
-					
-					piece = corridor;
 				}
 				else
 				{
 					StraightCorridor corridor = new StraightCorridor(facing, pos, ctxt.rand);
 					
 					ctxt.compoGen[xIndex][zIndex] = corridor;
+					ctxt.builder.addPiece(corridor);
 					corridor.generateAdjacentPieces(pos, xIndex, zIndex, index, ctxt);
-					
-					piece = corridor;
 				}
 			}
 		}
 		
 		ctxt.corridors = corridors;
-		ctxt.builder.addPiece(piece);
 		
 		return true;
 	}
 	
-	protected static StructurePiece genRoom(Direction facing, BlockPos pos, int xIndex, int zIndex, StructureContext ctxt)
+	protected static void genRoom(Direction facing, BlockPos pos, int xIndex, int zIndex, StructureContext ctxt)
 	{
 		float i = ctxt.rand.nextFloat();
 		if(i < 0.2 || !ctxt.generatedReturn)
@@ -241,24 +236,24 @@ public class ImpDungeonPieces
 			{
 				var room = new ReturnRoom(facing, pos);
 				ctxt.compoGen[xIndex][zIndex] = room;
-				return room;
+				ctxt.builder.addPiece(room);
 			} else
 			{
 				var room = new ReturnRoomAlt(facing, pos);
 				ctxt.compoGen[xIndex][zIndex] = room;
-				return room;
+				ctxt.builder.addPiece(room);
 			}
 		}
 		else if(i < 0.5)
 		{
 			BookcaseRoom room = new BookcaseRoom(facing, pos, ctxt.rand);
 			ctxt.compoGen[xIndex][zIndex] = room;
-			return room;
+			ctxt.builder.addPiece(room);
 		} else
 		{
 			SpawnerRoom room = new SpawnerRoom(facing, pos, ctxt.rand);
 			ctxt.compoGen[xIndex][zIndex] = room;
-			return room;
+			ctxt.builder.addPiece(room);
 		}
 	}
 	
