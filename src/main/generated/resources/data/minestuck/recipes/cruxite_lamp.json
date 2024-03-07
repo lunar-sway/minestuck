@@ -6,14 +6,17 @@
     "#": {
       "item": "minestuck:raw_cruxite"
     },
+    "$": {
+      "item": "minestuck:raw_uranium"
+    },
     "%": {
       "item": "minecraft:torch"
     }
   },
   "pattern": [
-    "###",
+    "$#$",
     "#%#",
-    "###"
+    "$#$"
   ],
   "result": {
     "item": "minestuck:cruxite_lamp"

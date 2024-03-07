@@ -249,6 +249,7 @@
   "block.minestuck.cruxite_dowel": "Cruxite Dowel",
   "block.minestuck.cruxite_dowel.invalid": "Invalid Data",
   "block.minestuck.cruxite_lamp": "Cruxite Lamp",
+  "block.minestuck.cruxite_lamp.tooltip": "The instructions have an arrow pointing at a line figure's right arm. You decide not to get your lamps from IKEA next time.",
   "block.minestuck.cruxite_pillar": "Cruxite Pillar",
   "block.minestuck.cruxite_pressure_plate": "Cruxite Pressure Plate",
   "block.minestuck.cruxite_slab": "Cruxite Slab",

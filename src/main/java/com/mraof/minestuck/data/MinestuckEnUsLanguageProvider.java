@@ -176,6 +176,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHISELED_CRUXITE_BLOCK, "Chiseled Cruxite Block");
 		addBlock(MSBlocks.CRUXITE_PILLAR, "Cruxite Pillar");
 		addBlock(MSBlocks.CRUXITE_LAMP, "Cruxite Lamp");
+		addBlockTooltip(MSBlocks.CRUXITE_LAMP, "The instructions have an arrow pointing at a line figure's right arm. You decide not to get your lamps from IKEA next time.");
 		
 		
 		addBlock(MSBlocks.URANIUM_BLOCK, "Uranium Block");

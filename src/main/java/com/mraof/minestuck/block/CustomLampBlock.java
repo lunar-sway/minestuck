@@ -13,7 +13,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class CustomLampBlock extends Block
 {
-	public static final BooleanProperty CLICKED = BooleanProperty.create("clicked");
+	public static final BooleanProperty CLICKED = MSProperties.CLICKED;
 	
 	public CustomLampBlock(Properties pProperties) {
 		super(pProperties);
