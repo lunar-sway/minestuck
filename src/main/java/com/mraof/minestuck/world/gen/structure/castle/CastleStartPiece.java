@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
-import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -54,8 +54,8 @@ public class CastleStartPiece extends CastlePiece
     @Override
     public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator generator, RandomSource random, BoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT.get() : MSBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT.get() : MSBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();
+		BlockState chessTile = (isBlack ? SkaiaBlocks.BLACK_CHESS_DIRT.get() : SkaiaBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? SkaiaBlocks.DARK_GRAY_CHESS_DIRT.get() : SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();
 		if(this.averageGroundLevel < 0)
 		{
 			this.averageGroundLevel = this.getAverageGroundLevel(level, structureBoundingBox);

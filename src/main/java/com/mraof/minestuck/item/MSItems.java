@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
@@ -726,61 +727,61 @@ public class MSItems
 	
 	
 	//Skaia
-	public static final RegistryObject<BlockItem> BLACK_CHESS_DIRT = registerBlockItem(MSBlocks.BLACK_CHESS_DIRT);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_DIRT = registerBlockItem(MSBlocks.WHITE_CHESS_DIRT);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_DIRT = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_DIRT);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_DIRT = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_DIRT);
-	public static final RegistryObject<BlockItem> SKAIA_PORTAL = registerBlockItem(MSBlocks.SKAIA_PORTAL, new Item.Properties().rarity(Rarity.EPIC));
+	public static final RegistryObject<BlockItem> BLACK_CHESS_DIRT = registerBlockItem(SkaiaBlocks.BLACK_CHESS_DIRT);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_DIRT = registerBlockItem(SkaiaBlocks.WHITE_CHESS_DIRT);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_DIRT = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_DIRT);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_DIRT = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT);
+	public static final RegistryObject<BlockItem> SKAIA_PORTAL = registerBlockItem(SkaiaBlocks.SKAIA_PORTAL, new Item.Properties().rarity(Rarity.EPIC));
 	
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICKS = registerBlockItem(MSBlocks.BLACK_CHESS_BRICKS);
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_WALL = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_WALL);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICKS = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICKS);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_WALL = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_WALL);
 	
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICKS = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICKS);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_WALL = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_WALL);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICKS = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICKS);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_WALL = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_WALL);
 	
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICKS = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICKS);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_WALL = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_WALL);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICKS = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICKS);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_WALL = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_WALL);
 	
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICKS = registerBlockItem(MSBlocks.WHITE_CHESS_BRICKS);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_WALL = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_WALL);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICKS = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICKS);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_WALL = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_WALL);
 	
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH);
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_STAIRS = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_STAIRS);
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_SLAB = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_SLAB);
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_WALL = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_WALL);
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_BUTTON = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_BUTTON);
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_STAIRS = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_STAIRS);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_SLAB = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_SLAB);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_WALL = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_WALL);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_BUTTON = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_BUTTON);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
 	
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_WALL = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_WALL = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
 	
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
 	
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_STAIRS = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_STAIRS);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_SLAB = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_SLAB);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_WALL = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_WALL);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_BUTTON = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_BUTTON);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_STAIRS = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_STAIRS);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_SLAB = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_SLAB);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_WALL = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_WALL);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_BUTTON = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_BUTTON);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
 	
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_TRIM = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_TRIM);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_TRIM = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_TRIM);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_TRIM = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_TRIM = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_TRIM);
-	public static final RegistryObject<BlockItem> CHECKERED_STAINED_GLASS = registerBlockItem(MSBlocks.CHECKERED_STAINED_GLASS);
-	public static final RegistryObject<BlockItem> BLACK_CROWN_STAINED_GLASS = registerBlockItem(MSBlocks.BLACK_CROWN_STAINED_GLASS);
-	public static final RegistryObject<BlockItem> BLACK_PAWN_STAINED_GLASS = registerBlockItem(MSBlocks.BLACK_PAWN_STAINED_GLASS);
-	public static final RegistryObject<BlockItem> WHITE_CROWN_STAINED_GLASS = registerBlockItem(MSBlocks.WHITE_CROWN_STAINED_GLASS);
-	public static final RegistryObject<BlockItem> WHITE_PAWN_STAINED_GLASS = registerBlockItem(MSBlocks.WHITE_PAWN_STAINED_GLASS);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_TRIM = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_TRIM);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_TRIM = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_TRIM);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_TRIM = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_TRIM = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_TRIM);
+	public static final RegistryObject<BlockItem> CHECKERED_STAINED_GLASS = registerBlockItem(SkaiaBlocks.CHECKERED_STAINED_GLASS);
+	public static final RegistryObject<BlockItem> BLACK_CROWN_STAINED_GLASS = registerBlockItem(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS);
+	public static final RegistryObject<BlockItem> BLACK_PAWN_STAINED_GLASS = registerBlockItem(SkaiaBlocks.BLACK_PAWN_STAINED_GLASS);
+	public static final RegistryObject<BlockItem> WHITE_CROWN_STAINED_GLASS = registerBlockItem(SkaiaBlocks.WHITE_CROWN_STAINED_GLASS);
+	public static final RegistryObject<BlockItem> WHITE_PAWN_STAINED_GLASS = registerBlockItem(SkaiaBlocks.WHITE_PAWN_STAINED_GLASS);
 	
 	
 	//Ores
@@ -1281,10 +1282,10 @@ public class MSItems
 	
 	
 	//Structure Land Blocks
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_STAIRS = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_STAIRS);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_STAIRS = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_STAIRS);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_STAIRS = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_STAIRS);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_STAIRS = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_STAIRS = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_STAIRS = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_STAIRS = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_STAIRS = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> COARSE_STONE_STAIRS = registerBlockItem(MSBlocks.COARSE_STONE_STAIRS);
 	public static final RegistryObject<BlockItem> COARSE_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.COARSE_STONE_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> SHADE_STAIRS = registerBlockItem(MSBlocks.SHADE_STAIRS);
@@ -1312,10 +1313,10 @@ public class MSItems
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE);
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP);
 	
-	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SLAB = registerBlockItem(MSBlocks.BLACK_CHESS_BRICK_SLAB);
-	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SLAB = registerBlockItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB);
-	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SLAB = registerBlockItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB);
-	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SLAB = registerBlockItem(MSBlocks.WHITE_CHESS_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> BLACK_CHESS_BRICK_SLAB = registerBlockItem(SkaiaBlocks.BLACK_CHESS_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> DARK_GRAY_CHESS_BRICK_SLAB = registerBlockItem(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> LIGHT_GRAY_CHESS_BRICK_SLAB = registerBlockItem(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> WHITE_CHESS_BRICK_SLAB = registerBlockItem(SkaiaBlocks.WHITE_CHESS_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> COARSE_STONE_SLAB = registerBlockItem(MSBlocks.COARSE_STONE_SLAB);
 	public static final RegistryObject<BlockItem> COARSE_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.COARSE_STONE_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> CHALK_SLAB = registerBlockItem(MSBlocks.CHALK_SLAB);
