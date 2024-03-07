@@ -5,7 +5,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
@@ -17,19 +16,12 @@ public final class MSDensityFunctions
 	public static final ResourceKey<DensityFunction> SHIFT_X = key("shift_x");
 	public static final ResourceKey<DensityFunction> SHIFT_Z = key("shift_z");
 	
-	public static final ResourceKey<DensityFunction> SKAIA_RIDGES = key("skaia/ridges");
-	
-	public static final ResourceKey<DensityFunction> SKAIA_OFFSET = key("skaia/offset");
-	public static final ResourceKey<DensityFunction> SKAIA_DEPTH = key("skaia/depth");
-	public static final ResourceKey<DensityFunction> SKAIA_INITIAL_DENSITY = key("skaia/initial_density");
-	public static final ResourceKey<DensityFunction> SKAIA_FINAL_DENSITY = key("skaia/final_density");
-	
 	public static final ResourceKey<DensityFunction> LAND_CONTINENTS = key("land/continents");
 	public static final ResourceKey<DensityFunction> LAND_EROSION = key("land/erosion");
 	
 	private static ResourceKey<DensityFunction> key(String name)
 	{
-		return ResourceKey.create(Registries.DENSITY_FUNCTION, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.DENSITY_FUNCTION, Minestuck.id(name));
 	}
 	
 	public static DensityFunction depth(DensityFunction offset)

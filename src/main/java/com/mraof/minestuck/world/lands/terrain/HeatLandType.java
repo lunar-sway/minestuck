@@ -3,16 +3,14 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSets;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.data.worldgen.Carvers;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -33,7 +31,7 @@ public class HeatLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.NAKAGATOR).names(HEAT, FLAME, FIRE)
 				.skylight(1/2F).fogColor(0.4, 0.0, 0.0)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_HEAT));
+				.biomeSet(LandBiomeSets.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_HEAT));
 	}
 	
 	@Override

@@ -2,7 +2,6 @@ package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
@@ -23,7 +22,7 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private GlobalPos destination = GlobalPos.of(MSDimensions.SKAIA, new BlockPos(0, -1, 0));
+	private GlobalPos destination = GlobalPos.of(SkaiaObjects.SKAIA_DIMENSION, new BlockPos(0, -1, 0));
 	
 	public SkaiaPortalBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -35,7 +34,7 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 	{
 		super.setLevel(level);
 		if(!level.isClientSide && destination.dimension() == level.dimension())
-			destination = GlobalPos.of(level.dimension() == MSDimensions.SKAIA ? Level.OVERWORLD : MSDimensions.SKAIA, destination.pos());
+			destination = GlobalPos.of(level.dimension() == SkaiaObjects.SKAIA_DIMENSION ? Level.OVERWORLD : SkaiaObjects.SKAIA_DIMENSION, destination.pos());
 	}
 	
 	@Override

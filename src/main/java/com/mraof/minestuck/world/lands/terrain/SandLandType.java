@@ -4,15 +4,14 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSets;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
@@ -38,21 +37,21 @@ public class SandLandType extends TerrainLandType
 	{
 		return new SandLandType(Variant.SAND, new Builder(MSEntityTypes.TURTLE).names(SAND, DUNES, DESERTS)
 				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_SAND));
+				.biomeSet(LandBiomeSets.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_SAND));
 	}
 	
 	public static TerrainLandType createLushDeserts()
 	{
 		return new SandLandType(Variant.LUSH_DESERTS, new Builder(MSEntityTypes.TURTLE).names(LUSH_DESERTS)
 				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_LUSH_DESERTS));
+				.biomeSet(LandBiomeSets.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_LUSH_DESERTS));
 	}
 	
 	public static TerrainLandType createRedSand()
 	{
 		return new SandLandType(Variant.RED_SAND, new Builder(MSEntityTypes.TURTLE).names(SAND, DUNES, DESERTS)
 				.fogColor(0.99, 0.6, 0.05).skyColor(0.8, 0.6, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_SAND));
+				.biomeSet(LandBiomeSets.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_SAND));
 	}
 	
 	private SandLandType(Variant variation, Builder builder)
