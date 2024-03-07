@@ -27,7 +27,7 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 	
 	public SkaiaPortalBlockEntity(BlockPos pos, BlockState state)
 	{
-		super(MSBlockEntityTypes.SKAIA_PORTAL.get(), pos, state);
+		super(SkaiaBlocks.SKAIA_PORTAL_BE.get(), pos, state);
 	}
 	
 	@Override
