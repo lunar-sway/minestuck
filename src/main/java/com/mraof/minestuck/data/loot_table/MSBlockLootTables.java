@@ -36,7 +36,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
-import static com.mraof.minestuck.block.SkaiaBlocks.*;
+import static com.mraof.minestuck.SkaiaObjects.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

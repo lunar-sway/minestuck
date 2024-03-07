@@ -1,7 +1,16 @@
-package com.mraof.minestuck.block;
+package com.mraof.minestuck;
 
+import com.mraof.minestuck.block.ItemBlockPair;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.block.SkaiaPortalBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.SkaiaPortalBlockEntity;
+import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.castle.*;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -10,13 +19,16 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
 
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 
-public final class SkaiaBlocks
+public final class SkaiaObjects
 {
 	public static final ItemBlockPair<Block, BlockItem> SKAIA_PORTAL = ItemBlockPair.register("skaia_portal",
 			() -> new SkaiaPortalBlock(Block.Properties.of().mapColor(MapColor.COLOR_CYAN).pushReaction(PushReaction.BLOCK).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noLootTable()),
@@ -93,7 +105,27 @@ public final class SkaiaBlocks
 	public static final ItemBlockPair<Block, BlockItem> BLACK_PAWN_STAINED_GLASS = ItemBlockPair.register("black_pawn_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, copy(CHECKERED_STAINED_GLASS.asBlock())));
 	public static final ItemBlockPair<Block, BlockItem> BLACK_CROWN_STAINED_GLASS = ItemBlockPair.register("black_crown_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, copy(CHECKERED_STAINED_GLASS.asBlock())));
 	
-	public static void init()
+	public static final class CastleParts
 	{
+		public static final RegistryObject<StructurePieceType.ContextlessType>
+				START_PIECE = MSStructurePieces.REGISTER.register("skaia_castle_start", () -> CastleStartPiece::new),
+				SOLID_PIECE = MSStructurePieces.REGISTER.register("skaia_castle_solid", () -> CastleSolidPiece::new),
+				WALL_PIECE = MSStructurePieces.REGISTER.register("skaia_castle_wall", () -> CastleWallPiece::new),
+				ROOM_PIECE = MSStructurePieces.REGISTER.register("skaia_castle_room", () -> CastleRoomPiece::new),
+				LIBRARY_PIECE = MSStructurePieces.REGISTER.register("skaia_castle_library", () -> CastleLibraryPiece::new),
+				STAIRCASE_PIECE = MSStructurePieces.REGISTER.register("skaia_castle_staircase", () -> CastleStaircasePiece::new);
+		
+		public static final RegistryObject<StructureType<CastleStructure>> STRUCTURE_TYPE = MSStructureTypes.REGISTER.register("skaia_castle", () -> MSStructureTypes.asType(CastleStructure.CODEC));
+		
+		public static final ResourceKey<Structure> STRUCTURE = MSStructures.key("skaia_castle");
+		
+		public static void initStatic()
+		{
+		}
+	}
+	
+	public static void initStatic()
+	{
+		CastleParts.initStatic();
 	}
 }

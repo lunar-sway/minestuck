@@ -21,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
-import static com.mraof.minestuck.block.SkaiaBlocks.*;
+import static com.mraof.minestuck.SkaiaObjects.*;
 import static com.mraof.minestuck.util.MSTags.Blocks.*;
 import static net.minecraft.tags.BlockTags.*;
 

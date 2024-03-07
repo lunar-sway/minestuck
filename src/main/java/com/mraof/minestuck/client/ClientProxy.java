@@ -2,7 +2,7 @@ package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.block.SkaiaBlocks;
+import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.MSModelLayers;
@@ -53,7 +53,7 @@ public class ClientProxy
 {
 	private static void registerRenderers()
 	{
-		BlockEntityRenderers.register(SkaiaBlocks.SKAIA_PORTAL_BE.get(), SkaiaPortalRenderer::new);
+		BlockEntityRenderers.register(SkaiaObjects.SKAIA_PORTAL_BE.get(), SkaiaPortalRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.GATE.get(), GateRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);

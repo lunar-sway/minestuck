@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
-import com.mraof.minestuck.block.SkaiaBlocks;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.SkaiaObjects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -20,14 +19,14 @@ public class CastleWallPiece extends CastlePiece
 	
 	protected CastleWallPiece(boolean isBlack, BoundingBox boundingBox, int direction, boolean cornerPiece)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_WALL.get(), 1, boundingBox, isBlack);
+		super(SkaiaObjects.CastleParts.WALL_PIECE.get(), 1, boundingBox, isBlack);
 		this.direction = direction;
 		this.cornerPiece = cornerPiece;
 	}
 	
 	public CastleWallPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_WALL.get(), nbt);
+		super(SkaiaObjects.CastleParts.WALL_PIECE.get(), nbt);
 	}
 	
 	@Override
@@ -109,8 +108,8 @@ public class CastleWallPiece extends CastlePiece
 	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator generator, RandomSource random, BoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		
-		BlockState chessTile = (isBlack ? SkaiaBlocks.BLACK_CHESS_DIRT : SkaiaBlocks.WHITE_CHESS_DIRT).asBlock().defaultBlockState();
-		BlockState chessTile1 = (isBlack ? SkaiaBlocks.DARK_GRAY_CHESS_DIRT : SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT).asBlock().defaultBlockState();
+		BlockState chessTile = (isBlack ? SkaiaObjects.BLACK_CHESS_DIRT : SkaiaObjects.WHITE_CHESS_DIRT).asBlock().defaultBlockState();
+		BlockState chessTile1 = (isBlack ? SkaiaObjects.DARK_GRAY_CHESS_DIRT : SkaiaObjects.LIGHT_GRAY_CHESS_DIRT).asBlock().defaultBlockState();
 		if(!(this.direction == 5 && this.cornerPiece))
 		{
 			this.fillWithAlternatingBlocks(level, structureBoundingBox, 0, 0, 0, 7, 6, 7, chessTile, chessTile1, false);

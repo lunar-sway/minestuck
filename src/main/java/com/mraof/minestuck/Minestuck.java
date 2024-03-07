@@ -5,7 +5,6 @@ import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterSerializer
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
 import com.mraof.minestuck.computer.ProgramData;
@@ -107,7 +106,7 @@ public class Minestuck
 		
 		MSCreativeTabs.REGISTER.register(eventBus);
 		
-		SkaiaBlocks.init();
+		SkaiaObjects.initStatic();
 		AspectTreeBlocks.init();
 	}
 	

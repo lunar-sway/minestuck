@@ -1,6 +1,6 @@
 package com.mraof.minestuck.blockentity;
 
-import com.mraof.minestuck.block.SkaiaBlocks;
+import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,7 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 	
 	public SkaiaPortalBlockEntity(BlockPos pos, BlockState state)
 	{
-		super(SkaiaBlocks.SKAIA_PORTAL_BE.get(), pos, state);
+		super(SkaiaObjects.SKAIA_PORTAL_BE.get(), pos, state);
 	}
 	
 	@Override
@@ -84,7 +84,7 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 		double x = worldPosition.getX();
 		double y = worldPosition.getY();
 		double z = worldPosition.getZ();
-		Block[] blocks = {SkaiaBlocks.BLACK_CHESS_DIRT.asBlock(), SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT.asBlock(), SkaiaBlocks.WHITE_CHESS_DIRT.asBlock(), SkaiaBlocks.DARK_GRAY_CHESS_DIRT.asBlock()};
+		Block[] blocks = {SkaiaObjects.BLACK_CHESS_DIRT.asBlock(), SkaiaObjects.LIGHT_GRAY_CHESS_DIRT.asBlock(), SkaiaObjects.WHITE_CHESS_DIRT.asBlock(), SkaiaObjects.DARK_GRAY_CHESS_DIRT.asBlock()};
 		for(int blockX = (int) x - 2; blockX < x + 2; blockX++)
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)

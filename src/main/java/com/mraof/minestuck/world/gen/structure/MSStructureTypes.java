@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.gen.structure;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
 import net.minecraft.core.registries.Registries;
@@ -24,10 +23,7 @@ public final class MSStructureTypes
 	public static final RegistryObject<StructureType<ImpDungeonStructure>> IMP_DUNGEON = REGISTER.register("imp_dungeon", () -> asType(ImpDungeonStructure.CODEC));
 	public static final RegistryObject<StructureType<ConsortVillageStructure>> CONSORT_VILLAGE = REGISTER.register("consort_village", () -> asType(ConsortVillageStructure.CODEC));
 	
-	// Skaia
-	public static final RegistryObject<StructureType<CastleStructure>> SKAIA_CASTLE = REGISTER.register("skaia_castle", () -> asType(CastleStructure.CODEC));
-	
-	private static <S extends Structure> StructureType<S> asType(Codec<S> codec)
+	public static <S extends Structure> StructureType<S> asType(Codec<S> codec)
 	{
 		return () -> codec;
 	}
