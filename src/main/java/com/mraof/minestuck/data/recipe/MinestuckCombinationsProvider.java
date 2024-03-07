@@ -1,10 +1,10 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipeBuilder;
 import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -764,28 +764,6 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_WARD.get()).input(Items.MUSIC_DISC_WARD).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_OTHERSIDE.get()).input(Items.MUSIC_DISC_OTHERSIDE).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_5.get()).input(Items.MUSIC_DISC_5).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
-		
-		CombinationRecipeBuilder.of(SkaiaObjects.BLACK_CHESS_DIRT).input(Items.DIRT).and().input(Items.BLACK_DYE).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.DARK_GRAY_CHESS_DIRT).input(Items.DIRT).and().input(Items.GRAY_DYE).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.LIGHT_GRAY_CHESS_DIRT).input(Items.DIRT).and().input(Items.LIGHT_GRAY_DYE).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.WHITE_CHESS_DIRT).input(Items.DIRT).and().input(Items.WHITE_DYE).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.BLACK_CHESS_BRICKS).input(Items.STONE_BRICKS).or().input(SkaiaObjects.BLACK_CHESS_DIRT).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.DARK_GRAY_CHESS_BRICKS).input(Items.STONE_BRICKS).or().input(SkaiaObjects.DARK_GRAY_CHESS_DIRT).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.LIGHT_GRAY_CHESS_BRICKS).input(Items.STONE_BRICKS).or().input(SkaiaObjects.LIGHT_GRAY_CHESS_DIRT).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.WHITE_CHESS_BRICKS).input(Items.STONE_BRICKS).or().input(SkaiaObjects.WHITE_CHESS_DIRT).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH).input(Items.STONE).or().input(SkaiaObjects.BLACK_CHESS_BRICKS).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH).input(Items.STONE).or().input(SkaiaObjects.DARK_GRAY_CHESS_BRICKS).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH).input(Items.STONE).or().input(SkaiaObjects.LIGHT_GRAY_CHESS_BRICKS).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH).input(Items.STONE).or().input(SkaiaObjects.WHITE_CHESS_BRICKS).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.BLACK_CHESS_BRICK_TRIM).input(Items.YELLOW_WOOL).and().input(SkaiaObjects.BLACK_CHESS_BRICKS).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.DARK_GRAY_CHESS_BRICK_TRIM).input(Items.YELLOW_WOOL).and().input(SkaiaObjects.DARK_GRAY_CHESS_BRICKS).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_TRIM).input(Items.YELLOW_WOOL).and().input(SkaiaObjects.LIGHT_GRAY_CHESS_BRICKS).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.WHITE_CHESS_BRICK_TRIM).input(Items.YELLOW_WOOL).and().input(SkaiaObjects.WHITE_CHESS_BRICKS).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.CHECKERED_STAINED_GLASS).input(Items.BLUE_STAINED_GLASS).and().input(MSBlocks.CHESSBOARD).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.BLACK_PAWN_STAINED_GLASS).input(Items.BLACK_STAINED_GLASS).and().input(MSBlocks.CHESSBOARD).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.WHITE_PAWN_STAINED_GLASS).input(Items.WHITE_STAINED_GLASS).and().input(MSBlocks.CHESSBOARD).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.BLACK_CROWN_STAINED_GLASS).input(SkaiaObjects.BLACK_PAWN_STAINED_GLASS).and().input(MSItems.PRIM_AND_PROPER_WALKING_POLE).build(consumer);
-		CombinationRecipeBuilder.of(SkaiaObjects.WHITE_CROWN_STAINED_GLASS).input(SkaiaObjects.WHITE_PAWN_STAINED_GLASS).and().input(MSItems.PRIM_AND_PROPER_WALKING_POLE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.BLUE_DIRT.get()).input(Items.DIRT).or().input(Items.BLUE_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.THOUGHT_DIRT.get()).input(Items.DIRT).or().input(Items.LIME_DYE).build(consumer);

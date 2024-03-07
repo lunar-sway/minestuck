@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.redstone.*;
@@ -33,104 +32,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 	@Override
 	protected void registerStatesAndModels()
 	{
+		SkaiaBlocksData.addModels(this);
 		AspectTreeBlocksData.addModels(this);
-		
-		//Skaia
-		simpleBlockWithItem(SkaiaObjects.BLACK_CHESS_DIRT);
-		simpleBlockWithItem(SkaiaObjects.WHITE_CHESS_DIRT);
-		simpleBlockWithItem(SkaiaObjects.DARK_GRAY_CHESS_DIRT);
-		simpleBlockWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_DIRT);
-		simpleBlock(SkaiaObjects.SKAIA_PORTAL.blockHolder(),
-				id -> empty(id.getPath(), itemTexture(id)));
-		flatItem(SkaiaObjects.SKAIA_PORTAL.itemHolder(), MSBlockStateProvider::itemTexture);
-		
-		simpleBlockWithItem(SkaiaObjects.BLACK_CHESS_BRICKS);
-		wallWithItem(SkaiaObjects.BLACK_CHESS_BRICK_WALL::asBlock, SkaiaObjects.BLACK_CHESS_BRICKS.blockHolder());
-		
-		simpleBlockWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICKS);
-		wallWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_WALL::asBlock, SkaiaObjects.DARK_GRAY_CHESS_BRICKS.blockHolder());
-		
-		simpleBlockWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICKS);
-		wallWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_WALL::asBlock, SkaiaObjects.LIGHT_GRAY_CHESS_BRICKS.blockHolder());
-		
-		simpleBlockWithItem(SkaiaObjects.WHITE_CHESS_BRICKS);
-		wallWithItem(SkaiaObjects.WHITE_CHESS_BRICK_WALL::asBlock, SkaiaObjects.WHITE_CHESS_BRICKS.blockHolder());
-		
-		simpleBlockWithItem(SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH);
-		stairsWithItem(SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH_STAIRS::asBlock, SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH.blockHolder());
-		slabWithItem(SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH_SLAB::asBlock, SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH.blockHolder());
-		wallWithItem(SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH_WALL::asBlock, SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH.blockHolder());
-		buttonWithItem(SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH_BUTTON::asBlock, SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH.blockHolder());
-		pressurePlateWithItem(SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE::asBlock, SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH.blockHolder());
-		
-		simpleBlockWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH);
-		stairsWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS::asBlock, SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		slabWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB::asBlock, SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		wallWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL::asBlock, SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		buttonWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON::asBlock, SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		pressurePlateWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE::asBlock, SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		
-		simpleBlockWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
-		stairsWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS::asBlock, SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		slabWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB::asBlock, SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		wallWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL::asBlock, SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		buttonWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON::asBlock, SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		pressurePlateWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE::asBlock, SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH.blockHolder());
-		
-		simpleBlockWithItem(SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH);
-		stairsWithItem(SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH_STAIRS::asBlock, SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH.blockHolder());
-		slabWithItem(SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH_SLAB::asBlock, SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH.blockHolder());
-		wallWithItem(SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH_WALL::asBlock, SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH.blockHolder());
-		buttonWithItem(SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH_BUTTON::asBlock, SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH.blockHolder());
-		pressurePlateWithItem(SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE::asBlock, SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH.blockHolder());
-		
-		trimWithItem(SkaiaObjects.BLACK_CHESS_BRICK_TRIM.blockHolder(),
-				id -> models().cubeColumn(
-						id.getPath(),
-						texture(id),
-						texture("black_chess_bricks")),
-				id -> models().cubeColumn(
-						id.withSuffix("_flipped").getPath(),
-						texture(id.withSuffix("_flipped")),
-						texture("black_chess_bricks")));
-		trimWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_TRIM.blockHolder(),
-				id -> models().cubeColumn(
-						id.getPath(),
-						texture(id),
-						texture("dark_gray_chess_bricks")),
-				id -> models().cubeColumn(
-						id.withSuffix("_flipped").getPath(),
-						texture(id.withSuffix("_flipped")),
-						texture("dark_gray_chess_bricks")));
-		trimWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_TRIM.blockHolder(),
-				id -> models().cubeColumn(
-						id.getPath(),
-						texture(id),
-						texture("light_gray_chess_bricks")),
-				id -> models().cubeColumn(
-						id.withSuffix("_flipped").getPath(),
-						texture(id.withSuffix("_flipped")),
-						texture("light_gray_chess_bricks")));
-		trimWithItem(SkaiaObjects.WHITE_CHESS_BRICK_TRIM.blockHolder(),
-				id -> models().cubeColumn(
-						id.getPath(),
-						texture(id),
-						texture("white_chess_bricks")),
-				id -> models().cubeColumn(
-						id.withSuffix("_flipped").getPath(),
-						texture(id.withSuffix("_flipped")),
-						texture("white_chess_bricks")));
-		
-		simpleBlockWithItem(SkaiaObjects.CHECKERED_STAINED_GLASS.blockHolder(),
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
-		simpleBlockWithItem(SkaiaObjects.BLACK_CROWN_STAINED_GLASS.blockHolder(),
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
-		simpleBlockWithItem(SkaiaObjects.BLACK_PAWN_STAINED_GLASS.blockHolder(),
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
-		simpleBlockWithItem(SkaiaObjects.WHITE_CROWN_STAINED_GLASS.blockHolder(),
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
-		simpleBlockWithItem(SkaiaObjects.WHITE_PAWN_STAINED_GLASS.blockHolder(),
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
 		
 		simpleBlockWithItem(MSBlocks.STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.NETHERRACK_CRUXITE_ORE);
@@ -898,10 +801,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleHorizontalWithItem(MSBlocks.NAKAGATOR_STATUE, this::existing);
 		
 		//Structure Land Blocks
-		stairsWithItem(SkaiaObjects.BLACK_CHESS_BRICK_STAIRS::asBlock, "black_chess_brick", texture(SkaiaObjects.BLACK_CHESS_BRICKS.blockHolder()));
-		stairsWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_STAIRS::asBlock, "dark_gray_chess_brick", texture(SkaiaObjects.DARK_GRAY_CHESS_BRICKS.blockHolder()));
-		stairsWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_STAIRS::asBlock, "light_gray_chess_brick", texture(SkaiaObjects.LIGHT_GRAY_CHESS_BRICKS.blockHolder()));
-		stairsWithItem(SkaiaObjects.WHITE_CHESS_BRICK_STAIRS::asBlock, "white_chess_brick", texture(SkaiaObjects.WHITE_CHESS_BRICKS.blockHolder()));
 		stairsWithItem(MSBlocks.COARSE_STONE_STAIRS, MSBlocks.COARSE_STONE);
 		stairsWithItem(MSBlocks.COARSE_STONE_BRICK_STAIRS, "coarse_stone_brick", texture(MSBlocks.COARSE_STONE_BRICKS));
 		stairsWithItem(MSBlocks.SHADE_STAIRS, "shade", texture(MSBlocks.SHADE_STONE));
@@ -930,11 +829,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		simpleHorizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, this::existing);
 		simpleHorizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, this::existing);
-		
-		slabWithItem(SkaiaObjects.BLACK_CHESS_BRICK_SLAB::asBlock, SkaiaObjects.BLACK_CHESS_BRICKS.blockHolder());
-		slabWithItem(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SLAB::asBlock, SkaiaObjects.DARK_GRAY_CHESS_BRICKS.blockHolder());
-		slabWithItem(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SLAB::asBlock, SkaiaObjects.LIGHT_GRAY_CHESS_BRICKS.blockHolder());
-		slabWithItem(SkaiaObjects.WHITE_CHESS_BRICK_SLAB::asBlock, SkaiaObjects.WHITE_CHESS_BRICKS.blockHolder());
 		
 		slabWithItem(MSBlocks.COARSE_STONE_SLAB, MSBlocks.COARSE_STONE);
 		slabWithItem(MSBlocks.COARSE_STONE_BRICK_SLAB, MSBlocks.COARSE_STONE_BRICKS);
@@ -1411,7 +1305,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		return models().cubeAll(id.getPath(), texture(id));
 	}
 	
-	private ModelFile empty(String path, ResourceLocation particleTexture)
+	ModelFile empty(String path, ResourceLocation particleTexture)
 	{
 		return models().getBuilder(path).texture("particle", particleTexture);
 	}
@@ -1589,7 +1483,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), model);
 	}
 	
-	private void trimWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider, Function<ResourceLocation, ModelFile> flippedModelProvider)
+	void trimWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider, Function<ResourceLocation, ModelFile> flippedModelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		var flippedModel = flippedModelProvider.apply(block.getId());
@@ -1618,7 +1512,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void stairsWithItem(Supplier<StairBlock> block, String baseName, ResourceLocation texture)
+	void stairsWithItem(Supplier<StairBlock> block, String baseName, ResourceLocation texture)
 	{
 		stairsWithItem(block, baseName, texture, texture, texture);
 	}
@@ -1651,7 +1545,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), slabBottom);
 	}
 	
-	private void wallWithItem(Supplier<WallBlock> block, RegistryObject<? extends Block> sourceBlock)
+	void wallWithItem(Supplier<WallBlock> block, RegistryObject<? extends Block> sourceBlock)
 	{
 		wallWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}

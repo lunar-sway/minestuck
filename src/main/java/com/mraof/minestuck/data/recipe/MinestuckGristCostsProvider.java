@@ -8,7 +8,6 @@ import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipeBuilder;
 import com.mraof.minestuck.api.alchemy.recipe.SourceGristCostBuilder;
 import com.mraof.minestuck.api.alchemy.recipe.WildcardGristCostBuilder;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
@@ -823,28 +822,6 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.INSTANT_TNT.get()).grist(BUILD, 6).grist(CHALK, 11).grist(SULFUR, 17).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.STONE_EXPLOSIVE_BUTTON.get()).grist(BUILD, 7).grist(CHALK, 5).grist(SULFUR, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.WOODEN_EXPLOSIVE_BUTTON.get()).grist(BUILD, 7).grist(CHALK, 5).grist(SULFUR, 8).build(recipeSaver);
-		
-		GristCostRecipeBuilder.of(SkaiaObjects.BLACK_CHESS_DIRT).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.DARK_GRAY_CHESS_DIRT).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.LIGHT_GRAY_CHESS_DIRT).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.WHITE_CHESS_DIRT).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.BLACK_CHESS_BRICKS).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.DARK_GRAY_CHESS_BRICKS).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.LIGHT_GRAY_CHESS_BRICKS).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.WHITE_CHESS_BRICKS).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.BLACK_CHESS_BRICK_SMOOTH).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.DARK_GRAY_CHESS_BRICK_SMOOTH).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_SMOOTH).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.WHITE_CHESS_BRICK_SMOOTH).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.BLACK_CHESS_BRICK_TRIM).grist(BUILD, 3).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.DARK_GRAY_CHESS_BRICK_TRIM).grist(BUILD, 3).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.LIGHT_GRAY_CHESS_BRICK_TRIM).grist(BUILD, 3).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.WHITE_CHESS_BRICK_TRIM).grist(BUILD, 3).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.CHECKERED_STAINED_GLASS).grist(BUILD, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.BLACK_PAWN_STAINED_GLASS).grist(BUILD, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.BLACK_CROWN_STAINED_GLASS).grist(BUILD, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.WHITE_PAWN_STAINED_GLASS).grist(BUILD, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(SkaiaObjects.WHITE_CROWN_STAINED_GLASS).grist(BUILD, 5).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.TAR_SHADE_BRICKS.get()).grist(BUILD, 2).grist(TAR, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_TILE.get()).grist(BUILD, 2).grist(COBALT, 1).build(recipeSaver);
