@@ -1,5 +1,5 @@
 {
-	"credit": "Made with Blockbench by blankMushroom",
+	"credit": "Model made with Blockbench by blankMushroom",
 	"parent": "block/thin_block",
 	"texture_size": [32, 32],
 	"textures": {

@@ -1,5 +1,5 @@
 {
-    "credit": "Made with Blockbench by Cibernet",
+    "credit": "Model made with Blockbench by Cibernet",
     "parent": "minecraft:block/block",
     "texture_size": [32, 32],
     "render_type": "cutout",

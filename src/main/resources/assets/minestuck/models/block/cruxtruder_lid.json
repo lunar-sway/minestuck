@@ -1,5 +1,5 @@
 {
-	"credit": "Made with Blockbench by Riotmode",
+	"credit": "Model made with Blockbench by Riotmode",
 	"texture_size": [256, 256],
 	"parent": "block/thin_block",
 	"textures": {

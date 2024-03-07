@@ -6,7 +6,10 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
-public class CrumplyHatModel
+/**
+ * Model made by Badadamadaba.
+ */
+public final class CrumplyHatModel
 {
 	public static LayerDefinition createBodyLayer()
 	{

@@ -1,5 +1,5 @@
 {
-    "credit": "Made with Blockbench by Dweblenod",
+    "credit": "Model made with Blockbench by Dweblenod",
     "parent": "minecraft:block/block",
     "render_type": "cutout",
     "textures": {

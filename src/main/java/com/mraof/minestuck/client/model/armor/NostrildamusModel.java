@@ -1,11 +1,14 @@
-package com.mraof.minestuck.client.model.armor; // Made with Blockbench 4.5.2 by Riotmode
+package com.mraof.minestuck.client.model.armor;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
-public class NostrildamusModel
+/**
+ * Model made with Blockbench 4.5.2 by Riotmode.
+ */
+public final class NostrildamusModel
 {
 	public static LayerDefinition createBodyLayer()
 	{
