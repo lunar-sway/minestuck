@@ -31,15 +31,17 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * Creates an ArrayList of UnlocalizedString and returns it.
 	 * The first item in the list must be the message above the buttons, and then it continues with the topmost
 	 * button and down.
+	 *
 	 * @param be The {@link ComputerBlockEntity} this program is associated with, for access to related data.
 	 */
 	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be);
 	
 	/**
 	 * Performs the action caused by pressing a button.
-	 * @param be The computer, if needed.
+	 *
+	 * @param be         The computer, if needed.
 	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
-	 * @param data Format data provided by getStringList().
+	 * @param data       Format data provided by getStringList().
 	 */
 	protected abstract void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data);
 	
@@ -58,7 +60,8 @@ public abstract class ButtonListProgram extends ComputerProgram
 	
 	public final void onArrowPressed(ComputerScreen screen, boolean reverse)
 	{
-		if(reverse) index--; else index++;
+		if(reverse) index--;
+		else index++;
 		
 		screen.updateGui();
 	}
@@ -66,8 +69,8 @@ public abstract class ButtonListProgram extends ComputerProgram
 	@Override
 	public final void onInitGui(ComputerScreen gui)
 	{
-		var xOffset = (gui.width-ComputerScreen.xSize)/2;
-		var yOffset = (gui.height-ComputerScreen.ySize)/2;
+		var xOffset = (gui.width - ComputerScreen.xSize) / 2;
+		var yOffset = (gui.height - ComputerScreen.ySize) / 2;
 		buttonMap.clear();
 		for(int i = 0; i < 4; i++)
 			buttonMap.put(gui.addRenderableWidget(
@@ -131,16 +134,16 @@ public abstract class ButtonListProgram extends ComputerProgram
 		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
 		{
 			guiGraphics.drawString(font, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
-		}
-		else
+		} else
 		{
-			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
+			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
 		}
 	}
 	
 	/**
 	 * Represents an unlocalized string and the possible format parameters.
 	 * Is used to represent the value on the buttons, but also the message shown above the buttons.
+	 *
 	 * @see ButtonListProgram#getStringList
 	 */
 	protected static class UnlocalizedString
@@ -169,9 +172,10 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		boolean reverse;
 		ComputerScreen gui;
+		
 		public ArrowButton(boolean reverse, ComputerScreen gui)
 		{
-			super((gui.width-ComputerScreen.xSize)/2 + 140, (gui.height-ComputerScreen.ySize)/2 + (reverse?60:132), 20, 20, Component.empty(), b->onArrowPressed(gui, reverse));
+			super((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + (reverse ? 60 : 132), 20, 20, Component.empty(), b -> onArrowPressed(gui, reverse));
 			this.reverse = reverse;
 			this.gui = gui;
 		}
@@ -179,17 +183,8 @@ public abstract class ButtonListProgram extends ComputerProgram
 		@Override
 		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			if(active)
-			{
-				RenderSystem.setShaderColor(1, 1, 1, 1);
-				guiGraphics.blit(gui.getTheme().data().texturePath(), getX(), getY(), 158 + (active ? 0 : 20), reverse ? 0 : 20, 20, 20);
-			} else
-			{
-				// use default minecraft button rendering to draw inactive buttons
-				super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
-				RenderSystem.setShaderColor(1, 1, 1, 1);
-				guiGraphics.blit(ComputerScreen.guiMain, getX(), getY(), reverse?0:20, ComputerScreen.ySize, 20, 20);
-			}
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			guiGraphics.blit(gui.getTheme().data().texturePath(), getX(), getY(), 158, reverse ? 0 : 20, 20, 20);
 		}
 	}
 }

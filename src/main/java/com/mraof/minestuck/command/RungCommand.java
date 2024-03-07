@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.commands.CommandSourceStack;
@@ -63,8 +64,10 @@ public class RungCommand
 	
 	private static int setRung(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, int rung, double progress)
 	{
-		players.forEach(player -> PlayerSavedData.getData(player).getEcheladder().setByCommand(rung, progress));
-		
+		for (ServerPlayer player : players) {
+			PlayerSavedData.getData(player).getEcheladder().setByCommand(rung, progress);
+			MSCriteriaTriggers.ECHELADDER.trigger(player, rung);
+		}
 		context.getSource().sendSuccess(() -> Component.translatable(SET_SUCCESS, players.size(), rung, progress), true);
 		return players.size();
 	}

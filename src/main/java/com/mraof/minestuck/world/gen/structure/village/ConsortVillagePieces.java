@@ -3,8 +3,8 @@ package com.mraof.minestuck.world.gen.structure.village;
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.ImprovedStructurePiece;
+import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -275,7 +275,7 @@ public class ConsortVillagePieces
 				{
 					BlockState state = level.getBlockState(blockpos);
 					
-					if (state.liquid() || state.canOcclude())
+					if (!state.getFluidState().isEmpty() || state.canOcclude())
 					{
 						level.setBlock(blockpos, pathBlock, Block.UPDATE_CLIENTS);
 						break;

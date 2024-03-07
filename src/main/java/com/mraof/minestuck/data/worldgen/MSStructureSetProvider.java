@@ -24,9 +24,6 @@ public final class MSStructureSetProvider
 		
 		// Land
 		context.register(key("land_gate"), new StructureSet(structures.getOrThrow(MSStructures.LAND_GATE), new LandGatePlacement()));
-		context.register(key("small_ruin"), new StructureSet(structures.getOrThrow(MSStructures.SMALL_RUIN), new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 59273643)));
-		context.register(key("imp_dungeon"), new StructureSet(structures.getOrThrow(MSStructures.IMP_DUNGEON), new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 34527185)));
-		context.register(key("consort_village"), new StructureSet(structures.getOrThrow(MSStructures.CONSORT_VILLAGE), new RandomSpreadStructurePlacement(24, 5, RandomSpreadType.LINEAR, 10387312)));
 		
 		// Skaia
 		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(MSStructures.SKAIA_CASTLE), new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
