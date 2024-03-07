@@ -54,8 +54,8 @@ public class CastleStartPiece extends CastlePiece
     @Override
     public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator generator, RandomSource random, BoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? SkaiaBlocks.BLACK_CHESS_DIRT.get() : SkaiaBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
-		BlockState chessTile1 = (isBlack ? SkaiaBlocks.DARK_GRAY_CHESS_DIRT.get() : SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();
+		BlockState chessTile = (isBlack ? SkaiaBlocks.BLACK_CHESS_DIRT : SkaiaBlocks.WHITE_CHESS_DIRT).asBlock().defaultBlockState();
+		BlockState chessTile1 = (isBlack ? SkaiaBlocks.DARK_GRAY_CHESS_DIRT : SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT).asBlock().defaultBlockState();
 		if(this.averageGroundLevel < 0)
 		{
 			this.averageGroundLevel = this.getAverageGroundLevel(level, structureBoundingBox);

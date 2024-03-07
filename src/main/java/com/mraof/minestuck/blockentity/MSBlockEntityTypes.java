@@ -35,7 +35,7 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<IntellibeamLaserstationBlockEntity>> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", () -> BlockEntityType.Builder.of(IntellibeamLaserstationBlockEntity::new, MSBlocks.INTELLIBEAM_LASERSTATION.get()).build(null));
 	public static final RegistryObject<BlockEntityType<PowerHubBlockEntity>> POWER_HUB = REGISTER.register("power_hub", () -> BlockEntityType.Builder.of(PowerHubBlockEntity::new, MSBlocks.POWER_HUB.get()).build(null));
 	
-	public static final RegistryObject<BlockEntityType<SkaiaPortalBlockEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalBlockEntity::new, SkaiaBlocks.SKAIA_PORTAL.get()).build(null));
+	public static final RegistryObject<BlockEntityType<SkaiaPortalBlockEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalBlockEntity::new, SkaiaBlocks.SKAIA_PORTAL.asBlock()).build(null));
 	public static final RegistryObject<BlockEntityType<GateBlockEntity>> GATE = REGISTER.register("gate", () -> BlockEntityType.Builder.of(GateBlockEntity::new, MSBlocks.GATE_MAIN.get()).build(null));
 	public static final RegistryObject<BlockEntityType<ReturnNodeBlockEntity>> RETURN_NODE = REGISTER.register("return_node", () -> BlockEntityType.Builder.of(ReturnNodeBlockEntity::new, MSBlocks.RETURN_NODE_MAIN.get()).build(null));
 	

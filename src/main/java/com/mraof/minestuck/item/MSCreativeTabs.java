@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.AspectTreeBlocks;
+import com.mraof.minestuck.block.SkaiaBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -201,60 +202,60 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CRUXITE_DOWEL.get());
 		output.accept(MSItems.LOTUS_TIME_CAPSULE.get());
 		
-		output.accept(MSItems.BLACK_CHESS_DIRT.get());
-		output.accept(MSItems.WHITE_CHESS_DIRT.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_DIRT.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_DIRT.get());
-		output.accept(MSItems.SKAIA_PORTAL.get());
-		output.accept(MSItems.BLACK_CHESS_BRICKS.get());
-		output.accept(MSItems.BLACK_CHESS_BRICK_WALL.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICKS.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_WALL.get());
+		output.accept(SkaiaBlocks.BLACK_CHESS_DIRT);
+		output.accept(SkaiaBlocks.WHITE_CHESS_DIRT);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_DIRT);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT);
+		output.accept(SkaiaBlocks.SKAIA_PORTAL);
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICKS);
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_WALL);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICKS);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_WALL);
 		
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICKS.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_WALL.get());
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICKS);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_WALL);
 		
-		output.accept(MSItems.WHITE_CHESS_BRICKS.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_WALL.get());
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICKS);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_WALL);
 		
-		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH.get());
-		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_STAIRS.get());
-		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_SLAB.get());
-		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_WALL.get());
-		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_BUTTON.get());
-		output.accept(MSItems.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH);
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_STAIRS);
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_SLAB);
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_WALL);
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_BUTTON);
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
 		
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
 		
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
 		
-		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_STAIRS.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_SLAB.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_WALL.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_BUTTON.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_STAIRS);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_SLAB);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_WALL);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_BUTTON);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE);
 		
-		output.accept(MSItems.BLACK_CHESS_BRICK_TRIM.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_TRIM.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_TRIM.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_TRIM.get());
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_TRIM);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_TRIM);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_TRIM);
 		
-		output.accept(MSItems.CHECKERED_STAINED_GLASS.get());
-		output.accept(MSItems.BLACK_CROWN_STAINED_GLASS.get());
-		output.accept(MSItems.BLACK_PAWN_STAINED_GLASS.get());
-		output.accept(MSItems.WHITE_CROWN_STAINED_GLASS.get());
-		output.accept(MSItems.WHITE_PAWN_STAINED_GLASS.get());
+		output.accept(SkaiaBlocks.CHECKERED_STAINED_GLASS);
+		output.accept(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS);
+		output.accept(SkaiaBlocks.BLACK_PAWN_STAINED_GLASS);
+		output.accept(SkaiaBlocks.WHITE_CROWN_STAINED_GLASS);
+		output.accept(SkaiaBlocks.WHITE_PAWN_STAINED_GLASS);
 		
 		output.accept(MSItems.CRUXITE_BLOCK.get());
 		output.accept(MSItems.CRUXITE_STAIRS.get());
@@ -310,18 +311,18 @@ public final class MSCreativeTabs
 		output.accept(MSItems.GREEN_STONE_BRICK_SKAIA.get());
 		output.accept(MSItems.GREEN_STONE_BRICK_TURTLE.get());
 		
-		output.accept(MSItems.BLACK_CHESS_BRICK_STAIRS.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_STAIRS.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_STAIRS.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_STAIRS.get());
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_STAIRS);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_STAIRS);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_STAIRS);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_STAIRS);
 		output.accept(MSItems.GREEN_STONE_STAIRS.get());
 		output.accept(MSItems.GREEN_STONE_BRICK_STAIRS.get());
 		output.accept(MSItems.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get());
 		output.accept(MSItems.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get());
-		output.accept(MSItems.BLACK_CHESS_BRICK_SLAB.get());
-		output.accept(MSItems.DARK_GRAY_CHESS_BRICK_SLAB.get());
-		output.accept(MSItems.LIGHT_GRAY_CHESS_BRICK_SLAB.get());
-		output.accept(MSItems.WHITE_CHESS_BRICK_SLAB.get());
+		output.accept(SkaiaBlocks.BLACK_CHESS_BRICK_SLAB);
+		output.accept(SkaiaBlocks.DARK_GRAY_CHESS_BRICK_SLAB);
+		output.accept(SkaiaBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB);
+		output.accept(SkaiaBlocks.WHITE_CHESS_BRICK_SLAB);
 		output.accept(MSItems.GREEN_STONE_SLAB.get());
 		output.accept(MSItems.GREEN_STONE_BRICK_SLAB.get());
 		

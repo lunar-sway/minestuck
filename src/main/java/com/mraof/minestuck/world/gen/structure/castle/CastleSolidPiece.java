@@ -33,8 +33,8 @@ public class CastleSolidPiece extends CastlePiece
 	@Override
 	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? SkaiaBlocks.BLACK_CHESS_DIRT.get() : SkaiaBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
-		BlockState chessTile1 = (isBlack ? SkaiaBlocks.DARK_GRAY_CHESS_DIRT.get() : SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();
+		BlockState chessTile = (isBlack ? SkaiaBlocks.BLACK_CHESS_DIRT : SkaiaBlocks.WHITE_CHESS_DIRT).asBlock().defaultBlockState();
+		BlockState chessTile1 = (isBlack ? SkaiaBlocks.DARK_GRAY_CHESS_DIRT : SkaiaBlocks.LIGHT_GRAY_CHESS_DIRT).asBlock().defaultBlockState();
   
 		this.fillWithAlternatingBlocks(level, boundingBox, 0, 0, 0, 7 ,7, 7, chessTile, chessTile1, false);
 	}
