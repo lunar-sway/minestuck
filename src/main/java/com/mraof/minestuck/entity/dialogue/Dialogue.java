@@ -21,7 +21,9 @@ import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
@@ -63,6 +65,13 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 		
 		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, conditionChecks, messageArgs);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+	}
+	
+	public static Map<String, Boolean> readConditionChecks(CompoundTag tag)
+	{
+		Map<String, Boolean> map = new HashMap<>();
+		tag.getAllKeys().forEach(key -> map.put(key, tag.getBoolean(key)));
+		return map;
 	}
 	
 	/**

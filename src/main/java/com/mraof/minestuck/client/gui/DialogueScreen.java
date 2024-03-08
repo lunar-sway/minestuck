@@ -21,6 +21,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Displays a screen when interacting with any dialogue capable entity that has a valid dialogue.
@@ -35,7 +36,7 @@ public class DialogueScreen extends Screen
 	
 	private final LivingEntity entity;
 	private final Dialogue dialogue;
-	private final CompoundTag conditionChecks;
+	private final Map<String, Boolean> conditionChecks;
 	private final DialogueMessage.ArgumentsData messageArgs;
 	
 	private int xOffset;
@@ -50,7 +51,7 @@ public class DialogueScreen extends Screen
 		this.entity = entity;
 		this.guiBackground = dialogue.guiPath();
 		this.dialogue = dialogue;
-		this.conditionChecks = conditionChecks;
+		this.conditionChecks = Dialogue.readConditionChecks(conditionChecks);
 		this.messageArgs = DialogueMessage.ArgumentsData.read(messageArgs);
 	}
 	
@@ -104,12 +105,7 @@ public class DialogueScreen extends Screen
 	
 	private boolean responseFailedCheck(String responseMessage)
 	{
-		if(conditionChecks.contains(responseMessage))
-		{
-			return !conditionChecks.getBoolean(responseMessage);
-		}
-		
-		return true;
+		return !conditionChecks.getOrDefault(responseMessage, false);
 	}
 	
 	private static MutableComponent conditionFailMessage(Dialogue.Response response)
