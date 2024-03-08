@@ -93,7 +93,7 @@ public class DialogueScreen extends Screen
 			Component buttonComponent = Component.translatable(responseMessage, messageArgs.responseArgumentsMap().getOrDefault(responseMessage, Collections.emptyList()));
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
-					button -> clickResponse(responseMessage));
+					button -> clickResponse(response));
 			
 			if(responseFailedCheck(responseMessage))
 				createFailedTooltip(response, entryButton);
@@ -128,35 +128,28 @@ public class DialogueScreen extends Screen
 		entryButton.active = false;
 	}
 	
-	private void clickResponse(String responseMessage)
+	private void clickResponse(Dialogue.Response response)
 	{
-		for(Dialogue.Response response : dialogue.responses())
+		ResourceLocation nextPath = response.nextDialoguePath();
+		
+		Dialogue nextDialogue = null;
+		if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
+			nextDialogue = this.dialogue;
+		else if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
+			nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
+		
+		List<Trigger> triggers = response.triggers();
+		for(Trigger trigger : triggers)
 		{
-			if(response.response().message().equals(responseMessage))
-			{
-				ResourceLocation nextPath = response.nextDialoguePath();
-				
-				Dialogue nextDialogue = null;
-				if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
-					nextDialogue = this.dialogue;
-				else if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
-					nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
-				
-				List<Trigger> triggers = response.triggers();
-				for(Trigger trigger : triggers)
-				{
-					DialogueTriggerPacket packet = DialogueTriggerPacket.createPacket(trigger, dialogue.path(), entity);
-					MSPacketHandler.sendToServer(packet);
-				}
-				
-				onClose();
-				if(nextDialogue != null)
-				{
-					DialogueFromClientScreenPacket packet = DialogueFromClientScreenPacket.createPacket(entity, nextDialogue);
-					MSPacketHandler.sendToServer(packet);
-				}
-				break;
-			}
+			DialogueTriggerPacket packet = DialogueTriggerPacket.createPacket(trigger, dialogue.path(), entity);
+			MSPacketHandler.sendToServer(packet);
+		}
+		
+		onClose();
+		if(nextDialogue != null)
+		{
+			DialogueFromClientScreenPacket packet = DialogueFromClientScreenPacket.createPacket(entity, nextDialogue);
+			MSPacketHandler.sendToServer(packet);
 		}
 	}
 	
