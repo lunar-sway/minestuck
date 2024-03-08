@@ -88,8 +88,9 @@ public class DialogueScreen extends Screen
 			
 			Component buttonComponent = Component.translatable(responseMessage, messageArgs.responseArgumentsMap().getOrDefault(responseMessage, Collections.emptyList()));
 			
+			int index = dialogue.responses().indexOf(response);
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
-					button -> clickResponse(response));
+					button -> clickResponse(index));
 			
 			if(responseFailedCheck(responseMessage))
 				createFailedTooltip(response, entryButton);
@@ -124,10 +125,10 @@ public class DialogueScreen extends Screen
 		entryButton.active = false;
 	}
 	
-	private void clickResponse(Dialogue.Response response)
+	private void clickResponse(int responseIndex)
 	{
 		onClose();
-		MSPacketHandler.sendToServer(ResponseTriggerPacket.createPacket(response, dialogue.path(), entity));
+		MSPacketHandler.sendToServer(ResponseTriggerPacket.createPacket(responseIndex, dialogue.path(), entity));
 	}
 	
 	@Override

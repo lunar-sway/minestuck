@@ -13,27 +13,27 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
-public record ResponseTriggerPacket(Dialogue.Response response, ResourceLocation dialogueLocation, int entityID) implements MSPacket.PlayToServer
+public record ResponseTriggerPacket(int responseIndex, ResourceLocation dialogueLocation, int entityID) implements MSPacket.PlayToServer
 {
-	public static ResponseTriggerPacket createPacket(Dialogue.Response response, ResourceLocation dialogueLocation, LivingEntity entity)
+	public static ResponseTriggerPacket createPacket(int responseIndex, ResourceLocation dialogueLocation, LivingEntity entity)
 	{
-		return new ResponseTriggerPacket(response, dialogueLocation, entity.getId());
+		return new ResponseTriggerPacket(responseIndex, dialogueLocation, entity.getId());
 	}
 	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		buffer.writeJsonWithCodec(Dialogue.Response.CODEC, response);
+		buffer.writeInt(this.responseIndex);
 		buffer.writeResourceLocation(dialogueLocation);
 		buffer.writeInt(entityID);
 	}
 	
 	public static ResponseTriggerPacket decode(FriendlyByteBuf buffer)
 	{
-		Dialogue.Response response = buffer.readJsonWithCodec(Dialogue.Response.CODEC);
+		int responseIndex = buffer.readInt();
 		ResourceLocation dialogueLocation = buffer.readResourceLocation();
 		int entityID = buffer.readInt();
-		return new ResponseTriggerPacket(response, dialogueLocation, entityID);
+		return new ResponseTriggerPacket(responseIndex, dialogueLocation, entityID);
 	}
 	
 	@Override
@@ -53,29 +53,33 @@ public record ResponseTriggerPacket(Dialogue.Response response, ResourceLocation
 	private void validateThenTrigger(ServerPlayer player, LivingEntity livingEntity)
 	{
 		Dialogue dialogue = DialogueManager.getInstance().getDialogue(dialogueLocation);
-		if(dialogue != null)
+		if(dialogue == null)
+			return;
+		
+		if(this.responseIndex < 0 || dialogue.responses().size() <= this.responseIndex)
+			return;
+		
+		Dialogue.Response response = dialogue.responses().get(this.responseIndex);
+		if(!response.conditions().testWithContext(livingEntity, player))
+			return;
+		
+		ResourceLocation nextPath = response.nextDialoguePath();
+		
+		Dialogue nextDialogue = null;
+		if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
+			nextDialogue = dialogue;
+		else if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
+			nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
+		
+		List<Trigger> triggers = response.triggers();
+		for(Trigger trigger : triggers)
 		{
-			if(dialogue.responses().contains(this.response) && this.response.conditions().testWithContext(livingEntity, player))
-			{
-				ResourceLocation nextPath = response.nextDialoguePath();
-				
-				Dialogue nextDialogue = null;
-				if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
-					nextDialogue = dialogue;
-				else if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
-					nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
-				
-				List<Trigger> triggers = response.triggers();
-				for(Trigger trigger : triggers)
-				{
-					trigger.triggerEffect(livingEntity, player);
-				}
-				
-				if(nextDialogue != null)
-				{
-					Dialogue.openScreen(livingEntity, player, nextDialogue);
-				}
-			}
+			trigger.triggerEffect(livingEntity, player);
+		}
+		
+		if(nextDialogue != null)
+		{
+			Dialogue.openScreen(livingEntity, player, nextDialogue);
 		}
 	}
 }
