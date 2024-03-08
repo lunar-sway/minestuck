@@ -1,16 +1,12 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
-import com.mraof.minestuck.entity.dialogue.Trigger;
-import com.mraof.minestuck.network.DialogueFromClientScreenPacket;
-import com.mraof.minestuck.network.DialogueTriggerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.util.DialogueManager;
+import com.mraof.minestuck.network.ResponseTriggerPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -130,27 +126,8 @@ public class DialogueScreen extends Screen
 	
 	private void clickResponse(Dialogue.Response response)
 	{
-		ResourceLocation nextPath = response.nextDialoguePath();
-		
-		Dialogue nextDialogue = null;
-		if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
-			nextDialogue = this.dialogue;
-		else if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
-			nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
-		
-		List<Trigger> triggers = response.triggers();
-		for(Trigger trigger : triggers)
-		{
-			DialogueTriggerPacket packet = DialogueTriggerPacket.createPacket(trigger, dialogue.path(), entity);
-			MSPacketHandler.sendToServer(packet);
-		}
-		
 		onClose();
-		if(nextDialogue != null)
-		{
-			DialogueFromClientScreenPacket packet = DialogueFromClientScreenPacket.createPacket(entity, nextDialogue);
-			MSPacketHandler.sendToServer(packet);
-		}
+		MSPacketHandler.sendToServer(ResponseTriggerPacket.createPacket(response, dialogue.path(), entity));
 	}
 	
 	@Override

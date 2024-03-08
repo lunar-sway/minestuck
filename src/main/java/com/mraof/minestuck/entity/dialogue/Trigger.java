@@ -11,7 +11,6 @@ import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +25,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -38,39 +36,25 @@ public sealed interface Trigger
 	Codec<Trigger> CODEC = Type.CODEC.dispatch(Trigger::getType, type -> type.codec.get());
 	Codec<List<Trigger>> LIST_CODEC = Trigger.CODEC.listOf();
 	
-	static Trigger read(FriendlyByteBuf buffer)
-	{
-		Type type = Type.fromInt(buffer.readInt());
-		return type.bufferReader.apply(buffer);
-	}
-	
-	default void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeInt(this.getType().ordinal());
-		this.writeTrigger(buffer);
-	}
-	
 	enum Type implements StringRepresentable
 	{
-		SET_DIALOGUE(() -> SetDialogue.CODEC, SetDialogue::readTrigger),
-		SET_DIALOGUE_FROM_LIST(() -> SetDialogueFromList.CODEC, SetDialogueFromList::readTrigger),
-		SET_RANDOM_DIALOGUE(() -> SetRandomDialogue.CODEC, SetRandomDialogue::readTrigger),
-		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC, OpenConsortMerchantGui::readTrigger),
-		COMMAND(() -> Command.CODEC, Command::readTrigger),
-		TAKE_ITEM(() -> TakeItem.CODEC, TakeItem::readTrigger),
-		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC, AddConsortReputation::readTrigger),
-		ADD_BOONDOLLARS(() -> AddBoondollars.CODEC, AddBoondollars::readTrigger),
-		EXPLODE(() -> Explode.CODEC, Explode::readTrigger);
+		SET_DIALOGUE(() -> SetDialogue.CODEC),
+		SET_DIALOGUE_FROM_LIST(() -> SetDialogueFromList.CODEC),
+		SET_RANDOM_DIALOGUE(() -> SetRandomDialogue.CODEC),
+		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC),
+		COMMAND(() -> Command.CODEC),
+		TAKE_ITEM(() -> TakeItem.CODEC),
+		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC),
+		ADD_BOONDOLLARS(() -> AddBoondollars.CODEC),
+		EXPLODE(() -> Explode.CODEC);
 		
 		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 		
 		private final Supplier<Codec<? extends Trigger>> codec;
-		private final Function<FriendlyByteBuf, Trigger> bufferReader;
 		
-		Type(Supplier<Codec<? extends Trigger>> codec, Function<FriendlyByteBuf, Trigger> bufferReader)
+		Type(Supplier<Codec<? extends Trigger>> codec)
 		{
 			this.codec = codec;
-			this.bufferReader = bufferReader;
 		}
 		
 		public static Type fromInt(int ordinal) //converts int back into enum
@@ -88,8 +72,6 @@ public sealed interface Trigger
 		}
 	}
 	
-	void writeTrigger(FriendlyByteBuf buffer);
-	
 	Type getType();
 	
 	void triggerEffect(LivingEntity entity, ServerPlayer player);
@@ -104,17 +86,6 @@ public sealed interface Trigger
 		public Type getType()
 		{
 			return Type.SET_DIALOGUE;
-		}
-		
-		static SetDialogue readTrigger(FriendlyByteBuf buffer)
-		{
-			return new SetDialogue(buffer.readResourceLocation());
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
-			buffer.writeResourceLocation(this.newPath);
 		}
 		
 		@Override
@@ -137,17 +108,6 @@ public sealed interface Trigger
 			return Type.SET_DIALOGUE_FROM_LIST;
 		}
 		
-		static SetDialogueFromList readTrigger(FriendlyByteBuf buffer)
-		{
-			return new SetDialogueFromList(buffer.readList(FriendlyByteBuf::readResourceLocation));
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
-			buffer.writeCollection(newPaths, FriendlyByteBuf::writeResourceLocation);
-		}
-		
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
@@ -166,16 +126,6 @@ public sealed interface Trigger
 		public Type getType()
 		{
 			return Type.SET_RANDOM_DIALOGUE;
-		}
-		
-		static SetRandomDialogue readTrigger(FriendlyByteBuf buffer)
-		{
-			return new SetRandomDialogue();
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
 		}
 		
 		@Override
@@ -199,18 +149,6 @@ public sealed interface Trigger
 		public Type getType()
 		{
 			return Type.OPEN_CONSORT_MERCHANT_GUI;
-		}
-		
-		static OpenConsortMerchantGui readTrigger(FriendlyByteBuf buffer)
-		{
-			return new OpenConsortMerchantGui(buffer.readResourceLocation(), buffer.readUtf(500));
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
-			buffer.writeResourceLocation(this.lootTable);
-			buffer.writeUtf(this.merchantTypeName, 500);
 		}
 		
 		@Override
@@ -243,18 +181,6 @@ public sealed interface Trigger
 		public Type getType()
 		{
 			return Type.COMMAND;
-		}
-		
-		static Command readTrigger(FriendlyByteBuf buffer)
-		{
-			String contentString = buffer.readUtf(500);
-			return new Command(contentString);
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
-			buffer.writeUtf(this.commandText, 500);
 		}
 		
 		@Override
@@ -290,20 +216,6 @@ public sealed interface Trigger
 			return Type.TAKE_ITEM;
 		}
 		
-		static TakeItem readTrigger(FriendlyByteBuf buffer)
-		{
-			Item item = buffer.readRegistryIdSafe(Item.class);
-			int amount = buffer.readInt();
-			return new TakeItem(item, amount);
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
-			buffer.writeRegistryId(ForgeRegistries.ITEMS, this.item);
-			buffer.writeInt(this.amount);
-		}
-		
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
@@ -326,17 +238,6 @@ public sealed interface Trigger
 		public Type getType()
 		{
 			return Type.ADD_CONSORT_REPUTATION;
-		}
-		
-		static AddConsortReputation readTrigger(FriendlyByteBuf buffer)
-		{
-			return new AddConsortReputation(buffer.readInt());
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
-			buffer.writeInt(this.reputation);
 		}
 		
 		@Override
@@ -363,17 +264,6 @@ public sealed interface Trigger
 			return Type.ADD_BOONDOLLARS;
 		}
 		
-		static AddBoondollars readTrigger(FriendlyByteBuf buffer)
-		{
-			return new AddBoondollars(buffer.readInt());
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
-			buffer.writeInt(this.boondollars);
-		}
-		
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
@@ -396,16 +286,6 @@ public sealed interface Trigger
 		public Type getType()
 		{
 			return Type.EXPLODE;
-		}
-		
-		static Explode readTrigger(FriendlyByteBuf buffer)
-		{
-			return new Explode();
-		}
-		
-		@Override
-		public void writeTrigger(FriendlyByteBuf buffer)
-		{
 		}
 		
 		@Override
