@@ -4,13 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Condition;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
+import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.network.DialogueFromClientScreenPacket;
 import com.mraof.minestuck.network.DialogueTriggerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
-import com.mraof.minestuck.entity.dialogue.Trigger;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -23,6 +23,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -83,13 +84,14 @@ public class DialogueScreen extends Screen
 			filteredResponses.add(response);
 		}
 		
+		var map = DialogueMessage.readResponseArgumentsMap(messageArgs);
 		for(int i = 0; i < filteredResponses.size(); i++)
 		{
 			Dialogue.Response response = filteredResponses.get(i);
 			String responseMessage = response.response().message();
 			int yPositionOffset = 20 * i;
 			
-			Component buttonComponent = Component.translatable(responseMessage, DialogueMessage.readResponseArgumentsFromCompound(messageArgs, responseMessage));
+			Component buttonComponent = Component.translatable(responseMessage, map.getOrDefault(responseMessage, Collections.emptyList()));
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));

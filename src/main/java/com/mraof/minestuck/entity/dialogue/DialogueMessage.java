@@ -10,9 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public record DialogueMessage(String message, List<Argument> arguments)
@@ -44,19 +42,20 @@ public record DialogueMessage(String message, List<Argument> arguments)
 		return messageArgs;
 	}
 	
-	public static List<String> readResponseArgumentsFromCompound(CompoundTag messageArgs, String responseMessage)
+	public static Map<String, List<String>> readResponseArgumentsMap(CompoundTag messageArgs)
 	{
-		List<String> arguments = new ArrayList<>();
-		
 		CompoundTag responses = messageArgs.getCompound("responses");
-		if(responses.contains(responseMessage))
-		{
-			CompoundTag response = responses.getCompound(responseMessage);
-			for(String key : response.getAllKeys())
-				arguments.add(response.getString(key));
-		}
-		
-		return arguments;
+		Map<String, List<String>> responseMap = new HashMap<>();
+		responses.getAllKeys().forEach(key -> {
+			List<String> arguments = readResponseArguments(responses.getCompound(key));
+			responseMap.put(key, arguments);
+		});
+		return responseMap;
+	}
+	
+	private static List<String> readResponseArguments(CompoundTag response)
+	{
+		return response.getAllKeys().stream().map(response::getString).toList();
 	}
 	
 	public static List<String> readDialogueArgumentsFromCompound(CompoundTag messageArgs)
