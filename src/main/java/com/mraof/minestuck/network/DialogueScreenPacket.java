@@ -2,8 +2,8 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,24 +12,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class DialogueScreenPacket implements MSPacket.PlayToClient
+public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocation, CompoundTag conditionChecks, CompoundTag messageArgs) implements MSPacket.PlayToClient
 {
-	private final int entityID;
-	private final ResourceLocation dialogueLocation;
-	private final CompoundTag conditionChecks;
-	private final CompoundTag messageArgs;
-	
 	public static DialogueScreenPacket createPacket(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks, CompoundTag messageArgs)
 	{
 		return new DialogueScreenPacket(entity.getId(), dialogue.path(), conditionChecks, messageArgs);
-	}
-	
-	public DialogueScreenPacket(int entityID, ResourceLocation dialogueLocation, CompoundTag conditionChecks, CompoundTag messageArgs)
-	{
-		this.entityID = entityID;
-		this.dialogueLocation = dialogueLocation;
-		this.conditionChecks = conditionChecks;
-		this.messageArgs = messageArgs;
 	}
 	
 	@Override
