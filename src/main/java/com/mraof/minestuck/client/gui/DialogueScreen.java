@@ -40,7 +40,7 @@ public class DialogueScreen extends Screen
 	private final LivingEntity entity;
 	private final Dialogue dialogue;
 	private final CompoundTag conditionChecks;
-	private final CompoundTag messageArgs;
+	private final DialogueMessage.ArgumentsData messageArgs;
 	
 	private int xOffset;
 	private int yOffset;
@@ -55,7 +55,7 @@ public class DialogueScreen extends Screen
 		this.guiBackground = dialogue.guiPath();
 		this.dialogue = dialogue;
 		this.conditionChecks = conditionChecks;
-		this.messageArgs = messageArgs;
+		this.messageArgs = DialogueMessage.ArgumentsData.read(messageArgs);
 	}
 	
 	@Override
@@ -84,14 +84,13 @@ public class DialogueScreen extends Screen
 			filteredResponses.add(response);
 		}
 		
-		var map = DialogueMessage.readResponseArgumentsMap(messageArgs);
 		for(int i = 0; i < filteredResponses.size(); i++)
 		{
 			Dialogue.Response response = filteredResponses.get(i);
 			String responseMessage = response.response().message();
 			int yPositionOffset = 20 * i;
 			
-			Component buttonComponent = Component.translatable(responseMessage, map.getOrDefault(responseMessage, Collections.emptyList()));
+			Component buttonComponent = Component.translatable(responseMessage, messageArgs.responseArgumentsMap().getOrDefault(responseMessage, Collections.emptyList()));
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(responseMessage));
@@ -182,7 +181,7 @@ public class DialogueScreen extends Screen
 				entityName.withStyle(consortEntity.getConsortType().getColor());
 			}
 			
-			Component entityMessage = entityName.append(": ").append(Component.translatable(dialogueMessage, DialogueMessage.readDialogueArgumentsFromCompound(messageArgs)));
+			Component entityMessage = entityName.append(": ").append(Component.translatable(dialogueMessage, messageArgs.dialogueArguments()));
 			guiGraphics.drawWordWrap(font, entityMessage, xOffset + 10, yOffset + 20, 210, 0x000000);
 		}
 		

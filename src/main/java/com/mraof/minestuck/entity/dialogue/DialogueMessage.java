@@ -42,31 +42,39 @@ public record DialogueMessage(String message, List<Argument> arguments)
 		return messageArgs;
 	}
 	
-	public static Map<String, List<String>> readResponseArgumentsMap(CompoundTag messageArgs)
+	public record ArgumentsData(List<String> dialogueArguments, Map<String, List<String>> responseArgumentsMap)
 	{
-		CompoundTag responses = messageArgs.getCompound("responses");
-		Map<String, List<String>> responseMap = new HashMap<>();
-		responses.getAllKeys().forEach(key -> {
-			List<String> arguments = readResponseArguments(responses.getCompound(key));
-			responseMap.put(key, arguments);
-		});
-		return responseMap;
-	}
-	
-	private static List<String> readResponseArguments(CompoundTag response)
-	{
-		return response.getAllKeys().stream().map(response::getString).toList();
-	}
-	
-	public static List<String> readDialogueArgumentsFromCompound(CompoundTag messageArgs)
-	{
-		List<String> arguments = new ArrayList<>();
+		public static ArgumentsData read(CompoundTag messageArgs)
+		{
+			return new ArgumentsData(readDialogueArguments(messageArgs), readResponseArgumentsMap(messageArgs));
+		}
 		
-		CompoundTag message = messageArgs.getCompound("dialogue_message");
-		for(String key : message.getAllKeys())
-			arguments.add(message.getString(key));
+		private static Map<String, List<String>> readResponseArgumentsMap(CompoundTag messageArgs)
+		{
+			CompoundTag responses = messageArgs.getCompound("responses");
+			Map<String, List<String>> responseMap = new HashMap<>();
+			responses.getAllKeys().forEach(key -> {
+				List<String> arguments = readResponseArguments(responses.getCompound(key));
+				responseMap.put(key, arguments);
+			});
+			return responseMap;
+		}
 		
-		return arguments;
+		private static List<String> readResponseArguments(CompoundTag response)
+		{
+			return response.getAllKeys().stream().map(response::getString).toList();
+		}
+		
+		private static List<String> readDialogueArguments(CompoundTag messageArgs)
+		{
+			List<String> arguments = new ArrayList<>();
+			
+			CompoundTag message = messageArgs.getCompound("dialogue_message");
+			for(String key : message.getAllKeys())
+				arguments.add(message.getString(key));
+			
+			return arguments;
+		}
 	}
 	
 	public void addToCompound(CompoundTag dialogueArgs, LivingEntity entity, ServerPlayer serverPlayer)
