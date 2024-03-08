@@ -1,6 +1,5 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.entity.dialogue.Trigger;
@@ -11,45 +10,27 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-public class DialogueTriggerPacket implements MSPacket.PlayToServer
+public record DialogueTriggerPacket(Trigger trigger, ResourceLocation dialogueLocation, int entityID) implements MSPacket.PlayToServer
 {
-	private final Trigger trigger;
-	private final ResourceLocation dialogueLocation;
-	private final int entityID;
-	
 	public static DialogueTriggerPacket createPacket(Trigger trigger, ResourceLocation dialogueLocation, LivingEntity entity)
 	{
 		return new DialogueTriggerPacket(trigger, dialogueLocation, entity.getId());
-	}
-	
-	public DialogueTriggerPacket(Trigger trigger, ResourceLocation dialogueLocation, int entityID)
-	{
-		this.trigger = trigger;
-		this.dialogueLocation = dialogueLocation;
-		this.entityID = entityID;
 	}
 	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
 		trigger.write(buffer);
-		buffer.writeUtf(dialogueLocation.toString(), 500);
+		buffer.writeResourceLocation(dialogueLocation);
 		buffer.writeInt(entityID);
 	}
 	
 	public static DialogueTriggerPacket decode(FriendlyByteBuf buffer)
 	{
-		try
-		{
-			Trigger trigger = Trigger.read(buffer);
-			ResourceLocation dialogueLocation = ResourceLocation.tryParse(buffer.readUtf(500));
-			return new DialogueTriggerPacket(trigger, dialogueLocation, buffer.readInt());
-		} catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		return null;
+		Trigger trigger = Trigger.read(buffer);
+		ResourceLocation dialogueLocation = buffer.readResourceLocation();
+		int entityID = buffer.readInt();
+		return new DialogueTriggerPacket(trigger, dialogueLocation, entityID);
 	}
 	
 	@Override
