@@ -93,7 +93,10 @@ public class DialogueScreen extends Screen
 					button -> clickResponse(index));
 			
 			if(responseFailedCheck(responseMessage))
-				createFailedTooltip(response, entryButton);
+			{
+				entryButton.setTooltip(Tooltip.create(conditionFailMessage(response)));
+				entryButton.active = false;
+			}
 			
 			responseButtons.add(addRenderableWidget(entryButton));
 		}
@@ -109,7 +112,7 @@ public class DialogueScreen extends Screen
 		return true;
 	}
 	
-	private static void createFailedTooltip(Dialogue.Response response, ExtendedButton entryButton)
+	private static MutableComponent conditionFailMessage(Dialogue.Response response)
 	{
 		//TODO Does not make sense linguistically with a hard coded failure tooltip in Condition and a Conditions.Type other than ALL
 		MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
@@ -120,9 +123,7 @@ public class DialogueScreen extends Screen
 			if(!tooltip.isEmpty())
 				tooltipMessage.append("\n").append(Component.translatable(tooltip));
 		}
-		
-		entryButton.setTooltip(Tooltip.create(tooltipMessage));
-		entryButton.active = false;
+		return tooltipMessage;
 	}
 	
 	private void clickResponse(int responseIndex)
