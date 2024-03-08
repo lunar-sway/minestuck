@@ -7,12 +7,12 @@ import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.blockentity.redstone.*;
 import com.mraof.minestuck.client.gui.captchalouge.*;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.entity.dialogue.Dialogue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.nbt.CompoundTag;
@@ -139,9 +139,9 @@ public class MSScreenFactories
 		}
 	}
 	
-	public static void displayDialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks, CompoundTag messageArgs)
+	public static void displayDialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag dialogueData)
 	{
-		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialogue, conditionChecks, messageArgs));
+		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialogue, dialogueData));
 	}
 	
 	public static void updateSylladexScreen()

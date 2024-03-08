@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,20 +59,10 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 	 */
 	public static void openScreen(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
 	{
-		CompoundTag conditionChecks = new CompoundTag();
-		dialogue.responses().forEach(response -> conditionChecks.putBoolean(response.response().message(), response.conditions().testWithContext(entity, serverPlayer)));
+		CompoundTag dialogueData = writeAllMessagesToCompound(entity, serverPlayer, dialogue);
 		
-		CompoundTag messageArgs = DialogueMessage.writeAllMessagesToCompound(entity, serverPlayer, dialogue);
-		
-		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, conditionChecks, messageArgs);
+		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, dialogueData);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
-	}
-	
-	public static Map<String, Boolean> readConditionChecks(CompoundTag tag)
-	{
-		Map<String, Boolean> map = new HashMap<>();
-		tag.getAllKeys().forEach(key -> map.put(key, tag.getBoolean(key)));
-		return map;
 	}
 	
 	/**
@@ -192,6 +183,71 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			}
 			
 			return json;
+		}
+	}
+	
+	public static CompoundTag writeAllMessagesToCompound(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
+	{
+		CompoundTag messageArgs = new CompoundTag();
+		
+		CompoundTag dialogueArgs = new CompoundTag();
+		dialogue.message().addToCompound(dialogueArgs, entity, serverPlayer);
+		messageArgs.put("dialogue_message", dialogueArgs);
+		
+		CompoundTag responsesArgs = new CompoundTag();
+		dialogue.responses().forEach(response -> {
+			CompoundTag responseArgs = new CompoundTag();
+			response.response().addToCompound(responseArgs, entity, serverPlayer);
+			responsesArgs.put(response.response().message(), responseArgs);
+		});
+		messageArgs.put("responses", responsesArgs);
+		
+		CompoundTag conditionChecks = new CompoundTag();
+		dialogue.responses().forEach(response -> conditionChecks.putBoolean(response.response().message(), response.conditions().testWithContext(entity, serverPlayer)));
+		messageArgs.put("condition_checks", conditionChecks);
+		
+		return messageArgs;
+	}
+	
+	public record DialogueData(List<String> messageArguments, Map<String, List<String>> responseArgumentsMap, Map<String, Boolean> conditionChecks)
+	{
+		public static DialogueData read(CompoundTag messageArgs)
+		{
+			return new DialogueData(readDialogueArguments(messageArgs), readResponseArgumentsMap(messageArgs), readConditionChecks(messageArgs.getCompound("condition_checks")));
+		}
+		
+		private static Map<String, List<String>> readResponseArgumentsMap(CompoundTag messageArgs)
+		{
+			CompoundTag responses = messageArgs.getCompound("responses");
+			Map<String, List<String>> responseMap = new HashMap<>();
+			responses.getAllKeys().forEach(key -> {
+				List<String> arguments = readResponseArguments(responses.getCompound(key));
+				responseMap.put(key, arguments);
+			});
+			return responseMap;
+		}
+		
+		private static List<String> readResponseArguments(CompoundTag response)
+		{
+			return response.getAllKeys().stream().map(response::getString).toList();
+		}
+		
+		private static List<String> readDialogueArguments(CompoundTag messageArgs)
+		{
+			List<String> arguments = new ArrayList<>();
+			
+			CompoundTag message = messageArgs.getCompound("dialogue_message");
+			for(String key : message.getAllKeys())
+				arguments.add(message.getString(key));
+			
+			return arguments;
+		}
+		
+		private static Map<String, Boolean> readConditionChecks(CompoundTag tag)
+		{
+			Map<String, Boolean> map = new HashMap<>();
+			tag.getAllKeys().forEach(key -> map.put(key, tag.getBoolean(key)));
+			return map;
 		}
 	}
 }

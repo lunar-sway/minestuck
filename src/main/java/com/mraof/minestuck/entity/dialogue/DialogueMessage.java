@@ -10,7 +10,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 import java.util.function.BiFunction;
 
 public record DialogueMessage(String message, List<Argument> arguments)
@@ -19,63 +20,6 @@ public record DialogueMessage(String message, List<Argument> arguments)
 			instance.group(Codec.STRING.fieldOf("message").forGetter(DialogueMessage::message),
 							Codec.list(Argument.CODEC).fieldOf("arguments").forGetter(DialogueMessage::arguments))
 					.apply(instance, DialogueMessage::new));
-	
-	/**
-	 * Creates a CompoundTag of every DialogueMessage in a Dialogue (including those in a Response)
-	 */
-	public static CompoundTag writeAllMessagesToCompound(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
-	{
-		CompoundTag messageArgs = new CompoundTag();
-		
-		CompoundTag dialogueArgs = new CompoundTag();
-		dialogue.message().addToCompound(dialogueArgs, entity, serverPlayer);
-		messageArgs.put("dialogue_message", dialogueArgs);
-		
-		CompoundTag responsesArgs = new CompoundTag();
-		dialogue.responses().forEach(response -> {
-			CompoundTag responseArgs = new CompoundTag();
-			response.response().addToCompound(responseArgs, entity, serverPlayer);
-			responsesArgs.put(response.response().message(), responseArgs);
-		});
-		messageArgs.put("responses", responsesArgs);
-		
-		return messageArgs;
-	}
-	
-	public record ArgumentsData(List<String> dialogueArguments, Map<String, List<String>> responseArgumentsMap)
-	{
-		public static ArgumentsData read(CompoundTag messageArgs)
-		{
-			return new ArgumentsData(readDialogueArguments(messageArgs), readResponseArgumentsMap(messageArgs));
-		}
-		
-		private static Map<String, List<String>> readResponseArgumentsMap(CompoundTag messageArgs)
-		{
-			CompoundTag responses = messageArgs.getCompound("responses");
-			Map<String, List<String>> responseMap = new HashMap<>();
-			responses.getAllKeys().forEach(key -> {
-				List<String> arguments = readResponseArguments(responses.getCompound(key));
-				responseMap.put(key, arguments);
-			});
-			return responseMap;
-		}
-		
-		private static List<String> readResponseArguments(CompoundTag response)
-		{
-			return response.getAllKeys().stream().map(response::getString).toList();
-		}
-		
-		private static List<String> readDialogueArguments(CompoundTag messageArgs)
-		{
-			List<String> arguments = new ArrayList<>();
-			
-			CompoundTag message = messageArgs.getCompound("dialogue_message");
-			for(String key : message.getAllKeys())
-				arguments.add(message.getString(key));
-			
-			return arguments;
-		}
-	}
 	
 	public void addToCompound(CompoundTag dialogueArgs, LivingEntity entity, ServerPlayer serverPlayer)
 	{

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
-import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ResponseTriggerPacket;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,7 +20,6 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Displays a screen when interacting with any dialogue capable entity that has a valid dialogue.
@@ -36,23 +34,21 @@ public class DialogueScreen extends Screen
 	
 	private final LivingEntity entity;
 	private final Dialogue dialogue;
-	private final Map<String, Boolean> conditionChecks;
-	private final DialogueMessage.ArgumentsData messageArgs;
+	private final Dialogue.DialogueData dialogueData;
 	
 	private int xOffset;
 	private int yOffset;
 	
 	private final List<Button> responseButtons = new ArrayList<>();
 	
-	DialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag conditionChecks, CompoundTag messageArgs)
+	DialogueScreen(LivingEntity entity, Dialogue dialogue, CompoundTag dialogueData)
 	{
 		super(Component.empty());
 		
 		this.entity = entity;
 		this.guiBackground = dialogue.guiPath();
 		this.dialogue = dialogue;
-		this.conditionChecks = Dialogue.readConditionChecks(conditionChecks);
-		this.messageArgs = DialogueMessage.ArgumentsData.read(messageArgs);
+		this.dialogueData = Dialogue.DialogueData.read(dialogueData);
 	}
 	
 	@Override
@@ -87,7 +83,7 @@ public class DialogueScreen extends Screen
 			String responseMessage = response.response().message();
 			int yPositionOffset = 20 * i;
 			
-			Component buttonComponent = Component.translatable(responseMessage, messageArgs.responseArgumentsMap().getOrDefault(responseMessage, Collections.emptyList()));
+			Component buttonComponent = Component.translatable(responseMessage, dialogueData.responseArgumentsMap().getOrDefault(responseMessage, Collections.emptyList()));
 			
 			int index = dialogue.responses().indexOf(response);
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
@@ -105,7 +101,7 @@ public class DialogueScreen extends Screen
 	
 	private boolean responseFailedCheck(String responseMessage)
 	{
-		return !conditionChecks.getOrDefault(responseMessage, false);
+		return !dialogueData.conditionChecks().getOrDefault(responseMessage, false);
 	}
 	
 	private static MutableComponent conditionFailMessage(Dialogue.Response response)
@@ -149,7 +145,7 @@ public class DialogueScreen extends Screen
 				entityName.withStyle(consortEntity.getConsortType().getColor());
 			}
 			
-			Component entityMessage = entityName.append(": ").append(Component.translatable(dialogueMessage, messageArgs.dialogueArguments()));
+			Component entityMessage = entityName.append(": ").append(Component.translatable(dialogueMessage, dialogueData.messageArguments()));
 			guiGraphics.drawWordWrap(font, entityMessage, xOffset + 10, yOffset + 20, 210, 0x000000);
 		}
 		
