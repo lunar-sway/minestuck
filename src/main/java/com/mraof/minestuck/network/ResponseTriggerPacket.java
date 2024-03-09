@@ -52,10 +52,7 @@ public record ResponseTriggerPacket(int responseIndex, ResourceLocation dialogue
 		if(dialogue == null)
 			return;
 		
-		if(this.responseIndex < 0 || dialogue.node().responses().size() <= this.responseIndex)
-			return;
-		
-		Dialogue.Response response = dialogue.node().responses().get(this.responseIndex);
-		response.trigger(livingEntity, player);
+		dialogue.node().getResponseIfValid(this.responseIndex)
+				.ifPresent(response -> response.trigger(livingEntity, player));
 	}
 }

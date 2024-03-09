@@ -163,6 +163,14 @@ public final class Dialogue
 		{
 			return this.name().toLowerCase(Locale.ROOT);
 		}
+		
+		public Optional<Response> getResponseIfValid(int responseIndex)
+		{
+			if(responseIndex < 0 || this.responses().size() <= responseIndex)
+				return Optional.empty();
+			
+			return Optional.of(this.responses().get(responseIndex));
+		}
 	}
 	
 	/**
