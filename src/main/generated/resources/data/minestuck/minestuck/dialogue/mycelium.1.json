@@ -3,9 +3,6 @@
     "message": "minestuck.dialogue.mycelium.1",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "=>",
         "next_dialogue_path": "minestuck:mycelium.2"
       }

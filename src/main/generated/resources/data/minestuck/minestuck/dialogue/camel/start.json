@@ -3,16 +3,10 @@
     "message": "minestuck.dialogue.camel.start",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "minestuck.dialogue.camel.yes",
         "next_dialogue_path": "minestuck:camel/no_camel"
       },
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "minestuck.dialogue.camel.no",
         "next_dialogue_path": "minestuck:camel/dancing_camel"
       }

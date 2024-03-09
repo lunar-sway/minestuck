@@ -3,9 +3,6 @@
     "message": "minestuck.dialogue.immortality_herb.1",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "=>",
         "next_dialogue_path": "minestuck:immortality_herb.2"
       }

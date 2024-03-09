@@ -3,9 +3,6 @@
     "message": "minestuck.dialogue.hi_friend_can_i_help_you",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "hide_if_failed": false,
         "message": "I hate you",
         "triggers": [
@@ -16,9 +13,6 @@
         ]
       },
       {
-        "conditions": {
-          "condition_list": []
-        },
         "hide_if_failed": false,
         "message": "I love you",
         "triggers": [
@@ -54,9 +48,6 @@
         "message": "Rep below 200"
       },
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "bye"
       }
     ]

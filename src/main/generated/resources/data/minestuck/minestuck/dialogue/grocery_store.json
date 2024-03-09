@@ -3,15 +3,9 @@
     "message": "minestuck.dialogue.grocery_store",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "No thanks"
       },
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "What do you have to sell?",
         "triggers": [
           {

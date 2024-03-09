@@ -3,9 +3,6 @@
     "message": "minestuck.dialogue.pyre.1",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "=>",
         "next_dialogue_path": "minestuck:pyre.2"
       }

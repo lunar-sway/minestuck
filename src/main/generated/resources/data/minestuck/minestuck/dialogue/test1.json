@@ -33,9 +33,6 @@
         "next_dialogue_path": "minestuck:test2"
       },
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "test1response3",
         "next_dialogue_path": "minestuck:test2",
         "triggers": [
