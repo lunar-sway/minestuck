@@ -12,11 +12,14 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 
 import javax.annotation.Nullable;
@@ -52,52 +55,52 @@ public class DialogueProvider implements DataProvider
 	private void consortDialogues()
 	{
 		//Wind
-		//add(new DialogueBuilder("dad_wind", new Condition.InTitleLandType(LandTypes.WIND.get())));
+		//add(new DialogueBuilder("dad_wind", isInLand(LandTypes.WIND.get())));
 		add(new DialogueBuilder("pyre.1")
 				.randomlySelectable(all(
-						new Condition.InTitleLandType(LandTypes.WIND.get()),
+						isInLand(LandTypes.WIND.get()),
 						new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get()))))
 				.addResponse(new ResponseBuilder("=>").nextDialogue("pyre.2")));
 		add(new DialogueBuilder("pyre.2"));
 		
 		//Pulse
-		add(new DialogueBuilder("koolaid").randomlySelectable(new Condition.InTitleLandType(LandTypes.PULSE.get())));
-		add(new DialogueBuilder("murder_rain").randomlySelectable(new Condition.InTitleLandType(LandTypes.PULSE.get())));
-		add(new DialogueBuilder("swimming").randomlySelectable(new Condition.InTitleLandType(LandTypes.PULSE.get())));
-		add(new DialogueBuilder("blood_surprise").randomlySelectable(new Condition.InTitleLandType(LandTypes.PULSE.get())));
+		add(new DialogueBuilder("koolaid").randomlySelectable(isInLand(LandTypes.PULSE.get())));
+		add(new DialogueBuilder("murder_rain").randomlySelectable(isInLand(LandTypes.PULSE.get())));
+		add(new DialogueBuilder("swimming").randomlySelectable(isInLand(LandTypes.PULSE.get())));
+		add(new DialogueBuilder("blood_surprise").randomlySelectable(isInLand(LandTypes.PULSE.get())));
 		
 		//Thunder
-		add(new DialogueBuilder("skeleton_horse").randomlySelectable(new Condition.InTitleLandType(LandTypes.THUNDER.get())));
-		add(new DialogueBuilder("blue_moon").randomlySelectable(new Condition.InTitleLandType(LandTypes.THUNDER.get())));
-		add(new DialogueBuilder("lightning_strike").randomlySelectable(new Condition.InTitleLandType(LandTypes.THUNDER.get())));
+		add(new DialogueBuilder("skeleton_horse").randomlySelectable(isInLand(LandTypes.THUNDER.get())));
+		add(new DialogueBuilder("blue_moon").randomlySelectable(isInLand(LandTypes.THUNDER.get())));
+		add(new DialogueBuilder("lightning_strike").randomlySelectable(isInLand(LandTypes.THUNDER.get())));
 		add(new DialogueBuilder("reckoning.1")
-				.randomlySelectable(new Condition.InTitleLandType(LandTypes.THUNDER.get()))
+				.randomlySelectable(isInLand(LandTypes.THUNDER.get()))
 				.addResponse(new ResponseBuilder("=>").nextDialogue("reckoning.2")));
 		add(new DialogueBuilder("reckoning.2")
 				.addResponse(new ResponseBuilder("=>").nextDialogue("reckoning.3")));
 		add(new DialogueBuilder("reckoning.3"));
 		add(new DialogueBuilder("thunder_death.1")
 				.randomlySelectable(all(
-						new Condition.InTitleLandType(LandTypes.THUNDER.get()),
-						new Condition.InTerrainLandType(LandTypes.WOOD.get())))
+						isInLand(LandTypes.THUNDER.get()),
+						isInLand(LandTypes.WOOD.get())))
 				.addResponse(new ResponseBuilder("=>").nextDialogue("thunder_death.2")));
 		add(new DialogueBuilder("thunder_death.2")
 				.addResponse(new ResponseBuilder("=>").nextDialogue("thunder_death.3")));
 		add(new DialogueBuilder("thunder_death.3"));
 		add(new DialogueBuilder("hardcore")
 				.randomlySelectable(all(
-						new Condition.InTitleLandType(LandTypes.THUNDER.get()),
-						new Condition.InTerrainLandType(LandTypes.HEAT.get()))));
+						isInLand(LandTypes.THUNDER.get()),
+						isInLand(LandTypes.HEAT.get()))));
 		
 		
 		add(new DialogueBuilder("mycelium.1")
-				.randomlySelectable(new Condition.InTerrainLandType(LandTypes.FUNGI.get()))
+				.randomlySelectable(isInLand(LandTypes.FUNGI.get()))
 				.addResponse(new ResponseBuilder("=>").nextDialogue("mycelium.2")));
 		add(new DialogueBuilder("mycelium.2"));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
 		add(new DialogueBuilder("camel/start")
-				.randomlySelectable(new Condition.InTerrainLandTypeTag(MSTags.TerrainLandTypes.SAND))
+				.randomlySelectable(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
 				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.yes").nextDialogue("camel/no_camel"))
 				.addResponse(new ResponseBuilder("minestuck.dialogue.camel.no").nextDialogue("camel/dancing_camel")));
 		add(new DialogueBuilder("camel/no_camel"));
@@ -121,7 +124,7 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder("Let me see your wares").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
 		
 		add(new DialogueBuilder("immortality_herb.1")
-				.randomlySelectable(new Condition.InTerrainLandType(LandTypes.FLORA.get()))
+				.randomlySelectable(isInLand(LandTypes.FLORA.get()))
 				.addResponse(new ResponseBuilder("=>").nextDialogue("immortality_herb.2")));
 		add(new DialogueBuilder("immortality_herb.2")
 				.addResponse(new ResponseBuilder("=>").nextDialogue("immortality_herb.3")));
@@ -154,8 +157,8 @@ public class DialogueProvider implements DataProvider
 						.dontHideFailed())
 				.addResponse(new ResponseBuilder("test2response2").nextDialogue("test1")
 						.addCondition(new Condition.IsCarapacian())
-						.addCondition(new Condition.InTerrainLandType(LandTypes.END.get()))
-						.addCondition(new Condition.InTerrainLandType(LandTypes.SHADE.get()))
+						.addCondition(isInLand(LandTypes.END.get()))
+						.addCondition(isInLand(LandTypes.SHADE.get()))
 						.addTrigger(new Trigger.Command("say hi"))
 						.conditionType(Conditions.Type.NONE)
 						.dontHideFailed())
@@ -169,7 +172,7 @@ public class DialogueProvider implements DataProvider
 						.addCondition(new Condition.PlayerIsClass(EnumClass.MAGE))
 						.addCondition(new Condition.PlayerIsAspect(EnumAspect.HEART))
 						.addCondition(new Condition.PlayerIsAspect(EnumAspect.DOOM))
-						.addCondition(new Condition.InTerrainLandType(LandTypes.RAIN.get()))
+						.addCondition(isInLand(LandTypes.RAIN.get()))
 						.conditionType(Conditions.Type.ONE)
 						.dontHideFailed()));
 		add(new DialogueBuilder("turtle_only").randomlySelectable(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())));
@@ -352,6 +355,21 @@ public class DialogueProvider implements DataProvider
 	public static Conditions all(Condition... conditions)
 	{
 		return new Conditions(List.of(conditions), Conditions.Type.ALL);
+	}
+	
+	public static Condition isInLand(TerrainLandType landType)
+	{
+		return new Condition.InTerrainLandType(landType);
+	}
+	
+	public static Condition isInLand(TitleLandType landType)
+	{
+		return new Condition.InTitleLandType(landType);
+	}
+	
+	public static Condition isInTerrainLand(TagKey<TerrainLandType> tag)
+	{
+		return new Condition.InTerrainLandTypeTag(tag);
 	}
 	
 	@Override
