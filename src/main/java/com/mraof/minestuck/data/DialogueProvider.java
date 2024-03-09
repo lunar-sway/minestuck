@@ -215,7 +215,7 @@ public class DialogueProvider implements DataProvider
 	private void add(DialogueBuilder builder)
 	{
 		Dialogue.DialogueNode node = new Dialogue.DialogueNode(builder.message, builder.animation, builder.guiPath, builder.responses);
-		Dialogue dialogue = new Dialogue(builder.path, node, Optional.ofNullable(builder.useContext));
+		Dialogue dialogue = new Dialogue(builder.path, new Dialogue.NodeSelector(List.of(), node), Optional.ofNullable(builder.useContext));
 		dialogues.put(builder.path, dialogue);
 	}
 	

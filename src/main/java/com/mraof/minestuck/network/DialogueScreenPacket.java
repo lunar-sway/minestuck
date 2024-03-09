@@ -5,33 +5,27 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocation, Dialogue.DialogueData dialogueData) implements MSPacket.PlayToClient
+public record DialogueScreenPacket(int entityID, Dialogue.NodeReference nodeReference, Dialogue.DialogueData dialogueData) implements MSPacket.PlayToClient
 {
-	public static DialogueScreenPacket createPacket(LivingEntity entity, Dialogue dialogue, Dialogue.DialogueData dialogueData)
-	{
-		return new DialogueScreenPacket(entity.getId(), dialogue.path(), dialogueData);
-	}
-	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(entityID);
-		buffer.writeResourceLocation(dialogueLocation);
+		nodeReference.write(buffer);
 		dialogueData.write(buffer);
 	}
 	
 	public static DialogueScreenPacket decode(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt();
-		ResourceLocation dialogueLocation = buffer.readResourceLocation();
-		Dialogue.DialogueData dialogueData = Dialogue.DialogueData.read(buffer);
+		var nodeReference = Dialogue.NodeReference.read(buffer);
+		var dialogueData = Dialogue.DialogueData.read(buffer);
 		
-		return new DialogueScreenPacket(entityID, dialogueLocation, dialogueData);
+		return new DialogueScreenPacket(entityID, nodeReference, dialogueData);
 	}
 	
 	@Override
@@ -42,7 +36,7 @@ public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocati
 		{
 			Entity entity = playerEntity.level().getEntity(entityID);
 			if(entity instanceof LivingEntity livingEntity && entity instanceof DialogueEntity)
-				MSScreenFactories.displayDialogueScreen(livingEntity, dialogueLocation, dialogueData);
+				MSScreenFactories.displayDialogueScreen(livingEntity, nodeReference, dialogueData);
 		}
 	}
 }
