@@ -1,10 +1,8 @@
 {
-  "animation": "generic_animation",
   "dialogue_message": {
     "arguments": [],
     "message": "minestuck.dialogue.hi_friend_can_i_help_you"
   },
-  "gui": "minestuck:textures/gui/generic_extra_large.png",
   "path": "minestuck:hi_friend_can_i_help_you",
   "responses": [
     {

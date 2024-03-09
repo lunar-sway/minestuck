@@ -1,10 +1,8 @@
 {
-  "animation": "generic_animation",
   "dialogue_message": {
     "arguments": [],
     "message": "minestuck.dialogue.me_want_cookie"
   },
-  "gui": "minestuck:textures/gui/generic_extra_large.png",
   "path": "minestuck:me_want_cookie",
   "responses": [
     {
