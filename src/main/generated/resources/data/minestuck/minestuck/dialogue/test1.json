@@ -95,11 +95,7 @@
   "path": "minestuck:test1",
   "use_context": {
     "conditions": {
-      "condition_list": [
-        {
-          "type": "conditionless"
-        }
-      ]
+      "condition_list": []
     }
   }
 }

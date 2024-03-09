@@ -31,11 +31,7 @@
   "path": "minestuck:me_want_5_cookies",
   "use_context": {
     "conditions": {
-      "condition_list": [
-        {
-          "type": "conditionless"
-        }
-      ]
+      "condition_list": []
     },
     "dialogue_weight": 5
   }

@@ -20,11 +20,7 @@
   "path": "minestuck:test_arguments",
   "use_context": {
     "conditions": {
-      "condition_list": [
-        {
-          "type": "conditionless"
-        }
-      ]
+      "condition_list": []
     }
   }
 }

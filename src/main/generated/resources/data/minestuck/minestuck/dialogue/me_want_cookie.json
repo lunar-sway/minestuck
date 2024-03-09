@@ -37,11 +37,7 @@
   "path": "minestuck:me_want_cookie",
   "use_context": {
     "conditions": {
-      "condition_list": [
-        {
-          "type": "conditionless"
-        }
-      ]
+      "condition_list": []
     }
   }
 }

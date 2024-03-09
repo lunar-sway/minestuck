@@ -127,16 +127,6 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 		private final Conditions conditions;
 		private final int weight;
 		
-		public UseContext(Condition condition)
-		{
-			this(new Conditions(List.of(condition), Conditions.Type.ALL), 10);
-		}
-		
-		public UseContext(Condition condition, int weight)
-		{
-			this(new Conditions(List.of(condition), Conditions.Type.ALL), weight);
-		}
-		
 		public UseContext(Conditions conditions)
 		{
 			this(conditions, 10);
