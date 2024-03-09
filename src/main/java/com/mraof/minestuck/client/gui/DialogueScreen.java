@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ResponseTriggerPacket;
@@ -83,17 +82,19 @@ public class DialogueScreen extends Screen
 			int yPositionOffset = 20 * i;
 			
 			Dialogue.ResponseData data = this.dialogueData.responsesMap().get(responseMessage);
-			Component buttonComponent = Component.translatable(responseMessage, data != null ? data.arguments() : List.of());
+			if(data == null)
+				continue;
+			
+			Component buttonComponent = Component.translatable(responseMessage, data.arguments());
 			
 			int index = dialogue.responses().indexOf(response);
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(index));
 			
-			if(responseFailedCheck(responseMessage))
-			{
-				entryButton.setTooltip(Tooltip.create(conditionFailMessage(response)));
+			data.conditionFailure().ifPresent(failure -> {
+				entryButton.setTooltip(Tooltip.create(conditionFailMessage(failure.causes())));
 				entryButton.active = false;
-			}
+			});
 			
 			responseButtons.add(addRenderableWidget(entryButton));
 		}
@@ -102,20 +103,16 @@ public class DialogueScreen extends Screen
 	private boolean responseFailedCheck(String responseMessage)
 	{
 		Dialogue.ResponseData data = this.dialogueData.responsesMap().get(responseMessage);
-		return data == null || !data.metCondition();
+		return data == null || data.conditionFailure().isPresent();
 	}
 	
-	private static MutableComponent conditionFailMessage(Dialogue.Response response)
+	private static MutableComponent conditionFailMessage(List<String> causes)
 	{
 		//TODO Does not make sense linguistically with a hard coded failure tooltip in Condition and a Conditions.Type other than ALL
 		MutableComponent tooltipMessage = Component.literal("Cannot be picked because: ");
 		
-		for(Condition condition : response.conditions().conditionList())
-		{
-			String tooltip = condition.getFailureTooltip();
-			if(!tooltip.isEmpty())
-				tooltipMessage.append("\n").append(Component.translatable(tooltip));
-		}
+		causes.forEach(tooltip -> tooltipMessage.append("\n").append(Component.translatable(tooltip)));
+		
 		return tooltipMessage;
 	}
 	

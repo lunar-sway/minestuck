@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
@@ -198,9 +199,18 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 		
 		CompoundTag responsesArgs = new CompoundTag();
 		dialogue.responses().forEach(response -> {
-			ResponseData responseData = new ResponseData(
-					response.conditions().testWithContext(entity, serverPlayer),
-					response.response().processArguments(entity, serverPlayer));
+			Optional<ConditionFailure> conditionFailure;
+			if(response.conditions().testWithContext(entity, serverPlayer))
+				conditionFailure = Optional.empty();
+			else
+			{
+				List<String> failureMessages = response.conditions().conditionList().stream()
+						.map(Condition::getFailureTooltip).filter(message -> !message.isEmpty()).toList();
+				
+				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
+			}
+			ResponseData responseData = new ResponseData(response.response().processArguments(entity, serverPlayer), conditionFailure);
+			
 			responsesArgs.put(response.response().message(), responseData.write());
 		});
 		messageArgs.put("responses", responsesArgs);
@@ -230,24 +240,45 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 		}
 	}
 	
-	public record ResponseData(boolean metCondition, List<String> arguments)
+	public record ResponseData(List<String> arguments, Optional<ConditionFailure> conditionFailure)
 	{
 		private static ResponseData read(CompoundTag tag)
 		{
-			boolean metCondition = tag.getBoolean("met_condition");
 			List<String> arguments = tag.getList("arguments", Tag.TAG_STRING)
 					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
+			Optional<ConditionFailure> conditionFailure = tag.contains("failure", Tag.TAG_COMPOUND)
+					? Optional.of(ConditionFailure.read(tag.getCompound("failure"))) : Optional.empty();
 			
-			return new ResponseData(metCondition, arguments);
+			return new ResponseData(arguments, conditionFailure);
 		}
 		
 		private CompoundTag write()
 		{
 			CompoundTag tag = new CompoundTag();
-			tag.putBoolean("met_condition", this.metCondition);
 			ListTag argumentsTag = new ListTag();
 			arguments.forEach(argument -> argumentsTag.add(StringTag.valueOf(argument)));
 			tag.put("arguments", argumentsTag);
+			this.conditionFailure.ifPresent(failure -> tag.put("failure", failure.write()));
+			return tag;
+		}
+	}
+	
+	public record ConditionFailure(List<String> causes)
+	{
+		private static ConditionFailure read(CompoundTag tag)
+		{
+			List<String> causes = tag.getList("causes", Tag.TAG_STRING)
+					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
+			
+			return new ConditionFailure(causes);
+		}
+		
+		private CompoundTag write()
+		{
+			CompoundTag tag = new CompoundTag();
+			ListTag causesTag = new ListTag();
+			this.causes.forEach(cause -> causesTag.add(StringTag.valueOf(cause)));
+			tag.put("causes", causesTag);
 			return tag;
 		}
 	}
