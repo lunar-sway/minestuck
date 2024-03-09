@@ -7,7 +7,7 @@
       },
       {
         "message": "why do you want cookie?",
-        "next_dialogue_path": "minecraft:loop_menu"
+        "next_dialogue_path": "minestuck:me_want_cookie"
       },
       {
         "conditions": {

@@ -98,22 +98,20 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 			return Optional.of(new ResponseData(this.message().evaluateComponent(entity, serverPlayer), responseIndex, conditionFailure));
 		}
 		
-		public void trigger(LivingEntity entity, ServerPlayer player, Dialogue dialogue)
+		public void trigger(LivingEntity entity, ServerPlayer player)
 		{
 			if(!this.conditions().testWithContext(entity, player))
 				return;
 			
 			ResourceLocation nextPath = this.nextDialoguePath();
 			
-			Dialogue nextDialogue = null;
-			if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
-				nextDialogue = dialogue;
-			else if(!nextPath.equals(DialogueProvider.EMPTY_NEXT_PATH))
-				nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
-			
 			for(Trigger trigger : this.triggers())
 				trigger.triggerEffect(entity, player);
 			
+			if(nextPath.equals(DialogueProvider.EMPTY_NEXT_PATH))
+				return;
+			
+			Dialogue nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
 			if(nextDialogue != null)
 				Dialogue.openScreen(entity, player, nextDialogue);
 		}
