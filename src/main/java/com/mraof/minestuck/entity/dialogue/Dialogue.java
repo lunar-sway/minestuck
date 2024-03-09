@@ -9,10 +9,6 @@ import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -224,7 +220,7 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			String message = buffer.readUtf();
 			List<String> arguments = buffer.readList(FriendlyByteBuf::readUtf);
 			ResourceLocation guiBackground = buffer.readResourceLocation();
-			List<ResponseData> responses = buffer.readList(byteBuf -> ResponseData.read(byteBuf.readNbt()));
+			List<ResponseData> responses = buffer.readList(ResponseData::read);
 			
 			return new DialogueData(message, arguments, guiBackground, responses);
 		}
@@ -234,58 +230,43 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			buffer.writeUtf(this.message);
 			buffer.writeCollection(this.messageArguments, FriendlyByteBuf::writeUtf);
 			buffer.writeResourceLocation(this.guiBackground);
-			buffer.writeCollection(this.responses, (byteBuf, responseData) -> byteBuf.writeNbt(responseData.write()));
+			buffer.writeCollection(this.responses, (byteBuf, responseData) -> responseData.write(byteBuf));
 		}
 	}
 	
 	public record ResponseData(String message, List<String> arguments, int index, Optional<ConditionFailure> conditionFailure)
 	{
-		private static ResponseData read(CompoundTag tag)
+		private static ResponseData read(FriendlyByteBuf buffer)
 		{
-			String message = tag.getString("message");
-			List<String> arguments = tag.getList("arguments", Tag.TAG_STRING)
-					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
-			
-			int index = tag.getInt("index");
-			Optional<ConditionFailure> conditionFailure = tag.contains("failure", Tag.TAG_COMPOUND)
-					? Optional.of(ConditionFailure.read(tag.getCompound("failure"))) : Optional.empty();
+			String message = buffer.readUtf();
+			List<String> arguments = buffer.readList(FriendlyByteBuf::readUtf);
+			int index = buffer.readInt();
+			Optional<ConditionFailure> conditionFailure = buffer.readOptional(ConditionFailure::read);
 			
 			return new ResponseData(message, arguments, index, conditionFailure);
 		}
 		
-		private CompoundTag write()
+		private void write(FriendlyByteBuf buffer)
 		{
-			CompoundTag tag = new CompoundTag();
-			
-			tag.putString("message", this.message);
-			ListTag argumentsTag = new ListTag();
-			this.arguments.forEach(argument -> argumentsTag.add(StringTag.valueOf(argument)));
-			tag.put("arguments", argumentsTag);
-			
-			tag.putInt("index", this.index);
-			this.conditionFailure.ifPresent(failure -> tag.put("failure", failure.write()));
-			
-			return tag;
+			buffer.writeUtf(this.message);
+			buffer.writeCollection(this.arguments, FriendlyByteBuf::writeUtf);
+			buffer.writeInt(this.index);
+			buffer.writeOptional(this.conditionFailure, (byteBuf, failure) -> failure.write(byteBuf));
 		}
 	}
 	
 	public record ConditionFailure(List<String> causes)
 	{
-		private static ConditionFailure read(CompoundTag tag)
+		private static ConditionFailure read(FriendlyByteBuf buffer)
 		{
-			List<String> causes = tag.getList("causes", Tag.TAG_STRING)
-					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
+			List<String> causes = buffer.readList(FriendlyByteBuf::readUtf);
 			
 			return new ConditionFailure(causes);
 		}
 		
-		private CompoundTag write()
+		private void write(FriendlyByteBuf buffer)
 		{
-			CompoundTag tag = new CompoundTag();
-			ListTag causesTag = new ListTag();
-			this.causes.forEach(cause -> causesTag.add(StringTag.valueOf(cause)));
-			tag.put("causes", causesTag);
-			return tag;
+			buffer.writeCollection(this.causes, FriendlyByteBuf::writeUtf);
 		}
 	}
 }
