@@ -1,4 +1,13 @@
 {
-  "type": "minestuck:large_cog",
-  "config": {}
+  "type": "minecraft:random_boolean_selector",
+  "config": {
+    "feature_false": {
+      "feature": "minestuck:large_cog_2",
+      "placement": []
+    },
+    "feature_true": {
+      "feature": "minestuck:large_cog_1",
+      "placement": []
+    }
+  }
 }
