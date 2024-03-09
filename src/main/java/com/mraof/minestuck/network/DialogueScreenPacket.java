@@ -4,7 +4,6 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
-import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +44,7 @@ public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocati
 		{
 			Entity entity = playerEntity.level().getEntity(entityID);
 			if(entity instanceof LivingEntity livingEntity && entity instanceof DialogueEntity)
-				MSScreenFactories.displayDialogueScreen(livingEntity, DialogueManager.getInstance().getDialogue(dialogueLocation), dialogueData);
+				MSScreenFactories.displayDialogueScreen(livingEntity, dialogueLocation, dialogueData);
 		}
 	}
 }
