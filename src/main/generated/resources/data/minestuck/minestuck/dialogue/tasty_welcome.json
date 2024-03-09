@@ -1,18 +1,18 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.tasty_welcome",
+    "message": "minestuck.dialogue.tasty_welcome",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "Goodbye"
+        "message": "Goodbye"
       },
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "Let me see your wares",
+        "message": "Let me see your wares",
         "triggers": [
           {
             "type": "open_consort_merchant_gui",

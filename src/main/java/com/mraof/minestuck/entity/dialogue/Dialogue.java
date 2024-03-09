@@ -46,7 +46,7 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 	public record DialogueNode(DialogueMessage message, String animation, ResourceLocation guiPath, List<Response> responses)
 	{
 		public static Codec<DialogueNode> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				DialogueMessage.CODEC.fieldOf("dialogue_message").forGetter(DialogueNode::message),
+				DialogueMessage.CODEC.fieldOf("message").forGetter(DialogueNode::message),
 				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DialogueProvider.DEFAULT_ANIMATION).forGetter(DialogueNode::animation),
 				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DialogueProvider.DEFAULT_GUI).forGetter(DialogueNode::guiPath),
 				Response.LIST_CODEC.fieldOf("responses").forGetter(DialogueNode::responses)
@@ -66,17 +66,16 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 	 * A Response contains all possible Dialogues that can be reached from the present Dialogue.
 	 * It contains the message that represents the Response, any Conditions/Triggers, the location of the next Dialogue, and a boolean determining whether the Response should be visible when it fails to meet the Conditions
 	 */
-	public record Response(DialogueMessage response, Conditions conditions, List<Trigger> triggers,
+	public record Response(DialogueMessage message, Conditions conditions, List<Trigger> triggers,
 						   ResourceLocation nextDialoguePath, boolean hideIfFailed)
 	{
-		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance ->
-				instance.group(DialogueMessage.CODEC.fieldOf("response_message").forGetter(Response::response),
-								Conditions.CODEC.fieldOf("conditions").forGetter(Response::conditions),
-								PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
-								PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "next_dialogue_path", DialogueProvider.EMPTY_NEXT_PATH).forGetter(Response::nextDialoguePath),
-								PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed)
-						)
-						.apply(instance, Response::new));
+		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				DialogueMessage.CODEC.fieldOf("message").forGetter(Response::message),
+				Conditions.CODEC.fieldOf("conditions").forGetter(Response::conditions),
+				PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
+				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "next_dialogue_path", DialogueProvider.EMPTY_NEXT_PATH).forGetter(Response::nextDialoguePath),
+				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed)
+		).apply(instance, Response::new));
 		
 		static Codec<List<Response>> LIST_CODEC = Response.CODEC.listOf();
 		
@@ -95,7 +94,7 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 				
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
-			return Optional.of(new ResponseData(this.response().evaluateComponent(entity, serverPlayer), responseIndex, conditionFailure));
+			return Optional.of(new ResponseData(this.message().evaluateComponent(entity, serverPlayer), responseIndex, conditionFailure));
 		}
 	}
 	

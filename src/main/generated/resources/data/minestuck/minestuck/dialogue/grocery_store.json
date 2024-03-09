@@ -1,18 +1,18 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.grocery_store",
+    "message": "minestuck.dialogue.grocery_store",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "No thanks"
+        "message": "No thanks"
       },
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "What do you have to sell?",
+        "message": "What do you have to sell?",
         "triggers": [
           {
             "type": "open_consort_merchant_gui",

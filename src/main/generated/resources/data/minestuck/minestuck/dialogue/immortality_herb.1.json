@@ -1,13 +1,13 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.immortality_herb.1",
+    "message": "minestuck.dialogue.immortality_herb.1",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
-        "next_dialogue_path": "minestuck:immortality_herb.2",
-        "response_message": "=>"
+        "message": "=>",
+        "next_dialogue_path": "minestuck:immortality_herb.2"
       }
     ]
   },

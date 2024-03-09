@@ -1,6 +1,6 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.pyre.2",
+    "message": "minestuck.dialogue.pyre.2",
     "responses": []
   },
   "path": "minestuck:pyre.2"

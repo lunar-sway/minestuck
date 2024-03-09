@@ -1,6 +1,6 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.thunder_death.3",
+    "message": "minestuck.dialogue.thunder_death.3",
     "responses": []
   },
   "path": "minestuck:thunder_death.3"

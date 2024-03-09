@@ -1,6 +1,6 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.blue_moon",
+    "message": "minestuck.dialogue.blue_moon",
     "responses": []
   },
   "path": "minestuck:blue_moon",

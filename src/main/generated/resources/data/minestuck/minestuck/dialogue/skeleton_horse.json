@@ -1,6 +1,6 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.skeleton_horse",
+    "message": "minestuck.dialogue.skeleton_horse",
     "responses": []
   },
   "path": "minestuck:skeleton_horse",

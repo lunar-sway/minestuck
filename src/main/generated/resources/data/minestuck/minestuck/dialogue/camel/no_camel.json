@@ -1,6 +1,6 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.camel.no_camel",
+    "message": "minestuck.dialogue.camel.no_camel",
     "responses": []
   },
   "path": "minestuck:camel/no_camel"

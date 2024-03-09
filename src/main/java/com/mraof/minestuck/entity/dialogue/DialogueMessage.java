@@ -16,15 +16,15 @@ import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public record DialogueMessage(String message, List<Argument> arguments)
+public record DialogueMessage(String key, List<Argument> arguments)
 {
 	static Codec<DialogueMessage> DIRECT_CODEC = RecordCodecBuilder.create(instance ->
-			instance.group(Codec.STRING.fieldOf("message").forGetter(DialogueMessage::message),
+			instance.group(Codec.STRING.fieldOf("key").forGetter(DialogueMessage::key),
 							Codec.list(Argument.CODEC).fieldOf("arguments").forGetter(DialogueMessage::arguments))
 					.apply(instance, DialogueMessage::new));
 	static Codec<DialogueMessage> CODEC = Codec.either(Codec.STRING, DIRECT_CODEC)
 			.xmap(either -> either.map(DialogueMessage::new, Function.identity()),
-					message -> message.arguments.isEmpty() ? Either.left(message.message) : Either.right(message));
+					message -> message.arguments.isEmpty() ? Either.left(message.key) : Either.right(message));
 	
 	public DialogueMessage(String message)
 	{
@@ -33,7 +33,7 @@ public record DialogueMessage(String message, List<Argument> arguments)
 	
 	public Component evaluateComponent(LivingEntity entity, ServerPlayer serverPlayer)
 	{
-		return Component.translatable(this.message, this.arguments.stream().map(argument -> argument.processing.apply(entity, serverPlayer)).toArray());
+		return Component.translatable(this.key, this.arguments.stream().map(argument -> argument.processing.apply(entity, serverPlayer)).toArray());
 	}
 	
 	public enum Argument implements StringRepresentable

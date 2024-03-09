@@ -1,18 +1,18 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.fast_food",
+    "message": "minestuck.dialogue.fast_food",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "I'm good"
+        "message": "I'm good"
       },
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "Show me your menu",
+        "message": "Show me your menu",
         "triggers": [
           {
             "type": "open_consort_merchant_gui",
