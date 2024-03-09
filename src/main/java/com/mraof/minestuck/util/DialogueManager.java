@@ -70,9 +70,10 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	{
 		List<WeightedEntry.Wrapper<Dialogue>> weightedFilteredDialogue = new ArrayList<>();
 		dialogues.forEach(dialogue -> {
-			Dialogue.UseContext useContext = dialogue.useContext();
-			if(useContext != null && useContext.getConditions().testWithContext(entity, null))
-				weightedFilteredDialogue.add(WeightedEntry.wrap(dialogue, useContext.getWeight()));
+			dialogue.useContext().ifPresent(useContext -> {
+				if(useContext.getConditions().testWithContext(entity, null))
+					weightedFilteredDialogue.add(WeightedEntry.wrap(dialogue, useContext.getWeight()));
+			});
 		});
 		
 		return WeightedRandom.getRandomItem(rand, weightedFilteredDialogue)

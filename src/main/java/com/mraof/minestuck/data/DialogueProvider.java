@@ -21,10 +21,7 @@ import net.minecraft.world.item.Items;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
@@ -206,7 +203,7 @@ public class DialogueProvider implements DataProvider
 	
 	private void add(DialogueBuilder builder)
 	{
-		Dialogue dialogue = new Dialogue(builder.path, new DialogueMessage(builder.message, builder.messageArgs), builder.animation, builder.guiPath, builder.responses, builder.useContext);
+		Dialogue dialogue = new Dialogue(builder.path, new DialogueMessage(builder.message, builder.messageArgs), builder.animation, builder.guiPath, builder.responses, Optional.ofNullable(builder.useContext));
 		dialogues.put(builder.path, dialogue);
 	}
 	
