@@ -65,9 +65,7 @@ public class DialogueScreen extends Screen
 			Dialogue.ResponseData data = this.dialogueData.responses().get(i);
 			int yPositionOffset = 20 * i;
 			
-			Component buttonComponent = Component.translatable(data.message(), data.arguments());
-			
-			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
+			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, data.message(),
 					button -> clickResponse(data.index()));
 			
 			data.conditionFailure().ifPresent(failure -> {
@@ -104,20 +102,16 @@ public class DialogueScreen extends Screen
 		
 		guiGraphics.blit(dialogueData.guiBackground(), xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		String dialogueMessage = dialogueData.message();
-		if(!dialogueMessage.isEmpty())
+		MutableComponent entityName = entity.getDisplayName().plainCopy();
+		
+		//consort names will have the same color as their type
+		if(entity instanceof ConsortEntity consortEntity)
 		{
-			MutableComponent entityName = entity.getDisplayName().plainCopy();
-			
-			//consort names will have the same color as their type
-			if(entity instanceof ConsortEntity consortEntity)
-			{
-				entityName.withStyle(consortEntity.getConsortType().getColor());
-			}
-			
-			Component entityMessage = entityName.append(": ").append(Component.translatable(dialogueMessage, dialogueData.messageArguments()));
-			guiGraphics.drawWordWrap(font, entityMessage, xOffset + 10, yOffset + 20, 210, 0x000000);
+			entityName.withStyle(consortEntity.getConsortType().getColor());
 		}
+		
+		Component entityMessage = entityName.append(": ").append(this.dialogueData.message());
+		guiGraphics.drawWordWrap(font, entityMessage, xOffset + 10, yOffset + 20, 210, 0x000000);
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}

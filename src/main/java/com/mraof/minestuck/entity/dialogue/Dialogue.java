@@ -10,6 +10,7 @@ import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
@@ -70,7 +71,7 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 				.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, serverPlayer))
 				.flatMap(Optional::stream).toList();
 		
-		return new DialogueData(this.message().message(), this.message().processArguments(entity, serverPlayer), this.guiPath(), responses);
+		return new DialogueData(this.message().evaluateComponent(entity, serverPlayer), this.guiPath(), responses);
 	}
 	
 	/**
@@ -106,8 +107,7 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 				
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
-			return Optional.of(new ResponseData(this.response().message(), this.response().processArguments(entity, serverPlayer),
-					responseIndex, conditionFailure));
+			return Optional.of(new ResponseData(this.response().evaluateComponent(entity, serverPlayer), responseIndex, conditionFailure));
 		}
 	}
 	
@@ -213,43 +213,39 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 		}
 	}
 	
-	public record DialogueData(String message, List<String> messageArguments, ResourceLocation guiBackground, List<ResponseData> responses)
+	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses)
 	{
 		public static DialogueData read(FriendlyByteBuf buffer)
 		{
-			String message = buffer.readUtf();
-			List<String> arguments = buffer.readList(FriendlyByteBuf::readUtf);
+			Component message = buffer.readComponent();
 			ResourceLocation guiBackground = buffer.readResourceLocation();
 			List<ResponseData> responses = buffer.readList(ResponseData::read);
 			
-			return new DialogueData(message, arguments, guiBackground, responses);
+			return new DialogueData(message, guiBackground, responses);
 		}
 		
 		public void write(FriendlyByteBuf buffer)
 		{
-			buffer.writeUtf(this.message);
-			buffer.writeCollection(this.messageArguments, FriendlyByteBuf::writeUtf);
+			buffer.writeComponent(this.message);
 			buffer.writeResourceLocation(this.guiBackground);
 			buffer.writeCollection(this.responses, (byteBuf, responseData) -> responseData.write(byteBuf));
 		}
 	}
 	
-	public record ResponseData(String message, List<String> arguments, int index, Optional<ConditionFailure> conditionFailure)
+	public record ResponseData(Component message, int index, Optional<ConditionFailure> conditionFailure)
 	{
 		private static ResponseData read(FriendlyByteBuf buffer)
 		{
-			String message = buffer.readUtf();
-			List<String> arguments = buffer.readList(FriendlyByteBuf::readUtf);
+			Component message = buffer.readComponent();
 			int index = buffer.readInt();
 			Optional<ConditionFailure> conditionFailure = buffer.readOptional(ConditionFailure::read);
 			
-			return new ResponseData(message, arguments, index, conditionFailure);
+			return new ResponseData(message, index, conditionFailure);
 		}
 		
 		private void write(FriendlyByteBuf buffer)
 		{
-			buffer.writeUtf(this.message);
-			buffer.writeCollection(this.arguments, FriendlyByteBuf::writeUtf);
+			buffer.writeComponent(this.message);
 			buffer.writeInt(this.index);
 			buffer.writeOptional(this.conditionFailure, (byteBuf, failure) -> failure.write(byteBuf));
 		}
