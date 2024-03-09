@@ -61,10 +61,19 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 	 */
 	public static void openScreen(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
 	{
-		CompoundTag dialogueData = writeAllMessagesToCompound(entity, serverPlayer, dialogue);
+		DialogueData data = dialogue.evaluateData(entity, serverPlayer);
 		
-		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, dialogueData);
+		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, data.write());
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+	}
+	
+	private DialogueData evaluateData(LivingEntity entity, ServerPlayer serverPlayer)
+	{
+		List<ResponseData> responses = IntStream.range(0, responses().size())
+				.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, serverPlayer))
+				.flatMap(Optional::stream).toList();
+		
+		return new DialogueData(this.message().message(), this.message().processArguments(entity, serverPlayer), this.guiPath(), responses);
 	}
 	
 	/**
@@ -207,33 +216,12 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 		}
 	}
 	
-	public static CompoundTag writeAllMessagesToCompound(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
-	{
-		CompoundTag tag = new CompoundTag();
-		
-		tag.putString("message", dialogue.message.message());
-		
-		ListTag dialogueArgs = new ListTag();
-		dialogue.message().processArguments(entity, serverPlayer).forEach(argument -> dialogueArgs.add(StringTag.valueOf(argument)));
-		tag.put("dialogue_message", dialogueArgs);
-		
-		tag.putString("background", dialogue.guiPath().toString());
-		
-		ListTag responses = new ListTag();
-		IntStream.range(0, dialogue.responses().size())
-				.mapToObj(responseIndex -> dialogue.responses().get(responseIndex).evaluateData(responseIndex, entity, serverPlayer)).flatMap(Optional::stream)
-				.forEach(responseData -> responses.add(responseData.write()));
-		tag.put("responses", responses);
-		
-		return tag;
-	}
-	
 	public record DialogueData(String message, List<String> messageArguments, ResourceLocation guiBackground, List<ResponseData> responses)
 	{
 		public static DialogueData read(CompoundTag tag)
 		{
 			String message = tag.getString("message");
-			List<String> arguments = tag.getList("dialogue_message", Tag.TAG_STRING)
+			List<String> arguments = tag.getList("arguments", Tag.TAG_STRING)
 					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
 			
 			ResourceLocation guiBackground = new ResourceLocation(tag.getString("background"));
@@ -244,6 +232,24 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			return new DialogueData(message, arguments, guiBackground, responses);
 		}
 		
+		private CompoundTag write()
+		{
+			CompoundTag tag = new CompoundTag();
+			
+			tag.putString("message", message());
+			
+			ListTag dialogueArgs = new ListTag();
+			this.messageArguments.forEach(argument -> dialogueArgs.add(StringTag.valueOf(argument)));
+			tag.put("arguments", dialogueArgs);
+			
+			tag.putString("background", guiBackground().toString());
+			
+			ListTag responsesTag = new ListTag();
+			responses().forEach(responseData -> responsesTag.add(responseData.write()));
+			tag.put("responses", responsesTag);
+			
+			return tag;
+		}
 	}
 	
 	public record ResponseData(String message, List<String> arguments, int index, Optional<ConditionFailure> conditionFailure)
