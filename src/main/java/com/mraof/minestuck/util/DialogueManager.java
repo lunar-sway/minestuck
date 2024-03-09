@@ -1,6 +1,6 @@
 package com.mraof.minestuck.util;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -21,18 +21,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+@ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DialogueManager extends SimpleJsonResourceReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().create();
 	
-	private List<Dialogue> dialogues;
+	private Map<ResourceLocation, Dialogue> dialogues;
 	
 	public DialogueManager()
 	{
@@ -49,12 +50,12 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	@Override
 	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ImmutableList.Builder<Dialogue> dialogues = ImmutableList.builder();
+		ImmutableMap.Builder<ResourceLocation, Dialogue> dialogues = ImmutableMap.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
 			Dialogue.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
 					.resultOrPartial(message -> LOGGER.error("Problem parsing dialogue {}: {}", entry.getKey(), message))
-					.ifPresent(dialogues::add);
+					.ifPresent(dialogue -> dialogues.put(dialogue.path(), dialogue));
 		}
 		
 		this.dialogues = dialogues.build();
@@ -65,7 +66,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	public Dialogue doRandomDialogue(LivingEntity entity, RandomSource rand)
 	{
 		List<WeightedEntry.Wrapper<Dialogue>> weightedFilteredDialogue = new ArrayList<>();
-		dialogues.forEach(dialogue -> {
+		dialogues.values().forEach(dialogue -> {
 			dialogue.useContext().ifPresent(useContext -> {
 				if(useContext.getConditions().testWithContext(entity, null))
 					weightedFilteredDialogue.add(WeightedEntry.wrap(dialogue, useContext.getWeight()));
@@ -76,11 +77,10 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 				.map(WeightedEntry.Wrapper::getData).orElse(null);
 	}
 	
+	@Nullable
 	public Dialogue getDialogue(ResourceLocation location)
 	{
-		Optional<Dialogue> potentialDialogue = dialogues.stream().filter(dialogue ->
-				dialogue.path().equals(location)).findAny();
-		return potentialDialogue.orElse(null);
+		return this.dialogues.get(location);
 	}
 	
 	@SubscribeEvent
