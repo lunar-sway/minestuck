@@ -51,7 +51,7 @@ public class ConsortMerchantMenu extends AbstractContainerMenu
 	public static void write(FriendlyByteBuf buffer, ConsortEntity consort)
 	{
 		buffer.writeUtf(consort.getConsortType().getName());
-		buffer.writeUtf(consort.merchantType.getName());
+		buffer.writeUtf(consort.merchantType.getSerializedName());
 	}
 	
 	@Override

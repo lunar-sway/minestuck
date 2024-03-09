@@ -109,19 +109,19 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("food_shop")
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
 				.addResponse("Never mind")
-				.addResponse(new ResponseBuilder("What do you have?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
+				.addResponse(new ResponseBuilder("What do you have?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		add(new DialogueBuilder("fast_food")
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get()))
 				.addResponse("I'm good")
-				.addResponse(new ResponseBuilder("Show me your menu").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
+				.addResponse(new ResponseBuilder("Show me your menu").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		add(new DialogueBuilder("grocery_store")
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
 				.addResponse("No thanks")
-				.addResponse(new ResponseBuilder("What do you have to sell?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
+				.addResponse(new ResponseBuilder("What do you have to sell?").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		add(new DialogueBuilder("tasty_welcome")
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
 				.addResponse("Goodbye")
-				.addResponse(new ResponseBuilder("Let me see your wares").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD.getName()))));
+				.addResponse(new ResponseBuilder("Let me see your wares").addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		
 		add(new DialogueBuilder("immortality_herb.1")
 				.randomlySelectable(isInLand(LandTypes.FLORA.get()))

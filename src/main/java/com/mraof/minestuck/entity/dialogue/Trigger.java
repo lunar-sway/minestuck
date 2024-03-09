@@ -138,11 +138,11 @@ public sealed interface Trigger
 		}
 	}
 	
-	record OpenConsortMerchantGui(ResourceLocation lootTable, String merchantTypeName) implements Trigger
+	record OpenConsortMerchantGui(ResourceLocation lootTable, EnumConsort.MerchantType merchantType) implements Trigger
 	{
 		static final Codec<OpenConsortMerchantGui> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("loot_table").forGetter(OpenConsortMerchantGui::lootTable),
-				Codec.STRING.fieldOf("merchant_type").forGetter(OpenConsortMerchantGui::merchantTypeName)
+				EnumConsort.MerchantType.CODEC.fieldOf("merchant_type").forGetter(OpenConsortMerchantGui::merchantType)
 		).apply(instance, OpenConsortMerchantGui::new));
 		
 		@Override
@@ -157,9 +157,7 @@ public sealed interface Trigger
 			if(entity instanceof ConsortEntity consortEntity)
 			{
 				//TODO if(consortEntity.merchantType == EnumConsort.MerchantType.NONE) ?
-				for(EnumConsort.MerchantType type : EnumConsort.MerchantType.values())
-					if(type.name().toLowerCase().equals(this.merchantTypeName))
-						consortEntity.merchantType = type;
+				consortEntity.merchantType = this.merchantType;
 				
 				if(consortEntity.stocks == null)
 				{

@@ -1,14 +1,17 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum EnumConsort	//TODO Could ideally be changed into a registry.
@@ -90,7 +93,7 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 		throw new IllegalArgumentException("Invalid consort type " + str);
 	}
 	
-	public enum MerchantType
+	public enum MerchantType implements StringRepresentable
 	{
 		NONE,
 		SHADY,
@@ -98,10 +101,7 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 		GENERAL,
 		;
 		
-		public String getName()
-		{
-			return name().toLowerCase();
-		}
+		public static final Codec<MerchantType> CODEC = StringRepresentable.fromEnum(MerchantType::values);
 		
 		public static MerchantType getFromName(String str)
 		{
@@ -109,6 +109,12 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 				if(type.name().toLowerCase().equals(str))
 					return type;
 			throw new IllegalArgumentException("Invalid merchant type " + str);
+		}
+		
+		@Override
+		public String getSerializedName()
+		{
+			return name().toLowerCase(Locale.ROOT);
 		}
 	}
 }
