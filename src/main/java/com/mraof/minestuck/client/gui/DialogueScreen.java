@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -28,8 +27,6 @@ public class DialogueScreen extends Screen
 	private static final int GUI_WIDTH = 224;
 	private static final int GUI_HEIGHT = 176;
 	
-	private final ResourceLocation guiBackground;
-	
 	private final LivingEntity entity;
 	private final Dialogue dialogue;
 	private final Dialogue.DialogueData dialogueData;
@@ -44,7 +41,6 @@ public class DialogueScreen extends Screen
 		super(Component.empty());
 		
 		this.entity = entity;
-		this.guiBackground = dialogue.guiPath();
 		this.dialogue = dialogue;
 		this.dialogueData = Dialogue.DialogueData.read(dialogueData);
 	}
@@ -106,11 +102,10 @@ public class DialogueScreen extends Screen
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
-		if(guiBackground != null)
-			guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(dialogueData.guiBackground(), xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		String dialogueMessage = dialogue.message().message();
-		if(dialogueMessage != null && !dialogueMessage.isEmpty())
+		String dialogueMessage = dialogueData.message();
+		if(!dialogueMessage.isEmpty())
 		{
 			MutableComponent entityName = entity.getDisplayName().plainCopy();
 			

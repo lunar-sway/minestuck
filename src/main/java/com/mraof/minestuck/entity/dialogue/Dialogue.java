@@ -189,11 +189,15 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 	
 	public static CompoundTag writeAllMessagesToCompound(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
 	{
-		CompoundTag messageArgs = new CompoundTag();
+		CompoundTag tag = new CompoundTag();
+		
+		tag.putString("message", dialogue.message.message());
 		
 		ListTag dialogueArgs = new ListTag();
 		dialogue.message().processArguments(entity, serverPlayer).forEach(argument -> dialogueArgs.add(StringTag.valueOf(argument)));
-		messageArgs.put("dialogue_message", dialogueArgs);
+		tag.put("dialogue_message", dialogueArgs);
+		
+		tag.putString("background", dialogue.guiPath().toString());
 		
 		ListTag responses = new ListTag();
 		dialogue.responses().forEach(response -> {
@@ -215,29 +219,27 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			
 			responses.add(responseData.write());
 		});
-		messageArgs.put("responses", responses);
+		tag.put("responses", responses);
 		
-		return messageArgs;
+		return tag;
 	}
 	
-	public record DialogueData(List<String> messageArguments, List<ResponseData> responses)
+	public record DialogueData(String message, List<String> messageArguments, ResourceLocation guiBackground, List<ResponseData> responses)
 	{
-		public static DialogueData read(CompoundTag messageArgs)
+		public static DialogueData read(CompoundTag tag)
 		{
-			return new DialogueData(readDialogueArguments(messageArgs), readResponses(messageArgs));
-		}
-		
-		private static List<ResponseData> readResponses(CompoundTag messageArgs)
-		{
-			return messageArgs.getList("responses", Tag.TAG_COMPOUND)
-					.stream().map(CompoundTag.class::cast).map(ResponseData::read).toList();
-		}
-		
-		private static List<String> readDialogueArguments(CompoundTag messageArgs)
-		{
-			return messageArgs.getList("dialogue_message", Tag.TAG_STRING)
+			String message = tag.getString("message");
+			List<String> arguments = tag.getList("dialogue_message", Tag.TAG_STRING)
 					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
+			
+			ResourceLocation guiBackground = new ResourceLocation(tag.getString("background"));
+			
+			List<ResponseData> responses = tag.getList("responses", Tag.TAG_COMPOUND)
+					.stream().map(CompoundTag.class::cast).map(ResponseData::read).toList();
+			
+			return new DialogueData(message, arguments, guiBackground, responses);
 		}
+		
 	}
 	
 	public record ResponseData(String message, List<String> arguments, int index, Optional<ConditionFailure> conditionFailure)
