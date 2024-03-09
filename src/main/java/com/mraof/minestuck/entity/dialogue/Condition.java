@@ -55,7 +55,6 @@ public sealed interface Condition
 	
 	enum Type implements StringRepresentable
 	{
-		CONDITIONLESS(() -> Conditionless.CODEC, Conditionless::readCondition, ""),
 		HAS_CONDITIONS(() -> HasConditions.CODEC, HasConditions::readCondition, ""),
 		IS_CONSORT(() -> IsConsort.CODEC, IsConsort::readCondition, "NPC is not consort"),
 		IS_CARAPACIAN(() -> IsCarapacian.CODEC, IsCarapacian::readCondition, "NPC is not carapacian"),
@@ -115,33 +114,6 @@ public sealed interface Condition
 	/**
 	 * CONDITIONS
 	 */
-	
-	record Conditionless() implements Condition
-	{
-		static final Codec<Conditionless> CODEC = Codec.unit(Conditionless::new);
-		
-		@Override
-		public Type getType()
-		{
-			return Type.CONDITIONLESS;
-		}
-		
-		static Conditionless readCondition(FriendlyByteBuf buffer)
-		{
-			return new Conditionless();
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-		}
-		
-		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
-		{
-			return true;
-		}
-	}
 	
 	record HasConditions(Conditions conditions) implements Condition
 	{

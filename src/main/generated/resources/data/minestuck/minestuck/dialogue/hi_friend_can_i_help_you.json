@@ -55,11 +55,7 @@
   "path": "minestuck:hi_friend_can_i_help_you",
   "use_context": {
     "conditions": {
-      "condition_list": [
-        {
-          "type": "conditionless"
-        }
-      ]
+      "condition_list": []
     },
     "dialogue_weight": 11
   }

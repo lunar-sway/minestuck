@@ -54,7 +54,7 @@ public class DialogueProvider implements DataProvider
 		//Wind
 		//add(new DialogueBuilder("dad_wind", new Condition.InTitleLandType(LandTypes.WIND.get())));
 		add(new DialogueBuilder("pyre.1")
-				.randomlySelectable(List.of(
+				.randomlySelectable(all(
 						new Condition.InTitleLandType(LandTypes.WIND.get()),
 						new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get()))))
 				.addResponse(new ResponseBuilder("=>").nextDialogue("pyre.2")));
@@ -77,19 +77,17 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder("=>").nextDialogue("reckoning.3")));
 		add(new DialogueBuilder("reckoning.3"));
 		add(new DialogueBuilder("thunder_death.1")
-				.randomlySelectable(new Dialogue.UseContext(new Conditions(List.of(
+				.randomlySelectable(all(
 						new Condition.InTitleLandType(LandTypes.THUNDER.get()),
-						new Condition.InTerrainLandType(LandTypes.WOOD.get())),
-						Conditions.Type.ALL)))
+						new Condition.InTerrainLandType(LandTypes.WOOD.get())))
 				.addResponse(new ResponseBuilder("=>").nextDialogue("thunder_death.2")));
 		add(new DialogueBuilder("thunder_death.2")
 				.addResponse(new ResponseBuilder("=>").nextDialogue("thunder_death.3")));
 		add(new DialogueBuilder("thunder_death.3"));
 		add(new DialogueBuilder("hardcore")
-				.randomlySelectable(new Dialogue.UseContext(new Conditions(List.of(
+				.randomlySelectable(all(
 						new Condition.InTitleLandType(LandTypes.THUNDER.get()),
-						new Condition.InTerrainLandType(LandTypes.HEAT.get())),
-						Conditions.Type.ALL))));
+						new Condition.InTerrainLandType(LandTypes.HEAT.get()))));
 		
 		
 		add(new DialogueBuilder("mycelium.1")
@@ -134,7 +132,7 @@ public class DialogueProvider implements DataProvider
 	private void testDialogues()
 	{
 		add(new DialogueBuilder("test1")
-				.randomlySelectable(new Dialogue.UseContext(new Condition.Conditionless()))
+				.randomlySelectable()
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder("test1response1").nextDialogue("test2")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
@@ -149,7 +147,7 @@ public class DialogueProvider implements DataProvider
 						.dontHideFailed()));
 		
 		add(new DialogueBuilder("test2")
-				.randomlySelectable(new Dialogue.UseContext(new Condition.Conditionless()))
+				.randomlySelectable()
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder("test2response1").nextDialogue("test1")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
@@ -179,7 +177,7 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("nakagator_only").randomlySelectable(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())));
 		
 		add(new DialogueBuilder("me_want_cookie")
-				.randomlySelectable(new Condition.Conditionless())
+				.randomlySelectable()
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder("why do you want cookie?").loop())
 				.addResponse(new ResponseBuilder("here have a cookie chap").nextDialogue("oh_yippee")
@@ -191,7 +189,7 @@ public class DialogueProvider implements DataProvider
 		add(new DialogueBuilder("hunger_filled"));
 		
 		add(new DialogueBuilder("me_want_5_cookies")
-				.randomlySelectable(new Condition.Conditionless(), 5)
+				.randomlySelectable(5)
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder("here have 5 cookies chap").nextDialogue("oh_yippee")
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
@@ -199,7 +197,7 @@ public class DialogueProvider implements DataProvider
 						.dontHideFailed()));
 		
 		add(new DialogueBuilder("hi_friend_can_i_help_you")
-				.randomlySelectable(new Condition.Conditionless(), 11)
+				.randomlySelectable(11)
 				.addResponse(new ResponseBuilder("I hate you").addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
 				.addResponse(new ResponseBuilder("I love you").addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
 				.addResponse(new ResponseBuilder("Rep above 500").addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
@@ -207,7 +205,7 @@ public class DialogueProvider implements DataProvider
 				.addResponse("bye"));
 		
 		add(new DialogueBuilder("test_arguments", DialogueMessage.Argument.PLAYER_NAME_LAND)
-				.randomlySelectable(new Dialogue.UseContext(new Condition.Conditionless()))
+				.randomlySelectable()
 				.addResponse(new ResponseBuilder("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND)));
 	}
 	
@@ -258,24 +256,36 @@ public class DialogueProvider implements DataProvider
 			return this;
 		}
 		
+		public DialogueBuilder randomlySelectable()
+		{
+			return this.randomlySelectable(Conditions.EMPTY);
+		}
+		
+		public DialogueBuilder randomlySelectable(int weight)
+		{
+			return this.randomlySelectable(Conditions.EMPTY, weight);
+		}
+		
 		public DialogueBuilder randomlySelectable(Condition useCondition)
 		{
-			return this.randomlySelectable(new Dialogue.UseContext(useCondition));
+			return this.randomlySelectable(new Conditions(List.of(useCondition), Conditions.Type.ALL));
 		}
 		
+		@SuppressWarnings("unused")
 		public DialogueBuilder randomlySelectable(Condition useCondition, int weight)
 		{
-			return this.randomlySelectable(new Dialogue.UseContext(useCondition, weight));
+			return this.randomlySelectable(new Conditions(List.of(useCondition), Conditions.Type.ALL), weight);
 		}
 		
-		public DialogueBuilder randomlySelectable(List<Condition> useConditions)
+		public DialogueBuilder randomlySelectable(Conditions useConditions)
 		{
-			return this.randomlySelectable(new Dialogue.UseContext(new Conditions(useConditions, Conditions.Type.ALL)));
+			this.useContext = new Dialogue.UseContext(useConditions);
+			return this;
 		}
 		
-		public DialogueBuilder randomlySelectable(Dialogue.UseContext useContext)
+		public DialogueBuilder randomlySelectable(Conditions useConditions, int weight)
 		{
-			this.useContext = useContext;
+			this.useContext = new Dialogue.UseContext(useConditions, weight);
 			return this;
 		}
 	}
@@ -337,6 +347,11 @@ public class DialogueProvider implements DataProvider
 			this.hideIfFailed = false;
 			return this;
 		}
+	}
+	
+	public static Conditions all(Condition... conditions)
+	{
+		return new Conditions(List.of(conditions), Conditions.Type.ALL);
 	}
 	
 	@Override
