@@ -1,19 +1,13 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.hi_friend_can_i_help_you"
-    },
+    "dialogue_message": "minestuck.dialogue.hi_friend_can_i_help_you",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
         "hide_if_failed": false,
-        "response_message": {
-          "arguments": [],
-          "message": "I hate you"
-        },
+        "response_message": "I hate you",
         "triggers": [
           {
             "type": "add_consort_reputation",
@@ -26,10 +20,7 @@
           "condition_list": []
         },
         "hide_if_failed": false,
-        "response_message": {
-          "arguments": [],
-          "message": "I love you"
-        },
+        "response_message": "I love you",
         "triggers": [
           {
             "type": "add_consort_reputation",
@@ -47,10 +38,7 @@
           ]
         },
         "hide_if_failed": false,
-        "response_message": {
-          "arguments": [],
-          "message": "Rep above 500"
-        }
+        "response_message": "Rep above 500"
       },
       {
         "conditions": {
@@ -63,19 +51,13 @@
           ]
         },
         "hide_if_failed": false,
-        "response_message": {
-          "arguments": [],
-          "message": "Rep below 200"
-        }
+        "response_message": "Rep below 200"
       },
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": {
-          "arguments": [],
-          "message": "bye"
-        }
+        "response_message": "bye"
       }
     ]
   },

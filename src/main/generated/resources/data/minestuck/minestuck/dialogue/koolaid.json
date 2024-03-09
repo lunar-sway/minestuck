@@ -1,9 +1,6 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.koolaid"
-    },
+    "dialogue_message": "minestuck.dialogue.koolaid",
     "responses": []
   },
   "path": "minestuck:koolaid",

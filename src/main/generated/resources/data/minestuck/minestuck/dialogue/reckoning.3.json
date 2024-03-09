@@ -1,9 +1,6 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.reckoning.3"
-    },
+    "dialogue_message": "minestuck.dialogue.reckoning.3",
     "responses": []
   },
   "path": "minestuck:reckoning.3"

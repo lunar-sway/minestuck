@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.dialogue;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -13,13 +14,22 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public record DialogueMessage(String message, List<Argument> arguments)
 {
-	static Codec<DialogueMessage> CODEC = RecordCodecBuilder.create(instance ->
+	static Codec<DialogueMessage> DIRECT_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(Codec.STRING.fieldOf("message").forGetter(DialogueMessage::message),
 							Codec.list(Argument.CODEC).fieldOf("arguments").forGetter(DialogueMessage::arguments))
 					.apply(instance, DialogueMessage::new));
+	static Codec<DialogueMessage> CODEC = Codec.either(Codec.STRING, DIRECT_CODEC)
+			.xmap(either -> either.map(DialogueMessage::new, Function.identity()),
+					message -> message.arguments.isEmpty() ? Either.left(message.message) : Either.right(message));
+	
+	public DialogueMessage(String message)
+	{
+		this(message, List.of());
+	}
 	
 	public Component evaluateComponent(LivingEntity entity, ServerPlayer serverPlayer)
 	{

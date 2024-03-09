@@ -1,9 +1,6 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.swimming"
-    },
+    "dialogue_message": "minestuck.dialogue.swimming",
     "responses": []
   },
   "path": "minestuck:swimming",
