@@ -1,10 +1,7 @@
 {
   "node": {
     "animation": "test2animation",
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.test2"
-    },
+    "dialogue_message": "minestuck.dialogue.test2",
     "responses": [
       {
         "conditions": {
@@ -17,10 +14,7 @@
         },
         "hide_if_failed": false,
         "next_dialogue_path": "minestuck:test1",
-        "response_message": {
-          "arguments": [],
-          "message": "test2response1"
-        }
+        "response_message": "test2response1"
       },
       {
         "conditions": {
@@ -41,10 +35,7 @@
         },
         "hide_if_failed": false,
         "next_dialogue_path": "minestuck:test1",
-        "response_message": {
-          "arguments": [],
-          "message": "test2response2"
-        },
+        "response_message": "test2response2",
         "triggers": [
           {
             "type": "command",
@@ -57,10 +48,7 @@
           "condition_list": []
         },
         "next_dialogue_path": "minestuck:test1",
-        "response_message": {
-          "arguments": [],
-          "message": "test2response3"
-        },
+        "response_message": "test2response3",
         "triggers": [
           {
             "type": "command",
@@ -98,10 +86,7 @@
           ]
         },
         "hide_if_failed": false,
-        "response_message": {
-          "arguments": [],
-          "message": "test2response4"
-        }
+        "response_message": "test2response4"
       }
     ]
   },

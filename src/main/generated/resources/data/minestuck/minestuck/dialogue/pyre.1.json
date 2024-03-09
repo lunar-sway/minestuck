@@ -1,19 +1,13 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.pyre.1"
-    },
+    "dialogue_message": "minestuck.dialogue.pyre.1",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
         "next_dialogue_path": "minestuck:pyre.2",
-        "response_message": {
-          "arguments": [],
-          "message": "=>"
-        }
+        "response_message": "=>"
       }
     ]
   },

@@ -1,9 +1,6 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.hunger_filled"
-    },
+    "dialogue_message": "minestuck.dialogue.hunger_filled",
     "responses": []
   },
   "path": "minestuck:hunger_filled"

@@ -1,29 +1,20 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.camel.start"
-    },
+    "dialogue_message": "minestuck.dialogue.camel.start",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
         "next_dialogue_path": "minestuck:camel/no_camel",
-        "response_message": {
-          "arguments": [],
-          "message": "minestuck.dialogue.camel.yes"
-        }
+        "response_message": "minestuck.dialogue.camel.yes"
       },
       {
         "conditions": {
           "condition_list": []
         },
         "next_dialogue_path": "minestuck:camel/dancing_camel",
-        "response_message": {
-          "arguments": [],
-          "message": "minestuck.dialogue.camel.no"
-        }
+        "response_message": "minestuck.dialogue.camel.no"
       }
     ]
   },

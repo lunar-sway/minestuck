@@ -1,9 +1,6 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.turtle_only"
-    },
+    "dialogue_message": "minestuck.dialogue.turtle_only",
     "responses": []
   },
   "path": "minestuck:turtle_only",

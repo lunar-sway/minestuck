@@ -1,9 +1,6 @@
 {
   "node": {
-    "dialogue_message": {
-      "arguments": [],
-      "message": "minestuck.dialogue.nakagator_only"
-    },
+    "dialogue_message": "minestuck.dialogue.nakagator_only",
     "responses": []
   },
   "path": "minestuck:nakagator_only",
