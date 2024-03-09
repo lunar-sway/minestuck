@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.mraof.minestuck.entity.dialogue.Conditions;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -20,6 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,36 +65,18 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 		LOGGER.info("Loaded {} dialogues", this.dialogues.size());
 	}
 	
+	@Nullable
 	public Dialogue doRandomDialogue(LivingEntity entity, RandomSource rand)
 	{
-		if(dialogues.isEmpty())
-			return null;
-		else
-		{
-			//random dialogue from the ones available given the entities immediate context
-			List<Dialogue> filteredDialogues = dialogues.stream().filter(dialogue -> {
-				Dialogue.UseContext useContext = dialogue.useContext(); //TODO useContext is null when empty
-				if(useContext == null)
-					return false;
-				else
-				{
-					Conditions conditions = useContext.getConditions();
-					if(conditions.conditionList().isEmpty())
-						return true;
-					else
-						return conditions.testWithContext(entity, null);
-				}
-			}).toList();
-			
-			List<WeightedDialogue> weightedFilteredDialogue = new ArrayList<>();
-			filteredDialogues.forEach(dialogue -> weightedFilteredDialogue.add(new WeightedDialogue(dialogue, dialogue.useContext().getWeight())));
-			
-			if(!filteredDialogues.isEmpty())
-			{
-				return WeightedRandom.getRandomItem(rand, weightedFilteredDialogue).orElseThrow().dialogue;
-			} else
-				return null;
-		}
+		List<WeightedEntry.Wrapper<Dialogue>> weightedFilteredDialogue = new ArrayList<>();
+		dialogues.forEach(dialogue -> {
+			Dialogue.UseContext useContext = dialogue.useContext();
+			if(useContext != null && useContext.getConditions().testWithContext(entity, null))
+				weightedFilteredDialogue.add(WeightedEntry.wrap(dialogue, useContext.getWeight()));
+		});
+		
+		return WeightedRandom.getRandomItem(rand, weightedFilteredDialogue)
+				.map(WeightedEntry.Wrapper::getData).orElse(null);
 	}
 	
 	public Dialogue getDialogue(ResourceLocation location)
@@ -113,16 +95,5 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
 		event.addListener(INSTANCE = new DialogueManager());
-	}
-	
-	public static class WeightedDialogue extends WeightedEntry.IntrusiveBase
-	{
-		public final Dialogue dialogue;
-		
-		public WeightedDialogue(Dialogue dialogue, int pWeight)
-		{
-			super(pWeight);
-			this.dialogue = dialogue;
-		}
 	}
 }
