@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
@@ -218,37 +219,22 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 	
 	public record DialogueData(String message, List<String> messageArguments, ResourceLocation guiBackground, List<ResponseData> responses)
 	{
-		public static DialogueData read(CompoundTag tag)
+		public static DialogueData read(FriendlyByteBuf buffer)
 		{
-			String message = tag.getString("message");
-			List<String> arguments = tag.getList("arguments", Tag.TAG_STRING)
-					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
-			
-			ResourceLocation guiBackground = new ResourceLocation(tag.getString("background"));
-			
-			List<ResponseData> responses = tag.getList("responses", Tag.TAG_COMPOUND)
-					.stream().map(CompoundTag.class::cast).map(ResponseData::read).toList();
+			String message = buffer.readUtf();
+			List<String> arguments = buffer.readList(FriendlyByteBuf::readUtf);
+			ResourceLocation guiBackground = buffer.readResourceLocation();
+			List<ResponseData> responses = buffer.readList(byteBuf -> ResponseData.read(byteBuf.readNbt()));
 			
 			return new DialogueData(message, arguments, guiBackground, responses);
 		}
 		
-		public CompoundTag write()
+		public void write(FriendlyByteBuf buffer)
 		{
-			CompoundTag tag = new CompoundTag();
-			
-			tag.putString("message", message());
-			
-			ListTag dialogueArgs = new ListTag();
-			this.messageArguments.forEach(argument -> dialogueArgs.add(StringTag.valueOf(argument)));
-			tag.put("arguments", dialogueArgs);
-			
-			tag.putString("background", guiBackground().toString());
-			
-			ListTag responsesTag = new ListTag();
-			responses().forEach(responseData -> responsesTag.add(responseData.write()));
-			tag.put("responses", responsesTag);
-			
-			return tag;
+			buffer.writeUtf(this.message);
+			buffer.writeCollection(this.messageArguments, FriendlyByteBuf::writeUtf);
+			buffer.writeResourceLocation(this.guiBackground);
+			buffer.writeCollection(this.responses, (byteBuf, responseData) -> byteBuf.writeNbt(responseData.write()));
 		}
 	}
 	
