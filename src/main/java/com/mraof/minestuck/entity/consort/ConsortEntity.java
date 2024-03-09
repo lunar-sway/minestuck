@@ -156,7 +156,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 					{
 						handleConsortRepFromTalking(serverPlayer);
 						setCurrentAnimation(TALK_PROPERTIES);
-						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.node().message().message(), this);
+						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.path().toString(), this);
 						
 						Dialogue.openScreen(this, serverPlayer, dialogue);
 					}
