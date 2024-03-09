@@ -69,7 +69,8 @@ public class DialogueScreen extends Screen
 		//removes responses if they fail their conditions and should be hidden when that happens
 		for(Dialogue.Response response : dialogue.responses())
 		{
-			if(responseFailedCheck(response.response().message()) && response.hideIfFailed())
+			Dialogue.ResponseData data = this.dialogueData.responsesMap().get(response.response().message());
+			if(data == null)
 				continue;
 			
 			filteredResponses.add(response);
@@ -97,12 +98,6 @@ public class DialogueScreen extends Screen
 			
 			responseButtons.add(addRenderableWidget(entryButton));
 		}
-	}
-	
-	private boolean responseFailedCheck(String responseMessage)
-	{
-		Dialogue.ResponseData data = this.dialogueData.responsesMap().get(responseMessage);
-		return data == null || data.conditionFailure().isPresent();
 	}
 	
 	private static MutableComponent conditionFailMessage(List<String> causes)

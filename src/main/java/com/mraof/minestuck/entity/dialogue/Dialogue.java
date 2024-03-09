@@ -204,6 +204,9 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 				conditionFailure = Optional.empty();
 			else
 			{
+				if(response.hideIfFailed())
+					return;
+				
 				List<String> failureMessages = response.conditions().conditionList().stream()
 						.map(Condition::getFailureTooltip).filter(message -> !message.isEmpty()).toList();
 				
