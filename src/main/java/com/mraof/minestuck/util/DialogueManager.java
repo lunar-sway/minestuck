@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -29,7 +30,7 @@ import java.util.Optional;
 public class DialogueManager extends SimpleJsonResourceReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Dialogue.class, new Dialogue.Serializer()).create();
+	private static final Gson GSON = new GsonBuilder().create();
 	
 	private List<Dialogue> dialogues;
 	
@@ -51,14 +52,9 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 		ImmutableList.Builder<Dialogue> dialogues = ImmutableList.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
-			try
-			{
-				Dialogue dialogue = GSON.fromJson(entry.getValue(), Dialogue.class);
-				dialogues.add(dialogue);
-			} catch(Exception e)
-			{
-				LOGGER.error("Couldn't parse dialogue {}", entry.getKey(), e);
-			}
+			Dialogue.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
+					.resultOrPartial(message -> LOGGER.error("Problem parsing dialogue {}: {}", entry.getKey(), message))
+					.ifPresent(dialogues::add);
 		}
 		
 		this.dialogues = dialogues.build();
@@ -85,11 +81,6 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 		Optional<Dialogue> potentialDialogue = dialogues.stream().filter(dialogue ->
 				dialogue.path().equals(location)).findAny();
 		return potentialDialogue.orElse(null);
-	}
-	
-	public static JsonElement parseDialogue(Dialogue dialogue)
-	{
-		return GSON.toJsonTree(dialogue);
 	}
 	
 	@SubscribeEvent

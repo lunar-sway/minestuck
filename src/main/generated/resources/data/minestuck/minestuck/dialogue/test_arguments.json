@@ -1,12 +1,10 @@
 {
-  "animation": "generic_animation",
   "dialogue_message": {
     "arguments": [
       "PLAYER_NAME_LAND"
     ],
     "message": "minestuck.dialogue.test_arguments"
   },
-  "gui": "minestuck:textures/gui/generic_extra_large.png",
   "path": "minestuck:test_arguments",
   "responses": [
     {

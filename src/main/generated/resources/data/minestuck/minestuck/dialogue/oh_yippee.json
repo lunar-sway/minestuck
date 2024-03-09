@@ -1,10 +1,8 @@
 {
-  "animation": "generic_animation",
   "dialogue_message": {
     "arguments": [],
     "message": "minestuck.dialogue.oh_yippee"
   },
-  "gui": "minestuck:textures/gui/generic_extra_large.png",
   "path": "minestuck:oh_yippee",
   "responses": []
 }

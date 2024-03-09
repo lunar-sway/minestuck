@@ -1,5 +1,7 @@
 package com.mraof.minestuck.data;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -8,7 +10,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
-import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -358,7 +359,8 @@ public class DialogueProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, Dialogue> entry : dialogues.entrySet())
 		{
 			Path dialoguePath = getPath(outputPath, entry.getKey());
-			futures.add(DataProvider.saveStable(cache, DialogueManager.parseDialogue(entry.getValue()), dialoguePath));
+			JsonElement dialogueJson = Dialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			futures.add(DataProvider.saveStable(cache, dialogueJson, dialoguePath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}

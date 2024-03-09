@@ -4,7 +4,6 @@
     "arguments": [],
     "message": "minestuck.dialogue.test1"
   },
-  "gui": "minestuck:textures/gui/generic_extra_large.png",
   "path": "minestuck:test1",
   "responses": [
     {
