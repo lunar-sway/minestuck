@@ -61,6 +61,14 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 			
 			return new DialogueData(this.message().evaluateComponent(entity, serverPlayer), this.guiPath(), responses);
 		}
+		
+		public Optional<Response> getResponseIfValid(int responseIndex)
+		{
+			if(responseIndex < 0 || this.responses().size() <= responseIndex)
+				return Optional.empty();
+			
+			return Optional.of(this.responses().get(responseIndex));
+		}
 	}
 	
 	/**
