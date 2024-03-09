@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
@@ -83,6 +84,25 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 						.apply(instance, Response::new));
 		
 		static Codec<List<Response>> LIST_CODEC = Response.CODEC.listOf();
+		
+		public Optional<ResponseData> evaluateData(int responseIndex, LivingEntity entity, ServerPlayer serverPlayer)
+		{
+			Optional<ConditionFailure> conditionFailure;
+			if(this.conditions().testWithContext(entity, serverPlayer))
+				conditionFailure = Optional.empty();
+			else
+			{
+				if(this.hideIfFailed())
+					return Optional.empty();
+				
+				List<String> failureMessages = this.conditions().conditionList().stream()
+						.map(Condition::getFailureTooltip).filter(message -> !message.isEmpty()).toList();
+				
+				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
+			}
+			return Optional.of(new ResponseData(this.response().message(), this.response().processArguments(entity, serverPlayer),
+					responseIndex, conditionFailure));
+		}
 	}
 	
 	public static class UseContext
@@ -200,25 +220,9 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 		tag.putString("background", dialogue.guiPath().toString());
 		
 		ListTag responses = new ListTag();
-		dialogue.responses().forEach(response -> {
-			Optional<ConditionFailure> conditionFailure;
-			if(response.conditions().testWithContext(entity, serverPlayer))
-				conditionFailure = Optional.empty();
-			else
-			{
-				if(response.hideIfFailed())
-					return;
-				
-				List<String> failureMessages = response.conditions().conditionList().stream()
-						.map(Condition::getFailureTooltip).filter(message -> !message.isEmpty()).toList();
-				
-				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
-			}
-			ResponseData responseData = new ResponseData(response.response().message(), response.response().processArguments(entity, serverPlayer),
-					dialogue.responses.indexOf(response), conditionFailure);
-			
-			responses.add(responseData.write());
-		});
+		IntStream.range(0, dialogue.responses().size())
+				.mapToObj(responseIndex -> dialogue.responses().get(responseIndex).evaluateData(responseIndex, entity, serverPlayer)).flatMap(Optional::stream)
+				.forEach(responseData -> responses.add(responseData.write()));
 		tag.put("responses", responses);
 		
 		return tag;
