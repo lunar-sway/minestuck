@@ -1,7 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.camel.dancing_camel",
-    "responses": []
+    "message": "minestuck.dialogue.camel.dancing_camel"
   },
   "path": "minestuck:camel/dancing_camel"
 }

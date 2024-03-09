@@ -1,7 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.hunger_filled",
-    "responses": []
+    "message": "minestuck.dialogue.hunger_filled"
   },
   "path": "minestuck:hunger_filled"
 }

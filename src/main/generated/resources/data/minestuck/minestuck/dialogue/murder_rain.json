@@ -1,7 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.murder_rain",
-    "responses": []
+    "message": "minestuck.dialogue.murder_rain"
   },
   "path": "minestuck:murder_rain",
   "use_context": {
