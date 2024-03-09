@@ -1,6 +1,9 @@
 package com.mraof.minestuck.entity.dialogue;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.network.DialogueScreenPacket;
@@ -19,17 +22,18 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
 //TODO animation is unused?
-public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseContext> useContext)
+public record Dialogue(ResourceLocation path, NodeSelector nodes, Optional<UseContext> useContext)
 {
 	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.fieldOf("path").forGetter(Dialogue::path),
-			DialogueNode.CODEC.fieldOf("node").forGetter(Dialogue::node),
+			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes),
 			new PreservingOptionalFieldCodec<>(UseContext.CODEC, "use_context").forGetter(Dialogue::useContext)
 	).apply(instance, Dialogue::new));
 	
@@ -38,10 +42,65 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 	 */
 	public static void openScreen(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
 	{
-		DialogueData data = dialogue.node().evaluateData(entity, serverPlayer);
+		Pair<DialogueNode, Integer> node = dialogue.nodes().pickNode(entity, serverPlayer);
+		DialogueData data = node.getFirst().evaluateData(entity, serverPlayer);
+		NodeReference nodeReference = new NodeReference(dialogue.path(), node.getSecond());
 		
-		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, data);
+		DialogueScreenPacket packet = new DialogueScreenPacket(entity.getId(), nodeReference, data);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+	}
+	
+	public record NodeSelector(List<Pair<Conditions, DialogueNode>> conditionedNodes, DialogueNode defaultNode)
+	{
+		public static final Codec<NodeSelector> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.pair(Conditions.CODEC, DialogueNode.CODEC).listOf().fieldOf("conditioned_nodes").forGetter(NodeSelector::conditionedNodes),
+				DialogueNode.CODEC.fieldOf("default_node").forGetter(NodeSelector::defaultNode)
+		).apply(instance, NodeSelector::new));
+		public static final MapCodec<NodeSelector> EITHER_MAP_CODEC = Codec.mapEither(CODEC.fieldOf("nodes"), DialogueNode.CODEC.fieldOf("node"))
+				.xmap(either -> either.map(Function.identity(), node -> new NodeSelector(List.of(), node)),
+						nodeSelector -> nodeSelector.conditionedNodes.isEmpty() ? Either.right(nodeSelector.defaultNode) : Either.left(nodeSelector));
+		
+		public Pair<DialogueNode, Integer> pickNode(LivingEntity entity, ServerPlayer player)
+		{
+			for(int i = 0; i < this.conditionedNodes.size(); i++)
+			{
+				var pair = this.conditionedNodes.get(i);
+				if(pair.getFirst().testWithContext(entity, player))
+				{
+					DialogueNode node = pair.getSecond();
+					return Pair.of(node, i);
+				}
+			}
+			return Pair.of(this.defaultNode, -1);
+		}
+		
+		public Optional<DialogueNode> getNodeIfValid(int index)
+		{
+			if(index < -1 || this.conditionedNodes.size() <= index)
+				return Optional.empty();
+			
+			if(index == -1)
+				return Optional.of(this.defaultNode);
+			
+			return Optional.of(this.conditionedNodes.get(index).getSecond());
+		}
+	}
+	
+	public record NodeReference(ResourceLocation dialoguePath, int nodeIndex)
+	{
+		public static NodeReference read(FriendlyByteBuf buffer)
+		{
+			ResourceLocation dialoguePath = buffer.readResourceLocation();
+			int nodeIndex = buffer.readInt();
+			
+			return new NodeReference(dialoguePath, nodeIndex);
+		}
+		
+		public void write(FriendlyByteBuf buffer)
+		{
+			buffer.writeResourceLocation(this.dialoguePath);
+			buffer.writeInt(this.nodeIndex);
+		}
 	}
 	
 	public record DialogueNode(DialogueMessage message, String animation, ResourceLocation guiPath, List<Response> responses)

@@ -4,32 +4,32 @@ import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-public record ResponseTriggerPacket(int responseIndex, ResourceLocation dialogueLocation, int entityID) implements MSPacket.PlayToServer
+public record ResponseTriggerPacket(int responseIndex, Dialogue.NodeReference nodeReference, int entityID) implements MSPacket.PlayToServer
 {
-	public static ResponseTriggerPacket createPacket(int responseIndex, ResourceLocation dialogueLocation, LivingEntity entity)
+	public static ResponseTriggerPacket createPacket(int responseIndex, Dialogue.NodeReference nodeReference, LivingEntity entity)
 	{
-		return new ResponseTriggerPacket(responseIndex, dialogueLocation, entity.getId());
+		return new ResponseTriggerPacket(responseIndex, nodeReference, entity.getId());
 	}
 	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(this.responseIndex);
-		buffer.writeResourceLocation(dialogueLocation);
-		buffer.writeInt(entityID);
+		this.nodeReference.write(buffer);
+		buffer.writeInt(this.entityID);
 	}
 	
 	public static ResponseTriggerPacket decode(FriendlyByteBuf buffer)
 	{
 		int responseIndex = buffer.readInt();
-		ResourceLocation dialogueLocation = buffer.readResourceLocation();
+		var nodeReference = Dialogue.NodeReference.read(buffer);
 		int entityID = buffer.readInt();
-		return new ResponseTriggerPacket(responseIndex, dialogueLocation, entityID);
+		
+		return new ResponseTriggerPacket(responseIndex, nodeReference, entityID);
 	}
 	
 	@Override
@@ -48,11 +48,12 @@ public record ResponseTriggerPacket(int responseIndex, ResourceLocation dialogue
 	 */
 	private void validateThenTrigger(ServerPlayer player, LivingEntity livingEntity)
 	{
-		Dialogue dialogue = DialogueManager.getInstance().getDialogue(dialogueLocation);
+		Dialogue dialogue = DialogueManager.getInstance().getDialogue(nodeReference.dialoguePath());
 		if(dialogue == null)
 			return;
 		
-		dialogue.node().getResponseIfValid(this.responseIndex)
+		dialogue.nodes().getNodeIfValid(nodeReference.nodeIndex())
+				.flatMap(node -> node.getResponseIfValid(this.responseIndex))
 				.ifPresent(response -> response.trigger(livingEntity, player));
 	}
 }

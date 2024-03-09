@@ -11,7 +11,6 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -28,7 +27,7 @@ public class DialogueScreen extends Screen
 	private static final int GUI_HEIGHT = 176;
 	
 	private final LivingEntity entity;
-	private final ResourceLocation dialoguePath;
+	private final Dialogue.NodeReference nodeReference;
 	private final Dialogue.DialogueData dialogueData;
 	
 	private int xOffset;
@@ -36,12 +35,12 @@ public class DialogueScreen extends Screen
 	
 	private final List<Button> responseButtons = new ArrayList<>();
 	
-	DialogueScreen(LivingEntity entity, ResourceLocation dialoguePath, Dialogue.DialogueData dialogueData)
+	DialogueScreen(LivingEntity entity, Dialogue.NodeReference nodeReference, Dialogue.DialogueData dialogueData)
 	{
 		super(Component.empty());
 		
 		this.entity = entity;
-		this.dialoguePath = dialoguePath;
+		this.nodeReference = nodeReference;
 		this.dialogueData = dialogueData;
 	}
 	
@@ -90,7 +89,7 @@ public class DialogueScreen extends Screen
 	private void clickResponse(int responseIndex)
 	{
 		onClose();
-		MSPacketHandler.sendToServer(ResponseTriggerPacket.createPacket(responseIndex, dialoguePath, entity));
+		MSPacketHandler.sendToServer(ResponseTriggerPacket.createPacket(responseIndex, nodeReference, entity));
 	}
 	
 	@Override
