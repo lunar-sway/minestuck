@@ -215,15 +215,14 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder("Rep below 200").addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
 				.addResponse("bye"));
 		
-		add(new DialogueBuilder("test_arguments")
-				.addMessageArg(DialogueMessage.Argument.PLAYER_NAME_LAND)
+		add(new DialogueBuilder("test_arguments", DialogueMessage.Argument.PLAYER_NAME_LAND)
 				.randomlySelectable(new Dialogue.UseContext(new Condition.Conditionless()))
-				.addResponse(new ResponseBuilder("Player name land: %s").addMessageArg(DialogueMessage.Argument.PLAYER_NAME_LAND)));
+				.addResponse(new ResponseBuilder("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND)));
 	}
 	
 	private void add(DialogueBuilder builder)
 	{
-		Dialogue.DialogueNode node = new Dialogue.DialogueNode(new DialogueMessage(builder.message, builder.messageArgs), builder.animation, builder.guiPath, builder.responses);
+		Dialogue.DialogueNode node = new Dialogue.DialogueNode(builder.message, builder.animation, builder.guiPath, builder.responses);
 		Dialogue dialogue = new Dialogue(builder.path, node, Optional.ofNullable(builder.useContext));
 		dialogues.put(builder.path, dialogue);
 	}
@@ -231,18 +230,17 @@ public class DialogueProvider implements DataProvider
 	public static class DialogueBuilder
 	{
 		private final ResourceLocation path;
-		private final String message;
-		private final List<DialogueMessage.Argument> messageArgs = new ArrayList<>();
+		private final DialogueMessage message;
 		private String animation = DEFAULT_ANIMATION;
 		private ResourceLocation guiPath = DEFAULT_GUI;
 		private final List<Dialogue.Response> responses = new ArrayList<>();
 		@Nullable
 		private Dialogue.UseContext useContext;
 		
-		DialogueBuilder(String message)
+		DialogueBuilder(String path, DialogueMessage.Argument... arguments)
 		{
-			this.path = new ResourceLocation(Minestuck.MOD_ID, message);
-			this.message = "minestuck.dialogue." + message.replace("/", ".");
+			this.path = new ResourceLocation(Minestuck.MOD_ID, path);
+			this.message = new DialogueMessage("minestuck.dialogue." + path.replace("/", "."), List.of(arguments));
 		}
 		
 		public DialogueBuilder animation(String animation)
@@ -264,13 +262,7 @@ public class DialogueProvider implements DataProvider
 		
 		public DialogueBuilder addResponse(ResponseBuilder responseBuilder)
 		{
-			this.responses.add(new Dialogue.Response(new DialogueMessage(responseBuilder.responseMessage, responseBuilder.messageArgs), new Conditions(responseBuilder.conditions, responseBuilder.conditionsType), responseBuilder.triggers, responseBuilder.nextDialoguePath, responseBuilder.hideIfFailed));
-			return this;
-		}
-		
-		public DialogueBuilder addMessageArg(DialogueMessage.Argument argument)
-		{
-			this.messageArgs.add(argument);
+			this.responses.add(new Dialogue.Response(responseBuilder.message, new Conditions(responseBuilder.conditions, responseBuilder.conditionsType), responseBuilder.triggers, responseBuilder.nextDialoguePath, responseBuilder.hideIfFailed));
 			return this;
 		}
 		
@@ -298,17 +290,16 @@ public class DialogueProvider implements DataProvider
 	
 	public static class ResponseBuilder
 	{
-		private final String responseMessage;
-		private final List<DialogueMessage.Argument> messageArgs = new ArrayList<>();
+		private final DialogueMessage message;
 		private final List<Condition> conditions = new ArrayList<>();
 		private Conditions.Type conditionsType = Conditions.Type.ALL;
 		private final List<Trigger> triggers = new ArrayList<>();
 		private ResourceLocation nextDialoguePath = EMPTY_NEXT_PATH;
 		private boolean hideIfFailed = true;
 		
-		ResponseBuilder(String responseMessage)
+		ResponseBuilder(String key, DialogueMessage.Argument... arguments)
 		{
-			this.responseMessage = responseMessage;
+			this.message = new DialogueMessage(key, List.of(arguments));
 		}
 		
 		public ResponseBuilder nextDialogue(ResourceLocation nextDialoguePath)
@@ -342,12 +333,6 @@ public class DialogueProvider implements DataProvider
 		public ResponseBuilder addTrigger(Trigger trigger)
 		{
 			this.triggers.add(trigger);
-			return this;
-		}
-		
-		public ResponseBuilder addMessageArg(DialogueMessage.Argument argument)
-		{
-			this.messageArgs.add(argument);
 			return this;
 		}
 		
