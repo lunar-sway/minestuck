@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
 public record Dialogue(ResourceLocation path, DialogueMessage message, String animation, ResourceLocation guiPath,
-					   List<Response> responses, @Nullable UseContext useContext)
+					   List<Response> responses, Optional<UseContext> useContext)
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
@@ -41,7 +41,7 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 							PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DialogueProvider.DEFAULT_ANIMATION).forGetter(Dialogue::animation),
 							PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui_path", DialogueProvider.DEFAULT_GUI).forGetter(Dialogue::guiPath),
 							Response.LIST_CODEC.fieldOf("responses").forGetter(Dialogue::responses),
-							UseContext.CODEC.fieldOf("use_context").forGetter(Dialogue::useContext))
+							new PreservingOptionalFieldCodec<>(UseContext.CODEC, "use_context").forGetter(Dialogue::useContext))
 					.apply(instance, Dialogue::new));
 	
 	/**
@@ -179,7 +179,7 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			
 			List<Response> responsesProvider = Response.LIST_CODEC.parse(JsonOps.INSTANCE, json.getAsJsonArray("responses")).getOrThrow(true, LOGGER::error);
 			
-			return new Dialogue(pathProvider, messageProvider, animationProvider, guiProvider, responsesProvider, useContext);
+			return new Dialogue(pathProvider, messageProvider, animationProvider, guiProvider, responsesProvider, Optional.ofNullable(useContext));
 		}
 		
 		@Override
@@ -194,10 +194,9 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			
 			json.add("responses", Response.LIST_CODEC.encodeStart(JsonOps.INSTANCE, dialogue.responses).getOrThrow(false, LOGGER::error));
 			
-			if(dialogue.useContext != null)
-			{
-				json.add("use_context", UseContext.CODEC.encodeStart(JsonOps.INSTANCE, dialogue.useContext).getOrThrow(false, LOGGER::error));
-			}
+			dialogue.useContext.ifPresent(useContext ->
+					json.add("use_context", UseContext.CODEC.encodeStart(JsonOps.INSTANCE, useContext).getOrThrow(false, LOGGER::error))
+			);
 			
 			return json;
 		}
