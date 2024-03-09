@@ -79,7 +79,7 @@ public final class ImpDungeonPieces
 		@Override
 		public void addChildren(StructurePiece piece, StructurePieceAccessor builder, RandomSource rand)
 		{
-			BlockPos compoPos = new BlockPos(boundingBox.minX() + (boundingBox.getXSpan()/2 - 1), boundingBox.minY(), boundingBox.minZ() + (boundingBox.getZSpan()/2 - 1));
+			BlockPos compoPos = new BlockPos(boundingBox.minX() + (boundingBox.getXSpan() / 2 - 1), boundingBox.minY(), boundingBox.minZ() + (boundingBox.getZSpan() / 2 - 1));
 			
 			StructureContext ctxt = new StructureContext(compoPos, builder, rand);
 			
@@ -99,18 +99,18 @@ public final class ImpDungeonPieces
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-
+			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState fluid = blocks.getBlockState("fall_fluid");
-
+			
 			generateBox(level, structureBoundingBoxIn, 1, 0, 4, 4, 0, 6, floorBlock, floorBlock, false);
 			generateAirBox(level, structureBoundingBoxIn, 1, 1, 4, 4, 4, 6);
 			generateBox(level, structureBoundingBoxIn, 2, 0, 5, 3, 0, 5, fluid, fluid, false);
 			generateBox(level, structureBoundingBoxIn, 2, -1, 5, 3, -1, 5, floorDecor, floorDecor, false);
-
+			
 			generateBox(level, structureBoundingBoxIn, 0, 0, 3, 0, 5, 7, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 5, 0, 3, 5, 5, 7, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 4, 3, 4, 5, 3, wallBlock, wallBlock, false);
@@ -119,7 +119,7 @@ public final class ImpDungeonPieces
 			generateBox(level, structureBoundingBoxIn, 1, 0, 7, 1, 3, 7, wallDecor, wallDecor, false);
 			generateBox(level, structureBoundingBoxIn, 4, 0, 3, 4, 3, 3, wallDecor, wallDecor, false);
 			generateBox(level, structureBoundingBoxIn, 4, 0, 7, 4, 3, 7, wallDecor, wallDecor, false);
-
+			
 			generateBox(level, structureBoundingBoxIn, 2, 0, 0, 3, 0, 3, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 2, 0, 7, 3, 0, 9, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
@@ -130,7 +130,7 @@ public final class ImpDungeonPieces
 			generateBox(level, structureBoundingBoxIn, 4, 1, 8, 4, 4, 9, wallBlock, wallBlock, false);
 			generateAirBox(level, structureBoundingBoxIn, 2, 1, 0, 3, 3, 3);
 			generateAirBox(level, structureBoundingBoxIn, 2, 1, 7, 3, 3, 9);
-
+			
 			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 2, 1, 9, 3, 3, 9, wallBlock, wallBlock, false);
 			if(isBackBlocked)
@@ -170,23 +170,23 @@ public final class ImpDungeonPieces
 	
 	private static Optional<StructurePiece> nextPiece(BlockPos pos, Direction direction, int generationDepth, StructureContext ctxt)
 	{
-		if(ctxt.rand.nextDouble() >= (1.4 - generationDepth*0.1))
+		if(ctxt.rand.nextDouble() >= (1.4 - generationDepth * 0.1))
 		{
-			if(ctxt.rand.nextDouble() < 1/3D)
+			if(ctxt.rand.nextDouble() < 1 / 3D)
 				return Optional.of(pickRoom(pos, direction, ctxt));
 			else
 				return Optional.empty();
 		}
 		
 		double i = ctxt.rand.nextDouble();
-		if(i < 1.2 - ctxt.corridors*0.12)	//Cross corridor
+		if(i < 1.2 - ctxt.corridors * 0.12)    //Cross corridor
 		{
 			ctxt.corridors += 3;
 			return Optional.of(new CrossCorridor(direction, pos, ctxt.rand));
-		} else if(i < 0.96 - ctxt.corridors*0.06)	//Any room
+		} else if(i < 0.96 - ctxt.corridors * 0.06)    //Any room
 		{
 			return Optional.of(pickRoom(pos, direction, ctxt));
-		} else	//Straight or corner corridor
+		} else    //Straight or corner corridor
 		{
 			ctxt.corridors -= 1;
 			return Optional.of(pickCorridor(pos, direction, ctxt));
@@ -198,16 +198,15 @@ public final class ImpDungeonPieces
 		if(ctxt.rand.nextBoolean())
 			return TurnCorridor.create(direction, pos, ctxt.rand);
 		else
-		{	//Corridor
+		{    //Corridor
 			double i = ctxt.rand.nextFloat();
 			if(i < 0.2)
 				return new SpawnerCorridor(direction, pos, ctxt.rand);
-			else if (i < 0.3 && !ctxt.generatedOgreRoom)
+			else if(i < 0.3 && !ctxt.generatedOgreRoom)
 			{
 				ctxt.generatedOgreRoom = true;
 				return new OgreCorridor(direction, pos, ctxt.rand);
-			}
-			else if (i < 0.4)
+			} else if(i < 0.4)
 				return new LargeSpawnerCorridor(direction, pos, ctxt.rand);
 			else
 				return new StraightCorridor(direction, pos, ctxt.rand);
@@ -224,8 +223,7 @@ public final class ImpDungeonPieces
 				return new ReturnRoom(direction, pos);
 			else
 				return new ReturnRoomAlt(direction, pos);
-		}
-		else if(i < 0.5)
+		} else if(i < 0.5)
 			return new BookcaseRoom(direction, pos, ctxt.rand);
 		else
 			return new SpawnerRoom(direction, pos, ctxt.rand);
@@ -249,7 +247,7 @@ public final class ImpDungeonPieces
 		
 		BlockPos centerPosForGridSlot(int xIndex, int zIndex)
 		{
-			return this.zeroPos.offset(10*xIndex, 0, 10*zIndex);
+			return this.zeroPos.offset(10 * xIndex, 0, 10 * zIndex);
 		}
 		
 		@Nullable
@@ -320,28 +318,29 @@ public final class ImpDungeonPieces
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-
+			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-
+			
 			generateBox(level, structureBoundingBoxIn, 1, 0, 0, 2, 0, 9, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 4, 0, 2, 4, 9, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 0, 0, 0, 0, 4, 9, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 3, 0, 0, 3, 4, 9, wallBlock, wallBlock, false);
 			generateAirBox(level, structureBoundingBoxIn, 1, 1, 0, 2, 3, 9);
-
+			
 			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 1, 1, 9, 2, 3, 9, wallBlock, wallBlock, false);
-
+			
 			if(light)
 			{
 				BlockState torch = blocks.getBlockState("wall_torch");
-				if(lightPos/2 == 0)
-					placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 2, 2, 4 + lightPos%2, structureBoundingBoxIn);
-				else placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 4 + lightPos%2, structureBoundingBoxIn);
+				if(lightPos / 2 == 0)
+					placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 2, 2, 4 + lightPos % 2, structureBoundingBoxIn);
+				else
+					placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 4 + lightPos % 2, structureBoundingBoxIn);
 			}
 		}
-
+		
 		@Override
 		public boolean connectFrom(Direction facing)
 		{
@@ -409,21 +408,21 @@ public final class ImpDungeonPieces
 				isLeftBlocked = false;
 			return true;
 		}
-
+		
 		@Override
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
-
+			
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-
+			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-
+			
 			generateBox(level, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 6, 0, 4, 9, 0, 5, floorBlock, floorBlock, false);
-
+			
 			generateBox(level, structureBoundingBoxIn, 3, 0, 0, 3, 4, 3, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 6, 0, 0, 6, 4, 3, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 3, 0, 6, 3, 4, 9, wallBlock, wallBlock, false);
@@ -432,12 +431,12 @@ public final class ImpDungeonPieces
 			generateBox(level, structureBoundingBoxIn, 0, 0, 6, 2, 4, 6, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 7, 0, 3, 9, 4, 3, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 7, 0, 6, 9, 4, 6, wallBlock, wallBlock, false);
-
+			
 			generateAirBox(level, structureBoundingBoxIn, 4, 1, 0, 5, 3, 9);
 			generateAirBox(level, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
 			generateAirBox(level, structureBoundingBoxIn, 6, 1, 4, 9, 3, 5);
 			generateAirBox(level, structureBoundingBoxIn, 4, 4, 4, 5, 4, 5);
-
+			
 			generateBox(level, structureBoundingBoxIn, 4, 4, 0, 5, 4, 2, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 4, 4, 3, 5, 4, 3, wallDecor, wallDecor, false);
 			generateBox(level, structureBoundingBoxIn, 4, 4, 7, 5, 4, 9, wallBlock, wallBlock, false);
@@ -446,16 +445,16 @@ public final class ImpDungeonPieces
 			generateBox(level, structureBoundingBoxIn, 3, 4, 4, 3, 4, 5, wallDecor, wallDecor, false);
 			generateBox(level, structureBoundingBoxIn, 7, 4, 4, 9, 4, 5, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 6, 4, 4, 6, 4, 5, wallDecor, wallDecor, false);
-
+			
 			generateBox(level, structureBoundingBoxIn, 3, 5, 3, 6, 5, 6, wallBlock, wallBlock, false);
-
+			
 			if(isRightBlocked)
 				generateBox(level, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
 			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 4, 1, 9, 5, 3, 9, wallBlock, wallBlock, false);
 			if(isLeftBlocked)
 				generateBox(level, structureBoundingBoxIn, 9, 1, 4, 9, 3, 5, wallBlock, wallBlock, false);
-
+			
 			if(light)
 			{
 				BlockState lightBlock = blocks.getBlockState("light_block");
@@ -525,16 +524,16 @@ public final class ImpDungeonPieces
 			else return false;
 			return true;
 		}
-
+		
 		@Override
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
-
+			
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-
+			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-
+			
 			generateBox(level, structureBoundingBoxIn, 4, 0, 0, 5, 0, 5, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 6, 0, 0, 6, 4, 6, wallBlock, wallBlock, false);
@@ -545,12 +544,12 @@ public final class ImpDungeonPieces
 			generateBox(level, structureBoundingBoxIn, 0, 4, 4, 3, 4, 5, wallBlock, wallBlock, false);
 			generateAirBox(level, structureBoundingBoxIn, 4, 1, 0, 5, 3, 5);
 			generateAirBox(level, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
-
+			
 			if(isBackBlocked)
 				generateBox(level, structureBoundingBoxIn, 4, 1, 0, 5, 3, 0, wallBlock, wallBlock, false);
 			if(isRightBlocked)
 				generateBox(level, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
-
+			
 			if(light)
 			{
 				BlockState torch = blocks.getBlockState("wall_torch");
@@ -583,25 +582,25 @@ public final class ImpDungeonPieces
 		{
 			return getOrientation().getOpposite().equals(facing);
 		}
-
+		
 		@Override
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-
+			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState light = blocks.getBlockState("light_block");
-
+			
 			generateBox(level, structureBoundingBoxIn, 2, 0, 0, 3, 0, 2, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 0, 3, 4, 0, 6, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 2, 0, 4, 3, 0, 5, floorDecor, floorDecor, false);
 			generateAirBox(level, structureBoundingBoxIn, 2, 1, 0, 3, 3, 2);
 			generateAirBox(level, structureBoundingBoxIn, 1, 1, 3, 4, 4, 6);
 			generateAirBox(level, structureBoundingBoxIn, 2, 5, 4, 3, 9, 5);
-
+			
 			generateBox(level, structureBoundingBoxIn, 1, 0, 0, 1, 4, 2, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 4, 0, 0, 4, 4, 2, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 0, 0, 2, 0, 5, 7, wallBlock, wallBlock, false);
@@ -612,13 +611,13 @@ public final class ImpDungeonPieces
 			generateBox(level, structureBoundingBoxIn, 0, 3, 4, 0, 3, 5, wallDecor, wallDecor, false);
 			generateBox(level, structureBoundingBoxIn, 5, 3, 4, 5, 3, 5, wallDecor, wallDecor, false);
 			generateBox(level, structureBoundingBoxIn, 2, 3, 7, 3, 3, 7, wallDecor, wallDecor, false);
-
+			
 			generateBox(level, structureBoundingBoxIn, 1, 5, 3, 4, 10, 3, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 5, 6, 4, 10, 6, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 5, 4, 1, 10, 5, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 4, 5, 4, 4, 10, 5, wallBlock, wallBlock, false);
 			generateBox(level, structureBoundingBoxIn, 2, 10, 4, 3, 10, 5, light, light, false);
-
+			
 			placeReturnNode(level, structureBoundingBoxIn, 2, 1, 4);
 		}
 	}
@@ -929,7 +928,7 @@ public final class ImpDungeonPieces
 		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 		{
 			tagCompound.putBoolean("bl0", isBackBlocked);
-			tagCompound.putBoolean("bl1",isFrontBlocked);
+			tagCompound.putBoolean("bl1", isFrontBlocked);
 			tagCompound.putBoolean("sp1", spawner1);
 			tagCompound.putBoolean("sp2", spawner2);
 			tagCompound.putBoolean("ch", chestPos);
@@ -1106,7 +1105,7 @@ public final class ImpDungeonPieces
 		{
 			BlockPos pos = new BlockPos(getWorldX(xPos, zPos), getWorldY(yPos), getWorldZ(xPos, zPos));
 			OgreEntity ogre = MSEntityTypes.OGRE.get().create(level.getLevel());
-			ogre.moveTo(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat()*360F, 0);
+			ogre.moveTo(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat() * 360F, 0);
 			ogre.finalizeSpawn(level, null, MobSpawnType.STRUCTURE, null, null);
 			ogre.restrictTo(pos, 2);
 			level.addFreshEntity(ogre);
@@ -1237,7 +1236,7 @@ public final class ImpDungeonPieces
 				generateBox(level, structureBoundingBoxIn, 4, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);
 			if(isFrontBlocked)
 				generateBox(level, structureBoundingBoxIn, 4, 0, 9, 5, 3, 9, wallBlock, wallBlock, false);
-		}	
+		}
 	}
 	
 	private static EntityType<?> getTypeForSpawners()
@@ -1258,12 +1257,13 @@ public final class ImpDungeonPieces
 		int y = centerPos.getY();
 		
 		return switch(orientation)
-				{
-					case SOUTH -> new BoundingBox(startX + minX, y + minY, startZ + minZ, startX + maxX, y + maxY, startZ + maxZ);
-					case NORTH -> new BoundingBox(endX - maxX, y + minY, endZ - maxZ, endX - minX, y + maxY, endZ - minZ);
-					case EAST -> new BoundingBox(startX + minZ, y + minY, endZ - maxX, startX + maxZ, y + maxY, endZ - minX);
-					case WEST -> new BoundingBox(endX - maxZ, y + minY, startZ + minX, endX - minZ, y + maxY, startZ + maxX);
-					default -> throw new IllegalArgumentException("Invalid orientation");
-				};
+		{
+			case SOUTH ->
+					new BoundingBox(startX + minX, y + minY, startZ + minZ, startX + maxX, y + maxY, startZ + maxZ);
+			case NORTH -> new BoundingBox(endX - maxX, y + minY, endZ - maxZ, endX - minX, y + maxY, endZ - minZ);
+			case EAST -> new BoundingBox(startX + minZ, y + minY, endZ - maxX, startX + maxZ, y + maxY, endZ - minX);
+			case WEST -> new BoundingBox(endX - maxZ, y + minY, startZ + minX, endX - minZ, y + maxY, startZ + maxX);
+			default -> throw new IllegalArgumentException("Invalid orientation");
+		};
 	}
 }
