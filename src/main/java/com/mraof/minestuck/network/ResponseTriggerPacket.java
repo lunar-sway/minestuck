@@ -56,6 +56,6 @@ public record ResponseTriggerPacket(int responseIndex, ResourceLocation dialogue
 			return;
 		
 		Dialogue.Response response = dialogue.node().responses().get(this.responseIndex);
-		response.trigger(livingEntity, player, dialogue);
+		response.trigger(livingEntity, player);
 	}
 }

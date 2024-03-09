@@ -33,10 +33,6 @@ public class DialogueProvider implements DataProvider
 	 * Can be used as a dead end to close the screen
 	 */
 	public static final ResourceLocation EMPTY_NEXT_PATH = new ResourceLocation("close_menu");
-	/**
-	 * Can be used to activate triggers but return to the same screen
-	 */
-	public static final ResourceLocation LOOP_NEXT_PATH = new ResourceLocation("loop_menu");
 	
 	public static final String DEFAULT_ANIMATION = "generic_animation";
 	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
@@ -262,7 +258,8 @@ public class DialogueProvider implements DataProvider
 		
 		public DialogueBuilder addResponse(ResponseBuilder responseBuilder)
 		{
-			this.responses.add(new Dialogue.Response(responseBuilder.message, new Conditions(responseBuilder.conditions, responseBuilder.conditionsType), responseBuilder.triggers, responseBuilder.nextDialoguePath, responseBuilder.hideIfFailed));
+			ResourceLocation nextPath = responseBuilder.loopNextPath ? this.path : responseBuilder.nextDialoguePath;
+			this.responses.add(new Dialogue.Response(responseBuilder.message, new Conditions(responseBuilder.conditions, responseBuilder.conditionsType), responseBuilder.triggers, nextPath, responseBuilder.hideIfFailed));
 			return this;
 		}
 		
@@ -295,6 +292,7 @@ public class DialogueProvider implements DataProvider
 		private Conditions.Type conditionsType = Conditions.Type.ALL;
 		private final List<Trigger> triggers = new ArrayList<>();
 		private ResourceLocation nextDialoguePath = EMPTY_NEXT_PATH;
+		private boolean loopNextPath = false;
 		private boolean hideIfFailed = true;
 		
 		ResponseBuilder(String key, DialogueMessage.Argument... arguments)
@@ -304,6 +302,7 @@ public class DialogueProvider implements DataProvider
 		
 		public ResponseBuilder nextDialogue(ResourceLocation nextDialoguePath)
 		{
+			this.loopNextPath = false;
 			this.nextDialoguePath = nextDialoguePath;
 			return this;
 		}
@@ -315,7 +314,8 @@ public class DialogueProvider implements DataProvider
 		
 		public ResponseBuilder loop()
 		{
-			return this.nextDialogue(LOOP_NEXT_PATH);
+			this.loopNextPath = true;
+			return this;
 		}
 		
 		public ResponseBuilder addCondition(Condition condition)
