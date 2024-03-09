@@ -4,7 +4,6 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -22,18 +21,17 @@ public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocati
 	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(entityID);
-		buffer.writeUtf(dialogueLocation.toString(), 500);
-		
-		buffer.writeNbt(dialogueData.write());
+		buffer.writeResourceLocation(dialogueLocation);
+		dialogueData.write(buffer);
 	}
 	
 	public static DialogueScreenPacket decode(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt();
-		ResourceLocation dialogueLocation = ResourceLocation.tryParse(buffer.readUtf(500));
+		ResourceLocation dialogueLocation = buffer.readResourceLocation();
+		Dialogue.DialogueData dialogueData = Dialogue.DialogueData.read(buffer);
 		
-		CompoundTag dialogueData = buffer.readNbt();
-		return new DialogueScreenPacket(entityID, dialogueLocation, Dialogue.DialogueData.read(dialogueData));
+		return new DialogueScreenPacket(entityID, dialogueLocation, dialogueData);
 	}
 	
 	@Override
