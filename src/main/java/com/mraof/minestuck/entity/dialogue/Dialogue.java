@@ -68,13 +68,13 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 	 * It contains the message that represents the Response, any Conditions/Triggers, the location of the next Dialogue, and a boolean determining whether the Response should be visible when it fails to meet the Conditions
 	 */
 	public record Response(DialogueMessage message, Conditions conditions, List<Trigger> triggers,
-						   ResourceLocation nextDialoguePath, boolean hideIfFailed)
+						   Optional<ResourceLocation> nextDialoguePath, boolean hideIfFailed)
 	{
 		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				DialogueMessage.CODEC.fieldOf("message").forGetter(Response::message),
 				PreservingOptionalFieldCodec.withDefault(Conditions.CODEC, "conditions", Conditions.EMPTY).forGetter(Response::conditions),
 				PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
-				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "next_dialogue_path", DialogueProvider.EMPTY_NEXT_PATH).forGetter(Response::nextDialoguePath),
+				new PreservingOptionalFieldCodec<>(ResourceLocation.CODEC, "next_dialogue_path").forGetter(Response::nextDialoguePath),
 				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed)
 		).apply(instance, Response::new));
 		
@@ -103,15 +103,15 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 			if(!this.conditions().testWithContext(entity, player))
 				return;
 			
-			ResourceLocation nextPath = this.nextDialoguePath();
-			
 			for(Trigger trigger : this.triggers())
 				trigger.triggerEffect(entity, player);
 			
-			if(nextPath.equals(DialogueProvider.EMPTY_NEXT_PATH))
+			Optional<ResourceLocation> nextPath = this.nextDialoguePath();
+			
+			if(nextPath.isEmpty())
 				return;
 			
-			Dialogue nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
+			Dialogue nextDialogue = DialogueManager.getInstance().getDialogue(nextPath.get());
 			if(nextDialogue != null)
 				Dialogue.openScreen(entity, player, nextDialogue);
 		}
