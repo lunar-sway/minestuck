@@ -198,40 +198,29 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 		
 		CompoundTag responsesArgs = new CompoundTag();
 		dialogue.responses().forEach(response -> {
-			ListTag responseArgs = new ListTag();
-			response.response().processArguments(entity, serverPlayer).forEach(argument -> responseArgs.add(StringTag.valueOf(argument)));
-			responsesArgs.put(response.response().message(), responseArgs);
+			ResponseData responseData = new ResponseData(
+					response.conditions().testWithContext(entity, serverPlayer),
+					response.response().processArguments(entity, serverPlayer));
+			responsesArgs.put(response.response().message(), responseData.write());
 		});
 		messageArgs.put("responses", responsesArgs);
-		
-		CompoundTag conditionChecks = new CompoundTag();
-		dialogue.responses().forEach(response -> conditionChecks.putBoolean(response.response().message(), response.conditions().testWithContext(entity, serverPlayer)));
-		messageArgs.put("condition_checks", conditionChecks);
 		
 		return messageArgs;
 	}
 	
-	public record DialogueData(List<String> messageArguments, Map<String, List<String>> responseArgumentsMap, Map<String, Boolean> conditionChecks)
+	public record DialogueData(List<String> messageArguments, Map<String, ResponseData> responsesMap)
 	{
 		public static DialogueData read(CompoundTag messageArgs)
 		{
-			return new DialogueData(readDialogueArguments(messageArgs), readResponseArgumentsMap(messageArgs), readConditionChecks(messageArgs.getCompound("condition_checks")));
+			return new DialogueData(readDialogueArguments(messageArgs), readResponsesMap(messageArgs));
 		}
 		
-		private static Map<String, List<String>> readResponseArgumentsMap(CompoundTag messageArgs)
+		private static Map<String, ResponseData> readResponsesMap(CompoundTag messageArgs)
 		{
 			CompoundTag responses = messageArgs.getCompound("responses");
-			Map<String, List<String>> responseMap = new HashMap<>();
-			responses.getAllKeys().forEach(key -> {
-				List<String> arguments = readResponseArguments(responses.getList(key, Tag.TAG_STRING));
-				responseMap.put(key, arguments);
-			});
+			Map<String, ResponseData> responseMap = new HashMap<>();
+			responses.getAllKeys().forEach(key -> responseMap.put(key, ResponseData.read(responses.getCompound(key))));
 			return responseMap;
-		}
-		
-		private static List<String> readResponseArguments(ListTag response)
-		{
-			return response.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
 		}
 		
 		private static List<String> readDialogueArguments(CompoundTag messageArgs)
@@ -239,12 +228,27 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			return messageArgs.getList("dialogue_message", Tag.TAG_STRING)
 					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
 		}
-		
-		private static Map<String, Boolean> readConditionChecks(CompoundTag tag)
+	}
+	
+	public record ResponseData(boolean metCondition, List<String> arguments)
+	{
+		private static ResponseData read(CompoundTag tag)
 		{
-			Map<String, Boolean> map = new HashMap<>();
-			tag.getAllKeys().forEach(key -> map.put(key, tag.getBoolean(key)));
-			return map;
+			boolean metCondition = tag.getBoolean("met_condition");
+			List<String> arguments = tag.getList("arguments", Tag.TAG_STRING)
+					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
+			
+			return new ResponseData(metCondition, arguments);
+		}
+		
+		private CompoundTag write()
+		{
+			CompoundTag tag = new CompoundTag();
+			tag.putBoolean("met_condition", this.metCondition);
+			ListTag argumentsTag = new ListTag();
+			arguments.forEach(argument -> argumentsTag.add(StringTag.valueOf(argument)));
+			tag.put("arguments", argumentsTag);
+			return tag;
 		}
 	}
 }

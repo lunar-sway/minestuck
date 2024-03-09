@@ -18,7 +18,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -83,7 +82,8 @@ public class DialogueScreen extends Screen
 			String responseMessage = response.response().message();
 			int yPositionOffset = 20 * i;
 			
-			Component buttonComponent = Component.translatable(responseMessage, dialogueData.responseArgumentsMap().getOrDefault(responseMessage, Collections.emptyList()));
+			Dialogue.ResponseData data = this.dialogueData.responsesMap().get(responseMessage);
+			Component buttonComponent = Component.translatable(responseMessage, data != null ? data.arguments() : List.of());
 			
 			int index = dialogue.responses().indexOf(response);
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
@@ -101,7 +101,8 @@ public class DialogueScreen extends Screen
 	
 	private boolean responseFailedCheck(String responseMessage)
 	{
-		return !dialogueData.conditionChecks().getOrDefault(responseMessage, false);
+		Dialogue.ResponseData data = this.dialogueData.responsesMap().get(responseMessage);
+		return data == null || !data.metCondition();
 	}
 	
 	private static MutableComponent conditionFailMessage(Dialogue.Response response)
