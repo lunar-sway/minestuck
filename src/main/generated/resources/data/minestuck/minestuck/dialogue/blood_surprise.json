@@ -1,7 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.blood_surprise",
-    "responses": []
+    "message": "minestuck.dialogue.blood_surprise"
   },
   "path": "minestuck:blood_surprise",
   "use_context": {

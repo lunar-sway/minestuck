@@ -1,7 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.hardcore",
-    "responses": []
+    "message": "minestuck.dialogue.hardcore"
   },
   "path": "minestuck:hardcore",
   "use_context": {

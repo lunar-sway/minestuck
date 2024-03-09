@@ -1,7 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.koolaid",
-    "responses": []
+    "message": "minestuck.dialogue.koolaid"
   },
   "path": "minestuck:koolaid",
   "use_context": {

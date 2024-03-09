@@ -49,7 +49,7 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 				DialogueMessage.CODEC.fieldOf("message").forGetter(DialogueNode::message),
 				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DialogueProvider.DEFAULT_ANIMATION).forGetter(DialogueNode::animation),
 				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DialogueProvider.DEFAULT_GUI).forGetter(DialogueNode::guiPath),
-				Response.LIST_CODEC.fieldOf("responses").forGetter(DialogueNode::responses)
+				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(DialogueNode::responses)
 		).apply(instance, DialogueNode::new));
 		
 		private DialogueData evaluateData(LivingEntity entity, ServerPlayer serverPlayer)
