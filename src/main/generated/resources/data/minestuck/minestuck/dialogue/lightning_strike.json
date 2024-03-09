@@ -1,6 +1,6 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.lightning_strike",
+    "message": "minestuck.dialogue.lightning_strike",
     "responses": []
   },
   "path": "minestuck:lightning_strike",

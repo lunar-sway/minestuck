@@ -1,12 +1,12 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.immortality_herb.3",
+    "message": "minestuck.dialogue.immortality_herb.3",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "...",
+        "message": "...",
         "triggers": [
           {
             "type": "explode"

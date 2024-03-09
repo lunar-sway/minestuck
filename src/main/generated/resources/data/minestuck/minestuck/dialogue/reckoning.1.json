@@ -1,13 +1,13 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.reckoning.1",
+    "message": "minestuck.dialogue.reckoning.1",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
-        "next_dialogue_path": "minestuck:reckoning.2",
-        "response_message": "=>"
+        "message": "=>",
+        "next_dialogue_path": "minestuck:reckoning.2"
       }
     ]
   },

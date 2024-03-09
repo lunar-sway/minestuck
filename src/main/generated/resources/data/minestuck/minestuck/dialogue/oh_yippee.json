@@ -1,6 +1,6 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.oh_yippee",
+    "message": "minestuck.dialogue.oh_yippee",
     "responses": []
   },
   "path": "minestuck:oh_yippee"

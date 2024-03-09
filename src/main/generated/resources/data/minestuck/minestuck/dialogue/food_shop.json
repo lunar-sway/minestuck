@@ -1,18 +1,18 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.food_shop",
+    "message": "minestuck.dialogue.food_shop",
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "Never mind"
+        "message": "Never mind"
       },
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": "What do you have?",
+        "message": "What do you have?",
         "triggers": [
           {
             "type": "open_consort_merchant_gui",

@@ -1,6 +1,6 @@
 {
   "node": {
-    "dialogue_message": "minestuck.dialogue.mycelium.2",
+    "message": "minestuck.dialogue.mycelium.2",
     "responses": []
   },
   "path": "minestuck:mycelium.2"

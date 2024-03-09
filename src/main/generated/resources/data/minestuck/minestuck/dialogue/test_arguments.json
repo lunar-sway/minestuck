@@ -1,21 +1,21 @@
 {
   "node": {
-    "dialogue_message": {
+    "message": {
       "arguments": [
         "PLAYER_NAME_LAND"
       ],
-      "message": "minestuck.dialogue.test_arguments"
+      "key": "minestuck.dialogue.test_arguments"
     },
     "responses": [
       {
         "conditions": {
           "condition_list": []
         },
-        "response_message": {
+        "message": {
           "arguments": [
             "PLAYER_NAME_LAND"
           ],
-          "message": "Player name land: %s"
+          "key": "Player name land: %s"
         }
       }
     ]
