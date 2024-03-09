@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.turtle_only"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.turtle_only"
+    },
+    "responses": []
   },
   "path": "minestuck:turtle_only",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

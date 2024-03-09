@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.blood_surprise"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.blood_surprise"
+    },
+    "responses": []
   },
   "path": "minestuck:blood_surprise",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

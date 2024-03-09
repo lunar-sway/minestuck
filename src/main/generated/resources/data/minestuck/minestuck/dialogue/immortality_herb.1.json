@@ -1,21 +1,23 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.immortality_herb.1"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.immortality_herb.1"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "next_dialogue_path": "minestuck:immortality_herb.2",
+        "response_message": {
+          "arguments": [],
+          "message": "=>"
+        }
+      }
+    ]
   },
   "path": "minestuck:immortality_herb.1",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "next_dialogue_path": "minestuck:immortality_herb.2",
-      "response_message": {
-        "arguments": [],
-        "message": "=>"
-      }
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

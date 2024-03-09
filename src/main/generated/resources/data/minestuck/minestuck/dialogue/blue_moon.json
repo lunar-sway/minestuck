@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.blue_moon"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.blue_moon"
+    },
+    "responses": []
   },
   "path": "minestuck:blue_moon",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

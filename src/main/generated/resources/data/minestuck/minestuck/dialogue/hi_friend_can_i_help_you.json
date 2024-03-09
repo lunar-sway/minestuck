@@ -1,83 +1,85 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.hi_friend_can_i_help_you"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.hi_friend_can_i_help_you"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "hide_if_failed": false,
+        "response_message": {
+          "arguments": [],
+          "message": "I hate you"
+        },
+        "triggers": [
+          {
+            "type": "add_consort_reputation",
+            "reputation": -100
+          }
+        ]
+      },
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "hide_if_failed": false,
+        "response_message": {
+          "arguments": [],
+          "message": "I love you"
+        },
+        "triggers": [
+          {
+            "type": "add_consort_reputation",
+            "reputation": 100
+          }
+        ]
+      },
+      {
+        "conditions": {
+          "condition_list": [
+            {
+              "type": "player_has_reputation",
+              "amount": 500
+            }
+          ]
+        },
+        "hide_if_failed": false,
+        "response_message": {
+          "arguments": [],
+          "message": "Rep above 500"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": [
+            {
+              "type": "player_has_reputation",
+              "amount": 200,
+              "greater_than": false
+            }
+          ]
+        },
+        "hide_if_failed": false,
+        "response_message": {
+          "arguments": [],
+          "message": "Rep below 200"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "bye"
+        }
+      }
+    ]
   },
   "path": "minestuck:hi_friend_can_i_help_you",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "hide_if_failed": false,
-      "response_message": {
-        "arguments": [],
-        "message": "I hate you"
-      },
-      "triggers": [
-        {
-          "type": "add_consort_reputation",
-          "reputation": -100
-        }
-      ]
-    },
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "hide_if_failed": false,
-      "response_message": {
-        "arguments": [],
-        "message": "I love you"
-      },
-      "triggers": [
-        {
-          "type": "add_consort_reputation",
-          "reputation": 100
-        }
-      ]
-    },
-    {
-      "conditions": {
-        "condition_list": [
-          {
-            "type": "player_has_reputation",
-            "amount": 500
-          }
-        ]
-      },
-      "hide_if_failed": false,
-      "response_message": {
-        "arguments": [],
-        "message": "Rep above 500"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": [
-          {
-            "type": "player_has_reputation",
-            "amount": 200,
-            "greater_than": false
-          }
-        ]
-      },
-      "hide_if_failed": false,
-      "response_message": {
-        "arguments": [],
-        "message": "Rep below 200"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "bye"
-      }
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

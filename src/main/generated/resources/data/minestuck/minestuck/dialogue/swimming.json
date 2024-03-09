@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.swimming"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.swimming"
+    },
+    "responses": []
   },
   "path": "minestuck:swimming",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

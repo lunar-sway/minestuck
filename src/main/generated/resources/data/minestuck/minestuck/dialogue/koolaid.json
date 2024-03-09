@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.koolaid"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.koolaid"
+    },
+    "responses": []
   },
   "path": "minestuck:koolaid",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

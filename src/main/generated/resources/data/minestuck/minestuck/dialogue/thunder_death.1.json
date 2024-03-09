@@ -1,21 +1,23 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.thunder_death.1"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.thunder_death.1"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "next_dialogue_path": "minestuck:thunder_death.2",
+        "response_message": {
+          "arguments": [],
+          "message": "=>"
+        }
+      }
+    ]
   },
   "path": "minestuck:thunder_death.1",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "next_dialogue_path": "minestuck:thunder_death.2",
-      "response_message": {
-        "arguments": [],
-        "message": "=>"
-      }
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

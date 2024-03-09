@@ -1,8 +1,10 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.thunder_death.3"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.thunder_death.3"
+    },
+    "responses": []
   },
-  "path": "minestuck:thunder_death.3",
-  "responses": []
+  "path": "minestuck:thunder_death.3"
 }

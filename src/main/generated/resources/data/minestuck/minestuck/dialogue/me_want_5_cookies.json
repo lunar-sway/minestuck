@@ -1,44 +1,46 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.me_want_5_cookies"
-  },
-  "path": "minestuck:me_want_5_cookies",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "im sorry fellow, I have no cookie for you. Bye"
-      }
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.me_want_5_cookies"
     },
-    {
-      "conditions": {
-        "condition_list": [
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "im sorry fellow, I have no cookie for you. Bye"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": [
+            {
+              "type": "player_has_item",
+              "amount": 5,
+              "item": "minecraft:cookie"
+            }
+          ]
+        },
+        "hide_if_failed": false,
+        "next_dialogue_path": "minestuck:oh_yippee",
+        "response_message": {
+          "arguments": [],
+          "message": "here have 5 cookies chap"
+        },
+        "triggers": [
           {
-            "type": "player_has_item",
+            "type": "take_item",
             "amount": 5,
             "item": "minecraft:cookie"
           }
         ]
-      },
-      "hide_if_failed": false,
-      "next_dialogue_path": "minestuck:oh_yippee",
-      "response_message": {
-        "arguments": [],
-        "message": "here have 5 cookies chap"
-      },
-      "triggers": [
-        {
-          "type": "take_item",
-          "amount": 5,
-          "item": "minecraft:cookie"
-        }
-      ]
-    }
-  ],
+      }
+    ]
+  },
+  "path": "minestuck:me_want_5_cookies",
   "use_context": {
     "conditions": {
       "condition_list": [

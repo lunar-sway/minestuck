@@ -1,56 +1,58 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.me_want_cookie"
-  },
-  "path": "minestuck:me_want_cookie",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "im sorry fellow, I have no cookie for you. Bye"
-      }
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.me_want_cookie"
     },
-    {
-      "conditions": {
-        "condition_list": []
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "im sorry fellow, I have no cookie for you. Bye"
+        }
       },
-      "next_dialogue_path": "minecraft:loop_menu",
-      "response_message": {
-        "arguments": [],
-        "message": "why do you want cookie?"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "next_dialogue_path": "minecraft:loop_menu",
+        "response_message": {
+          "arguments": [],
+          "message": "why do you want cookie?"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": [
+            {
+              "type": "player_has_item",
+              "item": "minecraft:cookie"
+            }
+          ]
+        },
+        "hide_if_failed": false,
+        "next_dialogue_path": "minestuck:oh_yippee",
+        "response_message": {
+          "arguments": [],
+          "message": "here have a cookie chap"
+        },
+        "triggers": [
           {
-            "type": "player_has_item",
+            "type": "take_item",
             "item": "minecraft:cookie"
+          },
+          {
+            "type": "set_dialogue",
+            "new_path": "minestuck:hunger_filled"
           }
         ]
-      },
-      "hide_if_failed": false,
-      "next_dialogue_path": "minestuck:oh_yippee",
-      "response_message": {
-        "arguments": [],
-        "message": "here have a cookie chap"
-      },
-      "triggers": [
-        {
-          "type": "take_item",
-          "item": "minecraft:cookie"
-        },
-        {
-          "type": "set_dialogue",
-          "new_path": "minestuck:hunger_filled"
-        }
-      ]
-    }
-  ],
+      }
+    ]
+  },
+  "path": "minestuck:me_want_cookie",
   "use_context": {
     "conditions": {
       "condition_list": [

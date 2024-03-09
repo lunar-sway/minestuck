@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.nakagator_only"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.nakagator_only"
+    },
+    "responses": []
   },
   "path": "minestuck:nakagator_only",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

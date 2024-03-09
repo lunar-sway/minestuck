@@ -1,8 +1,10 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.pyre.2"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.pyre.2"
+    },
+    "responses": []
   },
-  "path": "minestuck:pyre.2",
-  "responses": []
+  "path": "minestuck:pyre.2"
 }
