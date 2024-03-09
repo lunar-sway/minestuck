@@ -7,6 +7,7 @@ import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.blockentity.redstone.*;
 import com.mraof.minestuck.client.gui.captchalouge.*;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
@@ -14,7 +15,6 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -139,7 +139,7 @@ public class MSScreenFactories
 		}
 	}
 	
-	public static void displayDialogueScreen(LivingEntity entity, ResourceLocation dialoguePath, CompoundTag dialogueData)
+	public static void displayDialogueScreen(LivingEntity entity, ResourceLocation dialoguePath, Dialogue.DialogueData dialogueData)
 	{
 		Minecraft.getInstance().setScreen(new DialogueScreen(entity, dialoguePath, dialogueData));
 	}

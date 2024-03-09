@@ -63,7 +63,7 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 	{
 		DialogueData data = dialogue.evaluateData(entity, serverPlayer);
 		
-		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, data.write());
+		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, data);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
@@ -232,7 +232,7 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			return new DialogueData(message, arguments, guiBackground, responses);
 		}
 		
-		private CompoundTag write()
+		public CompoundTag write()
 		{
 			CompoundTag tag = new CompoundTag();
 			

@@ -11,9 +11,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocation, CompoundTag dialogueData) implements MSPacket.PlayToClient
+public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocation, Dialogue.DialogueData dialogueData) implements MSPacket.PlayToClient
 {
-	public static DialogueScreenPacket createPacket(LivingEntity entity, Dialogue dialogue, CompoundTag dialogueData)
+	public static DialogueScreenPacket createPacket(LivingEntity entity, Dialogue dialogue, Dialogue.DialogueData dialogueData)
 	{
 		return new DialogueScreenPacket(entity.getId(), dialogue.path(), dialogueData);
 	}
@@ -24,7 +24,7 @@ public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocati
 		buffer.writeInt(entityID);
 		buffer.writeUtf(dialogueLocation.toString(), 500);
 		
-		buffer.writeNbt(dialogueData);
+		buffer.writeNbt(dialogueData.write());
 	}
 	
 	public static DialogueScreenPacket decode(FriendlyByteBuf buffer)
@@ -32,8 +32,8 @@ public record DialogueScreenPacket(int entityID, ResourceLocation dialogueLocati
 		int entityID = buffer.readInt();
 		ResourceLocation dialogueLocation = ResourceLocation.tryParse(buffer.readUtf(500));
 		
-		CompoundTag messageArgs = buffer.readNbt();
-		return new DialogueScreenPacket(entityID, dialogueLocation, messageArgs);
+		CompoundTag dialogueData = buffer.readNbt();
+		return new DialogueScreenPacket(entityID, dialogueLocation, Dialogue.DialogueData.read(dialogueData));
 	}
 	
 	@Override

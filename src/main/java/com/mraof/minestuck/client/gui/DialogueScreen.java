@@ -9,7 +9,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -37,13 +36,13 @@ public class DialogueScreen extends Screen
 	
 	private final List<Button> responseButtons = new ArrayList<>();
 	
-	DialogueScreen(LivingEntity entity, ResourceLocation dialoguePath, CompoundTag dialogueData)
+	DialogueScreen(LivingEntity entity, ResourceLocation dialoguePath, Dialogue.DialogueData dialogueData)
 	{
 		super(Component.empty());
 		
 		this.entity = entity;
 		this.dialoguePath = dialoguePath;
-		this.dialogueData = Dialogue.DialogueData.read(dialogueData);
+		this.dialogueData = dialogueData;
 	}
 	
 	@Override
