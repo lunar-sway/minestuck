@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,14 +20,9 @@ public record DialogueMessage(String message, List<Argument> arguments)
 							Codec.list(Argument.CODEC).fieldOf("arguments").forGetter(DialogueMessage::arguments))
 					.apply(instance, DialogueMessage::new));
 	
-	public void addToCompound(CompoundTag dialogueArgs, LivingEntity entity, ServerPlayer serverPlayer)
+	public List<String> processArguments(LivingEntity entity, ServerPlayer serverPlayer)
 	{
-		arguments.forEach(argument -> dialogueArgs.putString(argument.getSerializedName(), DialogueMessage.getProcessedArgument(argument, entity, serverPlayer)));
-	}
-	
-	public static String getProcessedArgument(Argument argument, LivingEntity npc, ServerPlayer player)
-	{
-		return argument.processing.apply(npc, player);
+		return this.arguments.stream().map(argument -> argument.processing.apply(entity, serverPlayer)).toList();
 	}
 	
 	public enum Argument implements StringRepresentable

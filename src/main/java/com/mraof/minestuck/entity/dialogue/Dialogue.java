@@ -10,6 +10,9 @@ import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
@@ -21,7 +24,6 @@ import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -190,14 +192,14 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 	{
 		CompoundTag messageArgs = new CompoundTag();
 		
-		CompoundTag dialogueArgs = new CompoundTag();
-		dialogue.message().addToCompound(dialogueArgs, entity, serverPlayer);
+		ListTag dialogueArgs = new ListTag();
+		dialogue.message().processArguments(entity, serverPlayer).forEach(argument -> dialogueArgs.add(StringTag.valueOf(argument)));
 		messageArgs.put("dialogue_message", dialogueArgs);
 		
 		CompoundTag responsesArgs = new CompoundTag();
 		dialogue.responses().forEach(response -> {
-			CompoundTag responseArgs = new CompoundTag();
-			response.response().addToCompound(responseArgs, entity, serverPlayer);
+			ListTag responseArgs = new ListTag();
+			response.response().processArguments(entity, serverPlayer).forEach(argument -> responseArgs.add(StringTag.valueOf(argument)));
 			responsesArgs.put(response.response().message(), responseArgs);
 		});
 		messageArgs.put("responses", responsesArgs);
@@ -221,26 +223,21 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			CompoundTag responses = messageArgs.getCompound("responses");
 			Map<String, List<String>> responseMap = new HashMap<>();
 			responses.getAllKeys().forEach(key -> {
-				List<String> arguments = readResponseArguments(responses.getCompound(key));
+				List<String> arguments = readResponseArguments(responses.getList(key, Tag.TAG_STRING));
 				responseMap.put(key, arguments);
 			});
 			return responseMap;
 		}
 		
-		private static List<String> readResponseArguments(CompoundTag response)
+		private static List<String> readResponseArguments(ListTag response)
 		{
-			return response.getAllKeys().stream().map(response::getString).toList();
+			return response.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
 		}
 		
 		private static List<String> readDialogueArguments(CompoundTag messageArgs)
 		{
-			List<String> arguments = new ArrayList<>();
-			
-			CompoundTag message = messageArgs.getCompound("dialogue_message");
-			for(String key : message.getAllKeys())
-				arguments.add(message.getString(key));
-			
-			return arguments;
+			return messageArgs.getList("dialogue_message", Tag.TAG_STRING)
+					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
 		}
 		
 		private static Map<String, Boolean> readConditionChecks(CompoundTag tag)
