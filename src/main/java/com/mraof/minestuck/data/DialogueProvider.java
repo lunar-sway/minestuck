@@ -142,8 +142,9 @@ public class DialogueProvider implements DataProvider
 	
 	private void testDialogues()
 	{
-		add(new DialogueBuilder("test1", "test1animation", DEFAULT_GUI)
+		add(new DialogueBuilder("test1")
 				.randomlySelectable(new Dialogue.UseContext(new Condition.Conditionless()))
+				.animation("test1animation")
 				.addResponse(new ResponseBuilder("test1response1").nextDialogue("test2")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
@@ -156,8 +157,9 @@ public class DialogueProvider implements DataProvider
 						.conditionType(Conditions.Type.ONE)
 						.dontHideFailed()));
 		
-		add(new DialogueBuilder("test2", "test2animation", DEFAULT_GUI)
+		add(new DialogueBuilder("test2")
 				.randomlySelectable(new Dialogue.UseContext(new Condition.Conditionless()))
+				.animation("test2animation")
 				.addResponse(new ResponseBuilder("test2response1").nextDialogue("test1")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
 						.dontHideFailed())
@@ -231,23 +233,28 @@ public class DialogueProvider implements DataProvider
 		private final ResourceLocation path;
 		private final String message;
 		private final List<DialogueMessage.Argument> messageArgs = new ArrayList<>();
-		private final String animation;
-		private final ResourceLocation guiPath;
+		private String animation = DEFAULT_ANIMATION;
+		private ResourceLocation guiPath = DEFAULT_GUI;
 		private final List<Dialogue.Response> responses = new ArrayList<>();
 		@Nullable
 		private Dialogue.UseContext useContext;
 		
 		DialogueBuilder(String message)
 		{
-			this(message, DEFAULT_ANIMATION, DEFAULT_GUI);
-		}
-		
-		DialogueBuilder(String message, String animation, ResourceLocation guiPath)
-		{
 			this.path = new ResourceLocation(Minestuck.MOD_ID, message);
 			this.message = "minestuck.dialogue." + message.replace("/", ".");
+		}
+		
+		public DialogueBuilder animation(String animation)
+		{
 			this.animation = animation;
+			return this;
+		}
+		
+		public DialogueBuilder gui(ResourceLocation guiPath)
+		{
 			this.guiPath = guiPath;
+			return this;
 		}
 		
 		public DialogueBuilder addResponse(String response)
