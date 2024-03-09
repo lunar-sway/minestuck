@@ -1,114 +1,116 @@
 {
-  "animation": "test1animation",
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.test1"
+  "node": {
+    "animation": "test1animation",
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.test1"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "type": "ANY",
+          "condition_list": [
+            {
+              "type": "is_entity_type",
+              "entity_type": "minestuck:turtle"
+            },
+            {
+              "type": "is_entity_type",
+              "entity_type": "minestuck:iguana"
+            }
+          ]
+        },
+        "next_dialogue_path": "minestuck:test2",
+        "response_message": {
+          "arguments": [],
+          "message": "test1response1"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": [
+            {
+              "type": "is_entity_type",
+              "entity_type": "minestuck:nakagator"
+            }
+          ]
+        },
+        "next_dialogue_path": "minestuck:test2",
+        "response_message": {
+          "arguments": [],
+          "message": "test1response2"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "next_dialogue_path": "minestuck:test2",
+        "response_message": {
+          "arguments": [],
+          "message": "test1response3"
+        },
+        "triggers": [
+          {
+            "type": "command",
+            "command": "summon minestuck:grist ~ ~ ~ {Value:200}"
+          }
+        ]
+      },
+      {
+        "conditions": {
+          "type": "ONE",
+          "condition_list": [
+            {
+              "type": "has_conditions",
+              "conditions": {
+                "type": "ONE",
+                "condition_list": [
+                  {
+                    "type": "is_entity_type",
+                    "entity_type": "minestuck:nakagator"
+                  },
+                  {
+                    "type": "is_entity_type",
+                    "entity_type": "minestuck:turtle"
+                  },
+                  {
+                    "type": "is_entity_type",
+                    "entity_type": "minestuck:iguana"
+                  },
+                  {
+                    "type": "is_entity_type",
+                    "entity_type": "minestuck:salamander"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "has_conditions",
+              "conditions": {
+                "type": "ONE",
+                "condition_list": [
+                  {
+                    "type": "is_carapacian"
+                  },
+                  {
+                    "type": "player_has_item",
+                    "item": "minestuck:ace_of_clubs"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "hide_if_failed": false,
+        "response_message": {
+          "arguments": [],
+          "message": "test1response4"
+        }
+      }
+    ]
   },
   "path": "minestuck:test1",
-  "responses": [
-    {
-      "conditions": {
-        "type": "ANY",
-        "condition_list": [
-          {
-            "type": "is_entity_type",
-            "entity_type": "minestuck:turtle"
-          },
-          {
-            "type": "is_entity_type",
-            "entity_type": "minestuck:iguana"
-          }
-        ]
-      },
-      "next_dialogue_path": "minestuck:test2",
-      "response_message": {
-        "arguments": [],
-        "message": "test1response1"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": [
-          {
-            "type": "is_entity_type",
-            "entity_type": "minestuck:nakagator"
-          }
-        ]
-      },
-      "next_dialogue_path": "minestuck:test2",
-      "response_message": {
-        "arguments": [],
-        "message": "test1response2"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "next_dialogue_path": "minestuck:test2",
-      "response_message": {
-        "arguments": [],
-        "message": "test1response3"
-      },
-      "triggers": [
-        {
-          "type": "command",
-          "command": "summon minestuck:grist ~ ~ ~ {Value:200}"
-        }
-      ]
-    },
-    {
-      "conditions": {
-        "type": "ONE",
-        "condition_list": [
-          {
-            "type": "has_conditions",
-            "conditions": {
-              "type": "ONE",
-              "condition_list": [
-                {
-                  "type": "is_entity_type",
-                  "entity_type": "minestuck:nakagator"
-                },
-                {
-                  "type": "is_entity_type",
-                  "entity_type": "minestuck:turtle"
-                },
-                {
-                  "type": "is_entity_type",
-                  "entity_type": "minestuck:iguana"
-                },
-                {
-                  "type": "is_entity_type",
-                  "entity_type": "minestuck:salamander"
-                }
-              ]
-            }
-          },
-          {
-            "type": "has_conditions",
-            "conditions": {
-              "type": "ONE",
-              "condition_list": [
-                {
-                  "type": "is_carapacian"
-                },
-                {
-                  "type": "player_has_item",
-                  "item": "minestuck:ace_of_clubs"
-                }
-              ]
-            }
-          }
-        ]
-      },
-      "hide_if_failed": false,
-      "response_message": {
-        "arguments": [],
-        "message": "test1response4"
-      }
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

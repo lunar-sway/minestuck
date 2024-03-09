@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.lightning_strike"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.lightning_strike"
+    },
+    "responses": []
   },
   "path": "minestuck:lightning_strike",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

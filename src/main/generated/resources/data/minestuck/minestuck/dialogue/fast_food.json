@@ -1,36 +1,38 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.fast_food"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.fast_food"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "I'm good"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "Show me your menu"
+        },
+        "triggers": [
+          {
+            "type": "open_consort_merchant_gui",
+            "loot_table": "minestuck:gameplay/consort_food",
+            "merchant_type": "food"
+          }
+        ]
+      }
+    ]
   },
   "path": "minestuck:fast_food",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "I'm good"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "Show me your menu"
-      },
-      "triggers": [
-        {
-          "type": "open_consort_merchant_gui",
-          "loot_table": "minestuck:gameplay/consort_food",
-          "merchant_type": "food"
-        }
-      ]
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

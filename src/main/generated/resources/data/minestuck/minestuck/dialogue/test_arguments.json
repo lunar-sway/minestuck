@@ -1,24 +1,26 @@
 {
-  "dialogue_message": {
-    "arguments": [
-      "PLAYER_NAME_LAND"
-    ],
-    "message": "minestuck.dialogue.test_arguments"
+  "node": {
+    "dialogue_message": {
+      "arguments": [
+        "PLAYER_NAME_LAND"
+      ],
+      "message": "minestuck.dialogue.test_arguments"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [
+            "PLAYER_NAME_LAND"
+          ],
+          "message": "Player name land: %s"
+        }
+      }
+    ]
   },
   "path": "minestuck:test_arguments",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [
-          "PLAYER_NAME_LAND"
-        ],
-        "message": "Player name land: %s"
-      }
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

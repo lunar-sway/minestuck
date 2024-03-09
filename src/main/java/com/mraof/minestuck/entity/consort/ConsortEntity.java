@@ -4,9 +4,10 @@ import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
-import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -14,7 +15,6 @@ import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
-import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -30,7 +30,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.*;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -153,7 +156,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 					{
 						handleConsortRepFromTalking(serverPlayer);
 						setCurrentAnimation(TALK_PROPERTIES);
-						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.message().message(), this);
+						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.node().message().message(), this);
 						
 						Dialogue.openScreen(this, serverPlayer, dialogue);
 					}

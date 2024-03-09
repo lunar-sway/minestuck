@@ -1,36 +1,38 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.grocery_store"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.grocery_store"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "No thanks"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "What do you have to sell?"
+        },
+        "triggers": [
+          {
+            "type": "open_consort_merchant_gui",
+            "loot_table": "minestuck:gameplay/consort_food",
+            "merchant_type": "food"
+          }
+        ]
+      }
+    ]
   },
   "path": "minestuck:grocery_store",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "No thanks"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "What do you have to sell?"
-      },
-      "triggers": [
-        {
-          "type": "open_consort_merchant_gui",
-          "loot_table": "minestuck:gameplay/consort_food",
-          "merchant_type": "food"
-        }
-      ]
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

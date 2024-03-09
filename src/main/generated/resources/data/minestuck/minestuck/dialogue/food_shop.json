@@ -1,36 +1,38 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.food_shop"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.food_shop"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "Never mind"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "What do you have?"
+        },
+        "triggers": [
+          {
+            "type": "open_consort_merchant_gui",
+            "loot_table": "minestuck:gameplay/consort_food",
+            "merchant_type": "food"
+          }
+        ]
+      }
+    ]
   },
   "path": "minestuck:food_shop",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "Never mind"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "What do you have?"
-      },
-      "triggers": [
-        {
-          "type": "open_consort_merchant_gui",
-          "loot_table": "minestuck:gameplay/consort_food",
-          "merchant_type": "food"
-        }
-      ]
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.murder_rain"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.murder_rain"
+    },
+    "responses": []
   },
   "path": "minestuck:murder_rain",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

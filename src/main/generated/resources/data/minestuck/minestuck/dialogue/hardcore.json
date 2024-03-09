@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.hardcore"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.hardcore"
+    },
+    "responses": []
   },
   "path": "minestuck:hardcore",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

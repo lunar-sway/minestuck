@@ -1,10 +1,12 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.skeleton_horse"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.skeleton_horse"
+    },
+    "responses": []
   },
   "path": "minestuck:skeleton_horse",
-  "responses": [],
   "use_context": {
     "conditions": {
       "condition_list": [

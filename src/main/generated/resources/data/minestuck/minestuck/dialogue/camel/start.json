@@ -1,31 +1,33 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.camel.start"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.camel.start"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "next_dialogue_path": "minestuck:camel/no_camel",
+        "response_message": {
+          "arguments": [],
+          "message": "minestuck.dialogue.camel.yes"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "next_dialogue_path": "minestuck:camel/dancing_camel",
+        "response_message": {
+          "arguments": [],
+          "message": "minestuck.dialogue.camel.no"
+        }
+      }
+    ]
   },
   "path": "minestuck:camel/start",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "next_dialogue_path": "minestuck:camel/no_camel",
-      "response_message": {
-        "arguments": [],
-        "message": "minestuck.dialogue.camel.yes"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "next_dialogue_path": "minestuck:camel/dancing_camel",
-      "response_message": {
-        "arguments": [],
-        "message": "minestuck.dialogue.camel.no"
-      }
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

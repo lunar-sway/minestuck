@@ -1,36 +1,38 @@
 {
-  "dialogue_message": {
-    "arguments": [],
-    "message": "minestuck.dialogue.tasty_welcome"
+  "node": {
+    "dialogue_message": {
+      "arguments": [],
+      "message": "minestuck.dialogue.tasty_welcome"
+    },
+    "responses": [
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "Goodbye"
+        }
+      },
+      {
+        "conditions": {
+          "condition_list": []
+        },
+        "response_message": {
+          "arguments": [],
+          "message": "Let me see your wares"
+        },
+        "triggers": [
+          {
+            "type": "open_consort_merchant_gui",
+            "loot_table": "minestuck:gameplay/consort_food",
+            "merchant_type": "food"
+          }
+        ]
+      }
+    ]
   },
   "path": "minestuck:tasty_welcome",
-  "responses": [
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "Goodbye"
-      }
-    },
-    {
-      "conditions": {
-        "condition_list": []
-      },
-      "response_message": {
-        "arguments": [],
-        "message": "Let me see your wares"
-      },
-      "triggers": [
-        {
-          "type": "open_consort_merchant_gui",
-          "loot_table": "minestuck:gameplay/consort_food",
-          "merchant_type": "food"
-        }
-      ]
-    }
-  ],
   "use_context": {
     "conditions": {
       "condition_list": [

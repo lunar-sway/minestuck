@@ -56,10 +56,10 @@ public record ResponseTriggerPacket(int responseIndex, ResourceLocation dialogue
 		if(dialogue == null)
 			return;
 		
-		if(this.responseIndex < 0 || dialogue.responses().size() <= this.responseIndex)
+		if(this.responseIndex < 0 || dialogue.node().responses().size() <= this.responseIndex)
 			return;
 		
-		Dialogue.Response response = dialogue.responses().get(this.responseIndex);
+		Dialogue.Response response = dialogue.node().responses().get(this.responseIndex);
 		if(!response.conditions().testWithContext(livingEntity, player))
 			return;
 		

@@ -24,15 +24,11 @@ import java.util.stream.IntStream;
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
 //TODO animation is unused?
-public record Dialogue(ResourceLocation path, DialogueMessage message, String animation, ResourceLocation guiPath,
-					   List<Response> responses, Optional<UseContext> useContext)
+public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseContext> useContext)
 {
 	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.fieldOf("path").forGetter(Dialogue::path),
-			DialogueMessage.CODEC.fieldOf("dialogue_message").forGetter(Dialogue::message),
-			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DialogueProvider.DEFAULT_ANIMATION).forGetter(Dialogue::animation),
-			PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DialogueProvider.DEFAULT_GUI).forGetter(Dialogue::guiPath),
-			Response.LIST_CODEC.fieldOf("responses").forGetter(Dialogue::responses),
+			DialogueNode.CODEC.fieldOf("node").forGetter(Dialogue::node),
 			new PreservingOptionalFieldCodec<>(UseContext.CODEC, "use_context").forGetter(Dialogue::useContext)
 	).apply(instance, Dialogue::new));
 	
@@ -41,19 +37,29 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 	 */
 	public static void openScreen(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
 	{
-		DialogueData data = dialogue.evaluateData(entity, serverPlayer);
+		DialogueData data = dialogue.node().evaluateData(entity, serverPlayer);
 		
 		DialogueScreenPacket packet = DialogueScreenPacket.createPacket(entity, dialogue, data);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
-	private DialogueData evaluateData(LivingEntity entity, ServerPlayer serverPlayer)
+	public record DialogueNode(DialogueMessage message, String animation, ResourceLocation guiPath, List<Response> responses)
 	{
-		List<ResponseData> responses = IntStream.range(0, responses().size())
-				.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, serverPlayer))
-				.flatMap(Optional::stream).toList();
+		public static Codec<DialogueNode> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				DialogueMessage.CODEC.fieldOf("dialogue_message").forGetter(DialogueNode::message),
+				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DialogueProvider.DEFAULT_ANIMATION).forGetter(DialogueNode::animation),
+				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DialogueProvider.DEFAULT_GUI).forGetter(DialogueNode::guiPath),
+				Response.LIST_CODEC.fieldOf("responses").forGetter(DialogueNode::responses)
+		).apply(instance, DialogueNode::new));
 		
-		return new DialogueData(this.message().evaluateComponent(entity, serverPlayer), this.guiPath(), responses);
+		private DialogueData evaluateData(LivingEntity entity, ServerPlayer serverPlayer)
+		{
+			List<ResponseData> responses = IntStream.range(0, responses().size())
+					.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, serverPlayer))
+					.flatMap(Optional::stream).toList();
+			
+			return new DialogueData(this.message().evaluateComponent(entity, serverPlayer), this.guiPath(), responses);
+		}
 	}
 	
 	/**
