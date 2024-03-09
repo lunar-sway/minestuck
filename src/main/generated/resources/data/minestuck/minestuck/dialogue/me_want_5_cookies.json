@@ -3,9 +3,6 @@
     "message": "minestuck.dialogue.me_want_5_cookies",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "im sorry fellow, I have no cookie for you. Bye"
       },
       {

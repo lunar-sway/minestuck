@@ -3,9 +3,6 @@
     "message": "minestuck.dialogue.thunder_death.1",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "=>",
         "next_dialogue_path": "minestuck:thunder_death.2"
       }

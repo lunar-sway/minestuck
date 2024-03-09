@@ -15,10 +15,11 @@ import java.util.Locale;
  */
 public record Conditions(List<Condition> conditionList, Type type)
 {
-	public static Codec<Conditions> CODEC = RecordCodecBuilder.create(instance ->
-			instance.group(Condition.LIST_CODEC.fieldOf("condition_list").forGetter(Conditions::conditionList),
-							PreservingOptionalFieldCodec.withDefault(Type.CODEC, "type", Type.ALL).forGetter(Conditions::type))
-					.apply(instance, Conditions::new));
+	public static Codec<Conditions> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Condition.LIST_CODEC.fieldOf("condition_list").forGetter(Conditions::conditionList),
+			PreservingOptionalFieldCodec.withDefault(Type.CODEC, "type", Type.ALL).forGetter(Conditions::type)
+	).apply(instance, Conditions::new));
+	public static final Conditions EMPTY = new Conditions(List.of(), Type.ALL);
 	
 	public boolean testWithContext(LivingEntity entity, ServerPlayer player)
 	{

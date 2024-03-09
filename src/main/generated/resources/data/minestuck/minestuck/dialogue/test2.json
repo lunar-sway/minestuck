@@ -44,9 +44,6 @@
         ]
       },
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "test2response3",
         "next_dialogue_path": "minestuck:test1",
         "triggers": [

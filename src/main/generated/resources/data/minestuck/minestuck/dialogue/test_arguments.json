@@ -8,9 +8,6 @@
     },
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": {
           "arguments": [
             "PLAYER_NAME_LAND"

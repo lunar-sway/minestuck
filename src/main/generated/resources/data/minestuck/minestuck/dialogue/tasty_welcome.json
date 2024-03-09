@@ -3,15 +3,9 @@
     "message": "minestuck.dialogue.tasty_welcome",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "Goodbye"
       },
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "Let me see your wares",
         "triggers": [
           {

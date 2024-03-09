@@ -3,15 +3,9 @@
     "message": "minestuck.dialogue.food_shop",
     "responses": [
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "Never mind"
       },
       {
-        "conditions": {
-          "condition_list": []
-        },
         "message": "What do you have?",
         "triggers": [
           {

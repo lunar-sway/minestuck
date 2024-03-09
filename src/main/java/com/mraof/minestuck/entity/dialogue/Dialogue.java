@@ -71,7 +71,7 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 	{
 		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				DialogueMessage.CODEC.fieldOf("message").forGetter(Response::message),
-				Conditions.CODEC.fieldOf("conditions").forGetter(Response::conditions),
+				PreservingOptionalFieldCodec.withDefault(Conditions.CODEC, "conditions", Conditions.EMPTY).forGetter(Response::conditions),
 				PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
 				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "next_dialogue_path", DialogueProvider.EMPTY_NEXT_PATH).forGetter(Response::nextDialoguePath),
 				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed)
