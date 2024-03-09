@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
 public record Dialogue(ResourceLocation path, DialogueMessage message, String animation, ResourceLocation guiPath,
-					   List<Response> responses, UseContext useContext)
+					   List<Response> responses, @Nullable UseContext useContext)
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
@@ -43,16 +43,6 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 							Response.LIST_CODEC.fieldOf("responses").forGetter(Dialogue::responses),
 							UseContext.CODEC.fieldOf("use_context").forGetter(Dialogue::useContext))
 					.apply(instance, Dialogue::new));
-	
-	public Dialogue(ResourceLocation path, DialogueMessage message, String animation, ResourceLocation guiPath, List<Response> responses, @Nullable UseContext useContext)
-	{
-		this.path = path;
-		this.message = message;
-		this.animation = animation;
-		this.guiPath = guiPath;
-		this.responses = responses;
-		this.useContext = useContext;
-	}
 	
 	/**
 	 * Opens up the dialogue screen and includes a nbt object containing whether all the conditions are matched

@@ -218,6 +218,7 @@ public class DialogueProvider implements DataProvider
 		private final String animation;
 		private final ResourceLocation guiPath;
 		private final List<Dialogue.Response> responses;
+		@Nullable
 		private final Dialogue.UseContext useContext;
 		
 		DialogueBuilder(String message)
