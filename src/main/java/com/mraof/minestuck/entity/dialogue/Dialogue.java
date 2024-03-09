@@ -209,7 +209,8 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 				
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
-			ResponseData responseData = new ResponseData(response.response().processArguments(entity, serverPlayer), conditionFailure);
+			ResponseData responseData = new ResponseData(response.response().processArguments(entity, serverPlayer),
+					dialogue.responses.indexOf(response), conditionFailure);
 			
 			responsesArgs.put(response.response().message(), responseData.write());
 		});
@@ -240,16 +241,17 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 		}
 	}
 	
-	public record ResponseData(List<String> arguments, Optional<ConditionFailure> conditionFailure)
+	public record ResponseData(List<String> arguments, int index, Optional<ConditionFailure> conditionFailure)
 	{
 		private static ResponseData read(CompoundTag tag)
 		{
 			List<String> arguments = tag.getList("arguments", Tag.TAG_STRING)
 					.stream().map(StringTag.class::cast).map(StringTag::getAsString).toList();
+			int index = tag.getInt("index");
 			Optional<ConditionFailure> conditionFailure = tag.contains("failure", Tag.TAG_COMPOUND)
 					? Optional.of(ConditionFailure.read(tag.getCompound("failure"))) : Optional.empty();
 			
-			return new ResponseData(arguments, conditionFailure);
+			return new ResponseData(arguments, index, conditionFailure);
 		}
 		
 		private CompoundTag write()
@@ -258,6 +260,7 @@ public record Dialogue(ResourceLocation path, DialogueMessage message, String an
 			ListTag argumentsTag = new ListTag();
 			arguments.forEach(argument -> argumentsTag.add(StringTag.valueOf(argument)));
 			tag.put("arguments", argumentsTag);
+			tag.putInt("index", this.index);
 			this.conditionFailure.ifPresent(failure -> tag.put("failure", failure.write()));
 			return tag;
 		}

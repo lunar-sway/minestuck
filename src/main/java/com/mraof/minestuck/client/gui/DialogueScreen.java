@@ -87,9 +87,8 @@ public class DialogueScreen extends Screen
 			
 			Component buttonComponent = Component.translatable(responseMessage, data.arguments());
 			
-			int index = dialogue.responses().indexOf(response);
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
-					button -> clickResponse(index));
+					button -> clickResponse(data.index()));
 			
 			data.conditionFailure().ifPresent(failure -> {
 				entryButton.setTooltip(Tooltip.create(conditionFailMessage(failure.causes())));
