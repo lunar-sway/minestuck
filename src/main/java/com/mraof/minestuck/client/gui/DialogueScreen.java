@@ -64,29 +64,12 @@ public class DialogueScreen extends Screen
 		responseButtons.forEach(this::removeWidget);
 		responseButtons.clear();
 		
-		List<Dialogue.Response> filteredResponses = new ArrayList<>();
-		
-		//removes responses if they fail their conditions and should be hidden when that happens
-		for(Dialogue.Response response : dialogue.responses())
+		for(int i = 0; i < this.dialogueData.responses().size(); i++)
 		{
-			Dialogue.ResponseData data = this.dialogueData.responsesMap().get(response.response().message());
-			if(data == null)
-				continue;
-			
-			filteredResponses.add(response);
-		}
-		
-		for(int i = 0; i < filteredResponses.size(); i++)
-		{
-			Dialogue.Response response = filteredResponses.get(i);
-			String responseMessage = response.response().message();
+			Dialogue.ResponseData data = this.dialogueData.responses().get(i);
 			int yPositionOffset = 20 * i;
 			
-			Dialogue.ResponseData data = this.dialogueData.responsesMap().get(responseMessage);
-			if(data == null)
-				continue;
-			
-			Component buttonComponent = Component.translatable(responseMessage, data.arguments());
+			Component buttonComponent = Component.translatable(data.message(), data.arguments());
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, buttonComponent,
 					button -> clickResponse(data.index()));
