@@ -1,17 +1,13 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
-import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.List;
 
 public record ResponseTriggerPacket(int responseIndex, ResourceLocation dialogueLocation, int entityID) implements MSPacket.PlayToServer
 {
@@ -60,26 +56,6 @@ public record ResponseTriggerPacket(int responseIndex, ResourceLocation dialogue
 			return;
 		
 		Dialogue.Response response = dialogue.node().responses().get(this.responseIndex);
-		if(!response.conditions().testWithContext(livingEntity, player))
-			return;
-		
-		ResourceLocation nextPath = response.nextDialoguePath();
-		
-		Dialogue nextDialogue = null;
-		if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
-			nextDialogue = dialogue;
-		else if(nextPath != null && nextPath != DialogueProvider.EMPTY_NEXT_PATH)
-			nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
-		
-		List<Trigger> triggers = response.triggers();
-		for(Trigger trigger : triggers)
-		{
-			trigger.triggerEffect(livingEntity, player);
-		}
-		
-		if(nextDialogue != null)
-		{
-			Dialogue.openScreen(livingEntity, player, nextDialogue);
-		}
+		response.trigger(livingEntity, player, dialogue);
 	}
 }

@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.data.DialogueProvider;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -95,6 +96,26 @@ public record Dialogue(ResourceLocation path, DialogueNode node, Optional<UseCon
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
 			return Optional.of(new ResponseData(this.message().evaluateComponent(entity, serverPlayer), responseIndex, conditionFailure));
+		}
+		
+		public void trigger(LivingEntity entity, ServerPlayer player, Dialogue dialogue)
+		{
+			if(!this.conditions().testWithContext(entity, player))
+				return;
+			
+			ResourceLocation nextPath = this.nextDialoguePath();
+			
+			Dialogue nextDialogue = null;
+			if(nextPath.equals(DialogueProvider.LOOP_NEXT_PATH))
+				nextDialogue = dialogue;
+			else if(!nextPath.equals(DialogueProvider.EMPTY_NEXT_PATH))
+				nextDialogue = DialogueManager.getInstance().getDialogue(nextPath);
+			
+			for(Trigger trigger : this.triggers())
+				trigger.triggerEffect(entity, player);
+			
+			if(nextDialogue != null)
+				Dialogue.openScreen(entity, player, nextDialogue);
 		}
 	}
 	
