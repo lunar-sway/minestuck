@@ -56,75 +56,59 @@ public class DialogueProvider implements DataProvider
 	private void consortDialogues()
 	{
 		//Wind
-		add("pyre.1", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(all(
-						isInLand(LandTypes.WIND.get()),
-						new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get()))))
-				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("pyre.2")));
+		addRandomlySelectable("pyre.1", all(isInLand(LandTypes.WIND.get()), new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get()))),
+				new NodeBuilder(defaultKeyMsg()).addResponse(new ResponseBuilder(msg("=>")).nextDialogue("pyre.2")));
 		add("pyre.2", new NodeBuilder(defaultKeyMsg()));
 		
 		//Pulse
-		add("koolaid", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
-		add("murder_rain", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
-		add("swimming", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
-		add("blood_surprise", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
+		addRandomlySelectable("koolaid", isInLand(LandTypes.PULSE.get()), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("murder_rain", isInLand(LandTypes.PULSE.get()), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("swimming", isInLand(LandTypes.PULSE.get()), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("blood_surprise", isInLand(LandTypes.PULSE.get()), new NodeBuilder(defaultKeyMsg()));
 		
 		//Thunder
-		add("skeleton_horse", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
-		add("blue_moon", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
-		add("lightning_strike", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
-		add("reckoning.1", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(isInLand(LandTypes.THUNDER.get()))
+		addRandomlySelectable("skeleton_horse", isInLand(LandTypes.THUNDER.get()), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("blue_moon", isInLand(LandTypes.THUNDER.get()), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("lightning_strike", isInLand(LandTypes.THUNDER.get()), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("reckoning.1", isInLand(LandTypes.THUNDER.get()), new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.2")));
 		add("reckoning.2", new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.3")));
 		add("reckoning.3", new NodeBuilder(defaultKeyMsg()));
-		add("thunder_death.1", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(all(
-						isInLand(LandTypes.THUNDER.get()),
-						isInLand(LandTypes.WOOD.get())))
-				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.2")));
+		addRandomlySelectable("thunder_death.1", all(isInLand(LandTypes.THUNDER.get()), isInLand(LandTypes.WOOD.get())),
+				new NodeBuilder(defaultKeyMsg()).addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.2")));
 		add("thunder_death.2", new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.3")));
 		add("thunder_death.3", new NodeBuilder(defaultKeyMsg()));
-		add("hardcore", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(all(
-						isInLand(LandTypes.THUNDER.get()),
-						isInLand(LandTypes.HEAT.get()))));
+		addRandomlySelectable("hardcore", all(isInLand(LandTypes.THUNDER.get()), isInLand(LandTypes.HEAT.get())),
+				new NodeBuilder(defaultKeyMsg()));
 		
 		
-		add("mycelium.1", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(isInLand(LandTypes.FUNGI.get()))
+		addRandomlySelectable("mycelium.1", isInLand(LandTypes.FUNGI.get()), new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("mycelium.2")));
 		add("mycelium.2", new NodeBuilder(defaultKeyMsg()));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
-		add("camel/start", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
+		addRandomlySelectable("camel/start", isInTerrainLand(MSTags.TerrainLandTypes.SAND), new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes")).nextDialogue("camel/no_camel"))
 				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.no")).nextDialogue("camel/dancing_camel")));
 		add("camel/no_camel", new NodeBuilder(defaultKeyMsg()));
 		add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg()));
 		
-		add("food_shop", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
+		addRandomlySelectable("food_shop", new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()), new NodeBuilder(defaultKeyMsg())
 				.addResponse("Never mind")
 				.addResponse(new ResponseBuilder(msg("What do you have?")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		add("fast_food", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get()))
+		addRandomlySelectable("fast_food", new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get()), new NodeBuilder(defaultKeyMsg())
 				.addResponse("I'm good")
 				.addResponse(new ResponseBuilder(msg("Show me your menu")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		add("grocery_store", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
+		addRandomlySelectable("grocery_store", new Condition.IsEntityType(MSEntityTypes.IGUANA.get()), new NodeBuilder(defaultKeyMsg())
 				.addResponse("No thanks")
 				.addResponse(new ResponseBuilder(msg("What do you have to sell?")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		add("tasty_welcome", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
+		addRandomlySelectable("tasty_welcome", new Condition.IsEntityType(MSEntityTypes.TURTLE.get()), new NodeBuilder(defaultKeyMsg())
 				.addResponse("Goodbye")
 				.addResponse(new ResponseBuilder(msg("Let me see your wares")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		
-		add("immortality_herb.1", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(isInLand(LandTypes.FLORA.get()))
+		addRandomlySelectable("immortality_herb.1", isInLand(LandTypes.FLORA.get()), new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.2")));
 		add("immortality_herb.2", new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.3")));
@@ -134,8 +118,7 @@ public class DialogueProvider implements DataProvider
 	
 	private void testDialogues()
 	{
-		add("test1", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable()
+		addRandomlySelectable("test1", Conditions.EMPTY, new NodeBuilder(defaultKeyMsg())
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue("test2")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
@@ -149,8 +132,7 @@ public class DialogueProvider implements DataProvider
 						.conditionType(Conditions.Type.ONE)
 						.dontHideFailed()));
 		
-		add("test2", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable()
+		addRandomlySelectable("test2", Conditions.EMPTY, new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue("test1")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
@@ -175,12 +157,11 @@ public class DialogueProvider implements DataProvider
 						.addCondition(isInLand(LandTypes.RAIN.get()))
 						.conditionType(Conditions.Type.ONE)
 						.dontHideFailed()));
-		add("turtle_only", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())));
+		addRandomlySelectable("turtle_only", new Condition.IsEntityType(MSEntityTypes.TURTLE.get()), new NodeBuilder(defaultKeyMsg()));
 		
-		add("nakagator_only", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())));
+		addRandomlySelectable("nakagator_only", new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get()), new NodeBuilder(defaultKeyMsg()));
 		
-		add("me_want_cookie", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable()
+		addRandomlySelectable("me_want_cookie", Conditions.EMPTY, new NodeBuilder(defaultKeyMsg())
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder(msg("why do you want cookie?")).loop())
 				.addResponse(new ResponseBuilder(msg("here have a cookie chap")).nextDialogue("oh_yippee")
@@ -188,33 +169,45 @@ public class DialogueProvider implements DataProvider
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
 						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))
 						.dontHideFailed()));
-		add("oh_yippee", new DialogueBuilder(defaultKeyMsg()));
-		add("hunger_filled", new DialogueBuilder(defaultKeyMsg()));
+		add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
+		add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
 		
-		add("me_want_5_cookies", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(5)
+		addRandomlySelectable("me_want_5_cookies", weighted(5, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder(msg("here have 5 cookies chap")).nextDialogue("oh_yippee")
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))
 						.dontHideFailed()));
 		
-		add("hi_friend_can_i_help_you", new DialogueBuilder(defaultKeyMsg())
-				.randomlySelectable(11)
+		addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
 				.addResponse(new ResponseBuilder(msg("I love you")).addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
 				.addResponse(new ResponseBuilder(msg("Rep above 500")).addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
 				.addResponse(new ResponseBuilder(msg("Rep below 200")).addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
 				.addResponse("bye"));
 		
-		add("test_arguments", new DialogueBuilder(defaultKeyMsg(DialogueMessage.Argument.PLAYER_NAME_LAND))
-				.randomlySelectable()
+		addRandomlySelectable("test_arguments", Conditions.EMPTY, new NodeBuilder(defaultKeyMsg(DialogueMessage.Argument.PLAYER_NAME_LAND))
 				.addResponse(new ResponseBuilder(msg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
 	}
 	
 	private void add(String path, NodeBuilder builder)
 	{
 		add(path, new DialogueBuilder(builder));
+	}
+	
+	private void addRandomlySelectable(String path, Condition condition, NodeBuilder builder)
+	{
+		addRandomlySelectable(path, all(condition), builder);
+	}
+	
+	private void addRandomlySelectable(String path, Conditions conditions, NodeBuilder builder)
+	{
+		addRandomlySelectable(path, new Dialogue.UseContext(conditions), builder);
+	}
+	
+	private void addRandomlySelectable(String path, Dialogue.UseContext useContext, NodeBuilder builder)
+	{
+		add(path, new DialogueBuilder(builder).randomlySelectable(useContext));
 	}
 	
 	private void add(String path, DialogueBuilder builder)
@@ -229,72 +222,14 @@ public class DialogueProvider implements DataProvider
 		@Nullable
 		private Dialogue.UseContext useContext;
 		
-		DialogueBuilder(Function<String, DialogueMessage> messageProvider)
-		{
-			this(new NodeBuilder(messageProvider));
-		}
-		
-		DialogueBuilder(DialogueMessage message)
-		{
-			this(new NodeBuilder(message));
-		}
-		
 		DialogueBuilder(NodeBuilder nodeBuilder)
 		{
 			this.nodeBuilder = nodeBuilder;
 		}
 		
-		@Deprecated
-		public DialogueBuilder animation(String animation)
+		public DialogueBuilder randomlySelectable(Dialogue.UseContext useContext)
 		{
-			this.nodeBuilder.animation(animation);
-			return this;
-		}
-		
-		@Deprecated
-		public DialogueBuilder addResponse(String response)
-		{
-			this.nodeBuilder.addResponse(response);
-			return this;
-		}
-		
-		@Deprecated
-		public DialogueBuilder addResponse(ResponseBuilder responseBuilder)
-		{
-			this.nodeBuilder.addResponse(responseBuilder);
-			return this;
-		}
-		
-		public DialogueBuilder randomlySelectable()
-		{
-			return this.randomlySelectable(Conditions.EMPTY);
-		}
-		
-		public DialogueBuilder randomlySelectable(int weight)
-		{
-			return this.randomlySelectable(Conditions.EMPTY, weight);
-		}
-		
-		public DialogueBuilder randomlySelectable(Condition useCondition)
-		{
-			return this.randomlySelectable(new Conditions(List.of(useCondition), Conditions.Type.ALL));
-		}
-		
-		@SuppressWarnings("unused")
-		public DialogueBuilder randomlySelectable(Condition useCondition, int weight)
-		{
-			return this.randomlySelectable(new Conditions(List.of(useCondition), Conditions.Type.ALL), weight);
-		}
-		
-		public DialogueBuilder randomlySelectable(Conditions useConditions)
-		{
-			this.useContext = new Dialogue.UseContext(useConditions);
-			return this;
-		}
-		
-		public DialogueBuilder randomlySelectable(Conditions useConditions, int weight)
-		{
-			this.useContext = new Dialogue.UseContext(useConditions, weight);
+			this.useContext = useContext;
 			return this;
 		}
 		
@@ -430,6 +365,16 @@ public class DialogueProvider implements DataProvider
 	public static Conditions all(Condition... conditions)
 	{
 		return new Conditions(List.of(conditions), Conditions.Type.ALL);
+	}
+	
+	public static Dialogue.UseContext weighted(int weight, Condition condition)
+	{
+		return weighted(weight, all(condition));
+	}
+	
+	public static Dialogue.UseContext weighted(int weight, Conditions conditions)
+	{
+		return new Dialogue.UseContext(conditions, weight);
 	}
 	
 	public static Condition isInLand(TerrainLandType landType)
