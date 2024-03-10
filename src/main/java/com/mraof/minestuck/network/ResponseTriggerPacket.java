@@ -52,7 +52,7 @@ public record ResponseTriggerPacket(int responseIndex, Dialogue.NodeReference no
 		if(dialogue == null)
 			return;
 		
-		dialogue.nodes().getNodeIfValid(nodeReference.nodeIndex())
+		dialogue.nodes().getNodeIfValid(nodeReference.nodeIndex(), livingEntity, player)
 				.flatMap(node -> node.getResponseIfValid(this.responseIndex))
 				.ifPresent(response -> response.trigger(livingEntity, player));
 	}

@@ -77,15 +77,13 @@ public record Dialogue(ResourceLocation path, NodeSelector nodes, Optional<UseCo
 			return Pair.of(this.defaultNode, -1);
 		}
 		
-		public Optional<DialogueNode> getNodeIfValid(int index)
+		public Optional<DialogueNode> getNodeIfValid(int index, LivingEntity entity, ServerPlayer player)
 		{
-			if(index < -1 || this.conditionedNodes.size() <= index)
+			var pair = this.pickNode(entity, player);
+			if(pair.getSecond() != index)
 				return Optional.empty();
 			
-			if(index == -1)
-				return Optional.of(this.defaultNode);
-			
-			return Optional.of(this.conditionedNodes.get(index).getSecond());
+			return Optional.of(pair.getFirst());
 		}
 	}
 	
