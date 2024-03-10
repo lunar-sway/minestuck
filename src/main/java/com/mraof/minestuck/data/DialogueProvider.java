@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -188,16 +189,32 @@ public class DialogueProvider implements DataProvider
 		
 		addRandomlySelectable("test_arguments", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg(DialogueMessage.Argument.PLAYER_NAME_LAND))
 				.addResponse(new ResponseBuilder(msg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
+		
+		addRandomlySelectable("look_rich", weighted(100, Conditions.EMPTY), new NodeSelectorBuilder()
+				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(msg("Hey, looks like you have a lot of boons!")))
+				.node(new Condition.PlayerHasBoondollars(10, false), new NodeBuilder(msg("Wow, you barely have any boons. Poor you.")))
+				.defaultNode(new NodeBuilder(msg("Hi! I can sense if someone has a lot of boondollars."))));
+		
 	}
 	
-	private ResourceLocation add(String path, NodeBuilder builder)
+	private ResourceLocation add(String path, NodeBuilder node)
 	{
-		return add(path, new DialogueBuilder(builder));
+		return add(path, new NodeSelectorBuilder().defaultNode(node));
 	}
 	
-	private void addRandomlySelectable(String path, Dialogue.UseContext useContext, NodeBuilder builder)
+	private ResourceLocation add(String path, NodeSelectorBuilder selector)
 	{
-		add(path, new DialogueBuilder(builder).randomlySelectable(useContext));
+		return add(path, new DialogueBuilder(selector));
+	}
+	
+	private void addRandomlySelectable(String path, Dialogue.UseContext useContext, NodeBuilder node)
+	{
+		addRandomlySelectable(path, useContext, new NodeSelectorBuilder().defaultNode(node));
+	}
+	
+	private void addRandomlySelectable(String path, Dialogue.UseContext useContext, NodeSelectorBuilder selector)
+	{
+		add(path, new DialogueBuilder(selector).randomlySelectable(useContext));
 	}
 	
 	private ResourceLocation add(String path, DialogueBuilder builder)
@@ -209,13 +226,13 @@ public class DialogueProvider implements DataProvider
 	
 	public static class DialogueBuilder
 	{
-		private final NodeBuilder nodeBuilder;
+		private final NodeSelectorBuilder selector;
 		@Nullable
 		private Dialogue.UseContext useContext;
 		
-		DialogueBuilder(NodeBuilder nodeBuilder)
+		DialogueBuilder(NodeSelectorBuilder selector)
 		{
-			this.nodeBuilder = nodeBuilder;
+			this.selector = selector;
 		}
 		
 		public DialogueBuilder randomlySelectable(Dialogue.UseContext useContext)
@@ -226,8 +243,39 @@ public class DialogueProvider implements DataProvider
 		
 		private Dialogue build(ResourceLocation id)
 		{
-			Dialogue.DialogueNode node = this.nodeBuilder.build(id);
-			return new Dialogue(id, new Dialogue.NodeSelector(List.of(), node), Optional.ofNullable(this.useContext));
+			return new Dialogue(id, this.selector.build(id), Optional.ofNullable(this.useContext));
+		}
+	}
+	
+	public static class NodeSelectorBuilder
+	{
+		private final List<Pair<Conditions, NodeBuilder>> conditionedNodes = new ArrayList<>();
+		@Nullable
+		private NodeBuilder defaultNode;
+		
+		public NodeSelectorBuilder node(Condition condition, NodeBuilder node)
+		{
+			this.conditionedNodes.add(Pair.of(all(condition), node));
+			return this;
+		}
+		
+		public NodeSelectorBuilder node(Conditions conditions, NodeBuilder node)
+		{
+			this.conditionedNodes.add(Pair.of(conditions, node));
+			return this;
+		}
+		
+		public NodeSelectorBuilder defaultNode(NodeBuilder node)
+		{
+			this.defaultNode = node;
+			return this;
+		}
+		
+		public Dialogue.NodeSelector build(ResourceLocation id)
+		{
+			Objects.requireNonNull(this.defaultNode, "Default node must be set");
+			return new Dialogue.NodeSelector(this.conditionedNodes.stream().map(pair -> pair.mapSecond(builder -> builder.build(id))).toList(),
+					this.defaultNode.build(id));
 		}
 	}
 	
