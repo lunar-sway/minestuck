@@ -2486,9 +2486,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");
+		add(DialogueProvider.ARROW.key(), "=>");
+		add(DialogueProvider.DOTS.key(), "...");
 		addDialogue("thanks", "Thanks!");
 		addDialogue("thank_you", "Thank you!");
-		addDialogue("dots", "...");
 		addDialogue("sadface", ":(");
 		//Wind
 		addDialogue("dad_wind", "My dad was blown away in one of the recent wind storms.");

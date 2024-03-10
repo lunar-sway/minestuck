@@ -266,6 +266,9 @@ public abstract class DialogueProvider implements DataProvider
 		return id -> msg(languageKeyBase(id) + "." + key, text, arguments);
 	}
 	
+	public static final DialogueMessage ARROW = new DialogueMessage("minestuck.arrow");
+	public static final DialogueMessage DOTS = new DialogueMessage("minestuck.dots");
+	
 	@Deprecated
 	public static DialogueMessage msg(String key, DialogueMessage.Argument... arguments)
 	{

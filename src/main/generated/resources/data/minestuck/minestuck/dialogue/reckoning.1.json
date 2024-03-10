@@ -3,7 +3,7 @@
     "message": "minestuck.dialogue.reckoning.1",
     "responses": [
       {
-        "message": "=>",
+        "message": "minestuck.arrow",
         "next_dialogue_path": "minestuck:reckoning.2"
       }
     ]

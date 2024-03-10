@@ -3,7 +3,7 @@
     "message": "minestuck.dialogue.pyre.1",
     "responses": [
       {
-        "message": "=>",
+        "message": "minestuck.arrow",
         "next_dialogue_path": "minestuck:pyre.2"
       }
     ]

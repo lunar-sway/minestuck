@@ -39,7 +39,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		//Wind
 		addRandomlySelectable("pyre.1", defaultWeight(all(isInLand(LandTypes.WIND.get()), new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get())))),
 				new NodeBuilder(defaultKeyMsg("If only I was faster than the wind! That would be fun!"))
-						.addResponse(new ResponseBuilder(msg("=>")).nextDialogue(
+						.addResponse(new ResponseBuilder(ARROW).nextDialogue(
 								add("pyre.2", new NodeBuilder(defaultKeyMsg("Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society."))))
 						));
 		
@@ -62,15 +62,15 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("You don't want to be struck by lightning. No one does.")));
 		addRandomlySelectable("reckoning.1", defaultWeight(isInLand(LandTypes.THUNDER.get())),
 				new NodeBuilder(defaultKeyMsg("Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!"))
-						.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.2")));
+						.addResponse(new ResponseBuilder(ARROW).nextDialogue("reckoning.2")));
 		add("reckoning.2", new NodeBuilder(defaultKeyMsg("What's The Reckoning? It's when meteors from The Veil are sent towards Skaia."))
-				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.3")));
+				.addResponse(new ResponseBuilder(ARROW).nextDialogue("reckoning.3")));
 		add("reckoning.3", new NodeBuilder(defaultKeyMsg("Like any reasonable %s believes in that!")));
 		addRandomlySelectable("thunder_death.1", defaultWeight(all(isInLand(LandTypes.THUNDER.get()), isInLand(LandTypes.WOOD.get()))),
 				new NodeBuilder(defaultKeyMsg("We're lucky to have rain with this weather."))
-						.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.2")));
+						.addResponse(new ResponseBuilder(ARROW).nextDialogue("thunder_death.2")));
 		add("thunder_death.2", new NodeBuilder(defaultKeyMsg("Otherwise the thunder would surely have been our death."))
-				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.3")));
+				.addResponse(new ResponseBuilder(ARROW).nextDialogue("thunder_death.3")));
 		add("thunder_death.3", new NodeBuilder(defaultKeyMsg()));
 		addRandomlySelectable("hardcore", defaultWeight(all(isInLand(LandTypes.THUNDER.get()), isInLand(LandTypes.HEAT.get()))),
 				new NodeBuilder(defaultKeyMsg("This land is HARDCORE! There's lava and lightning wherever you go!")));
@@ -78,7 +78,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("mycelium.1", defaultWeight(isInLand(LandTypes.FUNGI.get())),
 				new NodeBuilder(defaultKeyMsg("Frog, don't you love the feeling of mycelium on your toes?"))
-						.addResponse(new ResponseBuilder(msg("=>"))
+						.addResponse(new ResponseBuilder(ARROW)
 								.nextDialogue(add("mycelium.2", new NodeBuilder(defaultKeyMsg("No? Is that just me?"))))));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
@@ -111,11 +111,11 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("immortality_herb.1", defaultWeight(isInLand(LandTypes.FLORA.get())),
 				new NodeBuilder(defaultKeyMsg("I have a herb that grants immortality! I'm going to eat it right now!"))
-						.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.2")));
+						.addResponse(new ResponseBuilder(ARROW).nextDialogue("immortality_herb.2")));
 		add("immortality_herb.2", new NodeBuilder(defaultKeyMsg("However, they are easily confused with an explosion-causing herb..."))
-				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.3")));
+				.addResponse(new ResponseBuilder(ARROW).nextDialogue("immortality_herb.3")));
 		add("immortality_herb.3", new NodeBuilder(defaultKeyMsg("I'm taking the risk."))
-				.addResponse(new ResponseBuilder(responseMsg("end", "...")).addTrigger(new Trigger.Explode())));
+				.addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode())));
 	}
 	
 	private void testDialogues()
