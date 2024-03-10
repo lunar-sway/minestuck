@@ -1,0 +1,35 @@
+{
+  "nodes": {
+    "conditioned_nodes": [
+      {
+        "condition_list": [
+          {
+            "type": "player_has_boondollars",
+            "amount": 10000
+          }
+        ],
+        "message": "Hey, looks like you have a lot of boons!"
+      },
+      {
+        "condition_list": [
+          {
+            "type": "player_has_boondollars",
+            "amount": 10,
+            "greater_than": false
+          }
+        ],
+        "message": "Wow, you barely have any boons. Poor you."
+      }
+    ],
+    "default_node": {
+      "message": "Hi! I can sense if someone has a lot of boondollars."
+    }
+  },
+  "path": "minestuck:look_rich",
+  "use_context": {
+    "conditions": {
+      "condition_list": []
+    },
+    "dialogue_weight": 100
+  }
+}
