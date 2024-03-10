@@ -155,9 +155,14 @@ public abstract class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public NodeBuilder addResponse(String response)
+		public NodeBuilder addClosingResponse(DialogueMessage message)
 		{
-			return addResponse(new ResponseBuilder(msg(response)));
+			return addResponse(new ResponseBuilder(message));
+		}
+		
+		public NodeBuilder addClosingResponse(Function<ResourceLocation, DialogueMessage> message)
+		{
+			return addResponse(new ResponseBuilder(message));
 		}
 		
 		public NodeBuilder addResponse(ResponseBuilder responseBuilder)
@@ -175,7 +180,7 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public static class ResponseBuilder
 	{
-		private final DialogueMessage message;
+		private final Function<ResourceLocation, DialogueMessage> message;
 		private final List<Condition> conditions = new ArrayList<>();
 		private Conditions.Type conditionsType = Conditions.Type.ALL;
 		private final List<Trigger> triggers = new ArrayList<>();
@@ -185,6 +190,11 @@ public abstract class DialogueProvider implements DataProvider
 		private boolean hideIfFailed = true;
 		
 		ResponseBuilder(DialogueMessage message)
+		{
+			this.message = id -> message;
+		}
+		
+		ResponseBuilder(Function<ResourceLocation, DialogueMessage> message)
 		{
 			this.message = message;
 		}
@@ -232,10 +242,11 @@ public abstract class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public Dialogue.Response build(ResourceLocation selfPath)
+		public Dialogue.Response build(ResourceLocation id)
 		{
-			ResourceLocation nextPath = this.loopNextPath ? selfPath : this.nextDialoguePath;
-			return new Dialogue.Response(this.message, new Conditions(this.conditions, this.conditionsType), this.triggers, Optional.ofNullable(nextPath), this.hideIfFailed);
+			ResourceLocation nextPath = this.loopNextPath ? id : this.nextDialoguePath;
+			DialogueMessage message = this.message.apply(id);
+			return new Dialogue.Response(message, new Conditions(this.conditions, this.conditionsType), this.triggers, Optional.ofNullable(nextPath), this.hideIfFailed);
 		}
 	}
 	
@@ -248,6 +259,11 @@ public abstract class DialogueProvider implements DataProvider
 	public Function<ResourceLocation, DialogueMessage> defaultKeyMsg(String text, DialogueMessage.Argument... arguments)
 	{
 		return id -> msg(languageKeyBase(id), text, arguments);
+	}
+	
+	public Function<ResourceLocation, DialogueMessage> responseMsg(String key, String text, DialogueMessage.Argument... arguments)
+	{
+		return id -> msg(languageKeyBase(id) + "." + key, text, arguments);
 	}
 	
 	@Deprecated

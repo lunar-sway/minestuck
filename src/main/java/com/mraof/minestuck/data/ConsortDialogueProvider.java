@@ -90,23 +90,23 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("food_shop", defaultWeight(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get())),
 				new NodeBuilder(defaultKeyMsg("You hungry? I bet you are! Why else would you be talking to me?"))
-						.addResponse("Never mind")
-						.addResponse(new ResponseBuilder(msg("What do you have?"))
+						.addClosingResponse(responseMsg("bye", "Never mind"))
+						.addResponse(new ResponseBuilder(responseMsg("next", "What do you have?"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		addRandomlySelectable("fast_food", defaultWeight(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())),
 				new NodeBuilder(defaultKeyMsg("Welcome to MacCricket's, what would you like?"))
-						.addResponse("I'm good")
-						.addResponse(new ResponseBuilder(msg("Show me your menu"))
+						.addClosingResponse(responseMsg("bye", "I'm good"))
+						.addResponse(new ResponseBuilder(responseMsg("next", "Show me your menu"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		addRandomlySelectable("grocery_store", defaultWeight(new Condition.IsEntityType(MSEntityTypes.IGUANA.get())),
 				new NodeBuilder(defaultKeyMsg("Thank you for choosing Stop and Hop, this village's #1 one grocer!"))
-						.addResponse("No thanks")
-						.addResponse(new ResponseBuilder(msg("What do you have to sell?"))
+						.addClosingResponse(responseMsg("bye", "No thanks"))
+						.addResponse(new ResponseBuilder(responseMsg("next", "What do you have to sell?"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		addRandomlySelectable("tasty_welcome", defaultWeight(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())),
 				new NodeBuilder(defaultKeyMsg("Welcome. I hope you find something tasty among our wares."))
-						.addResponse("Goodbye")
-						.addResponse(new ResponseBuilder(msg("Let me see your wares"))
+						.addClosingResponse(responseMsg("bye", "Goodbye"))
+						.addResponse(new ResponseBuilder(responseMsg("next", "Let me see your wares"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		
 		addRandomlySelectable("immortality_herb.1", defaultWeight(isInLand(LandTypes.FLORA.get())),
@@ -115,12 +115,12 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		add("immortality_herb.2", new NodeBuilder(defaultKeyMsg("However, they are easily confused with an explosion-causing herb..."))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.3")));
 		add("immortality_herb.3", new NodeBuilder(defaultKeyMsg("I'm taking the risk."))
-				.addResponse(new ResponseBuilder(msg("...")).addTrigger(new Trigger.Explode())));
+				.addResponse(new ResponseBuilder(responseMsg("end", "...")).addTrigger(new Trigger.Explode())));
 	}
 	
 	private void testDialogues()
 	{
-		addRandomlySelectable("test1", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
+		addRandomlySelectable("test1", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg("Press §eSHIFT§r for more info"))
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue("test2")
 						.addCondition(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
@@ -164,9 +164,9 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("nakagator_only", defaultWeight(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())), new NodeBuilder(defaultKeyMsg()));
 		
 		addRandomlySelectable("me_want_cookie", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
-				.addResponse("im sorry fellow, I have no cookie for you. Bye")
-				.addResponse(new ResponseBuilder(msg("why do you want cookie?")).loop())
-				.addResponse(new ResponseBuilder(msg("here have a cookie chap")).nextDialogue("oh_yippee")
+				.addClosingResponse(responseMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
+				.addResponse(new ResponseBuilder(responseMsg("why", "why do you want cookie?")).loop())
+				.addResponse(new ResponseBuilder(responseMsg("give", "here have a cookie chap")).nextDialogue("oh_yippee")
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 1))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
 						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))
@@ -175,21 +175,21 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
 		
 		addRandomlySelectable("me_want_5_cookies", weighted(5, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
-				.addResponse("im sorry fellow, I have no cookie for you. Bye")
-				.addResponse(new ResponseBuilder(msg("here have 5 cookies chap")).nextDialogue("oh_yippee")
+				.addClosingResponse(responseMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
+				.addResponse(new ResponseBuilder(responseMsg("give", "here have 5 cookies chap")).nextDialogue("oh_yippee")
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))
 						.dontHideFailed()));
 		
 		addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(msg("I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
-				.addResponse(new ResponseBuilder(msg("I love you")).addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
-				.addResponse(new ResponseBuilder(msg("Rep above 500")).addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
-				.addResponse(new ResponseBuilder(msg("Rep below 200")).addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
-				.addResponse("bye"));
+				.addResponse(new ResponseBuilder(responseMsg("hate", "I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
+				.addResponse(new ResponseBuilder(responseMsg("love", "I love you")).addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
+				.addResponse(new ResponseBuilder(responseMsg("high_rep", "Rep above 500")).addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
+				.addResponse(new ResponseBuilder(responseMsg("low_rep", "Rep below 200")).addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
+				.addClosingResponse(responseMsg("bye", "bye")));
 		
-		addRandomlySelectable("test_arguments", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg(DialogueMessage.Argument.PLAYER_NAME_LAND))
-				.addResponse(new ResponseBuilder(msg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
+		addRandomlySelectable("test_arguments", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))
+				.addResponse(new ResponseBuilder(responseMsg("name", "Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
 		
 		addRandomlySelectable("look_rich", weighted(100, Conditions.EMPTY), new NodeSelectorBuilder()
 				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(msg("Hey, looks like you have a lot of boons!")))

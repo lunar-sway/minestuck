@@ -12,7 +12,7 @@
           "arguments": [
             "PLAYER_NAME_LAND"
           ],
-          "key": "Player name land: %s"
+          "key": "minestuck.dialogue.test_arguments.name"
         }
       }
     ]

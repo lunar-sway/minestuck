@@ -3,10 +3,10 @@
     "message": "minestuck.dialogue.tasty_welcome",
     "responses": [
       {
-        "message": "Goodbye"
+        "message": "minestuck.dialogue.tasty_welcome.bye"
       },
       {
-        "message": "Let me see your wares",
+        "message": "minestuck.dialogue.tasty_welcome.next",
         "triggers": [
           {
             "type": "open_consort_merchant_gui",

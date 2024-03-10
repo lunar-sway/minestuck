@@ -4,7 +4,7 @@
     "responses": [
       {
         "hide_if_failed": false,
-        "message": "I hate you",
+        "message": "minestuck.dialogue.hi_friend_can_i_help_you.hate",
         "triggers": [
           {
             "type": "add_consort_reputation",
@@ -14,7 +14,7 @@
       },
       {
         "hide_if_failed": false,
-        "message": "I love you",
+        "message": "minestuck.dialogue.hi_friend_can_i_help_you.love",
         "triggers": [
           {
             "type": "add_consort_reputation",
@@ -32,7 +32,7 @@
           ]
         },
         "hide_if_failed": false,
-        "message": "Rep above 500"
+        "message": "minestuck.dialogue.hi_friend_can_i_help_you.high_rep"
       },
       {
         "conditions": {
@@ -45,10 +45,10 @@
           ]
         },
         "hide_if_failed": false,
-        "message": "Rep below 200"
+        "message": "minestuck.dialogue.hi_friend_can_i_help_you.low_rep"
       },
       {
-        "message": "bye"
+        "message": "minestuck.dialogue.hi_friend_can_i_help_you.bye"
       }
     ]
   },

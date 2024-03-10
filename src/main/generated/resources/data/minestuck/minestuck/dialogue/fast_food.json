@@ -3,10 +3,10 @@
     "message": "minestuck.dialogue.fast_food",
     "responses": [
       {
-        "message": "I'm good"
+        "message": "minestuck.dialogue.fast_food.bye"
       },
       {
-        "message": "Show me your menu",
+        "message": "minestuck.dialogue.fast_food.next",
         "triggers": [
           {
             "type": "open_consort_merchant_gui",
