@@ -308,17 +308,17 @@ public class DialogueProvider implements DataProvider
 	
 	public static class NodeBuilder
 	{
-		private final Function<String, DialogueMessage> messageProvider;
+		private final Function<ResourceLocation, DialogueMessage> messageProvider;
 		private String animation = DEFAULT_ANIMATION;
 		private ResourceLocation guiPath = DEFAULT_GUI;
 		private final List<ResponseBuilder> responses = new ArrayList<>();
 		
 		NodeBuilder(DialogueMessage message)
 		{
-			this.messageProvider = defaultKey -> message;
+			this.messageProvider = id -> message;
 		}
 		
-		NodeBuilder(Function<String, DialogueMessage> messageProvider)
+		NodeBuilder(Function<ResourceLocation, DialogueMessage> messageProvider)
 		{
 			this.messageProvider = messageProvider;
 		}
@@ -348,7 +348,7 @@ public class DialogueProvider implements DataProvider
 		
 		public Dialogue.DialogueNode build(ResourceLocation id)
 		{
-			DialogueMessage message = this.messageProvider.apply("minestuck.dialogue." + id.getPath().replace("/", "."));
+			DialogueMessage message = this.messageProvider.apply(id);
 			return new Dialogue.DialogueNode(message, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id)).toList());
 		}
 	}
@@ -420,14 +420,14 @@ public class DialogueProvider implements DataProvider
 	}
 	
 	@Deprecated
-	public static Function<String, DialogueMessage> defaultKeyMsg(DialogueMessage.Argument... arguments)
+	public static Function<ResourceLocation, DialogueMessage> defaultKeyMsg(DialogueMessage.Argument... arguments)
 	{
-		return key -> msg(key, arguments);
+		return id -> msg(languageKeyBase(id), arguments);
 	}
 	
-	public Function<String, DialogueMessage> defaultKeyMsg(String text, DialogueMessage.Argument... arguments)
+	public Function<ResourceLocation, DialogueMessage> defaultKeyMsg(String text, DialogueMessage.Argument... arguments)
 	{
-		return key -> msg(key, text, arguments);
+		return id -> msg(languageKeyBase(id), text, arguments);
 	}
 	
 	@Deprecated
@@ -440,6 +440,11 @@ public class DialogueProvider implements DataProvider
 	{
 		this.enUsLanguageProvider.add(key, text);
 		return new DialogueMessage(key, List.of(arguments));
+	}
+	
+	private static String languageKeyBase(ResourceLocation id)
+	{
+		return id.getNamespace() + ".dialogue." + id.getPath().replace("/", ".");
 	}
 	
 	public static Conditions all(Condition... conditions)
