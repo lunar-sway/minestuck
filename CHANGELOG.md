@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.20.1-1.11.2.1] - 2024-03-10
+
 ### Fixed
 
 - Metal Boats no longer crash the game when dispensed
