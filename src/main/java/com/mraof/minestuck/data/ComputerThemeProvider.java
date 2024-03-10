@@ -47,6 +47,17 @@ public class ComputerThemeProvider implements DataProvider
 		add(MSComputerThemes.ECHIDNA, 0x005DFF);
 		add(MSComputerThemes.JOY, 0x282828);
 		add(MSComputerThemes.SBURB_95, 0x282828);
+		add(MSComputerThemes.SBURB_10, 0xFFFFFF);
+		add(MSComputerThemes.SCOURGING_HEAT, 0xFFFFFF);
+		add(MSComputerThemes.LIFDOFF, 0xFFFF00);
+		add(MSComputerThemes.SKAIANET_GREEN, 0xFFFFFF);
+		add(MSComputerThemes.SKAIANET_WHITE, 0x006600);
+		add(MSComputerThemes.SKAIANET_BLACK, 0xFFFFFF);
+		add(MSComputerThemes.ASTRAL_CHARTS, 0xFFFFFF);
+		add(MSComputerThemes.TILLDEATH, 0xFFFFFF);
+		add(MSComputerThemes.LOWAS, 0xBFEFEA);
+		add(MSComputerThemes.SPIROGRAPH, 0x006600);
+		add(MSComputerThemes.MINESTUCK, 0xFFFFFF);
 	}
 	
 	protected void add(ResourceLocation id, int textColor)

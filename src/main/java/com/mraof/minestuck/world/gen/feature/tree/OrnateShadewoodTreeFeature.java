@@ -5,8 +5,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.TemplatePlacement;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -43,13 +41,10 @@ public class OrnateShadewoodTreeFeature extends Feature<NoneFeatureConfiguration
 	@Override
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
-		WorldGenLevel level = context.level();
 		RandomSource rand = context.random();
-		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(pickTemplate(rand));
+		StructureTemplate template = context.level().getLevel().getStructureManager().getOrCreate(pickTemplate(rand));
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
-		
-		int y = placement.minHeight(Heightmap.Types.OCEAN_FLOOR, level);
-		placement.placeWithStructureBlockRegistry(y, context);
+		placement.placeWithStructureBlockRegistry(context);
 		
 		return true;
 	}

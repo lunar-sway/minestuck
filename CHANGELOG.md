@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
 - New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
+- New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
+- New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
 - Added Carved Bush
 - Added Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
 - Added Silicone Caulk fluid, used in Wood lands
@@ -38,6 +40,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer Themes can now be added and rendered via resource pack
 - Default computer Theme for crockertop is now Crocker
 - Computer Theme is now chosen from a list of available Themes in separate GUI
+- Changes to computer Theme texture Crocker
+- Computer programs now always use Theme specific texture for arrow buttons
 - Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
 - Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
@@ -55,7 +59,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi
 
 ## [Unreleased]
 
@@ -64,9 +68,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Metal Boats no longer crash the game when dispensed
 - Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
 - Fixed underling texture layer that on hurt wasn't tinted red with the rest of the underling
+- Fixed fall damage for minestuck fluids
 - Fluids no longer break gates and return nodes
 - Advanced color selection screen no longer tints buttons
 - Round the displayed max health value on the echeladder screen
+- Prevent one method of captchaloguing stacks with stack size larger than max stack size
 
 ### Contributors for this release
 

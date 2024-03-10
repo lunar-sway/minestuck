@@ -50,7 +50,7 @@ public class SurfaceFossilsFeature extends Feature<NoneFeatureConfiguration>
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), random);
 		
 		int y = this.yForPlacement(level, placement);
-		placement.placeWithStructureBlockRegistry(y, context);
+		placement.placeWithStructureBlockRegistryAt(y, context);
 		
 		return true;
 	}

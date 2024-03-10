@@ -1,5 +1,5 @@
 {
-  "parent": "minestuck:minestuck/alchemy",
+  "parent": "minestuck:minestuck/commune",
   "criteria": {
     "has_french_fry": {
       "conditions": {
