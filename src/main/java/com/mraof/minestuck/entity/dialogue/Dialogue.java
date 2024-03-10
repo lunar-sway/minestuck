@@ -5,7 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.data.DialogueProvider;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.DialogueManager;
@@ -31,6 +31,9 @@ import java.util.stream.IntStream;
 //TODO animation is unused?
 public record Dialogue(ResourceLocation path, NodeSelector nodes, Optional<UseContext> useContext)
 {
+	public static final String DEFAULT_ANIMATION = "generic_animation";
+	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
+	
 	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.fieldOf("path").forGetter(Dialogue::path),
 			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes),
@@ -107,8 +110,8 @@ public record Dialogue(ResourceLocation path, NodeSelector nodes, Optional<UseCo
 	{
 		public static Codec<DialogueNode> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				DialogueMessage.CODEC.fieldOf("message").forGetter(DialogueNode::message),
-				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DialogueProvider.DEFAULT_ANIMATION).forGetter(DialogueNode::animation),
-				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DialogueProvider.DEFAULT_GUI).forGetter(DialogueNode::guiPath),
+				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DEFAULT_ANIMATION).forGetter(DialogueNode::animation),
+				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DEFAULT_GUI).forGetter(DialogueNode::guiPath),
 				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(DialogueNode::responses)
 		).apply(instance, DialogueNode::new));
 		
