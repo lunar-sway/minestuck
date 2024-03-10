@@ -22,6 +22,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.data.LanguageProvider;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -39,10 +40,15 @@ public class DialogueProvider implements DataProvider
 	
 	private final Map<ResourceLocation, Dialogue> dialogues = new HashMap<>();
 	private final PackOutput output;
+	private final LanguageProvider enUsLanguageProvider;
 	
-	public DialogueProvider(PackOutput output)
+	public DialogueProvider(PackOutput output, LanguageProvider enUsLanguageProvider)
 	{
 		this.output = output;
+		this.enUsLanguageProvider = enUsLanguageProvider;
+		
+		//Call this early so that language stuff gets added before the language provider generates its file regardless of the order that providers are run
+		registerDialogues();
 	}
 	
 	/**
@@ -58,62 +64,83 @@ public class DialogueProvider implements DataProvider
 	{
 		//Wind
 		addRandomlySelectable("pyre.1", defaultWeight(all(isInLand(LandTypes.WIND.get()), new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get())))),
-				new NodeBuilder(defaultKeyMsg()).addResponse(new ResponseBuilder(msg("=>"))
-						.nextDialogue(add("pyre.2", new NodeBuilder(defaultKeyMsg())))));
+				new NodeBuilder(defaultKeyMsg("If only I was faster than the wind! That would be fun!"))
+						.addResponse(new ResponseBuilder(msg("=>")).nextDialogue(
+								add("pyre.2", new NodeBuilder(defaultKeyMsg("Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society."))))
+						));
 		
 		//Pulse
-		addRandomlySelectable("koolaid", defaultWeight(isInLand(LandTypes.PULSE.get())), new NodeBuilder(defaultKeyMsg()));
-		addRandomlySelectable("murder_rain", defaultWeight(isInLand(LandTypes.PULSE.get())), new NodeBuilder(defaultKeyMsg()));
-		addRandomlySelectable("swimming", defaultWeight(isInLand(LandTypes.PULSE.get())), new NodeBuilder(defaultKeyMsg()));
-		addRandomlySelectable("blood_surprise", defaultWeight(isInLand(LandTypes.PULSE.get())), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("koolaid", defaultWeight(isInLand(LandTypes.PULSE.get())),
+				new NodeBuilder(defaultKeyMsg("Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.")));
+		addRandomlySelectable("murder_rain", defaultWeight(isInLand(LandTypes.PULSE.get())),
+				new NodeBuilder(defaultKeyMsg("You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!")));
+		addRandomlySelectable("swimming", defaultWeight(isInLand(LandTypes.PULSE.get())),
+				new NodeBuilder(defaultKeyMsg("If you're looking for a good land to swim in, it's definitely not this one.")));
+		addRandomlySelectable("blood_surprise", defaultWeight(isInLand(LandTypes.PULSE.get())),
+				new NodeBuilder(defaultKeyMsg("OH GOD IS THAT BLOOD oh wait nevermind.")));
 		
 		//Thunder
-		addRandomlySelectable("skeleton_horse", defaultWeight(isInLand(LandTypes.THUNDER.get())), new NodeBuilder(defaultKeyMsg()));
-		addRandomlySelectable("blue_moon", defaultWeight(isInLand(LandTypes.THUNDER.get())), new NodeBuilder(defaultKeyMsg()));
-		addRandomlySelectable("lightning_strike", defaultWeight(isInLand(LandTypes.THUNDER.get())), new NodeBuilder(defaultKeyMsg()));
-		addRandomlySelectable("reckoning.1", defaultWeight(isInLand(LandTypes.THUNDER.get())), new NodeBuilder(defaultKeyMsg())
+		addRandomlySelectable("skeleton_horse", defaultWeight(isInLand(LandTypes.THUNDER.get())),
+				new NodeBuilder(defaultKeyMsg("Some people say at night, skeletons riding skeleton horses come through the town.")));
+		addRandomlySelectable("blue_moon", defaultWeight(isInLand(LandTypes.THUNDER.get())),
+				new NodeBuilder(defaultKeyMsg("Every once in a blue moon, lightning strikes and burns down the village. We have to rebuild it!")));
+		addRandomlySelectable("lightning_strike", defaultWeight(isInLand(LandTypes.THUNDER.get())),
+				new NodeBuilder(defaultKeyMsg("You don't want to be struck by lightning. No one does.")));
+		addRandomlySelectable("reckoning.1", defaultWeight(isInLand(LandTypes.THUNDER.get())),
+				new NodeBuilder(defaultKeyMsg("Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!"))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.2")));
-		add("reckoning.2", new NodeBuilder(defaultKeyMsg())
+		add("reckoning.2", new NodeBuilder(defaultKeyMsg("What's The Reckoning? It's when meteors from The Veil are sent towards Skaia."))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.3")));
-		add("reckoning.3", new NodeBuilder(defaultKeyMsg()));
+		add("reckoning.3", new NodeBuilder(defaultKeyMsg("Like any reasonable %s believes in that!")));
 		addRandomlySelectable("thunder_death.1", defaultWeight(all(isInLand(LandTypes.THUNDER.get()), isInLand(LandTypes.WOOD.get()))),
-				new NodeBuilder(defaultKeyMsg()).addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.2")));
-		add("thunder_death.2", new NodeBuilder(defaultKeyMsg())
+				new NodeBuilder(defaultKeyMsg("We're lucky to have rain with this weather."))
+						.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.2")));
+		add("thunder_death.2", new NodeBuilder(defaultKeyMsg("Otherwise the thunder would surely have been our death."))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.3")));
 		add("thunder_death.3", new NodeBuilder(defaultKeyMsg()));
 		addRandomlySelectable("hardcore", defaultWeight(all(isInLand(LandTypes.THUNDER.get()), isInLand(LandTypes.HEAT.get()))),
-				new NodeBuilder(defaultKeyMsg()));
+				new NodeBuilder(defaultKeyMsg("This land is HARDCORE! There's lava and lightning wherever you go!")));
 		
 		
-		addRandomlySelectable("mycelium.1", defaultWeight(isInLand(LandTypes.FUNGI.get())), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(msg("=>"))
-						.nextDialogue(add("mycelium.2", new NodeBuilder(defaultKeyMsg())))));
+		addRandomlySelectable("mycelium.1", defaultWeight(isInLand(LandTypes.FUNGI.get())),
+				new NodeBuilder(defaultKeyMsg("Frog, don't you love the feeling of mycelium on your toes?"))
+						.addResponse(new ResponseBuilder(msg("=>"))
+								.nextDialogue(add("mycelium.2", new NodeBuilder(defaultKeyMsg("No? Is that just me?"))))));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
 		addRandomlySelectable("camel/start", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes"))
-						.nextDialogue(add("camel/no_camel", new NodeBuilder(defaultKeyMsg()))))
-				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.no"))
-						.nextDialogue(add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg())))));
+				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes", "Why not? Seems like a good price for a camel!"))
+						.nextDialogue(add("camel/no_camel", new NodeBuilder(defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))
+				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.no", "Of course not! You know better!"))
+						.nextDialogue(add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))));
 		
-		addRandomlySelectable("food_shop", defaultWeight(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get())), new NodeBuilder(defaultKeyMsg())
-				.addResponse("Never mind")
-				.addResponse(new ResponseBuilder(msg("What do you have?")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		addRandomlySelectable("fast_food", defaultWeight(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())), new NodeBuilder(defaultKeyMsg())
-				.addResponse("I'm good")
-				.addResponse(new ResponseBuilder(msg("Show me your menu")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		addRandomlySelectable("grocery_store", defaultWeight(new Condition.IsEntityType(MSEntityTypes.IGUANA.get())), new NodeBuilder(defaultKeyMsg())
-				.addResponse("No thanks")
-				.addResponse(new ResponseBuilder(msg("What do you have to sell?")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		addRandomlySelectable("tasty_welcome", defaultWeight(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())), new NodeBuilder(defaultKeyMsg())
-				.addResponse("Goodbye")
-				.addResponse(new ResponseBuilder(msg("Let me see your wares")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
+		addRandomlySelectable("food_shop", defaultWeight(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get())),
+				new NodeBuilder(defaultKeyMsg("You hungry? I bet you are! Why else would you be talking to me?"))
+						.addResponse("Never mind")
+						.addResponse(new ResponseBuilder(msg("What do you have?"))
+								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
+		addRandomlySelectable("fast_food", defaultWeight(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())),
+				new NodeBuilder(defaultKeyMsg("Welcome to MacCricket's, what would you like?"))
+						.addResponse("I'm good")
+						.addResponse(new ResponseBuilder(msg("Show me your menu"))
+								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
+		addRandomlySelectable("grocery_store", defaultWeight(new Condition.IsEntityType(MSEntityTypes.IGUANA.get())),
+				new NodeBuilder(defaultKeyMsg("Thank you for choosing Stop and Hop, this village's #1 one grocer!"))
+						.addResponse("No thanks")
+						.addResponse(new ResponseBuilder(msg("What do you have to sell?"))
+								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
+		addRandomlySelectable("tasty_welcome", defaultWeight(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())),
+				new NodeBuilder(defaultKeyMsg("Welcome. I hope you find something tasty among our wares."))
+						.addResponse("Goodbye")
+						.addResponse(new ResponseBuilder(msg("Let me see your wares"))
+								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		
-		addRandomlySelectable("immortality_herb.1", defaultWeight(isInLand(LandTypes.FLORA.get())), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.2")));
-		add("immortality_herb.2", new NodeBuilder(defaultKeyMsg())
+		addRandomlySelectable("immortality_herb.1", defaultWeight(isInLand(LandTypes.FLORA.get())),
+				new NodeBuilder(defaultKeyMsg("I have a herb that grants immortality! I'm going to eat it right now!"))
+						.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.2")));
+		add("immortality_herb.2", new NodeBuilder(defaultKeyMsg("However, they are easily confused with an explosion-causing herb..."))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.3")));
-		add("immortality_herb.3", new NodeBuilder(defaultKeyMsg())
+		add("immortality_herb.3", new NodeBuilder(defaultKeyMsg("I'm taking the risk."))
 				.addResponse(new ResponseBuilder(msg("...")).addTrigger(new Trigger.Explode())));
 	}
 	
@@ -392,13 +419,26 @@ public class DialogueProvider implements DataProvider
 		}
 	}
 	
+	@Deprecated
 	public static Function<String, DialogueMessage> defaultKeyMsg(DialogueMessage.Argument... arguments)
 	{
 		return key -> msg(key, arguments);
 	}
 	
+	public Function<String, DialogueMessage> defaultKeyMsg(String text, DialogueMessage.Argument... arguments)
+	{
+		return key -> msg(key, text, arguments);
+	}
+	
+	@Deprecated
 	public static DialogueMessage msg(String key, DialogueMessage.Argument... arguments)
 	{
+		return new DialogueMessage(key, List.of(arguments));
+	}
+	
+	public DialogueMessage msg(String key, String text, DialogueMessage.Argument... arguments)
+	{
+		this.enUsLanguageProvider.add(key, text);
 		return new DialogueMessage(key, List.of(arguments));
 	}
 	
@@ -446,8 +486,6 @@ public class DialogueProvider implements DataProvider
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache)
 	{
-		registerDialogues();
-		
 		Path outputPath = output.getOutputFolder();
 		List<CompletableFuture<?>> futures = new ArrayList<>(dialogues.size());
 		
