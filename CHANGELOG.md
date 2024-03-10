@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Advanced color selection screen no longer tints buttons
 - Round the displayed max health value on the echeladder screen
 - Prevent one method of captchaloguing stacks with stack size larger than max stack size
+- Stopped editmode cursor from spinning
 
 ### Contributors for this release
 
