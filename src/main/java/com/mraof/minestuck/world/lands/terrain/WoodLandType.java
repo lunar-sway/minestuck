@@ -6,9 +6,11 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.FeatureModifier;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.SalamanderVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -20,12 +22,20 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
+
+import java.util.function.Consumer;
 
 public class WoodLandType extends TerrainLandType
 {
 	public static final String WOOD = "minestuck.wood";
 	public static final String PLANKS = "minestuck.planks";
 	public static final String CARVINGS = "minestuck.carvings";
+	
+	protected static final RandomSpreadStructurePlacement LARGE_UNFINISHED_TABLE_PLACEMENT = new RandomSpreadStructurePlacement(4, 4, RandomSpreadType.LINEAR, 17524013);
 	
 	public WoodLandType()
 	{
@@ -61,6 +71,13 @@ public class WoodLandType extends TerrainLandType
 	}
 	
 	@Override
+	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
+	{
+		super.addStructureSets(consumer, structureLookup);
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.LARGE_UNFINISHED_TABLE), LARGE_UNFINISHED_TABLE_PLACEMENT));
+	}
+	
+	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WOODEN_GRASS_PATCH, LandBiomeType.NORMAL);
@@ -92,7 +109,6 @@ public class WoodLandType extends TerrainLandType
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LACQUERED_WOODEN_MUSHROOM_PATCH, LandBiomeType.ROUGH);
-		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.LARGE_UNFINISHED_TABLE, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.TREATED_CHAIR, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.TREATED_TABLE, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.UNFINISHED_CARVED_CHAIR, LandBiomeType.ROUGH);

@@ -61,6 +61,7 @@ public final class MSStructurePieces
 	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_NAK_MARKET = REGISTER.register("high_nak_market", () -> NakagatorVillagePieces.HighNakMarket1::new);
 	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_NAK_INN = REGISTER.register("high_nak_inn", () -> NakagatorVillagePieces.HighNakInn1::new);
 	
+	public static final RegistryObject<StructurePieceType.StructureTemplateType> LARGE_UNFINISHED_TABLE = REGISTER.register("large_unfinished_table", () -> LargeUnfinishedTablePiece::new);
 	
 	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_START = REGISTER.register("skaia_castle_start", () -> CastleStartPiece::new);
 	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_SOLID = REGISTER.register("skaia_castle_solid", () -> CastleSolidPiece::new);
