@@ -56,86 +56,85 @@ public class DialogueProvider implements DataProvider
 	private void consortDialogues()
 	{
 		//Wind
-		//add(new DialogueBuilder("dad_wind", isInLand(LandTypes.WIND.get())));
-		add(new DialogueBuilder("pyre.1", defaultKeyMsg())
+		add("pyre.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(all(
 						isInLand(LandTypes.WIND.get()),
 						new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get()))))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("pyre.2")));
-		add(new DialogueBuilder("pyre.2", defaultKeyMsg()));
+		add("pyre.2", new DialogueBuilder(defaultKeyMsg()));
 		
 		//Pulse
-		add(new DialogueBuilder("koolaid", defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
-		add(new DialogueBuilder("murder_rain", defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
-		add(new DialogueBuilder("swimming", defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
-		add(new DialogueBuilder("blood_surprise", defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
+		add("koolaid", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
+		add("murder_rain", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
+		add("swimming", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
+		add("blood_surprise", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
 		
 		//Thunder
-		add(new DialogueBuilder("skeleton_horse", defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
-		add(new DialogueBuilder("blue_moon", defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
-		add(new DialogueBuilder("lightning_strike", defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
-		add(new DialogueBuilder("reckoning.1", defaultKeyMsg())
+		add("skeleton_horse", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
+		add("blue_moon", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
+		add("lightning_strike", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.THUNDER.get())));
+		add("reckoning.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(isInLand(LandTypes.THUNDER.get()))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.2")));
-		add(new DialogueBuilder("reckoning.2", defaultKeyMsg())
+		add("reckoning.2", new DialogueBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.3")));
-		add(new DialogueBuilder("reckoning.3", defaultKeyMsg()));
-		add(new DialogueBuilder("thunder_death.1", defaultKeyMsg())
+		add("reckoning.3", new DialogueBuilder(defaultKeyMsg()));
+		add("thunder_death.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(all(
 						isInLand(LandTypes.THUNDER.get()),
 						isInLand(LandTypes.WOOD.get())))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.2")));
-		add(new DialogueBuilder("thunder_death.2", defaultKeyMsg())
+		add("thunder_death.2", new DialogueBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.3")));
-		add(new DialogueBuilder("thunder_death.3", defaultKeyMsg()));
-		add(new DialogueBuilder("hardcore", defaultKeyMsg())
+		add("thunder_death.3", new DialogueBuilder(defaultKeyMsg()));
+		add("hardcore", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(all(
 						isInLand(LandTypes.THUNDER.get()),
 						isInLand(LandTypes.HEAT.get()))));
 		
 		
-		add(new DialogueBuilder("mycelium.1", defaultKeyMsg())
+		add("mycelium.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(isInLand(LandTypes.FUNGI.get()))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("mycelium.2")));
-		add(new DialogueBuilder("mycelium.2", defaultKeyMsg()));
+		add("mycelium.2", new DialogueBuilder(defaultKeyMsg()));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
-		add(new DialogueBuilder("camel/start", defaultKeyMsg())
+		add("camel/start", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
 				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes")).nextDialogue("camel/no_camel"))
 				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.no")).nextDialogue("camel/dancing_camel")));
-		add(new DialogueBuilder("camel/no_camel", defaultKeyMsg()));
-		add(new DialogueBuilder("camel/dancing_camel", defaultKeyMsg()));
+		add("camel/no_camel", new DialogueBuilder(defaultKeyMsg()));
+		add("camel/dancing_camel", new DialogueBuilder(defaultKeyMsg()));
 		
-		add(new DialogueBuilder("food_shop", defaultKeyMsg())
+		add("food_shop", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
 				.addResponse("Never mind")
 				.addResponse(new ResponseBuilder(msg("What do you have?")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		add(new DialogueBuilder("fast_food", defaultKeyMsg())
+		add("fast_food", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get()))
 				.addResponse("I'm good")
 				.addResponse(new ResponseBuilder(msg("Show me your menu")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		add(new DialogueBuilder("grocery_store", defaultKeyMsg())
+		add("grocery_store", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.IGUANA.get()))
 				.addResponse("No thanks")
 				.addResponse(new ResponseBuilder(msg("What do you have to sell?")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		add(new DialogueBuilder("tasty_welcome", defaultKeyMsg())
+		add("tasty_welcome", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.TURTLE.get()))
 				.addResponse("Goodbye")
 				.addResponse(new ResponseBuilder(msg("Let me see your wares")).addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		
-		add(new DialogueBuilder("immortality_herb.1", defaultKeyMsg())
+		add("immortality_herb.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(isInLand(LandTypes.FLORA.get()))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.2")));
-		add(new DialogueBuilder("immortality_herb.2", defaultKeyMsg())
+		add("immortality_herb.2", new DialogueBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.3")));
-		add(new DialogueBuilder("immortality_herb.3", defaultKeyMsg())
+		add("immortality_herb.3", new DialogueBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("...")).addTrigger(new Trigger.Explode())));
 	}
 	
 	private void testDialogues()
 	{
-		add(new DialogueBuilder("test1", defaultKeyMsg())
+		add("test1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable()
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue("test2")
@@ -150,7 +149,7 @@ public class DialogueProvider implements DataProvider
 						.conditionType(Conditions.Type.ONE)
 						.dontHideFailed()));
 		
-		add(new DialogueBuilder("test2", defaultKeyMsg())
+		add("test2", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable()
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue("test1")
@@ -176,11 +175,11 @@ public class DialogueProvider implements DataProvider
 						.addCondition(isInLand(LandTypes.RAIN.get()))
 						.conditionType(Conditions.Type.ONE)
 						.dontHideFailed()));
-		add(new DialogueBuilder("turtle_only", defaultKeyMsg()).randomlySelectable(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())));
+		add("turtle_only", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())));
 		
-		add(new DialogueBuilder("nakagator_only", defaultKeyMsg()).randomlySelectable(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())));
+		add("nakagator_only", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())));
 		
-		add(new DialogueBuilder("me_want_cookie", defaultKeyMsg())
+		add("me_want_cookie", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable()
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder(msg("why do you want cookie?")).loop())
@@ -189,10 +188,10 @@ public class DialogueProvider implements DataProvider
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
 						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))
 						.dontHideFailed()));
-		add(new DialogueBuilder("oh_yippee", defaultKeyMsg()));
-		add(new DialogueBuilder("hunger_filled", defaultKeyMsg()));
+		add("oh_yippee", new DialogueBuilder(defaultKeyMsg()));
+		add("hunger_filled", new DialogueBuilder(defaultKeyMsg()));
 		
-		add(new DialogueBuilder("me_want_5_cookies", defaultKeyMsg())
+		add("me_want_5_cookies", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(5)
 				.addResponse("im sorry fellow, I have no cookie for you. Bye")
 				.addResponse(new ResponseBuilder(msg("here have 5 cookies chap")).nextDialogue("oh_yippee")
@@ -200,7 +199,7 @@ public class DialogueProvider implements DataProvider
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))
 						.dontHideFailed()));
 		
-		add(new DialogueBuilder("hi_friend_can_i_help_you", defaultKeyMsg())
+		add("hi_friend_can_i_help_you", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(11)
 				.addResponse(new ResponseBuilder(msg("I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
 				.addResponse(new ResponseBuilder(msg("I love you")).addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
@@ -208,36 +207,35 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder(msg("Rep below 200")).addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
 				.addResponse("bye"));
 		
-		add(new DialogueBuilder("test_arguments", defaultKeyMsg(DialogueMessage.Argument.PLAYER_NAME_LAND))
+		add("test_arguments", new DialogueBuilder(defaultKeyMsg(DialogueMessage.Argument.PLAYER_NAME_LAND))
 				.randomlySelectable()
 				.addResponse(new ResponseBuilder(msg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
 	}
 	
-	private void add(DialogueBuilder builder)
+	private void add(String path, DialogueBuilder builder)
 	{
-		dialogues.put(builder.path, builder.build());
+		ResourceLocation id = new ResourceLocation(Minestuck.MOD_ID, path);
+		dialogues.put(id, builder.build(id));
 	}
 	
 	public static class DialogueBuilder
 	{
-		private final ResourceLocation path;
 		private final NodeBuilder nodeBuilder;
 		@Nullable
 		private Dialogue.UseContext useContext;
 		
-		DialogueBuilder(String path, Function<String, DialogueMessage> messageProvider)
+		DialogueBuilder(Function<String, DialogueMessage> messageProvider)
 		{
-			this(path, new NodeBuilder(messageProvider));
+			this(new NodeBuilder(messageProvider));
 		}
 		
-		DialogueBuilder(String path, DialogueMessage message)
+		DialogueBuilder(DialogueMessage message)
 		{
-			this(path, new NodeBuilder(message));
+			this(new NodeBuilder(message));
 		}
 		
-		DialogueBuilder(String path, NodeBuilder nodeBuilder)
+		DialogueBuilder(NodeBuilder nodeBuilder)
 		{
-			this.path = new ResourceLocation(Minestuck.MOD_ID, path);
 			this.nodeBuilder = nodeBuilder;
 		}
 		
@@ -295,10 +293,10 @@ public class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		private Dialogue build()
+		private Dialogue build(ResourceLocation id)
 		{
-			Dialogue.DialogueNode node = this.nodeBuilder.build(this.path);
-			return new Dialogue(this.path, new Dialogue.NodeSelector(List.of(), node), Optional.ofNullable(this.useContext));
+			Dialogue.DialogueNode node = this.nodeBuilder.build(id);
+			return new Dialogue(id, new Dialogue.NodeSelector(List.of(), node), Optional.ofNullable(this.useContext));
 		}
 	}
 	
