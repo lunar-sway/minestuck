@@ -90,23 +90,23 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("food_shop", defaultWeight(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get())),
 				new NodeBuilder(defaultKeyMsg("You hungry? I bet you are! Why else would you be talking to me?"))
-						.addClosingResponse(responseMsg("bye", "Never mind"))
-						.addResponse(new ResponseBuilder(responseMsg("next", "What do you have?"))
+						.addClosingResponse(subMsg("bye", "Never mind"))
+						.addResponse(new ResponseBuilder(subMsg("next", "What do you have?"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		addRandomlySelectable("fast_food", defaultWeight(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())),
 				new NodeBuilder(defaultKeyMsg("Welcome to MacCricket's, what would you like?"))
-						.addClosingResponse(responseMsg("bye", "I'm good"))
-						.addResponse(new ResponseBuilder(responseMsg("next", "Show me your menu"))
+						.addClosingResponse(subMsg("bye", "I'm good"))
+						.addResponse(new ResponseBuilder(subMsg("next", "Show me your menu"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		addRandomlySelectable("grocery_store", defaultWeight(new Condition.IsEntityType(MSEntityTypes.IGUANA.get())),
 				new NodeBuilder(defaultKeyMsg("Thank you for choosing Stop and Hop, this village's #1 one grocer!"))
-						.addClosingResponse(responseMsg("bye", "No thanks"))
-						.addResponse(new ResponseBuilder(responseMsg("next", "What do you have to sell?"))
+						.addClosingResponse(subMsg("bye", "No thanks"))
+						.addResponse(new ResponseBuilder(subMsg("next", "What do you have to sell?"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		addRandomlySelectable("tasty_welcome", defaultWeight(new Condition.IsEntityType(MSEntityTypes.TURTLE.get())),
 				new NodeBuilder(defaultKeyMsg("Welcome. I hope you find something tasty among our wares."))
-						.addClosingResponse(responseMsg("bye", "Goodbye"))
-						.addResponse(new ResponseBuilder(responseMsg("next", "Let me see your wares"))
+						.addClosingResponse(subMsg("bye", "Goodbye"))
+						.addResponse(new ResponseBuilder(subMsg("next", "Let me see your wares"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
 		
 		addRandomlySelectable("immortality_herb.1", defaultWeight(isInLand(LandTypes.FLORA.get())),
@@ -164,9 +164,9 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("nakagator_only", defaultWeight(new Condition.IsEntityType(MSEntityTypes.NAKAGATOR.get())), new NodeBuilder(defaultKeyMsg()));
 		
 		addRandomlySelectable("me_want_cookie", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
-				.addClosingResponse(responseMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
-				.addResponse(new ResponseBuilder(responseMsg("why", "why do you want cookie?")).loop())
-				.addResponse(new ResponseBuilder(responseMsg("give", "here have a cookie chap")).nextDialogue("oh_yippee")
+				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
+				.addResponse(new ResponseBuilder(subMsg("why", "why do you want cookie?")).loop())
+				.addResponse(new ResponseBuilder(subMsg("give", "here have a cookie chap")).nextDialogue("oh_yippee")
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 1))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
 						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))
@@ -175,25 +175,25 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
 		
 		addRandomlySelectable("me_want_5_cookies", weighted(5, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
-				.addClosingResponse(responseMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
-				.addResponse(new ResponseBuilder(responseMsg("give", "here have 5 cookies chap")).nextDialogue("oh_yippee")
+				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
+				.addResponse(new ResponseBuilder(subMsg("give", "here have 5 cookies chap")).nextDialogue("oh_yippee")
 						.addCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))
 						.dontHideFailed()));
 		
 		addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(responseMsg("hate", "I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
-				.addResponse(new ResponseBuilder(responseMsg("love", "I love you")).addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
-				.addResponse(new ResponseBuilder(responseMsg("high_rep", "Rep above 500")).addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
-				.addResponse(new ResponseBuilder(responseMsg("low_rep", "Rep below 200")).addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
-				.addClosingResponse(responseMsg("bye", "bye")));
+				.addResponse(new ResponseBuilder(subMsg("hate", "I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
+				.addResponse(new ResponseBuilder(subMsg("love", "I love you")).addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
+				.addResponse(new ResponseBuilder(subMsg("high_rep", "Rep above 500")).addCondition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
+				.addResponse(new ResponseBuilder(subMsg("low_rep", "Rep below 200")).addCondition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
+				.addClosingResponse(subMsg("bye", "bye")));
 		
 		addRandomlySelectable("test_arguments", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))
-				.addResponse(new ResponseBuilder(responseMsg("name", "Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
+				.addResponse(new ResponseBuilder(subMsg("name", "Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
 		
 		addRandomlySelectable("look_rich", weighted(100, Conditions.EMPTY), new NodeSelectorBuilder()
-				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(msg("Hey, looks like you have a lot of boons!")))
-				.node(new Condition.PlayerHasBoondollars(10, false), new NodeBuilder(msg("Wow, you barely have any boons. Poor you.")))
-				.defaultNode(new NodeBuilder(msg("Hi! I can sense if someone has a lot of boondollars."))));
+				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(subMsg("rich", "Hey, looks like you have a lot of boons!")))
+				.node(new Condition.PlayerHasBoondollars(10, false), new NodeBuilder(subMsg("poor", "Wow, you barely have any boons. Poor you.")))
+				.defaultNode(new NodeBuilder(defaultKeyMsg("Hi! I can sense if someone has a lot of boondollars."))));
 	}
 }
