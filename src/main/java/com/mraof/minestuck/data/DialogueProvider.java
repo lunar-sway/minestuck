@@ -214,48 +214,46 @@ public class DialogueProvider implements DataProvider
 	
 	private void add(DialogueBuilder builder)
 	{
-		Dialogue.DialogueNode node = new Dialogue.DialogueNode(builder.message, builder.animation, builder.guiPath, builder.responses);
-		Dialogue dialogue = new Dialogue(builder.path, new Dialogue.NodeSelector(List.of(), node), Optional.ofNullable(builder.useContext));
-		dialogues.put(builder.path, dialogue);
+		dialogues.put(builder.path, builder.build());
 	}
 	
 	public static class DialogueBuilder
 	{
 		private final ResourceLocation path;
-		private final DialogueMessage message;
-		private String animation = DEFAULT_ANIMATION;
-		private ResourceLocation guiPath = DEFAULT_GUI;
-		private final List<Dialogue.Response> responses = new ArrayList<>();
+		private final NodeBuilder nodeBuilder;
 		@Nullable
 		private Dialogue.UseContext useContext;
 		
+		@Deprecated
 		DialogueBuilder(String path, DialogueMessage.Argument... arguments)
 		{
-			this.path = new ResourceLocation(Minestuck.MOD_ID, path);
-			this.message = new DialogueMessage("minestuck.dialogue." + path.replace("/", "."), List.of(arguments));
+			this(path, new NodeBuilder("minestuck.dialogue." + path.replace("/", "."), arguments));
 		}
 		
+		DialogueBuilder(String path, NodeBuilder nodeBuilder)
+		{
+			this.path = new ResourceLocation(Minestuck.MOD_ID, path);
+			this.nodeBuilder = nodeBuilder;
+		}
+		
+		@Deprecated
 		public DialogueBuilder animation(String animation)
 		{
-			this.animation = animation;
+			this.nodeBuilder.animation(animation);
 			return this;
 		}
 		
-		public DialogueBuilder gui(ResourceLocation guiPath)
-		{
-			this.guiPath = guiPath;
-			return this;
-		}
-		
+		@Deprecated
 		public DialogueBuilder addResponse(String response)
 		{
-			return addResponse(new ResponseBuilder(response));
+			this.nodeBuilder.addResponse(response);
+			return this;
 		}
 		
+		@Deprecated
 		public DialogueBuilder addResponse(ResponseBuilder responseBuilder)
 		{
-			ResourceLocation nextPath = responseBuilder.loopNextPath ? this.path : responseBuilder.nextDialoguePath;
-			this.responses.add(new Dialogue.Response(responseBuilder.message, new Conditions(responseBuilder.conditions, responseBuilder.conditionsType), responseBuilder.triggers, Optional.ofNullable(nextPath), responseBuilder.hideIfFailed));
+			this.nodeBuilder.addResponse(responseBuilder);
 			return this;
 		}
 		
@@ -290,6 +288,53 @@ public class DialogueProvider implements DataProvider
 		{
 			this.useContext = new Dialogue.UseContext(useConditions, weight);
 			return this;
+		}
+		
+		private Dialogue build()
+		{
+			Dialogue.DialogueNode node = this.nodeBuilder.build(this.path);
+			return new Dialogue(this.path, new Dialogue.NodeSelector(List.of(), node), Optional.ofNullable(this.useContext));
+		}
+	}
+	
+	public static class NodeBuilder
+	{
+		private final DialogueMessage message;
+		private String animation = DEFAULT_ANIMATION;
+		private ResourceLocation guiPath = DEFAULT_GUI;
+		private final List<ResponseBuilder> responses = new ArrayList<>();
+		
+		NodeBuilder(String key, DialogueMessage.Argument... arguments)
+		{
+			this.message = new DialogueMessage(key, List.of(arguments));
+		}
+		
+		public NodeBuilder animation(String animation)
+		{
+			this.animation = animation;
+			return this;
+		}
+		
+		public NodeBuilder gui(ResourceLocation guiPath)
+		{
+			this.guiPath = guiPath;
+			return this;
+		}
+		
+		public NodeBuilder addResponse(String response)
+		{
+			return addResponse(new ResponseBuilder(response));
+		}
+		
+		public NodeBuilder addResponse(ResponseBuilder responseBuilder)
+		{
+			this.responses.add(responseBuilder);
+			return this;
+		}
+		
+		public Dialogue.DialogueNode build(ResourceLocation selfPath)
+		{
+			return new Dialogue.DialogueNode(this.message, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(selfPath)).toList());
 		}
 	}
 	
@@ -349,6 +394,12 @@ public class DialogueProvider implements DataProvider
 		{
 			this.hideIfFailed = false;
 			return this;
+		}
+		
+		public Dialogue.Response build(ResourceLocation selfPath)
+		{
+			ResourceLocation nextPath = this.loopNextPath ? selfPath : this.nextDialoguePath;
+			return new Dialogue.Response(this.message, new Conditions(this.conditions, this.conditionsType), this.triggers, Optional.ofNullable(nextPath), this.hideIfFailed);
 		}
 	}
 	
