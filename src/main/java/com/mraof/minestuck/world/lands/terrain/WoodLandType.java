@@ -87,7 +87,6 @@ public class WoodLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CARVED_HOUSE, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CARVED_LOG, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.LARGE_CARVED_LOG, LandBiomeType.NORMAL);
-		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SPARSE_LARGE_UNFINISHED_TABLE, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SPARSE_TREATED_CHAIR, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SPARSE_TREATED_TABLE, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.UNFINISHED_CARVED_BOOKSHELF, LandBiomeType.NORMAL, LandBiomeType.ROUGH);

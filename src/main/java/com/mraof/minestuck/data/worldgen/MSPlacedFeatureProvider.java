@@ -74,10 +74,6 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(64), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		context.register(LARGE_CARVED_LOG, placed(features, MSCFeatures.LARGE_CARVED_LOG,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(512), PlacementUtils.HEIGHTMAP)));
-		context.register(SPARSE_LARGE_UNFINISHED_TABLE, placed(features, MSCFeatures.LARGE_UNFINISHED_TABLE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(512), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
-		context.register(LARGE_UNFINISHED_TABLE, placed(features, MSCFeatures.LARGE_UNFINISHED_TABLE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(64), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		context.register(SPARSE_TREATED_CHAIR, placed(features, MSCFeatures.TREATED_CHAIR,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(512), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		context.register(TREATED_CHAIR, placed(features, MSCFeatures.TREATED_CHAIR,

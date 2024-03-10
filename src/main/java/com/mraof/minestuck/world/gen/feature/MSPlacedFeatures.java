@@ -37,8 +37,6 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> CARVED_LOG = key("carved_log");
 	public static final ResourceKey<PlacedFeature> CARVED_HOUSE = key("carved_house");
 	public static final ResourceKey<PlacedFeature> LARGE_CARVED_LOG = key("large_carved_log");
-	public static final ResourceKey<PlacedFeature> SPARSE_LARGE_UNFINISHED_TABLE = key("sparse_large_unfinished_table");
-	public static final ResourceKey<PlacedFeature> LARGE_UNFINISHED_TABLE = key("large_unfinished_table");
 	public static final ResourceKey<PlacedFeature> SPARSE_TREATED_CHAIR = key("sparse_treated_chair");
 	public static final ResourceKey<PlacedFeature> TREATED_CHAIR = key("treated_chair");
 	public static final ResourceKey<PlacedFeature> SPARSE_TREATED_TABLE = key("sparse_treated_table");

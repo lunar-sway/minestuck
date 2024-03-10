@@ -84,7 +84,6 @@ public final class MSConfiguredFeatureProvider
 		context.register(CARVED_HOUSE, new ConfiguredFeature<>(MSFeatures.CARVED_HOUSE.get(), FeatureConfiguration.NONE));
 		context.register(CARVED_LOG, new ConfiguredFeature<>(MSFeatures.CARVED_LOG.get(), FeatureConfiguration.NONE));
 		context.register(LARGE_CARVED_LOG, new ConfiguredFeature<>(MSFeatures.LARGE_CARVED_LOG.get(), FeatureConfiguration.NONE));
-		context.register(LARGE_UNFINISHED_TABLE, new ConfiguredFeature<>(MSFeatures.LARGE_UNFINISHED_TABLE.get(), FeatureConfiguration.NONE));
 		context.register(TREATED_CHAIR, new ConfiguredFeature<>(MSFeatures.TREATED_CHAIR.get(), FeatureConfiguration.NONE));
 		context.register(TREATED_TABLE, new ConfiguredFeature<>(MSFeatures.TREATED_TABLE.get(), FeatureConfiguration.NONE));
 		context.register(UNFINISHED_CARVED_BOOKSHELF, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_BOOKSHELF.get(), FeatureConfiguration.NONE));

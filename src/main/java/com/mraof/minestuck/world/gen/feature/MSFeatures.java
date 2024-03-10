@@ -35,7 +35,6 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CARVED_HOUSE = REGISTER.register("carved_house", () -> new CarvedHouseFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CARVED_LOG = REGISTER.register("carved_log", () -> new CarvedLogFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_CARVED_LOG = REGISTER.register("large_carved_log", () -> new LargeCarvedLogFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_UNFINISHED_TABLE = REGISTER.register("large_unfinished_table", () -> new LargeUnfinishedTableFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TREATED_CHAIR = REGISTER.register("treated_chair", () -> new TreatedChairFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TREATED_TABLE = REGISTER.register("treated_table", () -> new TreatedTableFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_BOOKSHELF = REGISTER.register("unfinished_carved_bookshelf", () -> new UnfinishedCarvedBookshelfFeature(NoneFeatureConfiguration.CODEC));
