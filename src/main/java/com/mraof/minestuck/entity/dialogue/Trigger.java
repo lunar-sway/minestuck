@@ -133,7 +133,9 @@ public sealed interface Trigger
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
 			{
-				dialogueEntity.setDialoguePath(DialogueManager.getInstance().doRandomDialogue(entity, entity.getRandom()).path());
+				Dialogue dialogue = DialogueManager.getInstance().doRandomDialogue(entity, entity.getRandom());
+				if(dialogue != null)
+					dialogueEntity.setDialoguePath(dialogue.lookupId());
 			}
 		}
 	}

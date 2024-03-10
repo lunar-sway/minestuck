@@ -2,7 +2,6 @@
   "node": {
     "message": "minestuck.dialogue.turtle_only"
   },
-  "path": "minestuck:turtle_only",
   "use_context": {
     "conditions": {
       "condition_list": [

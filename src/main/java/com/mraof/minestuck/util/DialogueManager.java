@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -25,6 +26,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -33,7 +35,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().create();
 	
-	private Map<ResourceLocation, Dialogue> dialogues;
+	private BiMap<ResourceLocation, Dialogue> dialogues;
 	
 	public DialogueManager()
 	{
@@ -50,12 +52,12 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	@Override
 	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ImmutableMap.Builder<ResourceLocation, Dialogue> dialogues = ImmutableMap.builder();
+		ImmutableBiMap.Builder<ResourceLocation, Dialogue> dialogues = ImmutableBiMap.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
 			Dialogue.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
 					.resultOrPartial(message -> LOGGER.error("Problem parsing dialogue {}: {}", entry.getKey(), message))
-					.ifPresent(dialogue -> dialogues.put(dialogue.path(), dialogue));
+					.ifPresent(dialogue -> dialogues.put(entry.getKey(), dialogue));
 		}
 		
 		this.dialogues = dialogues.build();
@@ -81,6 +83,11 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	public Dialogue getDialogue(ResourceLocation location)
 	{
 		return this.dialogues.get(location);
+	}
+	
+	public ResourceLocation getId(Dialogue dialogue)
+	{
+		return Objects.requireNonNull(this.dialogues.inverse().get(dialogue), "Dialogue is missing an id!");
 	}
 	
 	@SubscribeEvent

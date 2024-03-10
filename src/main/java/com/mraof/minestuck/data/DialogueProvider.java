@@ -90,7 +90,7 @@ public abstract class DialogueProvider implements DataProvider
 		
 		private Dialogue build(ResourceLocation id)
 		{
-			return new Dialogue(id, this.selector.build(id), Optional.ofNullable(this.useContext));
+			return new Dialogue(this.selector.build(id), Optional.ofNullable(this.useContext));
 		}
 	}
 	

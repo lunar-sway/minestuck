@@ -2,7 +2,6 @@
   "node": {
     "message": "minestuck.dialogue.koolaid"
   },
-  "path": "minestuck:koolaid",
   "use_context": {
     "conditions": {
       "condition_list": [

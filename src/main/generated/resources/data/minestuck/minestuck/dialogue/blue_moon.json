@@ -2,7 +2,6 @@
   "node": {
     "message": "minestuck.dialogue.blue_moon"
   },
-  "path": "minestuck:blue_moon",
   "use_context": {
     "conditions": {
       "condition_list": [

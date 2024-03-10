@@ -2,7 +2,6 @@
   "node": {
     "message": "minestuck.dialogue.skeleton_horse"
   },
-  "path": "minestuck:skeleton_horse",
   "use_context": {
     "conditions": {
       "condition_list": [

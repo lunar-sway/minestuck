@@ -29,16 +29,20 @@ import java.util.stream.IntStream;
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
 //TODO animation is unused?
-public record Dialogue(ResourceLocation path, NodeSelector nodes, Optional<UseContext> useContext)
+public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
 {
 	public static final String DEFAULT_ANIMATION = "generic_animation";
 	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
 	
 	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ResourceLocation.CODEC.fieldOf("path").forGetter(Dialogue::path),
 			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes),
 			new PreservingOptionalFieldCodec<>(UseContext.CODEC, "use_context").forGetter(Dialogue::useContext)
 	).apply(instance, Dialogue::new));
+	
+	public ResourceLocation lookupId()
+	{
+		return DialogueManager.getInstance().getId(this);
+	}
 	
 	/**
 	 * Opens up the dialogue screen and includes a nbt object containing whether all the conditions are matched
@@ -47,7 +51,7 @@ public record Dialogue(ResourceLocation path, NodeSelector nodes, Optional<UseCo
 	{
 		Pair<DialogueNode, Integer> node = dialogue.nodes().pickNode(entity, serverPlayer);
 		DialogueData data = node.getFirst().evaluateData(entity, serverPlayer);
-		NodeReference nodeReference = new NodeReference(dialogue.path(), node.getSecond());
+		NodeReference nodeReference = new NodeReference(dialogue.lookupId(), node.getSecond());
 		
 		DialogueScreenPacket packet = new DialogueScreenPacket(entity.getId(), nodeReference, data);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
@@ -217,6 +221,7 @@ public record Dialogue(ResourceLocation path, NodeSelector nodes, Optional<UseCo
 		}
 	}
 	
+	//TODO this helper function does not belong here
 	@Nullable
 	public static ItemStack findPlayerItem(Item item, Player player, int minAmount)
 	{

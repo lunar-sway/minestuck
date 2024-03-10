@@ -17,7 +17,6 @@
       }
     ]
   },
-  "path": "minestuck:food_shop",
   "use_context": {
     "conditions": {
       "condition_list": [

@@ -25,7 +25,6 @@
       "message": "Hi! I can sense if someone has a lot of boondollars."
     }
   },
-  "path": "minestuck:look_rich",
   "use_context": {
     "conditions": {
       "condition_list": []

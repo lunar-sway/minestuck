@@ -2,7 +2,6 @@
   "node": {
     "message": "minestuck.dialogue.murder_rain"
   },
-  "path": "minestuck:murder_rain",
   "use_context": {
     "conditions": {
       "condition_list": [
