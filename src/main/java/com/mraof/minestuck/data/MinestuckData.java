@@ -13,8 +13,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -40,8 +38,7 @@ public final class MinestuckData
 		
 		gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, Set.of(Minestuck.MOD_ID)));
 		
-		TagsProvider<Block> blockTags = new MinestuckBlockTagsProvider(output, lookupProvider, fileHelper);
-		gen.addProvider(event.includeServer(), blockTags);
+		var blockTags = gen.addProvider(event.includeServer(), new MinestuckBlockTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MinestuckItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), fileHelper));
 		gen.addProvider(event.includeServer(), new MinestuckFluidTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MinestuckEntityTypeTagsProvider(output, lookupProvider, fileHelper));
@@ -56,8 +53,6 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output));
 		gen.addProvider(event.includeServer(), new GeneratedGristCostConfigProvider(output, Minestuck.MOD_ID));
 		
-		gen.addProvider(event.includeServer(), new DialogueProvider(output));
-		
 		gen.addProvider(event.includeServer(), new BoondollarPricingProvider(output, Minestuck.MOD_ID));
 		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output));
 		gen.addProvider(event.includeServer(), new MSLootModifiers(output));
@@ -67,7 +62,9 @@ public final class MinestuckData
 		
 		gen.addProvider(event.includeClient(), new MSBlockStateProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
-		gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
+		var enUsLanguageProvider = gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
+		
+		gen.addProvider(event.includeServer(), new DialogueProvider(output, enUsLanguageProvider));
 	}
 	
 	private static RegistrySetBuilder registrySetBuilder()

@@ -2495,23 +2495,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("sadface", ":(");
 		//Wind
 		addDialogue("dad_wind", "My dad was blown away in one of the recent wind storms.");
-		addDialogue("pyre.1", "If only I was faster than the wind! That would be fun!");
-		addDialogue("pyre.2", "Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society.");
-		//Pulse
-		addDialogue("koolaid", "Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.");
-		addDialogue("murder_rain", "You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!");
-		addDialogue("swimming", "If you're looking for a good land to swim in, it's definitely not this one.");
-		addDialogue("blood_surprise", "OH GOD IS THAT BLOOD oh wait nevermind.");
 		//Thunder
-		addDialogue("skeleton_horse", "Some people say at night, skeletons riding skeleton horses come through the town.");
-		addDialogue("blue_moon", "Every once in a blue moon, lightning strikes and burns down the village. We have to rebuild it!");
-		addDialogue("reckoning.1", "Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!");
-		addDialogue("reckoning.2", "What's The Reckoning? It's when meteors from The Veil are sent towards Skaia.");
-		addDialogue("reckoning.3", "Like any reasonable %s believes in that!");
-		addDialogue("lightning_strike", "You don't want to be struck by lightning. No one does.");
-		addDialogue("thunder_death.1", "We're lucky to have rain with this weather.");
-		addDialogue("thunder_death.2", "Otherwise the thunder would surely have been our death.");
-		addDialogue("hardcore", "This land is HARDCORE! There's lava and lightning wherever you go!");
 		addDialogue("thunder_throw.1", "Nemesis has been throwing thunder for generations, not stopping for even a moment.");
 		addDialogue("thunder_throw.2", "They are even doing it in their sleep. Can you believe that?");
 		//Rabbits
@@ -2616,12 +2600,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		//Sand & Sandstone
 		addDialogue("sand_surfing", "Sand-surfing is my new favorite sport! Too bad you can't really move, though.");
 		addDialogue("camel", "Want to buy a used camel? Only 2000 boondollars.");
-		addDialogue("camel.yes", "Why not? Seems like a good price for a camel!");
 		addDialogue("camel.yes.reply", "Sure!");
-		addDialogue("camel.no_camel", "Hahaha! Sucker! I have no camel! Cya later! 8)");
-		addDialogue("camel.no", "Of course not! You know better!");
 		addDialogue("camel.no.reply", "Not at all!");
-		addDialogue("camel.dancing_camel", "Are you sure? Too bad! The camel knew how to dance, too!");
 		addDialogue("knockoff", "I kind of feel like we're a stale, knockoff sand land.");
 		addDialogue("sandless.1", "According to legend, %s ate all the sand here leaving nothing but sandstone!");
 		addDialogue("sandless.2", "I'm kidding, I made that up on the spot. I had no other dialogue.");
@@ -2645,8 +2625,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("really_likes_trees", "Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!");
 		//Fungi
 		addDialogue("mildew", "Ah, the mildew on the grass in the morning makes the landscape so pretty!");
-		addDialogue("mycelium.1", "Frog, don't you love the feeling of mycelium on your toes?");
-		addDialogue("mycelium.2", "No? Is that just me?");
 		addDialogue("adaptation.1", "At first, no one liked the mushrooms when our planet was cursed with the Dank.");
 		addDialogue("adaptation.2", "Those who refused to adapt to the new food source Perished, obviously.");
 		addDialogue("jacket", "It's so damp and cold. I wish I had a jacket!");
@@ -2696,9 +2674,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("giant_swords", "My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.");
 		addDialogue("bloodberries.1", "The strawberries here grow big and red thanks to all the blood in the water supply! The flowers thrive, too!");
 		addDialogue("bloodberries.2", "Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.");
-		addDialogue("immortality_herb.1", "I have a herb that grants immortality! I'm going to eat it right now!");
-		addDialogue("immortality_herb.2", "However, they are easily confused with an explosion-causing herb...");
-		addDialogue("immortality_herb.3", "I'm taking the risk.");
 		addDialogue("spices.1", "A good chef cooks with the spices found throughout the land.");
 		addDialogue("spices.2", "Other chefs are envious that they don't live in %s.");
 		addDialogue("sharp_slide", "Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.");
@@ -2854,10 +2829,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("hope_food_shop", "I HOPE you're hungry!");
 		addDialogue("hope_food_shop.desc", "You hear a faint ba-dum tss in the distance.");
 		addDialogue("frog_food_shop", "We would never eat frogs here in the %s! Grasshoppers, though...");
-		addDialogue("food_shop", "You hungry? I bet you are! Why else would you be talking to me?");
-		addDialogue("fast_food", "Welcome to MacCricket's, what would you like?");
-		addDialogue("grocery_store", "Thank you for choosing Stop and Hop, this village's #1 one grocer!");
-		addDialogue("tasty_welcome", "Welcome. I hope you find something tasty among our wares.");
 		
 		addDialogue("breeze_general_shop", "The breeze has brought me many fine wares.");
 		addDialogue("blood_general_shop", "I accept payment in blood. And boondollars. I also take checks.");
