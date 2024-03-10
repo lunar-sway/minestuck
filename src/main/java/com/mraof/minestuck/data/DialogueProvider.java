@@ -13,6 +13,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import javax.annotation.Nullable;
@@ -291,6 +292,11 @@ public abstract class DialogueProvider implements DataProvider
 		return new Conditions(List.of(conditions), Conditions.Type.ALL);
 	}
 	
+	public static Conditions any(Condition... conditions)
+	{
+		return new Conditions(List.of(conditions), Conditions.Type.ANY);
+	}
+	
 	@SuppressWarnings("unused")
 	public static Dialogue.UseContext weighted(int weight, Condition condition)
 	{
@@ -325,6 +331,14 @@ public abstract class DialogueProvider implements DataProvider
 	public static Condition isInTerrainLand(TagKey<TerrainLandType> tag)
 	{
 		return new Condition.InTerrainLandTypeTag(tag);
+	}
+	
+	public static Condition isEntityType(EntityType<?>... entityType)
+	{
+		if(entityType.length == 1)
+			return new Condition.IsEntityType(Arrays.stream(entityType).findFirst().get());
+		else
+			return new Condition.IsOneOfEntityType(List.of(entityType));
 	}
 	
 	@Override

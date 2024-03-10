@@ -2493,19 +2493,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("sadface", ":(");
 		//Wind
 		addDialogue("dad_wind", "My dad was blown away in one of the recent wind storms.");
-		//Thunder
-		addDialogue("thunder_throw.1", "Nemesis has been throwing thunder for generations, not stopping for even a moment.");
-		addDialogue("thunder_throw.2", "They are even doing it in their sleep. Can you believe that?");
-		//Rabbits
-		addDialogue("bunny_birthday", "Our daughter wants a bunny for her birthday, even though she caught six in the past three hours.");
-		addDialogue("rabbit_eating", "One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.");
-		addDialogue("edgy_life_hatred", "This place is just so full of life! I despise it.");
-		addDialogue("rabbit.food_shortage.1", "This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!");
-		addDialogue("rabbit.food_shortage.2", "But with that many rabbits around, there sure are other ways of getting food...");
-		addDialogue("rabbit.food.1", "I sure wonder where the rabbits are getting their food from.");
-		addDialogue("rabbit.food.2a", "There's not really much food to be found in this desolate place.");
-		addDialogue("rabbit.food.3a", "Except maybe cacti, but would rabbits eat something that prickly?");
-		addDialogue("rabbit.food.2b", "I mean, there's not really much else than mushrooms around here.");
 		//Monsters
 		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it and everything!");
 		addDialogue("spider_raid", "A few giant spiders raided our village last night, taking all of our bugs! Those monsters...");

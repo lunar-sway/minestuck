@@ -1,0 +1,41 @@
+{
+  "nodes": {
+    "conditioned_nodes": [
+      {
+        "type": "ANY",
+        "condition_list": [
+          {
+            "type": "in_terrain_land_type_tag",
+            "land_type_tag": "minestuck:sand"
+          },
+          {
+            "type": "in_terrain_land_type_tag",
+            "land_type_tag": "minestuck:sandstone"
+          },
+          {
+            "type": "in_terrain_land_type_tag",
+            "land_type_tag": "minestuck:rock"
+          }
+        ],
+        "message": "minestuck.dialogue.rabbit.food.2.a",
+        "responses": [
+          {
+            "conditions": {
+              "condition_list": [
+                {
+                  "type": "in_terrain_land_type_tag",
+                  "land_type_tag": "minestuck:sand"
+                }
+              ]
+            },
+            "message": "minestuck.arrow",
+            "next_dialogue_path": "minestuck:rabbit.food.3"
+          }
+        ]
+      }
+    ],
+    "default_node": {
+      "message": "minestuck.dialogue.rabbit.food.2.b"
+    }
+  }
+}
