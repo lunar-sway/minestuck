@@ -1,0 +1,37 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.rabbit.food_shortage.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:rabbit.food_shortage.2"
+      }
+    ]
+  },
+  "use_context": {
+    "conditions": {
+      "condition_list": [
+        {
+          "type": "in_title_land_type",
+          "land_type": "minestuck:rabbits"
+        },
+        {
+          "type": "has_conditions",
+          "conditions": {
+            "type": "ANY",
+            "condition_list": [
+              {
+                "type": "in_terrain_land_type_tag",
+                "land_type_tag": "minestuck:sand"
+              },
+              {
+                "type": "in_terrain_land_type_tag",
+                "land_type_tag": "minestuck:sandstone"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

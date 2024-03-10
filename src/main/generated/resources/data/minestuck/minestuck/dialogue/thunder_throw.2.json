@@ -1,6 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.thunder_death.2",
+    "message": "minestuck.dialogue.thunder_throw.2",
     "responses": [
       {
         "message": "minestuck.dots"

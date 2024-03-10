@@ -8,6 +8,10 @@
         {
           "type": "in_title_land_type",
           "land_type": "minestuck:thunder"
+        },
+        {
+          "type": "is_entity_type",
+          "entity_type": "minestuck:turtle"
         }
       ]
     }
