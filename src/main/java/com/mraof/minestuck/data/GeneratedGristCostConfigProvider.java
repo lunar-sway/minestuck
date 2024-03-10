@@ -1,11 +1,7 @@
 package com.mraof.minestuck.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.*;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
@@ -16,24 +12,20 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GeneratedGristCostConfigProvider implements DataProvider
 {
-	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	private final PackOutput output;
 	private final String modid;
-	private final List<JsonObject> entries = new ArrayList<>();
+	private final List<RecipeGeneratedCostHandler.SourceEntry> entries = new ArrayList<>();
 	
 	public GeneratedGristCostConfigProvider(PackOutput output, String modid)
 	{
@@ -60,14 +52,10 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 		Path jsonPath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK)
 				.resolve(modid).resolve(RecipeGeneratedCostHandler.PATH);
 		
-		JsonElement json = serialize();
+		JsonElement json = RecipeGeneratedCostHandler.SourceEntry.LIST_CODEC.encodeStart(JsonOps.INSTANCE, this.entries)
+				.getOrThrow(false, LOGGER::error);
+		
 		return DataProvider.saveStable(cache, json, jsonPath);
-	}
-	
-	private JsonElement serialize()
-	{
-		Type type = new TypeToken<List<JsonObject>>(){}.getType();
-		return GSON.toJsonTree(entries, type);
 	}
 	
 	protected void recipe(ResourceLocation location)
@@ -87,37 +75,22 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	
 	protected void recipe(ResourceLocation location, RecipeInterpreter interpreter)
 	{
-		JsonObject entry = new JsonObject();
-		entry.addProperty("source_type", "recipe");
-		entry.addProperty("source", location.toString());
-		addEntry(entry, interpreter);
+		addEntry(new RecipeSource.SingleRecipe(location), interpreter);
 	}
 	
 	protected void serializer(RecipeSerializer<?> serializer, RecipeInterpreter interpreter)
 	{
-		JsonObject entry = new JsonObject();
-		entry.addProperty("source_type", "recipe_serializer");
-		ResourceLocation serializerId = Objects.requireNonNull(ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer));
-		entry.addProperty("source", serializerId.toString());
-		addEntry(entry, interpreter);
+		addEntry(new RecipeSource.BySerializer(serializer), interpreter);
 	}
 	
 	protected void type(RecipeType<?> type, RecipeInterpreter interpreter)
 	{
-		JsonObject entry = new JsonObject();
-		entry.addProperty("source_type", "recipe_type");
-		entry.addProperty("source", type.toString());
-		addEntry(entry, interpreter);
+		addEntry(new RecipeSource.ByType(type), interpreter);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private <T extends RecipeInterpreter> void addEntry(JsonObject entry, T interpreter)
+	private void addEntry(RecipeSource source, RecipeInterpreter interpreter)
 	{
-		ResourceLocation type = Objects.requireNonNull(InterpreterSerializers.REGISTRY.get().getKey(interpreter.getSerializer()));
-		entry.addProperty("interpreter_type", type.toString());
-		entry.add("interpreter", ((InterpreterSerializer<T>) interpreter.getSerializer()).write(interpreter));
-		
-		entries.add(entry);
+		entries.add(new RecipeGeneratedCostHandler.SourceEntry(source, interpreter));
 	}
 	
 	@Override

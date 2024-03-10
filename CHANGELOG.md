@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer Theme is now chosen from a list of available Themes in separate GUI
 - Changes to computer Theme texture Crocker
 - Computer programs now always use Theme specific texture for arrow buttons
+- New format for the data file `grist_cost_generation_recipes.json`
 
 ### Fixed
 
