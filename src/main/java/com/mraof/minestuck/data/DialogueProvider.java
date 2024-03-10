@@ -61,7 +61,7 @@ public class DialogueProvider implements DataProvider
 						isInLand(LandTypes.WIND.get()),
 						new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get()))))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("pyre.2")));
-		add("pyre.2", new DialogueBuilder(defaultKeyMsg()));
+		add("pyre.2", new NodeBuilder(defaultKeyMsg()));
 		
 		//Pulse
 		add("koolaid", new DialogueBuilder(defaultKeyMsg()).randomlySelectable(isInLand(LandTypes.PULSE.get())));
@@ -76,17 +76,17 @@ public class DialogueProvider implements DataProvider
 		add("reckoning.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(isInLand(LandTypes.THUNDER.get()))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.2")));
-		add("reckoning.2", new DialogueBuilder(defaultKeyMsg())
+		add("reckoning.2", new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("reckoning.3")));
-		add("reckoning.3", new DialogueBuilder(defaultKeyMsg()));
+		add("reckoning.3", new NodeBuilder(defaultKeyMsg()));
 		add("thunder_death.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(all(
 						isInLand(LandTypes.THUNDER.get()),
 						isInLand(LandTypes.WOOD.get())))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.2")));
-		add("thunder_death.2", new DialogueBuilder(defaultKeyMsg())
+		add("thunder_death.2", new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("thunder_death.3")));
-		add("thunder_death.3", new DialogueBuilder(defaultKeyMsg()));
+		add("thunder_death.3", new NodeBuilder(defaultKeyMsg()));
 		add("hardcore", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(all(
 						isInLand(LandTypes.THUNDER.get()),
@@ -96,15 +96,15 @@ public class DialogueProvider implements DataProvider
 		add("mycelium.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(isInLand(LandTypes.FUNGI.get()))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("mycelium.2")));
-		add("mycelium.2", new DialogueBuilder(defaultKeyMsg()));
+		add("mycelium.2", new NodeBuilder(defaultKeyMsg()));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
 		add("camel/start", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
 				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes")).nextDialogue("camel/no_camel"))
 				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.no")).nextDialogue("camel/dancing_camel")));
-		add("camel/no_camel", new DialogueBuilder(defaultKeyMsg()));
-		add("camel/dancing_camel", new DialogueBuilder(defaultKeyMsg()));
+		add("camel/no_camel", new NodeBuilder(defaultKeyMsg()));
+		add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg()));
 		
 		add("food_shop", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()))
@@ -126,9 +126,9 @@ public class DialogueProvider implements DataProvider
 		add("immortality_herb.1", new DialogueBuilder(defaultKeyMsg())
 				.randomlySelectable(isInLand(LandTypes.FLORA.get()))
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.2")));
-		add("immortality_herb.2", new DialogueBuilder(defaultKeyMsg())
+		add("immortality_herb.2", new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("immortality_herb.3")));
-		add("immortality_herb.3", new DialogueBuilder(defaultKeyMsg())
+		add("immortality_herb.3", new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("...")).addTrigger(new Trigger.Explode())));
 	}
 	
@@ -210,6 +210,11 @@ public class DialogueProvider implements DataProvider
 		add("test_arguments", new DialogueBuilder(defaultKeyMsg(DialogueMessage.Argument.PLAYER_NAME_LAND))
 				.randomlySelectable()
 				.addResponse(new ResponseBuilder(msg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
+	}
+	
+	private void add(String path, NodeBuilder builder)
+	{
+		add(path, new DialogueBuilder(builder));
 	}
 	
 	private void add(String path, DialogueBuilder builder)
