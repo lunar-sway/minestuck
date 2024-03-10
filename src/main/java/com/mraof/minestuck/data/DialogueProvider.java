@@ -26,9 +26,6 @@ import java.util.function.Function;
 @MethodsReturnNonnullByDefault
 public abstract class DialogueProvider implements DataProvider
 {
-	public static final String DEFAULT_ANIMATION = "generic_animation";
-	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
-	
 	private final Map<ResourceLocation, Dialogue> dialogues = new HashMap<>();
 	
 	private final String modId;
@@ -132,8 +129,8 @@ public abstract class DialogueProvider implements DataProvider
 	public static class NodeBuilder
 	{
 		private final Function<ResourceLocation, DialogueMessage> messageProvider;
-		private String animation = DEFAULT_ANIMATION;
-		private ResourceLocation guiPath = DEFAULT_GUI;
+		private String animation = Dialogue.DEFAULT_ANIMATION;
+		private ResourceLocation guiPath = Dialogue.DEFAULT_GUI;
 		private final List<ResponseBuilder> responses = new ArrayList<>();
 		
 		NodeBuilder(DialogueMessage message)
