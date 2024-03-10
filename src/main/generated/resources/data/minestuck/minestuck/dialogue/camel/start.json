@@ -12,7 +12,6 @@
       }
     ]
   },
-  "path": "minestuck:camel/start",
   "use_context": {
     "conditions": {
       "condition_list": [

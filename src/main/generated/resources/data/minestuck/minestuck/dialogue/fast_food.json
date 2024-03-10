@@ -17,7 +17,6 @@
       }
     ]
   },
-  "path": "minestuck:fast_food",
   "use_context": {
     "conditions": {
       "condition_list": [

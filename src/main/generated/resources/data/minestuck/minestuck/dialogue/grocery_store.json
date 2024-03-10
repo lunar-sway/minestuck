@@ -17,7 +17,6 @@
       }
     ]
   },
-  "path": "minestuck:grocery_store",
   "use_context": {
     "conditions": {
       "condition_list": [

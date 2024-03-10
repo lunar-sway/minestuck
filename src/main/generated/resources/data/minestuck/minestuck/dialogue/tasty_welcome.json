@@ -17,7 +17,6 @@
       }
     ]
   },
-  "path": "minestuck:tasty_welcome",
   "use_context": {
     "conditions": {
       "condition_list": [

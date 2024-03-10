@@ -2,7 +2,6 @@
   "node": {
     "message": "minestuck.dialogue.hardcore"
   },
-  "path": "minestuck:hardcore",
   "use_context": {
     "conditions": {
       "condition_list": [

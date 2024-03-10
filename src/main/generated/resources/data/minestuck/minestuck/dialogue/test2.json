@@ -87,7 +87,6 @@
       }
     ]
   },
-  "path": "minestuck:test2",
   "use_context": {
     "conditions": {
       "condition_list": []
