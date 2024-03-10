@@ -3,7 +3,7 @@
     "message": "minestuck.dialogue.mycelium.1",
     "responses": [
       {
-        "message": "=>",
+        "message": "minestuck.arrow",
         "next_dialogue_path": "minestuck:mycelium.2"
       }
     ]

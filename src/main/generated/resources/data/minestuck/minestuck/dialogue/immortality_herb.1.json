@@ -3,7 +3,7 @@
     "message": "minestuck.dialogue.immortality_herb.1",
     "responses": [
       {
-        "message": "=>",
+        "message": "minestuck.arrow",
         "next_dialogue_path": "minestuck:immortality_herb.2"
       }
     ]
