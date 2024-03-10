@@ -57,8 +57,8 @@ public class DialogueProvider implements DataProvider
 	{
 		//Wind
 		addRandomlySelectable("pyre.1", all(isInLand(LandTypes.WIND.get()), new Condition.IsOneOfEntityType(List.of(MSEntityTypes.SALAMANDER.get(), MSEntityTypes.TURTLE.get()))),
-				new NodeBuilder(defaultKeyMsg()).addResponse(new ResponseBuilder(msg("=>")).nextDialogue("pyre.2")));
-		add("pyre.2", new NodeBuilder(defaultKeyMsg()));
+				new NodeBuilder(defaultKeyMsg()).addResponse(new ResponseBuilder(msg("=>"))
+						.nextDialogue(add("pyre.2", new NodeBuilder(defaultKeyMsg())))));
 		
 		//Pulse
 		addRandomlySelectable("koolaid", isInLand(LandTypes.PULSE.get()), new NodeBuilder(defaultKeyMsg()));
@@ -85,15 +85,15 @@ public class DialogueProvider implements DataProvider
 		
 		
 		addRandomlySelectable("mycelium.1", isInLand(LandTypes.FUNGI.get()), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(msg("=>")).nextDialogue("mycelium.2")));
-		add("mycelium.2", new NodeBuilder(defaultKeyMsg()));
+				.addResponse(new ResponseBuilder(msg("=>"))
+						.nextDialogue(add("mycelium.2", new NodeBuilder(defaultKeyMsg())))));
 		
 		//TODO was originally in MSTags.TerrainLandTypes.SAND
 		addRandomlySelectable("camel/start", isInTerrainLand(MSTags.TerrainLandTypes.SAND), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes")).nextDialogue("camel/no_camel"))
-				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.no")).nextDialogue("camel/dancing_camel")));
-		add("camel/no_camel", new NodeBuilder(defaultKeyMsg()));
-		add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg()));
+				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes"))
+						.nextDialogue(add("camel/no_camel", new NodeBuilder(defaultKeyMsg()))))
+				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.no"))
+						.nextDialogue(add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg())))));
 		
 		addRandomlySelectable("food_shop", new Condition.IsEntityType(MSEntityTypes.SALAMANDER.get()), new NodeBuilder(defaultKeyMsg())
 				.addResponse("Never mind")
@@ -190,9 +190,9 @@ public class DialogueProvider implements DataProvider
 				.addResponse(new ResponseBuilder(msg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
 	}
 	
-	private void add(String path, NodeBuilder builder)
+	private ResourceLocation add(String path, NodeBuilder builder)
 	{
-		add(path, new DialogueBuilder(builder));
+		return add(path, new DialogueBuilder(builder));
 	}
 	
 	private void addRandomlySelectable(String path, Condition condition, NodeBuilder builder)
@@ -210,10 +210,11 @@ public class DialogueProvider implements DataProvider
 		add(path, new DialogueBuilder(builder).randomlySelectable(useContext));
 	}
 	
-	private void add(String path, DialogueBuilder builder)
+	private ResourceLocation add(String path, DialogueBuilder builder)
 	{
 		ResourceLocation id = new ResourceLocation(Minestuck.MOD_ID, path);
 		dialogues.put(id, builder.build(id));
+		return id;
 	}
 	
 	public static class DialogueBuilder
@@ -310,6 +311,7 @@ public class DialogueProvider implements DataProvider
 			return this;
 		}
 		
+		@Deprecated
 		public ResponseBuilder nextDialogue(String nextDialoguePath)
 		{
 			return this.nextDialogue(new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath));
@@ -367,6 +369,7 @@ public class DialogueProvider implements DataProvider
 		return new Conditions(List.of(conditions), Conditions.Type.ALL);
 	}
 	
+	@SuppressWarnings("unused")
 	public static Dialogue.UseContext weighted(int weight, Condition condition)
 	{
 		return weighted(weight, all(condition));
