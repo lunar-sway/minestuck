@@ -261,7 +261,7 @@ public abstract class DialogueProvider implements DataProvider
 		return id -> msg(languageKeyBase(id), text, arguments);
 	}
 	
-	public Function<ResourceLocation, DialogueMessage> responseMsg(String key, String text, DialogueMessage.Argument... arguments)
+	public Function<ResourceLocation, DialogueMessage> subMsg(String key, String text, DialogueMessage.Argument... arguments)
 	{
 		return id -> msg(languageKeyBase(id) + "." + key, text, arguments);
 	}

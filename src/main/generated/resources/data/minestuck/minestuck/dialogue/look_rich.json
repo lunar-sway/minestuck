@@ -8,7 +8,7 @@
             "amount": 10000
           }
         ],
-        "message": "Hey, looks like you have a lot of boons!"
+        "message": "minestuck.dialogue.look_rich.rich"
       },
       {
         "condition_list": [
@@ -18,11 +18,11 @@
             "greater_than": false
           }
         ],
-        "message": "Wow, you barely have any boons. Poor you."
+        "message": "minestuck.dialogue.look_rich.poor"
       }
     ],
     "default_node": {
-      "message": "Hi! I can sense if someone has a lot of boondollars."
+      "message": "minestuck.dialogue.look_rich"
     }
   },
   "use_context": {
