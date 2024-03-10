@@ -3,7 +3,7 @@
     "message": "minestuck.dialogue.me_want_5_cookies",
     "responses": [
       {
-        "message": "im sorry fellow, I have no cookie for you. Bye"
+        "message": "minestuck.dialogue.me_want_5_cookies.no"
       },
       {
         "conditions": {
@@ -16,7 +16,7 @@
           ]
         },
         "hide_if_failed": false,
-        "message": "here have 5 cookies chap",
+        "message": "minestuck.dialogue.me_want_5_cookies.give",
         "next_dialogue_path": "minestuck:oh_yippee",
         "triggers": [
           {

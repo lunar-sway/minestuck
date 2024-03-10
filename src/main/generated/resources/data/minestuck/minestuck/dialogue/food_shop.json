@@ -3,10 +3,10 @@
     "message": "minestuck.dialogue.food_shop",
     "responses": [
       {
-        "message": "Never mind"
+        "message": "minestuck.dialogue.food_shop.bye"
       },
       {
-        "message": "What do you have?",
+        "message": "minestuck.dialogue.food_shop.next",
         "triggers": [
           {
             "type": "open_consort_merchant_gui",

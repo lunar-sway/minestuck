@@ -3,7 +3,7 @@
     "message": "minestuck.dialogue.immortality_herb.3",
     "responses": [
       {
-        "message": "...",
+        "message": "minestuck.dialogue.immortality_herb.3.end",
         "triggers": [
           {
             "type": "explode"
