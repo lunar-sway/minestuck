@@ -13,7 +13,6 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -26,8 +25,9 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -41,46 +41,32 @@ public sealed interface Condition
 	Codec<Condition> CODEC = Type.CODEC.dispatch(Condition::getType, type -> type.codec.get());
 	Codec<List<Condition>> LIST_CODEC = Condition.CODEC.listOf();
 	
-	static Condition read(FriendlyByteBuf buffer)
-	{
-		Type type = Type.fromInt(buffer.readInt());
-		return type.bufferReader.apply(buffer);
-	}
-	
-	default void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeInt(this.getType().ordinal());
-		this.writeCondition(buffer);
-	}
-	
 	enum Type implements StringRepresentable
 	{
-		HAS_CONDITIONS(() -> HasConditions.CODEC, HasConditions::readCondition, ""),
-		IS_CONSORT(() -> IsConsort.CODEC, IsConsort::readCondition, "NPC is not consort"),
-		IS_CARAPACIAN(() -> IsCarapacian.CODEC, IsCarapacian::readCondition, "NPC is not carapacian"),
-		IS_ENTITY_TYPE(() -> IsEntityType.CODEC, IsEntityType::readCondition, "NPC is wrong entity type"),
-		IS_ONE_OF_ENTITY_TYPE(() -> IsOneOfEntityType.CODEC, IsOneOfEntityType::readCondition, "NPC is wrong entity type"),
-		IN_ANY_LAND(() -> InAnyLand.CODEC, InAnyLand::readCondition, "Is not in a Land"),
-		IN_TERRAIN_LAND_TYPE(() -> InTerrainLandType.CODEC, InTerrainLandType::readCondition, "Is not in specific Land"),
-		IN_TERRAIN_LAND_TYPE_TAG(() -> InTerrainLandTypeTag.CODEC, InTerrainLandTypeTag::readCondition, "Is not in specific Land tag"),
-		IN_TITLE_LAND_TYPE(() -> InTitleLandType.CODEC, InTitleLandType::readCondition, "Is not in specific Land"),
-		IN_TITLE_LAND_TYPE_TAG(() -> InTitleLandTypeTag.CODEC, InTitleLandTypeTag::readCondition, "Is not in specific Land tag"),
-		PLAYER_HAS_ITEM(() -> PlayerHasItem.CODEC, PlayerHasItem::readCondition, "You don't have the required item(s)"),
-		PLAYER_IS_CLASS(() -> PlayerIsClass.CODEC, PlayerIsClass::readCondition, "You aren't the required Class"),
-		PLAYER_IS_ASPECT(() -> PlayerIsAspect.CODEC, PlayerIsAspect::readCondition, "You aren't the required Aspect"),
-		PLAYER_HAS_REPUTATION(() -> PlayerHasReputation.CODEC, PlayerHasReputation::readCondition, "Your reputation doesn't meet requirement"),
-		PLAYER_HAS_BOONDOLLARS(() -> PlayerHasBoondollars.CODEC, PlayerHasBoondollars::readCondition, "Your porkhollow doesn't meet requirement");
+		HAS_CONDITIONS(() -> HasConditions.CODEC, ""),
+		IS_CONSORT(() -> IsConsort.CODEC, "NPC is not consort"),
+		IS_CARAPACIAN(() -> IsCarapacian.CODEC, "NPC is not carapacian"),
+		IS_ENTITY_TYPE(() -> IsEntityType.CODEC, "NPC is wrong entity type"),
+		IS_ONE_OF_ENTITY_TYPE(() -> IsOneOfEntityType.CODEC, "NPC is wrong entity type"),
+		IN_ANY_LAND(() -> InAnyLand.CODEC, "Is not in a Land"),
+		IN_TERRAIN_LAND_TYPE(() -> InTerrainLandType.CODEC, "Is not in specific Land"),
+		IN_TERRAIN_LAND_TYPE_TAG(() -> InTerrainLandTypeTag.CODEC, "Is not in specific Land tag"),
+		IN_TITLE_LAND_TYPE(() -> InTitleLandType.CODEC, "Is not in specific Land"),
+		IN_TITLE_LAND_TYPE_TAG(() -> InTitleLandTypeTag.CODEC, "Is not in specific Land tag"),
+		PLAYER_HAS_ITEM(() -> PlayerHasItem.CODEC, "You don't have the required item(s)"),
+		PLAYER_IS_CLASS(() -> PlayerIsClass.CODEC, "You aren't the required Class"),
+		PLAYER_IS_ASPECT(() -> PlayerIsAspect.CODEC, "You aren't the required Aspect"),
+		PLAYER_HAS_REPUTATION(() -> PlayerHasReputation.CODEC, "Your reputation doesn't meet requirement"),
+		PLAYER_HAS_BOONDOLLARS(() -> PlayerHasBoondollars.CODEC, "Your porkhollow doesn't meet requirement");
 		
 		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 		
 		private final Supplier<Codec<? extends Condition>> codec;
-		private final Function<FriendlyByteBuf, Condition> bufferReader;
 		private final String failureTooltip;
 		
-		Type(Supplier<Codec<? extends Condition>> codec, Function<FriendlyByteBuf, Condition> bufferReader, String failureTooltip)
+		Type(Supplier<Codec<? extends Condition>> codec, String failureTooltip)
 		{
 			this.codec = codec;
-			this.bufferReader = bufferReader;
 			this.failureTooltip = failureTooltip;
 		}
 		
@@ -98,8 +84,6 @@ public sealed interface Condition
 			return this.name().toLowerCase(Locale.ROOT);
 		}
 	}
-	
-	void writeCondition(FriendlyByteBuf buffer);
 	
 	Type getType();
 	
@@ -127,28 +111,6 @@ public sealed interface Condition
 			return Type.HAS_CONDITIONS;
 		}
 		
-		static HasConditions readCondition(FriendlyByteBuf buffer)
-		{
-			int ordinal = buffer.readInt();
-			
-			List<Condition> conditionList = new ArrayList<>();
-			while(buffer.isReadable())
-			{
-				conditionList.add(Condition.read(buffer));
-			}
-			
-			Conditions conditions = new Conditions(conditionList, Conditions.Type.fromInt(ordinal));
-			
-			return new HasConditions(conditions);
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeInt(conditions.type().ordinal());
-			conditions.conditionList().forEach(condition -> condition.write(buffer));
-		}
-		
 		@Override
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
@@ -169,16 +131,6 @@ public sealed interface Condition
 			return Type.IS_CONSORT;
 		}
 		
-		static IsConsort readCondition(FriendlyByteBuf buffer)
-		{
-			return new IsConsort();
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-		}
-		
 		@Override
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
@@ -194,16 +146,6 @@ public sealed interface Condition
 		public Type getType()
 		{
 			return Type.IS_CARAPACIAN;
-		}
-		
-		static IsCarapacian readCondition(FriendlyByteBuf buffer)
-		{
-			return new IsCarapacian();
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
 		}
 		
 		@Override
@@ -225,18 +167,6 @@ public sealed interface Condition
 			return Type.IS_ENTITY_TYPE;
 		}
 		
-		static IsEntityType readCondition(FriendlyByteBuf buffer)
-		{
-			EntityType<?> entityType = buffer.readRegistryIdSafe(EntityType.class);
-			return new IsEntityType(entityType);
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeRegistryId(ForgeRegistries.ENTITY_TYPES, this.entityType);
-		}
-		
 		@Override
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
@@ -256,26 +186,6 @@ public sealed interface Condition
 			return Type.IS_ONE_OF_ENTITY_TYPE;
 		}
 		
-		static IsOneOfEntityType readCondition(FriendlyByteBuf buffer)
-		{
-			List<EntityType<?>> entityTypes = new ArrayList<>();
-			while(buffer.isReadable())
-			{
-				entityTypes.add(buffer.readRegistryIdSafe(EntityType.class));
-			}
-			
-			return new IsOneOfEntityType(entityTypes);
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			for(EntityType<?> entityType : entityTypes)
-			{
-				buffer.writeRegistryId(ForgeRegistries.ENTITY_TYPES, entityType);
-			}
-		}
-		
 		@Override
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
@@ -291,16 +201,6 @@ public sealed interface Condition
 		public Type getType()
 		{
 			return Type.IN_ANY_LAND;
-		}
-		
-		static InAnyLand readCondition(FriendlyByteBuf buffer)
-		{
-			return new InAnyLand();
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
 		}
 		
 		@Override
@@ -321,18 +221,6 @@ public sealed interface Condition
 		public Type getType()
 		{
 			return Type.IN_TERRAIN_LAND_TYPE;
-		}
-		
-		static InTerrainLandType readCondition(FriendlyByteBuf buffer)
-		{
-			return new InTerrainLandType(LandTypes.TERRAIN_REGISTRY.get().getValue(buffer.readResourceLocation()));
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			//TODO is it safe to require non null here?
-			buffer.writeResourceLocation(Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().getKey(landType)));
 		}
 		
 		@Override
@@ -364,17 +252,6 @@ public sealed interface Condition
 			return Type.IN_TERRAIN_LAND_TYPE_TAG;
 		}
 		
-		static InTerrainLandTypeTag readCondition(FriendlyByteBuf buffer)
-		{
-			return new InTerrainLandTypeTag(TagKey.create(LandTypes.TERRAIN_REGISTRY.get().getRegistryKey(), buffer.readResourceLocation()));
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeResourceLocation(landTypeTag.location());
-		}
-		
 		@Override
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
@@ -404,18 +281,6 @@ public sealed interface Condition
 			return Type.IN_TITLE_LAND_TYPE;
 		}
 		
-		static InTitleLandType readCondition(FriendlyByteBuf buffer)
-		{
-			return new InTitleLandType(LandTypes.TITLE_REGISTRY.get().getValue(buffer.readResourceLocation()));
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			//TODO is it safe to require non null here?
-			buffer.writeResourceLocation(Objects.requireNonNull(LandTypes.TITLE_REGISTRY.get().getKey(landType)));
-		}
-		
 		@Override
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
@@ -443,17 +308,6 @@ public sealed interface Condition
 		public Type getType()
 		{
 			return Type.IN_TITLE_LAND_TYPE_TAG;
-		}
-		
-		static InTitleLandTypeTag readCondition(FriendlyByteBuf buffer)
-		{
-			return new InTitleLandTypeTag(TagKey.create(LandTypes.TITLE_REGISTRY.get().getRegistryKey(), buffer.readResourceLocation()));
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeResourceLocation(landTypeTag.location());
 		}
 		
 		@Override
@@ -486,20 +340,6 @@ public sealed interface Condition
 			return Type.PLAYER_HAS_ITEM;
 		}
 		
-		static PlayerHasItem readCondition(FriendlyByteBuf buffer)
-		{
-			Item item = buffer.readRegistryIdSafe(Item.class);
-			int amount = buffer.readInt();
-			return new PlayerHasItem(item, amount);
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeRegistryId(ForgeRegistries.ITEMS, this.item);
-			buffer.writeInt(this.amount);
-		}
-		
 		@Override
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
@@ -518,18 +358,6 @@ public sealed interface Condition
 		public Type getType()
 		{
 			return Type.PLAYER_IS_CLASS;
-		}
-		
-		static PlayerIsClass readCondition(FriendlyByteBuf buffer)
-		{
-			int ordinal = buffer.readInt();
-			return new PlayerIsClass(EnumClass.getClassFromInt(ordinal));
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeInt(this.enumClass.ordinal());
 		}
 		
 		@Override
@@ -556,18 +384,6 @@ public sealed interface Condition
 		public Type getType()
 		{
 			return Type.PLAYER_IS_ASPECT;
-		}
-		
-		static PlayerIsAspect readCondition(FriendlyByteBuf buffer)
-		{
-			int ordinal = buffer.readInt();
-			return new PlayerIsAspect(EnumAspect.getAspectFromInt(ordinal));
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeInt(this.enumAspect.ordinal());
 		}
 		
 		@Override
@@ -597,20 +413,6 @@ public sealed interface Condition
 			return Type.PLAYER_HAS_REPUTATION;
 		}
 		
-		static PlayerHasReputation readCondition(FriendlyByteBuf buffer)
-		{
-			int amount = buffer.readInt();
-			boolean greaterThan = buffer.readBoolean();
-			return new PlayerHasReputation(amount, greaterThan);
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeInt(this.amount);
-			buffer.writeBoolean(this.greaterThan);
-		}
-		
 		@Override
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
@@ -638,20 +440,6 @@ public sealed interface Condition
 		public Type getType()
 		{
 			return Type.PLAYER_HAS_BOONDOLLARS;
-		}
-		
-		static PlayerHasBoondollars readCondition(FriendlyByteBuf buffer)
-		{
-			int amount = buffer.readInt();
-			boolean greaterThan = buffer.readBoolean();
-			return new PlayerHasBoondollars(amount, greaterThan);
-		}
-		
-		@Override
-		public void writeCondition(FriendlyByteBuf buffer)
-		{
-			buffer.writeInt(this.amount);
-			buffer.writeBoolean(this.greaterThan);
 		}
 		
 		@Override
