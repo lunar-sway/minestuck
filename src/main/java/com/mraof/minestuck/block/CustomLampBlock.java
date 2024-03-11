@@ -24,7 +24,7 @@ public class CustomLampBlock extends Block
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		if(!pLevel.isClientSide() && pHand == InteractionHand.MAIN_HAND) {
 			
-			pLevel.setBlock(pPos, pState.cycle(CLICKED), 3);
+			pLevel.setBlock(pPos, pState.cycle(CLICKED), Block.UPDATE_ALL);
 		}
 		
 		return InteractionResult.SUCCESS;
