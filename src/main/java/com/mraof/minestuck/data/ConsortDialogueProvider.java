@@ -155,8 +155,10 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				.addResponse(new ResponseBuilder(msg("test1response2")).nextDialogue("test2").condition(isEntityType(NAKAGATOR.get())))
 				.addResponse(new ResponseBuilder(msg("test1response3")).nextDialogue("test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 				.addResponse(new ResponseBuilder(msg("test1response4"))
-						.visibleCondition(one(one(isEntityType(NAKAGATOR.get()), isEntityType(TURTLE.get()), isEntityType(IGUANA.get()), isEntityType(SALAMANDER.get())),
-								one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1))))));
+						.visibleCondition(subText("fail", "This very custom condition was not met."), one(
+								one(isEntityType(NAKAGATOR.get()), isEntityType(TURTLE.get()), isEntityType(IGUANA.get()), isEntityType(SALAMANDER.get())),
+								one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1))
+						))));
 		
 		addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")

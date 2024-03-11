@@ -191,12 +191,13 @@ public abstract class DialogueProvider implements DataProvider
 	public static class ResponseBuilder
 	{
 		private final Function<ResourceLocation, DialogueMessage> message;
-		private Condition condition = Condition.AlwaysTrue.INSTANCE;
 		private final List<Trigger> triggers = new ArrayList<>();
 		@Nullable
 		private ResourceLocation nextDialoguePath = null;
 		private boolean loopNextPath = false;
+		private Condition condition = Condition.AlwaysTrue.INSTANCE;
 		private boolean hideIfFailed = true;
+		private Function<ResourceLocation, String> failTooltip = id -> null;
 		
 		ResponseBuilder(DialogueMessage message)
 		{
@@ -241,6 +242,14 @@ public abstract class DialogueProvider implements DataProvider
 			return this;
 		}
 		
+		public ResponseBuilder visibleCondition(Function<ResourceLocation, String> failTooltip, Condition condition)
+		{
+			this.hideIfFailed = false;
+			this.condition = condition;
+			this.failTooltip = failTooltip;
+			return this;
+		}
+		
 		public ResponseBuilder addTrigger(Trigger trigger)
 		{
 			this.triggers.add(trigger);
@@ -251,9 +260,12 @@ public abstract class DialogueProvider implements DataProvider
 		{
 			ResourceLocation nextPath = this.loopNextPath ? id : this.nextDialoguePath;
 			DialogueMessage message = this.message.apply(id);
-			return new Dialogue.Response(message, this.condition, this.triggers, Optional.ofNullable(nextPath), this.hideIfFailed);
+			return new Dialogue.Response(message, this.triggers, Optional.ofNullable(nextPath), this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
 		}
 	}
+	
+	public static final DialogueMessage ARROW = new DialogueMessage("minestuck.arrow");
+	public static final DialogueMessage DOTS = new DialogueMessage("minestuck.dots");
 	
 	@Deprecated
 	public static Function<ResourceLocation, DialogueMessage> defaultKeyMsg(DialogueMessage.Argument... arguments)
@@ -271,9 +283,6 @@ public abstract class DialogueProvider implements DataProvider
 		return id -> msg(languageKeyBase(id) + "." + key, text, arguments);
 	}
 	
-	public static final DialogueMessage ARROW = new DialogueMessage("minestuck.arrow");
-	public static final DialogueMessage DOTS = new DialogueMessage("minestuck.dots");
-	
 	@Deprecated
 	public static DialogueMessage msg(String key, DialogueMessage.Argument... arguments)
 	{
@@ -284,6 +293,15 @@ public abstract class DialogueProvider implements DataProvider
 	{
 		this.languageProvider.add(key, text);
 		return new DialogueMessage(key, List.of(arguments));
+	}
+	
+	public Function<ResourceLocation, String> subText(String subKey, String text)
+	{
+		return id -> {
+			String key = languageKeyBase(id) + "." + subKey;
+			this.languageProvider.add(key, text);
+			return key;
+		};
 	}
 	
 	private static String languageKeyBase(ResourceLocation id)
