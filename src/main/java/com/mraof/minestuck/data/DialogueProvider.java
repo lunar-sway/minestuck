@@ -315,22 +315,22 @@ public abstract class DialogueProvider implements DataProvider
 	@SuppressWarnings("unused")
 	public static Dialogue.RandomlySelectable weighted(int weight, Condition condition)
 	{
-		return weighted(weight, all(condition));
+		return new Dialogue.RandomlySelectable(condition, weight);
 	}
 	
 	public static Dialogue.RandomlySelectable weighted(int weight, Conditions conditions)
 	{
-		return new Dialogue.RandomlySelectable(conditions, weight);
+		return weighted(weight, new Condition.HasConditions(conditions));
 	}
 	
 	public static Dialogue.RandomlySelectable defaultWeight(Condition condition)
 	{
-		return defaultWeight(all(condition));
+		return new Dialogue.RandomlySelectable(condition);
 	}
 	
 	public static Dialogue.RandomlySelectable defaultWeight(Conditions conditions)
 	{
-		return new Dialogue.RandomlySelectable(conditions);
+		return defaultWeight(new Condition.HasConditions(conditions));
 	}
 	
 	public static Condition isInLand(TerrainLandType landType)

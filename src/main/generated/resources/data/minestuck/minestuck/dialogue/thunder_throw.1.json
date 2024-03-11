@@ -9,20 +9,23 @@
     ]
   },
   "selectable": {
-    "conditions": {
-      "condition_list": [
-        {
-          "type": "in_title_land_type",
-          "land_type": "minestuck:thunder"
-        },
-        {
-          "type": "is_one_of_entity_type",
-          "entity_type": [
-            "minestuck:turtle",
-            "minestuck:salamander"
-          ]
-        }
-      ]
+    "condition": {
+      "type": "has_conditions",
+      "conditions": {
+        "condition_list": [
+          {
+            "type": "in_title_land_type",
+            "land_type": "minestuck:thunder"
+          },
+          {
+            "type": "is_one_of_entity_type",
+            "entity_type": [
+              "minestuck:turtle",
+              "minestuck:salamander"
+            ]
+          }
+        ]
+      }
     }
   }
 }

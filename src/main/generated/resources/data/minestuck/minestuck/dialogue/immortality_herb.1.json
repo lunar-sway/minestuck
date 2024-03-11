@@ -9,13 +9,9 @@
     ]
   },
   "selectable": {
-    "conditions": {
-      "condition_list": [
-        {
-          "type": "in_terrain_land_type",
-          "land_type": "minestuck:flora"
-        }
-      ]
+    "condition": {
+      "type": "in_terrain_land_type",
+      "land_type": "minestuck:flora"
     }
   }
 }

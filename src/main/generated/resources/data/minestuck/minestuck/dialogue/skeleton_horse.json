@@ -3,13 +3,9 @@
     "message": "minestuck.dialogue.skeleton_horse"
   },
   "selectable": {
-    "conditions": {
-      "condition_list": [
-        {
-          "type": "in_title_land_type",
-          "land_type": "minestuck:thunder"
-        }
-      ]
+    "condition": {
+      "type": "in_title_land_type",
+      "land_type": "minestuck:thunder"
     }
   }
 }

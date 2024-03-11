@@ -3,13 +3,9 @@
     "message": "minestuck.dialogue.nakagator_only"
   },
   "selectable": {
-    "conditions": {
-      "condition_list": [
-        {
-          "type": "is_entity_type",
-          "entity_type": "minestuck:nakagator"
-        }
-      ]
+    "condition": {
+      "type": "is_entity_type",
+      "entity_type": "minestuck:nakagator"
     }
   }
 }

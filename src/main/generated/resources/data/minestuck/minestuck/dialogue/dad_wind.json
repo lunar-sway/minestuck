@@ -3,13 +3,9 @@
     "message": "minestuck.dialogue.dad_wind"
   },
   "selectable": {
-    "conditions": {
-      "condition_list": [
-        {
-          "type": "in_title_land_type",
-          "land_type": "minestuck:wind"
-        }
-      ]
+    "condition": {
+      "type": "in_title_land_type",
+      "land_type": "minestuck:wind"
     }
   }
 }

@@ -26,8 +26,8 @@
     }
   },
   "selectable": {
-    "conditions": {
-      "condition_list": []
+    "condition": {
+      "type": "always_true"
     },
     "dialogue_weight": 100
   }
