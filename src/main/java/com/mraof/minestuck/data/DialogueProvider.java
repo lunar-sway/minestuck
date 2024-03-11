@@ -4,7 +4,10 @@ import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.dialogue.*;
+import com.mraof.minestuck.entity.dialogue.Condition;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.entity.dialogue.DialogueMessage;
+import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -278,22 +281,22 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public static Condition all(Condition... conditions)
 	{
-		return new Condition.HasConditions(new Conditions(List.of(conditions), Conditions.Type.ALL));
+		return new Condition.ListCondition(List.of(conditions), Condition.ListCondition.ListType.ALL);
 	}
 	
 	public static Condition any(Condition... conditions)
 	{
-		return new Condition.HasConditions(new Conditions(List.of(conditions), Conditions.Type.ANY));
+		return new Condition.ListCondition(List.of(conditions), Condition.ListCondition.ListType.ANY);
 	}
 	
 	public static Condition one(Condition... conditions)
 	{
-		return new Condition.HasConditions(new Conditions(List.of(conditions), Conditions.Type.ONE));
+		return new Condition.ListCondition(List.of(conditions), Condition.ListCondition.ListType.ONE);
 	}
 	
 	public static Condition none(Condition... conditions)
 	{
-		return new Condition.HasConditions(new Conditions(List.of(conditions), Conditions.Type.NONE));
+		return new Condition.ListCondition(List.of(conditions), Condition.ListCondition.ListType.NONE);
 	}
 	
 	@SuppressWarnings("unused")

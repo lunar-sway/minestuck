@@ -5,21 +5,19 @@
   "selectable": {
     "condition": {
       "type": "has_conditions",
-      "conditions": {
-        "condition_list": [
-          {
-            "type": "in_title_land_type",
-            "land_type": "minestuck:pulse"
-          },
-          {
-            "type": "is_one_of_entity_type",
-            "entity_type": [
-              "minestuck:salamander",
-              "minestuck:turtle"
-            ]
-          }
-        ]
-      }
+      "conditions": [
+        {
+          "type": "in_title_land_type",
+          "land_type": "minestuck:pulse"
+        },
+        {
+          "type": "is_one_of_entity_type",
+          "entity_type": [
+            "minestuck:salamander",
+            "minestuck:turtle"
+          ]
+        }
+      ]
     }
   }
 }
