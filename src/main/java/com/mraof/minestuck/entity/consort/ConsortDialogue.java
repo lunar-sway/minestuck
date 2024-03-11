@@ -45,9 +45,6 @@ public class ConsortDialogue
 	 */
 	public static void init()
 	{
-		// Thunder
-		addMessage(new ChainMessage(new SingleMessage("reckoning.1"), new SingleMessage("reckoning.2"), new SingleMessage("reckoning.3", "consort_type"))).condition(titleLand(THUNDER));
-		
 		//Monsters
 		addMessage(new SingleMessage("pet_zombie")).condition(titleLand(MSTags.TitleLandTypes.MONSTERS)).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		addMessage("spider_raid").condition(titleLand(MONSTERS));

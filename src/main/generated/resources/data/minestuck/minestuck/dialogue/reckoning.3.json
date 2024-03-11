@@ -1,5 +1,10 @@
 {
   "node": {
-    "message": "minestuck.dialogue.reckoning.3"
+    "message": {
+      "arguments": [
+        "ENTITY_TYPE"
+      ],
+      "key": "minestuck.dialogue.reckoning.3"
+    }
   }
 }

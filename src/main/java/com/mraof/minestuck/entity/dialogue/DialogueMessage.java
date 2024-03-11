@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
@@ -48,7 +49,10 @@ public record DialogueMessage(String key, List<Argument> arguments)
 			}
 			
 			return Component.literal("Player name");
-		});
+		}),
+		ENTITY_TYPE((npc, player) -> npc.getType().getDescription()),
+		ENTITY_TYPES((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".plural")),
+		;
 		
 		public static final Codec<Argument> CODEC = Codec.STRING.xmap(Argument::valueOf, Argument::name);
 		
@@ -66,6 +70,7 @@ public record DialogueMessage(String key, List<Argument> arguments)
 		}
 	}
 	
+	@Nullable
 	private static SburbConnection getConnection(ConsortEntity consort, ServerPlayer player)
 	{
 		return SburbHandler.getConnectionForDimension(player.getServer(), consort.getHomeDimension());
