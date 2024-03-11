@@ -11,6 +11,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.lands.LandTypePair;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,6 +46,7 @@ public record DialogueMessage(String key, List<Argument> arguments)
 		return Component.translatable(this.key, this.arguments.stream().map(argument -> argument.processing.apply(entity, serverPlayer)).toArray());
 	}
 	
+	@MethodsReturnNonnullByDefault
 	public enum Argument implements StringRepresentable
 	{
 		PLAYER_NAME_LAND((npc, player) -> homeLandClientPlayer(npc)
@@ -80,7 +82,7 @@ public record DialogueMessage(String key, List<Argument> arguments)
 		}),
 		;
 		
-		public static final Codec<Argument> CODEC = Codec.STRING.xmap(Argument::valueOf, Argument::name);
+		public static final Codec<Argument> CODEC = StringRepresentable.fromEnum(Argument::values);
 		
 		private final BiFunction<LivingEntity, ServerPlayer, Component> processing;
 		
