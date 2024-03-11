@@ -2,9 +2,9 @@ package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.entity.dialogue.Condition;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.Trigger;
+import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.EnumAspect;
