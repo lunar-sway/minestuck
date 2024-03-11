@@ -11,12 +11,14 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @MethodsReturnNonnullByDefault
-public record ListCondition(List<Condition> conditionList, ListType type) implements Condition
+public record ListCondition(List<Condition> conditions, ListType type) implements Condition
 {
 	static final Codec<ListCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Condition.LIST_CODEC.fieldOf("conditions").forGetter(ListCondition::conditionList),
+			Condition.LIST_CODEC.fieldOf("conditions").forGetter(ListCondition::conditions),
 			ListType.CODEC.fieldOf("list_type").forGetter(ListCondition::type)
 	).apply(instance, ListCondition::new));
 	
@@ -29,7 +31,7 @@ public record ListCondition(List<Condition> conditionList, ListType type) implem
 	@Override
 	public boolean test(LivingEntity entity, ServerPlayer player)
 	{
-		return type.context.test(entity, player, conditionList);
+		return this.type.conditionMerger.test(this.conditions.stream().map(condition -> condition.test(entity, player)));
 	}
 	
 	//TODO Does not make sense linguistically with a hard coded failure tooltip in Condition and a Conditions.Type other than ALL
@@ -38,88 +40,34 @@ public record ListCondition(List<Condition> conditionList, ListType type) implem
 	{
 		MutableComponent component = Component.empty();
 		
-		if(!this.conditionList.isEmpty())
-			component.append(this.conditionList.get(0).getFailureTooltip());
-		for(int i = 1; i < this.conditionList.size(); i++)
-			component.append("\n").append(this.conditionList.get(i).getFailureTooltip());
+		if(!this.conditions.isEmpty())
+			component.append(this.conditions.get(0).getFailureTooltip());
+		for(int i = 1; i < this.conditions.size(); i++)
+			component.append("\n").append(this.conditions.get(i).getFailureTooltip());
 		
 		return component;
 	}
 	
 	public enum ListType implements StringRepresentable
 	{
-		ALL((npc, player, conditions) ->
-		{
-			for(Condition condition : conditions)
-			{
-				if(!condition.test(npc, player))
-				{
-					return false;
-				}
-			}
-			
-			return true;
-		}),
-		ANY((npc, player, conditions) ->
-		{
-			for(Condition condition : conditions)
-			{
-				if(condition.test(npc, player))
-				{
-					return true;
-				}
-			}
-			
-			return false;
-		}),
-		ONE((npc, player, conditions) ->
-		{
-			boolean passedCondition = false;
-			
-			for(Condition condition : conditions)
-			{
-				if(condition.test(npc, player))
-				{
-					if(passedCondition)
-						return false;
-					
-					passedCondition = true;
-				}
-			}
-			
-			return passedCondition;
-		}),
-		NONE((npc, player, conditions) ->
-		{
-			for(Condition condition : conditions)
-			{
-				if(condition.test(npc, player))
-				{
-					return false;
-				}
-			}
-			
-			return true;
-		});
+		ALL(stream -> stream.allMatch(result -> result)),
+		ANY(stream -> stream.anyMatch(result -> result)),
+		ONE(stream -> stream.filter(result -> result).count() == 1),
+		NONE(stream -> stream.noneMatch(result -> result));
 		
 		public static final Codec<ListType> CODEC = StringRepresentable.fromEnum(ListType::values);
 		
-		private final ListType.TriPredicate<LivingEntity, ServerPlayer, List<Condition>> context;
+		private final Predicate<Stream<Boolean>> conditionMerger;
 		
-		ListType(ListType.TriPredicate<LivingEntity, ServerPlayer, List<Condition>> context)
+		ListType(Predicate<Stream<Boolean>> conditionMerger)
 		{
-			this.context = context;
+			this.conditionMerger = conditionMerger;
 		}
 		
 		@Override
 		public String getSerializedName()
 		{
 			return this.name().toLowerCase(Locale.ROOT);
-		}
-		
-		interface TriPredicate<A, B, C>
-		{
-			boolean test(A a, B b, C c);
 		}
 	}
 }
