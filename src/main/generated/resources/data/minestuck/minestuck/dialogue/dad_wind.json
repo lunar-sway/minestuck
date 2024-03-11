@@ -1,0 +1,15 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.dad_wind"
+  },
+  "use_context": {
+    "conditions": {
+      "condition_list": [
+        {
+          "type": "in_title_land_type",
+          "land_type": "minestuck:wind"
+        }
+      ]
+    }
+  }
+}
