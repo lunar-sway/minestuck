@@ -10,7 +10,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "in_terrain_land_type",
+      "type": "minestuck:terrain_land_type",
       "land_type": "minestuck:flora"
     }
   }

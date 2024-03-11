@@ -14,7 +14,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "in_terrain_land_type_tag",
+      "type": "minestuck:terrain_land_type_tag",
       "land_type_tag": "minestuck:sand"
     }
   }

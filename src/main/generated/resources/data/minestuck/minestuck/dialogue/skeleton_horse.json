@@ -4,7 +4,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "in_title_land_type",
+      "type": "minestuck:title_land_type",
       "land_type": "minestuck:thunder"
     }
   }

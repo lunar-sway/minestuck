@@ -22,7 +22,7 @@
       },
       {
         "condition": {
-          "type": "player_has_reputation",
+          "type": "minestuck:player_reputation",
           "amount": 500
         },
         "hide_if_failed": false,
@@ -30,7 +30,7 @@
       },
       {
         "condition": {
-          "type": "player_has_reputation",
+          "type": "minestuck:player_reputation",
           "amount": 200,
           "greater_than": false
         },
@@ -44,7 +44,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "always_true"
+      "type": "minestuck:always_true"
     },
     "dialogue_weight": 11
   }

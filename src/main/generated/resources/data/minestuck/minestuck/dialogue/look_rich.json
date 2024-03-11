@@ -3,7 +3,7 @@
     "conditioned_nodes": [
       {
         "condition": {
-          "type": "player_has_boondollars",
+          "type": "minestuck:player_boondollars",
           "amount": 10000
         },
         "node": {
@@ -12,7 +12,7 @@
       },
       {
         "condition": {
-          "type": "player_has_boondollars",
+          "type": "minestuck:player_boondollars",
           "amount": 10,
           "greater_than": false
         },
@@ -27,7 +27,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "always_true"
+      "type": "minestuck:always_true"
     },
     "dialogue_weight": 100
   }

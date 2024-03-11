@@ -19,7 +19,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "always_true"
+      "type": "minestuck:always_true"
     }
   }
 }

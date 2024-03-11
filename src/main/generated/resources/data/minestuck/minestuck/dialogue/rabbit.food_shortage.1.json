@@ -4,7 +4,7 @@
     "responses": [
       {
         "condition": {
-          "type": "in_terrain_land_type_tag",
+          "type": "minestuck:terrain_land_type_tag",
           "land_type_tag": "minestuck:rock"
         },
         "message": "minestuck.arrow",
@@ -14,14 +14,14 @@
   },
   "selectable": {
     "condition": {
-      "type": "has_conditions",
+      "type": "minestuck:list",
       "conditions": [
         {
-          "type": "in_title_land_type",
+          "type": "minestuck:title_land_type",
           "land_type": "minestuck:rabbits"
         },
         {
-          "type": "in_terrain_land_type_tag",
+          "type": "minestuck:terrain_land_type_tag",
           "land_type_tag": "minestuck:is_desolate"
         }
       ],
