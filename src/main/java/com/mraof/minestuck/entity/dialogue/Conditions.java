@@ -3,6 +3,8 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +26,19 @@ public record Conditions(List<Condition> conditionList, Type type)
 	public boolean testWithContext(LivingEntity entity, ServerPlayer player)
 	{
 		return type.context.test(entity, player, conditionList);
+	}
+	
+	//TODO Does not make sense linguistically with a hard coded failure tooltip in Condition and a Conditions.Type other than ALL
+	public Component getFailureTooltip()
+	{
+		MutableComponent component = Component.empty();
+		
+		if(!this.conditionList.isEmpty())
+			component.append(this.conditionList.get(0).getFailureTooltip());
+		for(int i = 1; i < this.conditionList.size(); i++)
+			component.append("\n").append(this.conditionList.get(i).getFailureTooltip());
+		
+		return component;
 	}
 	
 	public enum Type implements StringRepresentable

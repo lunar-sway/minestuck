@@ -86,10 +86,7 @@ public sealed interface Condition
 	
 	Type getType();
 	
-	default Component getFailureTooltip()
-	{
-		return Component.empty();
-	}
+	Component getFailureTooltip();
 	
 	boolean testCondition(LivingEntity entity, ServerPlayer player);
 	
@@ -117,6 +114,12 @@ public sealed interface Condition
 				return true;
 			
 			return conditions.testWithContext(entity, player);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return this.conditions.getFailureTooltip();
 		}
 	}
 	

@@ -76,14 +76,9 @@ public class DialogueScreen extends Screen
 		}
 	}
 	
-	private static MutableComponent conditionFailMessage(List<Component> causes)
+	private static MutableComponent conditionFailMessage(Component causes)
 	{
-		//TODO Does not make sense linguistically with a hard coded failure tooltip in Condition and a Conditions.Type other than ALL
-		MutableComponent tooltipMessage = Component.literal("Cannot be picked because:");
-		
-		causes.forEach(tooltip -> tooltipMessage.append("\n").append(tooltip));
-		
-		return tooltipMessage;
+		return Component.literal("Cannot be picked because:").append("\n").append(causes);
 	}
 	
 	private void clickResponse(int responseIndex)

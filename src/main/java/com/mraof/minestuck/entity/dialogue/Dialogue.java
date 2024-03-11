@@ -162,8 +162,7 @@ public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
 				if(this.hideIfFailed())
 					return Optional.empty();
 				
-				List<Component> failureMessages = this.conditions().conditionList().stream()
-						.map(Condition::getFailureTooltip).toList();
+				Component failureMessages = this.conditions().getFailureTooltip();
 				
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
@@ -275,18 +274,16 @@ public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
 		}
 	}
 	
-	public record ConditionFailure(List<Component> causes)
+	public record ConditionFailure(Component causes)
 	{
 		private static ConditionFailure read(FriendlyByteBuf buffer)
 		{
-			List<Component> causes = buffer.readList(FriendlyByteBuf::readComponent);
-			
-			return new ConditionFailure(causes);
+			return new ConditionFailure(buffer.readComponent());
 		}
 		
 		private void write(FriendlyByteBuf buffer)
 		{
-			buffer.writeCollection(this.causes, FriendlyByteBuf::writeComponent);
+			buffer.writeComponent(this.causes);
 		}
 	}
 }
