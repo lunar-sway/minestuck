@@ -16,7 +16,7 @@ public final class Conditions
 	
 	static {
 		REGISTER.register("always_true", () -> Condition.AlwaysTrue.CODEC);
-		REGISTER.register("list", () -> Condition.ListCondition.CODEC);
+		REGISTER.register("list", () -> ListCondition.CODEC);
 		REGISTER.register("consort", () -> Condition.IsConsort.CODEC);
 		REGISTER.register("carapacian", () -> Condition.IsCarapacian.CODEC);
 		REGISTER.register("entity_type", () -> Condition.IsEntityType.CODEC);
