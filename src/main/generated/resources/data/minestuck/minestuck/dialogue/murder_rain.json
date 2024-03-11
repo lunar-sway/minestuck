@@ -3,13 +3,9 @@
     "message": "minestuck.dialogue.murder_rain"
   },
   "selectable": {
-    "conditions": {
-      "condition_list": [
-        {
-          "type": "in_title_land_type",
-          "land_type": "minestuck:pulse"
-        }
-      ]
+    "condition": {
+      "type": "in_title_land_type",
+      "land_type": "minestuck:pulse"
     }
   }
 }

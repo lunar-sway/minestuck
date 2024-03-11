@@ -18,13 +18,9 @@
     ]
   },
   "selectable": {
-    "conditions": {
-      "condition_list": [
-        {
-          "type": "is_entity_type",
-          "entity_type": "minestuck:salamander"
-        }
-      ]
+    "condition": {
+      "type": "is_entity_type",
+      "entity_type": "minestuck:salamander"
     }
   }
 }

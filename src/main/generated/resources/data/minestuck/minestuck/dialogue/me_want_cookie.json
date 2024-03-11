@@ -31,8 +31,8 @@
     ]
   },
   "selectable": {
-    "conditions": {
-      "condition_list": []
+    "condition": {
+      "type": "always_true"
     }
   }
 }

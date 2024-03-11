@@ -9,41 +9,44 @@
     ]
   },
   "selectable": {
-    "conditions": {
-      "condition_list": [
-        {
-          "type": "in_title_land_type",
-          "land_type": "minestuck:rabbits"
-        },
-        {
-          "type": "has_conditions",
-          "conditions": {
-            "type": "ANY",
-            "condition_list": [
-              {
-                "type": "in_terrain_land_type_tag",
-                "land_type_tag": "minestuck:sand"
-              },
-              {
-                "type": "in_terrain_land_type_tag",
-                "land_type_tag": "minestuck:sandstone"
-              },
-              {
-                "type": "in_terrain_land_type_tag",
-                "land_type_tag": "minestuck:rock"
-              },
-              {
-                "type": "in_terrain_land_type",
-                "land_type": "minestuck:fungi"
-              },
-              {
-                "type": "in_terrain_land_type",
-                "land_type": "minestuck:shade"
-              }
-            ]
+    "condition": {
+      "type": "has_conditions",
+      "conditions": {
+        "condition_list": [
+          {
+            "type": "in_title_land_type",
+            "land_type": "minestuck:rabbits"
+          },
+          {
+            "type": "has_conditions",
+            "conditions": {
+              "type": "ANY",
+              "condition_list": [
+                {
+                  "type": "in_terrain_land_type_tag",
+                  "land_type_tag": "minestuck:sand"
+                },
+                {
+                  "type": "in_terrain_land_type_tag",
+                  "land_type_tag": "minestuck:sandstone"
+                },
+                {
+                  "type": "in_terrain_land_type_tag",
+                  "land_type_tag": "minestuck:rock"
+                },
+                {
+                  "type": "in_terrain_land_type",
+                  "land_type": "minestuck:fungi"
+                },
+                {
+                  "type": "in_terrain_land_type",
+                  "land_type": "minestuck:shade"
+                }
+              ]
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "dialogue_weight": 100
   }

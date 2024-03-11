@@ -70,7 +70,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 		List<WeightedEntry.Wrapper<Dialogue>> weightedFilteredDialogue = new ArrayList<>();
 		dialogues.values().forEach(dialogue -> {
 			dialogue.selectable().ifPresent(selectable -> {
-				if(selectable.conditions().testWithContext(entity, null))
+				if(selectable.condition().test(entity, null))
 					weightedFilteredDialogue.add(WeightedEntry.wrap(dialogue, selectable.weight()));
 			});
 		});

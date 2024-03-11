@@ -155,7 +155,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 	
 	private void testDialogues()
 	{
-		addRandomlySelectable("test1", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg("Press §eSHIFT§r for more info"))
+		addRandomlySelectable("test1", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg("Press §eSHIFT§r for more info"))
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue("test2")
 						.conditions(any(isEntityType(TURTLE.get()), isEntityType(IGUANA.get()))))
@@ -165,7 +165,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.visibleConditions(one(new Condition.HasConditions(one(isEntityType(NAKAGATOR.get()), isEntityType(TURTLE.get()), isEntityType(IGUANA.get()), isEntityType(SALAMANDER.get()))),
 								new Condition.HasConditions(one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1)))))));
 		
-		addRandomlySelectable("test2", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
+		addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue("test1")
 						.visibleCondition(isEntityType(SALAMANDER.get())))
@@ -183,7 +183,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("nakagator_only", defaultWeight(isEntityType(NAKAGATOR.get())), new NodeBuilder(defaultKeyMsg()));
 		
-		addRandomlySelectable("me_want_cookie", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
+		addRandomlySelectable("me_want_cookie", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
 				.addResponse(new ResponseBuilder(subMsg("why", "why do you want cookie?")).loop())
 				.addResponse(new ResponseBuilder(subMsg("give", "here have a cookie chap")).nextDialogue("oh_yippee")
@@ -193,23 +193,23 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
 		add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
 		
-		addRandomlySelectable("me_want_5_cookies", weighted(5, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
+		addRandomlySelectable("me_want_5_cookies", weighted(5, Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
 				.addResponse(new ResponseBuilder(subMsg("give", "here have 5 cookies chap")).nextDialogue("oh_yippee")
 						.visibleCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))));
 		
-		addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
+		addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(subMsg("hate", "I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)))
 				.addResponse(new ResponseBuilder(subMsg("love", "I love you")).addTrigger(new Trigger.AddConsortReputation(100)))
 				.addResponse(new ResponseBuilder(subMsg("high_rep", "Rep above 500")).visibleCondition(new Condition.PlayerHasReputation(500, true)))
 				.addResponse(new ResponseBuilder(subMsg("low_rep", "Rep below 200")).visibleCondition(new Condition.PlayerHasReputation(200, false)))
 				.addClosingResponse(subMsg("bye", "bye")));
 		
-		addRandomlySelectable("test_arguments", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))
+		addRandomlySelectable("test_arguments", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))
 				.addResponse(new ResponseBuilder(subMsg("name", "Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
 		
-		addRandomlySelectable("look_rich", weighted(100, Conditions.EMPTY), new NodeSelectorBuilder()
+		addRandomlySelectable("look_rich", weighted(100, Condition.AlwaysTrue.INSTANCE), new NodeSelectorBuilder()
 				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(subMsg("rich", "Hey, looks like you have a lot of boons!")))
 				.node(new Condition.PlayerHasBoondollars(10, false), new NodeBuilder(subMsg("poor", "Wow, you barely have any boons. Poor you.")))
 				.defaultNode(new NodeBuilder(defaultKeyMsg("Hi! I can sense if someone has a lot of boondollars."))));
