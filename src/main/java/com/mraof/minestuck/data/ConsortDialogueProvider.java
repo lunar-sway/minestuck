@@ -162,27 +162,23 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				.addResponse(new ResponseBuilder(msg("test1response2")).nextDialogue("test2").condition(isEntityType(NAKAGATOR.get())))
 				.addResponse(new ResponseBuilder(msg("test1response3")).nextDialogue("test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 				.addResponse(new ResponseBuilder(msg("test1response4"))
-						.conditions(one(new Condition.HasConditions(one(isEntityType(NAKAGATOR.get()), isEntityType(TURTLE.get()), isEntityType(IGUANA.get()), isEntityType(SALAMANDER.get()))),
-								new Condition.HasConditions(one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1)))))
-						.dontHideFailed()));
+						.visibleConditions(one(new Condition.HasConditions(one(isEntityType(NAKAGATOR.get()), isEntityType(TURTLE.get()), isEntityType(IGUANA.get()), isEntityType(SALAMANDER.get()))),
+								new Condition.HasConditions(one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1)))))));
 		
 		addRandomlySelectable("test2", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue("test1")
-						.condition(isEntityType(SALAMANDER.get()))
-						.dontHideFailed())
+						.visibleCondition(isEntityType(SALAMANDER.get())))
 				.addResponse(new ResponseBuilder(msg("test2response2")).nextDialogue("test1")
-						.conditions(none(new Condition.IsCarapacian(), isInLand(END.get()), isInLand(SHADE.get())))
-						.addTrigger(new Trigger.Command("say hi"))
-						.dontHideFailed())
+						.visibleConditions(none(new Condition.IsCarapacian(), isInLand(END.get()), isInLand(SHADE.get())))
+						.addTrigger(new Trigger.Command("say hi")))
 				.addResponse(new ResponseBuilder(msg("test2response3")).nextDialogue("test1")
 						.addTrigger(new Trigger.Command("""
 								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]"""))
 				)
 				.addResponse(new ResponseBuilder(msg("test2response4"))
-						.conditions(one(new Condition.IsCarapacian(), new Condition.PlayerIsClass(EnumClass.WITCH), new Condition.PlayerIsClass(EnumClass.MAGE),
-								new Condition.PlayerIsAspect(EnumAspect.HEART), new Condition.PlayerIsAspect(EnumAspect.DOOM), isInLand(RAIN.get())))
-						.dontHideFailed()));
+						.visibleConditions(one(new Condition.IsCarapacian(), new Condition.PlayerIsClass(EnumClass.WITCH), new Condition.PlayerIsClass(EnumClass.MAGE),
+								new Condition.PlayerIsAspect(EnumAspect.HEART), new Condition.PlayerIsAspect(EnumAspect.DOOM), isInLand(RAIN.get())))));
 		addRandomlySelectable("turtle_only", defaultWeight(isEntityType(TURTLE.get())), new NodeBuilder(defaultKeyMsg()));
 		
 		addRandomlySelectable("nakagator_only", defaultWeight(isEntityType(NAKAGATOR.get())), new NodeBuilder(defaultKeyMsg()));
@@ -191,25 +187,23 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
 				.addResponse(new ResponseBuilder(subMsg("why", "why do you want cookie?")).loop())
 				.addResponse(new ResponseBuilder(subMsg("give", "here have a cookie chap")).nextDialogue("oh_yippee")
-						.condition(new Condition.PlayerHasItem(Items.COOKIE, 1))
+						.visibleCondition(new Condition.PlayerHasItem(Items.COOKIE, 1))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
-						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))
-						.dontHideFailed()));
+						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))));
 		add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
 		add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
 		
 		addRandomlySelectable("me_want_5_cookies", weighted(5, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
 				.addResponse(new ResponseBuilder(subMsg("give", "here have 5 cookies chap")).nextDialogue("oh_yippee")
-						.condition(new Condition.PlayerHasItem(Items.COOKIE, 5))
-						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))
-						.dontHideFailed()));
+						.visibleCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
+						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))));
 		
 		addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, Conditions.EMPTY), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(subMsg("hate", "I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)).dontHideFailed())
-				.addResponse(new ResponseBuilder(subMsg("love", "I love you")).addTrigger(new Trigger.AddConsortReputation(100)).dontHideFailed())
-				.addResponse(new ResponseBuilder(subMsg("high_rep", "Rep above 500")).condition(new Condition.PlayerHasReputation(500, true)).dontHideFailed())
-				.addResponse(new ResponseBuilder(subMsg("low_rep", "Rep below 200")).condition(new Condition.PlayerHasReputation(200, false)).dontHideFailed())
+				.addResponse(new ResponseBuilder(subMsg("hate", "I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)))
+				.addResponse(new ResponseBuilder(subMsg("love", "I love you")).addTrigger(new Trigger.AddConsortReputation(100)))
+				.addResponse(new ResponseBuilder(subMsg("high_rep", "Rep above 500")).visibleCondition(new Condition.PlayerHasReputation(500, true)))
+				.addResponse(new ResponseBuilder(subMsg("low_rep", "Rep below 200")).visibleCondition(new Condition.PlayerHasReputation(200, false)))
 				.addClosingResponse(subMsg("bye", "bye")));
 		
 		addRandomlySelectable("test_arguments", defaultWeight(Conditions.EMPTY), new NodeBuilder(defaultKeyMsg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))
