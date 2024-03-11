@@ -44,17 +44,17 @@ public record DialogueMessage(String key, List<Argument> arguments)
 			{
 				SburbConnection connection = getConnection(consort, player);
 				if(connection != null)
-					return connection.getClientIdentifier().getUsername();
+					return Component.literal(connection.getClientIdentifier().getUsername());
 			}
 			
-			return "Player name";
+			return Component.literal("Player name");
 		});
 		
 		public static final Codec<Argument> CODEC = Codec.STRING.xmap(Argument::valueOf, Argument::name);
 		
-		private final BiFunction<LivingEntity, ServerPlayer, String> processing;
+		private final BiFunction<LivingEntity, ServerPlayer, Component> processing;
 		
-		Argument(BiFunction<LivingEntity, ServerPlayer, String> processing)
+		Argument(BiFunction<LivingEntity, ServerPlayer, Component> processing)
 		{
 			this.processing = processing;
 		}
