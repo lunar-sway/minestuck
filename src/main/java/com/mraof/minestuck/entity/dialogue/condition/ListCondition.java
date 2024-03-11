@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public record ListCondition(List<Condition> conditions, ListType type) implements Condition
 {
 	static final Codec<ListCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Condition.LIST_CODEC.fieldOf("conditions").forGetter(ListCondition::conditions),
+			Condition.CODEC.listOf().fieldOf("conditions").forGetter(ListCondition::conditions),
 			ListType.CODEC.fieldOf("list_type").forGetter(ListCondition::type)
 	).apply(instance, ListCondition::new));
 	
@@ -32,6 +32,12 @@ public record ListCondition(List<Condition> conditions, ListType type) implement
 	public boolean test(LivingEntity entity, ServerPlayer player)
 	{
 		return this.type.conditionMerger.test(this.conditions.stream().map(condition -> condition.test(entity, player)));
+	}
+	
+	@Override
+	public boolean isNpcOnly()
+	{
+		return this.conditions.stream().allMatch(Condition::isNpcOnly);
 	}
 	
 	//TODO Does not make sense linguistically with a hard coded failure tooltip in Condition and a Conditions.Type other than ALL

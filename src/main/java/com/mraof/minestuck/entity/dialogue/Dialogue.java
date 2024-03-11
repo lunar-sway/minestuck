@@ -195,10 +195,10 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 	
 	public record RandomlySelectable(Condition condition, int weight)
 	{
-		static Codec<RandomlySelectable> CODEC = RecordCodecBuilder.create(instance ->
-				instance.group(Condition.CODEC.fieldOf("condition").forGetter(RandomlySelectable::condition),
-								PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", 10).forGetter(RandomlySelectable::weight))
-						.apply(instance, RandomlySelectable::new));
+		static Codec<RandomlySelectable> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Condition.NPC_ONLY_CODEC.fieldOf("condition").forGetter(RandomlySelectable::condition),
+				PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", 10).forGetter(RandomlySelectable::weight)
+		).apply(instance, RandomlySelectable::new));
 		
 		public RandomlySelectable(Condition condition)
 		{

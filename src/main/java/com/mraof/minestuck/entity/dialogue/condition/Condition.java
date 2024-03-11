@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -18,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -38,7 +40,8 @@ public interface Condition
 	Logger LOGGER = LogUtils.getLogger();
 	
 	Codec<Condition> CODEC = CodecUtil.registryCodec(Conditions.REGISTRY).dispatch(Condition::codec, Function.identity());
-	Codec<List<Condition>> LIST_CODEC = Condition.CODEC.listOf();
+	Codec<Condition> NPC_ONLY_CODEC = ExtraCodecs.validate(Condition.CODEC,
+			condition -> condition.isNpcOnly() ? DataResult.success(condition) : DataResult.error(() -> "Player condition not supported here"));
 	
 	Codec<? extends Condition> codec();
 	
@@ -46,11 +49,33 @@ public interface Condition
 	
 	boolean test(LivingEntity entity, ServerPlayer player);
 	
+	default boolean isNpcOnly()
+	{
+		return false;
+	}
+	
+	interface NpcOnlyCondition extends Condition
+	{
+		boolean test(LivingEntity entity);
+		
+		@Override
+		default boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return test(entity);
+		}
+		
+		@Override
+		default boolean isNpcOnly()
+		{
+			return true;
+		}
+	}
+	
 	/**
 	 * CONDITIONS
 	 */
 	
-	enum AlwaysTrue implements Condition
+	enum AlwaysTrue implements NpcOnlyCondition
 	{
 		INSTANCE;
 		
@@ -69,13 +94,13 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			return true;
 		}
 	}
 	
-	record IsConsort() implements Condition
+	record IsConsort() implements NpcOnlyCondition
 	{
 		static final Codec<IsConsort> CODEC = Codec.unit(IsConsort::new);
 		
@@ -86,7 +111,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			return entity instanceof ConsortEntity;
 		}
@@ -98,7 +123,7 @@ public interface Condition
 		}
 	}
 	
-	record IsCarapacian() implements Condition
+	record IsCarapacian() implements NpcOnlyCondition
 	{
 		static final Codec<IsCarapacian> CODEC = Codec.unit(IsCarapacian::new);
 		
@@ -109,7 +134,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			return entity instanceof CarapacianEntity;
 		}
@@ -121,7 +146,7 @@ public interface Condition
 		}
 	}
 	
-	record IsEntityType(EntityType<?> entityType) implements Condition
+	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
 	{
 		static final Codec<IsEntityType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				ForgeRegistries.ENTITY_TYPES.getCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
@@ -134,7 +159,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			return entityType != null && entity.getType().equals(entityType);
 		}
@@ -146,7 +171,7 @@ public interface Condition
 		}
 	}
 	
-	record IsOneOfEntityType(List<EntityType<?>> entityTypes) implements Condition
+	record IsOneOfEntityType(List<EntityType<?>> entityTypes) implements NpcOnlyCondition
 	{
 		static final Codec<IsOneOfEntityType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.list(ForgeRegistries.ENTITY_TYPES.getCodec()).fieldOf("entity_type").forGetter(IsOneOfEntityType::entityTypes)
@@ -159,7 +184,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			return !entityTypes.isEmpty() && entityTypes.contains(entity.getType());
 		}
@@ -171,7 +196,7 @@ public interface Condition
 		}
 	}
 	
-	record InAnyLand() implements Condition
+	record InAnyLand() implements NpcOnlyCondition
 	{
 		static final Codec<InAnyLand> CODEC = Codec.unit(InAnyLand::new);
 		
@@ -182,7 +207,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			return MSDimensions.isLandDimension(entity.getServer(), entity.level().dimension());
 		}
@@ -195,7 +220,7 @@ public interface Condition
 	}
 	
 	//TODO handle land type tags
-	record InTerrainLandType(TerrainLandType landType) implements Condition
+	record InTerrainLandType(TerrainLandType landType) implements NpcOnlyCondition
 	{
 		static final Codec<InTerrainLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				LandTypes.TERRAIN_REGISTRY.get().getCodec().fieldOf("land_type").forGetter(InTerrainLandType::landType)
@@ -208,7 +233,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			if(landType == null)
 				return false;
@@ -230,7 +255,7 @@ public interface Condition
 		}
 	}
 	
-	record InTerrainLandTypeTag(TagKey<TerrainLandType> landTypeTag) implements Condition
+	record InTerrainLandTypeTag(TagKey<TerrainLandType> landTypeTag) implements NpcOnlyCondition
 	{
 		static final Codec<InTerrainLandTypeTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				TagKey.codec(LandTypes.TERRAIN_REGISTRY.get().getRegistryKey()).fieldOf("land_type_tag").forGetter(InTerrainLandTypeTag::landTypeTag)
@@ -243,7 +268,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			if(landTypeTag == null)
 				return false;
@@ -265,7 +290,7 @@ public interface Condition
 		}
 	}
 	
-	record InTitleLandType(TitleLandType landType) implements Condition
+	record InTitleLandType(TitleLandType landType) implements NpcOnlyCondition
 	{
 		static final Codec<InTitleLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				LandTypes.TITLE_REGISTRY.get().getCodec().fieldOf("land_type").forGetter(InTitleLandType::landType)
@@ -278,7 +303,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			if(landType == null)
 				return false;
@@ -300,7 +325,7 @@ public interface Condition
 		}
 	}
 	
-	record InTitleLandTypeTag(TagKey<TitleLandType> landTypeTag) implements Condition
+	record InTitleLandTypeTag(TagKey<TitleLandType> landTypeTag) implements NpcOnlyCondition
 	{
 		static final Codec<InTitleLandTypeTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				TagKey.codec(LandTypes.TITLE_REGISTRY.get().getRegistryKey()).fieldOf("land_type_tag").forGetter(InTitleLandTypeTag::landTypeTag)
@@ -313,7 +338,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity)
 		{
 			if(landTypeTag == null)
 				return false;
