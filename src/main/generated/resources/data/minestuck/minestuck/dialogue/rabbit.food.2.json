@@ -2,19 +2,23 @@
   "nodes": {
     "conditioned_nodes": [
       {
-        "type": "has_conditions",
-        "conditions": [
-          {
-            "type": "in_terrain_land_type",
-            "land_type": "minestuck:fungi"
-          },
-          {
-            "type": "in_terrain_land_type",
-            "land_type": "minestuck:shade"
-          }
-        ],
-        "list_type": "ANY",
-        "message": "minestuck.dialogue.rabbit.food.2.b"
+        "condition": {
+          "type": "has_conditions",
+          "conditions": [
+            {
+              "type": "in_terrain_land_type",
+              "land_type": "minestuck:fungi"
+            },
+            {
+              "type": "in_terrain_land_type",
+              "land_type": "minestuck:shade"
+            }
+          ],
+          "list_type": "ANY"
+        },
+        "node": {
+          "message": "minestuck.dialogue.rabbit.food.2.b"
+        }
       }
     ],
     "default_node": {
