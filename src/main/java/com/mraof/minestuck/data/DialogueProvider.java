@@ -97,19 +97,13 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public static class NodeSelectorBuilder
 	{
-		private final List<Pair<Conditions, NodeBuilder>> conditionedNodes = new ArrayList<>();
+		private final List<Pair<Condition, NodeBuilder>> conditionedNodes = new ArrayList<>();
 		@Nullable
 		private NodeBuilder defaultNode;
 		
 		public NodeSelectorBuilder node(Condition condition, NodeBuilder node)
 		{
-			this.conditionedNodes.add(Pair.of(all(condition), node));
-			return this;
-		}
-		
-		public NodeSelectorBuilder node(Conditions conditions, NodeBuilder node)
-		{
-			this.conditionedNodes.add(Pair.of(conditions, node));
+			this.conditionedNodes.add(Pair.of(condition, node));
 			return this;
 		}
 		
@@ -225,21 +219,11 @@ public abstract class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public ResponseBuilder conditions(Conditions conditions)
-		{
-			return this.condition(new Condition.HasConditions(conditions));
-		}
-		
 		public ResponseBuilder visibleCondition(Condition condition)
 		{
 			this.hideIfFailed = false;
 			this.condition = condition;
 			return this;
-		}
-		
-		public ResponseBuilder visibleConditions(Conditions conditions)
-		{
-			return this.visibleCondition(new Condition.HasConditions(conditions));
 		}
 		
 		public ResponseBuilder addTrigger(Trigger trigger)
@@ -292,24 +276,24 @@ public abstract class DialogueProvider implements DataProvider
 		return id.getNamespace() + ".dialogue." + id.getPath().replace("/", ".");
 	}
 	
-	public static Conditions all(Condition... conditions)
+	public static Condition all(Condition... conditions)
 	{
-		return new Conditions(List.of(conditions), Conditions.Type.ALL);
+		return new Condition.HasConditions(new Conditions(List.of(conditions), Conditions.Type.ALL));
 	}
 	
-	public static Conditions any(Condition... conditions)
+	public static Condition any(Condition... conditions)
 	{
-		return new Conditions(List.of(conditions), Conditions.Type.ANY);
+		return new Condition.HasConditions(new Conditions(List.of(conditions), Conditions.Type.ANY));
 	}
 	
-	public static Conditions one(Condition... conditions)
+	public static Condition one(Condition... conditions)
 	{
-		return new Conditions(List.of(conditions), Conditions.Type.ONE);
+		return new Condition.HasConditions(new Conditions(List.of(conditions), Conditions.Type.ONE));
 	}
 	
-	public static Conditions none(Condition... conditions)
+	public static Condition none(Condition... conditions)
 	{
-		return new Conditions(List.of(conditions), Conditions.Type.NONE);
+		return new Condition.HasConditions(new Conditions(List.of(conditions), Conditions.Type.NONE));
 	}
 	
 	@SuppressWarnings("unused")
@@ -318,19 +302,9 @@ public abstract class DialogueProvider implements DataProvider
 		return new Dialogue.RandomlySelectable(condition, weight);
 	}
 	
-	public static Dialogue.RandomlySelectable weighted(int weight, Conditions conditions)
-	{
-		return weighted(weight, new Condition.HasConditions(conditions));
-	}
-	
 	public static Dialogue.RandomlySelectable defaultWeight(Condition condition)
 	{
 		return new Dialogue.RandomlySelectable(condition);
-	}
-	
-	public static Dialogue.RandomlySelectable defaultWeight(Conditions conditions)
-	{
-		return defaultWeight(new Condition.HasConditions(conditions));
 	}
 	
 	public static Condition isInLand(TerrainLandType landType)

@@ -57,10 +57,10 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
-	public record NodeSelector(List<Pair<Conditions, DialogueNode>> conditionedNodes, DialogueNode defaultNode)
+	public record NodeSelector(List<Pair<Condition, DialogueNode>> conditionedNodes, DialogueNode defaultNode)
 	{
 		public static final Codec<NodeSelector> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.pair(Conditions.CODEC, DialogueNode.CODEC).listOf().fieldOf("conditioned_nodes").forGetter(NodeSelector::conditionedNodes),
+				Codec.pair(Condition.CODEC, DialogueNode.CODEC).listOf().fieldOf("conditioned_nodes").forGetter(NodeSelector::conditionedNodes),
 				DialogueNode.CODEC.fieldOf("default_node").forGetter(NodeSelector::defaultNode)
 		).apply(instance, NodeSelector::new));
 		public static final MapCodec<NodeSelector> EITHER_MAP_CODEC = Codec.mapEither(CODEC.fieldOf("nodes"), DialogueNode.CODEC.fieldOf("node"))
@@ -72,7 +72,7 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 			for(int i = 0; i < this.conditionedNodes.size(); i++)
 			{
 				var pair = this.conditionedNodes.get(i);
-				if(pair.getFirst().testWithContext(entity, player))
+				if(pair.getFirst().test(entity, player))
 				{
 					DialogueNode node = pair.getSecond();
 					return Pair.of(node, i);
