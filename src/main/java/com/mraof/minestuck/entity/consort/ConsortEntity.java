@@ -443,9 +443,9 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	}
 	
 	@Override
-	public void setDialoguePath(ResourceLocation location)
+	public DialogueComponent getDialogueComponent()
 	{
-		dialogueComponent.setDialogue(location);
+		return this.dialogueComponent;
 	}
 	
 	@Override

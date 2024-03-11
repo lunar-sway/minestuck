@@ -92,7 +92,7 @@ public sealed interface Trigger
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
-				dialogueEntity.setDialoguePath(this.newPath);
+				dialogueEntity.getDialogueComponent().setDialogue(this.newPath);
 		}
 	}
 	
@@ -113,7 +113,7 @@ public sealed interface Trigger
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
 			{
-				dialogueEntity.setDialoguePath(newPaths.get(entity.level().random.nextInt(newPaths().size())));
+				dialogueEntity.getDialogueComponent().setDialogue(newPaths.get(entity.level().random.nextInt(newPaths().size())));
 			}
 		}
 	}
@@ -135,7 +135,7 @@ public sealed interface Trigger
 			{
 				Dialogue dialogue = DialogueManager.getInstance().doRandomDialogue(entity);
 				if(dialogue != null)
-					dialogueEntity.setDialoguePath(dialogue.lookupId());
+					dialogueEntity.getDialogueComponent().setDialogue(dialogue.lookupId());
 			}
 		}
 	}
