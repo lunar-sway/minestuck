@@ -3,7 +3,6 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.Condition;
-import com.mraof.minestuck.entity.dialogue.Conditions;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.item.MSItems;
@@ -93,14 +92,14 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("edgy_life_hatred", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("This place is just so full of life! I despise it.")));
 		
-		addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInLand(RABBITS.get()), new Condition.HasConditions(any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK))))),
+		addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInLand(RABBITS.get()), any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK)))),
 				new NodeBuilder(defaultKeyMsg("This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!"))
 						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)).nextDialogue("rabbit.food_shortage.2")));
 		add("rabbit.food_shortage.2", new NodeBuilder(defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
 				.addClosingResponse(DOTS));
 		
 		addRandomlySelectable("rabbit.food.1", weighted(100, all(isInLand(RABBITS.get()),
-						new Condition.HasConditions(any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK), isInLand(FUNGI.get()), isInLand(SHADE.get()))))),
+						any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK), isInLand(FUNGI.get()), isInLand(SHADE.get())))),
 				new NodeBuilder(defaultKeyMsg("I sure wonder where the rabbits are getting their food from."))
 						.addResponse(new ResponseBuilder(ARROW).nextDialogue("rabbit.food.2")));
 		add("rabbit.food.2", new NodeSelectorBuilder()
@@ -158,26 +157,26 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("test1", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg("Press §eSHIFT§r for more info"))
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue("test2")
-						.conditions(any(isEntityType(TURTLE.get()), isEntityType(IGUANA.get()))))
+						.condition(any(isEntityType(TURTLE.get()), isEntityType(IGUANA.get()))))
 				.addResponse(new ResponseBuilder(msg("test1response2")).nextDialogue("test2").condition(isEntityType(NAKAGATOR.get())))
 				.addResponse(new ResponseBuilder(msg("test1response3")).nextDialogue("test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 				.addResponse(new ResponseBuilder(msg("test1response4"))
-						.visibleConditions(one(new Condition.HasConditions(one(isEntityType(NAKAGATOR.get()), isEntityType(TURTLE.get()), isEntityType(IGUANA.get()), isEntityType(SALAMANDER.get()))),
-								new Condition.HasConditions(one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1)))))));
+						.visibleCondition(one(one(isEntityType(NAKAGATOR.get()), isEntityType(TURTLE.get()), isEntityType(IGUANA.get()), isEntityType(SALAMANDER.get())),
+								one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1))))));
 		
 		addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue("test1")
 						.visibleCondition(isEntityType(SALAMANDER.get())))
 				.addResponse(new ResponseBuilder(msg("test2response2")).nextDialogue("test1")
-						.visibleConditions(none(new Condition.IsCarapacian(), isInLand(END.get()), isInLand(SHADE.get())))
+						.visibleCondition(none(new Condition.IsCarapacian(), isInLand(END.get()), isInLand(SHADE.get())))
 						.addTrigger(new Trigger.Command("say hi")))
 				.addResponse(new ResponseBuilder(msg("test2response3")).nextDialogue("test1")
 						.addTrigger(new Trigger.Command("""
 								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]"""))
 				)
 				.addResponse(new ResponseBuilder(msg("test2response4"))
-						.visibleConditions(one(new Condition.IsCarapacian(), new Condition.PlayerIsClass(EnumClass.WITCH), new Condition.PlayerIsClass(EnumClass.MAGE),
+						.visibleCondition(one(new Condition.IsCarapacian(), new Condition.PlayerIsClass(EnumClass.WITCH), new Condition.PlayerIsClass(EnumClass.MAGE),
 								new Condition.PlayerIsAspect(EnumAspect.HEART), new Condition.PlayerIsAspect(EnumAspect.DOOM), isInLand(RAIN.get())))));
 		addRandomlySelectable("turtle_only", defaultWeight(isEntityType(TURTLE.get())), new NodeBuilder(defaultKeyMsg()));
 		
