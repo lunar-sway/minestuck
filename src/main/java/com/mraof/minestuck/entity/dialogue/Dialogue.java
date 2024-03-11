@@ -188,35 +188,16 @@ public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
 		}
 	}
 	
-	public static class UseContext
+	public record UseContext(Conditions conditions, int weight)
 	{
 		static Codec<UseContext> CODEC = RecordCodecBuilder.create(instance ->
-				instance.group(Conditions.CODEC.fieldOf("conditions").forGetter(UseContext::getConditions),
-								PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", 10).forGetter(UseContext::getWeight))
+				instance.group(Conditions.CODEC.fieldOf("conditions").forGetter(UseContext::conditions),
+								PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", 10).forGetter(UseContext::weight))
 						.apply(instance, UseContext::new));
-		
-		private final Conditions conditions;
-		private final int weight;
 		
 		public UseContext(Conditions conditions)
 		{
 			this(conditions, 10);
-		}
-		
-		public UseContext(Conditions conditions, int weight)
-		{
-			this.conditions = conditions;
-			this.weight = weight;
-		}
-		
-		public Conditions getConditions()
-		{
-			return conditions;
-		}
-		
-		public int getWeight()
-		{
-			return weight;
 		}
 	}
 	
