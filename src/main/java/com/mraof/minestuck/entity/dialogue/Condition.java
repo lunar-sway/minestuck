@@ -13,6 +13,7 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -87,9 +88,9 @@ public sealed interface Condition
 	
 	Type getType();
 	
-	default String getFailureTooltip()
+	default Component getFailureTooltip()
 	{
-		return getType().failureTooltip;
+		return Component.literal(getType().failureTooltip);
 	}
 	
 	boolean testCondition(LivingEntity entity, ServerPlayer player);
