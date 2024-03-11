@@ -10,7 +10,6 @@ import com.mraof.minestuck.entity.dialogue.Dialogue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
@@ -65,7 +64,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	}
 	
 	@Nullable
-	public Dialogue doRandomDialogue(LivingEntity entity, RandomSource rand)
+	public Dialogue doRandomDialogue(LivingEntity entity)
 	{
 		List<WeightedEntry.Wrapper<Dialogue>> weightedFilteredDialogue = new ArrayList<>();
 		dialogues.values().forEach(dialogue -> {
@@ -75,7 +74,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 			});
 		});
 		
-		return WeightedRandom.getRandomItem(rand, weightedFilteredDialogue)
+		return WeightedRandom.getRandomItem(entity.getRandom(), weightedFilteredDialogue)
 				.map(WeightedEntry.Wrapper::getData).orElse(null);
 	}
 	
