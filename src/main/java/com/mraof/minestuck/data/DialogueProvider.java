@@ -182,7 +182,7 @@ public abstract class DialogueProvider implements DataProvider
 	public static class ResponseBuilder
 	{
 		private final Function<ResourceLocation, DialogueMessage> message;
-		private Conditions conditions = Conditions.EMPTY;
+		private Condition condition = Condition.AlwaysTrue.INSTANCE;
 		private final List<Trigger> triggers = new ArrayList<>();
 		@Nullable
 		private ResourceLocation nextDialoguePath = null;
@@ -220,26 +220,26 @@ public abstract class DialogueProvider implements DataProvider
 		
 		public ResponseBuilder condition(Condition condition)
 		{
-			return this.conditions(all(condition));
+			this.hideIfFailed = true;
+			this.condition = condition;
+			return this;
 		}
 		
 		public ResponseBuilder conditions(Conditions conditions)
 		{
-			this.hideIfFailed = true;
-			this.conditions = conditions;
-			return this;
+			return this.condition(new Condition.HasConditions(conditions));
 		}
 		
 		public ResponseBuilder visibleCondition(Condition condition)
 		{
-			return this.visibleConditions(all(condition));
+			this.hideIfFailed = false;
+			this.condition = condition;
+			return this;
 		}
 		
 		public ResponseBuilder visibleConditions(Conditions conditions)
 		{
-			this.hideIfFailed = false;
-			this.conditions = conditions;
-			return this;
+			return this.visibleCondition(new Condition.HasConditions(conditions));
 		}
 		
 		public ResponseBuilder addTrigger(Trigger trigger)
@@ -252,7 +252,7 @@ public abstract class DialogueProvider implements DataProvider
 		{
 			ResourceLocation nextPath = this.loopNextPath ? id : this.nextDialoguePath;
 			DialogueMessage message = this.message.apply(id);
-			return new Dialogue.Response(message, this.conditions, this.triggers, Optional.ofNullable(nextPath), this.hideIfFailed);
+			return new Dialogue.Response(message, this.condition, this.triggers, Optional.ofNullable(nextPath), this.hideIfFailed);
 		}
 	}
 	

@@ -47,7 +47,7 @@ public record Conditions(List<Condition> conditionList, Type type)
 		{
 			for(Condition condition : conditions)
 			{
-				if(!condition.testCondition(npc, player))
+				if(!condition.test(npc, player))
 				{
 					return false;
 				}
@@ -59,7 +59,7 @@ public record Conditions(List<Condition> conditionList, Type type)
 		{
 			for(Condition condition : conditions)
 			{
-				if(condition.testCondition(npc, player))
+				if(condition.test(npc, player))
 				{
 					return true;
 				}
@@ -73,7 +73,7 @@ public record Conditions(List<Condition> conditionList, Type type)
 			
 			for(Condition condition : conditions)
 			{
-				if(condition.testCondition(npc, player))
+				if(condition.test(npc, player))
 				{
 					if(passedCondition)
 						return false;
@@ -88,7 +88,7 @@ public record Conditions(List<Condition> conditionList, Type type)
 		{
 			for(Condition condition : conditions)
 			{
-				if(condition.testCondition(npc, player))
+				if(condition.test(npc, player))
 				{
 					return false;
 				}

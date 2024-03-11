@@ -21,26 +21,18 @@
         ]
       },
       {
-        "conditions": {
-          "condition_list": [
-            {
-              "type": "player_has_reputation",
-              "amount": 500
-            }
-          ]
+        "condition": {
+          "type": "player_has_reputation",
+          "amount": 500
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.hi_friend_can_i_help_you.high_rep"
       },
       {
-        "conditions": {
-          "condition_list": [
-            {
-              "type": "player_has_reputation",
-              "amount": 200,
-              "greater_than": false
-            }
-          ]
+        "condition": {
+          "type": "player_has_reputation",
+          "amount": 200,
+          "greater_than": false
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.hi_friend_can_i_help_you.low_rep"

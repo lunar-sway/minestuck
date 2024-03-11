@@ -89,7 +89,7 @@ public sealed interface Condition
 	
 	Component getFailureTooltip();
 	
-	boolean testCondition(LivingEntity entity, ServerPlayer player);
+	boolean test(LivingEntity entity, ServerPlayer player);
 	
 	
 	/**
@@ -115,7 +115,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			return true;
 		}
@@ -134,7 +134,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(conditions.conditionList().isEmpty())
 				return true;
@@ -160,7 +160,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			return entity instanceof ConsortEntity;
 		}
@@ -183,7 +183,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			return entity instanceof CarapacianEntity;
 		}
@@ -208,7 +208,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			return entityType != null && entity.getType().equals(entityType);
 		}
@@ -233,7 +233,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			return !entityTypes.isEmpty() && entityTypes.contains(entity.getType());
 		}
@@ -256,7 +256,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			return MSDimensions.isLandDimension(entity.getServer(), entity.level().dimension());
 		}
@@ -282,7 +282,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(landType == null)
 				return false;
@@ -317,7 +317,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(landTypeTag == null)
 				return false;
@@ -352,7 +352,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(landType == null)
 				return false;
@@ -387,7 +387,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(landTypeTag == null)
 				return false;
@@ -423,7 +423,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
 			return stack != null;
@@ -449,7 +449,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -481,7 +481,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -514,7 +514,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -549,7 +549,7 @@ public sealed interface Condition
 		}
 		
 		@Override
-		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			if(player == null)
 				return false;
