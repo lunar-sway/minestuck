@@ -44,6 +44,7 @@ public sealed interface Condition
 	
 	enum Type implements StringRepresentable
 	{
+		ALWAYS_TRUE(() -> AlwaysTrue.CODEC),
 		HAS_CONDITIONS(() -> HasConditions.CODEC),
 		IS_CONSORT(() -> IsConsort.CODEC),
 		IS_CARAPACIAN(() -> IsCarapacian.CODEC),
@@ -94,6 +95,31 @@ public sealed interface Condition
 	/**
 	 * CONDITIONS
 	 */
+	
+	enum AlwaysTrue implements Condition
+	{
+		INSTANCE;
+		
+		static final Codec<AlwaysTrue> CODEC = Codec.unit(INSTANCE);
+		
+		@Override
+		public Type getType()
+		{
+			return Type.ALWAYS_TRUE;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.empty();
+		}
+		
+		@Override
+		public boolean testCondition(LivingEntity entity, ServerPlayer player)
+		{
+			return true;
+		}
+	}
 	
 	record HasConditions(Conditions conditions) implements Condition
 	{
