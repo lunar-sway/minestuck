@@ -32,10 +32,10 @@
               "land_type": "minestuck:shade"
             }
           ],
-          "list_type": "ANY"
+          "list_type": "any"
         }
       ],
-      "list_type": "ALL"
+      "list_type": "all"
     },
     "dialogue_weight": 100
   }

@@ -102,7 +102,7 @@ public record ListCondition(List<Condition> conditionList, ListType type) implem
 			return true;
 		});
 		
-		public static final Codec<ListType> CODEC = Codec.STRING.xmap(ListType::valueOf, ListType::name);
+		public static final Codec<ListType> CODEC = StringRepresentable.fromEnum(ListType::values);
 		
 		private final ListType.TriPredicate<LivingEntity, ServerPlayer, List<Condition>> context;
 		

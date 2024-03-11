@@ -16,7 +16,7 @@
               "entity_type": "minestuck:iguana"
             }
           ],
-          "list_type": "ANY"
+          "list_type": "any"
         },
         "message": "test1response1",
         "next_dialogue_path": "minestuck:test2"
@@ -63,7 +63,7 @@
                   "entity_type": "minestuck:salamander"
                 }
               ],
-              "list_type": "ONE"
+              "list_type": "one"
             },
             {
               "type": "minestuck:list",
@@ -76,10 +76,10 @@
                   "item": "minestuck:ace_of_clubs"
                 }
               ],
-              "list_type": "ONE"
+              "list_type": "one"
             }
           ],
-          "list_type": "ONE"
+          "list_type": "one"
         },
         "hide_if_failed": false,
         "message": "test1response4"
