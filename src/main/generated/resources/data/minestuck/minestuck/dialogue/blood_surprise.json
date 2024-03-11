@@ -2,7 +2,7 @@
   "node": {
     "message": "minestuck.dialogue.blood_surprise"
   },
-  "use_context": {
+  "selectable": {
     "conditions": {
       "condition_list": [
         {

@@ -2,7 +2,7 @@
   "node": {
     "message": "minestuck.dialogue.nakagator_only"
   },
-  "use_context": {
+  "selectable": {
     "conditions": {
       "condition_list": [
         {
