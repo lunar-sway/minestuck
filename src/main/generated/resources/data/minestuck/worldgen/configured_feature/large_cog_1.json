@@ -7,12 +7,12 @@
         "type": "minecraft:uniform",
         "value": {
           "max_inclusive": 0,
-          "min_inclusive": -2
+          "min_inclusive": -3
         }
       },
       "query_type": "min"
     },
     "land_block_replacement": true,
-    "template": "minestuck:small_cog"
+    "template": "minestuck:large_cog_1"
   }
 }
