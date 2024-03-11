@@ -59,11 +59,15 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 	
 	public record NodeSelector(List<Pair<Condition, DialogueNode>> conditionedNodes, DialogueNode defaultNode)
 	{
+		public static final Codec<Pair<Condition, DialogueNode>> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Condition.CODEC.fieldOf("condition").forGetter(Pair::getFirst),
+				DialogueNode.CODEC.fieldOf("node").forGetter(Pair::getSecond)
+		).apply(instance, Pair::of));
 		public static final Codec<NodeSelector> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.pair(Condition.CODEC, DialogueNode.CODEC).listOf().fieldOf("conditioned_nodes").forGetter(NodeSelector::conditionedNodes),
+				ENTRY_CODEC.listOf().fieldOf("conditioned_nodes").forGetter(NodeSelector::conditionedNodes),
 				DialogueNode.CODEC.fieldOf("default_node").forGetter(NodeSelector::defaultNode)
 		).apply(instance, NodeSelector::new));
-		public static final MapCodec<NodeSelector> EITHER_MAP_CODEC = Codec.mapEither(CODEC.fieldOf("nodes"), DialogueNode.CODEC.fieldOf("node"))
+		public static final MapCodec<NodeSelector> EITHER_MAP_CODEC = Codec.mapEither(NodeSelector.CODEC.fieldOf("nodes"), DialogueNode.CODEC.fieldOf("node"))
 				.xmap(either -> either.map(Function.identity(), node -> new NodeSelector(List.of(), node)),
 						nodeSelector -> nodeSelector.conditionedNodes.isEmpty() ? Either.right(nodeSelector.defaultNode) : Either.left(nodeSelector));
 		
