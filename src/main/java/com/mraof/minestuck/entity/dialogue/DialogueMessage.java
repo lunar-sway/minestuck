@@ -4,16 +4,24 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -39,19 +47,37 @@ public record DialogueMessage(String key, List<Argument> arguments)
 	
 	public enum Argument implements StringRepresentable
 	{
-		PLAYER_NAME_LAND((npc, player) ->
-		{
-			if(npc instanceof ConsortEntity consort)
-			{
-				SburbConnection connection = getConnection(consort, player);
-				if(connection != null)
-					return Component.literal(connection.getClientIdentifier().getUsername());
-			}
-			
-			return Component.literal("Player name");
-		}),
+		PLAYER_NAME_LAND((npc, player) -> homeLandClientPlayer(npc)
+				.map(clientPlayer -> Component.literal(clientPlayer.getUsername()))
+				.orElseGet(() -> Component.literal("Player name"))),
+		LAND_NAME((npc, player) -> homeDimension(npc)
+				.flatMap(land -> LandTypePair.getNamed(player.server, land))
+				.map(LandTypePair.Named::asComponent)
+				.orElseGet(() -> Component.literal("Land name"))),
+		LAND_TITLE((npc, player) -> homeLandTitle(npc)
+				.map(Title::asTextComponent)
+				.orElseGet(() -> Component.literal("Player title"))),
+		LAND_CLASS((npc, player) -> homeLandTitle(npc)
+				.map(title -> title.getHeroClass().asTextComponent())
+				.orElseGet(() -> Component.literal("Player class"))),
+		LAND_ASPECT((npc, player) -> homeLandTitle(npc)
+				.map(title -> title.getHeroAspect().asTextComponent())
+				.orElseGet(() -> Component.literal("Player aspect"))),
+		LAND_DENIZEN((npc, player) -> homeLandTitle(npc)
+				.map(title -> Component.translatable("denizen." + title.getHeroAspect().getTranslationKey()))
+				.orElseGet(() -> Component.literal("Denizen"))),
+		ENTITY_SOUND((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".sound")),
+		ENTITY_SOUND_2((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".sound.2")),
 		ENTITY_TYPE((npc, player) -> npc.getType().getDescription()),
 		ENTITY_TYPES((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".plural")),
+		PLAYER_TITLE((npc, player) -> {
+			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
+			Title playerTitle = PlayerSavedData.getData(identifier, player.server).getTitle();
+			if(playerTitle != null)
+				return playerTitle.asTextComponent();
+			else
+				return player.getName();
+		}),
 		;
 		
 		public static final Codec<Argument> CODEC = Codec.STRING.xmap(Argument::valueOf, Argument::name);
@@ -70,9 +96,24 @@ public record DialogueMessage(String key, List<Argument> arguments)
 		}
 	}
 	
-	@Nullable
-	private static SburbConnection getConnection(ConsortEntity consort, ServerPlayer player)
+	private static Optional<ResourceKey<Level>> homeDimension(LivingEntity entity)
 	{
-		return SburbHandler.getConnectionForDimension(player.getServer(), consort.getHomeDimension());
+		if(entity instanceof ConsortEntity consort)
+			return Optional.of(consort.getHomeDimension());
+		else
+			return Optional.empty();
+	}
+	
+	private static Optional<PlayerIdentifier> homeLandClientPlayer(LivingEntity entity)
+	{
+		return homeDimension(entity)
+				.flatMap(land -> Optional.ofNullable(SburbHandler.getConnectionForDimension(Objects.requireNonNull(entity.getServer()), land)))
+				.map(SburbConnection::getClientIdentifier);
+	}
+	
+	private static Optional<Title> homeLandTitle(LivingEntity entity)
+	{
+		return homeLandClientPlayer(entity)
+				.flatMap(clientPlayer -> Optional.ofNullable(PlayerSavedData.getData(clientPlayer, Objects.requireNonNull(entity.getServer())).getTitle()));
 	}
 }
