@@ -2,7 +2,7 @@
   "node": {
     "message": {
       "arguments": [
-        "ENTITY_TYPE"
+        "entity_type"
       ],
       "key": "minestuck.dialogue.reckoning.3"
     }
