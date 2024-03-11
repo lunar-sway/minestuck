@@ -3,14 +3,14 @@
     "conditioned_nodes": [
       {
         "condition": {
-          "type": "has_conditions",
+          "type": "minestuck:list",
           "conditions": [
             {
-              "type": "in_terrain_land_type",
+              "type": "minestuck:terrain_land_type",
               "land_type": "minestuck:fungi"
             },
             {
-              "type": "in_terrain_land_type",
+              "type": "minestuck:terrain_land_type",
               "land_type": "minestuck:shade"
             }
           ],
@@ -26,7 +26,7 @@
       "responses": [
         {
           "condition": {
-            "type": "in_terrain_land_type_tag",
+            "type": "minestuck:terrain_land_type_tag",
             "land_type_tag": "minestuck:sand"
           },
           "message": "minestuck.arrow",

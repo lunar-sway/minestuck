@@ -11,7 +11,7 @@
       },
       {
         "condition": {
-          "type": "player_has_item",
+          "type": "minestuck:player_item",
           "item": "minecraft:cookie"
         },
         "hide_if_failed": false,
@@ -32,7 +32,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "always_true"
+      "type": "minestuck:always_true"
     }
   }
 }

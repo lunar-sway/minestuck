@@ -12,6 +12,7 @@ import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
+import com.mraof.minestuck.entity.dialogue.Conditions;
 import com.mraof.minestuck.entry.BlockCopier;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
 import com.mraof.minestuck.entry.RSEntryBlockProcess;
@@ -87,6 +88,7 @@ public class Minestuck
 		MSLootTables.ENTRY_REGISTER.register(eventBus);
 		MSLootTables.MODIFIER_REGISTER.register(eventBus);
 		ModusTypes.REGISTER.register(eventBus);
+		Conditions.REGISTER.register(eventBus);
 		
 		MSFeatures.REGISTER.register(eventBus);
 		

@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -30,68 +31,23 @@ import org.slf4j.Logger;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * A Condition controls whether a piece of dialogue will show up
  */
-@MethodsReturnNonnullByDefault
-public sealed interface Condition
+public interface Condition
 {
 	Logger LOGGER = LogUtils.getLogger();
 	
-	Codec<Condition> CODEC = Type.CODEC.dispatch(Condition::getType, type -> type.codec.get());
+	Codec<Condition> CODEC = CodecUtil.registryCodec(Conditions.REGISTRY).dispatch(Condition::codec, Function.identity());
 	Codec<List<Condition>> LIST_CODEC = Condition.CODEC.listOf();
 	
-	enum Type implements StringRepresentable
-	{
-		ALWAYS_TRUE(() -> AlwaysTrue.CODEC),
-		HAS_CONDITIONS(() -> ListCondition.CODEC),
-		IS_CONSORT(() -> IsConsort.CODEC),
-		IS_CARAPACIAN(() -> IsCarapacian.CODEC),
-		IS_ENTITY_TYPE(() -> IsEntityType.CODEC),
-		IS_ONE_OF_ENTITY_TYPE(() -> IsOneOfEntityType.CODEC),
-		IN_ANY_LAND(() -> InAnyLand.CODEC),
-		IN_TERRAIN_LAND_TYPE(() -> InTerrainLandType.CODEC),
-		IN_TERRAIN_LAND_TYPE_TAG(() -> InTerrainLandTypeTag.CODEC),
-		IN_TITLE_LAND_TYPE(() -> InTitleLandType.CODEC),
-		IN_TITLE_LAND_TYPE_TAG(() -> InTitleLandTypeTag.CODEC),
-		PLAYER_HAS_ITEM(() -> PlayerHasItem.CODEC),
-		PLAYER_IS_CLASS(() -> PlayerIsClass.CODEC),
-		PLAYER_IS_ASPECT(() -> PlayerIsAspect.CODEC),
-		PLAYER_HAS_REPUTATION(() -> PlayerHasReputation.CODEC),
-		PLAYER_HAS_BOONDOLLARS(() -> PlayerHasBoondollars.CODEC);
-		
-		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
-		
-		private final Supplier<Codec<? extends Condition>> codec;
-		
-		Type(Supplier<Codec<? extends Condition>> codec)
-		{
-			this.codec = codec;
-		}
-		
-		public static Type fromInt(int ordinal) //converts int back into enum
-		{
-			if(0 <= ordinal && ordinal < Type.values().length)
-				return Type.values()[ordinal];
-			else
-				throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for Condition type!");
-		}
-		
-		@Override
-		public String getSerializedName()
-		{
-			return this.name().toLowerCase(Locale.ROOT);
-		}
-	}
-	
-	Type getType();
+	Codec<? extends Condition> codec();
 	
 	Component getFailureTooltip();
 	
 	boolean test(LivingEntity entity, ServerPlayer player);
-	
 	
 	/**
 	 * CONDITIONS
@@ -104,9 +60,9 @@ public sealed interface Condition
 		static final Codec<AlwaysTrue> CODEC = Codec.unit(INSTANCE);
 		
 		@Override
-		public Type getType()
+		public Codec<AlwaysTrue> codec()
 		{
-			return Type.ALWAYS_TRUE;
+			return CODEC;
 		}
 		
 		@Override
@@ -122,6 +78,7 @@ public sealed interface Condition
 		}
 	}
 	
+	@MethodsReturnNonnullByDefault
 	record ListCondition(List<Condition> conditionList, ListType type) implements Condition
 	{
 		static final Codec<ListCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -130,9 +87,9 @@ public sealed interface Condition
 		).apply(instance, ListCondition::new));
 		
 		@Override
-		public Type getType()
+		public Codec<ListCondition> codec()
 		{
-			return Type.HAS_CONDITIONS;
+			return CODEC;
 		}
 		
 		@Override
@@ -238,9 +195,9 @@ public sealed interface Condition
 		static final Codec<IsConsort> CODEC = Codec.unit(IsConsort::new);
 		
 		@Override
-		public Type getType()
+		public Codec<IsConsort> codec()
 		{
-			return Type.IS_CONSORT;
+			return CODEC;
 		}
 		
 		@Override
@@ -261,9 +218,9 @@ public sealed interface Condition
 		static final Codec<IsCarapacian> CODEC = Codec.unit(IsCarapacian::new);
 		
 		@Override
-		public Type getType()
+		public Codec<IsCarapacian> codec()
 		{
-			return Type.IS_CARAPACIAN;
+			return CODEC;
 		}
 		
 		@Override
@@ -286,9 +243,9 @@ public sealed interface Condition
 		).apply(instance, IsEntityType::new));
 		
 		@Override
-		public Type getType()
+		public Codec<IsEntityType> codec()
 		{
-			return Type.IS_ENTITY_TYPE;
+			return CODEC;
 		}
 		
 		@Override
@@ -311,9 +268,9 @@ public sealed interface Condition
 		).apply(instance, IsOneOfEntityType::new));
 		
 		@Override
-		public Type getType()
+		public Codec<IsOneOfEntityType> codec()
 		{
-			return Type.IS_ONE_OF_ENTITY_TYPE;
+			return CODEC;
 		}
 		
 		@Override
@@ -334,9 +291,9 @@ public sealed interface Condition
 		static final Codec<InAnyLand> CODEC = Codec.unit(InAnyLand::new);
 		
 		@Override
-		public Type getType()
+		public Codec<InAnyLand> codec()
 		{
-			return Type.IN_ANY_LAND;
+			return CODEC;
 		}
 		
 		@Override
@@ -360,9 +317,9 @@ public sealed interface Condition
 		).apply(instance, InTerrainLandType::new));
 		
 		@Override
-		public Type getType()
+		public Codec<InTerrainLandType> codec()
 		{
-			return Type.IN_TERRAIN_LAND_TYPE;
+			return CODEC;
 		}
 		
 		@Override
@@ -395,9 +352,9 @@ public sealed interface Condition
 		).apply(instance, InTerrainLandTypeTag::new));
 		
 		@Override
-		public Type getType()
+		public Codec<InTerrainLandTypeTag> codec()
 		{
-			return Type.IN_TERRAIN_LAND_TYPE_TAG;
+			return CODEC;
 		}
 		
 		@Override
@@ -430,9 +387,9 @@ public sealed interface Condition
 		).apply(instance, InTitleLandType::new));
 		
 		@Override
-		public Type getType()
+		public Codec<InTitleLandType> codec()
 		{
-			return Type.IN_TITLE_LAND_TYPE;
+			return CODEC;
 		}
 		
 		@Override
@@ -465,9 +422,9 @@ public sealed interface Condition
 		).apply(instance, InTitleLandTypeTag::new));
 		
 		@Override
-		public Type getType()
+		public Codec<InTitleLandTypeTag> codec()
 		{
-			return Type.IN_TITLE_LAND_TYPE_TAG;
+			return CODEC;
 		}
 		
 		@Override
@@ -501,9 +458,9 @@ public sealed interface Condition
 		).apply(instance, PlayerHasItem::new));
 		
 		@Override
-		public Type getType()
+		public Codec<PlayerHasItem> codec()
 		{
-			return Type.PLAYER_HAS_ITEM;
+			return CODEC;
 		}
 		
 		@Override
@@ -527,9 +484,9 @@ public sealed interface Condition
 		).apply(instance, PlayerIsClass::new));
 		
 		@Override
-		public Type getType()
+		public Codec<PlayerIsClass> codec()
 		{
-			return Type.PLAYER_IS_CLASS;
+			return CODEC;
 		}
 		
 		@Override
@@ -559,9 +516,9 @@ public sealed interface Condition
 		).apply(instance, PlayerIsAspect::new));
 		
 		@Override
-		public Type getType()
+		public Codec<PlayerIsAspect> codec()
 		{
-			return Type.PLAYER_IS_ASPECT;
+			return CODEC;
 		}
 		
 		@Override
@@ -592,9 +549,9 @@ public sealed interface Condition
 		).apply(instance, PlayerHasReputation::new));
 		
 		@Override
-		public Type getType()
+		public Codec<PlayerHasReputation> codec()
 		{
-			return Type.PLAYER_HAS_REPUTATION;
+			return CODEC;
 		}
 		
 		@Override
@@ -627,9 +584,9 @@ public sealed interface Condition
 		).apply(instance, PlayerHasBoondollars::new));
 		
 		@Override
-		public Type getType()
+		public Codec<PlayerHasBoondollars> codec()
 		{
-			return Type.PLAYER_HAS_BOONDOLLARS;
+			return CODEC;
 		}
 		
 		@Override

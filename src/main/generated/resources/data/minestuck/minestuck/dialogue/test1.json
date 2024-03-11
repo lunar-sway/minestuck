@@ -5,14 +5,14 @@
     "responses": [
       {
         "condition": {
-          "type": "has_conditions",
+          "type": "minestuck:list",
           "conditions": [
             {
-              "type": "is_entity_type",
+              "type": "minestuck:entity_type",
               "entity_type": "minestuck:turtle"
             },
             {
-              "type": "is_entity_type",
+              "type": "minestuck:entity_type",
               "entity_type": "minestuck:iguana"
             }
           ],
@@ -23,7 +23,7 @@
       },
       {
         "condition": {
-          "type": "is_entity_type",
+          "type": "minestuck:entity_type",
           "entity_type": "minestuck:nakagator"
         },
         "message": "test1response2",
@@ -41,38 +41,38 @@
       },
       {
         "condition": {
-          "type": "has_conditions",
+          "type": "minestuck:list",
           "conditions": [
             {
-              "type": "has_conditions",
+              "type": "minestuck:list",
               "conditions": [
                 {
-                  "type": "is_entity_type",
+                  "type": "minestuck:entity_type",
                   "entity_type": "minestuck:nakagator"
                 },
                 {
-                  "type": "is_entity_type",
+                  "type": "minestuck:entity_type",
                   "entity_type": "minestuck:turtle"
                 },
                 {
-                  "type": "is_entity_type",
+                  "type": "minestuck:entity_type",
                   "entity_type": "minestuck:iguana"
                 },
                 {
-                  "type": "is_entity_type",
+                  "type": "minestuck:entity_type",
                   "entity_type": "minestuck:salamander"
                 }
               ],
               "list_type": "ONE"
             },
             {
-              "type": "has_conditions",
+              "type": "minestuck:list",
               "conditions": [
                 {
-                  "type": "is_carapacian"
+                  "type": "minestuck:carapacian"
                 },
                 {
-                  "type": "player_has_item",
+                  "type": "minestuck:player_item",
                   "item": "minestuck:ace_of_clubs"
                 }
               ],
@@ -88,7 +88,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "always_true"
+      "type": "minestuck:always_true"
     }
   }
 }

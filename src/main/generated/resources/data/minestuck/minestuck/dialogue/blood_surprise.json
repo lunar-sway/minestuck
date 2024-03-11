@@ -4,14 +4,14 @@
   },
   "selectable": {
     "condition": {
-      "type": "has_conditions",
+      "type": "minestuck:list",
       "conditions": [
         {
-          "type": "in_title_land_type",
+          "type": "minestuck:title_land_type",
           "land_type": "minestuck:pulse"
         },
         {
-          "type": "is_one_of_entity_type",
+          "type": "minestuck:one_of_entity_type",
           "entity_type": [
             "minestuck:iguana",
             "minestuck:nakagator"

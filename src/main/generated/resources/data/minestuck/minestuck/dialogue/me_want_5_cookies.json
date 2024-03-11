@@ -7,7 +7,7 @@
       },
       {
         "condition": {
-          "type": "player_has_item",
+          "type": "minestuck:player_item",
           "amount": 5,
           "item": "minecraft:cookie"
         },
@@ -26,7 +26,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "always_true"
+      "type": "minestuck:always_true"
     },
     "dialogue_weight": 5
   }

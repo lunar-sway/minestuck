@@ -19,7 +19,7 @@
   },
   "selectable": {
     "condition": {
-      "type": "is_entity_type",
+      "type": "minestuck:entity_type",
       "entity_type": "minestuck:nakagator"
     }
   }
