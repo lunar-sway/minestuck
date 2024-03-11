@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
-  "group": "wooden_stairs",
+  "group": "cruxite_blocks",
   "key": {
     "#": {
       "item": "minestuck:cruxite_block"

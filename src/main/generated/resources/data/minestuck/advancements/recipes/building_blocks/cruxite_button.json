@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_cruxite_block": {
+    "has_raw_cruxite": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minestuck:cruxite_block"
+              "minestuck:raw_cruxite"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_cruxite_block",
+      "has_raw_cruxite",
       "has_the_recipe"
     ]
   ],

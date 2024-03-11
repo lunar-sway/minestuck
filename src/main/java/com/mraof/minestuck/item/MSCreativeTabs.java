@@ -262,6 +262,20 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CRUXITE_WALL.get());
 		output.accept(MSItems.CRUXITE_BUTTON.get());
 		output.accept(MSItems.CRUXITE_PRESSURE_PLATE.get());
+		output.accept(MSItems.CRUXITE_DOOR.get());
+		output.accept(MSItems.CRUXITE_TRAPDOOR.get());
+		output.accept(MSItems.POLISHED_CRUXITE_BLOCK.get());
+		output.accept(MSItems.POLISHED_CRUXITE_STAIRS.get());
+		output.accept(MSItems.POLISHED_CRUXITE_SLAB.get());
+		output.accept(MSItems.POLISHED_CRUXITE_WALL.get());
+		output.accept(MSItems.CRUXITE_BRICKS.get());
+		output.accept(MSItems.CRUXITE_BRICK_STAIRS.get());
+		output.accept(MSItems.CRUXITE_BRICK_SLAB.get());
+		output.accept(MSItems.CRUXITE_BRICK_WALL.get());
+		output.accept(MSItems.SMOOTH_CRUXITE_BLOCK.get());
+		output.accept(MSItems.CHISELED_CRUXITE_BLOCK.get());
+		output.accept(MSItems.CRUXITE_PILLAR.get());
+		output.accept(MSItems.CRUXITE_LAMP.get());
 		
 		output.accept(MSItems.URANIUM_BLOCK.get());
 		output.accept(MSItems.URANIUM_STAIRS.get());

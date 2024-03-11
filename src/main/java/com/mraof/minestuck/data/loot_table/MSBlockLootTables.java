@@ -154,6 +154,20 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CRUXITE_WALL.get());
 		dropSelf(CRUXITE_BUTTON.get());
 		dropSelf(CRUXITE_PRESSURE_PLATE.get());
+		add(CRUXITE_DOOR.get(), this::createDoorTable);
+		dropSelf(CRUXITE_TRAPDOOR.get());
+		dropSelf(POLISHED_CRUXITE_BLOCK.get());
+		dropSelf(POLISHED_CRUXITE_STAIRS.get());
+		add(POLISHED_CRUXITE_SLAB.get(), this::createSlabItemTable);
+		dropSelf(POLISHED_CRUXITE_WALL.get());
+		dropSelf(CRUXITE_BRICKS.get());
+		dropSelf(CRUXITE_BRICK_STAIRS.get());
+		add(CRUXITE_BRICK_SLAB.get(), this::createSlabItemTable);
+		dropSelf(CRUXITE_BRICK_WALL.get());
+		dropSelf(SMOOTH_CRUXITE_BLOCK.get());
+		dropSelf(CHISELED_CRUXITE_BLOCK.get());
+		dropSelf(CRUXITE_PILLAR.get());
+		dropSelf(CRUXITE_LAMP.get());
 		
 		dropSelf(URANIUM_BLOCK.get());
 		dropSelf(URANIUM_STAIRS.get());

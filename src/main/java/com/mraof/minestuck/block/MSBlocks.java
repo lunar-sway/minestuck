@@ -174,12 +174,30 @@ public final class MSBlocks
 	public static final RegistryObject<Block> PINK_STONE_DIAMOND_ORE = REGISTER.register("pink_stone_diamond_ore", () -> new DropExperienceBlock(copy(Blocks.DIAMOND_ORE), UniformInt.of(3, 7)));
 	
 	//Resource Blocks
-	public static final RegistryObject<Block> CRUXITE_BLOCK = REGISTER.register("cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F).requiresCorrectToolForDrops()));
+	public static final RegistryObject<Block> CRUXITE_BLOCK = REGISTER.register("cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
 	public static final RegistryObject<StairBlock> CRUXITE_STAIRS = REGISTER.register("cruxite_stairs", () -> new StairBlock(() -> MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), copy(CRUXITE_BLOCK.get())));
 	public static final RegistryObject<SlabBlock> CRUXITE_SLAB = REGISTER.register("cruxite_slab", () -> new SlabBlock(copy(CRUXITE_BLOCK.get())));
 	public static final RegistryObject<WallBlock> CRUXITE_WALL = REGISTER.register("cruxite_wall", () -> new WallBlock(copy(CRUXITE_BLOCK.get())));
 	public static final RegistryObject<ButtonBlock> CRUXITE_BUTTON = REGISTER.register("cruxite_button", () -> new ButtonBlock(copy(CRUXITE_BLOCK.get()), BlockSetType.STONE, 10, true));
 	public static final RegistryObject<PressurePlateBlock> CRUXITE_PRESSURE_PLATE = REGISTER.register("cruxite_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CRUXITE_BLOCK.get()), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> CRUXITE_DOOR = REGISTER.register("cruxite_door", () -> new DoorBlock(BlockBehaviour.Properties.copy(Blocks.OAK_DOOR), BlockSetType.OAK));
+	public static final RegistryObject<TrapDoorBlock> CRUXITE_TRAPDOOR = REGISTER.register("cruxite_trapdoor", () -> new TrapDoorBlock(BlockBehaviour.Properties.copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	
+	public static final RegistryObject<Block> POLISHED_CRUXITE_BLOCK = REGISTER.register("polished_cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
+	public static final RegistryObject<StairBlock> POLISHED_CRUXITE_STAIRS = REGISTER.register("polished_cruxite_stairs", () -> new StairBlock(() -> MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), copy(CRUXITE_BLOCK.get())));
+	public static final RegistryObject<SlabBlock> POLISHED_CRUXITE_SLAB = REGISTER.register("polished_cruxite_slab", () -> new SlabBlock(copy(CRUXITE_BLOCK.get())));
+	public static final RegistryObject<WallBlock> POLISHED_CRUXITE_WALL = REGISTER.register("polished_cruxite_wall", () -> new WallBlock(copy(CRUXITE_BLOCK.get())));
+	
+	public static final RegistryObject<Block> CRUXITE_BRICKS = REGISTER.register("cruxite_bricks", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
+	public static final RegistryObject<StairBlock> CRUXITE_BRICK_STAIRS = REGISTER.register("cruxite_brick_stairs", () -> new StairBlock(() -> MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), copy(CRUXITE_BLOCK.get())));
+	public static final RegistryObject<SlabBlock> CRUXITE_BRICK_SLAB = REGISTER.register("cruxite_brick_slab", () -> new SlabBlock(copy(CRUXITE_BLOCK.get())));
+	public static final RegistryObject<WallBlock> CRUXITE_BRICK_WALL = REGISTER.register("cruxite_brick_wall", () -> new WallBlock(copy(CRUXITE_BLOCK.get())));
+	
+	public static final RegistryObject<Block> SMOOTH_CRUXITE_BLOCK = REGISTER.register("smooth_cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
+	public static final RegistryObject<Block> CHISELED_CRUXITE_BLOCK = REGISTER.register("chiseled_cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
+	public static final RegistryObject<Block> CRUXITE_PILLAR = REGISTER.register("cruxite_pillar", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
+	public static final RegistryObject<Block> CRUXITE_LAMP = REGISTER.register("cruxite_lamp", () -> new CustomLampBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_BLUE).sound(SoundType.AMETHYST)
+			.strength(1f).lightLevel(state -> state.getValue(CustomLampBlock.CLICKED) ? 15 : 0)));
 	
 	public static final RegistryObject<Block> URANIUM_BLOCK = REGISTER.register("uranium_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIME).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F).requiresCorrectToolForDrops().lightLevel(state -> 7)));
 	public static final RegistryObject<StairBlock> URANIUM_STAIRS = REGISTER.register("uranium_stairs", () -> new StairBlock(() -> MSBlocks.URANIUM_BLOCK.get().defaultBlockState(), copy(URANIUM_BLOCK.get())));
@@ -196,7 +214,7 @@ public final class MSBlocks
 	public static final RegistryObject<FenceGateBlock> PERFECTLY_GENERIC_FENCE_GATE = REGISTER.register("perfectly_generic_fence_gate", () -> new FenceGateBlock(copy(GENERIC_OBJECT.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	public static final RegistryObject<ButtonBlock> PERFECTLY_GENERIC_BUTTON = REGISTER.register("perfectly_generic_button", () -> new ButtonBlock(copy(GENERIC_OBJECT.get()), BlockSetType.OAK, 10, true));
 	public static final RegistryObject<PressurePlateBlock> PERFECTLY_GENERIC_PRESSURE_PLATE = REGISTER.register("perfectly_generic_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(GENERIC_OBJECT.get()), BlockSetType.OAK));
-	public static final RegistryObject<DoorBlock> PERFECTLY_GENERIC_DOOR = REGISTER.register("perfectly_generic_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> PERFECTLY_GENERIC_DOOR = REGISTER.register("perfectly_generic_door", () -> new DoorBlock(copy(Blocks.OAK_DOOR), BlockSetType.OAK));
 	public static final RegistryObject<TrapDoorBlock> PERFECTLY_GENERIC_TRAPDOOR = REGISTER.register("perfectly_generic_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
 	//Land Environment
