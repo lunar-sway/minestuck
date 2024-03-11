@@ -70,7 +70,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.addResponse(new ResponseBuilder(ARROW).nextDialogue("reckoning.2")));
 		add("reckoning.2", new NodeBuilder(defaultKeyMsg("What's The Reckoning? It's when meteors from The Veil are sent towards Skaia."))
 				.addResponse(new ResponseBuilder(ARROW).nextDialogue("reckoning.3")));
-		add("reckoning.3", new NodeBuilder(defaultKeyMsg("Like any reasonable %s believes in that!"))); //TODO add consort_type argument
+		add("reckoning.3", new NodeBuilder(defaultKeyMsg("Like any reasonable %s believes in that!", DialogueMessage.Argument.ENTITY_TYPE)));
 		
 		addRandomlySelectable("thunder_death.1", defaultWeight(all(isInLand(THUNDER.get()), isInLand(WOOD.get()))),
 				new NodeBuilder(defaultKeyMsg("We're lucky to have rain with this weather."))
