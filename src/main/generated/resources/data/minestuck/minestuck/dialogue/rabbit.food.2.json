@@ -14,7 +14,7 @@
               "land_type": "minestuck:shade"
             }
           ],
-          "list_type": "ANY"
+          "list_type": "any"
         },
         "node": {
           "message": "minestuck.dialogue.rabbit.food.2.b"

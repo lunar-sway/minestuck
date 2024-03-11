@@ -28,7 +28,7 @@
               "land_type": "minestuck:shade"
             }
           ],
-          "list_type": "NONE"
+          "list_type": "none"
         },
         "hide_if_failed": false,
         "message": "test2response2",
@@ -78,7 +78,7 @@
               "land_type": "minestuck:rain"
             }
           ],
-          "list_type": "ONE"
+          "list_type": "one"
         },
         "hide_if_failed": false,
         "message": "test2response4"
