@@ -38,6 +38,9 @@ public final class ConsortDialogueProvider extends DialogueProvider
 	private void consortDialogues()
 	{
 		//Wind
+		addRandomlySelectable("dad_wind", defaultWeight(isInLand(WIND.get())),
+				new NodeBuilder(defaultKeyMsg("My dad was blown away in one of the recent wind storms.")));
+		
 		addRandomlySelectable("pyre.1", defaultWeight(all(isInLand(WIND.get()), isEntityType(SALAMANDER.get(), TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("If only I was faster than the wind! That would be fun!"))
 						.addResponse(new ResponseBuilder(ARROW).nextDialogue(
@@ -51,7 +54,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!")));
 		addRandomlySelectable("swimming", defaultWeight(all(isInLand(PULSE.get()), isEntityType(IGUANA.get(), TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("If you're looking for a good land to swim in, it's definitely not this one.")));
-		addRandomlySelectable("blood_surprise", defaultWeight(all(isInLand(PULSE.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
+		addRandomlySelectable("blood_surprise", defaultWeight(all(isInLand(PULSE.get()), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("OH GOD IS THAT BLOOD oh wait nevermind.")));
 		
 		//Thunder
@@ -61,46 +64,53 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("Every once in a blue moon, lightning strikes and burns down the village. We have to rebuild it!")));
 		addRandomlySelectable("lightning_strike", defaultWeight(all(isInLand(THUNDER.get()), isEntityType(TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("You don't want to be struck by lightning. No one does.")));
+		
 		addRandomlySelectable("reckoning.1", defaultWeight(isInLand(THUNDER.get())),
 				new NodeBuilder(defaultKeyMsg("Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!"))
 						.addResponse(new ResponseBuilder(ARROW).nextDialogue("reckoning.2")));
 		add("reckoning.2", new NodeBuilder(defaultKeyMsg("What's The Reckoning? It's when meteors from The Veil are sent towards Skaia."))
 				.addResponse(new ResponseBuilder(ARROW).nextDialogue("reckoning.3")));
 		add("reckoning.3", new NodeBuilder(defaultKeyMsg("Like any reasonable %s believes in that!"))); //TODO add consort_type argument
+		
 		addRandomlySelectable("thunder_death.1", defaultWeight(all(isInLand(THUNDER.get()), isInLand(WOOD.get()))),
 				new NodeBuilder(defaultKeyMsg("We're lucky to have rain with this weather."))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue("thunder_death.2")));
-		add("thunder_death.2", new NodeBuilder(defaultKeyMsg("Otherwise the thunder would surely have been our death."))
-				.addClosingResponse(DOTS));
-		//add("thunder_death.3", new NodeBuilder(defaultKeyMsg()));
+						.addResponse(new ResponseBuilder(ARROW).nextDialogue(add("thunder_death.2",
+								new NodeBuilder(defaultKeyMsg("Otherwise the thunder would surely have been our death."))
+										.addClosingResponse(DOTS)))));
+		
 		addRandomlySelectable("hardcore", defaultWeight(all(isInLand(THUNDER.get()), isInLand(HEAT.get()))),
 				new NodeBuilder(defaultKeyMsg("This land is HARDCORE! There's lava and lightning wherever you go!")));
+		
 		addRandomlySelectable("thunder_throw.1", defaultWeight(all(isInLand(THUNDER.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("Nemesis has been throwing thunder for generations, not stopping for even a moment."))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue("thunder_throw.2")));
-		add("thunder_throw.2", new NodeBuilder(defaultKeyMsg("They are even doing it in their sleep. Can you believe that?"))
-				.addClosingResponse(DOTS));
+						.addResponse(new ResponseBuilder(ARROW).nextDialogue(add("thunder_throw.2",
+								new NodeBuilder(defaultKeyMsg("They are even doing it in their sleep. Can you believe that?"))
+										.addClosingResponse(DOTS)))));
 		
 		//Rabbits
+		addRandomlySelectable("bunny_birthday", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(NAKAGATOR.get(), SALAMANDER.get()))),
+				new NodeBuilder(defaultKeyMsg("Our daughter wants a bunny for her birthday, even though she caught six in the past three hours.")));
 		addRandomlySelectable("rabbit_eating", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.")));
 		addRandomlySelectable("edgy_life_hatred", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("This place is just so full of life! I despise it.")));
-		addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInLand(RABBITS.get()), new Condition.HasConditions(any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE))))),
+		
+		addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInLand(RABBITS.get()), new Condition.HasConditions(any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK))))),
 				new NodeBuilder(defaultKeyMsg("This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!"))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue("rabbit.food_shortage.2")));
+						.addResponse(new ResponseBuilder(ARROW).addCondition(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)).nextDialogue("rabbit.food_shortage.2")));
 		add("rabbit.food_shortage.2", new NodeBuilder(defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
 				.addClosingResponse(DOTS));
+		
 		addRandomlySelectable("rabbit.food.1", weighted(100, all(isInLand(RABBITS.get()),
 						new Condition.HasConditions(any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK), isInLand(FUNGI.get()), isInLand(SHADE.get()))))),
 				new NodeBuilder(defaultKeyMsg("I sure wonder where the rabbits are getting their food from."))
 						.addResponse(new ResponseBuilder(ARROW).nextDialogue("rabbit.food.2")));
 		add("rabbit.food.2", new NodeSelectorBuilder()
-				.node(any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK)), new NodeBuilder(subMsg("a", "There's not really much food to be found in this desolate place."))
-						.addResponse(new ResponseBuilder(ARROW)
-								.addCondition(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
-								.nextDialogue(add("rabbit.food.3", new NodeBuilder(defaultKeyMsg("Except maybe cacti, but would rabbits eat something that prickly?"))))))
-				.defaultNode(new NodeBuilder(subMsg("b", "I mean, there's not really much else than mushrooms around here.")))); //picked if Fungi or Shade
+				.node(any(isInLand(FUNGI.get()), isInLand(SHADE.get())),
+						new NodeBuilder(subMsg("b", "I mean, there's not really much else than mushrooms around here.")))
+				.defaultNode(new NodeBuilder(subMsg("a", "There's not really much food to be found in this desolate place."))
+						.addResponse(new ResponseBuilder(ARROW).addCondition(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
+								.nextDialogue(add("rabbit.food.3", new NodeBuilder(defaultKeyMsg("Except maybe cacti, but would rabbits eat something that prickly?")))))));
 		
 		
 		addRandomlySelectable("mycelium.1", defaultWeight(isInLand(FUNGI.get())),

@@ -5,37 +5,33 @@
         "type": "ANY",
         "condition_list": [
           {
-            "type": "in_terrain_land_type_tag",
-            "land_type_tag": "minestuck:sand"
+            "type": "in_terrain_land_type",
+            "land_type": "minestuck:fungi"
           },
           {
-            "type": "in_terrain_land_type_tag",
-            "land_type_tag": "minestuck:sandstone"
-          },
-          {
-            "type": "in_terrain_land_type_tag",
-            "land_type_tag": "minestuck:rock"
+            "type": "in_terrain_land_type",
+            "land_type": "minestuck:shade"
           }
         ],
-        "message": "minestuck.dialogue.rabbit.food.2.a",
-        "responses": [
-          {
-            "conditions": {
-              "condition_list": [
-                {
-                  "type": "in_terrain_land_type_tag",
-                  "land_type_tag": "minestuck:sand"
-                }
-              ]
-            },
-            "message": "minestuck.arrow",
-            "next_dialogue_path": "minestuck:rabbit.food.3"
-          }
-        ]
+        "message": "minestuck.dialogue.rabbit.food.2.b"
       }
     ],
     "default_node": {
-      "message": "minestuck.dialogue.rabbit.food.2.b"
+      "message": "minestuck.dialogue.rabbit.food.2.a",
+      "responses": [
+        {
+          "conditions": {
+            "condition_list": [
+              {
+                "type": "in_terrain_land_type_tag",
+                "land_type_tag": "minestuck:sand"
+              }
+            ]
+          },
+          "message": "minestuck.arrow",
+          "next_dialogue_path": "minestuck:rabbit.food.3"
+        }
+      ]
     }
   }
 }

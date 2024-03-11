@@ -24,7 +24,8 @@ import java.util.List;
 
 import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_FOOD_STOCK;
 import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_GENERAL_STOCK;
-import static com.mraof.minestuck.world.lands.LandTypeConditions.*;
+import static com.mraof.minestuck.world.lands.LandTypeConditions.terrainLand;
+import static com.mraof.minestuck.world.lands.LandTypeConditions.titleLand;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 /**
@@ -42,36 +43,10 @@ public class ConsortDialogue
 	/**
 	 * Make sure to call after land registry
 	 */
-	public static void init()	//TODO Could likely be exported to a json format
+	public static void init()
 	{
-		// Wind
-		addMessage("dad_wind").condition(titleLand(WIND));
-		addMessage(new ChainMessage(new SingleMessage("pyre.1"), new SingleMessage("pyre.2"))).condition(titleLand(WIND)).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
-		
-		// Pulse
-		addMessage("koolaid").condition(titleLand(PULSE)).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
-		addMessage("murder_rain").condition(titleLand(PULSE));
-		addMessage("swimming").condition(titleLand(PULSE)).consort(EnumConsort.IGUANA, EnumConsort.TURTLE);
-		addMessage("blood_surprise").condition(titleLand(PULSE)).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		
 		// Thunder
-		addMessage("skeleton_horse").condition(titleLand(THUNDER));
-		addMessage("blue_moon").condition(titleLand(THUNDER)).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("lightning_strike").condition(titleLand(THUNDER)).consort(EnumConsort.TURTLE);
 		addMessage(new ChainMessage(new SingleMessage("reckoning.1"), new SingleMessage("reckoning.2"), new SingleMessage("reckoning.3", "consort_type"))).condition(titleLand(THUNDER));
-		addMessage(new ChainMessage(new SingleMessage("thunder_death.1"), new SingleMessage("thunder_death.2"))).condition(titleLand(THUNDER)).condition(terrainLand(WOOD));
-		addMessage("hardcore").condition(titleLand(THUNDER)).condition(terrainLand(HEAT));
-		addMessage(new ChainMessage(new SingleMessage("thunder_throw.1"), new SingleMessage("thunder_throw.2"))).condition(titleLand(THUNDER)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		
-		//Rabbits
-		addMessage("bunny_birthday").condition(titleLand(RABBITS)).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
-		addMessage("rabbit_eating").condition(titleLand(RABBITS)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		addMessage("edgy_life_hatred").condition(titleLand(RABBITS)).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		addMessage("rabbit.food_shortage.1").condition(titleLand(RABBITS)).condition(terrainLand(MSTags.TerrainLandTypes.SAND).or(MSTags.TerrainLandTypes.SANDSTONE));
-		addMessage(new ChainMessage(0, "rabbit.foodShortage.2", new SingleMessage("rabbit.food_shortage.1"), new SingleMessage("rabbit.food_shortage.2"))).condition(titleLand(RABBITS)).condition(terrainLand(MSTags.TerrainLandTypes.ROCK));
-		addMessage(new ChainMessage(0, "rabbit.food.1", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"))).condition(titleLand(RABBITS)).condition(terrainLand(MSTags.TerrainLandTypes.ROCK).or(MSTags.TerrainLandTypes.SANDSTONE));
-		addMessage(new ChainMessage(0, "rabbit.food.2", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"), new SingleMessage("rabbit.food.3a"))).condition(titleLand(RABBITS)).condition(terrainLand(MSTags.TerrainLandTypes.SAND));
-		addMessage(new ChainMessage(0, "rabbit.food.3", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2b"))).condition(titleLand(RABBITS)).condition(terrainLand(WOOD).or(SHADE));
 		
 		//Monsters
 		addMessage(new SingleMessage("pet_zombie")).condition(titleLand(MSTags.TitleLandTypes.MONSTERS)).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);

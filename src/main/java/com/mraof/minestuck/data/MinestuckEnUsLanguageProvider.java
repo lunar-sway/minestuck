@@ -2491,8 +2491,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thanks", "Thanks!");
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
-		//Wind
-		addDialogue("dad_wind", "My dad was blown away in one of the recent wind storms.");
 		//Monsters
 		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it and everything!");
 		addDialogue("spider_raid", "A few giant spiders raided our village last night, taking all of our bugs! Those monsters...");

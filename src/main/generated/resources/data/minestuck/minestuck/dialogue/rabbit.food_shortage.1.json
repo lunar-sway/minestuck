@@ -3,6 +3,14 @@
     "message": "minestuck.dialogue.rabbit.food_shortage.1",
     "responses": [
       {
+        "conditions": {
+          "condition_list": [
+            {
+              "type": "in_terrain_land_type_tag",
+              "land_type_tag": "minestuck:rock"
+            }
+          ]
+        },
         "message": "minestuck.arrow",
         "next_dialogue_path": "minestuck:rabbit.food_shortage.2"
       }
@@ -27,6 +35,10 @@
               {
                 "type": "in_terrain_land_type_tag",
                 "land_type_tag": "minestuck:sandstone"
+              },
+              {
+                "type": "in_terrain_land_type_tag",
+                "land_type_tag": "minestuck:rock"
               }
             ]
           }
