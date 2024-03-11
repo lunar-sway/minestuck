@@ -81,6 +81,7 @@
           ],
           "list_type": "one"
         },
+        "fail_tooltip": "minestuck.dialogue.test1.fail",
         "hide_if_failed": false,
         "message": "test1response4"
       }

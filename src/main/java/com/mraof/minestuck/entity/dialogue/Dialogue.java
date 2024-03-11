@@ -144,15 +144,16 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 	 * A Response contains all possible Dialogues that can be reached from the present Dialogue.
 	 * It contains the message that represents the Response, any Conditions/Triggers, the location of the next Dialogue, and a boolean determining whether the Response should be visible when it fails to meet the Conditions
 	 */
-	public record Response(DialogueMessage message, Condition condition, List<Trigger> triggers,
-						   Optional<ResourceLocation> nextDialoguePath, boolean hideIfFailed)
+	public record Response(DialogueMessage message, List<Trigger> triggers, Optional<ResourceLocation> nextDialoguePath,
+						   Condition condition, boolean hideIfFailed, Optional<String> failTooltipKey)
 	{
 		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				DialogueMessage.CODEC.fieldOf("message").forGetter(Response::message),
-				PreservingOptionalFieldCodec.withDefault(Condition.CODEC, "condition", Condition.AlwaysTrue.INSTANCE).forGetter(Response::condition),
 				PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
 				new PreservingOptionalFieldCodec<>(ResourceLocation.CODEC, "next_dialogue_path").forGetter(Response::nextDialoguePath),
-				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed)
+				PreservingOptionalFieldCodec.withDefault(Condition.CODEC, "condition", Condition.AlwaysTrue.INSTANCE).forGetter(Response::condition),
+				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed),
+				new PreservingOptionalFieldCodec<>(Codec.STRING, "fail_tooltip").forGetter(Response::failTooltipKey)
 		).apply(instance, Response::new));
 		
 		static Codec<List<Response>> LIST_CODEC = Response.CODEC.listOf();
@@ -160,18 +161,19 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 		public Optional<ResponseData> evaluateData(int responseIndex, LivingEntity entity, ServerPlayer serverPlayer)
 		{
 			Optional<ConditionFailure> conditionFailure;
-			if(this.condition().test(entity, serverPlayer))
+			if(this.condition.test(entity, serverPlayer))
 				conditionFailure = Optional.empty();
 			else
 			{
-				if(this.hideIfFailed())
+				if(this.hideIfFailed)
 					return Optional.empty();
 				
-				Component failureMessages = this.condition().getFailureTooltip();
+				Component failureMessages = this.failTooltipKey.<Component>map(Component::translatable)
+						.orElseGet(this.condition::getFailureTooltip);
 				
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
-			return Optional.of(new ResponseData(this.message().evaluateComponent(entity, serverPlayer), responseIndex, conditionFailure));
+			return Optional.of(new ResponseData(this.message.evaluateComponent(entity, serverPlayer), responseIndex, conditionFailure));
 		}
 		
 		public void trigger(LivingEntity entity, ServerPlayer player)
