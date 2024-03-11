@@ -2,11 +2,10 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
-import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
@@ -15,7 +14,6 @@ import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
-import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -78,8 +76,9 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final DialogueComponent dialogueComponent = new DialogueComponent();
+	
 	private final EnumConsort consortType;
-	private ResourceLocation dialoguePath;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
@@ -147,19 +146,13 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			//TODO there is server side data that needs to be made accessible client side
 			if(!level().isClientSide && player instanceof ServerPlayer serverPlayer)
 			{
-				Dialogue dialogue = getDialogue();
-				
-				if(dialogue != null)
+				PlayerData playerData = PlayerSavedData.getData(serverPlayer);
+				if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
 				{
-					PlayerData playerData = PlayerSavedData.getData(serverPlayer);
-					if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
-					{
-						handleConsortRepFromTalking(serverPlayer);
-						setCurrentAnimation(TALK_PROPERTIES);
-						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.lookupId().toString(), this);
-						
-						Dialogue.openScreen(this, serverPlayer, dialogue);
-					}
+					handleConsortRepFromTalking(serverPlayer);
+					setCurrentAnimation(TALK_PROPERTIES);
+					
+					this.dialogueComponent.startDialogue(this, serverPlayer);
 				}
 			}
 			
@@ -247,7 +240,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.addAdditionalSaveData(compound);
 		
-		ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, dialoguePath).resultOrPartial(LOGGER::error).ifPresent(tag -> compound.put(DIALOGUE_NBT_TAG, tag));
+		compound.put("dialogue", dialogueComponent.write());
 		
 		/*if(message != null)
 		{
@@ -291,8 +284,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.readAdditionalSaveData(compound);
 		
-		//TODO dialogue (at least on client side) seems to randomize on reloads
-		dialoguePath = ResourceLocation.CODEC.parse(NbtOps.INSTANCE, compound.get(DIALOGUE_NBT_TAG)).resultOrPartial(LOGGER::error).orElse(null);
+		dialogueComponent.read(compound.getCompound("dialogue"));
 		
 		/*if(compound.contains("Dialogue", Tag.TAG_STRING))
 		{
@@ -451,32 +443,9 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	}
 	
 	@Override
-	@Nullable
-	public Dialogue getDialogue()
-	{
-		//tries to get the dialogue from dialoguePath and failing that will choose a random one, setting the new dialoguePath in the process
-		Dialogue dialogue = null;
-		
-		if(dialoguePath != null)
-		{
-			dialogue = dialogueFromLocation(dialoguePath);
-		}
-		
-		if(dialogue == null)
-		{
-			dialogue = DialogueManager.getInstance().doRandomDialogue(this, random);
-			
-			if(dialogue != null)
-				dialoguePath = dialogue.lookupId();
-		}
-		
-		return dialogue;
-	}
-	
-	@Override
 	public void setDialoguePath(ResourceLocation location)
 	{
-		dialoguePath = location;
+		dialogueComponent.setDialogue(location);
 	}
 	
 	@Override

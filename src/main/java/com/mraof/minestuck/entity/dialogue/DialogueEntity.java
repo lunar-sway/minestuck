@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.dialogue;
 
-import com.mraof.minestuck.util.DialogueManager;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -8,14 +7,5 @@ import net.minecraft.resources.ResourceLocation;
  */
 public interface DialogueEntity
 {
-	String DIALOGUE_NBT_TAG = "Dialogue";
-	
-	Dialogue getDialogue();
-	
 	void setDialoguePath(ResourceLocation location);
-	
-	default Dialogue dialogueFromLocation(ResourceLocation location)
-	{
-		return DialogueManager.getInstance().getDialogue(location);
-	}
 }
