@@ -126,7 +126,7 @@ public sealed interface Condition
 	{
 		static final Codec<ListCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Condition.LIST_CODEC.fieldOf("conditions").forGetter(ListCondition::conditionList),
-				PreservingOptionalFieldCodec.withDefault(ListType.CODEC, "list_type", ListType.ALL).forGetter(ListCondition::type)
+				ListType.CODEC.fieldOf("list_type").forGetter(ListCondition::type)
 		).apply(instance, ListCondition::new));
 		
 		@Override

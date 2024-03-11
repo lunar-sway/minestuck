@@ -23,7 +23,8 @@
             "minestuck:turtle"
           ]
         }
-      ]
+      ],
+      "list_type": "ALL"
     }
   }
 }

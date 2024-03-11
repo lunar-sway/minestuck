@@ -17,7 +17,8 @@
             "minestuck:iguana"
           ]
         }
-      ]
+      ],
+      "list_type": "ALL"
     }
   }
 }

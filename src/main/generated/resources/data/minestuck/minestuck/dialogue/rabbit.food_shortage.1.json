@@ -38,7 +38,8 @@
           ],
           "list_type": "ANY"
         }
-      ]
+      ],
+      "list_type": "ALL"
     }
   }
 }
