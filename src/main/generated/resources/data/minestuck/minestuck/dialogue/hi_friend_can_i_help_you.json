@@ -3,7 +3,6 @@
     "message": "minestuck.dialogue.hi_friend_can_i_help_you",
     "responses": [
       {
-        "hide_if_failed": false,
         "message": "minestuck.dialogue.hi_friend_can_i_help_you.hate",
         "triggers": [
           {
@@ -13,7 +12,6 @@
         ]
       },
       {
-        "hide_if_failed": false,
         "message": "minestuck.dialogue.hi_friend_can_i_help_you.love",
         "triggers": [
           {

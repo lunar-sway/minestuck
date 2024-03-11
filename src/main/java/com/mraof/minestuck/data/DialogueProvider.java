@@ -225,6 +225,19 @@ public abstract class DialogueProvider implements DataProvider
 		
 		public ResponseBuilder conditions(Conditions conditions)
 		{
+			this.hideIfFailed = true;
+			this.conditions = conditions;
+			return this;
+		}
+		
+		public ResponseBuilder visibleCondition(Condition condition)
+		{
+			return this.visibleConditions(all(condition));
+		}
+		
+		public ResponseBuilder visibleConditions(Conditions conditions)
+		{
+			this.hideIfFailed = false;
 			this.conditions = conditions;
 			return this;
 		}
@@ -232,12 +245,6 @@ public abstract class DialogueProvider implements DataProvider
 		public ResponseBuilder addTrigger(Trigger trigger)
 		{
 			this.triggers.add(trigger);
-			return this;
-		}
-		
-		public ResponseBuilder dontHideFailed()
-		{
-			this.hideIfFailed = false;
 			return this;
 		}
 		
