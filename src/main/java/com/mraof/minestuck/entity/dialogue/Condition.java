@@ -44,31 +44,29 @@ public sealed interface Condition
 	
 	enum Type implements StringRepresentable
 	{
-		HAS_CONDITIONS(() -> HasConditions.CODEC, ""),
-		IS_CONSORT(() -> IsConsort.CODEC, "NPC is not consort"),
-		IS_CARAPACIAN(() -> IsCarapacian.CODEC, "NPC is not carapacian"),
-		IS_ENTITY_TYPE(() -> IsEntityType.CODEC, "NPC is wrong entity type"),
-		IS_ONE_OF_ENTITY_TYPE(() -> IsOneOfEntityType.CODEC, "NPC is wrong entity type"),
-		IN_ANY_LAND(() -> InAnyLand.CODEC, "Is not in a Land"),
-		IN_TERRAIN_LAND_TYPE(() -> InTerrainLandType.CODEC, "Is not in specific Land"),
-		IN_TERRAIN_LAND_TYPE_TAG(() -> InTerrainLandTypeTag.CODEC, "Is not in specific Land tag"),
-		IN_TITLE_LAND_TYPE(() -> InTitleLandType.CODEC, "Is not in specific Land"),
-		IN_TITLE_LAND_TYPE_TAG(() -> InTitleLandTypeTag.CODEC, "Is not in specific Land tag"),
-		PLAYER_HAS_ITEM(() -> PlayerHasItem.CODEC, "You don't have the required item(s)"),
-		PLAYER_IS_CLASS(() -> PlayerIsClass.CODEC, "You aren't the required Class"),
-		PLAYER_IS_ASPECT(() -> PlayerIsAspect.CODEC, "You aren't the required Aspect"),
-		PLAYER_HAS_REPUTATION(() -> PlayerHasReputation.CODEC, "Your reputation doesn't meet requirement"),
-		PLAYER_HAS_BOONDOLLARS(() -> PlayerHasBoondollars.CODEC, "Your porkhollow doesn't meet requirement");
+		HAS_CONDITIONS(() -> HasConditions.CODEC),
+		IS_CONSORT(() -> IsConsort.CODEC),
+		IS_CARAPACIAN(() -> IsCarapacian.CODEC),
+		IS_ENTITY_TYPE(() -> IsEntityType.CODEC),
+		IS_ONE_OF_ENTITY_TYPE(() -> IsOneOfEntityType.CODEC),
+		IN_ANY_LAND(() -> InAnyLand.CODEC),
+		IN_TERRAIN_LAND_TYPE(() -> InTerrainLandType.CODEC),
+		IN_TERRAIN_LAND_TYPE_TAG(() -> InTerrainLandTypeTag.CODEC),
+		IN_TITLE_LAND_TYPE(() -> InTitleLandType.CODEC),
+		IN_TITLE_LAND_TYPE_TAG(() -> InTitleLandTypeTag.CODEC),
+		PLAYER_HAS_ITEM(() -> PlayerHasItem.CODEC),
+		PLAYER_IS_CLASS(() -> PlayerIsClass.CODEC),
+		PLAYER_IS_ASPECT(() -> PlayerIsAspect.CODEC),
+		PLAYER_HAS_REPUTATION(() -> PlayerHasReputation.CODEC),
+		PLAYER_HAS_BOONDOLLARS(() -> PlayerHasBoondollars.CODEC);
 		
 		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 		
 		private final Supplier<Codec<? extends Condition>> codec;
-		private final String failureTooltip;
 		
-		Type(Supplier<Codec<? extends Condition>> codec, String failureTooltip)
+		Type(Supplier<Codec<? extends Condition>> codec)
 		{
 			this.codec = codec;
-			this.failureTooltip = failureTooltip;
 		}
 		
 		public static Type fromInt(int ordinal) //converts int back into enum
@@ -90,7 +88,7 @@ public sealed interface Condition
 	
 	default Component getFailureTooltip()
 	{
-		return Component.literal(getType().failureTooltip);
+		return Component.empty();
 	}
 	
 	boolean testCondition(LivingEntity entity, ServerPlayer player);
@@ -137,6 +135,12 @@ public sealed interface Condition
 		{
 			return entity instanceof ConsortEntity;
 		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not consort");
+		}
 	}
 	
 	record IsCarapacian() implements Condition
@@ -153,6 +157,12 @@ public sealed interface Condition
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			return entity instanceof CarapacianEntity;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not carapacian");
 		}
 	}
 	
@@ -173,6 +183,12 @@ public sealed interface Condition
 		{
 			return entityType != null && entity.getType().equals(entityType);
 		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is wrong entity type");
+		}
 	}
 	
 	record IsOneOfEntityType(List<EntityType<?>> entityTypes) implements Condition
@@ -192,6 +208,12 @@ public sealed interface Condition
 		{
 			return !entityTypes.isEmpty() && entityTypes.contains(entity.getType());
 		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is wrong entity type");
+		}
 	}
 	
 	record InAnyLand() implements Condition
@@ -208,6 +230,12 @@ public sealed interface Condition
 		public boolean testCondition(LivingEntity entity, ServerPlayer player)
 		{
 			return MSDimensions.isLandDimension(entity.getServer(), entity.level().dimension());
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in a Land");
 		}
 	}
 	
@@ -239,6 +267,12 @@ public sealed interface Condition
 			
 			return false;
 		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in specific Land");
+		}
 	}
 	
 	record InTerrainLandTypeTag(TagKey<TerrainLandType> landTypeTag) implements Condition
@@ -267,6 +301,12 @@ public sealed interface Condition
 			}
 			
 			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in specific Land tag");
 		}
 	}
 	
@@ -297,6 +337,12 @@ public sealed interface Condition
 			
 			return false;
 		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in specific Land");
+		}
 	}
 	
 	record InTitleLandTypeTag(TagKey<TitleLandType> landTypeTag) implements Condition
@@ -326,6 +372,12 @@ public sealed interface Condition
 			
 			return false;
 		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in specific Land tag");
+		}
 	}
 	
 	record PlayerHasItem(Item item, int amount) implements Condition
@@ -346,6 +398,12 @@ public sealed interface Condition
 		{
 			ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
 			return stack != null;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You don't have the required item(s)");
 		}
 	}
 	
@@ -373,6 +431,12 @@ public sealed interface Condition
 			
 			return false;
 		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You aren't the required Class");
+		}
 	}
 	
 	record PlayerIsAspect(EnumAspect enumAspect) implements Condition
@@ -398,6 +462,12 @@ public sealed interface Condition
 				return data.getTitle().getHeroAspect().equals(enumAspect);
 			
 			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You aren't the required Aspect");
 		}
 	}
 	
@@ -428,6 +498,12 @@ public sealed interface Condition
 			
 			return false;
 		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Your reputation doesn't meet requirement");
+		}
 	}
 	
 	record PlayerHasBoondollars(int amount, boolean greaterThan) implements Condition
@@ -454,6 +530,12 @@ public sealed interface Condition
 				return greaterThan ? data.getBoondollars() > amount : data.getBoondollars() < amount;
 			
 			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Your porkhollow doesn't meet requirement");
 		}
 	}
 }
