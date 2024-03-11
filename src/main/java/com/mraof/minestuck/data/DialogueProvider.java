@@ -182,8 +182,7 @@ public abstract class DialogueProvider implements DataProvider
 	public static class ResponseBuilder
 	{
 		private final Function<ResourceLocation, DialogueMessage> message;
-		private final List<Condition> conditions = new ArrayList<>();
-		private Conditions.Type conditionsType = Conditions.Type.ALL;
+		private Conditions conditions = Conditions.EMPTY;
 		private final List<Trigger> triggers = new ArrayList<>();
 		@Nullable
 		private ResourceLocation nextDialoguePath = null;
@@ -219,15 +218,14 @@ public abstract class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public ResponseBuilder addCondition(Condition condition)
+		public ResponseBuilder condition(Condition condition)
 		{
-			this.conditions.add(condition);
-			return this;
+			return this.conditions(all(condition));
 		}
 		
-		public ResponseBuilder conditionType(Conditions.Type type)
+		public ResponseBuilder conditions(Conditions conditions)
 		{
-			this.conditionsType = type;
+			this.conditions = conditions;
 			return this;
 		}
 		
@@ -247,7 +245,7 @@ public abstract class DialogueProvider implements DataProvider
 		{
 			ResourceLocation nextPath = this.loopNextPath ? id : this.nextDialoguePath;
 			DialogueMessage message = this.message.apply(id);
-			return new Dialogue.Response(message, new Conditions(this.conditions, this.conditionsType), this.triggers, Optional.ofNullable(nextPath), this.hideIfFailed);
+			return new Dialogue.Response(message, this.conditions, this.triggers, Optional.ofNullable(nextPath), this.hideIfFailed);
 		}
 	}
 	
@@ -295,6 +293,16 @@ public abstract class DialogueProvider implements DataProvider
 	public static Conditions any(Condition... conditions)
 	{
 		return new Conditions(List.of(conditions), Conditions.Type.ANY);
+	}
+	
+	public static Conditions one(Condition... conditions)
+	{
+		return new Conditions(List.of(conditions), Conditions.Type.ONE);
+	}
+	
+	public static Conditions none(Condition... conditions)
+	{
+		return new Conditions(List.of(conditions), Conditions.Type.NONE);
 	}
 	
 	@SuppressWarnings("unused")
