@@ -2,7 +2,7 @@
   "node": {
     "message": "minestuck.dialogue.turtle_only"
   },
-  "use_context": {
+  "selectable": {
     "conditions": {
       "condition_list": [
         {

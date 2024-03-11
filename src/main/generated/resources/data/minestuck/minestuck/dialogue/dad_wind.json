@@ -2,7 +2,7 @@
   "node": {
     "message": "minestuck.dialogue.dad_wind"
   },
-  "use_context": {
+  "selectable": {
     "conditions": {
       "condition_list": [
         {

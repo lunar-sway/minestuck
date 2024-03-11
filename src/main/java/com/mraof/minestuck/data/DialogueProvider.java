@@ -55,14 +55,14 @@ public abstract class DialogueProvider implements DataProvider
 		return add(path, new DialogueBuilder(selector));
 	}
 	
-	protected final void addRandomlySelectable(String path, Dialogue.UseContext useContext, NodeBuilder node)
+	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, NodeBuilder node)
 	{
-		addRandomlySelectable(path, useContext, new NodeSelectorBuilder().defaultNode(node));
+		addRandomlySelectable(path, selectable, new NodeSelectorBuilder().defaultNode(node));
 	}
 	
-	protected final void addRandomlySelectable(String path, Dialogue.UseContext useContext, NodeSelectorBuilder selector)
+	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, NodeSelectorBuilder selector)
 	{
-		add(path, new DialogueBuilder(selector).randomlySelectable(useContext));
+		add(path, new DialogueBuilder(selector).randomlySelectable(selectable));
 	}
 	
 	private ResourceLocation add(String path, DialogueBuilder builder)
@@ -76,22 +76,22 @@ public abstract class DialogueProvider implements DataProvider
 	{
 		private final NodeSelectorBuilder selector;
 		@Nullable
-		private Dialogue.UseContext useContext;
+		private Dialogue.RandomlySelectable selectable;
 		
 		DialogueBuilder(NodeSelectorBuilder selector)
 		{
 			this.selector = selector;
 		}
 		
-		public DialogueBuilder randomlySelectable(Dialogue.UseContext useContext)
+		public DialogueBuilder randomlySelectable(Dialogue.RandomlySelectable selectable)
 		{
-			this.useContext = useContext;
+			this.selectable = selectable;
 			return this;
 		}
 		
 		private Dialogue build(ResourceLocation id)
 		{
-			return new Dialogue(this.selector.build(id), Optional.ofNullable(this.useContext));
+			return new Dialogue(this.selector.build(id), Optional.ofNullable(this.selectable));
 		}
 	}
 	
@@ -313,24 +313,24 @@ public abstract class DialogueProvider implements DataProvider
 	}
 	
 	@SuppressWarnings("unused")
-	public static Dialogue.UseContext weighted(int weight, Condition condition)
+	public static Dialogue.RandomlySelectable weighted(int weight, Condition condition)
 	{
 		return weighted(weight, all(condition));
 	}
 	
-	public static Dialogue.UseContext weighted(int weight, Conditions conditions)
+	public static Dialogue.RandomlySelectable weighted(int weight, Conditions conditions)
 	{
-		return new Dialogue.UseContext(conditions, weight);
+		return new Dialogue.RandomlySelectable(conditions, weight);
 	}
 	
-	public static Dialogue.UseContext defaultWeight(Condition condition)
+	public static Dialogue.RandomlySelectable defaultWeight(Condition condition)
 	{
 		return defaultWeight(all(condition));
 	}
 	
-	public static Dialogue.UseContext defaultWeight(Conditions conditions)
+	public static Dialogue.RandomlySelectable defaultWeight(Conditions conditions)
 	{
-		return new Dialogue.UseContext(conditions);
+		return new Dialogue.RandomlySelectable(conditions);
 	}
 	
 	public static Condition isInLand(TerrainLandType landType)

@@ -12,7 +12,7 @@
       }
     ]
   },
-  "use_context": {
+  "selectable": {
     "conditions": {
       "condition_list": [
         {

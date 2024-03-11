@@ -29,14 +29,14 @@ import java.util.stream.IntStream;
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
 //TODO animation is unused?
-public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
+public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectable)
 {
 	public static final String DEFAULT_ANIMATION = "generic_animation";
 	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
 	
 	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes),
-			new PreservingOptionalFieldCodec<>(UseContext.CODEC, "use_context").forGetter(Dialogue::useContext)
+			new PreservingOptionalFieldCodec<>(RandomlySelectable.CODEC, "selectable").forGetter(Dialogue::selectable)
 	).apply(instance, Dialogue::new));
 	
 	public ResourceLocation lookupId()
@@ -188,14 +188,14 @@ public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
 		}
 	}
 	
-	public record UseContext(Conditions conditions, int weight)
+	public record RandomlySelectable(Conditions conditions, int weight)
 	{
-		static Codec<UseContext> CODEC = RecordCodecBuilder.create(instance ->
-				instance.group(Conditions.CODEC.fieldOf("conditions").forGetter(UseContext::conditions),
-								PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", 10).forGetter(UseContext::weight))
-						.apply(instance, UseContext::new));
+		static Codec<RandomlySelectable> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(Conditions.CODEC.fieldOf("conditions").forGetter(RandomlySelectable::conditions),
+								PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", 10).forGetter(RandomlySelectable::weight))
+						.apply(instance, RandomlySelectable::new));
 		
-		public UseContext(Conditions conditions)
+		public RandomlySelectable(Conditions conditions)
 		{
 			this(conditions, 10);
 		}

@@ -2,7 +2,7 @@
   "node": {
     "message": "minestuck.dialogue.rabbit_eating"
   },
-  "use_context": {
+  "selectable": {
     "conditions": {
       "condition_list": [
         {

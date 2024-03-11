@@ -2,7 +2,7 @@
   "node": {
     "message": "minestuck.dialogue.lightning_strike"
   },
-  "use_context": {
+  "selectable": {
     "conditions": {
       "condition_list": [
         {
