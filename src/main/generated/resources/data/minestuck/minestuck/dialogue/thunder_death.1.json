@@ -11,18 +11,16 @@
   "selectable": {
     "condition": {
       "type": "has_conditions",
-      "conditions": {
-        "condition_list": [
-          {
-            "type": "in_title_land_type",
-            "land_type": "minestuck:thunder"
-          },
-          {
-            "type": "in_terrain_land_type",
-            "land_type": "minestuck:wood"
-          }
-        ]
-      }
+      "conditions": [
+        {
+          "type": "in_title_land_type",
+          "land_type": "minestuck:thunder"
+        },
+        {
+          "type": "in_terrain_land_type",
+          "land_type": "minestuck:wood"
+        }
+      ]
     }
   }
 }

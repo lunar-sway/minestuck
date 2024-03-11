@@ -6,19 +6,17 @@
       {
         "condition": {
           "type": "has_conditions",
-          "conditions": {
-            "type": "ANY",
-            "condition_list": [
-              {
-                "type": "is_entity_type",
-                "entity_type": "minestuck:turtle"
-              },
-              {
-                "type": "is_entity_type",
-                "entity_type": "minestuck:iguana"
-              }
-            ]
-          }
+          "conditions": [
+            {
+              "type": "is_entity_type",
+              "entity_type": "minestuck:turtle"
+            },
+            {
+              "type": "is_entity_type",
+              "entity_type": "minestuck:iguana"
+            }
+          ],
+          "list_type": "ANY"
         },
         "message": "test1response1",
         "next_dialogue_path": "minestuck:test2"
@@ -44,50 +42,44 @@
       {
         "condition": {
           "type": "has_conditions",
-          "conditions": {
-            "type": "ONE",
-            "condition_list": [
-              {
-                "type": "has_conditions",
-                "conditions": {
-                  "type": "ONE",
-                  "condition_list": [
-                    {
-                      "type": "is_entity_type",
-                      "entity_type": "minestuck:nakagator"
-                    },
-                    {
-                      "type": "is_entity_type",
-                      "entity_type": "minestuck:turtle"
-                    },
-                    {
-                      "type": "is_entity_type",
-                      "entity_type": "minestuck:iguana"
-                    },
-                    {
-                      "type": "is_entity_type",
-                      "entity_type": "minestuck:salamander"
-                    }
-                  ]
+          "conditions": [
+            {
+              "type": "has_conditions",
+              "conditions": [
+                {
+                  "type": "is_entity_type",
+                  "entity_type": "minestuck:nakagator"
+                },
+                {
+                  "type": "is_entity_type",
+                  "entity_type": "minestuck:turtle"
+                },
+                {
+                  "type": "is_entity_type",
+                  "entity_type": "minestuck:iguana"
+                },
+                {
+                  "type": "is_entity_type",
+                  "entity_type": "minestuck:salamander"
                 }
-              },
-              {
-                "type": "has_conditions",
-                "conditions": {
-                  "type": "ONE",
-                  "condition_list": [
-                    {
-                      "type": "is_carapacian"
-                    },
-                    {
-                      "type": "player_has_item",
-                      "item": "minestuck:ace_of_clubs"
-                    }
-                  ]
+              ],
+              "list_type": "ONE"
+            },
+            {
+              "type": "has_conditions",
+              "conditions": [
+                {
+                  "type": "is_carapacian"
+                },
+                {
+                  "type": "player_has_item",
+                  "item": "minestuck:ace_of_clubs"
                 }
-              }
-            ]
-          }
+              ],
+              "list_type": "ONE"
+            }
+          ],
+          "list_type": "ONE"
         },
         "hide_if_failed": false,
         "message": "test1response4"

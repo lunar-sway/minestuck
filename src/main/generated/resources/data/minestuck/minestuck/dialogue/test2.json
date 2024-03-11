@@ -15,22 +15,20 @@
       {
         "condition": {
           "type": "has_conditions",
-          "conditions": {
-            "type": "NONE",
-            "condition_list": [
-              {
-                "type": "is_carapacian"
-              },
-              {
-                "type": "in_terrain_land_type",
-                "land_type": "minestuck:end"
-              },
-              {
-                "type": "in_terrain_land_type",
-                "land_type": "minestuck:shade"
-              }
-            ]
-          }
+          "conditions": [
+            {
+              "type": "is_carapacian"
+            },
+            {
+              "type": "in_terrain_land_type",
+              "land_type": "minestuck:end"
+            },
+            {
+              "type": "in_terrain_land_type",
+              "land_type": "minestuck:shade"
+            }
+          ],
+          "list_type": "NONE"
         },
         "hide_if_failed": false,
         "message": "test2response2",
@@ -55,34 +53,32 @@
       {
         "condition": {
           "type": "has_conditions",
-          "conditions": {
-            "type": "ONE",
-            "condition_list": [
-              {
-                "type": "is_carapacian"
-              },
-              {
-                "type": "player_is_class",
-                "class": "WITCH"
-              },
-              {
-                "type": "player_is_class",
-                "class": "MAGE"
-              },
-              {
-                "type": "player_is_aspect",
-                "aspect": "HEART"
-              },
-              {
-                "type": "player_is_aspect",
-                "aspect": "DOOM"
-              },
-              {
-                "type": "in_terrain_land_type",
-                "land_type": "minestuck:rain"
-              }
-            ]
-          }
+          "conditions": [
+            {
+              "type": "is_carapacian"
+            },
+            {
+              "type": "player_is_class",
+              "class": "WITCH"
+            },
+            {
+              "type": "player_is_class",
+              "class": "MAGE"
+            },
+            {
+              "type": "player_is_aspect",
+              "aspect": "HEART"
+            },
+            {
+              "type": "player_is_aspect",
+              "aspect": "DOOM"
+            },
+            {
+              "type": "in_terrain_land_type",
+              "land_type": "minestuck:rain"
+            }
+          ],
+          "list_type": "ONE"
         },
         "hide_if_failed": false,
         "message": "test2response4"
