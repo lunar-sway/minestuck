@@ -1,4 +1,4 @@
-package com.mraof.minestuck.entity.dialogue;
+package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -15,10 +15,10 @@ import java.util.Locale;
 @MethodsReturnNonnullByDefault
 public record ListCondition(List<Condition> conditionList, ListType type) implements Condition
 {
-	static final Codec<com.mraof.minestuck.entity.dialogue.ListCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Condition.LIST_CODEC.fieldOf("conditions").forGetter(com.mraof.minestuck.entity.dialogue.ListCondition::conditionList),
-			ListType.CODEC.fieldOf("list_type").forGetter(com.mraof.minestuck.entity.dialogue.ListCondition::type)
-	).apply(instance, com.mraof.minestuck.entity.dialogue.ListCondition::new));
+	static final Codec<ListCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Condition.LIST_CODEC.fieldOf("conditions").forGetter(ListCondition::conditionList),
+			ListType.CODEC.fieldOf("list_type").forGetter(ListCondition::type)
+	).apply(instance, ListCondition::new));
 	
 	@Override
 	public Codec<ListCondition> codec()

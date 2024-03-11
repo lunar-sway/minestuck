@@ -1,10 +1,11 @@
-package com.mraof.minestuck.entity.dialogue;
+package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;

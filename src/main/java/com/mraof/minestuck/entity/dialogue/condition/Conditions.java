@@ -1,4 +1,4 @@
-package com.mraof.minestuck.entity.dialogue;
+package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
