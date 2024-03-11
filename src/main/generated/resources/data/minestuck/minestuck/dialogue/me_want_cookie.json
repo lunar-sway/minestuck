@@ -10,13 +10,9 @@
         "next_dialogue_path": "minestuck:me_want_cookie"
       },
       {
-        "conditions": {
-          "condition_list": [
-            {
-              "type": "player_has_item",
-              "item": "minecraft:cookie"
-            }
-          ]
+        "condition": {
+          "type": "player_has_item",
+          "item": "minecraft:cookie"
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.me_want_cookie.give",

@@ -4,30 +4,29 @@
     "message": "minestuck.dialogue.test1",
     "responses": [
       {
-        "conditions": {
-          "type": "ANY",
-          "condition_list": [
-            {
-              "type": "is_entity_type",
-              "entity_type": "minestuck:turtle"
-            },
-            {
-              "type": "is_entity_type",
-              "entity_type": "minestuck:iguana"
-            }
-          ]
+        "condition": {
+          "type": "has_conditions",
+          "conditions": {
+            "type": "ANY",
+            "condition_list": [
+              {
+                "type": "is_entity_type",
+                "entity_type": "minestuck:turtle"
+              },
+              {
+                "type": "is_entity_type",
+                "entity_type": "minestuck:iguana"
+              }
+            ]
+          }
         },
         "message": "test1response1",
         "next_dialogue_path": "minestuck:test2"
       },
       {
-        "conditions": {
-          "condition_list": [
-            {
-              "type": "is_entity_type",
-              "entity_type": "minestuck:nakagator"
-            }
-          ]
+        "condition": {
+          "type": "is_entity_type",
+          "entity_type": "minestuck:nakagator"
         },
         "message": "test1response2",
         "next_dialogue_path": "minestuck:test2"
@@ -43,49 +42,52 @@
         ]
       },
       {
-        "conditions": {
-          "type": "ONE",
-          "condition_list": [
-            {
-              "type": "has_conditions",
-              "conditions": {
-                "type": "ONE",
-                "condition_list": [
-                  {
-                    "type": "is_entity_type",
-                    "entity_type": "minestuck:nakagator"
-                  },
-                  {
-                    "type": "is_entity_type",
-                    "entity_type": "minestuck:turtle"
-                  },
-                  {
-                    "type": "is_entity_type",
-                    "entity_type": "minestuck:iguana"
-                  },
-                  {
-                    "type": "is_entity_type",
-                    "entity_type": "minestuck:salamander"
-                  }
-                ]
+        "condition": {
+          "type": "has_conditions",
+          "conditions": {
+            "type": "ONE",
+            "condition_list": [
+              {
+                "type": "has_conditions",
+                "conditions": {
+                  "type": "ONE",
+                  "condition_list": [
+                    {
+                      "type": "is_entity_type",
+                      "entity_type": "minestuck:nakagator"
+                    },
+                    {
+                      "type": "is_entity_type",
+                      "entity_type": "minestuck:turtle"
+                    },
+                    {
+                      "type": "is_entity_type",
+                      "entity_type": "minestuck:iguana"
+                    },
+                    {
+                      "type": "is_entity_type",
+                      "entity_type": "minestuck:salamander"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "has_conditions",
+                "conditions": {
+                  "type": "ONE",
+                  "condition_list": [
+                    {
+                      "type": "is_carapacian"
+                    },
+                    {
+                      "type": "player_has_item",
+                      "item": "minestuck:ace_of_clubs"
+                    }
+                  ]
+                }
               }
-            },
-            {
-              "type": "has_conditions",
-              "conditions": {
-                "type": "ONE",
-                "condition_list": [
-                  {
-                    "type": "is_carapacian"
-                  },
-                  {
-                    "type": "player_has_item",
-                    "item": "minestuck:ace_of_clubs"
-                  }
-                ]
-              }
-            }
-          ]
+            ]
+          }
         },
         "hide_if_failed": false,
         "message": "test1response4"

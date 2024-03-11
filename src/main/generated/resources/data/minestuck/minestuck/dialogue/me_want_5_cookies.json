@@ -6,14 +6,10 @@
         "message": "minestuck.dialogue.me_want_5_cookies.no"
       },
       {
-        "conditions": {
-          "condition_list": [
-            {
-              "type": "player_has_item",
-              "amount": 5,
-              "item": "minecraft:cookie"
-            }
-          ]
+        "condition": {
+          "type": "player_has_item",
+          "amount": 5,
+          "item": "minecraft:cookie"
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.me_want_5_cookies.give",

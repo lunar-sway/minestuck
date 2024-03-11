@@ -139,12 +139,12 @@ public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
 	 * A Response contains all possible Dialogues that can be reached from the present Dialogue.
 	 * It contains the message that represents the Response, any Conditions/Triggers, the location of the next Dialogue, and a boolean determining whether the Response should be visible when it fails to meet the Conditions
 	 */
-	public record Response(DialogueMessage message, Conditions conditions, List<Trigger> triggers,
+	public record Response(DialogueMessage message, Condition condition, List<Trigger> triggers,
 						   Optional<ResourceLocation> nextDialoguePath, boolean hideIfFailed)
 	{
 		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				DialogueMessage.CODEC.fieldOf("message").forGetter(Response::message),
-				PreservingOptionalFieldCodec.withDefault(Conditions.CODEC, "conditions", Conditions.EMPTY).forGetter(Response::conditions),
+				PreservingOptionalFieldCodec.withDefault(Condition.CODEC, "condition", Condition.AlwaysTrue.INSTANCE).forGetter(Response::condition),
 				PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
 				new PreservingOptionalFieldCodec<>(ResourceLocation.CODEC, "next_dialogue_path").forGetter(Response::nextDialoguePath),
 				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed)
@@ -155,14 +155,14 @@ public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
 		public Optional<ResponseData> evaluateData(int responseIndex, LivingEntity entity, ServerPlayer serverPlayer)
 		{
 			Optional<ConditionFailure> conditionFailure;
-			if(this.conditions().testWithContext(entity, serverPlayer))
+			if(this.condition().test(entity, serverPlayer))
 				conditionFailure = Optional.empty();
 			else
 			{
 				if(this.hideIfFailed())
 					return Optional.empty();
 				
-				Component failureMessages = this.conditions().getFailureTooltip();
+				Component failureMessages = this.condition().getFailureTooltip();
 				
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
@@ -171,7 +171,7 @@ public record Dialogue(NodeSelector nodes, Optional<UseContext> useContext)
 		
 		public void trigger(LivingEntity entity, ServerPlayer player)
 		{
-			if(!this.conditions().testWithContext(entity, player))
+			if(!this.condition().test(entity, player))
 				return;
 			
 			for(Trigger trigger : this.triggers())
