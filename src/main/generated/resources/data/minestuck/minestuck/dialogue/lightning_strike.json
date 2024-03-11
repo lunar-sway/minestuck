@@ -14,7 +14,8 @@
           "type": "is_entity_type",
           "entity_type": "minestuck:turtle"
         }
-      ]
+      ],
+      "list_type": "ALL"
     }
   }
 }

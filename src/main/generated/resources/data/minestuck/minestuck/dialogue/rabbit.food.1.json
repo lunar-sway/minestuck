@@ -42,7 +42,8 @@
           ],
           "list_type": "ANY"
         }
-      ]
+      ],
+      "list_type": "ALL"
     },
     "dialogue_weight": 100
   }

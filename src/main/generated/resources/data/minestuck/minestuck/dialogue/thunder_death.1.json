@@ -20,7 +20,8 @@
           "type": "in_terrain_land_type",
           "land_type": "minestuck:wood"
         }
-      ]
+      ],
+      "list_type": "ALL"
     }
   }
 }

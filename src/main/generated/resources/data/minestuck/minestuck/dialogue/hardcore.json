@@ -14,7 +14,8 @@
           "type": "in_terrain_land_type",
           "land_type": "minestuck:heat"
         }
-      ]
+      ],
+      "list_type": "ALL"
     }
   }
 }
