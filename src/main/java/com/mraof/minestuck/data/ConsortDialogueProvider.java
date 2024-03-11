@@ -88,14 +88,14 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("edgy_life_hatred", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("This place is just so full of life! I despise it.")));
 		
-		addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInLand(RABBITS.get()), any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK)))),
+		addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInLand(RABBITS.get()), isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE))),
 				new NodeBuilder(defaultKeyMsg("This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!"))
 						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)).nextDialogue("rabbit.food_shortage.2")));
 		add("rabbit.food_shortage.2", new NodeBuilder(defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
 				.addClosingResponse(DOTS));
 		
 		addRandomlySelectable("rabbit.food.1", weighted(100, all(isInLand(RABBITS.get()),
-						any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK), isInLand(FUNGI.get()), isInLand(SHADE.get())))),
+						any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInLand(FUNGI.get()), isInLand(SHADE.get())))),
 				new NodeBuilder(defaultKeyMsg("I sure wonder where the rabbits are getting their food from."))
 						.next("rabbit.food.2"));
 		add("rabbit.food.2", new NodeSelectorBuilder()

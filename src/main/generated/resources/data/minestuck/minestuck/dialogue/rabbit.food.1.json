@@ -21,15 +21,7 @@
           "conditions": [
             {
               "type": "in_terrain_land_type_tag",
-              "land_type_tag": "minestuck:sand"
-            },
-            {
-              "type": "in_terrain_land_type_tag",
-              "land_type_tag": "minestuck:sandstone"
-            },
-            {
-              "type": "in_terrain_land_type_tag",
-              "land_type_tag": "minestuck:rock"
+              "land_type_tag": "minestuck:is_desolate"
             },
             {
               "type": "in_terrain_land_type",

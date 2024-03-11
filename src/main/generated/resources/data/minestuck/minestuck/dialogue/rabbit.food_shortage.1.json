@@ -21,22 +21,8 @@
           "land_type": "minestuck:rabbits"
         },
         {
-          "type": "has_conditions",
-          "conditions": [
-            {
-              "type": "in_terrain_land_type_tag",
-              "land_type_tag": "minestuck:sand"
-            },
-            {
-              "type": "in_terrain_land_type_tag",
-              "land_type_tag": "minestuck:sandstone"
-            },
-            {
-              "type": "in_terrain_land_type_tag",
-              "land_type_tag": "minestuck:rock"
-            }
-          ],
-          "list_type": "ANY"
+          "type": "in_terrain_land_type_tag",
+          "land_type_tag": "minestuck:is_desolate"
         }
       ],
       "list_type": "ALL"
