@@ -40,9 +40,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("pyre.1", defaultWeight(all(isInLand(WIND.get()), isEntityType(SALAMANDER.get(), TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("If only I was faster than the wind! That would be fun!"))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue(
-								add("pyre.2", new NodeBuilder(defaultKeyMsg("Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society."))))
-						));
+						.next(add("pyre.2", new NodeBuilder(defaultKeyMsg("Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society.")))));
 		
 		//Pulse
 		addRandomlySelectable("koolaid", defaultWeight(all(isInLand(PULSE.get()), isEntityType(SALAMANDER.get(), TURTLE.get()))),
@@ -64,25 +62,23 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("reckoning.1", defaultWeight(isInLand(THUNDER.get())),
 				new NodeBuilder(defaultKeyMsg("Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!"))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue("reckoning.2")));
+						.next("reckoning.2"));
 		add("reckoning.2", new NodeBuilder(defaultKeyMsg("What's The Reckoning? It's when meteors from The Veil are sent towards Skaia."))
-				.addResponse(new ResponseBuilder(ARROW).nextDialogue("reckoning.3")));
+				.next("reckoning.3"));
 		add("reckoning.3", new NodeBuilder(defaultKeyMsg("Like any reasonable %s believes in that!", DialogueMessage.Argument.ENTITY_TYPE)));
 		
 		addRandomlySelectable("thunder_death.1", defaultWeight(all(isInLand(THUNDER.get()), isInLand(WOOD.get()))),
 				new NodeBuilder(defaultKeyMsg("We're lucky to have rain with this weather."))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue(add("thunder_death.2",
-								new NodeBuilder(defaultKeyMsg("Otherwise the thunder would surely have been our death."))
-										.addClosingResponse(DOTS)))));
+						.next(add("thunder_death.2", new NodeBuilder(defaultKeyMsg("Otherwise the thunder would surely have been our death."))
+								.addClosingResponse(DOTS))));
 		
 		addRandomlySelectable("hardcore", defaultWeight(all(isInLand(THUNDER.get()), isInLand(HEAT.get()))),
 				new NodeBuilder(defaultKeyMsg("This land is HARDCORE! There's lava and lightning wherever you go!")));
 		
 		addRandomlySelectable("thunder_throw.1", defaultWeight(all(isInLand(THUNDER.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("Nemesis has been throwing thunder for generations, not stopping for even a moment."))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue(add("thunder_throw.2",
-								new NodeBuilder(defaultKeyMsg("They are even doing it in their sleep. Can you believe that?"))
-										.addClosingResponse(DOTS)))));
+						.next(add("thunder_throw.2", new NodeBuilder(defaultKeyMsg("They are even doing it in their sleep. Can you believe that?"))
+								.addClosingResponse(DOTS))));
 		
 		//Rabbits
 		addRandomlySelectable("bunny_birthday", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(NAKAGATOR.get(), SALAMANDER.get()))),
@@ -101,7 +97,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("rabbit.food.1", weighted(100, all(isInLand(RABBITS.get()),
 						any(isInTerrainLand(MSTags.TerrainLandTypes.SAND), isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE), isInTerrainLand(MSTags.TerrainLandTypes.ROCK), isInLand(FUNGI.get()), isInLand(SHADE.get())))),
 				new NodeBuilder(defaultKeyMsg("I sure wonder where the rabbits are getting their food from."))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue("rabbit.food.2")));
+						.next("rabbit.food.2"));
 		add("rabbit.food.2", new NodeSelectorBuilder()
 				.node(any(isInLand(FUNGI.get()), isInLand(SHADE.get())),
 						new NodeBuilder(subMsg("b", "I mean, there's not really much else than mushrooms around here.")))
@@ -112,8 +108,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("mycelium.1", defaultWeight(isInLand(FUNGI.get())),
 				new NodeBuilder(defaultKeyMsg("Frog, don't you love the feeling of mycelium on your toes?"))
-						.addResponse(new ResponseBuilder(ARROW)
-								.nextDialogue(add("mycelium.2", new NodeBuilder(defaultKeyMsg("No? Is that just me?"))))));
+						.next(add("mycelium.2", new NodeBuilder(defaultKeyMsg("No? Is that just me?")))));
 		
 		addRandomlySelectable("camel/start", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)), new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes", "Why not? Seems like a good price for a camel!"))
@@ -145,11 +140,10 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		addRandomlySelectable("immortality_herb.1", defaultWeight(isInLand(FLORA.get())),
 				new NodeBuilder(defaultKeyMsg("I have a herb that grants immortality! I'm going to eat it right now!"))
-						.addResponse(new ResponseBuilder(ARROW).nextDialogue("immortality_herb.2")));
+						.next("immortality_herb.2"));
 		add("immortality_herb.2", new NodeBuilder(defaultKeyMsg("However, they are easily confused with an explosion-causing herb..."))
-				.addResponse(new ResponseBuilder(ARROW).nextDialogue("immortality_herb.3")));
-		add("immortality_herb.3", new NodeBuilder(defaultKeyMsg("I'm taking the risk."))
-				.addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode())));
+				.next(add("immortality_herb.3", new NodeBuilder(defaultKeyMsg("I'm taking the risk."))
+						.addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode())))));
 	}
 	
 	private void testDialogues()

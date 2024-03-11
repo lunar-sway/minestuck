@@ -163,6 +163,17 @@ public abstract class DialogueProvider implements DataProvider
 			return addResponse(new ResponseBuilder(message));
 		}
 		
+		public NodeBuilder next(ResourceLocation dialogueId)
+		{
+			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(dialogueId));
+		}
+		
+		@Deprecated
+		public NodeBuilder next(String dialoguePath)
+		{
+			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(dialoguePath));
+		}
+		
 		public NodeBuilder addResponse(ResponseBuilder responseBuilder)
 		{
 			this.responses.add(responseBuilder);
