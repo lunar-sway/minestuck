@@ -28,7 +28,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -162,31 +161,6 @@ public interface Condition
 		public boolean test(LivingEntity entity)
 		{
 			return entityType != null && entity.getType().equals(entityType);
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is wrong entity type");
-		}
-	}
-	
-	record IsOneOfEntityType(List<EntityType<?>> entityTypes) implements NpcOnlyCondition
-	{
-		static final Codec<IsOneOfEntityType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.list(ForgeRegistries.ENTITY_TYPES.getCodec()).fieldOf("entity_type").forGetter(IsOneOfEntityType::entityTypes)
-		).apply(instance, IsOneOfEntityType::new));
-		
-		@Override
-		public Codec<IsOneOfEntityType> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return !entityTypes.isEmpty() && entityTypes.contains(entity.getType());
 		}
 		
 		@Override

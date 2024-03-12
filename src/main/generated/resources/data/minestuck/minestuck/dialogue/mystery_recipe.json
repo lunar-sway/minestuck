@@ -11,11 +11,18 @@
           "land_type": "minestuck:cake"
         },
         {
-          "type": "minestuck:one_of_entity_type",
-          "entity_type": [
-            "minestuck:turtle",
-            "minestuck:nakagator"
-          ]
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:turtle"
+            },
+            {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:nakagator"
+            }
+          ],
+          "list_type": "any"
         }
       ],
       "list_type": "all"

@@ -360,12 +360,12 @@ public abstract class DialogueProvider implements DataProvider
 		return new Condition.InTitleLandTypeTag(tag);
 	}
 	
-	public static Condition isEntityType(EntityType<?>... entityType)
+	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
 	{
-		if(entityType.length == 1)
-			return new Condition.IsEntityType(Arrays.stream(entityType).findFirst().get());
+		if(entityTypes.length == 1)
+			return new Condition.IsEntityType(entityTypes[0]);
 		else
-			return new Condition.IsOneOfEntityType(List.of(entityType));
+			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(Condition.IsEntityType::new).toList(), ListCondition.ListType.ANY);
 	}
 	
 	@Override

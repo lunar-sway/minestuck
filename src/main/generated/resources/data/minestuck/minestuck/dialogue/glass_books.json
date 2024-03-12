@@ -11,11 +11,18 @@
           "land_type": "minestuck:thought"
         },
         {
-          "type": "minestuck:one_of_entity_type",
-          "entity_type": [
-            "minestuck:turtle",
-            "minestuck:iguana"
-          ]
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:turtle"
+            },
+            {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:iguana"
+            }
+          ],
+          "list_type": "any"
         }
       ],
       "list_type": "all"
