@@ -17,11 +17,18 @@
           "land_type": "minestuck:wind"
         },
         {
-          "type": "minestuck:one_of_entity_type",
-          "entity_type": [
-            "minestuck:salamander",
-            "minestuck:turtle"
-          ]
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:salamander"
+            },
+            {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:turtle"
+            }
+          ],
+          "list_type": "any"
         }
       ],
       "list_type": "all"

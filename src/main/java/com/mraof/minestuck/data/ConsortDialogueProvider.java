@@ -38,26 +38,26 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("dad_wind", defaultWeight(isInLand(WIND.get())),
 				new NodeBuilder(defaultKeyMsg("My dad was blown away in one of the recent wind storms.")));
 		
-		addRandomlySelectable("pyre.1", defaultWeight(all(isInLand(WIND.get()), isEntityType(SALAMANDER.get(), TURTLE.get()))),
+		addRandomlySelectable("pyre.1", defaultWeight(all(isInLand(WIND.get()), isAnyEntityType(SALAMANDER.get(), TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("If only I was faster than the wind! That would be fun!"))
 						.next(add("pyre.2", new NodeBuilder(defaultKeyMsg("Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society.")))));
 		
 		//Pulse
-		addRandomlySelectable("koolaid", defaultWeight(all(isInLand(PULSE.get()), isEntityType(SALAMANDER.get(), TURTLE.get()))),
+		addRandomlySelectable("koolaid", defaultWeight(all(isInLand(PULSE.get()), isAnyEntityType(SALAMANDER.get(), TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.")));
 		addRandomlySelectable("murder_rain", defaultWeight(isInLand(PULSE.get())),
 				new NodeBuilder(defaultKeyMsg("You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!")));
-		addRandomlySelectable("swimming", defaultWeight(all(isInLand(PULSE.get()), isEntityType(IGUANA.get(), TURTLE.get()))),
+		addRandomlySelectable("swimming", defaultWeight(all(isInLand(PULSE.get()), isAnyEntityType(IGUANA.get(), TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("If you're looking for a good land to swim in, it's definitely not this one.")));
-		addRandomlySelectable("blood_surprise", defaultWeight(all(isInLand(PULSE.get()), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
+		addRandomlySelectable("blood_surprise", defaultWeight(all(isInLand(PULSE.get()), isAnyEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("OH GOD IS THAT BLOOD oh wait nevermind.")));
 		
 		//Thunder
 		addRandomlySelectable("skeleton_horse", defaultWeight(isInLand(THUNDER.get())),
 				new NodeBuilder(defaultKeyMsg("Some people say at night, skeletons riding skeleton horses come through the town.")));
-		addRandomlySelectable("blue_moon", defaultWeight(all(isInLand(THUNDER.get()), isEntityType(SALAMANDER.get(), IGUANA.get()))),
+		addRandomlySelectable("blue_moon", defaultWeight(all(isInLand(THUNDER.get()), isAnyEntityType(SALAMANDER.get(), IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("Every once in a blue moon, lightning strikes and burns down the village. We have to rebuild it!")));
-		addRandomlySelectable("lightning_strike", defaultWeight(all(isInLand(THUNDER.get()), isEntityType(TURTLE.get()))),
+		addRandomlySelectable("lightning_strike", defaultWeight(all(isInLand(THUNDER.get()), isAnyEntityType(TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("You don't want to be struck by lightning. No one does.")));
 		
 		addRandomlySelectable("reckoning.1", defaultWeight(isInLand(THUNDER.get())),
@@ -73,17 +73,17 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("hardcore", defaultWeight(all(isInLand(THUNDER.get()), isInLand(HEAT.get()))),
 				new NodeBuilder(defaultKeyMsg("This land is HARDCORE! There's lava and lightning wherever you go!")));
 		
-		addRandomlySelectable("thunder_throw.1", defaultWeight(all(isInLand(THUNDER.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
+		addRandomlySelectable("thunder_throw.1", defaultWeight(all(isInLand(THUNDER.get()), isAnyEntityType(TURTLE.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("Nemesis has been throwing thunder for generations, not stopping for even a moment."))
 						.next(add("thunder_throw.2", new NodeBuilder(defaultKeyMsg("They are even doing it in their sleep. Can you believe that?"))
 								.addClosingResponse(DOTS))));
 		
 		//Rabbits
-		addRandomlySelectable("bunny_birthday", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(NAKAGATOR.get(), SALAMANDER.get()))),
+		addRandomlySelectable("bunny_birthday", defaultWeight(all(isInLand(RABBITS.get()), isAnyEntityType(NAKAGATOR.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("Our daughter wants a bunny for her birthday, even though she caught six in the past three hours.")));
-		addRandomlySelectable("rabbit_eating", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
+		addRandomlySelectable("rabbit_eating", defaultWeight(all(isInLand(RABBITS.get()), isAnyEntityType(TURTLE.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.")));
-		addRandomlySelectable("edgy_life_hatred", defaultWeight(all(isInLand(RABBITS.get()), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
+		addRandomlySelectable("edgy_life_hatred", defaultWeight(all(isInLand(RABBITS.get()), isAnyEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("This place is just so full of life! I despise it.")));
 		
 		addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInLand(RABBITS.get()), isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE))),
@@ -104,46 +104,46 @@ public final class ConsortDialogueProvider extends DialogueProvider
 								.nextDialogue(add("rabbit.food.3", new NodeBuilder(defaultKeyMsg("Except maybe cacti, but would rabbits eat something that prickly?")))))));
 		
 		//Monsters
-		addRandomlySelectable("pet_zombie", defaultWeight(all(isInTitleLand(MSTags.TitleLandTypes.MONSTERS), isEntityType(NAKAGATOR.get(), SALAMANDER.get()))),
+		addRandomlySelectable("pet_zombie", defaultWeight(all(isInTitleLand(MSTags.TitleLandTypes.MONSTERS), isAnyEntityType(NAKAGATOR.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it and everything!")));
 		addRandomlySelectable("spider_raid", defaultWeight(isInLand(MONSTERS.get())),
 				new NodeBuilder(defaultKeyMsg("A few giant spiders raided our village last night, taking all of our bugs! Those monsters...")));
-		addRandomlySelectable("monstersona", defaultWeight(all(isInTitleLand(MSTags.TitleLandTypes.MONSTERS), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
+		addRandomlySelectable("monstersona", defaultWeight(all(isInTitleLand(MSTags.TitleLandTypes.MONSTERS), isAnyEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("What's your monster-sona? Mine is a zombie.")));
 		
 		//Towers
-		addRandomlySelectable("bug_treasure", defaultWeight(all(isInLand(TOWERS.get()), isEntityType(SALAMANDER.get(), IGUANA.get()))),
+		addRandomlySelectable("bug_treasure", defaultWeight(all(isInLand(TOWERS.get()), isAnyEntityType(SALAMANDER.get(), IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("Legends say underneath the tower to the north is a Captain Lizardtail's buried treasure! Literal tons of bugs, they say!")));
-		addRandomlySelectable("tower_gone", defaultWeight(all(isInLand(TOWERS.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
+		addRandomlySelectable("tower_gone", defaultWeight(all(isInLand(TOWERS.get()), isAnyEntityType(TURTLE.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("That tower over there was built by my great grandpa Fjorgenheimer! You can tell by how its about to fall apa- oh it fell apart.")));
-		addRandomlySelectable("no_tower_treasure", defaultWeight(all(isInLand(TOWERS.get()), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
+		addRandomlySelectable("no_tower_treasure", defaultWeight(all(isInLand(TOWERS.get()), isAnyEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("I feel ripped off. I was born in a land full of magical towers but none of them have treasure!")));
 		
 		//Thought
-		addRandomlySelectable("glass_books", defaultWeight(all(isInLand(THOUGHT.get()), isEntityType(TURTLE.get(), IGUANA.get()))),
+		addRandomlySelectable("glass_books", defaultWeight(all(isInLand(THOUGHT.get()), isAnyEntityType(TURTLE.get(), IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!")));
-		addRandomlySelectable("book_food", defaultWeight(all(isInLand(THOUGHT.get()), isEntityType(SALAMANDER.get(), NAKAGATOR.get()))),
+		addRandomlySelectable("book_food", defaultWeight(all(isInLand(THOUGHT.get()), isAnyEntityType(SALAMANDER.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.")));
-		addRandomlySelectable("to_eat", defaultWeight(all(isInLand(THOUGHT.get()), isEntityType(IGUANA.get(), NAKAGATOR.get()))),
+		addRandomlySelectable("to_eat", defaultWeight(all(isInLand(THOUGHT.get()), isAnyEntityType(IGUANA.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("To eat or not to eat, that is the question.")));
 		
 		//Cake
-		addRandomlySelectable("mystery_recipe", defaultWeight(all(isInLand(CAKE.get()), isEntityType(TURTLE.get(), NAKAGATOR.get()))),
+		addRandomlySelectable("mystery_recipe", defaultWeight(all(isInLand(CAKE.get()), isAnyEntityType(TURTLE.get(), NAKAGATOR.get()))),
 				new NodeBuilder(defaultKeyMsg("All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.")));
-		addRandomlySelectable("cake_regen", defaultWeight(all(isInLand(CAKE.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
+		addRandomlySelectable("cake_regen", defaultWeight(all(isInLand(CAKE.get()), isAnyEntityType(TURTLE.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!")));
-		addRandomlySelectable("cake_recipe", defaultWeight(all(isInLand(CAKE.get()), isEntityType(IGUANA.get(), SALAMANDER.get()))),
+		addRandomlySelectable("cake_recipe", defaultWeight(all(isInLand(CAKE.get()), isAnyEntityType(IGUANA.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("Let's see, the recipe calls for 5 tbsp. of sugar, 2 tbsp. vanilla, 1 large grasshopper... what are you looking at?")));
 		addRandomlySelectable("fire_cakes", defaultWeight(all(isInLand(CAKE.get()), isInLand(HEAT.get()))),
 				new NodeBuilder(defaultKeyMsg("If you're not careful, anything can set you on fire here, even the cakes!")));
 		addRandomlySelectable("frosting", defaultWeight(all(isInLand(CAKE.get()), isInLand(FROST.get()))),
 				new NodeBuilder(defaultKeyMsg("When we start talking about cakes, the others start mentioning frosting. I'm not sure I get what they're talking about!")));
 		
-		addRandomlySelectable("gear_technology", defaultWeight(all(isInLand(CLOCKWORK.get()), isEntityType(SALAMANDER.get(), IGUANA.get()))),
+		addRandomlySelectable("gear_technology", defaultWeight(all(isInLand(CLOCKWORK.get()), isAnyEntityType(SALAMANDER.get(), IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("Legends say the giant gears were used for technology no consort has ever seen before. That's absurd! It's obviously food!")));
-		addRandomlySelectable("evil_gears", defaultWeight(all(isInLand(CLOCKWORK.get()), isEntityType(NAKAGATOR.get(), IGUANA.get()))),
+		addRandomlySelectable("evil_gears", defaultWeight(all(isInLand(CLOCKWORK.get()), isAnyEntityType(NAKAGATOR.get(), IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("My neighbor says the gears are evil! He also said that swords are used for combat, so he's probably insane.")));
-		addRandomlySelectable("ticking", defaultWeight(all(isInLand(CLOCKWORK.get()), isEntityType(TURTLE.get(), SALAMANDER.get()))),
+		addRandomlySelectable("ticking", defaultWeight(all(isInLand(CLOCKWORK.get()), isAnyEntityType(TURTLE.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("The ticking keeps me up all night. It keeps us all up all night. Save us.")));
 		
 		//Frogs
@@ -158,7 +158,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.next(add("frog_variants.2", new NodeBuilder(defaultKeyMsg("Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.", DialogueMessage.Argument.LAND_NAME)))));
 		addRandomlySelectable("frog_hatred", defaultWeight(isInLand(FROGS.get())),
 				new NodeBuilder(defaultKeyMsg("For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?")));
-		addRandomlySelectable("grasshopper_fishing.1", defaultWeight(all(isInLand(FROGS.get()), isEntityType(SALAMANDER.get(), IGUANA.get()))),
+		addRandomlySelectable("grasshopper_fishing.1", defaultWeight(all(isInLand(FROGS.get()), isAnyEntityType(SALAMANDER.get(), IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("My brother found a magic grasshopper while fishing recently!"))
 						.next(add("grasshopper_fishing.2", new NodeBuilder(defaultKeyMsg("Usually all we find are rings!")))));
 		addRandomlySelectable("gay_frogs", defaultWeight(all(isInLand(FROGS.get()), isInLand(RAINBOW.get()))),
@@ -180,7 +180,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		//Light
 		addRandomlySelectable("blindness", defaultWeight(isInLand(LIGHT.get())),
 				new NodeBuilder(defaultKeyMsg("God, it's bright. Half of our village is blind. It's beginning to become a serious problem.")));
-		addRandomlySelectable("doctors_inside", defaultWeight(all(isInLand(LIGHT.get()), isEntityType(TURTLE.get()))),
+		addRandomlySelectable("doctors_inside", defaultWeight(all(isInLand(LIGHT.get()), isAnyEntityType(TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("Our best village doctors found that staying outside in the blinding light for too long is not good for us. Most of us stay inside all our lives. It's sad.")));
 		addRandomlySelectable("staring", defaultWeight(isInLand(LIGHT.get())),
 				new NodeBuilder(defaultKeyMsg("Are you staring at me? No, really! I can't see because I'm blind.")));
@@ -194,22 +194,22 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("Isn't it wonderful how much the snow is glimmering in the light?")));
 		addRandomlySelectable("glimmering_sand", defaultWeight(all(isInLand(LIGHT.get()), isInTerrainLand(MSTags.TerrainLandTypes.SAND))),
 				new NodeBuilder(defaultKeyMsg("Isn't it wonderful how much the sand is glimmering in the light?")));
-		addRandomlySelectable("light_pillars", defaultWeight(all(isInLand(LIGHT.get()), isEntityType(IGUANA.get(), TURTLE.get()))),
+		addRandomlySelectable("light_pillars", defaultWeight(all(isInLand(LIGHT.get()), isAnyEntityType(IGUANA.get(), TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("Those light pillars... they somehow make me think of the legend of the wyrm.")));
 		
 		//Silence
-		addRandomlySelectable("murder_silence", defaultWeight(all(isInLand(SILENCE.get()), isEntityType(NAKAGATOR.get(), SALAMANDER.get()))),
+		addRandomlySelectable("murder_silence", defaultWeight(all(isInLand(SILENCE.get()), isAnyEntityType(NAKAGATOR.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("This is a great place for murder. No one will hear you scream.")));
 		addRandomlySelectable("silent_underlings", defaultWeight(isInLand(SILENCE.get())),
 				new NodeBuilder(defaultKeyMsg("This place is so quiet and peaceful. Too bad we can't hear underlings about to kill us.")));
-		addRandomlySelectable("listening.1", defaultWeight(all(isInLand(SILENCE.get()), isEntityType(IGUANA.get(), SALAMANDER.get()))),
+		addRandomlySelectable("listening.1", defaultWeight(all(isInLand(SILENCE.get()), isAnyEntityType(IGUANA.get(), SALAMANDER.get()))),
 				new NodeBuilder(defaultKeyMsg("Shhh, they can hear you..."))
 						.next(add("listening.2", new NodeBuilder(defaultKeyMsg("Just kidding, no one can hear you! The land itself muffles your words!")))));
-		addRandomlySelectable("calmness", defaultWeight(all(isInLand(SILENCE.get()), isEntityType(TURTLE.get(), IGUANA.get()))),
+		addRandomlySelectable("calmness", defaultWeight(all(isInLand(SILENCE.get()), isAnyEntityType(TURTLE.get(), IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("The sense of calmness in the air, it's kind of unnerving!")));
 		
 		//Mixed
-		addRandomlySelectable("climb_high", defaultWeight(all(any(isInLand(TOWERS.get()), isInLand(WIND.get())), isEntityType(IGUANA.get()))),
+		addRandomlySelectable("climb_high", defaultWeight(all(any(isInLand(TOWERS.get()), isInLand(WIND.get())), isAnyEntityType(IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("Climb up high and you'll be up for a great view!")));
 		
 		
@@ -226,22 +226,22 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.nextDialogue(add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))));
 		
 		//TODO stop the shops from being selectable at end of testing
-		addRandomlySelectable("food_shop", defaultWeight(isEntityType(SALAMANDER.get())),
+		addRandomlySelectable("food_shop", defaultWeight(isAnyEntityType(SALAMANDER.get())),
 				new NodeBuilder(defaultKeyMsg("You hungry? I bet you are! Why else would you be talking to me?"))
 						.addClosingResponse(subMsg("bye", "Never mind"))
 						.addResponse(new ResponseBuilder(subMsg("next", "What do you have?"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		addRandomlySelectable("fast_food", defaultWeight(isEntityType(NAKAGATOR.get())),
+		addRandomlySelectable("fast_food", defaultWeight(isAnyEntityType(NAKAGATOR.get())),
 				new NodeBuilder(defaultKeyMsg("Welcome to MacCricket's, what would you like?"))
 						.addClosingResponse(subMsg("bye", "I'm good"))
 						.addResponse(new ResponseBuilder(subMsg("next", "Show me your menu"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		addRandomlySelectable("grocery_store", defaultWeight(isEntityType(IGUANA.get())),
+		addRandomlySelectable("grocery_store", defaultWeight(isAnyEntityType(IGUANA.get())),
 				new NodeBuilder(defaultKeyMsg("Thank you for choosing Stop and Hop, this village's #1 one grocer!"))
 						.addClosingResponse(subMsg("bye", "No thanks"))
 						.addResponse(new ResponseBuilder(subMsg("next", "What do you have to sell?"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		addRandomlySelectable("tasty_welcome", defaultWeight(isEntityType(TURTLE.get())),
+		addRandomlySelectable("tasty_welcome", defaultWeight(isAnyEntityType(TURTLE.get())),
 				new NodeBuilder(defaultKeyMsg("Welcome. I hope you find something tasty among our wares."))
 						.addClosingResponse(subMsg("bye", "Goodbye"))
 						.addResponse(new ResponseBuilder(subMsg("next", "Let me see your wares"))
@@ -260,19 +260,19 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("test1", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg("Press §eSHIFT§r for more info"))
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue("test2")
-						.condition(any(isEntityType(TURTLE.get()), isEntityType(IGUANA.get()))))
-				.addResponse(new ResponseBuilder(msg("test1response2")).nextDialogue("test2").condition(isEntityType(NAKAGATOR.get())))
+						.condition(any(isAnyEntityType(TURTLE.get()), isAnyEntityType(IGUANA.get()))))
+				.addResponse(new ResponseBuilder(msg("test1response2")).nextDialogue("test2").condition(isAnyEntityType(NAKAGATOR.get())))
 				.addResponse(new ResponseBuilder(msg("test1response3")).nextDialogue("test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 				.addResponse(new ResponseBuilder(msg("test1response4"))
 						.visibleCondition(subText("fail", "This very custom condition was not met."), one(
-								one(isEntityType(NAKAGATOR.get()), isEntityType(TURTLE.get()), isEntityType(IGUANA.get()), isEntityType(SALAMANDER.get())),
+								one(isAnyEntityType(NAKAGATOR.get()), isAnyEntityType(TURTLE.get()), isAnyEntityType(IGUANA.get()), isAnyEntityType(SALAMANDER.get())),
 								one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1))
 						))));
 		
 		addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue("test1")
-						.visibleCondition(isEntityType(SALAMANDER.get())))
+						.visibleCondition(isAnyEntityType(SALAMANDER.get())))
 				.addResponse(new ResponseBuilder(msg("test2response2")).nextDialogue("test1")
 						.visibleCondition(none(new Condition.IsCarapacian(), isInLand(END.get()), isInLand(SHADE.get())))
 						.addTrigger(new Trigger.Command("say hi")))
@@ -283,9 +283,9 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				.addResponse(new ResponseBuilder(msg("test2response4"))
 						.visibleCondition(one(new Condition.IsCarapacian(), new Condition.PlayerIsClass(EnumClass.WITCH), new Condition.PlayerIsClass(EnumClass.MAGE),
 								new Condition.PlayerIsAspect(EnumAspect.HEART), new Condition.PlayerIsAspect(EnumAspect.DOOM), isInLand(RAIN.get())))));
-		addRandomlySelectable("turtle_only", defaultWeight(isEntityType(TURTLE.get())), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("turtle_only", defaultWeight(isAnyEntityType(TURTLE.get())), new NodeBuilder(defaultKeyMsg()));
 		
-		addRandomlySelectable("nakagator_only", defaultWeight(isEntityType(NAKAGATOR.get())), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("nakagator_only", defaultWeight(isAnyEntityType(NAKAGATOR.get())), new NodeBuilder(defaultKeyMsg()));
 		
 		addRandomlySelectable("me_want_cookie", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
