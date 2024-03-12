@@ -1,0 +1,27 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.oil_buckets.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:oil_buckets.2"
+      }
+    ]
+  },
+  "selectable": {
+    "condition": {
+      "type": "minestuck:list",
+      "conditions": [
+        {
+          "type": "minestuck:title_land_type",
+          "land_type": "minestuck:buckets"
+        },
+        {
+          "type": "minestuck:terrain_land_type",
+          "land_type": "minestuck:shade"
+        }
+      ],
+      "list_type": "all"
+    }
+  }
+}

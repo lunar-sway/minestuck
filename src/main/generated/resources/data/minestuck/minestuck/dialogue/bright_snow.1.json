@@ -1,0 +1,27 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.bright_snow.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:bright_snow.2"
+      }
+    ]
+  },
+  "selectable": {
+    "condition": {
+      "type": "minestuck:list",
+      "conditions": [
+        {
+          "type": "minestuck:title_land_type",
+          "land_type": "minestuck:light"
+        },
+        {
+          "type": "minestuck:terrain_land_type",
+          "land_type": "minestuck:frost"
+        }
+      ],
+      "list_type": "all"
+    }
+  }
+}

@@ -355,6 +355,11 @@ public abstract class DialogueProvider implements DataProvider
 		return new Condition.InTerrainLandTypeTag(tag);
 	}
 	
+	public static Condition isInTitleLand(TagKey<TitleLandType> tag)
+	{
+		return new Condition.InTitleLandTypeTag(tag);
+	}
+	
 	public static Condition isEntityType(EntityType<?>... entityType)
 	{
 		if(entityType.length == 1)
