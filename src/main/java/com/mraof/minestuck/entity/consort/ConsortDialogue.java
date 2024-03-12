@@ -45,67 +45,6 @@ public class ConsortDialogue
 	 */
 	public static void init()
 	{
-		//Monsters
-		addMessage(new SingleMessage("pet_zombie")).condition(titleLand(MSTags.TitleLandTypes.MONSTERS)).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
-		addMessage("spider_raid").condition(titleLand(MONSTERS));
-		addMessage("monstersona").condition(titleLand(MSTags.TitleLandTypes.MONSTERS)).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		
-		//Towers
-		addMessage("bug_treasure").condition(titleLand(TOWERS)).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("tower_gone").condition(titleLand(TOWERS)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		addMessage("no_tower_treasure").condition(titleLand(TOWERS)).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		
-		//Thought
-		addMessage("glass_books").condition(titleLand(THOUGHT)).consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		addMessage("book_food").condition(titleLand(THOUGHT)).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
-		addMessage("to_eat").condition(titleLand(THOUGHT)).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		
-		//Cake
-		addMessage("mystery_recipe").condition(titleLand(CAKE)).consort(EnumConsort.TURTLE, EnumConsort.NAKAGATOR);
-		addMessage("cake_regen").condition(titleLand(CAKE)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		addMessage("cake_recipe").condition(titleLand(CAKE)).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER);
-		addMessage("fire_cakes").condition(terrainLand(HEAT)).condition(titleLand(CAKE));
-		addMessage("frosting").condition(titleLand(CAKE)).condition(terrainLand(FROST));
-		
-		//Clockwork
-		addMessage("gear_technology").condition(titleLand(CLOCKWORK)).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("evil_gears").condition(titleLand(CLOCKWORK)).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
-		addMessage("ticking").condition(titleLand(CLOCKWORK)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		
-		//Frogs
-		addMessage("frog_creation").condition(titleLand(FROGS));
-		addMessage("frog_location").condition(titleLand(FROGS));
-		addMessage("frog_imitation").condition(titleLand(FROGS));
-		addMessage(new ChainMessage(new SingleMessage("frog_variants.1"), new SingleMessage("frog_variants.2", "land_name"))).condition(titleLand(FROGS));
-		addMessage("frog_hatred").condition(titleLand(FROGS));
-		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing.1"), new SingleMessage("grasshopper_fishing.2"))).condition(titleLand(FROGS)).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("gay_frogs").condition(titleLand(FROGS)).condition(terrainLand(RAINBOW));
-		addMessage("non_teleporting_frogs").condition(titleLand(FROGS)).condition(terrainLand(END));
-		
-		//Buckets
-		addMessage("lewd_buckets").condition(titleLand(BUCKETS));
-		addMessage("water_buckets").condition(titleLand(BUCKETS)).condition(terrainLand(MSTags.TerrainLandTypes.SAND));
-		addMessage("warm_buckets").condition(titleLand(BUCKETS)).condition(terrainLand(FROST));
-		addMessage(new ChainMessage(new SingleMessage("oil_buckets.1"), new SingleMessage("oil_buckets.2"))).condition(titleLand(BUCKETS)).condition(terrainLand(SHADE));
-		
-		//Light
-		addMessage("blindness").condition(titleLand(LIGHT));
-		addMessage("doctors_inside").condition(titleLand(LIGHT)).consort(EnumConsort.TURTLE);
-		addMessage("staring").condition(titleLand(LIGHT));
-		addMessage(new ChainMessage(new SingleMessage("sunglasses.1"), new SingleMessage("sunglasses.2"))).condition(titleLand(LIGHT)).condition(terrainLand(HEAT));
-		addMessage(new ChainMessage(new SingleMessage("bright_snow.1"), new SingleMessage("bright_snow.2"))).condition(titleLand(LIGHT)).condition(terrainLand(FROST));
-		addMessage("glimmering_snow").condition(titleLand(LIGHT)).condition(terrainLand(FROST));
-		addMessage("glimmering_sand").condition(titleLand(LIGHT)).condition(terrainLand(MSTags.TerrainLandTypes.SAND));
-		addMessage("light_pillars").condition(titleLand(LIGHT)).consort(EnumConsort.IGUANA, EnumConsort.TURTLE);
-		
-		//Silence
-		addMessage("murder_silence").condition(titleLand(SILENCE)).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
-		addMessage("silent_underlings").condition(titleLand(SILENCE));
-		addMessage(new ChainMessage(new SingleMessage("listening.1"), new SingleMessage("listening.2"))).condition(titleLand(SILENCE)).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER);
-		addMessage("calmness").condition(titleLand(SILENCE)).consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		
-		//Towers
-		addMessage("climb_high").condition(titleLand(TOWERS).or(WIND)).consort(EnumConsort.IGUANA);
 		addMessage(new ConditionedMessage((ConsortEntity consort2, ServerPlayer player2) -> consort2.getY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
 				new SingleMessage("height_fear.panic"))).condition(titleLand(TOWERS)).consort(EnumConsort.TURTLE);
 		addMessage(new ConditionedMessage((ConsortEntity consort1, ServerPlayer player1) -> consort1.getY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
