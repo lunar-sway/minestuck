@@ -2491,12 +2491,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thanks", "Thanks!");
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
-		//Towers
-		addDialogue("height_fear.towers.1", "I'd climb up one of those towers and look at the view, but I am scared of heights.");
-		addDialogue("height_fear.towers.2", "I mean, what if I slipped and fell off the stairs?");
-		addDialogue("height_fear.rock.1", "I'd climb up one of those rocks and look at the view, but I am scared of heights.");
-		addDialogue("height_fear.rock.2", "I mean what if I fell down and landed on my back?");
-		addDialogue("height_fear.panic", "AAH, I am scared of heights!");
 		//Shade
 		addDialogue("mush_farm.1", "Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.");
 		addDialogue("mush_farm.2", "So that's what I'm doing.");

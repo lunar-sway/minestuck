@@ -45,11 +45,6 @@ public class ConsortDialogue
 	 */
 	public static void init()
 	{
-		addMessage(new ConditionedMessage((ConsortEntity consort2, ServerPlayer player2) -> consort2.getY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
-				new SingleMessage("height_fear.panic"))).condition(titleLand(TOWERS)).consort(EnumConsort.TURTLE);
-		addMessage(new ConditionedMessage((ConsortEntity consort1, ServerPlayer player1) -> consort1.getY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
-				new SingleMessage("height_fear.panic"))).condition(titleLand(WIND)).consort(EnumConsort.TURTLE);
-		
 		//Shade
 		addMessage(new ChainMessage(2, new SingleMessage("mush_farm.1"), new SingleMessage("mush_farm.2"), new SingleMessage("mush_farm.3"),
 				new SingleMessage("mush_farm.4"), new SingleMessage("mush_farm.5"), new SingleMessage("mush_farm.6"),

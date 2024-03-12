@@ -211,6 +211,12 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		//Mixed
 		addRandomlySelectable("climb_high", defaultWeight(all(any(isInLand(TOWERS.get()), isInLand(WIND.get())), isAnyEntityType(IGUANA.get()))),
 				new NodeBuilder(defaultKeyMsg("Climb up high and you'll be up for a great view!")));
+		addRandomlySelectable("height_fear", defaultWeight(all(any(isInLand(TOWERS.get()), isInLand(WIND.get())), isAnyEntityType(TURTLE.get()))), new NodeSelectorBuilder()
+				.node(new Condition.AtOrAboveY(78), new NodeBuilder(subMsg("panic", "AAH, I am scared of heights!")))
+				.node(isInLand(TOWERS.get()), new NodeBuilder(subMsg("towers.1", "I'd climb up one of those towers and look at the view, but I am scared of heights."))
+						.next(add("height_fear.towers.2", new NodeBuilder(defaultKeyMsg("I mean, what if I slipped and fell off the stairs?")))))
+				.defaultNode(new NodeBuilder(subMsg("rock.1", "I'd climb up one of those rocks and look at the view, but I am scared of heights."))
+						.next(add("height_fear.rock.2", new NodeBuilder(defaultKeyMsg("I mean what if I fell down and landed on my back?"))))));
 		
 		
 		

@@ -25,6 +25,7 @@ public final class Conditions
 		REGISTER.register("terrain_land_type_tag", () -> Condition.InTerrainLandTypeTag.CODEC);
 		REGISTER.register("title_land_type", () -> Condition.InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> Condition.InTitleLandTypeTag.CODEC);
+		REGISTER.register("at_or_above_y", () -> Condition.AtOrAboveY.CODEC);
 		REGISTER.register("player_item", () -> Condition.PlayerHasItem.CODEC);
 		REGISTER.register("player_class", () -> Condition.PlayerIsClass.CODEC);
 		REGISTER.register("player_aspect", () -> Condition.PlayerIsAspect.CODEC);

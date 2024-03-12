@@ -44,9 +44,9 @@ public interface Condition
 	
 	Codec<? extends Condition> codec();
 	
-	Component getFailureTooltip();
-	
 	boolean test(LivingEntity entity, ServerPlayer player);
+	
+	Component getFailureTooltip();
 	
 	default boolean isNpcOnly()
 	{
@@ -331,6 +331,30 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Is not in specific Land tag");
+		}
+	}
+	
+	record AtOrAboveY(double y) implements NpcOnlyCondition
+	{
+		static final Codec<AtOrAboveY> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.DOUBLE.fieldOf("y").forGetter(AtOrAboveY::y)
+		).apply(instance, AtOrAboveY::new));
+		@Override
+		public Codec<AtOrAboveY> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return this.y <= entity.getY();
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not at the right height");
 		}
 	}
 	
