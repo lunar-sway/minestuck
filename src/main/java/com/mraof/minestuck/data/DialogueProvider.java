@@ -25,6 +25,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
@@ -49,34 +50,23 @@ public abstract class DialogueProvider implements DataProvider
 	
 	protected abstract void addDialogue();
 	
-	protected final ResourceLocation add(String path, NodeBuilder node)
+	protected final ResourceLocation add(String path, DialogueBuilder builder)
 	{
-		return add(path, new NodeSelectorBuilder().defaultNode(node));
+		return builder.buildDialogue(new ResourceLocation(modId, path), Optional.empty(), dialogues::put);
 	}
 	
-	protected final ResourceLocation add(String path, NodeSelectorBuilder selector)
+	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, DialogueBuilder builder)
 	{
-		return add(path, id -> new Dialogue(selector.build(id), Optional.empty()));
+		builder.buildDialogue(new ResourceLocation(modId, path), Optional.of(selectable), dialogues::put);
 	}
 	
-	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, NodeBuilder node)
+	public interface DialogueBuilder
 	{
-		addRandomlySelectable(path, selectable, new NodeSelectorBuilder().defaultNode(node));
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		ResourceLocation buildDialogue(ResourceLocation id, Optional<Dialogue.RandomlySelectable> randomlySelectable, BiConsumer<ResourceLocation, Dialogue> register);
 	}
 	
-	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, NodeSelectorBuilder selector)
-	{
-		add(path, id -> new Dialogue(selector.build(id), Optional.of(selectable)));
-	}
-	
-	private ResourceLocation add(String path, Function<ResourceLocation, Dialogue> builder)
-	{
-		ResourceLocation id = new ResourceLocation(modId, path);
-		dialogues.put(id, builder.apply(id));
-		return id;
-	}
-	
-	public static class NodeSelectorBuilder
+	public static class NodeSelectorBuilder implements DialogueBuilder
 	{
 		private final List<Pair<Condition, NodeBuilder>> conditionedNodes = new ArrayList<>();
 		@Nullable
@@ -100,9 +90,16 @@ public abstract class DialogueProvider implements DataProvider
 			return new Dialogue.NodeSelector(this.conditionedNodes.stream().map(pair -> pair.mapSecond(builder -> builder.build(id))).toList(),
 					this.defaultNode.build(id));
 		}
+		
+		@Override
+		public ResourceLocation buildDialogue(ResourceLocation id, Optional<Dialogue.RandomlySelectable> randomlySelectable, BiConsumer<ResourceLocation, Dialogue> register)
+		{
+			register.accept(id, new Dialogue(this.build(id), randomlySelectable));
+			return id;
+		}
 	}
 	
-	public static class NodeBuilder
+	public static class NodeBuilder implements DialogueBuilder
 	{
 		private final Function<ResourceLocation, DialogueMessage> messageProvider;
 		private String animation = Dialogue.DEFAULT_ANIMATION;
@@ -162,6 +159,13 @@ public abstract class DialogueProvider implements DataProvider
 		{
 			DialogueMessage message = this.messageProvider.apply(id);
 			return new Dialogue.DialogueNode(message, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id)).toList());
+		}
+		
+		@Override
+		public ResourceLocation buildDialogue(ResourceLocation id, Optional<Dialogue.RandomlySelectable> randomlySelectable, BiConsumer<ResourceLocation, Dialogue> register)
+		{
+			return new NodeSelectorBuilder().defaultNode(this)
+					.buildDialogue(id, randomlySelectable, register);
 		}
 	}
 	
