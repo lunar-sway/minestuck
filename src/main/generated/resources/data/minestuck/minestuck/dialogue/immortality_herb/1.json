@@ -4,7 +4,7 @@
     "responses": [
       {
         "message": "minestuck.arrow",
-        "next_dialogue_path": "minestuck:immortality_herb.2"
+        "next_dialogue_path": "minestuck:immortality_herb/2"
       }
     ]
   },

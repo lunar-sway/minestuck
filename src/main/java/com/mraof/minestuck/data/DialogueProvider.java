@@ -257,8 +257,15 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public static class ChainBuilder implements DialogueBuilder
 	{
+		private boolean withFolders = false;
 		private final List<NodeBuilder> nodes = new ArrayList<>();
 		private boolean loop = false;
+		
+		public ChainBuilder withFolders()
+		{
+			this.withFolders = true;
+			return this;
+		}
 		
 		public ChainBuilder node(NodeBuilder nodeBuilder)
 		{
@@ -278,7 +285,8 @@ public abstract class DialogueProvider implements DataProvider
 			if(this.nodes.isEmpty())
 				throw new IllegalStateException("Nodes must be added to this chain builder");
 			
-			List<ResourceLocation> ids = IntStream.range(0, this.nodes.size()).mapToObj(index -> id.withSuffix("." + (index + 1))).toList();
+			List<ResourceLocation> ids = IntStream.range(0, this.nodes.size())
+					.mapToObj(index -> id.withSuffix((withFolders ? "/" : ".") + (index + 1))).toList();
 			
 			for(int index = 1; index < this.nodes.size(); index++)
 				this.nodes.get(index - 1).next(ids.get(index));
