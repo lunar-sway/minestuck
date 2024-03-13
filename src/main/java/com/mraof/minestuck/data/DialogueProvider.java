@@ -56,7 +56,7 @@ public abstract class DialogueProvider implements DataProvider
 	
 	protected final ResourceLocation add(String path, NodeSelectorBuilder selector)
 	{
-		return add(path, new DialogueBuilder(selector));
+		return add(path, id -> new Dialogue(selector.build(id), Optional.empty()));
 	}
 	
 	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, NodeBuilder node)
@@ -66,37 +66,14 @@ public abstract class DialogueProvider implements DataProvider
 	
 	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, NodeSelectorBuilder selector)
 	{
-		add(path, new DialogueBuilder(selector).randomlySelectable(selectable));
+		add(path, id -> new Dialogue(selector.build(id), Optional.of(selectable)));
 	}
 	
-	private ResourceLocation add(String path, DialogueBuilder builder)
+	private ResourceLocation add(String path, Function<ResourceLocation, Dialogue> builder)
 	{
 		ResourceLocation id = new ResourceLocation(modId, path);
-		dialogues.put(id, builder.build(id));
+		dialogues.put(id, builder.apply(id));
 		return id;
-	}
-	
-	public static class DialogueBuilder
-	{
-		private final NodeSelectorBuilder selector;
-		@Nullable
-		private Dialogue.RandomlySelectable selectable;
-		
-		DialogueBuilder(NodeSelectorBuilder selector)
-		{
-			this.selector = selector;
-		}
-		
-		public DialogueBuilder randomlySelectable(Dialogue.RandomlySelectable selectable)
-		{
-			this.selectable = selectable;
-			return this;
-		}
-		
-		private Dialogue build(ResourceLocation id)
-		{
-			return new Dialogue(this.selector.build(id), Optional.ofNullable(this.selectable));
-		}
 	}
 	
 	public static class NodeSelectorBuilder
