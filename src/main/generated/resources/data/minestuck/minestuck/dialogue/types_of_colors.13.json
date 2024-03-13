@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.types_of_colors.13",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:types_of_colors.14"
+      }
+    ]
+  }
+}

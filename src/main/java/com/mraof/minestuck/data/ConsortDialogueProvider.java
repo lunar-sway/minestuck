@@ -313,6 +313,26 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("I have no clue what the ground here is made of. I've never seen anything like it anywhere else!")));
 		addRandomlySelectable("love_colors", defaultWeight(isInLand(RAINBOW.get())),
 				new NodeBuilder(defaultKeyMsg("People ask me, \"What's your favorite color?\" I can't pick! I love them all! They're all special in their own way! Well, except green.")));
+		addRandomlySelectable("types_of_colors", defaultWeight(isInLand(RAINBOW.get())), new ChainBuilder()
+				.node(new NodeBuilder(defaultKeyMsg("In the additive color system, there are three primary colors: red, green, and blue.")))
+				.node(new NodeBuilder(defaultKeyMsg("In the subtractive color system, there are also three primary colors, but those are magenta, yellow, and cyan.")))
+				.node(new NodeBuilder(defaultKeyMsg("In the additive system, mixing red and green makes yellow, mixing green and blue makes cyan, and mixing blue and red makes magenta.")))
+				.node(new NodeBuilder(defaultKeyMsg("In the subtractive system, mixing magenta and yellow makes red, mixing yellow and cyan makes green, and mixing cyan and magenta makes blue!")))
+				.node(new NodeBuilder(defaultKeyMsg("These six colors make up the color wheel: red, yellow, green, cyan, blue, magenta, and then back to red.")))
+				.node(new NodeBuilder(defaultKeyMsg("When you look at a rainbow, you don't see magenta, because the blue on one end doesn't mix with the red on the other end.")))
+				.node(new NodeBuilder(defaultKeyMsg("You do, however, see purple, which is between magenta and blue. Short answer for why that is, your eyes are lying to you.")))
+				.node(new NodeBuilder(defaultKeyMsg("Beyond the six main colors, however, there are also six other colors: pink, brown, orange, lime, light blue, and purple.")))
+				.node(new NodeBuilder(defaultKeyMsg("In addition, there are also the tones of white, light gray, gray, and black.")))
+				.node(new NodeBuilder(defaultKeyMsg("In the additive system, mixing all the colors together makes white.")))
+				.node(new NodeBuilder(defaultKeyMsg("In the subtractive system, mixing all the colors together makes black.")))
+				.node(new NodeBuilder(defaultKeyMsg("When dealing with dye, however, you can find some unusual combinations, or lack of combinations.")))
+				.node(new NodeBuilder(defaultKeyMsg("Dyes work largely on the subtractive color system, but they don't always mix the way they should.")))
+				.node(new NodeBuilder(defaultKeyMsg("This is because dyes, while vibrant, are imperfect representations of their respective colors.")))
+				.node(new NodeBuilder(defaultKeyMsg("Lime, for example, should be a mix of yellow and green. To get lime dye, though, you need to mix cactus green with white dye instead.")))
+				.node(new NodeBuilder(defaultKeyMsg("When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta.")))
+				.node(new NodeBuilder(defaultKeyMsg("Dye is weird like that.")))
+				.node(new NodeBuilder(defaultKeyMsg("...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?")))
+				.loop());
 		
 		//End
 		addRandomlySelectable("at_the_end", defaultWeight(isInLand(END.get())),
