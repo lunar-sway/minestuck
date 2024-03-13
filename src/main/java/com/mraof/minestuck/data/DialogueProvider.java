@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -242,6 +243,33 @@ public abstract class DialogueProvider implements DataProvider
 			ResourceLocation nextPath = this.loopNextPath ? id : this.nextDialoguePath;
 			DialogueMessage message = this.message.apply(id);
 			return new Dialogue.Response(message, this.triggers, Optional.ofNullable(nextPath), this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
+		}
+	}
+	
+	public static class ChainBuilder implements DialogueBuilder
+	{
+		private final List<NodeBuilder> nodes = new ArrayList<>();
+		
+		public ChainBuilder node(NodeBuilder nodeBuilder)
+		{
+			this.nodes.add(nodeBuilder);
+			return this;
+		}
+		
+		@Override
+		public ResourceLocation buildDialogue(ResourceLocation id, Optional<Dialogue.RandomlySelectable> randomlySelectable, BiConsumer<ResourceLocation, Dialogue> register)
+		{
+			if(this.nodes.isEmpty())
+				throw new IllegalStateException("Nodes must be added to this chain builder");
+			
+			List<ResourceLocation> ids = IntStream.range(0, this.nodes.size()).mapToObj(index -> id.withSuffix("." + (index + 1))).toList();
+			
+			for(int index = 1; index < this.nodes.size(); index++)
+				this.nodes.get(index - 1).next(ids.get(index));
+			
+			for(int index = 1; index < this.nodes.size(); index++)
+				this.nodes.get(index).buildDialogue(ids.get(index), Optional.empty(), register);
+			return this.nodes.get(0).buildDialogue(ids.get(0), randomlySelectable, register);
 		}
 	}
 	
