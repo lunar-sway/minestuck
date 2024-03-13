@@ -2491,32 +2491,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thanks", "Thanks!");
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
-		//Monsters
-		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it and everything!");
-		addDialogue("spider_raid", "A few giant spiders raided our village last night, taking all of our bugs! Those monsters...");
-		addDialogue("monstersona", "What's your monster-sona? Mine is a zombie.");
-		//Towers
-		addDialogue("bug_treasure", "Legends say underneath the tower to the north is a Captain Lizardtail's buried treasure! Literal tons of bugs, they say!");
-		addDialogue("tower_gone", "That tower over there was built by my great grandpa Fjorgenheimer! You can tell by how its about to fall apa- oh it fell apart.");
-		addDialogue("no_tower_treasure", "I feel ripped off. I was born in a land full of magical towers but none of them have treasure!");
-		//Thought
-		addDialogue("glass_books", "Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!");
-		addDialogue("book_food", "We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.");
-		addDialogue("to_eat", "To eat or not to eat, that is the question.");
-		//Cake
-		addDialogue("mystery_recipe", "All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.");
-		addDialogue("cake_regen", "I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!");
-		addDialogue("cake_recipe", "Let's see, the recipe calls for 5 tbsp. of sugar, 2 tbsp. vanilla, 1 large grasshopper... what are you looking at?");
-		addDialogue("fire_cakes", "If you're not careful, anything can set you on fire here, even the cakes!");
-		addDialogue("frosting", "When we start talking about cakes, the others start mentioning frosting. I'm not sure I get what they're talking about!");
-		//Clockwork
-		addDialogue("gear_technology", "Legends say the giant gears were used for technology no consort has ever seen before. That's absurd! It's obviously food!");
-		addDialogue("evil_gears", "My neighbor says the gears are evil! He also said that swords are used for combat, so he's probably insane.");
-		addDialogue("ticking", "The ticking keeps me up all night. It keeps us all up all night. Save us.");
 		//Frogs
-		addDialogue("frog_creation", "We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!");
-		addDialogue("frog_location", "You won't find many frogs where you find villages. Most of them live where the terrain is rougher.");
-		addDialogue("frog_imitation", "Ribbit, ribbit! I'm a frog! I don't care what you say!");
 		addDialogue("frog_variants.1", "Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be proposterous.");
 		addDialogue("frog_variants.2", "Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.");
 		addDialogue("frog_hatred", "For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?");

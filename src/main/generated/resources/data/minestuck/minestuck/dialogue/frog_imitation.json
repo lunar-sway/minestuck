@@ -1,0 +1,17 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.frog_imitation"
+  },
+  "selectable": {
+    "condition": {
+      "type": "minestuck:list",
+      "conditions": [
+        {
+          "type": "minestuck:title_land_type",
+          "land_type": "minestuck:frogs"
+        }
+      ],
+      "list_type": "all"
+    }
+  }
+}

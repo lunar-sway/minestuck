@@ -46,36 +46,12 @@ public class ConsortDialogue
 	public static void init()
 	{
 		//Monsters
-		addMessage(new SingleMessage("pet_zombie")).condition(titleLand(MSTags.TitleLandTypes.MONSTERS)).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
-		addMessage("spider_raid").condition(titleLand(MONSTERS));
-		addMessage("monstersona").condition(titleLand(MSTags.TitleLandTypes.MONSTERS)).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
+		//addMessage(new SingleMessage("pet_zombie")).condition(titleLand(MSTags.TitleLandTypes.MONSTERS)).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		
 		//Towers
-		addMessage("bug_treasure").condition(titleLand(TOWERS)).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("tower_gone").condition(titleLand(TOWERS)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		addMessage("no_tower_treasure").condition(titleLand(TOWERS)).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		
-		//Thought
-		addMessage("glass_books").condition(titleLand(THOUGHT)).consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		addMessage("book_food").condition(titleLand(THOUGHT)).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
-		addMessage("to_eat").condition(titleLand(THOUGHT)).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		
-		//Cake
-		addMessage("mystery_recipe").condition(titleLand(CAKE)).consort(EnumConsort.TURTLE, EnumConsort.NAKAGATOR);
-		addMessage("cake_regen").condition(titleLand(CAKE)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-		addMessage("cake_recipe").condition(titleLand(CAKE)).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER);
-		addMessage("fire_cakes").condition(terrainLand(HEAT)).condition(titleLand(CAKE));
-		addMessage("frosting").condition(titleLand(CAKE)).condition(terrainLand(FROST));
-		
-		//Clockwork
-		addMessage("gear_technology").condition(titleLand(CLOCKWORK)).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("evil_gears").condition(titleLand(CLOCKWORK)).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
-		addMessage("ticking").condition(titleLand(CLOCKWORK)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
+		//addMessage("tower_gone").condition(titleLand(TOWERS)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		
 		//Frogs
-		addMessage("frog_creation").condition(titleLand(FROGS));
-		addMessage("frog_location").condition(titleLand(FROGS));
-		addMessage("frog_imitation").condition(titleLand(FROGS));
 		addMessage(new ChainMessage(new SingleMessage("frog_variants.1"), new SingleMessage("frog_variants.2", "land_name"))).condition(titleLand(FROGS));
 		addMessage("frog_hatred").condition(titleLand(FROGS));
 		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing.1"), new SingleMessage("grasshopper_fishing.2"))).condition(titleLand(FROGS)).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);

@@ -1,0 +1,24 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.book_food"
+  },
+  "selectable": {
+    "condition": {
+      "type": "minestuck:list",
+      "conditions": [
+        {
+          "type": "minestuck:title_land_type",
+          "land_type": "minestuck:thought"
+        },
+        {
+          "type": "minestuck:one_of_entity_type",
+          "entity_type": [
+            "minestuck:salamander",
+            "minestuck:nakagator"
+          ]
+        }
+      ],
+      "list_type": "all"
+    }
+  }
+}
