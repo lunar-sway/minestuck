@@ -350,7 +350,7 @@ public abstract class DialogueProvider implements DataProvider
 	@SuppressWarnings("unused")
 	public static Dialogue.RandomlySelectable weighted(int weight, Condition condition)
 	{
-		return new Dialogue.RandomlySelectable(condition, weight);
+		return new Dialogue.RandomlySelectable(condition, weight, false);
 	}
 	
 	public static Dialogue.RandomlySelectable defaultWeight(Condition condition)
