@@ -182,7 +182,7 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 				
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
-			return Optional.of(new ResponseData(this.message.evaluateComponent(entity, serverPlayer), responseIndex, conditionFailure));
+			return Optional.of(new ResponseData(this.message.evaluateComponent(entity, serverPlayer), this.nextDialoguePath.isEmpty(), responseIndex, conditionFailure));
 		}
 		
 		public void trigger(LivingEntity entity, ServerPlayer player)
@@ -258,20 +258,22 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 		}
 	}
 	
-	public record ResponseData(Component message, int index, Optional<ConditionFailure> conditionFailure)
+	public record ResponseData(Component message, boolean shouldClose, int index, Optional<ConditionFailure> conditionFailure)
 	{
 		private static ResponseData read(FriendlyByteBuf buffer)
 		{
 			Component message = buffer.readComponent();
+			boolean shouldClose = buffer.readBoolean();
 			int index = buffer.readInt();
 			Optional<ConditionFailure> conditionFailure = buffer.readOptional(ConditionFailure::read);
 			
-			return new ResponseData(message, index, conditionFailure);
+			return new ResponseData(message, shouldClose, index, conditionFailure);
 		}
 		
 		private void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeComponent(this.message);
+			buffer.writeBoolean(this.shouldClose);
 			buffer.writeInt(this.index);
 			buffer.writeOptional(this.conditionFailure, (byteBuf, failure) -> failure.write(byteBuf));
 		}

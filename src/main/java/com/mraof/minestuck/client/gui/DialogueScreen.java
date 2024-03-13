@@ -78,7 +78,7 @@ public class DialogueScreen extends Screen
 			Dialogue.ResponseData data = this.dialogueData.responses().get(i);
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, startY + 20 * i, 190, 14, data.message(),
-					button -> clickResponse(data.index()));
+					button -> clickResponse(data));
 			
 			data.conditionFailure().ifPresent(failure -> {
 				entryButton.setTooltip(Tooltip.create(conditionFailMessage(failure.causes())));
@@ -94,10 +94,11 @@ public class DialogueScreen extends Screen
 		return Component.literal("Cannot be picked because:").append("\n").append(causes);
 	}
 	
-	private void clickResponse(int responseIndex)
+	private void clickResponse(Dialogue.ResponseData responseData)
 	{
-		onClose();
-		MSPacketHandler.sendToServer(ResponseTriggerPacket.createPacket(responseIndex, nodeReference, entity));
+		if(responseData.shouldClose())
+			onClose();
+		MSPacketHandler.sendToServer(ResponseTriggerPacket.createPacket(responseData.index(), nodeReference, entity));
 	}
 	
 	@Override
