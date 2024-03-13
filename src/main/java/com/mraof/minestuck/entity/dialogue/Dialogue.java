@@ -11,8 +11,10 @@ import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -113,22 +115,29 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 		}
 	}
 	
-	public record DialogueNode(DialogueMessage message, String animation, ResourceLocation guiPath, List<Response> responses)
+	public record DialogueNode(DialogueMessage message, Optional<DialogueMessage> description, String animation, ResourceLocation guiPath, List<Response> responses)
 	{
 		public static Codec<DialogueNode> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				DialogueMessage.CODEC.fieldOf("message").forGetter(DialogueNode::message),
+				new PreservingOptionalFieldCodec<>(DialogueMessage.CODEC, "description").forGetter(DialogueNode::description),
 				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DEFAULT_ANIMATION).forGetter(DialogueNode::animation),
 				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DEFAULT_GUI).forGetter(DialogueNode::guiPath),
 				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(DialogueNode::responses)
 		).apply(instance, DialogueNode::new));
 		
-		private DialogueData evaluateData(LivingEntity entity, ServerPlayer serverPlayer)
+		private DialogueData evaluateData(LivingEntity entity, ServerPlayer player)
 		{
 			List<ResponseData> responses = IntStream.range(0, responses().size())
-					.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, serverPlayer))
+					.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, player))
 					.flatMap(Optional::stream).toList();
 			
-			return new DialogueData(this.message().evaluateComponent(entity, serverPlayer), this.guiPath(), responses);
+			MutableComponent message = this.message().evaluateComponent(entity, player);
+			this.description().ifPresent(descriptionMessage ->
+					message.append("\n")
+							.append(descriptionMessage.evaluateComponent(entity, player)
+									.withStyle(style -> style.withItalic(true).applyFormat(ChatFormatting.GRAY))));
+			
+			return new DialogueData(message, this.guiPath(), responses);
 		}
 		
 		public Optional<Response> getResponseIfValid(int responseIndex)

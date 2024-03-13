@@ -13,6 +13,7 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
@@ -41,7 +42,7 @@ public record DialogueMessage(String key, List<Argument> arguments)
 		this(message, List.of());
 	}
 	
-	public Component evaluateComponent(LivingEntity entity, ServerPlayer serverPlayer)
+	public MutableComponent evaluateComponent(LivingEntity entity, ServerPlayer serverPlayer)
 	{
 		return Component.translatable(this.key, this.arguments.stream().map(argument -> argument.processing.apply(entity, serverPlayer)).toArray());
 	}

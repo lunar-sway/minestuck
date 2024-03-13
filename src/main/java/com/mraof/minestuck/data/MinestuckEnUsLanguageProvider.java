@@ -2492,9 +2492,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
 		//Frost
-		addDialogue("frozen.1", "My neighbors were complaining the other night about the snow.");
-		addDialogue("frozen.2", "Personally, the cold never really bothered me anyways.");
-		addDialogue("frozen.2.desc", "You hear a faint \"ba-dum tss\" in the distance.");
 		addDialogue("fur_coat", "Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!");
 		addDialogue("fur_coat.pay", "Give them the boondollars [Pay 100 boondollars]");
 		addDialogue("fur_coat.pay.reply", "Here you go!");
