@@ -249,10 +249,17 @@ public abstract class DialogueProvider implements DataProvider
 	public static class ChainBuilder implements DialogueBuilder
 	{
 		private final List<NodeBuilder> nodes = new ArrayList<>();
+		private boolean loop = false;
 		
 		public ChainBuilder node(NodeBuilder nodeBuilder)
 		{
 			this.nodes.add(nodeBuilder);
+			return this;
+		}
+		
+		public ChainBuilder loop()
+		{
+			this.loop = true;
 			return this;
 		}
 		
@@ -266,6 +273,8 @@ public abstract class DialogueProvider implements DataProvider
 			
 			for(int index = 1; index < this.nodes.size(); index++)
 				this.nodes.get(index - 1).next(ids.get(index));
+			if(this.loop)
+				this.nodes.get(this.nodes.size() - 1).next(ids.get(0));
 			
 			for(int index = 1; index < this.nodes.size(); index++)
 				this.nodes.get(index).buildDialogue(ids.get(index), Optional.empty(), register);

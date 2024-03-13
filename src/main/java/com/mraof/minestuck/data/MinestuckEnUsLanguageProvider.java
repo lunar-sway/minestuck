@@ -2503,25 +2503,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("fur_coat.ignore.reply", "Sorry, but I can't help you.");
 		addDialogue("fur_coat.death", "I guess I'll just die then...");
 		addDialogue("tent_protection", "These tents doesn't protect against the cold very well, but they are good enough.");
-		//Rainbow
-		addDialogue("types_of_colors.1", "In the additive color system, there are three primary colors: red, green, and blue.");
-		addDialogue("types_of_colors.2", "In the subtractive color system, there are also three primary colors, but those are magenta, yellow, and cyan.");
-		addDialogue("types_of_colors.3", "In the additive system, mixing red and green makes yellow, mixing green and blue makes cyan, and mixing blue and red makes magenta.");
-		addDialogue("types_of_colors.4", "In the subtractive system, mixing magenta and yellow makes red, mixing yellow and cyan makes green, and mixing cyan and magenta makes blue!");
-		addDialogue("types_of_colors.5", "These six colors make up the color wheel: red, yellow, green, cyan, blue, magenta, and then back to red.");
-		addDialogue("types_of_colors.6", "When you look at a rainbow, you don't see magenta, because the blue on one end doesn't mix with the red on the other end.");
-		addDialogue("types_of_colors.7", "You do, however, see purple, which is between magenta and blue. Short answer for why that is, your eyes are lying to you.");
-		addDialogue("types_of_colors.8", "Beyond the six main colors, however, there are also six other colors: pink, brown, orange, lime, light blue, and purple.");
-		addDialogue("types_of_colors.9", "In addition, there are also the tones of white, light gray, gray, and black.");
-		addDialogue("types_of_colors.10", "In the additive system, mixing all the colors together makes white.");
-		addDialogue("types_of_colors.11", "In the subtractive system, mixing all the colors together makes black.");
-		addDialogue("types_of_colors.12", "When dealing with dye, however, you can find some unusual combinations, or lack of combinations.");
-		addDialogue("types_of_colors.13", "Dyes work largely on the subtractive color system, but they don't always mix the way they should.");
-		addDialogue("types_of_colors.14", "This is because dyes, while vibrant, are imperfect representations of their respective colors.");
-		addDialogue("types_of_colors.15", "Lime, for example, should be a mix of yellow and green. To get lime dye, though, you need to mix cactus green with white dye instead.");
-		addDialogue("types_of_colors.16", "When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta.");
-		addDialogue("types_of_colors.17", "Dye is weird like that.");
-		addDialogue("types_of_colors.18", "...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?");
 		
 		addDialogue("denizen_mention", "It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!");
 		addDialogue("floating_island", "I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!");
