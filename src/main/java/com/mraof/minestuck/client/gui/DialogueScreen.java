@@ -11,6 +11,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -33,6 +34,7 @@ public class DialogueScreen extends Screen
 	private int xOffset;
 	private int yOffset;
 	
+	private List<FormattedCharSequence> messageLines;
 	private final List<Button> responseButtons = new ArrayList<>();
 	
 	DialogueScreen(LivingEntity entity, Dialogue.NodeReference nodeReference, Dialogue.DialogueData dialogueData)
@@ -51,6 +53,17 @@ public class DialogueScreen extends Screen
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
 		
+		MutableComponent entityName = entity.getDisplayName().plainCopy();
+		
+		//consort names will have the same color as their type
+		if(entity instanceof ConsortEntity consortEntity)
+		{
+			entityName.withStyle(consortEntity.getConsortType().getColor());
+		}
+		
+		Component entityMessage = entityName.append(": ").append(this.dialogueData.message());
+		this.messageLines = font.split(entityMessage, 210);
+		
 		recreateResponseButtons();
 	}
 	
@@ -59,12 +72,12 @@ public class DialogueScreen extends Screen
 		responseButtons.forEach(this::removeWidget);
 		responseButtons.clear();
 		
+		int startY = yOffset + 20 + 9 * messageLines.size() + 2;
 		for(int i = 0; i < this.dialogueData.responses().size(); i++)
 		{
 			Dialogue.ResponseData data = this.dialogueData.responses().get(i);
-			int yPositionOffset = 20 * i;
 			
-			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, yOffset + 40 + yPositionOffset, 190, 14, data.message(),
+			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, startY + 20 * i, 190, 14, data.message(),
 					button -> clickResponse(data.index()));
 			
 			data.conditionFailure().ifPresent(failure -> {
@@ -96,16 +109,12 @@ public class DialogueScreen extends Screen
 		
 		guiGraphics.blit(dialogueData.guiBackground(), xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		MutableComponent entityName = entity.getDisplayName().plainCopy();
-		
-		//consort names will have the same color as their type
-		if(entity instanceof ConsortEntity consortEntity)
+		int pY = yOffset + 20;
+		for(FormattedCharSequence line : messageLines)
 		{
-			entityName.withStyle(consortEntity.getConsortType().getColor());
+			guiGraphics.drawString(font, line, xOffset + 10, pY, 0x000000, false);
+			pY += 9;
 		}
-		
-		Component entityMessage = entityName.append(": ").append(this.dialogueData.message());
-		guiGraphics.drawWordWrap(font, entityMessage, xOffset + 10, yOffset + 20, 210, 0x000000);
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
