@@ -63,7 +63,7 @@ public abstract class DialogueProvider implements DataProvider
 	
 	private void checkAndAdd(ResourceLocation id, Dialogue dialogue)
 	{
-		if(!this.dialogues.containsKey(id))
+		if(this.dialogues.containsKey(id))
 			throw new IllegalArgumentException(id + " was added twice");
 		this.dialogues.put(id, dialogue);
 	}
