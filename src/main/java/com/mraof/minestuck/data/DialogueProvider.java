@@ -53,12 +53,19 @@ public abstract class DialogueProvider implements DataProvider
 	
 	protected final ResourceLocation add(String path, DialogueBuilder builder)
 	{
-		return builder.buildDialogue(new ResourceLocation(modId, path), Optional.empty(), dialogues::put);
+		return builder.buildDialogue(new ResourceLocation(modId, path), Optional.empty(), this::checkAndAdd);
 	}
 	
 	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, DialogueBuilder builder)
 	{
-		builder.buildDialogue(new ResourceLocation(modId, path), Optional.of(selectable), dialogues::put);
+		builder.buildDialogue(new ResourceLocation(modId, path), Optional.of(selectable), this::checkAndAdd);
+	}
+	
+	private void checkAndAdd(ResourceLocation id, Dialogue dialogue)
+	{
+		if(!this.dialogues.containsKey(id))
+			throw new IllegalArgumentException(id + " was added twice");
+		this.dialogues.put(id, dialogue);
 	}
 	
 	public interface DialogueBuilder
