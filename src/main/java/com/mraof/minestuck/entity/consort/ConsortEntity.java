@@ -79,7 +79,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	private final DialogueComponent dialogueComponent = new DialogueComponent();
 	
 	private final EnumConsort consortType;
-	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
 	private CompoundTag messageData;
@@ -255,7 +254,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 				compound.put("talkRepList", list);
 			}
 		}
-		compound.putBoolean("HasHadMessage", hasHadMessage);
 		 */
 		
 		compound.putInt("Type", merchantType.ordinal());
@@ -299,9 +297,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 				for(int i = 0; i < list.size(); i++)
 					talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
 			}
-			
-			hasHadMessage = true;
-		} else hasHadMessage = compound.getBoolean("HasHadMessage");
+		}
 		 */
 		
 		merchantType = EnumConsort.MerchantType.values()[Mth.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];

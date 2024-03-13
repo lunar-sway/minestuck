@@ -14,19 +14,33 @@ public final class DialogueComponent
 {
 	@Nullable
 	private ResourceLocation activeDialogue;
+	private boolean hasGeneratedOnce = false;
 	
 	public void read(CompoundTag tag)
 	{
 		if(tag.contains("dialogue_id", CompoundTag.TAG_STRING))
-			activeDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
+		{
+			this.activeDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
+			this.hasGeneratedOnce = true;
+		}
+		else
+			this.hasGeneratedOnce = tag.getBoolean("has_generated");
 	}
 	
 	public CompoundTag write()
 	{
 		CompoundTag tag = new CompoundTag();
-		if(activeDialogue != null)
-			tag.putString("dialogue_id", activeDialogue.toString());
+		if(this.activeDialogue != null)
+			tag.putString("dialogue_id", this.activeDialogue.toString());
+		
+		tag.putBoolean("has_generated", this.hasGeneratedOnce);
+		
 		return tag;
+	}
+	
+	public boolean hasGeneratedOnce()
+	{
+		return hasGeneratedOnce;
 	}
 	
 	public void setDialogue(ResourceLocation dialogueId)
@@ -58,6 +72,7 @@ public final class DialogueComponent
 		{
 			dialogue = DialogueManager.getInstance().doRandomDialogue(entity);
 			
+			this.hasGeneratedOnce = true;
 			if(dialogue != null)
 				this.activeDialogue = dialogue.lookupId();
 		}

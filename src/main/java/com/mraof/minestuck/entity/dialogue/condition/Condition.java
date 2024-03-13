@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
@@ -46,7 +47,10 @@ public interface Condition
 	
 	boolean test(LivingEntity entity, ServerPlayer player);
 	
-	Component getFailureTooltip();
+	default Component getFailureTooltip()
+	{
+		return Component.empty();
+	}
 	
 	default boolean isNpcOnly()
 	{
@@ -87,15 +91,31 @@ public interface Condition
 		}
 		
 		@Override
-		public Component getFailureTooltip()
+		public boolean test(LivingEntity entity)
 		{
-			return Component.empty();
+			return true;
+		}
+	}
+	
+	enum FirstTimeGenerating implements NpcOnlyCondition
+	{
+		INSTANCE;
+		
+		static final Codec<FirstTimeGenerating> CODEC = Codec.unit(INSTANCE);
+		
+		@Override
+		public Codec<FirstTimeGenerating> codec()
+		{
+			return CODEC;
 		}
 		
 		@Override
 		public boolean test(LivingEntity entity)
 		{
-			return true;
+			if(entity instanceof DialogueEntity dialogueEntity)
+				return !dialogueEntity.getDialogueComponent().hasGeneratedOnce();
+			else
+				return false;
 		}
 	}
 	
