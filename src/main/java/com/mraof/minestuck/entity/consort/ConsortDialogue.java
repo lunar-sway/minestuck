@@ -45,6 +45,12 @@ public class ConsortDialogue
 	 */
 	public static void init()
 	{
+		//Monsters
+		//addMessage(new SingleMessage("pet_zombie")).condition(titleLand(MSTags.TitleLandTypes.MONSTERS)).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
+		
+		//Towers
+		//addMessage("tower_gone").condition(titleLand(TOWERS)).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
+		
 		//Frost
 		addMessage(new ChoiceMessage(new SingleMessage("fur_coat"), new SingleMessage[]{new SingleMessage("fur_coat.pay"), new SingleMessage("fur_coat.ignore")},
 				new MessageType[]{new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),

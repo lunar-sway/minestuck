@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.Trigger;
@@ -19,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -382,14 +384,14 @@ public abstract class DialogueProvider implements DataProvider
 		return new Dialogue.RandomlySelectable(condition);
 	}
 	
-	public static Condition isInLand(TerrainLandType landType)
+	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)
 	{
-		return new Condition.InTerrainLandType(landType);
+		return new Condition.InTerrainLandType(landType.get());
 	}
 	
-	public static Condition isInLand(TitleLandType landType)
+	public static Condition isInTitle(RegistryObject<TitleLandType> landType)
 	{
-		return new Condition.InTitleLandType(landType);
+		return new Condition.InTitleLandType(landType.get());
 	}
 	
 	public static Condition isInTerrainLand(TagKey<TerrainLandType> tag)
@@ -400,6 +402,12 @@ public abstract class DialogueProvider implements DataProvider
 	public static Condition isInTitleLand(TagKey<TitleLandType> tag)
 	{
 		return new Condition.InTitleLandTypeTag(tag);
+	}
+	
+	@SafeVarargs
+	public static Condition isAnyEntityType(RegistryObject<EntityType<ConsortEntity>>... entityType)
+	{
+		return isAnyEntityType(Arrays.stream(entityType).map(RegistryObject::get).toArray(EntityType<?>[]::new));
 	}
 	
 	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
