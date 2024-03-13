@@ -52,6 +52,16 @@ public final class DialogueComponent
 		this.activeDialogue = dialogueId;
 	}
 	
+	public boolean hasActiveDialogue()
+	{
+		return this.activeDialogue != null;
+	}
+	
+	public void resetDialogue()
+	{
+		this.activeDialogue = null;
+	}
+	
 	public void startDialogue(LivingEntity entity, ServerPlayer serverPlayer)
 	{
 		if(this.activeDialogue == null)

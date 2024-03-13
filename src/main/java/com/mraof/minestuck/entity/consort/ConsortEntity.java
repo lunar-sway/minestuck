@@ -80,7 +80,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private final EnumConsort consortType;
 	ConsortDialogue.DialogueWrapper message;
-	int messageTicksLeft;
+	int ticksUntilDialogueReset;
 	private CompoundTag messageData;
 	private final Set<PlayerIdentifier> talkRepPlayerList = new HashSet<>();
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
@@ -158,6 +158,9 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		this.dialogueComponent.startDialogue(this, serverPlayer);
 		
+		if(this.dialogueComponent.hasActiveDialogue())
+			checkMessageData();
+		
 		return InteractionResult.SUCCESS;
 	}
 	
@@ -166,7 +169,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(messageData == null)
 		{
 			messageData = new CompoundTag();
-			messageTicksLeft = 24000 + level().random.nextInt(24000);
+			ticksUntilDialogueReset = 24000 + level().random.nextInt(24000);
 		}
 	}
 	
@@ -175,6 +178,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		messageData = null;
 		updatingMessage = null;
 		stocks = null;
+		this.dialogueComponent.resetDialogue();
 		talkRepPlayerList.clear();
 	}
 	
@@ -203,8 +207,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(level().isClientSide)
 			return;
 		
-		if(messageTicksLeft > 0)
-			messageTicksLeft -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
+		if(ticksUntilDialogueReset > 0)
+			ticksUntilDialogueReset -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
 		else if(messageData != null)
 		{
 			clearDialogueData();

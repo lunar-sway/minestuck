@@ -797,7 +797,7 @@ public abstract class MessageType
 			
 			if(!nbt.contains(this.getString()) || consort.updatingMessage != this)
 			{
-				nbt.putInt(this.getString(), consort.messageTicksLeft - delay[0]);
+				nbt.putInt(this.getString(), consort.ticksUntilDialogueReset - delay[0]);
 				nbt.putInt(this.getString()+".i", 0);
 				consort.updatingMessage = this;
 				Component text = messages[0].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[0].getString()));
@@ -848,7 +848,7 @@ public abstract class MessageType
 				{
 					int i = nbt.getInt(this.getString()+".i");
 					int time = nbt.getInt(this.getString());
-					if(time >= consort.messageTicksLeft)
+					if(time >= consort.ticksUntilDialogueReset)
 					{
 						i++;
 						time -= delay[i % delay.length];
