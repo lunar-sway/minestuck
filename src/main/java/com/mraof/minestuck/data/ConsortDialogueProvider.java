@@ -35,7 +35,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 	private void consortDialogues()
 	{
 		//Wind
-		addRandomlySelectable("dad_wind", defaultWeight(isInTitle(WIND)),
+		addRandomlySelectable("dad_wind", defaultWeight(isInTitle(WIND)), //todo review this
 				new NodeBuilder(defaultKeyMsg("My dad was blown away in one of the recent wind storms.")));
 		
 		addRandomlySelectable("pyre", defaultWeight(all(isInTitle(WIND), isAnyEntityType(SALAMANDER, TURTLE))), new ChainBuilder()
@@ -76,7 +76,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		
 		//Rabbits
-		addRandomlySelectable("bunny_birthday", defaultWeight(all(isInTitle(RABBITS), isAnyEntityType(NAKAGATOR, SALAMANDER))),
+		addRandomlySelectable("bunny_birthday", defaultWeight(all(isInTitle(RABBITS), isAnyEntityType(NAKAGATOR, SALAMANDER))), //todo review this
 				new NodeBuilder(defaultKeyMsg("Our daughter wants a bunny for her birthday, even though she caught six in the past three hours.")));
 		addRandomlySelectable("rabbit_eating", defaultWeight(all(isInTitle(RABBITS), isAnyEntityType(TURTLE, SALAMANDER))),
 				new NodeBuilder(defaultKeyMsg("One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.")));
@@ -100,7 +100,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		
 		//Monsters
-		addRandomlySelectable("pet_zombie", defaultWeight(all(isInTitleLand(MSTags.TitleLandTypes.MONSTERS), isAnyEntityType(NAKAGATOR, SALAMANDER))),
+		addRandomlySelectable("pet_zombie", defaultWeight(all(isInTitleLand(MSTags.TitleLandTypes.MONSTERS), isAnyEntityType(NAKAGATOR, SALAMANDER))), //todo review this
 				new NodeBuilder(defaultKeyMsg("I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it and everything!")));
 		addRandomlySelectable("spider_raid", defaultWeight(isInTitle(MONSTERS)),
 				new NodeBuilder(defaultKeyMsg("A few giant spiders raided our village last night, taking all of our bugs! Those monsters...")));
@@ -111,7 +111,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		//Towers
 		addRandomlySelectable("bug_treasure", defaultWeight(all(isInTitle(TOWERS), isAnyEntityType(SALAMANDER, IGUANA))),
 				new NodeBuilder(defaultKeyMsg("Legends say underneath the tower to the north is a Captain Lizardtail's buried treasure! Literal tons of bugs, they say!")));
-		addRandomlySelectable("tower_gone", defaultWeight(all(isInTitle(TOWERS), isAnyEntityType(TURTLE, SALAMANDER))),
+		addRandomlySelectable("tower_gone", defaultWeight(all(isInTitle(TOWERS), isAnyEntityType(TURTLE, SALAMANDER))), //todo review this
 				new NodeBuilder(defaultKeyMsg("That tower over there was built by my great grandpa Fjorgenheimer! You can tell by how its about to fall apa- oh it fell apart.")));
 		addRandomlySelectable("no_tower_treasure", defaultWeight(all(isInTitle(TOWERS), isAnyEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(defaultKeyMsg("I feel ripped off. I was born in a land full of magical towers but none of them have treasure!")));
