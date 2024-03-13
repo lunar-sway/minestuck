@@ -372,7 +372,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.next(add("bloodberries.2", new NodeBuilder(defaultKeyMsg("Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.")))));
 		addRandomlySelectable("sharp_slide", defaultWeight(isInLand(FLORA.get())),
 				new NodeBuilder(defaultKeyMsg("Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.")));
-		addRandomlySelectable("immortality_herb", defaultWeight(isInLand(FLORA.get())), new ChainBuilder()
+		addRandomlySelectable("immortality_herb", defaultWeight(all(isInLand(FLORA.get()), Condition.FirstTimeGenerating.INSTANCE)), new ChainBuilder()
 				.node(new NodeBuilder(defaultKeyMsg("I have a herb that grants immortality! I'm going to eat it right now!")))
 				.node(new NodeBuilder(defaultKeyMsg("However, they are easily confused with an explosion-causing herb...")))
 				.node(new NodeBuilder(defaultKeyMsg("I'm taking the risk.")).addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode()))));
