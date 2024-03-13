@@ -2492,8 +2492,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
 		//Frogs
-		addDialogue("frog_variants.1", "Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be proposterous.");
-		addDialogue("frog_variants.2", "Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.");
 		addDialogue("frog_hatred", "For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?");
 		addDialogue("grasshopper_fishing.1", "My brother found a magic grasshopper while fishing recently!");
 		addDialogue("grasshopper_fishing.2", "Usually all we find are rings!");

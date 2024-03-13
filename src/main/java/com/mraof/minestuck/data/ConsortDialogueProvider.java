@@ -52,6 +52,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("blood_surprise", defaultWeight(all(isInTitle(PULSE), isEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(defaultKeyMsg("OH GOD IS THAT BLOOD oh wait nevermind.")));
 		
+		
 		//Thunder
 		addRandomlySelectable("skeleton_horse", defaultWeight(isInTitle(THUNDER)),
 				new NodeBuilder(defaultKeyMsg("Some people say at night, skeletons riding skeleton horses come through the town.")));
@@ -66,19 +67,17 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		add("reckoning.2", new NodeBuilder(defaultKeyMsg("What's The Reckoning? It's when meteors from The Veil are sent towards Skaia."))
 				.next("reckoning.3"));
 		add("reckoning.3", new NodeBuilder(defaultKeyMsg("Like any reasonable %s believes in that!", DialogueMessage.Argument.ENTITY_TYPE)));
-		
 		addRandomlySelectable("thunder_death.1", defaultWeight(all(isInTitle(THUNDER), isInTerrain(WOOD))),
 				new NodeBuilder(defaultKeyMsg("We're lucky to have rain with this weather."))
 						.next(add("thunder_death.2", new NodeBuilder(defaultKeyMsg("Otherwise the thunder would surely have been our death."))
 								.addClosingResponse(DOTS))));
-		
 		addRandomlySelectable("hardcore", defaultWeight(all(isInTitle(THUNDER), isInTerrain(HEAT))),
 				new NodeBuilder(defaultKeyMsg("This land is HARDCORE! There's lava and lightning wherever you go!")));
-		
 		addRandomlySelectable("thunder_throw.1", defaultWeight(all(isInTitle(THUNDER), isEntityType(TURTLE, SALAMANDER))),
 				new NodeBuilder(defaultKeyMsg("Nemesis has been throwing thunder for generations, not stopping for even a moment."))
 						.next(add("thunder_throw.2", new NodeBuilder(defaultKeyMsg("They are even doing it in their sleep. Can you believe that?"))
 								.addClosingResponse(DOTS))));
+		
 		
 		//Rabbits
 		addRandomlySelectable("bunny_birthday", defaultWeight(all(isInTitle(RABBITS), isEntityType(NAKAGATOR, SALAMANDER))),
@@ -87,13 +86,11 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.")));
 		addRandomlySelectable("edgy_life_hatred", defaultWeight(all(isInTitle(RABBITS), isEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(defaultKeyMsg("This place is just so full of life! I despise it.")));
-		
 		addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInTitle(RABBITS), isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE))),
 				new NodeBuilder(defaultKeyMsg("This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!"))
 						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)).nextDialogue("rabbit.food_shortage.2")));
 		add("rabbit.food_shortage.2", new NodeBuilder(defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
 				.addClosingResponse(DOTS));
-		
 		addRandomlySelectable("rabbit.food.1", defaultWeight(all(isInTitle(RABBITS),
 						any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInTerrain(FUNGI), isInTerrain(SHADE)))),
 				new NodeBuilder(defaultKeyMsg("I sure wonder where the rabbits are getting their food from."))
@@ -105,17 +102,20 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
 								.nextDialogue(add("rabbit.food.3", new NodeBuilder(defaultKeyMsg("Except maybe cacti, but would rabbits eat something that prickly?")))))));
 		
+		
 		//Monsters
 		addRandomlySelectable("spider_raid", defaultWeight(isInTitle(MONSTERS)),
 				new NodeBuilder(defaultKeyMsg("A few giant spiders raided our village last night, taking all of our bugs! Those monsters...")));
 		addRandomlySelectable("monstersona", defaultWeight(all(isInTitle(MONSTERS), isEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(defaultKeyMsg("What's your monster-sona? Mine is a zombie.")));
 		
+		
 		//Towers
 		addRandomlySelectable("bug_treasure", defaultWeight(all(isInTitle(TOWERS), isEntityType(SALAMANDER, IGUANA))),
 				new NodeBuilder(defaultKeyMsg("Legends say underneath the tower to the north is a Captain Lizardtail's buried treasure! Literal tons of bugs, they say!")));
 		addRandomlySelectable("no_tower_treasure", defaultWeight(all(isInTitle(TOWERS), isEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(defaultKeyMsg("I feel ripped off. I was born in a land full of magical towers but none of them have treasure!")));
+		
 		
 		//Thought
 		addRandomlySelectable("glass_books", defaultWeight(all(isInTitle(THOUGHT), isEntityType(TURTLE, IGUANA))),
@@ -124,6 +124,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.")));
 		addRandomlySelectable("to_eat", defaultWeight(all(isInTitle(THOUGHT), isEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(defaultKeyMsg("To eat or not to eat, that is the question.")));
+		
 		
 		//Cake
 		addRandomlySelectable("mystery_recipe", defaultWeight(all(isInTitle(CAKE), isEntityType(TURTLE, NAKAGATOR))),
@@ -137,6 +138,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("frosting", defaultWeight(all(isInTitle(CAKE), isInTerrain(FROST))),
 				new NodeBuilder(defaultKeyMsg("When we start talking about cakes, the others start mentioning frosting. I'm not sure I get what they're talking about!")));
 		
+		
 		//Clockwork
 		addRandomlySelectable("gear_technology", defaultWeight(all(isInTitle(CLOCKWORK), isEntityType(SALAMANDER, IGUANA))),
 				new NodeBuilder(defaultKeyMsg("Legends say the giant gears were used for technology no consort has ever seen before. That's absurd! It's obviously food!")));
@@ -145,6 +147,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("ticking", defaultWeight(all(isInTitle(CLOCKWORK), isEntityType(TURTLE, SALAMANDER))),
 				new NodeBuilder(defaultKeyMsg("The ticking keeps me up all night. It keeps us all up all night. Save us.")));
 		
+		
 		//Frogs
 		addRandomlySelectable("frog_creation", defaultWeight(all(isInTitle(FROGS))),
 				new NodeBuilder(defaultKeyMsg("We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!")));
@@ -152,6 +155,11 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("You won't find many frogs where you find villages. Most of them live where the terrain is rougher.")));
 		addRandomlySelectable("frog_imitation", defaultWeight(all(isInTitle(FROGS))),
 				new NodeBuilder(defaultKeyMsg("Ribbit, ribbit! I'm a frog! I don't care what you say!")));
+		addRandomlySelectable("frog_variants.1", defaultWeight(isInTitle(FROGS)),
+				new NodeBuilder(defaultKeyMsg("Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be preposterous.", DialogueMessage.Argument.LAND_NAME))
+						.addResponse(new ResponseBuilder(ARROW).nextDialogue("frog_variants.2")));
+		add("frog_variants.2", new NodeBuilder(defaultKeyMsg("Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs."))
+				.addClosingResponse(DOTS));
 		
 		
 		addRandomlySelectable("mycelium.1", defaultWeight(isInTerrain(FUNGI)),
@@ -252,7 +260,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("test_arguments", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))
 				.addResponse(new ResponseBuilder(subMsg("name", "Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
 		
-		addRandomlySelectable("look_rich", weighted(100, Condition.AlwaysTrue.INSTANCE), new NodeSelectorBuilder()
+		addRandomlySelectable("look_rich", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeSelectorBuilder()
 				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(subMsg("rich", "Hey, looks like you have a lot of boons!")))
 				.node(new Condition.PlayerHasBoondollars(10, false), new NodeBuilder(subMsg("poor", "Wow, you barely have any boons. Poor you.")))
 				.defaultNode(new NodeBuilder(defaultKeyMsg("Hi! I can sense if someone has a lot of boondollars."))));

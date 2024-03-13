@@ -28,7 +28,6 @@
   "selectable": {
     "condition": {
       "type": "minestuck:always_true"
-    },
-    "dialogue_weight": 100
+    }
   }
 }
