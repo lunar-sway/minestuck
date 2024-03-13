@@ -1,0 +1,17 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.frozen.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:frozen.2"
+      }
+    ]
+  },
+  "selectable": {
+    "condition": {
+      "type": "minestuck:terrain_land_type",
+      "land_type": "minestuck:frost"
+    }
+  }
+}

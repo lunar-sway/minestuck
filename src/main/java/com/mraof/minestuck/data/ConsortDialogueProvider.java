@@ -272,6 +272,12 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				.node(new NodeBuilder(defaultKeyMsg("According to legend, %s ate all the sand here leaving nothing but sandstone!", DialogueMessage.Argument.LAND_DENIZEN)))
 				.node(new NodeBuilder(defaultKeyMsg("I'm kidding, I made that up on the spot. I had no other dialogue."))));
 		
+		//Frost
+		addRandomlySelectable("frozen", defaultWeight(isInLand(FROST.get())), new ChainBuilder()
+				.node(new NodeBuilder(defaultKeyMsg("My neighbors were complaining the other night about the snow.")))
+				.node(new NodeBuilder(defaultKeyMsg("Personally, the cold never really bothered me anyways."))
+						.description(subMsg("desc", "You hear a faint \"ba-dum tss\" in the distance."))));
+		
 		//Rock
 		addRandomlySelectable("all_ores", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)),
 				new NodeBuilder(defaultKeyMsg("Jokes on the losers in other lands, we have ALL the resources! All of them!")));

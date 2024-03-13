@@ -103,6 +103,8 @@ public abstract class DialogueProvider implements DataProvider
 	public static class NodeBuilder implements DialogueBuilder
 	{
 		private final Function<ResourceLocation, DialogueMessage> messageProvider;
+		@Nullable
+		private Function<ResourceLocation, DialogueMessage> descriptionProvider;
 		private String animation = Dialogue.DEFAULT_ANIMATION;
 		private ResourceLocation guiPath = Dialogue.DEFAULT_GUI;
 		private final List<ResponseBuilder> responses = new ArrayList<>();
@@ -115,6 +117,12 @@ public abstract class DialogueProvider implements DataProvider
 		NodeBuilder(Function<ResourceLocation, DialogueMessage> messageProvider)
 		{
 			this.messageProvider = messageProvider;
+		}
+		
+		public NodeBuilder description(Function<ResourceLocation, DialogueMessage> provider)
+		{
+			this.descriptionProvider = provider;
+			return this;
 		}
 		
 		public NodeBuilder animation(String animation)
@@ -159,7 +167,8 @@ public abstract class DialogueProvider implements DataProvider
 		public Dialogue.DialogueNode build(ResourceLocation id)
 		{
 			DialogueMessage message = this.messageProvider.apply(id);
-			return new Dialogue.DialogueNode(message, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id)).toList());
+			Optional<DialogueMessage> description = this.descriptionProvider != null ? Optional.of(this.descriptionProvider.apply(id)) : Optional.empty();
+			return new Dialogue.DialogueNode(message, description, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id)).toList());
 		}
 		
 		@Override
