@@ -1,6 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.camel.start",
+    "message": "minestuck.dialogue.camel",
     "responses": [
       {
         "message": "minestuck.dialogue.camel.yes",

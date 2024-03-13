@@ -2491,42 +2491,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thanks", "Thanks!");
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
-		//Shade
-		addDialogue("mush_farm.1", "Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.");
-		addDialogue("mush_farm.2", "So that's what I'm doing.");
-		addDialogue("mush_farm.3", "Standing around here.");
-		addDialogue("mush_farm.4", "farmin' all these");
-		addDialogue("mush_farm.5", "goddamn");
-		addDialogue("mush_farm.6", "fuckin");
-		addDialogue("mush_farm.7", "mushrooms");
-		addDialogue("mushroom_pizza", "Do you put glow mushrooms on your pizza or leave them off?");
-		addDialogue("mushroom_pizza.on", "Put them on");
-		addDialogue("mushroom_pizza.on.reply", "I put them on!");
-		addDialogue("mushroom_pizza.on.consort_reply", "Good! I was afraid I'd have to kill you!");
-		addDialogue("mushroom_pizza.off", "Leave them off");
-		addDialogue("mushroom_pizza.off.reply", "I leave them off!");
-		addDialogue("mushroom_pizza.off.consort_reply", "You are a despicable person.");
-		addDialogue("fire_hazard", "Our land is a fire waiting to happen! Hopefully there isn't any lightning!");
-		addDialogue("that_boy_needs_therapy", "Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...");
-		//Heat
-		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
-		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
-		addDialogue("step_into_fire", "You'd better watch where you're going. Wouldn't want you to step right into some fire.");
-		addDialogue("the_water_is_lava", "You know the water is fucking lava? Who thought it would be a good idea to make water out of lava? How do we even stay hydrated in this place dude?");
-		//Wood
-		addDialogue("wood_treatments", "We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.");
-		addDialogue("splinters.1", "Be careful not to walk barefoot here, you could get a splinter!");
-		addDialogue("splinters.2", "Some of our kind have died due to the amount of splinters they received while on a walk.");
-		//Sand & Sandstone
-		addDialogue("sand_surfing", "Sand-surfing is my new favorite sport! Too bad you can't really move, though.");
-		addDialogue("camel", "Want to buy a used camel? Only 2000 boondollars.");
-		addDialogue("camel.yes.reply", "Sure!");
-		addDialogue("camel.no.reply", "Not at all!");
-		addDialogue("knockoff", "I kind of feel like we're a stale, knockoff sand land.");
-		addDialogue("sandless.1", "According to legend, %s ate all the sand here leaving nothing but sandstone!");
-		addDialogue("sandless.2", "I'm kidding, I made that up on the spot. I had no other dialogue.");
-		addDialogue("red_better", "Red is much better than yellow, don't you think?");
-		addDialogue("yellow_better", "In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!");
 		//Frost
 		addDialogue("frozen.1", "My neighbors were complaining the other night about the snow.");
 		addDialogue("frozen.2", "Personally, the cold never really bothered me anyways.");
@@ -2539,24 +2503,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("fur_coat.ignore.reply", "Sorry, but I can't help you.");
 		addDialogue("fur_coat.death", "I guess I'll just die then...");
 		addDialogue("tent_protection", "These tents doesn't protect against the cold very well, but they are good enough.");
-		addDialogue("all_ores", "Jokes on the losers in other lands, we have ALL the resources! All of them!");
-		addDialogue("rockfu", "Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!");
-		addDialogue("all_trees", "Jokes on the losers in other lands, we have ALL the trees! All of them!");
-		addDialogue("really_likes_trees", "Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!");
-		//Fungi
-		addDialogue("mildew", "Ah, the mildew on the grass in the morning makes the landscape so pretty!");
-		addDialogue("adaptation.1", "At first, no one liked the mushrooms when our planet was cursed with the Dank.");
-		addDialogue("adaptation.2", "Those who refused to adapt to the new food source Perished, obviously.");
-		addDialogue("jacket", "It's so damp and cold. I wish I had a jacket!");
-		addDialogue("mushroom_curse", "Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!");
-		addDialogue("fungus_destroyer", "According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!");
 		//Rainbow
-		addDialogue("generic_green", "Have you ever noticed rainbow wood looks green from a distance? I wonder if green is somehow more generic than other colors.");
-		addDialogue("overwhelming_colors", "Even for us turtles, this place is too bright. All the light and colors around here can be really overwhelming!");
-		addDialogue("saw_rainbow", "I saw a rainbow yesterday! Normally I see way more than that.");
-		addDialogue("sunglasses", "Some sunglasses would be really great in a Land like this. Too bad I don't have ears!");
-		addDialogue("what_is_wool", "I have no clue what the ground here is made of. I've never seen anything like it anywhere else!");
-		addDialogue("love_colors", "People ask me, \"What's your favorite color?\" I can't pick! I love them all! They're all special in their own way! Well, except green.");
 		addDialogue("types_of_colors.1", "In the additive color system, there are three primary colors: red, green, and blue.");
 		addDialogue("types_of_colors.2", "In the subtractive color system, there are also three primary colors, but those are magenta, yellow, and cyan.");
 		addDialogue("types_of_colors.3", "In the additive system, mixing red and green makes yellow, mixing green and blue makes cyan, and mixing blue and red makes magenta.");
@@ -2575,28 +2522,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("types_of_colors.16", "When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta.");
 		addDialogue("types_of_colors.17", "Dye is weird like that.");
 		addDialogue("types_of_colors.18", "...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?");
-		//End
-		addDialogue("at_the_end", "This may be the start of our conversation, but now we're at the end.");
-		addDialogue("chorus_fruit", "Never eat fruit. Last time I tried it, I blacked out and came to somewhere else! Stick to bugs like a normal person!");
-		addDialogue("end_grass", "The grass in this place just keeps growing everywhere! You can bet that any patches of grass you find weren't there before. I don't even know how it takes root in the stone like that.");
-		addDialogue("grass_curse", "Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!");
-		addDialogue("tall_grass", "The taller grass is so disorienting to walk through! Unless you are careful it will just move you around.");
-		addDialogue("useless_elytra", "One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?");
-		//Rain
-		addDialogue("empty_ocean", "Our oceans used to be filled with life! Now they're all barren, thanks to %s.");
-		addDialogue("forbidden_snack", "Contrary to popular belief, chalk is not safe for consumption... but how can I resist its allure?");
-		addDialogue("cotton_candy", "Have you ever considered eating a rain cloud? Yum! Maybe it tastes like cotton candy...");
-		addDialogue("monsters_below", "Do you know what lies deep beneath the ocean waters? Scary to think about!");
-		addDialogue("keep_swimming", "Just keep swimming, just keep swimming! Yay, swimming!");
-		//flora
-		addDialogue("battle_site", "This land was the site of a battle ages and ages and ages ago.");
-		addDialogue("blood_oceans", "The giant creatures who warred here long ago shed so much blood that, even now, the oceans are red with it.");
-		addDialogue("giant_swords", "My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.");
-		addDialogue("bloodberries.1", "The strawberries here grow big and red thanks to all the blood in the water supply! The flowers thrive, too!");
-		addDialogue("bloodberries.2", "Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.");
-		addDialogue("spices.1", "A good chef cooks with the spices found throughout the land.");
-		addDialogue("spices.2", "Other chefs are envious that they don't live in %s.");
-		addDialogue("sharp_slide", "Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.");
 		
 		addDialogue("denizen_mention", "It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!");
 		addDialogue("floating_island", "I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!");
@@ -2765,7 +2690,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("tower_general_shop", "I got the goods; they're all recently raided from a nearby tower!");
 		addDialogue("general_shop", "We have generic goods for generic people!");
 		addDialogue("got_the_goods", "You want the goods? We got the goods.");
-		addDialogue("tummy_tunnel", "Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.");
 		addDialogue("rising_shop", "We have top tier goods for a top tier god!");
 		addDialogue("boring_shop", "Looking for something that won't catch your eye? You've come to the right place!");
 		

@@ -1,0 +1,16 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.empty_ocean"
+    }
+  },
+  "selectable": {
+    "condition": {
+      "type": "minestuck:terrain_land_type",
+      "land_type": "minestuck:rain"
+    }
+  }
+}

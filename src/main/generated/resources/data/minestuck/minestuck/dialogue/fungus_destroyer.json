@@ -1,0 +1,17 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_title",
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.fungus_destroyer"
+    }
+  },
+  "selectable": {
+    "condition": {
+      "type": "minestuck:terrain_land_type",
+      "land_type": "minestuck:fungi"
+    }
+  }
+}

@@ -45,90 +45,21 @@ public class ConsortDialogue
 	 */
 	public static void init()
 	{
-		//Shade
-		addMessage(new ChainMessage(2, new SingleMessage("mush_farm.1"), new SingleMessage("mush_farm.2"), new SingleMessage("mush_farm.3"),
-				new SingleMessage("mush_farm.4"), new SingleMessage("mush_farm.5"), new SingleMessage("mush_farm.6"),
-				new SingleMessage("mush_farm.7"))).condition(terrainLand(SHADE));
-		addMessage(new ChoiceMessage(new SingleMessage("mushroom_pizza"),
-				new SingleMessage[]{new SingleMessage("mushroom_pizza.on"), new SingleMessage("mushroom_pizza.off")},
-				new MessageType[]{new SingleMessage("mushroom_pizza.on.consort_reply"), new SingleMessage("mushroom_pizza.off.consort_reply")})).condition(terrainLand(SHADE));
-		addMessage("fire_hazard").condition(terrainLand(SHADE)).condition(titleLand(THUNDER).negate());
-		addMessage("that_boy_needs_therapy").condition(terrainLand(SHADE));
-		
-		//Heat
-		addMessage("getting_hot").condition(terrainLand(HEAT));
-		addMessage("step_into_fire").condition(terrainLand(HEAT));
-		addMessage("lava_crickets").condition(terrainLand(HEAT));
-		addMessage("tummy_tunnel").condition(terrainLand(HEAT));
-		addMessage("the_water_is_lava").condition(terrainLand(HEAT));
-		
-		//Wood
-		addMessage("wood_treatments").condition(terrainLand(WOOD));
-		addMessage(new ChainMessage(new SingleMessage("splinters.1"), new SingleMessage("splinters.2"))).condition(terrainLand(WOOD));
-		
-		//Sand & Sandstone
-		addMessage("sand_surfing").condition(terrainLand(MSTags.TerrainLandTypes.SAND));
-		addMessage(new ChoiceMessage(new SingleMessage("camel"), new SingleMessage[]{new SingleMessage("camel.yes"), new SingleMessage("camel.no")},
-				new MessageType[]{new SingleMessage("camel.no_camel"), new SingleMessage("camel.dancing_camel")})).condition(terrainLand(MSTags.TerrainLandTypes.SAND));
-		addMessage("knockoff").condition(terrainLand(MSTags.TerrainLandTypes.SANDSTONE));
-		addMessage(new ChainMessage(new SingleMessage("sandless.1", "denizen"), new SingleMessage("sandless.2"))).condition(terrainLand(MSTags.TerrainLandTypes.SANDSTONE));
-		addMessage("red_better").condition(terrainLand(RED_SAND).or(RED_SANDSTONE));
-		addMessage("yellow_better").condition(terrainLand(SAND).or(SANDSTONE));
-		
 		//Frost
 		addMessage(new ChainMessage(new SingleMessage("frozen.1"), new DescriptionMessage("frozen.2"))).condition(terrainLand(FROST));
 		addMessage(new ChoiceMessage(new SingleMessage("fur_coat"), new SingleMessage[]{new SingleMessage("fur_coat.pay"), new SingleMessage("fur_coat.ignore")},
 				new MessageType[]{new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
 						new SingleMessage("fur_coat.death")})).condition(terrainLand(FROST));
 		addMessage("tent_protection").condition(terrainLand(FROST)).consortReq(ConsortEntity::hasRestriction);
-		addMessage("all_ores").condition(terrainLand(MSTags.TerrainLandTypes.ROCK));
-		addMessage("rockfu", "land_name").condition(terrainLand(MSTags.TerrainLandTypes.ROCK));
-		addMessage("all_trees").condition(terrainLand(MSTags.TerrainLandTypes.FOREST));
-		addMessage("really_likes_trees").condition(terrainLand(MSTags.TerrainLandTypes.FOREST));
-		
-		//Fungi
-		addMessage(new ChainMessage(new SingleMessage("mycelium.1"), new SingleMessage("mycelium.2"))).condition(terrainLand(FUNGI));
-		addMessage(new ChainMessage(new SingleMessage("adaptation.1"), new SingleMessage("adaptation.2"))).condition(terrainLand(FUNGI));
-		addMessage("mushroom_curse", "denizen").condition(terrainLand(FUNGI));
-		addMessage("jacket").condition(terrainLand(FUNGI));
-		addMessage("mildew").condition(terrainLand(FUNGI));
-		addMessage("fungus_destroyer", "player_title_land", "denizen").condition(terrainLand(FUNGI));
 		
 		//Rainbow Terrain
-		addMessage("generic_green").condition(terrainLand(RAINBOW));
-		addMessage("overwhelming_colors").condition(terrainLand(RAINBOW));
-		addMessage("saw_rainbow").condition(terrainLand(RAINBOW));
-		addMessage("sunglasses").condition(terrainLand(RAINBOW));
-		addMessage("what_is_wool").condition(terrainLand(RAINBOW));
-		addMessage("love_colors").condition(terrainLand(RAINBOW));
 		addMessage(new ChainMessage(new SingleMessage("types_of_colors.1"), new SingleMessage("types_of_colors.2"), new SingleMessage("types_of_colors.3"),
 				new SingleMessage("types_of_colors.4"), new SingleMessage("types_of_colors.5"), new SingleMessage("types_of_colors.6"), new SingleMessage("types_of_colors.7"), new SingleMessage("types_of_colors.8"),
 				new SingleMessage("types_of_colors.9"), new SingleMessage("types_of_colors.10"), new SingleMessage("types_of_colors.11"), new SingleMessage("types_of_colors.12"), new SingleMessage("types_of_colors.13"),
 				new SingleMessage("types_of_colors.14"), new SingleMessage("types_of_colors.15"), new SingleMessage("types_of_colors.16"), new SingleMessage("types_of_colors.17"), new SingleMessage("types_of_colors.18"))).condition(terrainLand(RAINBOW));
 		
-		//End Terrain
-		addMessage("at_the_end").condition(terrainLand(END));
-		addMessage("chorus_fruit").condition(terrainLand(END));
-		addMessage("end_grass").condition(terrainLand(END));
-		addMessage("grass_curse", "denizen").condition(terrainLand(END));
-		addMessage("tall_grass").condition(terrainLand(END));
-		addMessage("useless_elytra").condition(terrainLand(END));
-		
-		//Rain terrain
-		addMessage("empty_ocean", "denizen").condition(terrainLand(RAIN));
-		addMessage("forbidden_snack").condition(terrainLand(RAIN));
-		addMessage("cotton_candy").condition(terrainLand(RAIN));
-		addMessage("monsters_below").condition(terrainLand(RAIN));
-		addMessage("keep_swimming").condition(terrainLand(RAIN));
-		
 		//Flora Terrain
-		addMessage("battle_site").condition(terrainLand(FLORA));
-		addMessage("blood_oceans").condition(terrainLand(FLORA));
-		addMessage("giant_swords").condition(terrainLand(FLORA));
-		addMessage(new ChainMessage(new SingleMessage("bloodberries.1"), new SingleMessage("bloodberries.2"))).condition(terrainLand(FLORA));
-		addMessage("sharp_slide").condition(terrainLand(FLORA));
 		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new ExplosionMessage("immortality_herb.3"))).condition(terrainLand(FLORA)).lockToConsort();
-		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "land_name"))).condition(terrainLand(FLORA));
 		
 		//Misc
 		addMessage("denizen_mention").reqLand();
