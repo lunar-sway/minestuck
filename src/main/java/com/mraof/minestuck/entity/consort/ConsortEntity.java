@@ -140,24 +140,25 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	@Override
 	protected InteractionResult mobInteract(Player player, InteractionHand hand)
 	{
-		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
-		{
-			//TODO there is server side data that needs to be made accessible client side
-			if(!level().isClientSide && player instanceof ServerPlayer serverPlayer)
-			{
-				PlayerData playerData = PlayerSavedData.getData(serverPlayer);
-				if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
-				{
-					handleConsortRepFromTalking(serverPlayer);
-					setCurrentAnimation(TALK_PROPERTIES);
-					
-					this.dialogueComponent.startDialogue(this, serverPlayer);
-				}
-			}
-			
+		if(!this.isAlive() || player.isShiftKeyDown())
+			return InteractionResult.PASS;
+		
+		if(eventTimer >= 0)
+			return InteractionResult.FAIL;
+		
+		if(!(player instanceof ServerPlayer serverPlayer))
 			return InteractionResult.SUCCESS;
-		} else
-			return super.mobInteract(player, hand);
+		
+		PlayerData playerData = PlayerSavedData.getData(serverPlayer);
+		if(playerData == null || playerData.getConsortReputation(homeDimension) <= -1000)
+			return InteractionResult.FAIL;
+		
+		handleConsortRepFromTalking(serverPlayer);
+		setCurrentAnimation(TALK_PROPERTIES);
+		
+		this.dialogueComponent.startDialogue(this, serverPlayer);
+		
+		return InteractionResult.SUCCESS;
 	}
 	
 	private void checkMessageData()
