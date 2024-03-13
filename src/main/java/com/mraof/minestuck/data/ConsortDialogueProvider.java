@@ -219,17 +219,156 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.next(add("height_fear.rock.2", new NodeBuilder(defaultKeyMsg("I mean what if I fell down and landed on my back?"))))));
 		
 		
+		//Shade
+		addRandomlySelectable("mush_farm.1", defaultWeight(isInLand(SHADE.get())),
+				new NodeBuilder(defaultKeyMsg("Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be."))
+						.next(add("mush_farm.2", new NodeBuilder(defaultKeyMsg("So that's what I'm doing."))
+								.next(add("mush_farm.3", new NodeBuilder(defaultKeyMsg("Standing around here."))
+										.next(add("mush_farm.4", new NodeBuilder(defaultKeyMsg("farmin' all these"))
+												.next(add("mush_farm.5", new NodeBuilder(defaultKeyMsg("goddamn"))
+														.next(add("mush_farm.6", new NodeBuilder(defaultKeyMsg("fuckin"))
+																.next(add("mush_farm.7", new NodeBuilder(defaultKeyMsg("mushrooms")))))))))))))));
+		addRandomlySelectable("mushroom_pizza", defaultWeight(isInLand(SHADE.get())),
+				new NodeBuilder(defaultKeyMsg("Do you put glow mushrooms on your pizza or leave them off?"))
+						.addResponse(new ResponseBuilder(subMsg("reply_on", "I put them on!"))
+								.nextDialogue(add("mushroom_pizza.on", new NodeBuilder(defaultKeyMsg("Good! I was afraid I'd have to kill you!")))))
+						.addResponse(new ResponseBuilder(subMsg("reply_off", "I leave them off!"))
+								.nextDialogue(add("mushroom_pizza.off", new NodeBuilder(defaultKeyMsg("You are a despicable person."))))));
+		addRandomlySelectable("fire_hazard", defaultWeight(all(isInLand(SHADE.get()), none(isInLand(THUNDER.get())))),
+				new NodeBuilder(defaultKeyMsg("Our land is a fire waiting to happen! Hopefully there isn't any lightning!")));
+		addRandomlySelectable("that_boy_needs_therapy", defaultWeight(isInLand(SHADE.get())),
+				new NodeBuilder(defaultKeyMsg("Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...")));
 		
+		//Heat
+		addRandomlySelectable("getting_hot", defaultWeight(isInLand(HEAT.get())),
+				new NodeBuilder(defaultKeyMsg("Is it getting hot in here or is it just me?")));
+		addRandomlySelectable("step_into_fire", defaultWeight(isInLand(HEAT.get())),
+				new NodeBuilder(defaultKeyMsg("You'd better watch where you're going. Wouldn't want you to step right into some fire.")));
+		addRandomlySelectable("lava_crickets", defaultWeight(isInLand(HEAT.get())),
+				new NodeBuilder(defaultKeyMsg("Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.")));
+		addRandomlySelectable("tummy_tunnel", defaultWeight(isInLand(HEAT.get())),
+				new NodeBuilder(defaultKeyMsg("Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.")));
+		addRandomlySelectable("the_water_is_lava", defaultWeight(isInLand(HEAT.get())),
+				new NodeBuilder(defaultKeyMsg("You know the water is fucking lava? Who thought it would be a good idea to make water out of lava? How do we even stay hydrated in this place dude?")));
 		
+		//Wood
+		addRandomlySelectable("wood_treatments", defaultWeight(isInLand(WOOD.get())),
+				new NodeBuilder(defaultKeyMsg("We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.")));
+		addRandomlySelectable("splinters.1", defaultWeight(isInLand(WOOD.get())),
+				new NodeBuilder(defaultKeyMsg("Be careful not to walk barefoot here, you could get a splinter!"))
+						.next(add("splinters.2", new NodeBuilder(defaultKeyMsg("Some of our kind have died due to the amount of splinters they received while on a walk.")))));
+		
+		//Sand
+		addRandomlySelectable("sand_surfing", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)),
+				new NodeBuilder(defaultKeyMsg("Sand-surfing is my new favorite sport! Too bad you can't really move, though.")));
+		addRandomlySelectable("camel", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)), new NodeBuilder(defaultKeyMsg("Want to buy a used camel? Only 2000 boondollars."))
+				.addResponse(new ResponseBuilder(subMsg("yes", "Why not? Seems like a good price for a camel!"))
+						.nextDialogue(add("camel/no_camel", new NodeBuilder(defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))
+				.addResponse(new ResponseBuilder(subMsg("no", "Of course not! You know better!"))
+						.nextDialogue(add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))));
+		
+		//Sandstone
+		addRandomlySelectable("knockoff", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE)),
+				new NodeBuilder(defaultKeyMsg("I kind of feel like we're a stale, knockoff sand land.")));
+		addRandomlySelectable("sandless.1", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE)),
+				new NodeBuilder(defaultKeyMsg("According to legend, %s ate all the sand here leaving nothing but sandstone!", DialogueMessage.Argument.LAND_DENIZEN))
+						.next(add("sandless.2", new NodeBuilder(defaultKeyMsg("I'm kidding, I made that up on the spot. I had no other dialogue.")))));
+		
+		//Rock
+		addRandomlySelectable("all_ores", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)),
+				new NodeBuilder(defaultKeyMsg("Jokes on the losers in other lands, we have ALL the resources! All of them!")));
+		addRandomlySelectable("rockfu", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)),
+				new NodeBuilder(defaultKeyMsg("Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!", DialogueMessage.Argument.LAND_NAME)));
+		
+		//Forest
+		addRandomlySelectable("all_trees", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.FOREST)),
+				new NodeBuilder(defaultKeyMsg("Jokes on the losers in other lands, we have ALL the trees! All of them!")));
+		addRandomlySelectable("really_likes_trees", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.FOREST)),
+				new NodeBuilder(defaultKeyMsg("Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!")));
+		
+		//Fungi
 		addRandomlySelectable("mycelium.1", defaultWeight(isInLand(FUNGI.get())),
 				new NodeBuilder(defaultKeyMsg("Frog, don't you love the feeling of mycelium on your toes?"))
 						.next(add("mycelium.2", new NodeBuilder(defaultKeyMsg("No? Is that just me?")))));
+		addRandomlySelectable("adaptation.1", defaultWeight(isInLand(FUNGI.get())),
+				new NodeBuilder(defaultKeyMsg("At first, no one liked the mushrooms when our planet was cursed with the Dank."))
+						.next(add("adaptation.2", new NodeBuilder(defaultKeyMsg("Those who refused to adapt to the new food source Perished, obviously.")))));
+		addRandomlySelectable("mushroom_curse", defaultWeight(isInLand(FUNGI.get())),
+				new NodeBuilder(defaultKeyMsg("Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!", DialogueMessage.Argument.LAND_DENIZEN)));
+		addRandomlySelectable("jacket", defaultWeight(isInLand(FUNGI.get())),
+				new NodeBuilder(defaultKeyMsg("It's so damp and cold. I wish I had a jacket!")));
+		addRandomlySelectable("mildew", defaultWeight(isInLand(FUNGI.get())),
+				new NodeBuilder(defaultKeyMsg("Ah, the mildew on the grass in the morning makes the landscape so pretty!")));
+		addRandomlySelectable("fungus_destroyer", defaultWeight(isInLand(FUNGI.get())),
+				new NodeBuilder(defaultKeyMsg("According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!", DialogueMessage.Argument.LAND_TITLE, DialogueMessage.Argument.LAND_DENIZEN)));
 		
-		addRandomlySelectable("camel/start", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.yes", "Why not? Seems like a good price for a camel!"))
-						.nextDialogue(add("camel/no_camel", new NodeBuilder(defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))
-				.addResponse(new ResponseBuilder(msg("minestuck.dialogue.camel.no", "Of course not! You know better!"))
-						.nextDialogue(add("camel/dancing_camel", new NodeBuilder(defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))));
+		//Rainbow
+		addRandomlySelectable("generic_green", defaultWeight(isInLand(RAINBOW.get())),
+				new NodeBuilder(defaultKeyMsg("Have you ever noticed rainbow wood looks green from a distance? I wonder if green is somehow more generic than other colors.")));
+		addRandomlySelectable("overwhelming_colors", defaultWeight(isInLand(RAINBOW.get())),
+				new NodeBuilder(defaultKeyMsg("Even for us turtles, this place is too bright. All the light and colors around here can be really overwhelming!")));
+		addRandomlySelectable("saw_rainbow", defaultWeight(isInLand(RAINBOW.get())),
+				new NodeBuilder(defaultKeyMsg("I saw a rainbow yesterday! Normally I see way more than that.")));
+		addRandomlySelectable("sunglasses", defaultWeight(isInLand(RAINBOW.get())),
+				new NodeBuilder(defaultKeyMsg("Some sunglasses would be really great in a Land like this. Too bad I don't have ears!")));
+		addRandomlySelectable("what_is_wool", defaultWeight(isInLand(RAINBOW.get())),
+				new NodeBuilder(defaultKeyMsg("I have no clue what the ground here is made of. I've never seen anything like it anywhere else!")));
+		addRandomlySelectable("love_colors", defaultWeight(isInLand(RAINBOW.get())),
+				new NodeBuilder(defaultKeyMsg("People ask me, \"What's your favorite color?\" I can't pick! I love them all! They're all special in their own way! Well, except green.")));
+		
+		//End
+		addRandomlySelectable("at_the_end", defaultWeight(isInLand(END.get())),
+				new NodeBuilder(defaultKeyMsg("This may be the start of our conversation, but now we're at the end.")));
+		addRandomlySelectable("chorus_fruit", defaultWeight(isInLand(END.get())),
+				new NodeBuilder(defaultKeyMsg("Never eat fruit. Last time I tried it, I blacked out and came to somewhere else! Stick to bugs like a normal person!")));
+		addRandomlySelectable("end_grass", defaultWeight(isInLand(END.get())),
+				new NodeBuilder(defaultKeyMsg("The grass in this place just keeps growing everywhere! You can bet that any patches of grass you find weren't there before. I don't even know how it takes root in the stone like that.")));
+		addRandomlySelectable("grass_curse", defaultWeight(isInLand(END.get())),
+				new NodeBuilder(defaultKeyMsg("Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!", DialogueMessage.Argument.LAND_DENIZEN)));
+		addRandomlySelectable("tall_grass", defaultWeight(isInLand(END.get())),
+				new NodeBuilder(defaultKeyMsg("The taller grass is so disorienting to walk through! Unless you are careful it will just move you around.")));
+		addRandomlySelectable("useless_elytra", defaultWeight(isInLand(END.get())),
+				new NodeBuilder(defaultKeyMsg("One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?")));
+		
+		//Rain
+		addRandomlySelectable("empty_ocean", defaultWeight(isInLand(RAIN.get())),
+				new NodeBuilder(defaultKeyMsg("Our oceans used to be filled with life! Now they're all barren, thanks to %s.", DialogueMessage.Argument.LAND_DENIZEN)));
+		addRandomlySelectable("forbidden_snack", defaultWeight(isInLand(RAIN.get())),
+				new NodeBuilder(defaultKeyMsg("Contrary to popular belief, chalk is not safe for consumption... but how can I resist its allure?")));
+		addRandomlySelectable("cotton_candy", defaultWeight(isInLand(RAIN.get())),
+				new NodeBuilder(defaultKeyMsg("Have you ever considered eating a rain cloud? Yum! Maybe it tastes like cotton candy...")));
+		addRandomlySelectable("monsters_below", defaultWeight(isInLand(RAIN.get())),
+				new NodeBuilder(defaultKeyMsg("Do you know what lies deep beneath the ocean waters? Scary to think about!")));
+		addRandomlySelectable("keep_swimming", defaultWeight(isInLand(RAIN.get())),
+				new NodeBuilder(defaultKeyMsg("Just keep swimming, just keep swimming! Yay, swimming!")));
+		
+		//Flora
+		addRandomlySelectable("battle_site", defaultWeight(isInLand(FLORA.get())),
+				new NodeBuilder(defaultKeyMsg("This land was the site of a battle ages and ages and ages ago.")));
+		addRandomlySelectable("blood_oceans", defaultWeight(isInLand(FLORA.get())),
+				new NodeBuilder(defaultKeyMsg("The giant creatures who warred here long ago shed so much blood that, even now, the oceans are red with it.")));
+		addRandomlySelectable("giant_swords", defaultWeight(isInLand(FLORA.get())),
+				new NodeBuilder(defaultKeyMsg("My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.")));
+		addRandomlySelectable("bloodberries.1", defaultWeight(isInLand(FLORA.get())),
+				new NodeBuilder(defaultKeyMsg("The strawberries here grow big and red thanks to all the blood in the water supply! The flowers thrive, too!"))
+						.next(add("bloodberries.2", new NodeBuilder(defaultKeyMsg("Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.")))));
+		addRandomlySelectable("sharp_slide", defaultWeight(isInLand(FLORA.get())),
+				new NodeBuilder(defaultKeyMsg("Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.")));
+		addRandomlySelectable("immortality_herb.1", defaultWeight(isInLand(FLORA.get())),
+				new NodeBuilder(defaultKeyMsg("I have a herb that grants immortality! I'm going to eat it right now!"))
+						.next(add("immortality_herb.2", new NodeBuilder(defaultKeyMsg("However, they are easily confused with an explosion-causing herb..."))
+								.next(add("immortality_herb.3", new NodeBuilder(defaultKeyMsg("I'm taking the risk."))
+										.addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode())))))));
+		addRandomlySelectable("spices.1", defaultWeight(isInLand(FLORA.get())),
+				new NodeBuilder(defaultKeyMsg("A good chef cooks with the spices found throughout the land."))
+						.next(add("spices.2", new NodeBuilder(defaultKeyMsg("Other chefs are envious that they don't live in %s.", DialogueMessage.Argument.LAND_NAME)))));
+		
+		//Mixed
+		addRandomlySelectable("red_better", defaultWeight(any(isInLand(RED_SAND.get()), isInLand(RED_SANDSTONE.get()))),
+				new NodeBuilder(defaultKeyMsg("Red is much better than yellow, don't you think?")));
+		addRandomlySelectable("yellow_better", defaultWeight(any(isInLand(SAND.get()), isInLand(SANDSTONE.get()))),
+				new NodeBuilder(defaultKeyMsg("In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!")));
+		
 		
 		//TODO stop the shops from being selectable at end of testing
 		addRandomlySelectable("food_shop", defaultWeight(isAnyEntityType(SALAMANDER.get())),
@@ -252,13 +391,6 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.addClosingResponse(subMsg("bye", "Goodbye"))
 						.addResponse(new ResponseBuilder(subMsg("next", "Let me see your wares"))
 								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
-		
-		addRandomlySelectable("immortality_herb.1", defaultWeight(isInLand(FLORA.get())),
-				new NodeBuilder(defaultKeyMsg("I have a herb that grants immortality! I'm going to eat it right now!"))
-						.next("immortality_herb.2"));
-		add("immortality_herb.2", new NodeBuilder(defaultKeyMsg("However, they are easily confused with an explosion-causing herb..."))
-				.next(add("immortality_herb.3", new NodeBuilder(defaultKeyMsg("I'm taking the risk."))
-						.addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode())))));
 	}
 	
 	private void testDialogues()
