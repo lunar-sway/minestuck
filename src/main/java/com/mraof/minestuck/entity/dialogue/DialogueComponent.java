@@ -7,11 +7,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
 public final class DialogueComponent
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	@Nullable
 	private ResourceLocation activeDialogue;
 	private boolean hasGeneratedOnce = false;
@@ -50,34 +54,31 @@ public final class DialogueComponent
 	
 	public void startDialogue(LivingEntity entity, ServerPlayer serverPlayer)
 	{
-		Dialogue dialogue = getActiveOrRandomDialogue(entity);
-		if(dialogue == null)
+		if(this.activeDialogue == null)
+			generateNewDialogue(entity);
+		
+		if(this.activeDialogue == null)
 			return;
 		
+		Dialogue dialogue = DialogueManager.getInstance().getDialogue(this.activeDialogue);
+		if(dialogue == null)
+		{
+			LOGGER.warn("Unable to find dialogue with id {}", this.activeDialogue);
+			this.activeDialogue = null;
+			return;
+		}
+		
 		if(entity instanceof ConsortEntity consort)
-			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogue.lookupId().toString(), consort);
+			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, this.activeDialogue.toString(), consort);
 		
 		Dialogue.openScreen(entity, serverPlayer, dialogue);
 	}
 	
-	@Nullable
-	private Dialogue getActiveOrRandomDialogue(LivingEntity entity)
+	private void generateNewDialogue(LivingEntity entity)
 	{
-		Dialogue dialogue = null;
-		
-		if(this.activeDialogue != null)
-			dialogue = DialogueManager.getInstance().getDialogue(this.activeDialogue);
-		
-		if(dialogue == null)
-		{
-			dialogue = DialogueManager.getInstance().doRandomDialogue(entity);
-			
-			this.hasGeneratedOnce = true;
-			if(dialogue != null)
-				this.activeDialogue = dialogue.lookupId();
-		}
-		
-		return dialogue;
+		Dialogue dialogue = DialogueManager.getInstance().doRandomDialogue(entity);
+		this.hasGeneratedOnce = true;
+		if(dialogue != null)
+			this.activeDialogue = dialogue.lookupId();
 	}
-	
 }
