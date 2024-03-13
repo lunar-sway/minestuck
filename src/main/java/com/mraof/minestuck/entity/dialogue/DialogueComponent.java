@@ -18,6 +18,7 @@ public final class DialogueComponent
 	
 	@Nullable
 	private ResourceLocation activeDialogue;
+	private boolean keepOnReset;
 	private boolean hasGeneratedOnce = false;
 	
 	public void read(CompoundTag tag)
@@ -25,6 +26,7 @@ public final class DialogueComponent
 		if(tag.contains("dialogue_id", CompoundTag.TAG_STRING))
 		{
 			this.activeDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
+			this.keepOnReset = tag.getBoolean("keep_on_reset");
 			this.hasGeneratedOnce = true;
 		}
 		else
@@ -35,7 +37,10 @@ public final class DialogueComponent
 	{
 		CompoundTag tag = new CompoundTag();
 		if(this.activeDialogue != null)
+		{
 			tag.putString("dialogue_id", this.activeDialogue.toString());
+			tag.putBoolean("keep_on_reset", this.keepOnReset);
+		}
 		
 		tag.putBoolean("has_generated", this.hasGeneratedOnce);
 		
@@ -47,9 +52,10 @@ public final class DialogueComponent
 		return hasGeneratedOnce;
 	}
 	
-	public void setDialogue(ResourceLocation dialogueId)
+	public void setDialogue(ResourceLocation dialogueId, boolean keepOnReset)
 	{
 		this.activeDialogue = dialogueId;
+		this.keepOnReset = keepOnReset;
 	}
 	
 	public boolean hasActiveDialogue()
@@ -59,7 +65,8 @@ public final class DialogueComponent
 	
 	public void resetDialogue()
 	{
-		this.activeDialogue = null;
+		if(!this.keepOnReset)
+			this.activeDialogue = null;
 	}
 	
 	public void startDialogue(LivingEntity entity, ServerPlayer serverPlayer)
@@ -89,6 +96,6 @@ public final class DialogueComponent
 		Dialogue dialogue = DialogueManager.getInstance().doRandomDialogue(entity);
 		this.hasGeneratedOnce = true;
 		if(dialogue != null)
-			this.activeDialogue = dialogue.lookupId();
+			this.setDialogue(dialogue.lookupId(), dialogue.selectable().map(Dialogue.RandomlySelectable::keepOnReset).orElse(false));
 	}
 }

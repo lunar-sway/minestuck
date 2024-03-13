@@ -52,9 +52,6 @@ public class ConsortDialogue
 						new SingleMessage("fur_coat.death")})).condition(terrainLand(FROST));
 		addMessage("tent_protection").condition(terrainLand(FROST)).consortReq(ConsortEntity::hasRestriction);
 		
-		//Flora Terrain
-		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new ExplosionMessage("immortality_herb.3"))).condition(terrainLand(FLORA)).lockToConsort();
-		
 		//Misc
 		addMessage("denizen_mention").reqLand();
 		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vec3(consort.level().getLevelData().getXSpawn(), consort.level().getLevelData().getYSpawn(), consort.level().getLevelData().getZSpawn())) < 65536).reqLand();
