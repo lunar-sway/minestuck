@@ -60,7 +60,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		addRandomlySelectable("lightning_strike", defaultWeight(all(isInLand(THUNDER.get()), isAnyEntityType(TURTLE.get()))),
 				new NodeBuilder(defaultKeyMsg("You don't want to be struck by lightning. No one does.")));
 		
-		addRandomlySelectable("reckoning", defaultWeight(isInLand(THUNDER.get())), new ChainBuilder()
+		addRandomlySelectable("reckoning", defaultWeight(isInLand(THUNDER.get())), new ChainBuilder().withFolders()
 				.node(new NodeBuilder(defaultKeyMsg("Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!")))
 				.node(new NodeBuilder(defaultKeyMsg("What's The Reckoning? It's when meteors from The Veil are sent towards Skaia.")))
 				.node(new NodeBuilder(defaultKeyMsg("Like any reasonable %s believes in that!", DialogueMessage.Argument.ENTITY_TYPE))));
@@ -218,7 +218,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 		
 		
 		//Shade
-		addRandomlySelectable("mush_farm", defaultWeight(isInLand(SHADE.get())), new ChainBuilder()
+		addRandomlySelectable("mush_farm", defaultWeight(isInLand(SHADE.get())), new ChainBuilder().withFolders()
 				.node(new NodeBuilder(defaultKeyMsg("Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.")))
 				.node(new NodeBuilder(defaultKeyMsg("So that's what I'm doing.")))
 				.node(new NodeBuilder(defaultKeyMsg("Standing around here.")))
@@ -319,7 +319,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 				new NodeBuilder(defaultKeyMsg("I have no clue what the ground here is made of. I've never seen anything like it anywhere else!")));
 		addRandomlySelectable("love_colors", defaultWeight(isInLand(RAINBOW.get())),
 				new NodeBuilder(defaultKeyMsg("People ask me, \"What's your favorite color?\" I can't pick! I love them all! They're all special in their own way! Well, except green.")));
-		addRandomlySelectable("types_of_colors", defaultWeight(isInLand(RAINBOW.get())), new ChainBuilder()
+		addRandomlySelectable("types_of_colors", defaultWeight(isInLand(RAINBOW.get())), new ChainBuilder().withFolders()
 				.node(new NodeBuilder(defaultKeyMsg("In the additive color system, there are three primary colors: red, green, and blue.")))
 				.node(new NodeBuilder(defaultKeyMsg("In the subtractive color system, there are also three primary colors, but those are magenta, yellow, and cyan.")))
 				.node(new NodeBuilder(defaultKeyMsg("In the additive system, mixing red and green makes yellow, mixing green and blue makes cyan, and mixing blue and red makes magenta.")))
@@ -378,7 +378,7 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.next(add("bloodberries.2", new NodeBuilder(defaultKeyMsg("Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.")))));
 		addRandomlySelectable("sharp_slide", defaultWeight(isInLand(FLORA.get())),
 				new NodeBuilder(defaultKeyMsg("Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.")));
-		addRandomlySelectable("immortality_herb", defaultWeight(all(isInLand(FLORA.get()), Condition.FirstTimeGenerating.INSTANCE)).withKeepOnReset(), new ChainBuilder()
+		addRandomlySelectable("immortality_herb", defaultWeight(all(isInLand(FLORA.get()), Condition.FirstTimeGenerating.INSTANCE)).withKeepOnReset(), new ChainBuilder().withFolders()
 				.node(new NodeBuilder(defaultKeyMsg("I have a herb that grants immortality! I'm going to eat it right now!")))
 				.node(new NodeBuilder(defaultKeyMsg("However, they are easily confused with an explosion-causing herb...")))
 				.node(new NodeBuilder(defaultKeyMsg("I'm taking the risk.")).addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode()))));

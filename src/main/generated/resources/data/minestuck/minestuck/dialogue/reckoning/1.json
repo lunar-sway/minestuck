@@ -4,7 +4,7 @@
     "responses": [
       {
         "message": "minestuck.arrow",
-        "next_dialogue_path": "minestuck:reckoning.2"
+        "next_dialogue_path": "minestuck:reckoning/2"
       }
     ]
   },
