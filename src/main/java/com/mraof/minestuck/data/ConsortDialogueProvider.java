@@ -428,7 +428,9 @@ public final class ConsortDialogueProvider extends DialogueProvider
 						.visibleCondition(subText("fail", "This very custom condition was not met."), one(
 								one(isAnyEntityType(NAKAGATOR.get()), isAnyEntityType(TURTLE.get()), isAnyEntityType(IGUANA.get()), isAnyEntityType(SALAMANDER.get())),
 								one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1))
-						))));
+						)))
+				.addResponse(new ResponseBuilder(msg("test1response5"))
+						.visibleCondition(subText("bad_score", "Player needs a score of 5 for 'testScore'."), new Condition.CustomHasScore(5, "player", "testScore"))));
 		
 		addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
