@@ -32,5 +32,6 @@ public final class Conditions
 		REGISTER.register("player_aspect", () -> Condition.PlayerIsAspect.CODEC);
 		REGISTER.register("player_reputation", () -> Condition.PlayerHasReputation.CODEC);
 		REGISTER.register("player_boondollars", () -> Condition.PlayerHasBoondollars.CODEC);
+		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
 	}
 }

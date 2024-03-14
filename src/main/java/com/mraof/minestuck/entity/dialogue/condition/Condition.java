@@ -26,9 +26,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.scores.Score;
+import net.minecraft.world.scores.Scoreboard;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -534,6 +537,46 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Your porkhollow doesn't meet requirement");
+		}
+	}
+	
+	record CustomHasScore(int value, String ownerName, String objectiveName) implements Condition
+	{
+		static final Codec<CustomHasScore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				PreservingOptionalFieldCodec.withDefault(Codec.INT, "value", 0).forGetter(CustomHasScore::value),
+				Codec.STRING.fieldOf("owner_name").forGetter(CustomHasScore::ownerName),
+				Codec.STRING.fieldOf("objective_name").forGetter(CustomHasScore::objectiveName)
+		).apply(instance, CustomHasScore::new));
+		
+		@Override
+		public Codec<CustomHasScore> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			Scoreboard scoreboard = player.getScoreboard();
+			
+			if(!scoreboard.hasObjective(objectiveName))
+				return false;
+			
+			Collection<Score> scores = scoreboard.getPlayerScores(scoreboard.getObjective(objectiveName));
+			
+			//go with originally written scoreboard name if not "player" or "npc"
+			String modOwnerName = ownerName.equals("player") ? player.getScoreboardName() : ownerName.equals("npc") ? entity.getScoreboardName() : ownerName;
+			
+			return scores.stream().filter(score -> score.getOwner().equals(modOwnerName)).anyMatch(score -> score.getScore() == value);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("A custom scoreboard value does not match");
 		}
 	}
 }

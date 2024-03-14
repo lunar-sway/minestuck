@@ -2394,6 +2394,7 @@
   "minestuck.dialogue.tasty_welcome.next": "Let me see your wares",
   "minestuck.dialogue.tent_protection": "These tents doesn't protect against the cold very well, but they are good enough.",
   "minestuck.dialogue.test1": "Press §eSHIFT§r for more info",
+  "minestuck.dialogue.test1.bad_score": "Player needs a score of 5 for 'testScore'.",
   "minestuck.dialogue.test1.fail": "This very custom condition was not met.",
   "minestuck.dialogue.test_arguments": "Player name land: %s",
   "minestuck.dialogue.test_arguments.name": "Player name land: %s",
