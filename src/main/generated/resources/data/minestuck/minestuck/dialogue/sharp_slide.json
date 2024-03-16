@@ -1,11 +1,5 @@
 {
   "node": {
     "message": "minestuck.dialogue.sharp_slide"
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type",
-      "land_type": "minestuck:flora"
-    }
   }
 }

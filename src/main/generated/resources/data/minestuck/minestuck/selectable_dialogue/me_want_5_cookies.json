@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:always_true"
+  },
+  "dialogue": "minestuck:me_want_5_cookies",
+  "dialogue_weight": 5
+}

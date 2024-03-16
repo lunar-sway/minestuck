@@ -11,11 +11,5 @@
         "next_dialogue_path": "minestuck:mushroom_pizza.off"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type",
-      "land_type": "minestuck:shade"
-    }
   }
 }

@@ -1,11 +1,5 @@
 {
   "node": {
     "message": "minestuck.dialogue.nakagator_only"
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:entity_type",
-      "entity_type": "minestuck:nakagator"
-    }
   }
 }

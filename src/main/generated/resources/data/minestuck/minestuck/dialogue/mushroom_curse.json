@@ -6,11 +6,5 @@
       ],
       "key": "minestuck.dialogue.mushroom_curse"
     }
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type",
-      "land_type": "minestuck:fungi"
-    }
   }
 }

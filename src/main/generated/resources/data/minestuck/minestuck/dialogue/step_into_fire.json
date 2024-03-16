@@ -1,11 +1,5 @@
 {
   "node": {
     "message": "minestuck.dialogue.step_into_fire"
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type",
-      "land_type": "minestuck:heat"
-    }
   }
 }
