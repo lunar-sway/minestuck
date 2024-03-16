@@ -88,7 +88,7 @@ public final class DialogueComponent
 		if(this.activeDialogue == null)
 			return;
 		
-		Dialogue dialogue = DialogueManager.getInstance().getDialogue(this.activeDialogue);
+		Dialogue.NodeSelector dialogue = DialogueManager.getInstance().getDialogue(this.activeDialogue);
 		if(dialogue == null)
 		{
 			LOGGER.warn("Unable to find dialogue with id {}", this.activeDialogue);
@@ -104,14 +104,14 @@ public final class DialogueComponent
 	
 	public void tryOpenScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId)
 	{
-		Dialogue dialogue = DialogueManager.getInstance().getDialogue(dialogueId);
+		Dialogue.NodeSelector dialogue = DialogueManager.getInstance().getDialogue(dialogueId);
 		if(dialogue != null)
 			this.openScreenForDialogue(serverPlayer, dialogueId, dialogue);
 	}
 	
-	public void openScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId, Dialogue dialogue)
+	public void openScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue)
 	{
-		Pair<Dialogue.Node, Integer> node = dialogue.nodes().pickNode(this.entity, serverPlayer);
+		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, serverPlayer);
 		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, serverPlayer);
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		

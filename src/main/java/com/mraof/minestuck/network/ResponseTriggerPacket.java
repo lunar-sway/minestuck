@@ -48,11 +48,11 @@ public record ResponseTriggerPacket(int responseIndex, Dialogue.NodeReference no
 	 */
 	private void validateThenTrigger(ServerPlayer player, LivingEntity livingEntity)
 	{
-		Dialogue dialogue = DialogueManager.getInstance().getDialogue(nodeReference.dialoguePath());
+		Dialogue.NodeSelector dialogue = DialogueManager.getInstance().getDialogue(nodeReference.dialoguePath());
 		if(dialogue == null)
 			return;
 		
-		dialogue.nodes().getNodeIfValid(nodeReference.nodeIndex(), livingEntity, player)
+		dialogue.getNodeIfValid(nodeReference.nodeIndex(), livingEntity, player)
 				.flatMap(node -> node.getResponseIfValid(this.responseIndex))
 				.ifPresent(response -> response.trigger(livingEntity, player));
 	}

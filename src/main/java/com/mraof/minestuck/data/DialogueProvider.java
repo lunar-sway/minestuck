@@ -35,7 +35,7 @@ import java.util.stream.IntStream;
 @MethodsReturnNonnullByDefault
 public abstract class DialogueProvider implements DataProvider
 {
-	private final Map<ResourceLocation, Dialogue> dialogues = new HashMap<>();
+	private final Map<ResourceLocation, Dialogue.NodeSelector> dialogues = new HashMap<>();
 	private final Map<ResourceLocation, Dialogue.SelectableDialogue> selectableDialogueMap = new HashMap<>();
 	
 	private final String modId;
@@ -66,7 +66,7 @@ public abstract class DialogueProvider implements DataProvider
 		this.selectableDialogueMap.put(id, selectable.build(dialogueId));
 	}
 	
-	private void checkAndAdd(ResourceLocation id, Dialogue dialogue)
+	private void checkAndAdd(ResourceLocation id, Dialogue.NodeSelector dialogue)
 	{
 		if(this.dialogues.containsKey(id))
 			throw new IllegalArgumentException(id + " was added twice");
@@ -75,7 +75,7 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public interface DialogueBuilder
 	{
-		ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue> register);
+		ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
 	}
 	
 	public static class NodeSelectorBuilder implements DialogueBuilder
@@ -104,9 +104,9 @@ public abstract class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue> register)
+		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			register.accept(id, new Dialogue(this.build(id)));
+			register.accept(id, this.build(id));
 			return id;
 		}
 	}
@@ -183,7 +183,7 @@ public abstract class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue> register)
+		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			return new NodeSelectorBuilder().defaultNode(this)
 					.buildDialogue(id, register);
@@ -291,7 +291,7 @@ public abstract class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue> register)
+		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			if(this.nodes.isEmpty())
 				throw new IllegalStateException("Nodes must be added to this chain builder");
@@ -449,10 +449,10 @@ public abstract class DialogueProvider implements DataProvider
 		Path outputPath = output.getOutputFolder();
 		List<CompletableFuture<?>> futures = new ArrayList<>(dialogues.size());
 		
-		for(Map.Entry<ResourceLocation, Dialogue> entry : dialogues.entrySet())
+		for(Map.Entry<ResourceLocation, Dialogue.NodeSelector> entry : dialogues.entrySet())
 		{
 			Path dialoguePath = getPath(outputPath, entry.getKey());
-			JsonElement dialogueJson = Dialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			JsonElement dialogueJson = Dialogue.NodeSelector.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
 			futures.add(DataProvider.saveStable(cache, dialogueJson, dialoguePath));
 		}
 		

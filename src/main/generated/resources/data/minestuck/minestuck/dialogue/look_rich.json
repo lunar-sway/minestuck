@@ -1,28 +1,26 @@
 {
-  "nodes": {
-    "conditioned_nodes": [
-      {
-        "condition": {
-          "type": "minestuck:player_boondollars",
-          "amount": 10000
-        },
-        "node": {
-          "message": "minestuck.dialogue.look_rich.rich"
-        }
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_boondollars",
+        "amount": 10000
       },
-      {
-        "condition": {
-          "type": "minestuck:player_boondollars",
-          "amount": 10,
-          "greater_than": false
-        },
-        "node": {
-          "message": "minestuck.dialogue.look_rich.poor"
-        }
+      "node": {
+        "message": "minestuck.dialogue.look_rich.rich"
       }
-    ],
-    "default_node": {
-      "message": "minestuck.dialogue.look_rich"
+    },
+    {
+      "condition": {
+        "type": "minestuck:player_boondollars",
+        "amount": 10,
+        "greater_than": false
+      },
+      "node": {
+        "message": "minestuck.dialogue.look_rich.poor"
+      }
     }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.look_rich"
   }
 }

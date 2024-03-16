@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
@@ -28,28 +27,25 @@ import java.util.stream.IntStream;
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
-public record Dialogue(NodeSelector nodes)
+public final class Dialogue
 {
 	public static final String DEFAULT_ANIMATION = "generic_animation";
 	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
 	
-	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes)
-	).apply(instance, Dialogue::new));
-	
 	public record NodeSelector(List<Pair<Condition, Node>> conditionedNodes, Node defaultNode)
 	{
-		public static final Codec<Pair<Condition, Node>> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		private static final Codec<Pair<Condition, Node>> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Condition.CODEC.fieldOf("condition").forGetter(Pair::getFirst),
 				Node.CODEC.fieldOf("node").forGetter(Pair::getSecond)
 		).apply(instance, Pair::of));
-		public static final Codec<NodeSelector> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		private static final Codec<NodeSelector> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				ENTRY_CODEC.listOf().fieldOf("conditioned_nodes").forGetter(NodeSelector::conditionedNodes),
 				Node.CODEC.fieldOf("default_node").forGetter(NodeSelector::defaultNode)
 		).apply(instance, NodeSelector::new));
-		public static final MapCodec<NodeSelector> EITHER_MAP_CODEC = Codec.mapEither(NodeSelector.CODEC.fieldOf("nodes"), Node.CODEC.fieldOf("node"))
+		public static final Codec<NodeSelector> CODEC = Codec.either(NodeSelector.DIRECT_CODEC, Node.CODEC.fieldOf("node").codec())
 				.xmap(either -> either.map(Function.identity(), node -> new NodeSelector(List.of(), node)),
 						nodeSelector -> nodeSelector.conditionedNodes.isEmpty() ? Either.right(nodeSelector.defaultNode) : Either.left(nodeSelector));
+		
 		
 		public Pair<Node, Integer> pickNode(LivingEntity entity, ServerPlayer player)
 		{

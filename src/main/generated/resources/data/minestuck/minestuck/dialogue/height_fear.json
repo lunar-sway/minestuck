@@ -1,39 +1,37 @@
 {
-  "nodes": {
-    "conditioned_nodes": [
-      {
-        "condition": {
-          "type": "minestuck:at_or_above_y",
-          "y": 78.0
-        },
-        "node": {
-          "message": "minestuck.dialogue.height_fear.panic"
-        }
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:at_or_above_y",
+        "y": 78.0
       },
-      {
-        "condition": {
-          "type": "minestuck:title_land_type",
-          "land_type": "minestuck:towers"
-        },
-        "node": {
-          "message": "minestuck.dialogue.height_fear.towers.1",
-          "responses": [
-            {
-              "message": "minestuck.arrow",
-              "next_dialogue_path": "minestuck:height_fear.towers.2"
-            }
-          ]
-        }
+      "node": {
+        "message": "minestuck.dialogue.height_fear.panic"
       }
-    ],
-    "default_node": {
-      "message": "minestuck.dialogue.height_fear.rock.1",
-      "responses": [
-        {
-          "message": "minestuck.arrow",
-          "next_dialogue_path": "minestuck:height_fear.rock.2"
-        }
-      ]
+    },
+    {
+      "condition": {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:towers"
+      },
+      "node": {
+        "message": "minestuck.dialogue.height_fear.towers.1",
+        "responses": [
+          {
+            "message": "minestuck.arrow",
+            "next_dialogue_path": "minestuck:height_fear.towers.2"
+          }
+        ]
+      }
     }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.height_fear.rock.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:height_fear.rock.2"
+      }
+    ]
   }
 }
