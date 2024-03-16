@@ -163,6 +163,11 @@ public final class DialogueProvider implements DataProvider
 			return addResponse(new ResponseBuilder(message));
 		}
 		
+		public NodeBuilder next(String key, DialogueProducer dialogueProducer)
+		{
+			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(key, dialogueProducer));
+		}
+		
 		public NodeBuilder next(ResourceLocation dialogueId)
 		{
 			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(dialogueId));

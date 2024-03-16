@@ -239,9 +239,9 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("height_fear", defaultWeight(all(any(isInTitle(TOWERS), isInTitle(WIND)), isAnyEntityType(TURTLE))), new NodeSelectorBuilder()
 				.node(new Condition.AtOrAboveY(78), new NodeBuilder(l.subMsg("panic", "AAH, I am scared of heights!")))
 				.node(isInTitle(TOWERS), new NodeBuilder(l.subMsg("towers.1", "I'd climb up one of those towers and look at the view, but I am scared of heights."))
-						.next(provider.dialogue().add("height_fear.towers.2", new NodeBuilder(l.defaultKeyMsg("I mean, what if I slipped and fell off the stairs?")))))
+						.next("towers.2", new NodeBuilder(l.defaultKeyMsg("I mean, what if I slipped and fell off the stairs?"))))
 				.defaultNode(new NodeBuilder(l.subMsg("rock.1", "I'd climb up one of those rocks and look at the view, but I am scared of heights."))
-						.next(provider.dialogue().add("height_fear.rock.2", new NodeBuilder(l.defaultKeyMsg("I mean what if I fell down and landed on my back?"))))));
+						.next("rock.2", new NodeBuilder(l.defaultKeyMsg("I mean what if I fell down and landed on my back?")))));
 		
 		
 		//Shade
