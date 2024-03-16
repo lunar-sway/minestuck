@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -284,7 +285,7 @@ public final class DialogueProvider implements DataProvider
 		}
 	}
 	
-	public static class ChainBuilder implements DialogueProducer
+	public static class ChainBuilder implements DialogueProducer, NodeProducer
 	{
 		private boolean withFolders = false;
 		private final List<NodeBuilder> nodes = new ArrayList<>();
@@ -308,8 +309,7 @@ public final class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		@Override
-		public ResourceLocation buildAndRegister(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		private <T> T build(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register, BiFunction<NodeBuilder, ResourceLocation, T> startNodeBuilder)
 		{
 			if(this.nodes.isEmpty())
 				throw new IllegalStateException("Nodes must be added to this chain builder");
@@ -324,8 +324,19 @@ public final class DialogueProvider implements DataProvider
 			
 			for(int index = 1; index < this.nodes.size(); index++)
 				this.nodes.get(index).buildAndRegister(ids.get(index), register);
-			this.nodes.get(0).buildAndRegister(ids.get(0), register);
-			return ids.get(0);
+			return startNodeBuilder.apply(this.nodes.get(0), ids.get(0));
+		}
+		
+		@Override
+		public Dialogue.Node buildNode(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		{
+			return this.build(id, register, (startNode, startId) -> startNode.buildNode(startId, register));
+		}
+		
+		@Override
+		public ResourceLocation buildAndRegister(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		{
+			return this.build(id, register, (startNode, startId) -> startNode.buildAndRegister(startId, register));
 		}
 	}
 	
