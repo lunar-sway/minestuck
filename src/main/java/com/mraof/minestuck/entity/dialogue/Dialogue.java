@@ -170,6 +170,11 @@ public final class Dialogue
 			
 			return Optional.of(this.responses().get(responseIndex));
 		}
+		
+		public void visitConnectedDialogue(Consumer<ResourceLocation> idConsumer)
+		{
+			responses.forEach(response -> response.nextDialoguePath().ifPresent(idConsumer));
+		}
 	}
 	
 	/**

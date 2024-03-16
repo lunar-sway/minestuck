@@ -435,9 +435,22 @@ public abstract class DialogueProvider implements DataProvider
 			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(Condition.IsEntityType::new).toList(), ListCondition.ListType.ANY);
 	}
 	
+	protected final boolean hasAddedDialogue(ResourceLocation dialogueId)
+	{
+		return this.dialogues.containsKey(dialogueId);
+	}
+	
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache)
 	{
+		Set<ResourceLocation> missingDialogue = new HashSet<>();
+		dialogues.values().forEach(dialogue -> dialogue.visitConnectedDialogue(dialogueId -> {
+			if(!hasAddedDialogue(dialogueId))
+				missingDialogue.add(dialogueId);
+		}));
+		if(!missingDialogue.isEmpty())
+			throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
+		
 		Path outputPath = output.getOutputFolder();
 		List<CompletableFuture<?>> futures = new ArrayList<>(dialogues.size());
 		
