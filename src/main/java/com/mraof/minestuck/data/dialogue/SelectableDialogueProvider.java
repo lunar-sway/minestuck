@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class SelectableDialogueProvider extends DialogueProvider
+public final class SelectableDialogueProvider extends DialogueProvider
 {
 	private final Map<ResourceLocation, Dialogue.SelectableDialogue> selectableDialogueMap = new HashMap<>();
 	private final RandomlySelectableDialogue.DialogueCategory category;
@@ -43,12 +43,12 @@ public abstract class SelectableDialogueProvider extends DialogueProvider
 		return new SelectableBuilder(condition, Dialogue.SelectableDialogue.DEFAULT_WEIGHT);
 	}
 	
-	protected final void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueBuilder builder)
+	public void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueBuilder builder)
 	{
 		addRandomlySelectable(path, selectable, add(path, builder));
 	}
 	
-	protected final void addRandomlySelectable(String path, SelectableBuilder selectable, ResourceLocation dialogueId)
+	public void addRandomlySelectable(String path, SelectableBuilder selectable, ResourceLocation dialogueId)
 	{
 		this.selectableDialogueMap.put(new ResourceLocation(this.modId, path), selectable.build(dialogueId));
 	}

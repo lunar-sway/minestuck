@@ -37,17 +37,17 @@ public abstract class DialogueProvider implements DataProvider
 		this.output = output;
 	}
 	
-	protected ResourceLocation dialogueId(String path)
+	public ResourceLocation dialogueId(String path)
 	{
 		return new ResourceLocation(this.modId, path);
 	}
 	
-	protected final ResourceLocation add(String path, DialogueBuilder builder)
+	public final ResourceLocation add(String path, DialogueBuilder builder)
 	{
 		return builder.buildDialogue(dialogueId(path), this::checkAndAdd);
 	}
 	
-	protected final void add(ResourceLocation id, SimpleDialogueBuilder builder)
+	public final void add(ResourceLocation id, SimpleDialogueBuilder builder)
 	{
 		builder.buildSimple(id, this::checkAndAdd);
 	}
@@ -117,12 +117,12 @@ public abstract class DialogueProvider implements DataProvider
 		private ResourceLocation guiPath = Dialogue.DEFAULT_GUI;
 		private final List<ResponseBuilder> responses = new ArrayList<>();
 		
-		NodeBuilder(DialogueMessage message)
+		public NodeBuilder(DialogueMessage message)
 		{
 			this.messageProvider = id -> message;
 		}
 		
-		NodeBuilder(Function<ResourceLocation, DialogueMessage> messageProvider)
+		public NodeBuilder(Function<ResourceLocation, DialogueMessage> messageProvider)
 		{
 			this.messageProvider = messageProvider;
 		}

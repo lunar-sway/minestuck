@@ -1,7 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.data.dialogue.ConsortDialogueProvider;
+import com.mraof.minestuck.data.dialogue.ConsortDialogue;
 import com.mraof.minestuck.data.loot_table.MSLootModifiers;
 import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
@@ -65,7 +65,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
 		var enUsLanguageProvider = gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
 		
-		gen.addProvider(event.includeServer(), ConsortDialogueProvider.create(output, enUsLanguageProvider));
+		gen.addProvider(event.includeServer(), ConsortDialogue.create(output, enUsLanguageProvider));
 	}
 	
 	private static RegistrySetBuilder registrySetBuilder()
