@@ -173,11 +173,11 @@ public abstract class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public Dialogue.DialogueNode build(ResourceLocation id)
+		public Dialogue.Node build(ResourceLocation id)
 		{
 			DialogueMessage message = this.messageProvider.apply(id);
 			Optional<DialogueMessage> description = this.descriptionProvider != null ? Optional.of(this.descriptionProvider.apply(id)) : Optional.empty();
-			return new Dialogue.DialogueNode(message, description, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id)).toList());
+			return new Dialogue.Node(message, description, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id)).toList());
 		}
 		
 		@Override
