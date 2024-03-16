@@ -19,6 +19,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 import static com.mraof.minestuck.data.DialogueLangHelper.defaultKeyMsg;
 import static com.mraof.minestuck.data.DialogueLangHelper.msg;
 import static com.mraof.minestuck.entity.MSEntityTypes.*;
+import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 public final class ConsortDialogueProvider extends SelectableDialogueProvider

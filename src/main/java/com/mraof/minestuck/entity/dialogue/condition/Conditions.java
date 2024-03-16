@@ -2,11 +2,19 @@ package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 public final class Conditions
@@ -33,5 +41,59 @@ public final class Conditions
 		REGISTER.register("player_reputation", () -> Condition.PlayerHasReputation.CODEC);
 		REGISTER.register("player_boondollars", () -> Condition.PlayerHasBoondollars.CODEC);
 		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
+	}
+	
+	public static Condition all(Condition... conditions)
+	{
+		return new ListCondition(List.of(conditions), ListCondition.ListType.ALL);
+	}
+	
+	public static Condition any(Condition... conditions)
+	{
+		return new ListCondition(List.of(conditions), ListCondition.ListType.ANY);
+	}
+	
+	public static Condition one(Condition... conditions)
+	{
+		return new ListCondition(List.of(conditions), ListCondition.ListType.ONE);
+	}
+	
+	public static Condition none(Condition... conditions)
+	{
+		return new ListCondition(List.of(conditions), ListCondition.ListType.NONE);
+	}
+	
+	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)
+	{
+		return new Condition.InTerrainLandType(landType.get());
+	}
+	
+	public static Condition isInTitle(RegistryObject<TitleLandType> landType)
+	{
+		return new Condition.InTitleLandType(landType.get());
+	}
+	
+	public static Condition isInTerrainLand(TagKey<TerrainLandType> tag)
+	{
+		return new Condition.InTerrainLandTypeTag(tag);
+	}
+	
+	public static Condition isInTitleLand(TagKey<TitleLandType> tag)
+	{
+		return new Condition.InTitleLandTypeTag(tag);
+	}
+	
+	@SafeVarargs
+	public static Condition isAnyEntityType(RegistryObject<EntityType<ConsortEntity>>... entityType)
+	{
+		return isAnyEntityType(Arrays.stream(entityType).map(RegistryObject::get).toArray(EntityType<?>[]::new));
+	}
+	
+	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
+	{
+		if(entityTypes.length == 1)
+			return new Condition.IsEntityType(entityTypes[0]);
+		else
+			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(Condition.IsEntityType::new).toList(), ListCondition.ListType.ANY);
 	}
 }

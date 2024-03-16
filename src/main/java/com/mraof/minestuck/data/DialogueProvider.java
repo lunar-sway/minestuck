@@ -3,22 +3,15 @@ package com.mraof.minestuck.data;
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
-import com.mraof.minestuck.entity.dialogue.condition.ListCondition;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -305,60 +298,6 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public static final DialogueMessage ARROW = new DialogueMessage("minestuck.arrow");
 	public static final DialogueMessage DOTS = new DialogueMessage("minestuck.dots");
-	
-	public static Condition all(Condition... conditions)
-	{
-		return new ListCondition(List.of(conditions), ListCondition.ListType.ALL);
-	}
-	
-	public static Condition any(Condition... conditions)
-	{
-		return new ListCondition(List.of(conditions), ListCondition.ListType.ANY);
-	}
-	
-	public static Condition one(Condition... conditions)
-	{
-		return new ListCondition(List.of(conditions), ListCondition.ListType.ONE);
-	}
-	
-	public static Condition none(Condition... conditions)
-	{
-		return new ListCondition(List.of(conditions), ListCondition.ListType.NONE);
-	}
-	
-	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)
-	{
-		return new Condition.InTerrainLandType(landType.get());
-	}
-	
-	public static Condition isInTitle(RegistryObject<TitleLandType> landType)
-	{
-		return new Condition.InTitleLandType(landType.get());
-	}
-	
-	public static Condition isInTerrainLand(TagKey<TerrainLandType> tag)
-	{
-		return new Condition.InTerrainLandTypeTag(tag);
-	}
-	
-	public static Condition isInTitleLand(TagKey<TitleLandType> tag)
-	{
-		return new Condition.InTitleLandTypeTag(tag);
-	}
-	
-	@SafeVarargs
-	public static Condition isAnyEntityType(RegistryObject<EntityType<ConsortEntity>>... entityType)
-	{
-		return isAnyEntityType(Arrays.stream(entityType).map(RegistryObject::get).toArray(EntityType<?>[]::new));
-	}
-	
-	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
-	{
-		if(entityTypes.length == 1)
-			return new Condition.IsEntityType(entityTypes[0]);
-		else
-			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(Condition.IsEntityType::new).toList(), ListCondition.ListType.ANY);
-	}
 	
 	protected final boolean hasAddedDialogue(ResourceLocation dialogueId)
 	{
