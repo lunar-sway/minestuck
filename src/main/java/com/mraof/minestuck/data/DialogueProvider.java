@@ -146,6 +146,11 @@ public abstract class DialogueProvider implements DataProvider
 			return this;
 		}
 		
+		public NodeBuilder addClosingResponse()
+		{
+			return addClosingResponse(DOTS);
+		}
+		
 		public NodeBuilder addClosingResponse(DialogueMessage message)
 		{
 			return addResponse(new ResponseBuilder(message));
