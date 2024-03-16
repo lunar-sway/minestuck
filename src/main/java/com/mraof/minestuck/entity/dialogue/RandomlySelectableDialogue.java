@@ -68,6 +68,7 @@ public final class RandomlySelectableDialogue
 	public enum DialogueCategory
 	{
 		CONSORT("consort"),
+		CONSORT_FOOD_MERCHANT("consort_food_merchant"),
 		;
 		private final String folderName;
 		

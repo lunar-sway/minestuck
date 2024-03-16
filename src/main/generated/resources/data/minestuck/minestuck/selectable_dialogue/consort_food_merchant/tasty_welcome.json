@@ -3,5 +3,5 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:turtle"
   },
-  "dialogue": "minestuck:consort/tasty_welcome"
+  "dialogue": "minestuck:consort_food_merchant/tasty_welcome"
 }

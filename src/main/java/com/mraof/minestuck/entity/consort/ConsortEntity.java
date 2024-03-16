@@ -161,7 +161,10 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		if(!this.dialogueComponent.hasActiveDialogue())
 		{
-			RandomlySelectableDialogue.instance(RandomlySelectableDialogue.DialogueCategory.CONSORT).pickRandomForEntity(this)
+			var category = this.merchantType == EnumConsort.MerchantType.FOOD
+					? RandomlySelectableDialogue.DialogueCategory.CONSORT_FOOD_MERCHANT
+					: RandomlySelectableDialogue.DialogueCategory.CONSORT;
+			RandomlySelectableDialogue.instance(category).pickRandomForEntity(this)
 					.ifPresent(this.dialogueComponent::setDialogue);
 		}
 		

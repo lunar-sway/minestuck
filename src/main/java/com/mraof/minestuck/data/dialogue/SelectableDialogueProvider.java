@@ -110,6 +110,6 @@ public final class SelectableDialogueProvider implements DataProvider
 	@Override
 	public String getName()
 	{
-		return "Selectable dialogue provider";
+		return "Selectable dialogue provider: " + this.category.folderName();
 	}
 }

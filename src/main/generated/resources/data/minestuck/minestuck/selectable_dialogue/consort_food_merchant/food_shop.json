@@ -3,5 +3,5 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:salamander"
   },
-  "dialogue": "minestuck:consort/food_shop"
+  "dialogue": "minestuck:consort_food_merchant/food_shop"
 }

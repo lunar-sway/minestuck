@@ -3,5 +3,5 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:iguana"
   },
-  "dialogue": "minestuck:consort/grocery_store"
+  "dialogue": "minestuck:consort_food_merchant/grocery_store"
 }
