@@ -46,12 +46,12 @@ public final class DialogueProvider implements DataProvider
 	
 	public ResourceLocation add(String path, DialogueProducer builder)
 	{
-		return builder.buildDialogue(dialogueId(path), this::checkAndAdd);
+		return builder.buildAndRegister(dialogueId(path), this::checkAndAdd);
 	}
 	
 	public void add(ResourceLocation id, SimpleDialogueProducer builder)
 	{
-		builder.buildSimple(id, this::checkAndAdd);
+		builder.buildAndRegister(id, this::checkAndAdd);
 	}
 	
 	private void checkAndAdd(ResourceLocation id, Dialogue.NodeSelector dialogue)
@@ -61,19 +61,25 @@ public final class DialogueProvider implements DataProvider
 		this.dialogues.put(id, dialogue);
 	}
 	
+	/**
+	 * A builder that can would create one or more node selectors, with one being considered a starting node.
+	 */
 	public interface DialogueProducer
 	{
-		ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
+		ResourceLocation buildAndRegister(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
 	}
 	
+	/**
+	 * A version of {@link DialogueProducer} which is expected to register the starting node selector under the given id.
+	 */
 	public interface SimpleDialogueProducer extends DialogueProducer
 	{
-		void buildSimple(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
+		Dialogue.NodeSelector buildSelector(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
 		
 		@Override
-		default ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		default ResourceLocation buildAndRegister(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			this.buildSimple(id, register);
+			register.accept(id, this.buildSelector(id, register));
 			return id;
 		}
 	}
@@ -96,17 +102,12 @@ public final class DialogueProvider implements DataProvider
 			return this;
 		}
 		
+		@Override
 		public Dialogue.NodeSelector buildSelector(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			Objects.requireNonNull(this.defaultNode, "Default node must be set");
 			return new Dialogue.NodeSelector(this.conditionedNodes.stream().map(pair -> pair.mapSecond(builder -> builder.buildNode(id, register))).toList(),
 					this.defaultNode.buildNode(id, register));
-		}
-		
-		@Override
-		public void buildSimple(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
-		{
-			register.accept(id, this.buildSelector(id, register));
 		}
 	}
 	
@@ -181,10 +182,10 @@ public final class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public void buildSimple(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		public Dialogue.NodeSelector buildSelector(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			new NodeSelectorBuilder().defaultNode(this)
-					.buildSimple(id, register);
+			return new NodeSelectorBuilder().defaultNode(this)
+					.buildSelector(id, register);
 		}
 	}
 	
@@ -210,7 +211,7 @@ public final class DialogueProvider implements DataProvider
 		
 		public ResponseBuilder nextDialogue(String key, DialogueProducer dialogueProducer)
 		{
-			this.nextDialogue = (id, register) -> dialogueProducer.buildDialogue(id.withSuffix("." + key), register);
+			this.nextDialogue = (id, register) -> dialogueProducer.buildAndRegister(id.withSuffix("." + key), register);
 			return this;
 		}
 		
@@ -256,7 +257,7 @@ public final class DialogueProvider implements DataProvider
 		
 		public Dialogue.Response build(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			Optional<ResourceLocation> nextPath = Optional.ofNullable(this.nextDialogue).map(builder -> builder.buildDialogue(id, register));
+			Optional<ResourceLocation> nextPath = Optional.ofNullable(this.nextDialogue).map(builder -> builder.buildAndRegister(id, register));
 			DialogueMessage message = this.message.apply(id);
 			return new Dialogue.Response(message, this.triggers, nextPath, this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
 		}
@@ -287,7 +288,7 @@ public final class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		public ResourceLocation buildAndRegister(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			if(this.nodes.isEmpty())
 				throw new IllegalStateException("Nodes must be added to this chain builder");
@@ -301,8 +302,8 @@ public final class DialogueProvider implements DataProvider
 				this.nodes.get(this.nodes.size() - 1).next(ids.get(0));
 			
 			for(int index = 1; index < this.nodes.size(); index++)
-				this.nodes.get(index).buildSimple(ids.get(index), register);
-			this.nodes.get(0).buildSimple(ids.get(0), register);
+				this.nodes.get(index).buildAndRegister(ids.get(index), register);
+			this.nodes.get(0).buildAndRegister(ids.get(0), register);
 			return ids.get(0);
 		}
 	}
