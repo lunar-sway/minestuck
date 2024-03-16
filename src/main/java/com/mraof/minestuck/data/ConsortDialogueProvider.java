@@ -10,6 +10,7 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -18,9 +19,18 @@ import net.minecraftforge.common.data.LanguageProvider;
 import static com.mraof.minestuck.entity.MSEntityTypes.*;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
 
-public final class ConsortDialogueProvider extends DialogueProvider
+public final class ConsortDialogueProvider extends SelectableDialogueProvider
 {
-	public ConsortDialogueProvider(PackOutput output, LanguageProvider enUsLanguageProvider)
+	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider)
+	{
+		ConsortDialogueProvider provider = new ConsortDialogueProvider(output, enUsLanguageProvider);
+		//Call this early so that language stuff gets added before the language provider generates its file regardless of the order that providers are run
+		provider.addDialogue();
+		
+		return provider;
+	}
+	
+	private ConsortDialogueProvider(PackOutput output, LanguageProvider enUsLanguageProvider)
 	{
 		super(Minestuck.MOD_ID, output, enUsLanguageProvider);
 	}
