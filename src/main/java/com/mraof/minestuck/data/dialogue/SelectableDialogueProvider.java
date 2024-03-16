@@ -13,11 +13,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -58,6 +56,11 @@ public final class SelectableDialogueProvider extends DialogueProvider
 	{
 		List<CompletableFuture<?>> futures = new ArrayList<>(this.selectableDialogueMap.size() + 1);
 		futures.add(super.run(cache));
+		
+		Set<ResourceLocation> missingDialogue = this.selectableDialogueMap.values().stream().map(Dialogue.SelectableDialogue::dialogueId)
+				.filter(id -> !hasAddedDialogue(id)).collect(Collectors.toSet());
+		if(!missingDialogue.isEmpty())
+			throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
 		
 		Path outputPath = output.getOutputFolder();
 		for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
