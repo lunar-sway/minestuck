@@ -254,12 +254,13 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("goddamn")))
 				.node(new NodeBuilder(l.defaultKeyMsg("fuckin")))
 				.node(new NodeBuilder(l.defaultKeyMsg("mushrooms"))));
-		provider.addRandomlySelectable("mushroom_pizza", defaultWeight(isInTerrain(SHADE)),
-				new NodeBuilder(l.defaultKeyMsg("Do you put glow mushrooms on your pizza or leave them off?"))
+		provider.addRandomlySelectable("mushroom_pizza", defaultWeight(isInTerrain(SHADE)), new FolderedDialogue(builder ->
+				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Do you put glow mushrooms on your pizza or leave them off?"))
 						.addResponse(new ResponseBuilder(l.subMsg("reply_on", "I put them on!"))
-								.nextDialogue("on", new NodeBuilder(l.defaultKeyMsg("Good! I was afraid I'd have to kill you!"))))
+								.nextDialogue(builder.add("on", new NodeBuilder(l.defaultKeyMsg("Good! I was afraid I'd have to kill you!")))))
 						.addResponse(new ResponseBuilder(l.subMsg("reply_off", "I leave them off!"))
-								.nextDialogue("off", new NodeBuilder(l.defaultKeyMsg("You are a despicable person.")))));
+								.nextDialogue(builder.add("off", new NodeBuilder(l.defaultKeyMsg("You are a despicable person."))))))
+		));
 		provider.addRandomlySelectable("fire_hazard", defaultWeight(all(isInTerrain(SHADE), none(isInTitle(THUNDER)))),
 				new NodeBuilder(l.defaultKeyMsg("Our land is a fire waiting to happen! Hopefully there isn't any lightning!")));
 		provider.addRandomlySelectable("that_boy_needs_therapy", defaultWeight(isInTerrain(SHADE)),
@@ -290,12 +291,13 @@ public final class ConsortDialogue
 		//Sand
 		provider.addRandomlySelectable("sand_surfing", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)),
 				new NodeBuilder(l.defaultKeyMsg("Sand-surfing is my new favorite sport! Too bad you can't really move, though.")));
-		provider.addRandomlySelectable("camel", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)),
-				new NodeBuilder(l.defaultKeyMsg("Want to buy a used camel? Only 2000 boondollars."))
+		provider.addRandomlySelectable("camel", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)), new FolderedDialogue(builder ->
+				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Want to buy a used camel? Only 2000 boondollars."))
 						.addResponse(new ResponseBuilder(l.subMsg("yes", "Why not? Seems like a good price for a camel!"))
-								.nextDialogue(provider.dialogue().add("camel/no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))
+								.nextDialogue(builder.add("no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))
 						.addResponse(new ResponseBuilder(l.subMsg("no", "Of course not! You know better!"))
-								.nextDialogue(provider.dialogue().add("camel/dancing_camel", new NodeBuilder(l.defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))));
+								.nextDialogue(builder.add("dancing_camel", new NodeBuilder(l.defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))))
+		));
 		
 		
 		//Sandstone

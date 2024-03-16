@@ -1,13 +1,13 @@
 {
   "node": {
-    "message": "minestuck.dialogue.consort.camel",
+    "message": "minestuck.dialogue.consort.camel.start",
     "responses": [
       {
-        "message": "minestuck.dialogue.consort.camel.yes",
+        "message": "minestuck.dialogue.consort.camel.start.yes",
         "next_dialogue_path": "minestuck:consort/camel/no_camel"
       },
       {
-        "message": "minestuck.dialogue.consort.camel.no",
+        "message": "minestuck.dialogue.consort.camel.start.no",
         "next_dialogue_path": "minestuck:consort/camel/dancing_camel"
       }
     ]

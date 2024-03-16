@@ -1,0 +1,15 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.mushroom_pizza.start",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.mushroom_pizza.start.reply_on",
+        "next_dialogue_path": "minestuck:consort/mushroom_pizza/on"
+      },
+      {
+        "message": "minestuck.dialogue.consort.mushroom_pizza.start.reply_off",
+        "next_dialogue_path": "minestuck:consort/mushroom_pizza/off"
+      }
+    ]
+  }
+}
