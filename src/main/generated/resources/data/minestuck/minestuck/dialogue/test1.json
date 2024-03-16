@@ -97,10 +97,5 @@
         "message": "test1response5"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:always_true"
-    }
   }
 }

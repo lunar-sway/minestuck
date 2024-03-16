@@ -6,11 +6,5 @@
       ],
       "key": "minestuck.dialogue.rockfu"
     }
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type_tag",
-      "land_type_tag": "minestuck:rock"
-    }
   }
 }

@@ -1,11 +1,5 @@
 {
   "node": {
     "message": "minestuck.dialogue.battle_site"
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type",
-      "land_type": "minestuck:flora"
-    }
   }
 }

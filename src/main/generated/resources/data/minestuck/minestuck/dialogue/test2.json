@@ -84,10 +84,5 @@
         "message": "test2response4"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:always_true"
-    }
   }
 }

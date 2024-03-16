@@ -92,9 +92,9 @@ public final class DialogueComponent
 	
 	private void generateNewDialogue(LivingEntity entity)
 	{
-		Dialogue dialogue = DialogueManager.getInstance().doRandomDialogue(entity);
-		this.hasGeneratedOnce = true;
-		if(dialogue != null)
-			this.setDialogue(dialogue.lookupId(), dialogue.selectable().map(Dialogue.RandomlySelectable::keepOnReset).orElse(false));
+		RandomlySelectableDialogue.instance().pickRandomForEntity(entity).ifPresent(selectable -> {
+			this.hasGeneratedOnce = true;
+			this.setDialogue(selectable.dialogue(), selectable.keepOnReset());
+		});
 	}
 }

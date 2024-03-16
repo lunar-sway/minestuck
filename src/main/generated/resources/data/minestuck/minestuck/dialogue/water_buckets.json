@@ -1,21 +1,5 @@
 {
   "node": {
     "message": "minestuck.dialogue.water_buckets"
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:list",
-      "conditions": [
-        {
-          "type": "minestuck:title_land_type",
-          "land_type": "minestuck:buckets"
-        },
-        {
-          "type": "minestuck:terrain_land_type_tag",
-          "land_type_tag": "minestuck:sand"
-        }
-      ],
-      "list_type": "all"
-    }
   }
 }

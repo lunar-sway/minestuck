@@ -7,11 +7,5 @@
         "next_dialogue_path": "minestuck:frog_variants.2"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:title_land_type",
-      "land_type": "minestuck:frogs"
-    }
   }
 }

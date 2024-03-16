@@ -7,11 +7,5 @@
         "next_dialogue_path": "minestuck:mush_farm/2"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type",
-      "land_type": "minestuck:shade"
-    }
   }
 }

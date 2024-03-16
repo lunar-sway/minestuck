@@ -1,11 +1,5 @@
 {
   "node": {
     "message": "minestuck.dialogue.silent_underlings"
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:title_land_type",
-      "land_type": "minestuck:silence"
-    }
   }
 }

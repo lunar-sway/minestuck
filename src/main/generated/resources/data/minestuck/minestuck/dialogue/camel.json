@@ -11,11 +11,5 @@
         "next_dialogue_path": "minestuck:camel/dancing_camel"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type_tag",
-      "land_type_tag": "minestuck:sand"
-    }
   }
 }

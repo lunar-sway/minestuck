@@ -36,6 +36,7 @@ import java.util.stream.IntStream;
 public abstract class DialogueProvider implements DataProvider
 {
 	private final Map<ResourceLocation, Dialogue> dialogues = new HashMap<>();
+	private final Map<ResourceLocation, Dialogue.SelectableDialogue> selectableDialogueMap = new HashMap<>();
 	
 	private final String modId;
 	private final PackOutput output;
@@ -55,12 +56,14 @@ public abstract class DialogueProvider implements DataProvider
 	
 	protected final ResourceLocation add(String path, DialogueBuilder builder)
 	{
-		return builder.buildDialogue(new ResourceLocation(modId, path), Optional.empty(), this::checkAndAdd);
+		return builder.buildDialogue(new ResourceLocation(modId, path), this::checkAndAdd);
 	}
 	
 	protected final void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueBuilder builder)
 	{
-		builder.buildDialogue(new ResourceLocation(modId, path), Optional.of(selectable.build()), this::checkAndAdd);
+		ResourceLocation id = new ResourceLocation(modId, path);
+		ResourceLocation dialogueId = builder.buildDialogue(id, this::checkAndAdd);
+		this.selectableDialogueMap.put(id, selectable.build(dialogueId));
 	}
 	
 	private void checkAndAdd(ResourceLocation id, Dialogue dialogue)
@@ -72,8 +75,7 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public interface DialogueBuilder
 	{
-		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-		ResourceLocation buildDialogue(ResourceLocation id, Optional<Dialogue.RandomlySelectable> randomlySelectable, BiConsumer<ResourceLocation, Dialogue> register);
+		ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue> register);
 	}
 	
 	public static class NodeSelectorBuilder implements DialogueBuilder
@@ -102,9 +104,9 @@ public abstract class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, Optional<Dialogue.RandomlySelectable> randomlySelectable, BiConsumer<ResourceLocation, Dialogue> register)
+		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue> register)
 		{
-			register.accept(id, new Dialogue(this.build(id), randomlySelectable));
+			register.accept(id, new Dialogue(this.build(id)));
 			return id;
 		}
 	}
@@ -181,10 +183,10 @@ public abstract class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, Optional<Dialogue.RandomlySelectable> randomlySelectable, BiConsumer<ResourceLocation, Dialogue> register)
+		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue> register)
 		{
 			return new NodeSelectorBuilder().defaultNode(this)
-					.buildDialogue(id, randomlySelectable, register);
+					.buildDialogue(id, register);
 		}
 	}
 	
@@ -289,7 +291,7 @@ public abstract class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, Optional<Dialogue.RandomlySelectable> randomlySelectable, BiConsumer<ResourceLocation, Dialogue> register)
+		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue> register)
 		{
 			if(this.nodes.isEmpty())
 				throw new IllegalStateException("Nodes must be added to this chain builder");
@@ -303,8 +305,8 @@ public abstract class DialogueProvider implements DataProvider
 				this.nodes.get(this.nodes.size() - 1).next(ids.get(0));
 			
 			for(int index = 1; index < this.nodes.size(); index++)
-				this.nodes.get(index).buildDialogue(ids.get(index), Optional.empty(), register);
-			return this.nodes.get(0).buildDialogue(ids.get(0), randomlySelectable, register);
+				this.nodes.get(index).buildDialogue(ids.get(index), register);
+			return this.nodes.get(0).buildDialogue(ids.get(0), register);
 		}
 	}
 	
@@ -370,9 +372,9 @@ public abstract class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public Dialogue.RandomlySelectable build()
+		public Dialogue.SelectableDialogue build(ResourceLocation dialogueId)
 		{
-			return new Dialogue.RandomlySelectable(this.condition, this.weight, this.keepOnReset);
+			return new Dialogue.SelectableDialogue(dialogueId, this.condition, this.weight, this.keepOnReset);
 		}
 	}
 	
@@ -404,7 +406,7 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public static SelectableBuilder defaultWeight(Condition condition)
 	{
-		return new SelectableBuilder(condition, Dialogue.RandomlySelectable.DEFAULT_WEIGHT);
+		return new SelectableBuilder(condition, Dialogue.SelectableDialogue.DEFAULT_WEIGHT);
 	}
 	
 	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)
@@ -453,6 +455,14 @@ public abstract class DialogueProvider implements DataProvider
 			JsonElement dialogueJson = Dialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
 			futures.add(DataProvider.saveStable(cache, dialogueJson, dialoguePath));
 		}
+		
+		for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
+		{
+			Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/minestuck/selectable_dialogue/" + entry.getKey().getPath() + ".json");
+			JsonElement selectableJson = Dialogue.SelectableDialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			futures.add(DataProvider.saveStable(cache, selectableJson, selectablePath));
+		}
+		
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}
 	

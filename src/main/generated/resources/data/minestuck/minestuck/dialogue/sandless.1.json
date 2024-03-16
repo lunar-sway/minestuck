@@ -12,11 +12,5 @@
         "next_dialogue_path": "minestuck:sandless.2"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type_tag",
-      "land_type_tag": "minestuck:sandstone"
-    }
   }
 }

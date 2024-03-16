@@ -7,21 +7,5 @@
         "next_dialogue_path": "minestuck:immortality_herb/2"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:list",
-      "conditions": [
-        {
-          "type": "minestuck:terrain_land_type",
-          "land_type": "minestuck:flora"
-        },
-        {
-          "type": "minestuck:first_time_generating"
-        }
-      ],
-      "list_type": "all"
-    },
-    "keep_on_reset": true
   }
 }

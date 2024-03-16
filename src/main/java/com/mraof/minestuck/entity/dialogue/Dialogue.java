@@ -31,14 +31,13 @@ import java.util.stream.IntStream;
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
 //TODO animation is unused?
-public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectable)
+public record Dialogue(NodeSelector nodes)
 {
 	public static final String DEFAULT_ANIMATION = "generic_animation";
 	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
 	
 	public static Codec<Dialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes),
-			new PreservingOptionalFieldCodec<>(RandomlySelectable.CODEC, "selectable").forGetter(Dialogue::selectable)
+			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes)
 	).apply(instance, Dialogue::new));
 	
 	public ResourceLocation lookupId()
@@ -203,14 +202,15 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 		}
 	}
 	
-	public record RandomlySelectable(Condition condition, int weight, boolean keepOnReset)
+	public record SelectableDialogue(ResourceLocation dialogue, Condition condition, int weight, boolean keepOnReset)
 	{
 		public static final int DEFAULT_WEIGHT = 10;
-		static Codec<RandomlySelectable> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Condition.NPC_ONLY_CODEC.fieldOf("condition").forGetter(RandomlySelectable::condition),
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", DEFAULT_WEIGHT).forGetter(RandomlySelectable::weight),
-				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "keep_on_reset", false).forGetter(RandomlySelectable::keepOnReset)
-		).apply(instance, RandomlySelectable::new));
+		public static Codec<SelectableDialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("dialogue").forGetter(SelectableDialogue::dialogue),
+				Condition.NPC_ONLY_CODEC.fieldOf("condition").forGetter(SelectableDialogue::condition),
+				PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", DEFAULT_WEIGHT).forGetter(SelectableDialogue::weight),
+				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "keep_on_reset", false).forGetter(SelectableDialogue::keepOnReset)
+		).apply(instance, SelectableDialogue::new));
 	}
 	
 	//TODO this helper function does not belong here

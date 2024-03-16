@@ -24,10 +24,5 @@
     "default_node": {
       "message": "minestuck.dialogue.look_rich"
     }
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:always_true"
-    }
   }
 }

@@ -7,21 +7,5 @@
         "next_dialogue_path": "minestuck:sunglasses.2"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:list",
-      "conditions": [
-        {
-          "type": "minestuck:title_land_type",
-          "land_type": "minestuck:light"
-        },
-        {
-          "type": "minestuck:terrain_land_type",
-          "land_type": "minestuck:heat"
-        }
-      ],
-      "list_type": "all"
-    }
   }
 }

@@ -7,35 +7,5 @@
         "next_dialogue_path": "minestuck:rabbit.food.2"
       }
     ]
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:list",
-      "conditions": [
-        {
-          "type": "minestuck:title_land_type",
-          "land_type": "minestuck:rabbits"
-        },
-        {
-          "type": "minestuck:list",
-          "conditions": [
-            {
-              "type": "minestuck:terrain_land_type_tag",
-              "land_type_tag": "minestuck:is_desolate"
-            },
-            {
-              "type": "minestuck:terrain_land_type",
-              "land_type": "minestuck:fungi"
-            },
-            {
-              "type": "minestuck:terrain_land_type",
-              "land_type": "minestuck:shade"
-            }
-          ],
-          "list_type": "any"
-        }
-      ],
-      "list_type": "all"
-    }
   }
 }

@@ -132,9 +132,8 @@ public sealed interface Trigger
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
 			{
-				Dialogue dialogue = DialogueManager.getInstance().doRandomDialogue(entity);
-				if(dialogue != null)
-					dialogueEntity.getDialogueComponent().setDialogue(dialogue.lookupId(), dialogue.selectable().map(Dialogue.RandomlySelectable::keepOnReset).orElse(false));
+				RandomlySelectableDialogue.instance().pickRandomForEntity(entity).ifPresent(selectable ->
+						dialogueEntity.getDialogueComponent().setDialogue(selectable.dialogue(), selectable.keepOnReset()));
 			}
 		}
 	}

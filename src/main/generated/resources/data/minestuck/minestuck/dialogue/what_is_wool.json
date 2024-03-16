@@ -1,11 +1,5 @@
 {
   "node": {
     "message": "minestuck.dialogue.what_is_wool"
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type",
-      "land_type": "minestuck:rainbow"
-    }
   }
 }

@@ -1,11 +1,5 @@
 {
   "node": {
     "message": "minestuck.dialogue.all_trees"
-  },
-  "selectable": {
-    "condition": {
-      "type": "minestuck:terrain_land_type_tag",
-      "land_type_tag": "minestuck:forest"
-    }
   }
 }

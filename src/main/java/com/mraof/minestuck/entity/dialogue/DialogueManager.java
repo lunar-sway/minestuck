@@ -10,9 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,8 +18,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -60,21 +55,6 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 		
 		this.dialogues = dialogues.build();
 		LOGGER.info("Loaded {} dialogues", this.dialogues.size());
-	}
-	
-	@Nullable
-	public Dialogue doRandomDialogue(LivingEntity entity)
-	{
-		List<WeightedEntry.Wrapper<Dialogue>> weightedFilteredDialogue = new ArrayList<>();
-		dialogues.values().forEach(dialogue -> {
-			dialogue.selectable().ifPresent(selectable -> {
-				if(selectable.condition().test(entity, null))
-					weightedFilteredDialogue.add(WeightedEntry.wrap(dialogue, selectable.weight()));
-			});
-		});
-		
-		return WeightedRandom.getRandomItem(entity.getRandom(), weightedFilteredDialogue)
-				.map(WeightedEntry.Wrapper::getData).orElse(null);
 	}
 	
 	@Nullable
