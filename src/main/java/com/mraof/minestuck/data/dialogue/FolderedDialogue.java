@@ -10,6 +10,10 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+/**
+ * Helper class for building multiple connected dialogue nodes meant to go in the same folder.
+ * This is suitable for branching multi-node dialogue.
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class FolderedDialogue implements DialogueProvider.DialogueProducer

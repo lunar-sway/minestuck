@@ -11,6 +11,10 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
+/**
+ * A helper for building dialogue that is chained together in a list.
+ * The first node is suffixed with "1", the next with "2" and so on.
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class ChainBuilder implements DialogueProvider.DialogueProducer, DialogueProvider.NodeProducer
