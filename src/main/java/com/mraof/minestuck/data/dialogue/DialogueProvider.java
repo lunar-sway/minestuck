@@ -190,6 +190,11 @@ public final class DialogueProvider implements DataProvider
 			return this.addResponse(new ResponseBuilder(DialogueLangHelper.msg(ARROW)).nextDialogue(key, dialogueProducer));
 		}
 		
+		public NodeBuilder next(String key, DialogueProducer dialogueProducer)
+		{
+			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(key, dialogueProducer));
+		}
+		
 		public NodeBuilder next(ResourceLocation dialogueId)
 		{
 			return this.addResponse(new ResponseBuilder(DialogueLangHelper.msg(ARROW)).nextDialogue(dialogueId));
