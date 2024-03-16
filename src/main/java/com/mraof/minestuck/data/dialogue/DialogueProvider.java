@@ -44,12 +44,12 @@ public final class DialogueProvider implements DataProvider
 		return new ResourceLocation(this.modId, this.subFolder + "/" + path);
 	}
 	
-	public ResourceLocation add(String path, DialogueBuilder builder)
+	public ResourceLocation add(String path, DialogueProducer builder)
 	{
 		return builder.buildDialogue(dialogueId(path), this::checkAndAdd);
 	}
 	
-	public void add(ResourceLocation id, SimpleDialogueBuilder builder)
+	public void add(ResourceLocation id, SimpleDialogueProducer builder)
 	{
 		builder.buildSimple(id, this::checkAndAdd);
 	}
@@ -61,12 +61,12 @@ public final class DialogueProvider implements DataProvider
 		this.dialogues.put(id, dialogue);
 	}
 	
-	public interface DialogueBuilder
+	public interface DialogueProducer
 	{
 		ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
 	}
 	
-	public interface SimpleDialogueBuilder extends DialogueBuilder
+	public interface SimpleDialogueProducer extends DialogueProducer
 	{
 		void buildSimple(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
 		
@@ -78,7 +78,7 @@ public final class DialogueProvider implements DataProvider
 		}
 	}
 	
-	public static class NodeSelectorBuilder implements SimpleDialogueBuilder
+	public static class NodeSelectorBuilder implements SimpleDialogueProducer
 	{
 		private final List<Pair<Condition, NodeBuilder>> conditionedNodes = new ArrayList<>();
 		@Nullable
@@ -110,7 +110,7 @@ public final class DialogueProvider implements DataProvider
 		}
 	}
 	
-	public static class NodeBuilder implements SimpleDialogueBuilder
+	public static class NodeBuilder implements SimpleDialogueProducer
 	{
 		private final Function<ResourceLocation, DialogueMessage> messageProvider;
 		@Nullable
@@ -193,7 +193,7 @@ public final class DialogueProvider implements DataProvider
 		private final Function<ResourceLocation, DialogueMessage> message;
 		private final List<Trigger> triggers = new ArrayList<>();
 		@Nullable
-		private DialogueBuilder nextDialogue = null;
+		private DialogueProducer nextDialogue = null;
 		private Condition condition = Condition.AlwaysTrue.INSTANCE;
 		private boolean hideIfFailed = true;
 		private Function<ResourceLocation, String> failTooltip = id -> null;
@@ -208,9 +208,9 @@ public final class DialogueProvider implements DataProvider
 			this.message = message;
 		}
 		
-		public ResponseBuilder nextDialogue(String key, DialogueBuilder dialogueBuilder)
+		public ResponseBuilder nextDialogue(String key, DialogueProducer dialogueProducer)
 		{
-			this.nextDialogue = (id, register) -> dialogueBuilder.buildDialogue(id.withSuffix("." + key), register);
+			this.nextDialogue = (id, register) -> dialogueProducer.buildDialogue(id.withSuffix("." + key), register);
 			return this;
 		}
 		
@@ -262,7 +262,7 @@ public final class DialogueProvider implements DataProvider
 		}
 	}
 	
-	public static class ChainBuilder implements DialogueBuilder
+	public static class ChainBuilder implements DialogueProducer
 	{
 		private boolean withFolders = false;
 		private final List<NodeBuilder> nodes = new ArrayList<>();

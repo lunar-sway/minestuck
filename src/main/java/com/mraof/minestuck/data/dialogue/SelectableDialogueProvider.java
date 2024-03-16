@@ -47,7 +47,7 @@ public final class SelectableDialogueProvider implements DataProvider
 		return new SelectableBuilder(condition, Dialogue.SelectableDialogue.DEFAULT_WEIGHT);
 	}
 	
-	public void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueProvider.DialogueBuilder builder)
+	public void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueProvider.DialogueProducer builder)
 	{
 		addRandomlySelectable(path, selectable, dialogueProvider.add(path, builder));
 	}
