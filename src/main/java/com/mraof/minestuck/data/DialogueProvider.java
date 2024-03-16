@@ -379,7 +379,7 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public static Dialogue.RandomlySelectable defaultWeight(Condition condition)
 	{
-		return new Dialogue.RandomlySelectable(condition);
+		return new Dialogue.RandomlySelectable(condition, Dialogue.RandomlySelectable.DEFAULT_WEIGHT, false);
 	}
 	
 	public static Condition isInLand(TerrainLandType landType)
