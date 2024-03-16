@@ -18,7 +18,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
@@ -38,16 +37,12 @@ public abstract class DialogueProvider implements DataProvider
 	
 	protected final String modId;
 	protected final PackOutput output;
-	private final LanguageProvider languageProvider;
 	
-	public DialogueProvider(String modId, PackOutput output, LanguageProvider languageProvider)
+	public DialogueProvider(String modId, PackOutput output)
 	{
 		this.modId = modId;
 		this.output = output;
-		this.languageProvider = languageProvider;
 	}
-	
-	protected abstract void addDialogue();
 	
 	protected ResourceLocation dialogueId(String path)
 	{
@@ -310,48 +305,6 @@ public abstract class DialogueProvider implements DataProvider
 	
 	public static final DialogueMessage ARROW = new DialogueMessage("minestuck.arrow");
 	public static final DialogueMessage DOTS = new DialogueMessage("minestuck.dots");
-	
-	@Deprecated
-	public static Function<ResourceLocation, DialogueMessage> defaultKeyMsg(DialogueMessage.Argument... arguments)
-	{
-		return id -> msg(languageKeyBase(id), arguments);
-	}
-	
-	public Function<ResourceLocation, DialogueMessage> defaultKeyMsg(String text, DialogueMessage.Argument... arguments)
-	{
-		return id -> msg(languageKeyBase(id), text, arguments);
-	}
-	
-	public Function<ResourceLocation, DialogueMessage> subMsg(String key, String text, DialogueMessage.Argument... arguments)
-	{
-		return id -> msg(languageKeyBase(id) + "." + key, text, arguments);
-	}
-	
-	@Deprecated
-	public static DialogueMessage msg(String key, DialogueMessage.Argument... arguments)
-	{
-		return new DialogueMessage(key, List.of(arguments));
-	}
-	
-	public DialogueMessage msg(String key, String text, DialogueMessage.Argument... arguments)
-	{
-		this.languageProvider.add(key, text);
-		return new DialogueMessage(key, List.of(arguments));
-	}
-	
-	public Function<ResourceLocation, String> subText(String subKey, String text)
-	{
-		return id -> {
-			String key = languageKeyBase(id) + "." + subKey;
-			this.languageProvider.add(key, text);
-			return key;
-		};
-	}
-	
-	private static String languageKeyBase(ResourceLocation id)
-	{
-		return id.getNamespace() + ".dialogue." + id.getPath().replace("/", ".");
-	}
 	
 	public static Condition all(Condition... conditions)
 	{
