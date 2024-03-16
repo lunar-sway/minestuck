@@ -96,17 +96,17 @@ public final class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public Dialogue.NodeSelector build(ResourceLocation id)
+		public Dialogue.NodeSelector buildSelector(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			Objects.requireNonNull(this.defaultNode, "Default node must be set");
-			return new Dialogue.NodeSelector(this.conditionedNodes.stream().map(pair -> pair.mapSecond(builder -> builder.build(id))).toList(),
-					this.defaultNode.build(id));
+			return new Dialogue.NodeSelector(this.conditionedNodes.stream().map(pair -> pair.mapSecond(builder -> builder.buildNode(id, register))).toList(),
+					this.defaultNode.buildNode(id, register));
 		}
 		
 		@Override
 		public void buildSimple(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			register.accept(id, this.build(id));
+			register.accept(id, this.buildSelector(id, register));
 		}
 	}
 	
@@ -173,11 +173,11 @@ public final class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public Dialogue.Node build(ResourceLocation id)
+		public Dialogue.Node buildNode(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			DialogueMessage message = this.messageProvider.apply(id);
 			Optional<DialogueMessage> description = this.descriptionProvider != null ? Optional.of(this.descriptionProvider.apply(id)) : Optional.empty();
-			return new Dialogue.Node(message, description, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id)).toList());
+			return new Dialogue.Node(message, description, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id, register)).toList());
 		}
 		
 		@Override
@@ -193,8 +193,7 @@ public final class DialogueProvider implements DataProvider
 		private final Function<ResourceLocation, DialogueMessage> message;
 		private final List<Trigger> triggers = new ArrayList<>();
 		@Nullable
-		private ResourceLocation nextDialoguePath = null;
-		private boolean loopNextPath = false;
+		private DialogueBuilder nextDialogue = null;
 		private Condition condition = Condition.AlwaysTrue.INSTANCE;
 		private boolean hideIfFailed = true;
 		private Function<ResourceLocation, String> failTooltip = id -> null;
@@ -209,16 +208,21 @@ public final class DialogueProvider implements DataProvider
 			this.message = message;
 		}
 		
-		public ResponseBuilder nextDialogue(ResourceLocation nextDialoguePath)
+		public ResponseBuilder nextDialogue(String key, DialogueBuilder dialogueBuilder)
 		{
-			this.loopNextPath = false;
-			this.nextDialoguePath = nextDialoguePath;
+			this.nextDialogue = (id, register) -> dialogueBuilder.buildDialogue(id.withSuffix("." + key), register);
+			return this;
+		}
+		
+		public ResponseBuilder nextDialogue(ResourceLocation nextDialogueId)
+		{
+			this.nextDialogue = (id, register) -> nextDialogueId;
 			return this;
 		}
 		
 		public ResponseBuilder loop()
 		{
-			this.loopNextPath = true;
+			this.nextDialogue = (id, register) -> id;
 			return this;
 		}
 		
@@ -250,11 +254,11 @@ public final class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public Dialogue.Response build(ResourceLocation id)
+		public Dialogue.Response build(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			ResourceLocation nextPath = this.loopNextPath ? id : this.nextDialoguePath;
+			Optional<ResourceLocation> nextPath = Optional.ofNullable(this.nextDialogue).map(builder -> builder.buildDialogue(id, register));
 			DialogueMessage message = this.message.apply(id);
-			return new Dialogue.Response(message, this.triggers, Optional.ofNullable(nextPath), this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
+			return new Dialogue.Response(message, this.triggers, nextPath, this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
 		}
 	}
 	
