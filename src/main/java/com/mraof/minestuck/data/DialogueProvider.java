@@ -58,9 +58,9 @@ public abstract class DialogueProvider implements DataProvider
 		return builder.buildDialogue(new ResourceLocation(modId, path), Optional.empty(), this::checkAndAdd);
 	}
 	
-	protected final void addRandomlySelectable(String path, Dialogue.RandomlySelectable selectable, DialogueBuilder builder)
+	protected final void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueBuilder builder)
 	{
-		builder.buildDialogue(new ResourceLocation(modId, path), Optional.of(selectable), this::checkAndAdd);
+		builder.buildDialogue(new ResourceLocation(modId, path), Optional.of(selectable.build()), this::checkAndAdd);
 	}
 	
 	private void checkAndAdd(ResourceLocation id, Dialogue dialogue)
@@ -353,6 +353,29 @@ public abstract class DialogueProvider implements DataProvider
 		return id.getNamespace() + ".dialogue." + id.getPath().replace("/", ".");
 	}
 	
+	public static final class SelectableBuilder {
+		private final Condition condition;
+		private final int weight;
+		private boolean keepOnReset = false;
+		
+		public SelectableBuilder(Condition condition, int weight)
+		{
+			this.condition = condition;
+			this.weight = weight;
+		}
+		
+		public SelectableBuilder keepOnReset()
+		{
+			this.keepOnReset = true;
+			return this;
+		}
+		
+		public Dialogue.RandomlySelectable build()
+		{
+			return new Dialogue.RandomlySelectable(this.condition, this.weight, this.keepOnReset);
+		}
+	}
+	
 	public static Condition all(Condition... conditions)
 	{
 		return new ListCondition(List.of(conditions), ListCondition.ListType.ALL);
@@ -374,14 +397,14 @@ public abstract class DialogueProvider implements DataProvider
 	}
 	
 	@SuppressWarnings("unused")
-	public static Dialogue.RandomlySelectable weighted(int weight, Condition condition)
+	public static SelectableBuilder weighted(int weight, Condition condition)
 	{
-		return new Dialogue.RandomlySelectable(condition, weight, false);
+		return new SelectableBuilder(condition, weight);
 	}
 	
-	public static Dialogue.RandomlySelectable defaultWeight(Condition condition)
+	public static SelectableBuilder defaultWeight(Condition condition)
 	{
-		return new Dialogue.RandomlySelectable(condition, Dialogue.RandomlySelectable.DEFAULT_WEIGHT, false);
+		return new SelectableBuilder(condition, Dialogue.RandomlySelectable.DEFAULT_WEIGHT);
 	}
 	
 	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)

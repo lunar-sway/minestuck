@@ -211,11 +211,6 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 				PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", DEFAULT_WEIGHT).forGetter(RandomlySelectable::weight),
 				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "keep_on_reset", false).forGetter(RandomlySelectable::keepOnReset)
 		).apply(instance, RandomlySelectable::new));
-		
-		public RandomlySelectable withKeepOnReset()
-		{
-			return new RandomlySelectable(this.condition, this.weight, true);
-		}
 	}
 	
 	//TODO this helper function does not belong here
