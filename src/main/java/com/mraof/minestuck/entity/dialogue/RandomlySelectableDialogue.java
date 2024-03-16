@@ -19,7 +19,6 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
@@ -34,12 +33,11 @@ public final class RandomlySelectableDialogue
 		this.selectableDialogueList = selectableDialogueList;
 	}
 	
-	@Nullable
-	private static RandomlySelectableDialogue INSTANCE;
+	private static final Map<DialogueCategory, RandomlySelectableDialogue> INSTANCE_MAP = new HashMap<>();
 	
-	public static RandomlySelectableDialogue instance()
+	public static RandomlySelectableDialogue instance(DialogueCategory category)
 	{
-		return Objects.requireNonNull(INSTANCE, "Called instance() before this has loaded!");
+		return Objects.requireNonNull(INSTANCE_MAP.get(category), "Called instance() before this has loaded!");
 	}
 	
 	public Optional<Dialogue.SelectableDialogue> pickRandomForEntity(LivingEntity entity)
@@ -57,13 +55,36 @@ public final class RandomlySelectableDialogue
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		event.addListener(new Loader());
+		for(DialogueCategory category : DialogueCategory.values())
+			event.addListener(new Loader(category));
 	}
 	
 	@SubscribeEvent
 	public static void onServerStopped(ServerStoppedEvent event)
 	{
-		INSTANCE = null;
+		INSTANCE_MAP.clear();
+	}
+	
+	public enum DialogueCategory
+	{
+		CONSORT("consort"),
+		;
+		private final String folderName;
+		
+		DialogueCategory(String folderName)
+		{
+			this.folderName = folderName;
+		}
+		
+		public String folderName()
+		{
+			return this.folderName;
+		}
+		
+		public String folderNameForSelectable()
+		{
+			return "minestuck/selectable_dialogue/" + this.folderName();
+		}
 	}
 	
 	private static class Loader extends SimpleJsonResourceReloadListener
@@ -71,9 +92,12 @@ public final class RandomlySelectableDialogue
 		private static final Logger LOGGER = LogManager.getLogger();
 		private static final Gson GSON = new GsonBuilder().create();
 		
-		public Loader()
+		private final DialogueCategory category;
+		
+		public Loader(DialogueCategory category)
 		{
-			super(GSON, "minestuck/selectable_dialogue/consort");
+			super(GSON, category.folderNameForSelectable());
+			this.category = category;
 		}
 		
 		@Override
@@ -84,11 +108,11 @@ public final class RandomlySelectableDialogue
 			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonElements.entrySet())
 			{
 				Dialogue.SelectableDialogue.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
-						.resultOrPartial(message -> LOGGER.error("Problem loading selectable dialogue {}: {}", entry.getKey(), message))
+						.resultOrPartial(message -> LOGGER.error("Problem loading {} selectable dialogue {}: {}", this.category.folderName(), entry.getKey(), message))
 						.ifPresent(listBuilder::add);
 			}
 			
-			INSTANCE = new RandomlySelectableDialogue(listBuilder.build());
+			INSTANCE_MAP.put(this.category, new RandomlySelectableDialogue(listBuilder.build()));
 		}
 	}
 }

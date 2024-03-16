@@ -133,7 +133,7 @@ public sealed interface Trigger
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
 			{
-				RandomlySelectableDialogue.instance().pickRandomForEntity(entity)
+				RandomlySelectableDialogue.instance(RandomlySelectableDialogue.DialogueCategory.CONSORT).pickRandomForEntity(entity)
 						.ifPresent(dialogueEntity.getDialogueComponent()::setDialogue);
 			}
 		}
