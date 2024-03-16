@@ -453,7 +453,8 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 	{
 		var test1 = dialogueId("test1");
 		var test2 = dialogueId("test2");
-		addRandomlySelectable("test1", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg("Press §eSHIFT§r for more info"))
+		
+		add(test1, new NodeBuilder(defaultKeyMsg("Press §eSHIFT§r for more info"))
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue(test2)
 						.condition(any(isAnyEntityType(TURTLE), isAnyEntityType(IGUANA))))
@@ -466,8 +467,9 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 						)))
 				.addResponse(new ResponseBuilder(msg("test1response5"))
 						.visibleCondition(subText("bad_score", "Player needs a score of 5 for 'testScore'."), new Condition.CustomHasScore(5, "player", "testScore"))));
+		addRandomlySelectable("test1", defaultWeight(Condition.AlwaysTrue.INSTANCE), test1);
 		
-		addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
+		add(test2, new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue(test1)
 						.visibleCondition(isAnyEntityType(SALAMANDER)))
@@ -481,8 +483,9 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 				.addResponse(new ResponseBuilder(msg("test2response4"))
 						.visibleCondition(one(new Condition.IsCarapacian(), new Condition.PlayerIsClass(EnumClass.WITCH), new Condition.PlayerIsClass(EnumClass.MAGE),
 								new Condition.PlayerIsAspect(EnumAspect.HEART), new Condition.PlayerIsAspect(EnumAspect.DOOM), isInTerrain(RAIN)))));
-		addRandomlySelectable("turtle_only", defaultWeight(isAnyEntityType(TURTLE)), new NodeBuilder(defaultKeyMsg()));
+		addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), test2);
 		
+		addRandomlySelectable("turtle_only", defaultWeight(isAnyEntityType(TURTLE)), new NodeBuilder(defaultKeyMsg()));
 		addRandomlySelectable("nakagator_only", defaultWeight(isAnyEntityType(NAKAGATOR)), new NodeBuilder(defaultKeyMsg()));
 		
 		var ohYippee = add("oh_yippee", new NodeBuilder(defaultKeyMsg()));

@@ -56,12 +56,12 @@ public abstract class DialogueProvider implements DataProvider
 	
 	protected final ResourceLocation add(String path, DialogueBuilder builder)
 	{
-		return this.add(dialogueId(path), builder);
+		return builder.buildDialogue(dialogueId(path), this::checkAndAdd);
 	}
 	
-	protected final ResourceLocation add(ResourceLocation id, DialogueBuilder builder)
+	protected final void add(ResourceLocation id, SimpleDialogueBuilder builder)
 	{
-		return builder.buildDialogue(id, this::checkAndAdd);
+		builder.buildSimple(id, this::checkAndAdd);
 	}
 	
 	private void checkAndAdd(ResourceLocation id, Dialogue.NodeSelector dialogue)
@@ -76,7 +76,19 @@ public abstract class DialogueProvider implements DataProvider
 		ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
 	}
 	
-	public static class NodeSelectorBuilder implements DialogueBuilder
+	public interface SimpleDialogueBuilder extends DialogueBuilder
+	{
+		void buildSimple(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
+		
+		@Override
+		default ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		{
+			this.buildSimple(id, register);
+			return id;
+		}
+	}
+	
+	public static class NodeSelectorBuilder implements SimpleDialogueBuilder
 	{
 		private final List<Pair<Condition, NodeBuilder>> conditionedNodes = new ArrayList<>();
 		@Nullable
@@ -102,14 +114,13 @@ public abstract class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		public void buildSimple(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			register.accept(id, this.build(id));
-			return id;
 		}
 	}
 	
-	public static class NodeBuilder implements DialogueBuilder
+	public static class NodeBuilder implements SimpleDialogueBuilder
 	{
 		private final Function<ResourceLocation, DialogueMessage> messageProvider;
 		@Nullable
@@ -175,10 +186,10 @@ public abstract class DialogueProvider implements DataProvider
 		}
 		
 		@Override
-		public ResourceLocation buildDialogue(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
+		public void buildSimple(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			return new NodeSelectorBuilder().defaultNode(this)
-					.buildDialogue(id, register);
+			new NodeSelectorBuilder().defaultNode(this)
+					.buildSimple(id, register);
 		}
 	}
 	
@@ -291,8 +302,9 @@ public abstract class DialogueProvider implements DataProvider
 				this.nodes.get(this.nodes.size() - 1).next(ids.get(0));
 			
 			for(int index = 1; index < this.nodes.size(); index++)
-				this.nodes.get(index).buildDialogue(ids.get(index), register);
-			return this.nodes.get(0).buildDialogue(ids.get(0), register);
+				this.nodes.get(index).buildSimple(ids.get(index), register);
+			this.nodes.get(0).buildSimple(ids.get(0), register);
+			return ids.get(0);
 		}
 	}
 	
