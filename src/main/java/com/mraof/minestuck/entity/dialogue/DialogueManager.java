@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -28,7 +27,7 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().create();
 	
-	private BiMap<ResourceLocation, Dialogue> dialogues;
+	private BiMap<ResourceLocation, Dialogue.NodeSelector> dialogues;
 	
 	public DialogueManager()
 	{
@@ -45,10 +44,10 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	@Override
 	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ImmutableBiMap.Builder<ResourceLocation, Dialogue> dialogues = ImmutableBiMap.builder();
+		ImmutableBiMap.Builder<ResourceLocation, Dialogue.NodeSelector> dialogues = ImmutableBiMap.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
-			Dialogue.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
+			Dialogue.NodeSelector.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
 					.resultOrPartial(message -> LOGGER.error("Problem parsing dialogue {}: {}", entry.getKey(), message))
 					.ifPresent(dialogue -> dialogues.put(entry.getKey(), dialogue));
 		}
@@ -58,14 +57,9 @@ public class DialogueManager extends SimpleJsonResourceReloadListener
 	}
 	
 	@Nullable
-	public Dialogue getDialogue(ResourceLocation location)
+	public Dialogue.NodeSelector getDialogue(ResourceLocation location)
 	{
 		return this.dialogues.get(location);
-	}
-	
-	public ResourceLocation getId(Dialogue dialogue)
-	{
-		return Objects.requireNonNull(this.dialogues.inverse().get(dialogue), "Dialogue is missing an id!");
 	}
 	
 	@SubscribeEvent
