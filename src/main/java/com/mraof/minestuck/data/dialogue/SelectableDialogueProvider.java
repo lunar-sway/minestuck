@@ -19,15 +19,21 @@ import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public final class SelectableDialogueProvider extends DialogueProvider
+public final class SelectableDialogueProvider implements DataProvider
 {
+	private final DialogueProvider dialogueProvider;
 	private final Map<ResourceLocation, Dialogue.SelectableDialogue> selectableDialogueMap = new HashMap<>();
+	
+	private final String modId;
 	private final RandomlySelectableDialogue.DialogueCategory category;
+	private final PackOutput output;
 	
 	public SelectableDialogueProvider(String modId, RandomlySelectableDialogue.DialogueCategory category, PackOutput output)
 	{
-		super(modId, output);
+		this.dialogueProvider = new DialogueProvider(modId, output);
+		this.modId = modId;
 		this.category = category;
+		this.output = output;
 	}
 	
 	@SuppressWarnings("unused")
@@ -41,9 +47,9 @@ public final class SelectableDialogueProvider extends DialogueProvider
 		return new SelectableBuilder(condition, Dialogue.SelectableDialogue.DEFAULT_WEIGHT);
 	}
 	
-	public void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueBuilder builder)
+	public void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueProvider.DialogueBuilder builder)
 	{
-		addRandomlySelectable(path, selectable, add(path, builder));
+		addRandomlySelectable(path, selectable, dialogueProvider.add(path, builder));
 	}
 	
 	public void addRandomlySelectable(String path, SelectableBuilder selectable, ResourceLocation dialogueId)
@@ -51,14 +57,19 @@ public final class SelectableDialogueProvider extends DialogueProvider
 		this.selectableDialogueMap.put(new ResourceLocation(this.modId, path), selectable.build(dialogueId));
 	}
 	
+	public DialogueProvider dialogue()
+	{
+		return this.dialogueProvider;
+	}
+	
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache)
 	{
 		List<CompletableFuture<?>> futures = new ArrayList<>(this.selectableDialogueMap.size() + 1);
-		futures.add(super.run(cache));
+		futures.add(dialogueProvider.run(cache));
 		
 		Set<ResourceLocation> missingDialogue = this.selectableDialogueMap.values().stream().map(Dialogue.SelectableDialogue::dialogueId)
-				.filter(id -> !hasAddedDialogue(id)).collect(Collectors.toSet());
+				.filter(id -> !dialogueProvider.hasAddedDialogue(id)).collect(Collectors.toSet());
 		if(!missingDialogue.isEmpty())
 			throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
 		
@@ -94,5 +105,11 @@ public final class SelectableDialogueProvider extends DialogueProvider
 		{
 			return new Dialogue.SelectableDialogue(dialogueId, this.condition, this.weight, this.keepOnReset);
 		}
+	}
+	
+	@Override
+	public String getName()
+	{
+		return "Selectable dialogue provider";
 	}
 }

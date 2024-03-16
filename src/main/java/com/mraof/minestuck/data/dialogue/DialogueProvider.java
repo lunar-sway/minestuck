@@ -24,12 +24,12 @@ import java.util.stream.IntStream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class DialogueProvider implements DataProvider
+public final class DialogueProvider implements DataProvider
 {
 	private final Map<ResourceLocation, Dialogue.NodeSelector> dialogues = new HashMap<>();
 	
-	protected final String modId;
-	protected final PackOutput output;
+	private final String modId;
+	private final PackOutput output;
 	
 	public DialogueProvider(String modId, PackOutput output)
 	{
@@ -42,12 +42,12 @@ public abstract class DialogueProvider implements DataProvider
 		return new ResourceLocation(this.modId, path);
 	}
 	
-	public final ResourceLocation add(String path, DialogueBuilder builder)
+	public ResourceLocation add(String path, DialogueBuilder builder)
 	{
 		return builder.buildDialogue(dialogueId(path), this::checkAndAdd);
 	}
 	
-	public final void add(ResourceLocation id, SimpleDialogueBuilder builder)
+	public void add(ResourceLocation id, SimpleDialogueBuilder builder)
 	{
 		builder.buildSimple(id, this::checkAndAdd);
 	}
@@ -304,7 +304,7 @@ public abstract class DialogueProvider implements DataProvider
 	public static final DialogueMessage ARROW = new DialogueMessage("minestuck.arrow");
 	public static final DialogueMessage DOTS = new DialogueMessage("minestuck.dots");
 	
-	protected final boolean hasAddedDialogue(ResourceLocation dialogueId)
+	boolean hasAddedDialogue(ResourceLocation dialogueId)
 	{
 		return this.dialogues.containsKey(dialogueId);
 	}

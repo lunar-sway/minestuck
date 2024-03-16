@@ -97,19 +97,19 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInTitle(RABBITS), isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE))),
 				new NodeBuilder(l.defaultKeyMsg("This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!"))
 						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.ROCK))
-								.nextDialogue(provider.add("rabbit.food_shortage.2", new NodeBuilder(l.defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
+								.nextDialogue(provider.dialogue().add("rabbit.food_shortage.2", new NodeBuilder(l.defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
 										.addClosingResponse()))));
-		var rabbitFood2 = provider.dialogueId("rabbit.food.2");
+		var rabbitFood2 = provider.dialogue().dialogueId("rabbit.food.2");
 		provider.addRandomlySelectable("rabbit.food.1", defaultWeight(all(isInTitle(RABBITS),
 						any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInTerrain(FUNGI), isInTerrain(SHADE)))),
 				new NodeBuilder(l.defaultKeyMsg("I sure wonder where the rabbits are getting their food from."))
 						.next(rabbitFood2));
-		provider.add(rabbitFood2, new NodeSelectorBuilder()
+		provider.dialogue().add(rabbitFood2, new NodeSelectorBuilder()
 				.node(any(isInTerrain(FUNGI), isInTerrain(SHADE)),
 						new NodeBuilder(l.subMsg("b", "I mean, there's not really much else than mushrooms around here.")))
 				.defaultNode(new NodeBuilder(l.subMsg("a", "There's not really much food to be found in this desolate place."))
 						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
-								.nextDialogue(provider.add("rabbit.food.3", new NodeBuilder(l.defaultKeyMsg("Except maybe cacti, but would rabbits eat something that prickly?")))))));
+								.nextDialogue(provider.dialogue().add("rabbit.food.3", new NodeBuilder(l.defaultKeyMsg("Except maybe cacti, but would rabbits eat something that prickly?")))))));
 		
 		
 		//Monsters
@@ -192,7 +192,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Did you know that some buckets provide warmth? I tend to curl up next to one from time to time.")));
 		provider.addRandomlySelectable("oil_buckets.1", defaultWeight(all(isInTitle(BUCKETS), isInTerrain(SHADE))),
 				new NodeBuilder(l.defaultKeyMsg("Did you know that the buckets sometimes hold something other than oil?"))
-						.next(provider.add("oil_buckets.2", new NodeBuilder(l.defaultKeyMsg("In some cases, they even contain something drinkable!")))));
+						.next(provider.dialogue().add("oil_buckets.2", new NodeBuilder(l.defaultKeyMsg("In some cases, they even contain something drinkable!")))));
 		
 		
 		//Light
@@ -234,9 +234,9 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("height_fear", defaultWeight(all(any(isInTitle(TOWERS), isInTitle(WIND)), isAnyEntityType(TURTLE))), new NodeSelectorBuilder()
 				.node(new Condition.AtOrAboveY(78), new NodeBuilder(l.subMsg("panic", "AAH, I am scared of heights!")))
 				.node(isInTitle(TOWERS), new NodeBuilder(l.subMsg("towers.1", "I'd climb up one of those towers and look at the view, but I am scared of heights."))
-						.next(provider.add("height_fear.towers.2", new NodeBuilder(l.defaultKeyMsg("I mean, what if I slipped and fell off the stairs?")))))
+						.next(provider.dialogue().add("height_fear.towers.2", new NodeBuilder(l.defaultKeyMsg("I mean, what if I slipped and fell off the stairs?")))))
 				.defaultNode(new NodeBuilder(l.subMsg("rock.1", "I'd climb up one of those rocks and look at the view, but I am scared of heights."))
-						.next(provider.add("height_fear.rock.2", new NodeBuilder(l.defaultKeyMsg("I mean what if I fell down and landed on my back?"))))));
+						.next(provider.dialogue().add("height_fear.rock.2", new NodeBuilder(l.defaultKeyMsg("I mean what if I fell down and landed on my back?"))))));
 		
 		
 		//Shade
@@ -251,9 +251,9 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("mushroom_pizza", defaultWeight(isInTerrain(SHADE)),
 				new NodeBuilder(l.defaultKeyMsg("Do you put glow mushrooms on your pizza or leave them off?"))
 						.addResponse(new ResponseBuilder(l.subMsg("reply_on", "I put them on!"))
-								.nextDialogue(provider.add("mushroom_pizza.on", new NodeBuilder(l.defaultKeyMsg("Good! I was afraid I'd have to kill you!")))))
+								.nextDialogue(provider.dialogue().add("mushroom_pizza.on", new NodeBuilder(l.defaultKeyMsg("Good! I was afraid I'd have to kill you!")))))
 						.addResponse(new ResponseBuilder(l.subMsg("reply_off", "I leave them off!"))
-								.nextDialogue(provider.add("mushroom_pizza.off", new NodeBuilder(l.defaultKeyMsg("You are a despicable person."))))));
+								.nextDialogue(provider.dialogue().add("mushroom_pizza.off", new NodeBuilder(l.defaultKeyMsg("You are a despicable person."))))));
 		provider.addRandomlySelectable("fire_hazard", defaultWeight(all(isInTerrain(SHADE), none(isInTitle(THUNDER)))),
 				new NodeBuilder(l.defaultKeyMsg("Our land is a fire waiting to happen! Hopefully there isn't any lightning!")));
 		provider.addRandomlySelectable("that_boy_needs_therapy", defaultWeight(isInTerrain(SHADE)),
@@ -286,9 +286,9 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Sand-surfing is my new favorite sport! Too bad you can't really move, though.")));
 		provider.addRandomlySelectable("camel", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)), new NodeBuilder(l.defaultKeyMsg("Want to buy a used camel? Only 2000 boondollars."))
 				.addResponse(new ResponseBuilder(l.subMsg("yes", "Why not? Seems like a good price for a camel!"))
-						.nextDialogue(provider.add("camel/no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))
+						.nextDialogue(provider.dialogue().add("camel/no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))
 				.addResponse(new ResponseBuilder(l.subMsg("no", "Of course not! You know better!"))
-						.nextDialogue(provider.add("camel/dancing_camel", new NodeBuilder(l.defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))));
+						.nextDialogue(provider.dialogue().add("camel/dancing_camel", new NodeBuilder(l.defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))));
 		
 		
 		//Sandstone
@@ -409,7 +409,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.")));
 		provider.addRandomlySelectable("bloodberries.1", defaultWeight(isInTerrain(FLORA)),
 				new NodeBuilder(l.defaultKeyMsg("The strawberries here grow big and red thanks to all the blood in the water supply! The flowers thrive, too!"))
-						.next(provider.add("bloodberries.2", new NodeBuilder(l.defaultKeyMsg("Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.")))));
+						.next(provider.dialogue().add("bloodberries.2", new NodeBuilder(l.defaultKeyMsg("Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.")))));
 		provider.addRandomlySelectable("sharp_slide", defaultWeight(isInTerrain(FLORA)),
 				new NodeBuilder(l.defaultKeyMsg("Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.")));
 		provider.addRandomlySelectable("immortality_herb", defaultWeight(all(isInTerrain(FLORA), Condition.FirstTimeGenerating.INSTANCE)).keepOnReset(), new ChainBuilder().withFolders()
@@ -453,10 +453,10 @@ public final class ConsortDialogue
 	
 	private static void testDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
-		var test1 = provider.dialogueId("test1");
-		var test2 = provider.dialogueId("test2");
+		var test1 = provider.dialogue().dialogueId("test1");
+		var test2 = provider.dialogue().dialogueId("test2");
 		
-		provider.add(test1, new NodeBuilder(l.defaultKeyMsg("Press §eSHIFT§r for more info"))
+		provider.dialogue().add(test1, new NodeBuilder(l.defaultKeyMsg("Press §eSHIFT§r for more info"))
 				.animation("test1animation")
 				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue(test2)
 						.condition(any(isAnyEntityType(TURTLE), isAnyEntityType(IGUANA))))
@@ -471,7 +471,7 @@ public final class ConsortDialogue
 						.visibleCondition(l.subText("bad_score", "Player needs a score of 5 for 'testScore'."), new Condition.CustomHasScore(5, "player", "testScore"))));
 		provider.addRandomlySelectable("test1", defaultWeight(Condition.AlwaysTrue.INSTANCE), test1);
 		
-		provider.add(test2, new NodeBuilder(defaultKeyMsg())
+		provider.dialogue().add(test2, new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
 				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue(test1)
 						.visibleCondition(isAnyEntityType(SALAMANDER)))
@@ -490,8 +490,8 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("turtle_only", defaultWeight(isAnyEntityType(TURTLE)), new NodeBuilder(defaultKeyMsg()));
 		provider.addRandomlySelectable("nakagator_only", defaultWeight(isAnyEntityType(NAKAGATOR)), new NodeBuilder(defaultKeyMsg()));
 		
-		var ohYippee = provider.add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
-		var hungerFilled = provider.add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
+		var ohYippee = provider.dialogue().add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
+		var hungerFilled = provider.dialogue().add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
 		provider.addRandomlySelectable("me_want_cookie", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(l.subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
 				.addResponse(new ResponseBuilder(l.subMsg("why", "why do you want cookie?")).loop())
