@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
@@ -24,10 +25,12 @@ import java.util.concurrent.CompletableFuture;
 public abstract class SelectableDialogueProvider extends DialogueProvider
 {
 	private final Map<ResourceLocation, Dialogue.SelectableDialogue> selectableDialogueMap = new HashMap<>();
+	private final RandomlySelectableDialogue.DialogueCategory category;
 	
-	public SelectableDialogueProvider(String modId, PackOutput output, LanguageProvider languageProvider)
+	public SelectableDialogueProvider(String modId, RandomlySelectableDialogue.DialogueCategory category, PackOutput output, LanguageProvider languageProvider)
 	{
 		super(modId, output, languageProvider);
+		this.category = category;
 	}
 	
 	@SuppressWarnings("unused")
@@ -57,7 +60,7 @@ public abstract class SelectableDialogueProvider extends DialogueProvider
 		Path outputPath = output.getOutputFolder();
 		for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
 		{
-			Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/minestuck/selectable_dialogue/consort/" + entry.getKey().getPath() + ".json");
+			Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/" + this.category.folderNameForSelectable() + "/" + entry.getKey().getPath() + ".json");
 			JsonElement selectableJson = Dialogue.SelectableDialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
 			futures.add(DataProvider.saveStable(cache, selectableJson, selectablePath));
 		}

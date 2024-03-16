@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
+import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.MSItems;
@@ -32,7 +33,7 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 	
 	private ConsortDialogueProvider(PackOutput output, LanguageProvider enUsLanguageProvider)
 	{
-		super(Minestuck.MOD_ID, output, enUsLanguageProvider);
+		super(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CONSORT, output, enUsLanguageProvider);
 	}
 	
 	@Override
