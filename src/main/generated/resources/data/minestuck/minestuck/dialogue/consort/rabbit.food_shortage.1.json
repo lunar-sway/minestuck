@@ -1,0 +1,15 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.rabbit.food_shortage.1",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:terrain_land_type_tag",
+          "land_type_tag": "minestuck:rock"
+        },
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:consort/rabbit.food_shortage.2"
+      }
+    ]
+  }
+}

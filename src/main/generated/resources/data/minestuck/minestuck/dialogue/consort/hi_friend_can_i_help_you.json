@@ -1,0 +1,45 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.hi_friend_can_i_help_you",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.hi_friend_can_i_help_you.hate",
+        "triggers": [
+          {
+            "type": "add_consort_reputation",
+            "reputation": -100
+          }
+        ]
+      },
+      {
+        "message": "minestuck.dialogue.consort.hi_friend_can_i_help_you.love",
+        "triggers": [
+          {
+            "type": "add_consort_reputation",
+            "reputation": 100
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:player_reputation",
+          "amount": 500
+        },
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.hi_friend_can_i_help_you.high_rep"
+      },
+      {
+        "condition": {
+          "type": "minestuck:player_reputation",
+          "amount": 200,
+          "greater_than": false
+        },
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.hi_friend_can_i_help_you.low_rep"
+      },
+      {
+        "message": "minestuck.dialogue.consort.hi_friend_can_i_help_you.bye"
+      }
+    ]
+  }
+}

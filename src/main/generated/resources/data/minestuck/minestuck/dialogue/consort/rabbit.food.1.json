@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.rabbit.food.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:consort/rabbit.food.2"
+      }
+    ]
+  }
+}

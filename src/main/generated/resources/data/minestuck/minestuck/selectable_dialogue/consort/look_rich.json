@@ -2,5 +2,5 @@
   "condition": {
     "type": "minestuck:always_true"
   },
-  "dialogue": "minestuck:look_rich"
+  "dialogue": "minestuck:consort/look_rich"
 }

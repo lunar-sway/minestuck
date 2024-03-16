@@ -1,0 +1,88 @@
+{
+  "node": {
+    "animation": "test2animation",
+    "message": "minestuck.dialogue.consort.test2",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:entity_type",
+          "entity_type": "minestuck:salamander"
+        },
+        "hide_if_failed": false,
+        "message": "test2response1",
+        "next_dialogue_path": "minestuck:consort/test1"
+      },
+      {
+        "condition": {
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:carapacian"
+            },
+            {
+              "type": "minestuck:terrain_land_type",
+              "land_type": "minestuck:end"
+            },
+            {
+              "type": "minestuck:terrain_land_type",
+              "land_type": "minestuck:shade"
+            }
+          ],
+          "list_type": "none"
+        },
+        "hide_if_failed": false,
+        "message": "test2response2",
+        "next_dialogue_path": "minestuck:consort/test1",
+        "triggers": [
+          {
+            "type": "command",
+            "command": "say hi"
+          }
+        ]
+      },
+      {
+        "message": "test2response3",
+        "next_dialogue_path": "minestuck:consort/test1",
+        "triggers": [
+          {
+            "type": "command",
+            "command": "tellraw @a [\"\",{\"text\":\"Welcome\",\"color\":\"aqua\"},{\"text\":\" to \"},{\"text\":\"Minecraft\",\"color\":\"#9B9B17\"},{\"text\":\" Tools \"},{\"text\":\"partner.\",\"obfuscated\":true},{\"text\":\" \"},{\"selector\":\"@s\"},{\"text\":\" fs\"}]"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:carapacian"
+            },
+            {
+              "type": "minestuck:player_class",
+              "class": "WITCH"
+            },
+            {
+              "type": "minestuck:player_class",
+              "class": "MAGE"
+            },
+            {
+              "type": "minestuck:player_aspect",
+              "aspect": "HEART"
+            },
+            {
+              "type": "minestuck:player_aspect",
+              "aspect": "DOOM"
+            },
+            {
+              "type": "minestuck:terrain_land_type",
+              "land_type": "minestuck:rain"
+            }
+          ],
+          "list_type": "one"
+        },
+        "hide_if_failed": false,
+        "message": "test2response4"
+      }
+    ]
+  }
+}
