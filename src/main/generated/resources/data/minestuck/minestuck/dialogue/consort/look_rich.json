@@ -1,0 +1,26 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_boondollars",
+        "amount": 10000
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.look_rich.rich"
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:player_boondollars",
+        "amount": 10,
+        "greater_than": false
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.look_rich.poor"
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.look_rich"
+  }
+}

@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:shade"
   },
-  "dialogue": "minestuck:mushroom_pizza"
+  "dialogue": "minestuck:consort/mushroom_pizza"
 }

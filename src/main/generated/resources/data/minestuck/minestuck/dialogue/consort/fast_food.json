@@ -1,0 +1,20 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.fast_food",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.fast_food.bye"
+      },
+      {
+        "message": "minestuck.dialogue.consort.fast_food.next",
+        "triggers": [
+          {
+            "type": "open_consort_merchant_gui",
+            "loot_table": "minestuck:gameplay/consort_food",
+            "merchant_type": "food"
+          }
+        ]
+      }
+    ]
+  }
+}

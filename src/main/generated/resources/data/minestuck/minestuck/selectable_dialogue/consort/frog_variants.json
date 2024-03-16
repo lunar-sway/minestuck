@@ -3,5 +3,5 @@
     "type": "minestuck:title_land_type",
     "land_type": "minestuck:frogs"
   },
-  "dialogue": "minestuck:frog_variants.1"
+  "dialogue": "minestuck:consort/frog_variants.1"
 }

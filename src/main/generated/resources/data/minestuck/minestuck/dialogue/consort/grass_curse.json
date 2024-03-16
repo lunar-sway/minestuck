@@ -1,0 +1,10 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.grass_curse"
+    }
+  }
+}

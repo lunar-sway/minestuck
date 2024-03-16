@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:flora"
   },
-  "dialogue": "minestuck:battle_site"
+  "dialogue": "minestuck:consort/battle_site"
 }

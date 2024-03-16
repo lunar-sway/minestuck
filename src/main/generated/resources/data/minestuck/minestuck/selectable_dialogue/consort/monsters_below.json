@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:rain"
   },
-  "dialogue": "minestuck:monsters_below"
+  "dialogue": "minestuck:consort/monsters_below"
 }

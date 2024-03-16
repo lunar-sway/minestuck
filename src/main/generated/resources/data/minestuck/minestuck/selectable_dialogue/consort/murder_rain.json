@@ -3,5 +3,5 @@
     "type": "minestuck:title_land_type",
     "land_type": "minestuck:pulse"
   },
-  "dialogue": "minestuck:murder_rain"
+  "dialogue": "minestuck:consort/murder_rain"
 }

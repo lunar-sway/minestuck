@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:rainbow"
   },
-  "dialogue": "minestuck:love_colors"
+  "dialogue": "minestuck:consort/love_colors"
 }

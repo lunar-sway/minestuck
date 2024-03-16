@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:heat"
   },
-  "dialogue": "minestuck:tummy_tunnel"
+  "dialogue": "minestuck:consort/tummy_tunnel"
 }

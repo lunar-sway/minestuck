@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:rainbow"
   },
-  "dialogue": "minestuck:saw_rainbow"
+  "dialogue": "minestuck:consort/saw_rainbow"
 }

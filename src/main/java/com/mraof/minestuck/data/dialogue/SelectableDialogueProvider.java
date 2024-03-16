@@ -30,7 +30,7 @@ public final class SelectableDialogueProvider implements DataProvider
 	
 	public SelectableDialogueProvider(String modId, RandomlySelectableDialogue.DialogueCategory category, PackOutput output)
 	{
-		this.dialogueProvider = new DialogueProvider(modId, output);
+		this.dialogueProvider = new DialogueProvider(modId, category.folderName(), output);
 		this.modId = modId;
 		this.category = category;
 		this.output = output;

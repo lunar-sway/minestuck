@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:wood"
   },
-  "dialogue": "minestuck:splinters.1"
+  "dialogue": "minestuck:consort/splinters.1"
 }

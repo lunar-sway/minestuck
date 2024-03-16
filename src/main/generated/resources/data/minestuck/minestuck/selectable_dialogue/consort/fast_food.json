@@ -3,5 +3,5 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:nakagator"
   },
-  "dialogue": "minestuck:fast_food"
+  "dialogue": "minestuck:consort/fast_food"
 }

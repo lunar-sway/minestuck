@@ -3,5 +3,5 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:nakagator"
   },
-  "dialogue": "minestuck:nakagator_only"
+  "dialogue": "minestuck:consort/nakagator_only"
 }

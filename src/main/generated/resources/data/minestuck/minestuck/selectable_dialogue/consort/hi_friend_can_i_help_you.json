@@ -2,6 +2,6 @@
   "condition": {
     "type": "minestuck:always_true"
   },
-  "dialogue": "minestuck:hi_friend_can_i_help_you",
+  "dialogue": "minestuck:consort/hi_friend_can_i_help_you",
   "dialogue_weight": 11
 }

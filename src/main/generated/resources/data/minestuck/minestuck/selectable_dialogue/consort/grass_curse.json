@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:end"
   },
-  "dialogue": "minestuck:grass_curse"
+  "dialogue": "minestuck:consort/grass_curse"
 }

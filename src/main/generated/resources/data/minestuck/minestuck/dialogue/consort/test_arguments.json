@@ -1,0 +1,20 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "player_name_land"
+      ],
+      "key": "minestuck.dialogue.consort.test_arguments"
+    },
+    "responses": [
+      {
+        "message": {
+          "arguments": [
+            "player_name_land"
+          ],
+          "key": "minestuck.dialogue.consort.test_arguments.name"
+        }
+      }
+    ]
+  }
+}

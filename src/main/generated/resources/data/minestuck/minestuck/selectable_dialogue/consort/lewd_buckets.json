@@ -3,5 +3,5 @@
     "type": "minestuck:title_land_type",
     "land_type": "minestuck:buckets"
   },
-  "dialogue": "minestuck:lewd_buckets"
+  "dialogue": "minestuck:consort/lewd_buckets"
 }

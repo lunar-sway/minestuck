@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:rainbow"
   },
-  "dialogue": "minestuck:generic_green"
+  "dialogue": "minestuck:consort/generic_green"
 }

@@ -3,5 +3,5 @@
     "type": "minestuck:title_land_type",
     "land_type": "minestuck:monsters"
   },
-  "dialogue": "minestuck:spider_raid"
+  "dialogue": "minestuck:consort/spider_raid"
 }

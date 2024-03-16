@@ -29,17 +29,19 @@ public final class DialogueProvider implements DataProvider
 	private final Map<ResourceLocation, Dialogue.NodeSelector> dialogues = new HashMap<>();
 	
 	private final String modId;
+	private final String subFolder;
 	private final PackOutput output;
 	
-	public DialogueProvider(String modId, PackOutput output)
+	public DialogueProvider(String modId, String subFolder, PackOutput output)
 	{
 		this.modId = modId;
+		this.subFolder = subFolder;
 		this.output = output;
 	}
 	
 	public ResourceLocation dialogueId(String path)
 	{
-		return new ResourceLocation(this.modId, path);
+		return new ResourceLocation(this.modId, this.subFolder + "/" + path);
 	}
 	
 	public ResourceLocation add(String path, DialogueBuilder builder)
