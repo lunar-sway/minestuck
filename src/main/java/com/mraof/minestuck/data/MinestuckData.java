@@ -64,7 +64,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
 		var enUsLanguageProvider = gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
 		
-		gen.addProvider(event.includeServer(), new ConsortDialogueProvider(output, enUsLanguageProvider));
+		gen.addProvider(event.includeServer(), ConsortDialogueProvider.create(output, enUsLanguageProvider));
 	}
 	
 	private static RegistrySetBuilder registrySetBuilder()

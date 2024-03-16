@@ -36,10 +36,9 @@ import java.util.stream.IntStream;
 public abstract class DialogueProvider implements DataProvider
 {
 	private final Map<ResourceLocation, Dialogue.NodeSelector> dialogues = new HashMap<>();
-	private final Map<ResourceLocation, Dialogue.SelectableDialogue> selectableDialogueMap = new HashMap<>();
 	
-	private final String modId;
-	private final PackOutput output;
+	protected final String modId;
+	protected final PackOutput output;
 	private final LanguageProvider languageProvider;
 	
 	public DialogueProvider(String modId, PackOutput output, LanguageProvider languageProvider)
@@ -47,23 +46,18 @@ public abstract class DialogueProvider implements DataProvider
 		this.modId = modId;
 		this.output = output;
 		this.languageProvider = languageProvider;
-		
-		//Call this early so that language stuff gets added before the language provider generates its file regardless of the order that providers are run
-		addDialogue();
 	}
 	
 	protected abstract void addDialogue();
 	
 	protected final ResourceLocation add(String path, DialogueBuilder builder)
 	{
-		return builder.buildDialogue(new ResourceLocation(modId, path), this::checkAndAdd);
+		return this.add(new ResourceLocation(modId, path), builder);
 	}
 	
-	protected final void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueBuilder builder)
+	protected final ResourceLocation add(ResourceLocation id, DialogueBuilder builder)
 	{
-		ResourceLocation id = new ResourceLocation(modId, path);
-		ResourceLocation dialogueId = builder.buildDialogue(id, this::checkAndAdd);
-		this.selectableDialogueMap.put(id, selectable.build(dialogueId));
+		return builder.buildDialogue(id, this::checkAndAdd);
 	}
 	
 	private void checkAndAdd(ResourceLocation id, Dialogue.NodeSelector dialogue)
@@ -355,29 +349,6 @@ public abstract class DialogueProvider implements DataProvider
 		return id.getNamespace() + ".dialogue." + id.getPath().replace("/", ".");
 	}
 	
-	public static final class SelectableBuilder {
-		private final Condition condition;
-		private final int weight;
-		private boolean keepOnReset = false;
-		
-		public SelectableBuilder(Condition condition, int weight)
-		{
-			this.condition = condition;
-			this.weight = weight;
-		}
-		
-		public SelectableBuilder keepOnReset()
-		{
-			this.keepOnReset = true;
-			return this;
-		}
-		
-		public Dialogue.SelectableDialogue build(ResourceLocation dialogueId)
-		{
-			return new Dialogue.SelectableDialogue(dialogueId, this.condition, this.weight, this.keepOnReset);
-		}
-	}
-	
 	public static Condition all(Condition... conditions)
 	{
 		return new ListCondition(List.of(conditions), ListCondition.ListType.ALL);
@@ -396,17 +367,6 @@ public abstract class DialogueProvider implements DataProvider
 	public static Condition none(Condition... conditions)
 	{
 		return new ListCondition(List.of(conditions), ListCondition.ListType.NONE);
-	}
-	
-	@SuppressWarnings("unused")
-	public static SelectableBuilder weighted(int weight, Condition condition)
-	{
-		return new SelectableBuilder(condition, weight);
-	}
-	
-	public static SelectableBuilder defaultWeight(Condition condition)
-	{
-		return new SelectableBuilder(condition, Dialogue.SelectableDialogue.DEFAULT_WEIGHT);
 	}
 	
 	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)
@@ -454,13 +414,6 @@ public abstract class DialogueProvider implements DataProvider
 			Path dialoguePath = getPath(outputPath, entry.getKey());
 			JsonElement dialogueJson = Dialogue.NodeSelector.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
 			futures.add(DataProvider.saveStable(cache, dialogueJson, dialoguePath));
-		}
-		
-		for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
-		{
-			Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/minestuck/selectable_dialogue/" + entry.getKey().getPath() + ".json");
-			JsonElement selectableJson = Dialogue.SelectableDialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
-			futures.add(DataProvider.saveStable(cache, selectableJson, selectablePath));
 		}
 		
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
