@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -13,6 +14,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.SimpleMenuProvider;
@@ -20,8 +22,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +43,8 @@ public sealed interface Trigger
 	Codec<Trigger> CODEC = Type.CODEC.dispatch(Trigger::getType, type -> type.codec.get());
 	Codec<List<Trigger>> LIST_CODEC = Trigger.CODEC.listOf();
 	
+	Logger LOGGER = LogManager.getLogger();
+	
 	enum Type implements StringRepresentable
 	{
 		SET_DIALOGUE(() -> SetDialogue.CODEC),
@@ -44,6 +53,8 @@ public sealed interface Trigger
 		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC),
 		COMMAND(() -> Command.CODEC),
 		TAKE_ITEM(() -> TakeItem.CODEC),
+		GIVE_ITEM(() -> GiveItem.CODEC),
+		GIVE_FROM_LOOT_TABLE(() -> GiveFromLootTable.CODEC),
 		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC),
 		ADD_BOONDOLLARS(() -> AddBoondollars.CODEC),
 		EXPLODE(() -> Explode.CODEC);
@@ -227,6 +238,64 @@ public sealed interface Trigger
 		}
 	}
 	
+	record GiveItem(Item item, int amount) implements Trigger
+	{
+		static final Codec<GiveItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(GiveItem::item),
+				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(GiveItem::amount)
+		).apply(instance, GiveItem::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.GIVE_ITEM;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return;
+			
+			player.addItem(new ItemStack(item, amount));
+		}
+	}
+	
+	record GiveFromLootTable(ResourceLocation lootTable) implements Trigger
+	{
+		static final Codec<GiveFromLootTable> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("loot_table").forGetter(GiveFromLootTable::lootTable)
+		).apply(instance, GiveFromLootTable::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.GIVE_FROM_LOOT_TABLE;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return;
+			
+			LootParams.Builder builder = new LootParams.Builder((ServerLevel) entity.level())
+					.withParameter(LootContextParams.THIS_ENTITY, entity).withParameter(LootContextParams.ORIGIN, entity.position());
+			List<ItemStack> loot = entity.getServer().getLootData().getLootTable(lootTable)
+					.getRandomItems(builder.create(LootContextParamSets.GIFT));
+			
+			if(loot.isEmpty())
+				LOGGER.warn("Tried to generate loot from {}, but no items were generated!", lootTable);
+			
+			for(ItemStack itemstack : loot)
+			{
+				player.spawnAtLocation(itemstack, 0.0F);
+				if(entity instanceof ConsortEntity consortEntity)
+					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTable.toString(), itemstack, consortEntity);
+			}
+		}
+	}
+	
 	record AddConsortReputation(int reputation) implements Trigger
 	{
 		static final Codec<AddConsortReputation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -272,7 +341,7 @@ public sealed interface Trigger
 				if(boondollars > 0)
 					data.addBoondollars(boondollars);
 				else
-					data.takeBoondollars(boondollars);
+					data.takeBoondollars(-boondollars);
 			}
 		}
 	}

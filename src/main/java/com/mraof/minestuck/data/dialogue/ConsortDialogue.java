@@ -46,6 +46,10 @@ public final class ConsortDialogue
 	
 	private static void consortDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
+		//Generic
+		var genericThanks = provider.dialogue().add("generic_thanks", new NodeBuilder(l.defaultKeyMsg("Thank you for helping me!")));
+		
+		
 		//Wind
 		provider.addRandomlySelectable("dad_wind", defaultWeight(isInTitle(WIND)), //todo review this
 				new NodeBuilder(l.defaultKeyMsg("My dad was blown away in one of the recent wind storms.")));
@@ -53,6 +57,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("pyre", defaultWeight(all(isInTitle(WIND), isAnyEntityType(SALAMANDER, TURTLE))), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("If only I was faster than the wind! That would be fun!")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society."))));
+		
 		
 		//Pulse
 		provider.addRandomlySelectable("koolaid", defaultWeight(all(isInTitle(PULSE), isAnyEntityType(SALAMANDER, TURTLE))),
@@ -304,6 +309,16 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("My neighbors were complaining the other night about the snow.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Personally, the cold never really bothered me anyways."))
 						.description(l.subMsg("desc", "You hear a faint \"ba-dum tss\" in the distance."))));
+		provider.addRandomlySelectable("fur_coat", defaultWeight(isInTerrain(FROST)), new NodeBuilder(l.defaultKeyMsg("Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!"))
+				.addResponse(new ResponseBuilder(l.subMsg("pay", "Here you go! [Pay 100 boondollars]"))
+						.condition(new Condition.PlayerHasBoondollars(100, true))
+						.addTrigger(new Trigger.AddBoondollars(-100))
+						.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
+						.addTrigger(new Trigger.AddConsortReputation(50))
+						.addTrigger(new Trigger.SetDialogue(genericThanks))
+						.nextDialogue(provider.dialogue().add("fur_coat.gratitude", new NodeBuilder(l.defaultKeyMsg("Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!")))))
+				.addResponse(new ResponseBuilder(l.subMsg("ignore", "Sorry, but I can't help you."))
+						.nextDialogue(provider.dialogue().add("fur_coat.death", new NodeBuilder(l.defaultKeyMsg("I guess I'll just die then..."))))));
 		
 		
 		//Rock
@@ -425,7 +440,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("red_better", defaultWeight(any(isInTerrain(RED_SAND), isInTerrain(RED_SANDSTONE))),
 				new NodeBuilder(l.defaultKeyMsg("Red is much better than yellow, don't you think?")));
 		provider.addRandomlySelectable("yellow_better", defaultWeight(any(isInTerrain(SAND), isInTerrain(SANDSTONE))),
-				new NodeBuilder(l.defaultKeyMsg("In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!")));
+				new NodeBuilder(l.defaultKeyMsg("In our village, we have tales of monsters that are attracted to red. That's why everything is yellow!")));
 		
 		
 		//TODO stop the shops from being selectable at end of testing

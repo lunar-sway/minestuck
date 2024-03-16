@@ -2493,13 +2493,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
 		//Frost
-		addDialogue("fur_coat", "Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!");
-		addDialogue("fur_coat.pay", "Give them the boondollars [Pay 100 boondollars]");
-		addDialogue("fur_coat.pay.reply", "Here you go!");
-		addDialogue("fur_coat.grattitude", "Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!");
-		addDialogue("fur_coat.ignore", "Don't give them any of your hard-earned boondollars!");
-		addDialogue("fur_coat.ignore.reply", "Sorry, but I can't help you.");
-		addDialogue("fur_coat.death", "I guess I'll just die then...");
 		addDialogue("tent_protection", "These tents doesn't protect against the cold very well, but they are good enough.");
 		
 		addDialogue("denizen_mention", "It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!");
