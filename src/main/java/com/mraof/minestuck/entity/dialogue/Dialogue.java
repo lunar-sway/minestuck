@@ -9,7 +9,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.util.DialogueManager;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
