@@ -1,7 +1,0 @@
-{
-  "condition": {
-    "type": "minestuck:terrain_land_type",
-    "land_type": "minestuck:shade"
-  },
-  "dialogue": "minestuck:that_boy_needs_therapy"
-}

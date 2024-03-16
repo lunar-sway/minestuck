@@ -1,7 +1,0 @@
-{
-  "condition": {
-    "type": "minestuck:terrain_land_type",
-    "land_type": "minestuck:fungi"
-  },
-  "dialogue": "minestuck:mushroom_curse"
-}
