@@ -1,4 +1,4 @@
-package com.mraof.minestuck.data;
+package com.mraof.minestuck.data.dialogue;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;

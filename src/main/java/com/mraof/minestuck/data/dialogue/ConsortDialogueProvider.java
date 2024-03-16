@@ -1,4 +1,4 @@
-package com.mraof.minestuck.data;
+package com.mraof.minestuck.data.dialogue;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -16,8 +16,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.LanguageProvider;
 
-import static com.mraof.minestuck.data.DialogueLangHelper.defaultKeyMsg;
-import static com.mraof.minestuck.data.DialogueLangHelper.msg;
+import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.defaultKeyMsg;
+import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.msg;
 import static com.mraof.minestuck.entity.MSEntityTypes.*;
 import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
 import static com.mraof.minestuck.world.lands.LandTypes.*;

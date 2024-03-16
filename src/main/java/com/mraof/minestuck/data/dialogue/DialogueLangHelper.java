@@ -1,4 +1,4 @@
-package com.mraof.minestuck.data;
+package com.mraof.minestuck.data.dialogue;
 
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import net.minecraft.resources.ResourceLocation;
