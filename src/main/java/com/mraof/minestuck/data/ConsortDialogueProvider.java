@@ -18,6 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import static com.mraof.minestuck.entity.MSEntityTypes.*;
+import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 public final class ConsortDialogueProvider extends SelectableDialogueProvider
