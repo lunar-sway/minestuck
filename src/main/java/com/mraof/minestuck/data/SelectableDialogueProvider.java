@@ -57,7 +57,7 @@ public abstract class SelectableDialogueProvider extends DialogueProvider
 		Path outputPath = output.getOutputFolder();
 		for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
 		{
-			Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/minestuck/selectable_dialogue/" + entry.getKey().getPath() + ".json");
+			Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/minestuck/selectable_dialogue/consort/" + entry.getKey().getPath() + ".json");
 			JsonElement selectableJson = Dialogue.SelectableDialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
 			futures.add(DataProvider.saveStable(cache, selectableJson, selectablePath));
 		}

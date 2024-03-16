@@ -73,7 +73,7 @@ public final class RandomlySelectableDialogue
 		
 		public Loader()
 		{
-			super(GSON, "minestuck/selectable_dialogue");
+			super(GSON, "minestuck/selectable_dialogue/consort");
 		}
 		
 		@Override
