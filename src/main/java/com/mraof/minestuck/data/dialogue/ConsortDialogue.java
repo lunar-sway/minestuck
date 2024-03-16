@@ -99,11 +99,11 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.")));
 		provider.addRandomlySelectable("edgy_life_hatred", defaultWeight(all(isInTitle(RABBITS), isAnyEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(l.defaultKeyMsg("This place is just so full of life! I despise it.")));
-		provider.addRandomlySelectable("rabbit.food_shortage.1", defaultWeight(all(isInTitle(RABBITS), isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE))),
+		provider.addRandomlySelectable("rabbit.food_shortage", defaultWeight(all(isInTitle(RABBITS), isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE))),
 				new NodeBuilder(l.defaultKeyMsg("This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!"))
-						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.ROCK))
-								.nextDialogue(provider.dialogue().add("rabbit.food_shortage.2", new NodeBuilder(l.defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
-										.addClosingResponse()))));
+						.addResponse(new ResponseBuilder(ARROW).condition(isAnyEntityType(NAKAGATOR))
+								.nextDialogue("other_way", new NodeBuilder(l.defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
+										.addClosingResponse())));
 		var rabbitFood2 = provider.dialogue().dialogueId("rabbit.food.2");
 		provider.addRandomlySelectable("rabbit.food.1", defaultWeight(all(isInTitle(RABBITS),
 						any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInTerrain(FUNGI), isInTerrain(SHADE)))),

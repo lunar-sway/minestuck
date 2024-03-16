@@ -1,6 +1,6 @@
 {
   "node": {
-    "message": "minestuck.dialogue.consort.rabbit.food_shortage.2",
+    "message": "minestuck.dialogue.consort.rabbit.food_shortage.other_way",
     "responses": [
       {
         "message": "minestuck.dots"
