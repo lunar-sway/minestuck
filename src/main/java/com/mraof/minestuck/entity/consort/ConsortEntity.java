@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -155,6 +156,13 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		handleConsortRepFromTalking(serverPlayer);
 		setCurrentAnimation(TALK_PROPERTIES);
+		
+		
+		if(!this.dialogueComponent.hasActiveDialogue())
+		{
+			RandomlySelectableDialogue.instance().pickRandomForEntity(this)
+					.ifPresent(this.dialogueComponent::setDialogue);
+		}
 		
 		this.dialogueComponent.startDialogue(this, serverPlayer);
 		

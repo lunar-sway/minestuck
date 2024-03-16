@@ -202,11 +202,11 @@ public record Dialogue(NodeSelector nodes)
 		}
 	}
 	
-	public record SelectableDialogue(ResourceLocation dialogue, Condition condition, int weight, boolean keepOnReset)
+	public record SelectableDialogue(ResourceLocation dialogueId, Condition condition, int weight, boolean keepOnReset)
 	{
 		public static final int DEFAULT_WEIGHT = 10;
 		public static Codec<SelectableDialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("dialogue").forGetter(SelectableDialogue::dialogue),
+				ResourceLocation.CODEC.fieldOf("dialogue").forGetter(SelectableDialogue::dialogueId),
 				Condition.NPC_ONLY_CODEC.fieldOf("condition").forGetter(SelectableDialogue::condition),
 				PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", DEFAULT_WEIGHT).forGetter(SelectableDialogue::weight),
 				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "keep_on_reset", false).forGetter(SelectableDialogue::keepOnReset)

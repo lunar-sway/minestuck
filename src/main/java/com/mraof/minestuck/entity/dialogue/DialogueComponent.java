@@ -51,8 +51,14 @@ public final class DialogueComponent
 		return hasGeneratedOnce;
 	}
 	
+	public void setDialogue(Dialogue.SelectableDialogue selectable)
+	{
+		this.setDialogue(selectable.dialogueId(), selectable.keepOnReset());
+	}
+	
 	public void setDialogue(ResourceLocation dialogueId, boolean keepOnReset)
 	{
+		this.hasGeneratedOnce = true;
 		this.activeDialogue = dialogueId;
 		this.keepOnReset = keepOnReset;
 	}
@@ -71,9 +77,6 @@ public final class DialogueComponent
 	public void startDialogue(LivingEntity entity, ServerPlayer serverPlayer)
 	{
 		if(this.activeDialogue == null)
-			generateNewDialogue(entity);
-		
-		if(this.activeDialogue == null)
 			return;
 		
 		Dialogue dialogue = DialogueManager.getInstance().getDialogue(this.activeDialogue);
@@ -88,13 +91,5 @@ public final class DialogueComponent
 			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, this.activeDialogue.toString(), consort);
 		
 		Dialogue.openScreen(entity, serverPlayer, dialogue);
-	}
-	
-	private void generateNewDialogue(LivingEntity entity)
-	{
-		RandomlySelectableDialogue.instance().pickRandomForEntity(entity).ifPresent(selectable -> {
-			this.hasGeneratedOnce = true;
-			this.setDialogue(selectable.dialogue(), selectable.keepOnReset());
-		});
 	}
 }

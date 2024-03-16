@@ -10,6 +10,7 @@ import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -112,7 +113,7 @@ public sealed interface Trigger
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
 			{
-				dialogueEntity.getDialogueComponent().setDialogue(newPaths.get(entity.level().random.nextInt(newPaths().size())), false);
+				dialogueEntity.getDialogueComponent().setDialogue(Util.getRandom(this.newPaths, entity.level().random), false);
 			}
 		}
 	}
@@ -132,8 +133,8 @@ public sealed interface Trigger
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
 			{
-				RandomlySelectableDialogue.instance().pickRandomForEntity(entity).ifPresent(selectable ->
-						dialogueEntity.getDialogueComponent().setDialogue(selectable.dialogue(), selectable.keepOnReset()));
+				RandomlySelectableDialogue.instance().pickRandomForEntity(entity)
+						.ifPresent(dialogueEntity.getDialogueComponent()::setDialogue);
 			}
 		}
 	}
