@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
-import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -150,11 +149,10 @@ public sealed interface Trigger
 		}
 	}
 	
-	record OpenConsortMerchantGui(ResourceLocation lootTable, EnumConsort.MerchantType merchantType) implements Trigger
+	record OpenConsortMerchantGui(ResourceLocation lootTable) implements Trigger
 	{
 		static final Codec<OpenConsortMerchantGui> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("loot_table").forGetter(OpenConsortMerchantGui::lootTable),
-				EnumConsort.MerchantType.CODEC.fieldOf("merchant_type").forGetter(OpenConsortMerchantGui::merchantType)
+				ResourceLocation.CODEC.fieldOf("loot_table").forGetter(OpenConsortMerchantGui::lootTable)
 		).apply(instance, OpenConsortMerchantGui::new));
 		
 		@Override
@@ -168,9 +166,6 @@ public sealed interface Trigger
 		{
 			if(entity instanceof ConsortEntity consortEntity)
 			{
-				//TODO if(consortEntity.merchantType == EnumConsort.MerchantType.NONE) ?
-				consortEntity.merchantType = this.merchantType;
-				
 				if(consortEntity.stocks == null)
 				{
 					consortEntity.stocks = new ConsortMerchantInventory(consortEntity, ConsortRewardHandler.generateStock(this.lootTable, consortEntity, consortEntity.level().random));

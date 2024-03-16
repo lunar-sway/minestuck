@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
-import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
@@ -449,22 +448,22 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("You hungry? I bet you are! Why else would you be talking to me?"))
 						.addClosingResponse(l.subMsg("bye", "Never mind"))
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What do you have?"))
-								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
+								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK))));
 		provider.addRandomlySelectable("fast_food", defaultWeight(isAnyEntityType(NAKAGATOR)),
 				new NodeBuilder(l.defaultKeyMsg("Welcome to MacCricket's, what would you like?"))
 						.addClosingResponse(l.subMsg("bye", "I'm good"))
 						.addResponse(new ResponseBuilder(l.subMsg("next", "Show me your menu"))
-								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
+								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK))));
 		provider.addRandomlySelectable("grocery_store", defaultWeight(isAnyEntityType(IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("Thank you for choosing Stop and Hop, this village's #1 one grocer!"))
 						.addClosingResponse(l.subMsg("bye", "No thanks"))
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What do you have to sell?"))
-								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
+								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK))));
 		provider.addRandomlySelectable("tasty_welcome", defaultWeight(isAnyEntityType(TURTLE)),
 				new NodeBuilder(l.defaultKeyMsg("Welcome. I hope you find something tasty among our wares."))
 						.addClosingResponse(l.subMsg("bye", "Goodbye"))
 						.addResponse(new ResponseBuilder(l.subMsg("next", "Let me see your wares"))
-								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK, EnumConsort.MerchantType.FOOD))));
+								.addTrigger(new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK))));
 	}
 	
 	private static void testDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
