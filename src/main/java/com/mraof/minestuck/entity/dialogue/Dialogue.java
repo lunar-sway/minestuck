@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -68,6 +69,12 @@ public final class Dialogue
 				return Optional.empty();
 			
 			return Optional.of(pair.getFirst());
+		}
+		
+		public void visitConnectedDialogue(Consumer<ResourceLocation> idConsumer)
+		{
+			this.conditionedNodes.forEach(pair -> pair.getSecond().visitConnectedDialogue(idConsumer));
+			this.defaultNode.visitConnectedDialogue(idConsumer);
 		}
 	}
 	
@@ -120,6 +127,11 @@ public final class Dialogue
 				return Optional.empty();
 			
 			return Optional.of(this.responses().get(responseIndex));
+		}
+		
+		public void visitConnectedDialogue(Consumer<ResourceLocation> idConsumer)
+		{
+			responses.forEach(response -> response.nextDialoguePath().ifPresent(idConsumer));
 		}
 	}
 	
