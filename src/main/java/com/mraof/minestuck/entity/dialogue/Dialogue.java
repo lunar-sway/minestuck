@@ -7,8 +7,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
-import com.mraof.minestuck.network.DialogueScreenPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,19 +41,6 @@ public record Dialogue(NodeSelector nodes)
 	public ResourceLocation lookupId()
 	{
 		return DialogueManager.getInstance().getId(this);
-	}
-	
-	/**
-	 * Opens up the dialogue screen and includes a nbt object containing whether all the conditions are matched
-	 */
-	public static void openScreen(LivingEntity entity, ServerPlayer serverPlayer, Dialogue dialogue)
-	{
-		Pair<DialogueNode, Integer> node = dialogue.nodes().pickNode(entity, serverPlayer);
-		DialogueData data = node.getFirst().evaluateData(entity, serverPlayer);
-		NodeReference nodeReference = new NodeReference(dialogue.lookupId(), node.getSecond());
-		
-		DialogueScreenPacket packet = new DialogueScreenPacket(entity.getId(), nodeReference, data);
-		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
 	public record NodeSelector(List<Pair<Condition, DialogueNode>> conditionedNodes, DialogueNode defaultNode)
@@ -123,7 +108,7 @@ public record Dialogue(NodeSelector nodes)
 				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(DialogueNode::responses)
 		).apply(instance, DialogueNode::new));
 		
-		private DialogueData evaluateData(LivingEntity entity, ServerPlayer player)
+		DialogueData evaluateData(LivingEntity entity, ServerPlayer player)
 		{
 			List<ResponseData> responses = IntStream.range(0, responses().size())
 					.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, player))
@@ -198,7 +183,7 @@ public record Dialogue(NodeSelector nodes)
 			
 			Dialogue nextDialogue = DialogueManager.getInstance().getDialogue(nextPath.get());
 			if(nextDialogue != null)
-				Dialogue.openScreen(entity, player, nextDialogue);
+				((DialogueEntity) entity).getDialogueComponent().openScreenForDialogue(player, nextDialogue);
 		}
 	}
 	

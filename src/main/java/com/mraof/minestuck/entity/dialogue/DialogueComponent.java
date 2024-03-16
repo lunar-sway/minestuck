@@ -1,7 +1,10 @@
 package com.mraof.minestuck.entity.dialogue;
 
+import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.network.DialogueScreenPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,10 +18,16 @@ public final class DialogueComponent
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	private final LivingEntity entity;
 	@Nullable
 	private ResourceLocation activeDialogue;
 	private boolean keepOnReset;
 	private boolean hasGeneratedOnce = false;
+	
+	public DialogueComponent(LivingEntity entity)
+	{
+		this.entity = entity;
+	}
 	
 	public void read(CompoundTag tag)
 	{
@@ -74,7 +83,7 @@ public final class DialogueComponent
 			this.activeDialogue = null;
 	}
 	
-	public void startDialogue(LivingEntity entity, ServerPlayer serverPlayer)
+	public void startDialogue(ServerPlayer serverPlayer)
 	{
 		if(this.activeDialogue == null)
 			return;
@@ -87,9 +96,19 @@ public final class DialogueComponent
 			return;
 		}
 		
-		if(entity instanceof ConsortEntity consort)
+		if(this.entity instanceof ConsortEntity consort)
 			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, this.activeDialogue.toString(), consort);
 		
-		Dialogue.openScreen(entity, serverPlayer, dialogue);
+		this.openScreenForDialogue(serverPlayer, dialogue);
+	}
+	
+	public void openScreenForDialogue(ServerPlayer serverPlayer, Dialogue dialogue)
+	{
+		Pair<Dialogue.DialogueNode, Integer> node = dialogue.nodes().pickNode(this.entity, serverPlayer);
+		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, serverPlayer);
+		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogue.lookupId(), node.getSecond());
+		
+		DialogueScreenPacket packet = new DialogueScreenPacket(this.entity.getId(), nodeReference, data);
+		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 }

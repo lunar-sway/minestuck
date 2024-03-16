@@ -77,7 +77,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private final DialogueComponent dialogueComponent = new DialogueComponent();
+	private final DialogueComponent dialogueComponent = new DialogueComponent(this);
 	
 	private final EnumConsort consortType;
 	ConsortDialogue.DialogueWrapper message;
@@ -164,7 +164,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 					.ifPresent(this.dialogueComponent::setDialogue);
 		}
 		
-		this.dialogueComponent.startDialogue(this, serverPlayer);
+		this.dialogueComponent.startDialogue(serverPlayer);
 		
 		if(this.dialogueComponent.hasActiveDialogue())
 			checkMessageData();
