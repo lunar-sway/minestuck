@@ -79,12 +79,12 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 				.node(new NodeBuilder(l.defaultKeyMsg("Like any reasonable %s believes in that!", DialogueMessage.Argument.ENTITY_TYPE))));
 		addRandomlySelectable("thunder_death", defaultWeight(all(isInTitle(THUNDER), isInTerrain(WOOD))), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("We're lucky to have rain with this weather.")))
-				.node(new NodeBuilder(l.defaultKeyMsg("Otherwise the thunder would surely have been our death.")).addClosingResponse(DOTS)));
+				.node(new NodeBuilder(l.defaultKeyMsg("Otherwise the thunder would surely have been our death.")).addClosingResponse()));
 		addRandomlySelectable("hardcore", defaultWeight(all(isInTitle(THUNDER), isInTerrain(HEAT))),
 				new NodeBuilder(l.defaultKeyMsg("This land is HARDCORE! There's lava and lightning wherever you go!")));
 		addRandomlySelectable("thunder_throw", defaultWeight(all(isInTitle(THUNDER), isAnyEntityType(TURTLE, SALAMANDER))), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("Nemesis has been throwing thunder for generations, not stopping for even a moment.")))
-				.node(new NodeBuilder(l.defaultKeyMsg("They are even doing it in their sleep. Can you believe that?")).addClosingResponse(DOTS)));
+				.node(new NodeBuilder(l.defaultKeyMsg("They are even doing it in their sleep. Can you believe that?")).addClosingResponse()));
 		
 		
 		//Rabbits
@@ -98,7 +98,7 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 				new NodeBuilder(l.defaultKeyMsg("This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!"))
 						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.ROCK))
 								.nextDialogue(add("rabbit.food_shortage.2", new NodeBuilder(l.defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
-										.addClosingResponse(DOTS)))));
+										.addClosingResponse()))));
 		var rabbitFood2 = dialogueId("rabbit.food.2");
 		addRandomlySelectable("rabbit.food.1", defaultWeight(all(isInTitle(RABBITS),
 						any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInTerrain(FUNGI), isInTerrain(SHADE)))),
@@ -171,7 +171,7 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 		addRandomlySelectable("frog_variants", defaultWeight(isInTitle(FROGS)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be preposterous.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.", DialogueMessage.Argument.LAND_NAME))
-						.addClosingResponse(DOTS)));
+						.addClosingResponse()));
 		addRandomlySelectable("frog_hatred", defaultWeight(isInTitle(FROGS)),
 				new NodeBuilder(l.defaultKeyMsg("For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?")));
 		addRandomlySelectable("grasshopper_fishing", defaultWeight(all(isInTitle(FROGS), isAnyEntityType(SALAMANDER, IGUANA))), new ChainBuilder()
