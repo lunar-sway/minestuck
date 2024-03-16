@@ -84,19 +84,34 @@ public final class DialogueProvider implements DataProvider
 		}
 	}
 	
+	public interface NodeProducer
+	{
+		Dialogue.Node buildNode(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
+	}
+	
 	public static class NodeSelectorBuilder implements SimpleDialogueProducer
 	{
-		private final List<Pair<Condition, NodeBuilder>> conditionedNodes = new ArrayList<>();
+		private final List<Pair<Condition, NodeProducer>> conditionedNodes = new ArrayList<>();
 		@Nullable
-		private NodeBuilder defaultNode;
+		private NodeProducer defaultNode;
 		
-		public NodeSelectorBuilder node(Condition condition, NodeBuilder node)
+		public NodeSelectorBuilder node(Condition condition, String key, NodeProducer node)
+		{
+			return node(condition, (id, register) -> node.buildNode(id.withSuffix("." + key), register));
+		}
+		
+		public NodeSelectorBuilder node(Condition condition, NodeProducer node)
 		{
 			this.conditionedNodes.add(Pair.of(condition, node));
 			return this;
 		}
 		
-		public NodeSelectorBuilder defaultNode(NodeBuilder node)
+		public NodeSelectorBuilder defaultNode(String key, NodeProducer node)
+		{
+			return defaultNode((id, register) -> node.buildNode(id.withSuffix("." + key), register));
+		}
+		
+		public NodeSelectorBuilder defaultNode(NodeProducer node)
 		{
 			this.defaultNode = node;
 			return this;
@@ -111,7 +126,7 @@ public final class DialogueProvider implements DataProvider
 		}
 	}
 	
-	public static class NodeBuilder implements SimpleDialogueProducer
+	public static class NodeBuilder implements SimpleDialogueProducer, NodeProducer
 	{
 		private final Function<ResourceLocation, DialogueMessage> messageProvider;
 		@Nullable
@@ -179,6 +194,7 @@ public final class DialogueProvider implements DataProvider
 			return this;
 		}
 		
+		@Override
 		public Dialogue.Node buildNode(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			DialogueMessage message = this.messageProvider.apply(id);

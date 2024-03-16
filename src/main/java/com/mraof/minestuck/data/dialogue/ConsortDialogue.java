@@ -238,10 +238,10 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Climb up high and you'll be up for a great view!")));
 		provider.addRandomlySelectable("height_fear", defaultWeight(all(any(isInTitle(TOWERS), isInTitle(WIND)), isAnyEntityType(TURTLE))), new NodeSelectorBuilder()
 				.node(new Condition.AtOrAboveY(78), new NodeBuilder(l.subMsg("panic", "AAH, I am scared of heights!")))
-				.node(isInTitle(TOWERS), new NodeBuilder(l.subMsg("towers.1", "I'd climb up one of those towers and look at the view, but I am scared of heights."))
-						.next("towers.2", new NodeBuilder(l.defaultKeyMsg("I mean, what if I slipped and fell off the stairs?"))))
-				.defaultNode(new NodeBuilder(l.subMsg("rock.1", "I'd climb up one of those rocks and look at the view, but I am scared of heights."))
-						.next("rock.2", new NodeBuilder(l.defaultKeyMsg("I mean what if I fell down and landed on my back?")))));
+				.node(isInTitle(TOWERS), "towers", new NodeBuilder(l.subMsg("1", "I'd climb up one of those towers and look at the view, but I am scared of heights."))
+						.next("2", new NodeBuilder(l.defaultKeyMsg("I mean, what if I slipped and fell off the stairs?"))))
+				.defaultNode("rock", new NodeBuilder(l.subMsg("1", "I'd climb up one of those rocks and look at the view, but I am scared of heights."))
+						.next("2", new NodeBuilder(l.defaultKeyMsg("I mean what if I fell down and landed on my back?")))));
 		
 		
 		//Shade
