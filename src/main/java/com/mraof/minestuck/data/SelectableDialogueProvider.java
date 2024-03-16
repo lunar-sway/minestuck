@@ -10,7 +10,6 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.data.LanguageProvider;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
@@ -27,9 +26,9 @@ public abstract class SelectableDialogueProvider extends DialogueProvider
 	private final Map<ResourceLocation, Dialogue.SelectableDialogue> selectableDialogueMap = new HashMap<>();
 	private final RandomlySelectableDialogue.DialogueCategory category;
 	
-	public SelectableDialogueProvider(String modId, RandomlySelectableDialogue.DialogueCategory category, PackOutput output, LanguageProvider languageProvider)
+	public SelectableDialogueProvider(String modId, RandomlySelectableDialogue.DialogueCategory category, PackOutput output)
 	{
-		super(modId, output, languageProvider);
+		super(modId, output);
 		this.category = category;
 	}
 	
