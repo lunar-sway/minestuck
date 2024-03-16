@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data.dialogue;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.data.dialogue.DialogueProvider.ChainBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
