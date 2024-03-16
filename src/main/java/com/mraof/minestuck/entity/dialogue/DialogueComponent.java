@@ -99,14 +99,21 @@ public final class DialogueComponent
 		if(this.entity instanceof ConsortEntity consort)
 			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, this.activeDialogue.toString(), consort);
 		
-		this.openScreenForDialogue(serverPlayer, dialogue);
+		this.openScreenForDialogue(serverPlayer, this.activeDialogue, dialogue);
 	}
 	
-	public void openScreenForDialogue(ServerPlayer serverPlayer, Dialogue dialogue)
+	public void tryOpenScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId)
+	{
+		Dialogue dialogue = DialogueManager.getInstance().getDialogue(dialogueId);
+		if(dialogue != null)
+			this.openScreenForDialogue(serverPlayer, dialogueId, dialogue);
+	}
+	
+	public void openScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId, Dialogue dialogue)
 	{
 		Pair<Dialogue.DialogueNode, Integer> node = dialogue.nodes().pickNode(this.entity, serverPlayer);
 		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, serverPlayer);
-		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogue.lookupId(), node.getSecond());
+		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		
 		DialogueScreenPacket packet = new DialogueScreenPacket(this.entity.getId(), nodeReference, data);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);

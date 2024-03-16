@@ -38,11 +38,6 @@ public record Dialogue(NodeSelector nodes)
 			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes)
 	).apply(instance, Dialogue::new));
 	
-	public ResourceLocation lookupId()
-	{
-		return DialogueManager.getInstance().getId(this);
-	}
-	
 	public record NodeSelector(List<Pair<Condition, DialogueNode>> conditionedNodes, DialogueNode defaultNode)
 	{
 		public static final Codec<Pair<Condition, DialogueNode>> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -181,9 +176,7 @@ public record Dialogue(NodeSelector nodes)
 			if(nextPath.isEmpty())
 				return;
 			
-			Dialogue nextDialogue = DialogueManager.getInstance().getDialogue(nextPath.get());
-			if(nextDialogue != null)
-				((DialogueEntity) entity).getDialogueComponent().openScreenForDialogue(player, nextDialogue);
+			((DialogueEntity) entity).getDialogueComponent().tryOpenScreenForDialogue(player, nextPath.get());
 		}
 	}
 	
