@@ -205,16 +205,12 @@ public record Dialogue(NodeSelector nodes, Optional<RandomlySelectable> selectab
 	
 	public record RandomlySelectable(Condition condition, int weight, boolean keepOnReset)
 	{
+		public static final int DEFAULT_WEIGHT = 10;
 		static Codec<RandomlySelectable> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Condition.NPC_ONLY_CODEC.fieldOf("condition").forGetter(RandomlySelectable::condition),
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", 10).forGetter(RandomlySelectable::weight),
+				PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", DEFAULT_WEIGHT).forGetter(RandomlySelectable::weight),
 				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "keep_on_reset", false).forGetter(RandomlySelectable::keepOnReset)
 		).apply(instance, RandomlySelectable::new));
-		
-		public RandomlySelectable(Condition condition)
-		{
-			this(condition, 10, false);
-		}
 		
 		public RandomlySelectable withKeepOnReset()
 		{
