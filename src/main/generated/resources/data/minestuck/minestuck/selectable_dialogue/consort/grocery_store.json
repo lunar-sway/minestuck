@@ -1,7 +1,0 @@
-{
-  "condition": {
-    "type": "minestuck:entity_type",
-    "entity_type": "minestuck:iguana"
-  },
-  "dialogue": "minestuck:consort/grocery_store"
-}
