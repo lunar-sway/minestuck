@@ -79,6 +79,11 @@ public final class SelectableDialogueProvider implements DataProvider
 		if(!missingDialogue.isEmpty())
 			throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
 		
+		Set<ResourceLocation> missingDialogue = this.selectableDialogueMap.values().stream().map(Dialogue.SelectableDialogue::dialogueId)
+				.filter(id -> !hasAddedDialogue(id)).collect(Collectors.toSet());
+		if(!missingDialogue.isEmpty())
+			throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
+		
 		Path outputPath = output.getOutputFolder();
 		for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
 		{
