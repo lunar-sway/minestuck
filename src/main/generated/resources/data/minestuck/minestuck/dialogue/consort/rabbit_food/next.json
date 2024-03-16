@@ -16,12 +16,12 @@
         "list_type": "any"
       },
       "node": {
-        "message": "minestuck.dialogue.consort.rabbit.food.2.b"
+        "message": "minestuck.dialogue.consort.rabbit_food.next.mushrooms"
       }
     }
   ],
   "default_node": {
-    "message": "minestuck.dialogue.consort.rabbit.food.2.a",
+    "message": "minestuck.dialogue.consort.rabbit_food.next.desolate",
     "responses": [
       {
         "condition": {
@@ -29,7 +29,7 @@
           "land_type_tag": "minestuck:sand"
         },
         "message": "minestuck.arrow",
-        "next_dialogue_path": "minestuck:consort/rabbit.food.3"
+        "next_dialogue_path": "minestuck:consort/rabbit_food/cacti"
       }
     ]
   }

@@ -103,17 +103,14 @@ public final class ConsortDialogue
 						.addResponse(new ResponseBuilder(ARROW).condition(isAnyEntityType(NAKAGATOR))
 								.nextDialogue("other_way", new NodeBuilder(l.defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
 										.addClosingResponse())));
-		var rabbitFood2 = provider.dialogue().dialogueId("rabbit.food.2");
-		provider.addRandomlySelectable("rabbit.food.1", defaultWeight(all(isInTitle(RABBITS),
-						any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInTerrain(FUNGI), isInTerrain(SHADE)))),
-				new NodeBuilder(l.defaultKeyMsg("I sure wonder where the rabbits are getting their food from."))
-						.next(rabbitFood2));
-		provider.dialogue().add(rabbitFood2, new NodeSelectorBuilder()
-				.node(any(isInTerrain(FUNGI), isInTerrain(SHADE)),
-						new NodeBuilder(l.subMsg("b", "I mean, there's not really much else than mushrooms around here.")))
-				.defaultNode(new NodeBuilder(l.subMsg("a", "There's not really much food to be found in this desolate place."))
-						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.SAND))
-								.nextDialogue(provider.dialogue().add("rabbit.food.3", new NodeBuilder(l.defaultKeyMsg("Except maybe cacti, but would rabbits eat something that prickly?")))))));
+		provider.addRandomlySelectable("rabbit_food", defaultWeight(all(isInTitle(RABBITS), any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInTerrain(FUNGI), isInTerrain(SHADE)))), new FolderedDialogue(builder -> {
+			var cacti = builder.add("cacti", new NodeBuilder(l.defaultKeyMsg("Except maybe cacti, but would rabbits eat something that prickly?")));
+			var next = builder.add("next", new NodeSelectorBuilder()
+					.node(any(isInTerrain(FUNGI), isInTerrain(SHADE)), new NodeBuilder(l.subMsg("mushrooms", "I mean, there's not really much else than mushrooms around here.")))
+					.defaultNode(new NodeBuilder(l.subMsg("desolate", "There's not really much food to be found in this desolate place."))
+							.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.SAND)).nextDialogue(cacti))));
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("I sure wonder where the rabbits are getting their food from.")).next(next));
+		}));
 		
 		
 		//Monsters
