@@ -111,7 +111,7 @@ public final class DialogueComponent
 	
 	public void openScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId, Dialogue dialogue)
 	{
-		Pair<Dialogue.DialogueNode, Integer> node = dialogue.nodes().pickNode(this.entity, serverPlayer);
+		Pair<Dialogue.Node, Integer> node = dialogue.nodes().pickNode(this.entity, serverPlayer);
 		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, serverPlayer);
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		

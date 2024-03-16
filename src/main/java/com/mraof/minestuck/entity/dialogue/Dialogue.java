@@ -28,7 +28,6 @@ import java.util.stream.IntStream;
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
  */
-//TODO animation is unused?
 public record Dialogue(NodeSelector nodes)
 {
 	public static final String DEFAULT_ANIMATION = "generic_animation";
@@ -38,35 +37,35 @@ public record Dialogue(NodeSelector nodes)
 			NodeSelector.EITHER_MAP_CODEC.forGetter(Dialogue::nodes)
 	).apply(instance, Dialogue::new));
 	
-	public record NodeSelector(List<Pair<Condition, DialogueNode>> conditionedNodes, DialogueNode defaultNode)
+	public record NodeSelector(List<Pair<Condition, Node>> conditionedNodes, Node defaultNode)
 	{
-		public static final Codec<Pair<Condition, DialogueNode>> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		public static final Codec<Pair<Condition, Node>> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Condition.CODEC.fieldOf("condition").forGetter(Pair::getFirst),
-				DialogueNode.CODEC.fieldOf("node").forGetter(Pair::getSecond)
+				Node.CODEC.fieldOf("node").forGetter(Pair::getSecond)
 		).apply(instance, Pair::of));
 		public static final Codec<NodeSelector> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				ENTRY_CODEC.listOf().fieldOf("conditioned_nodes").forGetter(NodeSelector::conditionedNodes),
-				DialogueNode.CODEC.fieldOf("default_node").forGetter(NodeSelector::defaultNode)
+				Node.CODEC.fieldOf("default_node").forGetter(NodeSelector::defaultNode)
 		).apply(instance, NodeSelector::new));
-		public static final MapCodec<NodeSelector> EITHER_MAP_CODEC = Codec.mapEither(NodeSelector.CODEC.fieldOf("nodes"), DialogueNode.CODEC.fieldOf("node"))
+		public static final MapCodec<NodeSelector> EITHER_MAP_CODEC = Codec.mapEither(NodeSelector.CODEC.fieldOf("nodes"), Node.CODEC.fieldOf("node"))
 				.xmap(either -> either.map(Function.identity(), node -> new NodeSelector(List.of(), node)),
 						nodeSelector -> nodeSelector.conditionedNodes.isEmpty() ? Either.right(nodeSelector.defaultNode) : Either.left(nodeSelector));
 		
-		public Pair<DialogueNode, Integer> pickNode(LivingEntity entity, ServerPlayer player)
+		public Pair<Node, Integer> pickNode(LivingEntity entity, ServerPlayer player)
 		{
 			for(int i = 0; i < this.conditionedNodes.size(); i++)
 			{
 				var pair = this.conditionedNodes.get(i);
 				if(pair.getFirst().test(entity, player))
 				{
-					DialogueNode node = pair.getSecond();
+					Node node = pair.getSecond();
 					return Pair.of(node, i);
 				}
 			}
 			return Pair.of(this.defaultNode, -1);
 		}
 		
-		public Optional<DialogueNode> getNodeIfValid(int index, LivingEntity entity, ServerPlayer player)
+		public Optional<Node> getNodeIfValid(int index, LivingEntity entity, ServerPlayer player)
 		{
 			var pair = this.pickNode(entity, player);
 			if(pair.getSecond() != index)
@@ -93,15 +92,16 @@ public record Dialogue(NodeSelector nodes)
 		}
 	}
 	
-	public record DialogueNode(DialogueMessage message, Optional<DialogueMessage> description, String animation, ResourceLocation guiPath, List<Response> responses)
+	//TODO animation is unused?
+	public record Node(DialogueMessage message, Optional<DialogueMessage> description, String animation, ResourceLocation guiPath, List<Response> responses)
 	{
-		public static Codec<DialogueNode> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				DialogueMessage.CODEC.fieldOf("message").forGetter(DialogueNode::message),
-				new PreservingOptionalFieldCodec<>(DialogueMessage.CODEC, "description").forGetter(DialogueNode::description),
-				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DEFAULT_ANIMATION).forGetter(DialogueNode::animation),
-				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DEFAULT_GUI).forGetter(DialogueNode::guiPath),
-				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(DialogueNode::responses)
-		).apply(instance, DialogueNode::new));
+		public static Codec<Node> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				DialogueMessage.CODEC.fieldOf("message").forGetter(Node::message),
+				new PreservingOptionalFieldCodec<>(DialogueMessage.CODEC, "description").forGetter(Node::description),
+				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DEFAULT_ANIMATION).forGetter(Node::animation),
+				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DEFAULT_GUI).forGetter(Node::guiPath),
+				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(Node::responses)
+		).apply(instance, Node::new));
 		
 		DialogueData evaluateData(LivingEntity entity, ServerPlayer player)
 		{
