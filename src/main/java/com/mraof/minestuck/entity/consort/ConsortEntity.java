@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
@@ -164,10 +165,12 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 					.ifPresent(this.dialogueComponent::setDialogue);
 		}
 		
-		this.dialogueComponent.startDialogue(serverPlayer);
+		this.dialogueComponent.tryStartDialogue(serverPlayer);
 		
-		if(this.dialogueComponent.hasActiveDialogue())
+		this.dialogueComponent.getActiveDialogue().ifPresent(dialogueId -> {
+			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogueId.toString(), this);
 			checkMessageData();
+		});
 		
 		return InteractionResult.SUCCESS;
 	}

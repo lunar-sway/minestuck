@@ -1,8 +1,6 @@
 package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.datafixers.util.Pair;
-import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public final class DialogueComponent
 {
@@ -72,6 +71,11 @@ public final class DialogueComponent
 		this.keepOnReset = keepOnReset;
 	}
 	
+	public Optional<ResourceLocation> getActiveDialogue()
+	{
+		return Optional.ofNullable(this.activeDialogue);
+	}
+	
 	public boolean hasActiveDialogue()
 	{
 		return this.activeDialogue != null;
@@ -83,7 +87,7 @@ public final class DialogueComponent
 			this.activeDialogue = null;
 	}
 	
-	public void startDialogue(ServerPlayer serverPlayer)
+	public void tryStartDialogue(ServerPlayer serverPlayer)
 	{
 		if(this.activeDialogue == null)
 			return;
@@ -95,9 +99,6 @@ public final class DialogueComponent
 			this.activeDialogue = null;
 			return;
 		}
-		
-		if(this.entity instanceof ConsortEntity consort)
-			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, this.activeDialogue.toString(), consort);
 		
 		this.openScreenForDialogue(serverPlayer, this.activeDialogue, dialogue);
 	}
