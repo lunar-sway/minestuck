@@ -46,9 +46,8 @@ public abstract class SelectableDialogueProvider extends DialogueProvider
 	
 	protected final void addRandomlySelectable(String path, SelectableBuilder selectable, DialogueBuilder builder)
 	{
-		ResourceLocation id = new ResourceLocation(this.modId, path);
-		ResourceLocation dialogueId = this.add(id, builder);
-		this.selectableDialogueMap.put(id, selectable.build(dialogueId));
+		ResourceLocation dialogueId = this.add(path, builder);
+		this.selectableDialogueMap.put(new ResourceLocation(this.modId, path), selectable.build(dialogueId));
 	}
 	
 	@Override

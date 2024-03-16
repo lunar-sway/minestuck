@@ -3,7 +3,6 @@ package com.mraof.minestuck.data;
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
@@ -50,9 +49,14 @@ public abstract class DialogueProvider implements DataProvider
 	
 	protected abstract void addDialogue();
 	
+	protected ResourceLocation dialogueId(String path)
+	{
+		return new ResourceLocation(this.modId, path);
+	}
+	
 	protected final ResourceLocation add(String path, DialogueBuilder builder)
 	{
-		return this.add(new ResourceLocation(modId, path), builder);
+		return this.add(dialogueId(path), builder);
 	}
 	
 	protected final ResourceLocation add(ResourceLocation id, DialogueBuilder builder)
@@ -157,12 +161,6 @@ public abstract class DialogueProvider implements DataProvider
 			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(dialogueId));
 		}
 		
-		@Deprecated
-		public NodeBuilder next(String dialoguePath)
-		{
-			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(dialoguePath));
-		}
-		
 		public NodeBuilder addResponse(ResponseBuilder responseBuilder)
 		{
 			this.responses.add(responseBuilder);
@@ -210,12 +208,6 @@ public abstract class DialogueProvider implements DataProvider
 			this.loopNextPath = false;
 			this.nextDialoguePath = nextDialoguePath;
 			return this;
-		}
-		
-		@Deprecated
-		public ResponseBuilder nextDialogue(String nextDialoguePath)
-		{
-			return this.nextDialogue(new ResourceLocation(Minestuck.MOD_ID, nextDialoguePath));
 		}
 		
 		public ResponseBuilder loop()

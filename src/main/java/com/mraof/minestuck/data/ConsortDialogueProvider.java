@@ -13,7 +13,6 @@ import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -98,11 +97,12 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 						.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.ROCK))
 								.nextDialogue(add("rabbit.food_shortage.2", new NodeBuilder(defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
 										.addClosingResponse(DOTS)))));
+		var rabbitFood2 = dialogueId("rabbit.food.2");
 		addRandomlySelectable("rabbit.food.1", defaultWeight(all(isInTitle(RABBITS),
 						any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInTerrain(FUNGI), isInTerrain(SHADE)))),
 				new NodeBuilder(defaultKeyMsg("I sure wonder where the rabbits are getting their food from."))
-						.next("rabbit.food.2"));
-		add("rabbit.food.2", new NodeSelectorBuilder()
+						.next(rabbitFood2));
+		add(rabbitFood2, new NodeSelectorBuilder()
 				.node(any(isInTerrain(FUNGI), isInTerrain(SHADE)),
 						new NodeBuilder(subMsg("b", "I mean, there's not really much else than mushrooms around here.")))
 				.defaultNode(new NodeBuilder(subMsg("a", "There's not really much food to be found in this desolate place."))
@@ -451,12 +451,14 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 	
 	private void testDialogues()
 	{
+		var test1 = dialogueId("test1");
+		var test2 = dialogueId("test2");
 		addRandomlySelectable("test1", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg("Press §eSHIFT§r for more info"))
 				.animation("test1animation")
-				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue("test2")
+				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue(test2)
 						.condition(any(isAnyEntityType(TURTLE), isAnyEntityType(IGUANA))))
-				.addResponse(new ResponseBuilder(msg("test1response2")).nextDialogue("test2").condition(isAnyEntityType(NAKAGATOR)))
-				.addResponse(new ResponseBuilder(msg("test1response3")).nextDialogue("test2").addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
+				.addResponse(new ResponseBuilder(msg("test1response2")).nextDialogue(test2).condition(isAnyEntityType(NAKAGATOR)))
+				.addResponse(new ResponseBuilder(msg("test1response3")).nextDialogue(test2).addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
 				.addResponse(new ResponseBuilder(msg("test1response4"))
 						.visibleCondition(subText("fail", "This very custom condition was not met."), one(
 								one(isAnyEntityType(NAKAGATOR), isAnyEntityType(TURTLE), isAnyEntityType(IGUANA), isAnyEntityType(SALAMANDER)),
@@ -467,12 +469,12 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 		
 		addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
-				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue("test1")
+				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue(test1)
 						.visibleCondition(isAnyEntityType(SALAMANDER)))
-				.addResponse(new ResponseBuilder(msg("test2response2")).nextDialogue("test1")
+				.addResponse(new ResponseBuilder(msg("test2response2")).nextDialogue(test1)
 						.visibleCondition(none(new Condition.IsCarapacian(), isInTerrain(END), isInTerrain(SHADE)))
 						.addTrigger(new Trigger.Command("say hi")))
-				.addResponse(new ResponseBuilder(msg("test2response3")).nextDialogue("test1")
+				.addResponse(new ResponseBuilder(msg("test2response3")).nextDialogue(test1)
 						.addTrigger(new Trigger.Command("""
 								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]"""))
 				)
@@ -483,19 +485,19 @@ public final class ConsortDialogueProvider extends SelectableDialogueProvider
 		
 		addRandomlySelectable("nakagator_only", defaultWeight(isAnyEntityType(NAKAGATOR)), new NodeBuilder(defaultKeyMsg()));
 		
+		var ohYippee = add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
+		var hungerFilled = add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
 		addRandomlySelectable("me_want_cookie", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
 				.addResponse(new ResponseBuilder(subMsg("why", "why do you want cookie?")).loop())
-				.addResponse(new ResponseBuilder(subMsg("give", "here have a cookie chap")).nextDialogue("oh_yippee")
+				.addResponse(new ResponseBuilder(subMsg("give", "here have a cookie chap")).nextDialogue(ohYippee)
 						.visibleCondition(new Condition.PlayerHasItem(Items.COOKIE, 1))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
-						.addTrigger(new Trigger.SetDialogue(new ResourceLocation(Minestuck.MOD_ID, "hunger_filled")))));
-		add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
-		add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
+						.addTrigger(new Trigger.SetDialogue(hungerFilled))));
 		
 		addRandomlySelectable("me_want_5_cookies", weighted(5, Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
-				.addResponse(new ResponseBuilder(subMsg("give", "here have 5 cookies chap")).nextDialogue("oh_yippee")
+				.addResponse(new ResponseBuilder(subMsg("give", "here have 5 cookies chap")).nextDialogue(ohYippee)
 						.visibleCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))));
 		
