@@ -11,7 +11,12 @@
     }
   ],
   "default_node": {
-    "description": "minestuck.dialogue.shady_consort.peppy_offer.start.desc",
+    "description": {
+      "arguments": [
+        "entity_type"
+      ],
+      "key": "minestuck.dialogue.shady_consort.peppy_offer.start.desc"
+    },
     "message": "minestuck.dialogue.shady_consort.peppy_offer.start",
     "responses": [
       {
