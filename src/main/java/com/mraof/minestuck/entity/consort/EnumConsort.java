@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue.DialogueCategory;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.sounds.SoundEvent;
@@ -95,13 +96,25 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 	
 	public enum MerchantType implements StringRepresentable
 	{
-		NONE,
-		SHADY,
-		FOOD,
-		GENERAL,
+		NONE(DialogueCategory.CONSORT),
+		SHADY(DialogueCategory.SHADY_CONSORT),
+		FOOD(DialogueCategory.CONSORT_FOOD_MERCHANT),
+		GENERAL(DialogueCategory.CONSORT),
 		;
 		
 		public static final Codec<MerchantType> CODEC = StringRepresentable.fromEnum(MerchantType::values);
+		
+		private final DialogueCategory category;
+		
+		MerchantType(DialogueCategory category)
+		{
+			this.category = category;
+		}
+		
+		public DialogueCategory dialogueCategory()
+		{
+			return category;
+		}
 		
 		public static MerchantType getFromName(String str)
 		{

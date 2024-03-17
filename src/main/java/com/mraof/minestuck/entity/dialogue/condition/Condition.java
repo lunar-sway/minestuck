@@ -488,6 +488,7 @@ public interface Condition
 		}
 	}
 	
+	//todo with how we're using this, I think we want it to accept an equal amount too
 	record PlayerHasBoondollars(int amount, boolean greaterThan) implements Condition
 	{
 		static final Codec<PlayerHasBoondollars> CODEC = RecordCodecBuilder.create(instance -> instance.group(

@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.data.dialogue.ConsortDialogue;
 import com.mraof.minestuck.data.dialogue.ConsortFoodMerchantDialogue;
+import com.mraof.minestuck.data.dialogue.ShadyConsortDialogue;
 import com.mraof.minestuck.data.loot_table.MSLootModifiers;
 import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
@@ -67,6 +68,7 @@ public final class MinestuckData
 		var enUsLanguageProvider = gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
 		
 		gen.addProvider(event.includeServer(), ConsortDialogue.create(output, enUsLanguageProvider));
+		gen.addProvider(event.includeServer(), ShadyConsortDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider));
 	}
 	

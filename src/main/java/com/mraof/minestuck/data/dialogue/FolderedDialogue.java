@@ -31,7 +31,7 @@ public final class FolderedDialogue implements DialogueProvider.DialogueProducer
 		Builder builder = new Builder(id, register);
 		this.builderConsumer.accept(builder);
 		Objects.requireNonNull(builder.dialogueStart, "Dialogue start must be set for dialogue " + id);
-		return builder.dialogueStart.buildAndRegister(id.withSuffix("/start"), register);
+		return builder.dialogueStart.buildAndRegister(builder.startId(), register);
 	}
 	
 	public static final class Builder
@@ -45,6 +45,11 @@ public final class FolderedDialogue implements DialogueProvider.DialogueProducer
 		{
 			this.baseId = baseId;
 			this.register = register;
+		}
+		
+		public ResourceLocation startId()
+		{
+			return this.baseId.withSuffix("/start");
 		}
 		
 		public void addStart(DialogueProvider.DialogueProducer dialogue)

@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
 import com.mraof.minestuck.entity.consort.MessageType.*;
-import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
@@ -101,47 +100,6 @@ public class ConsortDialogue
 				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level().dimension()),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
-		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
-				new SingleMessage[]{new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny")},
-				new MessageType[]{
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
-								new ChainMessage(1, new SingleMessage("peppy_offer.item"), new SingleMessage("peppy_offer.purchase"))),
-						new ChoiceMessage(new SingleMessage("peppy_offer.next"),
-								new SingleMessage[]{new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy_2")},
-								new MessageType[]{new SingleMessage("dots"),
-										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
-												new SingleMessage("peppy_offer.purchase"))})})).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
-		
-		
-		addMessage(new ChoiceMessage(new DescriptionMessage("shady_offer"),
-				new SingleMessage[]
-						{
-								new SingleMessage("shady_offer.buy"),
-								new SingleMessage("shady_offer.deny")
-						},
-				new MessageType[]{
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
-								new ChainMessage(1,
-										new SingleMessage("shady_offer.item"),
-										new SingleMessage("shady_offer.purchase")
-								)
-						),
-						new ChoiceMessage(new SingleMessage("shady_offer.next", "consort_sound"),
-								new SingleMessage[]
-										{
-												new SingleMessage("shady_offer.deny_again"),
-												new SingleMessage("shady_offer.buy_2")
-										},
-								new MessageType[]
-										{
-												new SingleMessage("dots"),
-												new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
-														new SingleMessage("shady_offer.purchase")
-												)
-										}
-						)
-				}
-		)).type(MerchantType.SHADY).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
 		
 		addMessage(new ItemRequirement(MSTags.Items.CONSORT_SNACKS, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
