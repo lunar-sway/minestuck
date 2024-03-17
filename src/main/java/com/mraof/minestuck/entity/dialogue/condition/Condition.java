@@ -567,7 +567,6 @@ public interface Condition
 		
 		static final Codec<HasMoveRestriction> CODEC = Codec.unit(INSTANCE);
 		
-		
 		@Override
 		public Codec<HasMoveRestriction> codec()
 		{
@@ -578,6 +577,27 @@ public interface Condition
 		public boolean test(LivingEntity entity)
 		{
 			return entity instanceof Mob mob && mob.hasRestriction();
+		}
+	}
+	
+	record PlayerFlag(String flag) implements Condition
+	{
+		static final Codec<PlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("flag").forGetter(PlayerFlag::flag)
+		).apply(instance, PlayerFlag::new));
+		
+		@Override
+		public Codec<PlayerFlag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			PlayerIdentifier playerId = IdentifierHandler.encode(player);
+			return playerId != null && entity instanceof DialogueEntity dialogueEntity
+					&& dialogueEntity.getDialogueComponent().playerFlags(playerId).contains(this.flag);
 		}
 	}
 }

@@ -6,7 +6,9 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -56,7 +58,9 @@ public sealed interface Trigger
 		GIVE_FROM_LOOT_TABLE(() -> GiveFromLootTable.CODEC),
 		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC),
 		ADD_BOONDOLLARS(() -> AddBoondollars.CODEC),
-		EXPLODE(() -> Explode.CODEC);
+		EXPLODE(() -> Explode.CODEC),
+		SET_PLAYER_FLAG(() -> SetPlayerFlag.CODEC),
+		;
 		
 		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 		
@@ -356,6 +360,27 @@ public sealed interface Trigger
 		{
 			if(entity instanceof ConsortEntity consortEntity)
 				consortEntity.setExplosionTimer();
+		}
+	}
+	
+	record SetPlayerFlag(String flag) implements Trigger
+	{
+		static final Codec<SetPlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("flag").forGetter(SetPlayerFlag::flag)
+		).apply(instance, SetPlayerFlag::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.SET_PLAYER_FLAG;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			PlayerIdentifier playerId = IdentifierHandler.encode(player);
+			if(playerId != null && entity instanceof DialogueEntity dialogueEntity)
+				dialogueEntity.getDialogueComponent().playerFlags(playerId).add(this.flag);
 		}
 	}
 }

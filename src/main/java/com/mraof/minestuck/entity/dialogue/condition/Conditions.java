@@ -41,6 +41,7 @@ public final class Conditions
 		REGISTER.register("player_boondollars", () -> Condition.PlayerHasBoondollars.CODEC);
 		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
 		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
+		REGISTER.register("player_flag", () -> Condition.PlayerFlag.CODEC);
 	}
 	
 	public static Condition alwaysTrue()

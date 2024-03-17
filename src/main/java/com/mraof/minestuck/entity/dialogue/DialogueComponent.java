@@ -3,7 +3,12 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
+import java.util.*;
 
 public final class DialogueComponent
 {
@@ -22,6 +27,7 @@ public final class DialogueComponent
 	private ResourceLocation activeDialogue;
 	private boolean keepOnReset;
 	private boolean hasGeneratedOnce = false;
+	private final Map<PlayerIdentifier, Set<String>> playerSpecificFlags = new HashMap<>();
 	
 	public DialogueComponent(LivingEntity entity)
 	{
@@ -35,6 +41,14 @@ public final class DialogueComponent
 			this.activeDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
 			this.keepOnReset = tag.getBoolean("keep_on_reset");
 			this.hasGeneratedOnce = true;
+			this.playerSpecificFlags.clear();
+			tag.getList("player_flags", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag -> {
+				
+				PlayerIdentifier player = IdentifierHandler.load(entryTag, "player");
+				Set<String> flags = this.playerFlags(player);
+				entryTag.getList("flags", Tag.TAG_STRING).stream().map(StringTag.class::cast)
+						.map(StringTag::getAsString).forEach(flags::add);
+			});
 		}
 		else
 			this.hasGeneratedOnce = tag.getBoolean("has_generated");
@@ -47,6 +61,16 @@ public final class DialogueComponent
 		{
 			tag.putString("dialogue_id", this.activeDialogue.toString());
 			tag.putBoolean("keep_on_reset", this.keepOnReset);
+			ListTag playerFlagsTag = new ListTag();
+			this.playerSpecificFlags.forEach((player, flags) -> {
+				CompoundTag entryTag = new CompoundTag();
+				player.saveToNBT(entryTag, "player");
+				ListTag flagsTag = new ListTag();
+				flags.stream().map(StringTag::valueOf).forEach(flagsTag::add);
+				entryTag.put("flags", flagsTag);
+				playerFlagsTag.add(entryTag);
+			});
+			tag.put("player_flags", playerFlagsTag);
 		}
 		
 		tag.putBoolean("has_generated", this.hasGeneratedOnce);
@@ -81,10 +105,16 @@ public final class DialogueComponent
 		return this.activeDialogue != null;
 	}
 	
+	public Set<String> playerFlags(PlayerIdentifier player)
+	{
+		return this.playerSpecificFlags.computeIfAbsent(player, _player -> new HashSet<>());
+	}
+	
 	public void resetDialogue()
 	{
 		if(!this.keepOnReset)
 			this.activeDialogue = null;
+		this.playerSpecificFlags.clear();
 	}
 	
 	public void tryStartDialogue(ServerPlayer serverPlayer)
