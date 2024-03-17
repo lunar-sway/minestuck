@@ -35,7 +35,7 @@ public class WoodLandType extends TerrainLandType
 	public static final String PLANKS = "minestuck.planks";
 	public static final String CARVINGS = "minestuck.carvings";
 	
-	protected static final RandomSpreadStructurePlacement LARGE_UNFINISHED_TABLE_PLACEMENT = new RandomSpreadStructurePlacement(4, 4, RandomSpreadType.LINEAR, 17524013);
+	protected static final RandomSpreadStructurePlacement LARGE_UNFINISHED_TABLE_PLACEMENT = new RandomSpreadStructurePlacement(6, 4, RandomSpreadType.LINEAR, 17524013);
 	
 	public WoodLandType()
 	{
