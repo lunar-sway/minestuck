@@ -50,6 +50,7 @@ public final class ConsortFoodMerchantDialogue
 						.addClosingResponse(l.subMsg("bye", "Goodbye"))
 						.addResponse(new ResponseBuilder(l.subMsg("next", "Let me see your wares")).addTrigger(SHOP_TRIGGER)));
 		
+		//todo these have not been made as fancy with responses as the ones above. Do we want to work on that?
 		provider.addRandomlySelectable("breeze", defaultWeight(isInTitle(WIND)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("It's hard to catch our food with the Breeze carrying them away and whatnot!"))
 						.addResponse(new ResponseBuilder(ARROW).addTrigger(SHOP_TRIGGER)));

@@ -42,6 +42,9 @@ public final class ConsortDialogue
 		return provider;
 	}
 	
+	//todo look over response texts.
+	// In the old system, there was one text showing off the option, and another text being what the player actually "replied" with. When moving to this system, only one of the two was used at each case.
+	//todo some nodes have closing responses and others doesn't. Do we want to work in more closing responses?
 	private static void consortDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
 		//Generic
@@ -271,7 +274,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("You'd better watch where you're going. Wouldn't want you to step right into some fire.")));
 		provider.addRandomlySelectable("lava_crickets", defaultWeight(isInTerrain(HEAT)),
 				new NodeBuilder(l.defaultKeyMsg("Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.")));
-		provider.addRandomlySelectable("tummy_tunnel", defaultWeight(isInTerrain(HEAT)),
+		provider.addRandomlySelectable("tummy_tunnel", defaultWeight(isInTerrain(HEAT)),	//todo review this. This dialogue was set up as regular dialogue in the old system, but its location in the language provider suggested that it might have meant to be food merchant dialogue.
 				new NodeBuilder(l.defaultKeyMsg("Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.")));
 		provider.addRandomlySelectable("the_water_is_lava", defaultWeight(isInTerrain(HEAT)),
 				new NodeBuilder(l.defaultKeyMsg("You know the water is fucking lava? Who thought it would be a good idea to make water out of lava? How do we even stay hydrated in this place dude?")));
@@ -291,7 +294,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("camel", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Want to buy a used camel? Only 2000 boondollars."))
 						.addResponse(new ResponseBuilder(l.subMsg("yes", "Why not? Seems like a good price for a camel!"))
-								.nextDialogue(builder.add("no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))
+								.nextDialogue(builder.add("no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)")))))	//todo a text mention (maybe in description?) saying they went off before actually getting any boondollars?
 						.addResponse(new ResponseBuilder(l.subMsg("no", "Of course not! You know better!"))
 								.nextDialogue(builder.add("dancing_camel", new NodeBuilder(l.defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))))
 		));
@@ -317,7 +320,7 @@ public final class ConsortDialogue
 								.addTrigger(new Trigger.AddBoondollars(-100))
 								.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
 								.addTrigger(new Trigger.AddConsortReputation(50))
-								.addTrigger(new Trigger.SetDialogue(genericThanks))
+								.addTrigger(new Trigger.SetDialogue(genericThanks))	//todo they'll be thanking any player like this. Maybe work with player flags to thank the specific player and say something else to others?
 								.nextDialogue(builder.add("gratitude", new NodeBuilder(l.defaultKeyMsg("Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!")))))
 						.addResponse(new ResponseBuilder(l.subMsg("ignore", "Sorry, but I can't help you."))
 								.nextDialogue(builder.add("death", new NodeBuilder(l.defaultKeyMsg("I guess I'll just die then..."))))))));
@@ -498,13 +501,13 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("I heard that the true name of the %s is %s. Isn't that cool?", Argument.LAND_TITLE, Argument.LAND_PLAYER_NAME)));
 		provider.addRandomlySelectable("college", defaultWeight(alwaysTrue()), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("Please, I need to pay for my children to attend college...")))
-				.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime."))));
+				.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime."))));	//todo this doesn't actually depend on how many boondollars the player has. There's also a lack of interaction options from what the text would warrant.
 		provider.addRandomlySelectable("unknown", defaultWeight(isAnyEntityType(TURTLE)), new ChainBuilder()
-				.node(new NodeBuilder(l.defaultKeyMsg("They are coming...")))
+				.node(new NodeBuilder(l.defaultKeyMsg("They are coming...")))	//todo custom response message?
 				.node(new NodeBuilder(l.defaultKeyMsg("Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?"))));
 		provider.addRandomlySelectable("cult", defaultWeight(isAnyEntityType(TURTLE, SALAMANDER)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("We would love to invite you, %s, to our secret wizards cult.", Argument.PLAYER_TITLE)))
-				.node(new NodeBuilder(l.defaultKeyMsg("Meet me by dawn with mercury, salt, and sulfur to begin the initiation."))));
+				.node(new NodeBuilder(l.defaultKeyMsg("Meet me by dawn with mercury, salt, and sulfur to begin the initiation."))));	//todo review this. Suggests interactivity that is simply not there.
 		provider.addRandomlySelectable("title_presence", defaultWeight(all(isAnyEntityType(IGUANA, SALAMANDER), isFromLand())), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("I sense the presence of the %s. Tell me if you see them, ok?", Argument.PLAYER_TITLE))
 						.addResponse(new ResponseBuilder(l.subMsg("i_am", "Present yourself as the %s.", Argument.PLAYER_TITLE))
