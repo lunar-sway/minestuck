@@ -309,16 +309,17 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("My neighbors were complaining the other night about the snow.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Personally, the cold never really bothered me anyways."))
 						.description(l.subMsg("desc", "You hear a faint \"ba-dum tss\" in the distance."))));
-		provider.addRandomlySelectable("fur_coat", defaultWeight(isInTerrain(FROST)), new NodeBuilder(l.defaultKeyMsg("Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!"))
-				.addResponse(new ResponseBuilder(l.subMsg("pay", "Here you go! [Pay 100 boondollars]"))
-						.condition(new Condition.PlayerHasBoondollars(100, true))
-						.addTrigger(new Trigger.AddBoondollars(-100))
-						.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
-						.addTrigger(new Trigger.AddConsortReputation(50))
-						.addTrigger(new Trigger.SetDialogue(genericThanks))
-						.nextDialogue(provider.dialogue().add("fur_coat.gratitude", new NodeBuilder(l.defaultKeyMsg("Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!")))))
-				.addResponse(new ResponseBuilder(l.subMsg("ignore", "Sorry, but I can't help you."))
-						.nextDialogue(provider.dialogue().add("fur_coat.death", new NodeBuilder(l.defaultKeyMsg("I guess I'll just die then..."))))));
+		provider.addRandomlySelectable("fur_coat", defaultWeight(isInTerrain(FROST)), new FolderedDialogue(builder ->
+				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!"))
+						.addResponse(new ResponseBuilder(l.subMsg("pay", "Here you go! [Pay 100 boondollars]"))
+								.condition(new Condition.PlayerHasBoondollars(100, true))
+								.addTrigger(new Trigger.AddBoondollars(-100))
+								.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
+								.addTrigger(new Trigger.AddConsortReputation(50))
+								.addTrigger(new Trigger.SetDialogue(genericThanks))
+								.nextDialogue(builder.add("gratitude", new NodeBuilder(l.defaultKeyMsg("Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!")))))
+						.addResponse(new ResponseBuilder(l.subMsg("ignore", "Sorry, but I can't help you."))
+								.nextDialogue(builder.add("death", new NodeBuilder(l.defaultKeyMsg("I guess I'll just die then..."))))))));
 		
 		
 		//Rock

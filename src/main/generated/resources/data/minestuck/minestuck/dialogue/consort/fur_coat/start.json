@@ -1,14 +1,14 @@
 {
   "node": {
-    "message": "minestuck.dialogue.consort.fur_coat",
+    "message": "minestuck.dialogue.consort.fur_coat.start",
     "responses": [
       {
         "condition": {
           "type": "minestuck:player_boondollars",
           "amount": 100
         },
-        "message": "minestuck.dialogue.consort.fur_coat.pay",
-        "next_dialogue_path": "minestuck:consort/fur_coat.gratitude",
+        "message": "minestuck.dialogue.consort.fur_coat.start.pay",
+        "next_dialogue_path": "minestuck:consort/fur_coat/gratitude",
         "triggers": [
           {
             "type": "add_boondollars",
@@ -29,8 +29,8 @@
         ]
       },
       {
-        "message": "minestuck.dialogue.consort.fur_coat.ignore",
-        "next_dialogue_path": "minestuck:consort/fur_coat.death"
+        "message": "minestuck.dialogue.consort.fur_coat.start.ignore",
+        "next_dialogue_path": "minestuck:consort/fur_coat/death"
       }
     ]
   }
