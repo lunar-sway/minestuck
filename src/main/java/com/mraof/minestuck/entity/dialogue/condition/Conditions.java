@@ -26,7 +26,6 @@ public final class Conditions
 		REGISTER.register("always_true", () -> Condition.AlwaysTrue.CODEC);
 		REGISTER.register("first_time_generating", () -> Condition.FirstTimeGenerating.CODEC);
 		REGISTER.register("list", () -> ListCondition.CODEC);
-		REGISTER.register("consort", () -> Condition.IsConsort.CODEC);
 		REGISTER.register("carapacian", () -> Condition.IsCarapacian.CODEC);
 		REGISTER.register("entity_type", () -> Condition.IsEntityType.CODEC);
 		REGISTER.register("is_from_land", () -> Condition.IsFromLand.CODEC);

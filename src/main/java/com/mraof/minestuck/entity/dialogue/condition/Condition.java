@@ -123,29 +123,6 @@ public interface Condition
 		}
 	}
 	
-	record IsConsort() implements NpcOnlyCondition
-	{
-		static final Codec<IsConsort> CODEC = Codec.unit(IsConsort::new);
-		
-		@Override
-		public Codec<IsConsort> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity instanceof ConsortEntity;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not consort");
-		}
-	}
-	
 	record IsCarapacian() implements NpcOnlyCondition
 	{
 		static final Codec<IsCarapacian> CODEC = Codec.unit(IsCarapacian::new);
