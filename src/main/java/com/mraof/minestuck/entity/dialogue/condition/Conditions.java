@@ -44,6 +44,11 @@ public final class Conditions
 		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
 	}
 	
+	public static Condition alwaysTrue()
+	{
+		return Condition.AlwaysTrue.INSTANCE;
+	}
+	
 	public static Condition all(Condition... conditions)
 	{
 		return new ListCondition(List.of(conditions), ListCondition.ListType.ALL);
@@ -62,6 +67,11 @@ public final class Conditions
 	public static Condition none(Condition... conditions)
 	{
 		return new ListCondition(List.of(conditions), ListCondition.ListType.NONE);
+	}
+	
+	public static Condition isFromLand()
+	{
+		return Condition.IsFromLand.INSTANCE;
 	}
 	
 	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)

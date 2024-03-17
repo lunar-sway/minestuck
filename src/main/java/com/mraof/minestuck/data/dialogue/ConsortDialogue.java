@@ -448,7 +448,7 @@ public final class ConsortDialogue
 		
 		
 		//Misc
-		provider.addRandomlySelectable("denizen_mention", defaultWeight(Condition.IsFromLand.INSTANCE),
+		provider.addRandomlySelectable("denizen_mention", defaultWeight(isFromLand()),
 				new NodeBuilder(l.defaultKeyMsg("It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!")));
 		provider.addRandomlySelectable("ring_fishing", defaultWeight(isAnyEntityType(SALAMANDER, IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("My brother found a magic ring while fishing recently!")));
@@ -460,13 +460,13 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.")));
 		provider.addRandomlySelectable("wyrm", defaultWeight(isAnyEntityType(TURTLE, IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("Legends speak of the Wyrm, a giant ivory pillar that radiates joy and happiness and uselessness.")));
-		provider.addRandomlySelectable("useless_pogo", defaultWeight(Condition.AlwaysTrue.INSTANCE),
+		provider.addRandomlySelectable("useless_pogo", defaultWeight(alwaysTrue()),
 				new NodeBuilder(l.defaultKeyMsg("I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!")));
-		provider.addRandomlySelectable("await_hero", defaultWeight(Condition.IsFromLand.INSTANCE),
+		provider.addRandomlySelectable("await_hero", defaultWeight(isFromLand()),
 				new NodeBuilder(l.defaultKeyMsg("Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.", Argument.LAND_NAME, Argument.ENTITY_TYPES, Argument.LAND_TITLE)));
 		provider.addRandomlySelectable("zazzerpan", defaultWeight(isAnyEntityType(TURTLE)),
 				new NodeBuilder(l.defaultKeyMsg("Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!")));
-		provider.addRandomlySelectable("texas_history", defaultWeight(all(isAnyEntityType(TURTLE), Condition.IsFromLand.INSTANCE)),
+		provider.addRandomlySelectable("texas_history", defaultWeight(all(isAnyEntityType(TURTLE), isFromLand())),
 				new NodeBuilder(l.defaultKeyMsg("The place was %s, the year, was 20XX.", Argument.LAND_NAME)));
 		provider.addRandomlySelectable("disks", defaultWeight(isAnyEntityType(IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("I used to be an adventurer like you, then I never got the disks.")));
@@ -494,9 +494,9 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?")));
 		provider.addRandomlySelectable("stock_market", defaultWeight(isAnyEntityType(NAKAGATOR)),
 				new NodeBuilder(l.defaultKeyMsg("I bought a bunch of stocks on the market... Now I'm broke...")));
-		provider.addRandomlySelectable("identity", defaultWeight(all(isAnyEntityType(SALAMANDER), Condition.IsFromLand.INSTANCE)),
+		provider.addRandomlySelectable("identity", defaultWeight(all(isAnyEntityType(SALAMANDER), isFromLand())),
 				new NodeBuilder(l.defaultKeyMsg("I heard that the true name of the %s is %s. Isn't that cool?", Argument.LAND_TITLE, Argument.LAND_PLAYER_NAME)));
-		provider.addRandomlySelectable("college", defaultWeight(Condition.AlwaysTrue.INSTANCE), new ChainBuilder()
+		provider.addRandomlySelectable("college", defaultWeight(alwaysTrue()), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("Please, I need to pay for my children to attend college...")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime."))));
 		provider.addRandomlySelectable("unknown", defaultWeight(isAnyEntityType(TURTLE)), new ChainBuilder()
@@ -505,13 +505,13 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("cult", defaultWeight(isAnyEntityType(TURTLE, SALAMANDER)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("We would love to invite you, %s, to our secret wizards cult.", Argument.PLAYER_TITLE)))
 				.node(new NodeBuilder(l.defaultKeyMsg("Meet me by dawn with mercury, salt, and sulfur to begin the initiation."))));
-		provider.addRandomlySelectable("title_presence", defaultWeight(all(isAnyEntityType(IGUANA, SALAMANDER), Condition.IsFromLand.INSTANCE)), new FolderedDialogue(builder ->
+		provider.addRandomlySelectable("title_presence", defaultWeight(all(isAnyEntityType(IGUANA, SALAMANDER), isFromLand())), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("I sense the presence of the %s. Tell me if you see them, ok?", Argument.PLAYER_TITLE))
 						.addResponse(new ResponseBuilder(l.subMsg("i_am", "Present yourself as the %s.", Argument.PLAYER_TITLE))
 								.nextDialogue(builder.add("i_am", new NodeBuilder(l.defaultKeyMsg("OH MY %s", Argument.ENTITY_SOUND_2)))))
 						.addResponse(new ResponseBuilder(l.subMsg("agree", "\"Agree\" to do that.")).nextDialogue(thanks)))
 		));
-		provider.addRandomlySelectable("denizen", defaultWeight(all(isAnyEntityType(SALAMANDER, IGUANA, TURTLE), Condition.IsFromLand.INSTANCE)), new FolderedDialogue(builder ->
+		provider.addRandomlySelectable("denizen", defaultWeight(all(isAnyEntityType(SALAMANDER, IGUANA, TURTLE), isFromLand())), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("%s has been sleeping for a thousand years. I shudder at the thought of their return.", Argument.LAND_DENIZEN))
 						.addResponse(new ResponseBuilder(l.subMsg("what", "The... what?"))
 								.nextDialogue(builder.add("explain", new NodeBuilder(l.defaultKeyMsg("The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.", Argument.LAND_CLASS)))))
@@ -539,7 +539,7 @@ public final class ConsortDialogue
 						)))
 				.addResponse(new ResponseBuilder(msg("test1response5"))
 						.visibleCondition(l.subText("bad_score", "Player needs a score of 5 for 'testScore'."), new Condition.CustomHasScore(5, "player", "testScore"))));
-		provider.addRandomlySelectable("test1", defaultWeight(Condition.AlwaysTrue.INSTANCE), test1);
+		provider.addRandomlySelectable("test1", defaultWeight(alwaysTrue()), test1);
 		
 		provider.dialogue().add(test2, new NodeBuilder(defaultKeyMsg())
 				.animation("test2animation")
@@ -555,14 +555,14 @@ public final class ConsortDialogue
 				.addResponse(new ResponseBuilder(msg("test2response4"))
 						.visibleCondition(one(new Condition.IsCarapacian(), new Condition.PlayerIsClass(EnumClass.WITCH), new Condition.PlayerIsClass(EnumClass.MAGE),
 								new Condition.PlayerIsAspect(EnumAspect.HEART), new Condition.PlayerIsAspect(EnumAspect.DOOM), isInTerrain(RAIN)))));
-		provider.addRandomlySelectable("test2", defaultWeight(Condition.AlwaysTrue.INSTANCE), test2);
+		provider.addRandomlySelectable("test2", defaultWeight(alwaysTrue()), test2);
 		
 		provider.addRandomlySelectable("turtle_only", defaultWeight(isAnyEntityType(TURTLE)), new NodeBuilder(defaultKeyMsg()));
 		provider.addRandomlySelectable("nakagator_only", defaultWeight(isAnyEntityType(NAKAGATOR)), new NodeBuilder(defaultKeyMsg()));
 		
 		var ohYippee = provider.dialogue().add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
 		var hungerFilled = provider.dialogue().add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
-		provider.addRandomlySelectable("me_want_cookie", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
+		provider.addRandomlySelectable("me_want_cookie", defaultWeight(alwaysTrue()), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(l.subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
 				.addResponse(new ResponseBuilder(l.subMsg("why", "why do you want cookie?")).loop())
 				.addResponse(new ResponseBuilder(l.subMsg("give", "here have a cookie chap")).nextDialogue(ohYippee)
@@ -570,23 +570,23 @@ public final class ConsortDialogue
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
 						.addTrigger(new Trigger.SetDialogue(hungerFilled))));
 		
-		provider.addRandomlySelectable("me_want_5_cookies", weighted(5, Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
+		provider.addRandomlySelectable("me_want_5_cookies", weighted(5, alwaysTrue()), new NodeBuilder(defaultKeyMsg())
 				.addClosingResponse(l.subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
 				.addResponse(new ResponseBuilder(l.subMsg("give", "here have 5 cookies chap")).nextDialogue(ohYippee)
 						.visibleCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
 						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))));
 		
-		provider.addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, Condition.AlwaysTrue.INSTANCE), new NodeBuilder(defaultKeyMsg())
+		provider.addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, alwaysTrue()), new NodeBuilder(defaultKeyMsg())
 				.addResponse(new ResponseBuilder(l.subMsg("hate", "I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)))
 				.addResponse(new ResponseBuilder(l.subMsg("love", "I love you")).addTrigger(new Trigger.AddConsortReputation(100)))
 				.addResponse(new ResponseBuilder(l.subMsg("high_rep", "Rep above 500")).visibleCondition(new Condition.PlayerHasReputation(500, true)))
 				.addResponse(new ResponseBuilder(l.subMsg("low_rep", "Rep below 200")).visibleCondition(new Condition.PlayerHasReputation(200, false)))
 				.addClosingResponse(l.subMsg("bye", "bye")));
 		
-		provider.addRandomlySelectable("test_arguments", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(l.defaultKeyMsg("Player name land: %s", Argument.LAND_PLAYER_NAME))
+		provider.addRandomlySelectable("test_arguments", defaultWeight(alwaysTrue()), new NodeBuilder(l.defaultKeyMsg("Player name land: %s", Argument.LAND_PLAYER_NAME))
 				.addResponse(new ResponseBuilder(l.subMsg("name", "Player name land: %s", Argument.LAND_PLAYER_NAME))));
 		
-		provider.addRandomlySelectable("look_rich", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeSelectorBuilder()
+		provider.addRandomlySelectable("look_rich", defaultWeight(alwaysTrue()), new NodeSelectorBuilder()
 				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(l.subMsg("rich", "Hey, looks like you have a lot of boons!")))
 				.node(new Condition.PlayerHasBoondollars(10, false), new NodeBuilder(l.subMsg("poor", "Wow, you barely have any boons. Poor you.")))
 				.defaultNode(new NodeBuilder(l.defaultKeyMsg("Hi! I can sense if someone has a lot of boondollars."))));
