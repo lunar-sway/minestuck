@@ -15,14 +15,16 @@ import java.util.List;
 public class DialogueButton extends ExtendedButton
 {
 	private final ResourceLocation gui;
+	private final boolean isResponse;
 	private final List<FormattedCharSequence> messageLines;
 	public final int trueHeight;
 	public boolean wasHoveredOrFocused = false;
 	
-	public DialogueButton(ResourceLocation gui, int xPos, int yPos, int width, int defaultHeight, Component displayString, OnPress handler)
+	public DialogueButton(ResourceLocation gui, boolean isResponse, int xPos, int yPos, int width, int defaultHeight, Component displayString, OnPress handler)
 	{
 		super(xPos, yPos, width, defaultHeight, displayString, handler);
 		this.gui = gui;
+		this.isResponse = isResponse;
 		
 		Minecraft mc = Minecraft.getInstance();
 		this.messageLines = mc.font.split(this.getMessage(), this.width - 8);
@@ -70,7 +72,7 @@ public class DialogueButton extends ExtendedButton
 		Minecraft mc = Minecraft.getInstance();
 		boolean hoveredOrFocused = this.isHoveredOrFocused();
 		int k = !this.active ? 0 : (hoveredOrFocused ? 2 : 1);
-		int hoverFocusShift = hoveredOrFocused ? 7 : 0;
+		int hoverFocusShift = isResponse ? (hoveredOrFocused ? 7 : 0) : 0;
 		
 		if(hoveredOrFocused && !wasHoveredOrFocused && this.active)
 			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.25F, 2.0F);
@@ -78,10 +80,17 @@ public class DialogueButton extends ExtendedButton
 		guiGraphics.blitWithBorder(gui, this.getX() + hoverFocusShift, this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
 		
 		int pY = this.getY() + (this.height - 8) / 2;
-		for(FormattedCharSequence line : messageLines)
+		for(int i = 0 ; i < messageLines.size(); i++)
 		{
 			//TODO fix poor centering of text
-			guiGraphics.drawString(mc.font, line, this.getX() + 10 + hoverFocusShift, pY, getFGColor(), false);
+			
+			int textX = this.getX() + hoverFocusShift + (isResponse ? 10 : 4);
+			
+			//prepends a ">" to the first line of a response
+			if(isResponse && i == 0)
+				guiGraphics.drawString(mc.font, Component.literal(">"), textX - 6 , pY, getFGColor(), false);
+			
+			guiGraphics.drawString(mc.font, messageLines.get(i), textX , pY, getFGColor(), false);
 			pY += 9;
 		}
 	}

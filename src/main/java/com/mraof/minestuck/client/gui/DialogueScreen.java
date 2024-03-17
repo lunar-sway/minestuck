@@ -32,7 +32,11 @@ public class DialogueScreen extends Screen
 	private int yOffset;
 	
 	private List<FormattedCharSequence> messageLines;
-	private final List<DialogueButton> responseButtons = new ArrayList<>();
+	private final List<List<DialogueButton>> responseButtonPages = new ArrayList<>();
+	private int responsePage = 0;
+	
+	private DialogueButton previousButton;
+	private DialogueButton nextButton;
 	
 	DialogueScreen(int dialogueId, Dialogue.DialogueData dialogueData)
 	{
@@ -56,14 +60,15 @@ public class DialogueScreen extends Screen
 	
 	public void recreateResponseButtons()
 	{
-		responseButtons.forEach(this::removeWidget);
-		responseButtons.clear();
+		responseButtonPages.forEach(dialogueButtons -> dialogueButtons.forEach(this::removeWidget));
+		responseButtonPages.clear();
 		
+		List<DialogueButton> pageButtons = new ArrayList<>();
 		int startY = yOffset + 20 + 9 * messageLines.size() + 2;
 		int cumulativeButtonHeight = 0;
 		for(Dialogue.ResponseData data : this.dialogueData.responses())
 		{
-			DialogueButton entryButton = new DialogueButton(dialogueData.guiBackground(), xOffset + 20, startY + cumulativeButtonHeight, 190, 16, data.message(),
+			DialogueButton entryButton = new DialogueButton(dialogueData.guiBackground(), true, xOffset + 20, startY + cumulativeButtonHeight, 190, 16, data.message(),
 					button -> clickResponse(data));
 			
 			//since every button may be a different height, add all the prior true heights together plus 2 pixel gaps
@@ -74,7 +79,59 @@ public class DialogueScreen extends Screen
 				entryButton.active = false;
 			});
 			
-			responseButtons.add(addRenderableWidget(entryButton));
+			pageButtons.add(addRenderableWidget(entryButton));
+			
+			//once it gets to the bottom, bring everything back to the top
+			/*if(cumulativeButtonHeight >= 60)
+			{
+				responseButtonPages.add(pageButtons);
+				pageButtons.clear();
+				cumulativeButtonHeight = 0;
+			}*/
+		}
+		
+		responseButtonPages.add(pageButtons);
+		
+		this.previousButton = new DialogueButton(dialogueData.guiBackground(), false, xOffset + (GUI_WIDTH / 2) - 21, yOffset + 140, 16, 16, Component.literal("<"), button -> prevPage());
+		this.nextButton = new DialogueButton(dialogueData.guiBackground(), false, xOffset + (GUI_WIDTH / 2) + 5, yOffset + 140, 16, 16, Component.literal(">"), button -> nextPage());
+		addRenderableWidget(this.nextButton);
+		addRenderableWidget(this.previousButton);
+		
+		//updateButtonStates();
+	}
+	
+	private void prevPage()
+	{
+		responsePage--;
+		updateButtonStates();
+	}
+	
+	private void nextPage()
+	{
+		responsePage++;
+		updateButtonStates();
+	}
+	
+	private void updateButtonStates()
+	{
+		//make all invisible
+		responseButtonPages.forEach(responseButtons -> responseButtons.forEach(dialogueButton -> dialogueButton.visible = false));
+		
+		previousButton.active = responsePage > 0;
+		nextButton.active = responsePage < responseButtonPages.size() - 1;
+		
+		if(responseButtonPages.size() <= 1)
+		{
+			previousButton.visible = false;
+			nextButton.visible = false;
+		}
+		
+		if(responseButtonPages.isEmpty())
+			return; //prevents out of bounds error with for loop below
+		
+		for(DialogueButton buttonIterate : responseButtonPages.get(responsePage))
+		{
+			buttonIterate.visible = true;
 		}
 	}
 	
