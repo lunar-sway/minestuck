@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -16,6 +17,7 @@ public class DialogueButton extends ExtendedButton
 	private final ResourceLocation gui;
 	private final List<FormattedCharSequence> messageLines;
 	public final int trueHeight;
+	public boolean wasHoveredOrFocused = false;
 	
 	public DialogueButton(ResourceLocation gui, int xPos, int yPos, int width, int defaultHeight, Component displayString, OnPress handler)
 	{
@@ -50,7 +52,14 @@ public class DialogueButton extends ExtendedButton
 		return this.active && this.visible;
 	}
 	
-	//TODO allow the box and text to shift to the right when selected to match original strife flashes
+	@Override
+	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
+	{
+		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		
+		//occurs after renderWidget where the value is checked
+		wasHoveredOrFocused = isMouseOver(pMouseX, pMouseY);
+	}
 	
 	@Override
 	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
@@ -59,15 +68,20 @@ public class DialogueButton extends ExtendedButton
 		this.isHovered = mouseOvertop(mouseX, mouseY);
 		
 		Minecraft mc = Minecraft.getInstance();
-		int k = !this.active ? 0 : (this.isHoveredOrFocused() ? 2 : 1);
+		boolean hoveredOrFocused = this.isHoveredOrFocused();
+		int k = !this.active ? 0 : (hoveredOrFocused ? 2 : 1);
+		int hoverFocusShift = hoveredOrFocused ? 7 : 0;
 		
-		guiGraphics.blitWithBorder(gui, this.getX(), this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
+		if(hoveredOrFocused && !wasHoveredOrFocused && this.active)
+			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.25F, 2.0F);
+		
+		guiGraphics.blitWithBorder(gui, this.getX() + hoverFocusShift, this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
 		
 		int pY = this.getY() + (this.height - 8) / 2;
 		for(FormattedCharSequence line : messageLines)
 		{
 			//TODO fix poor centering of text
-			guiGraphics.drawString(mc.font, line, this.getX() + 10, pY, getFGColor(), false);
+			guiGraphics.drawString(mc.font, line, this.getX() + 10 + hoverFocusShift, pY, getFGColor(), false);
 			pY += 9;
 		}
 	}
