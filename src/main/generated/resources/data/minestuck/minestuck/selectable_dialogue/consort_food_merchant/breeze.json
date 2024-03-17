@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:wind"
+  },
+  "dialogue": "minestuck:consort_food_merchant/breeze",
+  "keep_on_reset": true
+}

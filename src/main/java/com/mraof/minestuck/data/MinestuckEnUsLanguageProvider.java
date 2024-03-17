@@ -2582,23 +2582,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("hungry.finally.desc", "You are given 10 boondollars for the %s.");
 		addDialogue("hungry.end", "Fine. I will just go and find a real food store.");
 		
-		addDialogue("breeze_food_shop", "It's hard to catch our food with the Breeze carrying them away and whatnot!");
-		addDialogue("blood_food_shop", "Hope you like red meat!");
-		addDialogue("rabbit_food_shop", "Rabbit stew! Mmmm!");
-		addDialogue("lightning_food_shop", "Lightning-smoked meat really adds to the flavor!");
-		addDialogue("frog_leg_food_shop", "Frog legs are good but eating them is heresy! Buy some of our food instead!");
-		addDialogue("buckets_food_shop", "Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!");
-		addDialogue("time_food_shop", "Tick Tock, time's a-wasting! Eat something or leave!");
-		addDialogue("thyme_food_shop", "Take your mind off of the limited time we have left alive with food!");
-		addDialogue("library_food_shop", "I'm selling recipes I made from a nearby library's cookbook. Buy some!");
-		addDialogue("cake_food_shop", "Who needs cake when you have crickets!");
-		addDialogue("light_food_shop", "Crickets are nocturnal so our species' main food source is hard to find here. Oh well!");
-		addDialogue("silence_food_shop", "This place used to be filled with the sounds of crickets until we captured them all for food!");
-		addDialogue("rage_food_shop", "You're not you when you're hungry. Buy a snickers!");
-		addDialogue("hope_food_shop", "I HOPE you're hungry!");
-		addDialogue("hope_food_shop.desc", "You hear a faint ba-dum tss in the distance.");
-		addDialogue("frog_food_shop", "We would never eat frogs here in the %s! Grasshoppers, though...");
-		
 		addDialogue("breeze_general_shop", "The breeze has brought me many fine wares.");
 		addDialogue("blood_general_shop", "I accept payment in blood. And boondollars. I also take checks.");
 		addDialogue("life_general_shop", "Twenty years selling losers hats and shit really takes the life out of you.");
