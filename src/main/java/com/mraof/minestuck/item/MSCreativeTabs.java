@@ -33,6 +33,23 @@ public final class MSCreativeTabs
 	
 	private static void buildMainTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output)
 	{
+		output.accept(MSItems.CARVED_SIGN.get());
+		output.accept(MSItems.CARVED_HANGING_SIGN.get());
+		output.accept(MSItems.DEAD_SIGN.get());
+		output.accept(MSItems.DEAD_HANGING_SIGN.get());
+		output.accept(MSItems.END_SIGN.get());
+		output.accept(MSItems.END_HANGING_SIGN.get());
+		output.accept(MSItems.FROST_SIGN.get());
+		output.accept(MSItems.FROST_HANGING_SIGN.get());
+		output.accept(MSItems.GLOWING_SIGN.get());
+		output.accept(MSItems.GLOWING_HANGING_SIGN.get());
+		output.accept(MSItems.RAINBOW_SIGN.get());
+		output.accept(MSItems.RAINBOW_HANGING_SIGN.get());
+		output.accept(MSItems.SHADEWOOD_SIGN.get());
+		output.accept(MSItems.SHADEWOOD_HANGING_SIGN.get());
+		output.accept(MSItems.TREATED_SIGN.get());
+		output.accept(MSItems.TREATED_HANGING_SIGN.get());
+		
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 10));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 100));

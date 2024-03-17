@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
@@ -34,6 +35,49 @@ public class MSBlockStateProvider extends BlockStateProvider
 	protected void registerStatesAndModels()
 	{
 		AspectTreeBlocksData.addModels(this);
+		
+		//Trees
+		signBlock(((StandingSignBlock) MSBlocks.CARVED_SIGN.get()), ((WallSignBlock) MSBlocks.CARVED_WALL_SIGN.get()),
+				blockTexture(MSBlocks.CARVED_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.CARVED_HANGING_SIGN.get(), MSBlocks.CARVED_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.CARVED_PLANKS.get()));
+		
+		signBlock(((StandingSignBlock) MSBlocks.DEAD_SIGN.get()), ((WallSignBlock) MSBlocks.DEAD_WALL_SIGN.get()),
+				blockTexture(MSBlocks.DEAD_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.DEAD_HANGING_SIGN.get(), MSBlocks.DEAD_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.DEAD_PLANKS.get()));
+		
+		signBlock(((StandingSignBlock) MSBlocks.END_SIGN.get()), ((WallSignBlock) MSBlocks.END_WALL_SIGN.get()),
+				blockTexture(MSBlocks.END_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.END_HANGING_SIGN.get(), MSBlocks.END_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.END_PLANKS.get()));
+		
+		signBlock(((StandingSignBlock) MSBlocks.FROST_SIGN.get()), ((WallSignBlock) MSBlocks.FROST_WALL_SIGN.get()),
+				blockTexture(MSBlocks.FROST_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.FROST_HANGING_SIGN.get(), MSBlocks.FROST_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.FROST_PLANKS.get()));
+		
+		signBlock(((StandingSignBlock) MSBlocks.GLOWING_SIGN.get()), ((WallSignBlock) MSBlocks.GLOWING_WALL_SIGN.get()),
+				blockTexture(MSBlocks.GLOWING_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.GLOWING_HANGING_SIGN.get(), MSBlocks.GLOWING_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.GLOWING_PLANKS.get()));
+		
+		signBlock(((StandingSignBlock) MSBlocks.RAINBOW_SIGN.get()), ((WallSignBlock) MSBlocks.RAINBOW_WALL_SIGN.get()),
+				blockTexture(MSBlocks.RAINBOW_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.RAINBOW_HANGING_SIGN.get(), MSBlocks.RAINBOW_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.RAINBOW_PLANKS.get()));
+		
+		signBlock(((StandingSignBlock) MSBlocks.TREATED_SIGN.get()), ((WallSignBlock) MSBlocks.TREATED_WALL_SIGN.get()),
+				blockTexture(MSBlocks.TREATED_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.TREATED_PLANKS.get()));
 		
 		//Skaia
 		simpleBlockWithItem(MSBlocks.BLACK_CHESS_DIRT);
@@ -813,7 +857,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		trapDoorWithItem(MSBlocks.SHADEWOOD_TRAPDOOR);
 		flatItem(MSItems.SHADEWOOD_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.FROST_LEAVES);
+		weightedVariantsWithItem(MSBlocks.FROST_LEAVES, new int[]{12, 1},
+				i -> models().cubeAll("frost_leaves" + i, texture("frost_leaves" + i)));
 		simpleBlockWithItem(MSBlocks.RAINBOW_LEAVES,
 				id -> models().singleTexture(id.getPath(), new ResourceLocation("block/leaves"), "all", texture(id)));
 		simpleBlockWithItem(MSBlocks.END_LEAVES);
@@ -1425,6 +1470,24 @@ public class MSBlockStateProvider extends BlockStateProvider
 				.face(Direction.NORTH).uvs(0, 0, 16, 16).texture('#' + textureKey).end()
 				.face(Direction.SOUTH).uvs(0, 0, 16, 16).texture('#' + textureKey).end()
 				.end();
+	}
+	
+	public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
+		ModelFile sign = models().sign(name(signBlock), texture);
+		hangingSignBlock(signBlock, wallSignBlock, sign);
+	}
+	
+	public void hangingSignBlock(Block signBlock, Block wallSignBlock, ModelFile sign) {
+		simpleBlock(signBlock, sign);
+		simpleBlock(wallSignBlock, sign);
+	}
+	
+	private String name(Block block) {
+		return key(block).getPath();
+	}
+	
+	private ResourceLocation key(Block block) {
+		return ForgeRegistries.BLOCKS.getKey(block);
 	}
 	
 	private BlockModelBuilder cubeAll(ResourceLocation id)

@@ -22,6 +22,31 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
+		//Signs
+		simpleItem(MSItems.CARVED_SIGN);
+		simpleItem(MSItems.CARVED_HANGING_SIGN);
+		
+		simpleItem(MSItems.DEAD_SIGN);
+		simpleItem(MSItems.DEAD_HANGING_SIGN);
+		
+		simpleItem(MSItems.END_SIGN);
+		simpleItem(MSItems.END_HANGING_SIGN);
+		
+		simpleItem(MSItems.FROST_SIGN);
+		simpleItem(MSItems.FROST_HANGING_SIGN);
+		
+		simpleItem(MSItems.GLOWING_SIGN);
+		simpleItem(MSItems.GLOWING_HANGING_SIGN);
+		
+		simpleItem(MSItems.RAINBOW_SIGN);
+		simpleItem(MSItems.RAINBOW_HANGING_SIGN);
+		
+		simpleItem(MSItems.SHADEWOOD_SIGN);
+		simpleItem(MSItems.SHADEWOOD_HANGING_SIGN);
+		
+		simpleItem(MSItems.TREATED_SIGN);
+		simpleItem(MSItems.TREATED_HANGING_SIGN);
+		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);
 		handheldItem(MSItems.SLEDGE_HAMMER);

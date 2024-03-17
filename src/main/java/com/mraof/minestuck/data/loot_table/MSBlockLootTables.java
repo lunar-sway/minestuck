@@ -57,6 +57,78 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	{
 		AspectTreeBlocksData.addLootTables(this);
 		
+		add(CARVED_SIGN.get(), block ->
+			createSingleItemTable(MSItems.CARVED_SIGN.get()));
+		add(CARVED_WALL_SIGN.get(), block ->
+			createSingleItemTable(MSItems.CARVED_SIGN.get()));
+		add(CARVED_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.CARVED_HANGING_SIGN.get()));
+		add(CARVED_WALL_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.CARVED_HANGING_SIGN.get()));
+		
+		add(DEAD_SIGN.get(), block ->
+			createSingleItemTable(MSItems.DEAD_SIGN.get()));
+		add(DEAD_WALL_SIGN.get(), block ->
+			createSingleItemTable(MSItems.DEAD_SIGN.get()));
+		add(DEAD_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.DEAD_HANGING_SIGN.get()));
+		add(DEAD_WALL_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.DEAD_HANGING_SIGN.get()));
+		
+		add(END_SIGN.get(), block ->
+			createSingleItemTable(MSItems.END_SIGN.get()));
+		add(END_WALL_SIGN.get(), block ->
+			createSingleItemTable(MSItems.END_SIGN.get()));
+		add(END_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.END_HANGING_SIGN.get()));
+		add(END_WALL_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.END_HANGING_SIGN.get()));
+		
+		add(FROST_SIGN.get(), block ->
+			createSingleItemTable(MSItems.FROST_SIGN.get()));
+		add(FROST_WALL_SIGN.get(), block ->
+			createSingleItemTable(MSItems.FROST_SIGN.get()));
+		add(FROST_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.FROST_HANGING_SIGN.get()));
+		add(FROST_WALL_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.FROST_HANGING_SIGN.get()));
+		
+		add(GLOWING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.GLOWING_SIGN.get()));
+		add(GLOWING_WALL_SIGN.get(), block ->
+			createSingleItemTable(MSItems.GLOWING_SIGN.get()));
+		add(GLOWING_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.GLOWING_HANGING_SIGN.get()));
+		add(GLOWING_WALL_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.GLOWING_HANGING_SIGN.get()));
+		
+		add(RAINBOW_SIGN.get(), block ->
+			createSingleItemTable(MSItems.RAINBOW_SIGN.get()));
+		add(RAINBOW_WALL_SIGN.get(), block ->
+			createSingleItemTable(MSItems.RAINBOW_SIGN.get()));
+		add(RAINBOW_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.RAINBOW_HANGING_SIGN.get()));
+		add(RAINBOW_WALL_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.RAINBOW_HANGING_SIGN.get()));
+		
+		add(SHADEWOOD_SIGN.get(), block ->
+			createSingleItemTable(MSItems.SHADEWOOD_SIGN.get()));
+		add(SHADEWOOD_WALL_SIGN.get(), block ->
+			createSingleItemTable(MSItems.SHADEWOOD_SIGN.get()));
+		add(SHADEWOOD_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.SHADEWOOD_HANGING_SIGN.get()));
+		add(SHADEWOOD_WALL_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.SHADEWOOD_HANGING_SIGN.get()));
+		
+		add(TREATED_SIGN.get(), block ->
+			createSingleItemTable(MSItems.TREATED_SIGN.get()));
+		add(TREATED_WALL_SIGN.get(), block ->
+			createSingleItemTable(MSItems.TREATED_SIGN.get()));
+		add(TREATED_HANGING_SIGN.get(), block ->
+			createSingleItemTable(MSItems.TREATED_HANGING_SIGN.get()));
+		add(TREATED_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.TREATED_HANGING_SIGN.get()));
+		
 		dropSelf(BLACK_CHESS_DIRT.get());
 		dropSelf(WHITE_CHESS_DIRT.get());
 		dropSelf(DARK_GRAY_CHESS_DIRT.get());

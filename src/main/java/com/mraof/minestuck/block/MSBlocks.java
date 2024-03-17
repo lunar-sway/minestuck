@@ -11,6 +11,7 @@ import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.util.ModWoodTypes;
 import com.mraof.minestuck.world.gen.feature.tree.ShadewoodTree;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,6 +41,48 @@ import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.co
 public final class MSBlocks
 {
 	public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Minestuck.MOD_ID);
+	
+	//Signs
+	public static final RegistryObject<Block> CARVED_SIGN = REGISTER.register("carved_sign", () -> new ModStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.CARVED));
+	public static final RegistryObject<Block> CARVED_WALL_SIGN = REGISTER.register("carved_wall_sign", () -> new ModWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.CARVED));
+	public static final RegistryObject<Block> CARVED_HANGING_SIGN = REGISTER.register("carved_hanging_sign", () -> new ModHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.CARVED));
+	public static final RegistryObject<Block> CARVED_WALL_HANGING_SIGN = REGISTER.register("carved_wall_hanging_sign", () -> new ModWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.CARVED));
+	
+	public static final RegistryObject<Block> DEAD_SIGN = REGISTER.register("dead_sign", () -> new ModStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.DEAD));
+	public static final RegistryObject<Block> DEAD_WALL_SIGN = REGISTER.register("dead_wall_sign", () -> new ModWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.DEAD));
+	public static final RegistryObject<Block> DEAD_HANGING_SIGN = REGISTER.register("dead_hanging_sign", () -> new ModHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.DEAD));
+	public static final RegistryObject<Block> DEAD_WALL_HANGING_SIGN = REGISTER.register("dead_wall_hanging_sign", () -> new ModWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.DEAD));
+	
+	public static final RegistryObject<Block> END_SIGN = REGISTER.register("end_sign", () -> new ModStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.END));
+	public static final RegistryObject<Block> END_WALL_SIGN = REGISTER.register("end_wall_sign", () -> new ModWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.END));
+	public static final RegistryObject<Block> END_HANGING_SIGN = REGISTER.register("end_hanging_sign", () -> new ModHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.END));
+	public static final RegistryObject<Block> END_WALL_HANGING_SIGN = REGISTER.register("end_wall_hanging_sign", () -> new ModWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.END));
+	
+	public static final RegistryObject<Block> FROST_SIGN = REGISTER.register("frost_sign", () -> new ModStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.FROST));
+	public static final RegistryObject<Block> FROST_WALL_SIGN = REGISTER.register("frost_wall_sign", () -> new ModWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.FROST));
+	public static final RegistryObject<Block> FROST_HANGING_SIGN = REGISTER.register("frost_hanging_sign", () -> new ModHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.FROST));
+	public static final RegistryObject<Block> FROST_WALL_HANGING_SIGN = REGISTER.register("frost_wall_hanging_sign", () -> new ModWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.FROST));
+	
+	public static final RegistryObject<Block> GLOWING_SIGN = REGISTER.register("glowing_sign", () -> new ModStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.GLOWING));
+	public static final RegistryObject<Block> GLOWING_WALL_SIGN = REGISTER.register("glowing_wall_sign", () -> new ModWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.GLOWING));
+	public static final RegistryObject<Block> GLOWING_HANGING_SIGN = REGISTER.register("glowing_hanging_sign", () -> new ModHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.GLOWING));
+	public static final RegistryObject<Block> GLOWING_WALL_HANGING_SIGN = REGISTER.register("glowing_wall_hanging_sign", () -> new ModWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.GLOWING));
+	
+	public static final RegistryObject<Block> RAINBOW_SIGN = REGISTER.register("rainbow_sign", () -> new ModStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.RAINBOW));
+	public static final RegistryObject<Block> RAINBOW_WALL_SIGN = REGISTER.register("rainbow_wall_sign", () -> new ModWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.RAINBOW));
+	public static final RegistryObject<Block> RAINBOW_HANGING_SIGN = REGISTER.register("rainbow_hanging_sign", () -> new ModHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.RAINBOW));
+	public static final RegistryObject<Block> RAINBOW_WALL_HANGING_SIGN = REGISTER.register("rainbow_wall_hanging_sign", () -> new ModWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.RAINBOW));
+	
+	public static final RegistryObject<Block> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign", () -> new ModStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.SHADEWOOD));
+	public static final RegistryObject<Block> SHADEWOOD_WALL_SIGN = REGISTER.register("shadewood_wall_sign", () -> new ModWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.SHADEWOOD));
+	public static final RegistryObject<Block> SHADEWOOD_HANGING_SIGN = REGISTER.register("shadewood_hanging_sign", () -> new ModHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.SHADEWOOD));
+	public static final RegistryObject<Block> SHADEWOOD_WALL_HANGING_SIGN = REGISTER.register("shadewood_wall_hanging_sign", () -> new ModWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.SHADEWOOD));
+	
+	public static final RegistryObject<Block> TREATED_SIGN = REGISTER.register("treated_sign", () -> new ModStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.TREATED));
+	public static final RegistryObject<Block> TREATED_WALL_SIGN = REGISTER.register("treated_wall_sign", () -> new ModWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.TREATED));
+	public static final RegistryObject<Block> TREATED_HANGING_SIGN = REGISTER.register("treated_hanging_sign", () -> new ModHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.TREATED));
+	public static final RegistryObject<Block> TREATED_WALL_HANGING_SIGN = REGISTER.register("treated_wall_hanging_sign", () -> new ModWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.TREATED));
+	
 	
 	//Skaia
 	public static final RegistryObject<Block> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> new SkaiaPortalBlock(Block.Properties.of().mapColor(MapColor.COLOR_CYAN).pushReaction(PushReaction.BLOCK).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noLootTable()));

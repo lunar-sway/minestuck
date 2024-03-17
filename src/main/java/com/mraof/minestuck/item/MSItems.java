@@ -49,6 +49,55 @@ public class MSItems
 {
 	public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Minestuck.MOD_ID);
 	
+	//Signs
+	public static final RegistryObject<Item> CARVED_SIGN = REGISTER.register("carved_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.CARVED_SIGN.get(), MSBlocks.CARVED_WALL_SIGN.get()));
+	public static final RegistryObject<Item> CARVED_HANGING_SIGN = REGISTER.register("carved_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.CARVED_HANGING_SIGN.get(), MSBlocks.CARVED_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<Item> DEAD_SIGN = REGISTER.register("dead_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.DEAD_SIGN.get(), MSBlocks.DEAD_WALL_SIGN.get()));
+	public static final RegistryObject<Item> DEAD_HANGING_SIGN = REGISTER.register("dead_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.DEAD_HANGING_SIGN.get(), MSBlocks.DEAD_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<Item> END_SIGN = REGISTER.register("end_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.END_SIGN.get(), MSBlocks.END_WALL_SIGN.get()));
+	public static final RegistryObject<Item> END_HANGING_SIGN = REGISTER.register("end_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.END_HANGING_SIGN.get(), MSBlocks.END_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<Item> FROST_SIGN = REGISTER.register("frost_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.FROST_SIGN.get(), MSBlocks.FROST_WALL_SIGN.get()));
+	public static final RegistryObject<Item> FROST_HANGING_SIGN = REGISTER.register("frost_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.FROST_HANGING_SIGN.get(), MSBlocks.FROST_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<Item> GLOWING_SIGN = REGISTER.register("glowing_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.GLOWING_SIGN.get(), MSBlocks.GLOWING_WALL_SIGN.get()));
+	public static final RegistryObject<Item> GLOWING_HANGING_SIGN = REGISTER.register("glowing_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.GLOWING_HANGING_SIGN.get(), MSBlocks.GLOWING_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<Item> RAINBOW_SIGN = REGISTER.register("rainbow_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.RAINBOW_SIGN.get(), MSBlocks.RAINBOW_WALL_SIGN.get()));
+	public static final RegistryObject<Item> RAINBOW_HANGING_SIGN = REGISTER.register("rainbow_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.RAINBOW_HANGING_SIGN.get(), MSBlocks.RAINBOW_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<Item> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.SHADEWOOD_SIGN.get(), MSBlocks.SHADEWOOD_WALL_SIGN.get()));
+	public static final RegistryObject<Item> SHADEWOOD_HANGING_SIGN = REGISTER.register("shadewood_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<Item> TREATED_SIGN = REGISTER.register("treated_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.TREATED_SIGN.get(), MSBlocks.TREATED_WALL_SIGN.get()));
+	public static final RegistryObject<Item> TREATED_HANGING_SIGN = REGISTER.register("treated_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
 	//Hammers
 	public static final RegistryObject<Item> CLAW_HAMMER = REGISTER.register("claw_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.8F).efficiency(1.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));
 	public static final RegistryObject<Item> SLEDGE_HAMMER = REGISTER.register("sledge_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -3.2F).efficiency(4.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));

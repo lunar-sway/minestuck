@@ -11,6 +11,7 @@ import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.ModBlockEntities;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entry.BlockCopier;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
@@ -28,6 +29,7 @@ import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.DispenserBehaviourUtil;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.ModWoodTypes;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
@@ -36,6 +38,7 @@ import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
@@ -76,6 +79,7 @@ public class Minestuck
 		MSFluids.REGISTER.register(eventBus);
 		MSFluids.TYPE_REGISTER.register(eventBus);
 		MSBlockEntityTypes.REGISTER.register(eventBus);
+		ModBlockEntities.register(eventBus);
 		MSEntityTypes.REGISTER.register(eventBus);
 		MSMenuTypes.REGISTER.register(eventBus);
 		GristTypes.register();
@@ -129,6 +133,15 @@ public class Minestuck
 		MSCriteriaTriggers.register();
 		
 		ConsortDialogue.init();
+		
+		Sheets.addWoodType(ModWoodTypes.CARVED);
+		Sheets.addWoodType(ModWoodTypes.DEAD);
+		Sheets.addWoodType(ModWoodTypes.END);
+		Sheets.addWoodType(ModWoodTypes.FROST);
+		Sheets.addWoodType(ModWoodTypes.GLOWING);
+		Sheets.addWoodType(ModWoodTypes.RAINBOW);
+		Sheets.addWoodType(ModWoodTypes.SHADEWOOD);
+		Sheets.addWoodType(ModWoodTypes.TREATED);
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();

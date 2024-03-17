@@ -68,6 +68,23 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
+		addBlock(MSBlocks.CARVED_SIGN, "Carved Sign");
+		addBlock(MSBlocks.CARVED_HANGING_SIGN, "Carved Hanging Sign");
+		addBlock(MSBlocks.DEAD_SIGN, "Dead Sign");
+		addBlock(MSBlocks.DEAD_HANGING_SIGN, "Dead Hanging Sign");
+		addBlock(MSBlocks.END_SIGN, "End Sign");
+		addBlock(MSBlocks.END_HANGING_SIGN, "End Hanging Sign");
+		addBlock(MSBlocks.FROST_SIGN, "Frost Sign");
+		addBlock(MSBlocks.FROST_HANGING_SIGN, "Frost Hanging Sign");
+		addBlock(MSBlocks.GLOWING_SIGN, "Glowing Sign");
+		addBlock(MSBlocks.GLOWING_HANGING_SIGN, "Glowing Hanging Sign");
+		addBlock(MSBlocks.RAINBOW_SIGN, "Rainbow Sign");
+		addBlock(MSBlocks.RAINBOW_HANGING_SIGN, "Rainbow Hanging Sign");
+		addBlock(MSBlocks.SHADEWOOD_SIGN, "Shadewood Sign");
+		addBlock(MSBlocks.SHADEWOOD_HANGING_SIGN, "Shadewood Hanging Sign");
+		addBlock(MSBlocks.TREATED_SIGN, "Treated Sign");
+		addBlock(MSBlocks.TREATED_HANGING_SIGN, "Treated Hanging Sign");
+		
 		addBlock(MSBlocks.BLACK_CHESS_DIRT, "Black Chess Tile");
 		addBlock(MSBlocks.WHITE_CHESS_DIRT, "White Chess Tile");
 		addBlock(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
