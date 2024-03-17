@@ -5,7 +5,6 @@ import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -33,7 +32,7 @@ public class DialogueScreen extends Screen
 	private int yOffset;
 	
 	private List<FormattedCharSequence> messageLines;
-	private final List<Button> responseButtons = new ArrayList<>();
+	private final List<DialogueButton> responseButtons = new ArrayList<>();
 	
 	DialogueScreen(int dialogueId, Dialogue.DialogueData dialogueData)
 	{
@@ -65,7 +64,8 @@ public class DialogueScreen extends Screen
 		{
 			Dialogue.ResponseData data = this.dialogueData.responses().get(i);
 			
-			ExtendedButton entryButton = new ExtendedButton(xOffset + 20, startY + 20 * i, 190, 14, data.message(),
+			//ExtendedButton entryButton = new ExtendedButton(xOffset + 20, startY + 20 * i, 190, 14, data.message(), button -> clickResponse(data));
+			DialogueButton entryButton = new DialogueButton(dialogueData.guiBackground(), xOffset + 20, startY + 22 * i, 200, 20, data.message(),
 					button -> clickResponse(data));
 			
 			data.conditionFailure().ifPresent(failure -> {
