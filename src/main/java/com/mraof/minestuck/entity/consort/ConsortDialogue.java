@@ -45,9 +45,6 @@ public class ConsortDialogue
 	 */
 	public static void init()
 	{
-		//Frost
-		addMessage("tent_protection").condition(terrainLand(FROST)).consortReq(ConsortEntity::hasRestriction);
-		
 		//Misc
 		addMessage("denizen_mention").reqLand();
 		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vec3(consort.level().getLevelData().getXSpawn(), consort.level().getLevelData().getYSpawn(), consort.level().getLevelData().getZSpawn())) < 65536).reqLand();

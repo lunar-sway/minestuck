@@ -23,6 +23,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -577,6 +578,26 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("A custom scoreboard value does not match");
+		}
+	}
+	
+	enum HasMoveRestriction implements NpcOnlyCondition
+	{
+		INSTANCE;
+		
+		static final Codec<HasMoveRestriction> CODEC = Codec.unit(INSTANCE);
+		
+		
+		@Override
+		public Codec<HasMoveRestriction> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity instanceof Mob mob && mob.hasRestriction();
 		}
 	}
 }

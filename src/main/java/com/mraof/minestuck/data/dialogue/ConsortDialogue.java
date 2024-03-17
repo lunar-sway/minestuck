@@ -320,6 +320,8 @@ public final class ConsortDialogue
 								.nextDialogue(builder.add("gratitude", new NodeBuilder(l.defaultKeyMsg("Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!")))))
 						.addResponse(new ResponseBuilder(l.subMsg("ignore", "Sorry, but I can't help you."))
 								.nextDialogue(builder.add("death", new NodeBuilder(l.defaultKeyMsg("I guess I'll just die then..."))))))));
+		provider.addRandomlySelectable("tent_protection", defaultWeight(all(isInTerrain(FROST), Condition.HasMoveRestriction.INSTANCE)),
+				new NodeBuilder(l.defaultKeyMsg("These tents doesn't protect against the cold very well, but they are good enough.")));
 		
 		
 		//Rock
