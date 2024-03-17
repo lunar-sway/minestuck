@@ -60,13 +60,14 @@ public class DialogueScreen extends Screen
 		responseButtons.clear();
 		
 		int startY = yOffset + 20 + 9 * messageLines.size() + 2;
-		for(int i = 0; i < this.dialogueData.responses().size(); i++)
+		int cumulativeButtonHeight = 0;
+		for(Dialogue.ResponseData data : this.dialogueData.responses())
 		{
-			Dialogue.ResponseData data = this.dialogueData.responses().get(i);
-			
-			//ExtendedButton entryButton = new ExtendedButton(xOffset + 20, startY + 20 * i, 190, 14, data.message(), button -> clickResponse(data));
-			DialogueButton entryButton = new DialogueButton(dialogueData.guiBackground(), xOffset + 20, startY + 22 * i, 200, 20, data.message(),
+			DialogueButton entryButton = new DialogueButton(dialogueData.guiBackground(), xOffset + 20, startY + cumulativeButtonHeight, 190, 16, data.message(),
 					button -> clickResponse(data));
+			
+			//since every button may be a different height, add all the prior true heights together plus 2 pixel gaps
+			cumulativeButtonHeight += entryButton.trueHeight + 2;
 			
 			data.conditionFailure().ifPresent(failure -> {
 				entryButton.setTooltip(Tooltip.create(conditionFailMessage(failure.causes())));
