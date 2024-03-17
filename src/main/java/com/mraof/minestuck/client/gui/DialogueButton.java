@@ -14,6 +14,8 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class DialogueButton extends ExtendedButton
 {
+	private static final int TEXT_SPACING = 9;
+	
 	private final ResourceLocation gui;
 	private final boolean isResponse;
 	private final List<FormattedCharSequence> messageLines;
@@ -27,9 +29,10 @@ public class DialogueButton extends ExtendedButton
 		this.isResponse = isResponse;
 		
 		Minecraft mc = Minecraft.getInstance();
-		this.messageLines = mc.font.split(this.getMessage(), this.width - 8);
+		this.messageLines = mc.font.split(this.getMessage(), this.width - 6);
 		
-		this.trueHeight = messageLines.size() * 14;
+		//uses default height to start and with each successive line adds new width equal to the text spacing
+		this.trueHeight = defaultHeight + ((messageLines.size() - 1) * TEXT_SPACING);
 	}
 	
 	@Override
@@ -79,19 +82,17 @@ public class DialogueButton extends ExtendedButton
 		
 		guiGraphics.blitWithBorder(gui, this.getX() + hoverFocusShift, this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
 		
-		int pY = this.getY() + (this.height - 8) / 2;
+		int pY = this.getY() + 5;
 		for(int i = 0 ; i < messageLines.size(); i++)
 		{
-			//TODO fix poor centering of text
-			
-			int textX = this.getX() + hoverFocusShift + (isResponse ? 10 : 4);
+			int textX = this.getX() + hoverFocusShift + (isResponse ? 12 : 4);
 			
 			//prepends a ">" to the first line of a response
 			if(isResponse && i == 0)
 				guiGraphics.drawString(mc.font, Component.literal(">"), textX - 6 , pY, getFGColor(), false);
 			
 			guiGraphics.drawString(mc.font, messageLines.get(i), textX , pY, getFGColor(), false);
-			pY += 9;
+			pY += TEXT_SPACING;
 		}
 	}
 }

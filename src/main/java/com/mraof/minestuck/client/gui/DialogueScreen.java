@@ -68,7 +68,7 @@ public class DialogueScreen extends Screen
 		int cumulativeButtonHeight = 0;
 		for(Dialogue.ResponseData data : this.dialogueData.responses())
 		{
-			DialogueButton entryButton = new DialogueButton(dialogueData.guiBackground(), true, xOffset + 20, startY + cumulativeButtonHeight, 190, 16, data.message(),
+			DialogueButton entryButton = new DialogueButton(dialogueData.guiBackground(), true, xOffset + 16, startY + cumulativeButtonHeight, 190, 17, data.message(),
 					button -> clickResponse(data));
 			
 			//since every button may be a different height, add all the prior true heights together plus 2 pixel gaps
@@ -89,8 +89,6 @@ public class DialogueScreen extends Screen
 				cumulativeButtonHeight = 0;
 			}*/
 		}
-		
-		responseButtonPages.add(pageButtons);
 		
 		this.previousButton = new DialogueButton(dialogueData.guiBackground(), false, xOffset + (GUI_WIDTH / 2) - 21, yOffset + 140, 16, 16, Component.literal("<"), button -> prevPage());
 		this.nextButton = new DialogueButton(dialogueData.guiBackground(), false, xOffset + (GUI_WIDTH / 2) + 5, yOffset + 140, 16, 16, Component.literal(">"), button -> nextPage());
