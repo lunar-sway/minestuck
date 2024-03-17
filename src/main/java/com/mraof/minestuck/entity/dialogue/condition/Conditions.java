@@ -29,7 +29,7 @@ public final class Conditions
 		REGISTER.register("consort", () -> Condition.IsConsort.CODEC);
 		REGISTER.register("carapacian", () -> Condition.IsCarapacian.CODEC);
 		REGISTER.register("entity_type", () -> Condition.IsEntityType.CODEC);
-		REGISTER.register("in_land", () -> Condition.InAnyLand.CODEC);
+		REGISTER.register("is_from_land", () -> Condition.IsFromLand.CODEC);
 		REGISTER.register("terrain_land_type", () -> Condition.InTerrainLandType.CODEC);
 		REGISTER.register("terrain_land_type_tag", () -> Condition.InTerrainLandTypeTag.CODEC);
 		REGISTER.register("title_land_type", () -> Condition.InTitleLandType.CODEC);

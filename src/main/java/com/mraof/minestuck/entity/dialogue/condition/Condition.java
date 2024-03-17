@@ -194,12 +194,14 @@ public interface Condition
 		}
 	}
 	
-	record InAnyLand() implements NpcOnlyCondition
+	enum IsFromLand implements NpcOnlyCondition
 	{
-		static final Codec<InAnyLand> CODEC = Codec.unit(InAnyLand::new);
+		INSTANCE;
+		
+		static final Codec<IsFromLand> CODEC = Codec.unit(INSTANCE);
 		
 		@Override
-		public Codec<InAnyLand> codec()
+		public Codec<IsFromLand> codec()
 		{
 			return CODEC;
 		}
@@ -207,7 +209,8 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity)
 		{
-			return MSDimensions.isLandDimension(entity.getServer(), entity.level().dimension());
+			return entity instanceof ConsortEntity consort
+					&& MSDimensions.isLandDimension(entity.getServer(), consort.getHomeDimension());
 		}
 		
 		@Override
