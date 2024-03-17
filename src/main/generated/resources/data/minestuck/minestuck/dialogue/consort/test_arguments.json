@@ -2,7 +2,7 @@
   "node": {
     "message": {
       "arguments": [
-        "player_name_land"
+        "land_player_name"
       ],
       "key": "minestuck.dialogue.consort.test_arguments"
     },
@@ -10,7 +10,7 @@
       {
         "message": {
           "arguments": [
-            "player_name_land"
+            "land_player_name"
           ],
           "key": "minestuck.dialogue.consort.test_arguments.name"
         }

@@ -46,14 +46,7 @@ public class ConsortDialogue
 	public static void init()
 	{
 		//Misc
-		addMessage("denizen_mention").reqLand();
 		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vec3(consort.level().getLevelData().getXSpawn(), consort.level().getLevelData().getYSpawn(), consort.level().getLevelData().getZSpawn())) < 65536).reqLand();
-		addMessage("ring_fishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage("frog_walk").consort(EnumConsort.TURTLE);
-		addMessage("delicious_hair").consort(EnumConsort.IGUANA);
-		addMessage("lazy_king").condition(terrainLand(SHADE));
-		addMessage("music_invention").consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
-		addMessage("wyrm").consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
 		addMessage(new ConditionedMessage((consort, player) -> SburbHandler.hasEntered(player),
 				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
 		
@@ -102,34 +95,12 @@ public class ConsortDialogue
 			).setAcceptNull()
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
-		addMessage("useless_pogo");
-		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayer player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
 				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level().dimension()),
 						new SingleMessage("at_skaia.1", "consort_sound_2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
 		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayer player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
 				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level().dimension()),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
-		
-		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
-		addMessage(new SingleMessage("texas_history", "land_name")).consort(EnumConsort.TURTLE);
-		addMessage(new SingleMessage("disks")).consort(EnumConsort.IGUANA);
-		addMessage(new SingleMessage("whoops")).consort(EnumConsort.IGUANA);
-		addMessage(new SingleMessage("fourth_wall")).consort(EnumConsort.IGUANA);
-		addMessage(new SingleMessage("consort_scoliosis")).consort(EnumConsort.TURTLE);
-		addMessage(new SingleMessage("oh_to_be_ugly")).consort(EnumConsort.NAKAGATOR);
-		addMessage(new SingleMessage("no_to_podcasting")).consort(EnumConsort.IGUANA);
-		addMessage(new SingleMessage("bats")).consort(EnumConsort.TURTLE);
-		addMessage(new SingleMessage("so_what")).consort(EnumConsort.SALAMANDER);
-		addMessage(new SingleMessage("trolly_problem")).consort(EnumConsort.NAKAGATOR);
-		addMessage(new SingleMessage("a_little_lampshading")).consort(EnumConsort.IGUANA);
-		addMessage(new SingleMessage("hats")).consort(EnumConsort.SALAMANDER);
-		addMessage(new SingleMessage("wwizard")).consort(EnumConsort.TURTLE);
-		addMessage(new SingleMessage("stock_market")).consort(EnumConsort.NAKAGATOR);
-		addMessage(new SingleMessage("identity", "player_title_land", "player_name_land")).consort(EnumConsort.SALAMANDER).reqLand();
-		addMessage(new ChainMessage(0, new SingleMessage("college.1"), new SingleMessage("college.2")));
-		addMessage(new ChainMessage(1, new SingleMessage("unknown.1"), new SingleMessage("unknown.2"))).consort(EnumConsort.TURTLE);
-		addMessage(new ChainMessage(1, new SingleMessage("cult.1", "player_title"), new SingleMessage("cult.2"))).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
 				new SingleMessage[]{new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny")},
@@ -142,10 +113,6 @@ public class ConsortDialogue
 										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
 												new SingleMessage("peppy_offer.purchase"))})})).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
-		
-		addMessage(new ChoiceMessage(true, new SingleMessage("title_presence", "player_title"),
-				new SingleMessage[]{new SingleMessage("title_presence.iam", "player_title"), new SingleMessage("title_presence.agree")},
-				new MessageType[]{new SingleMessage("title_presence.iam_answer", "consort_sound_2"), new SingleMessage("thanks")})).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
 		
 		addMessage(new ChoiceMessage(new DescriptionMessage("shady_offer"),
 				new SingleMessage[]
@@ -176,10 +143,6 @@ public class ConsortDialogue
 						)
 				}
 		)).type(MerchantType.SHADY).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
-		
-		addMessage(new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
-				new SingleMessage[]{new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment")},
-				new MessageType[]{new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment")})).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new ItemRequirement(MSTags.Items.CONSORT_SNACKS, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),

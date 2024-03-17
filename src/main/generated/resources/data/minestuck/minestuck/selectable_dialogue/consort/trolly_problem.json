@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:entity_type",
+    "entity_type": "minestuck:nakagator"
+  },
+  "dialogue": "minestuck:consort/trolly_problem"
+}

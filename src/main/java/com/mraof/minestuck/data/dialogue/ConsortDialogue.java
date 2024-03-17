@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
-import com.mraof.minestuck.entity.dialogue.DialogueMessage;
+import com.mraof.minestuck.entity.dialogue.DialogueMessage.Argument;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
@@ -46,7 +46,7 @@ public final class ConsortDialogue
 	{
 		//Generic
 		var genericThanks = provider.dialogue().add("generic_thanks", new NodeBuilder(l.defaultKeyMsg("Thank you for helping me!")));
-		
+		var thanks = provider.dialogue().add("thanks", new NodeBuilder(l.defaultKeyMsg("Thanks!")));
 		
 		//Wind
 		provider.addRandomlySelectable("dad_wind", defaultWeight(isInTitle(WIND)), //todo review this
@@ -79,7 +79,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("reckoning", defaultWeight(isInTitle(THUNDER)), new ChainBuilder().withFolders()
 				.node(new NodeBuilder(l.defaultKeyMsg("Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!")))
 				.node(new NodeBuilder(l.defaultKeyMsg("What's The Reckoning? It's when meteors from The Veil are sent towards Skaia.")))
-				.node(new NodeBuilder(l.defaultKeyMsg("Like any reasonable %s believes in that!", DialogueMessage.Argument.ENTITY_TYPE))));
+				.node(new NodeBuilder(l.defaultKeyMsg("Like any reasonable %s believes in that!", Argument.ENTITY_TYPE))));
 		provider.addRandomlySelectable("thunder_death", defaultWeight(all(isInTitle(THUNDER), isInTerrain(WOOD))), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("We're lucky to have rain with this weather.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Otherwise the thunder would surely have been our death.")).addClosingResponse()));
@@ -170,7 +170,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Ribbit, ribbit! I'm a frog! I don't care what you say!")));
 		provider.addRandomlySelectable("frog_variants", defaultWeight(isInTitle(FROGS)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be preposterous.")))
-				.node(new NodeBuilder(l.defaultKeyMsg("Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.", DialogueMessage.Argument.LAND_NAME))
+				.node(new NodeBuilder(l.defaultKeyMsg("Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.", Argument.LAND_NAME))
 						.addClosingResponse()));
 		provider.addRandomlySelectable("frog_hatred", defaultWeight(isInTitle(FROGS)),
 				new NodeBuilder(l.defaultKeyMsg("For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?")));
@@ -261,7 +261,8 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Our land is a fire waiting to happen! Hopefully there isn't any lightning!")));
 		provider.addRandomlySelectable("that_boy_needs_therapy", defaultWeight(isInTerrain(SHADE)),
 				new NodeBuilder(l.defaultKeyMsg("Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...")));
-		
+		provider.addRandomlySelectable("lazy_king", defaultWeight(isInTerrain(SHADE)),
+				new NodeBuilder(l.defaultKeyMsg("I feel like our king just sits around doing nothing but eating weird glowing mushrooms! So lazy!")));
 		
 		//Heat
 		provider.addRandomlySelectable("getting_hot", defaultWeight(isInTerrain(HEAT)),
@@ -300,7 +301,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("knockoff", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE)),
 				new NodeBuilder(l.defaultKeyMsg("I kind of feel like we're a stale, knockoff sand land.")));
 		provider.addRandomlySelectable("sandless", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE)), new ChainBuilder()
-				.node(new NodeBuilder(l.defaultKeyMsg("According to legend, %s ate all the sand here leaving nothing but sandstone!", DialogueMessage.Argument.LAND_DENIZEN)))
+				.node(new NodeBuilder(l.defaultKeyMsg("According to legend, %s ate all the sand here leaving nothing but sandstone!", Argument.LAND_DENIZEN)))
 				.node(new NodeBuilder(l.defaultKeyMsg("I'm kidding, I made that up on the spot. I had no other dialogue."))));
 		
 		
@@ -328,7 +329,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("all_ores", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)),
 				new NodeBuilder(l.defaultKeyMsg("Jokes on the losers in other lands, we have ALL the resources! All of them!")));
 		provider.addRandomlySelectable("rockfu", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.ROCK)),
-				new NodeBuilder(l.defaultKeyMsg("Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!", DialogueMessage.Argument.LAND_NAME)));
+				new NodeBuilder(l.defaultKeyMsg("Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!", Argument.LAND_NAME)));
 		
 		
 		//Forest
@@ -346,13 +347,13 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("At first, no one liked the mushrooms when our planet was cursed with the Dank.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Those who refused to adapt to the new food source Perished, obviously."))));
 		provider.addRandomlySelectable("mushroom_curse", defaultWeight(isInTerrain(FUNGI)),
-				new NodeBuilder(l.defaultKeyMsg("Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!", DialogueMessage.Argument.LAND_DENIZEN)));
+				new NodeBuilder(l.defaultKeyMsg("Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!", Argument.LAND_DENIZEN)));
 		provider.addRandomlySelectable("jacket", defaultWeight(isInTerrain(FUNGI)),
 				new NodeBuilder(l.defaultKeyMsg("It's so damp and cold. I wish I had a jacket!")));
 		provider.addRandomlySelectable("mildew", defaultWeight(isInTerrain(FUNGI)),
 				new NodeBuilder(l.defaultKeyMsg("Ah, the mildew on the grass in the morning makes the landscape so pretty!")));
 		provider.addRandomlySelectable("fungus_destroyer", defaultWeight(isInTerrain(FUNGI)),
-				new NodeBuilder(l.defaultKeyMsg("According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!", DialogueMessage.Argument.LAND_TITLE, DialogueMessage.Argument.LAND_DENIZEN)));
+				new NodeBuilder(l.defaultKeyMsg("According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!", Argument.LAND_TITLE, Argument.LAND_DENIZEN)));
 		
 		
 		//Rainbow
@@ -398,7 +399,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("end_grass", defaultWeight(isInTerrain(END)),
 				new NodeBuilder(l.defaultKeyMsg("The grass in this place just keeps growing everywhere! You can bet that any patches of grass you find weren't there before. I don't even know how it takes root in the stone like that.")));
 		provider.addRandomlySelectable("grass_curse", defaultWeight(isInTerrain(END)),
-				new NodeBuilder(l.defaultKeyMsg("Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!", DialogueMessage.Argument.LAND_DENIZEN)));
+				new NodeBuilder(l.defaultKeyMsg("Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!", Argument.LAND_DENIZEN)));
 		provider.addRandomlySelectable("tall_grass", defaultWeight(isInTerrain(END)),
 				new NodeBuilder(l.defaultKeyMsg("The taller grass is so disorienting to walk through! Unless you are careful it will just move you around.")));
 		provider.addRandomlySelectable("useless_elytra", defaultWeight(isInTerrain(END)),
@@ -407,7 +408,7 @@ public final class ConsortDialogue
 		
 		//Rain
 		provider.addRandomlySelectable("empty_ocean", defaultWeight(isInTerrain(RAIN)),
-				new NodeBuilder(l.defaultKeyMsg("Our oceans used to be filled with life! Now they're all barren, thanks to %s.", DialogueMessage.Argument.LAND_DENIZEN)));
+				new NodeBuilder(l.defaultKeyMsg("Our oceans used to be filled with life! Now they're all barren, thanks to %s.", Argument.LAND_DENIZEN)));
 		provider.addRandomlySelectable("forbidden_snack", defaultWeight(isInTerrain(RAIN)),
 				new NodeBuilder(l.defaultKeyMsg("Contrary to popular belief, chalk is not safe for consumption... but how can I resist its allure?")));
 		provider.addRandomlySelectable("cotton_candy", defaultWeight(isInTerrain(RAIN)),
@@ -436,7 +437,7 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("I'm taking the risk.")).addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode()))));
 		provider.addRandomlySelectable("spices", defaultWeight(isInTerrain(FLORA)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("A good chef cooks with the spices found throughout the land.")))
-				.node(new NodeBuilder(l.defaultKeyMsg("Other chefs are envious that they don't live in %s.", DialogueMessage.Argument.LAND_NAME))));
+				.node(new NodeBuilder(l.defaultKeyMsg("Other chefs are envious that they don't live in %s.", Argument.LAND_NAME))));
 		
 		
 		//Mixed
@@ -445,6 +446,78 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("yellow_better", defaultWeight(any(isInTerrain(SAND), isInTerrain(SANDSTONE))),
 				new NodeBuilder(l.defaultKeyMsg("In our village, we have tales of monsters that are attracted to red. That's why everything is yellow!")));
 		
+		
+		//Misc
+		provider.addRandomlySelectable("denizen_mention", defaultWeight(Condition.IsFromLand.INSTANCE),
+				new NodeBuilder(l.defaultKeyMsg("It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!")));
+		provider.addRandomlySelectable("ring_fishing", defaultWeight(isAnyEntityType(SALAMANDER, IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("My brother found a magic ring while fishing recently!")));
+		provider.addRandomlySelectable("frog_walk", defaultWeight(isAnyEntityType(TURTLE)),
+				new NodeBuilder(l.defaultKeyMsg("Frog, it's such a wonderful day to just walk around a village.")));
+		provider.addRandomlySelectable("delicious_hair", defaultWeight(isAnyEntityType(IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("Holy leapin' god, you have such wonderful hair! Can I eat some?")));
+		provider.addRandomlySelectable("music_invention", defaultWeight(isAnyEntityType(NAKAGATOR, SALAMANDER)),
+				new NodeBuilder(l.defaultKeyMsg("I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.")));
+		provider.addRandomlySelectable("wyrm", defaultWeight(isAnyEntityType(TURTLE, IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("Legends speak of the Wyrm, a giant ivory pillar that radiates joy and happiness and uselessness.")));
+		provider.addRandomlySelectable("useless_pogo", defaultWeight(Condition.AlwaysTrue.INSTANCE),
+				new NodeBuilder(l.defaultKeyMsg("I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!")));
+		provider.addRandomlySelectable("await_hero", defaultWeight(Condition.IsFromLand.INSTANCE),
+				new NodeBuilder(l.defaultKeyMsg("Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.", Argument.LAND_NAME, Argument.ENTITY_TYPES, Argument.LAND_TITLE)));
+		provider.addRandomlySelectable("zazzerpan", defaultWeight(isAnyEntityType(TURTLE)),
+				new NodeBuilder(l.defaultKeyMsg("Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!")));
+		provider.addRandomlySelectable("texas_history", defaultWeight(all(isAnyEntityType(TURTLE), Condition.IsFromLand.INSTANCE)),
+				new NodeBuilder(l.defaultKeyMsg("The place was %s, the year, was 20XX.", Argument.LAND_NAME)));
+		provider.addRandomlySelectable("disks", defaultWeight(isAnyEntityType(IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("I used to be an adventurer like you, then I never got the disks.")));
+		provider.addRandomlySelectable("whoops", defaultWeight(isAnyEntityType(IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("Beware the man who speaks in hands, wait...wrong game.")));
+		provider.addRandomlySelectable("fourth_wall", defaultWeight(isAnyEntityType(IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("Maybe you should do something more productive than talking to NPCs.")));
+		provider.addRandomlySelectable("consort_scoliosis", defaultWeight(isAnyEntityType(TURTLE)),
+				new NodeBuilder(l.defaultKeyMsg("I'm not actually a child, I simply have an incredibly advanced case of consort scoliosisis that has gone untreated for years.")));
+		provider.addRandomlySelectable("oh_to_be_ugly", defaultWeight(isAnyEntityType(NAKAGATOR)),
+				new NodeBuilder(l.defaultKeyMsg("Inspite of the fact that I'm training to become an evil wizard, I'm simply not ugly enough to fit the bill. Any good wizardling knows that one must be as ugly as their desires to truly obtain power.")));
+		provider.addRandomlySelectable("no_to_podcasting", defaultWeight(isAnyEntityType(IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("My buddy wanted to do some podcasting... I'm no longer friends with him I'm not gonna lie")));
+		provider.addRandomlySelectable("bats", defaultWeight(isAnyEntityType(TURTLE)),
+				new NodeBuilder(l.defaultKeyMsg("I don't like the idea of a bat. Never seen one, and I don't plan on it. It's just like, why the fuck are they built like that!?")));
+		provider.addRandomlySelectable("so_what", defaultWeight(isAnyEntityType(SALAMANDER)),
+				new NodeBuilder(l.defaultKeyMsg("Uhuh, so what you think you and your little hairy non-reptilian disposition impresses me? It doesn't impress me you just look like a fool. A damned hairy fool.")));
+		provider.addRandomlySelectable("trolly_problem", defaultWeight(isAnyEntityType(NAKAGATOR)),
+				new NodeBuilder(l.defaultKeyMsg("The trolly problem isn't really all that complicated for me all things considered. I mean, I'll probably die of old age before the trolly ever hits me considering my incredibly short and quickly dwindling lifespan")));
+		provider.addRandomlySelectable("a_little_lampshading", defaultWeight(isAnyEntityType(IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("Look I know you aren't a reptile, I just got one question. You ever hear some of these people talk? I swear, they must be putting mercury in the water with how nonsensical conversation can be with these guys.")));
+		provider.addRandomlySelectable("hats", defaultWeight(isAnyEntityType(SALAMANDER)),
+				new NodeBuilder(l.defaultKeyMsg("I like crumpled hats, they're comfy and easy to wear!")));
+		provider.addRandomlySelectable("wwizard", defaultWeight(isAnyEntityType(TURTLE)),
+				new NodeBuilder(l.defaultKeyMsg("Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?")));
+		provider.addRandomlySelectable("stock_market", defaultWeight(isAnyEntityType(NAKAGATOR)),
+				new NodeBuilder(l.defaultKeyMsg("I bought a bunch of stocks on the market... Now I'm broke...")));
+		provider.addRandomlySelectable("identity", defaultWeight(all(isAnyEntityType(SALAMANDER), Condition.IsFromLand.INSTANCE)),
+				new NodeBuilder(l.defaultKeyMsg("I heard that the true name of the %s is %s. Isn't that cool?", Argument.LAND_TITLE, Argument.LAND_PLAYER_NAME)));
+		provider.addRandomlySelectable("college", defaultWeight(Condition.AlwaysTrue.INSTANCE), new ChainBuilder()
+				.node(new NodeBuilder(l.defaultKeyMsg("Please, I need to pay for my children to attend college...")))
+				.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime."))));
+		provider.addRandomlySelectable("unknown", defaultWeight(isAnyEntityType(TURTLE)), new ChainBuilder()
+				.node(new NodeBuilder(l.defaultKeyMsg("They are coming...")))
+				.node(new NodeBuilder(l.defaultKeyMsg("Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?"))));
+		provider.addRandomlySelectable("cult", defaultWeight(isAnyEntityType(TURTLE, SALAMANDER)), new ChainBuilder()
+				.node(new NodeBuilder(l.defaultKeyMsg("We would love to invite you, %s, to our secret wizards cult.", Argument.PLAYER_TITLE)))
+				.node(new NodeBuilder(l.defaultKeyMsg("Meet me by dawn with mercury, salt, and sulfur to begin the initiation."))));
+		provider.addRandomlySelectable("title_presence", defaultWeight(all(isAnyEntityType(IGUANA, SALAMANDER), Condition.IsFromLand.INSTANCE)), new FolderedDialogue(builder ->
+				builder.addStart(new NodeBuilder(l.defaultKeyMsg("I sense the presence of the %s. Tell me if you see them, ok?", Argument.PLAYER_TITLE))
+						.addResponse(new ResponseBuilder(l.subMsg("i_am", "Present yourself as the %s.", Argument.PLAYER_TITLE))
+								.nextDialogue(builder.add("i_am", new NodeBuilder(l.defaultKeyMsg("OH MY %s", Argument.ENTITY_SOUND_2)))))
+						.addResponse(new ResponseBuilder(l.subMsg("agree", "\"Agree\" to do that.")).nextDialogue(thanks)))
+		));
+		provider.addRandomlySelectable("denizen", defaultWeight(all(isAnyEntityType(SALAMANDER, IGUANA, TURTLE), Condition.IsFromLand.INSTANCE)), new FolderedDialogue(builder ->
+				builder.addStart(new NodeBuilder(l.defaultKeyMsg("%s has been sleeping for a thousand years. I shudder at the thought of their return.", Argument.LAND_DENIZEN))
+						.addResponse(new ResponseBuilder(l.subMsg("what", "The... what?"))
+								.nextDialogue(builder.add("explain", new NodeBuilder(l.defaultKeyMsg("The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.", Argument.LAND_CLASS)))))
+						.addResponse(new ResponseBuilder(l.subMsg("alignment", "Ask if the denizens are bad or not."))
+								.nextDialogue(builder.add("alignment", new NodeBuilder(l.defaultKeyMsg("How am I supposed to know if they were good or bad? There's more to a living being than just black and white!"))))))
+		));
 		
 	}
 	
@@ -510,8 +583,8 @@ public final class ConsortDialogue
 				.addResponse(new ResponseBuilder(l.subMsg("low_rep", "Rep below 200")).visibleCondition(new Condition.PlayerHasReputation(200, false)))
 				.addClosingResponse(l.subMsg("bye", "bye")));
 		
-		provider.addRandomlySelectable("test_arguments", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(l.defaultKeyMsg("Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))
-				.addResponse(new ResponseBuilder(l.subMsg("name", "Player name land: %s", DialogueMessage.Argument.PLAYER_NAME_LAND))));
+		provider.addRandomlySelectable("test_arguments", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeBuilder(l.defaultKeyMsg("Player name land: %s", Argument.LAND_PLAYER_NAME))
+				.addResponse(new ResponseBuilder(l.subMsg("name", "Player name land: %s", Argument.LAND_PLAYER_NAME))));
 		
 		provider.addRandomlySelectable("look_rich", defaultWeight(Condition.AlwaysTrue.INSTANCE), new NodeSelectorBuilder()
 				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(l.subMsg("rich", "Hey, looks like you have a lot of boons!")))

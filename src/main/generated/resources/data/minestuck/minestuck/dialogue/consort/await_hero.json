@@ -1,0 +1,12 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_name",
+        "entity_types",
+        "land_title"
+      ],
+      "key": "minestuck.dialogue.consort.await_hero"
+    }
+  }
+}

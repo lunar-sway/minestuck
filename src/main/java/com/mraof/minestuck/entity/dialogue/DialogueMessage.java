@@ -50,7 +50,7 @@ public record DialogueMessage(String key, List<Argument> arguments)
 	@MethodsReturnNonnullByDefault
 	public enum Argument implements StringRepresentable
 	{
-		PLAYER_NAME_LAND((npc, player) -> homeLandClientPlayer(npc)
+		LAND_PLAYER_NAME((npc, player) -> homeLandClientPlayer(npc)
 				.map(clientPlayer -> Component.literal(clientPlayer.getUsername()))
 				.orElseGet(() -> Component.literal("Player name"))),
 		LAND_NAME((npc, player) -> homeDimension(npc)

@@ -1,0 +1,16 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "player_title"
+      ],
+      "key": "minestuck.dialogue.consort.cult.1"
+    },
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue_path": "minestuck:consort/cult.2"
+      }
+    ]
+  }
+}

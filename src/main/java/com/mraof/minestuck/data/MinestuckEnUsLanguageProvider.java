@@ -2489,18 +2489,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");
 		add(DialogueProvider.ARROW.key(), "=>");
 		add(DialogueProvider.DOTS.key(), "...");
-		addDialogue("thanks", "Thanks!");
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
 		
-		addDialogue("denizen_mention", "It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!");
 		addDialogue("floating_island", "I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!");
-		addDialogue("ring_fishing", "My brother found a magic ring while fishing recently!");
-		addDialogue("frog_walk", "Frog, it's such a wonderful day to just walk around a village.");
-		addDialogue("delicious_hair", "Holy leapin' god, you have such wonderful hair! Can I eat some?");
-		addDialogue("lazy_king", "I feel like our king just sits around doing nothing but eating weird glowing mushrooms! So lazy!");
-		addDialogue("music_invention", "I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.");
-		addDialogue("wyrm", "Legends speak of the Wyrm, a giant ivory pillar that radiates joy and happiness and uselessness.");
 		addDialogue("heroic_stench", "You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!");
 		addDialogue("leech_stench", "You smell like you're leeching from the success from another hero... is this true?");
 		addDialogue("rap_battle", "I challenge you to a rap battle! Accept challenge? Y/N");
@@ -2543,34 +2535,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rap_battle_concede.final", "%s, yes! I am the greatest rapper ever!");
 		
 		
-		addDialogue("useless_pogo", "I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!");
-		addDialogue("await_hero", "Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.");
 		addDialogue("watch_skaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
 		addDialogue("at_skaia.1", "OH MY %s! I'M ACTUALLY ON SKAIA!");
 		addDialogue("at_skaia.2", "Oh my...! I'm actually on Skaia!");
 		addDialogue("visited_skaia", "You know, I have actually visited Skaia at one point!");
-		addDialogue("zazzerpan", "Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!");
-		addDialogue("texas_history", "The place was %s, the year, was 20XX.");
-		addDialogue("disks", "I used to be an adventurer like you, then I never got the disks.");
-		addDialogue("whoops", "Beware the man who speaks in hands, wait...wrong game.");
-		addDialogue("fourth_wall", "Maybe you should do something more productive than talking to NPCs.");
-		addDialogue("hats", "I like crumpled hats, they're comfy and easy to wear!");
-		addDialogue("wwizard", "Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?");
-		addDialogue("stock_market", "I bought a bunch of stocks on the market... Now I'm broke...");
-		addDialogue("consort_scoliosis", "I'm not actually a child, I simply have an incredibly advanced case of consort scoliosisis that has gone untreated for years.");
-		addDialogue("oh_to_be_ugly", "Inspite of the fact that I'm training to become an evil wizard, I'm simply not ugly enough to fit the bill. Any good wizardling knows that one must be as ugly as their desires to truly obtain power.");
-		addDialogue("no_to_podcasting", "My buddy wanted to do some podcasting... I'm no longer friends with him I'm not gonna lie");
-		addDialogue("bats", "I don't like the idea of a bat. Never seen one, and I don't plan on it. It's just like, why the fuck are they built like that!?");
-		addDialogue("so_what", "Uhuh, so what you think you and your little hairy non-reptilian disposition impresses me? It doesn't impress me you just look like a fool. A damned hairy fool.");
-		addDialogue("trolly_problem", "The trolly problem isn't really all that complicated for me all things considered. I mean, I'll probably die of old age before the trolly ever hits me considering my incredibly short and quickly dwindling lifespan");
-		addDialogue("a_little_lampshading", "Look I know you aren't a reptile, I just got one question. You ever hear some of these people talk? I swear, they must be putting mercury in the water with how nonsensical conversation can be with these guys.");
-		addDialogue("identity", "I heard that the true name of the %s is %s. Isn't that cool?");
-		addDialogue("college.1", "Please, I need to pay for my children to attend college...");
-		addDialogue("college.2", "Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.");
-		addDialogue("unknown.1", "They are coming...");
-		addDialogue("unknown.2", "Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?");
-		addDialogue("cult.1", "We would love to invite you, %s, to our secret wizards cult.");
-		addDialogue("cult.2", "Meet me by dawn with mercury, salt, and sulfur to begin the initiation.");
 		addDialogue("peppy_offer", "Hey there! I've got a wonderful item here for just 1000 boondollars? How about it kid?");
 		addDialogue("peppy_offer.desc", "This consort is way too nice to ever scam you! Surely you can trust them?");
 		addDialogue("peppy_offer.buy", "Buy \"Wonderful item\" [Pay 1000 boondollars]");
@@ -2584,12 +2552,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("peppy_offer.buy_2", "Buy that cheap item! [pay 500 boondollars]");
 		addDialogue("peppy_offer.buy_2.reply", "Sure! I'd be glad to!");
 		addDialogue("peppy_offer.purchase", "Thank you for your money!");
-		addDialogue("title_presence", "I sense the presence of the %s. Tell me if you see them, ok?");
-		addDialogue("title_presence.iam", "Present yourself as the %s.");
-		addDialogue("title_presence.iam.reply", "I am the %s.");
-		addDialogue("title_presence.iam_answer", "OH MY %s");
-		addDialogue("title_presence.agree", "\"Agree\" to do that.");
-		addDialogue("title_presence.agree.reply", "Hehe, ok I will.");
 		addDialogue("shady_offer", "Hey kid... I'll give you something special for 1000 boondollars...");
 		addDialogue("shady_offer.desc", "This consort seems pretty shady. You're not sure whether or not to trust them...");
 		addDialogue("shady_offer.buy", "Buy \"Something special\" [Pay 1000 boondollars]");
@@ -2603,14 +2565,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("shady_offer.buy_2", "buy it already! [Pay 500 boondollars]");
 		addDialogue("shady_offer.buy_2.reply", " Sure! Fine! Ok! Jeez...");
 		addDialogue("shady_offer.purchase", "Thanks for your cash.");
-		
-		addDialogue("denizen", "%s has been sleeping for a thousand years. I shudder at the thought of their return.");
-		addDialogue("denizen.what", "What?");
-		addDialogue("denizen.what.reply", "The... what?");
-		addDialogue("denizen.explain", "The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.");
-		addDialogue("denizen.ask_alignment", "Ask if the denizens are bad or not.");
-		addDialogue("denizen.ask_alignment.reply", "Were these 'denizens' bad?");
-		addDialogue("denizen.alignment", "How am I supposed to know if they were good or bad? There's more to a living being than just black and white!");
 		
 		addDialogue("hungry", "I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm.");
 		addDialogue("hungry.ask_food", "A %s! Could I have some?");

@@ -1,0 +1,6 @@
+{
+  "condition": {
+    "type": "minestuck:is_from_land"
+  },
+  "dialogue": "minestuck:consort/denizen_mention"
+}

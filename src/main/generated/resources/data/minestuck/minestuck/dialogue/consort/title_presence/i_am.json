@@ -1,0 +1,10 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "entity_sound_2"
+      ],
+      "key": "minestuck.dialogue.consort.title_presence.i_am"
+    }
+  }
+}

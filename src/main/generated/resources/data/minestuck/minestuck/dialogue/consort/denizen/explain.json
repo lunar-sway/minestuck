@@ -1,0 +1,10 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_class"
+      ],
+      "key": "minestuck.dialogue.consort.denizen.explain"
+    }
+  }
+}
