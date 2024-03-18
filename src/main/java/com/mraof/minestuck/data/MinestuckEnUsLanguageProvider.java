@@ -2492,7 +2492,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
 		
-		addDialogue("floating_island", "I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!");
 		addDialogue("heroic_stench", "You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!");
 		addDialogue("leech_stench", "You smell like you're leeching from the success from another hero... is this true?");
 		addDialogue("rap_battle", "I challenge you to a rap battle! Accept challenge? Y/N");

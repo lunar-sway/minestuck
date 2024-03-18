@@ -27,6 +27,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -599,6 +601,27 @@ public interface Condition
 			PlayerIdentifier playerId = IdentifierHandler.encode(player);
 			return playerId != null && entity instanceof DialogueEntity dialogueEntity
 					&& dialogueEntity.getDialogueComponent().playerFlags(playerId).contains(this.flag);
+		}
+	}
+	
+	record NearSpawn(int maxDistance) implements NpcOnlyCondition
+	{
+		static final Codec<NearSpawn> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.INT.fieldOf("max_distance").forGetter(NearSpawn::maxDistance)
+		).apply(instance, NearSpawn::new));
+		
+		@Override
+		public Codec<NearSpawn> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			LevelData levelData = entity.level().getLevelData();
+			Vec3 spawn = new Vec3(levelData.getXSpawn(), levelData.getYSpawn(), levelData.getZSpawn());
+			return entity.distanceToSqr(spawn) <= maxDistance * maxDistance;
 		}
 	}
 }

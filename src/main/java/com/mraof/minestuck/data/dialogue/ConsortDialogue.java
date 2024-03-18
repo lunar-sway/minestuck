@@ -521,6 +521,8 @@ public final class ConsortDialogue
 						.addResponse(new ResponseBuilder(l.subMsg("alignment", "Ask if the denizens are bad or not."))
 								.nextDialogue(builder.add("alignment", new NodeBuilder(l.defaultKeyMsg("How am I supposed to know if they were good or bad? There's more to a living being than just black and white!"))))))
 		));
+		provider.addRandomlySelectable("floating_island", defaultWeight(all(isFromLand(), new Condition.NearSpawn(256))),
+				new NodeBuilder(l.defaultKeyMsg("I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!")));
 		
 	}
 	
