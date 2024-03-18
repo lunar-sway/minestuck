@@ -43,6 +43,7 @@ public final class Conditions
 		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
 		REGISTER.register("player_flag", () -> Condition.PlayerFlag.CODEC);
 		REGISTER.register("near_spawn", () -> Condition.NearSpawn.CODEC);
+		REGISTER.register("has_player_entered", () -> Condition.HasPlayerEntered.CODEC);
 	}
 	
 	public static Condition alwaysTrue()

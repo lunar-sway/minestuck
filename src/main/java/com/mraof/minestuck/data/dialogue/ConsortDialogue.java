@@ -523,6 +523,9 @@ public final class ConsortDialogue
 		));
 		provider.addRandomlySelectable("floating_island", defaultWeight(all(isFromLand(), new Condition.NearSpawn(256))),
 				new NodeBuilder(l.defaultKeyMsg("I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!")));
+		provider.addRandomlySelectable("heroic_stench", defaultWeight(isFromLand()), new NodeSelectorBuilder()
+				.node(Condition.HasPlayerEntered.INSTANCE, new NodeBuilder(l.defaultKeyMsg("You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!")))
+				.defaultNode(new NodeBuilder(l.subMsg("leech", "You smell like you're leeching from the success from another hero... is this true?"))));
 		
 	}
 	

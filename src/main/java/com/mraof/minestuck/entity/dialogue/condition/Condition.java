@@ -9,6 +9,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.MSDimensions;
@@ -622,6 +623,25 @@ public interface Condition
 			LevelData levelData = entity.level().getLevelData();
 			Vec3 spawn = new Vec3(levelData.getXSpawn(), levelData.getYSpawn(), levelData.getZSpawn());
 			return entity.distanceToSqr(spawn) <= maxDistance * maxDistance;
+		}
+	}
+	
+	enum HasPlayerEntered implements Condition
+	{
+		INSTANCE;
+		static final Codec<HasPlayerEntered> CODEC = Codec.unit(INSTANCE);
+		
+		
+		@Override
+		public Codec<HasPlayerEntered> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return SburbHandler.hasEntered(player);
 		}
 	}
 }

@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
 import com.mraof.minestuck.entity.consort.MessageType.*;
-import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypeConditions;
@@ -43,9 +42,6 @@ public class ConsortDialogue
 	public static void init()
 	{
 		//Misc
-		addMessage(new ConditionedMessage((consort, player) -> SburbHandler.hasEntered(player),
-				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
-		
 		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,
 				new DelayMessage(new int[] {17, 17, 30},
 					new SingleMessage("rap_battle.a1"), new SingleMessage("rap_battle.a2"),

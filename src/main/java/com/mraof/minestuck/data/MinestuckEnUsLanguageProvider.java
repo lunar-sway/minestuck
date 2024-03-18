@@ -2492,8 +2492,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("thank_you", "Thank you!");
 		addDialogue("sadface", ":(");
 		
-		addDialogue("heroic_stench", "You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!");
-		addDialogue("leech_stench", "You smell like you're leeching from the success from another hero... is this true?");
 		addDialogue("rap_battle", "I challenge you to a rap battle! Accept challenge? Y/N");
 		addDialogue("rap_battle.accept", "Accept this consort's challenge!");
 		addDialogue("rap_battle.accept.reply", "Y! I'll take you on! You can even go first.");
