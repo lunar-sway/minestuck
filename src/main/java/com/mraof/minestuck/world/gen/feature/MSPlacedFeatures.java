@@ -55,9 +55,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> WOOD_SHAVINGS_PILE = key("wood_shavings_pile");
 	public static final ResourceKey<PlacedFeature> WOODEN_CACTUS_PAIR = key("wooden_cactus_pair");
 	public static final ResourceKey<PlacedFeature> MASSIVE_CHAIR = key("massive_chair");
-	public static final ResourceKey<PlacedFeature> MASSIVE_FRAMING = key("massive_framing");
 	public static final ResourceKey<PlacedFeature> MASSIVE_STOOL = key("massive_stool");
-	public static final ResourceKey<PlacedFeature> MASSIVE_TABLE = key("massive_table");
 	
 	public static final ResourceKey<PlacedFeature> LARGE_CAKE = key("large_cake");
 	
