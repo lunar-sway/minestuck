@@ -15,6 +15,7 @@ import java.util.List;
 public class DialogueButton extends ExtendedButton
 {
 	private static final int TEXT_SPACING = 9;
+	public static final int NORMAL_DEFAULT_HEIGHT = 17;
 	
 	private final ResourceLocation gui;
 	private final boolean isResponse;
@@ -78,7 +79,7 @@ public class DialogueButton extends ExtendedButton
 		int hoverFocusShift = isResponse ? (hoveredOrFocused ? 7 : 0) : 0;
 		
 		if(hoveredOrFocused && !wasHoveredOrFocused && this.active)
-			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.25F, 2.0F);
+			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.2F, 2.0F);
 		
 		guiGraphics.blitWithBorder(gui, this.getX() + hoverFocusShift, this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
 		
