@@ -39,7 +39,7 @@ public class LargeUnfinishedTableStructure extends Structure
 		int x = context.chunkPos().getBlockX(random.nextInt(16)), z = context.chunkPos().getBlockZ(random.nextInt(16));
 		int y = context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
 		BlockPos blockpos = new BlockPos(x, y, z);
-		LargeUnfinishedTablePiece piece = new LargeUnfinishedTablePiece(context.structureTemplateManager(), Minestuck.id("large_unfinished_table"), blockpos, Rotation.getRandom(random));
+		SimpleTemplatePiece piece = new SimpleTemplatePiece(context.structureTemplateManager(), Minestuck.id("large_unfinished_table"), blockpos, Rotation.getRandom(random));
 		builder.addPiece(piece);
 	}
 }

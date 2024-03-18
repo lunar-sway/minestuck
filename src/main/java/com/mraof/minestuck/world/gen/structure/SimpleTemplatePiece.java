@@ -14,17 +14,15 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnorePr
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
-public class LargeUnfinishedTablePiece extends TemplateStructurePiece
+public class SimpleTemplatePiece extends TemplateStructurePiece
 {
-	public LargeUnfinishedTablePiece(StructureTemplateManager pStructureManager, ResourceLocation pLocation, BlockPos pPos, Rotation pRotation)
+	public SimpleTemplatePiece(StructureTemplateManager pStructureManager, ResourceLocation pLocation, BlockPos pPos, Rotation pRotation)
 	{
-		super(MSStructurePieces.LARGE_UNFINISHED_TABLE.get(), 0, pStructureManager, pLocation, pLocation.toString(), makeSettings(pRotation), pPos);
+		super(MSStructurePieces.SIMPLE_TEMPLATE.get(), 0, pStructureManager, pLocation, pLocation.toString(), makeSettings(pRotation), pPos);
 	}
 	
-	public LargeUnfinishedTablePiece(StructureTemplateManager pStructureManager, CompoundTag pTag) {
-		super(MSStructurePieces.LARGE_UNFINISHED_TABLE.get(), pTag, pStructureManager, (p_8711111_) -> {
-			return makeSettings(Rotation.valueOf(pTag.getString("Rot")));
-		});
+	public SimpleTemplatePiece(StructureTemplateManager pStructureManager, CompoundTag pTag) {
+		super(MSStructurePieces.SIMPLE_TEMPLATE.get(), pTag, pStructureManager, id -> makeSettings(Rotation.valueOf(pTag.getString("Rot"))));
 	}
 	
 	private static StructurePlaceSettings makeSettings(Rotation pRotation) {
