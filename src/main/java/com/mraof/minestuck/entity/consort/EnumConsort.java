@@ -99,7 +99,7 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 		NONE(DialogueCategory.CONSORT),
 		SHADY(DialogueCategory.SHADY_CONSORT),
 		FOOD(DialogueCategory.CONSORT_FOOD_MERCHANT),
-		GENERAL(DialogueCategory.CONSORT),
+		GENERAL(DialogueCategory.CONSORT_GENERAL_MERCHANT),
 		;
 		
 		public static final Codec<MerchantType> CODEC = StringRepresentable.fromEnum(MerchantType::values);

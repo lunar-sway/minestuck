@@ -70,6 +70,7 @@ public final class RandomlySelectableDialogue
 		CONSORT("consort"),
 		SHADY_CONSORT("shady_consort"),
 		CONSORT_FOOD_MERCHANT("consort_food_merchant"),
+		CONSORT_GENERAL_MERCHANT("consort_general_merchant"),
 		;
 		private final String folderName;
 		
