@@ -28,7 +28,9 @@ public final class Conditions
 		REGISTER.register("list", () -> ListCondition.CODEC);
 		REGISTER.register("carapacian", () -> Condition.IsCarapacian.CODEC);
 		REGISTER.register("entity_type", () -> Condition.IsEntityType.CODEC);
-		REGISTER.register("is_from_land", () -> Condition.IsFromLand.CODEC);
+		REGISTER.register("is_is_land", () -> Condition.IsInLand.CODEC);
+		REGISTER.register("is_consort_from_land", () -> Condition.IsConsortFromLand.CODEC);
+		REGISTER.register("is_consort_in_home_land", () -> Condition.IsConsortInHomeLand.CODEC);
 		REGISTER.register("terrain_land_type", () -> Condition.InTerrainLandType.CODEC);
 		REGISTER.register("terrain_land_type_tag", () -> Condition.InTerrainLandTypeTag.CODEC);
 		REGISTER.register("title_land_type", () -> Condition.InTitleLandType.CODEC);
@@ -73,9 +75,19 @@ public final class Conditions
 		return new ListCondition(List.of(conditions), ListCondition.ListType.NONE);
 	}
 	
+	public static Condition isInLand()
+	{
+		return Condition.IsInLand.INSTANCE;
+	}
+	
 	public static Condition isFromLand()
 	{
-		return Condition.IsFromLand.INSTANCE;
+		return Condition.IsConsortFromLand.INSTANCE;
+	}
+	
+	public static Condition isInHomeLand()
+	{
+		return Condition.IsConsortInHomeLand.INSTANCE;
 	}
 	
 	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)

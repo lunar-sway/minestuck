@@ -7,7 +7,7 @@
         "entity_type": "minestuck:turtle"
       },
       {
-        "type": "minestuck:is_from_land"
+        "type": "minestuck:is_consort_from_land"
       }
     ],
     "list_type": "all"

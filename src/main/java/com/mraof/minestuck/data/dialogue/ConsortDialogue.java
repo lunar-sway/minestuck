@@ -451,7 +451,7 @@ public final class ConsortDialogue
 		
 		
 		//Misc
-		provider.addRandomlySelectable("denizen_mention", defaultWeight(isFromLand()),
+		provider.addRandomlySelectable("denizen_mention", defaultWeight(isInLand()),
 				new NodeBuilder(l.defaultKeyMsg("It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!")));
 		provider.addRandomlySelectable("ring_fishing", defaultWeight(isAnyEntityType(SALAMANDER, IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("My brother found a magic ring while fishing recently!")));
@@ -465,7 +465,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Legends speak of the Wyrm, a giant ivory pillar that radiates joy and happiness and uselessness.")));
 		provider.addRandomlySelectable("useless_pogo", defaultWeight(alwaysTrue()),
 				new NodeBuilder(l.defaultKeyMsg("I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!")));
-		provider.addRandomlySelectable("await_hero", defaultWeight(isFromLand()),
+		provider.addRandomlySelectable("await_hero", defaultWeight(isInHomeLand()),
 				new NodeBuilder(l.defaultKeyMsg("Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.", Argument.LAND_NAME, Argument.ENTITY_TYPES, Argument.LAND_TITLE)));
 		provider.addRandomlySelectable("zazzerpan", defaultWeight(isAnyEntityType(TURTLE)),
 				new NodeBuilder(l.defaultKeyMsg("Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!")));
@@ -514,16 +514,16 @@ public final class ConsortDialogue
 								.nextDialogue(builder.add("i_am", new NodeBuilder(l.defaultKeyMsg("OH MY %s", Argument.ENTITY_SOUND_2)))))
 						.addResponse(new ResponseBuilder(l.subMsg("agree", "\"Agree\" to do that.")).nextDialogue(thanks)))
 		));
-		provider.addRandomlySelectable("denizen", defaultWeight(all(isAnyEntityType(SALAMANDER, IGUANA, TURTLE), isFromLand())), new FolderedDialogue(builder ->
+		provider.addRandomlySelectable("denizen", defaultWeight(all(isAnyEntityType(SALAMANDER, IGUANA, TURTLE), isInHomeLand())), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("%s has been sleeping for a thousand years. I shudder at the thought of their return.", Argument.LAND_DENIZEN))
 						.addResponse(new ResponseBuilder(l.subMsg("what", "The... what?"))
 								.nextDialogue(builder.add("explain", new NodeBuilder(l.defaultKeyMsg("The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.", Argument.LAND_CLASS)))))
 						.addResponse(new ResponseBuilder(l.subMsg("alignment", "Ask if the denizens are bad or not."))
 								.nextDialogue(builder.add("alignment", new NodeBuilder(l.defaultKeyMsg("How am I supposed to know if they were good or bad? There's more to a living being than just black and white!"))))))
 		));
-		provider.addRandomlySelectable("floating_island", defaultWeight(all(isFromLand(), new Condition.NearSpawn(256))),
+		provider.addRandomlySelectable("floating_island", defaultWeight(all(isInHomeLand(), new Condition.NearSpawn(256))),
 				new NodeBuilder(l.defaultKeyMsg("I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!")));
-		provider.addRandomlySelectable("heroic_stench", defaultWeight(isFromLand()), new NodeSelectorBuilder()
+		provider.addRandomlySelectable("heroic_stench", defaultWeight(isInLand()), new NodeSelectorBuilder()
 				.node(Condition.HasPlayerEntered.INSTANCE, new NodeBuilder(l.defaultKeyMsg("You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!")))
 				.defaultNode(new NodeBuilder(l.subMsg("leech", "You smell like you're leeching from the success from another hero... is this true?"))));
 		provider.addRandomlySelectable("watch_skaia", defaultWeight(isFromLand()), new NodeSelectorBuilder()

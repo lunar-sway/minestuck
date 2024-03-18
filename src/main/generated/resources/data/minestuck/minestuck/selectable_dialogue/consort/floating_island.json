@@ -3,7 +3,7 @@
     "type": "minestuck:list",
     "conditions": [
       {
-        "type": "minestuck:is_from_land"
+        "type": "minestuck:is_consort_in_home_land"
       },
       {
         "type": "minestuck:near_spawn",

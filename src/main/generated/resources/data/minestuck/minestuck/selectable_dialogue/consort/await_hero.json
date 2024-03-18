@@ -1,6 +1,6 @@
 {
   "condition": {
-    "type": "minestuck:is_from_land"
+    "type": "minestuck:is_consort_in_home_land"
   },
   "dialogue": "minestuck:consort/await_hero"
 }

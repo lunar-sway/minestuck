@@ -174,14 +174,39 @@ public interface Condition
 		}
 	}
 	
-	enum IsFromLand implements NpcOnlyCondition
+	enum IsInLand implements NpcOnlyCondition
 	{
 		INSTANCE;
 		
-		static final Codec<IsFromLand> CODEC = Codec.unit(INSTANCE);
+		static final Codec<IsInLand> CODEC = Codec.unit(INSTANCE);
 		
 		@Override
-		public Codec<IsFromLand> codec()
+		public Codec<IsInLand> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return MSDimensions.isLandDimension(entity.getServer(), entity.level().dimension());
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in a Land");
+		}
+	}
+	
+	enum IsConsortFromLand implements NpcOnlyCondition
+	{
+		INSTANCE;
+		
+		static final Codec<IsConsortFromLand> CODEC = Codec.unit(INSTANCE);
+		
+		@Override
+		public Codec<IsConsortFromLand> codec()
 		{
 			return CODEC;
 		}
@@ -196,7 +221,34 @@ public interface Condition
 		@Override
 		public Component getFailureTooltip()
 		{
-			return Component.literal("Is not in a Land");
+			return Component.literal("Is not from a Land");
+		}
+	}
+	
+	enum IsConsortInHomeLand implements NpcOnlyCondition
+	{
+		INSTANCE;
+		
+		static final Codec<IsConsortInHomeLand> CODEC = Codec.unit(INSTANCE);
+		
+		@Override
+		public Codec<IsConsortInHomeLand> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity instanceof ConsortEntity consort
+					&& MSDimensions.isLandDimension(entity.getServer(), consort.getHomeDimension())
+					&& consort.level().dimension().equals(consort.getHomeDimension());
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in home Land");
 		}
 	}
 	
