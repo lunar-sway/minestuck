@@ -110,11 +110,7 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		context.register(MASSIVE_CHAIR, placed(features, MSCFeatures.MASSIVE_CHAIR,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
-		context.register(MASSIVE_FRAMING, placed(features, MSCFeatures.MASSIVE_FRAMING,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		context.register(MASSIVE_STOOL, placed(features, MSCFeatures.MASSIVE_STOOL,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
-		context.register(MASSIVE_TABLE, placed(features, MSCFeatures.MASSIVE_TABLE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		
 		context.register(LARGE_CAKE, placed(features, MSCFeatures.LARGE_CAKE,

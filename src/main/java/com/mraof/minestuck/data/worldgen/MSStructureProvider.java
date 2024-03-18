@@ -1,10 +1,9 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.structure.FrogTempleStructure;
 import com.mraof.minestuck.world.gen.structure.ImpDungeonStructure;
-import com.mraof.minestuck.world.gen.structure.LargeUnfinishedTableStructure;
+import com.mraof.minestuck.world.gen.structure.LargeWoodObjectStructure;
 import com.mraof.minestuck.world.gen.structure.SmallRuinStructure;
 import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
@@ -34,7 +33,7 @@ public final class MSStructureProvider
 		context.register(IMP_DUNGEON, new ImpDungeonStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_IMP_DUNGEON), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(CONSORT_VILLAGE, new ConsortVillageStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_CONSORT_VILLAGE), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		
-		context.register(LARGE_UNFINISHED_TABLE, new LargeUnfinishedTableStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.LAND_ROUGH), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+		context.register(LARGE_WOOD_OBJECT, new LargeWoodObjectStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.LAND_ROUGH), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		
 		context.register(SKAIA_CASTLE, new CastleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SKAIA_CASTLE), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 	}

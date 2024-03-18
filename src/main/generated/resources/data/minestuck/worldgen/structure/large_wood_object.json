@@ -1,5 +1,5 @@
 {
-  "type": "minestuck:large_unfinished_table",
+  "type": "minestuck:large_wood_object",
   "biomes": "#minestuck:land/rough",
   "spawn_overrides": {},
   "step": "surface_structures"

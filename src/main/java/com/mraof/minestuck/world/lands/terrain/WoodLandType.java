@@ -35,8 +35,6 @@ public class WoodLandType extends TerrainLandType
 	public static final String PLANKS = "minestuck.planks";
 	public static final String CARVINGS = "minestuck.carvings";
 	
-	protected static final RandomSpreadStructurePlacement LARGE_UNFINISHED_TABLE_PLACEMENT = new RandomSpreadStructurePlacement(6, 4, RandomSpreadType.LINEAR, 17524013);
-	
 	public WoodLandType()
 	{
 		super(new Builder(MSEntityTypes.SALAMANDER).names(WOOD, PLANKS, CARVINGS)
@@ -74,7 +72,7 @@ public class WoodLandType extends TerrainLandType
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
 		super.addStructureSets(consumer, structureLookup);
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.LARGE_UNFINISHED_TABLE), LARGE_UNFINISHED_TABLE_PLACEMENT));
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.LARGE_WOOD_OBJECT), new RandomSpreadStructurePlacement(4, 2, RandomSpreadType.LINEAR, 17524013)));
 	}
 	
 	@Override

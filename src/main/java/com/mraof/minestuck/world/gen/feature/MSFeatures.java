@@ -48,9 +48,7 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> WOOD_SHAVINGS_PILE = REGISTER.register("wood_shavings_pile", () -> new WoodShavingsPileFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> WOODEN_CACTUS_PAIR = REGISTER.register("wooden_cactus_pair", () -> new WoodenCactusPairFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MASSIVE_CHAIR = REGISTER.register("massive_chair", () -> new MassiveChairFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MASSIVE_FRAMING = REGISTER.register("massive_framing", () -> new MassiveFramingFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MASSIVE_STOOL = REGISTER.register("massive_stool", () -> new MassiveStoolFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MASSIVE_TABLE = REGISTER.register("massive_table", () -> new MassiveTableFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OASIS = REGISTER.register("oasis", () -> new OasisFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> new OceanRundownFeature(NoneFeatureConfiguration.CODEC));

@@ -50,9 +50,7 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> WOOD_SHAVINGS_PILE = key("wood_shavings_pile");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> WOODEN_CACTUS_PAIR = key("wooden_cactus_pair");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MASSIVE_CHAIR = key("massive_chair");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> MASSIVE_FRAMING = key("massive_framing");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MASSIVE_STOOL = key("massive_stool");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> MASSIVE_TABLE = key("massive_table");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_POOL = key("blood_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OIL_POOL = key("oil_pool");
