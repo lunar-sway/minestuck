@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity.consort;
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
 import com.mraof.minestuck.entity.consort.MessageType.*;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypeConditions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.network.chat.Component;
@@ -86,14 +85,6 @@ public class ConsortDialogue
 				}
 			).setAcceptNull()
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
-		
-		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayer player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level().dimension()),
-						new SingleMessage("at_skaia.1", "consort_sound_2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
-		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayer player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level().dimension()),
-						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
-		
 		
 		addMessage(new ItemRequirement(MSTags.Items.CONSORT_SNACKS, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),

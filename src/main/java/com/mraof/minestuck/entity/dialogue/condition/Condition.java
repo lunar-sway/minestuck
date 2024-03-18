@@ -644,4 +644,42 @@ public interface Condition
 			return SburbHandler.hasEntered(player);
 		}
 	}
+	
+	enum IsInSkaia implements NpcOnlyCondition
+	{
+		INSTANCE;
+		static final Codec<IsInSkaia> CODEC = Codec.unit(INSTANCE);
+		
+		
+		@Override
+		public Codec<IsInSkaia> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return MSDimensions.isSkaia(entity.level().dimension());
+		}
+	}
+	
+	enum ConsortVisitedSkaia implements NpcOnlyCondition
+	{
+		INSTANCE;
+		static final Codec<ConsortVisitedSkaia> CODEC = Codec.unit(INSTANCE);
+		
+		
+		@Override
+		public Codec<ConsortVisitedSkaia> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity instanceof ConsortEntity consort && consort.visitedSkaia();
+		}
+	}
 }

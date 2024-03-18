@@ -33,7 +33,7 @@ public final class ShadyConsortDialogue
 	private static void dialogue(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
 		provider.addRandomlySelectable("shady_offer", defaultWeight(isAnyEntityType(SALAMANDER, TURTLE)), new FolderedDialogue(builder -> {
-			var shadyOffer2 = builder.add("next", new NodeBuilder(l.defaultKeyMsg("You're missin' out kiddo. %s it. I'll sell you this thing for 500 boondollars.", Argument.ENTITY_SOUND))
+			var shadyOffer2 = builder.add("next", new NodeBuilder(l.defaultKeyMsg("You're missin' out kiddo. %s it. I'll sell you this thing for 500 boondollars.", Argument.ENTITY_SOUND))	//todo the entity sound for turtles doesn't work well here
 					.addResponse(new ResponseBuilder(l.subMsg("buy", "buy it already! [Pay 500 boondollars]"))
 							.visibleCondition(new Condition.PlayerHasBoondollars(500, true))
 							.addTrigger(new Trigger.AddBoondollars(-500))

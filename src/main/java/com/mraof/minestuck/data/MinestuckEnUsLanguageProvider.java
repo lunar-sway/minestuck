@@ -2532,11 +2532,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rap_battle_concede.final", "%s, yes! I am the greatest rapper ever!");
 		
 		
-		addDialogue("watch_skaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
-		addDialogue("at_skaia.1", "OH MY %s! I'M ACTUALLY ON SKAIA!");
-		addDialogue("at_skaia.2", "Oh my...! I'm actually on Skaia!");
-		addDialogue("visited_skaia", "You know, I have actually visited Skaia at one point!");
-		
 		addDialogue("hungry", "I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm.");
 		addDialogue("hungry.ask_food", "A %s! Could I have some?");
 		addDialogue("hungry.accept", "Yes");

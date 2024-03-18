@@ -1,8 +1,10 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MSTags;
@@ -14,20 +16,14 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +38,6 @@ import java.util.UUID;
  */
 public abstract class MessageType
 {
-	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String MISSING_ITEM = "consort.missing_item";
 	
@@ -453,60 +448,6 @@ public abstract class MessageType
 		}
 	}
 	
-	public static class ConditionedMessage extends MessageType
-	{
-		String nbtName;
-		Condition condition;
-		MessageType message1, message2;
-		
-		public ConditionedMessage(Condition condition, MessageType message1, MessageType message2)
-		{
-			this(message1.getString(), condition, message1, message2);
-		}
-		
-		public ConditionedMessage(String nbtName, Condition condition, MessageType message1, MessageType message2)
-		{
-			this.nbtName = nbtName;
-			this.condition = condition;
-			this.message1 = message1;
-			this.message2 = message2;
-		}
-		
-		@Override
-		public String getString()
-		{
-			return nbtName;
-		}
-		
-		@Override
-		public MutableComponent getMessage(ConsortEntity consort, ServerPlayer player, String chainIdentifier)
-		{
-			if (condition.testFor(consort, player))
-				return message1.getMessage(consort, player, chainIdentifier);
-			else return message2.getMessage(consort, player, chainIdentifier);
-		}
-		
-		@Override
-		public MutableComponent getFromChain(ConsortEntity consort, ServerPlayer player, String chainIdentifier, String fromChain)
-		{
-			if (condition.testFor(consort, player))
-				return message1.getFromChain(consort, player, chainIdentifier, fromChain);
-			else return message2.getFromChain(consort, player, chainIdentifier, fromChain);
-		}
-		
-		@Override
-		protected void debugAddAllMessages(List<Component> list)
-		{
-			message1.debugAddAllMessages(list);
-			message2.debugAddAllMessages(list);
-		}
-		
-		public interface Condition
-		{
-			boolean testFor(ConsortEntity consort, ServerPlayer player);
-		}
-	}
-	
 	//This class functions like a chain message, except that it will select a single entry randomly each time, instead of looping.
 	public static class RandomMessage extends MessageType
 	{
@@ -887,90 +828,6 @@ public abstract class MessageType
 		}
 	}
 	
-	public static class PurchaseMessage extends MessageType
-	{
-		protected String nbtName;
-		protected boolean repeat;
-		protected ResourceLocation lootTableId;
-		protected int cost;
-		protected int rep;
-		protected MessageType message;
-		
-		public PurchaseMessage(ResourceLocation lootTableId, int cost, MessageType message)
-		{
-			this(false, lootTableId, cost, 0, message.getString(), message);
-		}
-		/**
-		 * Make sure to use this constructor with a unique name, if the message
-		 * is of a type that uses it's own stored data
-		 */
-		public PurchaseMessage(boolean repeat, ResourceLocation lootTableId, int cost, int rep, String name, MessageType message)
-		{
-			this.nbtName = name;
-			this.repeat = repeat;
-			this.lootTableId = lootTableId;
-			this.cost = cost;
-			this.message = message;
-		}
-		
-		@Override
-		public MutableComponent getFromChain(ConsortEntity consort, ServerPlayer player, String chainIdentifier,
-										   String fromChain)
-		{
-			return message.getFromChain(consort, player, chainIdentifier, fromChain);
-		}
-		
-		@Override
-		public MutableComponent getMessage(ConsortEntity consort, ServerPlayer player, String chainIdentifier)
-		{
-			CompoundTag nbt = consort.getMessageTagForPlayer(player);
-			PlayerData data = PlayerSavedData.getData(player);
-			if(!repeat && nbt.getBoolean(nbtName))
-				return message.getMessage(consort, player, chainIdentifier);
-			
-			if(data.tryTakeBoondollars(cost))
-			{
-				if(!repeat)
-					nbt.putBoolean(nbtName, true);
-				
-				LootParams.Builder builder = new LootParams.Builder((ServerLevel) consort.level())
-						.withParameter(LootContextParams.THIS_ENTITY, consort).withParameter(LootContextParams.ORIGIN, consort.position());
-				List<ItemStack> loot = consort.getServer().getLootData().getLootTable(lootTableId)
-						.getRandomItems(builder.create(LootContextParamSets.GIFT));
-				
-				if(loot.isEmpty())
-					LOGGER.warn("Tried to generate loot from {}, but no items were generated!", lootTableId);
-				
-				for(ItemStack itemstack : loot)
-				{
-					player.spawnAtLocation(itemstack, 0.0F);
-					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTableId.toString(), itemstack, consort);
-				}
-				if(rep != 0)
-					data.addConsortReputation(rep, consort.homeDimension);
-				
-				return message.getMessage(consort, player, chainIdentifier);
-			} else
-			{
-				player.sendSystemMessage(createMessage(consort, player, "cant_afford", new String[0], false));
-				
-				return null;
-			}
-		}
-		
-		@Override
-		public String getString()
-		{
-			return nbtName;
-		}
-		
-		@Override
-		protected void debugAddAllMessages(List<Component> list)
-		{
-			message.debugAddAllMessages(list);
-		}
-	}
-	
 	public static class ItemRequirement extends MessageType
 	{
 		protected String nbtName;
@@ -1282,18 +1139,4 @@ public abstract class MessageType
 		}
 	}
 	
-	public static class ExplosionMessage extends SingleMessage
-	{
-		public ExplosionMessage(String message, String... args)
-		{
-			super(message, args);
-		}
-		
-		@Override
-		public MutableComponent getMessage(ConsortEntity consort, ServerPlayer player, String chainIdentifier)
-		{
-			consort.setExplosionTimer();
-			return super.getMessage(consort, player, chainIdentifier);
-		}
-	}
 }

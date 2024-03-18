@@ -87,7 +87,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	private final Set<PlayerIdentifier> talkRepPlayerList = new HashSet<>();
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	ResourceKey<Level> homeDimension;
-	boolean visitedSkaia;
+	private boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
 	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
@@ -447,6 +447,11 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public ResourceKey<Level> getHomeDimension()
 	{
 		return homeDimension;
+	}
+	
+	public boolean visitedSkaia()
+	{
+		return this.visitedSkaia;
 	}
 	
 	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random)

@@ -44,6 +44,8 @@ public final class Conditions
 		REGISTER.register("player_flag", () -> Condition.PlayerFlag.CODEC);
 		REGISTER.register("near_spawn", () -> Condition.NearSpawn.CODEC);
 		REGISTER.register("has_player_entered", () -> Condition.HasPlayerEntered.CODEC);
+		REGISTER.register("is_in_skaia", () -> Condition.IsInSkaia.CODEC);
+		REGISTER.register("consort_visited_skaia", () -> Condition.ConsortVisitedSkaia.CODEC);
 	}
 	
 	public static Condition alwaysTrue()
