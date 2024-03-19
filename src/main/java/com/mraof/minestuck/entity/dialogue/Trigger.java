@@ -51,7 +51,6 @@ public sealed interface Trigger
 		SET_DIALOGUE(() -> SetDialogue.CODEC),
 		SET_DIALOGUE_FROM_LIST(() -> SetDialogueFromList.CODEC),
 		SET_PLAYER_DIALOGUE(() -> SetPlayerDialogue.CODEC),
-		SET_RANDOM_DIALOGUE(() -> SetRandomDialogue.CODEC),
 		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC),
 		COMMAND(() -> Command.CODEC),
 		TAKE_ITEM(() -> TakeItem.CODEC),
@@ -149,27 +148,6 @@ public sealed interface Trigger
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
 			((DialogueEntity) entity).getDialogueComponent().setDialogueForPlayer(player, this.dialogueId);
-		}
-	}
-	
-	record SetRandomDialogue() implements Trigger
-	{
-		static final Codec<SetRandomDialogue> CODEC = Codec.unit(SetRandomDialogue::new);
-		
-		@Override
-		public Type getType()
-		{
-			return Type.SET_RANDOM_DIALOGUE;
-		}
-		
-		@Override
-		public void triggerEffect(LivingEntity entity, ServerPlayer player)
-		{
-			if(entity instanceof DialogueEntity dialogueEntity)
-			{
-				RandomlySelectableDialogue.instance(RandomlySelectableDialogue.DialogueCategory.CONSORT).pickRandomForEntity(entity)
-						.ifPresent(dialogueEntity.getDialogueComponent()::setDialogue);
-			}
 		}
 	}
 	
