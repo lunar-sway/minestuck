@@ -539,8 +539,8 @@ public final class ConsortDialogue
 				.node(Condition.ConsortVisitedSkaia.INSTANCE, new NodeBuilder(l.subMsg("has_visited", "You know, I have actually visited Skaia at one point!")))
 				.defaultNode(new NodeBuilder(l.defaultKeyMsg("Sometimes, I look up in the sky to see Skaia and wish I could visit there some day..."))));
 		
-		provider.addRandomlySelectable("hungry", weighted(999999, isAnyEntityType(SALAMANDER, IGUANA, NAKAGATOR)), new FolderedDialogue(builder -> {
-			
+		provider.addRandomlySelectable("hungry", defaultWeight(isAnyEntityType(SALAMANDER, IGUANA, NAKAGATOR)), new FolderedDialogue(builder ->
+		{
 			var barter = builder.add("barter", new NodeBuilder(l.defaultKeyMsg("But I am starving here! What if I paid you 10 boondollars for it?"))
 					.addResponse(new ResponseBuilder(l.subMsg("yes", "Sure"))
 							.condition(Condition.HasMatchedItem.INSTANCE)

@@ -17,6 +17,5 @@
     ],
     "list_type": "any"
   },
-  "dialogue": "minestuck:consort/hungry/start",
-  "dialogue_weight": 999999
+  "dialogue": "minestuck:consort/hungry/start"
 }
