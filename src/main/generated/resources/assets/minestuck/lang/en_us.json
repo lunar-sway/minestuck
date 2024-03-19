@@ -2283,8 +2283,6 @@
   "minestuck.dialogue.consort.test1": "Press §eSHIFT§r for more info",
   "minestuck.dialogue.consort.test1.bad_score": "Player needs a score of 5 for 'testScore'.",
   "minestuck.dialogue.consort.test1.fail": "This very custom condition was not met.",
-  "minestuck.dialogue.consort.test_arguments": "Player name land: %s",
-  "minestuck.dialogue.consort.test_arguments.name": "Player name land: %s",
   "minestuck.dialogue.consort.texas_history": "The place was %s, the year, was 20XX.",
   "minestuck.dialogue.consort.thanks": "Thanks!",
   "minestuck.dialogue.consort.that_boy_needs_therapy": "Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...",

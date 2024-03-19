@@ -609,9 +609,6 @@ public final class ConsortDialogue
 								new Condition.PlayerIsAspect(EnumAspect.HEART), new Condition.PlayerIsAspect(EnumAspect.DOOM), isInTerrain(RAIN)))));
 		provider.addRandomlySelectable("test2", defaultWeight(alwaysTrue()), test2);
 		
-		provider.addRandomlySelectable("turtle_only", defaultWeight(isAnyEntityType(TURTLE)), new NodeBuilder(defaultKeyMsg()));
-		provider.addRandomlySelectable("nakagator_only", defaultWeight(isAnyEntityType(NAKAGATOR)), new NodeBuilder(defaultKeyMsg()));
-		
 		var ohYippee = provider.dialogue().add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
 		var hungerFilled = provider.dialogue().add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
 		provider.addRandomlySelectable("me_want_cookie", defaultWeight(alwaysTrue()), new NodeBuilder(defaultKeyMsg())
@@ -634,9 +631,6 @@ public final class ConsortDialogue
 				.addResponse(new ResponseBuilder(l.subMsg("high_rep", "Rep above 500")).visibleCondition(new Condition.PlayerHasReputation(500, true)))
 				.addResponse(new ResponseBuilder(l.subMsg("low_rep", "Rep below 200")).visibleCondition(new Condition.PlayerHasReputation(200, false)))
 				.addClosingResponse(l.subMsg("bye", "bye")));
-		
-		provider.addRandomlySelectable("test_arguments", defaultWeight(alwaysTrue()), new NodeBuilder(l.defaultKeyMsg("Player name land: %s", Argument.LAND_PLAYER_NAME))
-				.addResponse(new ResponseBuilder(l.subMsg("name", "Player name land: %s", Argument.LAND_PLAYER_NAME))));
 		
 		provider.addRandomlySelectable("look_rich", defaultWeight(alwaysTrue()), new NodeSelectorBuilder()
 				.node(new Condition.PlayerHasBoondollars(10_000), new NodeBuilder(l.subMsg("rich", "Hey, looks like you have a lot of boons!")))
