@@ -12,6 +12,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +30,7 @@ public final class DialogueComponent
 	private boolean keepOnReset;
 	private boolean hasGeneratedOnce = false;
 	private final Map<PlayerIdentifier, Set<String>> playerSpecificFlags = new HashMap<>();
+	private final Map<PlayerIdentifier, Item> matchedItem = new HashMap<>();
 	
 	public DialogueComponent(LivingEntity entity)
 	{
@@ -123,12 +125,28 @@ public final class DialogueComponent
 		return this.playerSpecificFlags.computeIfAbsent(player, _player -> new HashSet<>());
 	}
 	
+	public Optional<Item> getMatchedItem(PlayerIdentifier player)
+	{
+		return Optional.ofNullable(this.matchedItem.get(player));
+	}
+	
+	public void setMatchedItem(Item item, PlayerIdentifier player)
+	{
+		this.matchedItem.put(player, item);
+	}
+	
+	public void clearMatchedItem(PlayerIdentifier player)
+	{
+		this.matchedItem.remove(player);
+	}
+	
 	public void resetDialogue()
 	{
 		if(!this.keepOnReset)
 			this.activeDialogue = null;
 		this.dialogueEntrypoint.clear();
 		this.playerSpecificFlags.clear();
+		this.matchedItem.clear();
 	}
 	
 	public void tryStartDialogue(ServerPlayer player)

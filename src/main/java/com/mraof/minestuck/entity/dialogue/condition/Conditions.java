@@ -37,6 +37,8 @@ public final class Conditions
 		REGISTER.register("title_land_type_tag", () -> Condition.InTitleLandTypeTag.CODEC);
 		REGISTER.register("at_or_above_y", () -> Condition.AtOrAboveY.CODEC);
 		REGISTER.register("player_item", () -> Condition.PlayerHasItem.CODEC);
+		REGISTER.register("item_tag_match", () -> Condition.ItemTagMatch.CODEC);
+		REGISTER.register("has_matched_item", () -> Condition.HasMatchedItem.CODEC);
 		REGISTER.register("player_class", () -> Condition.PlayerIsClass.CODEC);
 		REGISTER.register("player_aspect", () -> Condition.PlayerIsAspect.CODEC);
 		REGISTER.register("player_reputation", () -> Condition.PlayerHasReputation.CODEC);
@@ -48,6 +50,7 @@ public final class Conditions
 		REGISTER.register("has_player_entered", () -> Condition.HasPlayerEntered.CODEC);
 		REGISTER.register("is_in_skaia", () -> Condition.IsInSkaia.CODEC);
 		REGISTER.register("consort_visited_skaia", () -> Condition.ConsortVisitedSkaia.CODEC);
+		REGISTER.register("consort_might_barter", () -> Condition.ConsortMightBarter.CODEC);
 	}
 	
 	public static Condition alwaysTrue()

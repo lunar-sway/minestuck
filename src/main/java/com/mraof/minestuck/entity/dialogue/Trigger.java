@@ -33,6 +33,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -54,6 +55,7 @@ public sealed interface Trigger
 		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC),
 		COMMAND(() -> Command.CODEC),
 		TAKE_ITEM(() -> TakeItem.CODEC),
+		TAKE_MATCHED_ITEM(() -> TakeMatchedItem.CODEC),
 		GIVE_ITEM(() -> GiveItem.CODEC),
 		GIVE_FROM_LOOT_TABLE(() -> GiveFromLootTable.CODEC),
 		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC),
@@ -232,6 +234,36 @@ public sealed interface Trigger
 			ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
 			if(stack != null)
 				stack.shrink(this.amount);
+		}
+	}
+	
+	/**
+	 * Take one of the item that was matched by a {@link com.mraof.minestuck.entity.dialogue.condition.Condition.ItemTagMatch}.
+	 */
+	enum TakeMatchedItem implements Trigger
+	{
+		INSTANCE;
+		static final Codec<TakeMatchedItem> CODEC = Codec.unit(INSTANCE);
+		
+		@Override
+		public Type getType()
+		{
+			return Type.TAKE_MATCHED_ITEM;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			PlayerIdentifier playerId = IdentifierHandler.encode(player);
+			if(playerId == null)
+				return;
+			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
+			Optional<Item> matchedItem = component.getMatchedItem(playerId);
+			matchedItem.ifPresent(item -> {
+				ItemStack matchedStack = Dialogue.findPlayerItem(item, player, 1);
+				if(matchedStack != null)
+					matchedStack.shrink(1);
+			});
 		}
 	}
 	

@@ -52,6 +52,10 @@ public final class ConsortDialogue
 		//Generic
 		var genericThanks = provider.dialogue().add("generic_thanks", new NodeBuilder(l.defaultKeyMsg("Thank you for helping me!")));
 		var thanks = provider.dialogue().add("thanks", new NodeBuilder(l.defaultKeyMsg("Thanks!")));
+		var sadFace = provider.dialogue().add("sad_face", new NodeBuilder(l.defaultKeyMsg(":(")));
+		var yesMsg = l.msg("minestuck.dialogue.yes", "Yes");
+		var noMsg = l.msg("minestuck.dialogue.no", "No");
+		var finallyMsg = l.msg("minestuck.dialogue.finally", "Finally!");
 		
 		//Wind
 		provider.addRandomlySelectable("dad_wind", defaultWeight(isInTitle(WIND)), //todo review this
@@ -533,6 +537,38 @@ public final class ConsortDialogue
 				.node(Condition.IsInSkaia.INSTANCE, new NodeBuilder(l.subMsg("at_skaia", "OH MY %s! I'M ACTUALLY ON SKAIA!", Argument.ENTITY_SOUND_2)))
 				.node(Condition.ConsortVisitedSkaia.INSTANCE, new NodeBuilder(l.subMsg("has_visited", "You know, I have actually visited Skaia at one point!")))
 				.defaultNode(new NodeBuilder(l.defaultKeyMsg("Sometimes, I look up in the sky to see Skaia and wish I could visit there some day..."))));
+		
+		provider.addRandomlySelectable("hungry", weighted(999999, isAnyEntityType(SALAMANDER, IGUANA, NAKAGATOR)), new FolderedDialogue(builder -> {
+			
+			var barter = builder.add("barter", new NodeBuilder(l.defaultKeyMsg("But I am starving here! What if I paid you 10 boondollars for it?"))
+					.addResponse(new ResponseBuilder(l.subMsg("yes", "Sure"))
+							.condition(Condition.HasMatchedItem.INSTANCE)
+							.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
+							.addTrigger(new Trigger.AddBoondollars(10))
+							.addTrigger(new Trigger.SetPlayerDialogue(builder.add("finally2", new NodeBuilder(finallyMsg))))
+							.nextDialogue(builder.add("finally", new NodeBuilder(finallyMsg)
+									.description(l.subMsg("desc", "You are given 10 boondollars for the %s.", Argument.MATCHED_ITEM)))))
+					.addResponse(new ResponseBuilder(l.subMsg("no", "Too Cheap"))
+							.nextDialogue(builder.add("end", new NodeBuilder(l.defaultKeyMsg("Fine. I will just go and find a real food store."))))
+							.setNextAsEntrypoint()));
+			
+			builder.addStart(new NodeSelectorBuilder()	//todo create a "not hungry" dialogue node for SetDialogue trigger to be used for any other player after the consort gets its snack.
+					.node(new Condition.ItemTagMatch(MSTags.Items.CONSORT_SNACKS), new NodeBuilder(l.subMsg("ask", "A %s! Could I have some?", Argument.MATCHED_ITEM))
+							.addResponse(new ResponseBuilder(yesMsg)
+									.condition(Condition.HasMatchedItem.INSTANCE)
+									.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
+									.addTrigger(new Trigger.AddConsortReputation(15))
+									.nextDialogue(builder.add("thanks", new NodeBuilder(l.defaultKeyMsg("Thank you! I will remember your kindness for the rest of my short life."))))
+									.setNextAsEntrypoint())
+							.addResponse(new ResponseBuilder(noMsg)
+									.condition(Condition.ConsortMightBarter.INSTANCE)
+									.nextDialogue(barter))
+							.addResponse(new ResponseBuilder(noMsg)
+									.condition(none(Condition.ConsortMightBarter.INSTANCE))
+									.nextDialogue(sadFace)
+									.setNextAsEntrypoint()))
+					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm."))));
+		}));
 		
 	}
 	

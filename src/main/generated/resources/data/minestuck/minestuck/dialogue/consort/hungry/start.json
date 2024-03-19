@@ -1,0 +1,65 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:item_tag_match",
+        "tag": "minestuck:consort_snacks"
+      },
+      "node": {
+        "message": {
+          "arguments": [
+            "matched_item"
+          ],
+          "key": "minestuck.dialogue.consort.hungry.start.ask"
+        },
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:has_matched_item"
+            },
+            "message": "minestuck.dialogue.yes",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/thanks",
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "take_matched_item"
+              },
+              {
+                "type": "add_consort_reputation",
+                "reputation": 15
+              }
+            ]
+          },
+          {
+            "condition": {
+              "type": "minestuck:consort_might_barter"
+            },
+            "message": "minestuck.dialogue.no",
+            "next_dialogue": "minestuck:consort/hungry/barter"
+          },
+          {
+            "condition": {
+              "type": "minestuck:list",
+              "conditions": [
+                {
+                  "type": "minestuck:consort_might_barter"
+                }
+              ],
+              "list_type": "none"
+            },
+            "message": "minestuck.dialogue.no",
+            "next_dialogue": {
+              "id": "minestuck:consort/sad_face",
+              "set_as_entrypoint": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.hungry.start"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "node": {
+    "description": {
+      "arguments": [
+        "matched_item"
+      ],
+      "key": "minestuck.dialogue.consort.hungry.finally.desc"
+    },
+    "message": "minestuck.dialogue.finally"
+  }
+}

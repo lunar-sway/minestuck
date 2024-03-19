@@ -2490,7 +2490,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DialogueProvider.ARROW.key(), "=>");
 		add(DialogueProvider.DOTS.key(), "...");
 		addDialogue("thank_you", "Thank you!");
-		addDialogue("sadface", ":(");
 		
 		addDialogue("rap_battle", "I challenge you to a rap battle! Accept challenge? Y/N");
 		addDialogue("rap_battle.accept", "Accept this consort's challenge!");
@@ -2531,22 +2530,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rap_battle_concede.reply", "... wow. I'm just... not going to try to go against something like that.");
 		addDialogue("rap_battle_concede.final", "%s, yes! I am the greatest rapper ever!");
 		
-		
-		addDialogue("hungry", "I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm.");
-		addDialogue("hungry.ask_food", "A %s! Could I have some?");
-		addDialogue("hungry.accept", "Yes");
-		addDialogue("hungry.accept.reply", "Sure, here.");
-		addDialogue("hungry.deny", "No");
-		addDialogue("hungry.deny.reply", "I don't really want to give this away.");
-		addDialogue("hungry.thanks", "Thank you! I will remember your kindness for the rest of my short life.");
-		addDialogue("hungry.starving", "But I am starving here! What if I paid you 10 boondollars for it?");
-		addDialogue("hungry.agree", "Sure");
-		addDialogue("hungry.agree.reply", "Sure, I can agree to that.");
-		addDialogue("hungry.too_cheap", "Too Cheap");
-		addDialogue("hungry.too_cheap.reply", "I won't let it go that cheap.");
-		addDialogue("hungry.finally", "Finally!");
-		addDialogue("hungry.finally.desc", "You are given 10 boondollars for the %s.");
-		addDialogue("hungry.end", "Fine. I will just go and find a real food store.");
 		
 		addDialogue("breeze_general_shop", "The breeze has brought me many fine wares.");
 		addDialogue("blood_general_shop", "I accept payment in blood. And boondollars. I also take checks.");

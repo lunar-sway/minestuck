@@ -81,6 +81,15 @@ public record DialogueMessage(String key, List<Argument> arguments)
 			else
 				return player.getName();
 		}),
+		/**
+		 * Becomes the name of the item that was matched by a {@link com.mraof.minestuck.entity.dialogue.condition.Condition.ItemTagMatch}.
+		 */
+		MATCHED_ITEM((npc, player) -> {
+			PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
+			DialogueComponent component = ((DialogueEntity) npc).getDialogueComponent();
+			return component.getMatchedItem(playerId).map(item -> item.getName(item.getDefaultInstance()))
+					.orElseGet(() -> Component.literal("???"));
+		}),
 		;
 		
 		public static final Codec<Argument> CODEC = StringRepresentable.fromEnum(Argument::values);

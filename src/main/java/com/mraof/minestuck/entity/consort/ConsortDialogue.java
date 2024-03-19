@@ -86,30 +86,6 @@ public class ConsortDialogue
 			).setAcceptNull()
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
-		addMessage(new ItemRequirement(MSTags.Items.CONSORT_SNACKS, false, true, new SingleMessage("hungry"),
-						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
-								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
-								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry.item", 0, 15, new SingleMessage("hungry.thanks")),
-										new SingleMessage("sadface") }))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage(new ItemRequirement("hungry2", MSTags.Items.CONSORT_SNACKS, false, true, false,
-						new SingleMessage(
-								"hungry"),
-						new ChoiceMessage(
-								new SingleMessage("hungry.ask_food",
-										"nbt_item:hungry2.item"),
-								new SingleMessage[] {
-										new SingleMessage(
-												"hungry.accept"),
-										new SingleMessage("hungry.deny") },
-								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry2.item", 0, 15, new SingleMessage("hungry.thanks")),
-										new ChoiceMessage(new SingleMessage("hungry.starving"),
-												new SingleMessage[] { new SingleMessage("hungry.agree"),
-														new SingleMessage("hungry.too_cheap") },
-												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10, 0,
-														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbt_item:hungry2.item"),
-																new SingleMessage("hungry.finally"))),
-														new SingleMessage("hungry.end") }) }))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
-		
 		addMessage(new MerchantGuiMessage(new SingleMessage("general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("got_the_goods"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("rising_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
