@@ -32,6 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -673,13 +674,19 @@ public interface Condition
 			
 			Scoreboard scoreboard = player.getScoreboard();
 			
-			if(!scoreboard.hasObjective(objectiveName))
+			Objective objective = scoreboard.getObjective(objectiveName);
+			if(objective == null)
 				return false;
 			
-			Collection<Score> scores = scoreboard.getPlayerScores(scoreboard.getObjective(objectiveName));
+			Collection<Score> scores = scoreboard.getPlayerScores(objective);
 			
 			//go with originally written scoreboard name if not "player" or "npc"
-			String modOwnerName = ownerName.equals("player") ? player.getScoreboardName() : ownerName.equals("npc") ? entity.getScoreboardName() : ownerName;
+			String modOwnerName = switch(ownerName)
+			{
+				case "player" -> player.getScoreboardName();
+				case "npc" -> entity.getScoreboardName();
+				default -> ownerName;
+			};
 			
 			return scores.stream().filter(score -> score.getOwner().equals(modOwnerName)).anyMatch(score -> score.getScore() == value);
 		}
