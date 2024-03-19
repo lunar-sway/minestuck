@@ -618,12 +618,10 @@ public interface Condition
 		}
 	}
 	
-	//todo with how we're using this, I think we want it to accept an equal amount too
-	record PlayerHasBoondollars(int amount, boolean greaterThan) implements Condition
+	record PlayerHasBoondollars(int amount) implements Condition
 	{
 		static final Codec<PlayerHasBoondollars> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasBoondollars::amount),
-				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "greater_than", true).forGetter(PlayerHasBoondollars::greaterThan)
+				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasBoondollars::amount)
 		).apply(instance, PlayerHasBoondollars::new));
 		
 		@Override
@@ -640,7 +638,7 @@ public interface Condition
 			
 			PlayerData data = PlayerSavedData.getData(player);
 			if(data != null)
-				return greaterThan ? data.getBoondollars() > amount : data.getBoondollars() < amount;
+				return data.getBoondollars() >= amount;
 			
 			return false;
 		}

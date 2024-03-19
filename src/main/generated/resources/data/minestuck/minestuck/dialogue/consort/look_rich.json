@@ -11,9 +11,14 @@
     },
     {
       "condition": {
-        "type": "minestuck:player_boondollars",
-        "amount": 10,
-        "greater_than": false
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:player_boondollars",
+            "amount": 10
+          }
+        ],
+        "list_type": "none"
       },
       "node": {
         "message": "minestuck.dialogue.consort.look_rich.poor"

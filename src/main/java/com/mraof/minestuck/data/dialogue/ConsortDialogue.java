@@ -323,7 +323,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("fur_coat", defaultWeight(isInTerrain(FROST)), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!"))
 						.addResponse(new ResponseBuilder(l.subMsg("pay", "Here you go! [Pay 100 boondollars]"))
-								.condition(new Condition.PlayerHasBoondollars(100, true))
+								.condition(new Condition.PlayerHasBoondollars(100))
 								.addTrigger(new Trigger.AddBoondollars(-100))
 								.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
 								.addTrigger(new Trigger.AddConsortReputation(50))
@@ -639,8 +639,8 @@ public final class ConsortDialogue
 				.addResponse(new ResponseBuilder(l.subMsg("name", "Player name land: %s", Argument.LAND_PLAYER_NAME))));
 		
 		provider.addRandomlySelectable("look_rich", defaultWeight(alwaysTrue()), new NodeSelectorBuilder()
-				.node(new Condition.PlayerHasBoondollars(10_000, true), new NodeBuilder(l.subMsg("rich", "Hey, looks like you have a lot of boons!")))
-				.node(new Condition.PlayerHasBoondollars(10, false), new NodeBuilder(l.subMsg("poor", "Wow, you barely have any boons. Poor you.")))
+				.node(new Condition.PlayerHasBoondollars(10_000), new NodeBuilder(l.subMsg("rich", "Hey, looks like you have a lot of boons!")))
+				.node(none(new Condition.PlayerHasBoondollars(10)), new NodeBuilder(l.subMsg("poor", "Wow, you barely have any boons. Poor you.")))
 				.defaultNode(new NodeBuilder(l.defaultKeyMsg("Hi! I can sense if someone has a lot of boondollars."))));
 	}
 }
