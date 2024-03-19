@@ -2365,6 +2365,7 @@
   "minestuck.dialogue.consort_food_merchant.time": "Tick Tock, time's a-wasting! Eat something or leave!",
   "minestuck.dialogue.doom_general_shop": "With my prices, my competitors are doomed!",
   "minestuck.dialogue.finally": "Finally!",
+  "minestuck.dialogue.format": "%s: %s",
   "minestuck.dialogue.frog_general_shop": "Get your frog merchandise here! Limited time only! ....Just kidding, I'm always here.",
   "minestuck.dialogue.general_shop": "We have generic goods for generic people!",
   "minestuck.dialogue.got_the_goods": "You want the goods? We got the goods.",

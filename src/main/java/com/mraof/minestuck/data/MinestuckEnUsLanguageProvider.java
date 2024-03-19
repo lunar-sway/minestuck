@@ -30,6 +30,7 @@ import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.MessageType;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
@@ -2489,6 +2490,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");
 		add(DialogueProvider.ARROW.key(), "=>");
 		add(DialogueProvider.DOTS.key(), "...");
+		add(Dialogue.DIALOGUE_FORMAT, "%s: %s");
 		addDialogue("thank_you", "Thank you!");
 		
 		addDialogue("rap_battle", "I challenge you to a rap battle! Accept challenge? Y/N");

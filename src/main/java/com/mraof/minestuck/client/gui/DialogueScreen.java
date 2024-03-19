@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ResponseTriggerPacket;
@@ -53,16 +52,7 @@ public class DialogueScreen extends Screen
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
 		
-		MutableComponent entityName = entity.getDisplayName().plainCopy();
-		
-		//consort names will have the same color as their type
-		if(entity instanceof ConsortEntity consortEntity)
-		{
-			entityName.withStyle(consortEntity.getConsortType().getColor());
-		}
-		
-		Component entityMessage = entityName.append(": ").append(this.dialogueData.message());
-		this.messageLines = font.split(entityMessage, 210);
+		this.messageLines = font.split(this.dialogueData.message(), 210);
 		
 		recreateResponseButtons();
 	}

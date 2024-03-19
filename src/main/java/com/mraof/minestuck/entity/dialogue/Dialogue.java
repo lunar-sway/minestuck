@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.ChatFormatting;
@@ -30,6 +31,7 @@ import java.util.stream.IntStream;
  */
 public final class Dialogue
 {
+	public static final String DIALOGUE_FORMAT = "minestuck.dialogue.format";
 	public static final String DEFAULT_ANIMATION = "generic_animation";
 	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
 	
@@ -112,13 +114,25 @@ public final class Dialogue
 					.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, player))
 					.flatMap(Optional::stream).toList();
 			
-			MutableComponent message = this.message().evaluateComponent(entity, player);
+			MutableComponent text = Component.empty();
+			text.append(this.buildMessage(entity, player));
 			this.description().ifPresent(descriptionMessage ->
-					message.append("\n")
+					text.append("\n")
 							.append(descriptionMessage.evaluateComponent(entity, player)
 									.withStyle(style -> style.withItalic(true).applyFormat(ChatFormatting.GRAY))));
 			
-			return new DialogueData(message, this.guiPath(), responses);
+			return new DialogueData(text, this.guiPath(), responses);
+		}
+		
+		private Component buildMessage(LivingEntity entity, ServerPlayer player)
+		{
+			MutableComponent message = Component.translatable(DIALOGUE_FORMAT,
+					entity.getDisplayName(), this.message.evaluateComponent(entity, player));
+			
+			if(entity instanceof ConsortEntity consort)
+				message.withStyle(consort.getConsortType().getColor());
+			
+			return message;
 		}
 		
 		public Optional<Response> getResponseIfValid(int responseIndex)
