@@ -44,9 +44,14 @@ public final class ConsortDialogue
 	
 	//todo look over response texts.
 	// In the old system, there was one text showing off the option, and another text being what the player actually "replied" with. When moving to this system, only one of the two was used at each case.
+	
 	//todo some nodes have closing responses and others doesn't. Do we want to work in more closing responses?
+	
 	//todo we should check if any dialogue would do well to use Trigger.SetPlayerDialogue or responseBuilder.setNextAsEntrypoint() to set a new and player-specific entrypoint
 	// (for when dialogue progresses in some way that it shouldn't start from the beginning)
+	
+	//todo if we want, we can shorten or replace some chain dialogue by showing multiple messages on the same screen (with "nodeBuilder.addMessage()").
+	// Check if we want to do that kind of change with any of these!
 	private static void consortDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
 		//Generic
@@ -319,7 +324,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("frozen", defaultWeight(isInTerrain(FROST)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("My neighbors were complaining the other night about the snow.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Personally, the cold never really bothered me anyways."))
-						.description(l.subMsg("desc", "You hear a faint \"ba-dum tss\" in the distance."))));
+						.addDescription(l.subMsg("desc", "You hear a faint \"ba-dum tss\" in the distance."))));
 		provider.addRandomlySelectable("fur_coat", defaultWeight(isInTerrain(FROST)), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!"))
 						.addResponse(new ResponseBuilder(l.subMsg("pay", "Here you go! [Pay 100 boondollars]"))
@@ -548,7 +553,7 @@ public final class ConsortDialogue
 							.addTrigger(new Trigger.AddBoondollars(10))
 							.addTrigger(new Trigger.SetPlayerDialogue(builder.add("finally2", new NodeBuilder(finallyMsg))))
 							.nextDialogue(builder.add("finally", new NodeBuilder(finallyMsg)
-									.description(l.subMsg("desc", "You are given 10 boondollars for the %s.", Argument.MATCHED_ITEM)))))
+									.addDescription(l.subMsg("desc", "You are given 10 boondollars for the %s.", Argument.MATCHED_ITEM)))))
 					.addResponse(new ResponseBuilder(l.subMsg("no", "Too Cheap"))
 							.nextDialogue(builder.add("end", new NodeBuilder(l.defaultKeyMsg("Fine. I will just go and find a real food store."))))
 							.setNextAsEntrypoint()));

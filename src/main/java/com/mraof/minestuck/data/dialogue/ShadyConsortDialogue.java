@@ -43,7 +43,7 @@ public final class ShadyConsortDialogue
 					.addClosingResponse(l.subMsg("deny", "It may be a deception, do not buy the \"thing\"!")));
 			
 			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Hey kid... I'll give you something special for 1000 boondollars..."))
-					.description(l.subMsg("desc", "This %s seems pretty shady. You're not sure whether or not to trust them...", Argument.ENTITY_TYPE))
+					.addDescription(l.subMsg("desc", "This %s seems pretty shady. You're not sure whether or not to trust them...", Argument.ENTITY_TYPE))
 					.addResponse(new ResponseBuilder(l.subMsg("buy", "Buy \"Something special\" [Pay 1000 boondollars]"))
 							.visibleCondition(new Condition.PlayerHasBoondollars(1000))
 							.addTrigger(new Trigger.AddBoondollars(-1000))
@@ -69,7 +69,7 @@ public final class ShadyConsortDialogue
 					.addClosingResponse(l.subMsg("deny", "I'm sorry, I meant *really* short on cash...")));
 			
 			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Hey there! I've got a wonderful item here for just 1000 boondollars? How about it kid?"))
-					.description(l.subMsg("desc", "This %s is way too nice to ever scam you! Surely you can trust them?", Argument.ENTITY_TYPE))
+					.addDescription(l.subMsg("desc", "This %s is way too nice to ever scam you! Surely you can trust them?", Argument.ENTITY_TYPE))
 					.addResponse(new ResponseBuilder(l.subMsg("buy", "Buy \"Wonderful item\" [Pay 1000 boondollars]"))
 							.visibleCondition(new Condition.PlayerHasBoondollars(1000))
 							.addTrigger(new Trigger.AddBoondollars(-1000))

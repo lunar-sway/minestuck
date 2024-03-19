@@ -132,21 +132,29 @@ public final class DialogueProvider implements DataProvider
 	
 	public static class NodeBuilder implements SimpleDialogueProducer, NodeProducer
 	{
-		private final MessageProducer messageProvider;
-		@Nullable
-		private MessageProducer descriptionProvider;
+		private final List<Pair<Dialogue.MessageType, MessageProducer>> messages = new ArrayList<>();
 		private String animation = Dialogue.DEFAULT_ANIMATION;
 		private ResourceLocation guiPath = Dialogue.DEFAULT_GUI;
 		private final List<ResponseBuilder> responses = new ArrayList<>();
 		
-		public NodeBuilder(MessageProducer messageProvider)
+		public NodeBuilder(MessageProducer message)
 		{
-			this.messageProvider = messageProvider;
+			this.addMessage(message);
 		}
 		
-		public NodeBuilder description(MessageProducer provider)
+		public NodeBuilder()
 		{
-			this.descriptionProvider = provider;
+		}
+		
+		public NodeBuilder addMessage(MessageProducer message)
+		{
+			this.messages.add(Pair.of(Dialogue.MessageType.ENTITY, message));
+			return this;
+		}
+		
+		public NodeBuilder addDescription(MessageProducer message)
+		{
+			this.messages.add(Pair.of(Dialogue.MessageType.DESCRIPTION, message));
 			return this;
 		}
 		
@@ -191,11 +199,12 @@ public final class DialogueProvider implements DataProvider
 		@Override
 		public Dialogue.Node buildNode(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			DialogueMessage message = this.messageProvider.build(id);
-			List<Pair<Dialogue.MessageType, DialogueMessage>> messages = this.descriptionProvider != null
-					? List.of(Pair.of(Dialogue.MessageType.ENTITY, message), Pair.of(Dialogue.MessageType.DESCRIPTION, this.descriptionProvider.build(id)))
-					: List.of(Pair.of(Dialogue.MessageType.ENTITY, message));
-			return new Dialogue.Node(messages, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id, register)).toList());
+			List<Pair<Dialogue.MessageType, DialogueMessage>> messages = this.messages.stream()
+					.map(pair -> pair.mapSecond(producer -> producer.build(id))).toList();
+			
+			List<Dialogue.Response> responses = this.responses.stream().map(builder -> builder.build(id, register)).toList();
+			
+			return new Dialogue.Node(messages, this.animation, this.guiPath, responses);
 		}
 		
 		@Override

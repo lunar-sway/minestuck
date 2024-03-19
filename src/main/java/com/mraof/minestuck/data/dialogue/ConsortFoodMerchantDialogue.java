@@ -93,7 +93,7 @@ public final class ConsortFoodMerchantDialogue
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
 		provider.addRandomlySelectable("hope", defaultWeight(isInTitle(TOWERS)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("I HOPE you're hungry!"))
-						.description(l.subMsg("desc", "You hear a faint ba-dum tss in the distance."))
+						.addDescription(l.subMsg("desc", "You hear a faint ba-dum tss in the distance."))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
 		provider.addRandomlySelectable("buckets", defaultWeight(isInTitle(BUCKETS)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!"))
