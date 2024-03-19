@@ -1,5 +1,6 @@
 package com.mraof.minestuck.data.dialogue;
 
+import com.mraof.minestuck.data.dialogue.DialogueProvider.MessageProducer;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -7,6 +8,9 @@ import net.minecraftforge.common.data.LanguageProvider;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * A helper class for creating {@link MessageProducer}s and register text for it to the language provider with one function call.
+ */
 public final class DialogueLangHelper
 {
 	private final LanguageProvider languageProvider;
@@ -17,31 +21,35 @@ public final class DialogueLangHelper
 	}
 	
 	@Deprecated
-	public static Function<ResourceLocation, DialogueMessage> defaultKeyMsg(DialogueMessage.Argument... arguments)
+	public static MessageProducer defaultKeyMsg(DialogueMessage.Argument... arguments)
 	{
-		return id -> msg(languageKeyBase(id), arguments);
+		return id -> new DialogueMessage(languageKeyBase(id), List.of(arguments));
 	}
 	
-	public Function<ResourceLocation, DialogueMessage> defaultKeyMsg(String text, DialogueMessage.Argument... arguments)
+	public MessageProducer defaultKeyMsg(String text, DialogueMessage.Argument... arguments)
 	{
-		return id -> msg(languageKeyBase(id), text, arguments);
+		return id -> registerAndBuild(languageKeyBase(id), text, arguments);
 	}
 	
-	public Function<ResourceLocation, DialogueMessage> subMsg(String key, String text, DialogueMessage.Argument... arguments)
+	public MessageProducer subMsg(String key, String text, DialogueMessage.Argument... arguments)
 	{
-		return id -> msg(languageKeyBase(id) + "." + key, text, arguments);
+		return id -> registerAndBuild(languageKeyBase(id) + "." + key, text, arguments);
 	}
 	
 	@Deprecated
-	public static DialogueMessage msg(String key, DialogueMessage.Argument... arguments)
+	public static MessageProducer msg(String key, DialogueMessage.Argument... arguments)
 	{
-		return new DialogueMessage(key, List.of(arguments));
+		return msg(new DialogueMessage(key, List.of(arguments)));
 	}
 	
-	public DialogueMessage msg(String key, String text, DialogueMessage.Argument... arguments)
+	public MessageProducer msg(String key, String text, DialogueMessage.Argument... arguments)
 	{
-		this.languageProvider.add(key, text);
-		return new DialogueMessage(key, List.of(arguments));
+		return msg(registerAndBuild(key, text, arguments));
+	}
+	
+	public static MessageProducer msg(DialogueMessage message)
+	{
+		return baseId -> message;
 	}
 	
 	public Function<ResourceLocation, String> subText(String subKey, String text)
@@ -51,6 +59,12 @@ public final class DialogueLangHelper
 			this.languageProvider.add(key, text);
 			return key;
 		};
+	}
+	
+	private DialogueMessage registerAndBuild(String key, String text, DialogueMessage.Argument... arguments)
+	{
+		this.languageProvider.add(key, text);
+		return new DialogueMessage(key, List.of(arguments));
 	}
 	
 	private static String languageKeyBase(ResourceLocation id)

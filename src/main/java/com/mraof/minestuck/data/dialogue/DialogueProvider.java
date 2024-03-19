@@ -88,6 +88,11 @@ public final class DialogueProvider implements DataProvider
 		Dialogue.Node buildNode(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register);
 	}
 	
+	public interface MessageProducer
+	{
+		DialogueMessage build(ResourceLocation baseId);
+	}
+	
 	public static class NodeSelectorBuilder implements SimpleDialogueProducer
 	{
 		private final List<Pair<Condition, NodeProducer>> conditionedNodes = new ArrayList<>();
@@ -127,24 +132,19 @@ public final class DialogueProvider implements DataProvider
 	
 	public static class NodeBuilder implements SimpleDialogueProducer, NodeProducer
 	{
-		private final Function<ResourceLocation, DialogueMessage> messageProvider;
+		private final MessageProducer messageProvider;
 		@Nullable
-		private Function<ResourceLocation, DialogueMessage> descriptionProvider;
+		private MessageProducer descriptionProvider;
 		private String animation = Dialogue.DEFAULT_ANIMATION;
 		private ResourceLocation guiPath = Dialogue.DEFAULT_GUI;
 		private final List<ResponseBuilder> responses = new ArrayList<>();
 		
-		public NodeBuilder(DialogueMessage message)
-		{
-			this.messageProvider = id -> message;
-		}
-		
-		public NodeBuilder(Function<ResourceLocation, DialogueMessage> messageProvider)
+		public NodeBuilder(MessageProducer messageProvider)
 		{
 			this.messageProvider = messageProvider;
 		}
 		
-		public NodeBuilder description(Function<ResourceLocation, DialogueMessage> provider)
+		public NodeBuilder description(MessageProducer provider)
 		{
 			this.descriptionProvider = provider;
 			return this;
@@ -164,27 +164,22 @@ public final class DialogueProvider implements DataProvider
 		
 		public NodeBuilder addClosingResponse()
 		{
-			return addClosingResponse(DOTS);
+			return addClosingResponse(DialogueLangHelper.msg(DOTS));
 		}
 		
-		public NodeBuilder addClosingResponse(DialogueMessage message)
-		{
-			return addResponse(new ResponseBuilder(message));
-		}
-		
-		public NodeBuilder addClosingResponse(Function<ResourceLocation, DialogueMessage> message)
+		public NodeBuilder addClosingResponse(MessageProducer message)
 		{
 			return addResponse(new ResponseBuilder(message));
 		}
 		
 		public NodeBuilder next(String key, DialogueProducer dialogueProducer)
 		{
-			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(key, dialogueProducer));
+			return this.addResponse(new ResponseBuilder(DialogueLangHelper.msg(ARROW)).nextDialogue(key, dialogueProducer));
 		}
 		
 		public NodeBuilder next(ResourceLocation dialogueId)
 		{
-			return this.addResponse(new ResponseBuilder(ARROW).nextDialogue(dialogueId));
+			return this.addResponse(new ResponseBuilder(DialogueLangHelper.msg(ARROW)).nextDialogue(dialogueId));
 		}
 		
 		public NodeBuilder addResponse(ResponseBuilder responseBuilder)
@@ -196,8 +191,8 @@ public final class DialogueProvider implements DataProvider
 		@Override
 		public Dialogue.Node buildNode(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			DialogueMessage message = this.messageProvider.apply(id);
-			Optional<DialogueMessage> description = this.descriptionProvider != null ? Optional.of(this.descriptionProvider.apply(id)) : Optional.empty();
+			DialogueMessage message = this.messageProvider.build(id);
+			Optional<DialogueMessage> description = this.descriptionProvider != null ? Optional.of(this.descriptionProvider.build(id)) : Optional.empty();
 			return new Dialogue.Node(message, description, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id, register)).toList());
 		}
 		
@@ -211,7 +206,7 @@ public final class DialogueProvider implements DataProvider
 	
 	public static class ResponseBuilder
 	{
-		private final Function<ResourceLocation, DialogueMessage> message;
+		private final MessageProducer message;
 		private final List<Trigger> triggers = new ArrayList<>();
 		@Nullable
 		private DialogueProducer nextDialogue = null;
@@ -220,12 +215,7 @@ public final class DialogueProvider implements DataProvider
 		private boolean hideIfFailed = true;
 		private Function<ResourceLocation, String> failTooltip = id -> null;
 		
-		ResponseBuilder(DialogueMessage message)
-		{
-			this.message = id -> message;
-		}
-		
-		ResponseBuilder(Function<ResourceLocation, DialogueMessage> message)
+		ResponseBuilder(MessageProducer message)
 		{
 			this.message = message;
 		}
@@ -286,7 +276,7 @@ public final class DialogueProvider implements DataProvider
 		{
 			Optional<Dialogue.NextDialogue> nextDialogue = Optional.ofNullable(this.nextDialogue).map(builder -> builder.buildAndRegister(id, register))
 					.map(nextId -> new Dialogue.NextDialogue(nextId, this.setEntrypoint));
-			DialogueMessage message = this.message.apply(id);
+			DialogueMessage message = this.message.build(id);
 			return new Dialogue.Response(message, this.triggers, nextDialogue, this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
 		}
 	}

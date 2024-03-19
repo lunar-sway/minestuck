@@ -108,7 +108,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("This place is just so full of life! I despise it.")));
 		provider.addRandomlySelectable("rabbit.food_shortage", defaultWeight(all(isInTitle(RABBITS), isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE))),
 				new NodeBuilder(l.defaultKeyMsg("This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!"))
-						.addResponse(new ResponseBuilder(ARROW).condition(isAnyEntityType(NAKAGATOR))
+						.addResponse(new ResponseBuilder(msg(ARROW)).condition(isAnyEntityType(NAKAGATOR))
 								.nextDialogue("other_way", new NodeBuilder(l.defaultKeyMsg("But with that many rabbits around, there sure are other ways of getting food..."))
 										.addClosingResponse())));
 		provider.addRandomlySelectable("rabbit_food", defaultWeight(all(isInTitle(RABBITS), any(isInTerrainLand(MSTags.TerrainLandTypes.IS_DESOLATE), isInTerrain(FUNGI), isInTerrain(SHADE)))), new FolderedDialogue(builder -> {
@@ -116,7 +116,7 @@ public final class ConsortDialogue
 			var next = builder.add("next", new NodeSelectorBuilder()
 					.node(any(isInTerrain(FUNGI), isInTerrain(SHADE)), new NodeBuilder(l.subMsg("mushrooms", "I mean, there's not really much else than mushrooms around here.")))
 					.defaultNode(new NodeBuilder(l.subMsg("desolate", "There's not really much food to be found in this desolate place."))
-							.addResponse(new ResponseBuilder(ARROW).condition(isInTerrainLand(MSTags.TerrainLandTypes.SAND)).nextDialogue(cacti))));
+							.addResponse(new ResponseBuilder(msg(ARROW)).condition(isInTerrainLand(MSTags.TerrainLandTypes.SAND)).nextDialogue(cacti))));
 			builder.addStart(new NodeBuilder(l.defaultKeyMsg("I sure wonder where the rabbits are getting their food from.")).next(next));
 		}));
 		
@@ -444,7 +444,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("immortality_herb", defaultWeight(all(isInTerrain(FLORA), Condition.FirstTimeGenerating.INSTANCE)).keepOnReset(), new ChainBuilder().withFolders()
 				.node(new NodeBuilder(l.defaultKeyMsg("I have a herb that grants immortality! I'm going to eat it right now!")))
 				.node(new NodeBuilder(l.defaultKeyMsg("However, they are easily confused with an explosion-causing herb...")))
-				.node(new NodeBuilder(l.defaultKeyMsg("I'm taking the risk.")).addResponse(new ResponseBuilder(DOTS).addTrigger(new Trigger.Explode()))));
+				.node(new NodeBuilder(l.defaultKeyMsg("I'm taking the risk.")).addResponse(new ResponseBuilder(msg(DOTS)).addTrigger(new Trigger.Explode()))));
 		provider.addRandomlySelectable("spices", defaultWeight(isInTerrain(FLORA)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("A good chef cooks with the spices found throughout the land.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Other chefs are envious that they don't live in %s.", Argument.LAND_NAME))));
