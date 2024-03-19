@@ -9,7 +9,7 @@
     "responses": [
       {
         "message": "minestuck.arrow",
-        "next_dialogue_path": "minestuck:consort/cult.2"
+        "next_dialogue": "minestuck:consort/cult.2"
       }
     ]
   }

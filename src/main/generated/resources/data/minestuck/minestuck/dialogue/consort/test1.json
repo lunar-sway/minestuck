@@ -19,7 +19,7 @@
           "list_type": "any"
         },
         "message": "test1response1",
-        "next_dialogue_path": "minestuck:consort/test2"
+        "next_dialogue": "minestuck:consort/test2"
       },
       {
         "condition": {
@@ -27,11 +27,11 @@
           "entity_type": "minestuck:nakagator"
         },
         "message": "test1response2",
-        "next_dialogue_path": "minestuck:consort/test2"
+        "next_dialogue": "minestuck:consort/test2"
       },
       {
         "message": "test1response3",
-        "next_dialogue_path": "minestuck:consort/test2",
+        "next_dialogue": "minestuck:consort/test2",
         "triggers": [
           {
             "type": "command",

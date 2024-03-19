@@ -4,7 +4,7 @@
     "responses": [
       {
         "message": "minestuck.arrow",
-        "next_dialogue_path": "minestuck:consort/adaptation.2"
+        "next_dialogue": "minestuck:consort/adaptation.2"
       }
     ]
   }

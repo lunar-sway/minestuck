@@ -50,6 +50,7 @@ public sealed interface Trigger
 	{
 		SET_DIALOGUE(() -> SetDialogue.CODEC),
 		SET_DIALOGUE_FROM_LIST(() -> SetDialogueFromList.CODEC),
+		SET_PLAYER_DIALOGUE(() -> SetPlayerDialogue.CODEC),
 		SET_RANDOM_DIALOGUE(() -> SetRandomDialogue.CODEC),
 		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC),
 		COMMAND(() -> Command.CODEC),
@@ -129,6 +130,25 @@ public sealed interface Trigger
 			{
 				dialogueEntity.getDialogueComponent().setDialogue(Util.getRandom(this.newPaths, entity.level().random), false);
 			}
+		}
+	}
+	
+	record SetPlayerDialogue(ResourceLocation dialogueId) implements Trigger
+	{
+		static final Codec<SetPlayerDialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("dialogue").forGetter(SetPlayerDialogue::dialogueId)
+		).apply(instance, SetPlayerDialogue::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.SET_PLAYER_DIALOGUE;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			((DialogueEntity) entity).getDialogueComponent().setDialogueForPlayer(player, this.dialogueId);
 		}
 	}
 	

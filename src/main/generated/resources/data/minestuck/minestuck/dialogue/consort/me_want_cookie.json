@@ -7,7 +7,7 @@
       },
       {
         "message": "minestuck.dialogue.consort.me_want_cookie.why",
-        "next_dialogue_path": "minestuck:consort/me_want_cookie"
+        "next_dialogue": "minestuck:consort/me_want_cookie"
       },
       {
         "condition": {
@@ -16,7 +16,7 @@
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.me_want_cookie.give",
-        "next_dialogue_path": "minestuck:consort/oh_yippee",
+        "next_dialogue": "minestuck:consort/oh_yippee",
         "triggers": [
           {
             "type": "take_item",

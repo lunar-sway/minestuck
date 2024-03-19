@@ -25,6 +25,7 @@ public final class DialogueComponent
 	private final LivingEntity entity;
 	@Nullable
 	private ResourceLocation activeDialogue;
+	private final Map<PlayerIdentifier, ResourceLocation> dialogueEntrypoint = new HashMap<>();
 	private boolean keepOnReset;
 	private boolean hasGeneratedOnce = false;
 	private final Map<PlayerIdentifier, Set<String>> playerSpecificFlags = new HashMap<>();
@@ -100,6 +101,18 @@ public final class DialogueComponent
 		return Optional.ofNullable(this.activeDialogue);
 	}
 	
+	public void setDialogueForPlayer(ServerPlayer player, ResourceLocation dialogueId)
+	{
+		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
+		this.dialogueEntrypoint.put(playerId, dialogueId);
+	}
+	
+	public Optional<ResourceLocation> getDialogueForPlayer(ServerPlayer player)
+	{
+		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
+		return Optional.ofNullable(this.dialogueEntrypoint.getOrDefault(playerId, this.activeDialogue));
+	}
+	
 	public boolean hasActiveDialogue()
 	{
 		return this.activeDialogue != null;
@@ -114,23 +127,25 @@ public final class DialogueComponent
 	{
 		if(!this.keepOnReset)
 			this.activeDialogue = null;
+		this.dialogueEntrypoint.clear();
 		this.playerSpecificFlags.clear();
 	}
 	
-	public void tryStartDialogue(ServerPlayer serverPlayer)
+	public void tryStartDialogue(ServerPlayer player)
 	{
-		if(this.activeDialogue == null)
+		Optional<ResourceLocation> dialogueId = this.getDialogueForPlayer(player);
+		if(dialogueId.isEmpty())
 			return;
 		
-		Dialogue.NodeSelector dialogue = DialogueManager.getInstance().getDialogue(this.activeDialogue);
+		Dialogue.NodeSelector dialogue = DialogueManager.getInstance().getDialogue(dialogueId.get());
 		if(dialogue == null)
 		{
-			LOGGER.warn("Unable to find dialogue with id {}", this.activeDialogue);
-			this.activeDialogue = null;
+			LOGGER.warn("Unable to find dialogue with id {}", dialogueId.get());
+			this.resetDialogue();
 			return;
 		}
 		
-		this.openScreenForDialogue(serverPlayer, this.activeDialogue, dialogue);
+		this.openScreenForDialogue(player, dialogueId.get(), dialogue);
 	}
 	
 	public void tryOpenScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId)

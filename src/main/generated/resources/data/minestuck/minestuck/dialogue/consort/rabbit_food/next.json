@@ -29,7 +29,7 @@
           "land_type_tag": "minestuck:sand"
         },
         "message": "minestuck.arrow",
-        "next_dialogue_path": "minestuck:consort/rabbit_food/cacti"
+        "next_dialogue": "minestuck:consort/rabbit_food/cacti"
       }
     ]
   }

@@ -10,7 +10,7 @@
         },
         "hide_if_failed": false,
         "message": "test2response1",
-        "next_dialogue_path": "minestuck:consort/test1"
+        "next_dialogue": "minestuck:consort/test1"
       },
       {
         "condition": {
@@ -32,7 +32,7 @@
         },
         "hide_if_failed": false,
         "message": "test2response2",
-        "next_dialogue_path": "minestuck:consort/test1",
+        "next_dialogue": "minestuck:consort/test1",
         "triggers": [
           {
             "type": "command",
@@ -42,7 +42,7 @@
       },
       {
         "message": "test2response3",
-        "next_dialogue_path": "minestuck:consort/test1",
+        "next_dialogue": "minestuck:consort/test1",
         "triggers": [
           {
             "type": "command",

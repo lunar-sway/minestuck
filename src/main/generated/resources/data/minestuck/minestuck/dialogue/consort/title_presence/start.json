@@ -14,11 +14,11 @@
           ],
           "key": "minestuck.dialogue.consort.title_presence.start.i_am"
         },
-        "next_dialogue_path": "minestuck:consort/title_presence/i_am"
+        "next_dialogue": "minestuck:consort/title_presence/i_am"
       },
       {
         "message": "minestuck.dialogue.consort.title_presence.start.agree",
-        "next_dialogue_path": "minestuck:consort/thanks"
+        "next_dialogue": "minestuck:consort/thanks"
       }
     ]
   }

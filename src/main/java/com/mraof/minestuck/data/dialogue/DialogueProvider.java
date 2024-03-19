@@ -215,6 +215,7 @@ public final class DialogueProvider implements DataProvider
 		private final List<Trigger> triggers = new ArrayList<>();
 		@Nullable
 		private DialogueProducer nextDialogue = null;
+		private boolean setEntrypoint = false;
 		private Condition condition = Condition.AlwaysTrue.INSTANCE;
 		private boolean hideIfFailed = true;
 		private Function<ResourceLocation, String> failTooltip = id -> null;
@@ -244,6 +245,12 @@ public final class DialogueProvider implements DataProvider
 		public ResponseBuilder loop()
 		{
 			this.nextDialogue = (id, register) -> id;
+			return this;
+		}
+		
+		public ResponseBuilder setNextAsEntrypoint()
+		{
+			this.setEntrypoint = true;
 			return this;
 		}
 		
@@ -277,9 +284,10 @@ public final class DialogueProvider implements DataProvider
 		
 		public Dialogue.Response build(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			Optional<ResourceLocation> nextPath = Optional.ofNullable(this.nextDialogue).map(builder -> builder.buildAndRegister(id, register));
+			Optional<Dialogue.NextDialogue> nextDialogue = Optional.ofNullable(this.nextDialogue).map(builder -> builder.buildAndRegister(id, register))
+					.map(nextId -> new Dialogue.NextDialogue(nextId, this.setEntrypoint));
 			DialogueMessage message = this.message.apply(id);
-			return new Dialogue.Response(message, this.triggers, nextPath, this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
+			return new Dialogue.Response(message, this.triggers, nextDialogue, this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
 		}
 	}
 	

@@ -8,7 +8,7 @@
           "entity_type": "minestuck:nakagator"
         },
         "message": "minestuck.arrow",
-        "next_dialogue_path": "minestuck:consort/rabbit.food_shortage.other_way"
+        "next_dialogue": "minestuck:consort/rabbit.food_shortage.other_way"
       }
     ]
   }

@@ -45,6 +45,8 @@ public final class ConsortDialogue
 	//todo look over response texts.
 	// In the old system, there was one text showing off the option, and another text being what the player actually "replied" with. When moving to this system, only one of the two was used at each case.
 	//todo some nodes have closing responses and others doesn't. Do we want to work in more closing responses?
+	//todo we should check if any dialogue would do well to use Trigger.SetPlayerDialogue or responseBuilder.setNextAsEntrypoint() to set a new and player-specific entrypoint
+	// (for when dialogue progresses in some way that it shouldn't start from the beginning)
 	private static void consortDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
 		//Generic

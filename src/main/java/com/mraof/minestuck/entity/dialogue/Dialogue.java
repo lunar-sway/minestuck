@@ -131,7 +131,7 @@ public final class Dialogue
 		
 		public void visitConnectedDialogue(Consumer<ResourceLocation> idConsumer)
 		{
-			responses.forEach(response -> response.nextDialoguePath().ifPresent(idConsumer));
+			responses.forEach(response -> response.nextDialogue.ifPresent(nextDialogue -> idConsumer.accept(nextDialogue.id)));
 		}
 	}
 	
@@ -139,13 +139,13 @@ public final class Dialogue
 	 * A Response contains all possible Dialogues that can be reached from the present Dialogue.
 	 * It contains the message that represents the Response, any Conditions/Triggers, the location of the next Dialogue, and a boolean determining whether the Response should be visible when it fails to meet the Conditions
 	 */
-	public record Response(DialogueMessage message, List<Trigger> triggers, Optional<ResourceLocation> nextDialoguePath,
+	public record Response(DialogueMessage message, List<Trigger> triggers, Optional<NextDialogue> nextDialogue,
 						   Condition condition, boolean hideIfFailed, Optional<String> failTooltipKey)
 	{
 		public static Codec<Response> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				DialogueMessage.CODEC.fieldOf("message").forGetter(Response::message),
 				PreservingOptionalFieldCodec.withDefault(Trigger.LIST_CODEC, "triggers", List.of()).forGetter(Response::triggers),
-				new PreservingOptionalFieldCodec<>(ResourceLocation.CODEC, "next_dialogue_path").forGetter(Response::nextDialoguePath),
+				new PreservingOptionalFieldCodec<>(NextDialogue.EITHER_CODEC, "next_dialogue").forGetter(Response::nextDialogue),
 				PreservingOptionalFieldCodec.withDefault(Condition.CODEC, "condition", Condition.AlwaysTrue.INSTANCE).forGetter(Response::condition),
 				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "hide_if_failed", true).forGetter(Response::hideIfFailed),
 				new PreservingOptionalFieldCodec<>(Codec.STRING, "fail_tooltip").forGetter(Response::failTooltipKey)
@@ -168,7 +168,7 @@ public final class Dialogue
 				
 				conditionFailure = Optional.of(new ConditionFailure(failureMessages));
 			}
-			return Optional.of(new ResponseData(this.message.evaluateComponent(entity, serverPlayer), this.nextDialoguePath.isEmpty(), responseIndex, conditionFailure));
+			return Optional.of(new ResponseData(this.message.evaluateComponent(entity, serverPlayer), this.nextDialogue.isEmpty(), responseIndex, conditionFailure));
 		}
 		
 		public void trigger(LivingEntity entity, ServerPlayer player)
@@ -179,12 +179,25 @@ public final class Dialogue
 			for(Trigger trigger : this.triggers())
 				trigger.triggerEffect(entity, player);
 			
-			Optional<ResourceLocation> nextPath = this.nextDialoguePath();
-			
-			if(nextPath.isEmpty())
-				return;
-			
-			((DialogueEntity) entity).getDialogueComponent().tryOpenScreenForDialogue(player, nextPath.get());
+			this.nextDialogue().ifPresent(nextDialogue -> nextDialogue.apply(((DialogueEntity) entity).getDialogueComponent(), player));
+		}
+	}
+	
+	public record NextDialogue(ResourceLocation id, boolean setAsEntrypoint)
+	{
+		public static final Codec<NextDialogue> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("id").forGetter(NextDialogue::id),
+				Codec.BOOL.fieldOf("set_as_entrypoint").forGetter(NextDialogue::setAsEntrypoint)
+		).apply(instance, NextDialogue::new));
+		public static final Codec<NextDialogue> EITHER_CODEC = Codec.either(ResourceLocation.CODEC, DIRECT_CODEC)
+				.xmap(either -> either.map(id -> new NextDialogue(id, false), Function.identity()),
+						nextDialogue -> nextDialogue.setAsEntrypoint ? Either.right(nextDialogue) : Either.left(nextDialogue.id));
+		
+		public void apply(DialogueComponent component, ServerPlayer player)
+		{
+			if(this.setAsEntrypoint)
+				component.setDialogueForPlayer(player, this.id);
+			component.tryOpenScreenForDialogue(player, this.id);
 		}
 	}
 	

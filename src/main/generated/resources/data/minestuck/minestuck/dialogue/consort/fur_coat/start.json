@@ -8,7 +8,7 @@
           "amount": 100
         },
         "message": "minestuck.dialogue.consort.fur_coat.start.pay",
-        "next_dialogue_path": "minestuck:consort/fur_coat/gratitude",
+        "next_dialogue": "minestuck:consort/fur_coat/gratitude",
         "triggers": [
           {
             "type": "add_boondollars",
@@ -30,7 +30,7 @@
       },
       {
         "message": "minestuck.dialogue.consort.fur_coat.start.ignore",
-        "next_dialogue_path": "minestuck:consort/fur_coat/death"
+        "next_dialogue": "minestuck:consort/fur_coat/death"
       }
     ]
   }

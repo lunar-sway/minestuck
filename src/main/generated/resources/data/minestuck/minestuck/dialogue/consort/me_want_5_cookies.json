@@ -13,7 +13,7 @@
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.me_want_5_cookies.give",
-        "next_dialogue_path": "minestuck:consort/oh_yippee",
+        "next_dialogue": "minestuck:consort/oh_yippee",
         "triggers": [
           {
             "type": "take_item",

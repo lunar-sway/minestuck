@@ -19,7 +19,7 @@
         "responses": [
           {
             "message": "minestuck.arrow",
-            "next_dialogue_path": "minestuck:consort/height_fear.towers.2"
+            "next_dialogue": "minestuck:consort/height_fear.towers.2"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "responses": [
       {
         "message": "minestuck.arrow",
-        "next_dialogue_path": "minestuck:consort/height_fear.rock.2"
+        "next_dialogue": "minestuck:consort/height_fear.rock.2"
       }
     ]
   }

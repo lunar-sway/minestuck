@@ -161,6 +161,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		if(!this.dialogueComponent.hasActiveDialogue())
 		{
+			this.dialogueComponent.resetDialogue();
 			RandomlySelectableDialogue.instance(this.merchantType.dialogueCategory())
 					.pickRandomForEntity(this).ifPresent(this.dialogueComponent::setDialogue);
 		}

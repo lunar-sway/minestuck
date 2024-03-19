@@ -9,11 +9,11 @@
     "responses": [
       {
         "message": "minestuck.dialogue.consort.denizen.start.what",
-        "next_dialogue_path": "minestuck:consort/denizen/explain"
+        "next_dialogue": "minestuck:consort/denizen/explain"
       },
       {
         "message": "minestuck.dialogue.consort.denizen.start.alignment",
-        "next_dialogue_path": "minestuck:consort/denizen/alignment"
+        "next_dialogue": "minestuck:consort/denizen/alignment"
       }
     ]
   }
