@@ -192,8 +192,10 @@ public final class DialogueProvider implements DataProvider
 		public Dialogue.Node buildNode(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
 			DialogueMessage message = this.messageProvider.build(id);
-			Optional<DialogueMessage> description = this.descriptionProvider != null ? Optional.of(this.descriptionProvider.build(id)) : Optional.empty();
-			return new Dialogue.Node(message, description, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id, register)).toList());
+			List<Pair<Dialogue.MessageType, DialogueMessage>> messages = this.descriptionProvider != null
+					? List.of(Pair.of(Dialogue.MessageType.ENTITY, message), Pair.of(Dialogue.MessageType.DESCRIPTION, this.descriptionProvider.build(id)))
+					: List.of(Pair.of(Dialogue.MessageType.ENTITY, message));
+			return new Dialogue.Node(messages, this.animation, this.guiPath, this.responses.stream().map(builder -> builder.build(id, register)).toList());
 		}
 		
 		@Override

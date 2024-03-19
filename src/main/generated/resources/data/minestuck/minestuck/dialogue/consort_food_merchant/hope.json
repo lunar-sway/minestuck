@@ -1,7 +1,15 @@
 {
   "node": {
-    "description": "minestuck.dialogue.consort_food_merchant.hope.desc",
-    "message": "minestuck.dialogue.consort_food_merchant.hope",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort_food_merchant.hope"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.consort_food_merchant.hope.desc"
+      }
+    ],
     "responses": [
       {
         "message": "minestuck.arrow",

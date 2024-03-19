@@ -1,12 +1,20 @@
 {
   "node": {
-    "description": {
-      "arguments": [
-        "entity_type"
-      ],
-      "key": "minestuck.dialogue.shady_consort.shady_offer.start.desc"
-    },
-    "message": "minestuck.dialogue.shady_consort.shady_offer.start",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.shady_consort.shady_offer.start"
+      },
+      {
+        "type": "description",
+        "message": {
+          "arguments": [
+            "entity_type"
+          ],
+          "key": "minestuck.dialogue.shady_consort.shady_offer.start.desc"
+        }
+      }
+    ],
     "responses": [
       {
         "condition": {

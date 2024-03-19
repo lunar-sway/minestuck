@@ -3,17 +3,20 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.ChatFormatting;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -21,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -98,11 +102,14 @@ public final class Dialogue
 	}
 	
 	//TODO animation is unused?
-	public record Node(DialogueMessage message, Optional<DialogueMessage> description, String animation, ResourceLocation guiPath, List<Response> responses)
+	public record Node(List<Pair<MessageType, DialogueMessage>> messages, String animation, ResourceLocation guiPath, List<Response> responses)
 	{
-		public static Codec<Node> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				DialogueMessage.CODEC.fieldOf("message").forGetter(Node::message),
-				new PreservingOptionalFieldCodec<>(DialogueMessage.CODEC, "description").forGetter(Node::description),
+		private static final Codec<Pair<MessageType, DialogueMessage>> MESSAGE_CODEC = Codec.mapPair(MessageType.CODEC.fieldOf("type"), DialogueMessage.CODEC.fieldOf("message")).codec();
+		private static final MapCodec<List<Pair<MessageType, DialogueMessage>>> MESSAGES_MAP_CODEC = Codec.mapEither(DialogueMessage.CODEC.fieldOf("message"), MESSAGE_CODEC.listOf().fieldOf("messages"))
+				.xmap(either -> either.map(message -> List.of(Pair.of(MessageType.ENTITY, message)), Function.identity()),
+						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.ENTITY ? Either.left(messages.get(0).getSecond()): Either.right(messages));
+		public static final Codec<Node> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				MESSAGES_MAP_CODEC.forGetter(Node::messages),
 				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DEFAULT_ANIMATION).forGetter(Node::animation),
 				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DEFAULT_GUI).forGetter(Node::guiPath),
 				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(Node::responses)
@@ -115,24 +122,35 @@ public final class Dialogue
 					.flatMap(Optional::stream).toList();
 			
 			MutableComponent text = Component.empty();
-			text.append(this.buildMessage(entity, player));
-			this.description().ifPresent(descriptionMessage ->
-					text.append("\n")
-							.append(descriptionMessage.evaluateComponent(entity, player)
-									.withStyle(style -> style.withItalic(true).applyFormat(ChatFormatting.GRAY))));
+			boolean isFirst = true;
+			for(Pair<MessageType, DialogueMessage> messagePair : this.messages)
+			{
+				if(!isFirst)
+					text.append("\n");
+				text.append(this.buildMessage(messagePair, entity, player));
+				isFirst = false;
+			}
 			
 			return new DialogueData(text, this.guiPath(), responses);
 		}
 		
-		private Component buildMessage(LivingEntity entity, ServerPlayer player)
+		private Component buildMessage(Pair<MessageType, DialogueMessage> messagePair, LivingEntity entity, ServerPlayer player)
 		{
-			MutableComponent message = Component.translatable(DIALOGUE_FORMAT,
-					entity.getDisplayName(), this.message.evaluateComponent(entity, player));
-			
-			if(entity instanceof ConsortEntity consort)
-				message.withStyle(consort.getConsortType().getColor());
-			
-			return message;
+			MutableComponent messageComponent = messagePair.getSecond().evaluateComponent(entity, player);
+			return switch(messagePair.getFirst())
+			{
+				case ENTITY -> {
+					MutableComponent component = Component.translatable(DIALOGUE_FORMAT,
+							entity.getDisplayName(), messageComponent);
+					
+					if(entity instanceof ConsortEntity consort)
+						component.withStyle(consort.getConsortType().getColor());
+					
+					yield component;
+				}
+				case DESCRIPTION ->
+						messageComponent.withStyle(style -> style.withItalic(true).applyFormat(ChatFormatting.GRAY));
+			};
 		}
 		
 		public Optional<Response> getResponseIfValid(int responseIndex)
@@ -146,6 +164,21 @@ public final class Dialogue
 		public void visitConnectedDialogue(Consumer<ResourceLocation> idConsumer)
 		{
 			responses.forEach(response -> response.nextDialogue.ifPresent(nextDialogue -> idConsumer.accept(nextDialogue.id)));
+		}
+	}
+	
+	@MethodsReturnNonnullByDefault
+	public enum MessageType implements StringRepresentable
+	{
+		ENTITY,
+		DESCRIPTION;
+		
+		static final Codec<MessageType> CODEC = StringRepresentable.fromEnum(MessageType::values);
+		
+		@Override
+		public String getSerializedName()
+		{
+			return this.name().toLowerCase(Locale.ROOT);
 		}
 	}
 	

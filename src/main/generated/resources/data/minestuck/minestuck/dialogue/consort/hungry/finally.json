@@ -1,11 +1,19 @@
 {
   "node": {
-    "description": {
-      "arguments": [
-        "matched_item"
-      ],
-      "key": "minestuck.dialogue.consort.hungry.finally.desc"
-    },
-    "message": "minestuck.dialogue.finally"
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.finally"
+      },
+      {
+        "type": "description",
+        "message": {
+          "arguments": [
+            "matched_item"
+          ],
+          "key": "minestuck.dialogue.consort.hungry.finally.desc"
+        }
+      }
+    ]
   }
 }
