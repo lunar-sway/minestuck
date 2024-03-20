@@ -18,11 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -257,22 +253,6 @@ public final class Dialogue
 				PreservingOptionalFieldCodec.withDefault(Codec.INT, "dialogue_weight", DEFAULT_WEIGHT).forGetter(SelectableDialogue::weight),
 				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "keep_on_reset", false).forGetter(SelectableDialogue::keepOnReset)
 		).apply(instance, SelectableDialogue::new));
-	}
-	
-	//TODO this helper function does not belong here
-	@Nullable
-	public static ItemStack findPlayerItem(Item item, Player player, int minAmount)
-	{
-		for(ItemStack invItem : player.getInventory().items)
-		{
-			if(invItem.is(item))
-			{
-				if(invItem.getCount() >= minAmount)
-					return invItem;
-			}
-		}
-		
-		return null;
 	}
 	
 	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses)

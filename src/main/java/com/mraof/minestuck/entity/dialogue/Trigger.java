@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
+import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
@@ -231,7 +232,7 @@ public sealed interface Trigger
 			if(player == null)
 				return;
 			
-			ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
+			ItemStack stack = Condition.PlayerHasItem.findPlayerItem(this.item, player, this.amount);
 			if(stack != null)
 				stack.shrink(this.amount);
 		}
@@ -260,7 +261,7 @@ public sealed interface Trigger
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			Optional<Item> matchedItem = component.getMatchedItem(playerId);
 			matchedItem.ifPresent(item -> {
-				ItemStack matchedStack = Dialogue.findPlayerItem(item, player, 1);
+				ItemStack matchedStack = Condition.PlayerHasItem.findPlayerItem(item, player, 1);
 				if(matchedStack != null)
 					matchedStack.shrink(1);
 			});

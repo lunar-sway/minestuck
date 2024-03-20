@@ -5,7 +5,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.*;
@@ -26,6 +25,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -37,6 +37,7 @@ import net.minecraft.world.scores.Scoreboard;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITag;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -433,7 +434,7 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
-			ItemStack stack = Dialogue.findPlayerItem(this.item, player, this.amount);
+			ItemStack stack = findPlayerItem(this.item, player, this.amount);
 			return stack != null;
 		}
 		
@@ -441,6 +442,21 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("You don't have the required item(s)");
+		}
+		
+		@Nullable
+		public static ItemStack findPlayerItem(Item item, Player player, int minAmount)
+		{
+			for(ItemStack invItem : player.getInventory().items)
+			{
+				if(invItem.is(item))
+				{
+					if(invItem.getCount() >= minAmount)
+						return invItem;
+				}
+			}
+			
+			return null;
 		}
 	}
 	
@@ -470,14 +486,14 @@ public interface Condition
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			ITag<Item> tag = Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.itemTag);
 			Optional<Item> lastMatched = component.getMatchedItem(playerId);
-			if(lastMatched.isPresent() && tag.contains(lastMatched.get()) && Dialogue.findPlayerItem(lastMatched.get(), player, 1) != null)
+			if(lastMatched.isPresent() && tag.contains(lastMatched.get()) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
 				return true;
 			
 			List<Item> items = tag.stream().collect(Collectors.toCollection(ArrayList::new));
 			while(!items.isEmpty())
 			{
 				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
-				if(Dialogue.findPlayerItem(nextItem, player, 1) != null)
+				if(PlayerHasItem.findPlayerItem(nextItem, player, 1) != null)
 				{
 					component.setMatchedItem(nextItem, playerId);
 					return true;
@@ -511,7 +527,7 @@ public interface Condition
 				return false;
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			Optional<Item> lastMatched = component.getMatchedItem(playerId);
-			return lastMatched.isPresent() && Dialogue.findPlayerItem(lastMatched.get(), player, 1) != null;
+			return lastMatched.isPresent() && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null;
 		}
 	}
 	
