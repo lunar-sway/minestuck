@@ -3,8 +3,6 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -26,11 +24,11 @@ public final class DialogueComponent
 	private final LivingEntity entity;
 	@Nullable
 	private ResourceLocation activeDialogue;
-	private final Map<PlayerIdentifier, ResourceLocation> dialogueEntrypoint = new HashMap<>();
+	private final Map<UUID, ResourceLocation> dialogueEntrypoint = new HashMap<>();
 	private boolean keepOnReset;
 	private boolean hasGeneratedOnce = false;
-	private final Map<PlayerIdentifier, Set<String>> playerSpecificFlags = new HashMap<>();
-	private final Map<PlayerIdentifier, Item> matchedItem = new HashMap<>();
+	private final Map<UUID, Set<String>> playerSpecificFlags = new HashMap<>();
+	private final Map<UUID, Item> matchedItem = new HashMap<>();
 	
 	public DialogueComponent(LivingEntity entity)
 	{
@@ -47,7 +45,7 @@ public final class DialogueComponent
 			this.playerSpecificFlags.clear();
 			tag.getList("player_flags", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag -> {
 				
-				PlayerIdentifier player = IdentifierHandler.load(entryTag, "player");
+				UUID player = entryTag.getUUID("player");
 				Set<String> flags = this.playerFlags(player);
 				entryTag.getList("flags", Tag.TAG_STRING).stream().map(StringTag.class::cast)
 						.map(StringTag::getAsString).forEach(flags::add);
@@ -67,7 +65,7 @@ public final class DialogueComponent
 			ListTag playerFlagsTag = new ListTag();
 			this.playerSpecificFlags.forEach((player, flags) -> {
 				CompoundTag entryTag = new CompoundTag();
-				player.saveToNBT(entryTag, "player");
+				entryTag.putUUID("player", player);
 				ListTag flagsTag = new ListTag();
 				flags.stream().map(StringTag::valueOf).forEach(flagsTag::add);
 				entryTag.put("flags", flagsTag);
@@ -105,14 +103,12 @@ public final class DialogueComponent
 	
 	public void setDialogueForPlayer(ServerPlayer player, ResourceLocation dialogueId)
 	{
-		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
-		this.dialogueEntrypoint.put(playerId, dialogueId);
+		this.dialogueEntrypoint.put(player.getUUID(), dialogueId);
 	}
 	
 	public Optional<ResourceLocation> getDialogueForPlayer(ServerPlayer player)
 	{
-		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
-		return Optional.ofNullable(this.dialogueEntrypoint.getOrDefault(playerId, this.activeDialogue));
+		return Optional.ofNullable(this.dialogueEntrypoint.getOrDefault(player.getUUID(), this.activeDialogue));
 	}
 	
 	public boolean hasActiveDialogue()
@@ -120,24 +116,29 @@ public final class DialogueComponent
 		return this.activeDialogue != null;
 	}
 	
-	public Set<String> playerFlags(PlayerIdentifier player)
+	public Set<String> playerFlags(ServerPlayer player)
+	{
+		return this.playerFlags(player.getUUID());
+	}
+	
+	private Set<String> playerFlags(UUID player)
 	{
 		return this.playerSpecificFlags.computeIfAbsent(player, _player -> new HashSet<>());
 	}
 	
-	public Optional<Item> getMatchedItem(PlayerIdentifier player)
+	public Optional<Item> getMatchedItem(ServerPlayer player)
 	{
-		return Optional.ofNullable(this.matchedItem.get(player));
+		return Optional.ofNullable(this.matchedItem.get(player.getUUID()));
 	}
 	
-	public void setMatchedItem(Item item, PlayerIdentifier player)
+	public void setMatchedItem(Item item, ServerPlayer player)
 	{
-		this.matchedItem.put(player, item);
+		this.matchedItem.put(player.getUUID(), item);
 	}
 	
-	public void clearMatchedItem(PlayerIdentifier player)
+	public void clearMatchedItem(ServerPlayer player)
 	{
-		this.matchedItem.remove(player);
+		this.matchedItem.remove(player.getUUID());
 	}
 	
 	public void resetDialogue()

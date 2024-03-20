@@ -7,9 +7,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -255,11 +253,8 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerIdentifier playerId = IdentifierHandler.encode(player);
-			if(playerId == null)
-				return;
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
-			Optional<Item> matchedItem = component.getMatchedItem(playerId);
+			Optional<Item> matchedItem = component.getMatchedItem(player);
 			matchedItem.ifPresent(item -> {
 				ItemStack matchedStack = Condition.PlayerHasItem.findPlayerItem(item, player, 1);
 				if(matchedStack != null)
@@ -410,9 +405,8 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerIdentifier playerId = IdentifierHandler.encode(player);
-			if(playerId != null && entity instanceof DialogueEntity dialogueEntity)
-				dialogueEntity.getDialogueComponent().playerFlags(playerId).add(this.flag);
+			if(entity instanceof DialogueEntity dialogueEntity)
+				dialogueEntity.getDialogueComponent().playerFlags(player).add(this.flag);
 		}
 	}
 	
@@ -433,10 +427,10 @@ public sealed interface Trigger
 		{
 			if(this.flags.isEmpty())
 				return;
-			PlayerIdentifier playerId = IdentifierHandler.encode(player);
-			if(playerId != null && entity instanceof DialogueEntity dialogueEntity)
+			
+			if(entity instanceof DialogueEntity dialogueEntity)
 			{
-				Set<String> playerFlags = dialogueEntity.getDialogueComponent().playerFlags(playerId);
+				Set<String> playerFlags = dialogueEntity.getDialogueComponent().playerFlags(player);
 				if(flags.stream().noneMatch(playerFlags::contains))
 					playerFlags.add(Util.getRandom(this.flags, entity.getRandom()));
 			}

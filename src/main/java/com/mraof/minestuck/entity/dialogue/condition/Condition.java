@@ -480,12 +480,9 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerIdentifier playerId = IdentifierHandler.encode(player);
-			if(playerId == null)
-				return false;
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			ITag<Item> tag = Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.itemTag);
-			Optional<Item> lastMatched = component.getMatchedItem(playerId);
+			Optional<Item> lastMatched = component.getMatchedItem(player);
 			if(lastMatched.isPresent() && tag.contains(lastMatched.get()) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
 				return true;
 			
@@ -495,12 +492,12 @@ public interface Condition
 				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
 				if(PlayerHasItem.findPlayerItem(nextItem, player, 1) != null)
 				{
-					component.setMatchedItem(nextItem, playerId);
+					component.setMatchedItem(nextItem, player);
 					return true;
 				}
 			}
 			
-			component.clearMatchedItem(playerId);
+			component.clearMatchedItem(player);
 			return false;
 		}
 	}
@@ -522,11 +519,8 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerIdentifier playerId = IdentifierHandler.encode(player);
-			if(playerId == null)
-				return false;
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
-			Optional<Item> lastMatched = component.getMatchedItem(playerId);
+			Optional<Item> lastMatched = component.getMatchedItem(player);
 			return lastMatched.isPresent() && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null;
 		}
 	}
@@ -550,7 +544,7 @@ public interface Condition
 				return false;
 			
 			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
+			if(data != null && data.getTitle() != null)
 				return data.getTitle().getHeroClass().equals(enumClass);
 			
 			return false;
@@ -582,7 +576,7 @@ public interface Condition
 				return false;
 			
 			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
+			if(data != null && data.getTitle() != null)
 				return data.getTitle().getHeroAspect().equals(enumAspect);
 			
 			return false;
@@ -742,9 +736,8 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerIdentifier playerId = IdentifierHandler.encode(player);
-			return playerId != null && entity instanceof DialogueEntity dialogueEntity
-					&& dialogueEntity.getDialogueComponent().playerFlags(playerId).contains(this.flag);
+			return entity instanceof DialogueEntity dialogueEntity
+					&& dialogueEntity.getDialogueComponent().playerFlags(player).contains(this.flag);
 		}
 	}
 	
