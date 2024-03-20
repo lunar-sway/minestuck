@@ -13,6 +13,20 @@
       },
       {
         "message": "minestuck.dialogue.consort.line_length.4"
+      },
+      {
+        "condition": {
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:always_true"
+            }
+          ],
+          "list_type": "none"
+        },
+        "fail_tooltip": "minestuck.dialogue.consort.line_length.no_way",
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.line_length.5"
       }
     ]
   }

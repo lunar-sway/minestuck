@@ -74,7 +74,9 @@ public class DialogueScreen extends Screen
 			DialogueButton entryButton = new DialogueButton(dialogueData.guiBackground(), true, xOffset + 16, startY + cumulativeButtonHeight, 190, DialogueButton.NORMAL_DEFAULT_HEIGHT, data.message(),
 					button -> clickResponse(data));
 			
-			cumulativeButtonHeight += entryButton.trueHeight + BUTTON_GAP;
+			int entryHeight = entryButton.trueHeight + BUTTON_GAP;
+			
+			cumulativeButtonHeight += entryHeight;
 			
 			data.conditionFailure().ifPresent(failure -> {
 				entryButton.setTooltip(Tooltip.create(conditionFailMessage(failure.causes())));
@@ -85,7 +87,7 @@ public class DialogueScreen extends Screen
 			{
 				responseButtonPages.add(pageButtons);
 				pageButtons = new ArrayList<>(); // Create a new instance for the next page
-				cumulativeButtonHeight = 0;
+				cumulativeButtonHeight = entryHeight;
 				
 				entryButton.setY(startY);
 			}
