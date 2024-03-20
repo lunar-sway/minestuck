@@ -89,7 +89,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	ResourceKey<Level> homeDimension;
 	private boolean visitedSkaia;
 	private boolean mightBarter;
-	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
 	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
 	
@@ -189,7 +188,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	private void clearDialogueData()
 	{
 		messageData = null;
-		updatingMessage = null;
 		stocks = null;
 		this.dialogueComponent.resetDialogue();
 		talkRepPlayerList.clear();
@@ -228,9 +226,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			if(message != null && !message.isLockedToConsort())
 				message = null;
 		}
-		
-		if(updatingMessage != null)
-			updatingMessage.onTickUpdate(this);
 		
 		if(MSDimensions.isSkaia(level().dimension()))
 			visitedSkaia = true;

@@ -1,7 +1,8 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
-import com.mraof.minestuck.entity.consort.MessageType.*;
+import com.mraof.minestuck.entity.consort.MessageType.MerchantGuiMessage;
+import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypeConditions;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -40,52 +41,6 @@ public class ConsortDialogue
 	 */
 	public static void init()
 	{
-		//Misc
-		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,
-				new DelayMessage(new int[] {17, 17, 30},
-					new SingleMessage("rap_battle.a1"), new SingleMessage("rap_battle.a2"),
-					new SingleMessage("rap_battle.a3"), new SingleMessage("rap_battle.a4")
-				), new DelayMessage(new int[] {25},
-					new SingleMessage("rap_battle.b1"),new SingleMessage("rap_battle.b2"),
-					new SingleMessage("rap_battle.b3"),new SingleMessage("rap_battle.b4")
-				), new DelayMessage(new int[] {17},
-					new SingleMessage("rap_battle.c1"),new SingleMessage("rap_battle.c2"),
-					new SingleMessage("rap_battle.c3", "consort_sound"), new SingleMessage("rap_battle.c4")
-				), new DelayMessage(new int[] {25, 20, 30},
-					new SingleMessage("rap_battle.d1"),new SingleMessage("rap_battle.d2"),
-					new SingleMessage("rap_battle.d3"),new SingleMessage("rap_battle.d4")
-				), new DelayMessage(new int[] {17, 20, 30},
-					new SingleMessage("rap_battle.e1"),new SingleMessage("rap_battle.e2"),
-					new SingleMessage("rap_battle.e3"),new SingleMessage("rap_battle.e4")
-				), new DelayMessage(new int[] {25},
-					new SingleMessage("rap_battle.f1"),new SingleMessage("rap_battle.f2"),
-					new SingleMessage("rap_battle.f3"),new SingleMessage("rap_battle.f4")));
-		addMessage(new ChoiceMessage(false, new SingleMessage("rap_battle"),
-				new SingleMessage[]
-				{
-					new SingleMessage("rap_battle.accept"),
-					new SingleMessage("rap_battle.deny")
-				},
-				new MessageType[] {
-					//If you accepted the challenge
-					new ChoiceMessage(false,
-							new DescriptionMessage(raps, "rap_battle.raps_desc"),
-							new SingleMessage[] {
-									new SingleMessage("rap_battle_school"),
-									new SingleMessage("rap_battle_concede")
-							},
-							new MessageType[] {
-									new DoubleMessage(new DescriptiveMessage("rap_battle_school.rap", "player_title", "land_name"),
-											new SingleMessage("rap_battle_school.final", "consort_sound")).setSayFirstOnce(),
-									new SingleMessage("rap_battle_concede.final", "consort_sound")
-							}
-					),
-					//If you didn't accept the challenge
-					new SingleMessage("rap_battle.deny_answer")
-				}
-			).setAcceptNull()
-		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
-		
 		addMessage(new MerchantGuiMessage(new SingleMessage("general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("got_the_goods"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("rising_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
@@ -104,14 +59,6 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).condition(titleLand(BUCKETS)).lockToConsort();
 		
 		addMessage(new MerchantGuiMessage(new SingleMessage("boring_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).condition(terrainLand(RAINBOW));
-	}
-	
-	/**
-	 * Not thread-safe. Make sure to only call this on the main thread
-	 */
-	public static DialogueWrapper addMessage(String message, String... args)
-	{
-		return addMessage(new SingleMessage(message, args));
 	}
 	
 	/**

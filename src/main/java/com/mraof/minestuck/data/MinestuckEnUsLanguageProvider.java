@@ -2491,46 +2491,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DialogueProvider.ARROW.key(), "=>");
 		add(DialogueProvider.DOTS.key(), "...");
 		add(Dialogue.DIALOGUE_FORMAT, "%s: %s");
-		addDialogue("thank_you", "Thank you!");
-		
-		addDialogue("rap_battle", "I challenge you to a rap battle! Accept challenge? Y/N");
-		addDialogue("rap_battle.accept", "Accept this consort's challenge!");
-		addDialogue("rap_battle.accept.reply", "Y! I'll take you on! You can even go first.");
-		addDialogue("rap_battle.deny", "Don't bother with this guy.");
-		addDialogue("rap_battle.deny.reply", "N. Maybe later.");
-		addDialogue("rap_battle.deny_answer", "Maybe one day I will find a challenger worthy of my greatness....");
-		addDialogue("rap_battle.a1", "I see you carryin' a pick");
-		addDialogue("rap_battle.a2", "You think you minin'? Sick");
-		addDialogue("rap_battle.a3", "But uh...");
-		addDialogue("rap_battle.a4", "you ain't. Word.");
-		addDialogue("rap_battle.b1", "You're green and square, kinda beveled on the sides");
-		addDialogue("rap_battle.b2", "And the corners I guess. Or are they called vertexes?");
-		addDialogue("rap_battle.b3", "But I'm sayin' you're generic. Like, so generic");
-		addDialogue("rap_battle.b4", "it doesn't make sense. ... uh, sorry for being a jerk.");
-		addDialogue("rap_battle.c1", "Yeah. Yeah. Yeah. Yeah.");
-		addDialogue("rap_battle.c2", "Ooh. Ooh. Ooh. Ooh.");
-		addDialogue("rap_battle.c3", "%1$s. %1$s. %1$s. %1$s.");
-		addDialogue("rap_battle.c4", "Yeah. Yeah. Yeah. Yeah.");
-		addDialogue("rap_battle.d1", "I'm the Knight of Time, the god of sick beats");
-		addDialogue("rap_battle.d2", "Settle down and lemme... why are you giving me that look?");
-		addDialogue("rap_battle.d3", "This is my own original rap!");
-		addDialogue("rap_battle.d4", "Really!");
-		addDialogue("rap_battle.e1", "Incaseyoucouldn'ttell,");
-		addDialogue("rap_battle.e2", "you'reuglyandyousmell!");
-		addDialogue("rap_battle.e3", "OOOHHHHHHHHH!");
-		addDialogue("rap_battle.e4", "...That's how rap works, right?");
-		addDialogue("rap_battle.f1", "Have a nice trip and I'll see you next fall!");
-		addDialogue("rap_battle.f2", "I hope you don't mind that my house isn't tall,");
-		addDialogue("rap_battle.f3", "'Cuz them things is dang'rous and although no one cares,");
-		addDialogue("rap_battle.f4", "I'm tellin' ya, dawg, I WARNED YOU 'BOUT STAIRS!");
-		addDialogue("rap_battle.raps_desc", "... that rap was really awful.");
-		addDialogue("rap_battle_school", "Schoo' that foo'!");
-		addDialogue("rap_battle_school.reply", "All right, now it's my turn.");
-		addDialogue("rap_battle_school.rap", "The %s proceeded to drop sick fire unlike any the %s had ever seen before.");
-		addDialogue("rap_battle_school.final", "%s. You are the greatest rapper ever.");
-		addDialogue("rap_battle_concede", "Let the poor guy think they won.");
-		addDialogue("rap_battle_concede.reply", "... wow. I'm just... not going to try to go against something like that.");
-		addDialogue("rap_battle_concede.final", "%s, yes! I am the greatest rapper ever!");
 		
 		
 		addDialogue("breeze_general_shop", "The breeze has brought me many fine wares.");

@@ -34,6 +34,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -60,6 +61,7 @@ public sealed interface Trigger
 		ADD_BOONDOLLARS(() -> AddBoondollars.CODEC),
 		EXPLODE(() -> Explode.CODEC),
 		SET_PLAYER_FLAG(() -> SetPlayerFlag.CODEC),
+		SET_RANDOM_PLAYER_FLAG(() -> SetRandomPlayerFlag.CODEC),
 		;
 		
 		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
@@ -410,6 +412,33 @@ public sealed interface Trigger
 			PlayerIdentifier playerId = IdentifierHandler.encode(player);
 			if(playerId != null && entity instanceof DialogueEntity dialogueEntity)
 				dialogueEntity.getDialogueComponent().playerFlags(playerId).add(this.flag);
+		}
+	}
+	
+	record SetRandomPlayerFlag(List<String> flags) implements Trigger
+	{
+		static final Codec<SetRandomPlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.listOf().fieldOf("flags").forGetter(SetRandomPlayerFlag::flags)
+		).apply(instance, SetRandomPlayerFlag::new));
+		
+		@Override
+		public Type getType()
+		{
+			return Type.SET_RANDOM_PLAYER_FLAG;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(this.flags.isEmpty())
+				return;
+			PlayerIdentifier playerId = IdentifierHandler.encode(player);
+			if(playerId != null && entity instanceof DialogueEntity dialogueEntity)
+			{
+				Set<String> playerFlags = dialogueEntity.getDialogueComponent().playerFlags(playerId);
+				if(flags.stream().noneMatch(playerFlags::contains))
+					playerFlags.add(Util.getRandom(this.flags, entity.getRandom()));
+			}
 		}
 	}
 }

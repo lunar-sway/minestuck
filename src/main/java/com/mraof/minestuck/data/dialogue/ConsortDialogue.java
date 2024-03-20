@@ -18,6 +18,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.LanguageProvider;
 
+import java.util.List;
+
 import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.defaultKeyMsg;
 import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.msg;
 import static com.mraof.minestuck.data.dialogue.DialogueProvider.ARROW;
@@ -575,6 +577,67 @@ public final class ConsortDialogue
 									.nextDialogue(sadFace)
 									.setNextAsEntrypoint()))
 					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm."))));
+		}));
+		provider.addRandomlySelectable("rap_battle", defaultWeight(isAnyEntityType(NAKAGATOR, IGUANA)), new FolderedDialogue(builder -> {
+			String rapA = "rap_a", rapB = "rap_b", rapC = "rap_c", rapD = "rap_d", rapE = "rap_e", rapF = "rap_f";
+			
+			var schoolFinalMsg = l.msg(builder.id(), "final", "%s. You are the greatest rapper ever.", Argument.ENTITY_SOUND);
+			var afterRap = builder.add("after_rap", new NodeBuilder()
+					.addDescription(l.defaultKeyMsg("... that rap was really awful."))
+					.addResponse(new ResponseBuilder(l.subMsg("school", "Schoo' that foo'!"))
+							.addTrigger(new Trigger.SetPlayerDialogue(builder.add("final", new NodeBuilder(schoolFinalMsg))))
+							.nextDialogue(builder.add("school_that_fool", new NodeBuilder()
+									.addDescription(l.defaultKeyMsg("The %s proceeded to drop sick fire unlike any the %s had ever seen before.", Argument.PLAYER_TITLE, Argument.LAND_NAME))
+									.addMessage(schoolFinalMsg))))
+					.addResponse(new ResponseBuilder(l.subMsg("concede", "Let the poor guy think they won."))
+							.setNextAsEntrypoint()
+							.nextDialogue(builder.add("concede", new NodeBuilder(l.defaultKeyMsg("%s, yes! I am the greatest rapper ever!", Argument.ENTITY_SOUND))))));
+			
+			var raps = builder.add("raps", new NodeSelectorBuilder()
+					.node(new Condition.PlayerFlag(rapA), new NodeBuilder()
+							.addMessage(l.subMsg("a1", "I see you carryin' a pick"))
+							.addMessage(l.subMsg("a2", "You think you minin'? Sick"))
+							.addMessage(l.subMsg("a3", "But uh..."))
+							.addMessage(l.subMsg("a4", "you ain't. Word."))
+							.next(afterRap))
+					.node(new Condition.PlayerFlag(rapB), new NodeBuilder()
+							.addMessage(l.subMsg("b1", "You're green and square, kinda beveled on the sides"))
+							.addMessage(l.subMsg("b2", "And the corners I guess. Or are they called vertexes?"))
+							.addMessage(l.subMsg("b3", "But I'm sayin' you're generic. Like, so generic"))
+							.addMessage(l.subMsg("b4", "it doesn't make sense. ... uh, sorry for being a jerk."))
+							.next(afterRap))
+					.node(new Condition.PlayerFlag(rapC), new NodeBuilder()
+							.addMessage(l.subMsg("c1", "Yeah. Yeah. Yeah. Yeah."))
+							.addMessage(l.subMsg("c2", "Ooh. Ooh. Ooh. Ooh."))
+							.addMessage(l.subMsg("c3", "%1$s. %1$s. %1$s. %1$s.", Argument.ENTITY_SOUND))
+							.addMessage(l.subMsg("c4", "Yeah. Yeah. Yeah. Yeah."))
+							.next(afterRap))
+					.node(new Condition.PlayerFlag(rapD), new NodeBuilder()
+							.addMessage(l.subMsg("d1", "I'm the Knight of Time, the god of sick beats"))
+							.addMessage(l.subMsg("d2", "Settle down and lemme... why are you giving me that look?"))
+							.addMessage(l.subMsg("d3", "This is my own original rap!"))
+							.addMessage(l.subMsg("d4", "Really!"))
+							.next(afterRap))
+					.node(new Condition.PlayerFlag(rapE), new NodeBuilder()
+							.addMessage(l.subMsg("e1", "Incaseyoucouldn'ttell,"))
+							.addMessage(l.subMsg("e2", "you'reuglyandyousmell!"))
+							.addMessage(l.subMsg("e3", "OOOHHHHHHHHH!"))
+							.addMessage(l.subMsg("e4", "...That's how rap works, right?"))
+							.next(afterRap))
+					.defaultNode(new NodeBuilder()
+							.addMessage(l.subMsg("f1", "Have a nice trip and I'll see you next fall!"))
+							.addMessage(l.subMsg("f2", "I hope you don't mind that my house isn't tall,"))
+							.addMessage(l.subMsg("f3", "'Cuz them things is dang'rous and although no one cares,"))
+							.addMessage(l.subMsg("f4", "I'm tellin' ya, dawg, I WARNED YOU 'BOUT STAIRS!"))
+							.next(afterRap)));
+			
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("I challenge you to a rap battle! Accept challenge? Y/N"))
+					.addResponse(new ResponseBuilder(l.subMsg("accept", "Y! I'll take you on! You can even go first."))
+							.addTrigger(new Trigger.SetRandomPlayerFlag(List.of(rapA, rapB, rapC, rapD, rapE, rapF)))
+							.nextDialogue(raps)
+							.setNextAsEntrypoint())
+					.addResponse(new ResponseBuilder(l.subMsg("deny", "N. Maybe later."))
+							.nextDialogue(builder.add("deny", new NodeBuilder(l.defaultKeyMsg("Maybe one day I will find a challenger worthy of my greatness...."))))));
 		}));
 		
 	}

@@ -1,0 +1,29 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.consort.rap_battle.after_rap"
+      }
+    ],
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.rap_battle.after_rap.school",
+        "next_dialogue": "minestuck:consort/rap_battle/school_that_fool",
+        "triggers": [
+          {
+            "type": "set_player_dialogue",
+            "dialogue": "minestuck:consort/rap_battle/final"
+          }
+        ]
+      },
+      {
+        "message": "minestuck.dialogue.consort.rap_battle.after_rap.concede",
+        "next_dialogue": {
+          "id": "minestuck:consort/rap_battle/concede",
+          "set_as_entrypoint": true
+        }
+      }
+    ]
+  }
+}
