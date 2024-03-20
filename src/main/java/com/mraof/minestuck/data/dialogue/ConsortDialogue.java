@@ -54,6 +54,8 @@ public final class ConsortDialogue
 	
 	//todo if we want, we can shorten or replace some chain dialogue by showing multiple messages on the same screen (with "nodeBuilder.addMessage()").
 	// Check if we want to do that kind of change with any of these!
+	
+	//todo tweak dialogue weights? perhaps dialogue with more specific conditions should have a higher weight than those with less specific conditions to compensate?
 	private static void consortDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
 		//Generic
