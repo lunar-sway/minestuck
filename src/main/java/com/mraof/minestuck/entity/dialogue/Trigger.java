@@ -45,8 +45,6 @@ public sealed interface Trigger
 	Codec<Trigger> CODEC = Type.CODEC.dispatch(Trigger::getType, type -> type.codec.get());
 	Codec<List<Trigger>> LIST_CODEC = Trigger.CODEC.listOf();
 	
-	Logger LOGGER = LogManager.getLogger();
-	
 	enum Type implements StringRepresentable
 	{
 		SET_DIALOGUE(() -> SetDialogue.CODEC),
@@ -292,6 +290,7 @@ public sealed interface Trigger
 	
 	record GiveFromLootTable(ResourceLocation lootTable) implements Trigger
 	{
+		private static final Logger LOGGER = LogManager.getLogger();
 		static final Codec<GiveFromLootTable> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("loot_table").forGetter(GiveFromLootTable::lootTable)
 		).apply(instance, GiveFromLootTable::new));

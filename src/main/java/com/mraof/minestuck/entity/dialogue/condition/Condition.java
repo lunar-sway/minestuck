@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.dialogue.condition;
 
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -37,7 +36,6 @@ import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITag;
-import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Function;
@@ -48,8 +46,6 @@ import java.util.stream.Collectors;
  */
 public interface Condition
 {
-	Logger LOGGER = LogUtils.getLogger();
-	
 	Codec<Condition> CODEC = CodecUtil.registryCodec(Conditions.REGISTRY).dispatch(Condition::codec, Function.identity());
 	Codec<Condition> NPC_ONLY_CODEC = ExtraCodecs.validate(Condition.CODEC,
 			condition -> condition.isNpcOnly() ? DataResult.success(condition) : DataResult.error(() -> "Player condition not supported here"));
