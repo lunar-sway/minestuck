@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:rabbits"
+  },
+  "dialogue": "minestuck:consort_general_merchant/life",
+  "keep_on_reset": true
+}

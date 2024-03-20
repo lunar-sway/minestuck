@@ -2492,32 +2492,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DialogueProvider.DOTS.key(), "...");
 		add(Dialogue.DIALOGUE_FORMAT, "%s: %s");
 		
-		
-		addDialogue("breeze_general_shop", "The breeze has brought me many fine wares.");
-		addDialogue("blood_general_shop", "I accept payment in blood. And boondollars. I also take checks.");
-		addDialogue("life_general_shop", "Twenty years selling losers hats and shit really takes the life out of you.");
-		addDialogue("doom_general_shop", "With my prices, my competitors are doomed!");
-		addDialogue("frog_general_shop", "Get your frog merchandise here! Limited time only! ....Just kidding, I'm always here.");
-		addDialogue("buckets_general_shop", "Here's a witty one-liner tying in buckets and general stores!");
-		addDialogue("time_general_shop", "Future me has told me that some sucker would buy tons of \"goods\" from me... will that sucker be you?");
-		addDialogue("book_general_shop", "Books have taught us how to sell as much useless crap as possible, want some?");
-		addDialogue("cake_general_shop", "Don't buy goods here. Cake is our specialty, not general goods. Very low quality.");
-		addDialogue("light_general_shop", "You may be blind but I'm sure you can see our prices are fantastic!");
-		addDialogue("silence_general_shop", "This land may be silent but our prices will make you SCREAM!... with joy, of course!");
-		addDialogue("rage_general_shop", "Other store's prices are INFURIATING! Our prices, however, will soothe that frustration!");
-		addDialogue("tower_general_shop", "I got the goods; they're all recently raided from a nearby tower!");
-		addDialogue("general_shop", "We have generic goods for generic people!");
-		addDialogue("got_the_goods", "You want the goods? We got the goods.");
-		addDialogue("rising_shop", "We have top tier goods for a top tier god!");
-		addDialogue("boring_shop", "Looking for something that won't catch your eye? You've come to the right place!");
-		
-		//TODO Here are some unimplemented dialogue
-		addDialogue("cant_see", "We spent a lot of time making this shop looks really nice, we may have overdone it though, I can barely see over this counter.");
-		addDialogue("naked", "Special offer on shell polish, dear custom- wait a minute, where's your shell? Are you naked?");
-		addDialogue("vines", "Please don't climb on the vines outside, I won't be able to reach you and it'll be really upsetting to watch me fruitlessly try.");
-		addDialogue("skaia_rocket", "My house may be kind of in the ground, but my dreams are taller than any Giclops! One day I'm gonna fly a rocket to Skaia and prove that we're not all so timid.");
-		addDialogue("advertisement", "Been to the shop? They've got the best %s in the area!");
-		
 		addSubtitles("warhorn", "Warhorn sounds");
 		addSubtitles("whispers", "Spooky Whispers");
 		addSubtitles("horn", "Horn honks");
