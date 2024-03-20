@@ -93,19 +93,19 @@ public final class Conditions
 		return Condition.IsConsortInHomeLand.INSTANCE;
 	}
 	
-	public static Condition isInTerrain(RegistryObject<TerrainLandType> landType)
+	public static Condition isInTerrainLand(RegistryObject<TerrainLandType> landType)
 	{
 		return new Condition.InTerrainLandType(landType.get());
-	}
-	
-	public static Condition isInTitle(RegistryObject<TitleLandType> landType)
-	{
-		return new Condition.InTitleLandType(landType.get());
 	}
 	
 	public static Condition isInTerrainLand(TagKey<TerrainLandType> tag)
 	{
 		return new Condition.InTerrainLandTypeTag(tag);
+	}
+	
+	public static Condition isInTitleLand(RegistryObject<TitleLandType> landType)
+	{
+		return new Condition.InTitleLandType(landType.get());
 	}
 	
 	public static Condition isInTitleLand(TagKey<TitleLandType> tag)

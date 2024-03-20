@@ -52,50 +52,50 @@ public final class ConsortFoodMerchantDialogue
 						.addResponse(new ResponseBuilder(l.subMsg("next", "Let me see your wares")).addTrigger(SHOP_TRIGGER)));
 		
 		//todo these have not been made as fancy with responses as the ones above. Do we want to work on that?
-		provider.addRandomlySelectable("breeze", defaultWeight(isInTitle(WIND)).keepOnReset(),
+		provider.addRandomlySelectable("breeze", defaultWeight(isInTitleLand(WIND)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("It's hard to catch our food with the Breeze carrying them away and whatnot!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("blood", defaultWeight(isInTitle(PULSE)).keepOnReset(),
+		provider.addRandomlySelectable("blood", defaultWeight(isInTitleLand(PULSE)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Hope you like red meat!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("rabbit", defaultWeight(isInTitle(RABBITS)).keepOnReset(),
+		provider.addRandomlySelectable("rabbit", defaultWeight(isInTitleLand(RABBITS)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Rabbit stew! Mmmm!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("lightning", defaultWeight(isInTitle(THUNDER)).keepOnReset(),
+		provider.addRandomlySelectable("lightning", defaultWeight(isInTitleLand(THUNDER)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Lightning-smoked meat really adds to the flavor!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-				provider.addRandomlySelectable("frog_leg", defaultWeight(isInTitle(FROGS)).keepOnReset(),
-						new NodeBuilder(l.defaultKeyMsg("Frog legs are good but eating them is heresy! Buy some of our food instead!"))
+		provider.addRandomlySelectable("frog_leg", defaultWeight(isInTitleLand(FROGS)).keepOnReset(),
+				new NodeBuilder(l.defaultKeyMsg("Frog legs are good but eating them is heresy! Buy some of our food instead!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("frog", defaultWeight(isInTitle(FROGS)).keepOnReset(),
+		provider.addRandomlySelectable("frog", defaultWeight(isInTitleLand(FROGS)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("We would never eat frogs here in the %s! Grasshoppers, though...", Argument.LAND_NAME))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("time", defaultWeight(isInTitle(CLOCKWORK)).keepOnReset(),
+		provider.addRandomlySelectable("time", defaultWeight(isInTitleLand(CLOCKWORK)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Tick Tock, time's a-wasting! Eat something or leave!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("thyme", defaultWeight(any(isInTitle(CLOCKWORK), isInTitle(THOUGHT))).keepOnReset(),
+		provider.addRandomlySelectable("thyme", defaultWeight(any(isInTitleLand(CLOCKWORK), isInTitleLand(THOUGHT))).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Take your mind off of the limited time we have left alive with food!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("library", defaultWeight(isInTitle(THOUGHT)).keepOnReset(),
+		provider.addRandomlySelectable("library", defaultWeight(isInTitleLand(THOUGHT)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("I'm selling recipes I made from a nearby library's cookbook. Buy some!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("cake", defaultWeight(isInTitle(CAKE)).keepOnReset(),
+		provider.addRandomlySelectable("cake", defaultWeight(isInTitleLand(CAKE)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Who needs cake when you have crickets!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("light", defaultWeight(isInTitle(LIGHT)).keepOnReset(),
+		provider.addRandomlySelectable("light", defaultWeight(isInTitleLand(LIGHT)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Crickets are nocturnal so our species' main food source is hard to find here. Oh well!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("silence", defaultWeight(isInTitle(SILENCE)).keepOnReset(),
+		provider.addRandomlySelectable("silence", defaultWeight(isInTitleLand(SILENCE)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("This place used to be filled with the sounds of crickets until we captured them all for food!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
 		provider.addRandomlySelectable("rage", defaultWeight(isInTitleLand(MSTags.TitleLandTypes.MONSTERS)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("You're not you when you're hungry. Buy a snickers!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("hope", defaultWeight(isInTitle(TOWERS)).keepOnReset(),
+		provider.addRandomlySelectable("hope", defaultWeight(isInTitleLand(TOWERS)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("I HOPE you're hungry!"))
 						.addDescription(l.subMsg("desc", "You hear a faint ba-dum tss in the distance."))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
-		provider.addRandomlySelectable("buckets", defaultWeight(isInTitle(BUCKETS)).keepOnReset(),
+		provider.addRandomlySelectable("buckets", defaultWeight(isInTitleLand(BUCKETS)).keepOnReset(),
 				new NodeBuilder(l.defaultKeyMsg("Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!"))
 						.addResponse(new ResponseBuilder(msg(ARROW)).addTrigger(SHOP_TRIGGER)));
 		
