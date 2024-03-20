@@ -29,7 +29,6 @@ import com.mraof.minestuck.data.dialogue.DialogueProvider;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.MessageType;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
@@ -2487,7 +2486,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 				"%1$s lost their head whilst engaged with %2$s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
-		add(MessageType.MISSING_ITEM, "You need a %s for that!");
 		add(DialogueProvider.ARROW.key(), "=>");
 		add(DialogueProvider.DOTS.key(), "...");
 		add(Dialogue.DIALOGUE_FORMAT, "%s: %s");

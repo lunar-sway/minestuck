@@ -943,7 +943,6 @@
   "commands.minestuck.tpz.not_found": "Couldn't find transportalizer with ID \"%s\"",
   "commands.minestuck.tpz.result": "Successfully teleported %s entities to transportalizer",
   "consort.cant_afford": "You don't have enough boondollars for that!",
-  "consort.missing_item": "You need a %s for that!",
   "container.minestuck.anthvil": "Anthvil",
   "container.minestuck.grist_widget": "GristWidget 12000",
   "container.minestuck.mini_alchemiter": "Miniature Alchemiter",

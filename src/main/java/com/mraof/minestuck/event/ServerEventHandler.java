@@ -5,7 +5,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
-import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
@@ -60,7 +59,6 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void serverStarting(ServerStartingEvent event)
 	{
-		ConsortDialogue.serverStarting();
 		lastDay = event.getServer().overworld().getGameTime() / 24000L;
 	}
 	

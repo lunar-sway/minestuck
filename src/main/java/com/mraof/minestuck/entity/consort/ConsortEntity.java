@@ -20,10 +20,10 @@ import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -81,9 +81,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	private final DialogueComponent dialogueComponent = new DialogueComponent(this);
 	
 	private final EnumConsort consortType;
-	ConsortDialogue.DialogueWrapper message;
-	int ticksUntilDialogueReset;
-	private CompoundTag messageData;
+	private int ticksUntilDialogueReset = 0;
 	private final Set<PlayerIdentifier> talkRepPlayerList = new HashSet<>();
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	ResourceKey<Level> homeDimension;
@@ -170,24 +168,16 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		this.dialogueComponent.getActiveDialogue().ifPresent(dialogueId -> {
 			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogueId.toString(), this);
-			checkMessageData();
+			if(ticksUntilDialogueReset == 0)
+				ticksUntilDialogueReset = 24000 + level().random.nextInt(24000);
 		});
 		
 		return InteractionResult.SUCCESS;
 	}
 	
-	private void checkMessageData()
-	{
-		if(messageData == null)
-		{
-			messageData = new CompoundTag();
-			ticksUntilDialogueReset = 24000 + level().random.nextInt(24000);
-		}
-	}
-	
 	private void clearDialogueData()
 	{
-		messageData = null;
+		ticksUntilDialogueReset = 0;
 		stocks = null;
 		this.dialogueComponent.resetDialogue();
 		talkRepPlayerList.clear();
@@ -219,12 +209,10 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			return;
 		
 		if(ticksUntilDialogueReset > 0)
-			ticksUntilDialogueReset -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
-		else if(messageData != null)
 		{
-			clearDialogueData();
-			if(message != null && !message.isLockedToConsort())
-				message = null;
+			ticksUntilDialogueReset -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
+			if(ticksUntilDialogueReset <= 0)
+				clearDialogueData();
 		}
 		
 		if(MSDimensions.isSkaia(level().dimension()))
@@ -254,20 +242,12 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		compound.put("dialogue", dialogueComponent.write());
 		
-		/*if(message != null)
-		{
-			compound.putString("Dialogue", message.getString());
-			if(messageData != null)
-			{
-				compound.putInt("MessageTicks", messageTicksLeft);
-				compound.put("MessageData", messageData);
-				ListTag list = new ListTag();
-				for(PlayerIdentifier id : talkRepPlayerList)
-					list.add(id.saveToNBT(new CompoundTag(), "id"));
-				compound.put("talkRepList", list);
-			}
-		}
-		 */
+		compound.putInt("dialogue_reset_ticks", ticksUntilDialogueReset);
+		
+		ListTag list = new ListTag();
+		for(PlayerIdentifier id : talkRepPlayerList)
+			list.add(id.saveToNBT(new CompoundTag(), "id"));
+		compound.put("talkRepList", list);
 		
 		compound.putInt("Type", merchantType.ordinal());
 		ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, homeDimension.location()).resultOrPartial(LOGGER::error)
@@ -297,21 +277,12 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		dialogueComponent.read(compound.getCompound("dialogue"));
 		
-		/*if(compound.contains("Dialogue", Tag.TAG_STRING))
-		{
-			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
-			if(compound.contains("MessageData", Tag.TAG_COMPOUND))
-			{
-				messageData = compound.getCompound("MessageData");
-				messageTicksLeft = compound.getInt("MessageTicks");
-				
-				talkRepPlayerList.clear();
-				ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
-				for(int i = 0; i < list.size(); i++)
-					talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
-			}
-		}
-		 */
+		ticksUntilDialogueReset = compound.getInt("dialogue_reset_ticks");
+		
+		talkRepPlayerList.clear();
+		ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
+		for(int i = 0; i < list.size(); i++)
+			talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
 		
 		merchantType = EnumConsort.MerchantType.values()[Mth.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
@@ -383,28 +354,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public EnumConsort getConsortType()
 	{
 		return consortType;
-	}
-	
-	public void commandReply(ServerPlayer player, String chain)
-	{
-		if(this.isAlive() && !level().isClientSide && message != null)
-		{
-			Component text = message.getFromChain(this, player, chain);
-			if(text != null)
-				player.sendSystemMessage(text);
-		}
-	}
-	
-	public CompoundTag getMessageTag()
-	{
-		return messageData;
-	}
-	
-	public CompoundTag getMessageTagForPlayer(Player player)
-	{
-		if(!messageData.contains(player.getStringUUID(), Tag.TAG_COMPOUND))
-			messageData.put(player.getStringUUID(), new CompoundTag());
-		return messageData.getCompound(player.getStringUUID());
 	}
 	
 	@Nullable

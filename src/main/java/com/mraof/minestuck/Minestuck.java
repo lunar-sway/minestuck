@@ -11,7 +11,6 @@ import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.dialogue.condition.Conditions;
 import com.mraof.minestuck.entry.BlockCopier;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
@@ -124,8 +123,6 @@ public class Minestuck
 	private void mainThreadSetup()
 	{
 		MSCriteriaTriggers.register();
-		
-		ConsortDialogue.init();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
