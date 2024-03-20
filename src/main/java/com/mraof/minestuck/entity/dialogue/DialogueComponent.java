@@ -29,6 +29,7 @@ public final class DialogueComponent
 	private boolean hasGeneratedOnce = false;
 	private final Map<UUID, Set<String>> playerSpecificFlags = new HashMap<>();
 	private final Map<UUID, Item> matchedItem = new HashMap<>();
+	private final Map<UUID, Dialogue.NodeReference> currentNodeForPlayer = new HashMap<>();
 	
 	public DialogueComponent(LivingEntity entity)
 	{
@@ -148,6 +149,7 @@ public final class DialogueComponent
 		this.dialogueEntrypoint.clear();
 		this.playerSpecificFlags.clear();
 		this.matchedItem.clear();
+		this.currentNodeForPlayer.clear();	//todo potentially send a packet to close the screen?
 	}
 	
 	public void tryStartDialogue(ServerPlayer player)
@@ -180,7 +182,22 @@ public final class DialogueComponent
 		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, serverPlayer);
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		
+		this.currentNodeForPlayer.put(serverPlayer.getUUID(), nodeReference);
 		DialogueScreenPacket packet = new DialogueScreenPacket(this.entity.getId(), nodeReference, data);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+	}
+	
+	public Optional<Dialogue.Node> validateAndGetCurrentNode(Dialogue.NodeReference reference, ServerPlayer player)
+	{
+		if(!Objects.equals(reference, this.currentNodeForPlayer.get(player.getUUID())))
+			return Optional.empty();
+		
+		return Optional.ofNullable(DialogueManager.getInstance().getDialogue(reference.dialoguePath()))
+				.flatMap(nodeSelector -> nodeSelector.getNodeIfValid(reference.nodeIndex(), this.entity, player));
+	}
+	
+	public void clearCurrentNode(ServerPlayer player)
+	{
+		this.currentNodeForPlayer.remove(player.getUUID());
 	}
 }

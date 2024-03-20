@@ -2,11 +2,12 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
-import com.mraof.minestuck.entity.dialogue.DialogueManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+
+import java.util.Optional;
 
 public record ResponseTriggerPacket(int responseIndex, Dialogue.NodeReference nodeReference, int entityID) implements MSPacket.PlayToServer
 {
@@ -36,24 +37,13 @@ public record ResponseTriggerPacket(int responseIndex, Dialogue.NodeReference no
 	public void execute(ServerPlayer player)
 	{
 		Entity entity = player.level().getEntity(entityID);
-		if(entity instanceof LivingEntity livingEntity && entity instanceof DialogueEntity)
+		if(entity instanceof LivingEntity livingEntity && entity instanceof DialogueEntity dialogueEntity)
 		{
-			validateThenTrigger(player, livingEntity);
+			Optional<Dialogue.Node> optionalNode = dialogueEntity.getDialogueComponent().validateAndGetCurrentNode(this.nodeReference, player);
+			dialogueEntity.getDialogueComponent().clearCurrentNode(player);
+			optionalNode.flatMap(node -> node.getResponseIfValid(this.responseIndex))
+					.ifPresent(response -> response.trigger(livingEntity, player));
 		}
 	}
 	
-	/**
-	 * Validation for the Response the client is trying to activate.
-	 * A corresponding Response must be found within the Dialogue and then the Conditions of that Response must match.
-	 */
-	private void validateThenTrigger(ServerPlayer player, LivingEntity livingEntity)
-	{
-		Dialogue.NodeSelector dialogue = DialogueManager.getInstance().getDialogue(nodeReference.dialoguePath());
-		if(dialogue == null)
-			return;
-		
-		dialogue.getNodeIfValid(nodeReference.nodeIndex(), livingEntity, player)
-				.flatMap(node -> node.getResponseIfValid(this.responseIndex))
-				.ifPresent(response -> response.trigger(livingEntity, player));
-	}
 }
