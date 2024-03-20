@@ -33,7 +33,7 @@ public final class ConsortDialogue
 	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider)
 	{
 		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CONSORT, output);
-		DialogueLangHelper l = new DialogueLangHelper(enUsLanguageProvider);
+		DialogueLangHelper l = new DialogueLangHelper(Minestuck.MOD_ID, enUsLanguageProvider);
 		
 		//Run dialogue creation early so that language stuff gets added before the language provider generates its file
 		consortDialogues(provider, l);
@@ -58,9 +58,8 @@ public final class ConsortDialogue
 		var genericThanks = provider.dialogue().add("generic_thanks", new NodeBuilder(l.defaultKeyMsg("Thank you for helping me!")));
 		var thanks = provider.dialogue().add("thanks", new NodeBuilder(l.defaultKeyMsg("Thanks!")));
 		var sadFace = provider.dialogue().add("sad_face", new NodeBuilder(l.defaultKeyMsg(":(")));
-		var yesMsg = l.msg("minestuck.dialogue.yes", "Yes");
-		var noMsg = l.msg("minestuck.dialogue.no", "No");
-		var finallyMsg = l.msg("minestuck.dialogue.finally", "Finally!");
+		var yesMsg = l.msg("yes", "Yes");
+		var noMsg = l.msg("no", "No");
 		
 		//Wind
 		provider.addRandomlySelectable("dad_wind", defaultWeight(isInTitle(WIND)), //todo review this
@@ -546,6 +545,8 @@ public final class ConsortDialogue
 		
 		provider.addRandomlySelectable("hungry", defaultWeight(isAnyEntityType(SALAMANDER, IGUANA, NAKAGATOR)), new FolderedDialogue(builder ->
 		{
+			var finallyMsg = l.msg(builder.id(), "finally", "Finally!");
+			
 			var barter = builder.add("barter", new NodeBuilder(l.defaultKeyMsg("But I am starving here! What if I paid you 10 boondollars for it?"))
 					.addResponse(new ResponseBuilder(l.subMsg("yes", "Sure"))
 							.condition(Condition.HasMatchedItem.INSTANCE)

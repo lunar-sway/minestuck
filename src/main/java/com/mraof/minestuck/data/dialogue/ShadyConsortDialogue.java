@@ -22,7 +22,7 @@ public final class ShadyConsortDialogue
 	{
 		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.SHADY_CONSORT, output);
 		
-		dialogue(provider, new DialogueLangHelper(enUsLanguageProvider));
+		dialogue(provider, new DialogueLangHelper(Minestuck.MOD_ID, enUsLanguageProvider));
 		
 		return provider;
 	}

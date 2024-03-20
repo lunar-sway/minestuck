@@ -47,6 +47,11 @@ public final class FolderedDialogue implements DialogueProvider.DialogueProducer
 			this.register = register;
 		}
 		
+		public ResourceLocation id()
+		{
+			return this.baseId;
+		}
+		
 		public ResourceLocation startId()
 		{
 			return this.baseId.withSuffix("/start");

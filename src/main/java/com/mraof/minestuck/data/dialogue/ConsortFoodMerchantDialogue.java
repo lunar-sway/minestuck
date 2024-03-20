@@ -27,7 +27,7 @@ public final class ConsortFoodMerchantDialogue
 	{
 		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CONSORT_FOOD_MERCHANT, output);
 		
-		dialogue(provider, new DialogueLangHelper(enUsLanguageProvider));
+		dialogue(provider, new DialogueLangHelper(Minestuck.MOD_ID, enUsLanguageProvider));
 		
 		return provider;
 	}

@@ -13,10 +13,12 @@ import java.util.function.Function;
  */
 public final class DialogueLangHelper
 {
+	private final String modid;
 	private final LanguageProvider languageProvider;
 	
-	public DialogueLangHelper(LanguageProvider languageProvider)
+	public DialogueLangHelper(String modid, LanguageProvider languageProvider)
 	{
+		this.modid = modid;
 		this.languageProvider = languageProvider;
 	}
 	
@@ -42,9 +44,14 @@ public final class DialogueLangHelper
 		return msg(new DialogueMessage(key, List.of(arguments)));
 	}
 	
+	public MessageProducer msg(ResourceLocation id, String key, String text, DialogueMessage.Argument... arguments)
+	{
+		return msg(registerAndBuild(languageKeyBase(id) + "." + key, text, arguments));
+	}
+	
 	public MessageProducer msg(String key, String text, DialogueMessage.Argument... arguments)
 	{
-		return msg(registerAndBuild(key, text, arguments));
+		return msg(registerAndBuild(languageKeyBase(new ResourceLocation(modid, key)), text, arguments));
 	}
 	
 	public static MessageProducer msg(DialogueMessage message)
