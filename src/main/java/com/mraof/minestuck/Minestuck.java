@@ -36,6 +36,7 @@ import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -50,8 +51,12 @@ import static com.mraof.minestuck.Minestuck.MOD_ID;
 @Mod(MOD_ID)
 public class Minestuck
 {
-	public static final String MOD_NAME = "Minestuck";
 	public static final String MOD_ID = "minestuck";
+	
+	public static ResourceLocation id(String path)
+	{
+		return new ResourceLocation(MOD_ID, path);
+	}
 	
 	public Minestuck()
 	{

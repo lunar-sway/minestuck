@@ -169,24 +169,24 @@ public final class CaptchaDeckHandler
 	
 	public static void captchalogueItemInSlot(ServerPlayer player, int slotIndex, int windowId)
 	{
-		if(canPlayerUseModus(player) && hasModus(player) && player.containerMenu.containerId == windowId)
-		{
-			Slot slot = slotIndex >= 0 && slotIndex < player.containerMenu.slots.size() ? player.containerMenu.getSlot(slotIndex) : null;
-			
-			if(slot != null)
-			{
-				ItemStack stack = slot.safeTake(slot.getItem().getCount(), Integer.MAX_VALUE, player);
-				if(!stack.isEmpty())
-				{
-					captchalogueItem(player, stack);
-					//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
-					if(!stack.isEmpty())
-						launchItem(player, stack);
-					
-					player.containerMenu.broadcastChanges();
-				}
-			}
-		}
+		if(!canPlayerUseModus(player) || !hasModus(player) || player.containerMenu.containerId != windowId)
+			return;
+		
+		if(slotIndex < 0 || slotIndex >= player.containerMenu.slots.size())
+			return;
+		
+		Slot slot = player.containerMenu.getSlot(slotIndex);
+		
+		ItemStack stack = slot.safeTake(slot.getItem().getCount(), slot.getItem().getMaxStackSize(), player);
+		if(stack.isEmpty())
+			return;
+		
+		captchalogueItem(player, stack);
+		//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+		if(!stack.isEmpty())
+			launchItem(player, stack);
+		
+		player.containerMenu.broadcastChanges();
 	}
 	
 	private static void captchalogueItem(ServerPlayer player, ItemStack stack)

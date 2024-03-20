@@ -155,14 +155,14 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> HEART_ASPECT_LOG = MSBlocks.REGISTER.register("heart_aspect_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_LOG);
 	
-	public static final RegistryObject<Block> HEART_ASPECT_PLANKS = MSBlocks.REGISTER.register("heart_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<BlockItem> HEART_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_PLANKS);
-	
 	public static final RegistryObject<Block> HEART_ASPECT_LEAVES = MSBlocks.REGISTER.register("heart_aspect_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> HEART_ASPECT_SAPLING = MSBlocks.REGISTER.register("heart_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	
+	public static final RegistryObject<Block> HEART_ASPECT_PLANKS = MSBlocks.REGISTER.register("heart_aspect_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> HEART_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_PLANKS);
 	
 	public static final RegistryObject<StairBlock> HEART_ASPECT_STAIRS = MSBlocks.REGISTER.register("heart_aspect_stairs", () -> new StairBlock(() -> HEART_ASPECT_PLANKS.get().defaultBlockState(), copy(HEART_ASPECT_PLANKS.get())));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_STAIRS);

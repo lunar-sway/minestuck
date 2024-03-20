@@ -41,7 +41,7 @@ public class FloorCogFeature extends Feature<NoneFeatureConfiguration>
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
 		
 		int y = this.yForPlacement(level, placement);
-		placement.placeWithStructureBlockRegistry(y, context);
+		placement.placeWithStructureBlockRegistryAt(y, context);
 		
 		return true;
 	}

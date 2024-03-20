@@ -17,6 +17,8 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> RETURN_NODE = key("return_node");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_COG = key("small_cog");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_COG_1 = key("large_cog_1");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_COG_2 = key("large_cog_2");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_COG = key("large_cog");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> COG = key("cog");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FLOOR_COG = key("floor_cog");
@@ -28,6 +30,7 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_LIBRARY = key("small_library");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TOWER = key("tower");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PARCEL_PYXIS = key("parcel_pyxis");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> FROG_RUINS = key("frog_ruins");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_POOL = key("blood_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OIL_POOL = key("oil_pool");

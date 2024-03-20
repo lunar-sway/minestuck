@@ -12,6 +12,7 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 	public static final ResourceLocation CRUXITE_ARTIFACT_ID = new ResourceLocation(Minestuck.MOD_ID, "cruxite_artifact");
 	public static final ResourceLocation RETURN_NODE_ID = new ResourceLocation(Minestuck.MOD_ID, "return_node");
 	public static final ResourceLocation MELON_OVERLOAD_ID = new ResourceLocation(Minestuck.MOD_ID, "melon_overload");
+	public static final ResourceLocation BUY_OUT_SHOP_ID = new ResourceLocation(Minestuck.MOD_ID, "buy_out_shop");
 	
 	private final ResourceLocation id;
 	
@@ -57,6 +58,11 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 		public static Instance melonOverload()
 		{
 			return new Instance(ContextAwarePredicate.ANY, MELON_OVERLOAD_ID);
+		}
+		
+		public static Instance buyOutShop()
+		{
+			return new Instance(ContextAwarePredicate.ANY, BUY_OUT_SHOP_ID);
 		}
 		public Instance(ContextAwarePredicate predicate, ResourceLocation id)
 		{

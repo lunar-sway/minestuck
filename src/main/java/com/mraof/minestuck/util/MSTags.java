@@ -5,7 +5,6 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -25,6 +24,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("SameParameterValue")
 public class MSTags
 {
 	public static class Blocks
@@ -64,10 +64,11 @@ public class MSTags
 		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
 		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		public static final TagKey<Block> EDITMODE_BREAK_BLACKLIST = tag("editmode_break_blacklist");
+		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");
 		
 		private static TagKey<Block> tag(String name)
 		{
-			return BlockTags.create(new ResourceLocation(Minestuck.MOD_ID, name));
+			return BlockTags.create(Minestuck.id(name));
 		}
 	}
 	
@@ -105,10 +106,11 @@ public class MSTags
 		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
+		public static final TagKey<Item> LEGENDARY = tag("legendary");
 
 		private static TagKey<Item> tag(String name)
 		{
-			return ItemTags.create(new ResourceLocation(Minestuck.MOD_ID, name));
+			return ItemTags.create(Minestuck.id(name));
 		}
 	}
 	
@@ -123,7 +125,7 @@ public class MSTags
 		
 		private static TagKey<Fluid> tag(String name)
 		{
-			return FluidTags.create(new ResourceLocation(Minestuck.MOD_ID, name));
+			return FluidTags.create(Minestuck.id(name));
 		}
 	}
 	
@@ -143,7 +145,7 @@ public class MSTags
 		
 		private static TagKey<EntityType<?>> tag(String name)
 		{
-			return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.ENTITY_TYPE, Minestuck.id(name));
 		}
 	}
 	
@@ -153,7 +155,7 @@ public class MSTags
 		
 		private static TagKey<MobEffect> tag(String name)
 		{
-			return TagKey.create(Registries.MOB_EFFECT, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.MOB_EFFECT, Minestuck.id(name));
 		}
 	}
 	
@@ -178,7 +180,7 @@ public class MSTags
 		
 		private static TagKey<Biome> tag(String name)
 		{
-			return TagKey.create(Registries.BIOME, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.BIOME, Minestuck.id(name));
 		}
 	}
 	
@@ -188,7 +190,7 @@ public class MSTags
 		
 		private static TagKey<Structure> tag(String name)
 		{
-			return TagKey.create(Registries.STRUCTURE, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.STRUCTURE, Minestuck.id(name));
 		}
 	}
 	
@@ -202,7 +204,7 @@ public class MSTags
 		
 		private static TagKey<TerrainLandType> tag(String name)
 		{
-			return TagKey.create(LandTypes.TERRAIN_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(LandTypes.TERRAIN_KEY, Minestuck.id(name));
 		}
 	}
 	
@@ -210,10 +212,9 @@ public class MSTags
 	public static class TitleLandTypes
 	{
 		public static final TagKey<TitleLandType> MONSTERS = tag("monsters");
-		
-		private static TagKey<TitleLandType> tag(@SuppressWarnings("SameParameterValue") String name)
+		private static TagKey<TitleLandType> tag(String name)
 		{
-			return TagKey.create(LandTypes.TITLE_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(LandTypes.TITLE_KEY, Minestuck.id(name));
 		}
 	}
 	

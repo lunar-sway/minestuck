@@ -3,7 +3,8 @@ package com.mraof.minestuck.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.mraof.minestuck.client.model.entity.PawnModel;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -12,14 +13,16 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemDisplayContext;
 import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class PawnRenderer extends GeoEntityRenderer<PawnEntity>
 {
 	
-	public PawnRenderer(EntityRendererProvider.Context context)
+	public PawnRenderer(EntityRendererProvider.Context context, EnumEntityKingdom kingdom)
 	{
-		super(context, new PawnModel());
+		super(context, new DefaultedEntityGeoModel<PawnEntity>(Minestuck.id("carapacian/pawn"), true)
+				.withAltTexture(Minestuck.id(kingdom == EnumEntityKingdom.DERSITE ? "carapacian/derse_pawn" : "carapacian/prospit_pawn")));
 	}
 	
 	@Override

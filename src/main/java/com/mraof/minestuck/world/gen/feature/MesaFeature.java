@@ -15,7 +15,10 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 public class MesaFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -55,7 +58,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 		int tallness = 7;
 		int height = rand.nextInt(tallness) + tallness + 3;
 		
-		if(level.getBlockState(pos.above(height*2/3)).liquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(!level.getFluidState(pos.above(height*2/3)).isEmpty())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		
 		float plateauSize = 0.6F + rand.nextFloat()*(height/10F);

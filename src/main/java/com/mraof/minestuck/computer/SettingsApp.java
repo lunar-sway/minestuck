@@ -2,9 +2,7 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.computer.ThemeSelectPacket;
-import net.minecraft.client.resources.language.I18n;
+import com.mraof.minestuck.client.gui.ComputerThemeScreen;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ public class SettingsApp extends ButtonListProgram
 		var list = new ArrayList<UnlocalizedString>();
 		
 		list.add(new UnlocalizedString(TITLE));
-		list.add(new UnlocalizedString(THEME, I18n.get(be.getTheme().getName())));
+		list.add(new UnlocalizedString(THEME));
 		
 		return list;
 	}
@@ -30,10 +28,16 @@ public class SettingsApp extends ButtonListProgram
 	@Override
 	protected void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
 	{
+		if(be.getLevel() == null)
+			return;
+		
 		//TODO ADD MORE SETTINGS
 		switch(buttonName)
 		{
-			case THEME -> MSPacketHandler.sendToServer(ThemeSelectPacket.create(be, be.getTheme().next()));
+			case THEME -> {
+				be.gui.getMinecraft().setScreen(null);
+				be.gui.getMinecraft().setScreen(new ComputerThemeScreen(be));
+			}
 		}
 	}
 	

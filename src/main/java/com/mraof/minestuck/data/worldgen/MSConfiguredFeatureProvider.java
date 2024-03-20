@@ -1,9 +1,11 @@
 package com.mraof.minestuck.data.worldgen;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.OreGeneration;
 import com.mraof.minestuck.world.gen.feature.RandomRockBlockBlobConfig;
+import com.mraof.minestuck.world.gen.feature.SimpleTemplateFeature;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -17,6 +19,7 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -47,19 +50,35 @@ public final class MSConfiguredFeatureProvider
 		
 		context.register(RETURN_NODE, new ConfiguredFeature<>(MSFeatures.RETURN_NODE.get(), FeatureConfiguration.NONE));
 		
-		var smallCog = context.register(SMALL_COG, new ConfiguredFeature<>(MSFeatures.SMALL_COG.get(), FeatureConfiguration.NONE));
-		var largeCog = context.register(LARGE_COG, new ConfiguredFeature<>(MSFeatures.LARGE_COG.get(), FeatureConfiguration.NONE));
+		var smallCog = context.register(SMALL_COG, new ConfiguredFeature<>(MSFeatures.SIMPLE_TEMPLATE.get(),
+				new SimpleTemplateFeature.Config(Minestuck.id("small_cog"), true,
+						SimpleTemplateFeature.HeightQueryType.MIN.with(Heightmap.Types.WORLD_SURFACE_WG, UniformInt.of(-2, 0)))));
+		
+		var largeCog1 = context.register(LARGE_COG_1, new ConfiguredFeature<>(MSFeatures.SIMPLE_TEMPLATE.get(),
+				new SimpleTemplateFeature.Config(Minestuck.id("large_cog_1"), true,
+						SimpleTemplateFeature.HeightQueryType.MIN.with(Heightmap.Types.WORLD_SURFACE_WG, UniformInt.of(-3, 0)))));
+		var largeCog2 = context.register(LARGE_COG_2, new ConfiguredFeature<>(MSFeatures.SIMPLE_TEMPLATE.get(),
+				new SimpleTemplateFeature.Config(Minestuck.id("large_cog_2"), true,
+						SimpleTemplateFeature.HeightQueryType.MIN.with(Heightmap.Types.WORLD_SURFACE_WG, UniformInt.of(-3, 0)))));
+		var largeCog = context.register(LARGE_COG, new ConfiguredFeature<>(Feature.RANDOM_BOOLEAN_SELECTOR,
+				new RandomBooleanFeatureConfiguration(PlacementUtils.inlinePlaced(largeCog1), PlacementUtils.inlinePlaced(largeCog2))));
+		
 		context.register(COG, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
 				new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(PlacementUtils.inlinePlaced(largeCog), 0.1F)), PlacementUtils.inlinePlaced(smallCog))));
+		
 		context.register(FLOOR_COG, new ConfiguredFeature<>(MSFeatures.FLOOR_COG.get(), FeatureConfiguration.NONE));
 		
 		context.register(SURFACE_FOSSIL, new ConfiguredFeature<>(MSFeatures.SURFACE_FOSSIL.get(), FeatureConfiguration.NONE));
 		context.register(BROKEN_SWORD, new ConfiguredFeature<>(MSFeatures.BROKEN_SWORD.get(), FeatureConfiguration.NONE));
 		context.register(BUCKET, new ConfiguredFeature<>(MSFeatures.BUCKET.get(), FeatureConfiguration.NONE));
-		context.register(CAKE_PEDESTAL, new ConfiguredFeature<>(MSFeatures.CAKE_PEDESTAL.get(), FeatureConfiguration.NONE));
+		
+		context.register(CAKE_PEDESTAL, new ConfiguredFeature<>(MSFeatures.SIMPLE_TEMPLATE.get(),
+				new SimpleTemplateFeature.Config(Minestuck.id("cake_pedestal"), true)));
+		
 		context.register(SMALL_LIBRARY, new ConfiguredFeature<>(MSFeatures.SMALL_LIBRARY.get(), FeatureConfiguration.NONE));
 		context.register(TOWER, new ConfiguredFeature<>(MSFeatures.TOWER.get(), FeatureConfiguration.NONE));
 		context.register(PARCEL_PYXIS, new ConfiguredFeature<>(MSFeatures.PARCEL_PYXIS.get(), FeatureConfiguration.NONE));
+		context.register(FROG_RUINS, new ConfiguredFeature<>(MSFeatures.FROG_RUINS.get(), FeatureConfiguration.NONE));
 		
 		context.register(BLOOD_POOL, new ConfiguredFeature<>(Feature.LAKE,
 				new LakeFeature.Configuration(BlockStateProvider.simple(MSBlocks.BLOOD.get()), BlockStateProvider.simple(Blocks.AIR))));

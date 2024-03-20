@@ -57,7 +57,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		int power = blockState.getValue(POWER);
 		double powerMod = power / 16D;
 		
-		if(power != 0 && !(blockState.getValue(FACING) == Direction.UP && power < UPWARDS_POWER_MIN))
+		if(power != 0 && !(blockState.getValue(FACING) == Direction.UP && power < UPWARDS_POWER_MIN) && !entityIn.isShiftKeyDown())
 		{
 			if(entityIn.onGround())
 				entityIn.setOnGround(false);

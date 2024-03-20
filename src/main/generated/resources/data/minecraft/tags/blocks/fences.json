@@ -1,16 +1,5 @@
 {
   "values": [
-    "minestuck:perfectly_generic_fence",
-    "minestuck:glowing_fence",
-    "minestuck:uncarved_wood_fence",
-    "minestuck:chipboard_fence",
-    "minestuck:carved_fence",
-    "minestuck:frost_fence",
-    "minestuck:rainbow_fence",
-    "minestuck:end_fence",
-    "minestuck:dead_fence",
-    "minestuck:shadewood_fence",
-    "minestuck:treated_fence",
     "minestuck:blood_aspect_fence",
     "minestuck:breath_aspect_fence",
     "minestuck:doom_aspect_fence",
@@ -22,6 +11,17 @@
     "minestuck:rage_aspect_fence",
     "minestuck:space_aspect_fence",
     "minestuck:time_aspect_fence",
-    "minestuck:void_aspect_fence"
+    "minestuck:void_aspect_fence",
+    "minestuck:perfectly_generic_fence",
+    "minestuck:glowing_fence",
+    "minestuck:uncarved_wood_fence",
+    "minestuck:chipboard_fence",
+    "minestuck:carved_fence",
+    "minestuck:frost_fence",
+    "minestuck:rainbow_fence",
+    "minestuck:end_fence",
+    "minestuck:dead_fence",
+    "minestuck:shadewood_fence",
+    "minestuck:treated_fence"
   ]
 }

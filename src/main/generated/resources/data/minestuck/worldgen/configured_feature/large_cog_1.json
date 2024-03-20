@@ -1,0 +1,18 @@
+{
+  "type": "minestuck:simple_template",
+  "config": {
+    "height_placement": {
+      "heightmap": "WORLD_SURFACE_WG",
+      "offset": {
+        "type": "minecraft:uniform",
+        "value": {
+          "max_inclusive": 0,
+          "min_inclusive": -3
+        }
+      },
+      "query_type": "min"
+    },
+    "land_block_replacement": true,
+    "template": "minestuck:large_cog_1"
+  }
+}

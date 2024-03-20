@@ -1,7 +1,6 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -114,6 +113,6 @@ public class MSSoundEvents
 	
 	private static RegistryObject<SoundEvent> register(String name)
 	{
-		return REGISTER.register(name.replace(".","_"), () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Minestuck.MOD_ID, name)));
+		return REGISTER.register(name.replace(".","_"), () -> SoundEvent.createVariableRangeEvent(Minestuck.id(name)));
 	}
 }

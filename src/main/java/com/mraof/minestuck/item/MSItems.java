@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.MSEffects;
@@ -13,6 +12,7 @@ import com.mraof.minestuck.entity.item.ShopPosterEntity;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.armor.IronLassArmorItem;
 import com.mraof.minestuck.item.armor.MSArmorItem;
+import com.mraof.minestuck.item.armor.PrismarineArmorItem;
 import com.mraof.minestuck.item.artifact.CruxiteAppleItem;
 import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
@@ -44,6 +44,7 @@ import java.util.function.Function;
  * This class initializes and registers all items and blockitems in the mod. Utilizes a DeferredRegister, so utilizations of items from this class will often require .get()
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+
 public class MSItems
 {
 	public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Minestuck.MOD_ID);
@@ -444,10 +445,10 @@ public class MSItems
 	public static final RegistryObject<Item> MINE_AND_GRIST = REGISTER.register("mine_and_grist", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -2.8F).efficiency(10.0F).set(MSItemTypes.PICKAXE_TOOL).add(MSItemTypes.GRIST_HARVEST), new Item.Properties()));
 	
 	//Armor
-	public static final RegistryObject<Item> PRISMARINE_HELMET = REGISTER.register("prismarine_helmet", () -> new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.HELMET, new Item.Properties()));
-	public static final RegistryObject<Item> PRISMARINE_CHESTPLATE = REGISTER.register("prismarine_chestplate", () -> new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
-	public static final RegistryObject<Item> PRISMARINE_LEGGINGS = REGISTER.register("prismarine_leggings", () -> new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
-	public static final RegistryObject<Item> PRISMARINE_BOOTS = REGISTER.register("prismarine_boots", () -> new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
+	public static final RegistryObject<Item> PRISMARINE_HELMET = REGISTER.register("prismarine_helmet", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.HELMET, new Item.Properties()));
+	public static final RegistryObject<Item> PRISMARINE_CHESTPLATE = REGISTER.register("prismarine_chestplate", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+	public static final RegistryObject<Item> PRISMARINE_LEGGINGS = REGISTER.register("prismarine_leggings", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+	public static final RegistryObject<Item> PRISMARINE_BOOTS = REGISTER.register("prismarine_boots", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
 	public static final RegistryObject<Item> IRON_LASS_GLASSES = REGISTER.register("iron_lass_glasses", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.HELMET, new Item.Properties()));
 	public static final RegistryObject<Item> IRON_LASS_CHESTPLATE = REGISTER.register("iron_lass_chestplate", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
 	public static final RegistryObject<Item> IRON_LASS_SKIRT = REGISTER.register("iron_lass_skirt", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
@@ -826,6 +827,20 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CRUXITE_WALL = registerBlockItem(MSBlocks.CRUXITE_WALL);
 	public static final RegistryObject<BlockItem> CRUXITE_BUTTON = registerBlockItem(MSBlocks.CRUXITE_BUTTON);
 	public static final RegistryObject<BlockItem> CRUXITE_PRESSURE_PLATE = registerBlockItem(MSBlocks.CRUXITE_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> CRUXITE_DOOR = registerBlockItem(MSBlocks.CRUXITE_DOOR);
+	public static final RegistryObject<BlockItem> CRUXITE_TRAPDOOR = registerBlockItem(MSBlocks.CRUXITE_TRAPDOOR);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_BLOCK = registerBlockItem(MSBlocks.POLISHED_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_STAIRS = registerBlockItem(MSBlocks.POLISHED_CRUXITE_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_SLAB = registerBlockItem(MSBlocks.POLISHED_CRUXITE_SLAB);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_WALL = registerBlockItem(MSBlocks.POLISHED_CRUXITE_WALL);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICKS = registerBlockItem(MSBlocks.CRUXITE_BRICKS);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_STAIRS = registerBlockItem(MSBlocks.CRUXITE_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_SLAB = registerBlockItem(MSBlocks.CRUXITE_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_WALL = registerBlockItem(MSBlocks.CRUXITE_BRICK_WALL);
+	public static final RegistryObject<BlockItem> SMOOTH_CRUXITE_BLOCK = registerBlockItem(MSBlocks.SMOOTH_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> CHISELED_CRUXITE_BLOCK = registerBlockItem(MSBlocks.CHISELED_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> CRUXITE_PILLAR = registerBlockItem(MSBlocks.CRUXITE_PILLAR);
+	public static final RegistryObject<BlockItem> CRUXITE_LAMP = registerBlockItem(MSBlocks.CRUXITE_LAMP);
 	
 	public static final RegistryObject<BlockItem> URANIUM_BLOCK = registerBlockItem(MSBlocks.URANIUM_BLOCK);
 	public static final RegistryObject<BlockItem> URANIUM_STAIRS = registerBlockItem(MSBlocks.URANIUM_STAIRS);
@@ -1139,6 +1154,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> POLISHED_UNCARVED_SLAB = registerBlockItem(MSBlocks.POLISHED_UNCARVED_SLAB);
 	
 	public static final RegistryObject<BlockItem> CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.CARVED_KNOTTED_WOOD);
+	public static final RegistryObject<BlockItem> CARVED_BUSH = registerBlockItem(MSBlocks.CARVED_BUSH);
 	public static final RegistryObject<BlockItem> DENSE_CLOUD = registerBlockItem(MSBlocks.DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> BRIGHT_DENSE_CLOUD = registerBlockItem(MSBlocks.BRIGHT_DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> SUGAR_CUBE = registerBlockItem(MSBlocks.SUGAR_CUBE);
@@ -1380,8 +1396,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> HUBTOP = registerBlockItem(MSBlocks.HUBTOP);
 	public static final RegistryObject<BlockItem> LUNCHTOP = registerBlockItem(MSBlocks.LUNCHTOP);
 	public static final RegistryObject<BlockItem> OLD_COMPUTER = registerBlockItem(MSBlocks.OLD_COMPUTER);
-	public static final RegistryObject<BlockItem> TRANSPORTALIZER = registerBlockItem(MSBlocks.TRANSPORTALIZER, block -> new TransportalizerItem(block, new Item.Properties()));
-	public static final RegistryObject<BlockItem> TRANS_PORTALIZER = registerBlockItem(MSBlocks.TRANS_PORTALIZER, block -> new TransportalizerItem(block, new Item.Properties()));
+	public static final RegistryObject<BlockItem> TRANSPORTALIZER = registerBlockItem(MSBlocks.TRANSPORTALIZER, block -> new TransportalizerItem(block, new Item.Properties().stacksTo(1)));
+	public static final RegistryObject<BlockItem> TRANS_PORTALIZER = registerBlockItem(MSBlocks.TRANS_PORTALIZER, block -> new TransportalizerItem(block, new Item.Properties().stacksTo(1)));
 	public static final RegistryObject<BlockItem> SENDIFICATOR = registerBlockItem(MSBlocks.SENDIFICATOR, block -> new SendificatorBlockItem(block, new Item.Properties().stacksTo(1)));
 	public static final RegistryObject<BlockItem> GRIST_WIDGET = registerBlockItem(MSBlocks.GRIST_WIDGET, new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final RegistryObject<BlockItem> URANIUM_COOKER = registerBlockItem(MSBlocks.URANIUM_COOKER);
