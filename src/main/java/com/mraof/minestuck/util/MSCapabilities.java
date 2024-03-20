@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.EditToolsCapabilityProvider;
 import com.mraof.minestuck.computer.editmode.IEditTools;
+import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayingCapabilityProvider;
@@ -30,11 +31,16 @@ public class MSCapabilities
 	
 	public static final Capability<MSFluidType.LastFluidTickData> LAST_FLUID_TICK = CapabilityManager.get(new CapabilityToken<>(){});
 	
+	public static final Capability<DialogueComponent.CurrentDialogueEntity> CURRENT_DIALOGUE_ENTITY = CapabilityManager.get(new CapabilityToken<>()
+	{
+	});
+	
 	public static void register(RegisterCapabilitiesEvent event)
 	{
 		event.register(IMusicPlaying.class);
 		event.register(IEditTools.class);
 		event.register(MSFluidType.LastFluidTickData.class);
+		event.register(DialogueComponent.CurrentDialogueEntity.class);
 	}
 	
 	/**
@@ -44,17 +50,28 @@ public class MSCapabilities
 	 * @see EditToolsCapabilityProvider
 	 */
 	@SubscribeEvent
-	public static void entityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> attachCapabilitiesEvent)
+	public static void entityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event)
 	{
-		if(attachCapabilitiesEvent.getObject() instanceof Player)
+		if(event.getObject() instanceof Player)
 		{
-			attachCapabilitiesEvent.addCapability(Minestuck.id("musicplaying"),
+			event.addCapability(Minestuck.id("musicplaying"),
 					new MusicPlayingCapabilityProvider());
-			attachCapabilitiesEvent.addCapability(Minestuck.id("edit_tools"),
+			event.addCapability(Minestuck.id("edit_tools"),
 					new EditToolsCapabilityProvider());
+			event.addCapability(Minestuck.id("current_dialogue_entity"),
+					new ICapabilityProvider()
+					{
+						private final LazyOptional<DialogueComponent.CurrentDialogueEntity> lazyOptional = LazyOptional.of(() -> this.data);
+						private final DialogueComponent.CurrentDialogueEntity data = new DialogueComponent.CurrentDialogueEntity();
+						@Override
+						public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
+						{
+							return CURRENT_DIALOGUE_ENTITY.orEmpty(cap, lazyOptional);
+						}
+					});
 		}
 		
-		attachCapabilitiesEvent.addCapability(Minestuck.id("last_fluid_tick"),
+		event.addCapability(Minestuck.id("last_fluid_tick"),
 				new ICapabilityProvider()
 				{
 					private final LazyOptional<MSFluidType.LastFluidTickData> lazyOptional = LazyOptional.of(() -> this.data);

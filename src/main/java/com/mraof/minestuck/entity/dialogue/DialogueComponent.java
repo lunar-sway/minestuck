@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -176,15 +177,17 @@ public final class DialogueComponent
 			this.openScreenForDialogue(serverPlayer, dialogueId, dialogue);
 	}
 	
-	public void openScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue)
+	public void openScreenForDialogue(ServerPlayer player, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue)
 	{
-		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, serverPlayer);
-		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, serverPlayer);
+		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, player);
+		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, player);
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		
-		this.currentNodeForPlayer.put(serverPlayer.getUUID(), nodeReference);
+		this.currentNodeForPlayer.put(player.getUUID(), nodeReference);
+		player.getCapability(MSCapabilities.CURRENT_DIALOGUE_ENTITY)
+				.orElseThrow(IllegalStateException::new).entityId = this.entity.getId();
 		DialogueScreenPacket packet = new DialogueScreenPacket(this.entity.getId(), nodeReference, data);
-		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public Optional<Dialogue.Node> validateAndGetCurrentNode(Dialogue.NodeReference reference, ServerPlayer player)
@@ -199,5 +202,16 @@ public final class DialogueComponent
 	public void clearCurrentNode(ServerPlayer player)
 	{
 		this.currentNodeForPlayer.remove(player.getUUID());
+	}
+	
+	public static final class CurrentDialogueEntity
+	{
+		@Nullable
+		private Integer entityId = null;
+		
+		public boolean isEntity(int entityId)
+		{
+			return this.entityId != null && this.entityId == entityId;
+		}
 	}
 }

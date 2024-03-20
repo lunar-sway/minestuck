@@ -2,6 +2,7 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -36,6 +37,10 @@ public record ResponseTriggerPacket(int responseIndex, Dialogue.NodeReference no
 	@Override
 	public void execute(ServerPlayer player)
 	{
+		if(!player.getCapability(MSCapabilities.CURRENT_DIALOGUE_ENTITY)
+				.orElseThrow(IllegalStateException::new).isEntity(this.entityID))
+			return;
+		
 		Entity entity = player.level().getEntity(entityID);
 		if(entity instanceof LivingEntity livingEntity && entity instanceof DialogueEntity dialogueEntity)
 		{
