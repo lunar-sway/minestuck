@@ -44,6 +44,7 @@ import java.util.function.Function;
  * This class initializes and registers all items and blockitems in the mod. Utilizes a DeferredRegister, so utilizations of items from this class will often require .get()
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+
 public class MSItems
 {
 	public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Minestuck.MOD_ID);
@@ -844,6 +845,20 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CRUXITE_WALL = registerBlockItem(MSBlocks.CRUXITE_WALL);
 	public static final RegistryObject<BlockItem> CRUXITE_BUTTON = registerBlockItem(MSBlocks.CRUXITE_BUTTON);
 	public static final RegistryObject<BlockItem> CRUXITE_PRESSURE_PLATE = registerBlockItem(MSBlocks.CRUXITE_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> CRUXITE_DOOR = registerBlockItem(MSBlocks.CRUXITE_DOOR);
+	public static final RegistryObject<BlockItem> CRUXITE_TRAPDOOR = registerBlockItem(MSBlocks.CRUXITE_TRAPDOOR);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_BLOCK = registerBlockItem(MSBlocks.POLISHED_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_STAIRS = registerBlockItem(MSBlocks.POLISHED_CRUXITE_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_SLAB = registerBlockItem(MSBlocks.POLISHED_CRUXITE_SLAB);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_WALL = registerBlockItem(MSBlocks.POLISHED_CRUXITE_WALL);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICKS = registerBlockItem(MSBlocks.CRUXITE_BRICKS);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_STAIRS = registerBlockItem(MSBlocks.CRUXITE_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_SLAB = registerBlockItem(MSBlocks.CRUXITE_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_WALL = registerBlockItem(MSBlocks.CRUXITE_BRICK_WALL);
+	public static final RegistryObject<BlockItem> SMOOTH_CRUXITE_BLOCK = registerBlockItem(MSBlocks.SMOOTH_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> CHISELED_CRUXITE_BLOCK = registerBlockItem(MSBlocks.CHISELED_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> CRUXITE_PILLAR = registerBlockItem(MSBlocks.CRUXITE_PILLAR);
+	public static final RegistryObject<BlockItem> CRUXITE_LAMP = registerBlockItem(MSBlocks.CRUXITE_LAMP);
 	
 	public static final RegistryObject<BlockItem> URANIUM_BLOCK = registerBlockItem(MSBlocks.URANIUM_BLOCK);
 	public static final RegistryObject<BlockItem> URANIUM_STAIRS = registerBlockItem(MSBlocks.URANIUM_STAIRS);

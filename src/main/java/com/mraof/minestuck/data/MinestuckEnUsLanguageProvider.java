@@ -167,6 +167,22 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CRUXITE_WALL, "Cruxite Wall");
 		addBlock(MSBlocks.CRUXITE_BUTTON, "Cruxite Button");
 		addBlock(MSBlocks.CRUXITE_PRESSURE_PLATE, "Cruxite Pressure Plate");
+		addBlock(MSBlocks.CRUXITE_DOOR, "Cruxite Door");
+		addBlock(MSBlocks.CRUXITE_TRAPDOOR, "Cruxite Trapdoor");
+		addBlock(MSBlocks.POLISHED_CRUXITE_BLOCK, "Polished Cruxite Block");
+		addBlock(MSBlocks.POLISHED_CRUXITE_STAIRS, "Polished Cruxite Stairs");
+		addBlock(MSBlocks.POLISHED_CRUXITE_SLAB, "Polished Cruxite Slab");
+		addBlock(MSBlocks.POLISHED_CRUXITE_WALL, "Polished Cruxite Wall");
+		addBlock(MSBlocks.CRUXITE_BRICKS, "Cruxite Bricks");
+		addBlock(MSBlocks.CRUXITE_BRICK_STAIRS, "Cruxite Brick Stairs");
+		addBlock(MSBlocks.CRUXITE_BRICK_SLAB, "Cruxite Brick Slab");
+		addBlock(MSBlocks.CRUXITE_BRICK_WALL, "Cruxite Brick Wall");
+		addBlock(MSBlocks.SMOOTH_CRUXITE_BLOCK, "Smooth Cruxite Block");
+		addBlock(MSBlocks.CHISELED_CRUXITE_BLOCK, "Chiseled Cruxite Block");
+		addBlock(MSBlocks.CRUXITE_PILLAR, "Cruxite Pillar");
+		addBlock(MSBlocks.CRUXITE_LAMP, "Cruxite Lamp");
+		addBlockTooltip(MSBlocks.CRUXITE_LAMP, "The instructions have an arrow pointing at a line figure's right arm. You decide not to get your lamps from IKEA next time.");
+		
 		
 		addBlock(MSBlocks.URANIUM_BLOCK, "Uranium Block");
 		addBlock(MSBlocks.URANIUM_STAIRS, "Uranium Stairs");

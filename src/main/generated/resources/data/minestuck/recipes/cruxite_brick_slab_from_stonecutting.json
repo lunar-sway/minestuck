@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "minestuck:cruxite_block"
+  },
+  "result": "minestuck:cruxite_brick_slab"
+}

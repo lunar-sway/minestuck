@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Coffee Claws
 - Added TV Antenna
 - Added Molten Amber fluid, used in Heat lands
+- Cruxite block set
 
 ### Changed
 
@@ -59,7 +60,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipher
 
 ## [Unreleased]
 
@@ -290,7 +291,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Added 75 more blocks to the default atheneum list.
 - Config option for delaying entry from when the land dimension is generated, which can help with performance.
-Note that this option is found in the common config and not the world config.
+  Note that this option is found in the common config and not the world config.
 - Particle effect while entering
 - Transportalizer particle
 
@@ -384,7 +385,7 @@ Note that this option is found in the common config and not the world config.
 - The "minestuck:land_type" loot condition now uses tags instead of land type groups
 - Some consort dialogue conditions now uses tags instead of land type groups
 - New way to determine which land types that can get picked at random,
-defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
+  defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
 - Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
@@ -437,7 +438,7 @@ defined using data files `data/<namespace>/minestuck/terrain_land_types.json` an
 ### Removed
 
 - Removed config options "generateCruxiteOre" and "generateUraniumOre".
-For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
+  For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
 
 ### Fixed
 
