@@ -2,8 +2,8 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.ResponseTriggerPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -85,7 +85,7 @@ public class DialogueScreen extends Screen
 	{
 		if(responseData.shouldClose())
 			onClose();
-		MSPacketHandler.sendToServer(new ResponseTriggerPacket(responseData.index(), dialogueId));
+		MSPacketHandler.sendToServer(new DialoguePackets.TriggerResponse(responseData.index(), dialogueId));
 	}
 	
 	@Override

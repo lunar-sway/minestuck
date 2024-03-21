@@ -1,8 +1,7 @@
 package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.datafixers.util.Pair;
-import com.mraof.minestuck.network.CloseDialoguePacket;
-import com.mraof.minestuck.network.DialogueScreenPacket;
+import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.nbt.CompoundTag;
@@ -168,7 +167,7 @@ public final class DialogueComponent
 			return;
 		
 		if(player.getCapability(MSCapabilities.CURRENT_DIALOGUE).orElseThrow(IllegalStateException::new).lastTalkedTo(this.entity))
-			MSPacketHandler.sendToPlayer(new CloseDialoguePacket(), player);
+			MSPacketHandler.sendToPlayer(new DialoguePackets.CloseScreen(), player);
 	}
 	
 	public void tryStartDialogue(ServerPlayer player)
@@ -205,7 +204,7 @@ public final class DialogueComponent
 		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
 				.orElseThrow(IllegalStateException::new);
 		dialogueData.entityId = this.entity.getId();
-		DialogueScreenPacket packet = new DialogueScreenPacket(++dialogueData.dialogueCounter, data);
+		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(++dialogueData.dialogueCounter, data);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
