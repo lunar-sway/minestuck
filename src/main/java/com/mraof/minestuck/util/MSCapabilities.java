@@ -31,7 +31,7 @@ public class MSCapabilities
 	
 	public static final Capability<MSFluidType.LastFluidTickData> LAST_FLUID_TICK = CapabilityManager.get(new CapabilityToken<>(){});
 	
-	public static final Capability<DialogueComponent.CurrentDialogueEntity> CURRENT_DIALOGUE_ENTITY = CapabilityManager.get(new CapabilityToken<>()
+	public static final Capability<DialogueComponent.CurrentDialogue> CURRENT_DIALOGUE = CapabilityManager.get(new CapabilityToken<>()
 	{
 	});
 	
@@ -40,7 +40,7 @@ public class MSCapabilities
 		event.register(IMusicPlaying.class);
 		event.register(IEditTools.class);
 		event.register(MSFluidType.LastFluidTickData.class);
-		event.register(DialogueComponent.CurrentDialogueEntity.class);
+		event.register(DialogueComponent.CurrentDialogue.class);
 	}
 	
 	/**
@@ -58,15 +58,15 @@ public class MSCapabilities
 					new MusicPlayingCapabilityProvider());
 			event.addCapability(Minestuck.id("edit_tools"),
 					new EditToolsCapabilityProvider());
-			event.addCapability(Minestuck.id("current_dialogue_entity"),
+			event.addCapability(Minestuck.id("current_dialogue"),
 					new ICapabilityProvider()
 					{
-						private final LazyOptional<DialogueComponent.CurrentDialogueEntity> lazyOptional = LazyOptional.of(() -> this.data);
-						private final DialogueComponent.CurrentDialogueEntity data = new DialogueComponent.CurrentDialogueEntity();
+						private final LazyOptional<DialogueComponent.CurrentDialogue> lazyOptional = LazyOptional.of(() -> this.data);
+						private final DialogueComponent.CurrentDialogue data = new DialogueComponent.CurrentDialogue();
 						@Override
 						public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
 						{
-							return CURRENT_DIALOGUE_ENTITY.orEmpty(cap, lazyOptional);
+							return CURRENT_DIALOGUE.orEmpty(cap, lazyOptional);
 						}
 					});
 		}

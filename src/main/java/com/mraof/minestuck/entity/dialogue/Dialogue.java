@@ -82,19 +82,6 @@ public final class Dialogue
 	
 	public record NodeReference(ResourceLocation dialoguePath, int nodeIndex)
 	{
-		public static NodeReference read(FriendlyByteBuf buffer)
-		{
-			ResourceLocation dialoguePath = buffer.readResourceLocation();
-			int nodeIndex = buffer.readInt();
-			
-			return new NodeReference(dialoguePath, nodeIndex);
-		}
-		
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeResourceLocation(this.dialoguePath);
-			buffer.writeInt(this.nodeIndex);
-		}
 	}
 	
 	//TODO animation is unused?

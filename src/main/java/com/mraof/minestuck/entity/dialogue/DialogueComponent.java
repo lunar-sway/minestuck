@@ -10,6 +10,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import org.apache.logging.log4j.LogManager;
@@ -79,6 +80,11 @@ public final class DialogueComponent
 		tag.putBoolean("has_generated", this.hasGeneratedOnce);
 		
 		return tag;
+	}
+	
+	public LivingEntity entity()
+	{
+		return this.entity;
 	}
 	
 	public boolean hasGeneratedOnce()
@@ -184,19 +190,20 @@ public final class DialogueComponent
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		
 		this.currentNodeForPlayer.put(player.getUUID(), nodeReference);
-		player.getCapability(MSCapabilities.CURRENT_DIALOGUE_ENTITY)
-				.orElseThrow(IllegalStateException::new).entityId = this.entity.getId();
-		DialogueScreenPacket packet = new DialogueScreenPacket(this.entity.getId(), nodeReference, data);
+		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
+				.orElseThrow(IllegalStateException::new);
+		dialogueData.entityId = this.entity.getId();
+		DialogueScreenPacket packet = new DialogueScreenPacket(++dialogueData.dialogueCounter, data);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public Optional<Dialogue.Node> validateAndGetCurrentNode(Dialogue.NodeReference reference, ServerPlayer player)
+	public Optional<Dialogue.Node> validateAndGetCurrentNode(ServerPlayer player)
 	{
-		if(!Objects.equals(reference, this.currentNodeForPlayer.get(player.getUUID())))
-			return Optional.empty();
-		
-		return Optional.ofNullable(DialogueManager.getInstance().getDialogue(reference.dialoguePath()))
-				.flatMap(nodeSelector -> nodeSelector.getNodeIfValid(reference.nodeIndex(), this.entity, player));
+		return Optional.ofNullable(this.currentNodeForPlayer.get(player.getUUID()))
+				.flatMap(reference ->
+						Optional.ofNullable(DialogueManager.getInstance().getDialogue(reference.dialoguePath()))
+								.flatMap(nodeSelector -> nodeSelector.getNodeIfValid(reference.nodeIndex(), this.entity, player))
+				);
 	}
 	
 	public void clearCurrentNode(ServerPlayer player)
@@ -204,14 +211,29 @@ public final class DialogueComponent
 		this.currentNodeForPlayer.remove(player.getUUID());
 	}
 	
-	public static final class CurrentDialogueEntity
+	public static final class CurrentDialogue
 	{
+		/**
+		 * A counter for identifying the currently displayed dialogue gui. The counter increases by one with each new gui.
+		 * This fills the same purpose for dialogue as {@link ServerPlayer#containerCounter} does for container menus:
+		 * To identify which gui that the client and server is sending packets about,
+		 * to avoid packets meant for a previous gui instead getting used for a new gui.
+		 */
+		private int dialogueCounter = 0;
 		@Nullable
 		private Integer entityId = null;
 		
-		public boolean isEntity(int entityId)
+		public Optional<DialogueComponent> validateAndGetActiveComponent(ServerPlayer player, int dialogueId)
 		{
-			return this.entityId != null && this.entityId == entityId;
+			CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE).orElseThrow(IllegalStateException::new);
+			if(dialogueId != dialogueData.dialogueCounter || dialogueData.entityId == null)
+				return Optional.empty();
+			
+			Entity entity = player.level().getEntity(dialogueData.entityId);
+			if(!(entity instanceof DialogueEntity dialogueEntity))
+				return Optional.empty();
+			
+			return Optional.of(dialogueEntity.getDialogueComponent());
 		}
 	}
 }
