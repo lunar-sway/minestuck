@@ -61,8 +61,8 @@ public class MSCapabilities
 			event.addCapability(Minestuck.id("current_dialogue"),
 					new ICapabilityProvider()
 					{
-						private final LazyOptional<DialogueComponent.CurrentDialogue> lazyOptional = LazyOptional.of(() -> this.data);
-						private final DialogueComponent.CurrentDialogue data = new DialogueComponent.CurrentDialogue();
+						private final LazyOptional<DialogueComponent.CurrentDialogue> lazyOptional = LazyOptional.of(DialogueComponent.CurrentDialogue::new);
+						
 						@Override
 						public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
 						{
