@@ -142,6 +142,13 @@ public class MSScreenFactories
 		Minecraft.getInstance().setScreen(new DialogueScreen(dialogueId, dialogueData));
 	}
 	
+	public static void closeDialogueScreen()
+	{
+		Minecraft minecraft = Minecraft.getInstance();
+		if(minecraft.screen instanceof DialogueScreen)
+			minecraft.setScreen(null);
+	}
+	
 	public static void updateSylladexScreen()
 	{
 		if(Minecraft.getInstance().screen instanceof SylladexScreen screen)

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.network.CloseDialoguePacket;
 import com.mraof.minestuck.network.DialogueScreenPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSCapabilities;
@@ -156,7 +157,18 @@ public final class DialogueComponent
 		this.dialogueEntrypoint.clear();
 		this.playerSpecificFlags.clear();
 		this.matchedItem.clear();
-		this.currentNodeForPlayer.clear();	//todo potentially send a packet to close the screen?
+		this.currentNodeForPlayer.keySet().forEach(this::closeCurrentDialogue);
+		this.currentNodeForPlayer.clear();
+	}
+	
+	private void closeCurrentDialogue(UUID playerId)
+	{
+		ServerPlayer player = Objects.requireNonNull(this.entity.getServer()).getPlayerList().getPlayer(playerId);
+		if(player == null)
+			return;
+		
+		if(player.getCapability(MSCapabilities.CURRENT_DIALOGUE).orElseThrow(IllegalStateException::new).lastTalkedTo(this.entity))
+			MSPacketHandler.sendToPlayer(new CloseDialoguePacket(), player);
 	}
 	
 	public void tryStartDialogue(ServerPlayer player)
@@ -222,6 +234,11 @@ public final class DialogueComponent
 		private int dialogueCounter = 0;
 		@Nullable
 		private Integer entityId = null;
+		
+		public boolean lastTalkedTo(Entity entity)
+		{
+			return this.entityId != null && this.entityId == entity.getId();
+		}
 		
 		public Optional<DialogueComponent> validateAndGetActiveComponent(ServerPlayer player, int dialogueId)
 		{
