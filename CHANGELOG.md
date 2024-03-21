@@ -19,7 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
 - New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
 - Cruxite block set
-- 
+- Consort dialogues are now data driven and customizable
+
 ### Changed
 
 - Transportalizers now stack to one instead of 64
@@ -30,15 +31,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer Theme is now chosen from a list of available Themes in separate GUI
 - Changes to computer Theme texture Crocker
 - Computer programs now always use Theme specific texture for arrow buttons
+- Some changes to format of existing dialogues
 
 ### Fixed
 
 - Double slabs will now drop two slabs when broken
 - Sneaking now prevents trajectory blocks from moving the player
+- Improved grammar on some dialogues
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, pavizi, sipher
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, pavizi, sipher, kirderf1
 
 ## [Unreleased]
 

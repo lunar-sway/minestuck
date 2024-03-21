@@ -8,24 +8,18 @@ import com.mraof.minestuck.entity.dialogue.DialogueMessage.Argument;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import java.util.List;
 
-import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.defaultKeyMsg;
 import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.msg;
 import static com.mraof.minestuck.data.dialogue.DialogueProvider.ARROW;
 import static com.mraof.minestuck.data.dialogue.DialogueProvider.DOTS;
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
-import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.weighted;
 import static com.mraof.minestuck.entity.MSEntityTypes.*;
 import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
@@ -39,7 +33,6 @@ public final class ConsortDialogue
 		
 		//Run dialogue creation early so that language stuff gets added before the language provider generates its file
 		consortDialogues(provider, l);
-		testDialogues(provider, l);
 		
 		return provider;
 	}
@@ -76,7 +69,7 @@ public final class ConsortDialogue
 		
 		//Pulse
 		provider.addRandomlySelectable("koolaid", defaultWeight(all(isInTitleLand(PULSE), isAnyEntityType(SALAMANDER, TURTLE))),
-				new NodeBuilder(l.defaultKeyMsg("Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.")));
+				new NodeBuilder(l.defaultKeyMsg("Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself. Okj?")));
 		provider.addRandomlySelectable("murder_rain", defaultWeight(isInTitleLand(PULSE)),
 				new NodeBuilder(l.defaultKeyMsg("You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!")));
 		provider.addRandomlySelectable("swimming", defaultWeight(all(isInTitleLand(PULSE), isAnyEntityType(IGUANA, TURTLE))),
@@ -288,7 +281,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("You'd better watch where you're going. Wouldn't want you to step right into some fire.")));
 		provider.addRandomlySelectable("lava_crickets", defaultWeight(isInTerrainLand(HEAT)),
 				new NodeBuilder(l.defaultKeyMsg("Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.")));
-		provider.addRandomlySelectable("tummy_tunnel", defaultWeight(isInTerrainLand(HEAT)),	//todo review this. This dialogue was set up as regular dialogue in the old system, but its location in the language provider suggested that it might have meant to be food merchant dialogue.
+		provider.addRandomlySelectable("tummy_tunnel", defaultWeight(isInTerrainLand(HEAT)),    //todo review this. This dialogue was set up as regular dialogue in the old system, but its location in the language provider suggested that it might have meant to be food merchant dialogue.
 				new NodeBuilder(l.defaultKeyMsg("Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.")));
 		provider.addRandomlySelectable("the_water_is_lava", defaultWeight(isInTerrainLand(HEAT)),
 				new NodeBuilder(l.defaultKeyMsg("You know the water is fucking lava? Who thought it would be a good idea to make water out of lava? How do we even stay hydrated in this place dude?")));
@@ -308,7 +301,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("camel", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Want to buy a used camel? Only 2000 boondollars."))
 						.addResponse(new ResponseBuilder(l.subMsg("yes", "Why not? Seems like a good price for a camel!"))
-								.nextDialogue(builder.add("no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)"))))	//todo a text mention (maybe in description?) saying they went off before actually getting any boondollars?
+								.nextDialogue(builder.add("no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)"))))    //todo a text mention (maybe in description?) saying they went off before actually getting any boondollars?
 								.setNextAsEntrypoint())
 						.addResponse(new ResponseBuilder(l.subMsg("no", "Of course not! You know better!"))
 								.nextDialogue(builder.add("dancing_camel", new NodeBuilder(l.defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))))
@@ -335,7 +328,7 @@ public final class ConsortDialogue
 								.addTrigger(new Trigger.AddBoondollars(-100))
 								.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
 								.addTrigger(new Trigger.AddConsortReputation(50))
-								.addTrigger(new Trigger.SetDialogue(genericThanks))	//todo they'll be thanking any player like this. Maybe work with player flags to thank the specific player and say something else to others?
+								.addTrigger(new Trigger.SetDialogue(genericThanks))    //todo they'll be thanking any player like this. Maybe work with player flags to thank the specific player and say something else to others?
 								.nextDialogue(builder.add("gratitude", new NodeBuilder(l.defaultKeyMsg("Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!")))))
 						.addResponse(new ResponseBuilder(l.subMsg("ignore", "Sorry, but I can't help you."))
 								.nextDialogue(builder.add("death", new NodeBuilder(l.defaultKeyMsg("I guess I'll just die then..."))))))));
@@ -516,13 +509,13 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("I heard that the true name of the %s is %s. Isn't that cool?", Argument.LAND_TITLE, Argument.LAND_PLAYER_NAME)));
 		provider.addRandomlySelectable("college", defaultWeight(alwaysTrue()), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("Please, I need to pay for my children to attend college...")))
-				.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime."))));	//todo this doesn't actually depend on how many boondollars the player has. There's also a lack of interaction options from what the text would warrant.
+				.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime."))));    //todo this doesn't actually depend on how many boondollars the player has. There's also a lack of interaction options from what the text would warrant.
 		provider.addRandomlySelectable("unknown", defaultWeight(isAnyEntityType(TURTLE)), new ChainBuilder()
-				.node(new NodeBuilder(l.defaultKeyMsg("They are coming...")))	//todo custom response message?
+				.node(new NodeBuilder(l.defaultKeyMsg("They are coming...")))    //todo custom response message?
 				.node(new NodeBuilder(l.defaultKeyMsg("Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?"))));
 		provider.addRandomlySelectable("cult", defaultWeight(isAnyEntityType(TURTLE, SALAMANDER)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("We would love to invite you, %s, to our secret wizards cult.", Argument.PLAYER_TITLE)))
-				.node(new NodeBuilder(l.defaultKeyMsg("Meet me by dawn with mercury, salt, and sulfur to begin the initiation."))));	//todo review this. Suggests interactivity that is simply not there.
+				.node(new NodeBuilder(l.defaultKeyMsg("Meet me by dawn with mercury, salt, and sulfur to begin the initiation."))));    //todo review this. Suggests interactivity that is simply not there.
 		provider.addRandomlySelectable("title_presence", defaultWeight(all(isAnyEntityType(IGUANA, SALAMANDER), isFromLand())), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("I sense the presence of the %s. Tell me if you see them, ok?", Argument.PLAYER_TITLE))
 						.addResponse(new ResponseBuilder(l.subMsg("i_am", "Present yourself as the %s.", Argument.PLAYER_TITLE))
@@ -563,7 +556,7 @@ public final class ConsortDialogue
 							.nextDialogue(builder.add("end", new NodeBuilder(l.defaultKeyMsg("Fine. I will just go and find a real food store."))))
 							.setNextAsEntrypoint()));
 			
-			builder.addStart(new NodeSelectorBuilder()	//todo create a "not hungry" dialogue node for SetDialogue trigger to be used for any other player after the consort gets its snack.
+			builder.addStart(new NodeSelectorBuilder()    //todo create a "not hungry" dialogue node for SetDialogue trigger to be used for any other player after the consort gets its snack.
 					.node(new Condition.ItemTagMatch(MSTags.Items.CONSORT_SNACKS), new NodeBuilder(l.subMsg("ask", "A %s! Could I have some?", Argument.MATCHED_ITEM))
 							.addResponse(new ResponseBuilder(yesMsg)
 									.condition(Condition.HasMatchedItem.INSTANCE)
@@ -642,70 +635,5 @@ public final class ConsortDialogue
 							.nextDialogue(builder.add("deny", new NodeBuilder(l.defaultKeyMsg("Maybe one day I will find a challenger worthy of my greatness...."))))));
 		}));
 		
-	}
-	
-	private static void testDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
-	{
-		var test1 = provider.dialogue().dialogueId("test1");
-		var test2 = provider.dialogue().dialogueId("test2");
-		
-		provider.dialogue().add(test1, new NodeBuilder(l.defaultKeyMsg("Press §eSHIFT§r for more info"))
-				.animation("test1animation")
-				.addResponse(new ResponseBuilder(msg("test1response1")).nextDialogue(test2)
-						.condition(any(isAnyEntityType(TURTLE), isAnyEntityType(IGUANA))))
-				.addResponse(new ResponseBuilder(msg("test1response2")).nextDialogue(test2).condition(isAnyEntityType(NAKAGATOR)))
-				.addResponse(new ResponseBuilder(msg("test1response3")).nextDialogue(test2).addTrigger(new Trigger.Command("summon minestuck:grist ~ ~ ~ {Value:200}")))
-				.addResponse(new ResponseBuilder(msg("test1response4"))
-						.visibleCondition(l.subText("fail", "This very custom condition was not met."), one(
-								one(isAnyEntityType(NAKAGATOR), isAnyEntityType(TURTLE), isAnyEntityType(IGUANA), isAnyEntityType(SALAMANDER)),
-								one(new Condition.IsCarapacian(), new Condition.PlayerHasItem(MSItems.ACE_OF_CLUBS.get(), 1))
-						)))
-				.addResponse(new ResponseBuilder(msg("test1response5"))
-						.visibleCondition(l.subText("bad_score", "Player needs a score of 5 for 'testScore'."), new Condition.CustomHasScore(5, "player", "testScore"))));
-		provider.addRandomlySelectable("test1", defaultWeight(alwaysTrue()), test1);
-		
-		provider.dialogue().add(test2, new NodeBuilder(defaultKeyMsg())
-				.animation("test2animation")
-				.addResponse(new ResponseBuilder(msg("test2response1")).nextDialogue(test1)
-						.visibleCondition(isAnyEntityType(SALAMANDER)))
-				.addResponse(new ResponseBuilder(msg("test2response2")).nextDialogue(test1)
-						.visibleCondition(none(new Condition.IsCarapacian(), isInTerrainLand(END), isInTerrainLand(SHADE)))
-						.addTrigger(new Trigger.Command("say hi")))
-				.addResponse(new ResponseBuilder(msg("test2response3")).nextDialogue(test1)
-						.addTrigger(new Trigger.Command("""
-								tellraw @a ["",{"text":"Welcome","color":"aqua"},{"text":" to "},{"text":"Minecraft","color":"#9B9B17"},{"text":" Tools "},{"text":"partner.","obfuscated":true},{"text":" "},{"selector":"@s"},{"text":" fs"}]"""))
-				)
-				.addResponse(new ResponseBuilder(msg("test2response4"))
-						.visibleCondition(one(new Condition.IsCarapacian(), new Condition.PlayerIsClass(EnumClass.WITCH), new Condition.PlayerIsClass(EnumClass.MAGE),
-								new Condition.PlayerIsAspect(EnumAspect.HEART), new Condition.PlayerIsAspect(EnumAspect.DOOM), isInTerrainLand(RAIN)))));
-		provider.addRandomlySelectable("test2", defaultWeight(alwaysTrue()), test2);
-		
-		var ohYippee = provider.dialogue().add("oh_yippee", new NodeBuilder(defaultKeyMsg()));
-		var hungerFilled = provider.dialogue().add("hunger_filled", new NodeBuilder(defaultKeyMsg()));
-		provider.addRandomlySelectable("me_want_cookie", defaultWeight(alwaysTrue()), new NodeBuilder(defaultKeyMsg())
-				.addClosingResponse(l.subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
-				.addResponse(new ResponseBuilder(l.subMsg("why", "why do you want cookie?")).loop())
-				.addResponse(new ResponseBuilder(l.subMsg("give", "here have a cookie chap")).nextDialogue(ohYippee)
-						.visibleCondition(new Condition.PlayerHasItem(Items.COOKIE, 1))
-						.addTrigger(new Trigger.TakeItem(Items.COOKIE))
-						.addTrigger(new Trigger.SetDialogue(hungerFilled))));
-		
-		provider.addRandomlySelectable("me_want_5_cookies", weighted(5, alwaysTrue()), new NodeBuilder(defaultKeyMsg())
-				.addClosingResponse(l.subMsg("no", "im sorry fellow, I have no cookie for you. Bye"))
-				.addResponse(new ResponseBuilder(l.subMsg("give", "here have 5 cookies chap")).nextDialogue(ohYippee)
-						.visibleCondition(new Condition.PlayerHasItem(Items.COOKIE, 5))
-						.addTrigger(new Trigger.TakeItem(Items.COOKIE, 5))));
-		
-		provider.addRandomlySelectable("hi_friend_can_i_help_you", weighted(11, alwaysTrue()), new NodeBuilder(defaultKeyMsg())
-				.addResponse(new ResponseBuilder(l.subMsg("hate", "I hate you")).addTrigger(new Trigger.AddConsortReputation(-100)))
-				.addResponse(new ResponseBuilder(l.subMsg("love", "I love you")).addTrigger(new Trigger.AddConsortReputation(100)))
-				.addResponse(new ResponseBuilder(l.subMsg("high_rep", "Rep above 500")).visibleCondition(new Condition.PlayerHasReputation(500, true)))
-				.addResponse(new ResponseBuilder(l.subMsg("low_rep", "Rep below 200")).visibleCondition(new Condition.PlayerHasReputation(200, false)))
-				.addClosingResponse(l.subMsg("bye", "bye")));
-		
-		provider.addRandomlySelectable("look_rich", defaultWeight(alwaysTrue()), new NodeSelectorBuilder()
-				.node(new Condition.PlayerHasBoondollars(10_000), new NodeBuilder(l.subMsg("rich", "Hey, looks like you have a lot of boons!")))
-				.node(none(new Condition.PlayerHasBoondollars(10)), new NodeBuilder(l.subMsg("poor", "Wow, you barely have any boons. Poor you.")))
-				.defaultNode(new NodeBuilder(l.defaultKeyMsg("Hi! I can sense if someone has a lot of boondollars."))));
 	}
 }
