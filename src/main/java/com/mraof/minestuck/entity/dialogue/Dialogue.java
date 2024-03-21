@@ -201,15 +201,15 @@ public final class Dialogue
 			return Optional.of(new ResponseData(this.message.evaluateComponent(entity, serverPlayer), this.nextDialogue.isEmpty(), responseIndex, conditionFailure));
 		}
 		
-		public void trigger(LivingEntity entity, ServerPlayer player)
+		public void trigger(DialogueComponent component, ServerPlayer player)
 		{
-			if(!this.condition().test(entity, player))
+			if(!this.condition().test(component.entity(), player))
 				return;
 			
 			for(Trigger trigger : this.triggers())
-				trigger.triggerEffect(entity, player);
+				trigger.triggerEffect(component.entity(), player);
 			
-			this.nextDialogue().ifPresent(nextDialogue -> nextDialogue.apply(((DialogueEntity) entity).getDialogueComponent(), player));
+			this.nextDialogue().ifPresent(nextDialogue -> nextDialogue.apply(component, player));
 		}
 	}
 	

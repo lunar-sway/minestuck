@@ -40,6 +40,6 @@ public record ResponseTriggerPacket(int responseIndex, int dialogueId) implement
 		Optional<Dialogue.Node> optionalNode = component.validateAndGetCurrentNode(player);
 		component.clearCurrentNode(player);
 		optionalNode.flatMap(node -> node.getResponseIfValid(this.responseIndex))
-				.ifPresent(response -> response.trigger(component.entity(), player));
+				.ifPresent(response -> response.trigger(component, player));
 	}
 }
