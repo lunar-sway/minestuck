@@ -46,7 +46,7 @@ public class WoodLandType extends TerrainLandType
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setBlock("ground", MSBlocks.UNCARVED_WOOD);
-		registry.setBlock("upper", MSBlocks.CHIPBOARD);
+		registry.setBlock("upper", MSBlocks.UNCARVED_WOOD);
 		registry.setBlock("surface", MSBlocks.UNCARVED_WOOD);
 		registry.setBlock("ocean", MSBlocks.CAULK);
 		registry.setBlock("village_path", MSBlocks.WOOD_SHAVINGS);
@@ -72,7 +72,7 @@ public class WoodLandType extends TerrainLandType
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
 		super.addStructureSets(consumer, structureLookup);
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.LARGE_WOOD_OBJECT), new RandomSpreadStructurePlacement(4, 2, RandomSpreadType.LINEAR, 17524013)));
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.LARGE_WOOD_OBJECT), new RandomSpreadStructurePlacement(5, 3, RandomSpreadType.LINEAR, 17524013)));
 	}
 	
 	@Override
