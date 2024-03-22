@@ -69,7 +69,7 @@ public final class ConsortDialogue
 		
 		//Pulse
 		provider.addRandomlySelectable("koolaid", defaultWeight(all(isInTitleLand(PULSE), isAnyEntityType(SALAMANDER, TURTLE))),
-				new NodeBuilder(l.defaultKeyMsg("Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself. Okj?")));
+				new NodeBuilder(l.defaultKeyMsg("Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.")));
 		provider.addRandomlySelectable("murder_rain", defaultWeight(isInTitleLand(PULSE)),
 				new NodeBuilder(l.defaultKeyMsg("You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!")));
 		provider.addRandomlySelectable("swimming", defaultWeight(all(isInTitleLand(PULSE), isAnyEntityType(IGUANA, TURTLE))),
