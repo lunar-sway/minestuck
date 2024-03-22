@@ -16,7 +16,6 @@ import com.mraof.minestuck.player.Title;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 
@@ -138,9 +137,16 @@ public class MSScreenFactories
 		}
 	}
 	
-	public static void displayDialogueScreen(LivingEntity entity, Dialogue.NodeReference nodeReference, Dialogue.DialogueData dialogueData)
+	public static void displayDialogueScreen(int dialogueId, Dialogue.DialogueData dialogueData)
 	{
-		Minecraft.getInstance().setScreen(new DialogueScreen(entity, nodeReference, dialogueData));
+		Minecraft.getInstance().setScreen(new DialogueScreen(dialogueId, dialogueData));
+	}
+	
+	public static void closeDialogueScreen()
+	{
+		Minecraft minecraft = Minecraft.getInstance();
+		if(minecraft.screen instanceof DialogueScreen)
+			minecraft.setScreen(null);
 	}
 	
 	public static void updateSylladexScreen()

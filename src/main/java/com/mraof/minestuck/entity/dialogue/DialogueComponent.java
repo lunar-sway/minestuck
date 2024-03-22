@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.datafixers.util.Pair;
-import com.mraof.minestuck.network.DialogueScreenPacket;
+import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.nbt.CompoundTag;
@@ -10,6 +10,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import org.apache.logging.log4j.LogManager;
@@ -81,6 +82,11 @@ public final class DialogueComponent
 		return tag;
 	}
 	
+	public LivingEntity entity()
+	{
+		return this.entity;
+	}
+	
 	public boolean hasGeneratedOnce()
 	{
 		return hasGeneratedOnce;
@@ -150,7 +156,18 @@ public final class DialogueComponent
 		this.dialogueEntrypoint.clear();
 		this.playerSpecificFlags.clear();
 		this.matchedItem.clear();
-		this.currentNodeForPlayer.clear();	//todo potentially send a packet to close the screen?
+		this.currentNodeForPlayer.keySet().forEach(this::closeCurrentDialogue);
+		this.currentNodeForPlayer.clear();
+	}
+	
+	private void closeCurrentDialogue(UUID playerId)
+	{
+		ServerPlayer player = Objects.requireNonNull(this.entity.getServer()).getPlayerList().getPlayer(playerId);
+		if(player == null)
+			return;
+		
+		if(player.getCapability(MSCapabilities.CURRENT_DIALOGUE).orElseThrow(IllegalStateException::new).lastTalkedTo(this.entity))
+			MSPacketHandler.sendToPlayer(new DialoguePackets.CloseScreen(), player);
 	}
 	
 	public void tryStartDialogue(ServerPlayer player)
@@ -184,19 +201,20 @@ public final class DialogueComponent
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		
 		this.currentNodeForPlayer.put(player.getUUID(), nodeReference);
-		player.getCapability(MSCapabilities.CURRENT_DIALOGUE_ENTITY)
-				.orElseThrow(IllegalStateException::new).entityId = this.entity.getId();
-		DialogueScreenPacket packet = new DialogueScreenPacket(this.entity.getId(), nodeReference, data);
+		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
+				.orElseThrow(IllegalStateException::new);
+		dialogueData.entityId = this.entity.getId();
+		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(++dialogueData.dialogueCounter, data);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public Optional<Dialogue.Node> validateAndGetCurrentNode(Dialogue.NodeReference reference, ServerPlayer player)
+	public Optional<Dialogue.Node> validateAndGetCurrentNode(ServerPlayer player)
 	{
-		if(!Objects.equals(reference, this.currentNodeForPlayer.get(player.getUUID())))
-			return Optional.empty();
-		
-		return Optional.ofNullable(DialogueManager.getInstance().getDialogue(reference.dialoguePath()))
-				.flatMap(nodeSelector -> nodeSelector.getNodeIfValid(reference.nodeIndex(), this.entity, player));
+		return Optional.ofNullable(this.currentNodeForPlayer.get(player.getUUID()))
+				.flatMap(reference ->
+						Optional.ofNullable(DialogueManager.getInstance().getDialogue(reference.dialoguePath()))
+								.flatMap(nodeSelector -> nodeSelector.getNodeIfValid(reference.nodeIndex(), this.entity, player))
+				);
 	}
 	
 	public void clearCurrentNode(ServerPlayer player)
@@ -204,14 +222,34 @@ public final class DialogueComponent
 		this.currentNodeForPlayer.remove(player.getUUID());
 	}
 	
-	public static final class CurrentDialogueEntity
+	public static final class CurrentDialogue
 	{
+		/**
+		 * A counter for identifying the currently displayed dialogue gui. The counter increases by one with each new gui.
+		 * This fills the same purpose for dialogue as {@link ServerPlayer#containerCounter} does for container menus:
+		 * To identify which gui that the client and server is sending packets about,
+		 * to avoid packets meant for a previous gui instead getting used for a new gui.
+		 */
+		private int dialogueCounter = 0;
 		@Nullable
 		private Integer entityId = null;
 		
-		public boolean isEntity(int entityId)
+		public boolean lastTalkedTo(Entity entity)
 		{
-			return this.entityId != null && this.entityId == entityId;
+			return this.entityId != null && this.entityId == entity.getId();
+		}
+		
+		public Optional<DialogueComponent> validateAndGetActiveComponent(ServerPlayer player, int dialogueId)
+		{
+			CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE).orElseThrow(IllegalStateException::new);
+			if(dialogueId != dialogueData.dialogueCounter || dialogueData.entityId == null)
+				return Optional.empty();
+			
+			Entity entity = player.level().getEntity(dialogueData.entityId);
+			if(!(entity instanceof DialogueEntity dialogueEntity))
+				return Optional.empty();
+			
+			return Optional.of(dialogueEntity.getDialogueComponent());
 		}
 	}
 }

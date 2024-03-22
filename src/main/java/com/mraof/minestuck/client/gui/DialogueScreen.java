@@ -2,8 +2,8 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.ResponseTriggerPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -11,7 +11,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
@@ -26,8 +25,7 @@ public class DialogueScreen extends Screen
 	private static final int GUI_WIDTH = 224;
 	private static final int GUI_HEIGHT = 176;
 	
-	private final LivingEntity entity;
-	private final Dialogue.NodeReference nodeReference;
+	private final int dialogueId;
 	private final Dialogue.DialogueData dialogueData;
 	
 	private int xOffset;
@@ -36,12 +34,11 @@ public class DialogueScreen extends Screen
 	private List<FormattedCharSequence> messageLines;
 	private final List<Button> responseButtons = new ArrayList<>();
 	
-	DialogueScreen(LivingEntity entity, Dialogue.NodeReference nodeReference, Dialogue.DialogueData dialogueData)
+	DialogueScreen(int dialogueId, Dialogue.DialogueData dialogueData)
 	{
 		super(Component.empty());
 		
-		this.entity = entity;
-		this.nodeReference = nodeReference;
+		this.dialogueId = dialogueId;
 		this.dialogueData = dialogueData;
 	}
 	
@@ -88,7 +85,7 @@ public class DialogueScreen extends Screen
 	{
 		if(responseData.shouldClose())
 			onClose();
-		MSPacketHandler.sendToServer(ResponseTriggerPacket.createPacket(responseData.index(), nodeReference, entity));
+		MSPacketHandler.sendToServer(new DialoguePackets.TriggerResponse(responseData.index(), dialogueId));
 	}
 	
 	@Override
