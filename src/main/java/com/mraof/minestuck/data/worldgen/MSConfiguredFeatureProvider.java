@@ -80,6 +80,25 @@ public final class MSConfiguredFeatureProvider
 		context.register(PARCEL_PYXIS, new ConfiguredFeature<>(MSFeatures.PARCEL_PYXIS.get(), FeatureConfiguration.NONE));
 		context.register(FROG_RUINS, new ConfiguredFeature<>(MSFeatures.FROG_RUINS.get(), FeatureConfiguration.NONE));
 		
+		context.register(CARVED_CHERRY_TREE, new ConfiguredFeature<>(MSFeatures.CARVED_CHERRY_TREE.get(), FeatureConfiguration.NONE));
+		context.register(CARVED_HOUSE, new ConfiguredFeature<>(MSFeatures.CARVED_HOUSE.get(), FeatureConfiguration.NONE));
+		context.register(CARVED_LOG, new ConfiguredFeature<>(MSFeatures.CARVED_LOG.get(), FeatureConfiguration.NONE));
+		context.register(LARGE_CARVED_LOG, new ConfiguredFeature<>(MSFeatures.LARGE_CARVED_LOG.get(), FeatureConfiguration.NONE));
+		context.register(TREATED_CHAIR, new ConfiguredFeature<>(MSFeatures.TREATED_CHAIR.get(), FeatureConfiguration.NONE));
+		context.register(TREATED_TABLE, new ConfiguredFeature<>(MSFeatures.TREATED_TABLE.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_BOOKSHELF, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_BOOKSHELF.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_CHAIR, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_CHAIR.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_CREEPER, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_CREEPER.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_DRAWER, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_DRAWER.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_SALAMANDER, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_SALAMANDER.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_TABLE, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_TABLE.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_TREE, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_TREE.get(), FeatureConfiguration.NONE));
+		context.register(UNFINISHED_CARVED_TUNNEL, new ConfiguredFeature<>(MSFeatures.UNFINISHED_CARVED_TUNNEL.get(), FeatureConfiguration.NONE));
+		context.register(WOOD_SHAVINGS_PILE, new ConfiguredFeature<>(MSFeatures.WOOD_SHAVINGS_PILE.get(), FeatureConfiguration.NONE));
+		context.register(WOODEN_CACTUS_PAIR, new ConfiguredFeature<>(MSFeatures.WOODEN_CACTUS_PAIR.get(), FeatureConfiguration.NONE));
+		context.register(MASSIVE_CHAIR, new ConfiguredFeature<>(MSFeatures.MASSIVE_CHAIR.get(), FeatureConfiguration.NONE));
+		context.register(MASSIVE_STOOL, new ConfiguredFeature<>(MSFeatures.MASSIVE_STOOL.get(), FeatureConfiguration.NONE));
+		
 		context.register(BLOOD_POOL, new ConfiguredFeature<>(Feature.LAKE,
 				new LakeFeature.Configuration(BlockStateProvider.simple(MSBlocks.BLOOD.get()), BlockStateProvider.simple(Blocks.AIR))));
 		context.register(OIL_POOL, new ConfiguredFeature<>(Feature.LAKE,
@@ -104,6 +123,18 @@ public final class MSConfiguredFeatureProvider
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SLIME_BLOCK), BlockPredicate.matchesBlocks(Blocks.MYCELIUM, Blocks.DIRT), UniformInt.of(2, 6), 2)));
 		context.register(NETHERRACK_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.NETHERRACK), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 1)));
+		context.register(TREATED_PLANKS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.TREATED_PLANKS.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 2)));
+		context.register(LACQUERED_PLANKS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.LACQUERED_PLANKS.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 2)));
+		context.register(TREATED_UNCARVED_WOOD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.TREATED_UNCARVED_WOOD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 4)));
+		context.register(TREATED_CHIPBOARD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.TREATED_CHIPBOARD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 4)));
+		context.register(CHIPBOARD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.CHIPBOARD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 4)));
+		context.register(CARVED_PLANKS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.UNCARVED_WOOD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 4)));
 		context.register(COAGULATED_BLOOD_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.COAGULATED_BLOOD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 5), 2)));
 		context.register(COBBLESTONE_SURFACE_DISK, new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
@@ -159,6 +190,8 @@ public final class MSConfiguredFeatureProvider
 				new BlockStateConfiguration(MSBlocks.PETRIFIED_LOG.get().defaultBlockState())));
 		context.register(DEAD_TREE, new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 				new BlockStateConfiguration(MSBlocks.DEAD_LOG.get().defaultBlockState())));
+		context.register(CINDERED_TREE, new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
+				new BlockStateConfiguration(MSBlocks.CINDERED_LOG.get().defaultBlockState())));
 		
 		context.register(FOREST_LAND_TREES, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
 				new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(placedFeatures.getOrThrow(TreePlacements.BIRCH_CHECKED), 0.2F), new WeightedPlacedFeature(placedFeatures.getOrThrow(TreePlacements.FANCY_OAK_CHECKED), 0.1F)), placedFeatures.getOrThrow(TreePlacements.OAK_CHECKED))));
@@ -169,16 +202,34 @@ public final class MSConfiguredFeatureProvider
 				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.STRAWBERRY.get())), List.of(Blocks.GRASS_BLOCK, Blocks.COARSE_DIRT, Blocks.MUD), 4)));
 		context.register(GLOWING_MUSHROOM_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.GLOWING_MUSHROOM.get().defaultBlockState()))))));
+		context.register(WOODEN_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.WOODEN_GRASS.get().defaultBlockState()))))));
+		context.register(TREATED_WOODEN_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TREATED_WOODEN_GRASS.get().defaultBlockState()))))));
+		context.register(LACQUERED_WOODEN_MUSHROOM_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.LACQUERED_WOODEN_MUSHROOM.get().defaultBlockState()))))));
+		context.register(CARVED_BUSH_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.CARVED_BUSH.get().defaultBlockState()))))));
 		context.register(TALL_END_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TALL_END_GRASS.get().defaultBlockState())))));
 		context.register(PETRIFIED_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.PETRIFIED_GRASS.get().defaultBlockState()))))));
 		context.register(PETRIFIED_POPPY_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.PETRIFIED_POPPY.get().defaultBlockState()))))));
+		context.register(SINGED_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.SINGED_GRASS.get().defaultBlockState()))))));
+		context.register(IGNEOUS_SPIKE_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.IGNEOUS_SPIKE.get().defaultBlockState()))))));
 		context.register(BLOOMING_CACTUS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.BLOOMING_CACTUS.get()))))));
 		context.register(DESERT_BUSH_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.DESERT_BUSH.get()))))));
+		context.register(SANDY_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.SANDY_GRASS.get()))))));
+		context.register(TALL_SANDY_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TALL_SANDY_GRASS.get().defaultBlockState())))));
+		context.register(TALL_DEAD_BUSH_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TALL_DEAD_BUSH.get().defaultBlockState())))));
 		context.register(MOSS_CARPET_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MOSS_CARPET.defaultBlockState())), BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), Blocks.GRASS_BLOCK)))));
 		context.register(AZALEA_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,

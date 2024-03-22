@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "minestuck:block/uncarved_wood_uranium_ore"
+  }
+}

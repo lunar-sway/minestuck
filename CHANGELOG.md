@@ -10,18 +10,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Spawn egg items for main Underling types, Consorts, and Carapacians
 - Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+- Carved Logs, Carved Wooden Leaf, and Treated and Lacquered variants of Carved blocks
 - Tree Stump feature in Forest Lands
 - Frog Ruins feature in Frog Lands
+- Various Unfinished and Carved features in Wood Lands
 - Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
 - New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
-- Added Carved Bush.
 - New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
 - New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
+- Added Carved Bush
+- Added Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
+- Added Silicone Caulk fluid, used in Wood lands
+- Added Cindered woodset and Trees in Heat lands
+- Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
+- Added Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
+- Added Coffee Claws
+- Added TV Antenna
+- Added Molten Amber fluid, used in Heat lands
 - Cruxite block set
-- 
+
 ### Changed
 
+- Wooden Cactus is now only placeable on the Wood Terrain Blocks tag instead of Sand
+- Carved Planks are now the surface block of Wood Lands instead of Treated Planks
+- Carved Planks no longer need to be mined with a Stone Axe or better
 - Transportalizers now stack to one instead of 64
 - Prismarine armor remodel and retexture
 - Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
@@ -30,15 +43,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer Theme is now chosen from a list of available Themes in separate GUI
 - Changes to computer Theme texture Crocker
 - Computer programs now always use Theme specific texture for arrow buttons
+- Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
+- Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
+- Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
+- Renamed Oil to Shale Oil
+- Pumord is now alchemized with Pumice Stone instead of any regular Stone
 
 ### Fixed
 
 - Double slabs will now drop two slabs when broken
 - Sneaking now prevents trajectory blocks from moving the player
 
+### Removed
+
+- Uncarved Wood no longer has a tooltip
+
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, pavizi, sipher
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipher
 
 ## [Unreleased]
 

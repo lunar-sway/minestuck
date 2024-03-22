@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "minestuck:lacquered_uncarved_wood"
+  },
+  "result": "minestuck:lacquered_planks"
+}

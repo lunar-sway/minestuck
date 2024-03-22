@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:lacquered_chipboard"
+    }
+  ],
+  "result": {
+    "item": "minestuck:lacquered_chipboard_button"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "minecraft:logs"
+    "tag": "minecraft:planks"
   },
   "input2": {
     "item": "minecraft:stone"

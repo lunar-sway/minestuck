@@ -131,6 +131,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.PINK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE, "Cruxite Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.DEEPSLATE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.COBBLESTONE_URANIUM_ORE, "Uranium Ore");
@@ -141,20 +142,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.PINK_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_URANIUM_ORE, "Uranium Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.NETHERRACK_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.SHADE_STONE_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.PINK_STONE_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.SANDSTONE_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.RED_SANDSTONE_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.END_STONE_IRON_ORE, "Iron Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.SANDSTONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.RED_SANDSTONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.SHADE_STONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.PINK_STONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.END_STONE_REDSTONE_ORE, "Redstone Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE, "Redstone Ore");
 		addBlock(MSBlocks.STONE_QUARTZ_ORE, "Quartz Ore");
 		addBlock(MSBlocks.PINK_STONE_LAPIS_ORE, "Lapis Ore");
 		addBlock(MSBlocks.PINK_STONE_DIAMOND_ORE, "Diamond Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_EMERALD_ORE, "Emerald Ore");
 		
 		addBlock(MSBlocks.CRUXITE_BLOCK, "Cruxite Block");
 		addBlock(MSBlocks.CRUXITE_STAIRS, "Cruxite Stairs");
@@ -329,6 +334,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CRACKED_BLACK_STONE_BRICKS, "Cracked Black Stone Bricks");
 		addBlock(MSBlocks.BLACK_SAND, "Black Sand");
 		
+		addBlock(MSBlocks.IGNEOUS_STONE, "Igneous Stone");
+		addBlock(MSBlocks.PUMICE_STONE, "Pumice Stone");
+		
 		addBlock(MSBlocks.DECREPIT_STONE_BRICKS, "Decrepit Stone Bricks");
 		addBlock(MSBlocks.DECREPIT_STONE_BRICK_STAIRS, "Decrepit Stone Brick Stairs");
 		addBlock(MSBlocks.DECREPIT_STONE_BRICK_SLAB, "Decrepit Stone Brick Slab");
@@ -460,8 +468,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
 		addBlock(MSBlocks.NATIVE_SULFUR, "Native Sulfur");
 		
+		addBlock(MSBlocks.CARVED_LOG, "Carved Log");
+		addBlock(MSBlocks.CARVED_WOODEN_LEAF, "Carved Wooden Leaf");
+		
 		addBlock(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
-		addBlockTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
 		addBlock(MSBlocks.UNCARVED_WOOD_STAIRS, "Uncarved Wood Stairs");
 		addBlock(MSBlocks.UNCARVED_WOOD_SLAB, "Uncarved Wood Slab");
 		addBlock(MSBlocks.UNCARVED_WOOD_BUTTON, "Uncarved Wood Button");
@@ -497,9 +507,90 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.POLISHED_UNCARVED_STAIRS, "Polished Uncarved Stairs");
 		addBlock(MSBlocks.POLISHED_UNCARVED_SLAB, "Polished Uncarved Slab");
 		
-		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
 		addBlock(MSBlocks.CARVED_BUSH, "Carved Bush");
-		addBlockTooltip(MSBlocks.CARVED_BUSH, "Someone lovingly carved this bush.");
+		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
+		addBlock(MSBlocks.WOODEN_GRASS, "Wooden Grass");
+		
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD, "Treated Uncarved Wood");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_STAIRS, "Treated Uncarved Wood Stairs");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_SLAB, "Treated Uncarved Wood Slab");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_BUTTON, "Treated Uncarved Wood Button");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE, "Treated Uncarved Wood Pressure Plate");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_FENCE, "Treated Uncarved Wood Fence");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE, "Treated Uncarved Wood Fence Gate");
+		
+		addBlock(MSBlocks.TREATED_CHIPBOARD, "Treated Chipboard");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_STAIRS, "Treated Chipboard Stairs");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_SLAB, "Treated Chipboard Slab");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_BUTTON, "Treated Chipboard Button");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE, "Treated Chipboard Pressure Plate");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_FENCE, "Treated Chipboard Fence");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_FENCE_GATE, "Treated Chipboard Fence Gate");
+		
+		addBlock(MSBlocks.TREATED_WOOD_SHAVINGS, "Treated Wood Shavings");
+		
+		addBlock(MSBlocks.TREATED_HEAVY_PLANKS, "Treated Heavy Planks");
+		addBlock(MSBlocks.TREATED_HEAVY_PLANK_STAIRS, "Treated Heavy Stairs");
+		addBlock(MSBlocks.TREATED_HEAVY_PLANK_SLAB, "Treated Heavy Slab");
+		
+		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
+		addBlock(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Stairs");
+		addBlock(MSBlocks.TREATED_PLANKS_SLAB, "Treated Slab");
+		addBlock(MSBlocks.TREATED_BUTTON, "Treated Button");
+		addBlock(MSBlocks.TREATED_PRESSURE_PLATE, "Treated Pressure Plate");
+		addBlock(MSBlocks.TREATED_FENCE, "Treated Fence");
+		addBlock(MSBlocks.TREATED_FENCE_GATE, "Treated Fence Gate");
+		addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
+		addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
+		
+		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD, "Polished Treated Uncarved Wood");
+		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS, "Polished Treated Uncarved Stairs");
+		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB, "Polished Treated Uncarved Slab");
+		
+		addBlock(MSBlocks.TREATED_CARVED_KNOTTED_WOOD, "Treated Carved Knotted Wood");
+		addBlock(MSBlocks.TREATED_WOODEN_GRASS, "Treated Wooden Grass");
+		
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD, "Lacquered Uncarved Wood");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_STAIRS, "Lacquered Uncarved Wood Stairs");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_SLAB, "Lacquered Uncarved Wood Slab");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_BUTTON, "Lacquered Uncarved Wood Button");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE, "Lacquered Uncarved Wood Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE, "Lacquered Uncarved Wood Fence");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE, "Lacquered Uncarved Wood Fence Gate");
+		
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD, "Lacquered Chipboard");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_STAIRS, "Lacquered Chipboard Stairs");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_SLAB, "Lacquered Chipboard Slab");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_BUTTON, "Lacquered Chipboard Button");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE, "Lacquered Chipboard Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_FENCE, "Lacquered Chipboard Fence");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_FENCE_GATE, "Lacquered Chipboard Fence Gate");
+		
+		addBlock(MSBlocks.LACQUERED_WOOD_SHAVINGS, "Lacquered Wood Shavings");
+		
+		addBlock(MSBlocks.LACQUERED_HEAVY_PLANKS, "Lacquered Heavy Planks");
+		addBlock(MSBlocks.LACQUERED_HEAVY_PLANK_STAIRS, "Lacquered Heavy Stairs");
+		addBlock(MSBlocks.LACQUERED_HEAVY_PLANK_SLAB, "Lacquered Heavy Slab");
+		
+		addBlock(MSBlocks.LACQUERED_PLANKS, "Lacquered Planks");
+		addBlock(MSBlocks.LACQUERED_STAIRS, "Lacquered Stairs");
+		addBlock(MSBlocks.LACQUERED_SLAB, "Lacquered Slab");
+		addBlock(MSBlocks.LACQUERED_BUTTON, "Lacquered Button");
+		addBlock(MSBlocks.LACQUERED_PRESSURE_PLATE, "Lacquered Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_FENCE, "Lacquered Fence");
+		addBlock(MSBlocks.LACQUERED_FENCE_GATE, "Lacquered Fence Gate");
+		addBlock(MSBlocks.LACQUERED_DOOR, "Lacquered Door");
+		addBlock(MSBlocks.LACQUERED_TRAPDOOR, "Lacquered Trapdoor");
+		
+		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD, "Polished Lacquered Uncarved Wood");
+		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS, "Polished Lacquered Uncarved Stairs");
+		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB, "Polished Lacquered Uncarved Slab");
+		
+		addBlock(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD, "Lacquered Carved Knotted Wood");
+		addBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM, "Lacquered Wooden Mushroom");
+		
+		addBlock(MSBlocks.WOODEN_LAMP, "Wooden Lamp");
+		
 		addBlock(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		addBlock(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -512,6 +603,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_VINE_LOG, "Flowery Vine Oak Log");
 		addBlock(MSBlocks.DEAD_LOG, "Dead Log");
 		addBlock(MSBlocks.PETRIFIED_LOG, "Petrified Log");
+		addBlock(MSBlocks.CINDERED_LOG, "Cindered Log");
 		addBlock(MSBlocks.GLOWING_WOOD, "Glowing Wood");
 		addBlock(MSBlocks.SHADEWOOD_LOG, "Shadewood Log");
 		addBlock(MSBlocks.SCARRED_SHADEWOOD_LOG, "Scarred Shadewood Log");
@@ -532,6 +624,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_VINE_WOOD, "Flowery Vine Wood");
 		addBlock(MSBlocks.DEAD_WOOD, "Dead Wood");
 		addBlock(MSBlocks.PETRIFIED_WOOD, "Petrified Wood");
+		addBlock(MSBlocks.CINDERED_WOOD, "Cindered Wood");
 		
 		addBlock(MSBlocks.GLOWING_PLANKS, "Glowing Planks");
 		addBlock(MSBlocks.GLOWING_STAIRS, "Glowing Stairs");
@@ -577,13 +670,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_DOOR, "Dead Door");
 		addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
 		
-		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
-		addBlock(MSBlocks.TREATED_BUTTON, "Treated Button");
-		addBlock(MSBlocks.TREATED_PRESSURE_PLATE, "Treated Pressure Plate");
-		addBlock(MSBlocks.TREATED_FENCE, "Treated Fence");
-		addBlock(MSBlocks.TREATED_FENCE_GATE, "Treated Fence Gate");
-		addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
-		addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
+		addBlock(MSBlocks.CINDERED_PLANKS, "Cindered Planks");
+		addBlock(MSBlocks.CINDERED_STAIRS, "Cindered Stairs");
+		addBlock(MSBlocks.CINDERED_SLAB, "Cindered Slab");
+		addBlock(MSBlocks.CINDERED_BUTTON, "Cindered Button");
+		addBlock(MSBlocks.CINDERED_PRESSURE_PLATE, "Cindered Pressure Plate");
+		addBlock(MSBlocks.CINDERED_FENCE, "Cindered Fence");
+		addBlock(MSBlocks.CINDERED_FENCE_GATE, "Cindered Fence Gate");
+		addBlock(MSBlocks.CINDERED_DOOR, "Cindered Door");
+		addBlock(MSBlocks.CINDERED_TRAPDOOR, "Cindered Trapdoor");
 		
 		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
 		addBlock(MSBlocks.SHADEWOOD_STAIRS, "Shadewood Stairs");
@@ -620,8 +715,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockStoreTooltip(MSBlocks.GLOWING_MUSHROOM, "This mushroom tastes a bit better than any other around here, according to myself!");
 		addBlock(MSBlocks.DESERT_BUSH, "Desert Bush");
 		addBlock(MSBlocks.BLOOMING_CACTUS, "Blooming Cactus");
+		addBlock(MSBlocks.SANDY_GRASS, "Sandy Grass");
+		addBlock(MSBlocks.TALL_SANDY_GRASS, "Tall Sandy Grass");
+		addBlock(MSBlocks.DEAD_FOLIAGE, "Dead Foliage");
+		addBlock(MSBlocks.TALL_DEAD_BUSH, "Tall Dead Bush");
 		addBlock(MSBlocks.PETRIFIED_GRASS, "Petrified Grass");
 		addBlock(MSBlocks.PETRIFIED_POPPY, "Petrified Poppy");
+		addBlock(MSBlocks.IGNEOUS_SPIKE, "Igneous Spike");
+		addBlock(MSBlocks.SINGED_GRASS, "Singed Grass");
+		addBlock(MSBlocks.SINGED_FOLIAGE, "Singed Foliage");
+		addBlock(MSBlocks.SULFUR_BUBBLE, "Sulfur Bubble");
 		addBlock(MSBlocks.GLOWING_MUSHROOM_VINES, "Glowing Mushroom Vines");
 		addBlock(MSBlocks.STRAWBERRY, "Strawberry");
 		addBlock(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
@@ -663,7 +766,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_PLANKS_STAIRS, "Rainbow Planks Stairs");
 		addBlock(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
 		addBlock(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
-		addBlock(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Planks Stairs");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, "Steep Green Stone Brick Stairs Base");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, "Steep Green Stone Brick Stairs Top");
 		addBlock(MSBlocks.BLACK_CHESS_BRICK_SLAB, "Black Chess Brick Slab");
@@ -681,7 +783,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
 		addBlock(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
 		addBlock(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
-		addBlock(MSBlocks.TREATED_PLANKS_SLAB, "Treated Planks Slab");
 		addBlock(MSBlocks.BLACK_STONE_SLAB, "Black Stone Slab");
 		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");
@@ -837,12 +938,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.MINI_TYPHEUS_STATUE, "Small Denizen Statue"); //Referred to as typheus in all code except name here. Its generic now but more denizen statues may get added
 		addBlock(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
 		addBlock(MSBlocks.MIRROR, "Mirror");
-		addBlock(MSBlocks.OIL, "Oil");
+		
+		addBlock(MSBlocks.OIL, "Shale Oil");
 		addBlock(MSBlocks.BLOOD, "Blood");
 		addBlock(MSBlocks.BRAIN_JUICE, "Brain Juice");
 		addBlock(MSBlocks.WATER_COLORS, "Paint");
 		addBlock(MSBlocks.ENDER, "End Fluid");
 		addBlock(MSBlocks.LIGHT_WATER, "Light Water");
+		addBlock(MSBlocks.CAULK, "Silicone Caulk");
+		addBlock(MSBlocks.MOLTEN_AMBER, "Molten Amber");
 		
 		addItem(MSItems.CLAW_HAMMER, "Claw Hammer");
 		addItemTooltip(MSItems.CLAW_HAMMER, "An average hammer found in about any garage. It can also destroy blocks");
@@ -1054,6 +1158,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.MAKESHIFT_CLAWS_SHEATHED, "Makeshift Claws");
 		addItem(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		addItem(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		addItem(MSItems.COFFEE_CLAWS_DRAWN, "Coffee Claws");
+		addItem(MSItems.COFFEE_CLAWS_SHEATHED, "Coffee Claws");
 		addItem(MSItems.POGO_CLAWS, "Pogo Claws");
 		addItemTooltip(MSItems.POGO_CLAWS, "Pounce around and bounce around with these claws!");
 		addItem(MSItems.ATOMIKITTY_KATAR_DRAWN, "Atomikitty Katar");
@@ -1215,6 +1321,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.ACE_OF_DIAMONDS, "Ace of Diamonds");
 		addItemStore(MSItems.ACE_OF_DIAMONDS, "Star Sigil");
 		addItemStoreTooltip(MSItems.ACE_OF_DIAMONDS, "This star-shaped sigil probably has magical astral properties.");
+		addItem(MSItems.TV_ANTENNA, "TV Antenna");
 		addItem(MSItems.ACE_OF_HEARTS, "Ace of Hearts");
 		addItemStore(MSItems.ACE_OF_HEARTS, "Heart Sigil");
 		addItemStoreTooltip(MSItems.ACE_OF_HEARTS, "This thing MUST have magical love powers!");
@@ -1549,7 +1656,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.STONE_TABLET, "carved", "Looks like something has been carved into it!");
 		addItemStoreTooltip(MSItems.STONE_TABLET, "It's pretty rock, but I wouldn't advise rolling on it.");
 		addItem(MSItems.SHOP_POSTER, "Shop Poster");
-		addItem(MSItems.OIL_BUCKET, "Bucket of Oil");
+		addItem(MSItems.OIL_BUCKET, "Bucket of Shale Oil");
 		addItem(MSItems.BLOOD_BUCKET, "Bucket of Blood");
 		addItemTooltip(MSItems.BLOOD_BUCKET, "It looks like Kool-Aid... But you're too scared to try it yourself.");
 		addItem(MSItems.BRAIN_JUICE_BUCKET, "Bucket of Brain Juice");
@@ -1560,6 +1667,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.LIGHT_WATER_BUCKET, "Bucket of Glimmering Water");
 		addItemTooltip(MSItems.LIGHT_WATER_BUCKET, "You're not convinced this is water. It's unnatural.");
 		addItem(MSItems.OBSIDIAN_BUCKET, "Obsidian Bucket");
+		addItem(MSItems.CAULK_BUCKET, "Bucket of Silicone Caulk");
+		addItem(MSItems.MOLTEN_AMBER_BUCKET, "Bucket of Molten Amber");
 		addItem(MSItems.CAPTCHAROID_CAMERA, "Captcharoid Camera");
 		addItem(MSItems.GRIMOIRE, "Grimoire for Summoning the Zoologically Dubious");
 		addItemExtra(MSItems.GRIMOIRE, "message", "After flipping through some pages, you feel significantly more insignificant.");
@@ -2015,8 +2124,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(SandstoneLandType.STONY_DESERTS, "Stony Deserts");
 		addLand(ShadeLandType.SHADE, "Shade");
 		addLand(WoodLandType.WOOD, "Wood");
-		addLand(WoodLandType.OAK, "Oak");
-		addLand(WoodLandType.LUMBER, "Lumber");
+		addLand(WoodLandType.PLANKS, "Planks");
+		addLand(WoodLandType.CARVINGS, "Carvings");
 		addLand(FloraLandType.FLORA, "Flora");
 		addLand(FloraLandType.FLOWERS, "Flowers");
 		addLand(FloraLandType.THORNS, "Thorns");
