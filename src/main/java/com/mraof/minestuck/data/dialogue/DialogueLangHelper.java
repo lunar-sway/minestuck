@@ -22,12 +22,6 @@ public final class DialogueLangHelper
 		this.languageProvider = languageProvider;
 	}
 	
-	@Deprecated
-	public static MessageProducer defaultKeyMsg(DialogueMessage.Argument... arguments)
-	{
-		return id -> new DialogueMessage(languageKeyBase(id), List.of(arguments));
-	}
-	
 	public MessageProducer defaultKeyMsg(String text, DialogueMessage.Argument... arguments)
 	{
 		return id -> registerAndBuild(languageKeyBase(id), text, arguments);
@@ -36,12 +30,6 @@ public final class DialogueLangHelper
 	public MessageProducer subMsg(String key, String text, DialogueMessage.Argument... arguments)
 	{
 		return id -> registerAndBuild(languageKeyBase(id) + "." + key, text, arguments);
-	}
-	
-	@Deprecated
-	public static MessageProducer msg(String key, DialogueMessage.Argument... arguments)
-	{
-		return msg(new DialogueMessage(key, List.of(arguments)));
 	}
 	
 	public MessageProducer msg(ResourceLocation id, String key, String text, DialogueMessage.Argument... arguments)
