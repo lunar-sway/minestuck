@@ -208,8 +208,7 @@ public final class DialogueComponent
 		this.currentNodeForPlayer.put(player.getUUID(), nodeReference);
 		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
 				.orElseThrow(IllegalStateException::new);
-		dialogueData.entityId = this.entity.getId();
-		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(++dialogueData.dialogueCounter, data);
+		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(dialogueData.newDialogue(this.entity), data);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
@@ -242,6 +241,12 @@ public final class DialogueComponent
 		public boolean lastTalkedTo(Entity entity)
 		{
 			return this.entityId != null && this.entityId == entity.getId();
+		}
+		
+		private int newDialogue(LivingEntity entity)
+		{
+			this.entityId = entity.getId();
+			return ++dialogueCounter;
 		}
 		
 		public Optional<DialogueComponent> validateAndGetActiveComponent(ServerPlayer player, int dialogueId)
