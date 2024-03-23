@@ -176,7 +176,7 @@ public final class DialogueComponent
 		if(dialogueId.isEmpty())
 			return;
 		
-		Dialogue.NodeSelector dialogue = DialogueManager.getInstance().getDialogue(dialogueId.get());
+		Dialogue.NodeSelector dialogue = DialogueNodes.getInstance().getDialogue(dialogueId.get());
 		if(dialogue == null)
 		{
 			LOGGER.warn("Unable to find dialogue with id {}", dialogueId.get());
@@ -189,7 +189,7 @@ public final class DialogueComponent
 	
 	public void tryOpenScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId)
 	{
-		Dialogue.NodeSelector dialogue = DialogueManager.getInstance().getDialogue(dialogueId);
+		Dialogue.NodeSelector dialogue = DialogueNodes.getInstance().getDialogue(dialogueId);
 		if(dialogue != null)
 			this.openScreenForDialogue(serverPlayer, dialogueId, dialogue);
 	}
@@ -212,7 +212,7 @@ public final class DialogueComponent
 	{
 		return Optional.ofNullable(this.currentNodeForPlayer.get(player.getUUID()))
 				.flatMap(reference ->
-						Optional.ofNullable(DialogueManager.getInstance().getDialogue(reference.dialoguePath()))
+						Optional.ofNullable(DialogueNodes.getInstance().getDialogue(reference.dialoguePath()))
 								.flatMap(nodeSelector -> nodeSelector.getNodeIfValid(reference.nodeIndex(), this.entity, player))
 				);
 	}
