@@ -721,6 +721,26 @@ public interface Condition
 		}
 	}
 	
+	record Flag(String flag) implements Condition
+	{
+		static final Codec<Flag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("flag").forGetter(Flag::flag)
+		).apply(instance, Flag::new));
+		
+		@Override
+		public Codec<Flag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return entity instanceof DialogueEntity dialogueEntity
+					&& dialogueEntity.getDialogueComponent().flags().contains(this.flag);
+		}
+	}
+	
 	record PlayerFlag(String flag) implements Condition
 	{
 		static final Codec<PlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(

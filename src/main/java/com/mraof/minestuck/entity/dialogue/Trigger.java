@@ -367,6 +367,33 @@ public sealed interface Trigger
 		}
 	}
 	
+	record SetRandomFlag(List<String> flags) implements Trigger
+	{
+		static final Codec<SetRandomFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.listOf().fieldOf("flags").forGetter(SetRandomFlag::flags)
+		).apply(instance, SetRandomFlag::new));
+		
+		@Override
+		public Codec<SetRandomFlag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(this.flags.isEmpty())
+				return;
+			
+			if(entity instanceof DialogueEntity dialogueEntity)
+			{
+				Set<String> playerFlags = dialogueEntity.getDialogueComponent().flags();
+				if(flags.stream().noneMatch(playerFlags::contains))
+					playerFlags.add(Util.getRandom(this.flags, entity.getRandom()));
+			}
+		}
+	}
+	
 	record SetRandomPlayerFlag(List<String> flags) implements Trigger
 	{
 		static final Codec<SetRandomPlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(

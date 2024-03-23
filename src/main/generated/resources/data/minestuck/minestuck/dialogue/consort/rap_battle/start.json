@@ -10,7 +10,7 @@
         },
         "triggers": [
           {
-            "type": "minestuck:set_random_player_flag",
+            "type": "minestuck:set_random_flag",
             "flags": [
               "rap_a",
               "rap_b",

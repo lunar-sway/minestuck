@@ -29,6 +29,7 @@ public final class DialogueComponent
 	private final Map<UUID, ResourceLocation> dialogueEntrypoint = new HashMap<>();
 	private boolean keepOnReset;
 	private boolean hasGeneratedOnce = false;
+	private final Set<String> flags = new HashSet<>();
 	private final Map<UUID, Set<String>> playerSpecificFlags = new HashMap<>();
 	private final Map<UUID, Item> matchedItem = new HashMap<>();
 	private final Map<UUID, Dialogue.NodeReference> currentNodeForPlayer = new HashMap<>();
@@ -45,13 +46,18 @@ public final class DialogueComponent
 			this.activeDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
 			this.keepOnReset = tag.getBoolean("keep_on_reset");
 			this.hasGeneratedOnce = true;
+			
+			this.flags.clear();
+			tag.getList("flags", Tag.TAG_STRING).stream().map(StringTag.class::cast)
+					.map(StringTag::getAsString).forEach(this.flags::add);
+			
 			this.playerSpecificFlags.clear();
 			tag.getList("player_flags", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag -> {
 				
 				UUID player = entryTag.getUUID("player");
-				Set<String> flags = this.playerFlags(player);
+				Set<String> playerFlags = this.playerFlags(player);
 				entryTag.getList("flags", Tag.TAG_STRING).stream().map(StringTag.class::cast)
-						.map(StringTag::getAsString).forEach(flags::add);
+						.map(StringTag::getAsString).forEach(playerFlags::add);
 			});
 		}
 		else
@@ -65,16 +71,21 @@ public final class DialogueComponent
 		{
 			tag.putString("dialogue_id", this.activeDialogue.toString());
 			tag.putBoolean("keep_on_reset", this.keepOnReset);
-			ListTag playerFlagsTag = new ListTag();
-			this.playerSpecificFlags.forEach((player, flags) -> {
+			
+			ListTag flagsTag = new ListTag();
+			this.flags.stream().map(StringTag::valueOf).forEach(flagsTag::add);
+			tag.put("flags", flagsTag);
+			
+			ListTag playerFlagsMapTag = new ListTag();
+			this.playerSpecificFlags.forEach((player, playerFlags) -> {
 				CompoundTag entryTag = new CompoundTag();
 				entryTag.putUUID("player", player);
-				ListTag flagsTag = new ListTag();
-				flags.stream().map(StringTag::valueOf).forEach(flagsTag::add);
-				entryTag.put("flags", flagsTag);
-				playerFlagsTag.add(entryTag);
+				ListTag playerFlagsTag = new ListTag();
+				playerFlags.stream().map(StringTag::valueOf).forEach(playerFlagsTag::add);
+				entryTag.put("flags", playerFlagsTag);
+				playerFlagsMapTag.add(entryTag);
 			});
-			tag.put("player_flags", playerFlagsTag);
+			tag.put("player_flags", playerFlagsMapTag);
 		}
 		
 		tag.putBoolean("has_generated", this.hasGeneratedOnce);
@@ -124,6 +135,11 @@ public final class DialogueComponent
 		return this.activeDialogue != null;
 	}
 	
+	public Set<String> flags()
+	{
+		return this.flags;
+	}
+	
 	public Set<String> playerFlags(ServerPlayer player)
 	{
 		return this.playerFlags(player.getUUID());
@@ -154,6 +170,7 @@ public final class DialogueComponent
 		if(!this.keepOnReset)
 			this.activeDialogue = null;
 		this.dialogueEntrypoint.clear();
+		this.flags.clear();
 		this.playerSpecificFlags.clear();
 		this.matchedItem.clear();
 		closeAllCurrentDialogue();
