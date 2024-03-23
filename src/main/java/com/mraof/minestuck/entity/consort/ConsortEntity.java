@@ -17,6 +17,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.world.MSDimensions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -424,6 +425,12 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public DialogueComponent getDialogueComponent()
 	{
 		return this.dialogueComponent;
+	}
+	
+	@Override
+	public ChatFormatting getChatColor()
+	{
+		return getConsortType().getColor();
 	}
 	
 	@Override

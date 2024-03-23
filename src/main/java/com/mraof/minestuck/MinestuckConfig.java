@@ -46,6 +46,7 @@ public class MinestuckConfig
 		public final EnumValue<AnimationSpeed> echeladderAnimation;
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
+		public final BooleanValue npcDialogueTextColors;
 		
 		private Client(Builder builder)
 		{
@@ -56,6 +57,8 @@ public class MinestuckConfig
 					.define("loginColorSelector", true);
 			echeladderAnimation = builder.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
+			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
+					.define("npcDialogueTextColors", true);
 			builder.pop();
 		}
 	}
