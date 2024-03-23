@@ -9,6 +9,7 @@ import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
@@ -16,7 +17,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -31,10 +31,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * A Trigger allows for new code to be called when a dialogue option is picked
@@ -42,52 +41,10 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public sealed interface Trigger
 {
-	Codec<Trigger> CODEC = Type.CODEC.dispatch(Trigger::getType, type -> type.codec.get());
+	Codec<Trigger> CODEC = CodecUtil.registryCodec(Triggers.REGISTRY).dispatch(Trigger::codec, Function.identity());
 	Codec<List<Trigger>> LIST_CODEC = Trigger.CODEC.listOf();
 	
-	enum Type implements StringRepresentable
-	{
-		SET_DIALOGUE(() -> SetDialogue.CODEC),
-		SET_DIALOGUE_FROM_LIST(() -> SetDialogueFromList.CODEC),
-		SET_PLAYER_DIALOGUE(() -> SetPlayerDialogue.CODEC),
-		OPEN_CONSORT_MERCHANT_GUI(() -> OpenConsortMerchantGui.CODEC),
-		COMMAND(() -> Command.CODEC),
-		TAKE_ITEM(() -> TakeItem.CODEC),
-		TAKE_MATCHED_ITEM(() -> TakeMatchedItem.CODEC),
-		GIVE_ITEM(() -> GiveItem.CODEC),
-		GIVE_FROM_LOOT_TABLE(() -> GiveFromLootTable.CODEC),
-		ADD_CONSORT_REPUTATION(() -> AddConsortReputation.CODEC),
-		ADD_BOONDOLLARS(() -> AddBoondollars.CODEC),
-		EXPLODE(() -> Explode.CODEC),
-		SET_PLAYER_FLAG(() -> SetPlayerFlag.CODEC),
-		SET_RANDOM_PLAYER_FLAG(() -> SetRandomPlayerFlag.CODEC),
-		;
-		
-		public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
-		
-		private final Supplier<Codec<? extends Trigger>> codec;
-		
-		Type(Supplier<Codec<? extends Trigger>> codec)
-		{
-			this.codec = codec;
-		}
-		
-		public static Type fromInt(int ordinal) //converts int back into enum
-		{
-			if(0 <= ordinal && ordinal < Type.values().length)
-				return Type.values()[ordinal];
-			else
-				throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for Trigger type!");
-		}
-		
-		@Override
-		public String getSerializedName()
-		{
-			return this.name().toLowerCase(Locale.ROOT);
-		}
-	}
-	
-	Type getType();
+	Codec<? extends Trigger> codec();
 	
 	void triggerEffect(LivingEntity entity, ServerPlayer player);
 	
@@ -98,9 +55,9 @@ public sealed interface Trigger
 		).apply(instance, SetDialogue::new));
 		
 		@Override
-		public Type getType()
+		public Codec<SetDialogue> codec()
 		{
-			return Type.SET_DIALOGUE;
+			return CODEC;
 		}
 		
 		@Override
@@ -118,9 +75,9 @@ public sealed interface Trigger
 		).apply(instance, SetDialogueFromList::new));
 		
 		@Override
-		public Type getType()
+		public Codec<SetDialogueFromList> codec()
 		{
-			return Type.SET_DIALOGUE_FROM_LIST;
+			return CODEC;
 		}
 		
 		@Override
@@ -140,9 +97,9 @@ public sealed interface Trigger
 		).apply(instance, SetPlayerDialogue::new));
 		
 		@Override
-		public Type getType()
+		public Codec<SetPlayerDialogue> codec()
 		{
-			return Type.SET_PLAYER_DIALOGUE;
+			return CODEC;
 		}
 		
 		@Override
@@ -159,9 +116,9 @@ public sealed interface Trigger
 		).apply(instance, OpenConsortMerchantGui::new));
 		
 		@Override
-		public Type getType()
+		public Codec<OpenConsortMerchantGui> codec()
 		{
-			return Type.OPEN_CONSORT_MERCHANT_GUI;
+			return CODEC;
 		}
 		
 		@Override
@@ -186,9 +143,9 @@ public sealed interface Trigger
 		).apply(instance, Command::new));
 		
 		@Override
-		public Type getType()
+		public Codec<Command> codec()
 		{
-			return Type.COMMAND;
+			return CODEC;
 		}
 		
 		@Override
@@ -219,9 +176,9 @@ public sealed interface Trigger
 		}
 		
 		@Override
-		public Type getType()
+		public Codec<TakeItem> codec()
 		{
-			return Type.TAKE_ITEM;
+			return CODEC;
 		}
 		
 		@Override
@@ -245,9 +202,9 @@ public sealed interface Trigger
 		static final Codec<TakeMatchedItem> CODEC = Codec.unit(INSTANCE);
 		
 		@Override
-		public Type getType()
+		public Codec<TakeMatchedItem> codec()
 		{
-			return Type.TAKE_MATCHED_ITEM;
+			return CODEC;
 		}
 		
 		@Override
@@ -271,9 +228,9 @@ public sealed interface Trigger
 		).apply(instance, GiveItem::new));
 		
 		@Override
-		public Type getType()
+		public Codec<GiveItem> codec()
 		{
-			return Type.GIVE_ITEM;
+			return CODEC;
 		}
 		
 		@Override
@@ -294,9 +251,9 @@ public sealed interface Trigger
 		).apply(instance, GiveFromLootTable::new));
 		
 		@Override
-		public Type getType()
+		public Codec<GiveFromLootTable> codec()
 		{
-			return Type.GIVE_FROM_LOOT_TABLE;
+			return CODEC;
 		}
 		
 		@Override
@@ -329,9 +286,9 @@ public sealed interface Trigger
 		).apply(instance, AddConsortReputation::new));
 		
 		@Override
-		public Type getType()
+		public Codec<AddConsortReputation> codec()
 		{
-			return Type.ADD_CONSORT_REPUTATION;
+			return CODEC;
 		}
 		
 		@Override
@@ -353,9 +310,9 @@ public sealed interface Trigger
 		).apply(instance, AddBoondollars::new));
 		
 		@Override
-		public Type getType()
+		public Codec<AddBoondollars> codec()
 		{
-			return Type.ADD_BOONDOLLARS;
+			return CODEC;
 		}
 		
 		@Override
@@ -377,9 +334,9 @@ public sealed interface Trigger
 		static final Codec<Explode> CODEC = Codec.unit(Explode::new);
 		
 		@Override
-		public Type getType()
+		public Codec<Explode> codec()
 		{
-			return Type.EXPLODE;
+			return CODEC;
 		}
 		
 		@Override
@@ -397,9 +354,9 @@ public sealed interface Trigger
 		).apply(instance, SetPlayerFlag::new));
 		
 		@Override
-		public Type getType()
+		public Codec<SetPlayerFlag> codec()
 		{
-			return Type.SET_PLAYER_FLAG;
+			return CODEC;
 		}
 		
 		@Override
@@ -417,9 +374,9 @@ public sealed interface Trigger
 		).apply(instance, SetRandomPlayerFlag::new));
 		
 		@Override
-		public Type getType()
+		public Codec<SetRandomPlayerFlag> codec()
 		{
-			return Type.SET_RANDOM_PLAYER_FLAG;
+			return CODEC;
 		}
 		
 		@Override

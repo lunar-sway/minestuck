@@ -12,7 +12,7 @@
         "next_dialogue": "minestuck:consort/rap_battle/school_that_fool",
         "triggers": [
           {
-            "type": "set_player_dialogue",
+            "type": "minestuck:set_player_dialogue",
             "dialogue": "minestuck:consort/rap_battle/final"
           }
         ]

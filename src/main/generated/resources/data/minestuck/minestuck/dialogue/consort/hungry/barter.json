@@ -10,14 +10,14 @@
         "next_dialogue": "minestuck:consort/hungry/finally",
         "triggers": [
           {
-            "type": "take_matched_item"
+            "type": "minestuck:take_matched_item"
           },
           {
-            "type": "add_boondollars",
+            "type": "minestuck:add_boondollars",
             "boondollars": 10
           },
           {
-            "type": "set_player_dialogue",
+            "type": "minestuck:set_player_dialogue",
             "dialogue": "minestuck:consort/hungry/finally2"
           }
         ]

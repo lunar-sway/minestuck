@@ -15,7 +15,7 @@
         "message": "minestuck.arrow",
         "triggers": [
           {
-            "type": "open_consort_merchant_gui",
+            "type": "minestuck:open_consort_merchant_gui",
             "loot_table": "minestuck:gameplay/consort_food"
           }
         ]

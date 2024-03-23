@@ -9,7 +9,7 @@
         "message": "minestuck.dialogue.consort_food_merchant.food_shop.next",
         "triggers": [
           {
-            "type": "open_consort_merchant_gui",
+            "type": "minestuck:open_consort_merchant_gui",
             "loot_table": "minestuck:gameplay/consort_food"
           }
         ]

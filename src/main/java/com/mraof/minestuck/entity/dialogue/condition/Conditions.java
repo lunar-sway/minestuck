@@ -5,7 +5,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -19,7 +18,7 @@ import java.util.function.Supplier;
 
 public final class Conditions
 {
-	public static final DeferredRegister<Codec<? extends Condition>> REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "dialogue_condition"), Minestuck.MOD_ID);
+	public static final DeferredRegister<Codec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
 	public static final Supplier<IForgeRegistry<Codec<? extends Condition>>> REGISTRY = REGISTER.makeRegistry(() -> new RegistryBuilder<Codec<? extends Condition>>().disableSaving().disableSync());
 	
 	static {

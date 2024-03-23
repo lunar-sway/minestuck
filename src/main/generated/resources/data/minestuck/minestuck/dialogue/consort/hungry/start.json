@@ -24,10 +24,10 @@
             },
             "triggers": [
               {
-                "type": "take_matched_item"
+                "type": "minestuck:take_matched_item"
               },
               {
-                "type": "add_consort_reputation",
+                "type": "minestuck:add_consort_reputation",
                 "reputation": 15
               }
             ]

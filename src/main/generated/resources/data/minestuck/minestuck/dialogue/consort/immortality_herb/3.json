@@ -6,7 +6,7 @@
         "message": "minestuck.dots",
         "triggers": [
           {
-            "type": "explode"
+            "type": "minestuck:explode"
           }
         ]
       }
