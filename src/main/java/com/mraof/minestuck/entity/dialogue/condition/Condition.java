@@ -55,6 +55,7 @@ public interface Condition
 	
 	boolean test(LivingEntity entity, ServerPlayer player);
 	
+	//todo condition tooltips should be made better: translatable text should be used over literals, and the fields of the condition can be reflected in the tooltip. (like saying which class specifically that the player need to have)
 	default Component getFailureTooltip()
 	{
 		return Component.empty();
@@ -253,7 +254,6 @@ public interface Condition
 		}
 	}
 	
-	//TODO handle land type tags
 	record InTerrainLandType(TerrainLandType landType) implements NpcOnlyCondition
 	{
 		static final Codec<InTerrainLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
