@@ -21,6 +21,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+/**
+ * A provider specifically for building dialogue nodes and generating json files for said dialogue nodes.
+ * @see SelectableDialogueProvider
+ * @see DialogueLangHelper
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class DialogueProvider implements DataProvider

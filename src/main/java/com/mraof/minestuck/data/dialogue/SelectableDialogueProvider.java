@@ -17,6 +17,12 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+/**
+ * A provider for building dialogue nodes and generating the file making them selectable within a specific {@link RandomlySelectableDialogue.DialogueCategory}.
+ * Includes a {@link DialogueProvider} accessible through {@link SelectableDialogueProvider#dialogue()}.
+ * @see DialogueProvider
+ * @see DialogueLangHelper
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class SelectableDialogueProvider implements DataProvider
