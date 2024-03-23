@@ -97,6 +97,8 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_forge_version}"
 
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${mc_jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${mc_jei_version}")
@@ -111,6 +113,14 @@ dependencies {
 
 sourceSets.main.resources {
     srcDir 'src/main/generated/resources'
+}
+
+mixin {
+    add sourceSets.main, 'mixins.minestuck.refmap.json'
+    config 'mixins.minestuck.json'
+
+    debug.verbose = true
+    debug.export = true
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
