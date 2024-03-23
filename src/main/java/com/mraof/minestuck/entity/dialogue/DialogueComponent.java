@@ -156,6 +156,11 @@ public final class DialogueComponent
 		this.dialogueEntrypoint.clear();
 		this.playerSpecificFlags.clear();
 		this.matchedItem.clear();
+		closeAllCurrentDialogue();
+	}
+	
+	public void closeAllCurrentDialogue()
+	{
 		this.currentNodeForPlayer.keySet().forEach(this::closeCurrentDialogue);
 		this.currentNodeForPlayer.clear();
 	}

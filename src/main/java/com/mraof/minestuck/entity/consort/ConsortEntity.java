@@ -202,6 +202,17 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	}
 	
 	@Override
+	public boolean hurt(DamageSource source, float amount)
+	{
+		boolean wasHurt = super.hurt(source, amount);
+		
+		if(wasHurt)
+			this.dialogueComponent.closeAllCurrentDialogue();
+		
+		return wasHurt;
+	}
+	
+	@Override
 	public void aiStep()
 	{
 		super.aiStep();
