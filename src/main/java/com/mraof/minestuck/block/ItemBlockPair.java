@@ -11,6 +11,10 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Helper class for storing and registering a block and corresponding item in one place.
+ * Since this is not a block registry object in itself, you may need to call {@link ItemBlockPair#asBlock()} or {@link ItemBlockPair#blockHolder()} to use the block behind this pair.
+ */
 @MethodsReturnNonnullByDefault
 public record ItemBlockPair<B extends Block, I extends Item>(RegistryObject<B> blockHolder, RegistryObject<I> itemHolder) implements ItemLike
 {
