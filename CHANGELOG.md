@@ -19,7 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
 - New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
 - Cruxite block set
-- Consort dialogues are now data driven and customizable
+- New dialogue system that uses a gui screen, replacing the chat-based system
+- Dialogue in this new system is data-driven, and can be defined or tweaked through datapacks
 
 ### Changed
 
@@ -31,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer Theme is now chosen from a list of available Themes in separate GUI
 - Changes to computer Theme texture Crocker
 - Computer programs now always use Theme specific texture for arrow buttons
-- Some changes to format of existing dialogues
+- Existing consort dialogue have been ported to the new dialogue system with some tweaks
 
 ### Fixed
 
