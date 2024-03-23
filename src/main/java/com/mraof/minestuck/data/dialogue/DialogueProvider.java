@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.entity.dialogue.DialogueAnimation;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
@@ -138,7 +139,7 @@ public final class DialogueProvider implements DataProvider
 	public static class NodeBuilder implements SimpleDialogueProducer, NodeProducer
 	{
 		private final List<Pair<Dialogue.MessageType, MessageProducer>> messages = new ArrayList<>();
-		private String animation = Dialogue.DEFAULT_ANIMATION;
+		private DialogueAnimation animation = DialogueAnimation.DEFAULT_ANIMATION;
 		private ResourceLocation guiPath = Dialogue.DEFAULT_GUI;
 		private final List<ResponseBuilder> responses = new ArrayList<>();
 		
@@ -163,7 +164,7 @@ public final class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public NodeBuilder animation(String animation)
+		public NodeBuilder animation(DialogueAnimation animation)
 		{
 			this.animation = animation;
 			return this;

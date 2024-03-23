@@ -2,6 +2,8 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
+import com.mraof.minestuck.entity.dialogue.DialogueAnimation;
+import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
@@ -53,7 +55,7 @@ public class DialogueScreen extends Screen
 	{
 		//TODO static gui height/width may not make sense with customizable gui sizing
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
+		xOffset = (this.width / 2) - (GUI_WIDTH / 2) + ANIMATION_WIDTH;
 		
 		this.messageLines = font.split(this.dialogueData.message(), 210);
 		
@@ -169,6 +171,8 @@ public class DialogueScreen extends Screen
 		
 		guiGraphics.blit(dialogueData.guiBackground(), xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
+		renderAnimation(guiGraphics);
+		
 		int pY = yOffset + 20;
 		for(FormattedCharSequence line : messageLines)
 		{
@@ -177,6 +181,19 @@ public class DialogueScreen extends Screen
 		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+	}
+	
+	private static final int ANIMATION_WIDTH = 32;
+	private static final int ANIMATION_HEIGHT = 32;
+	
+	private void renderAnimation(GuiGraphics guiGraphics)
+	{
+		DialogueAnimation animation = dialogueData.animation();
+		
+		guiGraphics.pose().pushPose();
+		guiGraphics.pose().scale(0.25F,0.25F,0.25F);
+		guiGraphics.blit(animation.getRenderPath(entity), xOffset - ANIMATION_WIDTH, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.pose().popPose();
 	}
 	
 	@Override

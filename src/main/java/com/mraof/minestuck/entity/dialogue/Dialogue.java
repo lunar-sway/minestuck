@@ -31,8 +31,7 @@ import java.util.stream.IntStream;
 public final class Dialogue
 {
 	public static final String DIALOGUE_FORMAT = "minestuck.dialogue.format";
-	public static final String DEFAULT_ANIMATION = "generic_animation";
-	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue.png");
+	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/dialogue.png");
 	
 	public record NodeSelector(List<Pair<Condition, Node>> conditionedNodes, Node defaultNode)
 	{
@@ -83,8 +82,7 @@ public final class Dialogue
 	{
 	}
 	
-	//TODO animation is unused?
-	public record Node(List<Pair<MessageType, DialogueMessage>> messages, String animation, ResourceLocation guiPath, List<Response> responses)
+	public record Node(List<Pair<MessageType, DialogueMessage>> messages, DialogueAnimation animation, ResourceLocation guiPath, List<Response> responses)
 	{
 		private static final Codec<Pair<MessageType, DialogueMessage>> MESSAGE_CODEC = Codec.mapPair(MessageType.CODEC.fieldOf("type"), DialogueMessage.CODEC.fieldOf("message")).codec();
 		private static final MapCodec<List<Pair<MessageType, DialogueMessage>>> MESSAGES_MAP_CODEC = Codec.mapEither(DialogueMessage.CODEC.fieldOf("message"), MESSAGE_CODEC.listOf().fieldOf("messages"))
@@ -92,7 +90,7 @@ public final class Dialogue
 						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.ENTITY ? Either.left(messages.get(0).getSecond()): Either.right(messages));
 		public static final Codec<Node> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				MESSAGES_MAP_CODEC.forGetter(Node::messages),
-				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DEFAULT_ANIMATION).forGetter(Node::animation),
+				PreservingOptionalFieldCodec.withDefault(DialogueAnimation.CODEC, "animation", DialogueAnimation.DEFAULT_ANIMATION).forGetter(Node::animation),
 				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DEFAULT_GUI).forGetter(Node::guiPath),
 				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(Node::responses)
 		).apply(instance, Node::new));
@@ -113,7 +111,7 @@ public final class Dialogue
 				isFirst = false;
 			}
 			
-			return new DialogueData(text, this.guiPath(), responses);
+			return new DialogueData(text, this.guiPath(), responses, this.animation);
 		}
 		
 		private Component buildMessage(Pair<MessageType, DialogueMessage> messagePair, LivingEntity entity, ServerPlayer player)
@@ -254,15 +252,16 @@ public final class Dialogue
 		).apply(instance, SelectableDialogue::new));
 	}
 	
-	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses)
+	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimation animation)
 	{
 		public static DialogueData read(FriendlyByteBuf buffer)
 		{
 			Component message = buffer.readComponent();
 			ResourceLocation guiBackground = buffer.readResourceLocation();
 			List<ResponseData> responses = buffer.readList(ResponseData::read);
+			DialogueAnimation animation = DialogueAnimation.read(buffer);
 			
-			return new DialogueData(message, guiBackground, responses);
+			return new DialogueData(message, guiBackground, responses, animation);
 		}
 		
 		public void write(FriendlyByteBuf buffer)
@@ -270,6 +269,7 @@ public final class Dialogue
 			buffer.writeComponent(this.message);
 			buffer.writeResourceLocation(this.guiBackground);
 			buffer.writeCollection(this.responses, (byteBuf, responseData) -> responseData.write(byteBuf));
+			this.animation.write(buffer);
 		}
 	}
 	
