@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "minestuck:block/sandy_grass0"
+      },
+      {
+        "model": "minestuck:block/sandy_grass1"
+      }
+    ]
+  }
+}

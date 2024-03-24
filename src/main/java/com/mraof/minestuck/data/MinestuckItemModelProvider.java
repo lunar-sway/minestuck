@@ -544,6 +544,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.ENDER_BUCKET);
 		simpleItem(MSItems.LIGHT_WATER_BUCKET);
 		simpleItem(MSItems.OBSIDIAN_BUCKET);
+		simpleItem(MSItems.CAULK_BUCKET);
+		simpleItem(MSItems.MOLTEN_AMBER_BUCKET);
 		
 		
 		//Alchemy Items

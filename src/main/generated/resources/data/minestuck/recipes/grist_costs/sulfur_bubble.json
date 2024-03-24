@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:sulfur": 4
+  },
+  "ingredient": {
+    "item": "minestuck:sulfur_bubble"
+  }
+}
