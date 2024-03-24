@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixes some niche issues with connections
 - `/sburbpredefine` now gives an error when applied to a player that already has a land
 - Fixed missing data sync for land types after using `/debuglands`
+- Added command success message to `/debuglands`
 - Fixed player owner id not loading for mini alchemiter and grist widget
 
 ### Contributors for this release

@@ -596,6 +596,7 @@
   "commands.minestuck.check_land.fail": "You are currently not in a land dimension.",
   "commands.minestuck.debuglands.invalid_chain": "The given land list is not valid for this command",
   "commands.minestuck.debuglands.must_enter": "You must have entered before you can create debug lands",
+  "commands.minestuck.debuglands.success": "Created %d lands connected to %s",
   "commands.minestuck.get_rung": "%s's current echeladder rung is: %d.",
   "commands.minestuck.grist.add": "Successfully modified the grist cache for %s players.",
   "commands.minestuck.grist.add.failure": "Failed to modify the grist cache for %s.",

@@ -31,6 +31,7 @@ import java.util.Objects;
  */
 public class DebugLandsCommand
 {
+	public static final String SUCCESS = "commands.minestuck.debuglands.success";
 	public static final String MUST_ENTER = "commands.minestuck.debuglands.must_enter";
 	public static final SimpleCommandExceptionType MUST_ENTER_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(MUST_ENTER));
 	public static final String INVALID_CHAIN = "commands.minestuck.debuglands.invalid_chain";
@@ -47,11 +48,13 @@ public class DebugLandsCommand
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player), "Command was executed on a fake player");
-		createDebugLandsChain(playerId, landTypes, source.getServer());
-		return 1;
+		int createdLands = createDebugLandsChain(playerId, landTypes, source.getServer());
+		
+		source.sendSuccess(() -> Component.translatable(SUCCESS, createdLands, player.getDisplayName()), true);
+		return createdLands;
 	}
 	
-	private static void createDebugLandsChain(PlayerIdentifier playerId, List<LandTypePair> landTypes, MinecraftServer mcServer) throws CommandSyntaxException
+	private static int createDebugLandsChain(PlayerIdentifier playerId, List<LandTypePair> landTypes, MinecraftServer mcServer) throws CommandSyntaxException
 	{
 		if(!SburbPlayerData.get(playerId, mcServer).hasEntered())
 			throw MUST_ENTER_EXCEPTION.create();
@@ -74,6 +77,9 @@ public class DebugLandsCommand
 			}
 			
 			connectAndCreateLands(landEntries, connections, mcServer);
+			
+			MSDimensions.sendLandTypesToAll(mcServer);
+			return landEntries.size();
 		} else
 		{
 			if(landTypes.lastIndexOf(null) != openChainIndex)
@@ -89,9 +95,10 @@ public class DebugLandsCommand
 			
 			connectAndCreateLands(landEntries1, connections, mcServer);
 			connectAndCreateLands(landEntries2, connections, mcServer);
+			
+			MSDimensions.sendLandTypesToAll(mcServer);
+			return landEntries1.size() + landEntries2.size();
 		}
-		
-		MSDimensions.sendLandTypesToAll(mcServer);
 	}
 	
 	private static void connectAndCreateLands(List<LandEntry> landEntries2, SburbConnections connections, MinecraftServer mcServer)
