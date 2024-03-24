@@ -1,0 +1,45 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "barter"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.hungry.first_no",
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:has_matched_item"
+            },
+            "message": "minestuck.dialogue.consort.hungry.first_no.yes",
+            "next_dialogue": "minestuck:consort/hungry/finally",
+            "triggers": [
+              {
+                "type": "minestuck:take_matched_item"
+              },
+              {
+                "type": "minestuck:add_boondollars",
+                "boondollars": 10
+              },
+              {
+                "type": "minestuck:set_player_dialogue",
+                "dialogue": "minestuck:consort/hungry/finally2"
+              }
+            ]
+          },
+          {
+            "message": "minestuck.dialogue.consort.hungry.first_no.no",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/end",
+              "set_as_entrypoint": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.sad_face"
+  }
+}

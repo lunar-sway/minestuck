@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:thunder"
+  },
+  "dialogue": "minestuck:consort_general_merchant/doom",
+  "keep_on_reset": true
+}

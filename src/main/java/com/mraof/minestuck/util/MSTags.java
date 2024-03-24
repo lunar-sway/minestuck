@@ -200,6 +200,7 @@ public class MSTags
 		public static final TagKey<TerrainLandType> ROCK = tag("rock");
 		public static final TagKey<TerrainLandType> SAND = tag("sand");
 		public static final TagKey<TerrainLandType> SANDSTONE = tag("sandstone");
+		public static final TagKey<TerrainLandType> IS_DESOLATE = tag("is_desolate");
 		
 		private static TagKey<TerrainLandType> tag(String name)
 		{

@@ -1,0 +1,20 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.denizen.start"
+    },
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.denizen.start.what",
+        "next_dialogue": "minestuck:consort/denizen/explain"
+      },
+      {
+        "message": "minestuck.dialogue.consort.denizen.start.alignment",
+        "next_dialogue": "minestuck:consort/denizen/alignment"
+      }
+    ]
+  }
+}

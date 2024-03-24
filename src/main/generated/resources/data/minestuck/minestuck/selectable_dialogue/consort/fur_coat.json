@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:terrain_land_type",
+    "land_type": "minestuck:frost"
+  },
+  "dialogue": "minestuck:consort/fur_coat/start"
+}

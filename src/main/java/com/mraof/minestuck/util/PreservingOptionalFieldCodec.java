@@ -21,6 +21,13 @@ public final class PreservingOptionalFieldCodec<A> extends MapCodec<Optional<A>>
 						list -> list.isEmpty() ? Optional.empty() : Optional.of(list));
 	}
 	
+	public static <A> MapCodec<A> withDefault(Codec<A> elementCodec, String name, A defaultValue)
+	{
+		return new PreservingOptionalFieldCodec<>(elementCodec, name)
+				.xmap(optional -> optional.orElse(defaultValue),
+						value -> value.equals(defaultValue) ? Optional.empty() : Optional.of(value));
+	}
+	
 	private final Codec<A> elementCodec;
 	private final String name;
 	

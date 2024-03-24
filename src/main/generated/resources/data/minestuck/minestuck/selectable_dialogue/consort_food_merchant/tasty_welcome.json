@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:entity_type",
+    "entity_type": "minestuck:turtle"
+  },
+  "dialogue": "minestuck:consort_food_merchant/tasty_welcome",
+  "keep_on_reset": true
+}

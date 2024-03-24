@@ -1,5 +1,6 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.MinestuckConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -29,6 +30,9 @@ public final class Title
 	
 	private final EnumClass heroClass;
 	private final EnumAspect heroAspect;
+	
+	public static final Codec<EnumClass> CLASS_CODEC = Codec.STRING.xmap(EnumClass::valueOf, EnumClass::name);
+	public static final Codec<EnumAspect> ASPECT_CODEC = Codec.STRING.xmap(EnumAspect::valueOf, EnumAspect::name);
 
 	public Title(EnumClass heroClass, EnumAspect heroAspect)
 	{
