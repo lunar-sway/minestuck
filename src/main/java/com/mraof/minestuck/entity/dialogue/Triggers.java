@@ -27,8 +27,6 @@ public final class Triggers
 		REGISTER.register("add_boondollars", () -> Trigger.AddBoondollars.CODEC);
 		REGISTER.register("explode", () -> Trigger.Explode.CODEC);
 		REGISTER.register("set_flag", () -> Trigger.SetFlag.CODEC);
-		REGISTER.register("set_player_flag", () -> Trigger.SetPlayerFlag.CODEC);
 		REGISTER.register("set_random_flag", () -> Trigger.SetRandomFlag.CODEC);
-		REGISTER.register("set_random_player_flag", () -> Trigger.SetRandomPlayerFlag.CODEC);
 	}
 }

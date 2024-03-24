@@ -736,28 +736,12 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
-			return entity instanceof DialogueEntity dialogueEntity
-					&& dialogueEntity.getDialogueComponent().flags().contains(this.flag);
-		}
-	}
-	
-	record PlayerFlag(String flag) implements Condition
-	{
-		static final Codec<PlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.STRING.fieldOf("flag").forGetter(PlayerFlag::flag)
-		).apply(instance, PlayerFlag::new));
-		
-		@Override
-		public Codec<PlayerFlag> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
-		{
-			return entity instanceof DialogueEntity dialogueEntity
-					&& dialogueEntity.getDialogueComponent().playerFlags(player).contains(this.flag);
+			if(entity instanceof DialogueEntity dialogueEntity)
+			{
+				DialogueComponent component = dialogueEntity.getDialogueComponent();
+				return component.flags().contains(this.flag) || component.playerFlags(player).contains(this.flag);
+			}
+			return false;
 		}
 	}
 	

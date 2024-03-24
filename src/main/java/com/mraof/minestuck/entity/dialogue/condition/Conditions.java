@@ -45,7 +45,6 @@ public final class Conditions
 		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
 		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Condition.Flag.CODEC);
-		REGISTER.register("player_flag", () -> Condition.PlayerFlag.CODEC);
 		REGISTER.register("near_spawn", () -> Condition.NearSpawn.CODEC);
 		REGISTER.register("has_player_entered", () -> Condition.HasPlayerEntered.CODEC);
 		REGISTER.register("is_in_skaia", () -> Condition.IsInSkaia.CODEC);

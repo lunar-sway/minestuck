@@ -18,7 +18,8 @@
               "rap_d",
               "rap_e",
               "rap_f"
-            ]
+            ],
+            "player_specific": false
           }
         ]
       },

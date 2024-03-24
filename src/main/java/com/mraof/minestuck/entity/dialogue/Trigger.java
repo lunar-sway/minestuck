@@ -347,10 +347,11 @@ public sealed interface Trigger
 		}
 	}
 	
-	record SetFlag(String flag) implements Trigger
+	record SetFlag(String flag, boolean isPlayerSpecific) implements Trigger
 	{
 		static final Codec<SetFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.STRING.fieldOf("flag").forGetter(SetFlag::flag)
+				Codec.STRING.fieldOf("flag").forGetter(SetFlag::flag),
+				Codec.BOOL.fieldOf("player_specific").forGetter(SetFlag::isPlayerSpecific)
 		).apply(instance, SetFlag::new));
 		
 		@Override
@@ -363,34 +364,19 @@ public sealed interface Trigger
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
 			if(entity instanceof DialogueEntity dialogueEntity)
-				dialogueEntity.getDialogueComponent().flags().add(this.flag);
+			{
+				DialogueComponent component = dialogueEntity.getDialogueComponent();
+				Set<String> flags = this.isPlayerSpecific ? component.playerFlags(player) : component.flags();
+				flags.add(this.flag);
+			}
 		}
 	}
 	
-	record SetPlayerFlag(String flag) implements Trigger
-	{
-		static final Codec<SetPlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.STRING.fieldOf("flag").forGetter(SetPlayerFlag::flag)
-		).apply(instance, SetPlayerFlag::new));
-		
-		@Override
-		public Codec<SetPlayerFlag> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public void triggerEffect(LivingEntity entity, ServerPlayer player)
-		{
-			if(entity instanceof DialogueEntity dialogueEntity)
-				dialogueEntity.getDialogueComponent().playerFlags(player).add(this.flag);
-		}
-	}
-	
-	record SetRandomFlag(List<String> flags) implements Trigger
+	record SetRandomFlag(List<String> flags, boolean isPlayerSpecific) implements Trigger
 	{
 		static final Codec<SetRandomFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.STRING.listOf().fieldOf("flags").forGetter(SetRandomFlag::flags)
+				Codec.STRING.listOf().fieldOf("flags").forGetter(SetRandomFlag::flags),
+				Codec.BOOL.fieldOf("player_specific").forGetter(SetRandomFlag::isPlayerSpecific)
 		).apply(instance, SetRandomFlag::new));
 		
 		@Override
@@ -407,36 +393,10 @@ public sealed interface Trigger
 			
 			if(entity instanceof DialogueEntity dialogueEntity)
 			{
-				Set<String> playerFlags = dialogueEntity.getDialogueComponent().flags();
-				if(flags.stream().noneMatch(playerFlags::contains))
-					playerFlags.add(Util.getRandom(this.flags, entity.getRandom()));
-			}
-		}
-	}
-	
-	record SetRandomPlayerFlag(List<String> flags) implements Trigger
-	{
-		static final Codec<SetRandomPlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.STRING.listOf().fieldOf("flags").forGetter(SetRandomPlayerFlag::flags)
-		).apply(instance, SetRandomPlayerFlag::new));
-		
-		@Override
-		public Codec<SetRandomPlayerFlag> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public void triggerEffect(LivingEntity entity, ServerPlayer player)
-		{
-			if(this.flags.isEmpty())
-				return;
-			
-			if(entity instanceof DialogueEntity dialogueEntity)
-			{
-				Set<String> playerFlags = dialogueEntity.getDialogueComponent().playerFlags(player);
-				if(flags.stream().noneMatch(playerFlags::contains))
-					playerFlags.add(Util.getRandom(this.flags, entity.getRandom()));
+				DialogueComponent component = dialogueEntity.getDialogueComponent();
+				Set<String> flags = this.isPlayerSpecific ? component.playerFlags(player) : component.flags();
+				if(this.flags.stream().noneMatch(flags::contains))
+					flags.add(Util.getRandom(this.flags, entity.getRandom()));
 			}
 		}
 	}
