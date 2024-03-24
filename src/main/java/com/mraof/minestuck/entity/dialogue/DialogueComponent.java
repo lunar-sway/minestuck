@@ -23,7 +23,7 @@ public final class DialogueComponent
 	
 	private final LivingEntity entity;
 	@Nullable
-	private ResourceLocation activeDialogue;
+	private ResourceLocation startingDialogue;
 	private final Map<UUID, ResourceLocation> dialogueEntrypoint = new HashMap<>();
 	private boolean keepOnReset;
 	private boolean hasGeneratedOnce = false;
@@ -41,7 +41,7 @@ public final class DialogueComponent
 	{
 		if(tag.contains("dialogue_id", CompoundTag.TAG_STRING))
 		{
-			this.activeDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
+			this.startingDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
 			this.keepOnReset = tag.getBoolean("keep_on_reset");
 			this.hasGeneratedOnce = true;
 			
@@ -73,9 +73,9 @@ public final class DialogueComponent
 	public CompoundTag write()
 	{
 		CompoundTag tag = new CompoundTag();
-		if(this.activeDialogue != null)
+		if(this.startingDialogue != null)
 		{
-			tag.putString("dialogue_id", this.activeDialogue.toString());
+			tag.putString("dialogue_id", this.startingDialogue.toString());
 			tag.putBoolean("keep_on_reset", this.keepOnReset);
 			
 			ListTag flagsTag = new ListTag();
@@ -130,13 +130,13 @@ public final class DialogueComponent
 	public void setDialogue(ResourceLocation dialogueId, boolean keepOnReset)
 	{
 		this.hasGeneratedOnce = true;
-		this.activeDialogue = dialogueId;
+		this.startingDialogue = dialogueId;
 		this.keepOnReset = keepOnReset;
 	}
 	
-	public Optional<ResourceLocation> getActiveDialogue()
+	public Optional<ResourceLocation> getStartingDialogue()
 	{
-		return Optional.ofNullable(this.activeDialogue);
+		return Optional.ofNullable(this.startingDialogue);
 	}
 	
 	public void setDialogueForPlayer(ServerPlayer player, ResourceLocation dialogueId)
@@ -146,12 +146,12 @@ public final class DialogueComponent
 	
 	public Optional<ResourceLocation> getDialogueForPlayer(ServerPlayer player)
 	{
-		return Optional.ofNullable(this.dialogueEntrypoint.getOrDefault(player.getUUID(), this.activeDialogue));
+		return Optional.ofNullable(this.dialogueEntrypoint.getOrDefault(player.getUUID(), this.startingDialogue));
 	}
 	
 	public boolean hasActiveDialogue()
 	{
-		return this.activeDialogue != null;
+		return this.startingDialogue != null;
 	}
 	
 	public Set<String> flags()
@@ -187,7 +187,7 @@ public final class DialogueComponent
 	public void resetDialogue()
 	{
 		if(!this.keepOnReset)
-			this.activeDialogue = null;
+			this.startingDialogue = null;
 		this.dialogueEntrypoint.clear();
 		this.flags.clear();
 		this.playerSpecificFlags.clear();
