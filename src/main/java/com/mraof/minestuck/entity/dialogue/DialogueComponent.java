@@ -243,11 +243,6 @@ public final class DialogueComponent
 		movedPlayers.forEach(this.ongoingDialogue::remove);
 	}
 	
-	public void setDialogueIsClosed(ServerPlayer player)
-	{
-		this.ongoingDialogue.remove(player.getUUID());
-	}
-	
 	private void closeCurrentDialogue(UUID playerId)
 	{
 		ServerPlayer player = Objects.requireNonNull(this.entity.getServer()).getPlayerList().getPlayer(playerId);
@@ -286,7 +281,7 @@ public final class DialogueComponent
 	{
 		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
 				.orElseThrow(IllegalStateException::new);
-		dialogueData.getComponent(player.level()).ifPresent(oldComponent -> oldComponent.setDialogueIsClosed(player));
+		dialogueData.getComponent(player.level()).ifPresent(oldComponent -> oldComponent.clearOngoingDialogue(player));
 		
 		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, player);
 		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, player);
@@ -307,7 +302,7 @@ public final class DialogueComponent
 				);
 	}
 	
-	public void clearCurrentNode(ServerPlayer player)
+	public void clearOngoingDialogue(ServerPlayer player)
 	{
 		this.ongoingDialogue.remove(player.getUUID());
 	}

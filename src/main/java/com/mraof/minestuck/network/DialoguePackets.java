@@ -75,7 +75,7 @@ public final class DialoguePackets
 			player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
 					.orElseThrow(IllegalStateException::new)
 					.validateAndGetComponent(player.level(), this.dialogueId)
-					.ifPresent(component -> component.setDialogueIsClosed(player));
+					.ifPresent(component -> component.clearOngoingDialogue(player));
 		}
 	}
 	
@@ -108,7 +108,7 @@ public final class DialoguePackets
 		private void findAndTriggerResponse(ServerPlayer player, DialogueComponent component)
 		{
 			Optional<Dialogue.Node> optionalNode = component.validateAndGetCurrentNode(player);
-			component.clearCurrentNode(player);
+			component.clearOngoingDialogue(player);
 			optionalNode.flatMap(node -> node.getResponseIfValid(this.responseIndex))
 					.ifPresent(response -> response.trigger(component, player));
 		}
