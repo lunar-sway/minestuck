@@ -284,13 +284,15 @@ public final class DialogueComponent
 	
 	public void openScreenForDialogue(ServerPlayer player, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue)
 	{
+		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
+				.orElseThrow(IllegalStateException::new);
+		dialogueData.getComponent(player.level()).ifPresent(oldComponent -> oldComponent.setDialogueIsClosed(player));
+		
 		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, player);
 		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, player);
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		
 		this.ongoingDialogue.put(player.getUUID(), new OngoingDialogue(nodeReference, player.position()));
-		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
-				.orElseThrow(IllegalStateException::new);
 		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(dialogueData.newDialogue(this.entity), data);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
@@ -336,9 +338,17 @@ public final class DialogueComponent
 			return ++dialogueCounter;
 		}
 		
-		public Optional<DialogueComponent> validateAndGetActiveComponent(Level level, int dialogueId)
+		public Optional<DialogueComponent> validateAndGetComponent(Level level, int dialogueId)
 		{
-			if(dialogueId != this.dialogueCounter || this.entityId == null)
+			if(dialogueId != this.dialogueCounter)
+				return Optional.empty();
+			
+			return this.getComponent(level);
+		}
+		
+		public Optional<DialogueComponent> getComponent(Level level)
+		{
+			if(this.entityId == null)
 				return Optional.empty();
 			
 			Entity entity = level.getEntity(this.entityId);
