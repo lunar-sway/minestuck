@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
@@ -335,13 +336,12 @@ public final class DialogueComponent
 			return ++dialogueCounter;
 		}
 		
-		public Optional<DialogueComponent> validateAndGetActiveComponent(ServerPlayer player, int dialogueId)
+		public Optional<DialogueComponent> validateAndGetActiveComponent(Level level, int dialogueId)
 		{
-			CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE).orElseThrow(IllegalStateException::new);
-			if(dialogueId != dialogueData.dialogueCounter || dialogueData.entityId == null)
+			if(dialogueId != this.dialogueCounter || this.entityId == null)
 				return Optional.empty();
 			
-			@SuppressWarnings("resource") Entity entity = player.level().getEntity(dialogueData.entityId);
+			Entity entity = level.getEntity(this.entityId);
 			if(!(entity instanceof DialogueEntity dialogueEntity))
 				return Optional.empty();
 			

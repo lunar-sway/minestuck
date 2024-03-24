@@ -74,7 +74,7 @@ public final class DialoguePackets
 		{
 			player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
 					.orElseThrow(IllegalStateException::new)
-					.validateAndGetActiveComponent(player, this.dialogueId)
+					.validateAndGetActiveComponent(player.level(), this.dialogueId)
 					.ifPresent(component -> component.setDialogueIsClosed(player));
 		}
 	}
@@ -101,7 +101,7 @@ public final class DialoguePackets
 		{
 			player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
 					.orElseThrow(IllegalStateException::new)
-					.validateAndGetActiveComponent(player, this.dialogueId)
+					.validateAndGetActiveComponent(player.level(), this.dialogueId)
 					.ifPresent(component -> findAndTriggerResponse(player, component));
 		}
 		
