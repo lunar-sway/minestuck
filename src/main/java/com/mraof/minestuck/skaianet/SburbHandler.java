@@ -206,7 +206,6 @@ public final class SburbHandler
 	{
 		Random rand = new Random();	//TODO seed?
 		playerData.artifactType = SburbPlayerData.ArtifactType.values()[rand.nextInt(SburbPlayerData.ArtifactType.values().length)];
-		LOGGER.info("Randomized artifact type to be: {} for player {}.", playerData.artifactType.name(), playerData.playerId().getUsername());
 		playerData.setBaseGrist(generateGristType(rand));
 	}
 	

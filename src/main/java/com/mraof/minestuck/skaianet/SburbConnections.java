@@ -118,6 +118,8 @@ public final class SburbConnections
 		}
 		if(isMain)
 			this.primaryClientToServerMap.put(client.get(), server);
+		
+		LOGGER.debug("Parsed old connection between {} and {}", client.get(), server);
 	}
 	
 	public static SburbConnections get(MinecraftServer mcServer)
@@ -336,6 +338,7 @@ public final class SburbConnections
 		this.closeConnectionIf(connection -> !connection.client().equals(client) && connection.server().equals(server)
 						&& !this.hasPrimaryConnectionForClient(connection.client()));
 		
+		LOGGER.debug("Connecting players {} and {}", client, server);
 		primaryClientToServerMap.put(client, Optional.of(server));
 		
 		skaianetData.sessionHandler.onConnect(client, server);
@@ -355,6 +358,7 @@ public final class SburbConnections
 		if(oldServerPlayer.isEmpty())
 			return;
 		
+		LOGGER.debug("Disconnecting server {} from client {}", oldServerPlayer.get(), clientPlayer);
 		this.getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
 		primaryClientToServerMap.put(clientPlayer, Optional.empty());
 		
