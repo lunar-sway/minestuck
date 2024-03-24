@@ -4,15 +4,13 @@ import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSCapabilities;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,6 +57,14 @@ public final class DialogueComponent
 				entryTag.getList("flags", Tag.TAG_STRING).stream().map(StringTag.class::cast)
 						.map(StringTag::getAsString).forEach(playerFlags::add);
 			});
+			
+			this.matchedItem.clear();
+			tag.getList("matched_item", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag -> {
+				UUID player = entryTag.getUUID("player");
+				ForgeRegistries.ITEMS.getCodec().parse(NbtOps.INSTANCE, entryTag.get("item"))
+						.resultOrPartial(LOGGER::error)
+						.ifPresent(item -> this.matchedItem.put(player, item));
+			});
 		}
 		else
 			this.hasGeneratedOnce = tag.getBoolean("has_generated");
@@ -86,6 +92,19 @@ public final class DialogueComponent
 				playerFlagsMapTag.add(entryTag);
 			});
 			tag.put("player_flags", playerFlagsMapTag);
+			
+			ListTag matchedItemTag = new ListTag();
+			this.matchedItem.forEach((player, item) -> {
+				CompoundTag entryTag = new CompoundTag();
+				entryTag.putUUID("player", player);
+				ForgeRegistries.ITEMS.getCodec().encodeStart(NbtOps.INSTANCE, item)
+						.resultOrPartial(LOGGER::error)
+						.ifPresent(itemTag -> {
+							entryTag.put("item", itemTag);
+							matchedItemTag.add(entryTag);
+						});
+			});
+			tag.put("matched_item", matchedItemTag);
 		}
 		
 		tag.putBoolean("has_generated", this.hasGeneratedOnce);
