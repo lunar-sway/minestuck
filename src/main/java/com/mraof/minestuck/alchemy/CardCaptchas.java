@@ -32,12 +32,11 @@ public final class CardCaptchas
 	
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
-	
 	private final BiMap<Item, String> captchasMap = HashBiMap.create();
 	
 	public CardCaptchas()
 	{
-		this.setupPredeterminedCaptchas();
+	
 	}
 	
 	/**
@@ -49,7 +48,16 @@ public final class CardCaptchas
 		MSExtraData data = MSExtraData.get(server);
 		CardCaptchas captchas = data.getCardCaptchas();
 		
-		if(captchas.captchasMap.containsKey(item))
+		if(PredeterminedCardCaptchas.predefinedCardMap.containsKey(item) && captchas.captchasMap.containsKey(item))
+		{
+			captchas.captchasMap.remove(item);
+		}
+		
+		if(PredeterminedCardCaptchas.predefinedCardMap.containsKey(item))
+		{
+			return PredeterminedCardCaptchas.predefinedCardMap.get(item);
+		}
+		else if(captchas.captchasMap.containsKey(item))
 			return captchas.captchasMap.get(item);
 		else
 		{
@@ -63,7 +71,22 @@ public final class CardCaptchas
 	@Nullable
 	public static Item getItemFromCaptcha(String captcha, MinecraftServer server)
 	{
-		return MSExtraData.get(server).getCardCaptchas().captchasMap.inverse().get(captcha);
+		MSExtraData data = MSExtraData.get(server);
+		CardCaptchas captchas = data.getCardCaptchas();
+		
+		if(PredeterminedCardCaptchas.predefinedCardMap.inverse().containsKey(captcha) && captchas.captchasMap.inverse().containsKey(captcha))
+		{
+			captchas.captchasMap.inverse().remove(captcha);
+		}
+		
+		if(PredeterminedCardCaptchas.predefinedCardMap.inverse().containsKey(captcha))
+		{
+			return PredeterminedCardCaptchas.predefinedCardMap.inverse().get(captcha);
+		}
+		else
+		{
+			return MSExtraData.get(server).getCardCaptchas().captchasMap.inverse().get(captcha);
+		}
 	}
 	
 	public CompoundTag serialize()
@@ -92,14 +115,6 @@ public final class CardCaptchas
 		}
 	}
 	
-	
-	
-	private void setupPredeterminedCaptchas()
-	{
-		predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
-		predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
-	}
-	
 	/**
 	 * Creates a captcha from the registry name of the item and then adds it to a BiMap.
 	 * There is some simple collision detection and backup captchas for redundancy
@@ -121,11 +136,6 @@ public final class CardCaptchas
 			return generateBackupCaptcha(itemRandom);
 		
 		return captcha;
-	}
-	
-	private void predetermineCaptcha(Item item, String captcha)
-	{
-		captchasMap.put(item, captcha);
 	}
 	
 	private static String createHash(String registryName)
