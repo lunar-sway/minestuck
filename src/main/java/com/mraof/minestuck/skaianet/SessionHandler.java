@@ -277,6 +277,8 @@ public sealed abstract class SessionHandler
 		void onConnect(PlayerIdentifier client, PlayerIdentifier server)
 		{
 			Session clientSession = this.getOrCreateSession(client), serverSession = this.getOrCreateSession(server);
+			if(clientSession == serverSession)
+				return;
 			
 			if(clientSession.getPlayers().size() < serverSession.getPlayers().size())
 			{
