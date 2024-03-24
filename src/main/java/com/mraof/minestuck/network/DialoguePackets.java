@@ -54,6 +54,31 @@ public final class DialoguePackets
 		}
 	}
 	
+	public record OnCloseScreen(int dialogueId) implements MSPacket.PlayToServer
+	{
+		@Override
+		public void encode(FriendlyByteBuf buffer)
+		{
+			buffer.writeInt(this.dialogueId);
+		}
+		
+		public static OnCloseScreen decode(FriendlyByteBuf buffer)
+		{
+			int dialogueId = buffer.readInt();
+			
+			return new OnCloseScreen(dialogueId);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
+					.orElseThrow(IllegalStateException::new)
+					.validateAndGetActiveComponent(player, this.dialogueId)
+					.ifPresent(component -> component.setDialogueIsClosed(player));
+		}
+	}
+	
 	public record TriggerResponse(int responseIndex, int dialogueId) implements MSPacket.PlayToServer
 	{
 		@Override

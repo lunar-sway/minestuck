@@ -15,6 +15,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Displays a screen when interacting with any dialogue capable entity that has a valid dialogue.
@@ -84,8 +85,15 @@ public class DialogueScreen extends Screen
 	private void clickResponse(Dialogue.ResponseData responseData)
 	{
 		if(responseData.shouldClose())
-			onClose();
-		MSPacketHandler.sendToServer(new DialoguePackets.TriggerResponse(responseData.index(), dialogueId));
+			Objects.requireNonNull(this.minecraft).popGuiLayer();
+		MSPacketHandler.sendToServer(new DialoguePackets.TriggerResponse(responseData.index(), this.dialogueId));
+	}
+	
+	@Override
+	public void onClose()
+	{
+		MSPacketHandler.sendToServer(new DialoguePackets.OnCloseScreen(this.dialogueId));
+		super.onClose();
 	}
 	
 	@Override

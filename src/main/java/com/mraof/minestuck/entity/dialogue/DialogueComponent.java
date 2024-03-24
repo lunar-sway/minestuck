@@ -237,6 +237,11 @@ public final class DialogueComponent
 		movedPlayers.forEach(this.ongoingDialogue::remove);
 	}
 	
+	public void setDialogueIsClosed(ServerPlayer player)
+	{
+		this.ongoingDialogue.remove(player.getUUID());
+	}
+	
 	private void closeCurrentDialogue(UUID playerId)
 	{
 		ServerPlayer player = Objects.requireNonNull(this.entity.getServer()).getPlayerList().getPlayer(playerId);
