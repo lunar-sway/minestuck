@@ -1,6 +1,4 @@
 package com.mraof.minestuck.alchemy;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.google.gson.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -27,41 +25,31 @@ import java.util.*;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class PredeterminedCaptchaLoader extends SimplePreparableReloadListener<Map<String, ResourceLocation>>
+public final class PredeterminedCaptchaLoader extends SimplePreparableReloadListener<Map<String, Item>>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final String PATH = "minestuck/captcha_codes.json";
 	
 	@Override
-	protected Map<String, ResourceLocation> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
+	protected Map<String, Item> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		Map<String, ResourceLocation> captchaData = new HashMap<>();
+		Map<String, Item> captchaData = new HashMap<>();
 		
 		for(String namespace : resourceManager.getNamespaces())
 		{
-			parseCaptchaCodesFromNamespace(resourceManager, namespace).ifPresent(parsedData -> {
-				for(String captcha : parsedData.keySet())
-					captchaData.put(captcha, parsedData.get(captcha));
-			});
+			parseCaptchaCodesFromNamespace(resourceManager, namespace).ifPresent(captchaData::putAll);
 		}
 		
 		return captchaData;
 	}
 	
 	@Override
-	protected void apply(Map<String, ResourceLocation> data, ResourceManager resourceManager, ProfilerFiller profiler)
+	protected void apply(Map<String, Item> data, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		for(String captcha : data.keySet())
+		for(Map.Entry<String, Item> entrySet : data.entrySet())
 		{
-			if(!ForgeRegistries.ITEMS.containsKey(data.get(captcha)))
-			{
-				LOGGER.atInfo().log(data.get(captcha) + " does not point to a real item");
-			}
-			
-			Item item = ForgeRegistries.ITEMS.getValue(data.get(captcha));
-			
-			PredeterminedCardCaptchas.SetData(item, captcha);
-			LOGGER.atInfo().log(item + " was added to card with string: " + captcha);
+			PredeterminedCardCaptchas.SetData(entrySet.getValue(), entrySet.getKey());
+			LOGGER.atInfo().log(entrySet.getValue() + " was added to card with string: " + entrySet.getKey());
 		}
 	}
 	
@@ -72,9 +60,9 @@ public final class PredeterminedCaptchaLoader extends SimplePreparableReloadList
 		event.addListener(new PredeterminedCaptchaLoader());
 	}
 	
-	private static final Codec<Map<String, ResourceLocation>> PREDEFINED_CAPTCHAS_CODEC = Codec.unboundedMap(Codec.STRING, ResourceLocation.CODEC);
+	private static final Codec<Map<String, Item>> PREDEFINED_CAPTCHAS_CODEC = Codec.unboundedMap(Codec.STRING, ForgeRegistries.ITEMS.getCodec());
 	
-	private static Optional<Map<String, ResourceLocation>> parseCaptchaCodesFromNamespace(ResourceManager resourceManager, String namespace)
+	private static Optional<Map<String, Item>> parseCaptchaCodesFromNamespace(ResourceManager resourceManager, String namespace)
 	{
 		return parseCodecDataFromLocation(resourceManager, new ResourceLocation(namespace, PATH), PREDEFINED_CAPTCHAS_CODEC);
 	}

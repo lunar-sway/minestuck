@@ -3,7 +3,6 @@ package com.mraof.minestuck.alchemy;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
