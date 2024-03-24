@@ -79,6 +79,7 @@ public class DialogueScreen extends Screen
 	
 	private static MutableComponent conditionFailMessage(Component causes)
 	{
+		//todo language key
 		return Component.literal("Cannot be picked because:").append("\n").append(causes);
 	}
 	
