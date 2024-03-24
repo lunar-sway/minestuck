@@ -542,6 +542,8 @@ public final class ConsortDialogue
 		
 		provider.addRandomlySelectable("hungry", defaultWeight(isAnyEntityType(SALAMANDER, IGUANA, NAKAGATOR)), new FolderedDialogue(builder ->
 		{
+			String barterFlag = "barter", noBarterFlag = "no_barter";
+			
 			var finallyMsg = l.msg(builder.id(), "finally", "Finally!");
 			
 			var barterNode = new NodeBuilder(l.defaultKeyMsg("But I am starving here! What if I paid you 10 boondollars for it?"))
@@ -557,7 +559,7 @@ public final class ConsortDialogue
 							.setNextAsEntrypoint());
 			
 			var first_no = builder.add("first_no", new NodeSelectorBuilder()
-					.node(Condition.ConsortMightBarter.INSTANCE, barterNode)
+					.node(new Condition.Flag(barterFlag), barterNode)
 					.defaultNode(new NodeBuilder(sadFaceMsg)));
 			
 			builder.addStart(new NodeSelectorBuilder()    //todo create a "not hungry" dialogue node for SetDialogue trigger to be used for any other player after the consort gets its snack.
@@ -569,6 +571,18 @@ public final class ConsortDialogue
 									.nextDialogue(builder.add("thanks", new NodeBuilder(l.defaultKeyMsg("Thank you! I will remember your kindness for the rest of my short life."))))
 									.setNextAsEntrypoint())
 							.addResponse(new ResponseBuilder(noMsg)
+									.condition(isAnyEntityType(NAKAGATOR))
+									.addTrigger(new Trigger.SetFlag(barterFlag))
+									.nextDialogue(first_no)
+									.setNextAsEntrypoint())
+							.addResponse(new ResponseBuilder(noMsg)
+									.condition(isAnyEntityType(IGUANA))
+									.addTrigger(new Trigger.SetFlag(noBarterFlag))
+									.nextDialogue(first_no)
+									.setNextAsEntrypoint())
+							.addResponse(new ResponseBuilder(noMsg)
+									.condition(isAnyEntityType(SALAMANDER))
+									.addTrigger(new Trigger.SetRandomFlag(List.of(barterFlag, noBarterFlag)))
 									.nextDialogue(first_no)
 									.setNextAsEntrypoint()))
 					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm."))));

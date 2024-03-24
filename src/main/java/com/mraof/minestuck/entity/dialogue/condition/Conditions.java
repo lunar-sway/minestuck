@@ -50,7 +50,6 @@ public final class Conditions
 		REGISTER.register("has_player_entered", () -> Condition.HasPlayerEntered.CODEC);
 		REGISTER.register("is_in_skaia", () -> Condition.IsInSkaia.CODEC);
 		REGISTER.register("consort_visited_skaia", () -> Condition.ConsortVisitedSkaia.CODEC);
-		REGISTER.register("consort_might_barter", () -> Condition.ConsortMightBarter.CODEC);
 	}
 	
 	public static Condition alwaysTrue()

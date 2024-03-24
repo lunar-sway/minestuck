@@ -347,6 +347,26 @@ public sealed interface Trigger
 		}
 	}
 	
+	record SetFlag(String flag) implements Trigger
+	{
+		static final Codec<SetFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("flag").forGetter(SetFlag::flag)
+		).apply(instance, SetFlag::new));
+		
+		@Override
+		public Codec<SetFlag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(entity instanceof DialogueEntity dialogueEntity)
+				dialogueEntity.getDialogueComponent().flags().add(this.flag);
+		}
+	}
+	
 	record SetPlayerFlag(String flag) implements Trigger
 	{
 		static final Codec<SetPlayerFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(

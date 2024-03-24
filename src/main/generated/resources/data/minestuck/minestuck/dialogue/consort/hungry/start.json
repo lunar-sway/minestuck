@@ -33,11 +33,58 @@
             ]
           },
           {
+            "condition": {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:nakagator"
+            },
             "message": "minestuck.dialogue.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/first_no",
               "set_as_entrypoint": true
-            }
+            },
+            "triggers": [
+              {
+                "type": "minestuck:set_flag",
+                "flag": "barter"
+              }
+            ]
+          },
+          {
+            "condition": {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:iguana"
+            },
+            "message": "minestuck.dialogue.no",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/first_no",
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "minestuck:set_flag",
+                "flag": "no_barter"
+              }
+            ]
+          },
+          {
+            "condition": {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:salamander"
+            },
+            "message": "minestuck.dialogue.no",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/first_no",
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "minestuck:set_random_flag",
+                "flags": [
+                  "barter",
+                  "no_barter"
+                ]
+              }
+            ]
           }
         ]
       }

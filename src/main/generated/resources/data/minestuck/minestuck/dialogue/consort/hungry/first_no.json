@@ -2,7 +2,8 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type": "minestuck:consort_might_barter"
+        "type": "minestuck:flag",
+        "flag": "barter"
       },
       "node": {
         "message": "minestuck.dialogue.consort.hungry.first_no",

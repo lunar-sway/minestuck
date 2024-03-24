@@ -839,22 +839,4 @@ public interface Condition
 		}
 	}
 	
-	enum ConsortMightBarter implements NpcOnlyCondition
-	{
-		INSTANCE;
-		static final Codec<ConsortMightBarter> CODEC = Codec.unit(INSTANCE);
-		
-		
-		@Override
-		public Codec<ConsortMightBarter> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity instanceof ConsortEntity consort && consort.mightBarter();
-		}
-	}
 }
