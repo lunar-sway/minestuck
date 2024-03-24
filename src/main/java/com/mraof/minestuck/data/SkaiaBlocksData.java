@@ -68,7 +68,7 @@ public final class SkaiaBlocksData
 		provider.add(DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Dark Gray Chess Brick Stairs");
 		provider.add(DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB, "Smooth Dark Gray Chess Brick Slab");
 		provider.add(DARK_GRAY_CHESS_BRICK_SMOOTH_WALL, "Smooth Dark Gray Chess Brick Wall");
-		provider.add(DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "DBrick ark Gray Chess Smooth Pressure Plate");
+		provider.add(DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth Dark Gray Chess Brick Pressure Plate");
 		provider.add(DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Dark Gray Chess Brick Button");
 		
 		provider.add(LIGHT_GRAY_CHESS_BRICKS, "Light Gray Chess Bricks");
@@ -77,10 +77,10 @@ public final class SkaiaBlocksData
 		provider.add(LIGHT_GRAY_CHESS_BRICK_WALL, "Light Gray Chess Brick Wall");
 		provider.add(LIGHT_GRAY_CHESS_BRICK_TRIM, "Light Gray Chess Brick Trim");
 		
-		provider.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH, "Smooth Light Gray Black Chess Brick");
+		provider.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH, "Smooth Light Gray Chess Brick");
 		provider.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Light Gray Chess Brick Stairs");
 		provider.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB, "Smooth Light Gray Chess Brick Slab");
-		provider.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL, "LSmooth ight Gray Chess Brick Wall");
+		provider.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL, "Smooth Light Gray Chess Brick Wall");
 		provider.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth Light Gray Chess Brick Pressure Plate");
 		provider.add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Light Gray Chess Brick Button");
 		

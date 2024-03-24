@@ -53,6 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Double slabs will now drop two slabs when broken
 - Sneaking now prevents trajectory blocks from moving the player
+- Fixed name typos for some chess castle blocks
 
 ### Removed
 
