@@ -3,8 +3,10 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
@@ -111,7 +113,7 @@ public final class Dialogue
 				isFirst = false;
 			}
 			
-			return new DialogueData(text, this.guiPath(), responses, this.animation);
+			return new DialogueData(text, this.guiPath(), responses, this.animation, ((DialogueEntity) entity).getSpriteType());
 		}
 		
 		private Component buildMessage(Pair<MessageType, DialogueMessage> messagePair, LivingEntity entity, ServerPlayer player)
@@ -123,8 +125,11 @@ public final class Dialogue
 					MutableComponent component = Component.translatable(DIALOGUE_FORMAT,
 							entity.getDisplayName(), messageComponent);
 					
-					if(entity instanceof ConsortEntity consort)
-						component.withStyle(consort.getConsortType().getColor());
+					//color formats the name and message of the npc if enabled
+					if(entity instanceof DialogueEntity dialogueEntity && MinestuckConfig.CLIENT.npcDialogueTextColors.get())
+					{
+						component.withStyle(dialogueEntity.getChatColor());
+					}
 					
 					yield component;
 				}
@@ -159,19 +164,6 @@ public final class Dialogue
 		public String getSerializedName()
 		{
 			return this.name().toLowerCase(Locale.ROOT);
-		}
-		
-		public Optional<Response> getResponseIfValid(int responseIndex)
-		{
-			if(responseIndex < 0 || this.responses().size() <= responseIndex)
-				return Optional.empty();
-			
-			return Optional.of(this.responses().get(responseIndex));
-		}
-		
-		public void visitConnectedDialogue(Consumer<ResourceLocation> idConsumer)
-		{
-			responses.forEach(response -> response.nextDialoguePath().ifPresent(idConsumer));
 		}
 	}
 	
@@ -252,7 +244,7 @@ public final class Dialogue
 		).apply(instance, SelectableDialogue::new));
 	}
 	
-	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimation animation)
+	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimation animation, String spriteType)
 	{
 		public static DialogueData read(FriendlyByteBuf buffer)
 		{
@@ -260,8 +252,9 @@ public final class Dialogue
 			ResourceLocation guiBackground = buffer.readResourceLocation();
 			List<ResponseData> responses = buffer.readList(ResponseData::read);
 			DialogueAnimation animation = DialogueAnimation.read(buffer);
+			String spriteType = buffer.readUtf(25);
 			
-			return new DialogueData(message, guiBackground, responses, animation);
+			return new DialogueData(message, guiBackground, responses, animation, spriteType);
 		}
 		
 		public void write(FriendlyByteBuf buffer)
@@ -270,6 +263,7 @@ public final class Dialogue
 			buffer.writeResourceLocation(this.guiBackground);
 			buffer.writeCollection(this.responses, (byteBuf, responseData) -> responseData.write(byteBuf));
 			this.animation.write(buffer);
+			buffer.writeUtf(this.spriteType, 25);
 		}
 	}
 	

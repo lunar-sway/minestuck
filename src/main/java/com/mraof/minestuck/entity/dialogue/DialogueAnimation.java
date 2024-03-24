@@ -40,9 +40,9 @@ public record DialogueAnimation(String emotion)
 	/**
 	 * Returns the animatable sprite corresponding to the entities sprite type
 	 */
-	public ResourceLocation getRenderPath(DialogueEntity entity)
+	public ResourceLocation getRenderPath(String spriteType)
 	{
-		ResourceLocation spritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + entity.getSpriteType() + "/" + emotion + ".png");
+		ResourceLocation spritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + emotion + ".png");
 		
 		//TODO the first time this is run using an invalid path, the Minecraft missing texture sprite appears briefly before fallback system activates. An error message is printed in chat
 		AbstractTexture abstractTexture = Minecraft.getInstance().getTextureManager().getTexture(spritePath);
@@ -50,7 +50,7 @@ public record DialogueAnimation(String emotion)
 		//if the sprite for the given emotion cannot be found, it will try to render the generic sprite instead. If the generic sprite cannot be found, the invalid texture is allowed to proceed
 		if(!(abstractTexture instanceof SimpleTexture))
 		{
-			ResourceLocation fallbackSpritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + entity.getSpriteType() + "/" + Emotion.GENERIC.getSerializedName() + ".png");
+			ResourceLocation fallbackSpritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + Emotion.GENERIC.getSerializedName() + ".png");
 			if(Minecraft.getInstance().getTextureManager().getTexture(fallbackSpritePath) instanceof SimpleTexture fallbackTexture)
 			{
 				ensureAnimatable(fallbackTexture, fallbackSpritePath);

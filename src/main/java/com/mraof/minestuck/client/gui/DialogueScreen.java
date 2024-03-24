@@ -3,7 +3,6 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueAnimation;
-import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,13 +12,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib.cache.texture.AnimatableTexture;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Displays a screen when interacting with any dialogue capable entity that has a valid dialogue.
@@ -190,11 +187,8 @@ public class DialogueScreen extends Screen
 	
 	private void renderAnimation(GuiGraphics guiGraphics)
 	{
-		if(!(entity instanceof DialogueEntity dialogueEntity))
-			return;
-		
 		DialogueAnimation animation = dialogueData.animation();
-		ResourceLocation sprite = animation.getRenderPath(dialogueEntity);
+		ResourceLocation sprite = animation.getRenderPath(dialogueData.spriteType());
 		
 		//if there is a .png.mcmeta file associated with the sprite, the animation for it is updated here
 		AnimatableTexture.setAndUpdate(sprite, animationTick);
