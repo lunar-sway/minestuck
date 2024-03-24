@@ -1,16 +1,15 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.entity.ModSignBlockEntity;
+import com.mraof.minestuck.entity.MSSignBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.WallHangingSignBlock;
-import net.minecraft.world.level.block.WallSignBlock;
+import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
-public class ModWallSignBlock extends WallSignBlock
+public class MSStandingSignBlock extends StandingSignBlock
 {
-	public ModWallSignBlock(Properties pProperties, WoodType pType)
+	public MSStandingSignBlock(Properties pProperties, WoodType pType)
 	{
 		super(pProperties, pType);
 	}
@@ -18,6 +17,6 @@ public class ModWallSignBlock extends WallSignBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
 	{
-		return new ModSignBlockEntity(pPos, pState);
+		return new MSSignBlockEntity(pPos, pState);
 	}
 }

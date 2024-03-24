@@ -2,26 +2,21 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.Util;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.datafix.fixes.References;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.function.BiConsumer;
-
-public class ModBlockEntities {
+public class MSBlockEntities
+{
 	
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
 			DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Minestuck.MOD_ID);
 		
-	public static final RegistryObject<BlockEntityType<ModSignBlockEntity>> MOD_SIGN =
+	public static final RegistryObject<BlockEntityType<MSSignBlockEntity>> MOD_SIGN =
 			BLOCK_ENTITIES.register("mod_sign", () ->
-					BlockEntityType.Builder.of(ModSignBlockEntity::new,
+					BlockEntityType.Builder.of(MSSignBlockEntity::new,
 							MSBlocks.CARVED_SIGN.get(), MSBlocks.CARVED_WALL_SIGN.get(),
 							MSBlocks.DEAD_SIGN.get(), MSBlocks.DEAD_WALL_SIGN.get(),
 							MSBlocks.END_SIGN.get(), MSBlocks.END_WALL_SIGN.get(),
@@ -31,9 +26,9 @@ public class ModBlockEntities {
 							MSBlocks.SHADEWOOD_SIGN.get(), MSBlocks.SHADEWOOD_WALL_SIGN.get(),
 							MSBlocks.TREATED_SIGN.get(), MSBlocks.TREATED_WALL_SIGN.get()).build(null));
 	
-	public static final RegistryObject<BlockEntityType<ModHangingSignBlockEntity>> MOD_HANGING_SIGN =
+	public static final RegistryObject<BlockEntityType<MSHangingSignBlockEntity>> MOD_HANGING_SIGN =
 			BLOCK_ENTITIES.register("mod_hanging_sign", () ->
-					BlockEntityType.Builder.of(ModHangingSignBlockEntity::new,
+					BlockEntityType.Builder.of(MSHangingSignBlockEntity::new,
 							MSBlocks.CARVED_HANGING_SIGN.get(), MSBlocks.CARVED_WALL_HANGING_SIGN.get(),
 							MSBlocks.DEAD_HANGING_SIGN.get(), MSBlocks.DEAD_WALL_HANGING_SIGN.get(),
 							MSBlocks.END_HANGING_SIGN.get(), MSBlocks.END_WALL_HANGING_SIGN.get(),

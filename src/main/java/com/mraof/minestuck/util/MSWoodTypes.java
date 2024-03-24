@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
-public class ModWoodTypes
+public class MSWoodTypes
 {
 	public static final WoodType CARVED = WoodType.register(new WoodType(Minestuck.MOD_ID + ":carved", BlockSetType.OAK));
 	public static final WoodType DEAD = WoodType.register(new WoodType(Minestuck.MOD_ID + ":dead", BlockSetType.OAK));

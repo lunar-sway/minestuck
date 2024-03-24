@@ -1,7 +1,7 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.ModBlockEntities;
+import com.mraof.minestuck.entity.MSBlockEntities;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,8 +19,8 @@ public class ModEventClientBusEvents {
 	@SubscribeEvent
 	public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
 		
-		event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
-		event.registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntities.MOD_SIGN.get(), SignRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
 	}
 	
 	
