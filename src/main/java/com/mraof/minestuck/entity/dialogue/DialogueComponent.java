@@ -153,9 +153,12 @@ public final class DialogueComponent
 	
 	public void setDialogue(ResourceLocation dialogueId, boolean keepOnReset)
 	{
+		this.closeAllCurrentDialogue();
+		
 		this.hasGeneratedOnce = true;
 		this.startingDialogue = dialogueId;
 		this.keepOnReset = keepOnReset;
+		this.overriddenStartingDialogue.clear();
 	}
 	
 	public Optional<ResourceLocation> getStartingDialogue()
