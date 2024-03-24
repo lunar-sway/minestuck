@@ -5,7 +5,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
-import com.mraof.minestuck.world.biome.LandBiomeSets;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
@@ -137,7 +137,7 @@ public abstract class TerrainLandType implements ILandType
 		private float skylightBase = 1F;
 		private Vec3 fogColor = new Vec3(0, 0, 0);
 		private Vec3 skyColor = new Vec3(0, 0, 0);
-		private LandBiomeSetType biomeSet = LandBiomeSets.DEFAULT_LAND;
+		private LandBiomeSetType biomeSet = MSBiomes.DEFAULT_LAND;
 		private Supplier<SoundEvent> backgroundMusic = MSSoundEvents.MUSIC_DEFAULT;
 		
 		public Builder(Supplier<? extends EntityType<? extends ConsortEntity>> consortType)

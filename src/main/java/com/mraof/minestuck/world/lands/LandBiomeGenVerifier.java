@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands;
 
-import com.mraof.minestuck.world.biome.LandBiomeSets;
 import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.FeatureModifier;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -65,7 +65,7 @@ public class LandBiomeGenVerifier
 		{
 			try
 			{
-				landType.addBiomeGeneration(builder, StructureBlockRegistry.getOrDefault(null), LandBiomeSets.DEFAULT_LAND);
+				landType.addBiomeGeneration(builder, StructureBlockRegistry.getOrDefault(null), MSBiomes.DEFAULT_LAND);
 			} catch(RuntimeException e)
 			{
 				LOGGER.error("Detected issue with title land type {}:", landType, e);

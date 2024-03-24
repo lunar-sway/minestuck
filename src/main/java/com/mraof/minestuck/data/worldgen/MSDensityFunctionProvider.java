@@ -1,7 +1,5 @@
 package com.mraof.minestuck.data.worldgen;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -25,22 +23,17 @@ public final class MSDensityFunctionProvider
 		DensityFunction shiftX = registerAndGet(context, SHIFT_X, DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.shiftA(noise.getOrThrow(Noises.SHIFT)))));
 		DensityFunction shiftZ = registerAndGet(context, SHIFT_Z, DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.shiftB(noise.getOrThrow(Noises.SHIFT)))));
 		
-		Holder<DensityFunction> skaiaRidges = context.register(key("skaia/ridges"), base2dNoise(shiftX, shiftZ, noise.getOrThrow(SkaiaObjects.SKAIA_RIDGES_NOISE)));
+		Holder<DensityFunction> skaiaRidges = context.register(SKAIA_RIDGES, base2dNoise(shiftX, shiftZ, noise.getOrThrow(MSNoiseParameters.SKAIA_RIDGES)));
 		
-		DensityFunction skaiaOffset = registerAndGet(context, key("skaia/offset"), skaiaOffset(skaiaRidges));
-		DensityFunction skaiaDepth = registerAndGet(context, key("skaia/depth"), depth(skaiaOffset));
+		DensityFunction skaiaOffset = registerAndGet(context, SKAIA_OFFSET, skaiaOffset(skaiaRidges));
+		DensityFunction skaiaDepth = registerAndGet(context, SKAIA_DEPTH, depth(skaiaOffset));
 		DensityFunction skaiaFactor = DensityFunctions.constant(5);
 		
-		context.register(key("skaia/initial_density"), initialDensity(skaiaDepth, skaiaFactor));
-		context.register(key("skaia/final_density"), finalDensity(skaiaDepth, skaiaFactor, DensityFunctions.zero(), noise.getOrThrow(Noises.JAGGED), 256));
+		context.register(SKAIA_INITIAL_DENSITY, initialDensity(skaiaDepth, skaiaFactor));
+		context.register(SKAIA_FINAL_DENSITY, finalDensity(skaiaDepth, skaiaFactor, DensityFunctions.zero(), noise.getOrThrow(Noises.JAGGED), 256));
 		
 		context.register(LAND_CONTINENTS, base2dNoise(shiftX, shiftZ, noise.getOrThrow(MSNoiseParameters.LAND_CONTINENTS)));
 		context.register(LAND_EROSION, base2dNoise(shiftX, shiftZ, noise.getOrThrow(MSNoiseParameters.LAND_EROSION)));
-	}
-	
-	private static ResourceKey<DensityFunction> key(String name)
-	{
-		return ResourceKey.create(Registries.DENSITY_FUNCTION, Minestuck.id(name));
 	}
 	
 	private static DensityFunction registerAndGet(BootstapContext<DensityFunction> context, ResourceKey<DensityFunction> key, DensityFunction function)

@@ -1,8 +1,7 @@
 package com.mraof.minestuck.data.worldgen;
 
-import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.world.biome.LandBiomeSets;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
@@ -14,12 +13,12 @@ public final class MSBiomeProvider
 {
 	public static void register(BootstapContext<Biome> context)
 	{
-		context.register(SkaiaObjects.SKAIA_BIOME, skaiaBiome());
+		context.register(MSBiomes.SKAIA, skaiaBiome());
 		
-		LandBiomeSets.DEFAULT_LAND.createForDataGen(context);
-		LandBiomeSets.HIGH_HUMID_LAND.createForDataGen(context);
-		LandBiomeSets.NO_RAIN_LAND.createForDataGen(context);
-		LandBiomeSets.SNOW_LAND.createForDataGen(context);
+		MSBiomes.DEFAULT_LAND.createForDataGen(context);
+		MSBiomes.HIGH_HUMID_LAND.createForDataGen(context);
+		MSBiomes.NO_RAIN_LAND.createForDataGen(context);
+		MSBiomes.SNOW_LAND.createForDataGen(context);
 	}
 	
 	private static Biome skaiaBiome()

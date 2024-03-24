@@ -1,8 +1,7 @@
 package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.SkaiaObjects;
-import com.mraof.minestuck.world.biome.LandBiomeSets;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
@@ -29,9 +28,9 @@ public class MinestuckBiomeTagsProvider extends BiomeTagsProvider
 	{
 		this.tag(HAS_FROG_TEMPLE).addTag(BiomeTags.IS_OVERWORLD);
 		
-		this.tag(LAND_NORMAL).add(LandBiomeSets.DEFAULT_LAND.NORMAL, LandBiomeSets.NO_RAIN_LAND.NORMAL, LandBiomeSets.SNOW_LAND.NORMAL, LandBiomeSets.HIGH_HUMID_LAND.NORMAL);
-		this.tag(LAND_OCEAN).add(LandBiomeSets.DEFAULT_LAND.OCEAN, LandBiomeSets.NO_RAIN_LAND.OCEAN, LandBiomeSets.SNOW_LAND.OCEAN, LandBiomeSets.HIGH_HUMID_LAND.OCEAN);
-		this.tag(LAND_ROUGH).add(LandBiomeSets.DEFAULT_LAND.ROUGH, LandBiomeSets.NO_RAIN_LAND.ROUGH, LandBiomeSets.SNOW_LAND.ROUGH, LandBiomeSets.HIGH_HUMID_LAND.ROUGH);
+		this.tag(LAND_NORMAL).add(MSBiomes.DEFAULT_LAND.NORMAL, MSBiomes.NO_RAIN_LAND.NORMAL, MSBiomes.SNOW_LAND.NORMAL, MSBiomes.HIGH_HUMID_LAND.NORMAL);
+		this.tag(LAND_OCEAN).add(MSBiomes.DEFAULT_LAND.OCEAN, MSBiomes.NO_RAIN_LAND.OCEAN, MSBiomes.SNOW_LAND.OCEAN, MSBiomes.HIGH_HUMID_LAND.OCEAN);
+		this.tag(LAND_ROUGH).add(MSBiomes.DEFAULT_LAND.ROUGH, MSBiomes.NO_RAIN_LAND.ROUGH, MSBiomes.SNOW_LAND.ROUGH, MSBiomes.HIGH_HUMID_LAND.ROUGH);
 		this.tag(LAND).addTags(LAND_NORMAL, LAND_OCEAN, LAND_ROUGH);
 		
 		this.tag(HAS_LAND_GATE).addTag(LAND);
@@ -39,6 +38,6 @@ public class MinestuckBiomeTagsProvider extends BiomeTagsProvider
 		this.tag(HAS_IMP_DUNGEON).addTags(LAND_NORMAL, LAND_ROUGH);
 		this.tag(HAS_CONSORT_VILLAGE).addTag(LAND_NORMAL);
 		
-		this.tag(HAS_SKAIA_CASTLE).add(SkaiaObjects.SKAIA_BIOME);
+		this.tag(HAS_SKAIA_CASTLE).add(MSBiomes.SKAIA);
 	}
 }

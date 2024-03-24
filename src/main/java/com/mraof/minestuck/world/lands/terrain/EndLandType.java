@@ -3,14 +3,15 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSets;
 import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.data.worldgen.placement.EndPlacements;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -32,7 +33,7 @@ public class EndLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.NAKAGATOR).names(END, DIMENSION)
 				.fogColor(0.0, 0.4, 0.2).skyColor(0.3, 0.1, 0.5)
-				.biomeSet(LandBiomeSets.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_END));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_END));
 	}
 	
 	@Override

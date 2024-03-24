@@ -3,8 +3,8 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSets;
 import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
@@ -13,6 +13,7 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -34,7 +35,7 @@ public class FrostLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.IGUANA).names(FROST, ICE, SNOW)
 				.skylight(7/8F).fogColor(0.5, 0.6, 0.98).skyColor(0.6, 0.7, 0.9)
-				.biomeSet(LandBiomeSets.SNOW_LAND).music(MSSoundEvents.MUSIC_FROST));
+				.biomeSet(MSBiomes.SNOW_LAND).music(MSSoundEvents.MUSIC_FROST));
 	}
 	
 	@Override

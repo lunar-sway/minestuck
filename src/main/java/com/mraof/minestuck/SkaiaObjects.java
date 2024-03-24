@@ -8,15 +8,13 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.SkaiaPortalBlockEntity;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.castle.*;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -24,7 +22,6 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
@@ -108,10 +105,6 @@ public final class SkaiaObjects
 	public static final ItemBlockPair<Block, BlockItem> WHITE_PAWN_STAINED_GLASS = ItemBlockPair.register("white_pawn_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, copy(CHECKERED_STAINED_GLASS.asBlock())));
 	public static final ItemBlockPair<Block, BlockItem> WHITE_CROWN_STAINED_GLASS = ItemBlockPair.register("white_crown_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, copy(CHECKERED_STAINED_GLASS.asBlock())));
 	
-	public static final ResourceKey<Biome> SKAIA_BIOME = ResourceKey.create(Registries.BIOME, Minestuck.id("skaia"));
-	public static final ResourceKey<Level> SKAIA_DIMENSION = ResourceKey.create(Registries.DIMENSION, Minestuck.id("skaia"));
-	public static final ResourceKey<NormalNoise.NoiseParameters> SKAIA_RIDGES_NOISE = ResourceKey.create(Registries.NOISE, Minestuck.id("skaia/ridges"));
-	
 	public static final class CastleParts
 	{
 		public static final RegistryObject<StructurePieceType.ContextlessType>
@@ -124,7 +117,7 @@ public final class SkaiaObjects
 		
 		public static final RegistryObject<StructureType<CastleStructure>> STRUCTURE_TYPE = MSStructureTypes.REGISTER.register("skaia_castle", () -> MSStructureTypes.asType(CastleStructure.CODEC));
 		
-		public static final ResourceKey<Structure> STRUCTURE = ResourceKey.create(Registries.STRUCTURE, Minestuck.id("skaia_castle"));
+		public static final ResourceKey<Structure> STRUCTURE = MSStructures.key("skaia_castle");
 		
 		public static void initStatic()
 		{
