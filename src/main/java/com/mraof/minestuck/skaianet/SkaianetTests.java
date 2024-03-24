@@ -60,9 +60,33 @@ public final class SkaianetTests
 			helper.assertTrue(connections.isPrimaryPair(client, server2), "Primary server player did not match");
 		});
 	}
+	@GameTest(timeoutTicks = 0, template = "empty_gametest")
+	public static void multiSessionConnect(GameTestHelper helper)
+	{
+		helper.succeedIf(() -> {
+			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(false, helper);
+			SessionHandler sessions = skaianetData.sessionHandler;
+			SburbConnections connections = skaianetData.connections;
+			
+			PlayerIdentifier client = IdentifierHandler.createNewFakeIdentifier(),
+					server = IdentifierHandler.createNewFakeIdentifier();
+			
+			helper.assertFalse(sessions.getOrCreateSession(client) == sessions.getOrCreateSession(server), "Started in the same session");
+			
+			connections.setPrimaryConnection(client, server);
+			
+			helper.assertTrue(sessions.getOrCreateSession(client) == sessions.getOrCreateSession(server), "Sessions were not same after connecting");
+			helper.assertTrue(sessions.getSessions().size() == 1, "More than one session present after connecting once");
+			
+			connections.setPrimaryConnection(server, client);
+			
+			helper.assertTrue(sessions.getOrCreateSession(client) == sessions.getOrCreateSession(server), "Sessions were not same after connecting both ways");
+			helper.assertTrue(sessions.getSessions().size() == 1, "More than one session present after connecting both ways");
+		});
+	}
 	
 	@GameTest(timeoutTicks = 0, template = "empty_gametest")
-	public static void multiSessionAdaptions(GameTestHelper helper)
+	public static void multiSessionDisconnect(GameTestHelper helper)
 	{
 		helper.succeedIf(() -> {
 			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(false, helper);
