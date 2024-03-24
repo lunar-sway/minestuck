@@ -98,6 +98,12 @@ public class MSItems
 			() -> new HangingSignItem(MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(),
 					new Item.Properties().stacksTo(16)));
 	
+	public static final RegistryObject<Item> LACQUERED_SIGN = REGISTER.register("lacquered_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.LACQUERED_SIGN.get(), MSBlocks.LACQUERED_WALL_SIGN.get()));
+	public static final RegistryObject<Item> LACQUERED_HANGING_SIGN = REGISTER.register("lacquered_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
 	//Hammers
 	public static final RegistryObject<Item> CLAW_HAMMER = REGISTER.register("claw_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.8F).efficiency(1.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));
 	public static final RegistryObject<Item> SLEDGE_HAMMER = REGISTER.register("sledge_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -3.2F).efficiency(4.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));

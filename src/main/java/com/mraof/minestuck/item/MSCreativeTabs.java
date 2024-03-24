@@ -49,6 +49,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SHADEWOOD_HANGING_SIGN.get());
 		output.accept(MSItems.TREATED_SIGN.get());
 		output.accept(MSItems.TREATED_HANGING_SIGN.get());
+		output.accept(MSItems.LACQUERED_SIGN.get());
+		output.accept(MSItems.LACQUERED_HANGING_SIGN.get());
 		
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 10));

@@ -83,6 +83,11 @@ public final class MSBlocks
 	public static final RegistryObject<Block> TREATED_HANGING_SIGN = REGISTER.register("treated_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.TREATED));
 	public static final RegistryObject<Block> TREATED_WALL_HANGING_SIGN = REGISTER.register("treated_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.TREATED));
 	
+	public static final RegistryObject<Block> LACQUERED_SIGN = REGISTER.register("lacquered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LACQUERED));
+	public static final RegistryObject<Block> LACQUERED_WALL_SIGN = REGISTER.register("lacquered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LACQUERED));
+	public static final RegistryObject<Block> LACQUERED_HANGING_SIGN = REGISTER.register("lacquered_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LACQUERED));
+	public static final RegistryObject<Block> LACQUERED_WALL_HANGING_SIGN = REGISTER.register("lacquered_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.LACQUERED));
+	
 	
 	//Skaia
 	public static final RegistryObject<Block> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> new SkaiaPortalBlock(Block.Properties.of().mapColor(MapColor.COLOR_CYAN).pushReaction(PushReaction.BLOCK).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noLootTable()));

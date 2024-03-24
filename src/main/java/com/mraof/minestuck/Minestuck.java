@@ -142,6 +142,7 @@ public class Minestuck
 		Sheets.addWoodType(MSWoodTypes.RAINBOW);
 		Sheets.addWoodType(MSWoodTypes.SHADEWOOD);
 		Sheets.addWoodType(MSWoodTypes.TREATED);
+		Sheets.addWoodType(MSWoodTypes.LACQUERED);
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();

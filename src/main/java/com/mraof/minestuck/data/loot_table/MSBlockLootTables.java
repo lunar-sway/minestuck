@@ -129,6 +129,15 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(TREATED_WALL_HANGING_SIGN.get(), block ->
 				createSingleItemTable(MSItems.TREATED_HANGING_SIGN.get()));
 		
+		add(LACQUERED_SIGN.get(), block ->
+				createSingleItemTable(MSItems.LACQUERED_SIGN.get()));
+		add(LACQUERED_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.LACQUERED_SIGN.get()));
+		add(LACQUERED_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.LACQUERED_HANGING_SIGN.get()));
+		add(LACQUERED_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.LACQUERED_HANGING_SIGN.get()));
+		
 		dropSelf(BLACK_CHESS_DIRT.get());
 		dropSelf(WHITE_CHESS_DIRT.get());
 		dropSelf(DARK_GRAY_CHESS_DIRT.get());

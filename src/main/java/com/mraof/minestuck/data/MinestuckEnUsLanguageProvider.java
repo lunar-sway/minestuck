@@ -84,6 +84,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADEWOOD_HANGING_SIGN, "Shadewood Hanging Sign");
 		addBlock(MSBlocks.TREATED_SIGN, "Treated Sign");
 		addBlock(MSBlocks.TREATED_HANGING_SIGN, "Treated Hanging Sign");
+		addBlock(MSBlocks.LACQUERED_SIGN, "Lacquered Sign");
+		addBlock(MSBlocks.LACQUERED_HANGING_SIGN, "Lacquered Hanging Sign");
 		
 		addBlock(MSBlocks.BLACK_CHESS_DIRT, "Black Chess Tile");
 		addBlock(MSBlocks.WHITE_CHESS_DIRT, "White Chess Tile");

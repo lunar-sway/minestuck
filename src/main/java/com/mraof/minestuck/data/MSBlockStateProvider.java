@@ -79,6 +79,12 @@ public class MSBlockStateProvider extends BlockStateProvider
 		hangingSignBlock(MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.TREATED_PLANKS.get()));
 		
+		signBlock(((StandingSignBlock) MSBlocks.LACQUERED_SIGN.get()), ((WallSignBlock) MSBlocks.LACQUERED_WALL_SIGN.get()),
+				blockTexture(MSBlocks.LACQUERED_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.LACQUERED_PLANKS.get()));
+		
 		//Skaia
 		simpleBlockWithItem(MSBlocks.BLACK_CHESS_DIRT);
 		simpleBlockWithItem(MSBlocks.WHITE_CHESS_DIRT);

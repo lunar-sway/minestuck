@@ -24,7 +24,8 @@ public class MSBlockEntities
 							MSBlocks.GLOWING_SIGN.get(), MSBlocks.GLOWING_WALL_SIGN.get(),
 							MSBlocks.RAINBOW_SIGN.get(), MSBlocks.RAINBOW_WALL_SIGN.get(),
 							MSBlocks.SHADEWOOD_SIGN.get(), MSBlocks.SHADEWOOD_WALL_SIGN.get(),
-							MSBlocks.TREATED_SIGN.get(), MSBlocks.TREATED_WALL_SIGN.get()).build(null));
+							MSBlocks.TREATED_SIGN.get(), MSBlocks.TREATED_WALL_SIGN.get(),
+							MSBlocks.LACQUERED_SIGN.get(), MSBlocks.LACQUERED_WALL_SIGN.get()).build(null));
 	
 	public static final RegistryObject<BlockEntityType<MSHangingSignBlockEntity>> MOD_HANGING_SIGN =
 			BLOCK_ENTITIES.register("mod_hanging_sign", () ->
@@ -36,7 +37,8 @@ public class MSBlockEntities
 							MSBlocks.GLOWING_HANGING_SIGN.get(), MSBlocks.GLOWING_WALL_HANGING_SIGN.get(),
 							MSBlocks.RAINBOW_HANGING_SIGN.get(), MSBlocks.RAINBOW_WALL_HANGING_SIGN.get(),
 							MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
-							MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get()).build(null));
+							MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(),
+							MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get()).build(null));
 	
 	
 	public static void register(IEventBus eventBus) {
