@@ -54,7 +54,7 @@ public final class ConsortDialogue
 		//Generic
 		var genericThanks = provider.dialogue().add("generic_thanks", new NodeBuilder(l.defaultKeyMsg("Thank you for helping me!")));
 		var thanks = provider.dialogue().add("thanks", new NodeBuilder(l.defaultKeyMsg("Thanks!")));
-		var sadFace = provider.dialogue().add("sad_face", new NodeBuilder(l.defaultKeyMsg(":(")));
+		final DialogueProvider.MessageProducer sadFaceMsg = l.msg("sad_face", ":(");
 		var yesMsg = l.msg("yes", "Yes");
 		var noMsg = l.msg("no", "No");
 		
@@ -544,7 +544,7 @@ public final class ConsortDialogue
 		{
 			var finallyMsg = l.msg(builder.id(), "finally", "Finally!");
 			
-			var barter = builder.add("barter", new NodeBuilder(l.defaultKeyMsg("But I am starving here! What if I paid you 10 boondollars for it?"))
+			var barterNode = new NodeBuilder(l.defaultKeyMsg("But I am starving here! What if I paid you 10 boondollars for it?"))
 					.addResponse(new ResponseBuilder(l.subMsg("yes", "Sure"))
 							.condition(Condition.HasMatchedItem.INSTANCE)
 							.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
@@ -554,7 +554,11 @@ public final class ConsortDialogue
 									.addDescription(l.subMsg("desc", "You are given 10 boondollars for the %s.", Argument.MATCHED_ITEM)))))
 					.addResponse(new ResponseBuilder(l.subMsg("no", "Too Cheap"))
 							.nextDialogue(builder.add("end", new NodeBuilder(l.defaultKeyMsg("Fine. I will just go and find a real food store."))))
-							.setNextAsEntrypoint()));
+							.setNextAsEntrypoint());
+			
+			var first_no = builder.add("first_no", new NodeSelectorBuilder()
+					.node(Condition.ConsortMightBarter.INSTANCE, barterNode)
+					.defaultNode(new NodeBuilder(sadFaceMsg)));
 			
 			builder.addStart(new NodeSelectorBuilder()    //todo create a "not hungry" dialogue node for SetDialogue trigger to be used for any other player after the consort gets its snack.
 					.node(new Condition.ItemTagMatch(MSTags.Items.CONSORT_SNACKS), new NodeBuilder(l.subMsg("ask", "A %s! Could I have some?", Argument.MATCHED_ITEM))
@@ -565,15 +569,13 @@ public final class ConsortDialogue
 									.nextDialogue(builder.add("thanks", new NodeBuilder(l.defaultKeyMsg("Thank you! I will remember your kindness for the rest of my short life."))))
 									.setNextAsEntrypoint())
 							.addResponse(new ResponseBuilder(noMsg)
-									.condition(Condition.ConsortMightBarter.INSTANCE)
-									.nextDialogue(barter))
-							.addResponse(new ResponseBuilder(noMsg)
-									.condition(none(Condition.ConsortMightBarter.INSTANCE))
-									.nextDialogue(sadFace)
+									.nextDialogue(first_no)
 									.setNextAsEntrypoint()))
 					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm."))));
 		}));
-		provider.addRandomlySelectable("rap_battle", defaultWeight(isAnyEntityType(NAKAGATOR, IGUANA)), new FolderedDialogue(builder -> {
+		
+		provider.addRandomlySelectable("rap_battle", defaultWeight(isAnyEntityType(NAKAGATOR, IGUANA)), new FolderedDialogue(builder ->
+		{
 			String rapA = "rap_a", rapB = "rap_b", rapC = "rap_c", rapD = "rap_d", rapE = "rap_e", rapF = "rap_f";
 			
 			var schoolFinalMsg = l.msg(builder.id(), "final", "%s. You are the greatest rapper ever.", Argument.ENTITY_SOUND);

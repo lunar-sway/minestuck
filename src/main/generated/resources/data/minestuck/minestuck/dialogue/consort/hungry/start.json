@@ -33,25 +33,9 @@
             ]
           },
           {
-            "condition": {
-              "type": "minestuck:consort_might_barter"
-            },
-            "message": "minestuck.dialogue.no",
-            "next_dialogue": "minestuck:consort/hungry/barter"
-          },
-          {
-            "condition": {
-              "type": "minestuck:list",
-              "conditions": [
-                {
-                  "type": "minestuck:consort_might_barter"
-                }
-              ],
-              "list_type": "none"
-            },
             "message": "minestuck.dialogue.no",
             "next_dialogue": {
-              "id": "minestuck:consort/sad_face",
+              "id": "minestuck:consort/hungry/first_no",
               "set_as_entrypoint": true
             }
           }
