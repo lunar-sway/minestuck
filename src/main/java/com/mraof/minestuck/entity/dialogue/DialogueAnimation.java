@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
+import net.minecraft.ResourceLocationException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,20 +14,21 @@ import net.minecraft.world.entity.LivingEntity;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
-public record DialogueAnimation(String emotion/*, int frames, float speed, @Nullable ResourceLocation overridePath*/)
+public record DialogueAnimation(String emotion/*, int frames, float speed, Optional<ResourceLocation> overridePath*/)
 {
-	//public static final ResourceLocation FALLBACK_ANIMATION_PATH = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/fallback_animation.png");
-	public static final ResourceLocation FALLBACK_ANIMATION_PATH = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/vitality_gel.png");
-	
 	//public static final DialogueAnimation DEFAULT_ANIMATION = new DialogueAnimation(Emotion.GENERIC.getSerializedName(), 1, 1.0F, null);
 	public static final DialogueAnimation DEFAULT_ANIMATION = new DialogueAnimation(Emotion.GENERIC.getSerializedName());
+	
+	public static final int DEFAULT_SPRITE_WIDTH = 128;
+	public static final int DEFAULT_SPRITE_HEIGHT = 128;
 	
 	public static Codec<DialogueAnimation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", Emotion.GENERIC.getSerializedName()).forGetter(DialogueAnimation::emotion)
 			//PreservingOptionalFieldCodec.withDefault(Codec.INT, "frames", 1).forGetter(DialogueAnimation::frames),
 			//PreservingOptionalFieldCodec.withDefault(Codec.FLOAT, "speed", 1.0F).forGetter(DialogueAnimation::speed),
-			//PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "overridePath", Dialogue.FALLBACK_ANIMATION_PATH).forGetter(DialogueAnimation::overridePath)
+			//PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "overridePath", Optional.empty()).forGetter(DialogueAnimation::overridePath)
 	).apply(instance, DialogueAnimation::new));
 	
 	public static DialogueAnimation read(FriendlyByteBuf buffer)
@@ -42,15 +44,30 @@ public record DialogueAnimation(String emotion/*, int frames, float speed, @Null
 	}
 	
 	/**
-	 * Uses the emotion information to determine
+	 * Uses the emotion information to determine what sprite to render. If a file doesnt exist for that emotion it falls back to the generic sprite,
+	 * and if the generic sprite doesnt exist then the optional is empty and no sprite will be given.
 	 */
-	public ResourceLocation getRenderPath(LivingEntity entity)
+	public Optional<ResourceLocation> getRenderPath(DialogueEntity entity)
 	{
-		//ResourceLocation attemptedLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/" + entity.getType() + "/" + emotion + ".png");
-		
-		return FALLBACK_ANIMATION_PATH;
+		//TODO first try always succeeds even when it isnt intended to (because of optional?) making the rest redundant
+		try
+		{
+			return Optional.of(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + entity.getSpriteType() + "/" + emotion + ".png"));
+		} catch(ResourceLocationException exception)
+		{
+			try
+			{
+				return Optional.of(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + entity.getSpriteType() + "/" + Emotion.GENERIC.getSerializedName() + ".png"));
+			} catch(ResourceLocationException exceptionAgain)
+			{
+				return Optional.empty();
+			}
+		}
 	}
 	
+	/**
+	 * List of supported/used emotion types. Custom emotions can be declared through datapacks
+	 */
 	public enum Emotion implements StringRepresentable
 	{
 		GENERIC,

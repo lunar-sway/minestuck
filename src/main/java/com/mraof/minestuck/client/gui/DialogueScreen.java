@@ -11,12 +11,14 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Displays a screen when interacting with any dialogue capable entity that has a valid dialogue.
@@ -55,7 +57,7 @@ public class DialogueScreen extends Screen
 	{
 		//TODO static gui height/width may not make sense with customizable gui sizing
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		xOffset = (this.width / 2) - (GUI_WIDTH / 2) + ANIMATION_WIDTH;
+		xOffset = (this.width / 2) - (GUI_WIDTH / 2) + DialogueAnimation.DEFAULT_SPRITE_WIDTH;
 		
 		this.messageLines = font.split(this.dialogueData.message(), 210);
 		
@@ -183,17 +185,21 @@ public class DialogueScreen extends Screen
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
-	private static final int ANIMATION_WIDTH = 32;
-	private static final int ANIMATION_HEIGHT = 32;
-	
 	private void renderAnimation(GuiGraphics guiGraphics)
 	{
-		DialogueAnimation animation = dialogueData.animation();
+		if(!(entity instanceof DialogueEntity dialogueEntity))
+			return;
 		
-		guiGraphics.pose().pushPose();
-		guiGraphics.pose().scale(0.25F,0.25F,0.25F);
-		guiGraphics.blit(animation.getRenderPath(entity), xOffset - ANIMATION_WIDTH, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		guiGraphics.pose().popPose();
+		DialogueAnimation animation = dialogueData.animation();
+		Optional<ResourceLocation> potentialPath = animation.getRenderPath(dialogueEntity);
+		
+		if(potentialPath.isPresent())
+		{
+			//guiGraphics.pose().pushPose();
+			//guiGraphics.pose().scale(0.25F,0.25F,0.25F);
+			guiGraphics.blit(potentialPath.get(), xOffset - DialogueAnimation.DEFAULT_SPRITE_WIDTH, yOffset, 0, 0, DialogueAnimation.DEFAULT_SPRITE_WIDTH, DialogueAnimation.DEFAULT_SPRITE_HEIGHT);
+			//guiGraphics.pose().popPose();
+		}
 	}
 	
 	@Override

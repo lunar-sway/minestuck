@@ -434,6 +434,13 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	}
 	
 	@Override
+	public String getSpriteType()
+	{
+		//TODO consider adding support for vendor sprites here
+		return getConsortType().getName();
+	}
+	
+	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));

@@ -7,4 +7,6 @@ public interface DialogueEntity
 	DialogueComponent getDialogueComponent();
 	
 	ChatFormatting getChatColor();
+	
+	String getSpriteType();
 }
