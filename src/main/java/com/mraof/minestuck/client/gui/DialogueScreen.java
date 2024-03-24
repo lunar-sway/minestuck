@@ -13,7 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.minecraft.world.entity.LivingEntity;
+import software.bernie.geckolib.cache.texture.AnimatableTexture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,8 @@ public class DialogueScreen extends Screen
 	private DialogueButton previousButton;
 	private DialogueButton nextButton;
 	
+	private int animationTick = 0;
+	
 	DialogueScreen(int dialogueId, Dialogue.DialogueData dialogueData)
 	{
 		super(Component.empty());
@@ -57,7 +60,7 @@ public class DialogueScreen extends Screen
 	{
 		//TODO static gui height/width may not make sense with customizable gui sizing
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		xOffset = (this.width / 2) - (GUI_WIDTH / 2) + DialogueAnimation.DEFAULT_SPRITE_WIDTH;
+		xOffset = (this.width / 2) - (GUI_WIDTH / 2) + (DialogueAnimation.DEFAULT_SPRITE_WIDTH / 2);
 		
 		this.messageLines = font.split(this.dialogueData.message(), 210);
 		
@@ -191,15 +194,13 @@ public class DialogueScreen extends Screen
 			return;
 		
 		DialogueAnimation animation = dialogueData.animation();
-		Optional<ResourceLocation> potentialPath = animation.getRenderPath(dialogueEntity);
+		ResourceLocation sprite = animation.getRenderPath(dialogueEntity);
 		
-		if(potentialPath.isPresent())
-		{
-			//guiGraphics.pose().pushPose();
-			//guiGraphics.pose().scale(0.25F,0.25F,0.25F);
-			guiGraphics.blit(potentialPath.get(), xOffset - DialogueAnimation.DEFAULT_SPRITE_WIDTH, yOffset, 0, 0, DialogueAnimation.DEFAULT_SPRITE_WIDTH, DialogueAnimation.DEFAULT_SPRITE_HEIGHT);
-			//guiGraphics.pose().popPose();
-		}
+		//if there is a .png.mcmeta file associated with the sprite, the animation for it is updated here
+		AnimatableTexture.setAndUpdate(sprite, animationTick);
+		guiGraphics.blit(sprite, xOffset - DialogueAnimation.DEFAULT_SPRITE_WIDTH, yOffset, 0, 0, DialogueAnimation.DEFAULT_SPRITE_WIDTH, DialogueAnimation.DEFAULT_SPRITE_HEIGHT, DialogueAnimation.DEFAULT_SPRITE_WIDTH, DialogueAnimation.DEFAULT_SPRITE_HEIGHT);
+		
+		animationTick++;
 	}
 	
 	@Override

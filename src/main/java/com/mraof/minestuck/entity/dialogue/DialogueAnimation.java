@@ -4,21 +4,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
-import net.minecraft.ResourceLocationException;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.entity.LivingEntity;
+import software.bernie.geckolib.cache.texture.AnimatableTexture;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
-public record DialogueAnimation(String emotion/*, int frames, float speed, Optional<ResourceLocation> overridePath*/)
+public record DialogueAnimation(String emotion)
 {
-	//public static final DialogueAnimation DEFAULT_ANIMATION = new DialogueAnimation(Emotion.GENERIC.getSerializedName(), 1, 1.0F, null);
 	public static final DialogueAnimation DEFAULT_ANIMATION = new DialogueAnimation(Emotion.GENERIC.getSerializedName());
 	
 	public static final int DEFAULT_SPRITE_WIDTH = 128;
@@ -26,9 +23,6 @@ public record DialogueAnimation(String emotion/*, int frames, float speed, Optio
 	
 	public static Codec<DialogueAnimation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", Emotion.GENERIC.getSerializedName()).forGetter(DialogueAnimation::emotion)
-			//PreservingOptionalFieldCodec.withDefault(Codec.INT, "frames", 1).forGetter(DialogueAnimation::frames),
-			//PreservingOptionalFieldCodec.withDefault(Codec.FLOAT, "speed", 1.0F).forGetter(DialogueAnimation::speed),
-			//PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "overridePath", Optional.empty()).forGetter(DialogueAnimation::overridePath)
 	).apply(instance, DialogueAnimation::new));
 	
 	public static DialogueAnimation read(FriendlyByteBuf buffer)
@@ -44,29 +38,44 @@ public record DialogueAnimation(String emotion/*, int frames, float speed, Optio
 	}
 	
 	/**
-	 * Uses the emotion information to determine what sprite to render. If a file doesnt exist for that emotion it falls back to the generic sprite,
-	 * and if the generic sprite doesnt exist then the optional is empty and no sprite will be given.
+	 * Returns the animatable sprite corresponding to the entities sprite type
 	 */
-	public Optional<ResourceLocation> getRenderPath(DialogueEntity entity)
+	public ResourceLocation getRenderPath(DialogueEntity entity)
 	{
-		//TODO first try always succeeds even when it isnt intended to (because of optional?) making the rest redundant
-		try
+		ResourceLocation spritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + entity.getSpriteType() + "/" + emotion + ".png");
+		
+		//TODO the first time this is run using an invalid path, the Minecraft missing texture sprite appears briefly before fallback system activates. An error message is printed in chat
+		AbstractTexture abstractTexture = Minecraft.getInstance().getTextureManager().getTexture(spritePath);
+		
+		//if the sprite for the given emotion cannot be found, it will try to render the generic sprite instead. If the generic sprite cannot be found, the invalid texture is allowed to proceed
+		if(!(abstractTexture instanceof SimpleTexture))
 		{
-			return Optional.of(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + entity.getSpriteType() + "/" + emotion + ".png"));
-		} catch(ResourceLocationException exception)
+			ResourceLocation fallbackSpritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + entity.getSpriteType() + "/" + Emotion.GENERIC.getSerializedName() + ".png");
+			if(Minecraft.getInstance().getTextureManager().getTexture(fallbackSpritePath) instanceof SimpleTexture fallbackTexture)
+			{
+				ensureAnimatable(fallbackTexture, fallbackSpritePath);
+				return fallbackSpritePath;
+			} else
+				return spritePath;
+		}
+		
+		ensureAnimatable(abstractTexture, spritePath);
+		
+		return spritePath;
+	}
+	
+	private static void ensureAnimatable(AbstractTexture abstractTexture, ResourceLocation sprite)
+	{
+		//if the texture is not loaded as an AnimatableTexture, create a new AnimatableTexture and register it
+		if(!(abstractTexture instanceof AnimatableTexture))
 		{
-			try
-			{
-				return Optional.of(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + entity.getSpriteType() + "/" + Emotion.GENERIC.getSerializedName() + ".png"));
-			} catch(ResourceLocationException exceptionAgain)
-			{
-				return Optional.empty();
-			}
+			AnimatableTexture animatableTexture = new AnimatableTexture(sprite);
+			Minecraft.getInstance().getTextureManager().register(sprite, animatableTexture);
 		}
 	}
 	
 	/**
-	 * List of supported/used emotion types. Custom emotions can be declared through datapacks
+	 * List of supported/used emotion types. Custom emotions can still be declared through datapacks
 	 */
 	public enum Emotion implements StringRepresentable
 	{

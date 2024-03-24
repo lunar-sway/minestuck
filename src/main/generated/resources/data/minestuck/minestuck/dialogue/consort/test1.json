@@ -1,6 +1,5 @@
 {
   "node": {
-    "animation": "test1animation",
     "message": "minestuck.dialogue.consort.test1",
     "responses": [
       {
