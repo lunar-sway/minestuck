@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/lacquered_carved_knotted_wood",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/lacquered_carved_knotted_wood"
+    },
+    "facing=south": {
+      "model": "minestuck:block/lacquered_carved_knotted_wood",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/lacquered_carved_knotted_wood",
+      "y": 270
+    }
+  }
+}

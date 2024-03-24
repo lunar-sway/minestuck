@@ -1,0 +1,17 @@
+{
+	"render_type": "minecraft:cutout",
+	"textures": {
+		"0": "minestuck:block/carved_wooden_leaf",
+		"particle": "minestuck:block/carved_wooden_leaf"
+	},
+	"elements": [
+		{
+			"from": [0, 0.99, 0],
+			"to": [16, 1, 16],
+			"faces": {
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [0, 16, 16, 0], "texture": "#0"}
+			}
+		}
+	]
+}

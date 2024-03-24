@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
-  "group": "stone_pressure_plate",
+  "group": "cruxite_blocks",
   "key": {
     "#": {
       "item": "minestuck:cruxite_block"

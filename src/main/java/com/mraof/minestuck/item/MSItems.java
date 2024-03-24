@@ -44,6 +44,7 @@ import java.util.function.Function;
  * This class initializes and registers all items and blockitems in the mod. Utilizes a DeferredRegister, so utilizations of items from this class will often require .get()
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+
 public class MSItems
 {
 	public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Minestuck.MOD_ID);
@@ -110,6 +111,7 @@ public class MSItems
 	public static final RegistryObject<Item> THORN_IN_YOUR_SIDE = REGISTER.register("thorn_in_your_side", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties()));
 	public static final RegistryObject<Item> ROSE_PROTOCOL = REGISTER.register("rose_protocol", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(6)), new Item.Properties().rarity(Rarity.UNCOMMON)));
 	
+	
 	//Knives
 	public static final RegistryObject<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties()));
 	public static final RegistryObject<Item> DIAMOND_DAGGER = REGISTER.register("diamond_dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties()));
@@ -152,6 +154,7 @@ public class MSItems
 	public static final RegistryObject<Item> KEYTAR = REGISTER.register("keytar", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(SoundEvents.NOTE_BLOCK_GUITAR)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 10, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(265)));
 	public static final RegistryObject<Item> ALLWEDDOL = REGISTER.register("allweddol", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.WELSH_TIER, 6, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
 	
+	
 	//Batons
 	public static final RegistryObject<Item> CONDUCTORS_BATON = REGISTER.register("conductors_baton", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 1.0F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 10, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(200)));
 	public static final RegistryObject<Item> SHARP_NOTE = REGISTER.register("sharp_note", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 2.0F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 12, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(350)));
@@ -159,6 +162,7 @@ public class MSItems
 	public static final RegistryObject<Item> WIND_WAKER = REGISTER.register("wind_waker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.STANDARD_MAGIC).add(OnHitEffect.enemyKnockback(1.3F)).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 1.2F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 8, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(750)));
 	public static final RegistryObject<Item> CELESTIAL_FULCRUM = REGISTER.register("celestial_fulcrum", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 3, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.STANDARD_MAGIC).add(OnHitEffect.enemyKnockback(2.0F)).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 1.5F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 14, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(1200)));
 	public static final RegistryObject<Item> HYMN_FOR_HORRORTERRORS = REGISTER.register("hymn_for_horrorterrors", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.HORRORTERROR_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.HORRORTERROR).set(MagicRangedRightClickEffect.HORRORTERROR_MAGIC).add(OnHitEffect.enemyKnockback(2.0F)).add(OnHitEffect.playSound(MSSoundEvents.ITEM_BATON_ORCHESTRA, 1, 0.2F)).add(OnHitEffect.spawnParticles(ParticleTypes.SCULK_SOUL, 15, 1.0, 2.0, 1.0, 2.0)), new Item.Properties().defaultDurability(2500).rarity(Rarity.RARE)));
+	
 	
 	//Axes
 	public static final RegistryObject<Item> BATLEACKS = REGISTER.register("batleacks", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -3.5F).efficiency(1.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties()));
@@ -196,6 +200,8 @@ public class MSItems
 	public static final RegistryObject<Item> MAKESHIFT_CLAWS_SHEATHED = REGISTER.register("makeshift_claws_sheathed", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(MSItems.MAKESHIFT_CLAWS_DRAWN)), new Item.Properties().defaultDurability(200)));
 	public static final RegistryObject<Item> CAT_CLAWS_DRAWN = REGISTER.register("cat_claws_drawn", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(MSItems.CAT_CLAWS_SHEATHED)), new Item.Properties().defaultDurability(500)));
 	public static final RegistryObject<Item> CAT_CLAWS_SHEATHED = REGISTER.register("cat_claws_sheathed", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(MSItems.CAT_CLAWS_DRAWN)), new Item.Properties().defaultDurability(500)));
+	public static final RegistryObject<Item> COFFEE_CLAWS_DRAWN = REGISTER.register("coffee_claws_drawn", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 2, -1.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(MSItems.COFFEE_CLAWS_SHEATHED)), new Item.Properties().defaultDurability(350)));
+	public static final RegistryObject<Item> COFFEE_CLAWS_SHEATHED = REGISTER.register("coffee_claws_sheathed", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(MSItems.COFFEE_CLAWS_DRAWN)), new Item.Properties().defaultDurability(350)));
 	public static final RegistryObject<Item> POGO_CLAWS = REGISTER.register("pogo_claws", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.POGO_TIER, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07), new Item.Properties()));
 	public static final RegistryObject<Item> ATOMIKITTY_KATAR_DRAWN = REGISTER.register("atomikitty_katar_drawn", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 1, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(MSItems.ATOMIKITTY_KATAR_SHEATHED)).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.WITHER, 100, 1)))), new Item.Properties().defaultDurability(600)));
 	public static final RegistryObject<Item> ATOMIKITTY_KATAR_SHEATHED = REGISTER.register("atomikitty_katar_sheathed", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(MSItems.ATOMIKITTY_KATAR_DRAWN)), new Item.Properties().defaultDurability(600)));
@@ -330,8 +336,8 @@ public class MSItems
 	public static final RegistryObject<Item> ACE_OF_CLUBS = REGISTER.register("ace_of_clubs", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(MSItems.CLUB_OF_FELONY)), new Item.Properties().defaultDurability(500)));
 	public static final RegistryObject<Item> CUESTICK = REGISTER.register("cuestick", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 5, -2.0F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.ACE_OF_DIAMONDS)), new Item.Properties().defaultDurability(500).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> ACE_OF_DIAMONDS = REGISTER.register("ace_of_diamonds", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(MSItems.CUESTICK)), new Item.Properties().defaultDurability(500)));
-	public static final RegistryObject<Item> ACE_OF_HEARTS = REGISTER.register("ace_of_hearts", () -> new Item(new Item.Properties().defaultDurability(500)));
-	
+	public static final RegistryObject<Item> TV_ANTENNA = REGISTER.register("tv_antenna", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -1.4F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.ACE_OF_HEARTS)), new Item.Properties().defaultDurability(500).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> ACE_OF_HEARTS = REGISTER.register("ace_of_hearts", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(MSItems.TV_ANTENNA)), new Item.Properties().defaultDurability(500)));
 	
 	//Staffs
 	public static final RegistryObject<Item> BO_STAFF = REGISTER.register("bo_staff", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.enemyKnockback(0.5F)), new Item.Properties().defaultDurability(100)));
@@ -390,7 +396,6 @@ public class MSItems
 	public static final RegistryObject<Item> CROCKER_FORK = REGISTER.register("crocker_fork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 6, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.CROCKER_SPOON)), new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> EDISONS_FURY = REGISTER.register("edisons_fury", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.EDISONS_SERENITY)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER).add(OnHitEffect.playSound(MSSoundEvents.EVENT_ELECTRIC_SHOCK, 0.6F, 1.0F)), new Item.Properties()));
 	public static final RegistryObject<Item> EDISONS_SERENITY = REGISTER.register("edisons_serenity", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.EDISONS_FURY)), new Item.Properties()));
-	
 	public static final RegistryObject<Item> SKAIA_FORK = REGISTER.register("skaia_fork", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 9, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> SKAIAN_CROCKER_ROCKER = REGISTER.register("skaian_crocker_rocker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 10, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(2048).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> FORK = REGISTER.register("fork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
@@ -421,6 +426,7 @@ public class MSItems
 	public static final RegistryObject<Item> THISTLE_OF_ZILLYWICH = REGISTER.register("thistle_of_zillywich", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.ZILLY_MAGIC), new Item.Properties().rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> QUILL_OF_ECHIDNA = REGISTER.register("quill_of_echidna", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, -1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.ECHIDNA_MAGIC), new Item.Properties().rarity(Rarity.EPIC)));
 	
+	
 	//Projectiles
 	public static final RegistryObject<Item> SBAHJARANG = REGISTER.register("sbahjarang", () -> new ConsumableProjectileWeaponItem(new Item.Properties(), 0.5F, 20.0F, 1));
 	public static final RegistryObject<Item> SHURIKEN = REGISTER.register("shuriken", () -> new ConsumableProjectileWeaponItem(new Item.Properties(), 1.0F, 2.8F, 2));
@@ -442,6 +448,7 @@ public class MSItems
 	public static final RegistryObject<Item> EMERALD_SHOVEL = REGISTER.register("emerald_shovel", () -> new ShovelItem(MSItemTypes.EMERALD_TIER, 1.5F, -3.0F, new Item.Properties()));
 	public static final RegistryObject<Item> EMERALD_HOE = REGISTER.register("emerald_hoe", () -> new HoeItem(MSItemTypes.EMERALD_TIER, -3, 0.0F, new Item.Properties()));
 	public static final RegistryObject<Item> MINE_AND_GRIST = REGISTER.register("mine_and_grist", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -2.8F).efficiency(10.0F).set(MSItemTypes.PICKAXE_TOOL).add(MSItemTypes.GRIST_HARVEST), new Item.Properties()));
+	
 	
 	//Armor
 	public static final RegistryObject<Item> PRISMARINE_HELMET = REGISTER.register("prismarine_helmet", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.HELMET, new Item.Properties()));
@@ -573,6 +580,7 @@ public class MSItems
 	public static final RegistryObject<Item> ANCIENT_THUMB_DRIVE = REGISTER.register("ancient_thumb_drive", () -> new AncientThumbDrive(new Item.Properties().stacksTo(1)));
 	public static final RegistryObject<Item> GUTTER_BALL = REGISTER.register("gutter_ball", () -> new GutterBallItem(new Item.Properties().stacksTo(5).rarity(Rarity.UNCOMMON)));
 	
+	
 	//Buckets
 	public static final RegistryObject<Item> OIL_BUCKET = REGISTER.register("oil_bucket", () -> new BucketItem(MSFluids.OIL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final RegistryObject<Item> BLOOD_BUCKET = REGISTER.register("blood_bucket", () -> new BucketItem(MSFluids.BLOOD, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
@@ -581,6 +589,8 @@ public class MSItems
 	public static final RegistryObject<Item> ENDER_BUCKET = REGISTER.register("ender_bucket", () -> new BucketItem(MSFluids.ENDER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final RegistryObject<Item> LIGHT_WATER_BUCKET = REGISTER.register("light_water_bucket", () -> new BucketItem(MSFluids.LIGHT_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final RegistryObject<Item> OBSIDIAN_BUCKET = REGISTER.register("obsidian_bucket", () -> new ObsidianBucketItem(new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
+	public static final RegistryObject<Item> CAULK_BUCKET = REGISTER.register("caulk_bucket", () -> new BucketItem(MSFluids.CAULK, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final RegistryObject<Item> MOLTEN_AMBER_BUCKET = REGISTER.register("molten_amber_bucket", () -> new BucketItem(MSFluids.MOLTEN_AMBER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	
 	
 	//Alchemy Items
@@ -641,6 +651,7 @@ public class MSItems
 	public static final RegistryObject<Item> SCALEMATE_PYRALSPITE = REGISTER.register("scalemate_pyralspite", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_WITNESS = REGISTER.register("scalemate_witness", () -> new ScalemateItem(new Item.Properties()));
 	
+	
 	//Consort Plushies
 	public static final RegistryObject<Item> PLUSH_SALAMANDER = REGISTER.register("plush_salamander", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> PLUSH_NAKAGATOR = REGISTER.register("plush_nakagator", () -> new Item(new Item.Properties()));
@@ -648,6 +659,7 @@ public class MSItems
 	public static final RegistryObject<Item> PLUSH_TURTLE = REGISTER.register("plush_turtle", () -> new Item(new Item.Properties()));
 	
 	public static final RegistryObject<Item> PLUSH_MUTATED_CAT = REGISTER.register("plush_mutated_cat", () -> new Item(new Item.Properties()));
+	
 	
 	//Incredibly Useful Items
 	public static final RegistryObject<Item> URANIUM_POWERED_STICK = REGISTER.register("uranium_powered_stick", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -734,6 +746,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.SHADE_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.PINK_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_CRUXITE_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
+	
 	public static final RegistryObject<BlockItem> STONE_URANIUM_ORE = registerBlockItem(MSBlocks.STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> DEEPSLATE_URANIUM_ORE = registerBlockItem(MSBlocks.DEEPSLATE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> NETHERRACK_URANIUM_ORE = registerBlockItem(MSBlocks.NETHERRACK_URANIUM_ORE);
@@ -744,20 +758,25 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.SHADE_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.PINK_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_URANIUM_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+	
 	public static final RegistryObject<BlockItem> NETHERRACK_COAL_ORE = registerBlockItem(MSBlocks.NETHERRACK_COAL_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_COAL_ORE = registerBlockItem(MSBlocks.SHADE_STONE_COAL_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_COAL_ORE = registerBlockItem(MSBlocks.PINK_STONE_COAL_ORE);
 	public static final RegistryObject<BlockItem> END_STONE_IRON_ORE = registerBlockItem(MSBlocks.END_STONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> SANDSTONE_IRON_ORE = registerBlockItem(MSBlocks.SANDSTONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_IRON_ORE = registerBlockItem(MSBlocks.RED_SANDSTONE_IRON_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_IRON_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_IRON_ORE);
 	public static final RegistryObject<BlockItem> SANDSTONE_GOLD_ORE = registerBlockItem(MSBlocks.SANDSTONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_GOLD_ORE = registerBlockItem(MSBlocks.RED_SANDSTONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_GOLD_ORE = registerBlockItem(MSBlocks.SHADE_STONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_GOLD_ORE = registerBlockItem(MSBlocks.PINK_STONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> END_STONE_REDSTONE_ORE = registerBlockItem(MSBlocks.END_STONE_REDSTONE_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_REDSTONE_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE);
 	public static final RegistryObject<BlockItem> STONE_QUARTZ_ORE = registerBlockItem(MSBlocks.STONE_QUARTZ_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_LAPIS_ORE = registerBlockItem(MSBlocks.PINK_STONE_LAPIS_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_DIAMOND_ORE = registerBlockItem(MSBlocks.PINK_STONE_DIAMOND_ORE);
+	public static final RegistryObject<BlockItem> UNCARVED_WOOD_EMERALD_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_EMERALD_ORE);
 	
 	
 	//Resource Blocks
@@ -767,6 +786,20 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CRUXITE_WALL = registerBlockItem(MSBlocks.CRUXITE_WALL);
 	public static final RegistryObject<BlockItem> CRUXITE_BUTTON = registerBlockItem(MSBlocks.CRUXITE_BUTTON);
 	public static final RegistryObject<BlockItem> CRUXITE_PRESSURE_PLATE = registerBlockItem(MSBlocks.CRUXITE_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> CRUXITE_DOOR = registerBlockItem(MSBlocks.CRUXITE_DOOR);
+	public static final RegistryObject<BlockItem> CRUXITE_TRAPDOOR = registerBlockItem(MSBlocks.CRUXITE_TRAPDOOR);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_BLOCK = registerBlockItem(MSBlocks.POLISHED_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_STAIRS = registerBlockItem(MSBlocks.POLISHED_CRUXITE_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_SLAB = registerBlockItem(MSBlocks.POLISHED_CRUXITE_SLAB);
+	public static final RegistryObject<BlockItem> POLISHED_CRUXITE_WALL = registerBlockItem(MSBlocks.POLISHED_CRUXITE_WALL);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICKS = registerBlockItem(MSBlocks.CRUXITE_BRICKS);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_STAIRS = registerBlockItem(MSBlocks.CRUXITE_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_SLAB = registerBlockItem(MSBlocks.CRUXITE_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> CRUXITE_BRICK_WALL = registerBlockItem(MSBlocks.CRUXITE_BRICK_WALL);
+	public static final RegistryObject<BlockItem> SMOOTH_CRUXITE_BLOCK = registerBlockItem(MSBlocks.SMOOTH_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> CHISELED_CRUXITE_BLOCK = registerBlockItem(MSBlocks.CHISELED_CRUXITE_BLOCK);
+	public static final RegistryObject<BlockItem> CRUXITE_PILLAR = registerBlockItem(MSBlocks.CRUXITE_PILLAR);
+	public static final RegistryObject<BlockItem> CRUXITE_LAMP = registerBlockItem(MSBlocks.CRUXITE_LAMP);
 	
 	public static final RegistryObject<BlockItem> URANIUM_BLOCK = registerBlockItem(MSBlocks.URANIUM_BLOCK);
 	public static final RegistryObject<BlockItem> URANIUM_STAIRS = registerBlockItem(MSBlocks.URANIUM_STAIRS);
@@ -910,6 +943,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CHISELED_BLACK_STONE_BRICKS = registerBlockItem(MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 	public static final RegistryObject<BlockItem> CRACKED_BLACK_STONE_BRICKS = registerBlockItem(MSBlocks.CRACKED_BLACK_STONE_BRICKS);
 	public static final RegistryObject<BlockItem> BLACK_SAND = registerBlockItem(MSBlocks.BLACK_SAND);
+	public static final RegistryObject<BlockItem> IGNEOUS_STONE = registerBlockItem(MSBlocks.IGNEOUS_STONE);
+	public static final RegistryObject<BlockItem> PUMICE_STONE = registerBlockItem(MSBlocks.PUMICE_STONE);
 	public static final RegistryObject<BlockItem> DECREPIT_STONE_BRICKS = registerBlockItem(MSBlocks.DECREPIT_STONE_BRICKS);
 	public static final RegistryObject<BlockItem> DECREPIT_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.DECREPIT_STONE_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> DECREPIT_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.DECREPIT_STONE_BRICK_SLAB);
@@ -1043,6 +1078,9 @@ public class MSItems
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_COLUMN = registerBlockItem(MSBlocks.RED_SANDSTONE_COLUMN);
 	public static final RegistryObject<BlockItem> CHISELED_RED_SANDSTONE_COLUMN = registerBlockItem(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN);
 	
+	public static final RegistryObject<BlockItem> CARVED_LOG = registerBlockItem(MSBlocks.CARVED_LOG);
+	public static final RegistryObject<BlockItem> CARVED_WOODEN_LEAF = registerBlockItem(MSBlocks.CARVED_WOODEN_LEAF);
+	
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD = registerBlockItem(MSBlocks.UNCARVED_WOOD);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_STAIRS = registerBlockItem(MSBlocks.UNCARVED_WOOD_STAIRS);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_SLAB = registerBlockItem(MSBlocks.UNCARVED_WOOD_SLAB);
@@ -1081,6 +1119,88 @@ public class MSItems
 	
 	public static final RegistryObject<BlockItem> CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.CARVED_KNOTTED_WOOD);
 	public static final RegistryObject<BlockItem> CARVED_BUSH = registerBlockItem(MSBlocks.CARVED_BUSH);
+	public static final RegistryObject<BlockItem> WOODEN_GRASS = registerBlockItem(MSBlocks.WOODEN_GRASS);
+	
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_STAIRS = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_STAIRS);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_SLAB = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_SLAB);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_BUTTON = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_BUTTON);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_FENCE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE);
+	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE);
+	
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD = registerBlockItem(MSBlocks.TREATED_CHIPBOARD);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_STAIRS = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_STAIRS);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_SLAB = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_SLAB);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_BUTTON = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_BUTTON);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_FENCE = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_FENCE);
+	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_FENCE_GATE);
+	
+	public static final RegistryObject<BlockItem> TREATED_WOOD_SHAVINGS = registerBlockItem(MSBlocks.TREATED_WOOD_SHAVINGS);
+	
+	public static final RegistryObject<BlockItem> TREATED_HEAVY_PLANKS = registerBlockItem(MSBlocks.TREATED_HEAVY_PLANKS);
+	public static final RegistryObject<BlockItem> TREATED_HEAVY_PLANK_STAIRS = registerBlockItem(MSBlocks.TREATED_HEAVY_PLANK_STAIRS);
+	public static final RegistryObject<BlockItem> TREATED_HEAVY_PLANK_SLAB = registerBlockItem(MSBlocks.TREATED_HEAVY_PLANK_SLAB);
+	
+	public static final RegistryObject<BlockItem> TREATED_PLANKS = registerBlockItem(MSBlocks.TREATED_PLANKS);
+	public static final RegistryObject<BlockItem> TREATED_PLANKS_STAIRS = registerBlockItem(MSBlocks.TREATED_PLANKS_STAIRS);
+	public static final RegistryObject<BlockItem> TREATED_PLANKS_SLAB = registerBlockItem(MSBlocks.TREATED_PLANKS_SLAB);
+	public static final RegistryObject<BlockItem> TREATED_BUTTON = registerBlockItem(MSBlocks.TREATED_BUTTON);
+	public static final RegistryObject<BlockItem> TREATED_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> TREATED_FENCE = registerBlockItem(MSBlocks.TREATED_FENCE);
+	public static final RegistryObject<BlockItem> TREATED_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_FENCE_GATE);
+	public static final RegistryObject<BlockItem> TREATED_DOOR = registerBlockItem(MSBlocks.TREATED_DOOR);
+	public static final RegistryObject<BlockItem> TREATED_TRAPDOOR = registerBlockItem(MSBlocks.TREATED_TRAPDOOR);
+	
+	public static final RegistryObject<BlockItem> POLISHED_TREATED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> POLISHED_TREATED_UNCARVED_STAIRS = registerBlockItem(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_TREATED_UNCARVED_SLAB = registerBlockItem(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB);
+	
+	public static final RegistryObject<BlockItem> TREATED_CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD);
+	public static final RegistryObject<BlockItem> TREATED_WOODEN_GRASS = registerBlockItem(MSBlocks.TREATED_WOODEN_GRASS);
+	
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_STAIRS = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_STAIRS);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_SLAB = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_SLAB);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_BUTTON = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_BUTTON);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_FENCE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE);
+	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_FENCE_GATE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE);
+	
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_STAIRS = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_STAIRS);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_SLAB = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_SLAB);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_BUTTON = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_BUTTON);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_PRESSURE_PLATE = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_FENCE = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_FENCE);
+	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_FENCE_GATE = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_FENCE_GATE);
+	
+	public static final RegistryObject<BlockItem> LACQUERED_WOOD_SHAVINGS = registerBlockItem(MSBlocks.LACQUERED_WOOD_SHAVINGS);
+	
+	public static final RegistryObject<BlockItem> LACQUERED_HEAVY_PLANKS = registerBlockItem(MSBlocks.LACQUERED_HEAVY_PLANKS);
+	public static final RegistryObject<BlockItem> LACQUERED_HEAVY_PLANK_STAIRS = registerBlockItem(MSBlocks.LACQUERED_HEAVY_PLANK_STAIRS);
+	public static final RegistryObject<BlockItem> LACQUERED_HEAVY_PLANK_SLAB = registerBlockItem(MSBlocks.LACQUERED_HEAVY_PLANK_SLAB);
+	
+	public static final RegistryObject<BlockItem> LACQUERED_PLANKS = registerBlockItem(MSBlocks.LACQUERED_PLANKS);
+	public static final RegistryObject<BlockItem> LACQUERED_STAIRS = registerBlockItem(MSBlocks.LACQUERED_STAIRS);
+	public static final RegistryObject<BlockItem> LACQUERED_SLAB = registerBlockItem(MSBlocks.LACQUERED_SLAB);
+	public static final RegistryObject<BlockItem> LACQUERED_BUTTON = registerBlockItem(MSBlocks.LACQUERED_BUTTON);
+	public static final RegistryObject<BlockItem> LACQUERED_PRESSURE_PLATE = registerBlockItem(MSBlocks.LACQUERED_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> LACQUERED_FENCE = registerBlockItem(MSBlocks.LACQUERED_FENCE);
+	public static final RegistryObject<BlockItem> LACQUERED_FENCE_GATE = registerBlockItem(MSBlocks.LACQUERED_FENCE_GATE);
+	public static final RegistryObject<BlockItem> LACQUERED_DOOR = registerBlockItem(MSBlocks.LACQUERED_DOOR);
+	public static final RegistryObject<BlockItem> LACQUERED_TRAPDOOR = registerBlockItem(MSBlocks.LACQUERED_TRAPDOOR);
+	
+	public static final RegistryObject<BlockItem> POLISHED_LACQUERED_UNCARVED_WOOD = registerBlockItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+	public static final RegistryObject<BlockItem> POLISHED_LACQUERED_UNCARVED_STAIRS = registerBlockItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_LACQUERED_UNCARVED_SLAB = registerBlockItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB);
+	
+	public static final RegistryObject<BlockItem> LACQUERED_CARVED_KNOTTED_WOOD = registerBlockItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD);
+	public static final RegistryObject<BlockItem> LACQUERED_WOODEN_MUSHROOM = registerBlockItem(MSBlocks.LACQUERED_WOODEN_MUSHROOM);
+	
+	public static final RegistryObject<BlockItem> WOODEN_LAMP = registerBlockItem(MSBlocks.WOODEN_LAMP);
+	
 	public static final RegistryObject<BlockItem> DENSE_CLOUD = registerBlockItem(MSBlocks.DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> BRIGHT_DENSE_CLOUD = registerBlockItem(MSBlocks.BRIGHT_DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> SUGAR_CUBE = registerBlockItem(MSBlocks.SUGAR_CUBE);
@@ -1101,6 +1221,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FLOWERY_VINE_LOG = registerBlockItem(MSBlocks.FLOWERY_VINE_LOG);
 	public static final RegistryObject<BlockItem> DEAD_LOG = registerBlockItem(MSBlocks.DEAD_LOG);
 	public static final RegistryObject<BlockItem> PETRIFIED_LOG = registerBlockItem(MSBlocks.PETRIFIED_LOG);
+	public static final RegistryObject<BlockItem> CINDERED_LOG = registerBlockItem(MSBlocks.CINDERED_LOG);
 	public static final RegistryObject<BlockItem> GLOWING_WOOD = registerBlockItem(MSBlocks.GLOWING_WOOD);
 	public static final RegistryObject<BlockItem> SHADEWOOD = registerBlockItem(MSBlocks.SHADEWOOD);
 	public static final RegistryObject<BlockItem> SCARRED_SHADEWOOD = registerBlockItem(MSBlocks.SCARRED_SHADEWOOD);
@@ -1115,6 +1236,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FLOWERY_VINE_WOOD = registerBlockItem(MSBlocks.FLOWERY_VINE_WOOD);
 	public static final RegistryObject<BlockItem> DEAD_WOOD = registerBlockItem(MSBlocks.DEAD_WOOD);
 	public static final RegistryObject<BlockItem> PETRIFIED_WOOD = registerBlockItem(MSBlocks.PETRIFIED_WOOD);
+	public static final RegistryObject<BlockItem> CINDERED_WOOD = registerBlockItem(MSBlocks.CINDERED_WOOD);
 	
 	public static final RegistryObject<BlockItem> GLOWING_PLANKS = registerBlockItem(MSBlocks.GLOWING_PLANKS);
 	public static final RegistryObject<BlockItem> GLOWING_STAIRS = registerBlockItem(MSBlocks.GLOWING_STAIRS);
@@ -1160,13 +1282,15 @@ public class MSItems
 	public static final RegistryObject<BlockItem> DEAD_DOOR = registerBlockItem(MSBlocks.DEAD_DOOR);
 	public static final RegistryObject<BlockItem> DEAD_TRAPDOOR = registerBlockItem(MSBlocks.DEAD_TRAPDOOR);
 	
-	public static final RegistryObject<BlockItem> TREATED_PLANKS = registerBlockItem(MSBlocks.TREATED_PLANKS);
-	public static final RegistryObject<BlockItem> TREATED_BUTTON = registerBlockItem(MSBlocks.TREATED_BUTTON);
-	public static final RegistryObject<BlockItem> TREATED_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_PRESSURE_PLATE);
-	public static final RegistryObject<BlockItem> TREATED_FENCE = registerBlockItem(MSBlocks.TREATED_FENCE);
-	public static final RegistryObject<BlockItem> TREATED_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_FENCE_GATE);
-	public static final RegistryObject<BlockItem> TREATED_DOOR = registerBlockItem(MSBlocks.TREATED_DOOR);
-	public static final RegistryObject<BlockItem> TREATED_TRAPDOOR = registerBlockItem(MSBlocks.TREATED_TRAPDOOR);
+	public static final RegistryObject<BlockItem> CINDERED_PLANKS = registerBlockItem(MSBlocks.CINDERED_PLANKS);
+	public static final RegistryObject<BlockItem> CINDERED_STAIRS = registerBlockItem(MSBlocks.CINDERED_STAIRS);
+	public static final RegistryObject<BlockItem> CINDERED_SLAB = registerBlockItem(MSBlocks.CINDERED_SLAB);
+	public static final RegistryObject<BlockItem> CINDERED_BUTTON = registerBlockItem(MSBlocks.CINDERED_BUTTON);
+	public static final RegistryObject<BlockItem> CINDERED_PRESSURE_PLATE = registerBlockItem(MSBlocks.CINDERED_PRESSURE_PLATE);
+	public static final RegistryObject<BlockItem> CINDERED_FENCE = registerBlockItem(MSBlocks.CINDERED_FENCE);
+	public static final RegistryObject<BlockItem> CINDERED_FENCE_GATE = registerBlockItem(MSBlocks.CINDERED_FENCE_GATE);
+	public static final RegistryObject<BlockItem> CINDERED_DOOR = registerBlockItem(MSBlocks.CINDERED_DOOR);
+	public static final RegistryObject<BlockItem> CINDERED_TRAPDOOR = registerBlockItem(MSBlocks.CINDERED_TRAPDOOR);
 	
 	public static final RegistryObject<BlockItem> SHADEWOOD_PLANKS = registerBlockItem(MSBlocks.SHADEWOOD_PLANKS);
 	public static final RegistryObject<BlockItem> SHADEWOOD_STAIRS = registerBlockItem(MSBlocks.SHADEWOOD_STAIRS);
@@ -1204,8 +1328,16 @@ public class MSItems
 	public static final RegistryObject<BlockItem> GLOWING_MUSHROOM_VINES = registerBlockItem(MSBlocks.GLOWING_MUSHROOM_VINES);
 	public static final RegistryObject<BlockItem> DESERT_BUSH = registerBlockItem(MSBlocks.DESERT_BUSH);
 	public static final RegistryObject<BlockItem> BLOOMING_CACTUS = registerBlockItem(MSBlocks.BLOOMING_CACTUS);
+	public static final RegistryObject<BlockItem> SANDY_GRASS = registerBlockItem(MSBlocks.SANDY_GRASS);
+	public static final RegistryObject<BlockItem> TALL_SANDY_GRASS = registerBlockItem(MSBlocks.TALL_SANDY_GRASS);
+	public static final RegistryObject<BlockItem> DEAD_FOLIAGE = registerBlockItem(MSBlocks.DEAD_FOLIAGE);
+	public static final RegistryObject<BlockItem> TALL_DEAD_BUSH = registerBlockItem(MSBlocks.TALL_DEAD_BUSH);
 	public static final RegistryObject<BlockItem> PETRIFIED_GRASS = registerBlockItem(MSBlocks.PETRIFIED_GRASS);
 	public static final RegistryObject<BlockItem> PETRIFIED_POPPY = registerBlockItem(MSBlocks.PETRIFIED_POPPY);
+	public static final RegistryObject<BlockItem> IGNEOUS_SPIKE = registerBlockItem(MSBlocks.IGNEOUS_SPIKE);
+	public static final RegistryObject<BlockItem> SINGED_GRASS = registerBlockItem(MSBlocks.SINGED_GRASS);
+	public static final RegistryObject<BlockItem> SINGED_FOLIAGE = registerBlockItem(MSBlocks.SINGED_FOLIAGE);
+	public static final RegistryObject<BlockItem> SULFUR_BUBBLE = registerBlockItem(MSBlocks.SULFUR_BUBBLE);
 	public static final RegistryObject<BlockItem> STRAWBERRY = registerBlockItem(MSBlocks.STRAWBERRY, new Item.Properties());
 	public static final RegistryObject<BlockItem> TALL_END_GRASS = registerBlockItem(MSBlocks.TALL_END_GRASS);
 	public static final RegistryObject<BlockItem> GLOWFLOWER = registerBlockItem(MSBlocks.GLOWFLOWER);
@@ -1244,7 +1376,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> RAINBOW_PLANKS_STAIRS = registerBlockItem(MSBlocks.RAINBOW_PLANKS_STAIRS);
 	public static final RegistryObject<BlockItem> END_PLANKS_STAIRS = registerBlockItem(MSBlocks.END_PLANKS_STAIRS);
 	public static final RegistryObject<BlockItem> DEAD_PLANKS_STAIRS = registerBlockItem(MSBlocks.DEAD_PLANKS_STAIRS);
-	public static final RegistryObject<BlockItem> TREATED_PLANKS_STAIRS = registerBlockItem(MSBlocks.TREATED_PLANKS_STAIRS);
 	
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE);
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP);
@@ -1262,7 +1393,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> RAINBOW_PLANKS_SLAB = registerBlockItem(MSBlocks.RAINBOW_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> END_PLANKS_SLAB = registerBlockItem(MSBlocks.END_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> DEAD_PLANKS_SLAB = registerBlockItem(MSBlocks.DEAD_PLANKS_SLAB);
-	public static final RegistryObject<BlockItem> TREATED_PLANKS_SLAB = registerBlockItem(MSBlocks.TREATED_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> BLACK_STONE_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_SLAB);
 	public static final RegistryObject<BlockItem> BLACK_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> MYCELIUM_SLAB = registerBlockItem(MSBlocks.MYCELIUM_SLAB);

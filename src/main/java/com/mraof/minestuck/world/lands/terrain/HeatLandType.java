@@ -39,9 +39,9 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("ground", Blocks.NETHERRACK);
-		registry.setBlock("upper", Blocks.NETHERRACK);
-		registry.setBlock("ocean", Blocks.LAVA);
+		registry.setBlock("ground", MSBlocks.PUMICE_STONE);
+		registry.setBlock("upper", MSBlocks.IGNEOUS_STONE);
+		registry.setBlock("ocean", MSBlocks.MOLTEN_AMBER);
 		registry.setBlock("structure_primary", MSBlocks.BLACK_STONE_BRICKS);
 		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_BLACK_STONE_BRICKS);
@@ -55,6 +55,7 @@ public class HeatLandType extends TerrainLandType
 		registry.setBlock("structure_planks_slab", Blocks.BRICK_SLAB);
 		registry.setBlock("village_path", Blocks.QUARTZ_BLOCK);
 		registry.setBlock("village_fence", Blocks.NETHER_BRICK_FENCE);
+		registry.setBlock("village_door", MSBlocks.CINDERED_DOOR);
 		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
 		registry.setBlock("structure_wool_3", Blocks.PURPLE_WOOL);
 		registry.setBlock("cruxite_ore", MSBlocks.NETHERRACK_CRUXITE_ORE);
@@ -64,6 +65,12 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CINDERED_TREE,
+				LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SINGED_GRASS_PATCH, LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.IGNEOUS_SPIKE_PATCH, LandBiomeType.any());
+		
 		builder.addFeature(GenerationStep.Decoration.FLUID_SPRINGS, MSPlacedFeatures.OCEAN_RUNDOWN, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.FIRE_FIELD, LandBiomeType.NORMAL);
