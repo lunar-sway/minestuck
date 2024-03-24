@@ -7,7 +7,7 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.AtheneumPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -97,17 +97,17 @@ public class AtheneumMenu extends AbstractContainerMenu
 		if(editData == null)
 			throw new IllegalStateException("Creating an editmode inventory menu, but the player is not in editmode");
 		List<ItemStack> itemList = new ArrayList<>();
-		SburbConnection c = editData.getConnection();
+		SburbPlayerData playerData = editData.sburbData();
 		
 		//Gets items from the atheneum category of the DeployList
-		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.ATHENEUM);
-		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
+		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), playerData, DeployList.EntryLists.ATHENEUM);
+		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(playerData) == null);
 		
 		//if each stack is not empty, put it in the item list.
 		for(DeployEntry atheneumItem : atheneumItems)
 		{
-			if(!atheneumItem.getItemStack(c, player.level()).isEmpty())
-				itemList.add(atheneumItem.getItemStack(c, player.level()));
+			if(!atheneumItem.getItemStack(playerData, player.level()).isEmpty())
+				itemList.add(atheneumItem.getItemStack(playerData, player.level()));
 		}
 		
 		

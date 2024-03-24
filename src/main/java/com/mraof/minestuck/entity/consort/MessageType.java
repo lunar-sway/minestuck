@@ -3,8 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.ChatFormatting;
@@ -61,22 +60,23 @@ public abstract class MessageType
 		String s = consort.getType().getDescriptionId();
 		
 		Object[] obj = new Object[args.length];
-		SburbConnection c = SburbHandler.getConnectionForDimension(player.getServer(), consort.homeDimension);
-		Title worldTitle = c == null ? null : PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle();
+		Optional<SburbPlayerData> landData = SburbPlayerData.getForLand(consort.homeDimension, player.server);
+		Title worldTitle = landData.map(playerData ->
+				PlayerSavedData.getData(playerData.playerId(), player.server).getTitle()
+		).orElse(null);
+		
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i].equals("player_name_land"))	//TODO How about extendable objects or enums instead of type strings for args?
 			{
-				if(c != null)
-					obj[i] = c.getClientIdentifier().getUsername();
-				else
-					obj[i] = "Player name";
+				obj[i] = landData.map(playerData -> playerData.playerId().getUsername())
+						.orElse("Player name");
 			} else if(args[i].equals("player_name"))
 			{
 				obj[i] = player.getName();
 			} else if(args[i].equals("land_name"))
 			{
-				Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(consort.getServer(), consort.homeDimension);
+				Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(player.server, consort.homeDimension);
 				if(landTypes.isPresent())
 					obj[i] = landTypes.get().asComponent();
 				else

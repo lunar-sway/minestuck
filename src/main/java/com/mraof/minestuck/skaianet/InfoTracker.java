@@ -7,7 +7,8 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.LazyInstance;
+import com.mraof.minestuck.skaianet.client.ReducedConnection;
+import com.mraof.minestuck.skaianet.client.ReducedPlayerState;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -22,7 +23,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Works with the info that will be sent to players through {@link SkaianetInfoPacket}
@@ -32,7 +32,9 @@ public final class InfoTracker
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final SkaianetHandler skaianet;
+	public static final String PRIVATE_COMPUTER = "minestuck.private_computer";
+	
+	private final SkaianetData skaianet;
 	
 	private final Map<PlayerIdentifier, Set<PlayerIdentifier>> listenerMap = new HashMap<>();
 	private final Set<PlayerIdentifier> toUpdate = new HashSet<>();
@@ -40,9 +42,9 @@ public final class InfoTracker
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
-	private final LazyInstance<List<List<ResourceKey<Level>>>> landChains = new LazyInstance<>(this::createLandChains);
+	private boolean resendLandChains;
 	
-	InfoTracker(SkaianetHandler skaianet)
+	InfoTracker(SkaianetData skaianet)
 	{
 		this.skaianet = skaianet;
 	}
@@ -52,7 +54,7 @@ public final class InfoTracker
 	{
 		if(event.getEntity() instanceof ServerPlayer player)
 		{
-			SkaianetHandler.get(player.server).infoTracker.onPlayerLoggedIn(player);
+			SkaianetData.get(player.server).infoTracker.onPlayerLoggedIn(player);
 		}
 	}
 	
@@ -62,7 +64,7 @@ public final class InfoTracker
 		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
-			SkaianetHandler.get(player.server).infoTracker.listenerMap.values().forEach(set -> set.removeIf(identifier::equals));
+			SkaianetData.get(player.server).infoTracker.listenerMap.values().forEach(set -> set.removeIf(identifier::equals));
 		}
 	}
 	
@@ -71,7 +73,7 @@ public final class InfoTracker
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
-			SkaianetHandler.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
+			SkaianetData.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
 		}
 	}
 	
@@ -81,6 +83,7 @@ public final class InfoTracker
 		getSet(identifier).add(identifier);
 		sendConnectionInfo(identifier);
 		MSPacketHandler.sendToPlayer(createLandChainPacket(), player);
+		MSPacketHandler.sendToPlayer(new SkaianetInfoPacket.HasEntered(SburbPlayerData.get(player).hasEntered()), player);
 	}
 	
 	private Set<PlayerIdentifier> getSet(PlayerIdentifier identifier)
@@ -96,7 +99,7 @@ public final class InfoTracker
 		
 		if(cannotAccess(player, p1))
 		{
-			player.sendSystemMessage(Component.literal("[Minestuck] ").withStyle(ChatFormatting.RED).append(Component.translatable(SkaianetHandler.PRIVATE_COMPUTER)));
+			player.sendSystemMessage(Component.literal("[Minestuck] ").withStyle(ChatFormatting.RED).append(Component.translatable(PRIVATE_COMPUTER)));
 			return;
 		}
 		if(!getSet(p1).add(p0))
@@ -104,14 +107,13 @@ public final class InfoTracker
 			LOGGER.warn("[Skaianet] Player {} already got the requested data.", player.getName());
 		}
 		
-		SkaianetInfoPacket packet = generateClientInfoPacket(p1);
-		MSPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(generateClientInfoPacket(p1), player);
 	}
 	
 	
-	private SkaianetInfoPacket createLandChainPacket()
+	private SkaianetInfoPacket.LandChains createLandChainPacket()
 	{
-		return SkaianetInfoPacket.landChains(landChains.get());
+		return new SkaianetInfoPacket.LandChains(createLandChains());
 	}
 	
 	private List<List<ResourceKey<Level>>> createLandChains()
@@ -119,57 +121,67 @@ public final class InfoTracker
 		List<List<ResourceKey<Level>>> landChains = new ArrayList<>();
 		
 		Set<ResourceKey<Level>> checked = new HashSet<>();
-		skaianet.sessionHandler.getConnectionStream().forEach(c -> populateLandChain(landChains, checked, c));
+		skaianet.players().forEach(player -> populateLandChain(landChains, checked, player));
 		
 		return landChains;
 	}
 	
-	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, SburbConnection c)
+	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, PlayerIdentifier player)
 	{
-		ResourceKey<Level> dimensionType = c.getClientDimension();
-		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
+		ResourceKey<Level> dimensionType = skaianet.getOrCreateData(player).getLandDimensionIfEntered();
+		if(dimensionType == null || checked.contains(dimensionType))
+			return;
+		
+		LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
+		chain.add(dimensionType);
+		checked.add(dimensionType);
+		
+		PlayerIdentifier lastPlayer = player;
+		while(true)
 		{
-			LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
-			chain.add(c.getClientDimension());
-			checked.add(c.getClientDimension());
-			SburbConnection cIter = c;
-			while(true)
+			Optional<PlayerIdentifier> client = skaianet.connections.primaryPartnerForServer(lastPlayer);
+			if(client.isEmpty())
 			{
-				cIter = skaianet.getPrimaryConnection(cIter.getClientIdentifier(), false).orElse(null);
-				if(cIter != null && cIter.hasEntered())
-				{
-					if(!checked.contains(cIter.getClientDimension()))
-					{
-						chain.addLast(cIter.getClientDimension());
-						checked.add(cIter.getClientDimension());
-					} else break;
-				} else
-				{
-					chain.addLast(null);
-					break;
-				}
+				chain.addLast(null);
+				break;
 			}
-			cIter = c;
-			while(true)
+			PlayerIdentifier nextPlayer = client.get();
+			ResourceKey<Level> nextLand = skaianet.getOrCreateData(nextPlayer).getLandDimensionIfEntered();
+			if(nextLand == null)
 			{
-				cIter = skaianet.getPrimaryConnection(cIter.getServerIdentifier(), true).orElse(null);
-				if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
-				{
-					chain.addFirst(cIter.getClientDimension());
-					checked.add(cIter.getClientDimension());
-				} else
-				{
-					break;
-				}
+				chain.addLast(null);
+				break;
 			}
-			landChains.add(chain);
+			if(checked.contains(nextLand))
+				break;
+			
+			chain.addLast(nextLand);
+			checked.add(nextLand);
+			lastPlayer = nextPlayer;
 		}
+		
+		lastPlayer = player;
+		while(true)
+		{
+			Optional<PlayerIdentifier> server = skaianet.connections.primaryPartnerForClient(lastPlayer);
+			if(server.isEmpty())
+				break;
+			PlayerIdentifier nextPlayer = server.get();
+			
+			ResourceKey<Level> nextLand = skaianet.getOrCreateData(nextPlayer).getLandDimensionIfEntered();
+			if(nextLand == null || checked.contains(nextLand))
+				break;
+			
+			chain.addFirst(nextLand);
+			checked.add(nextLand);
+			lastPlayer = nextPlayer;
+		}
+		landChains.add(chain);
 	}
 	
-	void reloadLandChains()
+	void markLandChainDirty()
 	{
-		landChains.invalidate();
-		MSPacketHandler.sendToAll(createLandChainPacket());
+		resendLandChains = true;
 	}
 	
 	void markDirty(PlayerIdentifier player)
@@ -177,11 +189,10 @@ public final class InfoTracker
 		toUpdate.add(player);
 	}
 	
-	void markDirty(SburbConnection connection)
+	void markDirty(ActiveConnection connection)
 	{
-		markDirty(connection.getClientIdentifier());
-		if(connection.hasServerPlayer())
-			markDirty(connection.getServerIdentifier());
+		markDirty(connection.client());
+		markDirty(connection.server());
 	}
 	
 	private void checkAndSend()
@@ -195,18 +206,21 @@ public final class InfoTracker
 		}
 		
 		if(!toUpdate.isEmpty())
-			skaianet.checkData();
-		
-		for(PlayerIdentifier identifier : toUpdate)
 		{
-			sendConnectionInfo(identifier);
+			toUpdate.forEach(this::sendConnectionInfo);
+			toUpdate.clear();
 		}
-		toUpdate.clear();
+		
+		if(resendLandChains)
+		{
+			MSPacketHandler.sendToAll(createLandChainPacket());
+			resendLandChains = false;
+		}
 	}
 	
 	private void sendConnectionInfo(PlayerIdentifier player)
 	{
-		SkaianetInfoPacket packet = generateClientInfoPacket(player);
+		SkaianetInfoPacket.Data packet = generateClientInfoPacket(player);
 		
 		for(PlayerIdentifier listener : getSet(player))
 		{
@@ -216,9 +230,8 @@ public final class InfoTracker
 			{
 				if(player.equals(listener))
 				{
-					//Trigger advancement if there is an active connection that the player is in
-					skaianet.sessionHandler.getConnectionStream().filter(SburbConnection::isActive).filter(c -> c.hasPlayer(player))
-							.findAny().ifPresent(c -> MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerListener));
+					if(skaianet.connections.activeConnections().anyMatch(c -> c.hasPlayer(player)))
+						MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerListener);
 				}
 				
 				MSPacketHandler.sendToPlayer(packet, playerListener);
@@ -226,18 +239,24 @@ public final class InfoTracker
 		}
 	}
 	
-	private SkaianetInfoPacket generateClientInfoPacket(PlayerIdentifier player)
+	private SkaianetInfoPacket.Data generateClientInfoPacket(PlayerIdentifier player)
 	{
-		boolean clientResuming = skaianet.hasResumingClient(player);
-		boolean serverResuming = skaianet.hasResumingServer(player);
+		boolean clientResuming = skaianet.computerInteractions.hasResumingClient(player);
+		boolean serverResuming = skaianet.computerInteractions.hasResumingServer(player);
+		
+		boolean hasPrimaryConnectionAsClient = skaianet.connections.hasPrimaryConnectionForClient(player);
+		boolean hasPrimaryConnectionAsServer = skaianet.connections.hasPrimaryConnectionForServer(player);
 		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
 		openedServersCache.put(player, serverMap.keySet());
 		
-		// create list with all connections that the player is in
-		List<SburbConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).collect(Collectors.toList());
+		ReducedPlayerState playerState = new ReducedPlayerState(clientResuming, serverResuming,
+				hasPrimaryConnectionAsClient, hasPrimaryConnectionAsServer, serverMap);
 		
-		return SkaianetInfoPacket.update(player.getId(), clientResuming, serverResuming, serverMap, list);
+		// create list with all connections that the player is in
+		List<ReducedConnection> list = skaianet.connections.activeConnections().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
+		
+		return new SkaianetInfoPacket.Data(player.getId(), playerState, list);
 	}
 	
 	private void checkListeners()

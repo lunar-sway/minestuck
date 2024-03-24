@@ -1,9 +1,9 @@
 package com.mraof.minestuck.network.computer;
 
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.skaianet.ComputerInteractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,24 +11,24 @@ import net.minecraft.server.level.ServerPlayer;
 public class ConnectToSburbServerPacket implements MSPacket.PlayToServer
 {
 	private final BlockPos pos;
-	private final int server;
+	private final int serverPlayer;
 	
-	private ConnectToSburbServerPacket(BlockPos pos, int server)
+	private ConnectToSburbServerPacket(BlockPos pos, int serverPlayer)
 	{
 		this.pos = pos;
-		this.server = server;
+		this.serverPlayer = serverPlayer;
 	}
 	
-	public static ConnectToSburbServerPacket create(ComputerBlockEntity be, int server)
+	public static ConnectToSburbServerPacket create(ComputerBlockEntity be, int serverPlayer)
 	{
-		return new ConnectToSburbServerPacket(be.getBlockPos(), server);
+		return new ConnectToSburbServerPacket(be.getBlockPos(), serverPlayer);
 	}
 	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(pos);
-		buffer.writeInt(server);
+		buffer.writeInt(serverPlayer);
 	}
 	
 	public static ConnectToSburbServerPacket decode(FriendlyByteBuf buffer)
@@ -42,6 +42,6 @@ public class ConnectToSburbServerPacket implements MSPacket.PlayToServer
 	public void execute(ServerPlayer player)
 	{
 		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> SkaianetHandler.get(player.server).connectToServer(computer, IdentifierHandler.getById(server)));
+				computer -> ComputerInteractions.get(player.server).connectToServerPlayer(computer, IdentifierHandler.getById(serverPlayer)));
 	}
 }

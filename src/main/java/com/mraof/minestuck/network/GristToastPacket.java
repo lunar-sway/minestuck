@@ -2,14 +2,12 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 
@@ -34,11 +32,7 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 			
 			if(source == GristHelper.EnumSource.SERVER)
 			{
-				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
-				if(sc == null)
-					return;
-				
-				EditData ed = ServerEditHandler.getData(server, sc);
+				EditData ed = ServerEditHandler.getData(server, player);
 				if(ed == null)
 					return;
 				

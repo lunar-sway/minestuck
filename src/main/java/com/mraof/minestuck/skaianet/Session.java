@@ -1,22 +1,17 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristGutter;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A data structure that contains all related connections, along with any related data, such as predefine data.
@@ -27,50 +22,22 @@ public final class Session
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
-	final Set<SburbConnection> connections;
+	final SkaianetData skaianetData;
+	private final Set<PlayerIdentifier> players = new HashSet<>();
 	private final GristGutter gutter;
-	String name;
 	
 	/**
 	 * If the "connection circle" is whole, unused if globalSession == true.
 	 */
 	boolean completed;
-	boolean locked;
 	
-	/**
-	 * If the function throws an exception, this session should no longer be considered valid
-	 */
-	void inheritFrom(Session other) throws MergeResult.SessionMergeException
+	Session merge(Session other)
 	{
-		if(locked)
-			throw MergeResult.LOCKED.exception();
-		else locked = other.locked;
-		
-		if(other.isCustom())
-		{
-			if(!isCustom())
-				name = other.name;
-			else throw MergeResult.BOTH_CUSTOM.exception();
-		}
-		
-		if(other.predefinedPlayers.entrySet().stream().allMatch(entry -> canAdd(entry.getKey(), entry.getValue())))
-			predefinedPlayers.putAll(other.predefinedPlayers);
-		else throw MergeResult.GENERIC_FAIL.exception();
-		
-		connections.addAll(other.connections);
-		
-		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.MAX_SIZE)
-			throw MergeResult.MERGED_SESSION_FULL.exception();
-		
+		this.players.addAll(other.players);
 		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
 		// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
 		this.gutter.addGristUnchecked(other.gutter.getCache());
-	}
-	
-	private boolean canAdd(PlayerIdentifier player, PredefineData data)
-	{
-		return true;
+		return this;
 	}
 	
 	/**
@@ -78,173 +45,43 @@ public final class Session
 	 */
 	void checkIfCompleted()
 	{
-		if(connections.isEmpty())
-		{
-			completed = false;
-			return;
-		}
-		if(connections.stream().anyMatch(c -> !c.hasServerPlayer()))
-		{
-			completed = false;
-			return;
-		}
-		Set<PlayerIdentifier> players = this.getPlayerList();
-		for(PlayerIdentifier player : players)
-		{
-			if(connections.stream().noneMatch(c ->
-					c.getClientIdentifier().equals(player) && c.hasEntered()))
-			{
-				completed = false;
-				return;
-			}
-		}
-		completed = true;
+		completed = computeIsComplete();
 	}
 	
-	Session()
+	boolean computeIsComplete()
 	{
-		connections = new HashSet<>();
-		predefinedPlayers = new HashMap<>();
-		this.gutter = new GristGutter(this);
-	}
-	
-	private Session(CompoundTag nbt)
-	{
-		connections = new HashSet<>();
-		predefinedPlayers = new HashMap<>();
-		this.gutter = new GristGutter(this, nbt.getList("gutter", Tag.TAG_COMPOUND));
-	}
-	
-	/**
-	 * Checks if a certain player is in the connection list.
-	 * @param player The username of the player.
-	 * @return If the player was found.
-	 */
-	public boolean containsPlayer(PlayerIdentifier player)
-	{
-		if(player.equals(IdentifierHandler.NULL_IDENTIFIER))
+		if(this.players.isEmpty())
 			return false;
-		if(predefinedPlayers.containsKey(player))
-			return true;
-		for(SburbConnection c : connections)
-			if(c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player))
-				return true;
-		return false;
+		
+		return this.players.stream().allMatch(player ->
+				skaianetData.getOrCreateData(player).hasEntered()
+						&& skaianetData.connections.primaryPartnerForClient(player).isPresent());
+	}
+	
+	Session(SkaianetData skaianetData)
+	{
+		this.skaianetData = skaianetData;
+		this.gutter = new GristGutter(skaianetData.mcServer, this);
+	}
+	
+	private Session(CompoundTag nbt, SkaianetData skaianetData)
+	{
+		this.skaianetData = skaianetData;
+		this.gutter = new GristGutter(skaianetData.mcServer, this, nbt.getList("gutter", Tag.TAG_COMPOUND));
+	}
+	
+	boolean containsPlayer(PlayerIdentifier player)
+	{
+		return players.contains(player);
 	}
 	
 	/**
 	 * Creates a list with all players in the session.
 	 * @return Returns a list with the players identifiers.
 	 */
-	public Set<PlayerIdentifier> getPlayerList()
+	public Set<PlayerIdentifier> getPlayers()
 	{
-		Set<PlayerIdentifier> list = new HashSet<>();
-		for(SburbConnection c : this.connections)
-		{
-			list.add(c.getClientIdentifier());
-			if(c.hasServerPlayer())
-				list.add(c.getServerIdentifier());
-		}
-		list.addAll(predefinedPlayers.keySet());
-		return list;
-	}
-	
-	boolean isTitleUsed(@Nonnull Title newTitle)
-	{
-		for(SburbConnection c : connections)
-		{
-			Title title = c.getClientTitle();
-			if(newTitle.equals(title))
-				return true;
-		}
-		
-		for(PredefineData data : predefinedPlayers.values())
-			if(newTitle.equals(data.getTitle()))
-				return true;
-		
-		return false;
-	}
-	
-	Set<Title> getUsedTitles()
-	{
-		return getUsedTitles(null);
-	}
-	
-	Set<Title> getUsedTitles(PlayerIdentifier ignore)
-	{
-		Set<Title> titles = new HashSet<>();
-		for(SburbConnection c : connections)
-		{
-			if(!c.getClientIdentifier().equals(ignore))
-			{
-				Title title = c.getClientTitle();
-				if(title != null)
-					titles.add(title);
-			}
-		}
-		
-		for(PredefineData data : predefinedPlayers.values())
-			if(!data.getPlayer().equals(ignore) && data.getTitle() != null)
-				titles.add(data.getTitle());
-		
-		return titles;
-	}
-	
-	List<TitleLandType> getUsedTitleLandTypes(MinecraftServer server)
-	{
-		return getUsedTitleLandTypes(server, null);
-	}
-	
-	List<TitleLandType> getUsedTitleLandTypes(MinecraftServer server, PlayerIdentifier ignore)
-	{
-		List<TitleLandType> types = new ArrayList<>();
-		for(SburbConnection c : connections)
-		{
-			if(!c.getClientIdentifier().equals(ignore))
-			{
-				LandTypePair.getTypes(server, c.getClientDimension())
-						.ifPresent(landTypes -> types.add(landTypes.getTitle()));
-			}
-		}
-		
-		for(PredefineData data : predefinedPlayers.values())
-			if(!data.getPlayer().equals(ignore) && data.getTitleLandType() != null)
-				types.add(data.getTitleLandType());
-		
-		return types;
-	}
-	
-	List<TerrainLandType> getUsedTerrainLandTypes(MinecraftServer server)
-	{
-		return getUsedTerrainLandTypes(server, null);
-	}
-	
-	List<TerrainLandType> getUsedTerrainLandTypes(MinecraftServer server, PlayerIdentifier ignore)
-	{
-		List<TerrainLandType> types = new ArrayList<>();
-		for(SburbConnection c : connections)
-		{
-			if(!c.getClientIdentifier().equals(ignore))
-			{
-				LandTypePair.getTypes(server, c.getClientDimension())
-						.ifPresent(landTypes -> types.add(landTypes.getTerrain()));
-			}
-		}
-		
-		for(PredefineData data : predefinedPlayers.values())
-			if(!data.getPlayer().equals(ignore) && data.getTerrainLandType() != null)
-				types.add(data.getTerrainLandType());
-		
-		return types;
-	}
-	
-	void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
-	{
-		PredefineData data = predefinedPlayers.get(player);
-		if(data == null)    //TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
-			data = new PredefineData(player, this);
-		consumer.consume(data);
-		predefinedPlayers.put(player, data);
+		return players;
 	}
 	
 	public GristGutter getGristGutter()
@@ -252,81 +89,80 @@ public final class Session
 		return gutter;
 	}
 	
-	/**
-	 * Writes this session to an nbt tag.
-	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.
-	 *
-	 * @return An CompoundNBT representing this session.
-	 */
 	CompoundTag write()
 	{
 		CompoundTag nbt = new CompoundTag();
 		
-		if(isCustom())
-			nbt.putString("name", name);
 		ListTag list = new ListTag();
-		for(SburbConnection c : connections) list.add(c.write());
-		nbt.put("connections", list);
-		ListTag predefineList = new ListTag();
-		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
-			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
-		nbt.put("predefinedPlayers", predefineList);
-		nbt.putBoolean("locked", locked);
+		for(PlayerIdentifier player : players)
+		{
+			CompoundTag playerTag = new CompoundTag();
+			player.saveToNBT(playerTag, "player");
+			list.add(playerTag);
+		}
+		nbt.put("players", list);
 		nbt.put("gutter", this.gutter.write());
 		return nbt;
 	}
 	
-	/**
-	 * Reads data from the given nbt tag.
-	 *
-	 * @param nbt An CompoundNBT to read from.
-	 * @return This.
-	 */
-	static Session read(CompoundTag nbt, SkaianetHandler handler)
+	static Session read(CompoundTag nbt, SkaianetData skaianetData)
 	{
-		Session s = new Session(nbt);
-		if(nbt.contains("name", Tag.TAG_STRING))
-			s.name = nbt.getString("name");
-		else s.name = null;
+		Session s = new Session(nbt, skaianetData);
 		
-		ListTag list = nbt.getList("connections", Tag.TAG_COMPOUND);
+		ListTag list = nbt.getList("players", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
+			IdentifierHandler.load(list.getCompound(i), "player").resultOrPartial(LOGGER::error).ifPresent(s.players::add);
+		
+		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
+		if(nbt.contains("connections", Tag.TAG_LIST))
 		{
-			try
+			ListTag connections = nbt.getList("connections", Tag.TAG_COMPOUND);
+			LOGGER.info("Loading old save data with {} sburb connections.", connections.size());
+			
+			for(int i = 0; i < connections.size(); i++)
 			{
-				SburbConnection c = new SburbConnection(list.getCompound(i), handler);
-				if(c.isActive() || c.isMain())
-					s.connections.add(c);
-			} catch(Exception e)
+				CompoundTag connectionTag = connections.getCompound(i);
+				skaianetData.connections.readOldConnectionData(connectionTag, s::addPlayer);
+				IdentifierHandler.load(connectionTag, "client").result()
+						.ifPresent(client -> skaianetData.getOrCreateData(client).readOldData(connectionTag));
+			}
+		}
+		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))
+		{
+			ListTag predefinedPlayers = nbt.getList("predefinedPlayers", Tag.TAG_COMPOUND);
+			for(int i = 0; i < predefinedPlayers.size(); i++)
 			{
-				LOGGER.error("Unable to read sburb connection from tag {}. Forced to skip connection. Caused by:", list.getCompound(i), e);
+				CompoundTag compound = predefinedPlayers.getCompound(i);
+				IdentifierHandler.load(compound, "player").resultOrPartial(LOGGER::error)
+						.ifPresent(player -> skaianetData.readOldPredefineData(player, compound));
 			}
 		}
 		
-		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))    //If it is a tag list
-		{
-			list = nbt.getList("predefinedPlayers", Tag.TAG_COMPOUND);
-			for(int i = 0; i < list.size(); i++)
-			{
-				CompoundTag compound = list.getCompound(i);
-				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
-				s.predefinedPlayers.put(player, new PredefineData(player, s).read(compound));
-			}
-		}
-		
-		s.locked = nbt.getBoolean("locked");
-		
-		s.checkIfCompleted();
 		return s;
 	}
 	
-	public boolean isCustom()
+	Session addPlayer(PlayerIdentifier player)
 	{
-		return name != null;
+		this.players.add(player);
+		return this;
 	}
 	
-	public boolean isEmpty()
+	Session createSessionSplit(Set<PlayerIdentifier> players)
 	{
-		return connections.isEmpty() && predefinedPlayers.isEmpty();
+		double originalGutterMultiplier = this.gutter.gutterMultiplierForSession();
+		
+		Session newSession = new Session(skaianetData);
+		
+		for(PlayerIdentifier player : players)
+		{
+			this.players.remove(player);
+			newSession.players.add(player);
+		}
+		
+		double gutterMultiplier = newSession.gutter.gutterMultiplierForSession();
+		MutableGristSet takenGrist = this.gutter.takeFraction(gutterMultiplier/originalGutterMultiplier);
+		newSession.gutter.addGristFrom(takenGrist);
+		
+		return newSession;
 	}
 }

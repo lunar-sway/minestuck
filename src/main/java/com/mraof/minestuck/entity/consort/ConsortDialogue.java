@@ -3,7 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
 import com.mraof.minestuck.entity.consort.MessageType.*;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypeConditions;
@@ -24,7 +24,8 @@ import java.util.List;
 
 import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_FOOD_STOCK;
 import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_GENERAL_STOCK;
-import static com.mraof.minestuck.world.lands.LandTypeConditions.*;
+import static com.mraof.minestuck.world.lands.LandTypeConditions.terrainLand;
+import static com.mraof.minestuck.world.lands.LandTypeConditions.titleLand;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 /**
@@ -233,7 +234,7 @@ public class ConsortDialogue
 		addMessage("lazy_king").condition(terrainLand(SHADE));
 		addMessage("music_invention").consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		addMessage("wyrm").consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((consort, player) -> SburbHandler.hasEntered(player),
+		addMessage(new ConditionedMessage((consort, player) -> SburbPlayerData.get(player).hasEntered(),
 				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
 		
 		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,
@@ -576,11 +577,6 @@ public class ConsortDialogue
 	public interface ConsortRequirement
 	{
 		boolean apply(ConsortEntity consort);
-	}
-	
-	public static void serverStarting()
-	{
-		//debugPrintAll();
 	}
 	
 	@SuppressWarnings("unused")

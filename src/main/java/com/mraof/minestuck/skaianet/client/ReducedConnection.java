@@ -1,58 +1,29 @@
 package com.mraof.minestuck.skaianet.client;
 
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.player.NamedPlayerId;
+import com.mraof.minestuck.skaianet.ActiveConnection;
 import net.minecraft.network.FriendlyByteBuf;
 
 /**
- * The client side version of {@link SburbConnection}
+ * The client side version of {@link ActiveConnection}
  */
-public class ReducedConnection
+public record ReducedConnection(NamedPlayerId client, NamedPlayerId server)
 {
-	/**
-	 * Display name used by computer guis
-	 */
-	private final String clientName, serverName;
-	/**
-	 * Id for identifying players clientside
-	 */
-	private final int clientId, serverId;
-	
-	private final boolean isActive;
-	private final boolean isMain;
-	private final boolean hasEntered;
-	
-	//client side
-	public String getClientDisplayName() {return clientName;}
-	public String getServerDisplayName() {return serverName;}
-	public int getClientId() {return clientId;}
-	public int getServerId() {return serverId;}
-	public boolean isActive() {return isActive;}
-	public boolean isMain() {return isMain;}
-	public boolean hasEntered() {return hasEntered;}
-	
-	/**
-	 * Reads a connection from a network buffer. Must match with {@link SburbConnection#toBuffer}.
-	 */
-	public static ReducedConnection read(FriendlyByteBuf buffer)
+	public ReducedConnection(ActiveConnection connection)
 	{
-		return new ReducedConnection(buffer);
+		this(NamedPlayerId.of(connection.client()), NamedPlayerId.of(connection.server()));
 	}
 	
-	private ReducedConnection(FriendlyByteBuf buffer)
+	public static ReducedConnection read(FriendlyByteBuf buffer)
 	{
-		isMain = buffer.readBoolean();
-		if(isMain)
-		{
-			isActive = buffer.readBoolean();
-			hasEntered = buffer.readBoolean();
-		} else
-		{
-			isActive = true;
-			hasEntered = false;
-		}
-		clientId = buffer.readInt();
-		clientName = buffer.readUtf(16);
-		serverId = buffer.readInt();
-		serverName = buffer.readUtf(16);
+		NamedPlayerId client = NamedPlayerId.read(buffer);
+		NamedPlayerId server = NamedPlayerId.read(buffer);
+		return new ReducedConnection(client, server);
+	}
+	
+	public void write(FriendlyByteBuf buffer)
+	{
+		client.write(buffer);
+		server.write(buffer);
 	}
 }

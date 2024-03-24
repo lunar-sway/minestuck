@@ -2,26 +2,23 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.CommandActionHandler;
-import com.mraof.minestuck.skaianet.MergeResult;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SburbConnections;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public class SburbConnectionCommand
 {
 	public static final String SUCCESS = "commands.minestuck.sburbconnection.success";
-	public static final String LOCKED = "commands.minestuck.sburbconnection.locked";
 	public static final String ALREADY_CONNECTED = "commands.minestuck.sburbconnection.already_connected";
 	
-	public static final SimpleCommandExceptionType LOCKED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(LOCKED));
 	public static final SimpleCommandExceptionType CONNECTED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(ALREADY_CONNECTED));
-	public static final DynamicCommandExceptionType MERGE_EXCEPTION = new DynamicCommandExceptionType(o -> Component.translatable(((MergeResult) o).translationKey()));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
@@ -31,6 +28,36 @@ public class SburbConnectionCommand
 	
 	private static int connect(CommandSourceStack source, ServerPlayer client, ServerPlayer server) throws CommandSyntaxException
 	{
-		return CommandActionHandler.connectByCommand(source, IdentifierHandler.encode(client), IdentifierHandler.encode(server));
+		PlayerIdentifier clientId = IdentifierHandler.encode(client);
+		PlayerIdentifier serverId = IdentifierHandler.encode(server);
+		if(forceConnection(clientId, serverId, source.getServer()))
+		{
+			source.sendSuccess(() -> Component.translatable(SUCCESS, clientId.getUsername(), serverId.getUsername()), true);
+			return 1;
+		} else
+		{
+			throw CONNECTED_EXCEPTION.create();
+		}
+	}
+	
+	public static boolean forceConnection(PlayerIdentifier client, PlayerIdentifier server, MinecraftServer mcServer)
+	{
+		var connections = SburbConnections.get(mcServer);
+		if(connections.isPrimaryPair(client, server))
+			return false;
+		
+		if(!connections.hasPrimaryConnectionForClient(client)
+				&& connections.getActiveConnection(client).filter(connection -> connection.server().equals(server)).isPresent())
+		{
+			connections.setPrimaryConnection(client, server);
+			return true;
+		}
+		
+		connections.unlinkClientPlayer(client);
+		connections.unlinkServerPlayer(server);
+		
+		connections.setPrimaryConnection(client, server);
+		
+		return true;
 	}
 }

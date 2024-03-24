@@ -2,24 +2,28 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.nbt.EndTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A class that handles Grist overflow whenever you acquire too much grist.
@@ -32,19 +36,22 @@ public class GristGutter
 	
 	public static final int GUTTER_CAPACITY = 10000;
 	
+	private final MinecraftServer mcServer;
 	private final Session session;
 	private final NonNegativeGristSet gristSet;
 	private long gristTotal;
 	
-	public GristGutter(Session session)
+	public GristGutter(MinecraftServer mcServer, Session session)
 	{
+		this.mcServer = mcServer;
 		this.session = session;
 		this.gristSet = new NonNegativeGristSet();
 		this.gristTotal = 0;
 	}
 	
-	public GristGutter(Session session, Tag tag)
+	public GristGutter(MinecraftServer mcServer, Session session, Tag tag)
 	{
+		this.mcServer = mcServer;
 		this.session = session;
 		this.gristSet = NonNegativeGristSet.CODEC.parse(NbtOps.INSTANCE, tag).resultOrPartial(LOGGER::error).orElse(new NonNegativeGristSet());
 		this.gristTotal = 0;
@@ -57,9 +64,28 @@ public class GristGutter
 		return NonNegativeGristSet.CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet).resultOrPartial(LOGGER::error).orElse(EndTag.INSTANCE);
 	}
 	
+	public static Optional<GristGutter> get(ServerPlayer player)
+	{
+		PlayerIdentifier playerIdentifier = IdentifierHandler.encode(player);
+		if(playerIdentifier == null)
+			return Optional.empty();
+		
+		return Optional.of(get(playerIdentifier, player.server));
+	}
+	
+	public static GristGutter get(PlayerIdentifier player, MinecraftServer mcServer)
+	{
+		return SessionHandler.get(mcServer).getOrCreateSession(player).getGristGutter();
+	}
+	
 	public GristSet getCache()
 	{
 		return gristSet.asImmutable();
+	}
+	
+	private Stream<PlayerIdentifier> gutterPlayers()
+	{
+		return this.session.getPlayers().stream().filter(player -> SburbPlayerData.get(player, mcServer).hasEntered());
 	}
 	
 	public long getRemainingCapacity()
@@ -69,14 +95,11 @@ public class GristGutter
 	
 	public double gutterMultiplierForSession()
 	{
-		PlayerSavedData playerSavedData = PlayerSavedData.get(ServerLifecycleHooks.getCurrentServer());
-		double gutterMultiplier = 0;
-		for(PlayerIdentifier player : this.session.getPlayerList())
-		{
-			PlayerData data = playerSavedData.getData(player);
-			gutterMultiplier += data.getGutterMultipler();
-		}
-		return gutterMultiplier;
+		PlayerSavedData playerSavedData = PlayerSavedData.get(mcServer);
+		
+		return this.gutterPlayers()
+				.map(player -> playerSavedData.getData(player).getGutterMultipler())
+				.reduce(0D, Double::sum);
 	}
 	
 	/**
@@ -147,27 +170,25 @@ public class GristGutter
 		if(event.phase == TickEvent.Phase.START && event.getServer().overworld().getGameTime() % 200 == 0)
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
-			{
-				session.getGristGutter().distributeToPlayers(session.getPlayerList(), event.getServer());
-			}
+				session.getGristGutter().distributeToPlayers();
 		}
 	}
 	
-	private void distributeToPlayers(Set<PlayerIdentifier> players, MinecraftServer server)
+	private void distributeToPlayers()
 	{
-		RandomSource rand = server.overworld().random;
-		List<PlayerIdentifier> playerList = new ArrayList<>(players);
+		RandomSource rand = mcServer.overworld().random;
+		List<PlayerIdentifier> playerList = this.gutterPlayers().collect(Collectors.toCollection(ArrayList::new));
 		Collections.shuffle(playerList, new Random(rand.nextLong()));
 		
 		for(PlayerIdentifier player : playerList)
 		{
-			tickDistributionToPlayer(player, server, rand);
+			tickDistributionToPlayer(player, rand);
 		}
 	}
 	
-	private void tickDistributionToPlayer(PlayerIdentifier player, MinecraftServer server, RandomSource rand)
+	private void tickDistributionToPlayer(PlayerIdentifier player, RandomSource rand)
 	{
-		PlayerData data = PlayerSavedData.getData(player, server);
+		PlayerData data = PlayerSavedData.getData(player, mcServer);
 		
 		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		

@@ -170,12 +170,12 @@ public class MSExtraData extends SavedData
 		return recovery;
 	}
 	
-	public void recoverConnections(Consumer<EditData.ConnectionRecovery> recover)
+	public void recoverConnections(MinecraftServer mcServer)
 	{
 		if(!editConnectionRecovery.isEmpty())
 		{
 			LOGGER.warn("Recovering extra connection data for {} players that were in editmode when the server shut down abruptly last session. An attempt to recover players will be made when they rejoin the server.", editConnectionRecovery.size());
-			editConnectionRecovery.forEach(recover);
+			editConnectionRecovery.forEach(recovery -> recovery.recover(mcServer));
 			editConnectionRecovery.clear();
 			setDirty();
 		}

@@ -5,12 +5,11 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.alchemy.GristGutter;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+
+import java.util.Optional;
 
 import static net.minecraft.commands.Commands.LEVEL_GAMEMASTERS;
 import static net.minecraft.commands.Commands.literal;
@@ -35,11 +34,11 @@ public class GutterCommand
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		
-		Session session = SessionHandler.get(player.server).getPlayerSession(IdentifierHandler.encode(player));
-		if(session == null)
+		Optional<GristGutter> optionalGutter = GristGutter.get(player);
+		if(optionalGutter.isEmpty())
 			throw NO_SESSION_EXCEPTION.create();
+		GristGutter gutter = optionalGutter.get();
 		
-		GristGutter gutter = session.getGristGutter();
 		double multiplier = gutter.gutterMultiplierForSession();
 		long capacity = gutter.getRemainingCapacity();
 		Component gutterContentText = gutter.getCache().asTextComponent();

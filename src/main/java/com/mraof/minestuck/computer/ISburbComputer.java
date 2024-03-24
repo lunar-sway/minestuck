@@ -14,13 +14,6 @@ public interface ISburbComputer
 	
 	void clearConnectedClient();
 	
-	default void setIsResuming(boolean isClient)
-	{
-		if(isClient)
-			putClientBoolean("isResuming", true);
-		else putServerBoolean("isOpen", true);
-	}
-	
 	void putClientMessage(String message);
 	void putServerMessage(String message);
 	

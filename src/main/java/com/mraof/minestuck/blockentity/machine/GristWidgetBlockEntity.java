@@ -41,6 +41,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged, this::contentsValid);
+	@Nullable
 	private PlayerIdentifier owner;
 	
 	public GristWidgetBlockEntity(BlockPos pos, BlockState state)
@@ -151,8 +152,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		super.load(nbt);
 		
 		this.progressTracker.load(nbt);
-		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
-			owner = IdentifierHandler.load(nbt, "owner");
+		owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
 	}
 	
 	@Override
@@ -184,6 +184,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		this.owner = identifier;
 	}
 	
+	@Nullable
 	@Override
 	public PlayerIdentifier getOwner()
 	{

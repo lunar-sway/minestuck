@@ -364,13 +364,7 @@ public class DataCheckerScreen extends Screen
 			{
 				CompoundTag sessionTag = sessionList.getCompound(i);
 				SessionComponent session = new SessionComponent(this, sessionTag, data);
-				if(sessionTag.contains("name", Tag.TAG_STRING))
-					session.name = sessionTag.getString("name");
-				else
-				{
-					session.name = "Session " + String.valueOf(nameIndex);
-					nameIndex++;
-				}
+				session.name = "Session " + nameIndex++;
 				list.add(session);
 			}
 		}
@@ -477,30 +471,27 @@ public class DataCheckerScreen extends Screen
 			list.add(new TextField("Client Player: %s", client));
 			if(!server.isEmpty())
 				list.add(new TextField("Server Player: %s", server));
-			list.add(new TextField("Is Active: %b", connectionTag.getBoolean("isActive")));
 			list.add(new TextField("Is Primary Connection: %b", isMain));
 			
 			list.add(null);
-			if(isMain)
+			list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
+			
+			if(!landDim.isEmpty() && connectionTag.contains("landTypes"))
+				LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, connectionTag.get("landTypes")).resultOrPartial(LOGGER::error)
+						.ifPresent(namedTypes -> list.add(new LocalizedTextField(namedTypes.asComponent())));
+			
+			if(connectionTag.contains("class"))
 			{
-				list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
-				
-				if(!landDim.isEmpty() && connectionTag.contains("landTypes"))
-					LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, connectionTag.get("landTypes")).resultOrPartial(LOGGER::error)
-							.ifPresent(namedTypes -> list.add(new LocalizedTextField(namedTypes.asComponent())));
-				
-				if(connectionTag.contains("class"))
-				{
-					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
-					Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
-					list.add(new TextField(title.asTextComponent().getString()));
-				}
-				
-				if(connectionTag.contains("titleLandType"))
-					list.add(new TextField("Title land type: %s", connectionTag.getString("titleLandType")));
-				if(connectionTag.contains("terrainLandType"))
-					list.add(new TextField("Terrain land type: %s", connectionTag.getString("terrainLandType")));
+				byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
+				Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
+				list.add(new TextField(title.asTextComponent().getString()));
 			}
+			
+			if(connectionTag.contains("titleLandType"))
+				list.add(new TextField("Title land type: %s", connectionTag.getString("titleLandType")));
+			if(connectionTag.contains("terrainLandType"))
+				list.add(new TextField("Terrain land type: %s", connectionTag.getString("terrainLandType")));
+			
 			list.add(new GristCacheButton(connectionTag.getString("clientId")));
 		}
 		@Override

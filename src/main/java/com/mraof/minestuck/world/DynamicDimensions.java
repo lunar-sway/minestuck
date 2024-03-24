@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -17,9 +18,18 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 
+import java.util.Objects;
+
 public class DynamicDimensions
 {
-	private static final ResourceKey<DimensionType> LAND_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, new ResourceLocation(Minestuck.MOD_ID, "land"));
+	public static final ResourceKey<DimensionType> LAND_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, new ResourceLocation(Minestuck.MOD_ID, "land"));
+	private static final ResourceLocation LAND_BASE_ID = new ResourceLocation(Minestuck.MOD_ID, "land");
+	
+	public static ResourceLocation landIdBaseForPLayer(PlayerIdentifier player)
+	{
+		ResourceLocation dimensionName = ResourceLocation.tryBuild(Minestuck.MOD_ID, "land_" + player.getUsername().toLowerCase());
+		return Objects.requireNonNullElse(dimensionName, LAND_BASE_ID);
+	}
 	
 	public static ResourceKey<Level> createLand(MinecraftServer server, ResourceLocation baseName, LandTypePair landTypes)
 	{

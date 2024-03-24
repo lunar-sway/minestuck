@@ -91,7 +91,7 @@ public final class PlayerData
 	PlayerData(MinecraftServer mcServer, CompoundTag nbt)
 	{
 		this.mcServer = mcServer;
-		this.identifier = IdentifierHandler.load(nbt, "player");
+		this.identifier = IdentifierHandler.loadOrThrow(nbt, "player");
 		
 		echeladder = new Echeladder(mcServer, identifier);
 		echeladder.loadEcheladder(nbt);
