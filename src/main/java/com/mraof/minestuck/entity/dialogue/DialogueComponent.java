@@ -22,14 +22,18 @@ public final class DialogueComponent
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final LivingEntity entity;
+	
+	private boolean hasGeneratedOnce = false;
+	
 	@Nullable
 	private ResourceLocation startingDialogue;
-	private final Map<UUID, ResourceLocation> dialogueEntrypoint = new HashMap<>();
 	private boolean keepOnReset;
-	private boolean hasGeneratedOnce = false;
+	private final Map<UUID, ResourceLocation> overriddenStartingDialogue = new HashMap<>();
+	
 	private final Set<String> flags = new HashSet<>();
 	private final Map<UUID, Set<String>> playerSpecificFlags = new HashMap<>();
 	private final Map<UUID, Item> matchedItem = new HashMap<>();
+	
 	private final Map<UUID, Dialogue.NodeReference> currentNodeForPlayer = new HashMap<>();
 	
 	public DialogueComponent(LivingEntity entity)
@@ -41,49 +45,68 @@ public final class DialogueComponent
 	{
 		if(tag.contains("dialogue_id", CompoundTag.TAG_STRING))
 		{
-			this.startingDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
-			this.keepOnReset = tag.getBoolean("keep_on_reset");
 			this.hasGeneratedOnce = true;
 			
-			this.flags.clear();
+			this.startingDialogue = ResourceLocation.tryParse(tag.getString("dialogue_id"));
+			this.keepOnReset = tag.getBoolean("keep_on_reset");
+			
+			tag.getList("start_override", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag ->
+			{
+				UUID player = entryTag.getUUID("player");
+				ResourceLocation override = ResourceLocation.tryParse(tag.getString("dialogue_id"));
+				this.overriddenStartingDialogue.put(player, override);
+			});
+			
 			tag.getList("flags", Tag.TAG_STRING).stream().map(StringTag.class::cast)
 					.map(StringTag::getAsString).forEach(this.flags::add);
 			
-			this.playerSpecificFlags.clear();
-			tag.getList("player_flags", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag -> {
-				
+			tag.getList("player_flags", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag ->
+			{
 				UUID player = entryTag.getUUID("player");
 				Set<String> playerFlags = this.playerFlags(player);
 				entryTag.getList("flags", Tag.TAG_STRING).stream().map(StringTag.class::cast)
 						.map(StringTag::getAsString).forEach(playerFlags::add);
 			});
 			
-			this.matchedItem.clear();
-			tag.getList("matched_item", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag -> {
+			tag.getList("matched_item", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag ->
+			{
 				UUID player = entryTag.getUUID("player");
 				ForgeRegistries.ITEMS.getCodec().parse(NbtOps.INSTANCE, entryTag.get("item"))
 						.resultOrPartial(LOGGER::error)
 						.ifPresent(item -> this.matchedItem.put(player, item));
 			});
-		}
-		else
+		} else
 			this.hasGeneratedOnce = tag.getBoolean("has_generated");
 	}
 	
 	public CompoundTag write()
 	{
 		CompoundTag tag = new CompoundTag();
+		
+		tag.putBoolean("has_generated", this.hasGeneratedOnce);
+		
 		if(this.startingDialogue != null)
 		{
 			tag.putString("dialogue_id", this.startingDialogue.toString());
 			tag.putBoolean("keep_on_reset", this.keepOnReset);
+			
+			ListTag startOverrideTag = new ListTag();
+			this.overriddenStartingDialogue.forEach((player, override) ->
+			{
+				CompoundTag entryTag = new CompoundTag();
+				entryTag.putUUID("player", player);
+				entryTag.putString("dialogue_id", override.toString());
+				startOverrideTag.add(entryTag);
+			});
+			tag.put("start_override", startOverrideTag);
 			
 			ListTag flagsTag = new ListTag();
 			this.flags.stream().map(StringTag::valueOf).forEach(flagsTag::add);
 			tag.put("flags", flagsTag);
 			
 			ListTag playerFlagsMapTag = new ListTag();
-			this.playerSpecificFlags.forEach((player, playerFlags) -> {
+			this.playerSpecificFlags.forEach((player, playerFlags) ->
+			{
 				CompoundTag entryTag = new CompoundTag();
 				entryTag.putUUID("player", player);
 				ListTag playerFlagsTag = new ListTag();
@@ -94,7 +117,8 @@ public final class DialogueComponent
 			tag.put("player_flags", playerFlagsMapTag);
 			
 			ListTag matchedItemTag = new ListTag();
-			this.matchedItem.forEach((player, item) -> {
+			this.matchedItem.forEach((player, item) ->
+			{
 				CompoundTag entryTag = new CompoundTag();
 				entryTag.putUUID("player", player);
 				ForgeRegistries.ITEMS.getCodec().encodeStart(NbtOps.INSTANCE, item)
@@ -106,8 +130,6 @@ public final class DialogueComponent
 			});
 			tag.put("matched_item", matchedItemTag);
 		}
-		
-		tag.putBoolean("has_generated", this.hasGeneratedOnce);
 		
 		return tag;
 	}
@@ -141,12 +163,12 @@ public final class DialogueComponent
 	
 	public void setDialogueForPlayer(ServerPlayer player, ResourceLocation dialogueId)
 	{
-		this.dialogueEntrypoint.put(player.getUUID(), dialogueId);
+		this.overriddenStartingDialogue.put(player.getUUID(), dialogueId);
 	}
 	
 	public Optional<ResourceLocation> getDialogueForPlayer(ServerPlayer player)
 	{
-		return Optional.ofNullable(this.dialogueEntrypoint.getOrDefault(player.getUUID(), this.startingDialogue));
+		return Optional.ofNullable(this.overriddenStartingDialogue.getOrDefault(player.getUUID(), this.startingDialogue));
 	}
 	
 	public boolean hasActiveDialogue()
@@ -186,13 +208,13 @@ public final class DialogueComponent
 	
 	public void resetDialogue()
 	{
+		closeAllCurrentDialogue();
 		if(!this.keepOnReset)
 			this.startingDialogue = null;
-		this.dialogueEntrypoint.clear();
+		this.overriddenStartingDialogue.clear();
 		this.flags.clear();
 		this.playerSpecificFlags.clear();
 		this.matchedItem.clear();
-		closeAllCurrentDialogue();
 	}
 	
 	public void closeAllCurrentDialogue()
