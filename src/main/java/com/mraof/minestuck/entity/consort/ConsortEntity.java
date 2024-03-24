@@ -225,6 +225,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 				clearDialogueData();
 		}
 		
+		this.dialogueComponent.closeDialogueForMovingPlayers();
+		
 		if(MSDimensions.isSkaia(level().dimension()))
 			visitedSkaia = true;
 		

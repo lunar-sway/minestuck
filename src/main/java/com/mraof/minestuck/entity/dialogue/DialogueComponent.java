@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,7 @@ public final class DialogueComponent
 	private final Map<UUID, Set<String>> playerSpecificFlags = new HashMap<>();
 	private final Map<UUID, Item> matchedItem = new HashMap<>();
 	
-	private final Map<UUID, Dialogue.NodeReference> currentNodeForPlayer = new HashMap<>();
+	private final Map<UUID, OngoingDialogue> ongoingDialogue = new HashMap<>();
 	
 	public DialogueComponent(LivingEntity entity)
 	{
@@ -219,8 +220,21 @@ public final class DialogueComponent
 	
 	public void closeAllCurrentDialogue()
 	{
-		this.currentNodeForPlayer.keySet().forEach(this::closeCurrentDialogue);
-		this.currentNodeForPlayer.clear();
+		this.ongoingDialogue.keySet().forEach(this::closeCurrentDialogue);
+		this.ongoingDialogue.clear();
+	}
+	
+	/**
+	 * This function is meant to be called each tick by the holding entity if they want this functionality.
+	 */
+	public void closeDialogueForMovingPlayers()
+	{
+		Collection<UUID> movedPlayers = this.ongoingDialogue.entrySet().stream().filter(entry -> {
+			ServerPlayer player = Objects.requireNonNull(this.entity.getServer()).getPlayerList().getPlayer(entry.getKey());
+			return player == null || player.position().distanceToSqr(entry.getValue().playerStartPos()) > 2;
+		}).map(Map.Entry::getKey).toList();
+		movedPlayers.forEach(this::closeCurrentDialogue);
+		movedPlayers.forEach(this.ongoingDialogue::remove);
 	}
 	
 	private void closeCurrentDialogue(UUID playerId)
@@ -263,7 +277,7 @@ public final class DialogueComponent
 		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, player);
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		
-		this.currentNodeForPlayer.put(player.getUUID(), nodeReference);
+		this.ongoingDialogue.put(player.getUUID(), new OngoingDialogue(nodeReference, player.position()));
 		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
 				.orElseThrow(IllegalStateException::new);
 		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(dialogueData.newDialogue(this.entity), data);
@@ -272,7 +286,8 @@ public final class DialogueComponent
 	
 	public Optional<Dialogue.Node> validateAndGetCurrentNode(ServerPlayer player)
 	{
-		return Optional.ofNullable(this.currentNodeForPlayer.get(player.getUUID()))
+		return Optional.ofNullable(this.ongoingDialogue.get(player.getUUID()))
+				.map(OngoingDialogue::nodeReference)
 				.flatMap(reference ->
 						Optional.ofNullable(DialogueNodes.getInstance().getDialogue(reference.dialoguePath()))
 								.flatMap(nodeSelector -> nodeSelector.getNodeIfValid(reference.nodeIndex(), this.entity, player))
@@ -281,8 +296,11 @@ public final class DialogueComponent
 	
 	public void clearCurrentNode(ServerPlayer player)
 	{
-		this.currentNodeForPlayer.remove(player.getUUID());
+		this.ongoingDialogue.remove(player.getUUID());
 	}
+	
+	private record OngoingDialogue(Dialogue.NodeReference nodeReference, Vec3 playerStartPos)
+	{}
 	
 	public static final class CurrentDialogue
 	{
@@ -313,7 +331,7 @@ public final class DialogueComponent
 			if(dialogueId != dialogueData.dialogueCounter || dialogueData.entityId == null)
 				return Optional.empty();
 			
-			Entity entity = player.level().getEntity(dialogueData.entityId);
+			@SuppressWarnings("resource") Entity entity = player.level().getEntity(dialogueData.entityId);
 			if(!(entity instanceof DialogueEntity dialogueEntity))
 				return Optional.empty();
 			
