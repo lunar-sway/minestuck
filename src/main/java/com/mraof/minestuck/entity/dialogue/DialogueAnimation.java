@@ -14,27 +14,33 @@ import software.bernie.geckolib.cache.texture.AnimatableTexture;
 
 import java.util.Locale;
 
-public record DialogueAnimation(String emotion)
+public record DialogueAnimation(String emotion, int spriteHeight, int spriteWidth)
 {
-	public static final DialogueAnimation DEFAULT_ANIMATION = new DialogueAnimation(Emotion.GENERIC.getSerializedName());
-	
 	public static final int DEFAULT_SPRITE_WIDTH = 128;
 	public static final int DEFAULT_SPRITE_HEIGHT = 128;
 	
+	public static final DialogueAnimation DEFAULT_ANIMATION = new DialogueAnimation(Emotion.GENERIC.getSerializedName(), DEFAULT_SPRITE_HEIGHT, DEFAULT_SPRITE_WIDTH);
+	
 	public static Codec<DialogueAnimation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", Emotion.GENERIC.getSerializedName()).forGetter(DialogueAnimation::emotion)
+			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", Emotion.GENERIC.getSerializedName()).forGetter(DialogueAnimation::emotion),
+			PreservingOptionalFieldCodec.withDefault(Codec.INT, "height", DEFAULT_SPRITE_HEIGHT).forGetter(DialogueAnimation::spriteHeight),
+			PreservingOptionalFieldCodec.withDefault(Codec.INT, "width", DEFAULT_SPRITE_WIDTH).forGetter(DialogueAnimation::spriteWidth)
 	).apply(instance, DialogueAnimation::new));
 	
 	public static DialogueAnimation read(FriendlyByteBuf buffer)
 	{
 		String emotion = buffer.readUtf(25);
+		int height = buffer.readInt();
+		int width = buffer.readInt();
 		
-		return new DialogueAnimation(emotion);
+		return new DialogueAnimation(emotion, height, width);
 	}
 	
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeUtf(this.emotion);
+		buffer.writeUtf(this.emotion, 25);
+		buffer.writeInt(this.spriteHeight);
+		buffer.writeInt(this.spriteWidth);
 	}
 	
 	/**

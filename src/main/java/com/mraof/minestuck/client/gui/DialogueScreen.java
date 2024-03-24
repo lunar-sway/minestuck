@@ -31,6 +31,7 @@ public class DialogueScreen extends Screen
 	
 	private final int dialogueId;
 	private final Dialogue.DialogueData dialogueData;
+	private final DialogueAnimation animation;
 	
 	private int xOffset;
 	private int yOffset;
@@ -50,14 +51,15 @@ public class DialogueScreen extends Screen
 		
 		this.dialogueId = dialogueId;
 		this.dialogueData = dialogueData;
+		
+		this.animation = dialogueData.animation();
 	}
 	
 	@Override
 	public void init()
 	{
-		//TODO static gui height/width may not make sense with customizable gui sizing
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		xOffset = (this.width / 2) - (GUI_WIDTH / 2) + (DialogueAnimation.DEFAULT_SPRITE_WIDTH / 2);
+		xOffset = (this.width / 2) - (GUI_WIDTH / 2) + (animation.spriteWidth() / 2);
 		
 		this.messageLines = font.split(this.dialogueData.message(), 210);
 		
@@ -187,12 +189,11 @@ public class DialogueScreen extends Screen
 	
 	private void renderAnimation(GuiGraphics guiGraphics)
 	{
-		DialogueAnimation animation = dialogueData.animation();
 		ResourceLocation sprite = animation.getRenderPath(dialogueData.spriteType());
 		
 		//if there is a .png.mcmeta file associated with the sprite, the animation for it is updated here
 		AnimatableTexture.setAndUpdate(sprite, animationTick);
-		guiGraphics.blit(sprite, xOffset - DialogueAnimation.DEFAULT_SPRITE_WIDTH, yOffset, 0, 0, DialogueAnimation.DEFAULT_SPRITE_WIDTH, DialogueAnimation.DEFAULT_SPRITE_HEIGHT, DialogueAnimation.DEFAULT_SPRITE_WIDTH, DialogueAnimation.DEFAULT_SPRITE_HEIGHT);
+		guiGraphics.blit(sprite, xOffset - animation.spriteWidth(), yOffset, 0, 0, animation.spriteWidth(), animation.spriteHeight(), animation.spriteWidth(), animation.spriteHeight());
 		
 		animationTick++;
 	}
