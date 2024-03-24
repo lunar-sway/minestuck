@@ -218,6 +218,11 @@ public final class DialogueComponent
 		this.matchedItem.clear();
 	}
 	
+	public boolean hasAnyOngoingDialogue()
+	{
+		return !this.ongoingDialogue.isEmpty();
+	}
+	
 	public void closeAllCurrentDialogue()
 	{
 		this.ongoingDialogue.keySet().forEach(this::closeCurrentDialogue);

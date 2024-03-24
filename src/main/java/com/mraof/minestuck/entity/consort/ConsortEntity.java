@@ -148,6 +148,9 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(!(player instanceof ServerPlayer serverPlayer))
 			return InteractionResult.SUCCESS;
 		
+		if(this.dialogueComponent.hasAnyOngoingDialogue())	//todo do we want this? feel free to remove it if not
+			return InteractionResult.FAIL;
+		
 		PlayerData playerData = PlayerSavedData.getData(serverPlayer);
 		if(playerData == null || playerData.getConsortReputation(homeDimension) <= -1000)
 			return InteractionResult.FAIL;
