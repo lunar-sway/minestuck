@@ -1,18 +1,14 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.blockentity.SkaiaPortalBlockEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.registries.RegistryObject;
 
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 
@@ -21,8 +17,6 @@ public final class SkaiaBlocks
 	public static final ItemBlockPair<Block, BlockItem> SKAIA_PORTAL = ItemBlockPair.register("skaia_portal",
 			() -> new SkaiaPortalBlock(Block.Properties.of().mapColor(MapColor.COLOR_CYAN).pushReaction(PushReaction.BLOCK).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noLootTable()),
 			() -> new Item.Properties().rarity(Rarity.EPIC));
-	@SuppressWarnings("DataFlowIssue")
-	public static final RegistryObject<BlockEntityType<SkaiaPortalBlockEntity>> SKAIA_PORTAL_BE = MSBlockEntityTypes.REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalBlockEntity::new, SKAIA_PORTAL.asBlock()).build(null));
 	
 	public static final ItemBlockPair<Block, BlockItem> BLACK_CHESS_DIRT = ItemBlockPair.register("black_chess_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final ItemBlockPair<Block, BlockItem> WHITE_CHESS_DIRT = ItemBlockPair.register("white_chess_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).strength(0.5F).sound(SoundType.GRAVEL)));
