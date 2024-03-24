@@ -803,12 +803,12 @@ public final class MSBlocks
 		return type == EntityType.OCELOT || type == EntityType.PARROT;
 	}
 	
-	public static boolean never(BlockState state, BlockGetter level, BlockPos pos)
+	protected static boolean never(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return false;
 	}
 	
-	public static Boolean never(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> type)
+	protected static Boolean never(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> type)
 	{
 		return false;
 	}

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipeBuilder;
 import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -946,14 +946,14 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.IRON_LASS_CHESTPLATE.get()).namedInput(Items.IRON_CHESTPLATE).and().input(MSItems.PARTICLE_ACCELERATOR.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SKIRT.get()).namedInput(Items.IRON_LEGGINGS).and().input(MSItems.PARTICLE_ACCELERATOR.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SHOES.get()).namedInput(Items.IRON_BOOTS).and().input(MSItems.PARTICLE_ACCELERATOR.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.PROSPIT_CIRCLET.get()).namedInput(Items.GOLDEN_HELMET).and().input(SkaiaObjects.WHITE_CROWN_STAINED_GLASS).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.PROSPIT_SHIRT).namedInput(Items.LEATHER_CHESTPLATE).and().input(SkaiaObjects.WHITE_CROWN_STAINED_GLASS).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.PROSPIT_PANTS).namedInput(Items.LEATHER_LEGGINGS).and().input(SkaiaObjects.WHITE_CROWN_STAINED_GLASS).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.PROSPIT_SHOES).namedInput(Items.LEATHER_BOOTS).and().input(SkaiaObjects.WHITE_CROWN_STAINED_GLASS).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.DERSE_CIRCLET).namedInput(Items.GOLDEN_HELMET).or().input(SkaiaObjects.BLACK_CROWN_STAINED_GLASS).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.DERSE_SHIRT).namedInput(Items.LEATHER_CHESTPLATE).or().input(SkaiaObjects.BLACK_CROWN_STAINED_GLASS).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.DERSE_PANTS).namedInput(Items.LEATHER_LEGGINGS).or().input(SkaiaObjects.BLACK_CROWN_STAINED_GLASS).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.DERSE_SHOES).namedInput(Items.LEATHER_BOOTS).or().input(SkaiaObjects.BLACK_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PROSPIT_CIRCLET.get()).namedInput(Items.GOLDEN_HELMET).and().input(SkaiaBlocks.WHITE_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PROSPIT_SHIRT).namedInput(Items.LEATHER_CHESTPLATE).and().input(SkaiaBlocks.WHITE_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PROSPIT_PANTS).namedInput(Items.LEATHER_LEGGINGS).and().input(SkaiaBlocks.WHITE_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PROSPIT_SHOES).namedInput(Items.LEATHER_BOOTS).and().input(SkaiaBlocks.WHITE_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DERSE_CIRCLET).namedInput(Items.GOLDEN_HELMET).or().input(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DERSE_SHIRT).namedInput(Items.LEATHER_CHESTPLATE).or().input(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DERSE_PANTS).namedInput(Items.LEATHER_LEGGINGS).or().input(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DERSE_SHOES).namedInput(Items.LEATHER_BOOTS).or().input(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.AMPHIBEANIE.get()).namedInput(MSItems.CRUMPLY_HAT.get()).and().input(MSItems.FROG.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.NOSTRILDAMUS.get()).namedInput(MSItems.TEMPLE_SCANNER.get()).or().input(Items.EMERALD).build(consumer);

@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 public class MSDirectionalBlock extends DirectionalBlock
 {
 
-	public MSDirectionalBlock(Properties properties)
+	protected MSDirectionalBlock(Properties properties)
 	{
 		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));

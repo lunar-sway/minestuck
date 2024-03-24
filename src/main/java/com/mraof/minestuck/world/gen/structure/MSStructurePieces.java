@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.structure.castle.*;
 import com.mraof.minestuck.world.gen.structure.gate.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.structure.gate.GatePillarPiece;
 import com.mraof.minestuck.world.gen.structure.village.*;
@@ -59,4 +60,13 @@ public final class MSStructurePieces
 	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_NAK_HOUSING_1 = REGISTER.register("high_nak_housing_1", () -> NakagatorVillagePieces.HighNakHousing1::new);
 	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_NAK_MARKET = REGISTER.register("high_nak_market", () -> NakagatorVillagePieces.HighNakMarket1::new);
 	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_NAK_INN = REGISTER.register("high_nak_inn", () -> NakagatorVillagePieces.HighNakInn1::new);
+	
+	
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_START = REGISTER.register("skaia_castle_start", () -> CastleStartPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_SOLID = REGISTER.register("skaia_castle_solid", () -> CastleSolidPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_WALL = REGISTER.register("skaia_castle_wall", () -> CastleWallPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_ROOM = REGISTER.register("skaia_castle_room", () -> CastleRoomPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_LIBRARY = REGISTER.register("skaia_castle_library", () -> CastleLibraryPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_STAIRCASE = REGISTER.register("skaia_castle_staircase", () -> CastleStaircasePiece::new);
+	
 }

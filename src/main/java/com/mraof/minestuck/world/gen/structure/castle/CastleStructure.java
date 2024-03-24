@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.SkaiaObjects;
+import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -33,7 +33,7 @@ public class CastleStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return SkaiaObjects.CastleParts.STRUCTURE_TYPE.get();
+		return MSStructureTypes.SKAIA_CASTLE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

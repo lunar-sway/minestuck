@@ -15,7 +15,7 @@ import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
-import static com.mraof.minestuck.SkaiaObjects.*;
+import static com.mraof.minestuck.block.SkaiaBlocks.*;
 import static com.mraof.minestuck.data.MSBlockStateProvider.itemTexture;
 import static com.mraof.minestuck.data.MSBlockStateProvider.texture;
 import static com.mraof.minestuck.data.recipe.MinestuckRecipeProvider.has;

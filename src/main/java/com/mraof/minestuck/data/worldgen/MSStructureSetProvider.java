@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.SkaiaObjects;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import net.minecraft.core.HolderGetter;
@@ -27,7 +26,7 @@ public final class MSStructureSetProvider
 		context.register(key("land_gate"), new StructureSet(structures.getOrThrow(MSStructures.LAND_GATE), new LandGatePlacement()));
 		
 		// Skaia
-		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(SkaiaObjects.CastleParts.STRUCTURE), new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
+		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(MSStructures.SKAIA_CASTLE), new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
 	}
 	
 	private static ResourceKey<StructureSet> key(String path)
