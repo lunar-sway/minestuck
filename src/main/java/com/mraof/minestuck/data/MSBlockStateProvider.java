@@ -410,8 +410,32 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_top"))));
 		simpleBlockWithItem(MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 		simpleBlockWithItem(MSBlocks.CRACKED_BLACK_STONE_BRICKS);
+		simpleBlockWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
 		
 		simpleBlockWithItem(MSBlocks.IGNEOUS_STONE);
+		stairsWithItem(MSBlocks.IGNEOUS_STONE_STAIRS, MSBlocks.IGNEOUS_STONE);
+		slabWithItem(MSBlocks.IGNEOUS_STONE_SLAB, MSBlocks.IGNEOUS_STONE);
+		wallWithItem(MSBlocks.IGNEOUS_STONE_WALL, MSBlocks.IGNEOUS_STONE);
+		buttonWithItem(MSBlocks.IGNEOUS_STONE_BUTTON, MSBlocks.IGNEOUS_STONE);
+		pressurePlateWithItem(MSBlocks.IGNEOUS_STONE_PRESSURE_PLATE, MSBlocks.IGNEOUS_STONE);
+		simpleBlockWithItem(MSBlocks.POLISHED_IGNEOUS_STONE);
+		stairsWithItem(MSBlocks.POLISHED_IGNEOUS_STAIRS, MSBlocks.POLISHED_IGNEOUS_STONE);
+		slabWithItem(MSBlocks.POLISHED_IGNEOUS_SLAB, MSBlocks.POLISHED_IGNEOUS_STONE);
+		wallWithItem(MSBlocks.POLISHED_IGNEOUS_WALL, MSBlocks.POLISHED_IGNEOUS_STONE);
+		simpleBlockWithItem(MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		stairsWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS, MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		slabWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB, MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		wallWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_WALL, MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		unflippedColumnWithItem(MSBlocks.POLISHED_IGNEOUS_PILLAR,
+				id -> models().cubeColumn(
+						id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		simpleBlockWithItem(MSBlocks.CHISELED_IGNEOUS_STONE);
+		simpleBlockWithItem(MSBlocks.CRACKED_POLISHED_IGNEOUS_BRICKS);
+		simpleBlockWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		simpleBlockWithItem(MSBlocks.MAGMATIC_IGNEOUS_STONE);
+		
 		simpleBlockWithItem(MSBlocks.PUMICE_STONE);
 		
 		simpleBlockWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE);

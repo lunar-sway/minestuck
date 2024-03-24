@@ -323,9 +323,29 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(BLACK_STONE_COLUMN.get());
 		dropSelf(CHISELED_BLACK_STONE_BRICKS.get());
 		dropSelf(CRACKED_BLACK_STONE_BRICKS.get());
+		dropSelf(MAGMATIC_BLACK_STONE_BRICKS.get());
 		dropSelf(BLACK_SAND.get());
 		
 		dropSelf(IGNEOUS_STONE.get());
+		dropSelf(MAGMATIC_IGNEOUS_STONE.get());
+		dropSelf(IGNEOUS_STONE_STAIRS.get());
+		add(IGNEOUS_STONE_SLAB.get(), this::createSlabItemTable);
+		dropSelf(IGNEOUS_STONE_WALL.get());
+		dropSelf(IGNEOUS_STONE_BUTTON.get());
+		dropSelf(IGNEOUS_STONE_PRESSURE_PLATE.get());
+		dropSelf(POLISHED_IGNEOUS_STONE.get());
+		dropSelf(POLISHED_IGNEOUS_STAIRS.get());
+		add(POLISHED_IGNEOUS_SLAB.get(), this::createSlabItemTable);
+		dropSelf(POLISHED_IGNEOUS_WALL.get());
+		dropSelf(POLISHED_IGNEOUS_BRICKS.get());
+		dropSelf(POLISHED_IGNEOUS_BRICK_STAIRS.get());
+		add(POLISHED_IGNEOUS_BRICK_SLAB.get(), this::createSlabItemTable);
+		dropSelf(POLISHED_IGNEOUS_BRICK_WALL.get());
+		dropSelf(POLISHED_IGNEOUS_PILLAR.get());
+		dropSelf(CHISELED_IGNEOUS_STONE.get());
+		dropSelf(CRACKED_POLISHED_IGNEOUS_BRICKS.get());
+		dropSelf(MAGMATIC_POLISHED_IGNEOUS_BRICKS.get());
+		
 		dropSelf(PUMICE_STONE.get());
 		
 		dropSelf(DECREPIT_STONE_BRICKS.get());
