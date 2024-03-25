@@ -1,5 +1,4 @@
 package com.mraof.minestuck.alchemy;
-import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.gson.*;
 import com.mojang.serialization.Codec;

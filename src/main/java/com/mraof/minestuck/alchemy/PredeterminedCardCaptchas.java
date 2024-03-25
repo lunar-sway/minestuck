@@ -3,7 +3,6 @@ package com.mraof.minestuck.alchemy;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.level.PistonEvent;
 
 
 public class PredeterminedCardCaptchas
