@@ -1,4 +1,6 @@
 package com.mraof.minestuck.alchemy;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 import com.google.gson.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -46,17 +48,20 @@ public final class PredeterminedCaptchaLoader extends SimplePreparableReloadList
 	@Override
 	protected void apply(Map<String, Item> data, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
+		ImmutableBiMap.Builder<Item, String> predefinedCards = ImmutableBiMap.builder();
+		
 		for(Map.Entry<String, Item> entrySet : data.entrySet())
 		{
-			PredeterminedCardCaptchas.SetData(entrySet.getValue(), entrySet.getKey());
+			predefinedCards.put(entrySet.getValue(), entrySet.getKey());
 			LOGGER.atInfo().log(entrySet.getValue() + " was added to card with string: " + entrySet.getKey());
 		}
+		
+		PredeterminedCardCaptchas.SetData(predefinedCards.build());
 	}
 	
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		PredeterminedCardCaptchas.predefinedCardMap.clear();
 		event.addListener(new PredeterminedCaptchaLoader());
 	}
 	
@@ -64,16 +69,14 @@ public final class PredeterminedCaptchaLoader extends SimplePreparableReloadList
 	
 	private static Optional<Map<String, Item>> parseCaptchaCodesFromNamespace(ResourceManager resourceManager, String namespace)
 	{
-		return parseCodecDataFromLocation(resourceManager, new ResourceLocation(namespace, PATH), PREDEFINED_CAPTCHAS_CODEC);
-	}
-	private static <T> Optional<T> parseCodecDataFromLocation(ResourceManager resourceManager, ResourceLocation location, Codec<T> codec)
-	{
-		return resourceManager.getResource(location).flatMap(resource -> {
+		ResourceLocation rs = new ResourceLocation(namespace, PATH);
+		
+		return resourceManager.getResource(rs).flatMap(resource -> {
 			try(Reader reader = resource.openAsReader())
 			{
 				JsonElement json = JsonParser.parseReader(reader);
-				return codec.parse(JsonOps.INSTANCE, json)
-						.resultOrPartial(message -> LOGGER.error("Problem parsing json: {}, reason: {}", location, message));
+				return PREDEFINED_CAPTCHAS_CODEC.parse(JsonOps.INSTANCE, json)
+						.resultOrPartial(message -> LOGGER.error("Problem parsing json: {}, reason: {}", rs, message));
 				
 			} catch(IOException ignored)
 			{

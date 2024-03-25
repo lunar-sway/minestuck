@@ -47,17 +47,28 @@ public final class CardCaptchas
 		MSExtraData data = MSExtraData.get(server);
 		CardCaptchas captchas = data.getCardCaptchas();
 		
-		if(PredeterminedCardCaptchas.predefinedCardMap.containsKey(item) && captchas.captchasMap.containsKey(item))
+		if(PredeterminedCardCaptchas.GetData().containsKey(item))
 		{
-			captchas.captchasMap.remove(item);
-		}
-		
-		if(PredeterminedCardCaptchas.predefinedCardMap.containsKey(item))
-		{
-			return PredeterminedCardCaptchas.predefinedCardMap.get(item);
+			if(captchas.captchasMap.containsKey(item))
+			{
+				captchas.captchasMap.remove(item);
+				data.setDirty();
+			}
+			return PredeterminedCardCaptchas.GetData().get(item);
 		}
 		else if(captchas.captchasMap.containsKey(item))
-			return captchas.captchasMap.get(item);
+		{
+			if(PredeterminedCardCaptchas.GetData().containsKey(item))
+			{
+				captchas.captchasMap.remove(item);
+				data.setDirty();
+				return PredeterminedCardCaptchas.GetData().get(item);
+			}
+			else
+			{
+				return captchas.captchasMap.get(item);
+			}
+		}
 		else
 		{
 			String captcha = captchas.createCaptchaForItem(item, server.overworld().getSeed());
@@ -73,18 +84,27 @@ public final class CardCaptchas
 		MSExtraData data = MSExtraData.get(server);
 		CardCaptchas captchas = data.getCardCaptchas();
 		
-		if(PredeterminedCardCaptchas.predefinedCardMap.inverse().containsKey(captcha) && captchas.captchasMap.inverse().containsKey(captcha))
+		if(PredeterminedCardCaptchas.GetData().inverse().containsKey(captcha))
 		{
-			captchas.captchasMap.inverse().remove(captcha);
-		}
-		
-		if(PredeterminedCardCaptchas.predefinedCardMap.inverse().containsKey(captcha))
-		{
-			return PredeterminedCardCaptchas.predefinedCardMap.inverse().get(captcha);
+			if(captchas.captchasMap.inverse().containsKey(captcha))
+			{
+				captchas.captchasMap.inverse().remove(captcha);
+				data.setDirty();
+			}
+			return PredeterminedCardCaptchas.GetData().inverse().get(captcha);
 		}
 		else
 		{
-			return MSExtraData.get(server).getCardCaptchas().captchasMap.inverse().get(captcha);
+			if(PredeterminedCardCaptchas.GetData().inverse().containsKey(captcha))
+			{
+				captchas.captchasMap.inverse().remove(captcha);
+				data.setDirty();
+				return PredeterminedCardCaptchas.GetData().inverse().get(captcha);
+			}
+			else
+			{
+				return captchas.captchasMap.inverse().get(captcha);
+			}
 		}
 	}
 	
