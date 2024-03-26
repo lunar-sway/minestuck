@@ -14,7 +14,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class DialogueButton extends ExtendedButton
 {
-	private static final int TEXT_SPACING = 9;
+	public static final int TEXT_SPACING = 9;
 	public static final int NORMAL_DEFAULT_HEIGHT = 17;
 	
 	private final ResourceLocation gui;
@@ -30,7 +30,7 @@ public class DialogueButton extends ExtendedButton
 		this.isResponse = isResponse;
 		
 		Minecraft mc = Minecraft.getInstance();
-		this.messageLines = mc.font.split(this.getMessage(), this.width - 6);
+		this.messageLines = mc.font.split(this.getMessage(), this.width - 12);
 		
 		//uses default height to start and with each successive line adds new width equal to the text spacing
 		this.trueHeight = defaultHeight + ((messageLines.size() - 1) * TEXT_SPACING);
@@ -64,7 +64,7 @@ public class DialogueButton extends ExtendedButton
 		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 		
 		//occurs after renderWidget where the value is checked
-		wasHoveredOrFocused = isMouseOver(pMouseX, pMouseY);
+		wasHoveredOrFocused = isMouseOver(pMouseX, pMouseY) || isFocused();
 	}
 	
 	@Override
@@ -83,11 +83,17 @@ public class DialogueButton extends ExtendedButton
 		
 		guiGraphics.blitWithBorder(gui, this.getX() + hoverFocusShift, this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
 		
+		int textX = this.getX() + hoverFocusShift + (isResponse ? 12 : 4);
 		int pY = this.getY() + 5;
+		
+		if(this.getMessage().getString().equals("=>"))
+		{
+			guiGraphics.drawString(mc.font, this.getMessage(), textX , pY, getFGColor(), false);
+			return;
+		}
+		
 		for(int i = 0 ; i < messageLines.size(); i++)
 		{
-			int textX = this.getX() + hoverFocusShift + (isResponse ? 12 : 4);
-			
 			//prepends a ">" to the first line of a response
 			if(isResponse && i == 0)
 				guiGraphics.drawString(mc.font, Component.literal(">"), textX - 6 , pY, getFGColor(), false);

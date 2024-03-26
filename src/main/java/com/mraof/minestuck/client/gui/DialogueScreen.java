@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Displays a screen when interacting with any dialogue capable entity that has a valid dialogue.
- * It is configurable in terms of what the gui image is, what sort of animated talk sprite shows up, and how many response options there are.
+ * This is a GUI which pops up when talking with a dialogue compatible entity.
+ * The corresponding dialogue json file controls the configurable gui texture, npc sprite texture, message, and responses that show up.
  */
 public class DialogueScreen extends Screen
 {
@@ -59,9 +59,9 @@ public class DialogueScreen extends Screen
 	public void init()
 	{
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		xOffset = (this.width / 2) - (GUI_WIDTH / 2) + (animation.spriteWidth() / 2);
+		xOffset = (this.width / 2) - (GUI_WIDTH / 2) - (animation.spriteWidth() / 2);
 		
-		this.messageLines = font.split(this.dialogueData.message(), 210);
+		this.messageLines = font.split(this.dialogueData.message(), GUI_WIDTH - 20);
 		
 		recreateResponseButtons();
 	}
@@ -71,7 +71,7 @@ public class DialogueScreen extends Screen
 		responseButtonPages.forEach(dialogueButtons -> dialogueButtons.forEach(this::removeWidget));
 		responseButtonPages.clear();
 		
-		int startY = yOffset + 22 + (9 * messageLines.size());
+		int startY = yOffset + 22 + (DialogueButton.TEXT_SPACING * messageLines.size());
 		int cumulativeButtonHeight = 0;
 		List<DialogueButton> pageButtons = new ArrayList<>();
 		
@@ -89,6 +89,7 @@ public class DialogueScreen extends Screen
 				entryButton.active = false;
 			});
 			
+			//TODO if messageLines is large, it could still push buttons over the edge of the gui
 			if(cumulativeButtonHeight > (DialogueButton.NORMAL_DEFAULT_HEIGHT + BUTTON_GAP) * 5)
 			{
 				responseButtonPages.add(pageButtons);
@@ -181,19 +182,22 @@ public class DialogueScreen extends Screen
 		for(FormattedCharSequence line : messageLines)
 		{
 			guiGraphics.drawString(font, line, xOffset + 10, pY, 0x000000, false);
-			pY += 9;
+			pY += DialogueButton.TEXT_SPACING;
 		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
+	/**
+	 * Places a talksprite directly to the right of the gui. The center height of the sprite is level with that of the gui.
+	 */
 	private void renderAnimation(GuiGraphics guiGraphics)
 	{
 		ResourceLocation sprite = animation.getRenderPath(dialogueData.spriteType());
 		
 		//if there is a .png.mcmeta file associated with the sprite, the animation for it is updated here
 		AnimatableTexture.setAndUpdate(sprite, animationTick);
-		guiGraphics.blit(sprite, xOffset - animation.spriteWidth(), yOffset, 0, 0, animation.spriteWidth(), animation.spriteHeight(), animation.spriteWidth(), animation.spriteHeight());
+		guiGraphics.blit(sprite, xOffset + GUI_WIDTH, (this.height / 2) - (animation.spriteHeight() / 2), 0, 0, animation.spriteWidth(), animation.spriteHeight(), animation.spriteWidth(), animation.spriteHeight());
 		
 		animationTick++;
 	}
