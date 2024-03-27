@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.block.ItemBlockPair;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
@@ -33,6 +34,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 		this.modid = modid;
 	}
 	
+	protected void add(ItemBlockPair<?, ?> pair, String name)
+	{
+		add(pair.asBlock(), name);
+	}
 	protected void addBlockTooltip(Supplier<Block> key, String value)
 	{
 		addTooltip(key.get(), value);

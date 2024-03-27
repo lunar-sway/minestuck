@@ -64,64 +64,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	@Override
 	protected void addTranslations()
 	{
+		SkaiaBlocksData.addEnUsTranslations(this);
 		AspectTreeBlocksData.addEnUsTranslations(this);
 		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
-		addBlock(MSBlocks.BLACK_CHESS_DIRT, "Black Chess Tile");
-		addBlock(MSBlocks.WHITE_CHESS_DIRT, "White Chess Tile");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_DIRT, "Light Gray Chess Tile");
-		addBlock(MSBlocks.SKAIA_PORTAL, "Skaia Portal");
-		addBlock(MSBlocks.BLACK_CHESS_BRICKS, "Black Chess Bricks");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_WALL, "Black Chess Brick Wall");
-		
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICKS, "Dark Gray Chess Bricks");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_WALL, "Dark Gray Chess Brick Wall");
-		
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICKS, "Light Gray Chess Bricks");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_WALL, "Light Gray Chess Brick Wall");
-		
-		addBlock(MSBlocks.WHITE_CHESS_BRICKS, "White Chess Bricks");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_WALL, "White Chess Brick Wall");
-		
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH, "Smooth Black Chess Brick");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Black Chess Brick Stairs");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_SLAB, "Smooth Black Chess Brick Slab");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_WALL, "Smooth Black Chess Brick Wall");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Black Chess Brick Button");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth Black Chess Brick Pressure Plate");
-		
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH, "Smooth Dark Gray Chess Brick");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Dark Gray Chess Brick Stairs");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB, "Smooth Dark Gray Chess Brick Slab");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL, "Smooth Dark Gray Chess Brick Wall");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Dark Gray Chess Brick Button");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "DBrick ark Gray Chess Smooth Pressure Plate");
-		
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH, "Smooth Light Gray Black Chess Brick");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Light Gray Chess Brick Stairs");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB, "Smooth Light Gray Chess Brick Slab");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL, "LSmooth ight Gray Chess Brick Wall");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Light Gray Chess Brick Button");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth Light Gray Chess Brick Pressure Plate");
-		
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH, "Smooth White Chess Brick");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_STAIRS, "Smooth White Chess Brick Stairs");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_SLAB, "Smooth White Chess Brick Slab");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_WALL, "Smooth White Chess Brick Wall");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_BUTTON, "Smooth White Chess Brick Button");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth White Chess Brick Pressure Plate");
-		
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_TRIM, "Black Chess Brick Trim");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_TRIM, "Dark Gray Chess Brick Trim");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM, "Light Gray Chess Brick Trim");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_TRIM, "White Chess Brick Trim");
-		addBlock(MSBlocks.CHECKERED_STAINED_GLASS, "Checkered Stained Glass");
-		addBlock(MSBlocks.BLACK_CROWN_STAINED_GLASS, "Black Crown Stained Glass");
-		addBlock(MSBlocks.BLACK_PAWN_STAINED_GLASS, "Black Pawn Stained Glass");
-		addBlock(MSBlocks.WHITE_CROWN_STAINED_GLASS, "White Crown Stained Glass");
-		addBlock(MSBlocks.WHITE_PAWN_STAINED_GLASS, "White Pawn Stained Glass");
 		addBlock(MSBlocks.STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.COBBLESTONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.SANDSTONE_CRUXITE_ORE, "Cruxite Ore");
@@ -740,10 +687,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
 		addBlock(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
 		addBlock(MSBlocks.NAKAGATOR_STATUE, "Nakagator Statue");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_STAIRS, "Black Chess Brick Stairs");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_STAIRS, "Dark Gray Chess Brick Stairs");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_STAIRS, "Light Gray Chess Brick Stairs");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_STAIRS, "White Chess Brick Stairs");
+		
 		addBlock(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		addBlock(MSBlocks.COARSE_STONE_BRICK_STAIRS, "Coarse Stone Brick Stairs");
 		addBlock(MSBlocks.SHADE_STAIRS, "Shade Stone Stairs");
@@ -768,10 +712,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, "Steep Green Stone Brick Stairs Base");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, "Steep Green Stone Brick Stairs Top");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SLAB, "Black Chess Brick Slab");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, "Dark Gray Chess Brick Slab");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB, "Light Gray Chess Brick Slab");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SLAB, "White Chess Brick Slab");
+		
 		addBlock(MSBlocks.CHALK_SLAB, "Chalk Slab");
 		addBlock(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
 		addBlock(MSBlocks.PINK_STONE_SLAB, "Pink Stone Slab");
