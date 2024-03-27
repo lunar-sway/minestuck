@@ -2135,6 +2135,7 @@
   "minestuck.entry.teleport_failed": "Entry failed. Unable to teleport you!",
   "minestuck.entry.wrong_dimension": "Entry not permitted from this dimension",
   "minestuck.entry.wrong_dimension_reentry": "You may not re-enter from this dimension",
+  "minestuck.free": "Free!",
   "minestuck.gate_destroyed": "The destination gate seems to have been destroyed.",
   "minestuck.gate_missing_land": "The land this gate leads to does not exist yet!",
   "minestuck.grist_cache": "Grist Cache",
