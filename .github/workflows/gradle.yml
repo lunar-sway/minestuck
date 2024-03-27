@@ -37,11 +37,4 @@ jobs:
       timeout-minutes: 5
       run: ./gradlew :runData
     - name: Detect Changes
-      id: changes
-      uses: ch4rl3x/has-changes-action@3058353091eb04bf2c56876af42fd5a286b41faa
-    - name: Did runData create changes?
-      if: steps.changes.outputs.changed == 1
-      run: |
-        echo "Files were changed after running runData. Make sure to run runData and commit changes!"
-        git status --porcelain
-        exit 1
+      uses: NathanielHill/fail-if-changes@master
