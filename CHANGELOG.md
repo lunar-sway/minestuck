@@ -28,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Coffee Claws
 - Added TV Antenna
 - Added Molten Amber fluid, used in Heat lands
-- Cruxite block set
+- Added Cruxite block set
 
 ### Changed
 
@@ -53,6 +53,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Double slabs will now drop two slabs when broken
 - Sneaking now prevents trajectory blocks from moving the player
+- Blue dirt can now have the shovel used on it
+- Minestuck fences will now connect with vanilla fences appropriately
+- All walls will now connect with each other properly
 
 ### Removed
 
