@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
+import com.mraof.minestuck.data.SkaiaBlocksData;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
@@ -55,62 +56,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	@Override
 	protected void generate()
 	{
+		SkaiaBlocksData.addLootTables(this);
 		AspectTreeBlocksData.addLootTables(this);
-		
-		dropSelf(BLACK_CHESS_DIRT.get());
-		dropSelf(WHITE_CHESS_DIRT.get());
-		dropSelf(DARK_GRAY_CHESS_DIRT.get());
-		dropSelf(LIGHT_GRAY_CHESS_DIRT.get());
-		
-		dropSelf(BLACK_CHESS_BRICKS.get());
-		dropSelf(BLACK_CHESS_BRICK_WALL.get());
-		
-		dropSelf(WHITE_CHESS_BRICKS.get());
-		dropSelf(WHITE_CHESS_BRICK_WALL.get());
-		
-		dropSelf(LIGHT_GRAY_CHESS_BRICKS.get());
-		dropSelf(LIGHT_GRAY_CHESS_BRICK_WALL.get());
-		
-		dropSelf(DARK_GRAY_CHESS_BRICKS.get());
-		dropSelf(DARK_GRAY_CHESS_BRICK_WALL.get());
-		
-		dropSelf(BLACK_CHESS_BRICK_SMOOTH.get());
-		dropSelf(BLACK_CHESS_BRICK_SMOOTH_STAIRS.get());
-		add(BLACK_CHESS_BRICK_SMOOTH_SLAB.get(), this::createSlabItemTable);
-		dropSelf(BLACK_CHESS_BRICK_SMOOTH_WALL.get());
-		dropSelf(BLACK_CHESS_BRICK_SMOOTH_BUTTON.get());
-		dropSelf(BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
-		
-		dropSelf(WHITE_CHESS_BRICK_SMOOTH.get());
-		dropSelf(WHITE_CHESS_BRICK_SMOOTH_STAIRS.get());
-		add(WHITE_CHESS_BRICK_SMOOTH_SLAB.get(), this::createSlabItemTable);
-		dropSelf(WHITE_CHESS_BRICK_SMOOTH_WALL.get());
-		dropSelf(WHITE_CHESS_BRICK_SMOOTH_BUTTON.get());
-		dropSelf(WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
-		
-		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH.get());
-		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
-		add(LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB.get(), this::createSlabItemTable);
-		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
-		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
-		dropSelf(LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
-		
-		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH.get());
-		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS.get());
-		add(DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB.get(), this::createSlabItemTable);
-		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_WALL.get());
-		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON.get());
-		dropSelf(DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE.get());
-		
-		dropSelf(BLACK_CHESS_BRICK_TRIM.get());
-		dropSelf(WHITE_CHESS_BRICK_TRIM.get());
-		dropSelf(LIGHT_GRAY_CHESS_BRICK_TRIM.get());
-		dropSelf(DARK_GRAY_CHESS_BRICK_TRIM.get());
-		dropSelf(CHECKERED_STAINED_GLASS.get());
-		dropSelf(BLACK_CROWN_STAINED_GLASS.get());
-		dropSelf(BLACK_PAWN_STAINED_GLASS.get());
-		dropSelf(WHITE_CROWN_STAINED_GLASS.get());
-		dropSelf(WHITE_PAWN_STAINED_GLASS.get());
 		
 		add(STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(COBBLESTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
@@ -735,10 +682,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(STONE_TABLET.get(), this::droppingWithTEItem);
 		dropSelf(NAKAGATOR_STATUE.get());
 		
-		dropSelf(BLACK_CHESS_BRICK_STAIRS.get());
-		dropSelf(DARK_GRAY_CHESS_BRICK_STAIRS.get());
-		dropSelf(LIGHT_GRAY_CHESS_BRICK_STAIRS.get());
-		dropSelf(WHITE_CHESS_BRICK_STAIRS.get());
 		dropSelf(COARSE_STONE_STAIRS.get());
 		dropSelf(COARSE_STONE_BRICK_STAIRS.get());
 		dropSelf(SHADE_STAIRS.get());
@@ -763,10 +706,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(DEAD_PLANKS_STAIRS.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get());
-		add(BLACK_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
-		add(DARK_GRAY_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
-		add(LIGHT_GRAY_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
-		add(WHITE_CHESS_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(CHALK_SLAB.get(), this::createSlabItemTable);
 		add(CHALK_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(PINK_STONE_SLAB.get(), this::createSlabItemTable);
