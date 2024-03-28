@@ -19,12 +19,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * A data driven object that contains everything which determines what shows up on the screen when the dialogue window is opened.
@@ -98,13 +100,18 @@ public final class Dialogue
 				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(Node::responses)
 		).apply(instance, Node::new));
 		
-		DialogueData evaluateData(LivingEntity entity, ServerPlayer player)
+		DialogueData evaluateData(LivingEntity entity, ServerPlayer player, @Nullable Dialogue.NextDialogue source)
 		{
 			List<ResponseData> responses = IntStream.range(0, responses().size())
 					.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, player))
 					.flatMap(Optional::stream).toList();
 			
-			List<Component> lines = this.messages.stream().map(messagePair -> this.buildMessage(messagePair, entity, player)).toList();
+			List<Component> lines = Stream.concat(
+					Optional.ofNullable(source).flatMap(NextDialogue::playerMessage).stream()
+							.map(message -> Component.translatable(DIALOGUE_FORMAT,
+									player.getDisplayName(), message.evaluateComponent(entity, player))),
+					this.messages.stream().map(messagePair -> this.buildMessage(messagePair, entity, player))
+			).toList();
 			
 			return new DialogueData(combineLines(lines), this.guiPath(), responses);
 		}
@@ -219,21 +226,22 @@ public final class Dialogue
 		}
 	}
 	
-	public record NextDialogue(ResourceLocation id, boolean setAsEntrypoint)
+	public record NextDialogue(ResourceLocation id, boolean setAsEntrypoint, Optional<DialogueMessage> playerMessage)
 	{
 		public static final Codec<NextDialogue> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("id").forGetter(NextDialogue::id),
-				Codec.BOOL.fieldOf("set_as_entrypoint").forGetter(NextDialogue::setAsEntrypoint)
+				Codec.BOOL.fieldOf("set_as_entrypoint").forGetter(NextDialogue::setAsEntrypoint),
+				new PreservingOptionalFieldCodec<>(DialogueMessage.CODEC, "player_message").forGetter(NextDialogue::playerMessage)
 		).apply(instance, NextDialogue::new));
 		public static final Codec<NextDialogue> EITHER_CODEC = Codec.either(ResourceLocation.CODEC, DIRECT_CODEC)
-				.xmap(either -> either.map(id -> new NextDialogue(id, false), Function.identity()),
-						nextDialogue -> nextDialogue.setAsEntrypoint ? Either.right(nextDialogue) : Either.left(nextDialogue.id));
+				.xmap(either -> either.map(id -> new NextDialogue(id, false, Optional.empty()), Function.identity()),
+						nextDialogue -> !nextDialogue.setAsEntrypoint && nextDialogue.playerMessage.isEmpty() ? Either.left(nextDialogue.id) : Either.right(nextDialogue));
 		
 		public void apply(DialogueComponent component, ServerPlayer player)
 		{
 			if(this.setAsEntrypoint)
 				component.setDialogueForPlayer(player, this.id);
-			component.tryOpenScreenForDialogue(player, this.id);
+			component.tryOpenScreenForDialogue(player, this.id, this);
 		}
 	}
 	

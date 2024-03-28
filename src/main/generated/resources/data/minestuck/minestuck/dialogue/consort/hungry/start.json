@@ -20,6 +20,7 @@
             "message": "minestuck.dialogue.yes",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/thanks",
+              "player_message": "minestuck.dialogue.consort.hungry.start.yes_reply",
               "set_as_entrypoint": true
             },
             "triggers": [
@@ -40,6 +41,7 @@
             "message": "minestuck.dialogue.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/first_no",
+              "player_message": "minestuck.dialogue.consort.hungry.start.first_no_reply",
               "set_as_entrypoint": true
             },
             "triggers": [
@@ -58,6 +60,7 @@
             "message": "minestuck.dialogue.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/first_no",
+              "player_message": "minestuck.dialogue.consort.hungry.start.first_no_reply",
               "set_as_entrypoint": true
             },
             "triggers": [
@@ -76,6 +79,7 @@
             "message": "minestuck.dialogue.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/first_no",
+              "player_message": "minestuck.dialogue.consort.hungry.start.first_no_reply",
               "set_as_entrypoint": true
             },
             "triggers": [

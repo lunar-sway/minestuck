@@ -3,12 +3,20 @@
     "message": "minestuck.dialogue.consort.mushroom_pizza.start",
     "responses": [
       {
-        "message": "minestuck.dialogue.consort.mushroom_pizza.start.reply_on",
-        "next_dialogue": "minestuck:consort/mushroom_pizza/on"
+        "message": "minestuck.dialogue.consort.mushroom_pizza.start.on",
+        "next_dialogue": {
+          "id": "minestuck:consort/mushroom_pizza/on",
+          "player_message": "minestuck.dialogue.consort.mushroom_pizza.start.on.reply",
+          "set_as_entrypoint": false
+        }
       },
       {
-        "message": "minestuck.dialogue.consort.mushroom_pizza.start.reply_off",
-        "next_dialogue": "minestuck:consort/mushroom_pizza/off"
+        "message": "minestuck.dialogue.consort.mushroom_pizza.start.off",
+        "next_dialogue": {
+          "id": "minestuck:consort/mushroom_pizza/off",
+          "player_message": "minestuck.dialogue.consort.mushroom_pizza.start.off.reply",
+          "set_as_entrypoint": false
+        }
       }
     ]
   }

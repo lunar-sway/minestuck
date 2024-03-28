@@ -270,24 +270,24 @@ public final class DialogueComponent
 			return;
 		}
 		
-		this.openScreenForDialogue(player, dialogueId.get(), dialogue);
+		this.openScreenForDialogue(player, dialogueId.get(), dialogue, null);
 	}
 	
-	public void tryOpenScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId)
+	public void tryOpenScreenForDialogue(ServerPlayer serverPlayer, ResourceLocation dialogueId, @Nullable Dialogue.NextDialogue source)
 	{
 		Dialogue.NodeSelector dialogue = DialogueNodes.getInstance().getDialogue(dialogueId);
 		if(dialogue != null)
-			this.openScreenForDialogue(serverPlayer, dialogueId, dialogue);
+			this.openScreenForDialogue(serverPlayer, dialogueId, dialogue, source);
 	}
 	
-	public void openScreenForDialogue(ServerPlayer player, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue)
+	public void openScreenForDialogue(ServerPlayer player, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue, @Nullable Dialogue.NextDialogue source)
 	{
 		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
 				.orElseThrow(IllegalStateException::new);
 		dialogueData.getComponent(player.level()).ifPresent(oldComponent -> oldComponent.clearOngoingDialogue(player));
 		
 		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, player);
-		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, player);
+		Dialogue.DialogueData data = node.getFirst().evaluateData(this.entity, player, source);
 		Dialogue.NodeReference nodeReference = new Dialogue.NodeReference(dialogueId, node.getSecond());
 		
 		this.ongoingDialogue.put(player.getUUID(), new OngoingDialogue(nodeReference, player.position()));

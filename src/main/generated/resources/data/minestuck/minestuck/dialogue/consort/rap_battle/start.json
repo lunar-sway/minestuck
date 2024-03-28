@@ -6,6 +6,7 @@
         "message": "minestuck.dialogue.consort.rap_battle.start.accept",
         "next_dialogue": {
           "id": "minestuck:consort/rap_battle/raps",
+          "player_message": "minestuck.dialogue.consort.rap_battle.start.accept.reply",
           "set_as_entrypoint": true
         },
         "triggers": [
@@ -25,7 +26,11 @@
       },
       {
         "message": "minestuck.dialogue.consort.rap_battle.start.deny",
-        "next_dialogue": "minestuck:consort/rap_battle/deny"
+        "next_dialogue": {
+          "id": "minestuck:consort/rap_battle/deny",
+          "player_message": "minestuck.dialogue.consort.rap_battle.start.deny.reply",
+          "set_as_entrypoint": false
+        }
       }
     ]
   }
