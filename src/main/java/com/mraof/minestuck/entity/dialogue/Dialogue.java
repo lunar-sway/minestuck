@@ -104,17 +104,23 @@ public final class Dialogue
 					.mapToObj(responseIndex -> responses().get(responseIndex).evaluateData(responseIndex, entity, player))
 					.flatMap(Optional::stream).toList();
 			
-			MutableComponent text = Component.empty();
+			List<Component> lines = this.messages.stream().map(messagePair -> this.buildMessage(messagePair, entity, player)).toList();
+			
+			return new DialogueData(combineLines(lines), this.guiPath(), responses);
+		}
+		
+		private static Component combineLines(Iterable<Component> lines)
+		{
+			MutableComponent component = Component.empty();
 			boolean isFirst = true;
-			for(Pair<MessageType, DialogueMessage> messagePair : this.messages)
+			for(Component line : lines)
 			{
 				if(!isFirst)
-					text.append("\n");
-				text.append(this.buildMessage(messagePair, entity, player));
+					component.append("\n");
+				component.append(line);
 				isFirst = false;
 			}
-			
-			return new DialogueData(text, this.guiPath(), responses);
+			return component;
 		}
 		
 		private Component buildMessage(Pair<MessageType, DialogueMessage> messagePair, LivingEntity entity, ServerPlayer player)
