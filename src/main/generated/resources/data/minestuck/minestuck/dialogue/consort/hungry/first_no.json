@@ -15,8 +15,22 @@
             "message": "minestuck.dialogue.consort.hungry.first_no.yes",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/finally",
-              "player_message": "minestuck.dialogue.consort.hungry.first_no.yes.reply",
-              "set_as_entrypoint": false
+              "reply_messages": [
+                {
+                  "type": "player",
+                  "message": "minestuck.dialogue.consort.hungry.first_no.yes.reply"
+                },
+                {
+                  "type": "description",
+                  "message": {
+                    "arguments": [
+                      "matched_item"
+                    ],
+                    "key": "minestuck.dialogue.consort.hungry.first_no.yes.desc"
+                  }
+                }
+              ],
+              "set_as_entrypoint": true
             },
             "triggers": [
               {
@@ -25,10 +39,6 @@
               {
                 "type": "minestuck:add_boondollars",
                 "boondollars": 10
-              },
-              {
-                "type": "minestuck:set_player_dialogue",
-                "dialogue": "minestuck:consort/hungry/finally2"
               }
             ]
           },

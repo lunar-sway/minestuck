@@ -107,11 +107,9 @@ public final class Dialogue
 					.flatMap(Optional::stream).toList();
 			
 			List<Component> lines = Stream.concat(
-					Optional.ofNullable(source).flatMap(NextDialogue::playerMessage).stream()
-							.map(message -> Component.translatable(DIALOGUE_FORMAT,
-									player.getDisplayName(), message.evaluateComponent(entity, player))),
-					this.messages.stream().map(messagePair -> this.buildMessage(messagePair, entity, player))
-			).toList();
+					source != null ? source.replyMessages.stream() : Stream.empty(),
+					this.messages.stream()
+			).map(messagePair -> this.buildMessage(messagePair, entity, player)).toList();
 			
 			return new DialogueData(combineLines(lines), this.guiPath(), responses);
 		}
@@ -135,7 +133,8 @@ public final class Dialogue
 			MutableComponent messageComponent = messagePair.getSecond().evaluateComponent(entity, player);
 			return switch(messagePair.getFirst())
 			{
-				case ENTITY -> {
+				case ENTITY ->
+				{
 					MutableComponent component = Component.translatable(DIALOGUE_FORMAT,
 							entity.getDisplayName(), messageComponent);
 					
@@ -144,6 +143,7 @@ public final class Dialogue
 					
 					yield component;
 				}
+				case PLAYER -> Component.translatable(DIALOGUE_FORMAT, player.getDisplayName(), messageComponent);
 				case DESCRIPTION ->
 						messageComponent.withStyle(style -> style.withItalic(true).applyFormat(ChatFormatting.GRAY));
 			};
@@ -167,6 +167,7 @@ public final class Dialogue
 	public enum MessageType implements StringRepresentable
 	{
 		ENTITY,
+		PLAYER,
 		DESCRIPTION;
 		
 		static final Codec<MessageType> CODEC = StringRepresentable.fromEnum(MessageType::values);
@@ -226,16 +227,19 @@ public final class Dialogue
 		}
 	}
 	
-	public record NextDialogue(ResourceLocation id, boolean setAsEntrypoint, Optional<DialogueMessage> playerMessage)
+	public record NextDialogue(ResourceLocation id, boolean setAsEntrypoint, List<Pair<MessageType, DialogueMessage>> replyMessages)
 	{
+		private static final MapCodec<List<Pair<MessageType, DialogueMessage>>> MESSAGES_MAP_CODEC = Codec.mapEither(DialogueMessage.CODEC.fieldOf("player_message"), Node.MESSAGE_CODEC.listOf().fieldOf("reply_messages"))
+				.xmap(either -> either.map(message -> List.of(Pair.of(MessageType.PLAYER, message)), Function.identity()),
+						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.PLAYER ? Either.left(messages.get(0).getSecond()): Either.right(messages));
 		public static final Codec<NextDialogue> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("id").forGetter(NextDialogue::id),
 				Codec.BOOL.fieldOf("set_as_entrypoint").forGetter(NextDialogue::setAsEntrypoint),
-				new PreservingOptionalFieldCodec<>(DialogueMessage.CODEC, "player_message").forGetter(NextDialogue::playerMessage)
+				MESSAGES_MAP_CODEC.forGetter(NextDialogue::replyMessages)
 		).apply(instance, NextDialogue::new));
 		public static final Codec<NextDialogue> EITHER_CODEC = Codec.either(ResourceLocation.CODEC, DIRECT_CODEC)
-				.xmap(either -> either.map(id -> new NextDialogue(id, false, Optional.empty()), Function.identity()),
-						nextDialogue -> !nextDialogue.setAsEntrypoint && nextDialogue.playerMessage.isEmpty() ? Either.left(nextDialogue.id) : Either.right(nextDialogue));
+				.xmap(either -> either.map(id -> new NextDialogue(id, false, List.of()), Function.identity()),
+						nextDialogue -> !nextDialogue.setAsEntrypoint && nextDialogue.replyMessages.isEmpty() ? Either.left(nextDialogue.id) : Either.right(nextDialogue));
 		
 		public void apply(DialogueComponent component, ServerPlayer player)
 		{

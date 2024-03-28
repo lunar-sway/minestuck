@@ -38,7 +38,7 @@ public final class ShadyConsortDialogue
 							.addTrigger(new Trigger.AddBoondollars(-500))
 							.addTrigger(new Trigger.AddConsortReputation(-35))
 							.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
-							.playerResponse(l.subMsg("buy.reply", " Sure! Fine! Ok! Jeez..."))
+							.addPlayerMessage(l.subMsg("buy.reply", " Sure! Fine! Ok! Jeez..."))
 							.nextDialogue(purchase)
 							.setNextAsEntrypoint())
 					.addClosingResponse(l.subMsg("deny", "It may be a deception, do not buy the \"thing\"!")));
@@ -51,10 +51,10 @@ public final class ShadyConsortDialogue
 							.addTrigger(new Trigger.AddConsortReputation(-15))
 							.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
 							.addTrigger(new Trigger.SetPlayerDialogue(purchase))
-							.playerResponse(l.subMsg("buy.reply", "Ok... Sure??"))
+							.addPlayerMessage(l.subMsg("buy.reply", "Ok... Sure??"))
 							.nextDialogue(builder.add("item", new NodeBuilder(l.defaultKeyMsg("Here, kid.")))))
 					.addResponse(new ResponseBuilder(l.subMsg("deny", "Do not buy from the shadowy dealer."))
-							.playerResponse(l.subMsg("deny.reply", "Uh, no thanks..."))
+							.addPlayerMessage(l.subMsg("deny.reply", "Uh, no thanks..."))
 							.nextDialogue(shadyOffer2)));
 		}));
 		
@@ -67,7 +67,7 @@ public final class ShadyConsortDialogue
 							.addTrigger(new Trigger.AddBoondollars(-500))
 							.addTrigger(new Trigger.AddConsortReputation(-35))
 							.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
-							.playerResponse(l.subMsg("buy.reply", "Sure! I'd be glad to!"))
+							.addPlayerMessage(l.subMsg("buy.reply", "Sure! I'd be glad to!"))
 							.nextDialogue(purchase)
 							.setNextAsEntrypoint())
 					.addClosingResponse(l.subMsg("deny", "Still do not buy from cheery salesman.")));
@@ -80,10 +80,10 @@ public final class ShadyConsortDialogue
 							.addTrigger(new Trigger.AddConsortReputation(-15))
 							.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
 							.addTrigger(new Trigger.SetPlayerDialogue(purchase))
-							.playerResponse(l.subMsg("buy.reply", "Sure! Why not?"))
+							.addPlayerMessage(l.subMsg("buy.reply", "Sure! Why not?"))
 							.nextDialogue(builder.add("item", new NodeBuilder(l.defaultKeyMsg("Here you are!")))))
 					.addResponse(new ResponseBuilder(l.subMsg("deny", "Do not buy from cheery salesman."))
-							.playerResponse(l.subMsg("deny.reply", "No thanks! I'm short on cash."))
+							.addPlayerMessage(l.subMsg("deny.reply", "No thanks! I'm short on cash."))
 							.nextDialogue(peppyOffer2)));
 		}));
 	}
