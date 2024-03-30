@@ -37,4 +37,4 @@ jobs:
       timeout-minutes: 5
       run: ./gradlew :runData
     - name: Detect Changes
-      uses: NathanielHill/fail-if-changes@master
+      uses: NathanielHill/fail-if-changes@9e6ed6bb0543551728592d8114cfaa1dcd9155a6
