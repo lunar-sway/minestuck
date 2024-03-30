@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
-import com.mraof.minestuck.entity.dialogue.DialogueAnimation;
+import com.mraof.minestuck.entity.dialogue.DialogueAnimationData;
 import com.mraof.minestuck.network.DialoguePackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
@@ -31,7 +31,7 @@ public class DialogueScreen extends Screen
 	
 	private final int dialogueId;
 	private final Dialogue.DialogueData dialogueData;
-	private final DialogueAnimation animation;
+	private final DialogueAnimationData animationData;
 	
 	private int xOffset;
 	private int yOffset;
@@ -52,14 +52,14 @@ public class DialogueScreen extends Screen
 		this.dialogueId = dialogueId;
 		this.dialogueData = dialogueData;
 		
-		this.animation = dialogueData.animation();
+		this.animationData = dialogueData.animationData();
 	}
 	
 	@Override
 	public void init()
 	{
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		xOffset = (this.width / 2) - (GUI_WIDTH / 2) - (animation.spriteWidth() / 2);
+		xOffset = (this.width / 2) - (GUI_WIDTH / 2) - (animationData.spriteWidth() / 2) - animationData.xOffset();
 		
 		this.messageLines = font.split(this.dialogueData.message(), GUI_WIDTH - 20);
 		
@@ -193,11 +193,14 @@ public class DialogueScreen extends Screen
 	 */
 	private void renderAnimation(GuiGraphics guiGraphics)
 	{
-		ResourceLocation sprite = animation.getRenderPath(dialogueData.spriteType());
+		ResourceLocation sprite = animationData.getRenderPath(dialogueData.spriteType());
+		float scale = animationData.scale();
+		int moddedWidth = (int) (animationData.spriteWidth() * scale);
+		int moddedHeight = (int) (animationData.spriteHeight() * scale);
 		
 		//if there is a .png.mcmeta file associated with the sprite, the animation for it is updated here
 		AnimatableTexture.setAndUpdate(sprite, animationTick);
-		guiGraphics.blit(sprite, xOffset + GUI_WIDTH, (this.height / 2) - (animation.spriteHeight() / 2), 0, 0, animation.spriteWidth(), animation.spriteHeight(), animation.spriteWidth(), animation.spriteHeight());
+		guiGraphics.blit(sprite, xOffset + GUI_WIDTH + animationData.xOffset(), (this.height / 2) - (animationData.spriteHeight() / 2), 0, 0, moddedWidth, moddedHeight, moddedWidth, moddedHeight);
 		
 		animationTick++;
 	}

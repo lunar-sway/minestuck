@@ -83,7 +83,7 @@ public final class Dialogue
 	{
 	}
 	
-	public record Node(List<Pair<MessageType, DialogueMessage>> messages, DialogueAnimation animation, ResourceLocation guiPath, List<Response> responses)
+	public record Node(List<Pair<MessageType, DialogueMessage>> messages, DialogueAnimationData animation, ResourceLocation guiPath, List<Response> responses)
 	{
 		private static final Codec<Pair<MessageType, DialogueMessage>> MESSAGE_CODEC = Codec.mapPair(MessageType.CODEC.fieldOf("type"), DialogueMessage.CODEC.fieldOf("message")).codec();
 		private static final MapCodec<List<Pair<MessageType, DialogueMessage>>> MESSAGES_MAP_CODEC = Codec.mapEither(DialogueMessage.CODEC.fieldOf("message"), MESSAGE_CODEC.listOf().fieldOf("messages"))
@@ -91,7 +91,7 @@ public final class Dialogue
 						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.ENTITY ? Either.left(messages.get(0).getSecond()): Either.right(messages));
 		public static final Codec<Node> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				MESSAGES_MAP_CODEC.forGetter(Node::messages),
-				PreservingOptionalFieldCodec.withDefault(DialogueAnimation.CODEC, "animation", DialogueAnimation.DEFAULT_ANIMATION).forGetter(Node::animation),
+				PreservingOptionalFieldCodec.withDefault(DialogueAnimationData.CODEC, "animation", DialogueAnimationData.DEFAULT_ANIMATION).forGetter(Node::animation),
 				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DEFAULT_GUI).forGetter(Node::guiPath),
 				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(Node::responses)
 		).apply(instance, Node::new));
@@ -243,14 +243,14 @@ public final class Dialogue
 		).apply(instance, SelectableDialogue::new));
 	}
 	
-	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimation animation, String spriteType)
+	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimationData animationData, String spriteType)
 	{
 		public static DialogueData read(FriendlyByteBuf buffer)
 		{
 			Component message = buffer.readComponent();
 			ResourceLocation guiBackground = buffer.readResourceLocation();
 			List<ResponseData> responses = buffer.readList(ResponseData::read);
-			DialogueAnimation animation = DialogueAnimation.read(buffer);
+			DialogueAnimationData animation = DialogueAnimationData.read(buffer);
 			String spriteType = buffer.readUtf(25);
 			
 			return new DialogueData(message, guiBackground, responses, animation, spriteType);
@@ -261,7 +261,7 @@ public final class Dialogue
 			buffer.writeComponent(this.message);
 			buffer.writeResourceLocation(this.guiBackground);
 			buffer.writeCollection(this.responses, (byteBuf, responseData) -> responseData.write(byteBuf));
-			this.animation.write(buffer);
+			this.animationData.write(buffer);
 			buffer.writeUtf(this.spriteType, 25);
 		}
 	}

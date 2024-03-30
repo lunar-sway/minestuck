@@ -14,26 +14,32 @@ import software.bernie.geckolib.cache.texture.AnimatableTexture;
 
 import java.util.Locale;
 
-public record DialogueAnimation(String emotion, int spriteHeight, int spriteWidth)
+public record DialogueAnimationData(String emotion, int spriteHeight, int spriteWidth, int xOffset, int yOffset, float scale)
 {
 	public static final int DEFAULT_SPRITE_WIDTH = 128;
 	public static final int DEFAULT_SPRITE_HEIGHT = 128;
 	
-	public static final DialogueAnimation DEFAULT_ANIMATION = new DialogueAnimation(Emotion.GENERIC.getSerializedName(), DEFAULT_SPRITE_HEIGHT, DEFAULT_SPRITE_WIDTH);
+	public static final DialogueAnimationData DEFAULT_ANIMATION = new DialogueAnimationData(Emotion.GENERIC.getSerializedName(), DEFAULT_SPRITE_HEIGHT, DEFAULT_SPRITE_WIDTH, 0, 0, 1.0F);
 	
-	public static Codec<DialogueAnimation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", Emotion.GENERIC.getSerializedName()).forGetter(DialogueAnimation::emotion),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "height", DEFAULT_SPRITE_HEIGHT).forGetter(DialogueAnimation::spriteHeight),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "width", DEFAULT_SPRITE_WIDTH).forGetter(DialogueAnimation::spriteWidth)
-	).apply(instance, DialogueAnimation::new));
+	public static Codec<DialogueAnimationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", Emotion.GENERIC.getSerializedName()).forGetter(DialogueAnimationData::emotion),
+			PreservingOptionalFieldCodec.withDefault(Codec.INT, "height", DEFAULT_SPRITE_HEIGHT).forGetter(DialogueAnimationData::spriteHeight),
+			PreservingOptionalFieldCodec.withDefault(Codec.INT, "width", DEFAULT_SPRITE_WIDTH).forGetter(DialogueAnimationData::spriteWidth),
+			PreservingOptionalFieldCodec.withDefault(Codec.INT, "x_offset", 0).forGetter(DialogueAnimationData::xOffset),
+			PreservingOptionalFieldCodec.withDefault(Codec.INT, "y_offset", 0).forGetter(DialogueAnimationData::yOffset),
+			PreservingOptionalFieldCodec.withDefault(Codec.FLOAT, "scale", 1.0F).forGetter(DialogueAnimationData::scale)
+	).apply(instance, DialogueAnimationData::new));
 	
-	public static DialogueAnimation read(FriendlyByteBuf buffer)
+	public static DialogueAnimationData read(FriendlyByteBuf buffer)
 	{
 		String emotion = buffer.readUtf(25);
 		int height = buffer.readInt();
 		int width = buffer.readInt();
+		int xOffset = buffer.readInt();
+		int yOffset = buffer.readInt();
+		float scale = buffer.readFloat();
 		
-		return new DialogueAnimation(emotion, height, width);
+		return new DialogueAnimationData(emotion, height, width, xOffset, yOffset, scale);
 	}
 	
 	public void write(FriendlyByteBuf buffer)
@@ -41,6 +47,9 @@ public record DialogueAnimation(String emotion, int spriteHeight, int spriteWidt
 		buffer.writeUtf(this.emotion, 25);
 		buffer.writeInt(this.spriteHeight);
 		buffer.writeInt(this.spriteWidth);
+		buffer.writeInt(this.xOffset);
+		buffer.writeInt(this.yOffset);
+		buffer.writeFloat(this.scale);
 	}
 	
 	/**
