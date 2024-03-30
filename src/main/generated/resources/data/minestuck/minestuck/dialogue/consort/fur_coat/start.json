@@ -8,7 +8,11 @@
           "amount": 100
         },
         "message": "minestuck.dialogue.consort.fur_coat.start.pay",
-        "next_dialogue": "minestuck:consort/fur_coat/gratitude",
+        "next_dialogue": {
+          "id": "minestuck:consort/fur_coat/gratitude",
+          "player_message": "minestuck.dialogue.consort.fur_coat.start.pay.reply",
+          "set_as_entrypoint": false
+        },
         "triggers": [
           {
             "type": "minestuck:add_boondollars",
@@ -30,7 +34,11 @@
       },
       {
         "message": "minestuck.dialogue.consort.fur_coat.start.ignore",
-        "next_dialogue": "minestuck:consort/fur_coat/death"
+        "next_dialogue": {
+          "id": "minestuck:consort/fur_coat/death",
+          "player_message": "minestuck.dialogue.consort.fur_coat.start.ignore.reply",
+          "set_as_entrypoint": false
+        }
       }
     ]
   }

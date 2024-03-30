@@ -23,7 +23,11 @@
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.shady_consort.shady_offer.start.buy",
-        "next_dialogue": "minestuck:shady_consort/shady_offer/item",
+        "next_dialogue": {
+          "id": "minestuck:shady_consort/shady_offer/item",
+          "player_message": "minestuck.dialogue.shady_consort.shady_offer.start.buy.reply",
+          "set_as_entrypoint": false
+        },
         "triggers": [
           {
             "type": "minestuck:add_boondollars",
@@ -45,7 +49,11 @@
       },
       {
         "message": "minestuck.dialogue.shady_consort.shady_offer.start.deny",
-        "next_dialogue": "minestuck:shady_consort/shady_offer/next"
+        "next_dialogue": {
+          "id": "minestuck:shady_consort/shady_offer/next",
+          "player_message": "minestuck.dialogue.shady_consort.shady_offer.start.deny.reply",
+          "set_as_entrypoint": false
+        }
       }
     ]
   }

@@ -11,6 +11,7 @@
         "message": "minestuck.dialogue.shady_consort.peppy_offer.next.buy",
         "next_dialogue": {
           "id": "minestuck:shady_consort/peppy_offer/purchase",
+          "player_message": "minestuck.dialogue.shady_consort.peppy_offer.next.buy.reply",
           "set_as_entrypoint": true
         },
         "triggers": [
