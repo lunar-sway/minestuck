@@ -150,6 +150,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.PINK_STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_CRUXITE_ORE);
 		
 		simpleBlockWithItem(MSBlocks.STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.DEEPSLATE_URANIUM_ORE);
@@ -170,6 +171,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.PINK_STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_URANIUM_ORE);
 		
 		simpleBlockWithItem(MSBlocks.NETHERRACK_COAL_ORE);
 		simpleBlockWithItem(MSBlocks.SHADE_STONE_COAL_ORE);
@@ -200,12 +202,19 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_top"))));
 		simpleBlockWithItem(MSBlocks.SHADE_STONE_GOLD_ORE);
 		simpleBlockWithItem(MSBlocks.PINK_STONE_GOLD_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_GOLD_ORE);
 		
 		simpleBlockWithItem(MSBlocks.END_STONE_REDSTONE_ORE);
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_REDSTONE_ORE);
+		
 		simpleBlockWithItem(MSBlocks.STONE_QUARTZ_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_QUARTZ_ORE);
+		
 		simpleBlockWithItem(MSBlocks.PINK_STONE_LAPIS_ORE);
+		
 		simpleBlockWithItem(MSBlocks.PINK_STONE_DIAMOND_ORE);
+		
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_EMERALD_ORE);
 		
 		//Resource Blocks

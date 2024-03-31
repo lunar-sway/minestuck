@@ -127,6 +127,7 @@ public final class MSBlocks
 	public static final RegistryObject<Block> PINK_STONE_CRUXITE_ORE = REGISTER.register("pink_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> MYCELIUM_STONE_CRUXITE_ORE = REGISTER.register("mycelium_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> UNCARVED_WOOD_CRUXITE_ORE = REGISTER.register("uncarved_wood_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
+	public static final RegistryObject<Block> BLACK_STONE_CRUXITE_ORE = REGISTER.register("black_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	
 	private static Block cruxiteOre(BlockBehaviour.Properties properties)
 	{
@@ -145,6 +146,7 @@ public final class MSBlocks
 	public static final RegistryObject<Block> PINK_STONE_URANIUM_ORE = REGISTER.register("pink_stone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
 	public static final RegistryObject<Block> MYCELIUM_STONE_URANIUM_ORE = REGISTER.register("mycelium_stone_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
 	public static final RegistryObject<Block> UNCARVED_WOOD_URANIUM_ORE = REGISTER.register("uncarved_wood_uranium_ore", () -> uraniumOre(copy(STONE_URANIUM_ORE.get())));
+	public static final RegistryObject<Block> BLACK_STONE_URANIUM_ORE = REGISTER.register("black_stone_uranium_ore", () -> cruxiteOre(copy(STONE_URANIUM_ORE.get())));
 	
 	private static Block uraniumOre(BlockBehaviour.Properties properties)
 	{
@@ -171,12 +173,14 @@ public final class MSBlocks
 	public static final RegistryObject<Block> RED_SANDSTONE_GOLD_ORE = REGISTER.register("red_sandstone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
 	public static final RegistryObject<Block> SHADE_STONE_GOLD_ORE = REGISTER.register("shade_stone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
 	public static final RegistryObject<Block> PINK_STONE_GOLD_ORE = REGISTER.register("pink_stone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
+	public static final RegistryObject<Block> BLACK_STONE_GOLD_ORE = REGISTER.register("black_stone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
 	
 	public static final RegistryObject<Block> END_STONE_REDSTONE_ORE = REGISTER.register("end_stone_redstone_ore", () -> new RedStoneOreBlock(copy(Blocks.REDSTONE_ORE)));
 	public static final RegistryObject<Block> UNCARVED_WOOD_REDSTONE_ORE = REGISTER.register("uncarved_wood_redstone_ore", () -> new RedStoneOreBlock(copy(Blocks.REDSTONE_ORE)));
-	
+	public static final RegistryObject<Block> BLACK_STONE_REDSTONE_ORE = REGISTER.register("black_stone_redstone_ore", () -> new RedStoneOreBlock(copy(Blocks.REDSTONE_ORE)));
 	
 	public static final RegistryObject<Block> STONE_QUARTZ_ORE = REGISTER.register("stone_quartz_ore", () -> new DropExperienceBlock(copy(Blocks.NETHER_QUARTZ_ORE), UniformInt.of(2, 5)));
+	public static final RegistryObject<Block> BLACK_STONE_QUARTZ_ORE = REGISTER.register("black_stone_quartz_ore", () -> new DropExperienceBlock(copy(Blocks.NETHER_QUARTZ_ORE), UniformInt.of(2, 5)));
 	
 	public static final RegistryObject<Block> PINK_STONE_LAPIS_ORE = REGISTER.register("pink_stone_lapis_ore", () -> new DropExperienceBlock(copy(Blocks.LAPIS_ORE), UniformInt.of(2, 5)));
 	

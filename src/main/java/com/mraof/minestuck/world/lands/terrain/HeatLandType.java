@@ -10,9 +10,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.data.worldgen.Carvers;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -62,8 +60,8 @@ public class HeatLandType extends TerrainLandType
 		registry.setBlock("village_door", MSBlocks.CINDERED_DOOR);
 		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
 		registry.setBlock("structure_wool_3", Blocks.PURPLE_WOOL);
-		registry.setBlock("cruxite_ore", MSBlocks.NETHERRACK_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.NETHERRACK_URANIUM_ORE);
+		registry.setBlock("cruxite_ore", MSBlocks.BLACK_STONE_CRUXITE_ORE);
+		registry.setBlock("uranium_ore", MSBlocks.BLACK_STONE_URANIUM_ORE);
 	}
 	
 	@Override
@@ -85,11 +83,15 @@ public class HeatLandType extends TerrainLandType
 						CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), MSBlocks.NETHERRACK_COAL_ORE.get().defaultBlockState(), 17),
-						CountPlacement.of(39), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(128)), BiomeFilter.biome()),
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_GOLD_ORE.get().defaultBlockState(), 9),
+						CountPlacement.of(18), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), Blocks.NETHER_QUARTZ_ORE.defaultBlockState(), 8),
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_REDSTONE_ORE.get().defaultBlockState(), 7),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_QUARTZ_ORE.get().defaultBlockState(), 8),
 						CountPlacement.of(26), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		

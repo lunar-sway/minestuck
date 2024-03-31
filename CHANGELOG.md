@@ -19,16 +19,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 - New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
 - New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
-- Added Carved Bush
-- Added Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
-- Added Silicone Caulk fluid, used in Wood lands
-- Added Cindered woodset and Trees in Heat lands
-- Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
-- Added Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
-- Added Coffee Claws
-- Added TV Antenna
-- Added Molten Amber fluid, used in Heat lands
+- Carved Bush
+- Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
+- Silicone Caulk fluid, used in Wood lands
+- Cindered woodset and Trees in Heat lands
+- Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
+- Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
+- Coffee Claws
+- TV Antenna
+- Molten Amber fluid, used in Heat lands
 - Cruxite block set
+- Black Stone Cruxite, Uranium, Gold, Redstone, and Quartz ores
 
 ### Changed
 

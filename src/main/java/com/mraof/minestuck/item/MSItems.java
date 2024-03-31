@@ -806,6 +806,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> PINK_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.PINK_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_CRUXITE_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.BLACK_STONE_CRUXITE_ORE);
 	
 	public static final RegistryObject<BlockItem> STONE_URANIUM_ORE = registerBlockItem(MSBlocks.STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> DEEPSLATE_URANIUM_ORE = registerBlockItem(MSBlocks.DEEPSLATE_URANIUM_ORE);
@@ -818,23 +819,34 @@ public class MSItems
 	public static final RegistryObject<BlockItem> PINK_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.PINK_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_URANIUM_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.BLACK_STONE_URANIUM_ORE);
 	
 	public static final RegistryObject<BlockItem> NETHERRACK_COAL_ORE = registerBlockItem(MSBlocks.NETHERRACK_COAL_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_COAL_ORE = registerBlockItem(MSBlocks.SHADE_STONE_COAL_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_COAL_ORE = registerBlockItem(MSBlocks.PINK_STONE_COAL_ORE);
+	
 	public static final RegistryObject<BlockItem> END_STONE_IRON_ORE = registerBlockItem(MSBlocks.END_STONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> SANDSTONE_IRON_ORE = registerBlockItem(MSBlocks.SANDSTONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_IRON_ORE = registerBlockItem(MSBlocks.RED_SANDSTONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_IRON_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_IRON_ORE);
+	
 	public static final RegistryObject<BlockItem> SANDSTONE_GOLD_ORE = registerBlockItem(MSBlocks.SANDSTONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_GOLD_ORE = registerBlockItem(MSBlocks.RED_SANDSTONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_GOLD_ORE = registerBlockItem(MSBlocks.SHADE_STONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_GOLD_ORE = registerBlockItem(MSBlocks.PINK_STONE_GOLD_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_GOLD_ORE = registerBlockItem(MSBlocks.BLACK_STONE_GOLD_ORE);
+	
 	public static final RegistryObject<BlockItem> END_STONE_REDSTONE_ORE = registerBlockItem(MSBlocks.END_STONE_REDSTONE_ORE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_REDSTONE_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_REDSTONE_ORE = registerBlockItem(MSBlocks.BLACK_STONE_REDSTONE_ORE);
+	
 	public static final RegistryObject<BlockItem> STONE_QUARTZ_ORE = registerBlockItem(MSBlocks.STONE_QUARTZ_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_QUARTZ_ORE = registerBlockItem(MSBlocks.BLACK_STONE_QUARTZ_ORE);
+	
 	public static final RegistryObject<BlockItem> PINK_STONE_LAPIS_ORE = registerBlockItem(MSBlocks.PINK_STONE_LAPIS_ORE);
+	
 	public static final RegistryObject<BlockItem> PINK_STONE_DIAMOND_ORE = registerBlockItem(MSBlocks.PINK_STONE_DIAMOND_ORE);
+	
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_EMERALD_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_EMERALD_ORE);
 	
 	

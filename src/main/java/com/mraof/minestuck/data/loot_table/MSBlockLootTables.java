@@ -122,6 +122,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(PINK_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(MYCELIUM_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(UNCARVED_WOOD_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(BLACK_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		
 		add(STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(DEEPSLATE_URANIUM_ORE.get(), this::uraniumOreDrop);
@@ -134,6 +135,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(PINK_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(MYCELIUM_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(UNCARVED_WOOD_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(BLACK_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		
 		add(NETHERRACK_COAL_ORE.get(), this::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), this::coalOreDrop);
@@ -143,15 +145,24 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(RED_SANDSTONE_IRON_ORE.get(), this::ironOreDrop);
 		add(END_STONE_IRON_ORE.get(), this::ironOreDrop);
 		add(UNCARVED_WOOD_IRON_ORE.get(), this::ironOreDrop);
+		
 		add(SANDSTONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(RED_SANDSTONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(SHADE_STONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(PINK_STONE_GOLD_ORE.get(), this::goldOreDrop);
+		add(BLACK_STONE_GOLD_ORE.get(), this::goldOreDrop);
+		
 		add(END_STONE_REDSTONE_ORE.get(), this::redstoneOreDrop);
 		add(UNCARVED_WOOD_REDSTONE_ORE.get(), this::redstoneOreDrop);
+		add(BLACK_STONE_REDSTONE_ORE.get(), this::redstoneOreDrop);
+		
 		add(STONE_QUARTZ_ORE.get(), this::quartzOreDrop);
+		add(BLACK_STONE_QUARTZ_ORE.get(), this::quartzOreDrop);
+		
 		add(PINK_STONE_LAPIS_ORE.get(), this::lapisOreDrop);
+		
 		add(PINK_STONE_DIAMOND_ORE.get(), this::diamondOreDrop);
+		
 		add(UNCARVED_WOOD_EMERALD_ORE.get(), this::emeraldOreDrop);
 		
 		dropSelf(CRUXITE_BLOCK.get());
