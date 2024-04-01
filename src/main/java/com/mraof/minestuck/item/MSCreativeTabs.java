@@ -824,9 +824,44 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BLACK_STONE_COLUMN.get());
 		output.accept(MSItems.CHISELED_BLACK_STONE_BRICKS.get());
 		output.accept(MSItems.CRACKED_BLACK_STONE_BRICKS.get());
+		
+		output.accept(MSItems.MAGMATIC_BLACK_STONE_BRICKS.get());
+		output.accept(MSItems.MAGMATIC_BLACK_STONE_BRICK_STAIRS.get());
+		output.accept(MSItems.MAGMATIC_BLACK_STONE_BRICK_SLAB.get());
+		output.accept(MSItems.MAGMATIC_BLACK_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.BLACK_SAND.get());
+		
 		output.accept(MSItems.IGNEOUS_STONE.get());
+		output.accept(MSItems.IGNEOUS_STONE_STAIRS.get());
+		output.accept(MSItems.IGNEOUS_STONE_SLAB.get());
+		output.accept(MSItems.IGNEOUS_STONE_WALL.get());
+		output.accept(MSItems.IGNEOUS_STONE_BUTTON.get());
+		output.accept(MSItems.IGNEOUS_STONE_PRESSURE_PLATE.get());
+		
+		output.accept(MSItems.POLISHED_IGNEOUS_STONE.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_STAIRS.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_SLAB.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_WALL.get());
+		
+		output.accept(MSItems.POLISHED_IGNEOUS_BRICKS.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_BRICK_STAIRS.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_BRICK_SLAB.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_BRICK_WALL.get());
+		
+		output.accept(MSItems.POLISHED_IGNEOUS_PILLAR.get());
+		output.accept(MSItems.CHISELED_IGNEOUS_STONE.get());
+		output.accept(MSItems.CRACKED_POLISHED_IGNEOUS_BRICKS.get());
+		
+		output.accept(MSItems.MAGMATIC_POLISHED_IGNEOUS_BRICKS.get());
+		output.accept(MSItems.MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS.get());
+		output.accept(MSItems.MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB.get());
+		output.accept(MSItems.MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL.get());
+		
+		output.accept(MSItems.MAGMATIC_IGNEOUS_STONE.get());
+		
 		output.accept(MSItems.PUMICE_STONE.get());
+		
 		output.accept(MSItems.DECREPIT_STONE_BRICKS.get());
 		output.accept(MSItems.DECREPIT_STONE_BRICK_STAIRS.get());
 		output.accept(MSItems.DECREPIT_STONE_BRICK_SLAB.get());

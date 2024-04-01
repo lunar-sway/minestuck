@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "minestuck:magmatic_black_stone_bricks"
+  },
+  "result": "minestuck:magmatic_black_stone_brick_stairs"
+}

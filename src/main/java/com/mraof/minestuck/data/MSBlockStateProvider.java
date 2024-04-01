@@ -395,6 +395,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.BLACK_SAND);
 		
 		simpleBlockWithItem(MSBlocks.BLACK_STONE);
+		stairsWithItem(MSBlocks.BLACK_STONE_STAIRS, MSBlocks.BLACK_STONE);
+		slabWithItem(MSBlocks.BLACK_STONE_SLAB, MSBlocks.BLACK_STONE);
 		wallWithItem(MSBlocks.BLACK_STONE_WALL, MSBlocks.BLACK_STONE);
 		buttonWithItem(MSBlocks.BLACK_STONE_BUTTON, MSBlocks.BLACK_STONE);
 		pressurePlateWithItem(MSBlocks.BLACK_STONE_PRESSURE_PLATE, MSBlocks.BLACK_STONE);
@@ -410,6 +412,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		wallWithItem(MSBlocks.POLISHED_BLACK_STONE_WALL, MSBlocks.POLISHED_BLACK_STONE);
 		
 		simpleBlockWithItem(MSBlocks.BLACK_STONE_BRICKS);
+		stairsWithItem(MSBlocks.BLACK_STONE_BRICK_STAIRS, MSBlocks.BLACK_STONE_BRICKS);
+		slabWithItem(MSBlocks.BLACK_STONE_BRICK_SLAB, MSBlocks.BLACK_STONE_BRICKS);
 		wallWithItem(MSBlocks.BLACK_STONE_BRICK_WALL, MSBlocks.BLACK_STONE_BRICKS);
 		
 		unflippedColumnWithItem(MSBlocks.BLACK_STONE_COLUMN,
@@ -419,7 +423,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_top"))));
 		simpleBlockWithItem(MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 		simpleBlockWithItem(MSBlocks.CRACKED_BLACK_STONE_BRICKS);
+		
 		simpleBlockWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		stairsWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS, MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		slabWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB, MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		wallWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL, MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
 		
 		simpleBlockWithItem(MSBlocks.IGNEOUS_STONE);
 		stairsWithItem(MSBlocks.IGNEOUS_STONE_STAIRS, MSBlocks.IGNEOUS_STONE);
@@ -427,14 +435,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 		wallWithItem(MSBlocks.IGNEOUS_STONE_WALL, MSBlocks.IGNEOUS_STONE);
 		buttonWithItem(MSBlocks.IGNEOUS_STONE_BUTTON, MSBlocks.IGNEOUS_STONE);
 		pressurePlateWithItem(MSBlocks.IGNEOUS_STONE_PRESSURE_PLATE, MSBlocks.IGNEOUS_STONE);
+		
 		simpleBlockWithItem(MSBlocks.POLISHED_IGNEOUS_STONE);
 		stairsWithItem(MSBlocks.POLISHED_IGNEOUS_STAIRS, MSBlocks.POLISHED_IGNEOUS_STONE);
 		slabWithItem(MSBlocks.POLISHED_IGNEOUS_SLAB, MSBlocks.POLISHED_IGNEOUS_STONE);
 		wallWithItem(MSBlocks.POLISHED_IGNEOUS_WALL, MSBlocks.POLISHED_IGNEOUS_STONE);
+		
 		simpleBlockWithItem(MSBlocks.POLISHED_IGNEOUS_BRICKS);
 		stairsWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS, MSBlocks.POLISHED_IGNEOUS_BRICKS);
 		slabWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB, MSBlocks.POLISHED_IGNEOUS_BRICKS);
 		wallWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_WALL, MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		
 		unflippedColumnWithItem(MSBlocks.POLISHED_IGNEOUS_PILLAR,
 				id -> models().cubeColumn(
 						id.getPath(),
@@ -442,7 +453,12 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_top"))));
 		simpleBlockWithItem(MSBlocks.CHISELED_IGNEOUS_STONE);
 		simpleBlockWithItem(MSBlocks.CRACKED_POLISHED_IGNEOUS_BRICKS);
+		
 		simpleBlockWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		stairsWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS, MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		slabWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB, MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		wallWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL, MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		
 		simpleBlockWithItem(MSBlocks.MAGMATIC_IGNEOUS_STONE);
 		
 		simpleBlockWithItem(MSBlocks.PUMICE_STONE);
@@ -1105,8 +1121,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.FROST_TILE_STAIRS, MSBlocks.FROST_TILE);
 		stairsWithItem(MSBlocks.FROST_BRICK_STAIRS, "frost_brick", texture(MSBlocks.FROST_BRICKS));
 		stairsWithItem(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON);
-		stairsWithItem(MSBlocks.BLACK_STONE_STAIRS, MSBlocks.BLACK_STONE);
-		stairsWithItem(MSBlocks.BLACK_STONE_BRICK_STAIRS, "black_stone_brick", texture(MSBlocks.BLACK_STONE_BRICKS));
 		
 		stairsWithItem(MSBlocks.MYCELIUM_STAIRS, "mycelium", texture(MSBlocks.MYCELIUM_STONE));
 		stairsWithItem(MSBlocks.MYCELIUM_BRICK_STAIRS, "mycelium_brick", texture(MSBlocks.MYCELIUM_BRICKS));
@@ -1137,8 +1151,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.SHADE_BRICK_SLAB, MSBlocks.SHADE_BRICKS);
 		slabWithItem(MSBlocks.FROST_TILE_SLAB, MSBlocks.FROST_TILE);
 		slabWithItem(MSBlocks.FROST_BRICK_SLAB, MSBlocks.FROST_BRICKS);
-		slabWithItem(MSBlocks.BLACK_STONE_SLAB, MSBlocks.BLACK_STONE);
-		slabWithItem(MSBlocks.BLACK_STONE_BRICK_SLAB, MSBlocks.BLACK_STONE_BRICKS);
 		slabWithItem(MSBlocks.MYCELIUM_SLAB, MSBlocks.MYCELIUM_STONE);
 		slabWithItem(MSBlocks.MYCELIUM_BRICK_SLAB, MSBlocks.MYCELIUM_BRICKS);
 		slabWithItem(MSBlocks.CHALK_SLAB, MSBlocks.CHALK);

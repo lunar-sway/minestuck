@@ -317,6 +317,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICK_WALL, "Flowery Mycelium Brick Wall");
 		
 		addBlock(MSBlocks.BLACK_STONE, "Black Stone");
+		addBlock(MSBlocks.BLACK_STONE_STAIRS, "Black Stone Stairs");
+		addBlock(MSBlocks.BLACK_STONE_SLAB, "Black Stone Slab");
 		addBlock(MSBlocks.BLACK_STONE_WALL, "Black Stone Wall");
 		addBlock(MSBlocks.BLACK_STONE_BUTTON, "Black Stone Button");
 		addBlock(MSBlocks.BLACK_STONE_PRESSURE_PLATE, "Black Stone Pressure Plate");
@@ -332,14 +334,49 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLACK_COBBLESTONE_WALL, "Black Cobblestone Wall");
 		
 		addBlock(MSBlocks.BLACK_STONE_BRICKS, "Black Stone Bricks");
+		addBlock(MSBlocks.BLACK_STONE_BRICK_STAIRS, "Black Stone Brick Stairs");
+		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
 		addBlock(MSBlocks.BLACK_STONE_BRICK_WALL, "Black Stone Brick Wall");
 		
 		addBlock(MSBlocks.BLACK_STONE_COLUMN, "Black Stone Column");
 		addBlock(MSBlocks.CHISELED_BLACK_STONE_BRICKS, "Chiseled Black Stone Bricks");
 		addBlock(MSBlocks.CRACKED_BLACK_STONE_BRICKS, "Cracked Black Stone Bricks");
+		
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICKS, "Magmatic Black Stone Bricks");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS, "Magmatic Black Stone Brick Stairs");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB, "Magmatic Black Stone Brick Slab");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL, "Magmatic Black Stone Brick Wall");
+		
 		addBlock(MSBlocks.BLACK_SAND, "Black Sand");
 		
 		addBlock(MSBlocks.IGNEOUS_STONE, "Igneous Stone");
+		addBlock(MSBlocks.IGNEOUS_STONE_STAIRS, "Igneous Stone Stairs");
+		addBlock(MSBlocks.IGNEOUS_STONE_SLAB, "Igneous Stone Slab");
+		addBlock(MSBlocks.IGNEOUS_STONE_WALL, "Igneous Stone Wall");
+		addBlock(MSBlocks.IGNEOUS_STONE_BUTTON, "Igneous Stone Button");
+		addBlock(MSBlocks.IGNEOUS_STONE_PRESSURE_PLATE, "Igneous Stone Pressure Plate");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_STONE, "Polished Igneous Stone");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_STAIRS, "Polished Igneous Stairs");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_SLAB, "Polished Igneous Slab");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_WALL, "Polished Igneous Wall");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICKS, "Polished Igneous Bricks");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS, "Polished Igneous Brick Stairs");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB, "Polished Igneous Brick Slab");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_WALL, "Polished Igneous Brick Wall");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_PILLAR, "Polished Igneous Pillar");
+		addBlock(MSBlocks.CHISELED_IGNEOUS_STONE, "Chiseled Igneous Stone");
+		addBlock(MSBlocks.CRACKED_POLISHED_IGNEOUS_BRICKS, "Cracked Polished Igneous Bricks");
+		
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS, "Magmatic Polished Igneous Bricks");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS, "Magmatic Polished Igneous Brick Stairs");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB, "Magmatic Polished Igneous Brick Slab");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL, "Magmatic Polished Igneous Brick Wall");
+		
+		addBlock(MSBlocks.MAGMATIC_IGNEOUS_STONE, "Magmatic Igneous Stone");
+		
 		addBlock(MSBlocks.PUMICE_STONE, "Pumice Stone");
 		
 		addBlock(MSBlocks.DECREPIT_STONE_BRICKS, "Decrepit Stone Bricks");
@@ -756,8 +793,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FROST_TILE_STAIRS, "Frost Tile Stairs");
 		addBlock(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
 		addBlock(MSBlocks.CAST_IRON_STAIRS, "Cast-Iron Stairs");
-		addBlock(MSBlocks.BLACK_STONE_STAIRS, "Black Stone Stairs");
-		addBlock(MSBlocks.BLACK_STONE_BRICK_STAIRS, "Black Stone Brick Stairs");
 		addBlock(MSBlocks.MYCELIUM_STAIRS, "Mycelium Stairs");
 		addBlock(MSBlocks.MYCELIUM_BRICK_STAIRS, "Mycelium Brick Stairs");
 		addBlock(MSBlocks.CHALK_STAIRS, "Chalk Stairs");
@@ -788,8 +823,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
 		addBlock(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
 		addBlock(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
-		addBlock(MSBlocks.BLACK_STONE_SLAB, "Black Stone Slab");
-		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");
 		addBlock(MSBlocks.MYCELIUM_BRICK_SLAB, "Mycelium Brick Slab");
 		addBlock(MSBlocks.FROST_TILE_SLAB, "Frost Tile Slab");

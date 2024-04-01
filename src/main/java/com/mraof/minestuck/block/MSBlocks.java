@@ -395,7 +395,11 @@ public final class MSBlocks
 	public static final RegistryObject<Block> BLACK_STONE_COLUMN = REGISTER.register("black_stone_column", () -> new MSDirectionalBlock(copy(BLACK_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_BLACK_STONE_BRICKS = REGISTER.register("chiseled_black_stone_bricks", () -> new Block(copy(BLACK_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> CRACKED_BLACK_STONE_BRICKS = REGISTER.register("cracked_black_stone_bricks", () -> new Block(copy(BLACK_STONE_BRICKS.get())));
+	
 	public static final RegistryObject<Block> MAGMATIC_BLACK_STONE_BRICKS = REGISTER.register("magmatic_black_stone_bricks", () -> new Block(copy(BLACK_STONE_BRICKS.get())));
+	public static final RegistryObject<StairBlock> MAGMATIC_BLACK_STONE_BRICK_STAIRS = REGISTER.register("magmatic_black_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState(), copy(BLACK_STONE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> MAGMATIC_BLACK_STONE_BRICK_SLAB = REGISTER.register("magmatic_black_stone_brick_slab", () -> new SlabBlock(copy(BLACK_STONE_BRICKS.get())));
+	public static final RegistryObject<WallBlock> MAGMATIC_BLACK_STONE_BRICK_WALL = REGISTER.register("magmatic_black_stone_brick_wall", () -> new WallBlock(copy(BLACK_STONE_BRICKS.get())));
 	
 	//Igneous
 	public static final RegistryObject<Block> IGNEOUS_STONE = REGISTER.register("igneous_stone", () -> new FlammableBlock(0, 0, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
@@ -404,6 +408,7 @@ public final class MSBlocks
 	public static final RegistryObject<WallBlock> IGNEOUS_STONE_WALL = REGISTER.register("igneous_stone_wall", () -> new WallBlock(copy(IGNEOUS_STONE.get())));
 	public static final RegistryObject<ButtonBlock> IGNEOUS_STONE_BUTTON = REGISTER.register("igneous_stone_button", () -> new ButtonBlock(copy(IGNEOUS_STONE.get()), BlockSetType.STONE, 10, true));
 	public static final RegistryObject<PressurePlateBlock> IGNEOUS_STONE_PRESSURE_PLATE = REGISTER.register("igneous_stone_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(IGNEOUS_STONE.get()), BlockSetType.STONE));
+	
 	public static final RegistryObject<Block> POLISHED_IGNEOUS_STONE = REGISTER.register("polished_igneous_stone", () -> new Block(copy(IGNEOUS_STONE.get())));
 	public static final RegistryObject<StairBlock> POLISHED_IGNEOUS_STAIRS = REGISTER.register("polished_igneous_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_IGNEOUS_STONE.get().defaultBlockState(), copy(POLISHED_IGNEOUS_STONE.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_IGNEOUS_SLAB = REGISTER.register("polished_igneous_stone_slab", () -> new SlabBlock(copy(POLISHED_IGNEOUS_STONE.get())));
@@ -417,7 +422,12 @@ public final class MSBlocks
 	public static final RegistryObject<Block> POLISHED_IGNEOUS_PILLAR = REGISTER.register("polished_igneous_pillar", () -> new MSDirectionalBlock(copy(POLISHED_IGNEOUS_BRICKS.get())));
 	public static final RegistryObject<Block> CHISELED_IGNEOUS_STONE = REGISTER.register("chiseled_igneous_stone", () -> new Block(copy(POLISHED_IGNEOUS_BRICKS.get())));
 	public static final RegistryObject<Block> CRACKED_POLISHED_IGNEOUS_BRICKS = REGISTER.register("cracked_polished_igneous_bricks", () -> new Block(copy(POLISHED_IGNEOUS_BRICKS.get())));
+	
 	public static final RegistryObject<Block> MAGMATIC_POLISHED_IGNEOUS_BRICKS = REGISTER.register("magmatic_polished_igneous_bricks", () -> new Block(copy(POLISHED_IGNEOUS_BRICKS.get())));
+	public static final RegistryObject<StairBlock> MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS = REGISTER.register("magmatic_polished_igneous_brick_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_IGNEOUS_BRICKS.get().defaultBlockState(), copy(POLISHED_IGNEOUS_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB = REGISTER.register("magmatic_polished_igneous_brick_slab", () -> new SlabBlock(copy(POLISHED_IGNEOUS_BRICKS.get())));
+	public static final RegistryObject<WallBlock> MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL = REGISTER.register("magmatic_polished_igneous_brick_wall", () -> new WallBlock(copy(POLISHED_IGNEOUS_BRICKS.get())));
+	
 	public static final RegistryObject<Block> MAGMATIC_IGNEOUS_STONE = REGISTER.register("magmatic_igneous_stone", () -> new Block(copy(IGNEOUS_STONE.get())));
 	
 	//Pumice
