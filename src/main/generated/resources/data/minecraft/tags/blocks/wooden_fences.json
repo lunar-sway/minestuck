@@ -1,0 +1,20 @@
+{
+  "values": [
+    "minestuck:perfectly_generic_fence",
+    "minestuck:glowing_fence",
+    "minestuck:uncarved_wood_fence",
+    "minestuck:chipboard_fence",
+    "minestuck:carved_fence",
+    "minestuck:treated_uncarved_wood_fence",
+    "minestuck:treated_chipboard_fence",
+    "minestuck:treated_fence",
+    "minestuck:lacquered_uncarved_wood_fence",
+    "minestuck:lacquered_chipboard_fence",
+    "minestuck:lacquered_fence",
+    "minestuck:frost_fence",
+    "minestuck:rainbow_fence",
+    "minestuck:end_fence",
+    "minestuck:dead_fence",
+    "minestuck:shadewood_fence"
+  ]
+}
