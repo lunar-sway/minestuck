@@ -21,6 +21,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cruxite block set
 - New dialogue system that uses a gui screen, replacing the chat-based system
 - Dialogue in this new system is data-driven, and can be defined or tweaked through datapacks
+- New item tag for magic weapons
+- New dialogue
 
 ### Changed
 
@@ -32,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer Theme is now chosen from a list of available Themes in separate GUI
 - Changes to computer Theme texture Crocker
 - Computer programs now always use Theme specific texture for arrow buttons
-- Existing consort dialogue have been ported to the new dialogue system with some tweaks
+- Existing consort dialogue have been ported to the new dialogue system with some tweaks to wording or options
 
 ### Fixed
 
