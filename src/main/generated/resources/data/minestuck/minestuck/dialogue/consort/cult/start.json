@@ -4,12 +4,12 @@
       "arguments": [
         "player_title"
       ],
-      "key": "minestuck.dialogue.consort.cult.1"
+      "key": "minestuck.dialogue.consort.cult.start"
     },
     "responses": [
       {
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/cult.2"
+        "next_dialogue": "minestuck:consort/cult/after_invitation"
       }
     ]
   }

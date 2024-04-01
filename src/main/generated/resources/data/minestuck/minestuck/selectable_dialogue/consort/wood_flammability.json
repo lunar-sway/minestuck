@@ -3,5 +3,5 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:wood"
   },
-  "dialogue": "minestuck:consort/wood_treatments"
+  "dialogue": "minestuck:consort/wood_flammability.1"
 }

@@ -1,0 +1,27 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.favorite_sediment.start",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.favorite_sediment.start.sand",
+        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite"
+      },
+      {
+        "message": "minestuck.dialogue.consort.favorite_sediment.start.silt",
+        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite"
+      },
+      {
+        "message": "minestuck.dialogue.consort.favorite_sediment.start.clay",
+        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite"
+      },
+      {
+        "message": "minestuck.dialogue.consort.favorite_sediment.start.dirt",
+        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite"
+      },
+      {
+        "message": "minestuck.dialogue.consort.favorite_sediment.start.question",
+        "next_dialogue": "minestuck:consort/favorite_sediment/start.worried"
+      }
+    ]
+  }
+}
