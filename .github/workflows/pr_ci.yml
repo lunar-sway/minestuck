@@ -1,0 +1,14 @@
+name: Pull Request CI
+
+on: [ pull_request ]
+
+jobs:
+  checkstyle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dbelyaev/action-checkstyle@v1.7.1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-check
+          checkstyle_config: .github/workflows/checkstyle.xml
