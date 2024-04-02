@@ -10,8 +10,7 @@ import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
@@ -105,7 +104,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		if(nbt.contains("ownerId"))
 			ownerId = nbt.getInt("ownerId");
-		else this.owner = IdentifierHandler.load(nbt, "owner");
+		else this.owner = IdentifierHandler.loadOrThrow(nbt, "owner");
 		
 		//keep this after everything else has been loaded
 		if(gui != null)
@@ -146,9 +145,10 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			tagCompound.putInt("ownerId", owner.getId());
 		if(hasProgram(1))
 		{
-			SburbConnection c = SkaianetHandler.get(getLevel()).getServerConnection(this);
-			if(c != null)
-				tagCompound.getCompound("programData").getCompound("program_1").putInt("connectedClient", c.getClientIdentifier().getId());
+			SburbConnections.get(getLevel().getServer()).getServerConnection(this).ifPresent(c ->
+					tagCompound.getCompound("programData").getCompound("program_1")
+							.putInt("connectedClient", c.client().getId())
+			);
 		}
 		return tagCompound;
 	}

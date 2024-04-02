@@ -4,8 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -26,12 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Containers for grist layers.
- * Grist layers need the base grist type, which is kept in the {@link com.mraof.minestuck.skaianet.SburbConnection},
- * and the world seed, which is kept in {@link com.mraof.minestuck.world.gen.LandChunkGenerator}.
- * The sburb connection is created before the chunk generator, meaning that the layers can't be created with the connection as the seed wouldn't be available.
- * When the chunk generator is created, it lacks the information needed to find the related sburb connection, meaning that the layers can't be created in the chunk generator.
- * As such, this approach is needed until we get a more sane data structure.
+ * Container for grist layers.
  */
 @Mod.EventBusSubscriber
 public class GristLayerInfo
@@ -56,9 +50,9 @@ public class GristLayerInfo
 			long seed = level.getSeed();
 			
 			GristType baseType;
-			SburbConnection connection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
-			if (connection != null)
-				baseType = connection.getBaseGrist();
+			Optional<SburbPlayerData> landData = SburbPlayerData.getForLand(level);
+			if (landData.isPresent())
+				baseType = landData.get().getBaseGrist();
 			else
 			{
 				LOGGER.error("Unable to find sburb connection for land dimension \"{}\" when creating grist layers. Defaulting to amber base type.", level.dimension().location());

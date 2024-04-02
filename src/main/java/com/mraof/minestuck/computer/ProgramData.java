@@ -3,7 +3,8 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.ComputerInteractions;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
@@ -106,7 +107,7 @@ public final class ProgramData
 		{
 			if(computer.getLevel() instanceof ServerLevel level && computer.getOwner() != null)
 			{
-				SkaianetHandler.get(level).closeClientConnection(computer);	//Can safely be done even if this computer isn't in a connection
+				ComputerInteractions.get(level.getServer()).closeClientConnection(computer);	//Can safely be done even if this computer isn't in a connection
 				
 				EditmodeLocations.removeBlockSource(level.getServer(), computer.getOwner(), level.dimension(), computer.getBlockPos());
 			}
@@ -119,7 +120,8 @@ public final class ProgramData
 		public void onClosed(ComputerBlockEntity computer)
 		{
 			Objects.requireNonNull(computer.getLevel());
-			SkaianetHandler.get(computer.getLevel()).closeServerConnection(computer);
+			MinecraftServer mcServer = Objects.requireNonNull(computer.getLevel().getServer());
+			ComputerInteractions.get(mcServer).closeServerConnection(computer);
 		}
 	};
 }

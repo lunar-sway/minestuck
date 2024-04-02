@@ -11,8 +11,8 @@ import com.mraof.minestuck.network.EntryEffectPackets;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
@@ -48,7 +48,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
@@ -116,15 +115,15 @@ public class EntryProcess
 		}
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Optional<SburbConnection> c = SkaianetHandler.get(player.serverLevel()).getPrimaryConnection(identifier, true);
+		ResourceKey<Level> land = SburbPlayerData.get(identifier, player.server).getLandDimensionIfEntered();
 		
-		if(c.isPresent() && c.get().hasEntered())
+		if(land != null)
 		{
-			secondEntryTeleport(player, c.get().getClientDimension());
+			secondEntryTeleport(player, land);
 			return;
 		}
 		
-		ResourceKey<Level> landDimension = SkaianetHandler.get(player.level()).prepareEntry(identifier);
+		ResourceKey<Level> landDimension = SburbHandler.prepareEntry(identifier, player.server);
 		if(landDimension == null)
 		{
 			player.sendSystemMessage(Component.translatable(CREATION_FAILED));
@@ -226,7 +225,7 @@ public class EntryProcess
 			}
 			
 			finalizeEntry(player, originLevel, landLevel, wasInsideEntryArea);
-			SkaianetHandler.get(player.level()).onEntry(playerId);
+			SburbHandler.onEntry(player.server, player);
 			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - time);
 			
 		} catch(Exception e)

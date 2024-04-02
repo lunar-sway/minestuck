@@ -1,10 +1,11 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
@@ -64,6 +65,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	};
 	
 	private int ticks_since_update = 0;
+	@Nullable
 	private PlayerIdentifier owner;
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	
@@ -151,8 +153,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		this.wildcardGrist = MSNBTUtil.readGristType(nbt, "gristType");
 		
-		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
-			owner = IdentifierHandler.load(nbt, "owner");
+		owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
 	}
 	
 	@Override
@@ -258,6 +259,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		this.owner = identifier;
 	}
 	
+	@Nullable
 	@Override
 	public PlayerIdentifier getOwner()
 	{
