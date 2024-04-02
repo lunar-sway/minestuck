@@ -2230,7 +2230,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleSelectorScreen.RANDOMIZE, "Randomize");
 		add(EffectTogglePacket.ON, "Aspect Effects have been toggled on");
 		add(EffectTogglePacket.OFF, "Aspect Effects have been toggled off");
-		add(SkaianetHandler.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
+		add(InfoTracker.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
 		add(TransportalizerBlockEntity.DISABLED, "This transportalizer is currently disabled with a redstone signal.");
 		add(TransportalizerBlockEntity.BLOCKED, "The transportalizer appears to need more space above it to function.");
 		add(TransportalizerBlockEntity.BLOCKED_DESTINATION, "The destination seems to be blocked.");
@@ -2238,7 +2238,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerBlockEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
 		add(TransportalizerBlockEntity.TAKEN, "The code \"%s\" has been taken by another transportalizer.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
-		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
 		add(WirelessRedstoneTransmitterScreen.TITLE, "Wireless Redstone");
 		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
 		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
@@ -2259,8 +2258,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbClient.SELECT_COLOR, "Select a Color");
 		add(SburbClient.CONNECT, "Connected to %s");
 		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
-		add(SkaianetHandler.CLOSED, "Connection closed");
-		add(SkaianetHandler.CLOSED_SERVER, "Server closed");
+		add(SburbConnections.CLOSED, "Connection closed");
 		add(SburbServer.OFFLINE, "Server offline");
 		add(SburbClient.SELECT, "Select a server below");
 		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
@@ -2271,17 +2269,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurner.CHOOSE, "Choose disk type to write");
-		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
+		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
 		add(SettingsApp.THEME, "Choose Theme");
 		add(SettingsApp.TITLE, "Sburb Settings");
-		add(MergeResult.ABLE, "Able to merge");
-		add(MergeResult.LOCKED, "Either session is locked");
-		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
-		add(MergeResult.SESSION_FULL, "The session is full");
-		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
-		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
-		add(MergeResult.GENERIC_FAIL, "Merge failed");
-		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
 		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console");
@@ -2346,13 +2336,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerCommand.FAILURE_RESULT, "Failed the teleport anything.");
 		add(TransportalizerCommand.RESULT, "Successfully teleported %s entities to transportalizer");
 		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
-		add(SburbConnectionCommand.LOCKED, "Their session is locked, and should no longer be modified");
 		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
+		add(DebugLandsCommand.SUCCESS, "Created %d lands connected to %s");
 		add(DebugLandsCommand.MUST_ENTER, "You must have entered before you can create debug lands");
+		add(DebugLandsCommand.INVALID_CHAIN, "The given land list is not valid for this command");
 		add(SburbPredefineCommand.SET_TITLE, "Predefined %s's title as %s");
 		add(SburbPredefineCommand.SET_TERRAIN_LAND, "Predefined %s's terrain land type");
 		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
 		add(SburbPredefineCommand.DEFINE, "Predefined full data for %s");
+		add(SburbPredefineCommand.TOO_LATE, "It is too late to predefine data for this player");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
@@ -2364,7 +2356,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(LandTypePairArgument.INCOMPLETE, "Incomplete (expected two land aspects)");
 		
 		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
-		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
 		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
 		add(PredefineData.GENERATED_TITLE, "Generated %s as predefined title");
 		add(PredefineData.CHANGED_TITLE, "Changed predefined title from %s to %s due to a new title land type");

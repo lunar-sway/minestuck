@@ -306,7 +306,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 				talkRepPlayerList.clear();
 				ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
 				for(int i = 0; i < list.size(); i++)
-					talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
+					talkRepPlayerList.add(IdentifierHandler.loadOrThrow(list.getCompound(i), "id"));
 			}
 			
 			hasHadMessage = true;
