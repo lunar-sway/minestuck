@@ -86,6 +86,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		hangingSignBlock(MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.LACQUERED_PLANKS.get()));
+		
+		signBlock(((StandingSignBlock) MSBlocks.SHADEWOOD_SIGN.get()), ((WallSignBlock) MSBlocks.SHADEWOOD_WALL_SIGN.get()),
+				blockTexture(MSBlocks.SHADEWOOD_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.SHADEWOOD_PLANKS.get()));
+		
+		
 				
 		simpleBlockWithItem(MSBlocks.STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.NETHERRACK_CRUXITE_ORE);
@@ -704,11 +712,23 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.STRIPPED_GLOWING_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
 		axisWithItem(MSBlocks.FROST_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.STRIPPED_FROST_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
 		axisWithItem(MSBlocks.RAINBOW_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.STRIPPED_RAINBOW_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
@@ -724,15 +744,23 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.STRIPPED_DEAD_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
 		axisWithItem(MSBlocks.CINDERED_LOG,
 				id -> models().cube(id.getPath(),
-						texture(id.withSuffix("_bottom")),
-						texture(id.withSuffix("_top")),
-						texture(id.withSuffix("_north")),
-						texture(id.withSuffix("_south")),
-						texture(id.withSuffix("_east")),
-						texture(id.withSuffix("_west")))
-				.texture("particle", texture(id.withSuffix("_north"))));
+								texture(id.withSuffix("_bottom")),
+								texture(id.withSuffix("_top")),
+								texture(id.withSuffix("_north")),
+								texture(id.withSuffix("_south")),
+								texture(id.withSuffix("_east")),
+								texture(id.withSuffix("_west")))
+						.texture("particle", texture(id.withSuffix("_north"))));
+		axisWithItem(MSBlocks.STRIPPED_CINDERED_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
 		axisWithItem(MSBlocks.PETRIFIED_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
@@ -762,6 +790,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture("glowing_log"),
 						texture("glowing_log")));
+		axisWithItem(MSBlocks.STRIPPED_GLOWING_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("stripped_glowing_log"),
+						texture("stripped_glowing_log")));
 		axisWithItem(MSBlocks.SHADEWOOD,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
@@ -790,14 +822,26 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture("frost_log"),
 						texture("frost_log")));
+		axisWithItem(MSBlocks.STRIPPED_FROST_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("stripped_frost_log"),
+						texture("stripped_frost_log")));
 		axisWithItem(MSBlocks.RAINBOW_WOOD,
 				id -> models().cubeColumn(id.getPath(),
 						texture("rainbow_log"),
 						texture("rainbow_log")));
+		axisWithItem(MSBlocks.STRIPPED_RAINBOW_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("stripped_rainbow_log"),
+						texture("stripped_rainbow_log")));
 		axisWithItem(MSBlocks.END_WOOD,
 				id -> models().cubeColumn(id.getPath(),
 						texture("end_log"),
 						texture("end_log")));
+		axisWithItem(MSBlocks.STRIPPED_END_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("stripped_end_log"),
+						texture("stripped_end_log")));
 		axisWithItem(MSBlocks.VINE_WOOD,
 				id -> models().cubeColumn(id.getPath(),
 						texture("vine_log"),
@@ -810,10 +854,18 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture("dead_log"),
 						texture("dead_log")));
+		axisWithItem(MSBlocks.STRIPPED_DEAD_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("stripped_dead_log"),
+						texture("stripped_dead_log")));
 		axisWithItem(MSBlocks.CINDERED_WOOD,
 				id -> models().cubeColumn(id.getPath(),
 						texture("cindered_log_west"),
 						texture("cindered_log_west")));
+		axisWithItem(MSBlocks.STRIPPED_CINDERED_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("stripped_cindered_log"),
+						texture("stripped_cindered_log")));
 		axisWithItem(MSBlocks.PETRIFIED_WOOD,
 				id -> models().cubeColumn(id.getPath(),
 						texture("petrified_log"),

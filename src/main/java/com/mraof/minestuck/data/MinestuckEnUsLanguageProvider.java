@@ -69,6 +69,20 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
+		addBlock(MSBlocks.STRIPPED_GLOWING_LOG, "Stripped Glowing Log");
+		addBlock(MSBlocks.STRIPPED_FROST_LOG, "Stripped Frost Log");
+		addBlock(MSBlocks.STRIPPED_RAINBOW_LOG, "Stripped Rainbow Log");
+		addBlock(MSBlocks.STRIPPED_END_LOG, "Stripped End Log");
+		addBlock(MSBlocks.STRIPPED_DEAD_LOG, "Stripped Dead Log");
+		addBlock(MSBlocks.STRIPPED_CINDERED_LOG, "Stripped Cindered Log");
+		addBlock(MSBlocks.STRIPPED_GLOWING_WOOD, "Stripped Glowing Wood");
+		addBlock(MSBlocks.STRIPPED_FROST_WOOD, "Stripped Frost Wood");
+		addBlock(MSBlocks.STRIPPED_RAINBOW_WOOD, "Stripped Rainbow Wood");
+		addBlock(MSBlocks.STRIPPED_END_WOOD, "Stripped End Wood");
+		addBlock(MSBlocks.STRIPPED_DEAD_WOOD, "Stripped Dead Wood");
+		addBlock(MSBlocks.STRIPPED_CINDERED_WOOD, "Stripped Cindered Wood");
+		
+		
 		addBlock(MSBlocks.CARVED_SIGN, "Carved Sign");
 		addBlock(MSBlocks.CARVED_HANGING_SIGN, "Carved Hanging Sign");
 		addBlock(MSBlocks.DEAD_SIGN, "Dead Sign");

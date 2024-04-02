@@ -53,6 +53,19 @@ public final class MSCreativeTabs
 		output.accept(MSItems.LACQUERED_SIGN.get());
 		output.accept(MSItems.LACQUERED_HANGING_SIGN.get());
 		
+		output.accept(MSItems.STRIPPED_CINDERED_LOG.get());
+		output.accept(MSItems.STRIPPED_CINDERED_WOOD.get());
+		output.accept(MSItems.STRIPPED_DEAD_LOG.get());
+		output.accept(MSItems.STRIPPED_DEAD_WOOD.get());
+		output.accept(MSItems.STRIPPED_END_LOG.get());
+		output.accept(MSItems.STRIPPED_END_WOOD.get());
+		output.accept(MSItems.STRIPPED_FROST_LOG.get());
+		output.accept(MSItems.STRIPPED_FROST_WOOD.get());
+		output.accept(MSItems.STRIPPED_GLOWING_WOOD.get());
+		output.accept(MSItems.STRIPPED_GLOWING_LOG.get());
+		output.accept(MSItems.STRIPPED_RAINBOW_LOG.get());
+		output.accept(MSItems.STRIPPED_RAINBOW_WOOD.get());
+		
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 10));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 100));

@@ -23,6 +23,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.grower.AcaciaTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -87,6 +88,19 @@ public final class MSBlocks
 	public static final RegistryObject<Block> LACQUERED_WALL_SIGN = REGISTER.register("lacquered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LACQUERED));
 	public static final RegistryObject<Block> LACQUERED_HANGING_SIGN = REGISTER.register("lacquered_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LACQUERED));
 	public static final RegistryObject<Block> LACQUERED_WALL_HANGING_SIGN = REGISTER.register("lacquered_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.LACQUERED));
+	
+	public static final RegistryObject<Block> STRIPPED_GLOWING_LOG = REGISTER.register("stripped_glowing_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_GLOWING_WOOD = REGISTER.register("stripped_glowing_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_FROST_LOG = REGISTER.register("stripped_frost_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_FROST_WOOD = REGISTER.register("stripped_frost_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_RAINBOW_LOG = REGISTER.register("stripped_rainbow_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_RAINBOW_WOOD = REGISTER.register("stripped_rainbow_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_END_LOG = REGISTER.register("stripped_end_log", () -> new DoubleLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.COLOR_MAGENTA, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_END_WOOD = REGISTER.register("stripped_end_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.COLOR_MAGENTA, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_DEAD_LOG = REGISTER.register("stripped_dead_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_DEAD_WOOD = REGISTER.register("stripped_dead_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_CINDERED_LOG = REGISTER.register("stripped_cindered_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_CINDERED_WOOD = REGISTER.register("stripped_cindered_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	
 	//Cruxite ores
 	public static final RegistryObject<Block> STONE_CRUXITE_ORE = REGISTER.register("stone_cruxite_ore", () -> cruxiteOre(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F, 3.0F).requiresCorrectToolForDrops()));

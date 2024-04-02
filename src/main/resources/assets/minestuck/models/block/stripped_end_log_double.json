@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "minestuck:block/stripped_end_log_double",
+        "side": "minestuck:block/stripped_end_log_triple"
+    }
+}

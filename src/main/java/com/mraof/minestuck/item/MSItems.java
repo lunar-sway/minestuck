@@ -104,6 +104,20 @@ public class MSItems
 			() -> new HangingSignItem(MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get(),
 					new Item.Properties().stacksTo(16)));
 	
+	public static final RegistryObject<BlockItem> STRIPPED_GLOWING_LOG = registerBlockItem(MSBlocks.STRIPPED_GLOWING_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_FROST_LOG = registerBlockItem(MSBlocks.STRIPPED_FROST_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_RAINBOW_LOG = registerBlockItem(MSBlocks.STRIPPED_RAINBOW_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_END_LOG = registerBlockItem(MSBlocks.STRIPPED_END_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_DEAD_LOG = registerBlockItem(MSBlocks.STRIPPED_DEAD_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_CINDERED_LOG = registerBlockItem(MSBlocks.STRIPPED_CINDERED_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_GLOWING_WOOD = registerBlockItem(MSBlocks.STRIPPED_GLOWING_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_FROST_WOOD = registerBlockItem(MSBlocks.STRIPPED_FROST_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_RAINBOW_WOOD = registerBlockItem(MSBlocks.STRIPPED_RAINBOW_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_END_WOOD = registerBlockItem(MSBlocks.STRIPPED_END_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_DEAD_WOOD = registerBlockItem(MSBlocks.STRIPPED_DEAD_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_CINDERED_WOOD = registerBlockItem(MSBlocks.STRIPPED_CINDERED_WOOD);
+	
+	
 	//Hammers
 	public static final RegistryObject<Item> CLAW_HAMMER = REGISTER.register("claw_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.8F).efficiency(1.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));
 	public static final RegistryObject<Item> SLEDGE_HAMMER = REGISTER.register("sledge_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -3.2F).efficiency(4.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));
