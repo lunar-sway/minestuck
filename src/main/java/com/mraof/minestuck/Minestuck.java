@@ -104,6 +104,18 @@ public class Minestuck
 		MSArgumentTypes.REGISTER.register(eventBus);
 		
 		MSCreativeTabs.REGISTER.register(eventBus);
+		
+		if(false || ModList.get().isLoaded("some mod"))
+		{
+		
+		}
+		long l = 1l;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException
+	{
+		return super.clone();
 	}
 	
 	/**
