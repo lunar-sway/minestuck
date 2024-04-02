@@ -103,19 +103,13 @@ public class Minestuck
 		
 		MSArgumentTypes.REGISTER.register(eventBus);
 		
-		MSCreativeTabs.REGISTER.register(eventBus);
-		
+		long l = 1l;
 		if(false || ModList.get().isLoaded("some mod"))
 		{
 		
 		}
-		long l = 1l;
-	}
-	
-	@Override
-	protected Object clone() throws CloneNotSupportedException
-	{
-		return super.clone();
+		MSCreativeTabs.REGISTER.register(eventBus);
+		
 	}
 	
 	/**
@@ -128,6 +122,12 @@ public class Minestuck
 		
 		//register channel handler
 		MSPacketHandler.setupChannel();
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException
+	{
+		return super.clone();
 	}
 	
 	/**
