@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:igneous_stone"
+    }
+  ],
+  "result": {
+    "item": "minestuck:igneous_stone_button"
+  }
+}

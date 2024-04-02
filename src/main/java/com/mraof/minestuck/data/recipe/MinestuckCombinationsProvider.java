@@ -853,8 +853,8 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.MYCELIUM_STONE.get()).input(Tags.Items.STONE).and().input(Items.MYCELIUM).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE.get()).input(Tags.Items.STONE).and().namedInput(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE.get()).input(Items.STONE).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_BRICKS.get()).input(Items.STONE_BRICKS).and().input(Items.BLACK_DYE).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_BRICKS.get()).input(Items.BRICKS).and().input(MSBlocks.BLACK_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_BRICKS.get()).namedInput(Items.STONE_BRICKS).and().namedInput(Items.BLACK_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_BRICKS.get()).namedInput(Items.BRICKS).and().namedInput(MSBlocks.BLACK_STONE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).input(Items.SAND).and().namedInput(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).input(Items.SAND).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.IGNEOUS_STONE.get()).input(Items.BLACKSTONE).or().input(MSBlocks.BLACK_STONE.get()).build(consumer);
@@ -924,7 +924,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.WATER_COLORS_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Tags.Items.DYES).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ENDER_BUCKET.get()).input(Items.LAVA_BUCKET).and().input(Items.ENDER_PEARL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LIGHT_WATER_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.GLOWSTONE_DUST).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.LIGHT_WATER_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.QUARTZ).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CAULK_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.QUARTZ).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MOLTEN_AMBER_BUCKET.get()).input(Items.LAVA_BUCKET).and().input(Items.HONEY_BOTTLE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.UNKNOWABLE_EGG.get()).input(MSItems.SURPRISE_EMBRYO.get()).or().input(MSItems.GRIMOIRE.get()).build(consumer);
