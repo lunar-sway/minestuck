@@ -825,28 +825,6 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.STONE_EXPLOSIVE_BUTTON.get()).grist(BUILD, 7).grist(CHALK, 5).grist(SULFUR, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.WOODEN_EXPLOSIVE_BUTTON.get()).grist(BUILD, 7).grist(CHALK, 5).grist(SULFUR, 8).build(recipeSaver);
 		
-		GristCostRecipeBuilder.of(MSBlocks.BLACK_CHESS_DIRT.get()).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.DARK_GRAY_CHESS_DIRT.get()).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.LIGHT_GRAY_CHESS_DIRT.get()).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.WHITE_CHESS_DIRT.get()).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.BLACK_CHESS_BRICKS.get()).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.DARK_GRAY_CHESS_BRICKS.get()).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.LIGHT_GRAY_CHESS_BRICKS.get()).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.WHITE_CHESS_BRICKS.get()).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.BLACK_CHESS_BRICK_SMOOTH.get()).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH.get()).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH.get()).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.WHITE_CHESS_BRICK_SMOOTH.get()).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.BLACK_CHESS_BRICK_TRIM.get()).grist(BUILD, 3).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.DARK_GRAY_CHESS_BRICK_TRIM.get()).grist(BUILD, 3).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM.get()).grist(BUILD, 3).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.WHITE_CHESS_BRICK_TRIM.get()).grist(BUILD, 3).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.CHECKERED_STAINED_GLASS.get()).grist(BUILD, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.BLACK_PAWN_STAINED_GLASS.get()).grist(BUILD, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.BLACK_CROWN_STAINED_GLASS.get()).grist(BUILD, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.WHITE_PAWN_STAINED_GLASS.get()).grist(BUILD, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.WHITE_CROWN_STAINED_GLASS.get()).grist(BUILD, 5).build(recipeSaver);
-		
 		GristCostRecipeBuilder.of(MSBlocks.TAR_SHADE_BRICKS.get()).grist(BUILD, 2).grist(TAR, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_TILE.get()).grist(BUILD, 2).grist(COBALT, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CAST_IRON.get()).grist(BUILD, 3).grist(RUST, 2).build(recipeSaver);

@@ -56,6 +56,11 @@ public final class CombinationRecipeBuilder
 		return input(Ingredient.of(tag));
 	}
 	
+	public CombinationRecipeBuilder input(Supplier<? extends ItemLike> item)
+	{
+		return input(item.get());
+	}
+	
 	public CombinationRecipeBuilder input(ItemLike item)
 	{
 		return input(Ingredient.of(item));
