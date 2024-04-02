@@ -10,5 +10,5 @@ jobs:
       - uses: dbelyaev/action-checkstyle@v1.7.1
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: github-pr-check
+          reporter: github-pr-review
           checkstyle_config: .github/workflows/checkstyle.xml
