@@ -54,7 +54,10 @@ public final class ConsortDialogue
 	private static void consortDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
 		//Generic
-		var genericThanks = provider.dialogue().add("generic_thanks", new NodeBuilder(l.defaultKeyMsg("Thank you for helping me!")));
+		String helpingPlayer = "helpingPlayer";
+		var genericThanks = provider.dialogue().add("generic_thanks", new NodeSelectorBuilder()
+				.node(new Condition.Flag(helpingPlayer), new NodeBuilder(l.subMsg("player_helped", "Thank you for helping me!")))
+				.defaultNode(new NodeBuilder(l.subMsg("other_helped", "Someone else really helped me earlier"))));
 		var thanks = provider.dialogue().add("thanks", new NodeBuilder(l.defaultKeyMsg("Thanks!")));
 		final DialogueProvider.MessageProducer sadFaceMsg = l.msg("sad_face", ":(");
 		var yesMsg = l.msg("yes", "Yes");
@@ -326,7 +329,8 @@ public final class ConsortDialogue
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Want to buy a used camel? Only 2000 boondollars."))
 						.addResponse(new ResponseBuilder(l.subMsg("yes", "Why not? Seems like a good price for a camel!"))
 								.addPlayerMessage(l.subMsg("yes.reply", "Sure!"))
-								.nextDialogue(builder.add("no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)"))))    //todo a text mention (maybe in description?) saying they went off before actually getting any boondollars?
+								.nextDialogue(builder.add("no_camel", new NodeBuilder(l.defaultKeyMsg("Hahaha! Sucker! I have no camel! Cya later! 8)"))
+										.addDescription(l.subMsg("desc", "The %s starts running away, pauses when they realize they never took your boondollars, then continues running to avoid an awkward situation.", Argument.ENTITY_TYPE))))
 								.setNextAsEntrypoint())
 						.addResponse(new ResponseBuilder(l.subMsg("no", "Of course not! You know better!"))
 								.addPlayerMessage(l.subMsg("no.reply", "Not at all!"))
@@ -349,15 +353,16 @@ public final class ConsortDialogue
 						.addDescription(l.subMsg("desc", "You hear a faint \"ba-dum tss\" in the distance."))));
 		provider.addRandomlySelectable("fur_coat", defaultWeight(isInTerrainLand(FROST)), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!"))
-						.addResponse(new ResponseBuilder(l.subMsg("pay", "Give them the boondollars [Pay 100 boondollars]"))
+						.addResponse(new ResponseBuilder(l.subMsg("pay", "[Pay 100 boondollars]"))
 								.condition(new Condition.PlayerHasBoondollars(100))
 								.addTrigger(new Trigger.AddBoondollars(-100))
 								.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
 								.addTrigger(new Trigger.AddConsortReputation(50))
-								.addTrigger(new Trigger.SetDialogue(genericThanks))    //todo they'll be thanking any player like this. Maybe work with player flags to thank the specific player and say something else to others?
+								.addTrigger(new Trigger.SetDialogue(genericThanks))
+								.addTrigger(new Trigger.SetFlag(helpingPlayer, true))
 								.addPlayerMessage(l.subMsg("pay.reply", "Here you go!"))
 								.nextDialogue(builder.add("gratitude", new NodeBuilder(l.defaultKeyMsg("Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!")))))
-						.addResponse(new ResponseBuilder(l.subMsg("ignore", "Don't give them any of your hard-earned boondollars!"))
+						.addResponse(new ResponseBuilder(l.subMsg("ignore", "[Don't give them any of your hard-earned boondollars!]"))
 								.addPlayerMessage(l.subMsg("ignore.reply", "Sorry, but I can't help you."))
 								.nextDialogue(builder.add("death", new NodeBuilder(l.defaultKeyMsg("I guess I'll just die then..."))))))));
 		provider.addRandomlySelectable("tent_protection", defaultWeight(all(isInTerrainLand(FROST), Condition.HasMoveRestriction.INSTANCE)),
@@ -537,7 +542,8 @@ public final class ConsortDialogue
 								.addPlayerMessage(l.subMsg("yes.reply", "Sure here you go"))
 								.nextDialogue(builder.add("happy", new NodeBuilder(l.defaultKeyMsg("Oh %s, thank you for the snack!", Argument.ENTITY_SOUND))))
 								.addTrigger(new Trigger.TakeItem(MSItems.PONYTAIL.get()))
-								.addTrigger(new Trigger.SetDialogue(genericThanks))))
+								.addTrigger(new Trigger.SetDialogue(genericThanks))
+								.addTrigger(new Trigger.SetFlag(helpingPlayer, true))))
 		));
 		provider.addRandomlySelectable("music_invention", defaultWeight(isAnyEntityType(NAKAGATOR, SALAMANDER)),
 				new NodeBuilder(l.defaultKeyMsg("I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.")));
@@ -579,9 +585,11 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("I bought a bunch of stocks on the market... Now I'm broke...")));
 		provider.addRandomlySelectable("identity", defaultWeight(all(isAnyEntityType(SALAMANDER), isFromLand())),
 				new NodeBuilder(l.defaultKeyMsg("I heard that the true name of the %s is %s. Isn't that cool?", Argument.LAND_TITLE, Argument.LAND_PLAYER_NAME)));
-		provider.addRandomlySelectable("college", defaultWeight(alwaysTrue()), new ChainBuilder()
-				.node(new NodeBuilder(l.defaultKeyMsg("Please, I need to pay for my children to attend college...")))
-				.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime."))));    //todo this doesn't actually depend on how many boondollars the player has. There's also a lack of interaction options from what the text would warrant.
+		provider.addRandomlySelectable("college", defaultWeight(alwaysTrue()), new NodeSelectorBuilder()
+				.node(new Condition.PlayerHasBoondollars(1000), new ChainBuilder()
+						.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.")))
+						.node(new NodeBuilder(l.defaultKeyMsg("Please, I need to pay for my children to attend college..."))))
+				.defaultNode(new NodeBuilder(l.subMsg("poor","Wow you have a distinct lack of boondollars for someone in your position. Slumming it like the rest of us, eh?"))));
 		provider.addRandomlySelectable("unknown", defaultWeight(isAnyEntityType(TURTLE)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("They are coming...")))    //todo custom response message?
 				.node(new NodeBuilder(l.defaultKeyMsg("Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?"))));
@@ -627,15 +635,17 @@ public final class ConsortDialogue
 						.addResponse(new ResponseBuilder(l.subMsg("i_am", "[Present yourself as the %s]", Argument.PLAYER_TITLE))
 								.addPlayerMessage(l.subMsg("i_am.reply", "I am the %s.", Argument.PLAYER_TITLE))
 								.nextDialogue(builder.add("i_am", new NodeBuilder(l.defaultKeyMsg("OH MY %s", Argument.ENTITY_SOUND_2)))))
-						.addResponse(new ResponseBuilder(l.subMsg("agree", "\"Agree\" to do that."))
+						.addResponse(new ResponseBuilder(l.subMsg("agree", "[\"Agree\" to do that]"))
 								.addPlayerMessage(l.subMsg("agree.reply", "Hehe, ok I will.")).nextDialogue(thanks)))
 		));
 		provider.addRandomlySelectable("denizen", defaultWeight(all(isAnyEntityType(SALAMANDER, IGUANA, TURTLE), isInHomeLand())), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("%s has been sleeping for a thousand years. I shudder at the thought of their return.", Argument.LAND_DENIZEN))
 						.addResponse(new ResponseBuilder(l.subMsg("what", "What?"))
 								.addPlayerMessage(l.subMsg("what.reply", "The... what?"))
-								.nextDialogue(builder.add("explain", new NodeBuilder(l.defaultKeyMsg("The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.", Argument.LAND_CLASS)))))
-						.addResponse(new ResponseBuilder(l.subMsg("alignment", "Ask if the denizens are bad or not."))
+								.nextDialogue(builder.add("explain", new NodeBuilder(l.defaultKeyMsg("The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.", Argument.LAND_CLASS))
+										.addResponse(new ResponseBuilder(l.subMsg("where", "Where can I find this Denizen?"))
+												.nextDialogue(builder.add("location", new NodeBuilder(l.defaultKeyMsg("Supposedly there is a giant palace somewhere. The Denizen rests at its core. However I don't know anyone who has seen it!"))))))))
+						.addResponse(new ResponseBuilder(l.subMsg("alignment", "[Ask if the denizens are bad or not]"))
 								.addPlayerMessage(l.subMsg("alignment.reply", "Were these 'denizens' bad?"))
 								.nextDialogue(builder.add("alignment", new NodeBuilder(l.defaultKeyMsg("How am I supposed to know if they were good or bad? There's more to a living being than just black and white!"))))))
 		));
@@ -654,14 +664,19 @@ public final class ConsortDialogue
 		{
 			String barterFlag = "barter", noBarterFlag = "no_barter";
 			
+			var satisfied = builder.add("satisfied", new NodeSelectorBuilder()
+					.node(new Condition.Flag(helpingPlayer), new NodeBuilder(l.subMsg("player_specific", "Thanks for giving me food earlier!")))
+					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I was hungry before, but another player gave me a great snack!"))));
+			
 			var barterNode = new NodeBuilder(l.defaultKeyMsg("But I am starving here! What if I paid you 10 boondollars for it?"))
-					.addResponse(new ResponseBuilder(l.subMsg("yes", "Sure"))
+					.addResponse(new ResponseBuilder(l.subMsg("yes", "[Give them the %s]", Argument.MATCHED_ITEM))
 							.condition(Condition.HasMatchedItem.INSTANCE)
 							.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
 							.addTrigger(new Trigger.AddBoondollars(10))
+							.addTrigger(new Trigger.SetDialogue(satisfied))
+							.addTrigger(new Trigger.SetFlag(helpingPlayer, true))
 							.addPlayerMessage(l.subMsg("yes.reply", "Sure, I can agree to that."))
 							.addDescription(l.subMsg("yes.desc", "You are given 10 boondollars for the %s.", Argument.MATCHED_ITEM))
-							.setNextAsEntrypoint()
 							.nextDialogue(builder.add("finally", new NodeBuilder(l.defaultKeyMsg("Finally!")))))
 					.addResponse(new ResponseBuilder(l.subMsg("no", "Too Cheap"))
 							.addPlayerMessage(l.subMsg("no.reply", "I won't let it go that cheap."))
@@ -710,12 +725,12 @@ public final class ConsortDialogue
 			
 			var afterRap = builder.add("after_rap", new NodeBuilder()
 					.addDescription(l.defaultKeyMsg("... that rap was really awful."))
-					.addResponse(new ResponseBuilder(l.subMsg("school", "Schoo' that foo'!"))
+					.addResponse(new ResponseBuilder(l.subMsg("school", "[Ruin their whole day]"))
 							.addPlayerMessage(l.subMsg("school.reply", "All right, now it's my turn."))
 							.addDescription(l.subMsg("school.desc", "The %s proceeded to drop sick fire unlike any the %s had ever seen before.", Argument.PLAYER_TITLE, Argument.LAND_NAME))
 							.setNextAsEntrypoint()
 							.nextDialogue(builder.add("final", new NodeBuilder().addMessage(l.defaultKeyMsg("%s. You are the greatest rapper ever.", Argument.ENTITY_SOUND)))))
-					.addResponse(new ResponseBuilder(l.subMsg("concede", "Let the poor guy think they won."))
+					.addResponse(new ResponseBuilder(l.subMsg("concede", "[Let the poor guy think they won]"))
 							.addPlayerMessage(l.subMsg("concede.reply", "... wow. I'm just... not going to try to go against something like that."))
 							.setNextAsEntrypoint()
 							.nextDialogue(builder.add("concede", new NodeBuilder(l.defaultKeyMsg("%s, yes! I am the greatest rapper ever!", Argument.ENTITY_SOUND))))));

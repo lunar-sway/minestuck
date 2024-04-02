@@ -6,11 +6,11 @@
         "flag": "helpingPlayer"
       },
       "node": {
-        "message": "minestuck.dialogue.consort.generic_thanks.player_helped"
+        "message": "minestuck.dialogue.consort.hungry.satisfied.player_specific"
       }
     }
   ],
   "default_node": {
-    "message": "minestuck.dialogue.consort.generic_thanks.other_helped"
+    "message": "minestuck.dialogue.consort.hungry.satisfied"
   }
 }
