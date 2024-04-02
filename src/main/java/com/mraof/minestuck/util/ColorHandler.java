@@ -5,9 +5,8 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -108,8 +107,9 @@ public class ColorHandler
 	
 	public static int getColorForDimension(ServerLevel level)
 	{
-		SburbConnection c = SburbHandler.getConnectionForDimension(level);
-		return c == null ? ColorHandler.DEFAULT_COLOR : getColorForPlayer(c.getClientIdentifier(), level);
+		return SburbPlayerData.getForLand(level)
+				.map(data -> getColorForPlayer(data.playerId(), level))
+				.orElse(ColorHandler.DEFAULT_COLOR);
 	}
 	
 	public static int getColorForPlayer(ServerPlayer player)

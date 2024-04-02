@@ -8,8 +8,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
@@ -118,8 +117,8 @@ public record DialogueMessage(String key, List<Argument> arguments)
 	private static Optional<PlayerIdentifier> homeLandClientPlayer(LivingEntity entity)
 	{
 		return homeDimension(entity)
-				.flatMap(land -> Optional.ofNullable(SburbHandler.getConnectionForDimension(Objects.requireNonNull(entity.getServer()), land)))
-				.map(SburbConnection::getClientIdentifier);
+				.flatMap(land -> SburbPlayerData.getForLand(land, Objects.requireNonNull(entity.getServer())))
+				.map(SburbPlayerData::playerId);
 	}
 	
 	private static Optional<Title> homeLandTitle(LivingEntity entity)

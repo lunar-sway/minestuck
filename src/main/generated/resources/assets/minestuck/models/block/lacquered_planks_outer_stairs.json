@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/lacquered_planks",
+    "side": "minestuck:block/lacquered_planks",
+    "top": "minestuck:block/lacquered_planks"
+  }
+}

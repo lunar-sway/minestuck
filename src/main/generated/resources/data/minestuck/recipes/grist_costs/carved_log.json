@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 2,
+    "minestuck:build": 6
+  },
+  "ingredient": {
+    "item": "minestuck:carved_log"
+  }
+}

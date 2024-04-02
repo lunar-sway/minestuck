@@ -8,17 +8,13 @@ import com.mraof.minestuck.api.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SessionHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.Optional;
 
 public class SendGristCommand
 {
@@ -52,11 +48,11 @@ public class SendGristCommand
 	
 	private static boolean isPermittedFor(ServerPlayer player, ServerPlayer player2)
 	{
-		PlayerIdentifier name1 = IdentifierHandler.encode(player), name2 = IdentifierHandler.encode(player2);
-		Optional<SburbConnection> c1 = SkaianetHandler.get(player.server).getPrimaryConnection(name1, true);
-		Optional<SburbConnection> c2 = SkaianetHandler.get(player.server).getPrimaryConnection(name2, true);
-		if(c1.isEmpty() || c2.isEmpty() || !c1.get().hasEntered() || !c2.get().hasEntered())
+		
+		if(!SburbPlayerData.get(player).hasEntered() || !SburbPlayerData.get(player2).hasEntered())
 			return false;
-		else return SessionHandler.get(player.server).getPlayerSession(name1) == SessionHandler.get(player.server).getPlayerSession(name2);
+		
+		SessionHandler sessionHandler = SessionHandler.get(player.server);
+		return sessionHandler.isInSameSession(IdentifierHandler.encode(player), IdentifierHandler.encode(player2));
 	}
 }

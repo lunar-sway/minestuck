@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 /**
  * A helper class for placing a structure template from a {@link Feature}.
@@ -81,6 +82,14 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Mi
 	public Iterable<BlockPos> xzRange(int x1, int z1, int x2, int z2)
 	{
 		return BlockPos.betweenClosed(actualFromRelative(x1, 0, z1), actualFromRelative(x2, 0, z2));
+	}
+	
+	public Stream<BlockPos> xzCorners()
+	{
+		Vec3i unrotatedSize = this.template.getSize();
+		return Stream.of(BlockPos.ZERO, new BlockPos(0, 0, unrotatedSize.getZ() - 1),
+				new BlockPos(unrotatedSize.getX() - 1, 0, 0), new BlockPos(unrotatedSize.getX() - 1, 0, unrotatedSize.getZ() - 1))
+				.map(this::actualFromRelative);
 	}
 	
 	public int minHeight(Heightmap.Types type, LevelReader level)

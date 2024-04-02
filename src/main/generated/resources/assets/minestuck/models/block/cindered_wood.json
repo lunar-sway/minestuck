@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/cindered_log_west",
+    "side": "minestuck:block/cindered_log_west"
+  }
+}
