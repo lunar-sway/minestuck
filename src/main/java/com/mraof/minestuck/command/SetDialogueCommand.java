@@ -26,6 +26,7 @@ public final class SetDialogueCommand
 		dispatcher.register(Commands.literal("set_dialogue").requires(source -> source.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.then(Commands.argument("entity", EntityArgument.entity())
 						.then(Commands.argument("dialogue", ResourceLocationArgument.id())
+								.suggests(MSSuggestionProviders.ALL_DIALOGUE_NODES)
 								.executes(context -> setDialogue(context.getSource(),
 										EntityArgument.getEntity(context, "entity"), ResourceLocationArgument.getId(context, "dialogue"))))));
 	}

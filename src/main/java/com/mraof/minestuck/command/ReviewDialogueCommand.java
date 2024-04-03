@@ -11,7 +11,6 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceArgument;
-import net.minecraft.commands.synchronization.SuggestionProviders;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -40,7 +39,8 @@ public final class ReviewDialogueCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext)
 	{
 		dispatcher.register(Commands.literal("review_dialogue").requires(source -> source.hasPermission(Commands.LEVEL_GAMEMASTERS))
-				.then(Commands.argument("entity", ResourceArgument.resource(buildContext, Registries.ENTITY_TYPE)).suggests(SuggestionProviders.SUMMONABLE_ENTITIES)
+				.then(Commands.argument("entity", ResourceArgument.resource(buildContext, Registries.ENTITY_TYPE))
+						.suggests(MSSuggestionProviders.instance().DIALOGUE_ENTITY_TYPE)
 						.then(Commands.argument("category", new DialogueCategoryArgument())
 								.executes(context -> spawnDialogueEntities(context.getSource(),
 										ResourceArgument.getSummonableEntityType(context, "entity").value(),
