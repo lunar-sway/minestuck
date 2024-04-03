@@ -2348,6 +2348,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbPredefineCommand.TOO_LATE, "It is too late to predefine data for this player");
 		add(ReviewDialogueCommand.INVALID_TYPE_KEY, "The summoned entity is not a dialogue entity");
 		add(ReviewDialogueCommand.SUCCESS_KEY, "Summoned %d entities with dialogue ready to be reviewed");
+		add(SetDialogueCommand.INVALID_ENTITY_KEY, "%s is not a dialogue entity");
+		add(SetDialogueCommand.INVALID_ID_KEY, "%s is not a registered dialogue node");
+		add(SetDialogueCommand.SUCCESS_KEY, "Set dialogue for %s to %s");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");

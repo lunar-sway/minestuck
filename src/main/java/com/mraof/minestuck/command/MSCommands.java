@@ -28,5 +28,6 @@ public class MSCommands
 		DebugLandsCommand.register(dispatcher);
 		EntryCommand.register(dispatcher);
 		ReviewDialogueCommand.register(dispatcher, event.getBuildContext());
+		SetDialogueCommand.register(dispatcher);
 	}
 }
