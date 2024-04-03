@@ -2346,6 +2346,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
 		add(SburbPredefineCommand.DEFINE, "Predefined full data for %s");
 		add(SburbPredefineCommand.TOO_LATE, "It is too late to predefine data for this player");
+		add(ReviewDialogueCommand.INVALID_TYPE_KEY, "The summoned entity is not a dialogue entity");
+		add(ReviewDialogueCommand.SUCCESS_KEY, "Summoned %d entities with dialogue ready to be reviewed");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
@@ -2355,6 +2357,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleLandTypeArgument.INVALID, "Invalid title land type %s");
 		add(TerrainLandTypeArgument.INVALID, "Invalid terrain land type %s");
 		add(LandTypePairArgument.INCOMPLETE, "Incomplete (expected two land aspects)");
+		add(DialogueCategoryArgument.INVALID, "Invaid dialogue category %s");
 		
 		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
 		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
