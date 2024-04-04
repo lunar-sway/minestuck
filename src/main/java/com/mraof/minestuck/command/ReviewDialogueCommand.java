@@ -60,34 +60,46 @@ public final class ReviewDialogueCommand
 			level.removeBlock(pos, false);
 			level.setBlock(pos.below(), Blocks.BRICKS.defaultBlockState(), Block.UPDATE_ALL);
 			
-			Entity entity = entityType.spawn(level, pos, MobSpawnType.COMMAND);
-			if(entity == null)
-				throw ERROR_FAILED.create();
-			
-			entity.setNoGravity(true);
-			if(entity instanceof Mob mob)
-				mob.setNoAi(true);
-			
-			if(!(entity instanceof DialogueEntity dialogueEntity))
-				throw INVALID_TYPE.create();
+			DialogueEntity dialogueEntity = spawnEntity(entityType, level, pos);
 			
 			dialogueEntity.getDialogueComponent().setDialogue(dialogue.dialogueId(), true);
 			
-			BlockPos signPos = pos.north().below();
-			level.setBlock(signPos, Blocks.OAK_WALL_SIGN.defaultBlockState().setValue(WallSignBlock.FACING, Direction.NORTH), Block.UPDATE_ALL);
-			if(level.getBlockEntity(signPos) instanceof SignBlockEntity sign)
-			{
-				SignText signText = new SignText().setHasGlowingText(true).setColor(DyeColor.WHITE)
-						.setMessage(0, Component.literal(dialogue.dialogueId().getNamespace()));
-				String[] lines = dialogue.dialogueId().getPath().split("/", 3);
-				for(int i = 0; i < lines.length; i++)
-					signText = signText.setMessage(i + 1, Component.literal(lines[i]));
-				sign.setText(signText, true);
-			}
+			placeSign(dialogue, pos, level);
 		}
 		
 		source.sendSuccess(() -> Component.translatable(SUCCESS_KEY, dialogueCollection.size()), true);
 		
 		return dialogueCollection.size();
+	}
+	
+	private static DialogueEntity spawnEntity(EntityType<?> entityType, ServerLevel level, BlockPos pos) throws CommandSyntaxException
+	{
+		Entity entity = entityType.spawn(level, pos, MobSpawnType.COMMAND);
+		if(entity == null)
+			throw ERROR_FAILED.create();
+		
+		entity.setNoGravity(true);
+		if(entity instanceof Mob mob)
+			mob.setNoAi(true);
+		
+		if(entity instanceof DialogueEntity dialogueEntity)
+			return dialogueEntity;
+		else
+			throw INVALID_TYPE.create();
+	}
+	
+	private static void placeSign(Dialogue.SelectableDialogue dialogue, BlockPos pos, ServerLevel level)
+	{
+		BlockPos signPos = pos.north().below();
+		level.setBlock(signPos, Blocks.OAK_WALL_SIGN.defaultBlockState().setValue(WallSignBlock.FACING, Direction.NORTH), Block.UPDATE_ALL);
+		if(level.getBlockEntity(signPos) instanceof SignBlockEntity sign)
+		{
+			SignText signText = new SignText().setHasGlowingText(true).setColor(DyeColor.WHITE)
+					.setMessage(0, Component.literal(dialogue.dialogueId().getNamespace()));
+			String[] lines = dialogue.dialogueId().getPath().split("/", 3);
+			for(int i = 0; i < lines.length; i++)
+				signText = signText.setMessage(i + 1, Component.literal(lines[i]));
+			sign.setText(signText, true);
+		}
 	}
 }
