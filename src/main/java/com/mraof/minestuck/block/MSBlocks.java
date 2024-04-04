@@ -332,7 +332,7 @@ public final class MSBlocks
 	public static final RegistryObject<SlabBlock> CAST_IRON_SHEET_SLAB = REGISTER.register("cast_iron_sheet_slab", () -> new SlabBlock(copy(CAST_IRON.get())));
 	
 	public static final RegistryObject<Block> CHISELED_CAST_IRON = REGISTER.register("chiseled_cast_iron", () -> new Block(copy(CAST_IRON.get())));
-	public static final RegistryObject<Block> CAST_IRON_FRAME = REGISTER.register("cast_iron_frame", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
+	public static final RegistryObject<Block> CAST_IRON_FRAME = REGISTER.register("cast_iron_frame", () -> new MSDirectionalBlock(Block.Properties.of().noOcclusion().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	
 	public static final RegistryObject<Block> STEEL_BEAM = REGISTER.register("steel_beam", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	
