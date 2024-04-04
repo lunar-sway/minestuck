@@ -36,7 +36,6 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_HOUSE = key("carved_house");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_LOG = key("carved_log");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_CARVED_LOG = key("large_carved_log");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_UNFINISHED_TABLE = key("large_unfinished_table");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_CHAIR = key("treated_chair");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_TABLE = key("treated_table");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_BOOKSHELF = key("unfinished_carved_bookshelf");
@@ -66,6 +65,9 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> RED_SAND_DISK = key("red_sand_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SLIME_DISK = key("slime_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> NETHERRACK_DISK = key("netherrack_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> MAGMATIC_IGNEOUS_DISK = key("magmatic_igneous_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> BLACK_SAND_DISK = key("black_sand_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> PUMICE_STONE_DISK = key("pumice_stone_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_PLANKS_DISK = key("treated_planks_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LACQUERED_PLANKS_DISK = key("lacquered_planks_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_UNCARVED_WOOD_DISK = key("treated_uncarved_wood_disk");

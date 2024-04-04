@@ -847,10 +847,16 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_FROST_BRICKS.get()).input(Items.CHISELED_STONE_BRICKS).and().namedInput(Items.ICE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_FROST_BRICKS.get()).input(Items.CHISELED_STONE_BRICKS).and().namedInput(Items.PACKED_ICE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get()).input(MSBlocks.CHISELED_MYCELIUM_BRICKS.get()).or().namedInput(MSItems.SUSHROOM.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON.get()).input(Items.IRON_BLOCK).and().input(Items.LAVA_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_CAST_IRON.get()).input(Items.CHISELED_STONE_BRICKS).or().input(MSBlocks.CAST_IRON.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.STEEL_BEAM.get()).input(Items.QUARTZ_PILLAR).and().input(MSBlocks.CAST_IRON.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON_TILE.get()).input(MSBlocks.CAST_IRON.get()).and().input(Blocks.COPPER_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON_SHEET.get()).input(MSBlocks.CAST_IRON.get()).and().input(ItemTags.PLANKS).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON_FRAME.get()).input(MSBlocks.CAST_IRON.get()).or().input(Blocks.SCAFFOLDING).build(consumer);
+		
+		CombinationRecipeBuilder.of(MSBlocks.STEEL_BEAM.get()).input(Items.QUARTZ_PILLAR).and().input(Blocks.IRON_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.MYCELIUM_STONE.get()).input(Tags.Items.STONE).and().input(Items.MYCELIUM).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE.get()).input(Tags.Items.STONE).and().namedInput(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE.get()).input(Items.STONE).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_BRICKS.get()).namedInput(Items.STONE_BRICKS).and().namedInput(Items.BLACK_DYE).build(consumer);

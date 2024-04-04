@@ -272,12 +272,23 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(FLOWERY_FROST_BRICK_WALL.get());
 		
 		dropSelf(CAST_IRON.get());
+		dropSelf(CAST_IRON_STAIRS.get());
 		add(CAST_IRON_SLAB.get(), this::createSlabItemTable);
 		dropSelf(CAST_IRON_WALL.get());
 		dropSelf(CAST_IRON_BUTTON.get());
 		dropSelf(CAST_IRON_PRESSURE_PLATE.get());
 		
+		dropSelf(CAST_IRON_TILE.get());
+		dropSelf(CAST_IRON_TILE_STAIRS.get());
+		add(CAST_IRON_TILE_SLAB.get(), this::createSlabItemTable);
+		
+		dropSelf(CAST_IRON_SHEET.get());
+		dropSelf(CAST_IRON_SHEET_STAIRS.get());
+		add(CAST_IRON_SHEET_SLAB.get(), this::createSlabItemTable);
+		
 		dropSelf(CHISELED_CAST_IRON.get());
+		dropSelf(CAST_IRON_FRAME.get());
+		
 		dropSelf(STEEL_BEAM.get());
 		
 		dropSelf(MYCELIUM_COBBLESTONE.get());
@@ -793,7 +804,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(SHADE_BRICK_STAIRS.get());
 		dropSelf(FROST_TILE_STAIRS.get());
 		dropSelf(FROST_BRICK_STAIRS.get());
-		dropSelf(CAST_IRON_STAIRS.get());
 		dropSelf(MYCELIUM_STAIRS.get());
 		dropSelf(MYCELIUM_BRICK_STAIRS.get());
 		dropSelf(CHALK_STAIRS.get());

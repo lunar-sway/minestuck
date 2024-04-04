@@ -23,13 +23,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
 - Silicone Caulk fluid, used in Wood lands
 - Cindered woodset and Trees in Heat lands
-- Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
+- Igneous Stone, Magmatic Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
 - Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
 - Coffee Claws
 - TV Antenna
 - Molten Amber fluid, used in Heat lands
 - Cruxite block set
 - Black Stone Cruxite, Uranium, Gold, Redstone, and Quartz ores
+- Alchemy recipes for all Minestuck fluids
+- Magmatic Black Stone Bricks
+- Igneous blockset
+- Cast Iron Frame, Sheet, and Tile
 
 ### Changed
 
@@ -49,6 +53,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
 - Renamed Oil to Shale Oil
 - Pumord is now alchemized with Pumice Stone instead of any regular Stone
+- Black Sand now generates in Heat lands
+- Updated Textures of Cast Iron blocks
+- Steel Beams are now alchemized with Iron Blocks instead of Cast Iron Blocks
 
 ### Fixed
 

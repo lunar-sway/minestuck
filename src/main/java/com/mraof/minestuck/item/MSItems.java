@@ -951,12 +951,23 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FLOWERY_FROST_BRICK_WALL = registerBlockItem(MSBlocks.FLOWERY_FROST_BRICK_WALL);
 	
 	public static final RegistryObject<BlockItem> CAST_IRON = registerBlockItem(MSBlocks.CAST_IRON);
+	public static final RegistryObject<BlockItem> CAST_IRON_STAIRS = registerBlockItem(MSBlocks.CAST_IRON_STAIRS);
 	public static final RegistryObject<BlockItem> CAST_IRON_SLAB = registerBlockItem(MSBlocks.CAST_IRON_SLAB);
 	public static final RegistryObject<BlockItem> CAST_IRON_WALL = registerBlockItem(MSBlocks.CAST_IRON_WALL);
 	public static final RegistryObject<BlockItem> CAST_IRON_BUTTON = registerBlockItem(MSBlocks.CAST_IRON_BUTTON);
 	public static final RegistryObject<BlockItem> CAST_IRON_PRESSURE_PLATE = registerBlockItem(MSBlocks.CAST_IRON_PRESSURE_PLATE);
 	
+	public static final RegistryObject<BlockItem> CAST_IRON_TILE = registerBlockItem(MSBlocks.CAST_IRON_TILE);
+	public static final RegistryObject<BlockItem> CAST_IRON_TILE_STAIRS = registerBlockItem(MSBlocks.CAST_IRON_TILE_STAIRS);
+	public static final RegistryObject<BlockItem> CAST_IRON_TILE_SLAB = registerBlockItem(MSBlocks.CAST_IRON_TILE_SLAB);
+	
+	public static final RegistryObject<BlockItem> CAST_IRON_SHEET = registerBlockItem(MSBlocks.CAST_IRON_SHEET);
+	public static final RegistryObject<BlockItem> CAST_IRON_SHEET_STAIRS = registerBlockItem(MSBlocks.CAST_IRON_SHEET_STAIRS);
+	public static final RegistryObject<BlockItem> CAST_IRON_SHEET_SLAB = registerBlockItem(MSBlocks.CAST_IRON_SHEET_SLAB);
+	
 	public static final RegistryObject<BlockItem> CHISELED_CAST_IRON = registerBlockItem(MSBlocks.CHISELED_CAST_IRON);
+	public static final RegistryObject<BlockItem> CAST_IRON_FRAME = registerBlockItem(MSBlocks.CAST_IRON_FRAME);
+	
 	public static final RegistryObject<BlockItem> STEEL_BEAM = registerBlockItem(MSBlocks.STEEL_BEAM);
 	
 	public static final RegistryObject<BlockItem> MYCELIUM_COBBLESTONE = registerBlockItem(MSBlocks.MYCELIUM_COBBLESTONE);
@@ -1474,7 +1485,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_BRICK_STAIRS = registerBlockItem(MSBlocks.SHADE_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> FROST_TILE_STAIRS = registerBlockItem(MSBlocks.FROST_TILE_STAIRS);
 	public static final RegistryObject<BlockItem> FROST_BRICK_STAIRS = registerBlockItem(MSBlocks.FROST_BRICK_STAIRS);
-	public static final RegistryObject<BlockItem> CAST_IRON_STAIRS = registerBlockItem(MSBlocks.CAST_IRON_STAIRS);
 	public static final RegistryObject<BlockItem> MYCELIUM_STAIRS = registerBlockItem(MSBlocks.MYCELIUM_STAIRS);
 	public static final RegistryObject<BlockItem> MYCELIUM_BRICK_STAIRS = registerBlockItem(MSBlocks.MYCELIUM_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> CHALK_STAIRS = registerBlockItem(MSBlocks.CHALK_STAIRS);

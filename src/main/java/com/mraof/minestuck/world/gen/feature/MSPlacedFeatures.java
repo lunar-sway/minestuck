@@ -75,6 +75,9 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SLIME_DISK = key("slime_disk");
 	public static final ResourceKey<PlacedFeature> EXTRA_SLIME_DISK = key("extra_slime_disk");
 	public static final ResourceKey<PlacedFeature> NETHERRACK_DISK = key("netherrack_disk");
+	public static final ResourceKey<PlacedFeature> MAGMATIC_IGNEOUS_DISK = key("magmatic_igneous_disk");
+	public static final ResourceKey<PlacedFeature> BLACK_SAND_DISK = key("black_sand_disk");
+	public static final ResourceKey<PlacedFeature> PUMICE_STONE_DISK = key("pumice_stone_disk");
 	public static final ResourceKey<PlacedFeature> TREATED_PLANKS_DISK = key("treated_planks_disk");
 	public static final ResourceKey<PlacedFeature> LACQUERED_PLANKS_DISK = key("lacquered_planks_disk");
 	public static final ResourceKey<PlacedFeature> TREATED_UNCARVED_WOOD_DISK = key("treated_uncarved_wood_disk");

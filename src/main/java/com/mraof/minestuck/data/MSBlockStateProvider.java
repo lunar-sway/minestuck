@@ -341,12 +341,28 @@ public class MSBlockStateProvider extends BlockStateProvider
 		wallWithItem(MSBlocks.FLOWERY_FROST_BRICK_WALL, MSBlocks.FLOWERY_FROST_BRICKS);
 		
 		simpleBlockWithItem(MSBlocks.CAST_IRON);
+		stairsWithItem(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON);
 		slabWithItem(MSBlocks.CAST_IRON_SLAB, MSBlocks.CAST_IRON);
 		wallWithItem(MSBlocks.CAST_IRON_WALL, MSBlocks.CAST_IRON);
 		buttonWithItem(MSBlocks.CAST_IRON_BUTTON, MSBlocks.CAST_IRON);
 		pressurePlateWithItem(MSBlocks.CAST_IRON_PRESSURE_PLATE, MSBlocks.CAST_IRON);
 		
+		simpleBlockWithItem(MSBlocks.CAST_IRON_TILE);
+		stairsWithItem(MSBlocks.CAST_IRON_TILE_STAIRS, MSBlocks.CAST_IRON_TILE);
+		slabWithItem(MSBlocks.CAST_IRON_TILE_SLAB, MSBlocks.CAST_IRON_TILE);
+		
+		simpleBlockWithItem(MSBlocks.CAST_IRON_SHEET);
+		stairsWithItem(MSBlocks.CAST_IRON_SHEET_STAIRS, MSBlocks.CAST_IRON_SHEET);
+		slabWithItem(MSBlocks.CAST_IRON_SHEET_SLAB, MSBlocks.CAST_IRON_SHEET);
+		
 		simpleBlockWithItem(MSBlocks.CHISELED_CAST_IRON);
+		unflippedColumnWithItem(MSBlocks.CAST_IRON_FRAME,
+				id -> models().cubeColumn(
+						id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top")))
+						.renderType("cutout"));
+		
 		unflippedColumnWithItem(MSBlocks.STEEL_BEAM,
 				id -> models().cubeColumn(
 						id.getPath(),
@@ -1120,7 +1136,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.SHADE_BRICK_STAIRS, "shade_brick", texture(MSBlocks.SHADE_BRICKS));
 		stairsWithItem(MSBlocks.FROST_TILE_STAIRS, MSBlocks.FROST_TILE);
 		stairsWithItem(MSBlocks.FROST_BRICK_STAIRS, "frost_brick", texture(MSBlocks.FROST_BRICKS));
-		stairsWithItem(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON);
 		
 		stairsWithItem(MSBlocks.MYCELIUM_STAIRS, "mycelium", texture(MSBlocks.MYCELIUM_STONE));
 		stairsWithItem(MSBlocks.MYCELIUM_BRICK_STAIRS, "mycelium_brick", texture(MSBlocks.MYCELIUM_BRICKS));

@@ -274,13 +274,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_FROST_BRICK_SLAB, "Flowery Frost Brick Slab");
 		addBlock(MSBlocks.FLOWERY_FROST_BRICK_WALL, "Flowery Frost Brick Wall");
 		
-		addBlock(MSBlocks.CAST_IRON, "Cast-Iron");
+		addBlock(MSBlocks.CAST_IRON, "Cast Iron");
+		addBlock(MSBlocks.CAST_IRON_STAIRS, "Cast Iron Stairs");
 		addBlock(MSBlocks.CAST_IRON_SLAB, "Cast Iron Slab");
 		addBlock(MSBlocks.CAST_IRON_WALL, "Cast Iron Wall");
 		addBlock(MSBlocks.CAST_IRON_BUTTON, "Cast Iron Button");
 		addBlock(MSBlocks.CAST_IRON_PRESSURE_PLATE, "Cast Iron Pressure Plate");
 		
-		addBlock(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast-Iron");
+		addBlock(MSBlocks.CAST_IRON_TILE, "Cast Iron Tile");
+		addBlock(MSBlocks.CAST_IRON_TILE_STAIRS, "Cast Iron Tile Stairs");
+		addBlock(MSBlocks.CAST_IRON_TILE_SLAB, "Cast Iron Tile Slab");
+		
+		addBlock(MSBlocks.CAST_IRON_SHEET, "Cast Iron Sheet");
+		addBlock(MSBlocks.CAST_IRON_SHEET_STAIRS, "Cast Iron Sheet Stairs");
+		addBlock(MSBlocks.CAST_IRON_SHEET_SLAB, "Cast Iron Sheet Slab");
+		
+		addBlock(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast Iron");
+		addBlock(MSBlocks.CAST_IRON_FRAME, "Cast Iron Frame");
+		
 		addBlock(MSBlocks.STEEL_BEAM, "Steel Beam");
 		
 		addBlock(MSBlocks.MYCELIUM_COBBLESTONE, "Mycelium Cobblestone");
@@ -792,7 +803,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");
 		addBlock(MSBlocks.FROST_TILE_STAIRS, "Frost Tile Stairs");
 		addBlock(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
-		addBlock(MSBlocks.CAST_IRON_STAIRS, "Cast-Iron Stairs");
 		addBlock(MSBlocks.MYCELIUM_STAIRS, "Mycelium Stairs");
 		addBlock(MSBlocks.MYCELIUM_BRICK_STAIRS, "Mycelium Brick Stairs");
 		addBlock(MSBlocks.CHALK_STAIRS, "Chalk Stairs");

@@ -123,6 +123,12 @@ public final class MSConfiguredFeatureProvider
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SLIME_BLOCK), BlockPredicate.matchesBlocks(Blocks.MYCELIUM, Blocks.DIRT), UniformInt.of(2, 6), 2)));
 		context.register(NETHERRACK_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.NETHERRACK), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 1)));
+		context.register(MAGMATIC_IGNEOUS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.MAGMATIC_IGNEOUS_STONE.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 1)));
+		context.register(BLACK_SAND_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.BLACK_SAND.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 4), 1)));
+		context.register(PUMICE_STONE_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.PUMICE_STONE.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 4), 1)));
 		context.register(TREATED_PLANKS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.TREATED_PLANKS.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 8), 2)));
 		context.register(LACQUERED_PLANKS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),

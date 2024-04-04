@@ -758,12 +758,23 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FLOWERY_FROST_BRICK_WALL.get());
 		
 		output.accept(MSItems.CAST_IRON.get());
+		output.accept(MSItems.CAST_IRON_STAIRS.get());
 		output.accept(MSItems.CAST_IRON_SLAB.get());
 		output.accept(MSItems.CAST_IRON_WALL.get());
 		output.accept(MSItems.CAST_IRON_BUTTON.get());
 		output.accept(MSItems.CAST_IRON_PRESSURE_PLATE.get());
 		
+		output.accept(MSItems.CAST_IRON_TILE.get());
+		output.accept(MSItems.CAST_IRON_TILE_STAIRS.get());
+		output.accept(MSItems.CAST_IRON_TILE_SLAB.get());
+		
+		output.accept(MSItems.CAST_IRON_SHEET.get());
+		output.accept(MSItems.CAST_IRON_SHEET_STAIRS.get());
+		output.accept(MSItems.CAST_IRON_SHEET_SLAB.get());
+		
 		output.accept(MSItems.CHISELED_CAST_IRON.get());
+		output.accept(MSItems.CAST_IRON_FRAME.get());
+		
 		output.accept(MSItems.STEEL_BEAM.get());
 		
 		output.accept(MSItems.MYCELIUM_COBBLESTONE.get());
@@ -1230,7 +1241,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SHADE_BRICK_STAIRS.get());
 		output.accept(MSItems.FROST_TILE_STAIRS.get());
 		output.accept(MSItems.FROST_BRICK_STAIRS.get());
-		output.accept(MSItems.CAST_IRON_STAIRS.get());
 		output.accept(MSItems.MYCELIUM_STAIRS.get());
 		output.accept(MSItems.MYCELIUM_BRICK_STAIRS.get());
 		output.accept(MSItems.CHALK_STAIRS.get());
