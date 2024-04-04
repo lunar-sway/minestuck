@@ -260,7 +260,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PERFECTLY_GENERIC_FENCE.get(), 3).define('#', MSBlocks.GENERIC_OBJECT.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_generic_object", has(MSBlocks.GENERIC_OBJECT.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PERFECTLY_GENERIC_FENCE_GATE.get(), 1).define('#', MSBlocks.GENERIC_OBJECT.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_generic_object", has(MSBlocks.GENERIC_OBJECT.get())).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PERFECTLY_GENERIC_BUTTON.get()).requires(MSBlocks.GENERIC_OBJECT.get()).unlockedBy("has_generic_object", has(MSBlocks.GENERIC_OBJECT.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PERFECTLY_GENERIC_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.GENERIC_OBJECT.get()).pattern("##").group("wooden_pressure_plate").unlockedBy("has_generic_object", has(MSBlocks.GENERIC_OBJECT.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.PERFECTLY_GENERIC_PRESSURE_PLATE, MSBlocks.GENERIC_OBJECT).group("wooden_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PERFECTLY_GENERIC_DOOR.get(), 3).define('#', MSBlocks.GENERIC_OBJECT.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_generic_object", has(MSBlocks.GENERIC_OBJECT.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PERFECTLY_GENERIC_TRAPDOOR.get(), 2).define('#', MSBlocks.GENERIC_OBJECT.get()).pattern("###").pattern("###").group("wooden_trapdoor").unlockedBy("has_generic_object", has(MSBlocks.GENERIC_OBJECT.get())).save(recipeBuilder);
 		
@@ -272,7 +272,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.wallShapedRecipe(MSBlocks.CRUXITE_WALL, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CRUXITE_BUTTON.get()).requires(MSBlocks.CRUXITE_BLOCK.get()).unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CRUXITE_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.CRUXITE_BLOCK.get()).pattern("##").group("cruxite_blocks").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.CRUXITE_PRESSURE_PLATE, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
+				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CRUXITE_DOOR.get(), 3).define('#', MSBlocks.SMOOTH_CRUXITE_BLOCK.get()).pattern("## ").pattern("## ").pattern("## ").group("cruxite_blocks").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CRUXITE_TRAPDOOR.get(), 2).define('#', MSBlocks.SMOOTH_CRUXITE_BLOCK.get()).pattern("###").pattern("###").group("cruxite_blocks").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.POLISHED_CRUXITE_BLOCK.get(), 4).define('#', MSBlocks.SMOOTH_CRUXITE_BLOCK.get()).pattern("## ").pattern("## ").group("cruxite_blocks").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
@@ -470,14 +471,14 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.slabShapedRecipe(MSBlocks.URANIUM_SLAB, MSBlocks.URANIUM_BLOCK).group("wooden_slab").save(recipeBuilder);
 		CommonRecipes.wallShapedRecipe(MSBlocks.URANIUM_WALL, MSBlocks.URANIUM_BLOCK).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.URANIUM_BUTTON.get()).requires(MSBlocks.URANIUM_BLOCK.get()).unlockedBy("has_uranium_block", has(MSBlocks.URANIUM_BLOCK.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.URANIUM_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.URANIUM_BLOCK.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_uranium_block", has(MSBlocks.URANIUM_BLOCK.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.URANIUM_PRESSURE_PLATE, MSBlocks.URANIUM_BLOCK).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.URANIUM_BLOCK.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.URANIUM_STAIRS.get()).unlockedBy("has_uranium_block", has(MSBlocks.URANIUM_BLOCK.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "uranium_stairs_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.URANIUM_BLOCK.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.URANIUM_SLAB.get(), 2).unlockedBy("has_uranium_block", has(MSBlocks.URANIUM_BLOCK.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "uranium_slab_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.URANIUM_BLOCK.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.URANIUM_WALL.get(), 2).unlockedBy("has_uranium_block", has(MSBlocks.URANIUM_BLOCK.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "uranium_wall_from_stonecutting"));
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.COARSE_STONE_WALL, MSBlocks.COARSE_STONE).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.COARSE_STONE_BUTTON.get()).requires(MSBlocks.COARSE_STONE.get()).unlockedBy("has_coarse_stone", has(MSBlocks.COARSE_STONE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.COARSE_STONE_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.COARSE_STONE.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_coarse_stone", has(MSBlocks.COARSE_STONE.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.COARSE_STONE_PRESSURE_PLATE, MSBlocks.COARSE_STONE).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.COARSE_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.COARSE_STONE_WALL.get(), 2).unlockedBy("has_coarse_stone", has(MSBlocks.COARSE_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "coarse_stone_wall_from_stonecutting"));
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.COARSE_STONE_BRICK_WALL, MSBlocks.COARSE_STONE_BRICKS).group("stone_wall").save(recipeBuilder);
@@ -485,7 +486,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.SHADE_WALL, MSBlocks.SHADE_STONE).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.SHADE_BUTTON.get()).requires(MSBlocks.SHADE_STONE.get()).unlockedBy("has_shade_stone", has(MSBlocks.SHADE_STONE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.SHADE_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.SHADE_STONE.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_shade_stone", has(MSBlocks.SHADE_STONE.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.SHADE_PRESSURE_PLATE, MSBlocks.SHADE_STONE).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.SHADE_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.SHADE_WALL.get(), 2).unlockedBy("has_shade_stone", has(MSBlocks.SHADE_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "shade_wall_from_stonecutting"));
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.SHADE_BRICK_WALL, MSBlocks.SHADE_BRICKS).group("stone_wall").save(recipeBuilder);
@@ -535,13 +536,13 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.slabShapedRecipe(MSBlocks.CAST_IRON_SLAB, MSBlocks.CAST_IRON).group("wooden_slab").save(recipeBuilder);
 		CommonRecipes.wallShapedRecipe(MSBlocks.CAST_IRON_WALL, MSBlocks.CAST_IRON).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CAST_IRON_BUTTON.get()).requires(MSBlocks.CAST_IRON.get()).unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CAST_IRON_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.CAST_IRON.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.CAST_IRON_PRESSURE_PLATE, MSBlocks.CAST_IRON).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.CAST_IRON.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.CAST_IRON_SLAB.get(), 2).unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "cast_iron_slab_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.CAST_IRON.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.CAST_IRON_WALL.get(), 2).unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "cast_iron_wall_from_stonecutting"));
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.MYCELIUM_STONE_WALL, MSBlocks.MYCELIUM_STONE).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.MYCELIUM_STONE_BUTTON.get()).requires(MSBlocks.MYCELIUM_STONE.get()).unlockedBy("has_mycelium_stone", has(MSBlocks.MYCELIUM_STONE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.MYCELIUM_STONE_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.MYCELIUM_STONE.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_mycelium_stone", has(MSBlocks.MYCELIUM_STONE.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.MYCELIUM_STONE_PRESSURE_PLATE, MSBlocks.MYCELIUM_STONE).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.MYCELIUM_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.MYCELIUM_STONE_WALL.get(), 2).unlockedBy("has_mycelium_stone", has(MSBlocks.MYCELIUM_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "mycelium_stone_wall_from_stonecutting"));
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.MYCELIUM_COBBLESTONE_STAIRS, MSBlocks.MYCELIUM_COBBLESTONE).group("wooden_stairs").save(recipeBuilder);
@@ -577,7 +578,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.BLACK_STONE_WALL, MSBlocks.BLACK_STONE).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.BLACK_STONE_BUTTON.get()).requires(MSBlocks.BLACK_STONE.get()).unlockedBy("has_black_stone", has(MSBlocks.BLACK_STONE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.BLACK_STONE_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.BLACK_STONE.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_black_stone", has(MSBlocks.BLACK_STONE.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.BLACK_STONE_PRESSURE_PLATE, MSBlocks.BLACK_STONE).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.BLACK_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.BLACK_STONE_WALL.get(), 2).unlockedBy("has_black_stone", has(MSBlocks.BLACK_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "black_stone_wall_from_stonecutting"));
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.BLACK_COBBLESTONE_STAIRS, MSBlocks.BLACK_COBBLESTONE).group("wooden_stairs").save(recipeBuilder);
@@ -606,7 +607,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.CHALK_WALL, MSBlocks.CHALK).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CHALK_BUTTON.get()).requires(MSBlocks.CHALK.get()).unlockedBy("has_chalk", has(MSBlocks.CHALK.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CHALK_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.CHALK.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_chalk", has(MSBlocks.CHALK.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.CHALK_PRESSURE_PLATE, MSBlocks.CHALK).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.CHALK.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.CHALK_WALL.get(), 2).unlockedBy("has_chalk", has(MSBlocks.CHALK.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "chalk_wall_from_stonecutting"));
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.POLISHED_CHALK_STAIRS, MSBlocks.POLISHED_CHALK).group("wooden_stairs").save(recipeBuilder);
@@ -635,7 +636,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.PINK_STONE_WALL, MSBlocks.PINK_STONE).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PINK_STONE_BUTTON.get()).requires(MSBlocks.PINK_STONE.get()).unlockedBy("has_pink_stone", has(MSBlocks.PINK_STONE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PINK_STONE_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.PINK_STONE.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_pink_stone", has(MSBlocks.PINK_STONE.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.PINK_STONE_PRESSURE_PLATE, MSBlocks.PINK_STONE).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.PINK_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.PINK_STONE_WALL.get(), 2).unlockedBy("has_pink_stone", has(MSBlocks.PINK_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "pink_stone_wall_from_stonecutting"));
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.POLISHED_PINK_STONE_STAIRS, MSBlocks.POLISHED_PINK_STONE).group("wooden_stairs").save(recipeBuilder);
@@ -657,7 +658,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.BROWN_STONE_WALL, MSBlocks.BROWN_STONE).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.BROWN_STONE_BUTTON.get()).requires(MSBlocks.BROWN_STONE.get()).unlockedBy("has_brown_stone", has(MSBlocks.BROWN_STONE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.BROWN_STONE_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.BROWN_STONE.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_brown_stone", has(MSBlocks.BROWN_STONE.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.BROWN_STONE_PRESSURE_PLATE, MSBlocks.BROWN_STONE).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.BROWN_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.BROWN_STONE_WALL.get(), 2).unlockedBy("has_brown_stone", has(MSBlocks.BROWN_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "brown_stone_wall_from_stonecutting"));
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.POLISHED_BROWN_STONE_STAIRS, MSBlocks.POLISHED_BROWN_STONE).group("wooden_stairs").save(recipeBuilder);
@@ -672,7 +673,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		CommonRecipes.wallShapedRecipe(MSBlocks.GREEN_STONE_WALL, MSBlocks.GREEN_STONE).group("stone_wall").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GREEN_STONE_BUTTON.get()).requires(MSBlocks.GREEN_STONE.get()).unlockedBy("has_green_stone", has(MSBlocks.GREEN_STONE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GREEN_STONE_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.GREEN_STONE.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_green_stone", has(MSBlocks.GREEN_STONE.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.GREEN_STONE_PRESSURE_PLATE, MSBlocks.GREEN_STONE).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.GREEN_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.GREEN_STONE_WALL.get(), 2).unlockedBy("has_green_stone", has(MSBlocks.GREEN_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "green_stone_wall_from_stonecutting"));
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.POLISHED_GREEN_STONE_STAIRS, MSBlocks.POLISHED_GREEN_STONE).group("wooden_stairs").save(recipeBuilder);
@@ -718,14 +719,14 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.UNCARVED_WOOD_STAIRS, MSBlocks.UNCARVED_WOOD).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.UNCARVED_WOOD_SLAB, MSBlocks.UNCARVED_WOOD).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.UNCARVED_WOOD_BUTTON.get()).requires(MSBlocks.UNCARVED_WOOD.get()).unlockedBy("has_uncarved_wood", has(MSBlocks.UNCARVED_WOOD.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.UNCARVED_WOOD_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.UNCARVED_WOOD.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_uncarved_wood", has(MSBlocks.UNCARVED_WOOD.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.UNCARVED_WOOD).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.UNCARVED_WOOD_FENCE.get(), 3).define('#', MSBlocks.UNCARVED_WOOD.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_uncarved_wood", has(MSBlocks.UNCARVED_WOOD.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.UNCARVED_WOOD_FENCE_GATE.get(), 1).define('#', MSBlocks.UNCARVED_WOOD.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_uncarved_wood", has(MSBlocks.UNCARVED_WOOD.get())).save(recipeBuilder);
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.CHIPBOARD_STAIRS, MSBlocks.CHIPBOARD).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.CHIPBOARD_SLAB, MSBlocks.CHIPBOARD).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CHIPBOARD_BUTTON.get()).requires(MSBlocks.CHIPBOARD.get()).unlockedBy("has_chipboard", has(MSBlocks.CHIPBOARD.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CHIPBOARD_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.CHIPBOARD.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_chipboard", has(MSBlocks.CHIPBOARD.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.CHIPBOARD_PRESSURE_PLATE, MSBlocks.CHIPBOARD).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CHIPBOARD_FENCE.get(), 3).define('#', MSBlocks.CHIPBOARD.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_chipboard", has(MSBlocks.CHIPBOARD.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CHIPBOARD_FENCE_GATE.get(), 1).define('#', MSBlocks.CHIPBOARD.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_chipboard", has(MSBlocks.CHIPBOARD.get())).save(recipeBuilder);
 		
@@ -735,7 +736,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.CARVED_STAIRS, MSBlocks.CARVED_PLANKS).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.CARVED_SLAB, MSBlocks.CARVED_PLANKS).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CARVED_BUTTON.get()).requires(MSBlocks.CARVED_PLANKS.get()).unlockedBy("has_carved_planks", has(MSBlocks.CARVED_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CARVED_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.CARVED_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_carved_planks", has(MSBlocks.CARVED_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.CARVED_PRESSURE_PLATE, MSBlocks.CARVED_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CARVED_FENCE.get(), 3).define('#', MSBlocks.CARVED_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_carved_planks", has(MSBlocks.CARVED_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CARVED_FENCE_GATE.get(), 1).define('#', MSBlocks.CARVED_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_carved_planks", has(MSBlocks.CARVED_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CARVED_DOOR.get(), 3).define('#', MSBlocks.CARVED_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_carved_planks", has(MSBlocks.CARVED_PLANKS.get())).save(recipeBuilder);
@@ -747,14 +748,14 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.TREATED_UNCARVED_WOOD_STAIRS, MSBlocks.TREATED_UNCARVED_WOOD).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.TREATED_UNCARVED_WOOD_SLAB, MSBlocks.TREATED_UNCARVED_WOOD).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_UNCARVED_WOOD_BUTTON.get()).requires(MSBlocks.TREATED_UNCARVED_WOOD.get()).unlockedBy("has_treated_uncarved_wood", has(MSBlocks.TREATED_UNCARVED_WOOD.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.TREATED_UNCARVED_WOOD.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_treated_uncarved_wood", has(MSBlocks.TREATED_UNCARVED_WOOD.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.TREATED_UNCARVED_WOOD).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_UNCARVED_WOOD_FENCE.get(), 3).define('#', MSBlocks.TREATED_UNCARVED_WOOD.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_treated_uncarved_wood", has(MSBlocks.TREATED_UNCARVED_WOOD.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE.get(), 1).define('#', MSBlocks.TREATED_UNCARVED_WOOD.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_treated_uncarved_wood", has(MSBlocks.TREATED_UNCARVED_WOOD.get())).save(recipeBuilder);
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.TREATED_CHIPBOARD_STAIRS, MSBlocks.TREATED_CHIPBOARD).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.TREATED_CHIPBOARD_SLAB, MSBlocks.TREATED_CHIPBOARD).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_CHIPBOARD_BUTTON.get()).requires(MSBlocks.TREATED_CHIPBOARD.get()).unlockedBy("has_treated_chipboard", has(MSBlocks.TREATED_CHIPBOARD.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.TREATED_CHIPBOARD.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_treated_chipboard", has(MSBlocks.TREATED_CHIPBOARD.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE, MSBlocks.TREATED_CHIPBOARD).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_CHIPBOARD_FENCE.get(), 3).define('#', MSBlocks.TREATED_CHIPBOARD.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_treated_chipboard", has(MSBlocks.TREATED_CHIPBOARD.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_CHIPBOARD_FENCE_GATE.get(), 1).define('#', MSBlocks.TREATED_CHIPBOARD.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_treated_chipboard", has(MSBlocks.TREATED_CHIPBOARD.get())).save(recipeBuilder);
 		
@@ -764,7 +765,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.TREATED_PLANKS_STAIRS, MSBlocks.TREATED_PLANKS).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.TREATED_PLANKS_SLAB, MSBlocks.TREATED_PLANKS).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_BUTTON.get()).requires(MSBlocks.TREATED_PLANKS.get()).unlockedBy("has_treated_planks", has(MSBlocks.TREATED_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.TREATED_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_treated_planks", has(MSBlocks.TREATED_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.TREATED_PRESSURE_PLATE, MSBlocks.TREATED_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_FENCE.get(), 3).define('#', MSBlocks.TREATED_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_treated_planks", has(MSBlocks.TREATED_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_FENCE_GATE.get(), 1).define('#', MSBlocks.TREATED_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_treated_planks", has(MSBlocks.TREATED_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_DOOR.get(), 3).define('#', MSBlocks.TREATED_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_treated_planks", has(MSBlocks.TREATED_PLANKS.get())).save(recipeBuilder);
@@ -776,14 +777,14 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.LACQUERED_UNCARVED_WOOD_STAIRS, MSBlocks.LACQUERED_UNCARVED_WOOD).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.LACQUERED_UNCARVED_WOOD_SLAB, MSBlocks.LACQUERED_UNCARVED_WOOD).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_UNCARVED_WOOD_BUTTON.get()).requires(MSBlocks.LACQUERED_UNCARVED_WOOD.get()).unlockedBy("has_lacquered_uncarved_wood", has(MSBlocks.LACQUERED_UNCARVED_WOOD.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.LACQUERED_UNCARVED_WOOD.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_lacquered_uncarved_wood", has(MSBlocks.LACQUERED_UNCARVED_WOOD.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.LACQUERED_UNCARVED_WOOD).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE.get(), 3).define('#', MSBlocks.LACQUERED_UNCARVED_WOOD.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_lacquered_uncarved_wood", has(MSBlocks.LACQUERED_UNCARVED_WOOD.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE.get(), 1).define('#', MSBlocks.LACQUERED_UNCARVED_WOOD.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_lacquered_uncarved_wood", has(MSBlocks.LACQUERED_UNCARVED_WOOD.get())).save(recipeBuilder);
 		
 		CommonRecipes.stairsShapedRecipe(MSBlocks.LACQUERED_CHIPBOARD_STAIRS, MSBlocks.LACQUERED_CHIPBOARD).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.LACQUERED_CHIPBOARD_SLAB, MSBlocks.LACQUERED_CHIPBOARD).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_CHIPBOARD_BUTTON.get()).requires(MSBlocks.LACQUERED_CHIPBOARD.get()).unlockedBy("has_lacquered_chipboard", has(MSBlocks.LACQUERED_CHIPBOARD.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.LACQUERED_CHIPBOARD.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_lacquered_chipboard", has(MSBlocks.LACQUERED_CHIPBOARD.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE, MSBlocks.LACQUERED_CHIPBOARD).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_CHIPBOARD_FENCE.get(), 3).define('#', MSBlocks.LACQUERED_CHIPBOARD.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_lacquered_chipboard", has(MSBlocks.LACQUERED_CHIPBOARD.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_CHIPBOARD_FENCE_GATE.get(), 1).define('#', MSBlocks.LACQUERED_CHIPBOARD.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_lacquered_chipboard", has(MSBlocks.LACQUERED_CHIPBOARD.get())).save(recipeBuilder);
 		
@@ -793,7 +794,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.LACQUERED_STAIRS, MSBlocks.LACQUERED_PLANKS).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.LACQUERED_SLAB, MSBlocks.LACQUERED_PLANKS).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_BUTTON.get()).requires(MSBlocks.LACQUERED_PLANKS.get()).unlockedBy("has_lacquered_planks", has(MSBlocks.LACQUERED_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.LACQUERED_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_lacquered_planks", has(MSBlocks.LACQUERED_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.LACQUERED_PRESSURE_PLATE, MSBlocks.LACQUERED_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_FENCE.get(), 3).define('#', MSBlocks.LACQUERED_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_lacquered_planks", has(MSBlocks.LACQUERED_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_FENCE_GATE.get(), 1).define('#', MSBlocks.LACQUERED_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_lacquered_planks", has(MSBlocks.LACQUERED_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.LACQUERED_DOOR.get(), 3).define('#', MSBlocks.LACQUERED_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_lacquered_planks", has(MSBlocks.LACQUERED_PLANKS.get())).save(recipeBuilder);
@@ -805,7 +806,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.GLOWING_STAIRS, MSBlocks.GLOWING_PLANKS).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.GLOWING_SLAB, MSBlocks.GLOWING_PLANKS).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GLOWING_BUTTON.get()).requires(MSBlocks.GLOWING_PLANKS.get()).unlockedBy("has_glowing_planks", has(MSBlocks.GLOWING_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GLOWING_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.GLOWING_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_glowing_planks", has(MSBlocks.GLOWING_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.GLOWING_PRESSURE_PLATE, MSBlocks.GLOWING_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GLOWING_FENCE.get(), 3).define('#', MSBlocks.GLOWING_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_glowing_planks", has(MSBlocks.GLOWING_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GLOWING_FENCE_GATE.get(), 1).define('#', MSBlocks.GLOWING_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_glowing_planks", has(MSBlocks.GLOWING_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GLOWING_DOOR.get(), 3).define('#', MSBlocks.GLOWING_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_glowing_planks", has(MSBlocks.GLOWING_PLANKS.get())).save(recipeBuilder);
@@ -814,28 +815,28 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.FROST_STAIRS, MSBlocks.FROST_PLANKS).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.FROST_SLAB, MSBlocks.FROST_PLANKS).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.FROST_BUTTON.get()).requires(MSBlocks.FROST_PLANKS.get()).unlockedBy("has_frost_planks", has(MSBlocks.FROST_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.FROST_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.FROST_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_frost_planks", has(MSBlocks.FROST_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.FROST_PRESSURE_PLATE, MSBlocks.FROST_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.FROST_FENCE.get(), 3).define('#', MSBlocks.FROST_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_frost_planks", has(MSBlocks.FROST_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.FROST_FENCE_GATE.get(), 1).define('#', MSBlocks.FROST_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_frost_planks", has(MSBlocks.FROST_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.FROST_DOOR.get(), 3).define('#', MSBlocks.FROST_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_frost_planks", has(MSBlocks.FROST_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.FROST_TRAPDOOR.get(), 2).define('#', MSBlocks.FROST_PLANKS.get()).pattern("###").pattern("###").group("wooden_trapdoor").unlockedBy("has_frost_planks", has(MSBlocks.FROST_PLANKS.get())).save(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.RAINBOW_BUTTON.get()).requires(MSBlocks.RAINBOW_PLANKS.get()).unlockedBy("has_rainbow_planks", has(MSBlocks.RAINBOW_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.RAINBOW_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.RAINBOW_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_rainbow_planks", has(MSBlocks.RAINBOW_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.RAINBOW_PRESSURE_PLATE, MSBlocks.RAINBOW_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.RAINBOW_FENCE.get(), 3).define('#', MSBlocks.RAINBOW_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_rainbow_planks", has(MSBlocks.RAINBOW_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.RAINBOW_FENCE_GATE.get(), 1).define('#', MSBlocks.RAINBOW_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_rainbow_planks", has(MSBlocks.RAINBOW_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.RAINBOW_DOOR.get(), 3).define('#', MSBlocks.RAINBOW_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_rainbow_planks", has(MSBlocks.RAINBOW_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.RAINBOW_TRAPDOOR.get(), 2).define('#', MSBlocks.RAINBOW_PLANKS.get()).pattern("###").pattern("###").group("wooden_trapdoor").unlockedBy("has_rainbow_planks", has(MSBlocks.RAINBOW_PLANKS.get())).save(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.END_BUTTON.get()).requires(MSBlocks.END_PLANKS.get()).unlockedBy("has_end_planks", has(MSBlocks.END_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.END_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.END_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_end_planks", has(MSBlocks.END_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.END_PRESSURE_PLATE, MSBlocks.END_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.END_FENCE.get(), 3).define('#', MSBlocks.END_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_end_planks", has(MSBlocks.END_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.END_FENCE_GATE.get(), 1).define('#', MSBlocks.END_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_end_planks", has(MSBlocks.END_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.END_DOOR.get(), 3).define('#', MSBlocks.END_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_end_planks", has(MSBlocks.END_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.END_TRAPDOOR.get(), 2).define('#', MSBlocks.END_PLANKS.get()).pattern("###").pattern("###").group("wooden_trapdoor").unlockedBy("has_end_planks", has(MSBlocks.END_PLANKS.get())).save(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.DEAD_BUTTON.get()).requires(MSBlocks.DEAD_PLANKS.get()).unlockedBy("has_dead_planks", has(MSBlocks.DEAD_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.DEAD_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.DEAD_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_dead_planks", has(MSBlocks.DEAD_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.DEAD_PRESSURE_PLATE, MSBlocks.DEAD_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.DEAD_FENCE.get(), 3).define('#', MSBlocks.DEAD_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_dead_planks", has(MSBlocks.DEAD_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.DEAD_FENCE_GATE.get(), 1).define('#', MSBlocks.DEAD_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_dead_planks", has(MSBlocks.DEAD_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.DEAD_DOOR.get(), 3).define('#', MSBlocks.DEAD_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_dead_planks", has(MSBlocks.DEAD_PLANKS.get())).save(recipeBuilder);
@@ -844,7 +845,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.SHADEWOOD_STAIRS, MSBlocks.SHADEWOOD_PLANKS).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.SHADEWOOD_SLAB, MSBlocks.SHADEWOOD_PLANKS).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.SHADEWOOD_BUTTON.get()).requires(MSBlocks.SHADEWOOD_PLANKS.get()).unlockedBy("has_shadewood_planks", has(MSBlocks.SHADEWOOD_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.SHADEWOOD_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.SHADEWOOD_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_shadewood_planks", has(MSBlocks.SHADEWOOD_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.SHADEWOOD_PRESSURE_PLATE, MSBlocks.SHADEWOOD_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.SHADEWOOD_FENCE.get(), 3).define('#', MSBlocks.SHADEWOOD_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_shadewood_planks", has(MSBlocks.SHADEWOOD_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.SHADEWOOD_FENCE_GATE.get(), 1).define('#', MSBlocks.SHADEWOOD_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_shadewood_planks", has(MSBlocks.SHADEWOOD_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.SHADEWOOD_DOOR.get(), 3).define('#', MSBlocks.SHADEWOOD_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_shadewood_planks", has(MSBlocks.SHADEWOOD_PLANKS.get())).save(recipeBuilder);
@@ -853,7 +854,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsShapedRecipe(MSBlocks.CINDERED_STAIRS, MSBlocks.CINDERED_PLANKS).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabShapedRecipe(MSBlocks.CINDERED_SLAB, MSBlocks.CINDERED_PLANKS).group("wooden_slab").save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CINDERED_BUTTON.get()).requires(MSBlocks.CINDERED_PLANKS.get()).unlockedBy("has_cindered_planks", has(MSBlocks.CINDERED_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CINDERED_PRESSURE_PLATE.get(), 1).define('#', MSBlocks.CINDERED_PLANKS.get()).pattern("##").group("stone_pressure_plate").unlockedBy("has_cindered_planks", has(MSBlocks.CINDERED_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.pressurePlateShapedRecipe(MSBlocks.CINDERED_PRESSURE_PLATE, MSBlocks.CINDERED_PLANKS).group("stone_pressure_plate").save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CINDERED_FENCE.get(), 3).define('#', MSBlocks.CINDERED_PLANKS.get()).define('$', Items.STICK).pattern("#$#").pattern("#$#").group("wooden_fence").unlockedBy("has_cindered_planks", has(MSBlocks.CINDERED_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CINDERED_FENCE_GATE.get(), 1).define('#', MSBlocks.CINDERED_PLANKS.get()).define('$', Items.STICK).pattern("$#$").pattern("$#$").group("wooden_fence_gate").unlockedBy("has_cindered_planks", has(MSBlocks.CINDERED_PLANKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CINDERED_DOOR.get(), 3).define('#', MSBlocks.CINDERED_PLANKS.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_cindered_planks", has(MSBlocks.CINDERED_PLANKS.get())).save(recipeBuilder);

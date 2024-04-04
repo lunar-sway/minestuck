@@ -85,4 +85,24 @@ public final class CommonRecipes
 				.pattern("###")
 				.unlockedBy(criterionName, has(sourceBlock));
 	}
+	
+	public static ShapedRecipeBuilder pressurePlateShapedRecipe(Supplier<? extends ItemLike> pressurePlateBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return pressurePlateShapedRecipe(pressurePlateBlock.get(), sourceBlock.get());
+	}
+	
+	public static ShapedRecipeBuilder pressurePlateShapedRecipe(ItemLike pressurePlateBlock, ItemLike sourceBlock)
+	{
+		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
+		String blockName = blockId.getPath();
+		return pressurePlateShapedRecipe(pressurePlateBlock, sourceBlock, "has_" + blockName);
+	}
+	
+	public static ShapedRecipeBuilder pressurePlateShapedRecipe(ItemLike pressurePlateBlock, ItemLike sourceBlock, String criterionName)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, pressurePlateBlock)
+				.define('#', sourceBlock)
+				.pattern("##")
+				.unlockedBy(criterionName, has(sourceBlock));
+	}
 }
