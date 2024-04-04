@@ -56,7 +56,7 @@ public final class ReviewDialogueCommand
 		
 		for(Dialogue.SelectableDialogue dialogue : dialogueCollection)
 		{
-			pos = pos.east(3);
+			pos = pos.east(2);
 			level.removeBlock(pos, false);
 			level.setBlock(pos.below(), Blocks.BRICKS.defaultBlockState(), Block.UPDATE_ALL);
 			
