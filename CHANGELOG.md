@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added TV Antenna
 - Added Molten Amber fluid, used in Heat lands
 - Added Cruxite block set
+- New structure in rain lands
 
 ### Changed
 

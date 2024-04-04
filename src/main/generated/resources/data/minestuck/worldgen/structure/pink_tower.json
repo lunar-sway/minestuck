@@ -1,0 +1,6 @@
+{
+  "type": "minestuck:pink_tower",
+  "biomes": "#minestuck:land",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}
