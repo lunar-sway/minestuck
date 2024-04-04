@@ -64,4 +64,25 @@ public final class CommonRecipes
 				.pattern("###")
 				.unlockedBy(criterionName, has(sourceBlock));
 	}
+	
+	public static ShapedRecipeBuilder wallShapedRecipe(Supplier<? extends ItemLike> wallBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return wallShapedRecipe(wallBlock.get(), sourceBlock.get());
+	}
+	
+	public static ShapedRecipeBuilder wallShapedRecipe(ItemLike wallBlock, ItemLike sourceBlock)
+	{
+		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
+		String blockName = blockId.getPath();
+		return wallShapedRecipe(wallBlock, sourceBlock, "has_" + blockName);
+	}
+	
+	public static ShapedRecipeBuilder wallShapedRecipe(ItemLike wallBlock, ItemLike sourceBlock, String criterionName)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, wallBlock, 6)
+				.define('#', sourceBlock)
+				.pattern("###")
+				.pattern("###")
+				.unlockedBy(criterionName, has(sourceBlock));
+	}
 }
