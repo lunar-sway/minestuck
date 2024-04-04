@@ -2,8 +2,11 @@ package com.mraof.minestuck.data.recipe;
 
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.data.recipe.MinestuckRecipeProvider.has;
@@ -33,6 +36,31 @@ public final class CommonRecipes
 				.define('#', sourceBlock)
 				.pattern("#  ")
 				.pattern("## ")
+				.pattern("###")
+				.unlockedBy(criterionName, has(sourceBlock));
+	}
+	
+	public static ShapedRecipeBuilder slabShapedRecipe(Supplier<? extends ItemLike> slabBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return slabShapedRecipe(slabBlock.get(), sourceBlock.get());
+	}
+	
+	public static ShapedRecipeBuilder slabShapedRecipe(Supplier<? extends ItemLike> slabBlock, Supplier<? extends ItemLike> sourceBlock, String criterionName)
+	{
+		return slabShapedRecipe(slabBlock.get(), sourceBlock.get(), criterionName);
+	}
+	
+	public static ShapedRecipeBuilder slabShapedRecipe(ItemLike slabBlock, ItemLike sourceBlock)
+	{
+		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
+		String blockName = blockId.getPath();
+		return slabShapedRecipe(slabBlock, sourceBlock, "has_" + blockName);
+	}
+	
+	public static ShapedRecipeBuilder slabShapedRecipe(ItemLike slabBlock, ItemLike sourceBlock, String criterionName)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, slabBlock, 6)
+				.define('#', sourceBlock)
 				.pattern("###")
 				.unlockedBy(criterionName, has(sourceBlock));
 	}
