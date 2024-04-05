@@ -50,8 +50,6 @@ public class HeatLandType extends TerrainLandType
 		registry.setBlock("structure_primary_stairs", MSBlocks.BLACK_STONE_BRICK_STAIRS);
 		registry.setBlock("structure_secondary", MSBlocks.POLISHED_IGNEOUS_BRICKS);
 		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_IGNEOUS_STONE);
-		registry.setBlock("structure_secondary_mossy", MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
-		registry.setBlock("structure_secondary_column", MSBlocks.POLISHED_IGNEOUS_PILLAR);
 		registry.setBlock("structure_secondary_stairs", MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS);
 		registry.setBlock("fall_fluid", Blocks.WATER);
 		registry.setBlock("structure_planks", MSBlocks.CINDERED_PLANKS);
