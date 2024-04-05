@@ -37,6 +37,8 @@ public final class TerrainLandTypeTagsProvider extends IntrinsicHolderTagsProvid
 		this.tag(ROCK).add(LandTypes.ROCK.get(), LandTypes.PETRIFICATION.get());
 		this.tag(SAND).add(LandTypes.SAND.get(), LandTypes.RED_SAND.get(), LandTypes.LUSH_DESERTS.get());
 		this.tag(SANDSTONE).add(LandTypes.SANDSTONE.get(), LandTypes.RED_SANDSTONE.get());
+		this.tag(IS_DANGEROUS).add(LandTypes.HEAT.get());
+		this.tag(IS_FLUID_IMPORTANT).add(LandTypes.HEAT.get());
 	}
 	
 	@Override
