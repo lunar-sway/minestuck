@@ -57,6 +57,10 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> MASSIVE_CHAIR = key("massive_chair");
 	public static final ResourceKey<PlacedFeature> MASSIVE_STOOL = key("massive_stool");
 	
+	public static final ResourceKey<PlacedFeature> SULFUR_POOL = key("sulfur_pool");
+	public static final ResourceKey<PlacedFeature> CAST_IRON_BUILDING = key("cast_iron_building");
+	public static final ResourceKey<PlacedFeature> CAST_IRON_PLATFORM = key("cast_iron_platform");
+	
 	public static final ResourceKey<PlacedFeature> LARGE_CAKE = key("large_cake");
 	
 	public static final ResourceKey<PlacedFeature> BLOOD_POOL = key("blood_pool");

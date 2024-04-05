@@ -51,6 +51,10 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MASSIVE_CHAIR = key("massive_chair");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MASSIVE_STOOL = key("massive_stool");
 	
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR_POOL = key("sulfur_pool");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CAST_IRON_BUILDING = key("cast_iron_building");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CAST_IRON_PLATFORM = key("cast_iron_platform");
+	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_POOL = key("blood_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OIL_POOL = key("oil_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OASIS = key("oasis");

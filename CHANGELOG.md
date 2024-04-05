@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Magmatic Black Stone Bricks
 - Igneous blockset
 - Cast Iron Frame, Sheet, and Tile
+- Sulfur Pools and Cast Iron features in Heat Lands
 
 ### Changed
 

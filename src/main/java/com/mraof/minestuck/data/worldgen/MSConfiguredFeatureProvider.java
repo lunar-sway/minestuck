@@ -99,6 +99,10 @@ public final class MSConfiguredFeatureProvider
 		context.register(MASSIVE_CHAIR, new ConfiguredFeature<>(MSFeatures.MASSIVE_CHAIR.get(), FeatureConfiguration.NONE));
 		context.register(MASSIVE_STOOL, new ConfiguredFeature<>(MSFeatures.MASSIVE_STOOL.get(), FeatureConfiguration.NONE));
 		
+		context.register(SULFUR_POOL, new ConfiguredFeature<>(MSFeatures.SULFUR_POOL.get(), FeatureConfiguration.NONE));
+		context.register(CAST_IRON_BUILDING, new ConfiguredFeature<>(MSFeatures.CAST_IRON_BUILDING.get(), FeatureConfiguration.NONE));
+		context.register(CAST_IRON_PLATFORM, new ConfiguredFeature<>(MSFeatures.CAST_IRON_PLATFORM.get(), FeatureConfiguration.NONE));
+		
 		context.register(BLOOD_POOL, new ConfiguredFeature<>(Feature.LAKE,
 				new LakeFeature.Configuration(BlockStateProvider.simple(MSBlocks.BLOOD.get()), BlockStateProvider.simple(Blocks.AIR))));
 		context.register(OIL_POOL, new ConfiguredFeature<>(Feature.LAKE,

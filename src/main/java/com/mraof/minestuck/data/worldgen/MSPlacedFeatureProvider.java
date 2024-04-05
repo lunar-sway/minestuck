@@ -113,6 +113,13 @@ public final class MSPlacedFeatureProvider
 		context.register(MASSIVE_STOOL, placed(features, MSCFeatures.MASSIVE_STOOL,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		
+		context.register(SULFUR_POOL, placed(features, MSCFeatures.SULFUR_POOL,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(12), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, RandomOffsetPlacement.vertical(UniformInt.of(-2, 0)))));
+		context.register(CAST_IRON_BUILDING, placed(features, MSCFeatures.CAST_IRON_BUILDING,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, RandomOffsetPlacement.vertical(UniformInt.of(-1, 0)))));
+		context.register(CAST_IRON_PLATFORM, placed(features, MSCFeatures.CAST_IRON_PLATFORM,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
+		
 		context.register(LARGE_CAKE, placed(features, MSCFeatures.LARGE_CAKE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(50))));
 		
