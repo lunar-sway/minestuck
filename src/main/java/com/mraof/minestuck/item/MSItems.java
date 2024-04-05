@@ -117,6 +117,19 @@ public class MSItems
 	public static final RegistryObject<BlockItem> STRIPPED_DEAD_WOOD = registerBlockItem(MSBlocks.STRIPPED_DEAD_WOOD);
 	public static final RegistryObject<BlockItem> STRIPPED_CINDERED_WOOD = registerBlockItem(MSBlocks.STRIPPED_CINDERED_WOOD);
 	
+	public static final RegistryObject<Item> CINDERED_SIGN = REGISTER.register("cindered_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.CINDERED_SIGN.get(), MSBlocks.CINDERED_WALL_SIGN.get()));
+	public static final RegistryObject<Item> CINDERED_HANGING_SIGN = REGISTER.register("cindered_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.CINDERED_HANGING_SIGN.get(), MSBlocks.CINDERED_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<Item> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get()));
+	public static final RegistryObject<Item> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(),
+					new Item.Properties().stacksTo(16)));
+	
+	public static final RegistryObject<BlockItem> FROST_SAPLING = registerBlockItem(MSBlocks.FROST_SAPLING);
 	
 	//Hammers
 	public static final RegistryObject<Item> CLAW_HAMMER = REGISTER.register("claw_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.8F).efficiency(1.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));

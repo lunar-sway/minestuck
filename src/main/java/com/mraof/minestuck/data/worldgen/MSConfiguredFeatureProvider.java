@@ -33,6 +33,8 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.AttachedToLeavesDecorator;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.DarkOakTrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.MegaJungleTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
@@ -192,6 +194,14 @@ public final class MSConfiguredFeatureProvider
 				new BlockStateConfiguration(MSBlocks.DEAD_LOG.get().defaultBlockState())));
 		context.register(CINDERED_TREE, new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 				new BlockStateConfiguration(MSBlocks.CINDERED_LOG.get().defaultBlockState())));
+		
+		context.register(FROST_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(MSBlocks.FROST_LOG.get().defaultBlockState()),
+						new DarkOakTrunkPlacer(8, 4, 0), BlockStateProvider.simple(MSBlocks.FROST_LEAVES.get().defaultBlockState()),
+						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+				new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
+		
 		
 		context.register(FOREST_LAND_TREES, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
 				new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(placedFeatures.getOrThrow(TreePlacements.BIRCH_CHECKED), 0.2F), new WeightedPlacedFeature(placedFeatures.getOrThrow(TreePlacements.FANCY_OAK_CHECKED), 0.1F)), placedFeatures.getOrThrow(TreePlacements.OAK_CHECKED))));

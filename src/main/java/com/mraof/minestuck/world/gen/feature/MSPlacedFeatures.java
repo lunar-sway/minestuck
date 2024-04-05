@@ -129,6 +129,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> DEAD_TREE = key("tree/dead");
 	public static final ResourceKey<PlacedFeature> EXTRA_DEAD_TREE = key("tree/dead_extra");
 	public static final ResourceKey<PlacedFeature> CINDERED_TREE = key("tree/cindered");
+	public static final ResourceKey<PlacedFeature> FROST_TREE = key("tree/frost");
 	
 	public static final ResourceKey<PlacedFeature> FOREST_LAND_TREES = key("tree/forest_land");
 	public static final ResourceKey<PlacedFeature> DENSE_FOREST_LAND_TREES = key("tree/forest_land_dense");

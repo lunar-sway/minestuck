@@ -230,7 +230,9 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()))));
 		context.register(END_TREE, placed(features, MSCFeatures.END_TREE,
 				worldGenModifiers(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.END_SAPLING.get()))));
-		
+		context.register(FROST_TREE, placed(features, MSCFeatures.FROST_TREE,
+				worldGenModifiers(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.FROST_SAPLING.get()))));
+				
 		BlockPredicate onBlueDirt = BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), MSBlocks.BLUE_DIRT.get());
 		context.register(GLOWING_TREE, placed(features, MSCFeatures.GLOWING_TREE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP, BlockPredicateFilter.forPredicate(onBlueDirt))));

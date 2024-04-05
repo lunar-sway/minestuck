@@ -82,6 +82,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.STRIPPED_DEAD_WOOD, "Stripped Dead Wood");
 		addBlock(MSBlocks.STRIPPED_CINDERED_WOOD, "Stripped Cindered Wood");
 		
+		addBlock(MSBlocks.FROST_SAPLING, "Frost Sapling");
 		
 		addBlock(MSBlocks.CARVED_SIGN, "Carved Sign");
 		addBlock(MSBlocks.CARVED_HANGING_SIGN, "Carved Hanging Sign");
@@ -101,6 +102,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.TREATED_HANGING_SIGN, "Treated Hanging Sign");
 		addBlock(MSBlocks.LACQUERED_SIGN, "Lacquered Sign");
 		addBlock(MSBlocks.LACQUERED_HANGING_SIGN, "Lacquered Hanging Sign");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_SIGN, "Perfectly Generic Sign");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, "Perfectly Generic Hanging Sign");
+		addBlock(MSBlocks.CINDERED_SIGN, "Cindered Sign");
+		addBlock(MSBlocks.CINDERED_HANGING_SIGN, "Cindered Hanging Sign");
 		
 		addBlock(MSBlocks.STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.COBBLESTONE_CRUXITE_ORE, "Cruxite Ore");

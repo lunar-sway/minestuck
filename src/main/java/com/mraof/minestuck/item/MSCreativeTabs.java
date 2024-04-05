@@ -52,6 +52,10 @@ public final class MSCreativeTabs
 		output.accept(MSItems.TREATED_HANGING_SIGN.get());
 		output.accept(MSItems.LACQUERED_SIGN.get());
 		output.accept(MSItems.LACQUERED_HANGING_SIGN.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_SIGN.get());
+		output.accept(MSItems.PERFECTLY_GENERIC_HANGING_SIGN.get());
+		output.accept(MSItems.CINDERED_SIGN.get());
+		output.accept(MSItems.CINDERED_HANGING_SIGN.get());
 		
 		output.accept(MSItems.STRIPPED_CINDERED_LOG.get());
 		output.accept(MSItems.STRIPPED_CINDERED_WOOD.get());

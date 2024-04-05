@@ -50,6 +50,12 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.LACQUERED_SIGN);
 		simpleItem(MSItems.LACQUERED_HANGING_SIGN);
 		
+		simpleItem(MSItems.PERFECTLY_GENERIC_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_HANGING_SIGN);
+		
+		simpleItem(MSItems.CINDERED_SIGN);
+		simpleItem(MSItems.CINDERED_HANGING_SIGN);
+		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);
 		handheldItem(MSItems.SLEDGE_HAMMER);

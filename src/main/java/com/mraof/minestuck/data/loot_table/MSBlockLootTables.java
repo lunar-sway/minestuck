@@ -140,6 +140,24 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(LACQUERED_WALL_HANGING_SIGN.get(), block ->
 				createSingleItemTable(MSItems.LACQUERED_HANGING_SIGN.get()));
 		
+		add(PERFECTLY_GENERIC_SIGN.get(), block ->
+				createSingleItemTable(MSItems.PERFECTLY_GENERIC_SIGN.get()));
+		add(PERFECTLY_GENERIC_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.PERFECTLY_GENERIC_SIGN.get()));
+		add(PERFECTLY_GENERIC_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.PERFECTLY_GENERIC_HANGING_SIGN.get()));
+		add(PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.PERFECTLY_GENERIC_HANGING_SIGN.get()));
+		
+		add(CINDERED_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CINDERED_SIGN.get()));
+		add(CINDERED_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CINDERED_SIGN.get()));
+		add(CINDERED_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CINDERED_HANGING_SIGN.get()));
+		add(CINDERED_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CINDERED_HANGING_SIGN.get()));
+		
 		dropSelf(STRIPPED_GLOWING_LOG.get());
 		dropSelf(STRIPPED_FROST_LOG.get());
 		dropSelf(STRIPPED_RAINBOW_LOG.get());
@@ -152,6 +170,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(STRIPPED_END_WOOD.get());
 		dropSelf(STRIPPED_DEAD_WOOD.get());
 		dropSelf(STRIPPED_CINDERED_WOOD.get());
+		
+		dropSelf(FROST_SAPLING.get());
 		
 		add(STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(COBBLESTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);

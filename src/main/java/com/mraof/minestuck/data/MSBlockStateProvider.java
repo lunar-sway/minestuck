@@ -93,6 +93,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 		hangingSignBlock(MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.SHADEWOOD_PLANKS.get()));
 		
+		signBlock(((StandingSignBlock) MSBlocks.PERFECTLY_GENERIC_SIGN.get()), ((WallSignBlock) MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get()),
+				blockTexture(MSBlocks.GENERIC_OBJECT.get()));
+		
+		hangingSignBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.GENERIC_OBJECT.get()));
+		
+		signBlock(((StandingSignBlock) MSBlocks.CINDERED_SIGN.get()), ((WallSignBlock) MSBlocks.CINDERED_WALL_SIGN.get()),
+				blockTexture(MSBlocks.CINDERED_PLANKS.get()));
+		
+		hangingSignBlock(MSBlocks.CINDERED_HANGING_SIGN.get(), MSBlocks.CINDERED_WALL_HANGING_SIGN.get(),
+				blockTexture(MSBlocks.CINDERED_PLANKS.get()));
 		
 				
 		simpleBlockWithItem(MSBlocks.STONE_CRUXITE_ORE);
@@ -938,8 +949,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.SHADEWOOD_PRESSURE_PLATE, MSBlocks.SHADEWOOD_PLANKS);
 		fenceWithItem(MSBlocks.SHADEWOOD_FENCE, MSBlocks.SHADEWOOD_PLANKS);
 		fenceGateWithItem(MSBlocks.SHADEWOOD_FENCE_GATE, MSBlocks.SHADEWOOD_PLANKS);
-		simpleDoorBlock(MSBlocks.SHADEWOOD_DOOR);
-		trapDoorWithItem(MSBlocks.SHADEWOOD_TRAPDOOR);
+		simpleDoorBlock(MSBlocks.SHADEWOOD_DOOR, "translucent");
+		trapDoorWithItem(MSBlocks.SHADEWOOD_TRAPDOOR, "translucent");
 		flatItem(MSItems.SHADEWOOD_DOOR, MSBlockStateProvider::itemTexture);
 		
 		weightedVariantsWithItem(MSBlocks.FROST_LEAVES, new int[]{12, 1},
@@ -959,6 +970,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlock(MSBlocks.SHADEWOOD_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.SHADEWOOD_SAPLING, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.FROST_SAPLING,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.FROST_SAPLING, MSBlockStateProvider::texture);
 		
 		simpleBlockWithItem(MSBlocks.GLOWING_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
@@ -1878,16 +1892,30 @@ public class MSBlockStateProvider extends BlockStateProvider
 		doorBlockWithRenderType(block.get(), doorBottom, doorTop, "cutout");
 	}
 	
-	public void trapDoorWithItem(RegistryObject<TrapDoorBlock> block)
+	public void simpleDoorBlock(RegistryObject<DoorBlock> block, String renderType)
 	{
-		trapDoorWithItem(block, block.getId().getPath(), texture(block));
+		String baseName = block.getId().getPath();
+		ResourceLocation doorBottom = new ResourceLocation("minestuck:block/" + baseName + "_bottom");
+		ResourceLocation doorTop = new ResourceLocation("minestuck:block/" + baseName + "_top");
+		
+		doorBlockWithRenderType(block.get(), doorBottom, doorTop, renderType);
 	}
 	
-	private void trapDoorWithItem(RegistryObject<TrapDoorBlock> block, String baseName, ResourceLocation texture)
+	public void trapDoorWithItem(RegistryObject<TrapDoorBlock> block)
+	{
+		trapDoorWithItem(block, block.getId().getPath(), texture(block), "cutout");
+	}
+	
+	public void trapDoorWithItem(RegistryObject<TrapDoorBlock> block, String renderType)
+	{
+		trapDoorWithItem(block, block.getId().getPath(), texture(block), renderType);
+	}
+	
+	private void trapDoorWithItem(RegistryObject<TrapDoorBlock> block, String baseName, ResourceLocation texture, String renderType)
 	{
 		ModelFile trapDoorInventory = models().trapdoorBottom(baseName + "_bottom", texture);
 		
-		trapdoorBlockWithRenderType(block.get(), texture, true, "cutout");
+		trapdoorBlockWithRenderType(block.get(), texture, true, renderType);
 		simpleBlockItem(block.get(), trapDoorInventory);
 	}
 	

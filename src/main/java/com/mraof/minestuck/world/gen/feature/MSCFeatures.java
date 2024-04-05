@@ -104,6 +104,8 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_TREE = key("dead_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CINDERED_TREE = key("cindered_tree");
 	
+	public static final ResourceKey<ConfiguredFeature<?, ?>> FROST_TREE = key("frost_tree");
+	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FOREST_LAND_TREES = key("forest_land_trees");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TAIGA_LAND_TREES = key("taiga_land_trees");
 	

@@ -15,4 +15,6 @@ public class MSWoodTypes
 	public static final WoodType SHADEWOOD = WoodType.register(new WoodType(Minestuck.MOD_ID + ":shadewood", BlockSetType.OAK));
 	public static final WoodType TREATED = WoodType.register(new WoodType(Minestuck.MOD_ID + ":treated", BlockSetType.OAK));
 	public static final WoodType LACQUERED = WoodType.register(new WoodType(Minestuck.MOD_ID + ":lacquered", BlockSetType.OAK));
+	public static final WoodType PERFECTLY_GENERIC = WoodType.register(new WoodType(Minestuck.MOD_ID + ":perfectly_generic", BlockSetType.OAK));
+	public static final WoodType CINDERED = WoodType.register(new WoodType(Minestuck.MOD_ID + ":cindered", BlockSetType.OAK));
 }
