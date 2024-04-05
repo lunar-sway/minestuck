@@ -1,11 +1,11 @@
 {
   "values": [
-    "minestuck:coarse_stone_slab",
-    "minestuck:coarse_stone_brick_slab",
     "minestuck:black_chess_brick_slab",
+    "minestuck:white_chess_brick_slab",
     "minestuck:dark_gray_chess_brick_slab",
     "minestuck:light_gray_chess_brick_slab",
-    "minestuck:white_chess_brick_slab",
+    "minestuck:coarse_stone_slab",
+    "minestuck:coarse_stone_brick_slab",
     "minestuck:chalk_slab",
     "minestuck:chalk_brick_slab",
     "minestuck:pink_stone_brick_slab",

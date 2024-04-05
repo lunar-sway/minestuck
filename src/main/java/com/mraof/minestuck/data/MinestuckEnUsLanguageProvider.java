@@ -64,64 +64,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	@Override
 	protected void addTranslations()
 	{
+		SkaiaBlocksData.addEnUsTranslations(this);
 		AspectTreeBlocksData.addEnUsTranslations(this);
 		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
-		addBlock(MSBlocks.BLACK_CHESS_DIRT, "Black Chess Tile");
-		addBlock(MSBlocks.WHITE_CHESS_DIRT, "White Chess Tile");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_DIRT, "Light Gray Chess Tile");
-		addBlock(MSBlocks.SKAIA_PORTAL, "Skaia Portal");
-		addBlock(MSBlocks.BLACK_CHESS_BRICKS, "Black Chess Bricks");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_WALL, "Black Chess Brick Wall");
-		
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICKS, "Dark Gray Chess Bricks");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_WALL, "Dark Gray Chess Brick Wall");
-		
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICKS, "Light Gray Chess Bricks");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_WALL, "Light Gray Chess Brick Wall");
-		
-		addBlock(MSBlocks.WHITE_CHESS_BRICKS, "White Chess Bricks");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_WALL, "White Chess Brick Wall");
-		
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH, "Smooth Black Chess Brick");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Black Chess Brick Stairs");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_SLAB, "Smooth Black Chess Brick Slab");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_WALL, "Smooth Black Chess Brick Wall");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Black Chess Brick Button");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth Black Chess Brick Pressure Plate");
-		
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH, "Smooth Dark Gray Chess Brick");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Dark Gray Chess Brick Stairs");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB, "Smooth Dark Gray Chess Brick Slab");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL, "Smooth Dark Gray Chess Brick Wall");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Dark Gray Chess Brick Button");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "DBrick ark Gray Chess Smooth Pressure Plate");
-		
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH, "Smooth Light Gray Black Chess Brick");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS, "Smooth Light Gray Chess Brick Stairs");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB, "Smooth Light Gray Chess Brick Slab");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL, "LSmooth ight Gray Chess Brick Wall");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON, "Smooth Light Gray Chess Brick Button");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth Light Gray Chess Brick Pressure Plate");
-		
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH, "Smooth White Chess Brick");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_STAIRS, "Smooth White Chess Brick Stairs");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_SLAB, "Smooth White Chess Brick Slab");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_WALL, "Smooth White Chess Brick Wall");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_BUTTON, "Smooth White Chess Brick Button");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, "Smooth White Chess Brick Pressure Plate");
-		
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_TRIM, "Black Chess Brick Trim");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_TRIM, "Dark Gray Chess Brick Trim");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM, "Light Gray Chess Brick Trim");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_TRIM, "White Chess Brick Trim");
-		addBlock(MSBlocks.CHECKERED_STAINED_GLASS, "Checkered Stained Glass");
-		addBlock(MSBlocks.BLACK_CROWN_STAINED_GLASS, "Black Crown Stained Glass");
-		addBlock(MSBlocks.BLACK_PAWN_STAINED_GLASS, "Black Pawn Stained Glass");
-		addBlock(MSBlocks.WHITE_CROWN_STAINED_GLASS, "White Crown Stained Glass");
-		addBlock(MSBlocks.WHITE_PAWN_STAINED_GLASS, "White Pawn Stained Glass");
 		addBlock(MSBlocks.STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.COBBLESTONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.SANDSTONE_CRUXITE_ORE, "Cruxite Ore");
@@ -810,10 +757,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
 		addBlock(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
 		addBlock(MSBlocks.NAKAGATOR_STATUE, "Nakagator Statue");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_STAIRS, "Black Chess Brick Stairs");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_STAIRS, "Dark Gray Chess Brick Stairs");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_STAIRS, "Light Gray Chess Brick Stairs");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_STAIRS, "White Chess Brick Stairs");
+		
 		addBlock(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		addBlock(MSBlocks.COARSE_STONE_BRICK_STAIRS, "Coarse Stone Brick Stairs");
 		addBlock(MSBlocks.SHADE_STAIRS, "Shade Stone Stairs");
@@ -835,10 +779,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, "Steep Green Stone Brick Stairs Base");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, "Steep Green Stone Brick Stairs Top");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SLAB, "Black Chess Brick Slab");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, "Dark Gray Chess Brick Slab");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB, "Light Gray Chess Brick Slab");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SLAB, "White Chess Brick Slab");
+		
 		addBlock(MSBlocks.CHALK_SLAB, "Chalk Slab");
 		addBlock(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
 		addBlock(MSBlocks.PINK_STONE_SLAB, "Pink Stone Slab");
@@ -2354,7 +2295,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleSelectorScreen.RANDOMIZE, "Randomize");
 		add(EffectTogglePacket.ON, "Aspect Effects have been toggled on");
 		add(EffectTogglePacket.OFF, "Aspect Effects have been toggled off");
-		add(SkaianetHandler.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
+		add(InfoTracker.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
 		add(TransportalizerBlockEntity.DISABLED, "This transportalizer is currently disabled with a redstone signal.");
 		add(TransportalizerBlockEntity.BLOCKED, "The transportalizer appears to need more space above it to function.");
 		add(TransportalizerBlockEntity.BLOCKED_DESTINATION, "The destination seems to be blocked.");
@@ -2362,7 +2303,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerBlockEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
 		add(TransportalizerBlockEntity.TAKEN, "The code \"%s\" has been taken by another transportalizer.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
-		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
 		add(WirelessRedstoneTransmitterScreen.TITLE, "Wireless Redstone");
 		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
 		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
@@ -2383,8 +2323,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbClient.SELECT_COLOR, "Select a Color");
 		add(SburbClient.CONNECT, "Connected to %s");
 		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
-		add(SkaianetHandler.CLOSED, "Connection closed");
-		add(SkaianetHandler.CLOSED_SERVER, "Server closed");
+		add(SburbConnections.CLOSED, "Connection closed");
 		add(SburbServer.OFFLINE, "Server offline");
 		add(SburbClient.SELECT, "Select a server below");
 		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
@@ -2395,17 +2334,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurner.CHOOSE, "Choose disk type to write");
-		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
+		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
 		add(SettingsApp.THEME, "Choose Theme");
 		add(SettingsApp.TITLE, "Sburb Settings");
-		add(MergeResult.ABLE, "Able to merge");
-		add(MergeResult.LOCKED, "Either session is locked");
-		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
-		add(MergeResult.SESSION_FULL, "The session is full");
-		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
-		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
-		add(MergeResult.GENERIC_FAIL, "Merge failed");
-		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
 		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console");
@@ -2470,13 +2401,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerCommand.FAILURE_RESULT, "Failed the teleport anything.");
 		add(TransportalizerCommand.RESULT, "Successfully teleported %s entities to transportalizer");
 		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
-		add(SburbConnectionCommand.LOCKED, "Their session is locked, and should no longer be modified");
 		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
+		add(DebugLandsCommand.SUCCESS, "Created %d lands connected to %s");
 		add(DebugLandsCommand.MUST_ENTER, "You must have entered before you can create debug lands");
+		add(DebugLandsCommand.INVALID_CHAIN, "The given land list is not valid for this command");
 		add(SburbPredefineCommand.SET_TITLE, "Predefined %s's title as %s");
 		add(SburbPredefineCommand.SET_TERRAIN_LAND, "Predefined %s's terrain land type");
 		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
 		add(SburbPredefineCommand.DEFINE, "Predefined full data for %s");
+		add(SburbPredefineCommand.TOO_LATE, "It is too late to predefine data for this player");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
@@ -2488,7 +2421,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(LandTypePairArgument.INCOMPLETE, "Incomplete (expected two land aspects)");
 		
 		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
-		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
 		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
 		add(PredefineData.GENERATED_TITLE, "Generated %s as predefined title");
 		add(PredefineData.CHANGED_TITLE, "Changed predefined title from %s to %s due to a new title land type");
