@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "minestuck:block/cast_iron_sheet",
-    "side": "minestuck:block/cast_iron_sheet",
-    "top": "minestuck:block/cast_iron_sheet"
-  }
-}

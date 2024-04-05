@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:grist_cost",
-  "grist_cost": {
-    "minestuck:marble": 1
-  },
-  "ingredient": {
-    "item": "minecraft:moss_block"
-  }
-}

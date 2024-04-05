@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "minestuck:block/shadewood_planks",
-    "side": "minestuck:block/shadewood_planks",
-    "top": "minestuck:block/shadewood_planks"
-  }
-}

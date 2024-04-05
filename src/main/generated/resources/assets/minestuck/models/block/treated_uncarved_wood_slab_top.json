@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "minestuck:block/treated_uncarved_wood",
-    "side": "minestuck:block/treated_uncarved_wood",
-    "top": "minestuck:block/treated_uncarved_wood"
-  }
-}

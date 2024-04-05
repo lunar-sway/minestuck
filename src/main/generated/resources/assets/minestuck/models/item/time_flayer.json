@@ -1,6 +1,0 @@
-{
-  "parent": "minestuck:item/large_weapon",
-  "textures": {
-    "layer0": "minestuck:item/time_flayer"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "type": "minestuck:wildcard_grist_cost",
-  "grist_cost": 1,
-  "ingredient": {
-    "item": "minestuck:captcha_card"
-  }
-}

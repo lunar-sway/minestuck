@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/door_top_left",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "bottom": "minestuck:block/hope_aspect_door_bottom",
-    "top": "minestuck:block/hope_aspect_door_top"
-  }
-}

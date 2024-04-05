@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/wall_inventory",
-  "textures": {
-    "wall": "minestuck:block/horizontal_green_stone_bricks"
-  }
-}
