@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:toothripper"
+  },
+  "input2": {
+    "item": "minestuck:sorrow_gushers"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:shadowrazor"
+  }
+}

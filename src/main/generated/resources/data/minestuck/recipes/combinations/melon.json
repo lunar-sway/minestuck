@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:pumpkin"
+  },
+  "input2": {
+    "item": "minestuck:strawberry"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:melon"
+  }
+}

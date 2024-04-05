@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/coarse_stone_bricks_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/coarse_stone_bricks"
+    },
+    "type=top": {
+      "model": "minestuck:block/coarse_stone_bricks_slab_top"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 8,
+    "minestuck:mercury": 1,
+    "minestuck:rust": 4
+  },
+  "ingredient": {
+    "item": "minestuck:pipe"
+  }
+}

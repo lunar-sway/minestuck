@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button",
+  "textures": {
+    "texture": "minestuck:block/space_aspect_planks"
+  }
+}

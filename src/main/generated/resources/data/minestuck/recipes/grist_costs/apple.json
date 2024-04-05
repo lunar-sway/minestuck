@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 2,
+    "minestuck:shale": 2
+  },
+  "ingredient": {
+    "item": "minecraft:apple"
+  }
+}

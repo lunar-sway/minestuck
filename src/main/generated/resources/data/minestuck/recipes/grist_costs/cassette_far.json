@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 15,
+    "minestuck:caulk": 8,
+    "minestuck:sulfur": 5,
+    "minestuck:uranium": 5
+  },
+  "ingredient": {
+    "item": "minestuck:cassette_far"
+  }
+}

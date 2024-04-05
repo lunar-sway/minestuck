@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/rotted_shadewood",
+    "side": "minestuck:block/rotted_shadewood"
+  }
+}

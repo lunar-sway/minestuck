@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 150,
+    "minestuck:chalk": 30,
+    "minestuck:iodine": 20
+  },
+  "ingredient": {
+    "item": "minestuck:toffee_club"
+  }
+}

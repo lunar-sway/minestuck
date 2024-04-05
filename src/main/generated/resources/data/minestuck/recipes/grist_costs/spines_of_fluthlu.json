@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 90,
+    "minestuck:build": 454,
+    "minestuck:mercury": 66,
+    "minestuck:sulfur": 66
+  },
+  "ingredient": {
+    "item": "minestuck:spines_of_fluthlu"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:captcha_card"
+  },
+  "input2": {
+    "item": "minestuck:computer"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:captcharoid_camera"
+  }
+}

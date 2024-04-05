@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 1,
+    "minestuck:garnet": 1,
+    "minestuck:iodine": 1
+  },
+  "ingredient": {
+    "item": "minecraft:torchflower_seeds"
+  }
+}

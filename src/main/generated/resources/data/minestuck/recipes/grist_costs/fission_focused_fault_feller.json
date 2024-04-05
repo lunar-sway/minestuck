@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1360,
+    "minestuck:rust": 102,
+    "minestuck:shale": 510,
+    "minestuck:uranium": 136
+  },
+  "ingredient": {
+    "item": "minestuck:fission_focused_fault_feller"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_pressure_plate",
+  "key": {
+    "#": {
+      "item": "minestuck:black_chess_brick_smooth"
+    }
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "item": "minestuck:black_chess_brick_smooth_pressure_plate"
+  },
+  "show_notification": true
+}

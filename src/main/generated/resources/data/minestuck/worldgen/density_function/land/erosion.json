@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:shifted_noise",
+    "noise": "minestuck:land/erosion",
+    "shift_x": "minestuck:shift_x",
+    "shift_y": 0.0,
+    "shift_z": "minestuck:shift_z",
+    "xz_scale": 0.25,
+    "y_scale": 0.0
+  }
+}

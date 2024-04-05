@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 35,
+    "minestuck:quartz": 1
+  },
+  "ingredient": {
+    "item": "minestuck:swonge"
+  }
+}

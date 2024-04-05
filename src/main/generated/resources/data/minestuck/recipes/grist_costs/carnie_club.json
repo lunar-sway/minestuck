@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:garnet": 72,
+    "minestuck:gold": 1,
+    "minestuck:rust": 110,
+    "minestuck:sulfur": 145,
+    "minestuck:tar": 182
+  },
+  "ingredient": {
+    "item": "minestuck:carnie_club"
+  }
+}

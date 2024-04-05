@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:mini_typheus_statue"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 12000,
+      "min_inclusive": 10000
+    }
+  }
+}

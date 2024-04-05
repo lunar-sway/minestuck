@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "input2": {
+    "item": "minecraft:birch_leaves"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:birch_sapling"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 2,
+    "minestuck:shale": 4
+  },
+  "ingredient": {
+    "item": "minecraft:popped_chorus_fruit"
+  }
+}

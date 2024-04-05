@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 356,
+    "minestuck:cobalt": 71,
+    "minestuck:iodine": 89,
+    "minestuck:mercury": 71
+  },
+  "ingredient": {
+    "item": "minestuck:clown_club"
+  }
+}

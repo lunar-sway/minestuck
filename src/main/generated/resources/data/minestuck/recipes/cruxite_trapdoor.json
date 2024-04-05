@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "cruxite_blocks",
+  "key": {
+    "#": {
+      "item": "minestuck:smooth_cruxite_block"
+    }
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 2,
+    "item": "minestuck:cruxite_trapdoor"
+  },
+  "show_notification": true
+}

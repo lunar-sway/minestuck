@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1730,
+    "minestuck:gold": 346,
+    "minestuck:sulfur": 692,
+    "minestuck:tar": 865,
+    "minestuck:uranium": 346
+  },
+  "ingredient": {
+    "item": "minestuck:piglins_pride"
+  }
+}

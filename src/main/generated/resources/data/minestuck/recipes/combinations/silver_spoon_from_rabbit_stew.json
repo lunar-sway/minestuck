@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_shovel"
+  },
+  "input2": {
+    "item": "minecraft:rabbit_stew"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:silver_spoon"
+  }
+}

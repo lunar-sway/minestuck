@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/stripped_rotted_shadewood_log_top",
+    "side": "minestuck:block/stripped_rotted_shadewood_log"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minestuck:item/knife_weapon",
+  "textures": {
+    "layer0": "minestuck:item/light_of_my_knife"
+  }
+}

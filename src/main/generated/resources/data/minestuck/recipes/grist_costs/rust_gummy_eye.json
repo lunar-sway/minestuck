@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 3
+  },
+  "ingredient": {
+    "item": "minestuck:rust_gummy_eye"
+  }
+}

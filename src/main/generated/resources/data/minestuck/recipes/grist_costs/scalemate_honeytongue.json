@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 8,
+    "minestuck:build": 8
+  },
+  "ingredient": {
+    "item": "minestuck:scalemate_honeytongue"
+  }
+}

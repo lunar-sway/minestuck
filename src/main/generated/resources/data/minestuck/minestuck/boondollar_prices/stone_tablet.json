@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:stone_tablet"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 30,
+      "min_inclusive": 20
+    }
+  }
+}

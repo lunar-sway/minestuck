@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:music_disc_mall"
+  },
+  "input2": {
+    "item": "minestuck:cassette_player"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:cassette_mall"
+  }
+}

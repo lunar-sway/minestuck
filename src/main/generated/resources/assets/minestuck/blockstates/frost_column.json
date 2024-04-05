@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "minestuck:block/frost_column"
+    },
+    "facing=east": {
+      "model": "minestuck:block/frost_column",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/frost_column",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "minestuck:block/frost_column",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "minestuck:block/frost_column"
+    },
+    "facing=west": {
+      "model": "minestuck:block/frost_column",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/door_bottom_right_open",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "bottom": "minestuck:block/life_aspect_door_bottom",
+    "top": "minestuck:block/life_aspect_door_top"
+  }
+}

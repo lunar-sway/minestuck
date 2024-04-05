@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:rooted_dirt"
+  },
+  "input2": {
+    "item": "minecraft:oak_sapling"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:azalea"
+  }
+}

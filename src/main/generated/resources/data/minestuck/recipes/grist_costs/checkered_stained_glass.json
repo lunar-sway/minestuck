@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 5
+  },
+  "ingredient": {
+    "item": "minestuck:checkered_stained_glass"
+  }
+}

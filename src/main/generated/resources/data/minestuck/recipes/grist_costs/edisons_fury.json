@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:garnet": 240,
+    "minestuck:mercury": 267,
+    "minestuck:rust": 280,
+    "minestuck:tar": 67,
+    "minestuck:uranium": 27
+  },
+  "ingredient": {
+    "item": "minestuck:edisons_fury"
+  }
+}

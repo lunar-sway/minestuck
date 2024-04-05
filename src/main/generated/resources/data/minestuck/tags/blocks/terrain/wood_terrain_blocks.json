@@ -1,0 +1,19 @@
+{
+  "values": [
+    "minestuck:uncarved_wood",
+    "minestuck:chipboard",
+    "minestuck:wood_shavings",
+    "minestuck:carved_heavy_planks",
+    "minestuck:carved_planks",
+    "minestuck:treated_uncarved_wood",
+    "minestuck:treated_chipboard",
+    "minestuck:treated_wood_shavings",
+    "minestuck:treated_heavy_planks",
+    "minestuck:treated_planks",
+    "minestuck:lacquered_uncarved_wood",
+    "minestuck:lacquered_chipboard",
+    "minestuck:lacquered_wood_shavings",
+    "minestuck:lacquered_heavy_planks",
+    "minestuck:lacquered_planks"
+  ]
+}

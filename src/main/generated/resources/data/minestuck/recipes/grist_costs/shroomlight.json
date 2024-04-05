@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 8,
+    "minestuck:mercury": 10
+  },
+  "ingredient": {
+    "item": "minecraft:shroomlight"
+  }
+}

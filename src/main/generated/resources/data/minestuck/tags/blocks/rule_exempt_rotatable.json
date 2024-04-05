@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:repeater",
+    "minecraft:comparator",
+    "minestuck:and_gate_block",
+    "minestuck:or_gate_block",
+    "minestuck:xor_gate_block",
+    "minestuck:nand_gate_block",
+    "minestuck:nor_gate_block",
+    "minestuck:xnor_gate_block",
+    "minestuck:area_effect_block",
+    "minestuck:wireless_redstone_transmitter",
+    "minestuck:remote_comparator",
+    "minestuck:platform_generator",
+    "minestuck:item_magnet"
+  ]
+}

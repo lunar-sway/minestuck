@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:oak_leaves"
+  },
+  "input2": {
+    "item": "minecraft:spruce_leaves"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:dark_oak_leaves"
+  }
+}

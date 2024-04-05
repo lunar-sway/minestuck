@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:elytra"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 1000,
+      "min_inclusive": 500
+    }
+  }
+}

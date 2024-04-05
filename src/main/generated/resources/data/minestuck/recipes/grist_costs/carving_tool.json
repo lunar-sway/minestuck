@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 10,
+    "minestuck:rust": 2
+  },
+  "ingredient": {
+    "item": "minestuck:carving_tool"
+  }
+}

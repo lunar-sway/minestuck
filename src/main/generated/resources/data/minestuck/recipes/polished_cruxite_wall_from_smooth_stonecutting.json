@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "minestuck:smooth_cruxite_block"
+  },
+  "result": "minestuck:polished_cruxite_wall"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:small_flowers"
+  },
+  "input2": {
+    "item": "minecraft:brick"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:flower_pot"
+  }
+}

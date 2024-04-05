@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:raw_uranium"
+  },
+  "input2": {
+    "item": "minecraft:netherrack"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:netherrack_uranium_ore"
+  }
+}

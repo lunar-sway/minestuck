@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:iron_ingot"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 120,
+      "min_inclusive": 90
+    }
+  }
+}

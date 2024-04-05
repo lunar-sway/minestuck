@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 20,
+    "minestuck:quartz": 5,
+    "minestuck:uranium": 60
+  },
+  "ingredient": {
+    "item": "minestuck:power_hub"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:ruby_croak"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 210,
+      "min_inclusive": 175
+    }
+  }
+}

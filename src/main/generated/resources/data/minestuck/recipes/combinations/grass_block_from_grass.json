@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:dirt"
+  },
+  "input2": {
+    "item": "minecraft:grass"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:grass_block"
+  }
+}

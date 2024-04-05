@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 10,
+    "minestuck:garnet": 60,
+    "minestuck:marble": 16
+  },
+  "ingredient": {
+    "item": "minestuck:remote_observer"
+  }
+}

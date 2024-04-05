@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:knitting_needle"
+  },
+  "input2": {
+    "item": "minestuck:mini_wizard_statue"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:needle_wand"
+  }
+}

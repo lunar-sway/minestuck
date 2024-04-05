@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "minestuck:block/rotator_bottom",
+    "side": "minestuck:block/rotator_side",
+    "top": "minestuck:block/toggler_top"
+  }
+}

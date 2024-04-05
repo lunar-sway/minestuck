@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:water_bucket"
+  },
+  "input2": {
+    "item": "minecraft:sponge"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:wet_sponge"
+  }
+}

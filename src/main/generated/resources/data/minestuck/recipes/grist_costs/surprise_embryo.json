@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 15,
+    "minestuck:iodine": 5
+  },
+  "ingredient": {
+    "item": "minestuck:surprise_embryo"
+  }
+}

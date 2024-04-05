@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_block"
+  },
+  "input2": {
+    "item": "minestuck:mini_wizard_statue"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:sorcerers_pinball"
+  }
+}

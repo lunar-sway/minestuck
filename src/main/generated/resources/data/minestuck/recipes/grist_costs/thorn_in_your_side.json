@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 26,
+    "minestuck:ruby": 1
+  },
+  "ingredient": {
+    "item": "minestuck:thorn_in_your_side"
+  }
+}

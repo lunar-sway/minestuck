@@ -1,0 +1,6 @@
+{
+  "type": "minestuck:frog_temple",
+  "biomes": "#minestuck:has_structure/frog_temple",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

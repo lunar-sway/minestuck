@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:leafless_tree",
+  "config": {
+    "state": {
+      "Name": "minestuck:cindered_log",
+      "Properties": {
+        "axis": "y"
+      }
+    }
+  }
+}

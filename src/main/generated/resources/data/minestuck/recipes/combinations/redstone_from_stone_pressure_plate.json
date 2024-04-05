@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:gunpowder"
+  },
+  "input2": {
+    "item": "minecraft:stone_pressure_plate"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:redstone"
+  }
+}

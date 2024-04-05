@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:mossy_mycelium_bricks"
+  },
+  "result": "minestuck:mossy_mycelium_brick_wall"
+}

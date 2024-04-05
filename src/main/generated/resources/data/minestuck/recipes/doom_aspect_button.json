@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:doom_aspect_planks"
+    }
+  ],
+  "result": {
+    "item": "minestuck:doom_aspect_button"
+  }
+}

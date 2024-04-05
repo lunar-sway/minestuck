@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:garnet": 7,
+    "minestuck:iodine": 2
+  },
+  "ingredient": {
+    "item": "minecraft:rose_bush"
+  }
+}

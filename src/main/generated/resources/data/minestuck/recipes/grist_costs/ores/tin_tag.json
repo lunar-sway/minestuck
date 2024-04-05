@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:build": 4
+  },
+  "ingredient": {
+    "tag": "forge:ores/tin"
+  },
+  "sources": [
+    "#forge:raw_materials/tin"
+  ]
+}

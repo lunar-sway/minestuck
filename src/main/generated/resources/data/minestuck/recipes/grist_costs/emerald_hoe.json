@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:diamond": 50,
+    "minestuck:iodine": 32,
+    "minestuck:ruby": 45
+  },
+  "ingredient": {
+    "item": "minestuck:emerald_hoe"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 405,
+    "minestuck:garnet": 365,
+    "minestuck:tar": 405
+  },
+  "ingredient": {
+    "item": "minestuck:obsidiator"
+  }
+}

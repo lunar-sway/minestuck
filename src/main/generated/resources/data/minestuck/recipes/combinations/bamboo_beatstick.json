@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:bo_staff"
+  },
+  "input2": {
+    "item": "minecraft:bamboo"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:bamboo_beatstick"
+  }
+}

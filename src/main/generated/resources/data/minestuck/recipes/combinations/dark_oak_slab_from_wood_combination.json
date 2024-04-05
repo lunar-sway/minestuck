@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:oak_slab"
+  },
+  "input2": {
+    "item": "minecraft:spruce_slab"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:dark_oak_slab"
+  }
+}

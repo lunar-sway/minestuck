@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:mercury": 1,
+    "minestuck:shale": 4
+  },
+  "ingredient": {
+    "item": "minecraft:weeping_vines"
+  }
+}

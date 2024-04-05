@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:book"
+  },
+  "input2": {
+    "tag": "minecraft:planks"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:bookshelf"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:bricks"
+  },
+  "input2": {
+    "item": "minestuck:igneous_stone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:polished_igneous_bricks"
+  }
+}

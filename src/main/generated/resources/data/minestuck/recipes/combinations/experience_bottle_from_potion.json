@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:potion"
+  },
+  "input2": {
+    "item": "minecraft:enchanted_book"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:experience_bottle"
+  }
+}

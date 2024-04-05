@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 7
+  },
+  "ingredient": {
+    "item": "minestuck:wooden_cactus"
+  }
+}

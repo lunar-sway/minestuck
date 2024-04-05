@@ -1,0 +1,25 @@
+{
+  "type": "minestuck:disk",
+  "config": {
+    "half_height": 4,
+    "radius": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 8,
+        "min_inclusive": 2
+      }
+    },
+    "state_provider": {
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minestuck:treated_chipboard"
+        }
+      },
+      "rules": []
+    },
+    "target": {
+      "type": "minecraft:true"
+    }
+  }
+}

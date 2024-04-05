@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 10000
+  },
+  "ingredient": {
+    "item": "minestuck:ancient_thumb_drive"
+  }
+}

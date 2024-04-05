@@ -1,0 +1,6 @@
+{
+  "type": "minestuck:large_wood_object",
+  "biomes": "#minestuck:land/rough",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}
