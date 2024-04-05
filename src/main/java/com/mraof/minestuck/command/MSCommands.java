@@ -27,5 +27,7 @@ public class MSCommands
 		PorkhollowCommand.register(dispatcher);
 		DebugLandsCommand.register(dispatcher);
 		EntryCommand.register(dispatcher);
+		ReviewDialogueCommand.register(dispatcher, event.getBuildContext());
+		SetDialogueCommand.register(dispatcher);
 	}
 }
