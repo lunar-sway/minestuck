@@ -52,9 +52,7 @@ public final class LandGenSettings
 	{
 		this.landTypes = landTypes;
 		
-		blockRegistry = new StructureBlockRegistry();
-		landTypes.getTerrain().registerBlocks(blockRegistry);
-		landTypes.getTitle().registerBlocks(blockRegistry);
+		blockRegistry = StructureBlockRegistry.init(landTypes);
 		
 		landTypes.getTerrain().setGenSettings(this);
 		landTypes.getTitle().setGenSettings(this);
