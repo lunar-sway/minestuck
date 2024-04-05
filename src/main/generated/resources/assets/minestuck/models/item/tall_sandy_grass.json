@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minestuck:block/tall_sandy_grass_top"
+  }
+}

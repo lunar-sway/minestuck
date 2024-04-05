@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:treated_uncarved_wood"
+    }
+  ],
+  "result": {
+    "item": "minestuck:treated_uncarved_wood_button"
+  }
+}

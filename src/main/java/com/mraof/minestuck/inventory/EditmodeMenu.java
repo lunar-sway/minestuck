@@ -6,7 +6,7 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -94,17 +94,17 @@ public class EditmodeMenu extends AbstractContainerMenu
 		if(editData == null)
 			throw new IllegalStateException("Creating an editmode inventory menu, but the player is not in editmode");
 		List<ItemStack> itemList = new ArrayList<>();
-		SburbConnection c = editData.getConnection();
+		SburbPlayerData playerData = editData.sburbData();
 		List<ItemStack> tools = DeployList.getEditmodeTools();
 		//Fill list with harvestTool items when implemented
 		
-		List<DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.DEPLOY);
-		deployItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
+		List<DeployEntry> deployItems = DeployList.getItemList(player.getServer(), playerData, DeployList.EntryLists.DEPLOY);
+		deployItems.removeIf(deployEntry -> deployEntry.getCurrentCost(playerData) == null);
 		
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{
 			itemList.add(i >= tools.size() ? ItemStack.EMPTY : tools.get(i));
-			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c, player.level()));
+			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(playerData, player.level()));
 		}
 		
 		boolean changed = false;

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.client.model;
 
 import com.mraof.minestuck.entity.ServerCursorEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
@@ -29,7 +29,6 @@ public class ServerCursorModel extends GeoModel<ServerCursorEntity>
 	{
 		CoreGeoBone cursor = this.getAnimationProcessor().getBone("head");
 		
-		if(!animatable.level().isClientSide || !Minecraft.getInstance().isPaused())
-			cursor.setRotZ(cursor.getRotZ() + animatable.getXRot() * ((float) Math.PI / 180F));
+		cursor.setRotZ(animatable.getXRot() * Mth.DEG_TO_RAD);
 	}
 }

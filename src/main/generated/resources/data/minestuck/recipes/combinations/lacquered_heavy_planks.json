@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:treated_heavy_planks"
+  },
+  "input2": {
+    "item": "minecraft:honeycomb_block"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:lacquered_heavy_planks"
+  }
+}
