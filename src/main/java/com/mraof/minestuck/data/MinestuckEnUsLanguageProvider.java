@@ -389,6 +389,23 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.MAGMATIC_IGNEOUS_STONE, "Magmatic Igneous Stone");
 		
 		addBlock(MSBlocks.PUMICE_STONE, "Pumice Stone");
+		addBlock(MSBlocks.PUMICE_STONE_STAIRS, "Pumice Stone Stairs");
+		addBlock(MSBlocks.PUMICE_STONE_SLAB, "Pumice Stone Slab");
+		addBlock(MSBlocks.PUMICE_STONE_WALL, "Pumice Stone Wall");
+		addBlock(MSBlocks.PUMICE_STONE_BUTTON, "Pumice Stone Button");
+		addBlock(MSBlocks.PUMICE_STONE_PRESSURE_PLATE, "Pumice Stone Pressure Plate");
+		
+		addBlock(MSBlocks.PUMICE_BRICKS, "Pumice Bricks");
+		addBlock(MSBlocks.PUMICE_BRICK_STAIRS, "Pumice Brick Stairs");
+		addBlock(MSBlocks.PUMICE_BRICK_SLAB, "Pumice Brick Slab");
+		addBlock(MSBlocks.PUMICE_BRICK_WALL, "Pumice Brick Wall");
+		
+		addBlock(MSBlocks.PUMICE_TILES, "Pumice Tiles");
+		addBlock(MSBlocks.PUMICE_TILE_STAIRS, "Pumice Tile Stairs");
+		addBlock(MSBlocks.PUMICE_TILE_SLAB, "Pumice Tile Slab");
+		addBlock(MSBlocks.PUMICE_TILE_WALL, "Pumice Tile Wall");
+		
+		addBlock(MSBlocks.HEAT_LAMP, "Heat Lamp");
 		
 		addBlock(MSBlocks.DECREPIT_STONE_BRICKS, "Decrepit Stone Bricks");
 		addBlock(MSBlocks.DECREPIT_STONE_BRICK_STAIRS, "Decrepit Stone Brick Stairs");

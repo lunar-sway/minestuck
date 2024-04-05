@@ -128,7 +128,7 @@ public final class MSConfiguredFeatureProvider
 		context.register(NETHERRACK_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.NETHERRACK), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 1)));
 		context.register(MAGMATIC_IGNEOUS_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
-				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.MAGMATIC_IGNEOUS_STONE.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 1)));
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.MAGMATIC_IGNEOUS_STONE.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 2), 1)));
 		context.register(BLACK_SAND_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.BLACK_SAND.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 4), 1)));
 		context.register(PUMICE_STONE_DISK, new ConfiguredFeature<>(MSFeatures.DISK.get(),
@@ -228,8 +228,12 @@ public final class MSConfiguredFeatureProvider
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.PETRIFIED_POPPY.get().defaultBlockState()))))));
 		context.register(SINGED_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.SINGED_GRASS.get().defaultBlockState()))))));
+		context.register(SINGED_FOLIAGE_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.SINGED_FOLIAGE.get().defaultBlockState()))))));
 		context.register(IGNEOUS_SPIKE_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.IGNEOUS_SPIKE.get().defaultBlockState()))))));
+				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.IGNEOUS_SPIKE.get().defaultBlockState()))))));
+		context.register(SULFUR_BUBBLE_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.SULFUR_BUBBLE.get().defaultBlockState()))))));
 		context.register(BLOOMING_CACTUS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.BLOOMING_CACTUS.get()))))));
 		context.register(DESERT_BUSH_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,

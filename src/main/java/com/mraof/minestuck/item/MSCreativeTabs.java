@@ -872,6 +872,23 @@ public final class MSCreativeTabs
 		output.accept(MSItems.MAGMATIC_IGNEOUS_STONE.get());
 		
 		output.accept(MSItems.PUMICE_STONE.get());
+		output.accept(MSItems.PUMICE_STONE_STAIRS.get());
+		output.accept(MSItems.PUMICE_STONE_SLAB.get());
+		output.accept(MSItems.PUMICE_STONE_WALL.get());
+		output.accept(MSItems.PUMICE_STONE_BUTTON.get());
+		output.accept(MSItems.PUMICE_STONE_PRESSURE_PLATE.get());
+		
+		output.accept(MSItems.PUMICE_BRICKS.get());
+		output.accept(MSItems.PUMICE_BRICK_STAIRS.get());
+		output.accept(MSItems.PUMICE_BRICK_SLAB.get());
+		output.accept(MSItems.PUMICE_BRICK_WALL.get());
+		
+		output.accept(MSItems.PUMICE_TILES.get());
+		output.accept(MSItems.PUMICE_TILE_STAIRS.get());
+		output.accept(MSItems.PUMICE_TILE_SLAB.get());
+		output.accept(MSItems.PUMICE_TILE_WALL.get());
+		
+		output.accept(MSItems.HEAT_LAMP.get());
 		
 		output.accept(MSItems.DECREPIT_STONE_BRICKS.get());
 		output.accept(MSItems.DECREPIT_STONE_BRICK_STAIRS.get());

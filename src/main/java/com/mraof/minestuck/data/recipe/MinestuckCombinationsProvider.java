@@ -868,6 +868,9 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.MAGMATIC_IGNEOUS_STONE.get()).input(MSBlocks.IGNEOUS_STONE.get()).or().input(Items.MAGMA_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.IGNEOUS_SPIKE.get()).input(MSBlocks.IGNEOUS_STONE.get()).or().input(Items.POINTED_DRIPSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PUMICE_STONE.get()).input(Items.SPONGE).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.PUMICE_BRICKS.get()).input(Items.BRICKS).or().input(MSBlocks.PUMICE_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.PUMICE_TILES.get()).input(Items.POLISHED_ANDESITE).or().input(MSBlocks.PUMICE_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.HEAT_LAMP.get()).input(MSItems.MOLTEN_AMBER_BUCKET.get()).or().input(Items.SHROOMLIGHT).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get()).input(Items.MOSSY_COBBLESTONE).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get()).input(Items.MOSSY_STONE_BRICKS).or().input(ItemTags.SMALL_FLOWERS).build(consumer);

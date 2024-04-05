@@ -32,9 +32,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Black Stone Cruxite, Uranium, Gold, Redstone, and Quartz ores
 - Alchemy recipes for all Minestuck fluids
 - Magmatic Black Stone Bricks
-- Igneous blockset
 - Cast Iron Frame, Sheet, and Tile
 - Sulfur Pools and Cast Iron features in Heat Lands
+- Wooden Lamp and Heat Lamp blocks, used in Wood and Heat lands respectively
 
 ### Changed
 

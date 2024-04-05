@@ -412,7 +412,7 @@ public final class MSBlocks
 	public static final RegistryObject<WallBlock> MAGMATIC_BLACK_STONE_BRICK_WALL = REGISTER.register("magmatic_black_stone_brick_wall", () -> new WallBlock(copy(BLACK_STONE_BRICKS.get())));
 	
 	//Igneous
-	public static final RegistryObject<Block> IGNEOUS_STONE = REGISTER.register("igneous_stone", () -> new FlammableBlock(0, 0, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<Block> IGNEOUS_STONE = REGISTER.register("igneous_stone", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
 	public static final RegistryObject<StairBlock> IGNEOUS_STONE_STAIRS = REGISTER.register("igneous_stone_stairs", () -> new StairBlock(() -> MSBlocks.IGNEOUS_STONE.get().defaultBlockState(), copy(IGNEOUS_STONE.get())));
 	public static final RegistryObject<SlabBlock> IGNEOUS_STONE_SLAB = REGISTER.register("igneous_stone_slab", () -> new SlabBlock(copy(IGNEOUS_STONE.get())));
 	public static final RegistryObject<WallBlock> IGNEOUS_STONE_WALL = REGISTER.register("igneous_stone_wall", () -> new WallBlock(copy(IGNEOUS_STONE.get())));
@@ -442,6 +442,23 @@ public final class MSBlocks
 	
 	//Pumice
 	public static final RegistryObject<Block> PUMICE_STONE = REGISTER.register("pumice_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(0.5F)));
+	public static final RegistryObject<StairBlock> PUMICE_STONE_STAIRS = REGISTER.register("pumice_stone_stairs", () -> new StairBlock(() -> MSBlocks.PUMICE_STONE.get().defaultBlockState(), copy(PUMICE_STONE.get())));
+	public static final RegistryObject<SlabBlock> PUMICE_STONE_SLAB = REGISTER.register("pumice_stone_slab", () -> new SlabBlock(copy(PUMICE_STONE.get())));
+	public static final RegistryObject<WallBlock> PUMICE_STONE_WALL = REGISTER.register("pumice_stone_wall", () -> new WallBlock(copy(PUMICE_STONE.get())));
+	public static final RegistryObject<ButtonBlock> PUMICE_STONE_BUTTON = REGISTER.register("pumice_stone_button", () -> new ButtonBlock(copy(PUMICE_STONE.get()), BlockSetType.STONE, 10, true));
+	public static final RegistryObject<PressurePlateBlock> PUMICE_STONE_PRESSURE_PLATE = REGISTER.register("pumice_stone_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(PUMICE_STONE.get()), BlockSetType.STONE));
+	
+	public static final RegistryObject<Block> PUMICE_BRICKS = REGISTER.register("pumice_bricks", () -> new Block(copy(PUMICE_STONE.get())));
+	public static final RegistryObject<StairBlock> PUMICE_BRICK_STAIRS = REGISTER.register("pumice_brick_stairs", () -> new StairBlock(() -> MSBlocks.PUMICE_BRICKS.get().defaultBlockState(), copy(PUMICE_BRICKS.get())));
+	public static final RegistryObject<SlabBlock> PUMICE_BRICK_SLAB = REGISTER.register("pumice_brick_slab", () -> new SlabBlock(copy(PUMICE_BRICKS.get())));
+	public static final RegistryObject<WallBlock> PUMICE_BRICK_WALL = REGISTER.register("pumice_brick_wall", () -> new WallBlock(copy(PUMICE_BRICKS.get())));
+	
+	public static final RegistryObject<Block> PUMICE_TILES = REGISTER.register("pumice_tiles", () -> new Block(copy(PUMICE_STONE.get())));
+	public static final RegistryObject<StairBlock> PUMICE_TILE_STAIRS = REGISTER.register("pumice_tile_stairs", () -> new StairBlock(() -> MSBlocks.PUMICE_TILES.get().defaultBlockState(), copy(PUMICE_TILES.get())));
+	public static final RegistryObject<SlabBlock> PUMICE_TILE_SLAB = REGISTER.register("pumice_tile_slab", () -> new SlabBlock(copy(PUMICE_TILES.get())));
+	public static final RegistryObject<WallBlock> PUMICE_TILE_WALL = REGISTER.register("pumice_tile_wall", () -> new WallBlock(copy(PUMICE_TILES.get())));
+	
+	public static final RegistryObject<Block> HEAT_LAMP = REGISTER.register("heat_lamp", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.GUITAR).strength(1.5F).lightLevel(state -> 15).sound(SoundType.SHROOMLIGHT)));
 	
 	//Flowery
 	public static final RegistryObject<Block> FLOWERY_MOSSY_COBBLESTONE = REGISTER.register("flowery_mossy_cobblestone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
@@ -883,7 +900,7 @@ public final class MSBlocks
 	
 	public static final RegistryObject<Block> IGNEOUS_SPIKE = REGISTER.register("igneous_spike", () -> new BurnedFoliageBlock(Block.Properties.of().mapColor(DyeColor.BROWN).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(1.5F).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> SINGED_GRASS = REGISTER.register("singed_grass", () -> new BurnedFoliageBlock(Block.Properties.of().mapColor(DyeColor.GRAY).instrument(NoteBlockInstrument.GUITAR).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
-	public static final RegistryObject<Block> SINGED_FOLIAGE = REGISTER.register("singed_foliage", () -> new Block(copy(SINGED_GRASS.get())));
+	public static final RegistryObject<Block> SINGED_FOLIAGE = REGISTER.register("singed_foliage", () -> new BurnedFoliageBlock(copy(SINGED_GRASS.get())));
 	public static final RegistryObject<Block> SULFUR_BUBBLE = REGISTER.register("sulfur_bubble", () -> new SulfurBubbleBlock(Block.Properties.of().mapColor(DyeColor.LIME).instrument(NoteBlockInstrument.BELL).pushReaction(PushReaction.DESTROY).strength(0.5F).sound(SoundType.GLASS)));
 	
 	public static final RegistryObject<Block> GLOWING_MUSHROOM_VINES = REGISTER.register("glowing_mushroom_vines", () -> new GlowingMushroomVinesBlock(Block.Properties.of().mapColor(MapColor.DIAMOND).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11).offsetType(BlockBehaviour.OffsetType.XZ)));

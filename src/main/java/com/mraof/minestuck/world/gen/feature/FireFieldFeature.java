@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -39,7 +40,7 @@ public class FireFieldFeature extends Feature<NoneFeatureConfiguration>
 			BlockState block = level.getBlockState(pos1);
 			if(block == surface || block == upper)
 			{
-				level.setBlock(pos1, Blocks.NETHERRACK.defaultBlockState(), Block.UPDATE_CLIENTS);
+				level.setBlock(pos1, MSBlocks.MAGMATIC_IGNEOUS_STONE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
 				if(level.isEmptyBlock(pos1.above()) && rand.nextFloat() < FIRE_CHANCE)
 					level.setBlock(pos1.above(), Blocks.FIRE.defaultBlockState(), Block.UPDATE_CLIENTS);
 			}

@@ -114,11 +114,11 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		
 		context.register(SULFUR_POOL, placed(features, MSCFeatures.SULFUR_POOL,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(12), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, RandomOffsetPlacement.vertical(UniformInt.of(-2, 0)))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, RandomOffsetPlacement.vertical(UniformInt.of(-3, 0)))));
 		context.register(CAST_IRON_BUILDING, placed(features, MSCFeatures.CAST_IRON_BUILDING,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, RandomOffsetPlacement.vertical(UniformInt.of(-1, 0)))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, RandomOffsetPlacement.vertical(UniformInt.of(-1, 0)))));
 		context.register(CAST_IRON_PLATFORM, placed(features, MSCFeatures.CAST_IRON_PLATFORM,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(64), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 		
 		context.register(LARGE_CAKE, placed(features, MSCFeatures.LARGE_CAKE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(50))));
@@ -155,9 +155,9 @@ public final class MSPlacedFeatureProvider
 		context.register(NETHERRACK_DISK, placed(features, MSCFeatures.NETHERRACK_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(MAGMATIC_IGNEOUS_DISK, placed(features, MSCFeatures.MAGMATIC_IGNEOUS_DISK,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-		context.register(BLACK_SAND_DISK, placed(features, MSCFeatures.BLACK_SAND_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+		context.register(BLACK_SAND_DISK, placed(features, MSCFeatures.BLACK_SAND_DISK,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(PUMICE_STONE_DISK, placed(features, MSCFeatures.PUMICE_STONE_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(TREATED_PLANKS_DISK, placed(features, MSCFeatures.TREATED_PLANKS_DISK,
@@ -313,9 +313,13 @@ public final class MSPlacedFeatureProvider
 		context.register(SPARSE_PETRIFIED_POPPY_PATCH, placed(features, MSCFeatures.PETRIFIED_POPPY_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 		context.register(SINGED_GRASS_PATCH, placed(features, MSCFeatures.SINGED_GRASS_PATCH,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(35), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SINGED_GRASS.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SINGED_GRASS.get()))));
+		context.register(SINGED_FOLIAGE_PATCH, placed(features, MSCFeatures.SINGED_FOLIAGE_PATCH,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SINGED_GRASS.get()))));
 		context.register(IGNEOUS_SPIKE_PATCH, placed(features, MSCFeatures.IGNEOUS_SPIKE_PATCH,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(55), PlacementUtils.HEIGHTMAP)));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP)));
+		context.register(SULFUR_BUBBLE_PATCH, placed(features, MSCFeatures.SULFUR_BUBBLE_PATCH,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SULFUR_BUBBLE.get()))));
 		context.register(DESERT_BUSH_PATCH, placed(features, MSCFeatures.DESERT_BUSH_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 		context.register(SANDY_GRASS_PATCH, placed(features, MSCFeatures.SANDY_GRASS_PATCH,

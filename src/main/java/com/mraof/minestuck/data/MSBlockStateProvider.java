@@ -478,6 +478,23 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.MAGMATIC_IGNEOUS_STONE);
 		
 		simpleBlockWithItem(MSBlocks.PUMICE_STONE);
+		stairsWithItem(MSBlocks.PUMICE_STONE_STAIRS, MSBlocks.PUMICE_STONE);
+		slabWithItem(MSBlocks.PUMICE_STONE_SLAB, MSBlocks.PUMICE_STONE);
+		wallWithItem(MSBlocks.PUMICE_STONE_WALL, MSBlocks.PUMICE_STONE);
+		buttonWithItem(MSBlocks.PUMICE_STONE_BUTTON, MSBlocks.PUMICE_STONE);
+		pressurePlateWithItem(MSBlocks.PUMICE_STONE_PRESSURE_PLATE, MSBlocks.PUMICE_STONE);
+		
+		simpleBlockWithItem(MSBlocks.PUMICE_BRICKS);
+		stairsWithItem(MSBlocks.PUMICE_BRICK_STAIRS, MSBlocks.PUMICE_BRICKS);
+		slabWithItem(MSBlocks.PUMICE_BRICK_SLAB, MSBlocks.PUMICE_BRICKS);
+		wallWithItem(MSBlocks.PUMICE_BRICK_WALL, MSBlocks.PUMICE_BRICKS);
+		
+		simpleBlockWithItem(MSBlocks.PUMICE_TILES);
+		stairsWithItem(MSBlocks.PUMICE_TILE_STAIRS, MSBlocks.PUMICE_TILES);
+		slabWithItem(MSBlocks.PUMICE_TILE_SLAB, MSBlocks.PUMICE_TILES);
+		wallWithItem(MSBlocks.PUMICE_TILE_WALL, MSBlocks.PUMICE_TILES);
+		
+		simpleBlockWithItem(MSBlocks.HEAT_LAMP);
 		
 		simpleBlockWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		stairsWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_STAIRS, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);

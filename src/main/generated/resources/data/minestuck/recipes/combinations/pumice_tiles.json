@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:polished_andesite"
+  },
+  "input2": {
+    "item": "minestuck:pumice_stone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:pumice_tiles"
+  }
+}

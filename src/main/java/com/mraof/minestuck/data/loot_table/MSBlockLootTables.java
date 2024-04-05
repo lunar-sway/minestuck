@@ -386,6 +386,23 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(MAGMATIC_IGNEOUS_STONE.get());
 		
 		dropSelf(PUMICE_STONE.get());
+		dropSelf(PUMICE_STONE_STAIRS.get());
+		add(PUMICE_STONE_SLAB.get(), this::createSlabItemTable);
+		dropSelf(PUMICE_STONE_WALL.get());
+		dropSelf(PUMICE_STONE_BUTTON.get());
+		dropSelf(PUMICE_STONE_PRESSURE_PLATE.get());
+		
+		dropSelf(PUMICE_BRICKS.get());
+		dropSelf(PUMICE_BRICK_STAIRS.get());
+		add(PUMICE_BRICK_SLAB.get(), this::createSlabItemTable);
+		dropSelf(PUMICE_BRICK_WALL.get());
+		
+		dropSelf(PUMICE_TILES.get());
+		dropSelf(PUMICE_TILE_STAIRS.get());
+		add(PUMICE_TILE_SLAB.get(), this::createSlabItemTable);
+		dropSelf(PUMICE_TILE_WALL.get());
+		
+		dropSelf(HEAT_LAMP.get());
 		
 		dropSelf(DECREPIT_STONE_BRICKS.get());
 		dropSelf(DECREPIT_STONE_BRICK_STAIRS.get());

@@ -1065,6 +1065,23 @@ public class MSItems
 	public static final RegistryObject<BlockItem> MAGMATIC_IGNEOUS_STONE = registerBlockItem(MSBlocks.MAGMATIC_IGNEOUS_STONE);
 	
 	public static final RegistryObject<BlockItem> PUMICE_STONE = registerBlockItem(MSBlocks.PUMICE_STONE);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_STAIRS = registerBlockItem(MSBlocks.PUMICE_STONE_STAIRS);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_SLAB = registerBlockItem(MSBlocks.PUMICE_STONE_SLAB);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_WALL = registerBlockItem(MSBlocks.PUMICE_STONE_WALL);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_BUTTON = registerBlockItem(MSBlocks.PUMICE_STONE_BUTTON);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_PRESSURE_PLATE = registerBlockItem(MSBlocks.PUMICE_STONE_PRESSURE_PLATE);
+	
+	public static final RegistryObject<BlockItem> PUMICE_BRICKS = registerBlockItem(MSBlocks.PUMICE_BRICKS);
+	public static final RegistryObject<BlockItem> PUMICE_BRICK_STAIRS = registerBlockItem(MSBlocks.PUMICE_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> PUMICE_BRICK_SLAB = registerBlockItem(MSBlocks.PUMICE_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> PUMICE_BRICK_WALL = registerBlockItem(MSBlocks.PUMICE_BRICK_WALL);
+	
+	public static final RegistryObject<BlockItem> PUMICE_TILES = registerBlockItem(MSBlocks.PUMICE_TILES);
+	public static final RegistryObject<BlockItem> PUMICE_TILE_STAIRS = registerBlockItem(MSBlocks.PUMICE_TILE_STAIRS);
+	public static final RegistryObject<BlockItem> PUMICE_TILE_SLAB = registerBlockItem(MSBlocks.PUMICE_TILE_SLAB);
+	public static final RegistryObject<BlockItem> PUMICE_TILE_WALL = registerBlockItem(MSBlocks.PUMICE_TILE_WALL);
+	
+	public static final RegistryObject<BlockItem> HEAT_LAMP = registerBlockItem(MSBlocks.HEAT_LAMP);
 	
 	public static final RegistryObject<BlockItem> DECREPIT_STONE_BRICKS = registerBlockItem(MSBlocks.DECREPIT_STONE_BRICKS);
 	public static final RegistryObject<BlockItem> DECREPIT_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.DECREPIT_STONE_BRICK_STAIRS);
