@@ -313,9 +313,9 @@ public final class MSPlacedFeatureProvider
 		context.register(SPARSE_PETRIFIED_POPPY_PATCH, placed(features, MSCFeatures.PETRIFIED_POPPY_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 		context.register(SINGED_GRASS_PATCH, placed(features, MSCFeatures.SINGED_GRASS_PATCH,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SINGED_GRASS.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SINGED_GRASS.get()))));
 		context.register(SINGED_FOLIAGE_PATCH, placed(features, MSCFeatures.SINGED_FOLIAGE_PATCH,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SINGED_GRASS.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SINGED_GRASS.get()))));
 		context.register(IGNEOUS_SPIKE_PATCH, placed(features, MSCFeatures.IGNEOUS_SPIKE_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP)));
 		context.register(SULFUR_BUBBLE_PATCH, placed(features, MSCFeatures.SULFUR_BUBBLE_PATCH,
