@@ -841,9 +841,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', BLOOD_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', BLOOD_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(BLOOD_ASPECT_PRESSURE_PLATE, BLOOD_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(BLOOD_ASPECT_BUTTON, BLOOD_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(BREATH_ASPECT_STAIRS, BREATH_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -860,9 +858,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', BREATH_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', BREATH_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(BREATH_ASPECT_PRESSURE_PLATE, BREATH_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(BREATH_ASPECT_BUTTON, BREATH_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(DOOM_ASPECT_STAIRS, DOOM_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -879,9 +875,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', DOOM_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', DOOM_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(DOOM_ASPECT_PRESSURE_PLATE, DOOM_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(DOOM_ASPECT_BUTTON, DOOM_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(HEART_ASPECT_STAIRS, HEART_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -898,9 +892,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', HEART_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', HEART_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(HEART_ASPECT_PRESSURE_PLATE, HEART_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(HEART_ASPECT_BUTTON, HEART_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(HOPE_ASPECT_STAIRS, HOPE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -917,9 +909,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', HOPE_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', HOPE_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(HOPE_ASPECT_PRESSURE_PLATE, HOPE_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(HOPE_ASPECT_BUTTON, HOPE_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(LIFE_ASPECT_STAIRS, LIFE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -936,9 +926,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', LIFE_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', LIFE_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(LIFE_ASPECT_PRESSURE_PLATE, LIFE_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(LIFE_ASPECT_BUTTON, LIFE_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(LIGHT_ASPECT_STAIRS, LIGHT_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -955,9 +943,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', LIGHT_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', LIGHT_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(LIGHT_ASPECT_PRESSURE_PLATE, LIGHT_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(LIGHT_ASPECT_BUTTON, LIGHT_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(MIND_ASPECT_STAIRS, MIND_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -974,9 +960,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', MIND_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', MIND_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(MIND_ASPECT_PRESSURE_PLATE, MIND_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(MIND_ASPECT_BUTTON, MIND_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(RAGE_ASPECT_STAIRS, RAGE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -993,9 +977,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', RAGE_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', RAGE_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(RAGE_ASPECT_PRESSURE_PLATE, RAGE_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(RAGE_ASPECT_BUTTON, RAGE_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(SPACE_ASPECT_STAIRS, SPACE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -1012,9 +994,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', SPACE_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', SPACE_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(SPACE_ASPECT_PRESSURE_PLATE, SPACE_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(SPACE_ASPECT_BUTTON, SPACE_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(TIME_ASPECT_STAIRS, TIME_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -1031,9 +1011,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', TIME_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', TIME_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(TIME_ASPECT_PRESSURE_PLATE, TIME_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(TIME_ASPECT_BUTTON, TIME_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(VOID_ASPECT_STAIRS, VOID_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
@@ -1050,9 +1028,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_TRAPDOOR.get(), 2).group("wooden_trapdoor")
 				.define('#', VOID_ASPECT_PLANKS.get()).pattern("###").pattern("###")
 				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
-				.define('#', VOID_ASPECT_PLANKS.get()).pattern("##")
-				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.pressurePlateRecipe(VOID_ASPECT_PRESSURE_PLATE, VOID_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(VOID_ASPECT_BUTTON, VOID_ASPECT_PLANKS).save(recipeSaver);
 	}
 }
