@@ -62,6 +62,7 @@ public final class ConsortDialogue
 		final DialogueProvider.MessageProducer sadFaceMsg = l.msg("sad_face", ":(");
 		var yesMsg = l.msg("yes", "Yes");
 		var noMsg = l.msg("no", "No");
+		var thanksGoodbyeMsg = l.msg("goodbye", "Oh good to know, goodbye.");
 		
 		//Wind
 		provider.addRandomlySelectable("blown_away", defaultWeight(isInTitleLand(WIND)),
@@ -589,7 +590,7 @@ public final class ConsortDialogue
 				.node(new Condition.PlayerHasBoondollars(1000), new ChainBuilder()
 						.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.")))
 						.node(new NodeBuilder(l.defaultKeyMsg("Please, I need to pay for my children to attend college..."))))
-				.defaultNode(new NodeBuilder(l.subMsg("poor","Wow you have a distinct lack of boondollars for someone in your position. Slumming it like the rest of us, eh?"))));
+				.defaultNode(new NodeBuilder(l.subMsg("poor", "Wow you have a distinct lack of boondollars for someone in your position. Slumming it like the rest of us, eh?"))));
 		provider.addRandomlySelectable("unknown", defaultWeight(isAnyEntityType(TURTLE)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("They are coming...")))    //todo custom response message?
 				.node(new NodeBuilder(l.defaultKeyMsg("Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?"))));
@@ -614,7 +615,7 @@ public final class ConsortDialogue
 					.addResponse(new ResponseBuilder(l.subMsg("argue", "Wait! Will this %s prove I am ready?", Argument.MATCHED_ITEM))
 							.condition(new Condition.ItemTagMatch(MSTags.Items.MAGIC_WEAPON))
 							.nextDialogue(exchange))
-					.addResponse(new ResponseBuilder(l.subMsg("resign", "Alright fine. Bye."))));
+					.addClosingResponse(l.subMsg("resign", "Alright fine. Bye.")));
 			
 			var afterInvitation = builder.add("after_invitation", new NodeBuilder(l.defaultKeyMsg("Meet me by dawn with mercury, salt, and sulfur to begin the initiation."))
 					.addResponse(new ResponseBuilder(l.subMsg("no", "No thanks, I'm good."))
@@ -629,6 +630,38 @@ public final class ConsortDialogue
 			builder.addStart(new NodeBuilder(l.defaultKeyMsg("We would love to invite you, %s, to our secret wizards cult.", Argument.PLAYER_TITLE))
 					.next(afterInvitation));
 		}));
+		
+		provider.addRandomlySelectable("underling_commission", defaultWeight(isInHomeLand()), new FolderedDialogue(builder ->
+		{
+			var explainCarapacian = builder.add("explain_carapacian", new ChainBuilder()
+					.node(new NodeBuilder(l.defaultKeyMsg("It's the people who live on Prospit and Derse. Those garish golden and purple cities in the sky that are almost the size of a planet.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("The prospitians and dersites have been fighting on the Battlefield inside Skaia for longer than I care to know.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("It was agents of Derse that made the commission. Now we have to live alongside a bunch of screaming weirdos who explode into grist.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Why couldn't they commission something normal like art of their consort-sona?"))
+							.addResponse(new ResponseBuilder(l.subMsg("why_fight", "Why are the carapacians fighting?"))
+									.nextDialogue(builder.add("no_idea", new NodeBuilder(l.defaultKeyMsg("I have no idea, all I can imagine is that it would take a lot to solve the issue."))
+											.addClosingResponse(thanksGoodbyeMsg))))
+							.addClosingResponse(thanksGoodbyeMsg)
+					)
+			);
+			
+			var answer = builder.add("answer", new ChainBuilder()
+					.node(new NodeBuilder(l.defaultKeyMsg("Oh do you not know? Some incredibly rude carapacians came by to visit %s.", Argument.LAND_DENIZEN)))
+					.node(new NodeBuilder(l.defaultKeyMsg("They asked %s to create all the Underlings, no idea why!", Argument.LAND_DENIZEN))
+							.addResponse(new ResponseBuilder(l.subMsg("ask_carapacian", "Who are the carapacians?"))
+									.nextDialogue(explainCarapacian))
+							.addClosingResponse(thanksGoodbyeMsg)
+					)
+			);
+			
+			builder.addStart(new NodeBuilder(l.subMsg("start", "Ugh. I don't like those Underlings. Can't believe anyone would ever ask to make them!"))
+							.addResponse(new ResponseBuilder(l.subMsg("ask", "What do you mean?"))
+									.nextDialogue(answer))
+					.addResponse(new ResponseBuilder(l.subMsg("agree", "I know right?"))
+							.nextDialogue(builder.add("confront", new NodeBuilder(l.defaultKeyMsg("If I wasn't so scared of confrontation I would give them a stern talking to.")))))
+				);
+		}
+		));
 		
 		provider.addRandomlySelectable("title_presence", defaultWeight(all(isAnyEntityType(IGUANA, SALAMANDER), isFromLand())), new FolderedDialogue(builder ->
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("I sense the presence of the %s. Tell me if you see them, ok?", Argument.PLAYER_TITLE))
@@ -689,7 +722,7 @@ public final class ConsortDialogue
 			
 			var noReplyMsg = l.msg(builder.startId(), "first_no_reply", "I don't really want to give this away.");
 			
-			builder.addStart(new NodeSelectorBuilder()    //todo create a "not hungry" dialogue node for SetDialogue trigger to be used for any other player after the consort gets its snack.
+			builder.addStart(new NodeSelectorBuilder()
 					.node(new Condition.ItemTagMatch(MSTags.Items.CONSORT_SNACKS), new NodeBuilder(l.subMsg("ask", "A %s! Could I have some?", Argument.MATCHED_ITEM))
 							.addResponse(new ResponseBuilder(yesMsg)
 									.condition(Condition.HasMatchedItem.INSTANCE)
