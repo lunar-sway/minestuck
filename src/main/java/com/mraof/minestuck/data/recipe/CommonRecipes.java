@@ -26,9 +26,7 @@ public final class CommonRecipes
 	
 	public static ShapedRecipeBuilder stairsShapedRecipe(ItemLike stairsBlock, ItemLike sourceBlock)
 	{
-		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
-		String blockName = blockId.getPath();
-		return stairsShapedRecipe(stairsBlock, sourceBlock, "has_" + blockName);
+		return stairsShapedRecipe(stairsBlock, sourceBlock, "has_" + id(sourceBlock).getPath());
 	}
 	
 	public static ShapedRecipeBuilder stairsShapedRecipe(ItemLike stairsBlock, ItemLike sourceBlock, String criterionName)
@@ -53,9 +51,7 @@ public final class CommonRecipes
 	
 	public static ShapedRecipeBuilder slabShapedRecipe(ItemLike slabBlock, ItemLike sourceBlock)
 	{
-		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
-		String blockName = blockId.getPath();
-		return slabShapedRecipe(slabBlock, sourceBlock, "has_" + blockName);
+		return slabShapedRecipe(slabBlock, sourceBlock, "has_" + id(sourceBlock).getPath());
 	}
 	
 	public static ShapedRecipeBuilder slabShapedRecipe(ItemLike slabBlock, ItemLike sourceBlock, String criterionName)
@@ -73,18 +69,11 @@ public final class CommonRecipes
 	
 	public static ShapedRecipeBuilder wallShapedRecipe(ItemLike wallBlock, ItemLike sourceBlock)
 	{
-		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
-		String blockName = blockId.getPath();
-		return wallShapedRecipe(wallBlock, sourceBlock, "has_" + blockName);
-	}
-	
-	public static ShapedRecipeBuilder wallShapedRecipe(ItemLike wallBlock, ItemLike sourceBlock, String criterionName)
-	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, wallBlock, 6)
 				.define('#', sourceBlock)
 				.pattern("###")
 				.pattern("###")
-				.unlockedBy(criterionName, has(sourceBlock));
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
 	public static ShapedRecipeBuilder pressurePlateShapedRecipe(Supplier<? extends ItemLike> pressurePlateBlock, Supplier<? extends ItemLike> sourceBlock)
@@ -94,17 +83,10 @@ public final class CommonRecipes
 	
 	public static ShapedRecipeBuilder pressurePlateShapedRecipe(ItemLike pressurePlateBlock, ItemLike sourceBlock)
 	{
-		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
-		String blockName = blockId.getPath();
-		return pressurePlateShapedRecipe(pressurePlateBlock, sourceBlock, "has_" + blockName);
-	}
-	
-	public static ShapedRecipeBuilder pressurePlateShapedRecipe(ItemLike pressurePlateBlock, ItemLike sourceBlock, String criterionName)
-	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, pressurePlateBlock)
 				.define('#', sourceBlock)
 				.pattern("##")
-				.unlockedBy(criterionName, has(sourceBlock));
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
 	public static ShapelessRecipeBuilder buttonShapelessRecipe(Supplier<? extends ItemLike> buttonBlock, Supplier<? extends ItemLike> sourceBlock)
@@ -114,10 +96,12 @@ public final class CommonRecipes
 	
 	public static ShapelessRecipeBuilder buttonShapelessRecipe(ItemLike buttonBlock, ItemLike sourceBlock)
 	{
-		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
-		String blockName = blockId.getPath();
 		return ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, buttonBlock).requires(sourceBlock)
-				.unlockedBy("has_" + blockName, has(sourceBlock));
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
+	private static ResourceLocation id(ItemLike item)
+	{
+		return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem()));
+	}
 }
