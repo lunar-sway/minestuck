@@ -7,7 +7,6 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
@@ -845,8 +844,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', BLOOD_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_BUTTON.get()).requires(BLOOD_ASPECT_PLANKS.get())
-				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(BLOOD_ASPECT_BUTTON, BLOOD_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(BREATH_ASPECT_STAIRS, BREATH_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(BREATH_ASPECT_SLAB, BREATH_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -865,8 +863,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', BREATH_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_BUTTON.get()).requires(BREATH_ASPECT_PLANKS.get())
-				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(BREATH_ASPECT_BUTTON, BREATH_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(DOOM_ASPECT_STAIRS, DOOM_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(DOOM_ASPECT_SLAB, DOOM_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -885,8 +882,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', DOOM_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_BUTTON.get()).requires(DOOM_ASPECT_PLANKS.get())
-				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(DOOM_ASPECT_BUTTON, DOOM_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(HEART_ASPECT_STAIRS, HEART_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(HEART_ASPECT_SLAB, HEART_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -905,8 +901,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', HEART_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_BUTTON.get()).requires(HEART_ASPECT_PLANKS.get())
-				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(HEART_ASPECT_BUTTON, HEART_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(HOPE_ASPECT_STAIRS, HOPE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(HOPE_ASPECT_SLAB, HOPE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -925,8 +920,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', HOPE_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_BUTTON.get()).requires(HOPE_ASPECT_PLANKS.get())
-				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(HOPE_ASPECT_BUTTON, HOPE_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(LIFE_ASPECT_STAIRS, LIFE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(LIFE_ASPECT_SLAB, LIFE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -945,8 +939,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', LIFE_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_BUTTON.get()).requires(LIFE_ASPECT_PLANKS.get())
-				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(LIFE_ASPECT_BUTTON, LIFE_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(LIGHT_ASPECT_STAIRS, LIGHT_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(LIGHT_ASPECT_SLAB, LIGHT_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -965,8 +958,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', LIGHT_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_BUTTON.get()).requires(LIGHT_ASPECT_PLANKS.get())
-				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(LIGHT_ASPECT_BUTTON, LIGHT_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(MIND_ASPECT_STAIRS, MIND_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(MIND_ASPECT_SLAB, MIND_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -985,8 +977,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', MIND_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_BUTTON.get()).requires(MIND_ASPECT_PLANKS.get())
-				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(MIND_ASPECT_BUTTON, MIND_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(RAGE_ASPECT_STAIRS, RAGE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(RAGE_ASPECT_SLAB, RAGE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1005,8 +996,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', RAGE_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_BUTTON.get()).requires(RAGE_ASPECT_PLANKS.get())
-				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(RAGE_ASPECT_BUTTON, RAGE_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(SPACE_ASPECT_STAIRS, SPACE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(SPACE_ASPECT_SLAB, SPACE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1025,8 +1015,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', SPACE_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_BUTTON.get()).requires(SPACE_ASPECT_PLANKS.get())
-				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(SPACE_ASPECT_BUTTON, SPACE_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(TIME_ASPECT_STAIRS, TIME_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(TIME_ASPECT_SLAB, TIME_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1045,8 +1034,7 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', TIME_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_BUTTON.get()).requires(TIME_ASPECT_PLANKS.get())
-				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(TIME_ASPECT_BUTTON, TIME_ASPECT_PLANKS).save(recipeSaver);
 		
 		CommonRecipes.stairsShapedRecipe(VOID_ASPECT_STAIRS, VOID_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(VOID_ASPECT_SLAB, VOID_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1065,7 +1053,6 @@ public final class AspectTreeBlocksData
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_PRESSURE_PLATE.get(), 1).group("stone_pressure_plate")
 				.define('#', VOID_ASPECT_PLANKS.get()).pattern("##")
 				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_BUTTON.get()).requires(VOID_ASPECT_PLANKS.get())
-				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(VOID_ASPECT_BUTTON, VOID_ASPECT_PLANKS).save(recipeSaver);
 	}
 }

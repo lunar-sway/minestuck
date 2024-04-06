@@ -11,7 +11,6 @@ import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -333,8 +332,7 @@ public final class SkaiaBlocksData
 		CommonRecipes.slabShapedRecipe(BLACK_CHESS_BRICK_SMOOTH_SLAB, BLACK_CHESS_BRICK_SMOOTH).group("wooden_slab").save(recipeSaver);
 		CommonRecipes.wallShapedRecipe(BLACK_CHESS_BRICK_SMOOTH_WALL, BLACK_CHESS_BRICK_SMOOTH).group("stone_wall").save(recipeSaver);
 		CommonRecipes.pressurePlateShapedRecipe(BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, BLACK_CHESS_BRICK_SMOOTH).group("stone_pressure_plate").save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, BLACK_CHESS_BRICK_SMOOTH_BUTTON).requires(BLACK_CHESS_BRICK_SMOOTH)
-				.unlockedBy("has_black_chess_brick_smooth", has(BLACK_CHESS_BRICK_SMOOTH)).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(BLACK_CHESS_BRICK_SMOOTH_BUTTON, BLACK_CHESS_BRICK_SMOOTH).save(recipeSaver);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(BLACK_CHESS_BRICK_SMOOTH), RecipeCategory.BUILDING_BLOCKS, BLACK_CHESS_BRICK_SMOOTH_STAIRS)
 				.unlockedBy("has_black_chess_brick_smooth", has(BLACK_CHESS_BRICK_SMOOTH)).save(recipeSaver, Minestuck.id("black_chess_brick_smooth_stairs_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(BLACK_CHESS_BRICK_SMOOTH), RecipeCategory.BUILDING_BLOCKS, BLACK_CHESS_BRICK_SMOOTH_SLAB, 2)
@@ -356,8 +354,7 @@ public final class SkaiaBlocksData
 		CommonRecipes.stairsShapedRecipe(WHITE_CHESS_BRICK_SMOOTH_STAIRS, WHITE_CHESS_BRICK_SMOOTH).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabShapedRecipe(WHITE_CHESS_BRICK_SMOOTH_SLAB, WHITE_CHESS_BRICK_SMOOTH).group("wooden_slab").save(recipeSaver);
 		CommonRecipes.wallShapedRecipe(WHITE_CHESS_BRICK_SMOOTH_WALL, WHITE_CHESS_BRICK_SMOOTH).group("stone_wall").save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, WHITE_CHESS_BRICK_SMOOTH_BUTTON).requires(WHITE_CHESS_BRICK_SMOOTH)
-				.unlockedBy("has_white_chess_brick_smooth", has(WHITE_CHESS_BRICK_SMOOTH)).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(WHITE_CHESS_BRICK_SMOOTH_BUTTON, WHITE_CHESS_BRICK_SMOOTH).save(recipeSaver);
 		CommonRecipes.pressurePlateShapedRecipe(WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, WHITE_CHESS_BRICK_SMOOTH).group("stone_pressure_plate").save(recipeSaver);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(WHITE_CHESS_BRICK_SMOOTH), RecipeCategory.BUILDING_BLOCKS, WHITE_CHESS_BRICK_SMOOTH_STAIRS)
 				.unlockedBy("has_white_chess_brick_smooth", has(WHITE_CHESS_BRICK_SMOOTH)).save(recipeSaver, Minestuck.id("white_chess_brick_smooth_stairs_from_stonecutting"));
@@ -381,8 +378,7 @@ public final class SkaiaBlocksData
 		CommonRecipes.slabShapedRecipe(DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB, DARK_GRAY_CHESS_BRICK_SMOOTH).group("wooden_slab").save(recipeSaver);
 		CommonRecipes.wallShapedRecipe(DARK_GRAY_CHESS_BRICK_SMOOTH_WALL, DARK_GRAY_CHESS_BRICK_SMOOTH).group("stone_wall").save(recipeSaver);
 		CommonRecipes.pressurePlateShapedRecipe(DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, DARK_GRAY_CHESS_BRICK_SMOOTH).group("stone_pressure_plate").save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON).requires(DARK_GRAY_CHESS_BRICK_SMOOTH)
-				.unlockedBy("has_dark_gray_chess_brick_smooth", has(DARK_GRAY_CHESS_BRICK_SMOOTH)).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON, DARK_GRAY_CHESS_BRICK_SMOOTH).save(recipeSaver);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DARK_GRAY_CHESS_BRICK_SMOOTH), RecipeCategory.BUILDING_BLOCKS, DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS)
 				.unlockedBy("has_dark_gray_chess_brick_smooth", has(DARK_GRAY_CHESS_BRICK_SMOOTH)).save(recipeSaver, Minestuck.id("dark_gray_chess_brick_smooth_stairs_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DARK_GRAY_CHESS_BRICK_SMOOTH), RecipeCategory.BUILDING_BLOCKS, DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB, 2)
@@ -405,8 +401,7 @@ public final class SkaiaBlocksData
 		CommonRecipes.slabShapedRecipe(LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB, LIGHT_GRAY_CHESS_BRICK_SMOOTH).group("wooden_slab").save(recipeSaver);
 		CommonRecipes.wallShapedRecipe(LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL, LIGHT_GRAY_CHESS_BRICK_SMOOTH).group("stone_wall").save(recipeSaver);
 		CommonRecipes.pressurePlateShapedRecipe(LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, LIGHT_GRAY_CHESS_BRICK_SMOOTH).group("stone_pressure_plate").save(recipeSaver);
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON).requires(LIGHT_GRAY_CHESS_BRICK_SMOOTH)
-				.unlockedBy("has_light_gray_chess_brick_smooth", has(LIGHT_GRAY_CHESS_BRICK_SMOOTH)).save(recipeSaver);
+		CommonRecipes.buttonShapelessRecipe(LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON, LIGHT_GRAY_CHESS_BRICK_SMOOTH).save(recipeSaver);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(LIGHT_GRAY_CHESS_BRICK_SMOOTH), RecipeCategory.BUILDING_BLOCKS, LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS)
 				.unlockedBy("has_light_gray_chess_brick_smooth", has(LIGHT_GRAY_CHESS_BRICK_SMOOTH)).save(recipeSaver, Minestuck.id("light_gray_chess_brick_smooth_stairs_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(LIGHT_GRAY_CHESS_BRICK_SMOOTH), RecipeCategory.BUILDING_BLOCKS, LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB, 2)

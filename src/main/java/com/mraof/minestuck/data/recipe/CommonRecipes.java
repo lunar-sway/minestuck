@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.recipe;
 
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -105,4 +106,18 @@ public final class CommonRecipes
 				.pattern("##")
 				.unlockedBy(criterionName, has(sourceBlock));
 	}
+	
+	public static ShapelessRecipeBuilder buttonShapelessRecipe(Supplier<? extends ItemLike> buttonBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return buttonShapelessRecipe(buttonBlock.get(), sourceBlock.get());
+	}
+	
+	public static ShapelessRecipeBuilder buttonShapelessRecipe(ItemLike buttonBlock, ItemLike sourceBlock)
+	{
+		ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(sourceBlock.asItem()));
+		String blockName = blockId.getPath();
+		return ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, buttonBlock).requires(sourceBlock)
+				.unlockedBy("has_" + blockName, has(sourceBlock));
+	}
+	
 }
