@@ -104,7 +104,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		hangingSignBlock(MSBlocks.CINDERED_HANGING_SIGN.get(), MSBlocks.CINDERED_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.CINDERED_PLANKS.get()));
-		
 				
 		simpleBlockWithItem(MSBlocks.STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.NETHERRACK_CRUXITE_ORE);

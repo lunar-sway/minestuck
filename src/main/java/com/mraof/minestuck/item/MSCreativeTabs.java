@@ -70,6 +70,13 @@ public final class MSCreativeTabs
 		output.accept(MSItems.STRIPPED_RAINBOW_LOG.get());
 		output.accept(MSItems.STRIPPED_RAINBOW_WOOD.get());
 		
+		//move these to AspectTreeBlocksData
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_LOG_ITEM.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_WOOD_ITEM.get());
+		
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_SIGN_ITEM.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN_ITEM.get());
+		
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 10));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 100));

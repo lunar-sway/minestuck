@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,7 +28,20 @@ public class MSBlockEntities
 							MSBlocks.SHADEWOOD_SIGN.get(), MSBlocks.SHADEWOOD_WALL_SIGN.get(),
 							MSBlocks.TREATED_SIGN.get(), MSBlocks.TREATED_WALL_SIGN.get(),
 							MSBlocks.LACQUERED_SIGN.get(), MSBlocks.LACQUERED_WALL_SIGN.get(),
-							MSBlocks.CINDERED_SIGN.get(), MSBlocks.CINDERED_WALL_SIGN.get()).build(null));
+							MSBlocks.CINDERED_SIGN.get(), MSBlocks.CINDERED_WALL_SIGN.get(),
+							AspectTreeBlocks.BLOOD_ASPECT_SIGN.get(), AspectTreeBlocks.BLOOD_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.BREATH_ASPECT_SIGN.get(), AspectTreeBlocks.BREATH_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.DOOM_ASPECT_SIGN.get(), AspectTreeBlocks.DOOM_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.HEART_ASPECT_SIGN.get(), AspectTreeBlocks.HEART_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.HOPE_ASPECT_SIGN.get(), AspectTreeBlocks.HOPE_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.LIFE_ASPECT_SIGN.get(), AspectTreeBlocks.LIFE_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.LIGHT_ASPECT_SIGN.get(), AspectTreeBlocks.LIGHT_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.MIND_ASPECT_SIGN.get(), AspectTreeBlocks.MIND_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.RAGE_ASPECT_SIGN.get(), AspectTreeBlocks.RAGE_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.SPACE_ASPECT_SIGN.get(), AspectTreeBlocks.SPACE_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.TIME_ASPECT_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_SIGN.get(),
+							AspectTreeBlocks.VOID_ASPECT_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_SIGN.get())
+							.build(null));
 	
 	public static final RegistryObject<BlockEntityType<MSHangingSignBlockEntity>> MOD_HANGING_SIGN =
 			BLOCK_ENTITIES.register("mod_hanging_sign", () ->
@@ -42,7 +56,20 @@ public class MSBlockEntities
 							MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
 							MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(),
 							MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get(),
-							MSBlocks.CINDERED_HANGING_SIGN.get(), MSBlocks.CINDERED_WALL_HANGING_SIGN.get()).build(null));
+							MSBlocks.CINDERED_HANGING_SIGN.get(), MSBlocks.CINDERED_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.BLOOD_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.BREATH_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.BREATH_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.DOOM_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.DOOM_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.HEART_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.HEART_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.HOPE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.HOPE_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.LIFE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.LIFE_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.LIGHT_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.LIGHT_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.MIND_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.MIND_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.RAGE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.RAGE_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.SPACE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.SPACE_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_HANGING_SIGN.get(),
+							AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_HANGING_SIGN.get())
+							.build(null));
 	
 	
 	public static void register(IEventBus eventBus) {

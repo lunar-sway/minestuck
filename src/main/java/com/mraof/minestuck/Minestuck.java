@@ -147,6 +147,19 @@ public class Minestuck
 		Sheets.addWoodType(MSWoodTypes.TREATED);
 		Sheets.addWoodType(MSWoodTypes.LACQUERED);
 		
+		Sheets.addWoodType(MSWoodTypes.BLOOD);
+		Sheets.addWoodType(MSWoodTypes.BREATH);
+		Sheets.addWoodType(MSWoodTypes.DOOM);
+		Sheets.addWoodType(MSWoodTypes.HEART);
+		Sheets.addWoodType(MSWoodTypes.HOPE);
+		Sheets.addWoodType(MSWoodTypes.LIFE);
+		Sheets.addWoodType(MSWoodTypes.LIGHT);
+		Sheets.addWoodType(MSWoodTypes.MIND);
+		Sheets.addWoodType(MSWoodTypes.RAGE);
+		Sheets.addWoodType(MSWoodTypes.SPACE);
+		Sheets.addWoodType(MSWoodTypes.TIME);
+		Sheets.addWoodType(MSWoodTypes.VOID);
+		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		DispenserBehaviourUtil.registerBehaviours();

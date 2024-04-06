@@ -19,17 +19,17 @@ public class MSWoodTypes
 	public static final WoodType PERFECTLY_GENERIC = WoodType.register(new WoodType(Minestuck.MOD_ID + ":perfectly_generic", MSBlockSetType.PERFECTLY_GENERIC));
 	public static final WoodType CINDERED = WoodType.register(new WoodType(Minestuck.MOD_ID + ":cindered", MSBlockSetType.CINDERED));
 	
-	public static final WoodType BLOOD = WoodType.register(new WoodType(Minestuck.MOD_ID + ":blood", MSBlockSetType.BLOOD));
-	public static final WoodType BREATH = WoodType.register(new WoodType(Minestuck.MOD_ID + ":breath", MSBlockSetType.BREATH));
-	public static final WoodType DOOM = WoodType.register(new WoodType(Minestuck.MOD_ID + ":doom", MSBlockSetType.DOOM));
-	public static final WoodType HEART = WoodType.register(new WoodType(Minestuck.MOD_ID + ":heart", MSBlockSetType.HEART));
-	public static final WoodType HOPE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":hope", MSBlockSetType.HOPE));
-	public static final WoodType LIFE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":life", MSBlockSetType.LIFE));
-	public static final WoodType LIGHT = WoodType.register(new WoodType(Minestuck.MOD_ID + ":light", MSBlockSetType.LIGHT));
-	public static final WoodType MIND = WoodType.register(new WoodType(Minestuck.MOD_ID + ":mind", MSBlockSetType.MIND));
-	public static final WoodType RAGE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":rage", MSBlockSetType.RAGE));
-	public static final WoodType SPACE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":space", MSBlockSetType.SPACE));
-	public static final WoodType TIME = WoodType.register(new WoodType(Minestuck.MOD_ID + ":time", MSBlockSetType.TIME));
-	public static final WoodType VOID = WoodType.register(new WoodType(Minestuck.MOD_ID + ":void", MSBlockSetType.VOID));
+	public static final WoodType BLOOD = WoodType.register(new WoodType(Minestuck.MOD_ID + ":blood_aspect", MSBlockSetType.BLOOD));
+	public static final WoodType BREATH = WoodType.register(new WoodType(Minestuck.MOD_ID + ":breath_aspect", MSBlockSetType.BREATH));
+	public static final WoodType DOOM = WoodType.register(new WoodType(Minestuck.MOD_ID + ":doom_aspect", MSBlockSetType.DOOM));
+	public static final WoodType HEART = WoodType.register(new WoodType(Minestuck.MOD_ID + ":heart_aspect", MSBlockSetType.HEART));
+	public static final WoodType HOPE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":hope_aspect", MSBlockSetType.HOPE));
+	public static final WoodType LIFE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":life_aspect", MSBlockSetType.LIFE));
+	public static final WoodType LIGHT = WoodType.register(new WoodType(Minestuck.MOD_ID + ":light_aspect", MSBlockSetType.LIGHT));
+	public static final WoodType MIND = WoodType.register(new WoodType(Minestuck.MOD_ID + ":mind_aspect", MSBlockSetType.MIND));
+	public static final WoodType RAGE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":rage_aspect", MSBlockSetType.RAGE));
+	public static final WoodType SPACE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":space_aspect", MSBlockSetType.SPACE));
+	public static final WoodType TIME = WoodType.register(new WoodType(Minestuck.MOD_ID + ":time_aspect", MSBlockSetType.TIME));
+	public static final WoodType VOID = WoodType.register(new WoodType(Minestuck.MOD_ID + ":void_aspect", MSBlockSetType.VOID));
 	
 }

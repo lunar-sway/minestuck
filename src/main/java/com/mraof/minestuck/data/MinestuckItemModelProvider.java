@@ -1,6 +1,8 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.AspectTreeBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +24,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
+		AspectTreeBlocksData.addItemModels(this);
 		//Signs
 		simpleItem(MSItems.CARVED_SIGN);
 		simpleItem(MSItems.CARVED_HANGING_SIGN);
@@ -659,7 +662,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.PROSPITIAN_ROOK_SPAWN_EGG);
 	}
 	
-	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
+	ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
 	{
 		return simpleItem(item, item.getId().getPath());
 	}

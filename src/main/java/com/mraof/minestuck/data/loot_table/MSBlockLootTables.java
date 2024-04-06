@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
@@ -172,6 +173,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(STRIPPED_CINDERED_WOOD.get());
 		
 		dropSelf(FROST_SAPLING.get());
+		
+		
 		
 		add(STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(COBBLESTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
