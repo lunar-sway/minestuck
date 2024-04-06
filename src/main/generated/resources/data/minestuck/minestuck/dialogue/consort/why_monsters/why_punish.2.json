@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.why_monsters.why_punish.2",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/why_monsters/why_punish.3"
+      }
+    ]
+  }
+}

@@ -22,6 +22,7 @@ import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.msg;
 import static com.mraof.minestuck.data.dialogue.DialogueProvider.ARROW;
 import static com.mraof.minestuck.data.dialogue.DialogueProvider.DOTS;
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
+import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.weighted;
 import static com.mraof.minestuck.entity.MSEntityTypes.*;
 import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
@@ -152,6 +153,32 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("monstersona", defaultWeight(all(isInTitleLand(MSTags.TitleLandTypes.MONSTERS), isAnyEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(l.defaultKeyMsg("What's your monster-sona? Mine is a zombie.")));
 		
+		provider.addRandomlySelectable("why_monsters", defaultWeight(all(isInTitleLand(MSTags.TitleLandTypes.MONSTERS))), new FolderedDialogue(builder ->
+		{
+			ResponseBuilder noReason = new ResponseBuilder(l.subMsg("no_reason", "Maybe there is no reason?"));
+			var noAnswerMsg = l.subMsg("no_answer", "I don't have an answer, bye.");
+			
+			var whyNoReason = builder.add("why_no_reason", new ChainBuilder()
+					.node(new NodeBuilder(l.defaultKeyMsg("The %s has a destiny, and I believe in fate. Why wouldn't there be a reason?", Argument.LAND_TITLE))
+							.addClosingResponse(noAnswerMsg))
+			);
+			
+			var whyPunish = builder.add("why_punish", new ChainBuilder()
+					.node(new NodeBuilder(l.defaultKeyMsg("Punishment for what? For who?")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Monsters didn't first pop out of the ground yesterday. If it was punishment for someone specific they are probably long dead.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Whatever reason it's happening for, I certainly don't feel like I am learning any lesson from it..."))
+							.addResponse(noReason.nextDialogue(whyNoReason))
+							.addClosingResponse(noAnswerMsg))
+			);
+			
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Sometimes I really wonder why there are any monsters here to begin with!"))
+					.addResponse(new ResponseBuilder(l.subMsg("punishment", "Maybe it is punishment?")).nextDialogue(whyPunish))
+					.addResponse(noReason.nextDialogue(whyNoReason))
+					.addResponse(new ResponseBuilder(l.subMsg("confused", "Isn't it normal for there to be monsters?"))
+							.nextDialogue(builder.add("not_normal", new NodeBuilder(l.defaultKeyMsg("Yeah right. There is no way this is normal.")))))
+			);
+		}));
+		
 		
 		//Towers
 		provider.addRandomlySelectable("bug_treasure", defaultWeight(all(isInTitleLand(TOWERS), isAnyEntityType(SALAMANDER, IGUANA))),
@@ -160,6 +187,23 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("That tower over there was built by my ancestor Fjorgenheimer! You can tell by how its about to fall apa- oh it fell apart.")));
 		provider.addRandomlySelectable("no_tower_treasure", defaultWeight(all(isInTitleLand(TOWERS), isAnyEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(l.defaultKeyMsg("I feel ripped off. I was born in a land full of magical towers but none of them have treasure!")));
+		provider.addRandomlySelectable("tower_motivation", defaultWeight(all(isInTitleLand(TOWERS))), new FolderedDialogue(builder ->
+		{
+			var newTower = builder.add("new_tower", new NodeBuilder(l.defaultKeyMsg("I'm going to make the tallest tower this land has ever seen!")));
+			
+			builder.addStart(new ChainBuilder()
+					.node(new NodeBuilder(l.defaultKeyMsg("We would keep making towers, but we have no motivation.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Each time a %s starts to build, they have a bajillion ideas on what to do with it.", Argument.ENTITY_TYPE)))
+					.node(new NodeBuilder(l.defaultKeyMsg("They see all the other towers and think they can do better. But after the ground work gets laid, reality sets in.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Suddenly decisions that seemed simple enough to just ignore become unavoidable.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("And they start to question decisions they already made like \"Why did I start building on top of my flimsy house?\" and \"Why did I put myself into life-long debt for artisanal bricks?\"")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Next thing you know, there's another half baked pile of rock taking up space. It's just kind of pointless!"))
+							.addResponse(new ResponseBuilder(l.subMsg("dont_give_up", "That's no reason to give up!"))
+									.addPlayerMessage(l.subMsg("dont_give_up.reply", "Just because you haven't made a better tower yet doesn't mean you never will!"))
+									.nextDialogue("motivation", new NodeBuilder(l.defaultKeyMsg("You know what? Yeah! I'm ready to take out another loan and try again. Thanks!")))
+									.addTrigger(new Trigger.SetDialogue(newTower)))
+							.addClosingResponse(thanksGoodbyeMsg)));
+		}));
 		
 		
 		//Thought
@@ -195,7 +239,11 @@ public final class ConsortDialogue
 		
 		//Frogs
 		provider.addRandomlySelectable("frog_creation", defaultWeight(isInTitleLand(FROGS)),
-				new NodeBuilder(l.defaultKeyMsg("We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!")));
+				new NodeBuilder(l.defaultKeyMsg("We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!"))
+						.addResponse(new ResponseBuilder(l.subMsg("who", "Who are \"They\"?"))
+								.nextDialogue("no_idea", new NodeBuilder(l.defaultKeyMsg("No clue. Just sounded like the right thing to say!")))
+								.addPlayerMessage(l.subMsg("no_idea.reply", "Who are \"They\"?")))
+						.addClosingResponse());
 		provider.addRandomlySelectable("frog_location", defaultWeight(isInTitleLand(FROGS)),
 				new NodeBuilder(l.defaultKeyMsg("You won't find many frogs where you find villages. Most of them live where the terrain is rougher.")));
 		provider.addRandomlySelectable("frog_imitation", defaultWeight(isInTitleLand(FROGS)),
@@ -548,7 +596,7 @@ public final class ConsortDialogue
 		));
 		provider.addRandomlySelectable("music_invention", defaultWeight(isAnyEntityType(NAKAGATOR, SALAMANDER)),
 				new NodeBuilder(l.defaultKeyMsg("I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.")));
-		provider.addRandomlySelectable("wyrm", defaultWeight(isAnyEntityType(TURTLE, IGUANA)),
+		provider.addRandomlySelectable("wyrm", weighted(4, isAnyEntityType(TURTLE, IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("Legends speak of the Wyrm, a giant ivory pillar that radiated joy and happiness and uselessness.")));
 		provider.addRandomlySelectable("useless_pogo", defaultWeight(alwaysTrue()),
 				new NodeBuilder(l.defaultKeyMsg("I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!")));
@@ -560,7 +608,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("The place was %s, the year, was 20XX.", Argument.LAND_NAME)));
 		provider.addRandomlySelectable("disks", defaultWeight(isAnyEntityType(IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("I used to be an adventurer like you, then I never got the disks.")));
-		provider.addRandomlySelectable("whoops", defaultWeight(isAnyEntityType(IGUANA)),
+		provider.addRandomlySelectable("whoops", weighted(4, isAnyEntityType(IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("Beware the man who speaks in hands, wait...wrong game.")));
 		provider.addRandomlySelectable("fourth_wall", defaultWeight(isAnyEntityType(IGUANA)),
 				new NodeBuilder(l.defaultKeyMsg("Maybe you should do something more productive than talking to NPCs.")));
@@ -631,7 +679,7 @@ public final class ConsortDialogue
 					.next(afterInvitation));
 		}));
 		
-		provider.addRandomlySelectable("underling_commission", defaultWeight(isInHomeLand()), new FolderedDialogue(builder ->
+		provider.addRandomlySelectable("underling_commission", weighted(12, isInHomeLand()), new FolderedDialogue(builder ->
 		{
 			var explainCarapacian = builder.add("explain_carapacian", new ChainBuilder()
 					.node(new NodeBuilder(l.defaultKeyMsg("It's the people who live on Prospit and Derse. Those garish golden and purple cities in the sky that are almost the size of a planet.")))
@@ -655,11 +703,11 @@ public final class ConsortDialogue
 			);
 			
 			builder.addStart(new NodeBuilder(l.subMsg("start", "Ugh. I don't like those Underlings. Can't believe anyone would ever ask to make them!"))
-							.addResponse(new ResponseBuilder(l.subMsg("ask", "What do you mean?"))
-									.nextDialogue(answer))
+					.addResponse(new ResponseBuilder(l.subMsg("ask", "What do you mean?"))
+							.nextDialogue(answer))
 					.addResponse(new ResponseBuilder(l.subMsg("agree", "I know right?"))
 							.nextDialogue(builder.add("confront", new NodeBuilder(l.defaultKeyMsg("If I wasn't so scared of confrontation I would give them a stern talking to.")))))
-				);
+			);
 		}
 		));
 		
