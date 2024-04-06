@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
@@ -47,6 +48,11 @@ public class DialogueNodes
 	public Dialogue.NodeSelector getDialogue(ResourceLocation location)
 	{
 		return this.dialogues.get(location);
+	}
+	
+	public Collection<ResourceLocation> allIds()
+	{
+		return this.dialogues.keySet();
 	}
 	
 	@SubscribeEvent
