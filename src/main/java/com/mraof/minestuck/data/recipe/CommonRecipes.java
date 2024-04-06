@@ -1,5 +1,6 @@
 package com.mraof.minestuck.data.recipe;
 
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -14,22 +15,22 @@ import static com.mraof.minestuck.data.recipe.MinestuckRecipeProvider.has;
 
 public final class CommonRecipes
 {
-	public static ShapedRecipeBuilder stairsShapedRecipe(Supplier<? extends ItemLike> stairsBlock, Supplier<? extends ItemLike> sourceBlock)
+	public static RecipeBuilder stairsRecipe(Supplier<? extends ItemLike> stairsBlock, Supplier<? extends ItemLike> sourceBlock)
 	{
-		return stairsShapedRecipe(stairsBlock.get(), sourceBlock.get());
+		return stairsRecipe(stairsBlock.get(), sourceBlock.get());
 	}
 	
-	public static ShapedRecipeBuilder stairsShapedRecipe(Supplier<? extends ItemLike> stairsBlock, Supplier<? extends ItemLike> sourceBlock, String criterionName)
+	public static RecipeBuilder stairsRecipe(Supplier<? extends ItemLike> stairsBlock, Supplier<? extends ItemLike> sourceBlock, String criterionName)
 	{
-		return stairsShapedRecipe(stairsBlock.get(), sourceBlock.get(), criterionName);
+		return stairsRecipe(stairsBlock.get(), sourceBlock.get(), criterionName);
 	}
 	
-	public static ShapedRecipeBuilder stairsShapedRecipe(ItemLike stairsBlock, ItemLike sourceBlock)
+	public static RecipeBuilder stairsRecipe(ItemLike stairsBlock, ItemLike sourceBlock)
 	{
-		return stairsShapedRecipe(stairsBlock, sourceBlock, "has_" + id(sourceBlock).getPath());
+		return stairsRecipe(stairsBlock, sourceBlock, "has_" + id(sourceBlock).getPath());
 	}
 	
-	public static ShapedRecipeBuilder stairsShapedRecipe(ItemLike stairsBlock, ItemLike sourceBlock, String criterionName)
+	public static RecipeBuilder stairsRecipe(ItemLike stairsBlock, ItemLike sourceBlock, String criterionName)
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, stairsBlock, 4)
 				.define('#', sourceBlock)
@@ -39,22 +40,22 @@ public final class CommonRecipes
 				.unlockedBy(criterionName, has(sourceBlock));
 	}
 	
-	public static ShapedRecipeBuilder slabShapedRecipe(Supplier<? extends ItemLike> slabBlock, Supplier<? extends ItemLike> sourceBlock)
+	public static RecipeBuilder slabRecipe(Supplier<? extends ItemLike> slabBlock, Supplier<? extends ItemLike> sourceBlock)
 	{
-		return slabShapedRecipe(slabBlock.get(), sourceBlock.get());
+		return slabRecipe(slabBlock.get(), sourceBlock.get());
 	}
 	
-	public static ShapedRecipeBuilder slabShapedRecipe(Supplier<? extends ItemLike> slabBlock, Supplier<? extends ItemLike> sourceBlock, String criterionName)
+	public static RecipeBuilder slabRecipe(Supplier<? extends ItemLike> slabBlock, Supplier<? extends ItemLike> sourceBlock, String criterionName)
 	{
-		return slabShapedRecipe(slabBlock.get(), sourceBlock.get(), criterionName);
+		return slabRecipe(slabBlock.get(), sourceBlock.get(), criterionName);
 	}
 	
-	public static ShapedRecipeBuilder slabShapedRecipe(ItemLike slabBlock, ItemLike sourceBlock)
+	public static RecipeBuilder slabRecipe(ItemLike slabBlock, ItemLike sourceBlock)
 	{
-		return slabShapedRecipe(slabBlock, sourceBlock, "has_" + id(sourceBlock).getPath());
+		return slabRecipe(slabBlock, sourceBlock, "has_" + id(sourceBlock).getPath());
 	}
 	
-	public static ShapedRecipeBuilder slabShapedRecipe(ItemLike slabBlock, ItemLike sourceBlock, String criterionName)
+	public static RecipeBuilder slabRecipe(ItemLike slabBlock, ItemLike sourceBlock, String criterionName)
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, slabBlock, 6)
 				.define('#', sourceBlock)
@@ -62,12 +63,12 @@ public final class CommonRecipes
 				.unlockedBy(criterionName, has(sourceBlock));
 	}
 	
-	public static ShapedRecipeBuilder wallShapedRecipe(Supplier<? extends ItemLike> wallBlock, Supplier<? extends ItemLike> sourceBlock)
+	public static RecipeBuilder wallRecipe(Supplier<? extends ItemLike> wallBlock, Supplier<? extends ItemLike> sourceBlock)
 	{
-		return wallShapedRecipe(wallBlock.get(), sourceBlock.get());
+		return wallRecipe(wallBlock.get(), sourceBlock.get());
 	}
 	
-	public static ShapedRecipeBuilder wallShapedRecipe(ItemLike wallBlock, ItemLike sourceBlock)
+	public static RecipeBuilder wallRecipe(ItemLike wallBlock, ItemLike sourceBlock)
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, wallBlock, 6)
 				.define('#', sourceBlock)
@@ -76,12 +77,12 @@ public final class CommonRecipes
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
-	public static ShapedRecipeBuilder pressurePlateShapedRecipe(Supplier<? extends ItemLike> pressurePlateBlock, Supplier<? extends ItemLike> sourceBlock)
+	public static RecipeBuilder pressurePlateRecipe(Supplier<? extends ItemLike> pressurePlateBlock, Supplier<? extends ItemLike> sourceBlock)
 	{
-		return pressurePlateShapedRecipe(pressurePlateBlock.get(), sourceBlock.get());
+		return pressurePlateRecipe(pressurePlateBlock.get(), sourceBlock.get());
 	}
 	
-	public static ShapedRecipeBuilder pressurePlateShapedRecipe(ItemLike pressurePlateBlock, ItemLike sourceBlock)
+	public static RecipeBuilder pressurePlateRecipe(ItemLike pressurePlateBlock, ItemLike sourceBlock)
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, pressurePlateBlock)
 				.define('#', sourceBlock)
@@ -89,12 +90,12 @@ public final class CommonRecipes
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
-	public static ShapelessRecipeBuilder buttonShapelessRecipe(Supplier<? extends ItemLike> buttonBlock, Supplier<? extends ItemLike> sourceBlock)
+	public static RecipeBuilder buttonRecipe(Supplier<? extends ItemLike> buttonBlock, Supplier<? extends ItemLike> sourceBlock)
 	{
-		return buttonShapelessRecipe(buttonBlock.get(), sourceBlock.get());
+		return buttonRecipe(buttonBlock.get(), sourceBlock.get());
 	}
 	
-	public static ShapelessRecipeBuilder buttonShapelessRecipe(ItemLike buttonBlock, ItemLike sourceBlock)
+	public static RecipeBuilder buttonRecipe(ItemLike buttonBlock, ItemLike sourceBlock)
 	{
 		return ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, buttonBlock).requires(sourceBlock)
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
