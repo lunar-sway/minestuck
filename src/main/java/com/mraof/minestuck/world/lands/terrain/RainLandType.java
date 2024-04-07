@@ -110,7 +110,7 @@ public class RainLandType extends TerrainLandType
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
 		super.addStructureSets(consumer, structureLookup);
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.PINK_TOWER), new RandomSpreadStructurePlacement(20, 5, RandomSpreadType.LINEAR, 90543602)));
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.PINK_TOWER), new RandomSpreadStructurePlacement(35, 10, RandomSpreadType.LINEAR, 90543602)));
 	}
 	
 	@Override
