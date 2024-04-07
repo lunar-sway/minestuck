@@ -249,12 +249,12 @@ public final class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> CAST_IRON_PRESSURE_PLATE = REGISTER.register("cast_iron_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CAST_IRON.get()), BlockSetType.IRON));
 	
 	public static final RegistryObject<Block> CAST_IRON_TILE = REGISTER.register("cast_iron_tile", () -> new Block(copy(CAST_IRON.get())));
-	public static final RegistryObject<StairBlock> CAST_IRON_TILE_STAIRS = REGISTER.register("cast_iron_tile_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON_TILE.get().defaultBlockState(), copy(CAST_IRON.get())));
-	public static final RegistryObject<SlabBlock> CAST_IRON_TILE_SLAB = REGISTER.register("cast_iron_tile_slab", () -> new SlabBlock(copy(CAST_IRON.get())));
+	public static final RegistryObject<StairBlock> CAST_IRON_TILE_STAIRS = REGISTER.register("cast_iron_tile_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON_TILE.get().defaultBlockState(), copy(CAST_IRON_TILE.get())));
+	public static final RegistryObject<SlabBlock> CAST_IRON_TILE_SLAB = REGISTER.register("cast_iron_tile_slab", () -> new SlabBlock(copy(CAST_IRON_TILE.get())));
 	
 	public static final RegistryObject<Block> CAST_IRON_SHEET = REGISTER.register("cast_iron_sheet", () -> new Block(copy(CAST_IRON.get())));
-	public static final RegistryObject<StairBlock> CAST_IRON_SHEET_STAIRS = REGISTER.register("cast_iron_sheet_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON_SHEET.get().defaultBlockState(), copy(CAST_IRON.get())));
-	public static final RegistryObject<SlabBlock> CAST_IRON_SHEET_SLAB = REGISTER.register("cast_iron_sheet_slab", () -> new SlabBlock(copy(CAST_IRON.get())));
+	public static final RegistryObject<StairBlock> CAST_IRON_SHEET_STAIRS = REGISTER.register("cast_iron_sheet_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON_SHEET.get().defaultBlockState(), copy(CAST_IRON_SHEET.get())));
+	public static final RegistryObject<SlabBlock> CAST_IRON_SHEET_SLAB = REGISTER.register("cast_iron_sheet_slab", () -> new SlabBlock(copy(CAST_IRON_SHEET.get())));
 	
 	public static final RegistryObject<Block> CHISELED_CAST_IRON = REGISTER.register("chiseled_cast_iron", () -> new Block(copy(CAST_IRON.get())));
 	public static final RegistryObject<Block> CAST_IRON_FRAME = REGISTER.register("cast_iron_frame", () -> new MSDirectionalBlock(Block.Properties.of().noOcclusion().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));

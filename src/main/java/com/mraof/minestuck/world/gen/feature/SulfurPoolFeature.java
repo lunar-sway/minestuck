@@ -34,6 +34,8 @@ public class SulfurPoolFeature extends Feature<NoneFeatureConfiguration>
 		StructureTemplate template = context.level().getLevel().getStructureManager().getOrCreate(pickTemplate(rand));
 		BlockPos centerPos = context.origin();
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, centerPos, rand);
+		if(placement.heightRange(Heightmap.Types.OCEAN_FLOOR, context.level()).difference() > 3)
+			return false;
 		
 		int y = placement.minHeight(Heightmap.Types.WORLD_SURFACE_WG, level);
 		placement.placeAt(y, context);
