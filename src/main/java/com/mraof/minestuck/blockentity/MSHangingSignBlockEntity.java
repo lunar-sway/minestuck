@@ -1,4 +1,4 @@
-package com.mraof.minestuck.entity;
+package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
