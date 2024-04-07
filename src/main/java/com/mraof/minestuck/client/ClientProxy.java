@@ -32,6 +32,8 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
@@ -40,6 +42,7 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -142,6 +145,13 @@ public class ClientProxy
 		
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "angle"), new CompassItemPropertyFunction((level, stack, entity) -> StructureScannerItem.getTargetFromNbt(stack)));
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "powered"), (stack, level, entity, seed) -> StructureScannerItem.isPowered(stack) ? 1 : 0);
+	}
+	
+	@SubscribeEvent
+	public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
+		
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.MOD_SIGN.get(), SignRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
 	}
 	
 	@SubscribeEvent
