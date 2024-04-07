@@ -63,7 +63,7 @@ public final class ConsortDialogue
 		final DialogueProvider.MessageProducer sadFaceMsg = l.msg("sad_face", ":(");
 		var yesMsg = l.msg("yes", "Yes");
 		var noMsg = l.msg("no", "No");
-		var thanksGoodbyeMsg = l.msg("goodbye", "Oh good to know, goodbye.");
+		var thanksGoodbyeMsg = l.msg("goodbye", "Oh good to know, bye.");
 		
 		//Wind
 		provider.addRandomlySelectable("blown_away", defaultWeight(isInTitleLand(WIND)),
@@ -213,6 +213,37 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.")));
 		provider.addRandomlySelectable("to_eat", defaultWeight(all(isInTitleLand(THOUGHT), isAnyEntityType(IGUANA, NAKAGATOR))),
 				new NodeBuilder(l.defaultKeyMsg("To eat or not to eat, that is the question.")));
+		provider.addRandomlySelectable("book_purpose", defaultWeight(all(isInTitleLand(THOUGHT), isAnyEntityType(NAKAGATOR))), new FolderedDialogue(builder ->
+		{
+			var buyMyProducts = builder.add("buy_my_products", new NodeBuilder()
+					.addMessage(l.subMsg("a", "I'm feeling generous, so how about this."))
+					.addMessage(l.subMsg("b", "If you want to get started on being an intellectual giant, I can offer you a discounted price on my self help memoir. It's only 5 payments of 8000 boondollars."))
+					.addDescription(l.subMsg("description", "They show you a book labelled \"Grindset Tales: From Pawn to King (How to follow the Philosopher's Journey)\""))
+					.addResponse(new ResponseBuilder(l.subMsg("purchase", "[Purchase book]")).visibleCondition(resource -> "No matter how you feel, you are compelled to decline", none(alwaysTrue())))
+					.addResponse(new ResponseBuilder(l.subMsg("decline", "Yeah no way.")))
+					.addResponse(new ResponseBuilder(l.subMsg("decline_hard", "Absolutely no chance.")))
+			);
+			
+			var unenlightened = builder.add("unenlightened", new NodeBuilder(l.defaultKeyMsg("That's a pretty low IQ sentiment. To be honest I think you could use some help moving away from such a toxic mindset."))
+					.next(buyMyProducts));
+			
+			var fact2 = builder.add("fact_2", new NodeBuilder()
+					.addMessage(l.subMsg("a", "Fact 2: The louder you are and the more often you interrupt others in a conversation, the higher your IQ is."))
+					.addMessage(l.subMsg("b", "You already failed this by listening to me patiently but it's okay, you are lucky you have the Master around."))
+					.addResponse(new ResponseBuilder(l.subMsg("request_more", "Got any more wisdom?"))
+							.nextDialogue(buyMyProducts)
+							.setNextAsEntrypoint())
+					.addClosingResponse(thanksGoodbyeMsg));
+			
+			builder.addStart(new ChainBuilder()
+					.node(new NodeBuilder(l.defaultKeyMsg("Lets talk real facts right now. The true purpose of books is not to actually read them, it's about presentation.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Actual intellect is all about LOOKING like you know things."))
+							.addResponse(new ResponseBuilder(l.subMsg("disagree", "[Disagree]"))
+									.addPlayerMessage(l.subMsg("disagree.reply", "No I'm pretty sure books are meant to be read."))
+									.nextDialogue(unenlightened))
+							.addResponse(new ResponseBuilder(l.subMsg("continue", "[Let them continue enlightening you]"))
+									.nextDialogue(fact2))));
+		}));
 		
 		
 		//Cake
@@ -238,12 +269,20 @@ public final class ConsortDialogue
 		
 		
 		//Frogs
-		provider.addRandomlySelectable("frog_creation", defaultWeight(isInTitleLand(FROGS)),
-				new NodeBuilder(l.defaultKeyMsg("We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!"))
-						.addResponse(new ResponseBuilder(l.subMsg("who", "Who are \"They\"?"))
-								.nextDialogue("no_idea", new NodeBuilder(l.defaultKeyMsg("No clue. Just sounded like the right thing to say!")))
-								.addPlayerMessage(l.subMsg("no_idea.reply", "Who are \"They\"?")))
-						.addClosingResponse());
+		provider.addRandomlySelectable("frog_creation", defaultWeight(isInTitleLand(FROGS)), new FolderedDialogue(builder ->
+		{
+			var explain = builder.add("explain", new NodeBuilder(l.defaultKeyMsg("The Genesis Frog is the cornerstone of %s beliefs! In the Vast Croak, Our Glorious Speaker brought everything into existence.", Argument.ENTITY_TYPE))
+					.addResponse(new ResponseBuilder(l.subMsg("doubt", "How do you know They are real?"))
+							.nextDialogue("inside", new NodeBuilder(l.defaultKeyMsg("Because we are inside Our Glorious Speaker right now!"))))
+					.addResponse(new ResponseBuilder(l.subMsg("make", "What did you mean when you said that someone had to make another Genesis Frog?"))
+							.nextDialogue("no_idea", new NodeBuilder(l.defaultKeyMsg("No clue. Just seemed like it would involve a long quest or something if a new Genesis Frog ever had to be made."))))
+					.addClosingResponse(thanksGoodbyeMsg));
+			
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the Genesis Frog. I feel bad for the fool who has to make another!"))
+					.addResponse(new ResponseBuilder(l.subMsg("who", "What is the Genesis Frog?"))
+							.nextDialogue(explain).setNextAsEntrypoint())
+					.addClosingResponse());
+		}));
 		provider.addRandomlySelectable("frog_location", defaultWeight(isInTitleLand(FROGS)),
 				new NodeBuilder(l.defaultKeyMsg("You won't find many frogs where you find villages. Most of them live where the terrain is rougher.")));
 		provider.addRandomlySelectable("frog_imitation", defaultWeight(isInTitleLand(FROGS)),
