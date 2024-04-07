@@ -31,7 +31,7 @@ public final class MSStructureProvider
 		context.register(CONSORT_VILLAGE, new ConsortVillageStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_CONSORT_VILLAGE), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		
 		context.register(LARGE_WOOD_OBJECT, new LargeWoodObjectStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.LAND_ROUGH), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
-		context.register(PINK_TOWER, new PinkTowerStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.LAND), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN)));
+		context.register(PINK_TOWER, new PinkTowerStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.LAND_NORMAL), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN)));
 		
 		context.register(SKAIA_CASTLE, new CastleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SKAIA_CASTLE), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 	}
