@@ -48,6 +48,6 @@ public class PinkTowerStructure extends Structure
 				.mapToInt(corner -> context.chunkGenerator().getBaseHeight(corner.getX(), corner.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState()))
 				.min().orElseThrow();
 		
-		builder.addPiece(new SimpleTemplatePiece(templateManager, templateId, placement.zeroPos().atY(minY), placement.rotation()));
+		builder.addPiece(new PinkTowerPiece(templateManager, templateId, placement.zeroPos().atY(minY), placement.rotation()));
 	}
 }
