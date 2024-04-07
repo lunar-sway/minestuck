@@ -1,4 +1,4 @@
-package com.mraof.minestuck.api;
+package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.world.level.block.state.properties.BlockSetType;

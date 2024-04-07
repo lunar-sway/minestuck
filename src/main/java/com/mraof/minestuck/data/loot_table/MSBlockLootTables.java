@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
@@ -818,9 +817,9 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(BROWN_STONE_BRICK_STAIRS.get());
 		dropSelf(GREEN_STONE_STAIRS.get());
 		dropSelf(GREEN_STONE_BRICK_STAIRS.get());
-		dropSelf(RAINBOW_PLANKS_STAIRS.get());
-		dropSelf(END_PLANKS_STAIRS.get());
-		dropSelf(DEAD_PLANKS_STAIRS.get());
+		dropSelf(RAINBOW_STAIRS.get());
+		dropSelf(END_STAIRS.get());
+		dropSelf(DEAD_STAIRS.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get());
 		add(CHALK_SLAB.get(), this::createSlabItemTable);
@@ -831,9 +830,9 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(BROWN_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(GREEN_STONE_SLAB.get(), this::createSlabItemTable);
 		add(GREEN_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
-		add(RAINBOW_PLANKS_SLAB.get(), this::createSlabItemTable);
-		add(END_PLANKS_SLAB.get(), this::createSlabItemTable);
-		add(DEAD_PLANKS_SLAB.get(), this::createSlabItemTable);
+		add(RAINBOW_SLAB.get(), this::createSlabItemTable);
+		add(END_SLAB.get(), this::createSlabItemTable);
+		add(DEAD_SLAB.get(), this::createSlabItemTable);
 		add(BLACK_STONE_SLAB.get(), this::createSlabItemTable);
 		add(BLACK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(MYCELIUM_SLAB.get(), this::createSlabItemTable);

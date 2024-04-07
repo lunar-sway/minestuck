@@ -26,11 +26,12 @@ public final class AspectTreeBlocksData
 	{
 		provider.addBlock(BLOOD_ASPECT_LOG, "Blood Log");
 		provider.addBlock(BLOOD_ASPECT_WOOD, "Blood Wood");
-		provider.addBlock(BLOOD_ASPECT_STRIPPED_LOG, "Blood Stripped Log");
-		provider.addBlock(BLOOD_ASPECT_STRIPPED_WOOD, "Blood Stripped Wood");
+		provider.addBlock(BLOOD_ASPECT_STRIPPED_LOG, "Stripped Blood Log");
+		provider.addBlock(BLOOD_ASPECT_STRIPPED_WOOD, "Stripped Blood Wood");
 		provider.addBlock(BLOOD_ASPECT_LEAVES, "Blood Leaves");
 		provider.addBlock(BLOOD_ASPECT_SAPLING, "Blood Sapling");
 		provider.addBlock(BLOOD_ASPECT_PLANKS, "Blood Planks");
+		provider.addBlock(BLOOD_ASPECT_CARVED_PLANKS, "Carved Blood Planks");
 		provider.addBlock(BLOOD_ASPECT_STAIRS, "Blood Stairs");
 		provider.addBlock(BLOOD_ASPECT_SLAB, "Blood Slab");
 		provider.addBlock(BLOOD_ASPECT_FENCE, "Blood Fence");
@@ -46,11 +47,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(BREATH_ASPECT_LOG, "Breath Log");
 		provider.addBlock(BREATH_ASPECT_WOOD, "Breath Wood");
-		provider.addBlock(BREATH_ASPECT_STRIPPED_LOG, "Breath Stripped Log");
-		provider.addBlock(BREATH_ASPECT_STRIPPED_WOOD, "Breath Stripped Wood");
+		provider.addBlock(BREATH_ASPECT_STRIPPED_LOG, "Stripped Breath Log");
+		provider.addBlock(BREATH_ASPECT_STRIPPED_WOOD, "Stripped Breath Wood");
 		provider.addBlock(BREATH_ASPECT_LEAVES, "Breath Leaves");
 		provider.addBlock(BREATH_ASPECT_SAPLING, "Breath Sapling");
 		provider.addBlock(BREATH_ASPECT_PLANKS, "Breath Planks");
+		provider.addBlock(BREATH_ASPECT_CARVED_PLANKS, "Carved Breath Planks");
 		provider.addBlock(BREATH_ASPECT_STAIRS, "Breath Stairs");
 		provider.addBlock(BREATH_ASPECT_SLAB, "Breath Slab");
 		provider.addBlock(BREATH_ASPECT_FENCE, "Breath Fence");
@@ -66,11 +68,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(DOOM_ASPECT_LOG, "Doom Log");
 		provider.addBlock(DOOM_ASPECT_WOOD, "Doom Wood");
-		provider.addBlock(DOOM_ASPECT_STRIPPED_LOG, "Doom Stripped Log");
-		provider.addBlock(DOOM_ASPECT_STRIPPED_WOOD, "Doom Stripped Wood");
+		provider.addBlock(DOOM_ASPECT_STRIPPED_LOG, "Stripped Doom Log");
+		provider.addBlock(DOOM_ASPECT_STRIPPED_WOOD, "Stripped Doom Wood");
 		provider.addBlock(DOOM_ASPECT_LEAVES, "Doom Leaves");
 		provider.addBlock(DOOM_ASPECT_SAPLING, "Doom Sapling");
 		provider.addBlock(DOOM_ASPECT_PLANKS, "Doom Planks");
+		provider.addBlock(DOOM_ASPECT_CARVED_PLANKS, "Carved Doom Planks");
 		provider.addBlock(DOOM_ASPECT_STAIRS, "Doom Stairs");
 		provider.addBlock(DOOM_ASPECT_SLAB, "Doom Slab");
 		provider.addBlock(DOOM_ASPECT_FENCE, "Doom Fence");
@@ -86,11 +89,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(HEART_ASPECT_LOG, "Heart Log");
 		provider.addBlock(HEART_ASPECT_WOOD, "Heart Wood");
-		provider.addBlock(HEART_ASPECT_STRIPPED_LOG, "Heart Stripped Log");
-		provider.addBlock(HEART_ASPECT_STRIPPED_WOOD, "Heart Stripped Wood");
+		provider.addBlock(HEART_ASPECT_STRIPPED_LOG, "Stripped Heart Log");
+		provider.addBlock(HEART_ASPECT_STRIPPED_WOOD, "Stripped Heart Wood");
 		provider.addBlock(HEART_ASPECT_LEAVES, "Heart Leaves");
 		provider.addBlock(HEART_ASPECT_SAPLING, "Heart Sapling");
 		provider.addBlock(HEART_ASPECT_PLANKS, "Heart Planks");
+		provider.addBlock(HEART_ASPECT_CARVED_PLANKS, "Carved Heart Planks");
 		provider.addBlock(HEART_ASPECT_STAIRS, "Heart Stairs");
 		provider.addBlock(HEART_ASPECT_SLAB, "Heart Slab");
 		provider.addBlock(HEART_ASPECT_FENCE, "Heart Fence");
@@ -106,11 +110,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(HOPE_ASPECT_LOG, "Hope Log");
 		provider.addBlock(HOPE_ASPECT_WOOD, "Hope Wood");
-		provider.addBlock(HOPE_ASPECT_STRIPPED_LOG, "Hope Stripped Log");
-		provider.addBlock(HOPE_ASPECT_STRIPPED_WOOD, "Hope Stripped Wood");
+		provider.addBlock(HOPE_ASPECT_STRIPPED_LOG, "Stripped Hope Log");
+		provider.addBlock(HOPE_ASPECT_STRIPPED_WOOD, "Stripped Hope Wood");
 		provider.addBlock(HOPE_ASPECT_LEAVES, "Hope Leaves");
 		provider.addBlock(HOPE_ASPECT_SAPLING, "Hope Sapling");
 		provider.addBlock(HOPE_ASPECT_PLANKS, "Hope Planks");
+		provider.addBlock(HOPE_ASPECT_CARVED_PLANKS, "Carved Hope Planks");
 		provider.addBlock(HOPE_ASPECT_STAIRS, "Hope Stairs");
 		provider.addBlock(HOPE_ASPECT_SLAB, "Hope Slab");
 		provider.addBlock(HOPE_ASPECT_FENCE, "Hope Fence");
@@ -126,11 +131,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(LIFE_ASPECT_LOG, "Life Log");
 		provider.addBlock(LIFE_ASPECT_WOOD, "Life Wood");
-		provider.addBlock(LIFE_ASPECT_STRIPPED_LOG, "Life Stripped Log");
-		provider.addBlock(LIFE_ASPECT_STRIPPED_WOOD, "Life Stripped Wood");
+		provider.addBlock(LIFE_ASPECT_STRIPPED_LOG, "Stripped Life Log");
+		provider.addBlock(LIFE_ASPECT_STRIPPED_WOOD, "Stripped Life Wood");
 		provider.addBlock(LIFE_ASPECT_LEAVES, "Life Leaves");
 		provider.addBlock(LIFE_ASPECT_SAPLING, "Life Sapling");
 		provider.addBlock(LIFE_ASPECT_PLANKS, "Life Planks");
+		provider.addBlock(LIFE_ASPECT_CARVED_PLANKS, "Carved Life Planks");
 		provider.addBlock(LIFE_ASPECT_STAIRS, "Life Stairs");
 		provider.addBlock(LIFE_ASPECT_SLAB, "Life Slab");
 		provider.addBlock(LIFE_ASPECT_FENCE, "Life Fence");
@@ -146,11 +152,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(LIGHT_ASPECT_LOG, "Light Log");
 		provider.addBlock(LIGHT_ASPECT_WOOD, "Light Wood");
-		provider.addBlock(LIGHT_ASPECT_STRIPPED_LOG, "Light Stripped Log");
-		provider.addBlock(LIGHT_ASPECT_STRIPPED_WOOD, "Light Stripped Wood");
+		provider.addBlock(LIGHT_ASPECT_STRIPPED_LOG, "Stripped Light Log");
+		provider.addBlock(LIGHT_ASPECT_STRIPPED_WOOD, "Stripped Light Wood");
 		provider.addBlock(LIGHT_ASPECT_LEAVES, "Light Leaves");
 		provider.addBlock(LIGHT_ASPECT_SAPLING, "Light Sapling");
 		provider.addBlock(LIGHT_ASPECT_PLANKS, "Light Planks");
+		provider.addBlock(LIGHT_ASPECT_CARVED_PLANKS, "Carved Light Planks");
 		provider.addBlock(LIGHT_ASPECT_STAIRS, "Light Stairs");
 		provider.addBlock(LIGHT_ASPECT_SLAB, "Light Slab");
 		provider.addBlock(LIGHT_ASPECT_FENCE, "Light Fence");
@@ -166,11 +173,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(MIND_ASPECT_LOG, "Mind Log");
 		provider.addBlock(MIND_ASPECT_WOOD, "Mind Wood");
-		provider.addBlock(MIND_ASPECT_STRIPPED_LOG, "Mind Stripped Log");
-		provider.addBlock(MIND_ASPECT_STRIPPED_WOOD, "Mind Stripped Wood");
+		provider.addBlock(MIND_ASPECT_STRIPPED_LOG, "Stripped Mind Log");
+		provider.addBlock(MIND_ASPECT_STRIPPED_WOOD, "Stripped Mind Wood");
 		provider.addBlock(MIND_ASPECT_LEAVES, "Mind Leaves");
 		provider.addBlock(MIND_ASPECT_SAPLING, "Mind Sapling");
 		provider.addBlock(MIND_ASPECT_PLANKS, "Mind Planks");
+		provider.addBlock(MIND_ASPECT_CARVED_PLANKS, "Carved Mind Planks");
 		provider.addBlock(MIND_ASPECT_STAIRS, "Mind Stairs");
 		provider.addBlock(MIND_ASPECT_SLAB, "Mind Slab");
 		provider.addBlock(MIND_ASPECT_FENCE, "Mind Fence");
@@ -186,11 +194,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(RAGE_ASPECT_LOG, "Rage Log");
 		provider.addBlock(RAGE_ASPECT_WOOD, "Rage Wood");
-		provider.addBlock(RAGE_ASPECT_STRIPPED_LOG, "Rage Stripped Log");
-		provider.addBlock(RAGE_ASPECT_STRIPPED_WOOD, "Rage Stripped Wood");
+		provider.addBlock(RAGE_ASPECT_STRIPPED_LOG, "Stripped Rage Log");
+		provider.addBlock(RAGE_ASPECT_STRIPPED_WOOD, "Stripped Rage Wood");
 		provider.addBlock(RAGE_ASPECT_LEAVES, "Rage Leaves");
 		provider.addBlock(RAGE_ASPECT_SAPLING, "Rage Sapling");
 		provider.addBlock(RAGE_ASPECT_PLANKS, "Rage Planks");
+		provider.addBlock(RAGE_ASPECT_CARVED_PLANKS, "Carved Rage Planks");
 		provider.addBlock(RAGE_ASPECT_STAIRS, "Rage Stairs");
 		provider.addBlock(RAGE_ASPECT_SLAB, "Rage Slab");
 		provider.addBlock(RAGE_ASPECT_FENCE, "Rage Fence");
@@ -206,11 +215,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(SPACE_ASPECT_LOG, "Space Log");
 		provider.addBlock(SPACE_ASPECT_WOOD, "Space Wood");
-		provider.addBlock(SPACE_ASPECT_STRIPPED_LOG, "Space Stripped Log");
-		provider.addBlock(SPACE_ASPECT_STRIPPED_WOOD, "Space Stripped Wood");
+		provider.addBlock(SPACE_ASPECT_STRIPPED_LOG, "Stripped Space Log");
+		provider.addBlock(SPACE_ASPECT_STRIPPED_WOOD, "Stripped Space Wood");
 		provider.addBlock(SPACE_ASPECT_LEAVES, "Space Leaves");
 		provider.addBlock(SPACE_ASPECT_SAPLING, "Space Sapling");
 		provider.addBlock(SPACE_ASPECT_PLANKS, "Space Planks");
+		provider.addBlock(SPACE_ASPECT_CARVED_PLANKS, "Carved Space Planks");
 		provider.addBlock(SPACE_ASPECT_STAIRS, "Space Stairs");
 		provider.addBlock(SPACE_ASPECT_SLAB, "Space Slab");
 		provider.addBlock(SPACE_ASPECT_FENCE, "Space Fence");
@@ -226,11 +236,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(TIME_ASPECT_LOG, "Time Log");
 		provider.addBlock(TIME_ASPECT_WOOD, "Time Wood");
-		provider.addBlock(TIME_ASPECT_STRIPPED_LOG, "Time Stripped Log");
-		provider.addBlock(TIME_ASPECT_STRIPPED_WOOD, "Time Stripped Wood");
+		provider.addBlock(TIME_ASPECT_STRIPPED_LOG, "Stripped Time Log");
+		provider.addBlock(TIME_ASPECT_STRIPPED_WOOD, "Stripped Time Wood");
 		provider.addBlock(TIME_ASPECT_LEAVES, "Time Leaves");
 		provider.addBlock(TIME_ASPECT_SAPLING, "Time Sapling");
 		provider.addBlock(TIME_ASPECT_PLANKS, "Time Planks");
+		provider.addBlock(TIME_ASPECT_CARVED_PLANKS, "Carved Time Planks");
 		provider.addBlock(TIME_ASPECT_STAIRS, "Time Stairs");
 		provider.addBlock(TIME_ASPECT_SLAB, "Time Slab");
 		provider.addBlock(TIME_ASPECT_FENCE, "Time Fence");
@@ -246,11 +257,12 @@ public final class AspectTreeBlocksData
 		
 		provider.addBlock(VOID_ASPECT_LOG, "Void Log");
 		provider.addBlock(VOID_ASPECT_WOOD, "Void Wood");
-		provider.addBlock(VOID_ASPECT_STRIPPED_LOG, "Void Stripped Log");
-		provider.addBlock(VOID_ASPECT_STRIPPED_WOOD, "Void Stripped Wood");
+		provider.addBlock(VOID_ASPECT_STRIPPED_LOG, "Stripped Void Log");
+		provider.addBlock(VOID_ASPECT_STRIPPED_WOOD, "Stripped Void Wood");
 		provider.addBlock(VOID_ASPECT_LEAVES, "Void Leaves");
 		provider.addBlock(VOID_ASPECT_SAPLING, "Void Sapling");
 		provider.addBlock(VOID_ASPECT_PLANKS, "Void Planks");
+		provider.addBlock(VOID_ASPECT_CARVED_PLANKS, "Carved Void Planks");
 		provider.addBlock(VOID_ASPECT_STAIRS, "Void Stairs");
 		provider.addBlock(VOID_ASPECT_SLAB, "Void Slab");
 		provider.addBlock(VOID_ASPECT_FENCE, "Void Fence");
@@ -289,6 +301,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(BLOOD_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(BLOOD_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(BLOOD_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(BLOOD_ASPECT_STAIRS, BLOOD_ASPECT_PLANKS);
 		provider.slabWithItem(BLOOD_ASPECT_SLAB, BLOOD_ASPECT_PLANKS);
 		provider.fenceWithItem(BLOOD_ASPECT_FENCE, BLOOD_ASPECT_PLANKS);
@@ -330,6 +343,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(BREATH_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(BREATH_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(BREATH_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(BREATH_ASPECT_STAIRS, BREATH_ASPECT_PLANKS);
 		provider.slabWithItem(BREATH_ASPECT_SLAB, BREATH_ASPECT_PLANKS);
 		provider.fenceWithItem(BREATH_ASPECT_FENCE, BREATH_ASPECT_PLANKS);
@@ -372,6 +386,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(DOOM_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(DOOM_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(DOOM_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(DOOM_ASPECT_STAIRS, DOOM_ASPECT_PLANKS);
 		provider.slabWithItem(DOOM_ASPECT_SLAB, DOOM_ASPECT_PLANKS);
 		provider.fenceWithItem(DOOM_ASPECT_FENCE, DOOM_ASPECT_PLANKS);
@@ -414,6 +429,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(HEART_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(HEART_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(HEART_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(HEART_ASPECT_STAIRS, HEART_ASPECT_PLANKS);
 		provider.slabWithItem(HEART_ASPECT_SLAB, HEART_ASPECT_PLANKS);
 		provider.fenceWithItem(HEART_ASPECT_FENCE, HEART_ASPECT_PLANKS);
@@ -456,6 +472,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(HOPE_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(HOPE_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(HOPE_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(HOPE_ASPECT_STAIRS, HOPE_ASPECT_PLANKS);
 		provider.slabWithItem(HOPE_ASPECT_SLAB, HOPE_ASPECT_PLANKS);
 		provider.fenceWithItem(HOPE_ASPECT_FENCE, HOPE_ASPECT_PLANKS);
@@ -498,6 +515,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(LIFE_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(LIFE_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(LIFE_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(LIFE_ASPECT_STAIRS, LIFE_ASPECT_PLANKS);
 		provider.slabWithItem(LIFE_ASPECT_SLAB, LIFE_ASPECT_PLANKS);
 		provider.fenceWithItem(LIFE_ASPECT_FENCE, LIFE_ASPECT_PLANKS);
@@ -540,6 +558,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(LIGHT_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(LIGHT_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(LIGHT_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(LIGHT_ASPECT_STAIRS, LIGHT_ASPECT_PLANKS);
 		provider.slabWithItem(LIGHT_ASPECT_SLAB, LIGHT_ASPECT_PLANKS);
 		provider.fenceWithItem(LIGHT_ASPECT_FENCE, LIGHT_ASPECT_PLANKS);
@@ -582,6 +601,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(MIND_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(MIND_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(MIND_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(MIND_ASPECT_STAIRS, MIND_ASPECT_PLANKS);
 		provider.slabWithItem(MIND_ASPECT_SLAB, MIND_ASPECT_PLANKS);
 		provider.fenceWithItem(MIND_ASPECT_FENCE, MIND_ASPECT_PLANKS);
@@ -624,6 +644,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(RAGE_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(RAGE_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(RAGE_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(RAGE_ASPECT_STAIRS, RAGE_ASPECT_PLANKS);
 		provider.slabWithItem(RAGE_ASPECT_SLAB, RAGE_ASPECT_PLANKS);
 		provider.fenceWithItem(RAGE_ASPECT_FENCE, RAGE_ASPECT_PLANKS);
@@ -666,6 +687,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(SPACE_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(SPACE_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(SPACE_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(SPACE_ASPECT_STAIRS, SPACE_ASPECT_PLANKS);
 		provider.slabWithItem(SPACE_ASPECT_SLAB, SPACE_ASPECT_PLANKS);
 		provider.fenceWithItem(SPACE_ASPECT_FENCE, SPACE_ASPECT_PLANKS);
@@ -708,6 +730,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(TIME_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(TIME_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(TIME_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(TIME_ASPECT_STAIRS, TIME_ASPECT_PLANKS);
 		provider.slabWithItem(TIME_ASPECT_SLAB, TIME_ASPECT_PLANKS);
 		provider.fenceWithItem(TIME_ASPECT_FENCE, TIME_ASPECT_PLANKS);
@@ -749,6 +772,7 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(VOID_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
 		provider.simpleBlockWithItem(VOID_ASPECT_PLANKS);
+		provider.simpleBlockWithItem(VOID_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(VOID_ASPECT_STAIRS, VOID_ASPECT_PLANKS);
 		provider.slabWithItem(VOID_ASPECT_SLAB, VOID_ASPECT_PLANKS);
 		provider.fenceWithItem(VOID_ASPECT_FENCE, VOID_ASPECT_PLANKS);
@@ -818,6 +842,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, BLOOD_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(BLOOD_ASPECT_SAPLING.get());
 		provider.dropSelf(BLOOD_ASPECT_PLANKS.get());
+		provider.dropSelf(BLOOD_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(BLOOD_ASPECT_STAIRS.get());
 		provider.add(BLOOD_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(BLOOD_ASPECT_FENCE.get());
@@ -845,6 +870,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, BREATH_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(BREATH_ASPECT_SAPLING.get());
 		provider.dropSelf(BREATH_ASPECT_PLANKS.get());
+		provider.dropSelf(BREATH_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(BREATH_ASPECT_STAIRS.get());
 		provider.add(BREATH_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(BREATH_ASPECT_FENCE.get());
@@ -872,6 +898,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, DOOM_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(DOOM_ASPECT_SAPLING.get());
 		provider.dropSelf(DOOM_ASPECT_PLANKS.get());
+		provider.dropSelf(DOOM_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(DOOM_ASPECT_STAIRS.get());
 		provider.add(DOOM_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(DOOM_ASPECT_FENCE.get());
@@ -899,6 +926,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, HEART_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(HEART_ASPECT_SAPLING.get());
 		provider.dropSelf(HEART_ASPECT_PLANKS.get());
+		provider.dropSelf(HEART_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(HEART_ASPECT_STAIRS.get());
 		provider.add(HEART_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(HEART_ASPECT_FENCE.get());
@@ -926,6 +954,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, HOPE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(HOPE_ASPECT_SAPLING.get());
 		provider.dropSelf(HOPE_ASPECT_PLANKS.get());
+		provider.dropSelf(HOPE_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(HOPE_ASPECT_STAIRS.get());
 		provider.add(HOPE_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(HOPE_ASPECT_FENCE.get());
@@ -953,6 +982,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, LIFE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(LIFE_ASPECT_SAPLING.get());
 		provider.dropSelf(LIFE_ASPECT_PLANKS.get());
+		provider.dropSelf(LIFE_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(LIFE_ASPECT_STAIRS.get());
 		provider.add(LIFE_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(LIFE_ASPECT_FENCE.get());
@@ -980,6 +1010,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, LIGHT_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(LIGHT_ASPECT_SAPLING.get());
 		provider.dropSelf(LIGHT_ASPECT_PLANKS.get());
+		provider.dropSelf(LIGHT_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(LIGHT_ASPECT_STAIRS.get());
 		provider.add(LIGHT_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(LIGHT_ASPECT_FENCE.get());
@@ -1007,6 +1038,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, MIND_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(MIND_ASPECT_SAPLING.get());
 		provider.dropSelf(MIND_ASPECT_PLANKS.get());
+		provider.dropSelf(MIND_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(MIND_ASPECT_STAIRS.get());
 		provider.add(MIND_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(MIND_ASPECT_FENCE.get());
@@ -1034,6 +1066,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, RAGE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(RAGE_ASPECT_SAPLING.get());
 		provider.dropSelf(RAGE_ASPECT_PLANKS.get());
+		provider.dropSelf(RAGE_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(RAGE_ASPECT_STAIRS.get());
 		provider.add(RAGE_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(RAGE_ASPECT_FENCE.get());
@@ -1061,6 +1094,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, SPACE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(SPACE_ASPECT_SAPLING.get());
 		provider.dropSelf(SPACE_ASPECT_PLANKS.get());
+		provider.dropSelf(SPACE_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(SPACE_ASPECT_STAIRS.get());
 		provider.add(SPACE_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(SPACE_ASPECT_FENCE.get());
@@ -1088,6 +1122,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, TIME_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(TIME_ASPECT_SAPLING.get());
 		provider.dropSelf(TIME_ASPECT_PLANKS.get());
+		provider.dropSelf(TIME_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(TIME_ASPECT_STAIRS.get());
 		provider.add(TIME_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(TIME_ASPECT_FENCE.get());
@@ -1115,6 +1150,7 @@ public final class AspectTreeBlocksData
 				provider.createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(VOID_ASPECT_SAPLING.get());
 		provider.dropSelf(VOID_ASPECT_PLANKS.get());
+		provider.dropSelf(VOID_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(VOID_ASPECT_STAIRS.get());
 		provider.add(VOID_ASPECT_SLAB.get(), provider::createSlabItemTable);
 		provider.dropSelf(VOID_ASPECT_FENCE.get());

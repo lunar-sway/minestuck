@@ -1,8 +1,6 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.AspectTreeBlocks;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -25,39 +23,6 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	protected void registerModels()
 	{
 		AspectTreeBlocksData.addItemModels(this);
-		//Signs
-		simpleItem(MSItems.CARVED_SIGN);
-		simpleItem(MSItems.CARVED_HANGING_SIGN);
-		
-		simpleItem(MSItems.DEAD_SIGN);
-		simpleItem(MSItems.DEAD_HANGING_SIGN);
-		
-		simpleItem(MSItems.END_SIGN);
-		simpleItem(MSItems.END_HANGING_SIGN);
-		
-		simpleItem(MSItems.FROST_SIGN);
-		simpleItem(MSItems.FROST_HANGING_SIGN);
-		
-		simpleItem(MSItems.GLOWING_SIGN);
-		simpleItem(MSItems.GLOWING_HANGING_SIGN);
-		
-		simpleItem(MSItems.RAINBOW_SIGN);
-		simpleItem(MSItems.RAINBOW_HANGING_SIGN);
-		
-		simpleItem(MSItems.SHADEWOOD_SIGN);
-		simpleItem(MSItems.SHADEWOOD_HANGING_SIGN);
-		
-		simpleItem(MSItems.TREATED_SIGN);
-		simpleItem(MSItems.TREATED_HANGING_SIGN);
-		
-		simpleItem(MSItems.LACQUERED_SIGN);
-		simpleItem(MSItems.LACQUERED_HANGING_SIGN);
-		
-		simpleItem(MSItems.PERFECTLY_GENERIC_SIGN);
-		simpleItem(MSItems.PERFECTLY_GENERIC_HANGING_SIGN);
-		
-		simpleItem(MSItems.CINDERED_SIGN);
-		simpleItem(MSItems.CINDERED_HANGING_SIGN);
 		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);
@@ -547,6 +512,30 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.GUTTER_THUMB_DRIVE);
 		simpleItem(MSItems.ANCIENT_THUMB_DRIVE);
 		simpleItem(MSItems.GUTTER_BALL);
+		
+		//Signs
+		simpleItem(MSItems.CARVED_SIGN);
+		simpleItem(MSItems.CARVED_HANGING_SIGN);
+		simpleItem(MSItems.DEAD_SIGN);
+		simpleItem(MSItems.DEAD_HANGING_SIGN);
+		simpleItem(MSItems.END_SIGN);
+		simpleItem(MSItems.END_HANGING_SIGN);
+		simpleItem(MSItems.FROST_SIGN);
+		simpleItem(MSItems.FROST_HANGING_SIGN);
+		simpleItem(MSItems.GLOWING_SIGN);
+		simpleItem(MSItems.GLOWING_HANGING_SIGN);
+		simpleItem(MSItems.RAINBOW_SIGN);
+		simpleItem(MSItems.RAINBOW_HANGING_SIGN);
+		simpleItem(MSItems.SHADEWOOD_SIGN);
+		simpleItem(MSItems.SHADEWOOD_HANGING_SIGN);
+		simpleItem(MSItems.TREATED_SIGN);
+		simpleItem(MSItems.TREATED_HANGING_SIGN);
+		simpleItem(MSItems.LACQUERED_SIGN);
+		simpleItem(MSItems.LACQUERED_HANGING_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_HANGING_SIGN);
+		simpleItem(MSItems.CINDERED_SIGN);
+		simpleItem(MSItems.CINDERED_HANGING_SIGN);
 		
 		//Buckets
 		simpleItem(MSItems.OIL_BUCKET);

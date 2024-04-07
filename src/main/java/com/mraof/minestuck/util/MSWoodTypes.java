@@ -1,8 +1,6 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.api.MSBlockSetType;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
 public class MSWoodTypes

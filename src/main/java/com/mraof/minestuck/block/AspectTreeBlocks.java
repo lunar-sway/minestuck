@@ -54,6 +54,10 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_PLANKS);
 	
+	public static final RegistryObject<Block> BLOOD_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("blood_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> BLOOD_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_CARVED_PLANKS);
+	
 	public static final RegistryObject<StairBlock> BLOOD_ASPECT_STAIRS = MSBlocks.REGISTER.register("blood_aspect_stairs",
 			() -> new StairBlock(() -> BLOOD_ASPECT_PLANKS.get().defaultBlockState(), copy(BLOOD_ASPECT_PLANKS.get())));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_STAIRS);
@@ -140,6 +144,10 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_PLANKS);
 	
+	public static final RegistryObject<Block> BREATH_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("breath_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> BREATH_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_CARVED_PLANKS);
+	
 	public static final RegistryObject<StairBlock> BREATH_ASPECT_STAIRS = MSBlocks.REGISTER.register("breath_aspect_stairs",
 			() -> new StairBlock(() -> BREATH_ASPECT_PLANKS.get().defaultBlockState(), copy(BREATH_ASPECT_PLANKS.get())));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_STAIRS);
@@ -225,6 +233,10 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> DOOM_ASPECT_PLANKS = MSBlocks.REGISTER.register("doom_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_PLANKS);
+	
+	public static final RegistryObject<Block> DOOM_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("doom_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> DOOM_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_CARVED_PLANKS);
 	
 	public static final RegistryObject<StairBlock> DOOM_ASPECT_STAIRS = MSBlocks.REGISTER.register("doom_aspect_stairs",
 			() -> new StairBlock(() -> DOOM_ASPECT_PLANKS.get().defaultBlockState(), copy(DOOM_ASPECT_PLANKS.get())));
@@ -313,6 +325,10 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_PLANKS);
 	
+	public static final RegistryObject<Block> HEART_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("heart_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> HEART_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_CARVED_PLANKS);
+	
 	public static final RegistryObject<StairBlock> HEART_ASPECT_STAIRS = MSBlocks.REGISTER.register("heart_aspect_stairs",
 			() -> new StairBlock(() -> HEART_ASPECT_PLANKS.get().defaultBlockState(), copy(HEART_ASPECT_PLANKS.get())));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_STAIRS);
@@ -398,6 +414,10 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> HOPE_ASPECT_PLANKS = MSBlocks.REGISTER.register("hope_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_PLANKS);
+	
+	public static final RegistryObject<Block> HOPE_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("hope_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> HOPE_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_CARVED_PLANKS);
 	
 	public static final RegistryObject<StairBlock> HOPE_ASPECT_STAIRS = MSBlocks.REGISTER.register("hope_aspect_stairs",
 			() -> new StairBlock(() -> HOPE_ASPECT_PLANKS.get().defaultBlockState(), copy(HOPE_ASPECT_PLANKS.get())));
@@ -486,6 +506,10 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_PLANKS);
 	
+	public static final RegistryObject<Block> LIFE_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("life_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> LIFE_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_CARVED_PLANKS);
+	
 	public static final RegistryObject<StairBlock> LIFE_ASPECT_STAIRS = MSBlocks.REGISTER.register("life_aspect_stairs",
 			() -> new StairBlock(() -> LIFE_ASPECT_PLANKS.get().defaultBlockState(), copy(LIFE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_STAIRS);
@@ -571,6 +595,10 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> LIGHT_ASPECT_PLANKS = MSBlocks.REGISTER.register("light_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_PLANKS);
+	
+	public static final RegistryObject<Block> LIGHT_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("light_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> LIGHT_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_CARVED_PLANKS);
 	
 	public static final RegistryObject<StairBlock> LIGHT_ASPECT_STAIRS = MSBlocks.REGISTER.register("light_aspect_stairs",
 			() -> new StairBlock(() -> LIGHT_ASPECT_PLANKS.get().defaultBlockState(), copy(LIGHT_ASPECT_PLANKS.get())));
@@ -659,6 +687,10 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_PLANKS);
 	
+		public static final RegistryObject<Block> MIND_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("mind_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> MIND_ASPECT_PLANKS_CARVED_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_CARVED_PLANKS);
+	
 	public static final RegistryObject<StairBlock> MIND_ASPECT_STAIRS = MSBlocks.REGISTER.register("mind_aspect_stairs",
 			() -> new StairBlock(() -> MIND_ASPECT_PLANKS.get().defaultBlockState(), copy(MIND_ASPECT_PLANKS.get())));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_STAIRS);
@@ -744,6 +776,10 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> RAGE_ASPECT_PLANKS = MSBlocks.REGISTER.register("rage_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_PLANKS);
+	
+	public static final RegistryObject<Block> RAGE_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("rage_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> RAGE_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_CARVED_PLANKS);
 	
 	public static final RegistryObject<StairBlock> RAGE_ASPECT_STAIRS = MSBlocks.REGISTER.register("rage_aspect_stairs",
 			() -> new StairBlock(() -> RAGE_ASPECT_PLANKS.get().defaultBlockState(), copy(RAGE_ASPECT_PLANKS.get())));
@@ -831,6 +867,10 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_PLANKS);
 	
+	public static final RegistryObject<Block> SPACE_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("space_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> SPACE_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_CARVED_PLANKS);
+	
 	public static final RegistryObject<StairBlock> SPACE_ASPECT_STAIRS = MSBlocks.REGISTER.register("space_aspect_stairs",
 			() -> new StairBlock(() -> SPACE_ASPECT_PLANKS.get().defaultBlockState(), copy(SPACE_ASPECT_PLANKS.get())));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_STAIRS);
@@ -917,6 +957,10 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_PLANKS);
 	
+	public static final RegistryObject<Block> TIME_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("time_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> TIME_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_CARVED_PLANKS);
+	
 	public static final RegistryObject<StairBlock> TIME_ASPECT_STAIRS = MSBlocks.REGISTER.register("time_aspect_stairs",
 			() -> new StairBlock(() -> TIME_ASPECT_PLANKS.get().defaultBlockState(), copy(TIME_ASPECT_PLANKS.get())));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_STAIRS);
@@ -1002,6 +1046,10 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> VOID_ASPECT_PLANKS = MSBlocks.REGISTER.register("void_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_PLANKS);
+	
+	public static final RegistryObject<Block> VOID_ASPECT_CARVED_PLANKS = MSBlocks.REGISTER.register("void_aspect_carved_planks",
+			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<BlockItem> VOID_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_CARVED_PLANKS);
 	
 	public static final RegistryObject<StairBlock> VOID_ASPECT_STAIRS = MSBlocks.REGISTER.register("void_aspect_stairs",
 			() -> new StairBlock(() -> VOID_ASPECT_PLANKS.get().defaultBlockState(), copy(VOID_ASPECT_PLANKS.get())));
