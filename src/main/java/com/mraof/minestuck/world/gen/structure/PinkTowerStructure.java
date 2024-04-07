@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.TemplatePlacement;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -12,8 +13,11 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class PinkTowerStructure extends Structure
 {
 	public static final Codec<PinkTowerStructure> CODEC = simpleCodec(PinkTowerStructure::new);
@@ -44,10 +48,8 @@ public class PinkTowerStructure extends Structure
 		int x = context.chunkPos().getBlockX(random.nextInt(16)), z = context.chunkPos().getBlockZ(random.nextInt(16));
 		var placement = TemplatePlacement.centeredWithRandomRotation(templateManager.getOrCreate(templateId), new BlockPos(x, 0, z), random);
 		
-		int minY = placement.xzCorners()
-				.mapToInt(corner -> context.chunkGenerator().getBaseHeight(corner.getX(), corner.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState()))
-				.min().orElseThrow();
+		int y = context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 		
-		builder.addPiece(new PinkTowerPiece(templateManager, templateId, placement.zeroPos().atY(minY), placement.rotation()));
+		builder.addPiece(new PinkTowerPiece(templateManager, templateId, placement.zeroPos().atY(y - 3), placement.rotation()));
 	}
 }
