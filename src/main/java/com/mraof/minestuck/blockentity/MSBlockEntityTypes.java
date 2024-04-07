@@ -1,10 +1,13 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.*;
+import com.mraof.minestuck.entity.MSHangingSignBlockEntity;
+import com.mraof.minestuck.entity.MSSignBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -53,4 +56,60 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<RedstoneClockBlockEntity>> REDSTONE_CLOCK = REGISTER.register("redstone_clock", () -> BlockEntityType.Builder.of(RedstoneClockBlockEntity::new, MSBlocks.REDSTONE_CLOCK.get()).build(null));
 	public static final RegistryObject<BlockEntityType<RemoteComparatorBlockEntity>> REMOTE_COMPARATOR = REGISTER.register("remote_comparator", () -> BlockEntityType.Builder.of(RemoteComparatorBlockEntity::new, MSBlocks.REMOTE_COMPARATOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<StructureCoreBlockEntity>> STRUCTURE_CORE = REGISTER.register("structure_core", () -> BlockEntityType.Builder.of(StructureCoreBlockEntity::new, MSBlocks.STRUCTURE_CORE.get()).build(null));
+	
+	public static final RegistryObject<BlockEntityType<MSSignBlockEntity>> MOD_SIGN =
+			REGISTER.register("mod_sign", () ->
+					BlockEntityType.Builder.of(MSSignBlockEntity::new,
+									MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get(),
+									MSBlocks.CARVED_SIGN.get(), MSBlocks.CARVED_WALL_SIGN.get(),
+									MSBlocks.DEAD_SIGN.get(), MSBlocks.DEAD_WALL_SIGN.get(),
+									MSBlocks.END_SIGN.get(), MSBlocks.END_WALL_SIGN.get(),
+									MSBlocks.FROST_SIGN.get(), MSBlocks.FROST_WALL_SIGN.get(),
+									MSBlocks.GLOWING_SIGN.get(), MSBlocks.GLOWING_WALL_SIGN.get(),
+									MSBlocks.RAINBOW_SIGN.get(), MSBlocks.RAINBOW_WALL_SIGN.get(),
+									MSBlocks.SHADEWOOD_SIGN.get(), MSBlocks.SHADEWOOD_WALL_SIGN.get(),
+									MSBlocks.TREATED_SIGN.get(), MSBlocks.TREATED_WALL_SIGN.get(),
+									MSBlocks.LACQUERED_SIGN.get(), MSBlocks.LACQUERED_WALL_SIGN.get(),
+									MSBlocks.CINDERED_SIGN.get(), MSBlocks.CINDERED_WALL_SIGN.get(),
+									AspectTreeBlocks.BLOOD_ASPECT_SIGN.get(), AspectTreeBlocks.BLOOD_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.BREATH_ASPECT_SIGN.get(), AspectTreeBlocks.BREATH_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.DOOM_ASPECT_SIGN.get(), AspectTreeBlocks.DOOM_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.HEART_ASPECT_SIGN.get(), AspectTreeBlocks.HEART_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.HOPE_ASPECT_SIGN.get(), AspectTreeBlocks.HOPE_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.LIFE_ASPECT_SIGN.get(), AspectTreeBlocks.LIFE_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.LIGHT_ASPECT_SIGN.get(), AspectTreeBlocks.LIGHT_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.MIND_ASPECT_SIGN.get(), AspectTreeBlocks.MIND_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.RAGE_ASPECT_SIGN.get(), AspectTreeBlocks.RAGE_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.SPACE_ASPECT_SIGN.get(), AspectTreeBlocks.SPACE_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.TIME_ASPECT_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_SIGN.get(),
+									AspectTreeBlocks.VOID_ASPECT_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_SIGN.get())
+							.build(null));
+	
+	public static final RegistryObject<BlockEntityType<MSHangingSignBlockEntity>> MOD_HANGING_SIGN =
+			REGISTER.register("mod_hanging_sign", () ->
+					BlockEntityType.Builder.of(MSHangingSignBlockEntity::new,
+									MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(),
+									MSBlocks.CARVED_HANGING_SIGN.get(), MSBlocks.CARVED_WALL_HANGING_SIGN.get(),
+									MSBlocks.DEAD_HANGING_SIGN.get(), MSBlocks.DEAD_WALL_HANGING_SIGN.get(),
+									MSBlocks.END_HANGING_SIGN.get(), MSBlocks.END_WALL_HANGING_SIGN.get(),
+									MSBlocks.FROST_HANGING_SIGN.get(), MSBlocks.FROST_WALL_HANGING_SIGN.get(),
+									MSBlocks.GLOWING_HANGING_SIGN.get(), MSBlocks.GLOWING_WALL_HANGING_SIGN.get(),
+									MSBlocks.RAINBOW_HANGING_SIGN.get(), MSBlocks.RAINBOW_WALL_HANGING_SIGN.get(),
+									MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
+									MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(),
+									MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get(),
+									MSBlocks.CINDERED_HANGING_SIGN.get(), MSBlocks.CINDERED_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.BLOOD_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.BREATH_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.BREATH_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.DOOM_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.DOOM_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.HEART_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.HEART_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.HOPE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.HOPE_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.LIFE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.LIFE_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.LIGHT_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.LIGHT_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.MIND_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.MIND_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.RAGE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.RAGE_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.SPACE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.SPACE_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_HANGING_SIGN.get(),
+									AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_HANGING_SIGN.get())
+							.build(null));
 }
