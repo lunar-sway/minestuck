@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
 public class MSWoodTypes
@@ -29,5 +30,32 @@ public class MSWoodTypes
 	public static final WoodType SPACE = WoodType.register(new WoodType(Minestuck.MOD_ID + ":space_aspect", MSBlockSetType.SPACE));
 	public static final WoodType TIME = WoodType.register(new WoodType(Minestuck.MOD_ID + ":time_aspect", MSBlockSetType.TIME));
 	public static final WoodType VOID = WoodType.register(new WoodType(Minestuck.MOD_ID + ":void_aspect", MSBlockSetType.VOID));
+	
+	public static void init() {
+		
+		Sheets.addWoodType(MSWoodTypes.CARVED);
+		Sheets.addWoodType(MSWoodTypes.DEAD);
+		Sheets.addWoodType(MSWoodTypes.END);
+		Sheets.addWoodType(MSWoodTypes.FROST);
+		Sheets.addWoodType(MSWoodTypes.GLOWING);
+		Sheets.addWoodType(MSWoodTypes.RAINBOW);
+		Sheets.addWoodType(MSWoodTypes.SHADEWOOD);
+		Sheets.addWoodType(MSWoodTypes.TREATED);
+		Sheets.addWoodType(MSWoodTypes.LACQUERED);
+		
+		Sheets.addWoodType(MSWoodTypes.BLOOD);
+		Sheets.addWoodType(MSWoodTypes.BREATH);
+		Sheets.addWoodType(MSWoodTypes.DOOM);
+		Sheets.addWoodType(MSWoodTypes.HEART);
+		Sheets.addWoodType(MSWoodTypes.HOPE);
+		Sheets.addWoodType(MSWoodTypes.LIFE);
+		Sheets.addWoodType(MSWoodTypes.LIGHT);
+		Sheets.addWoodType(MSWoodTypes.MIND);
+		Sheets.addWoodType(MSWoodTypes.RAGE);
+		Sheets.addWoodType(MSWoodTypes.SPACE);
+		Sheets.addWoodType(MSWoodTypes.TIME);
+		Sheets.addWoodType(MSWoodTypes.VOID);
+		
+	}
 	
 }

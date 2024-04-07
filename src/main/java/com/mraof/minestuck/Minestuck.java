@@ -137,28 +137,7 @@ public class Minestuck
 		
 		ConsortDialogue.init();
 		
-		Sheets.addWoodType(MSWoodTypes.CARVED);
-		Sheets.addWoodType(MSWoodTypes.DEAD);
-		Sheets.addWoodType(MSWoodTypes.END);
-		Sheets.addWoodType(MSWoodTypes.FROST);
-		Sheets.addWoodType(MSWoodTypes.GLOWING);
-		Sheets.addWoodType(MSWoodTypes.RAINBOW);
-		Sheets.addWoodType(MSWoodTypes.SHADEWOOD);
-		Sheets.addWoodType(MSWoodTypes.TREATED);
-		Sheets.addWoodType(MSWoodTypes.LACQUERED);
-		
-		Sheets.addWoodType(MSWoodTypes.BLOOD);
-		Sheets.addWoodType(MSWoodTypes.BREATH);
-		Sheets.addWoodType(MSWoodTypes.DOOM);
-		Sheets.addWoodType(MSWoodTypes.HEART);
-		Sheets.addWoodType(MSWoodTypes.HOPE);
-		Sheets.addWoodType(MSWoodTypes.LIFE);
-		Sheets.addWoodType(MSWoodTypes.LIGHT);
-		Sheets.addWoodType(MSWoodTypes.MIND);
-		Sheets.addWoodType(MSWoodTypes.RAGE);
-		Sheets.addWoodType(MSWoodTypes.SPACE);
-		Sheets.addWoodType(MSWoodTypes.TIME);
-		Sheets.addWoodType(MSWoodTypes.VOID);
+		MSWoodTypes.init();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
