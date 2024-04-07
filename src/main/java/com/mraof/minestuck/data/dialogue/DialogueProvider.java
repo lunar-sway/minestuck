@@ -164,9 +164,9 @@ public final class DialogueProvider implements DataProvider
 			return this;
 		}
 		
-		public NodeBuilder animation(DialogueAnimationData.Emotion emotion)
+		public NodeBuilder animation(String emotion)
 		{
-			return animation(new DialogueAnimationData(emotion.getSerializedName(), DialogueAnimationData.DEFAULT_SPRITE_HEIGHT, DialogueAnimationData.DEFAULT_SPRITE_WIDTH, 0, 0, 1.0F));
+			return animation(new DialogueAnimationData(emotion, DialogueAnimationData.DEFAULT_SPRITE_HEIGHT, DialogueAnimationData.DEFAULT_SPRITE_WIDTH, 0, 0, 1.0F));
 		}
 		
 		public NodeBuilder animation(DialogueAnimationData animation)

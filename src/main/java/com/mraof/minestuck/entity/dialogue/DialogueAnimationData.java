@@ -16,13 +16,18 @@ import java.util.Locale;
 
 public record DialogueAnimationData(String emotion, int spriteHeight, int spriteWidth, int xOffset, int yOffset, float scale)
 {
+	public static final String GENERIC_EMOTION = "generic";
+	public static final String PLEASED_EMOTION = "pleased";
+	public static final String UPSET_EMOTION = "upset";
+	public static final String SCARED_EMOTION = "scared";
+	
 	public static final int DEFAULT_SPRITE_WIDTH = 128;
 	public static final int DEFAULT_SPRITE_HEIGHT = 128;
 	
-	public static final DialogueAnimationData DEFAULT_ANIMATION = new DialogueAnimationData(Emotion.GENERIC.getSerializedName(), DEFAULT_SPRITE_HEIGHT, DEFAULT_SPRITE_WIDTH, 0, 0, 1.0F);
+	public static final DialogueAnimationData DEFAULT_ANIMATION = new DialogueAnimationData(GENERIC_EMOTION, DEFAULT_SPRITE_HEIGHT, DEFAULT_SPRITE_WIDTH, 0, 0, 1.0F);
 	
 	public static Codec<DialogueAnimationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", Emotion.GENERIC.getSerializedName()).forGetter(DialogueAnimationData::emotion),
+			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", GENERIC_EMOTION).forGetter(DialogueAnimationData::emotion),
 			PreservingOptionalFieldCodec.withDefault(Codec.INT, "height", DEFAULT_SPRITE_HEIGHT).forGetter(DialogueAnimationData::spriteHeight),
 			PreservingOptionalFieldCodec.withDefault(Codec.INT, "width", DEFAULT_SPRITE_WIDTH).forGetter(DialogueAnimationData::spriteWidth),
 			PreservingOptionalFieldCodec.withDefault(Codec.INT, "x_offset", 0).forGetter(DialogueAnimationData::xOffset),
@@ -65,7 +70,7 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 		//if the sprite for the given emotion cannot be found, it will try to render the generic sprite instead. If the generic sprite cannot be found, the invalid texture is allowed to proceed
 		if(!(abstractTexture instanceof SimpleTexture))
 		{
-			ResourceLocation fallbackSpritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + Emotion.GENERIC.getSerializedName() + ".png");
+			ResourceLocation fallbackSpritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + GENERIC_EMOTION + ".png");
 			if(Minecraft.getInstance().getTextureManager().getTexture(fallbackSpritePath) instanceof SimpleTexture fallbackTexture)
 			{
 				ensureAnimatable(fallbackTexture, fallbackSpritePath);
@@ -86,24 +91,6 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 		{
 			AnimatableTexture animatableTexture = new AnimatableTexture(sprite);
 			Minecraft.getInstance().getTextureManager().register(sprite, animatableTexture);
-		}
-	}
-	
-	/**
-	 * List of supported/used emotion types. Custom emotions can still be declared through datapacks
-	 */
-	public enum Emotion implements StringRepresentable
-	{
-		GENERIC,
-		PLEASED,
-		UPSET,
-		SCARED,
-		ANXIOUS;
-		
-		@Override
-		public String getSerializedName()
-		{
-			return name().toLowerCase(Locale.ROOT);
 		}
 	}
 }

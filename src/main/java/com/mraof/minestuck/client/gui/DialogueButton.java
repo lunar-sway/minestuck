@@ -3,16 +3,16 @@ package com.mraof.minestuck.client.gui;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public class DialogueButton extends ExtendedButton
+public class DialogueButton extends Button
 {
 	public static final int TEXT_SPACING = 9;
 	public static final int NORMAL_DEFAULT_HEIGHT = 17;
@@ -25,7 +25,7 @@ public class DialogueButton extends ExtendedButton
 	
 	public DialogueButton(ResourceLocation gui, boolean isResponse, int xPos, int yPos, int width, int defaultHeight, Component displayString, OnPress handler)
 	{
-		super(xPos, yPos, width, defaultHeight, displayString, handler);
+		super(xPos, yPos, width, defaultHeight, displayString, handler, DEFAULT_NARRATION);
 		this.gui = gui;
 		this.isResponse = isResponse;
 		

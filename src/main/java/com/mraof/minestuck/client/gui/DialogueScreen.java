@@ -199,10 +199,8 @@ public class DialogueScreen extends Screen
 		int moddedHeight = (int) (animationData.spriteHeight() * scale);
 		
 		//if there is a .png.mcmeta file associated with the sprite, the animation for it is updated here
-		AnimatableTexture.setAndUpdate(sprite, animationTick);
+		AnimatableTexture.setAndUpdate(sprite, animationTick++);
 		guiGraphics.blit(sprite, xOffset + GUI_WIDTH + animationData.xOffset(), (this.height / 2) - (animationData.spriteHeight() / 2), 0, 0, moddedWidth, moddedHeight, moddedWidth, moddedHeight);
-		
-		animationTick++;
 	}
 	
 	@Override
