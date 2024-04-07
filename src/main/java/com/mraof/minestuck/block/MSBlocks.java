@@ -11,6 +11,7 @@ import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.util.MSBlockSetType;
 import com.mraof.minestuck.util.MSWoodTypes;
 import com.mraof.minestuck.world.gen.feature.tree.ShadewoodTree;
 import net.minecraft.core.BlockPos;
@@ -719,12 +720,12 @@ public final class MSBlocks
 	public static final RegistryObject<BushBlock> RAINBOW_SAPLING = REGISTER.register("rainbow_sapling", () -> new RainbowSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<Block> RAINBOW_BOOKSHELF = REGISTER.register("rainbow_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> RAINBOW_LADDER = REGISTER.register("rainbow_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<ButtonBlock> RAINBOW_BUTTON = REGISTER.register("rainbow_button", () -> new ButtonBlock(copy(RAINBOW_PLANKS.get()), BlockSetType.OAK, 10, true));
-	public static final RegistryObject<PressurePlateBlock> RAINBOW_PRESSURE_PLATE = REGISTER.register("rainbow_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(RAINBOW_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<ButtonBlock> RAINBOW_BUTTON = REGISTER.register("rainbow_button", () -> new ButtonBlock(copy(RAINBOW_PLANKS.get()), MSBlockSetType.RAINBOW, 10, true));
+	public static final RegistryObject<PressurePlateBlock> RAINBOW_PRESSURE_PLATE = REGISTER.register("rainbow_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(RAINBOW_PLANKS.get()), MSBlockSetType.RAINBOW));
 	public static final RegistryObject<FenceBlock> RAINBOW_FENCE = REGISTER.register("rainbow_fence", () -> new FenceBlock(copy(RAINBOW_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> RAINBOW_FENCE_GATE = REGISTER.register("rainbow_fence_gate", () -> new FenceGateBlock(copy(RAINBOW_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	public static final RegistryObject<DoorBlock> RAINBOW_DOOR = REGISTER.register("rainbow_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
-	public static final RegistryObject<TrapDoorBlock> RAINBOW_TRAPDOOR = REGISTER.register("rainbow_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> RAINBOW_DOOR = REGISTER.register("rainbow_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.RAINBOW));
+	public static final RegistryObject<TrapDoorBlock> RAINBOW_TRAPDOOR = REGISTER.register("rainbow_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.RAINBOW));
 	
 	//End
 	public static final RegistryObject<Block> END_LOG = REGISTER.register("end_log", () -> new DoubleLogBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
@@ -736,12 +737,12 @@ public final class MSBlocks
 	public static final RegistryObject<BushBlock> END_SAPLING = REGISTER.register("end_sapling", () -> new EndSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<Block> END_LADDER = REGISTER.register("end_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<Block> END_BOOKSHELF = REGISTER.register("end_bookshelf", () -> new FlammableBlock(1, 250, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<ButtonBlock> END_BUTTON = REGISTER.register("end_button", () -> new ButtonBlock(copy(END_PLANKS.get()), BlockSetType.OAK, 10, true));
-	public static final RegistryObject<PressurePlateBlock> END_PRESSURE_PLATE = REGISTER.register("end_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(END_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<ButtonBlock> END_BUTTON = REGISTER.register("end_button", () -> new ButtonBlock(copy(END_PLANKS.get()), MSBlockSetType.END, 10, true));
+	public static final RegistryObject<PressurePlateBlock> END_PRESSURE_PLATE = REGISTER.register("end_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(END_PLANKS.get()), MSBlockSetType.END));
 	public static final RegistryObject<FenceBlock> END_FENCE = REGISTER.register("end_fence", () -> new FenceBlock(copy(END_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> END_FENCE_GATE = REGISTER.register("end_fence_gate", () -> new FenceGateBlock(copy(END_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	public static final RegistryObject<DoorBlock> END_DOOR = REGISTER.register("end_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
-	public static final RegistryObject<TrapDoorBlock> END_TRAPDOOR = REGISTER.register("end_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> END_DOOR = REGISTER.register("end_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.END));
+	public static final RegistryObject<TrapDoorBlock> END_TRAPDOOR = REGISTER.register("end_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.END));
 	
 	//Vine
 	public static final RegistryObject<Block> VINE_LOG = REGISTER.register("vine_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
@@ -758,12 +759,12 @@ public final class MSBlocks
 	public static final RegistryObject<SlabBlock> DEAD_SLAB = REGISTER.register("dead_planks_slab", () -> new SlabBlock(copy(DEAD_PLANKS.get())));
 	public static final RegistryObject<Block> DEAD_BOOKSHELF = REGISTER.register("dead_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> DEAD_LADDER = REGISTER.register("dead_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<ButtonBlock> DEAD_BUTTON = REGISTER.register("dead_button", () -> new ButtonBlock(copy(DEAD_PLANKS.get()), BlockSetType.OAK, 10, true));
-	public static final RegistryObject<PressurePlateBlock> DEAD_PRESSURE_PLATE = REGISTER.register("dead_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(DEAD_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<ButtonBlock> DEAD_BUTTON = REGISTER.register("dead_button", () -> new ButtonBlock(copy(DEAD_PLANKS.get()), MSBlockSetType.DEAD, 10, true));
+	public static final RegistryObject<PressurePlateBlock> DEAD_PRESSURE_PLATE = REGISTER.register("dead_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(DEAD_PLANKS.get()), MSBlockSetType.DEAD));
 	public static final RegistryObject<FenceBlock> DEAD_FENCE = REGISTER.register("dead_fence", () -> new FenceBlock(copy(DEAD_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> DEAD_FENCE_GATE = REGISTER.register("dead_fence_gate", () -> new FenceGateBlock(copy(DEAD_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	public static final RegistryObject<DoorBlock> DEAD_DOOR = REGISTER.register("dead_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
-	public static final RegistryObject<TrapDoorBlock> DEAD_TRAPDOOR = REGISTER.register("dead_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> DEAD_DOOR = REGISTER.register("dead_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.DEAD));
+	public static final RegistryObject<TrapDoorBlock> DEAD_TRAPDOOR = REGISTER.register("dead_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.DEAD));
 	
 	//Petrified
 	public static final RegistryObject<Block> PETRIFIED_LOG = REGISTER.register("petrified_log", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STONE)));
@@ -775,12 +776,12 @@ public final class MSBlocks
 	public static final RegistryObject<Block> CINDERED_PLANKS = REGISTER.register("cindered_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.GUITAR).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> CINDERED_STAIRS = REGISTER.register("cindered_stairs", () -> new StairBlock(() -> MSBlocks.CINDERED_PLANKS.get().defaultBlockState(), copy(CINDERED_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> CINDERED_SLAB = REGISTER.register("cindered_slab", () -> new SlabBlock(copy(CINDERED_PLANKS.get())));
-	public static final RegistryObject<ButtonBlock> CINDERED_BUTTON = REGISTER.register("cindered_button", () -> new ButtonBlock(copy(CINDERED_PLANKS.get()), BlockSetType.OAK, 10, true));
-	public static final RegistryObject<PressurePlateBlock> CINDERED_PRESSURE_PLATE = REGISTER.register("cindered_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CINDERED_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<ButtonBlock> CINDERED_BUTTON = REGISTER.register("cindered_button", () -> new ButtonBlock(copy(CINDERED_PLANKS.get()), MSBlockSetType.CINDERED, 10, true));
+	public static final RegistryObject<PressurePlateBlock> CINDERED_PRESSURE_PLATE = REGISTER.register("cindered_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(CINDERED_PLANKS.get()), MSBlockSetType.CINDERED));
 	public static final RegistryObject<FenceBlock> CINDERED_FENCE = REGISTER.register("cindered_fence", () -> new FenceBlock(copy(CINDERED_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> CINDERED_FENCE_GATE = REGISTER.register("cindered_fence_gate", () -> new FenceGateBlock(copy(CINDERED_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	public static final RegistryObject<DoorBlock> CINDERED_DOOR = REGISTER.register("cindered_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
-	public static final RegistryObject<TrapDoorBlock> CINDERED_TRAPDOOR = REGISTER.register("cindered_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> CINDERED_DOOR = REGISTER.register("cindered_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.CINDERED));
+	public static final RegistryObject<TrapDoorBlock> CINDERED_TRAPDOOR = REGISTER.register("cindered_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.CINDERED));
 	
 	
 	//Shadewood
@@ -789,12 +790,12 @@ public final class MSBlocks
 	public static final RegistryObject<Block> SHADEWOOD_PLANKS = REGISTER.register("shadewood_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> SHADEWOOD_STAIRS = REGISTER.register("shadewood_stairs", () -> new StairBlock(() -> MSBlocks.SHADEWOOD_PLANKS.get().defaultBlockState(), copy(SHADEWOOD_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> SHADEWOOD_SLAB = REGISTER.register("shadewood_slab", () -> new SlabBlock(copy(SHADEWOOD_PLANKS.get())));
-	public static final RegistryObject<ButtonBlock> SHADEWOOD_BUTTON = REGISTER.register("shadewood_button", () -> new ButtonBlock(copy(SHADEWOOD_PLANKS.get()), BlockSetType.OAK, 10, true));
-	public static final RegistryObject<PressurePlateBlock> SHADEWOOD_PRESSURE_PLATE = REGISTER.register("shadewood_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(SHADEWOOD_PLANKS.get()), BlockSetType.OAK));
+	public static final RegistryObject<ButtonBlock> SHADEWOOD_BUTTON = REGISTER.register("shadewood_button", () -> new ButtonBlock(copy(SHADEWOOD_PLANKS.get()), MSBlockSetType.SHADEWOOD, 10, true));
+	public static final RegistryObject<PressurePlateBlock> SHADEWOOD_PRESSURE_PLATE = REGISTER.register("shadewood_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(SHADEWOOD_PLANKS.get()), MSBlockSetType.SHADEWOOD));
 	public static final RegistryObject<FenceBlock> SHADEWOOD_FENCE = REGISTER.register("shadewood_fence", () -> new FenceBlock(copy(SHADEWOOD_PLANKS.get())));
 	public static final RegistryObject<FenceGateBlock> SHADEWOOD_FENCE_GATE = REGISTER.register("shadewood_fence_gate", () -> new FenceGateBlock(copy(SHADEWOOD_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
-	public static final RegistryObject<DoorBlock> SHADEWOOD_DOOR = REGISTER.register("shadewood_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
-	public static final RegistryObject<TrapDoorBlock> SHADEWOOD_TRAPDOOR = REGISTER.register("shadewood_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<DoorBlock> SHADEWOOD_DOOR = REGISTER.register("shadewood_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.SHADEWOOD));
+	public static final RegistryObject<TrapDoorBlock> SHADEWOOD_TRAPDOOR = REGISTER.register("shadewood_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.SHADEWOOD));
 	
 	public static final RegistryObject<Block> SHADEWOOD_LEAVES = REGISTER.register("shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> SHROOMY_SHADEWOOD_LEAVES = REGISTER.register("shroomy_shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().lightLevel(state -> 11).sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));

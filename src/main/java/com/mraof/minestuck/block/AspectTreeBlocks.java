@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.plant.FlammableLeavesBlock;
 import com.mraof.minestuck.block.plant.FlammableLogBlock;
 import com.mraof.minestuck.block.plant.StrippableFlammableLogBlock;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.MSBlockSetType;
 import com.mraof.minestuck.util.MSWoodTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.*;
@@ -75,19 +76,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> BLOOD_ASPECT_DOOR = MSBlocks.REGISTER.register("blood_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.BLOOD));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> BLOOD_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("blood_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR),MSBlockSetType.BLOOD));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> BLOOD_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("blood_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BLOOD_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BLOOD_ASPECT_PLANKS.get()), MSBlockSetType.BLOOD));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> BLOOD_ASPECT_BUTTON = MSBlocks.REGISTER.register("blood_aspect_button",
-			() -> new ButtonBlock(copy(BLOOD_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(BLOOD_ASPECT_PLANKS.get()), MSBlockSetType.BLOOD, 10, true));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> BLOOD_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("blood_aspect_bookshelf",
@@ -165,19 +166,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> BREATH_ASPECT_DOOR = MSBlocks.REGISTER.register("breath_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.BREATH));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> BREATH_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("breath_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.BREATH));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> BREATH_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("breath_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BREATH_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(BREATH_ASPECT_PLANKS.get()), MSBlockSetType.BREATH));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> BREATH_ASPECT_BUTTON = MSBlocks.REGISTER.register("breath_aspect_button",
-			() -> new ButtonBlock(copy(BREATH_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(BREATH_ASPECT_PLANKS.get()), MSBlockSetType.BREATH, 10, true));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> BREATH_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("breath_aspect_bookshelf",
@@ -255,19 +256,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> DOOM_ASPECT_DOOR = MSBlocks.REGISTER.register("doom_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.DOOM));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> DOOM_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("doom_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.DOOM));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> DOOM_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("doom_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(DOOM_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(DOOM_ASPECT_PLANKS.get()), MSBlockSetType.DOOM));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> DOOM_ASPECT_BUTTON = MSBlocks.REGISTER.register("doom_aspect_button",
-			() -> new ButtonBlock(copy(DOOM_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(DOOM_ASPECT_PLANKS.get()), MSBlockSetType.DOOM, 10, true));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> DOOM_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("doom_aspect_bookshelf",
@@ -346,19 +347,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> HEART_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> HEART_ASPECT_DOOR = MSBlocks.REGISTER.register("heart_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.HEART));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> HEART_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("heart_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.HEART));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> HEART_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("heart_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(HEART_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(HEART_ASPECT_PLANKS.get()), MSBlockSetType.HEART));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> HEART_ASPECT_BUTTON = MSBlocks.REGISTER.register("heart_aspect_button",
-			() -> new ButtonBlock(copy(HEART_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(HEART_ASPECT_PLANKS.get()), MSBlockSetType.HEART, 10, true));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> HEART_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("heart_aspect_bookshelf",
@@ -436,19 +437,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> HOPE_ASPECT_DOOR = MSBlocks.REGISTER.register("hope_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.HOPE));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> HOPE_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("hope_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.HOPE));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> HOPE_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("hope_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(HOPE_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(HOPE_ASPECT_PLANKS.get()), MSBlockSetType.HOPE));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> HOPE_ASPECT_BUTTON = MSBlocks.REGISTER.register("hope_aspect_button",
-			() -> new ButtonBlock(copy(HOPE_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(HOPE_ASPECT_PLANKS.get()), MSBlockSetType.HOPE, 10, true));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> HOPE_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("hope_aspect_bookshelf",
@@ -527,19 +528,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> LIFE_ASPECT_DOOR = MSBlocks.REGISTER.register("life_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.LIFE));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> LIFE_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("life_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.LIFE));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> LIFE_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("life_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(LIFE_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(LIFE_ASPECT_PLANKS.get()), MSBlockSetType.LIFE));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> LIFE_ASPECT_BUTTON = MSBlocks.REGISTER.register("life_aspect_button",
-			() -> new ButtonBlock(copy(LIFE_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(LIFE_ASPECT_PLANKS.get()), MSBlockSetType.LIFE, 10, true));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> LIFE_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("life_aspect_bookshelf",
@@ -617,19 +618,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> LIGHT_ASPECT_DOOR = MSBlocks.REGISTER.register("light_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.LIGHT));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> LIGHT_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("light_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.LIGHT));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> LIGHT_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("light_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(LIGHT_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(LIGHT_ASPECT_PLANKS.get()), MSBlockSetType.LIGHT));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> LIGHT_ASPECT_BUTTON = MSBlocks.REGISTER.register("light_aspect_button",
-			() -> new ButtonBlock(copy(LIGHT_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(LIGHT_ASPECT_PLANKS.get()), MSBlockSetType.LIGHT, 10, true));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> LIGHT_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("light_aspect_bookshelf",
@@ -708,19 +709,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> MIND_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> MIND_ASPECT_DOOR = MSBlocks.REGISTER.register("mind_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.MIND));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> MIND_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("mind_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.MIND));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> MIND_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("mind_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(MIND_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(MIND_ASPECT_PLANKS.get()), MSBlockSetType.MIND));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> MIND_ASPECT_BUTTON = MSBlocks.REGISTER.register("mind_aspect_button",
-			() -> new ButtonBlock(copy(MIND_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(MIND_ASPECT_PLANKS.get()), MSBlockSetType.MIND, 10, true));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> MIND_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("mind_aspect_bookshelf",
@@ -798,19 +799,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> RAGE_ASPECT_DOOR = MSBlocks.REGISTER.register("rage_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.RAGE));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> RAGE_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("rage_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.RAGE));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> RAGE_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("rage_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(RAGE_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(RAGE_ASPECT_PLANKS.get()), MSBlockSetType.RAGE));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> RAGE_ASPECT_BUTTON = MSBlocks.REGISTER.register("rage_aspect_button",
-			() -> new ButtonBlock(copy(RAGE_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(RAGE_ASPECT_PLANKS.get()), MSBlockSetType.RAGE, 10, true));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> RAGE_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("rage_aspect_bookshelf",
@@ -888,19 +889,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> SPACE_ASPECT_DOOR = MSBlocks.REGISTER.register("space_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.SPACE));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> SPACE_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("space_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.SPACE));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> SPACE_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("space_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(SPACE_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(SPACE_ASPECT_PLANKS.get()), MSBlockSetType.SPACE));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> SPACE_ASPECT_BUTTON = MSBlocks.REGISTER.register("space_aspect_button",
-			() -> new ButtonBlock(copy(SPACE_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(SPACE_ASPECT_PLANKS.get()), MSBlockSetType.SPACE, 10, true));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> SPACE_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("space_aspect_bookshelf",
@@ -978,19 +979,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> TIME_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> TIME_ASPECT_DOOR = MSBlocks.REGISTER.register("time_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.TIME));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> TIME_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("time_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.TIME));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> TIME_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("time_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(TIME_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(TIME_ASPECT_PLANKS.get()), MSBlockSetType.TIME));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> TIME_ASPECT_BUTTON = MSBlocks.REGISTER.register("time_aspect_button",
-			() -> new ButtonBlock(copy(TIME_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(TIME_ASPECT_PLANKS.get()), MSBlockSetType.TIME, 10, true));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> TIME_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("time_aspect_bookshelf",
@@ -1068,19 +1069,19 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> VOID_ASPECT_FENCE_GATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_FENCE_GATE);
 	
 	public static final RegistryObject<DoorBlock> VOID_ASPECT_DOOR = MSBlocks.REGISTER.register("void_aspect_door",
-			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.VOID));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_DOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_DOOR);
 	
 	public static final RegistryObject<TrapDoorBlock> VOID_ASPECT_TRAPDOOR = MSBlocks.REGISTER.register("void_aspect_trapdoor",
-			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+			() -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.VOID));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_TRAPDOOR_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_TRAPDOOR);
 	
 	public static final RegistryObject<PressurePlateBlock> VOID_ASPECT_PRESSURE_PLATE = MSBlocks.REGISTER.register("void_aspect_pressure_plate",
-			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(VOID_ASPECT_PLANKS.get()), BlockSetType.OAK));
+			() -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(VOID_ASPECT_PLANKS.get()), MSBlockSetType.VOID));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_PRESSURE_PLATE);
 	
 	public static final RegistryObject<ButtonBlock> VOID_ASPECT_BUTTON = MSBlocks.REGISTER.register("void_aspect_button",
-			() -> new ButtonBlock(copy(VOID_ASPECT_PLANKS.get()), BlockSetType.OAK, 10, true));
+			() -> new ButtonBlock(copy(VOID_ASPECT_PLANKS.get()), MSBlockSetType.VOID, 10, true));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_BUTTON);
 	
 	public static final RegistryObject<Block> VOID_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("void_aspect_bookshelf",
