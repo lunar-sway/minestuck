@@ -8,7 +8,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.MSDimensions;
@@ -781,7 +781,7 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
-			return SburbHandler.hasEntered(player);
+			return SburbPlayerData.get(player).hasEntered();
 		}
 	}
 	

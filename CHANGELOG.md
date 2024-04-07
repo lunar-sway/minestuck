@@ -10,20 +10,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Spawn egg items for main Underling types, Consorts, and Carapacians
 - Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+- Carved Logs, Carved Wooden Leaf, and Treated and Lacquered variants of Carved blocks
 - Tree Stump feature in Forest Lands
 - Frog Ruins feature in Frog Lands
+- Various Unfinished and Carved features in Wood Lands
 - Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
 - New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
-- Added Carved Bush.
 - New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
 - New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
-- Cruxite block set
+- Added Carved Bush
+- Added Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
+- Added Silicone Caulk fluid, used in Wood lands
+- Added Cindered woodset and Trees in Heat lands
+- Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
+- Added Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
+- Added Coffee Claws
+- Added TV Antenna
+- Added Molten Amber fluid, used in Heat lands
+- Added Cruxite block set
 - New dialogue system that uses a gui screen, replacing the chat-based system
 - Dialogue in this new system is data-driven, and can be defined or tweaked through datapacks
 
 ### Changed
 
+- Wooden Cactus is now only placeable on the Wood Terrain Blocks tag instead of Sand
+- Carved Planks are now the surface block of Wood Lands instead of Treated Planks
+- Carved Planks no longer need to be mined with a Stone Axe or better
 - Transportalizers now stack to one instead of 64
 - Prismarine armor remodel and retexture
 - Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
@@ -32,19 +45,58 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer Theme is now chosen from a list of available Themes in separate GUI
 - Changes to computer Theme texture Crocker
 - Computer programs now always use Theme specific texture for arrow buttons
+- Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
+- Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
+- Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
+- Renamed Oil to Shale Oil
+- Pumord is now alchemized with Pumice Stone instead of any regular Stone
 - Existing consort dialogue have been ported to the new dialogue system with some tweaks
 
 ### Fixed
 
 - Double slabs will now drop two slabs when broken
 - Sneaking now prevents trajectory blocks from moving the player
+- Blue dirt can now have the shovel used on it
+- Minestuck fences will now connect with vanilla fences appropriately
+- All walls will now connect with each other properly
+- Fixed name typos for some chess castle blocks
 - Improved grammar on some dialogues
+
+### Removed
+
+- Uncarved Wood no longer has a tooltip
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, pavizi, sipher, kirderf1
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipher, kirderf1
 
 ## [Unreleased]
+
+### Changed
+
+- Minor changes to what is shown in the data checker
+- Duplicate titles are now allowed in the same session,
+  and consequently the session size limit has been removed
+- Pre-entry players no longer play a part in grist gutter capacity,
+  and they no longer receive grist from the gutter
+
+### Removed
+
+- Removed "skaianetCheck" config option
+
+### Fixed
+
+- Fixes some niche issues with connections
+- `/sburbpredefine` now gives an error when applied to a player that already has a land
+- Fixed missing data sync for land types after using `/debuglands`
+- Added command success message to `/debuglands`
+- Fixed player owner id not loading for mini alchemiter and grist widget
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.20.1-1.11.2.1] - 2024-03-10
 
 ### Fixed
 
@@ -56,6 +108,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Advanced color selection screen no longer tints buttons
 - Round the displayed max health value on the echeladder screen
 - Prevent one method of captchaloguing stacks with stack size larger than max stack size
+- Stopped editmode cursor from spinning
 
 ### Contributors for this release
 

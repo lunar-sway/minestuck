@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:treated_chipboard_fence_gate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_treated_chipboard": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:treated_chipboard"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_treated_chipboard",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:treated_chipboard_fence_gate"
+    ]
+  },
+  "sends_telemetry_event": false
+}

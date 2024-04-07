@@ -1,10 +1,10 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "minecraft:planks"
+    "item": "minestuck:carved_planks"
   },
   "input2": {
-    "item": "minecraft:netherrack"
+    "item": "minestuck:molten_amber_bucket"
   },
   "mode": "or",
   "output": {

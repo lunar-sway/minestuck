@@ -22,6 +22,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
 public class MSBlockStateProvider extends BlockStateProvider
 {
@@ -33,104 +34,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 	@Override
 	protected void registerStatesAndModels()
 	{
+		SkaiaBlocksData.addModels(this);
 		AspectTreeBlocksData.addModels(this);
-		
-		//Skaia
-		simpleBlockWithItem(MSBlocks.BLACK_CHESS_DIRT);
-		simpleBlockWithItem(MSBlocks.WHITE_CHESS_DIRT);
-		simpleBlockWithItem(MSBlocks.DARK_GRAY_CHESS_DIRT);
-		simpleBlockWithItem(MSBlocks.LIGHT_GRAY_CHESS_DIRT);
-		simpleBlock(MSBlocks.SKAIA_PORTAL,
-				id -> empty(id.getPath(), itemTexture(id)));
-		flatItem(MSItems.SKAIA_PORTAL, MSBlockStateProvider::itemTexture);
-		
-		simpleBlockWithItem(MSBlocks.BLACK_CHESS_BRICKS);
-		wallWithItem(MSBlocks.BLACK_CHESS_BRICK_WALL, MSBlocks.BLACK_CHESS_BRICKS);
-		
-		simpleBlockWithItem(MSBlocks.DARK_GRAY_CHESS_BRICKS);
-		wallWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_WALL, MSBlocks.DARK_GRAY_CHESS_BRICKS);
-		
-		simpleBlockWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICKS);
-		wallWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_WALL, MSBlocks.LIGHT_GRAY_CHESS_BRICKS);
-		
-		simpleBlockWithItem(MSBlocks.WHITE_CHESS_BRICKS);
-		wallWithItem(MSBlocks.WHITE_CHESS_BRICK_WALL, MSBlocks.WHITE_CHESS_BRICKS);
-		
-		simpleBlockWithItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH);
-		stairsWithItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_STAIRS, MSBlocks.BLACK_CHESS_BRICK_SMOOTH);
-		slabWithItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_SLAB, MSBlocks.BLACK_CHESS_BRICK_SMOOTH);
-		wallWithItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_WALL, MSBlocks.BLACK_CHESS_BRICK_SMOOTH);
-		buttonWithItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_BUTTON, MSBlocks.BLACK_CHESS_BRICK_SMOOTH);
-		pressurePlateWithItem(MSBlocks.BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, MSBlocks.BLACK_CHESS_BRICK_SMOOTH);
-		
-		simpleBlockWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
-		stairsWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_STAIRS, MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
-		slabWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_SLAB, MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
-		wallWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_WALL, MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
-		buttonWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON, MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
-		pressurePlateWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH);
-		
-		simpleBlockWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
-		stairsWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_STAIRS, MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
-		slabWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_SLAB, MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
-		wallWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_WALL, MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
-		buttonWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON, MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
-		pressurePlateWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH);
-		
-		simpleBlockWithItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH);
-		stairsWithItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_STAIRS, MSBlocks.WHITE_CHESS_BRICK_SMOOTH);
-		slabWithItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_SLAB, MSBlocks.WHITE_CHESS_BRICK_SMOOTH);
-		wallWithItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_WALL, MSBlocks.WHITE_CHESS_BRICK_SMOOTH);
-		buttonWithItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_BUTTON, MSBlocks.WHITE_CHESS_BRICK_SMOOTH);
-		pressurePlateWithItem(MSBlocks.WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE, MSBlocks.WHITE_CHESS_BRICK_SMOOTH);
-		
-		trimWithItem(MSBlocks.BLACK_CHESS_BRICK_TRIM,
-				id -> models().cubeColumn(
-						id.getPath(),
-						texture(id),
-						texture("black_chess_bricks")),
-				id -> models().cubeColumn(
-						id.withSuffix("_flipped").getPath(),
-						texture(id.withSuffix("_flipped")),
-						texture("black_chess_bricks")));
-		trimWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_TRIM,
-				id -> models().cubeColumn(
-						id.getPath(),
-						texture(id),
-						texture("dark_gray_chess_bricks")),
-				id -> models().cubeColumn(
-						id.withSuffix("_flipped").getPath(),
-						texture(id.withSuffix("_flipped")),
-						texture("dark_gray_chess_bricks")));
-		trimWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM,
-				id -> models().cubeColumn(
-						id.getPath(),
-						texture(id),
-						texture("light_gray_chess_bricks")),
-				id -> models().cubeColumn(
-						id.withSuffix("_flipped").getPath(),
-						texture(id.withSuffix("_flipped")),
-						texture("light_gray_chess_bricks")));
-		trimWithItem(MSBlocks.WHITE_CHESS_BRICK_TRIM,
-				id -> models().cubeColumn(
-						id.getPath(),
-						texture(id),
-						texture("white_chess_bricks")),
-				id -> models().cubeColumn(
-						id.withSuffix("_flipped").getPath(),
-						texture(id.withSuffix("_flipped")),
-						texture("white_chess_bricks")));
-		
-		simpleBlockWithItem(MSBlocks.CHECKERED_STAINED_GLASS,
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
-		simpleBlockWithItem(MSBlocks.BLACK_CROWN_STAINED_GLASS,
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
-		simpleBlockWithItem(MSBlocks.BLACK_PAWN_STAINED_GLASS,
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
-		simpleBlockWithItem(MSBlocks.WHITE_CROWN_STAINED_GLASS,
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
-		simpleBlockWithItem(MSBlocks.WHITE_PAWN_STAINED_GLASS,
-				id -> models().cubeAll(id.getPath(), texture(id)).renderType("translucent"));
 		
 		simpleBlockWithItem(MSBlocks.STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.NETHERRACK_CRUXITE_ORE);
@@ -149,6 +54,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.SHADE_STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.PINK_STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
+		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
 		
 		simpleBlockWithItem(MSBlocks.STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.DEEPSLATE_URANIUM_ORE);
@@ -168,6 +74,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.SHADE_STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.PINK_STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
+		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
 		
 		simpleBlockWithItem(MSBlocks.NETHERRACK_COAL_ORE);
 		simpleBlockWithItem(MSBlocks.SHADE_STONE_COAL_ORE);
@@ -184,6 +91,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_side")),
 						texture(id.withSuffix("_bottom")),
 						texture(id.withSuffix("_top"))));
+		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_IRON_ORE);
 		
 		simpleBlockWithItem(MSBlocks.SANDSTONE_GOLD_ORE,
 				id -> models().cubeBottomTop(id.getPath(),
@@ -199,9 +107,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.PINK_STONE_GOLD_ORE);
 		
 		simpleBlockWithItem(MSBlocks.END_STONE_REDSTONE_ORE);
+		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE);
 		simpleBlockWithItem(MSBlocks.STONE_QUARTZ_ORE);
 		simpleBlockWithItem(MSBlocks.PINK_STONE_LAPIS_ORE);
 		simpleBlockWithItem(MSBlocks.PINK_STONE_DIAMOND_ORE);
+		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_EMERALD_ORE);
 		
 		//Resource Blocks
 		simpleBlockWithItem(MSBlocks.CRUXITE_BLOCK);
@@ -406,6 +316,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 		simpleBlockWithItem(MSBlocks.CRACKED_BLACK_STONE_BRICKS);
 		
+		simpleBlockWithItem(MSBlocks.IGNEOUS_STONE);
+		simpleBlockWithItem(MSBlocks.PUMICE_STONE);
+		
 		simpleBlockWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		stairsWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_STAIRS, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		slabWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_SLAB, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
@@ -591,6 +504,13 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id),
 						texture("red_sandstone_column_end")));
 		
+		axisWithItem(MSBlocks.CARVED_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		simpleHorizontal(MSBlocks.CARVED_WOODEN_LEAF, this::existing);
+		flatItem(MSItems.CARVED_WOODEN_LEAF, MSBlockStateProvider::texture);
+		
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD);
 		stairsWithItem(MSBlocks.UNCARVED_WOOD_STAIRS, MSBlocks.UNCARVED_WOOD);
 		slabWithItem(MSBlocks.UNCARVED_WOOD_SLAB, MSBlocks.UNCARVED_WOOD);
@@ -628,10 +548,102 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.POLISHED_UNCARVED_STAIRS, MSBlocks.POLISHED_UNCARVED_WOOD);
 		slabWithItem(MSBlocks.POLISHED_UNCARVED_SLAB, MSBlocks.POLISHED_UNCARVED_WOOD);
 		
-		simpleBlockWithItem(MSBlocks.CARVED_KNOTTED_WOOD);
 		simpleBlock(MSBlocks.CARVED_BUSH,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.CARVED_BUSH, MSBlockStateProvider::texture);
+		simpleHorizontalWithItem(MSBlocks.CARVED_KNOTTED_WOOD,
+				id -> models().singleTexture(id.getPath(), new ResourceLocation("template_glazed_terracotta"), "pattern", texture(id)));
+		simpleBlock(MSBlocks.WOODEN_GRASS,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.WOODEN_GRASS, MSBlockStateProvider::texture);
+		
+		simpleBlockWithItem(MSBlocks.TREATED_UNCARVED_WOOD);
+		stairsWithItem(MSBlocks.TREATED_UNCARVED_WOOD_STAIRS, MSBlocks.TREATED_UNCARVED_WOOD);
+		slabWithItem(MSBlocks.TREATED_UNCARVED_WOOD_SLAB, MSBlocks.TREATED_UNCARVED_WOOD);
+		buttonWithItem(MSBlocks.TREATED_UNCARVED_WOOD_BUTTON, MSBlocks.TREATED_UNCARVED_WOOD);
+		pressurePlateWithItem(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.TREATED_UNCARVED_WOOD);
+		fenceWithItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE, MSBlocks.TREATED_UNCARVED_WOOD);
+		fenceGateWithItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE, MSBlocks.TREATED_UNCARVED_WOOD);
+		
+		simpleBlockWithItem(MSBlocks.TREATED_CHIPBOARD);
+		stairsWithItem(MSBlocks.TREATED_CHIPBOARD_STAIRS, MSBlocks.TREATED_CHIPBOARD);
+		slabWithItem(MSBlocks.TREATED_CHIPBOARD_SLAB, MSBlocks.TREATED_CHIPBOARD);
+		buttonWithItem(MSBlocks.TREATED_CHIPBOARD_BUTTON, MSBlocks.TREATED_CHIPBOARD);
+		pressurePlateWithItem(MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE, MSBlocks.TREATED_CHIPBOARD);
+		fenceWithItem(MSBlocks.TREATED_CHIPBOARD_FENCE, MSBlocks.TREATED_CHIPBOARD);
+		fenceGateWithItem(MSBlocks.TREATED_CHIPBOARD_FENCE_GATE, MSBlocks.TREATED_CHIPBOARD);
+		
+		simpleBlockWithItem(MSBlocks.TREATED_WOOD_SHAVINGS);
+		
+		simpleBlockWithItem(MSBlocks.TREATED_HEAVY_PLANKS);
+		stairsWithItem(MSBlocks.TREATED_HEAVY_PLANK_STAIRS, MSBlocks.TREATED_HEAVY_PLANKS);
+		slabWithItem(MSBlocks.TREATED_HEAVY_PLANK_SLAB, MSBlocks.TREATED_HEAVY_PLANKS);
+		
+		simpleBlockWithItem(MSBlocks.TREATED_PLANKS);
+		stairsWithItem(MSBlocks.TREATED_PLANKS_STAIRS, MSBlocks.TREATED_PLANKS);
+		slabWithItem(MSBlocks.TREATED_PLANKS_SLAB, MSBlocks.TREATED_PLANKS);
+		buttonWithItem(MSBlocks.TREATED_BUTTON, MSBlocks.TREATED_PLANKS);
+		pressurePlateWithItem(MSBlocks.TREATED_PRESSURE_PLATE, MSBlocks.TREATED_PLANKS);
+		fenceWithItem(MSBlocks.TREATED_FENCE, MSBlocks.TREATED_PLANKS);
+		fenceGateWithItem(MSBlocks.TREATED_FENCE_GATE, MSBlocks.TREATED_PLANKS);
+		simpleDoorBlock(MSBlocks.TREATED_DOOR);
+		trapDoorWithItem(MSBlocks.TREATED_TRAPDOOR);
+		flatItem(MSItems.TREATED_DOOR, MSBlockStateProvider::itemTexture);
+		
+		simpleBlockWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+		stairsWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+		slabWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+		
+		simpleHorizontalWithItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD,
+				id -> models().singleTexture(id.getPath(), new ResourceLocation("template_glazed_terracotta"), "pattern", texture(id)));
+		simpleBlock(MSBlocks.TREATED_WOODEN_GRASS,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.TREATED_WOODEN_GRASS, MSBlockStateProvider::texture);
+		
+		simpleBlockWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD);
+		stairsWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_STAIRS, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		slabWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_SLAB, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		buttonWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_BUTTON, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		pressurePlateWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		fenceWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		fenceGateWithItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE, MSBlocks.LACQUERED_UNCARVED_WOOD);
+		
+		simpleBlockWithItem(MSBlocks.LACQUERED_CHIPBOARD);
+		stairsWithItem(MSBlocks.LACQUERED_CHIPBOARD_STAIRS, MSBlocks.LACQUERED_CHIPBOARD);
+		slabWithItem(MSBlocks.LACQUERED_CHIPBOARD_SLAB, MSBlocks.LACQUERED_CHIPBOARD);
+		buttonWithItem(MSBlocks.LACQUERED_CHIPBOARD_BUTTON, MSBlocks.LACQUERED_CHIPBOARD);
+		pressurePlateWithItem(MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE, MSBlocks.LACQUERED_CHIPBOARD);
+		fenceWithItem(MSBlocks.LACQUERED_CHIPBOARD_FENCE, MSBlocks.LACQUERED_CHIPBOARD);
+		fenceGateWithItem(MSBlocks.LACQUERED_CHIPBOARD_FENCE_GATE, MSBlocks.LACQUERED_CHIPBOARD);
+		
+		simpleBlockWithItem(MSBlocks.LACQUERED_WOOD_SHAVINGS);
+		
+		simpleBlockWithItem(MSBlocks.LACQUERED_HEAVY_PLANKS);
+		stairsWithItem(MSBlocks.LACQUERED_HEAVY_PLANK_STAIRS, MSBlocks.LACQUERED_HEAVY_PLANKS);
+		slabWithItem(MSBlocks.LACQUERED_HEAVY_PLANK_SLAB, MSBlocks.LACQUERED_HEAVY_PLANKS);
+		
+		simpleBlockWithItem(MSBlocks.LACQUERED_PLANKS);
+		stairsWithItem(MSBlocks.LACQUERED_STAIRS, MSBlocks.LACQUERED_PLANKS);
+		slabWithItem(MSBlocks.LACQUERED_SLAB, MSBlocks.LACQUERED_PLANKS);
+		buttonWithItem(MSBlocks.LACQUERED_BUTTON, MSBlocks.LACQUERED_PLANKS);
+		pressurePlateWithItem(MSBlocks.LACQUERED_PRESSURE_PLATE, MSBlocks.LACQUERED_PLANKS);
+		fenceWithItem(MSBlocks.LACQUERED_FENCE, MSBlocks.LACQUERED_PLANKS);
+		fenceGateWithItem(MSBlocks.LACQUERED_FENCE_GATE, MSBlocks.LACQUERED_PLANKS);
+		simpleDoorBlock(MSBlocks.LACQUERED_DOOR);
+		trapDoorWithItem(MSBlocks.LACQUERED_TRAPDOOR);
+		flatItem(MSItems.LACQUERED_DOOR, MSBlockStateProvider::itemTexture);
+		
+		simpleBlockWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+		stairsWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+		slabWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+		
+		simpleHorizontalWithItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD,
+				id -> models().singleTexture(id.getPath(), new ResourceLocation("template_glazed_terracotta"), "pattern", texture(id)));
+		simpleBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.LACQUERED_WOODEN_MUSHROOM, MSBlockStateProvider::texture);
+		
+		simpleBlockWithItem(MSBlocks.WOODEN_LAMP);
 		
 		simpleBlockWithItem(MSBlocks.DENSE_CLOUD);
 		simpleBlockWithItem(MSBlocks.BRIGHT_DENSE_CLOUD);
@@ -662,6 +674,15 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.CINDERED_LOG,
+				id -> models().cube(id.getPath(),
+						texture(id.withSuffix("_bottom")),
+						texture(id.withSuffix("_top")),
+						texture(id.withSuffix("_north")),
+						texture(id.withSuffix("_south")),
+						texture(id.withSuffix("_east")),
+						texture(id.withSuffix("_west")))
+				.texture("particle", texture(id.withSuffix("_north"))));
 		axisWithItem(MSBlocks.PETRIFIED_LOG,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
@@ -739,6 +760,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture("dead_log"),
 						texture("dead_log")));
+		axisWithItem(MSBlocks.CINDERED_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("cindered_log_west"),
+						texture("cindered_log_west")));
 		axisWithItem(MSBlocks.PETRIFIED_WOOD,
 				id -> models().cubeColumn(id.getPath(),
 						texture("petrified_log"),
@@ -793,14 +818,16 @@ public class MSBlockStateProvider extends BlockStateProvider
 		trapDoorWithItem(MSBlocks.DEAD_TRAPDOOR);
 		flatItem(MSItems.DEAD_DOOR, MSBlockStateProvider::itemTexture);
 		
-		simpleBlockWithItem(MSBlocks.TREATED_PLANKS);
-		buttonWithItem(MSBlocks.TREATED_BUTTON, MSBlocks.TREATED_PLANKS);
-		pressurePlateWithItem(MSBlocks.TREATED_PRESSURE_PLATE, MSBlocks.TREATED_PLANKS);
-		fenceWithItem(MSBlocks.TREATED_FENCE, MSBlocks.TREATED_PLANKS);
-		fenceGateWithItem(MSBlocks.TREATED_FENCE_GATE, MSBlocks.TREATED_PLANKS);
-		simpleDoorBlock(MSBlocks.TREATED_DOOR);
-		trapDoorWithItem(MSBlocks.TREATED_TRAPDOOR);
-		flatItem(MSItems.TREATED_DOOR, MSBlockStateProvider::itemTexture);
+		simpleBlockWithItem(MSBlocks.CINDERED_PLANKS);
+		stairsWithItem(MSBlocks.CINDERED_STAIRS, MSBlocks.CINDERED_PLANKS);
+		slabWithItem(MSBlocks.CINDERED_SLAB, MSBlocks.CINDERED_PLANKS);
+		buttonWithItem(MSBlocks.CINDERED_BUTTON, MSBlocks.CINDERED_PLANKS);
+		pressurePlateWithItem(MSBlocks.CINDERED_PRESSURE_PLATE, MSBlocks.CINDERED_PLANKS);
+		fenceWithItem(MSBlocks.CINDERED_FENCE, MSBlocks.CINDERED_PLANKS);
+		fenceGateWithItem(MSBlocks.CINDERED_FENCE_GATE, MSBlocks.CINDERED_PLANKS);
+		simpleDoorBlock(MSBlocks.CINDERED_DOOR);
+		trapDoorWithItem(MSBlocks.CINDERED_TRAPDOOR);
+		flatItem(MSItems.CINDERED_DOOR, MSBlockStateProvider::itemTexture);
 		
 		simpleBlockWithItem(MSBlocks.SHADEWOOD_PLANKS);
 		stairsWithItem(MSBlocks.SHADEWOOD_STAIRS, MSBlocks.SHADEWOOD_PLANKS);
@@ -879,12 +906,30 @@ public class MSBlockStateProvider extends BlockStateProvider
 		getVariantBuilder(MSBlocks.BLOOMING_CACTUS.get()).partialState().setModels(variantModels(3,
 				i -> models().cross("blooming_cactus" + i, texture("blooming_cactus_" + i)).renderType("cutout")));
 		flatItem(MSItems.BLOOMING_CACTUS, id -> texture("blooming_cactus_2"));
+		getVariantBuilder(MSBlocks.SANDY_GRASS.get()).partialState().setModels(variantModels(2,
+				i -> models().cross("sandy_grass" + i, texture("sandy_grass_" + i)).renderType("cutout")));
+		flatItem(MSItems.SANDY_GRASS, id -> texture("sandy_grass_0"));
+		simpleBlock(MSBlocks.DEAD_FOLIAGE,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.DEAD_FOLIAGE, MSBlockStateProvider::texture);
 		simpleBlock(MSBlocks.PETRIFIED_GRASS,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.PETRIFIED_GRASS, MSBlockStateProvider::texture);
 		simpleBlock(MSBlocks.PETRIFIED_POPPY,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.PETRIFIED_POPPY, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.IGNEOUS_SPIKE,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.IGNEOUS_SPIKE, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.SINGED_GRASS,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.SINGED_GRASS, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.SINGED_FOLIAGE,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.SINGED_FOLIAGE, MSBlockStateProvider::texture);
+		simpleBlock(MSBlocks.SULFUR_BUBBLE,
+				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
+		flatItem(MSItems.SULFUR_BUBBLE, MSBlockStateProvider::texture);
 		
 		simpleBlock(MSBlocks.GLOWING_MUSHROOM_VINES,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
@@ -903,6 +948,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 			return ConfiguredModel.builder().modelFile(model).build();
 		});
 		
+		flatItem(MSItems.TALL_DEAD_BUSH, id -> texture(id.withSuffix("_top")));
+		flatItem(MSItems.TALL_SANDY_GRASS, id -> texture(id.withSuffix("_top")));
 		flatItem(MSItems.TALL_END_GRASS, id -> texture(id.withSuffix("_top")));
 		simpleBlock(MSBlocks.GLOWFLOWER,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
@@ -919,10 +966,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleHorizontalWithItem(MSBlocks.NAKAGATOR_STATUE, this::existing);
 		
 		//Structure Land Blocks
-		stairsWithItem(MSBlocks.BLACK_CHESS_BRICK_STAIRS, "black_chess_brick", texture(MSBlocks.BLACK_CHESS_BRICKS));
-		stairsWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_STAIRS, "dark_gray_chess_brick", texture(MSBlocks.DARK_GRAY_CHESS_BRICKS));
-		stairsWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_STAIRS, "light_gray_chess_brick", texture(MSBlocks.LIGHT_GRAY_CHESS_BRICKS));
-		stairsWithItem(MSBlocks.WHITE_CHESS_BRICK_STAIRS, "white_chess_brick", texture(MSBlocks.WHITE_CHESS_BRICKS));
 		stairsWithItem(MSBlocks.COARSE_STONE_STAIRS, MSBlocks.COARSE_STONE);
 		stairsWithItem(MSBlocks.COARSE_STONE_BRICK_STAIRS, "coarse_stone_brick", texture(MSBlocks.COARSE_STONE_BRICKS));
 		stairsWithItem(MSBlocks.SHADE_STAIRS, "shade", texture(MSBlocks.SHADE_STONE));
@@ -947,15 +990,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.RAINBOW_PLANKS_STAIRS, MSBlocks.RAINBOW_PLANKS);
 		stairsWithItem(MSBlocks.END_PLANKS_STAIRS, MSBlocks.END_PLANKS);
 		stairsWithItem(MSBlocks.DEAD_PLANKS_STAIRS, MSBlocks.DEAD_PLANKS);
-		stairsWithItem(MSBlocks.TREATED_PLANKS_STAIRS, MSBlocks.TREATED_PLANKS);
 		
 		simpleHorizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, this::existing);
 		simpleHorizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, this::existing);
-		
-		slabWithItem(MSBlocks.BLACK_CHESS_BRICK_SLAB, MSBlocks.BLACK_CHESS_BRICKS);
-		slabWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, MSBlocks.DARK_GRAY_CHESS_BRICKS);
-		slabWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB, MSBlocks.LIGHT_GRAY_CHESS_BRICKS);
-		slabWithItem(MSBlocks.WHITE_CHESS_BRICK_SLAB, MSBlocks.WHITE_CHESS_BRICKS);
 		
 		slabWithItem(MSBlocks.COARSE_STONE_SLAB, MSBlocks.COARSE_STONE);
 		slabWithItem(MSBlocks.COARSE_STONE_BRICK_SLAB, MSBlocks.COARSE_STONE_BRICKS);
@@ -979,7 +1016,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.RAINBOW_PLANKS_SLAB, MSBlocks.RAINBOW_PLANKS);
 		slabWithItem(MSBlocks.END_PLANKS_SLAB, MSBlocks.END_PLANKS);
 		slabWithItem(MSBlocks.DEAD_PLANKS_SLAB, MSBlocks.DEAD_PLANKS);
-		slabWithItem(MSBlocks.TREATED_PLANKS_SLAB, MSBlocks.TREATED_PLANKS);
 		
 		{
 			ModelFile verticalUnpowered = models()
@@ -1322,7 +1358,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().crop(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.GOLD_SEEDS, MSBlockStateProvider::itemTexture);
 		simpleBlockWithItem(MSBlocks.WOODEN_CACTUS,
-				id -> models().withExistingParent(id.getPath(), "block/cactus")
+				id -> models().withExistingParent(id.getPath(), "block/cactus").renderType("cutout")
 						.texture("particle", texture(id.withSuffix("_side")))
 						.texture("bottom", texture(id.withSuffix("_bottom")))
 						.texture("top", texture(id.withSuffix("_top")))
@@ -1389,6 +1425,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		fluid(MSBlocks.WATER_COLORS);
 		fluid(MSBlocks.ENDER);
 		fluid(MSBlocks.LIGHT_WATER);
+		fluid(MSBlocks.CAULK);
+		fluid(MSBlocks.MOLTEN_AMBER);
 		
 		//DERIVATIVE BLOCKS
 		stairsWithItem(MSBlocks.PERFECTLY_GENERIC_STAIRS, MSBlocks.GENERIC_OBJECT);
@@ -1432,7 +1470,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		return models().cubeAll(id.getPath(), texture(id));
 	}
 	
-	private ModelFile empty(String path, ResourceLocation particleTexture)
+	ModelFile empty(String path, ResourceLocation particleTexture)
 	{
 		return models().getBuilder(path).texture("particle", particleTexture);
 	}
@@ -1480,7 +1518,12 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlock(block, this::fluidModel);
 	}
 	
-	public void simpleBlockWithItem(RegistryObject<Block> block)
+	public void simpleBlockWithItem(ItemBlockPair<?, ?> pair)
+	{
+		simpleBlockWithItem(pair::asBlock);
+	}
+	
+	public void simpleBlockWithItem(Supplier<Block> block)
 	{
 		simpleBlockWithItem(block.get(), cubeAll(block.get()));
 	}
@@ -1605,7 +1648,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), model);
 	}
 	
-	private void trimWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider, Function<ResourceLocation, ModelFile> flippedModelProvider)
+	void trimWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider, Function<ResourceLocation, ModelFile> flippedModelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		var flippedModel = flippedModelProvider.apply(block.getId());
@@ -1629,17 +1672,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), model);
 	}
 	
-	public void stairsWithItem(RegistryObject<StairBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void stairsWithItem(Supplier<StairBlock> block, RegistryObject<? extends Block> sourceBlock)
 	{
 		stairsWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void stairsWithItem(RegistryObject<StairBlock> block, String baseName, ResourceLocation texture)
+	void stairsWithItem(Supplier<StairBlock> block, String baseName, ResourceLocation texture)
 	{
 		stairsWithItem(block, baseName, texture, texture, texture);
 	}
 	
-	private void stairsWithItem(RegistryObject<StairBlock> block, String baseName, ResourceLocation side, ResourceLocation bottom, ResourceLocation top)
+	private void stairsWithItem(Supplier<StairBlock> block, String baseName, ResourceLocation side, ResourceLocation bottom, ResourceLocation top)
 	{
 		ModelFile stairs = models().stairs(baseName + "_stairs", side, bottom, top);
 		ModelFile stairsInner = models().stairsInner(baseName + "_inner_stairs", side, bottom, top);
@@ -1648,17 +1691,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), stairs);
 	}
 	
-	public void slabWithItem(RegistryObject<SlabBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void slabWithItem(Supplier<SlabBlock> block, RegistryObject<? extends Block> sourceBlock)
 	{
 		slabWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void slabWithItem(RegistryObject<SlabBlock> block, String baseName, ResourceLocation texture)
+	private void slabWithItem(Supplier<SlabBlock> block, String baseName, ResourceLocation texture)
 	{
 		slabWithItem(block, baseName, texture, texture);
 	}
 	
-	private void slabWithItem(RegistryObject<SlabBlock> block, String baseName, ResourceLocation side, ResourceLocation topBottom)
+	private void slabWithItem(Supplier<SlabBlock> block, String baseName, ResourceLocation side, ResourceLocation topBottom)
 	{
 		ModelFile slabBottom = models().slab(baseName + "_slab", side, topBottom, topBottom);
 		ModelFile slabTop = models().slabTop(baseName + "_slab_top", side, topBottom, topBottom);
@@ -1667,12 +1710,12 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), slabBottom);
 	}
 	
-	private void wallWithItem(RegistryObject<WallBlock> block, RegistryObject<? extends Block> sourceBlock)
+	void wallWithItem(Supplier<WallBlock> block, RegistryObject<? extends Block> sourceBlock)
 	{
 		wallWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void wallWithItem(RegistryObject<WallBlock> block, String baseName, ResourceLocation texture)
+	private void wallWithItem(Supplier<WallBlock> block, String baseName, ResourceLocation texture)
 	{
 		wallBlock(block.get(), texture);
 		
@@ -1727,24 +1770,24 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), trapDoorInventory);
 	}
 	
-	public void buttonWithItem(RegistryObject<ButtonBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void buttonWithItem(Supplier<ButtonBlock> block, RegistryObject<? extends Block> sourceBlock)
 	{
 		buttonWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void buttonWithItem(RegistryObject<ButtonBlock> block, String baseName, ResourceLocation texture)
+	private void buttonWithItem(Supplier<ButtonBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile buttonInventory = models().buttonInventory(baseName + "_button_inventory", texture);
 		buttonBlock(block.get(), texture);
 		simpleBlockItem(block.get(), buttonInventory);
 	}
 	
-	public void pressurePlateWithItem(RegistryObject<PressurePlateBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void pressurePlateWithItem(Supplier<PressurePlateBlock> block, RegistryObject<? extends Block> sourceBlock)
 	{
 		pressurePlateWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void pressurePlateWithItem(RegistryObject<PressurePlateBlock> block, String baseName, ResourceLocation texture)
+	private void pressurePlateWithItem(Supplier<PressurePlateBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile pressurePlateInventory = models().pressurePlate(baseName + "_pressure_plate", texture);
 		pressurePlateBlock(block.get(), texture);

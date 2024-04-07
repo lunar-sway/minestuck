@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:conductors_baton"
+  },
+  "input2": {
+    "item": "minestuck:old_computer"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:tv_antenna"
+  }
+}

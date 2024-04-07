@@ -7,7 +7,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -117,8 +117,8 @@ public final class EditmodeLocations
 	
 	public static boolean checkIsValidSourcePos(EditData data, ResourceKey<Level> level, BlockPos pos)
 	{
-		PlayerIdentifier owner = data.getConnection().getClientIdentifier();
-		ResourceKey<Level> land = data.getConnection().getLandDimensionIfEntered();
+		PlayerIdentifier owner = data.getTarget();
+		ResourceKey<Level> land = data.sburbData().getLandDimensionIfEntered();
 		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).editmodeLocations;
 		
 		if(level == land && ENTRY_POSITIONS.contains(pos))
@@ -136,15 +136,15 @@ public final class EditmodeLocations
 		return true;
 	}
 	
-	public void validateClosestSource(ServerPlayer editPlayer, SburbConnection connection)
+	public void validateClosestSource(ServerPlayer editPlayer, SburbPlayerData targetData)
 	{
 		Level editLevel = editPlayer.level();
 		ResourceKey<Level> editDimension = editLevel.dimension();
-		ResourceKey<Level> land = connection.getLandDimensionIfEntered();
+		ResourceKey<Level> land = targetData.getLandDimensionIfEntered();
 		
 		this.findRelativelyClosestArea(editPlayer, land).map(Area::center).ifPresent(pos -> {
-			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
-				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
+			if(isComputerSourceInvalidFor(editLevel, pos, targetData.playerId()))
+				removeBlockSource(editPlayer.server, targetData.playerId(), editDimension, pos);
 		});
 	}
 	
@@ -259,7 +259,7 @@ public final class EditmodeLocations
 		if(data == null)
 			return;
 		Player editPlayer = data.getEditor();
-		ResourceKey<Level> land = data.getConnection().getLandDimensionIfEntered();
+		ResourceKey<Level> land = data.sburbData().getLandDimensionIfEntered();
 		
 		if(editPlayer.level().dimension() != level || isInsideBounds(editPlayer, land))
 			return;

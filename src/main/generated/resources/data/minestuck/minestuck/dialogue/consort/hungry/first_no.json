@@ -13,7 +13,25 @@
               "type": "minestuck:has_matched_item"
             },
             "message": "minestuck.dialogue.consort.hungry.first_no.yes",
-            "next_dialogue": "minestuck:consort/hungry/finally",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/finally",
+              "reply_messages": [
+                {
+                  "type": "player",
+                  "message": "minestuck.dialogue.consort.hungry.first_no.yes.reply"
+                },
+                {
+                  "type": "description",
+                  "message": {
+                    "arguments": [
+                      "matched_item"
+                    ],
+                    "key": "minestuck.dialogue.consort.hungry.first_no.yes.desc"
+                  }
+                }
+              ],
+              "set_as_entrypoint": true
+            },
             "triggers": [
               {
                 "type": "minestuck:take_matched_item"
@@ -21,10 +39,6 @@
               {
                 "type": "minestuck:add_boondollars",
                 "boondollars": 10
-              },
-              {
-                "type": "minestuck:set_player_dialogue",
-                "dialogue": "minestuck:consort/hungry/finally2"
               }
             ]
           },
@@ -32,6 +46,7 @@
             "message": "minestuck.dialogue.consort.hungry.first_no.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/end",
+              "player_message": "minestuck.dialogue.consort.hungry.first_no.no.reply",
               "set_as_entrypoint": true
             }
           }

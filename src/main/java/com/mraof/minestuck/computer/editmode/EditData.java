@@ -9,7 +9,9 @@ import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.ActiveConnection;
+import com.mraof.minestuck.skaianet.SburbConnections;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -17,13 +19,15 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nullable;
 
 /**
  * Data structure used by the server sided EditHandler
@@ -35,29 +39,39 @@ public class EditData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	EditData(DecoyEntity decoy, ServerPlayer player, SburbConnection c)
+	EditData(DecoyEntity decoy, ServerPlayer player, ActiveConnection activeConnection)
 	{
 		this.decoy = decoy;
 		this.player = player;
-		this.connection = c;
+		this.activeConnection = activeConnection;
 	}
 	
 	private final DecoyEntity decoy;
 	
-	final SburbConnection connection;
+	final ActiveConnection activeConnection;
 	
 	private final ServerPlayer player;
 	
 	private boolean isRecovering;
 	
-	public SburbConnection getConnection()
+	public PlayerIdentifier getTarget()
 	{
-		return connection;
+		return this.activeConnection.client();
+	}
+	
+	public SburbPlayerData sburbData()
+	{
+		return SburbPlayerData.get(this.getTarget(), player.server);
+	}
+	
+	public EditmodeLocations locations()
+	{
+		return PlayerSavedData.getData(this.getTarget(), player.server).editmodeLocations;
 	}
 	
 	public GristCache getGristCache()
 	{
-		return GristCache.get(player.server, connection.getClientIdentifier());
+		return GristCache.get(player.server, this.getTarget());
 	}
 	
 	/**
@@ -84,13 +98,13 @@ public class EditData
 	
 	public void sendCacheLimitToEditor()
 	{
-		long limit = PlayerSavedData.getData(connection.getClientIdentifier(), player.server).getEcheladder().getGristCapacity();
+		long limit = PlayerSavedData.getData(this.getTarget(), player.server).getEcheladder().getGristCapacity();
 		MSPacketHandler.sendToPlayer(new EditmodeCacheLimitPacket(limit), this.getEditor());
 	}
 	
 	public void sendGivenItemsToEditor()
 	{
-		MSPacketHandler.sendToPlayer(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, connection)), getEditor());
+		MSPacketHandler.sendToPlayer(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())), getEditor());
 	}
 	
 	public CompoundTag writeRecoveryData()
@@ -120,7 +134,7 @@ public class EditData
 		isRecovering = true;
 		try
 		{
-			new ConnectionRecovery(this).recover(connection, player);
+			new ConnectionRecovery(this).recover(player.server, player);
 			new PlayerRecovery(decoy).recover(player, true);
 		} finally {
 			isRecovering = false;
@@ -132,6 +146,7 @@ public class EditData
 		return isRecovering;
 	}
 	
+	@SuppressWarnings("resource")
 	public static class PlayerRecovery
 	{
 		private final ResourceKey<Level> dimension;
@@ -229,13 +244,13 @@ public class EditData
 		
 		private ConnectionRecovery(EditData data)
 		{
-			clientPlayer = data.connection.getClientIdentifier();
+			clientPlayer = data.getTarget();
 			inventory = data.player.getInventory().save(new ListTag());
 		}
 		
 		private ConnectionRecovery(CompoundTag nbt)
 		{
-			clientPlayer = IdentifierHandler.load(nbt, "client");
+			clientPlayer = IdentifierHandler.loadOrThrow(nbt, "client");
 			inventory = nbt.getList("edit_inv", Tag.TAG_COMPOUND);
 		}
 		
@@ -245,26 +260,19 @@ public class EditData
 			nbt.put("edit_inv", inventory);
 		}
 		
-		public PlayerIdentifier getClientPlayer()
+		public void recover(MinecraftServer mcServer)
 		{
-			return clientPlayer;
+			recover(mcServer, null);
 		}
 		
-		public void recover(SburbConnection connection)
+		void recover(MinecraftServer mcServer, @Nullable ServerPlayer editPlayer)
 		{
-			recover(connection, null);
-		}
-		
-		void recover(SburbConnection connection, ServerPlayer editPlayer)
-		{
-			if(connection != null)
+			SburbPlayerData.get(this.clientPlayer, mcServer).putEditmodeInventory(this.inventory);
+			if(editPlayer != null)
 			{
-				connection.putEditmodeInventory(this.inventory);
-				if(editPlayer != null)
-				{
-					ServerEditHandler.lastEditmodePos.put(connection, new Vec3(editPlayer.getX(), editPlayer.getY(), editPlayer.getZ()));
-				}
-			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
+				SburbConnections.get(mcServer).getActiveConnection(this.clientPlayer)
+						.ifPresent(connection -> connection.lastEditmodePosition = editPlayer.position());
+			}
 		}
 	}
 }

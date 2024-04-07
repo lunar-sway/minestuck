@@ -6,13 +6,16 @@ import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.ActiveConnection;
+import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.Optional;
 
 public class ClientEditPacket implements MSPacket.PlayToServer
 {
@@ -85,17 +88,20 @@ public class ClientEditPacket implements MSPacket.PlayToServer
 			
 			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getLevel() >= 2))
 			{
-				SburbConnection c = SkaianetHandler.get(player.level()).getActiveConnection(target);
-				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SburbHandler.giveItems(player.server, target)))
+				Optional<ActiveConnection> c = SburbConnections.get(player.server).getCheckedActiveConnection(target);
+				if(c.isEmpty() || c.get().server() != user)
 					return;
 				
-				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.DEPLOY))
+				SburbHandler.onEntryItemsDeployed(player.server, target);
+				
+				SburbPlayerData targetData = SburbPlayerData.get(target, player.server);
+				for(DeployEntry entry : DeployList.getItemList(player.server, targetData, DeployList.EntryLists.DEPLOY))
 				{
-					if(!c.hasGivenItem(entry))
+					if(!targetData.hasGivenItem(entry))
 					{
-						ItemStack item = entry.getItemStack(c, player.level());
+						ItemStack item = entry.getItemStack(targetData, player.level());
 						if(!targetPlayer.getInventory().contains(item) && targetPlayer.getInventory().add(item))
-							c.setHasGivenItem(entry);
+							targetData.setHasGivenItem(entry);
 					}
 				}
 				player.getServer().getPlayerList().sendAllPlayerInfo(targetPlayer);

@@ -298,7 +298,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		talkRepPlayerList.clear();
 		ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
-			talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
+			talkRepPlayerList.add(IdentifierHandler.loadOrThrow(list.getCompound(i), "id"));
 		
 		merchantType = EnumConsort.MerchantType.values()[Mth.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		

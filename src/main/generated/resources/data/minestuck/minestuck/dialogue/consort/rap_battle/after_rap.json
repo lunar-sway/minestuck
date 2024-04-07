@@ -9,18 +9,32 @@
     "responses": [
       {
         "message": "minestuck.dialogue.consort.rap_battle.after_rap.school",
-        "next_dialogue": "minestuck:consort/rap_battle/school_that_fool",
-        "triggers": [
-          {
-            "type": "minestuck:set_player_dialogue",
-            "dialogue": "minestuck:consort/rap_battle/final"
-          }
-        ]
+        "next_dialogue": {
+          "id": "minestuck:consort/rap_battle/final",
+          "reply_messages": [
+            {
+              "type": "player",
+              "message": "minestuck.dialogue.consort.rap_battle.after_rap.school.reply"
+            },
+            {
+              "type": "description",
+              "message": {
+                "arguments": [
+                  "player_title",
+                  "land_name"
+                ],
+                "key": "minestuck.dialogue.consort.rap_battle.after_rap.school.desc"
+              }
+            }
+          ],
+          "set_as_entrypoint": true
+        }
       },
       {
         "message": "minestuck.dialogue.consort.rap_battle.after_rap.concede",
         "next_dialogue": {
           "id": "minestuck:consort/rap_battle/concede",
+          "player_message": "minestuck.dialogue.consort.rap_battle.after_rap.concede.reply",
           "set_as_entrypoint": true
         }
       }

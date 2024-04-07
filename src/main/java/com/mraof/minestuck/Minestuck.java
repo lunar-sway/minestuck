@@ -5,7 +5,9 @@ import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterSerializer
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.command.MSSuggestionProviders;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
@@ -71,7 +73,6 @@ public class Minestuck
 		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		AspectTreeBlocks.init();
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
@@ -110,6 +111,9 @@ public class Minestuck
 		MSArgumentTypes.REGISTER.register(eventBus);
 		
 		MSCreativeTabs.REGISTER.register(eventBus);
+		
+		SkaiaBlocks.init();
+		AspectTreeBlocks.init();
 	}
 	
 	/**
@@ -131,6 +135,7 @@ public class Minestuck
 	private void mainThreadSetup()
 	{
 		MSCriteriaTriggers.register();
+		MSSuggestionProviders.register();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();

@@ -233,6 +233,7 @@ public final class DialogueProvider implements DataProvider
 		@Nullable
 		private DialogueProducer nextDialogue = null;
 		private boolean setEntrypoint = false;
+		private final List<Pair<Dialogue.MessageType, MessageProducer>> replyMessages = new ArrayList<>();
 		private Condition condition = Condition.AlwaysTrue.INSTANCE;
 		private boolean hideIfFailed = true;
 		private Function<ResourceLocation, String> failTooltip = id -> null;
@@ -251,6 +252,22 @@ public final class DialogueProvider implements DataProvider
 		public ResponseBuilder nextDialogue(ResourceLocation nextDialogueId)
 		{
 			this.nextDialogue = (id, register) -> nextDialogueId;
+			return this;
+		}
+		
+		public ResponseBuilder addPlayerMessage(MessageProducer producer)
+		{
+			return this.addReplyMessage(Dialogue.MessageType.PLAYER, producer);
+		}
+		
+		public ResponseBuilder addDescription(MessageProducer producer)
+		{
+			return this.addReplyMessage(Dialogue.MessageType.DESCRIPTION, producer);
+		}
+		
+		public ResponseBuilder addReplyMessage(Dialogue.MessageType type, MessageProducer producer)
+		{
+			this.replyMessages.add(Pair.of(type, producer));
 			return this;
 		}
 		
@@ -296,8 +313,8 @@ public final class DialogueProvider implements DataProvider
 		
 		public Dialogue.Response build(ResourceLocation id, BiConsumer<ResourceLocation, Dialogue.NodeSelector> register)
 		{
-			Optional<Dialogue.NextDialogue> nextDialogue = Optional.ofNullable(this.nextDialogue).map(builder -> builder.buildAndRegister(id, register))
-					.map(nextId -> new Dialogue.NextDialogue(nextId, this.setEntrypoint));
+			Optional<Dialogue.NextDialogue> nextDialogue = Optional.ofNullable(this.nextDialogue).map(producer -> producer.buildAndRegister(id, register))
+					.map(nextId -> new Dialogue.NextDialogue(nextId, this.setEntrypoint, this.replyMessages.stream().map(pair -> pair.mapSecond(producer -> producer.build(id))).toList()));
 			DialogueMessage message = this.message.build(id);
 			return new Dialogue.Response(message, this.triggers, nextDialogue, this.condition, this.hideIfFailed, Optional.ofNullable(this.failTooltip.apply(id)));
 		}

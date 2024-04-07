@@ -52,6 +52,11 @@ public final class RandomlySelectableDialogue
 				.map(WeightedEntry.Wrapper::getData);
 	}
 	
+	public Collection<Dialogue.SelectableDialogue> getAll()
+	{
+		return this.selectableDialogueList;
+	}
+	
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
