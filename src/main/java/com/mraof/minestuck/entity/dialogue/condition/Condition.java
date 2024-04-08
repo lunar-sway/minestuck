@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
+import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
@@ -148,6 +149,31 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("NPC is not carapacian");
+		}
+	}
+	
+	record IsFromKingdom(EnumEntityKingdom kingdom) implements NpcOnlyCondition
+	{
+		static final Codec<IsFromKingdom> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				CarapacianEntity.CODEC.fieldOf("kingdom").forGetter(IsFromKingdom::kingdom)
+		).apply(instance, IsFromKingdom::new));
+		
+		@Override
+		public Codec<IsFromKingdom> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity instanceof CarapacianEntity carapacianEntity && carapacianEntity.getKingdom() == kingdom;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not from the correct kingdom");
 		}
 	}
 	
@@ -415,6 +441,31 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Is not at the right height");
+		}
+	}
+	
+	record NPCIsHoldingItem(Item item) implements NpcOnlyCondition
+	{
+		static final Codec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(NPCIsHoldingItem::item)
+		).apply(instance, NPCIsHoldingItem::new));
+		
+		@Override
+		public Codec<NPCIsHoldingItem> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity.getMainHandItem().is(item) || entity.getOffhandItem().is(item);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not holding the right item");
 		}
 	}
 	

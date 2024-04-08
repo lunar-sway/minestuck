@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -216,6 +217,62 @@ public sealed interface Trigger
 				ItemStack matchedStack = Condition.PlayerHasItem.findPlayerItem(item, player, 1);
 				if(matchedStack != null)
 					matchedStack.shrink(1);
+			});
+		}
+	}
+	
+	Codec<EquipmentSlot> EQUIPMENT_CODEC = Codec.STRING.xmap(
+			EquipmentSlot::byName,
+			EquipmentSlot::getName
+	);
+	
+	record SetNPCItem(Item item, EquipmentSlot slot) implements Trigger
+	{
+		static final Codec<SetNPCItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(SetNPCItem::item),
+				PreservingOptionalFieldCodec.withDefault(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCItem::slot)
+		).apply(instance, SetNPCItem::new));
+		
+		@Override
+		public Codec<SetNPCItem> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			entity.setItemSlot(slot, new ItemStack(item));
+		}
+	}
+	
+	/**
+	 * If a matched item is found in the player inventory, it is removed from there and then added to the specified slot in the npc inventory
+	 */
+	record SetNPCMatchedItem(EquipmentSlot slot) implements Trigger
+	{
+		static final Codec<SetNPCMatchedItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				PreservingOptionalFieldCodec.withDefault(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCMatchedItem::slot)
+		).apply(instance, SetNPCMatchedItem::new));
+		
+		@Override
+		public Codec<SetNPCMatchedItem> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
+			Optional<Item> matchedItem = component.getMatchedItem(player);
+			matchedItem.ifPresent(item -> {
+				ItemStack matchedStack = Condition.PlayerHasItem.findPlayerItem(item, player, 1);
+				if(matchedStack != null)
+				{
+					entity.setItemSlot(slot, new ItemStack(item));
+					matchedStack.shrink(1);
+				}
 			});
 		}
 	}

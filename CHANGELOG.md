@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Cruxite block set
 - New dialogue system that uses a gui screen, replacing the chat-based system
 - Dialogue in this new system is data-driven, and can be defined or tweaked through datapacks
+- Carapacian pawns now have dialogue
 
 ### Changed
 

@@ -1,7 +1,17 @@
 package com.mraof.minestuck.entity.carapacian;
 
-public enum EnumEntityKingdom
+import net.minecraft.util.StringRepresentable;
+
+import java.util.Locale;
+
+public enum EnumEntityKingdom implements StringRepresentable
 {
 	DERSITE,
-	PROSPITIAN
+	PROSPITIAN;
+	
+	@Override
+	public String getSerializedName()
+	{
+		return name().toLowerCase(Locale.ROOT);
+	}
 }

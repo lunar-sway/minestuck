@@ -1,19 +1,26 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
+import com.mraof.minestuck.entity.dialogue.DialogueComponent;
+import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,6 +29,7 @@ import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -42,19 +50,25 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, GeoEntity, PhasedMobAnimation.Phases.Holder
+public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, GeoEntity, PhasedMobAnimation.Phases.Holder, DialogueEntity
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
+	
+	private static final MobAnimation TALK_PROPERTIES = new MobAnimation(MobAnimation.Action.TALK, 80, true, false);
 	
 	public static final PhasedMobAnimation MELEE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.MELEE, 18, true, false), 3, 6, 7);
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
 	private static final RawAnimation ARMS_WALKING_ANIMATION = RawAnimation.begin().thenLoop("walkarms");
 	private static final RawAnimation PUNCH_ANIMATION_1 = RawAnimation.begin().then("punch1", Animation.LoopType.PLAY_ONCE);
 	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation TALK_ANIMATION = RawAnimation.begin().thenLoop("talk");
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
+	
+	private int ticksUntilDialogueReset = 0;
+	private final DialogueComponent dialogueComponent = new DialogueComponent(this);
 	
 	protected PawnEntity(EntityType<? extends PawnEntity> type, EnumEntityKingdom kingdom, Level level)
 	{
@@ -111,6 +125,62 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	public void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Action action)
 	{
 		this.entityData.set(CURRENT_ACTION, phase.ordinal());
+	}
+	
+	@Override
+	protected InteractionResult mobInteract(Player player, InteractionHand hand)
+	{
+		boolean isInCombat = this.goalSelector.getRunningGoals().anyMatch(goal -> goal.getGoal() instanceof MoveToTargetGoal || goal.getGoal() instanceof AnimatedAttackWhenInRangeGoal<?>);
+		
+		if(!this.isAlive() || player.isShiftKeyDown() || isInCombat)
+			return InteractionResult.PASS;
+		
+		if(!(player instanceof ServerPlayer serverPlayer))
+			return InteractionResult.SUCCESS;
+		
+		if(this.dialogueComponent.hasAnyOngoingDialogue())
+			return InteractionResult.FAIL;
+		
+		setCurrentAnimation(TALK_PROPERTIES);
+		
+		if(!this.dialogueComponent.hasActiveDialogue())
+		{
+			this.dialogueComponent.resetDialogue();
+			RandomlySelectableDialogue.instance(RandomlySelectableDialogue.DialogueCategory.CARAPACIAN_SOLDIER)
+					.pickRandomForEntity(this).ifPresent(this.dialogueComponent::setDialogue);
+		}
+		
+		this.dialogueComponent.tryStartDialogue(serverPlayer);
+		
+		this.dialogueComponent.getStartingDialogue().ifPresent(dialogueId -> {
+			if(ticksUntilDialogueReset == 0)
+				ticksUntilDialogueReset = 24000 + level().random.nextInt(24000);
+		});
+		
+		return InteractionResult.SUCCESS;
+	}
+	
+	private void clearDialogueData()
+	{
+		ticksUntilDialogueReset = 0;
+		this.dialogueComponent.resetDialogue();
+	}
+	
+	@Override
+	public void aiStep()
+	{
+		super.aiStep();
+		if(level().isClientSide)
+			return;
+		
+		if(ticksUntilDialogueReset > 0)
+		{
+			ticksUntilDialogueReset -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
+			if(ticksUntilDialogueReset <= 0)
+				clearDialogueData();
+		}
+		
+		this.dialogueComponent.closeDialogueForMovingPlayers();
 	}
 	
 	@Override
@@ -236,12 +306,19 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	}
 	
 	@Override
+	public DialogueComponent getDialogueComponent()
+	{
+		return this.dialogueComponent;
+	}
+	
+	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		controllers.add(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
 		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
 		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
 		controllers.add(AnimationControllerUtil.createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "talkAnimation", 1, PawnEntity::talkAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationState<PawnEntity> state)
@@ -282,6 +359,18 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 			return PlayState.CONTINUE;
 		}
 		event.getController().forceAnimationReset();
+		return PlayState.STOP;
+	}
+	
+	private static PlayState talkAnimation(AnimationState<PawnEntity> state)
+	{
+		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
+		if(action == MobAnimation.Action.TALK)
+		{
+			state.getController().setAnimation(TALK_ANIMATION);
+			return PlayState.CONTINUE;
+		}
+		
 		return PlayState.STOP;
 	}
 }

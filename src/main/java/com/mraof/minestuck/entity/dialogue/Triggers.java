@@ -21,6 +21,8 @@ public final class Triggers
 		REGISTER.register("command", () -> Trigger.Command.CODEC);
 		REGISTER.register("take_item", () -> Trigger.TakeItem.CODEC);
 		REGISTER.register("take_matched_item", () -> Trigger.TakeMatchedItem.CODEC);
+		REGISTER.register("set_npc_item", () -> Trigger.SetNPCItem.CODEC);
+		REGISTER.register("set_npc_matched_item", () -> Trigger.SetNPCMatchedItem.CODEC);
 		REGISTER.register("give_item", () -> Trigger.GiveItem.CODEC);
 		REGISTER.register("give_from_loot_table", () -> Trigger.GiveFromLootTable.CODEC);
 		REGISTER.register("add_consort_reputation", () -> Trigger.AddConsortReputation.CODEC);

@@ -2,11 +2,13 @@ package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
@@ -26,6 +28,7 @@ public final class Conditions
 		REGISTER.register("first_time_generating", () -> Condition.FirstTimeGenerating.CODEC);
 		REGISTER.register("list", () -> ListCondition.CODEC);
 		REGISTER.register("carapacian", () -> Condition.IsCarapacian.CODEC);
+		REGISTER.register("is_from_kingdom", () -> Condition.IsFromKingdom.CODEC);
 		REGISTER.register("entity_type", () -> Condition.IsEntityType.CODEC);
 		REGISTER.register("is_is_land", () -> Condition.IsInLand.CODEC);
 		REGISTER.register("is_consort_from_land", () -> Condition.IsConsortFromLand.CODEC);
@@ -35,6 +38,7 @@ public final class Conditions
 		REGISTER.register("title_land_type", () -> Condition.InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> Condition.InTitleLandTypeTag.CODEC);
 		REGISTER.register("at_or_above_y", () -> Condition.AtOrAboveY.CODEC);
+		REGISTER.register("npc_holding_item", () -> Condition.NPCIsHoldingItem.CODEC);
 		REGISTER.register("player_item", () -> Condition.PlayerHasItem.CODEC);
 		REGISTER.register("item_tag_match", () -> Condition.ItemTagMatch.CODEC);
 		REGISTER.register("has_matched_item", () -> Condition.HasMatchedItem.CODEC);
@@ -109,6 +113,26 @@ public final class Conditions
 	public static Condition isInTitleLand(TagKey<TitleLandType> tag)
 	{
 		return new Condition.InTitleLandTypeTag(tag);
+	}
+	
+	public static Condition isInSkaia()
+	{
+		return Condition.IsInSkaia.INSTANCE;
+	}
+	
+	public static Condition isProspitian()
+	{
+		return new Condition.IsFromKingdom(EnumEntityKingdom.PROSPITIAN);
+	}
+	
+	public static Condition isDersite()
+	{
+		return new Condition.IsFromKingdom(EnumEntityKingdom.DERSITE);
+	}
+	
+	public static Condition isHolding(Item item)
+	{
+		return new Condition.NPCIsHoldingItem(item);
 	}
 	
 	@SafeVarargs
