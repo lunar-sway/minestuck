@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:consort_terrain_land_type",
+    "consort": "salamander"
+  },
+  "dialogue": "minestuck:carapacian_soldier/glub_glub"
+}

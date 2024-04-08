@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.*;
@@ -347,6 +348,40 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Is not in specific Land tag");
+		}
+	}
+	
+	record InConsortTerrainLandType(EnumConsort consort) implements NpcOnlyCondition
+	{
+		static final Codec<InConsortTerrainLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				EnumConsort.CODEC.fieldOf("consort").forGetter(InConsortTerrainLandType::consort)
+		).apply(instance, InConsortTerrainLandType::new));
+		
+		@Override
+		public Codec<InConsortTerrainLandType> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				Optional<LandTypePair.Named> potentialLandTypes = LandTypePair.getNamed(serverLevel);
+				if(potentialLandTypes.isPresent())
+				{
+					return potentialLandTypes.get().landTypes().getTerrain().getConsortType() == consort.getConsortType();
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in specific Land");
 		}
 	}
 	

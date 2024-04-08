@@ -5,6 +5,7 @@ import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.MessageProducer;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
@@ -43,6 +44,21 @@ public final class CarapacianSoldierDialogue
 		provider.addRandomlySelectable("forlorn", defaultWeight(isInSkaia()),
 				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("Sometimes they wish they could just all set their weapons down and be done with this war.")));
 		
+		provider.addRandomlySelectable("constant_nakking", defaultWeight(isInConsortLand(EnumConsort.NAKAGATOR)),
+				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They describe how they have a huge headache from the constant nakking.")));
+		
+		provider.addRandomlySelectable("too_quiet", defaultWeight(isInConsortLand(EnumConsort.TURTLE)),
+				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They look around paranoid, saying that while the turtles are a nice change of pace from the other consorts they've come across, they are so quiet its unnerving.")));
+		
+		provider.addRandomlySelectable("constant_thipping", defaultWeight(isInConsortLand(EnumConsort.IGUANA)),
+				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("One of the nearby iguanas asked for some food and when they gave it to them the iguana complained for an hour about the \"lack of a comprehensive flavor profile\".")));
+		
+		provider.addRandomlySelectable("glub_glub", defaultWeight(isInConsortLand(EnumConsort.SALAMANDER)),
+				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They hear the local salamanders glub so often that it's started to become part of their own vocabulary. Glub glub.")));
+		
+		provider.addRandomlySelectable("rain_sleet_or_snow", defaultWeight(alwaysTrue()),
+				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They sigh and share that they would love to deliver mail one day. That has to be one of the most honorable professions out there.")));
+		
 		provider.addRandomlySelectable("dreamer", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
 		{
 			var explainDreamers = builder.add("explain_dreamers", new ChainBuilder()
@@ -66,6 +82,9 @@ public final class CarapacianSoldierDialogue
 		
 		provider.addRandomlySelectable("enemy", defaultWeight(all(isInSkaia(), isProspitian())),
 				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They are panicking about whether any Dersites are nearby.")));
+		
+		provider.addRandomlySelectable("propaganda", defaultWeight(all(isInSkaia(), isDersite())),
+				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They already knew that the propaganda surrounding Prospitians was fake but it was still surprising to see that they didn't have horns or cool fangs or blood red eyes. Kind of a bummer honestly.")));
 		
 		provider.addRandomlySelectable("sword_barter", weighted(40, isHolding(MSItems.REGISWORD.get())), new FolderedDialogue(builder ->
 		{

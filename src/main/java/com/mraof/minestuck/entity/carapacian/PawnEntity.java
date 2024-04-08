@@ -275,9 +275,24 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	}
 	
 	@Override
+	public void addAdditionalSaveData(CompoundTag compound)
+	{
+		super.addAdditionalSaveData(compound);
+		
+		compound.put("dialogue", dialogueComponent.write());
+		
+		compound.putInt("dialogue_reset_ticks", ticksUntilDialogueReset);
+	}
+	
+	@Override
 	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
+		
+		dialogueComponent.read(compound.getCompound("dialogue"));
+		
+		ticksUntilDialogueReset = compound.getInt("dialogue_reset_ticks");
+		
 		setCombatTask();
 	}
 	

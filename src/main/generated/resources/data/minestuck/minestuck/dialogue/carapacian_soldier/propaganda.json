@@ -1,0 +1,14 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dots"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.propaganda"
+      }
+    ]
+  }
+}

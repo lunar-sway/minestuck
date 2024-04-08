@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.tags.TagKey;
@@ -35,6 +36,7 @@ public final class Conditions
 		REGISTER.register("is_consort_in_home_land", () -> Condition.IsConsortInHomeLand.CODEC);
 		REGISTER.register("terrain_land_type", () -> Condition.InTerrainLandType.CODEC);
 		REGISTER.register("terrain_land_type_tag", () -> Condition.InTerrainLandTypeTag.CODEC);
+		REGISTER.register("consort_terrain_land_type", () -> Condition.InConsortTerrainLandType.CODEC);
 		REGISTER.register("title_land_type", () -> Condition.InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> Condition.InTitleLandTypeTag.CODEC);
 		REGISTER.register("at_or_above_y", () -> Condition.AtOrAboveY.CODEC);
@@ -104,6 +106,11 @@ public final class Conditions
 	public static Condition isInTerrainLand(TagKey<TerrainLandType> tag)
 	{
 		return new Condition.InTerrainLandTypeTag(tag);
+	}
+	
+	public static Condition isInConsortLand(EnumConsort consort)
+	{
+		return new Condition.InConsortTerrainLandType(consort);
 	}
 	
 	public static Condition isInTitleLand(RegistryObject<TitleLandType> landType)
