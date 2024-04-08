@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.MessageProducer;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
+import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
@@ -38,6 +39,30 @@ public final class CarapacianSoldierDialogue
 		
 		provider.addRandomlySelectable("dread_waiting", defaultWeight(isInLand()),
 				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They explain that sometimes it's more exhausting to be posted on a Land since there isn't any fighting. If you aren't in combat you have time to think. That's when the dread sets in.")));
+		
+		provider.addRandomlySelectable("forlorn", defaultWeight(isInSkaia()),
+				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("Sometimes they wish they could just all set their weapons down and be done with this war.")));
+		
+		provider.addRandomlySelectable("dreamer", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+		{
+			var explainDreamers = builder.add("explain_dreamers", new ChainBuilder()
+					.node(new NodeBuilder(l.defaultKeyMsg("They explain that Dreamers are heroes who reside in towers on the moons of Prospit and Derse.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("There is one for each Land that exists, although they don't know what the connection is there.")))
+			);
+			
+			builder.addStart(new NodeSelectorBuilder()
+					.node(hasEntered(), new NodeBuilder(dots).addDescription(l.subMsg("familiar", "They look at you with surprise, saying you remind them of the Dreamers."))
+							.addResponse(new ResponseBuilder(l.subMsg("who", "Who are the Dreamers?"))
+									.nextDialogue(explainDreamers)))
+					.defaultNode(new NodeBuilder(dots).addDescription(l.subMsg("unfamiliar", "They are curious as to who you are and what you are doing here."))));
+		}));
+		
+		provider.addRandomlySelectable("not_so_bad", defaultWeight(isInSkaia()), new ChainBuilder()
+				.node(new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They recount one time where they went out to an isolated part of the Battlefield. Unexpectedly, a member of enemy scouting party came across them while sat on a hill side.")))
+				.node(new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They went to draw their weapon only to realize they forgot it back at camp. The two soldiers stared at each other for what felt like ages.")))
+				.node(new NodeBuilder(dots).addDescription(l.defaultKeyMsg("To make things worse, the rest of the scouting party called out to see what was going on. But just when they thought their life was coming to an end, the other soldier pretended like they weren't there and announced that the area was clear.")))
+				.node(new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They never ran so fast, trying to get back somewhere safe. And they certainly never leave anywhere without a weapon now.")))
+		);
 		
 		provider.addRandomlySelectable("enemy", defaultWeight(all(isInSkaia(), isProspitian())),
 				new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They are panicking about whether any Dersites are nearby.")));

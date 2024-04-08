@@ -46,6 +46,7 @@ public final class Conditions
 		REGISTER.register("player_aspect", () -> Condition.PlayerIsAspect.CODEC);
 		REGISTER.register("player_reputation", () -> Condition.PlayerHasReputation.CODEC);
 		REGISTER.register("player_boondollars", () -> Condition.PlayerHasBoondollars.CODEC);
+		REGISTER.register("player_entered", () -> Condition.PlayerHasEntered.CODEC);
 		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
 		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Condition.Flag.CODEC);
@@ -128,6 +129,11 @@ public final class Conditions
 	public static Condition isDersite()
 	{
 		return new Condition.IsFromKingdom(EnumEntityKingdom.DERSITE);
+	}
+	
+	public static Condition hasEntered()
+	{
+		return Condition.PlayerHasEntered.INSTANCE;
 	}
 	
 	public static Condition isHolding(Item item)

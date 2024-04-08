@@ -707,6 +707,34 @@ public interface Condition
 		}
 	}
 	
+	enum PlayerHasEntered implements Condition
+	{
+		INSTANCE;
+		
+		static final Codec<PlayerHasEntered> CODEC = Codec.unit(INSTANCE);
+		
+		@Override
+		public Codec<PlayerHasEntered> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			return SburbPlayerData.get(player).hasEntered();
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Player has not Entered");
+		}
+	}
+	
 	record CustomHasScore(int value, String ownerName, String objectiveName) implements Condition
 	{
 		static final Codec<CustomHasScore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
