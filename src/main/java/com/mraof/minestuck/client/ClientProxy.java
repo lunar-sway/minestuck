@@ -53,18 +53,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class ClientProxy
 {
-	private static void registerRenderers()
-	{
-		BlockEntityRenderers.register(MSBlockEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.GATE.get(), GateRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockRenderer::new);
-//		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
-	}
-	
 	@SubscribeEvent
 	public static void registerKeyMappings(RegisterKeyMappingsEvent event)
 	{
@@ -74,8 +62,6 @@ public class ClientProxy
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
-		registerRenderers();
-		
 		MSScreenFactories.registerScreenFactories();
 
 		EntityRenderers.register(MSEntityTypes.FROG.get(), FrogRenderer::new);
@@ -149,6 +135,15 @@ public class ClientProxy
 	
 	@SubscribeEvent
 	public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
+		
+		BlockEntityRenderers.register(MSBlockEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.GATE.get(), GateRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockRenderer::new);
+//		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 		
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.MOD_SIGN.get(), SignRenderer::new);
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
