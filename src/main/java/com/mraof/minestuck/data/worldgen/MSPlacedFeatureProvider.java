@@ -157,7 +157,7 @@ public final class MSPlacedFeatureProvider
 		context.register(MAGMATIC_IGNEOUS_DISK, placed(features, MSCFeatures.MAGMATIC_IGNEOUS_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(BLACK_SAND_DISK, placed(features, MSCFeatures.BLACK_SAND_DISK,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(PUMICE_STONE_DISK, placed(features, MSCFeatures.PUMICE_STONE_DISK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		context.register(TREATED_PLANKS_DISK, placed(features, MSCFeatures.TREATED_PLANKS_DISK,
