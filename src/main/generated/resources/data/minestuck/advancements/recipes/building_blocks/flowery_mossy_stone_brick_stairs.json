@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_flowery_mossy_bricks": {
+    "has_flowery_mossy_stone_bricks": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_flowery_mossy_bricks",
+      "has_flowery_mossy_stone_bricks",
       "has_the_recipe"
     ]
   ],
