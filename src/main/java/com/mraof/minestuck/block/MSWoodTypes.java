@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.client.renderer.Sheets;
