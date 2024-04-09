@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueAnimationData;
 import com.mraof.minestuck.network.DialoguePackets;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import software.bernie.geckolib.cache.texture.AnimatableTexture;
@@ -17,6 +19,7 @@ import software.bernie.geckolib.cache.texture.AnimatableTexture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * This is a GUI which pops up when talking with a dialogue compatible entity.
@@ -61,7 +64,12 @@ public class DialogueScreen extends Screen
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2) - (animationData.spriteWidth() / 2) - animationData.xOffset();
 		
+		Function<Component, Component> messageStyler = MinestuckConfig.CLIENT.npcDialogueTextColors.get()
+				? Function.identity()
+				: message -> message.copy().withStyle(style -> style.withColor((TextColor) null));
+		
 		this.messageLines = this.dialogueData.messages().stream()
+				.map(messageStyler)
 				.flatMap(message -> font.split(message, GUI_WIDTH - 20).stream())
 				.toList();
 		

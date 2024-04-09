@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.ChatFormatting;
@@ -122,17 +121,14 @@ public final class Dialogue
 					MutableComponent component = Component.translatable(DIALOGUE_FORMAT,
 							entity.getDisplayName(), messageComponent);
 					
-					//color formats the name and message of the npc if enabled
-					if(entity instanceof DialogueEntity dialogueEntity && MinestuckConfig.CLIENT.npcDialogueTextColors.get())
-					{
+					if(entity instanceof DialogueEntity dialogueEntity)
 						component.withStyle(dialogueEntity.getChatColor());
-					}
 					
 					yield component;
 				}
 				case PLAYER -> Component.translatable(DIALOGUE_FORMAT, player.getDisplayName(), messageComponent);
 				case DESCRIPTION ->
-						messageComponent.withStyle(style -> style.withItalic(true).applyFormat(ChatFormatting.GRAY));
+						messageComponent.withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
 			};
 		}
 		
