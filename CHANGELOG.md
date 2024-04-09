@@ -48,6 +48,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
 - Renamed Oil to Shale Oil
 - Pumord is now alchemized with Pumice Stone instead of any regular Stone
+- Minor change to land terrain height
 
 ### Fixed
 
