@@ -11,8 +11,6 @@ import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.CustomVoxelShape;
-import com.mraof.minestuck.util.MSBlockSetType;
-import com.mraof.minestuck.util.MSWoodTypes;
 import com.mraof.minestuck.world.gen.feature.tree.ShadewoodTree;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,58 +42,58 @@ public final class MSBlocks
 	public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Minestuck.MOD_ID);
 	
 	//Signs
-	public static final RegistryObject<Block> CARVED_SIGN = REGISTER.register("carved_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.CARVED));
-	public static final RegistryObject<Block> CARVED_WALL_SIGN = REGISTER.register("carved_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.CARVED));
+	public static final RegistryObject<StandingSignBlock> CARVED_SIGN = REGISTER.register("carved_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.CARVED));
+	public static final RegistryObject<WallSignBlock> CARVED_WALL_SIGN = REGISTER.register("carved_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.CARVED));
 	public static final RegistryObject<Block> CARVED_HANGING_SIGN = REGISTER.register("carved_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.CARVED));
 	public static final RegistryObject<Block> CARVED_WALL_HANGING_SIGN = REGISTER.register("carved_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.CARVED));
 	
-	public static final RegistryObject<Block> DEAD_SIGN = REGISTER.register("dead_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.DEAD));
-	public static final RegistryObject<Block> DEAD_WALL_SIGN = REGISTER.register("dead_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.DEAD));
+	public static final RegistryObject<StandingSignBlock> DEAD_SIGN = REGISTER.register("dead_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.DEAD));
+	public static final RegistryObject<WallSignBlock> DEAD_WALL_SIGN = REGISTER.register("dead_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.DEAD));
 	public static final RegistryObject<Block> DEAD_HANGING_SIGN = REGISTER.register("dead_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.DEAD));
 	public static final RegistryObject<Block> DEAD_WALL_HANGING_SIGN = REGISTER.register("dead_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.DEAD));
 	
-	public static final RegistryObject<Block> END_SIGN = REGISTER.register("end_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.END));
-	public static final RegistryObject<Block> END_WALL_SIGN = REGISTER.register("end_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.END));
+	public static final RegistryObject<StandingSignBlock> END_SIGN = REGISTER.register("end_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.END));
+	public static final RegistryObject<WallSignBlock> END_WALL_SIGN = REGISTER.register("end_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.END));
 	public static final RegistryObject<Block> END_HANGING_SIGN = REGISTER.register("end_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.END));
 	public static final RegistryObject<Block> END_WALL_HANGING_SIGN = REGISTER.register("end_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.END));
 	
-	public static final RegistryObject<Block> FROST_SIGN = REGISTER.register("frost_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.FROST));
-	public static final RegistryObject<Block> FROST_WALL_SIGN = REGISTER.register("frost_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.FROST));
+	public static final RegistryObject<StandingSignBlock> FROST_SIGN = REGISTER.register("frost_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.FROST));
+	public static final RegistryObject<WallSignBlock> FROST_WALL_SIGN = REGISTER.register("frost_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.FROST));
 	public static final RegistryObject<Block> FROST_HANGING_SIGN = REGISTER.register("frost_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.FROST));
 	public static final RegistryObject<Block> FROST_WALL_HANGING_SIGN = REGISTER.register("frost_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.FROST));
 	
-	public static final RegistryObject<Block> GLOWING_SIGN = REGISTER.register("glowing_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.GLOWING));
-	public static final RegistryObject<Block> GLOWING_WALL_SIGN = REGISTER.register("glowing_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.GLOWING));
+	public static final RegistryObject<StandingSignBlock> GLOWING_SIGN = REGISTER.register("glowing_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.GLOWING));
+	public static final RegistryObject<WallSignBlock> GLOWING_WALL_SIGN = REGISTER.register("glowing_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.GLOWING));
 	public static final RegistryObject<Block> GLOWING_HANGING_SIGN = REGISTER.register("glowing_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.GLOWING));
 	public static final RegistryObject<Block> GLOWING_WALL_HANGING_SIGN = REGISTER.register("glowing_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.GLOWING));
 	
-	public static final RegistryObject<Block> RAINBOW_SIGN = REGISTER.register("rainbow_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.RAINBOW));
-	public static final RegistryObject<Block> RAINBOW_WALL_SIGN = REGISTER.register("rainbow_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.RAINBOW));
+	public static final RegistryObject<StandingSignBlock> RAINBOW_SIGN = REGISTER.register("rainbow_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.RAINBOW));
+	public static final RegistryObject<WallSignBlock> RAINBOW_WALL_SIGN = REGISTER.register("rainbow_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.RAINBOW));
 	public static final RegistryObject<Block> RAINBOW_HANGING_SIGN = REGISTER.register("rainbow_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.RAINBOW));
 	public static final RegistryObject<Block> RAINBOW_WALL_HANGING_SIGN = REGISTER.register("rainbow_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.RAINBOW));
 	
-	public static final RegistryObject<Block> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.SHADEWOOD));
-	public static final RegistryObject<Block> SHADEWOOD_WALL_SIGN = REGISTER.register("shadewood_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.SHADEWOOD));
+	public static final RegistryObject<StandingSignBlock> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.SHADEWOOD));
+	public static final RegistryObject<WallSignBlock> SHADEWOOD_WALL_SIGN = REGISTER.register("shadewood_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.SHADEWOOD));
 	public static final RegistryObject<Block> SHADEWOOD_HANGING_SIGN = REGISTER.register("shadewood_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.SHADEWOOD));
 	public static final RegistryObject<Block> SHADEWOOD_WALL_HANGING_SIGN = REGISTER.register("shadewood_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.SHADEWOOD));
 	
-	public static final RegistryObject<Block> TREATED_SIGN = REGISTER.register("treated_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.TREATED));
-	public static final RegistryObject<Block> TREATED_WALL_SIGN = REGISTER.register("treated_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.TREATED));
+	public static final RegistryObject<StandingSignBlock> TREATED_SIGN = REGISTER.register("treated_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.TREATED));
+	public static final RegistryObject<WallSignBlock> TREATED_WALL_SIGN = REGISTER.register("treated_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.TREATED));
 	public static final RegistryObject<Block> TREATED_HANGING_SIGN = REGISTER.register("treated_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.TREATED));
 	public static final RegistryObject<Block> TREATED_WALL_HANGING_SIGN = REGISTER.register("treated_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.TREATED));
 	
-	public static final RegistryObject<Block> LACQUERED_SIGN = REGISTER.register("lacquered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LACQUERED));
-	public static final RegistryObject<Block> LACQUERED_WALL_SIGN = REGISTER.register("lacquered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LACQUERED));
+	public static final RegistryObject<StandingSignBlock> LACQUERED_SIGN = REGISTER.register("lacquered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LACQUERED));
+	public static final RegistryObject<WallSignBlock> LACQUERED_WALL_SIGN = REGISTER.register("lacquered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LACQUERED));
 	public static final RegistryObject<Block> LACQUERED_HANGING_SIGN = REGISTER.register("lacquered_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LACQUERED));
 	public static final RegistryObject<Block> LACQUERED_WALL_HANGING_SIGN = REGISTER.register("lacquered_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.LACQUERED));
 	
-	public static final RegistryObject<Block> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
-	public static final RegistryObject<Block> PERFECTLY_GENERIC_WALL_SIGN = REGISTER.register("perfectly_generic_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
+	public static final RegistryObject<StandingSignBlock> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
+	public static final RegistryObject<WallSignBlock> PERFECTLY_GENERIC_WALL_SIGN = REGISTER.register("perfectly_generic_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
 	public static final RegistryObject<Block> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
 	public static final RegistryObject<Block> PERFECTLY_GENERIC_WALL_HANGING_SIGN = REGISTER.register("perfectly_generic_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
 	
-	public static final RegistryObject<Block> CINDERED_SIGN = REGISTER.register("cindered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.CINDERED));
-	public static final RegistryObject<Block> CINDERED_WALL_SIGN = REGISTER.register("cindered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.CINDERED));
+	public static final RegistryObject<StandingSignBlock> CINDERED_SIGN = REGISTER.register("cindered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.CINDERED));
+	public static final RegistryObject<WallSignBlock> CINDERED_WALL_SIGN = REGISTER.register("cindered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.CINDERED));
 	public static final RegistryObject<Block> CINDERED_HANGING_SIGN = REGISTER.register("cindered_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.CINDERED));
 	public static final RegistryObject<Block> CINDERED_WALL_HANGING_SIGN = REGISTER.register("cindered_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.CINDERED));
 	

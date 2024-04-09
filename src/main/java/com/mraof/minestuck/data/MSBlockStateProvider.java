@@ -517,7 +517,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.UNCARVED_WOOD_PRESSURE_PLATE, MSBlocks.UNCARVED_WOOD);
 		fenceWithItem(MSBlocks.UNCARVED_WOOD_FENCE, MSBlocks.UNCARVED_WOOD);
 		fenceGateWithItem(MSBlocks.UNCARVED_WOOD_FENCE_GATE, MSBlocks.UNCARVED_WOOD);
-		signBlock(((StandingSignBlock) MSBlocks.CARVED_SIGN.get()), ((WallSignBlock) MSBlocks.CARVED_WALL_SIGN.get()),
+		signBlock(MSBlocks.CARVED_SIGN.get(), MSBlocks.CARVED_WALL_SIGN.get(),
 				blockTexture(MSBlocks.CARVED_PLANKS.get()));
 		hangingSignBlock(MSBlocks.CARVED_HANGING_SIGN.get(), MSBlocks.CARVED_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.CARVED_PLANKS.get()));
@@ -592,7 +592,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.TREATED_DOOR);
 		trapDoorWithItem(MSBlocks.TREATED_TRAPDOOR);
 		flatItem(MSItems.TREATED_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.TREATED_SIGN.get()), ((WallSignBlock) MSBlocks.TREATED_WALL_SIGN.get()),
+		signBlock(MSBlocks.TREATED_SIGN.get(), MSBlocks.TREATED_WALL_SIGN.get(),
 				blockTexture(MSBlocks.TREATED_PLANKS.get()));
 		hangingSignBlock(MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.TREATED_PLANKS.get()));
@@ -639,7 +639,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.LACQUERED_DOOR);
 		trapDoorWithItem(MSBlocks.LACQUERED_TRAPDOOR);
 		flatItem(MSItems.LACQUERED_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.LACQUERED_SIGN.get()), ((WallSignBlock) MSBlocks.LACQUERED_WALL_SIGN.get()),
+		signBlock(MSBlocks.LACQUERED_SIGN.get(), MSBlocks.LACQUERED_WALL_SIGN.get(),
 				blockTexture(MSBlocks.LACQUERED_PLANKS.get()));
 		hangingSignBlock(MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.LACQUERED_PLANKS.get()));
@@ -834,7 +834,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.GLOWING_DOOR);
 		trapDoorWithItem(MSBlocks.GLOWING_TRAPDOOR);
 		flatItem(MSItems.GLOWING_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.GLOWING_SIGN.get()), ((WallSignBlock) MSBlocks.GLOWING_WALL_SIGN.get()),
+		signBlock(MSBlocks.GLOWING_SIGN.get(), MSBlocks.GLOWING_WALL_SIGN.get(),
 				blockTexture(MSBlocks.GLOWING_PLANKS.get()));
 		hangingSignBlock(MSBlocks.GLOWING_HANGING_SIGN.get(), MSBlocks.GLOWING_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.GLOWING_PLANKS.get()));
@@ -849,7 +849,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.FROST_DOOR);
 		trapDoorWithItem(MSBlocks.FROST_TRAPDOOR);
 		flatItem(MSItems.FROST_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.FROST_SIGN.get()), ((WallSignBlock) MSBlocks.FROST_WALL_SIGN.get()),
+		signBlock(MSBlocks.FROST_SIGN.get(), MSBlocks.FROST_WALL_SIGN.get(),
 				blockTexture(MSBlocks.FROST_PLANKS.get()));
 		hangingSignBlock(MSBlocks.FROST_HANGING_SIGN.get(), MSBlocks.FROST_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.FROST_PLANKS.get()));
@@ -862,7 +862,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.RAINBOW_DOOR);
 		trapDoorWithItem(MSBlocks.RAINBOW_TRAPDOOR);
 		flatItem(MSItems.RAINBOW_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.RAINBOW_SIGN.get()), ((WallSignBlock) MSBlocks.RAINBOW_WALL_SIGN.get()),
+		signBlock(MSBlocks.RAINBOW_SIGN.get(), MSBlocks.RAINBOW_WALL_SIGN.get(),
 				blockTexture(MSBlocks.RAINBOW_PLANKS.get()));
 		hangingSignBlock(MSBlocks.RAINBOW_HANGING_SIGN.get(), MSBlocks.RAINBOW_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.RAINBOW_PLANKS.get()));
@@ -875,7 +875,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.END_DOOR);
 		trapDoorWithItem(MSBlocks.END_TRAPDOOR);
 		flatItem(MSItems.END_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.END_SIGN.get()), ((WallSignBlock) MSBlocks.END_WALL_SIGN.get()),
+		signBlock(MSBlocks.END_SIGN.get(), MSBlocks.END_WALL_SIGN.get(),
 				blockTexture(MSBlocks.END_PLANKS.get()));
 		hangingSignBlock(MSBlocks.END_HANGING_SIGN.get(), MSBlocks.END_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.END_PLANKS.get()));
@@ -889,7 +889,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.DEAD_DOOR);
 		trapDoorWithItem(MSBlocks.DEAD_TRAPDOOR);
 		flatItem(MSItems.DEAD_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.DEAD_SIGN.get()), ((WallSignBlock) MSBlocks.DEAD_WALL_SIGN.get()),
+		signBlock(MSBlocks.DEAD_SIGN.get(), MSBlocks.DEAD_WALL_SIGN.get(),
 				blockTexture(MSBlocks.DEAD_PLANKS.get()));
 		hangingSignBlock(MSBlocks.DEAD_HANGING_SIGN.get(), MSBlocks.DEAD_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.DEAD_PLANKS.get()));
@@ -904,7 +904,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.CINDERED_DOOR);
 		trapDoorWithItem(MSBlocks.CINDERED_TRAPDOOR);
 		flatItem(MSItems.CINDERED_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.CINDERED_SIGN.get()), ((WallSignBlock) MSBlocks.CINDERED_WALL_SIGN.get()),
+		signBlock(MSBlocks.CINDERED_SIGN.get(), MSBlocks.CINDERED_WALL_SIGN.get(),
 				blockTexture(MSBlocks.CINDERED_PLANKS.get()));
 		hangingSignBlock(MSBlocks.CINDERED_HANGING_SIGN.get(), MSBlocks.CINDERED_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.CINDERED_PLANKS.get()));
@@ -919,7 +919,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.SHADEWOOD_DOOR, "translucent");
 		trapDoorWithItem(MSBlocks.SHADEWOOD_TRAPDOOR, "translucent");
 		flatItem(MSItems.SHADEWOOD_DOOR, MSBlockStateProvider::itemTexture);
-		signBlock(((StandingSignBlock) MSBlocks.SHADEWOOD_SIGN.get()), ((WallSignBlock) MSBlocks.SHADEWOOD_WALL_SIGN.get()),
+		signBlock(MSBlocks.SHADEWOOD_SIGN.get(), MSBlocks.SHADEWOOD_WALL_SIGN.get(),
 				blockTexture(MSBlocks.SHADEWOOD_PLANKS.get()));
 		hangingSignBlock(MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.SHADEWOOD_PLANKS.get()));
@@ -1527,7 +1527,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleDoorBlock(MSBlocks.PERFECTLY_GENERIC_DOOR);
 		flatItem(MSItems.PERFECTLY_GENERIC_DOOR, MSBlockStateProvider::itemTexture);
 		trapDoorWithItem(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR);
-		signBlock(((StandingSignBlock) MSBlocks.PERFECTLY_GENERIC_SIGN.get()), ((WallSignBlock) MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get()),
+		signBlock(MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get(),
 				blockTexture(MSBlocks.GENERIC_OBJECT.get()));
 		hangingSignBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.GENERIC_OBJECT.get()));

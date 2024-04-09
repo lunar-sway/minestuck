@@ -5,13 +5,10 @@ import com.mraof.minestuck.block.plant.FlammableLeavesBlock;
 import com.mraof.minestuck.block.plant.FlammableLogBlock;
 import com.mraof.minestuck.block.plant.StrippableFlammableLogBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.MSBlockSetType;
-import com.mraof.minestuck.util.MSWoodTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -99,9 +96,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> BLOOD_ASPECT_SIGN = MSBlocks.REGISTER.register("blood_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> BLOOD_ASPECT_SIGN = MSBlocks.REGISTER.register("blood_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.BLOOD));
-	public static final RegistryObject<Block> BLOOD_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("blood_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> BLOOD_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("blood_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.BLOOD));
 	public static final RegistryObject<Block> BLOOD_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("blood_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.BLOOD));
@@ -189,9 +186,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> BREATH_ASPECT_SIGN = MSBlocks.REGISTER.register("breath_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> BREATH_ASPECT_SIGN = MSBlocks.REGISTER.register("breath_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.BREATH));
-	public static final RegistryObject<Block> BREATH_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("breath_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> BREATH_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("breath_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.BREATH));
 	public static final RegistryObject<Block> BREATH_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("breath_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.BREATH));
@@ -279,9 +276,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> DOOM_ASPECT_SIGN = MSBlocks.REGISTER.register("doom_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> DOOM_ASPECT_SIGN = MSBlocks.REGISTER.register("doom_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.DOOM));
-	public static final RegistryObject<Block> DOOM_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("doom_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> DOOM_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("doom_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.DOOM));
 	public static final RegistryObject<Block> DOOM_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("doom_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.DOOM));
@@ -370,9 +367,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> HEART_ASPECT_SIGN = MSBlocks.REGISTER.register("heart_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> HEART_ASPECT_SIGN = MSBlocks.REGISTER.register("heart_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.HEART));
-	public static final RegistryObject<Block> HEART_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("heart_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> HEART_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("heart_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.HEART));
 	public static final RegistryObject<Block> HEART_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("heart_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.HEART));
@@ -460,9 +457,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> HOPE_ASPECT_SIGN = MSBlocks.REGISTER.register("hope_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> HOPE_ASPECT_SIGN = MSBlocks.REGISTER.register("hope_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.HOPE));
-	public static final RegistryObject<Block> HOPE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("hope_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> HOPE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("hope_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.HOPE));
 	public static final RegistryObject<Block> HOPE_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("hope_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.HOPE));
@@ -551,9 +548,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> LIFE_ASPECT_SIGN = MSBlocks.REGISTER.register("life_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> LIFE_ASPECT_SIGN = MSBlocks.REGISTER.register("life_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LIFE));
-	public static final RegistryObject<Block> LIFE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("life_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> LIFE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("life_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LIFE));
 	public static final RegistryObject<Block> LIFE_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("life_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LIFE));
@@ -641,9 +638,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> LIGHT_ASPECT_SIGN = MSBlocks.REGISTER.register("light_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> LIGHT_ASPECT_SIGN = MSBlocks.REGISTER.register("light_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LIGHT));
-	public static final RegistryObject<Block> LIGHT_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("light_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> LIGHT_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("light_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LIGHT));
 	public static final RegistryObject<Block> LIGHT_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("light_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LIGHT));
@@ -732,9 +729,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> MIND_ASPECT_SIGN = MSBlocks.REGISTER.register("mind_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> MIND_ASPECT_SIGN = MSBlocks.REGISTER.register("mind_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.MIND));
-	public static final RegistryObject<Block> MIND_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("mind_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> MIND_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("mind_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.MIND));
 	public static final RegistryObject<Block> MIND_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("mind_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.MIND));
@@ -822,9 +819,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> RAGE_ASPECT_SIGN = MSBlocks.REGISTER.register("rage_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> RAGE_ASPECT_SIGN = MSBlocks.REGISTER.register("rage_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.RAGE));
-	public static final RegistryObject<Block> RAGE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("rage_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> RAGE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("rage_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.RAGE));
 	public static final RegistryObject<Block> RAGE_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("rage_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.RAGE));
@@ -912,9 +909,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> SPACE_ASPECT_SIGN = MSBlocks.REGISTER.register("space_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> SPACE_ASPECT_SIGN = MSBlocks.REGISTER.register("space_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.SPACE));
-	public static final RegistryObject<Block> SPACE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("space_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> SPACE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("space_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.SPACE));
 	public static final RegistryObject<Block> SPACE_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("space_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.SPACE));
@@ -1002,9 +999,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> TIME_ASPECT_SIGN = MSBlocks.REGISTER.register("time_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> TIME_ASPECT_SIGN = MSBlocks.REGISTER.register("time_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.TIME));
-	public static final RegistryObject<Block> TIME_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("time_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> TIME_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("time_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.TIME));
 	public static final RegistryObject<Block> TIME_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("time_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.TIME));
@@ -1092,9 +1089,9 @@ public final class AspectTreeBlocks
 			() -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_LADDER_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_LADDER);
 	
-	public static final RegistryObject<Block> VOID_ASPECT_SIGN = MSBlocks.REGISTER.register("void_aspect_sign",
+	public static final RegistryObject<StandingSignBlock> VOID_ASPECT_SIGN = MSBlocks.REGISTER.register("void_aspect_sign",
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.VOID));
-	public static final RegistryObject<Block> VOID_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("void_aspect_wall_sign",
+	public static final RegistryObject<WallSignBlock> VOID_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("void_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.VOID));
 	public static final RegistryObject<Block> VOID_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("void_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.VOID));
