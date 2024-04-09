@@ -109,21 +109,7 @@ public final class Dialogue
 					this.messages.stream()
 			).map(messagePair -> this.buildMessage(messagePair, entity, player)).toList();
 			
-			return new DialogueData(combineLines(lines), this.guiPath(), responses, this.animation, ((DialogueEntity) entity).getSpriteType());
-		}
-		
-		private static Component combineLines(Iterable<Component> lines)
-		{
-			MutableComponent component = Component.empty();
-			boolean isFirst = true;
-			for(Component line : lines)
-			{
-				if(!isFirst)
-					component.append("\n");
-				component.append(line);
-				isFirst = false;
-			}
-			return component;
+			return new DialogueData(lines, this.guiPath(), responses, this.animation, ((DialogueEntity) entity).getSpriteType());
 		}
 		
 		private Component buildMessage(Pair<MessageType, DialogueMessage> messagePair, LivingEntity entity, ServerPlayer player)
@@ -261,22 +247,22 @@ public final class Dialogue
 		).apply(instance, SelectableDialogue::new));
 	}
 	
-	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimationData animationData, String spriteType)
+	public record DialogueData(List<Component> messages, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimationData animationData, String spriteType)
 	{
 		public static DialogueData read(FriendlyByteBuf buffer)
 		{
-			Component message = buffer.readComponent();
+			List<Component> messages = buffer.readList(FriendlyByteBuf::readComponent);
 			ResourceLocation guiBackground = buffer.readResourceLocation();
 			List<ResponseData> responses = buffer.readList(ResponseData::read);
 			DialogueAnimationData animation = DialogueAnimationData.read(buffer);
 			String spriteType = buffer.readUtf(25);
 			
-			return new DialogueData(message, guiBackground, responses, animation, spriteType);
+			return new DialogueData(messages, guiBackground, responses, animation, spriteType);
 		}
 		
 		public void write(FriendlyByteBuf buffer)
 		{
-			buffer.writeComponent(this.message);
+			buffer.writeCollection(this.messages, FriendlyByteBuf::writeComponent);
 			buffer.writeResourceLocation(this.guiBackground);
 			buffer.writeCollection(this.responses, (byteBuf, responseData) -> responseData.write(byteBuf));
 			this.animationData.write(buffer);

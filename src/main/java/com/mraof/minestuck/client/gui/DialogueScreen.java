@@ -61,7 +61,9 @@ public class DialogueScreen extends Screen
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2) - (animationData.spriteWidth() / 2) - animationData.xOffset();
 		
-		this.messageLines = font.split(this.dialogueData.message(), GUI_WIDTH - 20);
+		this.messageLines = this.dialogueData.messages().stream()
+				.flatMap(message -> font.split(message, GUI_WIDTH - 20).stream())
+				.toList();
 		
 		recreateResponseButtons();
 	}
