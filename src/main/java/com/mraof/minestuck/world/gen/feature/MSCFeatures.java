@@ -36,7 +36,6 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_HOUSE = key("carved_house");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CARVED_LOG = key("carved_log");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_CARVED_LOG = key("large_carved_log");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_UNFINISHED_TABLE = key("large_unfinished_table");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_CHAIR = key("treated_chair");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_TABLE = key("treated_table");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> UNFINISHED_CARVED_BOOKSHELF = key("unfinished_carved_bookshelf");
@@ -52,6 +51,10 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MASSIVE_CHAIR = key("massive_chair");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MASSIVE_STOOL = key("massive_stool");
 	
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR_POOL = key("sulfur_pool");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CAST_IRON_BUILDING = key("cast_iron_building");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> CAST_IRON_PLATFORM = key("cast_iron_platform");
+	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_POOL = key("blood_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OIL_POOL = key("oil_pool");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> OASIS = key("oasis");
@@ -66,6 +69,9 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> RED_SAND_DISK = key("red_sand_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SLIME_DISK = key("slime_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> NETHERRACK_DISK = key("netherrack_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> MAGMATIC_IGNEOUS_DISK = key("magmatic_igneous_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> BLACK_SAND_DISK = key("black_sand_disk");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> PUMICE_STONE_DISK = key("pumice_stone_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_PLANKS_DISK = key("treated_planks_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LACQUERED_PLANKS_DISK = key("lacquered_planks_disk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TREATED_UNCARVED_WOOD_DISK = key("treated_uncarved_wood_disk");
@@ -117,7 +123,9 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_GRASS_PATCH = key("petrified_grass_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_POPPY_PATCH = key("petrified_poppy_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SINGED_GRASS_PATCH = key("singed_grass_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SINGED_FOLIAGE_PATCH = key("singed_foliage_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> IGNEOUS_SPIKE_PATCH = key("igneous_spike_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR_BUBBLE_PATCH = key("sulfur_bubble_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOMING_CACTUS_PATCH = key("blooming_cactus_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DESERT_BUSH_PATCH = key("desert_bush_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SANDY_GRASS_PATCH = key("sandy_grass_patch");

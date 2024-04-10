@@ -826,17 +826,30 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_FROST_BRICKS.get()).input(Items.CHISELED_STONE_BRICKS).and().namedInput(Items.ICE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_FROST_BRICKS.get()).input(Items.CHISELED_STONE_BRICKS).and().namedInput(Items.PACKED_ICE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get()).input(MSBlocks.CHISELED_MYCELIUM_BRICKS.get()).or().namedInput(MSItems.SUSHROOM.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON.get()).input(Items.IRON_BLOCK).and().input(Items.LAVA_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_CAST_IRON.get()).input(Items.CHISELED_STONE_BRICKS).or().input(MSBlocks.CAST_IRON.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.STEEL_BEAM.get()).input(Items.QUARTZ_PILLAR).and().input(MSBlocks.CAST_IRON.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON_TILE.get()).input(MSBlocks.CAST_IRON.get()).and().input(Blocks.COPPER_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON_SHEET.get()).input(MSBlocks.CAST_IRON.get()).and().input(ItemTags.PLANKS).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON_FRAME.get()).input(MSBlocks.CAST_IRON.get()).or().input(Blocks.SCAFFOLDING).build(consumer);
+		
+		CombinationRecipeBuilder.of(MSBlocks.STEEL_BEAM.get()).input(Items.QUARTZ_PILLAR).and().input(Blocks.IRON_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.MYCELIUM_STONE.get()).input(Tags.Items.STONE).and().input(Items.MYCELIUM).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE.get()).input(Items.STONE).and().namedInput(Items.BLACK_DYE).build(consumer);
+		
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE.get()).input(Tags.Items.STONE).and().namedInput(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE.get()).input(Items.STONE).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_BRICKS.get()).namedInput(Items.STONE_BRICKS).and().namedInput(Items.BLACK_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_BRICKS.get()).namedInput(Items.BRICKS).and().namedInput(MSBlocks.BLACK_STONE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).input(Items.SAND).and().namedInput(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).input(Items.SAND).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.IGNEOUS_STONE.get()).input(Items.BLACKSTONE).or().input(MSBlocks.BLACK_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.POLISHED_IGNEOUS_BRICKS.get()).input(Items.BRICKS).and().input(MSBlocks.IGNEOUS_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.MAGMATIC_IGNEOUS_STONE.get()).input(MSBlocks.IGNEOUS_STONE.get()).or().input(Items.MAGMA_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.IGNEOUS_SPIKE.get()).input(MSBlocks.IGNEOUS_STONE.get()).or().input(Items.POINTED_DRIPSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PUMICE_STONE.get()).input(Items.SPONGE).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.PUMICE_BRICKS.get()).input(Items.BRICKS).or().input(MSBlocks.PUMICE_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.PUMICE_TILES.get()).input(Items.POLISHED_ANDESITE).or().input(MSBlocks.PUMICE_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.HEAT_LAMP.get()).input(MSItems.MOLTEN_AMBER_BUCKET.get()).or().input(Items.SHROOMLIGHT).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get()).input(Items.MOSSY_COBBLESTONE).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get()).input(Items.MOSSY_STONE_BRICKS).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
@@ -893,6 +906,15 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.MIRROR.get()).input(Items.PAINTING).or().input(Items.WATER_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PARTICLE_ACCELERATOR.get()).input(Items.REPEATER).or().input(MSItems.ENERGY_CORE.get()).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.OIL_BUCKET.get()).input(Items.LAVA_BUCKET).and().input(Items.BONE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.BLOOD_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.ROTTEN_FLESH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.BRAIN_JUICE_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.SLIME_BALL).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.WATER_COLORS_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Tags.Items.DYES).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.ENDER_BUCKET.get()).input(Items.LAVA_BUCKET).and().input(Items.ENDER_PEARL).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.LIGHT_WATER_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.GLOWSTONE_DUST).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CAULK_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.QUARTZ).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MOLTEN_AMBER_BUCKET.get()).input(Items.LAVA_BUCKET).and().input(Items.HONEY_BOTTLE).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSItems.UNKNOWABLE_EGG.get()).input(MSItems.SURPRISE_EMBRYO.get()).or().input(MSItems.GRIMOIRE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LONG_FORGOTTEN_WARHORN.get()).input(Items.NOTE_BLOCK).and().input(MSItems.GRIMOIRE.get()).build(consumer);
 		
@@ -935,6 +957,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_CRUXITE_ORE.get()).input(MSItems.RAW_CRUXITE.get()).and().input(MSBlocks.PINK_STONE.get()).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE.get()).input(MSItems.RAW_CRUXITE.get()).and().input(MSBlocks.MYCELIUM_STONE.get()).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE.get()).input(MSItems.RAW_CRUXITE.get()).and().input(MSBlocks.UNCARVED_WOOD.get()).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_CRUXITE_ORE.get()).input(MSItems.RAW_CRUXITE.get()).and().input(MSBlocks.BLACK_STONE.get()).buildFor(consumer, Minestuck.MOD_ID);
 		
 		CombinationRecipeBuilder.of(MSBlocks.STONE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.DEEPSLATE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(Items.DEEPSLATE).buildFor(consumer, Minestuck.MOD_ID);
@@ -947,23 +970,34 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(MSBlocks.PINK_STONE.get()).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.MYCELIUM_STONE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(MSBlocks.MYCELIUM_STONE.get()).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(MSBlocks.UNCARVED_WOOD.get()).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(MSBlocks.BLACK_STONE.get()).buildFor(consumer, Minestuck.MOD_ID);
 		
 		CombinationRecipeBuilder.of(MSBlocks.NETHERRACK_COAL_ORE.get()).input(Items.COAL).and().input(Items.NETHERRACK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SHADE_STONE_COAL_ORE.get()).input(Items.COAL).and().input(MSBlocks.SHADE_STONE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_COAL_ORE.get()).input(Items.COAL).and().input(MSBlocks.PINK_STONE.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.END_STONE_IRON_ORE.get()).input(Items.IRON_INGOT).and().input(Items.END_STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SANDSTONE_IRON_ORE.get()).input(Items.IRON_INGOT).and().input(Items.SANDSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.RED_SANDSTONE_IRON_ORE.get()).input(Items.IRON_INGOT).and().input(Items.RED_SANDSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD_IRON_ORE.get()).input(Items.IRON_INGOT).and().input(MSBlocks.UNCARVED_WOOD.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.SANDSTONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(Items.SANDSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.RED_SANDSTONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(Items.RED_SANDSTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SHADE_STONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(MSBlocks.SHADE_STONE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(MSBlocks.PINK_STONE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_GOLD_ORE.get()).input(Items.GOLD_INGOT).and().input(MSBlocks.BLACK_STONE.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.END_STONE_REDSTONE_ORE.get()).input(Items.REDSTONE).and().input(Items.END_STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE.get()).input(Items.REDSTONE).and().input(MSBlocks.UNCARVED_WOOD.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_REDSTONE_ORE.get()).input(Items.REDSTONE).and().input(MSBlocks.BLACK_STONE.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.STONE_QUARTZ_ORE.get()).input(Items.QUARTZ).and().input(Items.STONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.BLACK_STONE_QUARTZ_ORE.get()).input(Items.QUARTZ).and().input(MSBlocks.BLACK_STONE.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_LAPIS_ORE.get()).input(Items.LAPIS_LAZULI).and().input(MSBlocks.PINK_STONE.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_DIAMOND_ORE.get()).input(Items.DIAMOND).and().input(MSBlocks.PINK_STONE.get()).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD_EMERALD_ORE.get()).input(Items.EMERALD).and().input(MSBlocks.UNCARVED_WOOD.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.EMERALD_SWORD.get()).input(Items.DIAMOND_SWORD).or().input(Items.EMERALD).build(consumer);

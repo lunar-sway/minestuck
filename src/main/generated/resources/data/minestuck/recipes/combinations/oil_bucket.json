@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:lava_bucket"
+  },
+  "input2": {
+    "item": "minecraft:bone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:oil_bucket"
+  }
+}

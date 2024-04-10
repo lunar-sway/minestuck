@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "minestuck:pumice_stone"
+  },
+  "result": "minestuck:pumice_stone_stairs"
+}

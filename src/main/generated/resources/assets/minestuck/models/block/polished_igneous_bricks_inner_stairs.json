@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "minestuck:block/polished_igneous_bricks",
+    "side": "minestuck:block/polished_igneous_bricks",
+    "top": "minestuck:block/polished_igneous_bricks"
+  }
+}
