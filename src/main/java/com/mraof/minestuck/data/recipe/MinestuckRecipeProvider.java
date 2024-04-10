@@ -94,11 +94,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsRecipe(MSBlocks.SHADE_BRICK_STAIRS, MSBlocks.SHADE_BRICKS).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.FROST_TILE_STAIRS, MSBlocks.FROST_TILE).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.FROST_BRICK_STAIRS, MSBlocks.FROST_BRICKS).save(recipeBuilder);
-		CommonRecipes.stairsRecipe(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.MYCELIUM_STAIRS, MSBlocks.MYCELIUM_STONE).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.MYCELIUM_BRICK_STAIRS, MSBlocks.MYCELIUM_BRICKS).save(recipeBuilder);
-		CommonRecipes.stairsRecipe(MSBlocks.BLACK_STONE_STAIRS, MSBlocks.BLACK_STONE).save(recipeBuilder);
-		CommonRecipes.stairsRecipe(MSBlocks.BLACK_STONE_BRICK_STAIRS, MSBlocks.BLACK_STONE_BRICKS).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.CHALK_STAIRS, MSBlocks.CHALK).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.CHALK_BRICK_STAIRS, MSBlocks.CHALK_BRICKS).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.PINK_STONE_STAIRS, MSBlocks.PINK_STONE).save(recipeBuilder);
@@ -118,8 +115,6 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.slabRecipe(MSBlocks.FROST_BRICK_SLAB, MSBlocks.FROST_BRICKS).save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.CHALK_SLAB, MSBlocks.CHALK).save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.CHALK_BRICK_SLAB, MSBlocks.CHALK_BRICKS).save(recipeBuilder);
-		CommonRecipes.slabRecipe(MSBlocks.BLACK_STONE_SLAB, MSBlocks.BLACK_STONE).save(recipeBuilder);
-		CommonRecipes.slabRecipe(MSBlocks.BLACK_STONE_BRICK_SLAB, MSBlocks.BLACK_STONE_BRICKS).save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.MYCELIUM_SLAB, MSBlocks.MYCELIUM_STONE).save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.MYCELIUM_BRICK_SLAB, MSBlocks.MYCELIUM_BRICKS).save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.PINK_STONE_SLAB, MSBlocks.PINK_STONE).save(recipeBuilder);
@@ -537,10 +532,12 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.FLOWERY_FROST_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.FLOWERY_FROST_BRICK_SLAB.get(), 2).unlockedBy("has_flowery_frost_bricks", has(MSBlocks.FLOWERY_FROST_BRICKS.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "flowery_frost_brick_slab_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.FLOWERY_FROST_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.FLOWERY_FROST_BRICK_WALL.get(), 2).unlockedBy("has_flowery_frost_bricks", has(MSBlocks.FLOWERY_FROST_BRICKS.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "flowery_frost_brick_wall_from_stonecutting"));
 		
+		CommonRecipes.stairsRecipe(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON).save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.CAST_IRON_SLAB, MSBlocks.CAST_IRON).group("wooden_slab").save(recipeBuilder);
 		CommonRecipes.wallRecipe(MSBlocks.CAST_IRON_WALL, MSBlocks.CAST_IRON).group("stone_wall").save(recipeBuilder);
 		CommonRecipes.buttonRecipe(MSBlocks.CAST_IRON_BUTTON, MSBlocks.CAST_IRON).save(recipeBuilder);
 		CommonRecipes.pressurePlateRecipe(MSBlocks.CAST_IRON_PRESSURE_PLATE, MSBlocks.CAST_IRON).group("stone_pressure_plate").save(recipeBuilder);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.CAST_IRON.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.CAST_IRON_STAIRS.get()).unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "cast_iron_stairs_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.CAST_IRON.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.CAST_IRON_SLAB.get(), 2).unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "cast_iron_slab_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.CAST_IRON.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.CAST_IRON_WALL.get(), 2).unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "cast_iron_wall_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.CAST_IRON.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.CAST_IRON_FRAME.get(), 1).unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "cast_iron_frame_from_stonecutting"));
@@ -592,6 +589,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.FLOWERY_MYCELIUM_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.FLOWERY_MYCELIUM_BRICK_SLAB.get(), 2).unlockedBy("has_flowery_mycelium_bricks", has(MSBlocks.FLOWERY_MYCELIUM_BRICKS.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "flowery_mycelium_brick_slab_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.FLOWERY_MYCELIUM_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.FLOWERY_MYCELIUM_BRICK_WALL.get(), 2).unlockedBy("has_flowery_mycelium_bricks", has(MSBlocks.FLOWERY_MYCELIUM_BRICKS.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "flowery_mycelium_brick_wall_from_stonecutting"));
 		
+		CommonRecipes.stairsRecipe(MSBlocks.BLACK_STONE_STAIRS, MSBlocks.BLACK_STONE).save(recipeBuilder);
+		CommonRecipes.slabRecipe(MSBlocks.BLACK_STONE_SLAB, MSBlocks.BLACK_STONE).save(recipeBuilder);
 		CommonRecipes.wallRecipe(MSBlocks.BLACK_STONE_WALL, MSBlocks.BLACK_STONE).group("stone_wall").save(recipeBuilder);
 		CommonRecipes.buttonRecipe(MSBlocks.BLACK_STONE_BUTTON, MSBlocks.BLACK_STONE).save(recipeBuilder);
 		CommonRecipes.pressurePlateRecipe(MSBlocks.BLACK_STONE_PRESSURE_PLATE, MSBlocks.BLACK_STONE).group("stone_pressure_plate").save(recipeBuilder);
@@ -611,10 +610,11 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.POLISHED_BLACK_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.POLISHED_BLACK_STONE_SLAB.get(), 2).unlockedBy("has_polished_black_stone", has(MSBlocks.POLISHED_BLACK_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "polished_black_stone_slab_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.POLISHED_BLACK_STONE.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.POLISHED_BLACK_STONE_WALL.get(), 2).unlockedBy("has_polished_black_stone", has(MSBlocks.POLISHED_BLACK_STONE.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "polished_black_stone_wall_from_stonecutting"));
 		
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.BLACK_STONE_BRICKS.get(), 4).define('#', MSBlocks.BLACK_STONE.get()).pattern("##").pattern("##").unlockedBy("has_black_stone", has(MSBlocks.BLACK_STONE.get())).save(recipeBuilder);
+		CommonRecipes.stairsRecipe(MSBlocks.BLACK_STONE_BRICK_STAIRS, MSBlocks.BLACK_STONE_BRICKS).save(recipeBuilder);
+		CommonRecipes.slabRecipe(MSBlocks.BLACK_STONE_BRICK_SLAB, MSBlocks.BLACK_STONE_BRICKS).save(recipeBuilder);
 		CommonRecipes.wallRecipe(MSBlocks.BLACK_STONE_BRICK_WALL, MSBlocks.BLACK_STONE_BRICKS).group("stone_wall").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.BLACK_STONE_BRICKS.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.BLACK_STONE_BRICK_WALL.get(), 2).unlockedBy("has_black_stone_bricks", has(MSBlocks.BLACK_STONE_BRICKS.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "black_stone_brick_wall_from_stonecutting"));
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.BLACK_STONE_BRICK_STAIRS.get(), 4).define('#', MSBlocks.BLACK_STONE_BRICKS.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_black_stone_bricks", has(MSBlocks.BLACK_STONE_BRICKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.BLACK_STONE_BRICK_SLAB.get(), 6).define('#', MSBlocks.BLACK_STONE_BRICKS.get()).pattern("###").unlockedBy("has_black_stone_bricks", has(MSBlocks.BLACK_STONE_BRICKS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CHISELED_BLACK_STONE_BRICKS.get()).define('#', MSBlocks.BLACK_STONE_BRICK_SLAB.get()).pattern("#").pattern("#").unlockedBy("has_black_stone_brick_slab", has(MSBlocks.BLACK_STONE_BRICK_SLAB.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.BLACK_STONE_COLUMN.get(), 3).define('#', MSBlocks.BLACK_STONE_BRICKS.get()).pattern("#").pattern("#").pattern("#").unlockedBy("has_black_stone_bricks", has(MSBlocks.BLACK_STONE_BRICKS.get())).save(recipeBuilder);
 		

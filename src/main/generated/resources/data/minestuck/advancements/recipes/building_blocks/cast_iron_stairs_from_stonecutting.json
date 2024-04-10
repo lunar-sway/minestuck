@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minestuck:cast_iron_stairs_from_cast_iron_stonecutting"
+        "recipe": "minestuck:cast_iron_stairs_from_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minestuck:cast_iron_stairs_from_cast_iron_stonecutting"
+      "minestuck:cast_iron_stairs_from_stonecutting"
     ]
   },
   "sends_telemetry_event": false
