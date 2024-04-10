@@ -43,6 +43,7 @@ public class DialogueScreen extends Screen
 	private final List<List<DialogueButton>> responseButtonPages = new ArrayList<>();
 	private int responsePage = 0;
 	
+	//todo replace buttons/pages with a scrollbar
 	private DialogueButton previousButton;
 	private DialogueButton nextButton;
 	
