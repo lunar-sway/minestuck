@@ -6,13 +6,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.StringRepresentable;
-import software.bernie.geckolib.cache.texture.AnimatableTexture;
-
-import java.util.Locale;
 
 public record DialogueAnimationData(String emotion, int spriteHeight, int spriteWidth, int xOffset, int yOffset, float scale)
 {
@@ -68,29 +65,16 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 		AbstractTexture abstractTexture = Minecraft.getInstance().getTextureManager().getTexture(spritePath);
 		
 		//if the sprite for the given emotion cannot be found, it will try to render the generic sprite instead. If the generic sprite cannot be found, the invalid texture is allowed to proceed
-		if(!(abstractTexture instanceof SimpleTexture))
+		if(abstractTexture == MissingTextureAtlasSprite.getTexture())
 		{
 			ResourceLocation fallbackSpritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + GENERIC_EMOTION + ".png");
-			if(Minecraft.getInstance().getTextureManager().getTexture(fallbackSpritePath) instanceof SimpleTexture fallbackTexture)
+			if(Minecraft.getInstance().getTextureManager().getTexture(fallbackSpritePath) instanceof SimpleTexture)
 			{
-				ensureAnimatable(fallbackTexture, fallbackSpritePath);
 				return fallbackSpritePath;
 			} else
 				return spritePath;
 		}
 		
-		ensureAnimatable(abstractTexture, spritePath);
-		
 		return spritePath;
-	}
-	
-	private static void ensureAnimatable(AbstractTexture abstractTexture, ResourceLocation sprite)
-	{
-		//if the texture is not loaded as an AnimatableTexture, create a new AnimatableTexture and register it
-		if(!(abstractTexture instanceof AnimatableTexture))
-		{
-			AnimatableTexture animatableTexture = new AnimatableTexture(sprite);
-			Minecraft.getInstance().getTextureManager().register(sprite, animatableTexture);
-		}
 	}
 }
