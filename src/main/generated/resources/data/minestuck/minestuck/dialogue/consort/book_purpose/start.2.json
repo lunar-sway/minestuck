@@ -1,0 +1,19 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.book_purpose.start.2",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.book_purpose.start.2.disagree",
+        "next_dialogue": {
+          "id": "minestuck:consort/book_purpose/unenlightened",
+          "player_message": "minestuck.dialogue.consort.book_purpose.start.2.disagree.reply",
+          "set_as_entrypoint": false
+        }
+      },
+      {
+        "message": "minestuck.dialogue.consort.book_purpose.start.2.continue",
+        "next_dialogue": "minestuck:consort/book_purpose/fact_2"
+      }
+    ]
+  }
+}

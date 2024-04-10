@@ -1,0 +1,14 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.underling_commission.explain_carapacian.4",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.underling_commission.explain_carapacian.4.why_fight",
+        "next_dialogue": "minestuck:consort/underling_commission/no_idea"
+      },
+      {
+        "message": "minestuck.dialogue.goodbye"
+      }
+    ]
+  }
+}

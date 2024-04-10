@@ -29,6 +29,11 @@
           {
             "type": "minestuck:set_dialogue",
             "new_path": "minestuck:consort/generic_thanks"
+          },
+          {
+            "type": "minestuck:set_flag",
+            "flag": "helpingPlayer",
+            "player_specific": true
           }
         ]
       },

@@ -12,7 +12,12 @@
             "condition": {
               "type": "minestuck:has_matched_item"
             },
-            "message": "minestuck.dialogue.consort.hungry.first_no.yes",
+            "message": {
+              "arguments": [
+                "matched_item"
+              ],
+              "key": "minestuck.dialogue.consort.hungry.first_no.yes"
+            },
             "next_dialogue": {
               "id": "minestuck:consort/hungry/finally",
               "reply_messages": [
@@ -30,7 +35,7 @@
                   }
                 }
               ],
-              "set_as_entrypoint": true
+              "set_as_entrypoint": false
             },
             "triggers": [
               {
@@ -39,6 +44,15 @@
               {
                 "type": "minestuck:add_boondollars",
                 "boondollars": 10
+              },
+              {
+                "type": "minestuck:set_dialogue",
+                "new_path": "minestuck:consort/hungry/satisfied"
+              },
+              {
+                "type": "minestuck:set_flag",
+                "flag": "helpingPlayer",
+                "player_specific": true
               }
             ]
           },

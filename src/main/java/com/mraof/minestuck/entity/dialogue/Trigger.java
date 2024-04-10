@@ -284,6 +284,11 @@ public sealed interface Trigger
 				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(GiveItem::amount)
 		).apply(instance, GiveItem::new));
 		
+		public GiveItem(Item item)
+		{
+			this(item, 1);
+		}
+		
 		@Override
 		public Codec<GiveItem> codec()
 		{

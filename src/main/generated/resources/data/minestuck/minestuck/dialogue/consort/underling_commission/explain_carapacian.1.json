@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.underling_commission.explain_carapacian.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/underling_commission/explain_carapacian.2"
+      }
+    ]
+  }
+}

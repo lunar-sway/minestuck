@@ -1,0 +1,13 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:title_land_type_tag",
+        "land_type_tag": "minestuck:monsters"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/why_monsters/start"
+}
