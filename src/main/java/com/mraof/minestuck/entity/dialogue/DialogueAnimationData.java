@@ -7,7 +7,6 @@ import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -67,12 +66,7 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 		//if the sprite for the given emotion cannot be found, it will try to render the generic sprite instead. If the generic sprite cannot be found, the invalid texture is allowed to proceed
 		if(abstractTexture == MissingTextureAtlasSprite.getTexture())
 		{
-			ResourceLocation fallbackSpritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + GENERIC_EMOTION + ".png");
-			if(Minecraft.getInstance().getTextureManager().getTexture(fallbackSpritePath) instanceof SimpleTexture)
-			{
-				return fallbackSpritePath;
-			} else
-				return spritePath;
+			return new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + GENERIC_EMOTION + ".png");
 		}
 		
 		return spritePath;
