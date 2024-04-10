@@ -219,9 +219,9 @@ public final class ConsortDialogue
 					.addMessage(l.subMsg("a", "I'm feeling generous, so how about this."))
 					.addMessage(l.subMsg("b", "If you want to get started on being an intellectual giant, I can offer you a discounted price on my self help memoir. It's only 5 payments of 8000 boondollars."))
 					.addDescription(l.subMsg("description", "They show you a book labelled \"Grindset Tales: From Pawn to King (How to follow the Philosopher's Journey)\""))
-					.addResponse(new ResponseBuilder(l.subMsg("purchase", "[Purchase book]")).visibleCondition(resource -> "No matter how you feel, you are compelled to decline", none(alwaysTrue())))
-					.addResponse(new ResponseBuilder(l.subMsg("decline", "Yeah no way.")))
-					.addResponse(new ResponseBuilder(l.subMsg("decline_hard", "Absolutely no chance.")))
+					.addResponse(new ResponseBuilder(l.subMsg("purchase", "[Purchase book]")).visibleCondition(l.subText("not_purchase","No matter how you feel, you are compelled to decline"), none(alwaysTrue())))
+					.addClosingResponse(l.subMsg("decline", "Yeah no way."))
+					.addClosingResponse(l.subMsg("decline_hard", "Absolutely no chance."))
 			);
 			
 			var unenlightened = builder.add("unenlightened", new NodeBuilder(l.defaultKeyMsg("That's a pretty low IQ sentiment. To be honest I think you could use some help moving away from such a toxic mindset."))

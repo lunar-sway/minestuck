@@ -25,7 +25,7 @@
           ],
           "list_type": "none"
         },
-        "fail_tooltip": "No matter how you feel, you are compelled to decline",
+        "fail_tooltip": "minestuck.dialogue.consort.book_purpose.buy_my_products.not_purchase",
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.book_purpose.buy_my_products.purchase"
       },
