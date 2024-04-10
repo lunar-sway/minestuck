@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:cast_iron"
+  },
+  "input2": {
+    "item": "minecraft:copper_block"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cast_iron_tile"
+  }
+}

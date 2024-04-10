@@ -50,6 +50,10 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MASSIVE_CHAIR = REGISTER.register("massive_chair", () -> new MassiveChairFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MASSIVE_STOOL = REGISTER.register("massive_stool", () -> new MassiveStoolFeature(NoneFeatureConfiguration.CODEC));
 	
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SULFUR_POOL = REGISTER.register("sulfur_pool", () -> new SulfurPoolFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CAST_IRON_BUILDING = REGISTER.register("cast_iron_building", () -> new CastIronBuildingFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CAST_IRON_PLATFORM = REGISTER.register("cast_iron_platform", () -> new CastIronPlatformFeature(NoneFeatureConfiguration.CODEC));
+	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OASIS = REGISTER.register("oasis", () -> new OasisFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> new OceanRundownFeature(NoneFeatureConfiguration.CODEC));
 	

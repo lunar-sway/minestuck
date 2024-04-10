@@ -5,7 +5,6 @@ import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.client.model.Model;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +12,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -55,6 +53,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.PINK_STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_CRUXITE_ORE);
 		
 		simpleBlockWithItem(MSBlocks.STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.DEEPSLATE_URANIUM_ORE);
@@ -75,6 +74,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.PINK_STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_URANIUM_ORE);
 		
 		simpleBlockWithItem(MSBlocks.NETHERRACK_COAL_ORE);
 		simpleBlockWithItem(MSBlocks.SHADE_STONE_COAL_ORE);
@@ -105,12 +105,19 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_top"))));
 		simpleBlockWithItem(MSBlocks.SHADE_STONE_GOLD_ORE);
 		simpleBlockWithItem(MSBlocks.PINK_STONE_GOLD_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_GOLD_ORE);
 		
 		simpleBlockWithItem(MSBlocks.END_STONE_REDSTONE_ORE);
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_REDSTONE_ORE);
+		
 		simpleBlockWithItem(MSBlocks.STONE_QUARTZ_ORE);
+		simpleBlockWithItem(MSBlocks.BLACK_STONE_QUARTZ_ORE);
+		
 		simpleBlockWithItem(MSBlocks.PINK_STONE_LAPIS_ORE);
+		
 		simpleBlockWithItem(MSBlocks.PINK_STONE_DIAMOND_ORE);
+		
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD_EMERALD_ORE);
 		
 		//Resource Blocks
@@ -237,12 +244,28 @@ public class MSBlockStateProvider extends BlockStateProvider
 		wallWithItem(MSBlocks.FLOWERY_FROST_BRICK_WALL, MSBlocks.FLOWERY_FROST_BRICKS);
 		
 		simpleBlockWithItem(MSBlocks.CAST_IRON);
+		stairsWithItem(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON);
 		slabWithItem(MSBlocks.CAST_IRON_SLAB, MSBlocks.CAST_IRON);
 		wallWithItem(MSBlocks.CAST_IRON_WALL, MSBlocks.CAST_IRON);
 		buttonWithItem(MSBlocks.CAST_IRON_BUTTON, MSBlocks.CAST_IRON);
 		pressurePlateWithItem(MSBlocks.CAST_IRON_PRESSURE_PLATE, MSBlocks.CAST_IRON);
 		
+		simpleBlockWithItem(MSBlocks.CAST_IRON_TILE);
+		stairsWithItem(MSBlocks.CAST_IRON_TILE_STAIRS, MSBlocks.CAST_IRON_TILE);
+		slabWithItem(MSBlocks.CAST_IRON_TILE_SLAB, MSBlocks.CAST_IRON_TILE);
+		
+		simpleBlockWithItem(MSBlocks.CAST_IRON_SHEET);
+		stairsWithItem(MSBlocks.CAST_IRON_SHEET_STAIRS, MSBlocks.CAST_IRON_SHEET);
+		slabWithItem(MSBlocks.CAST_IRON_SHEET_SLAB, MSBlocks.CAST_IRON_SHEET);
+		
 		simpleBlockWithItem(MSBlocks.CHISELED_CAST_IRON);
+		unflippedColumnWithItem(MSBlocks.CAST_IRON_FRAME,
+				id -> models().cubeColumn(
+						id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top")))
+						.renderType("cutout"));
+		
 		unflippedColumnWithItem(MSBlocks.STEEL_BEAM,
 				id -> models().cubeColumn(
 						id.getPath(),
@@ -291,6 +314,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.BLACK_SAND);
 		
 		simpleBlockWithItem(MSBlocks.BLACK_STONE);
+		stairsWithItem(MSBlocks.BLACK_STONE_STAIRS, MSBlocks.BLACK_STONE);
+		slabWithItem(MSBlocks.BLACK_STONE_SLAB, MSBlocks.BLACK_STONE);
 		wallWithItem(MSBlocks.BLACK_STONE_WALL, MSBlocks.BLACK_STONE);
 		buttonWithItem(MSBlocks.BLACK_STONE_BUTTON, MSBlocks.BLACK_STONE);
 		pressurePlateWithItem(MSBlocks.BLACK_STONE_PRESSURE_PLATE, MSBlocks.BLACK_STONE);
@@ -306,6 +331,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		wallWithItem(MSBlocks.POLISHED_BLACK_STONE_WALL, MSBlocks.POLISHED_BLACK_STONE);
 		
 		simpleBlockWithItem(MSBlocks.BLACK_STONE_BRICKS);
+		stairsWithItem(MSBlocks.BLACK_STONE_BRICK_STAIRS, MSBlocks.BLACK_STONE_BRICKS);
+		slabWithItem(MSBlocks.BLACK_STONE_BRICK_SLAB, MSBlocks.BLACK_STONE_BRICKS);
 		wallWithItem(MSBlocks.BLACK_STONE_BRICK_WALL, MSBlocks.BLACK_STONE_BRICKS);
 		
 		unflippedColumnWithItem(MSBlocks.BLACK_STONE_COLUMN,
@@ -316,8 +343,61 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 		simpleBlockWithItem(MSBlocks.CRACKED_BLACK_STONE_BRICKS);
 		
+		simpleBlockWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		stairsWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS, MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		slabWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB, MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		wallWithItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL, MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		
 		simpleBlockWithItem(MSBlocks.IGNEOUS_STONE);
+		stairsWithItem(MSBlocks.IGNEOUS_STONE_STAIRS, MSBlocks.IGNEOUS_STONE);
+		slabWithItem(MSBlocks.IGNEOUS_STONE_SLAB, MSBlocks.IGNEOUS_STONE);
+		wallWithItem(MSBlocks.IGNEOUS_STONE_WALL, MSBlocks.IGNEOUS_STONE);
+		buttonWithItem(MSBlocks.IGNEOUS_STONE_BUTTON, MSBlocks.IGNEOUS_STONE);
+		pressurePlateWithItem(MSBlocks.IGNEOUS_STONE_PRESSURE_PLATE, MSBlocks.IGNEOUS_STONE);
+		
+		simpleBlockWithItem(MSBlocks.POLISHED_IGNEOUS_STONE);
+		stairsWithItem(MSBlocks.POLISHED_IGNEOUS_STAIRS, MSBlocks.POLISHED_IGNEOUS_STONE);
+		slabWithItem(MSBlocks.POLISHED_IGNEOUS_SLAB, MSBlocks.POLISHED_IGNEOUS_STONE);
+		wallWithItem(MSBlocks.POLISHED_IGNEOUS_WALL, MSBlocks.POLISHED_IGNEOUS_STONE);
+		
+		simpleBlockWithItem(MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		stairsWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS, MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		slabWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB, MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		wallWithItem(MSBlocks.POLISHED_IGNEOUS_BRICK_WALL, MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		
+		unflippedColumnWithItem(MSBlocks.POLISHED_IGNEOUS_PILLAR,
+				id -> models().cubeColumn(
+						id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		simpleBlockWithItem(MSBlocks.CHISELED_IGNEOUS_STONE);
+		simpleBlockWithItem(MSBlocks.CRACKED_POLISHED_IGNEOUS_BRICKS);
+		
+		simpleBlockWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		stairsWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS, MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		slabWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB, MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		wallWithItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL, MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+		
+		simpleBlockWithItem(MSBlocks.MAGMATIC_IGNEOUS_STONE);
+		
 		simpleBlockWithItem(MSBlocks.PUMICE_STONE);
+		stairsWithItem(MSBlocks.PUMICE_STONE_STAIRS, MSBlocks.PUMICE_STONE);
+		slabWithItem(MSBlocks.PUMICE_STONE_SLAB, MSBlocks.PUMICE_STONE);
+		wallWithItem(MSBlocks.PUMICE_STONE_WALL, MSBlocks.PUMICE_STONE);
+		buttonWithItem(MSBlocks.PUMICE_STONE_BUTTON, MSBlocks.PUMICE_STONE);
+		pressurePlateWithItem(MSBlocks.PUMICE_STONE_PRESSURE_PLATE, MSBlocks.PUMICE_STONE);
+		
+		simpleBlockWithItem(MSBlocks.PUMICE_BRICKS);
+		stairsWithItem(MSBlocks.PUMICE_BRICK_STAIRS, MSBlocks.PUMICE_BRICKS);
+		slabWithItem(MSBlocks.PUMICE_BRICK_SLAB, MSBlocks.PUMICE_BRICKS);
+		wallWithItem(MSBlocks.PUMICE_BRICK_WALL, MSBlocks.PUMICE_BRICKS);
+		
+		simpleBlockWithItem(MSBlocks.PUMICE_TILES);
+		stairsWithItem(MSBlocks.PUMICE_TILE_STAIRS, MSBlocks.PUMICE_TILES);
+		slabWithItem(MSBlocks.PUMICE_TILE_SLAB, MSBlocks.PUMICE_TILES);
+		wallWithItem(MSBlocks.PUMICE_TILE_WALL, MSBlocks.PUMICE_TILES);
+		
+		simpleBlockWithItem(MSBlocks.HEAT_LAMP);
 		
 		simpleBlockWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		stairsWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_STAIRS, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
@@ -972,9 +1052,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.SHADE_BRICK_STAIRS, "shade_brick", texture(MSBlocks.SHADE_BRICKS));
 		stairsWithItem(MSBlocks.FROST_TILE_STAIRS, MSBlocks.FROST_TILE);
 		stairsWithItem(MSBlocks.FROST_BRICK_STAIRS, "frost_brick", texture(MSBlocks.FROST_BRICKS));
-		stairsWithItem(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON);
-		stairsWithItem(MSBlocks.BLACK_STONE_STAIRS, MSBlocks.BLACK_STONE);
-		stairsWithItem(MSBlocks.BLACK_STONE_BRICK_STAIRS, "black_stone_brick", texture(MSBlocks.BLACK_STONE_BRICKS));
 		
 		stairsWithItem(MSBlocks.MYCELIUM_STAIRS, "mycelium", texture(MSBlocks.MYCELIUM_STONE));
 		stairsWithItem(MSBlocks.MYCELIUM_BRICK_STAIRS, "mycelium_brick", texture(MSBlocks.MYCELIUM_BRICKS));
@@ -1000,8 +1077,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.SHADE_BRICK_SLAB, MSBlocks.SHADE_BRICKS);
 		slabWithItem(MSBlocks.FROST_TILE_SLAB, MSBlocks.FROST_TILE);
 		slabWithItem(MSBlocks.FROST_BRICK_SLAB, MSBlocks.FROST_BRICKS);
-		slabWithItem(MSBlocks.BLACK_STONE_SLAB, MSBlocks.BLACK_STONE);
-		slabWithItem(MSBlocks.BLACK_STONE_BRICK_SLAB, MSBlocks.BLACK_STONE_BRICKS);
 		slabWithItem(MSBlocks.MYCELIUM_SLAB, MSBlocks.MYCELIUM_STONE);
 		slabWithItem(MSBlocks.MYCELIUM_BRICK_SLAB, MSBlocks.MYCELIUM_BRICKS);
 		slabWithItem(MSBlocks.CHALK_SLAB, MSBlocks.CHALK);
@@ -1801,8 +1876,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 	private void customLampWithItem(RegistryObject<Block> block, String baseName, ResourceLocation texture) {
 		ModelFile lampOn = models().cubeAll(baseName + "_on", new ResourceLocation(texture + "_on"));
 		ModelFile lampOff = models().cubeAll(baseName + "_off", new ResourceLocation(texture + "_off"));
-		
-		System.out.println("TEXTURE: " + texture);
 		
 		getVariantBuilder(block.get()).forAllStates(state -> {
 			if(state.getValue(CustomLampBlock.CLICKED) ) {

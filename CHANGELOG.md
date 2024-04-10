@@ -19,16 +19,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
 - New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
 - New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
-- Added Carved Bush
-- Added Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
-- Added Silicone Caulk fluid, used in Wood lands
-- Added Cindered woodset and Trees in Heat lands
-- Added Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
-- Added Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
-- Added Coffee Claws
-- Added TV Antenna
-- Added Molten Amber fluid, used in Heat lands
-- Added Cruxite block set
+- Carved Bush
+- Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
+- Silicone Caulk fluid, used in Wood lands
+- Cindered woodset and Trees in Heat lands
+- Igneous Stone, Magmatic Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
+- Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
+- Coffee Claws
+- TV Antenna
+- Molten Amber fluid, used in Heat lands
+- Cruxite block set
+- Black Stone Cruxite, Uranium, Gold, Redstone, and Quartz ores
+- Alchemy recipes for all Minestuck fluids
+- Magmatic Black Stone Bricks
+- Cast Iron Frame, Sheet, and Tile
+- Sulfur Pools and Cast Iron features in Heat Lands
+- Wooden Lamp and Heat Lamp blocks, used in Wood and Heat lands respectively
 - New structure in rain lands
 
 ### Changed
@@ -49,6 +55,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
 - Renamed Oil to Shale Oil
 - Pumord is now alchemized with Pumice Stone instead of any regular Stone
+- Minor change to land terrain height
+- Black Sand now generates in Heat lands
+- Updated Textures of Cast Iron blocks
+- Steel Beams are now alchemized with Iron Blocks instead of Cast Iron Blocks
 
 ### Fixed
 

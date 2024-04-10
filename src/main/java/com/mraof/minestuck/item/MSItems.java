@@ -747,6 +747,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> PINK_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.PINK_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_CRUXITE_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.BLACK_STONE_CRUXITE_ORE);
 	
 	public static final RegistryObject<BlockItem> STONE_URANIUM_ORE = registerBlockItem(MSBlocks.STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> DEEPSLATE_URANIUM_ORE = registerBlockItem(MSBlocks.DEEPSLATE_URANIUM_ORE);
@@ -759,23 +760,34 @@ public class MSItems
 	public static final RegistryObject<BlockItem> PINK_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.PINK_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_URANIUM_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.BLACK_STONE_URANIUM_ORE);
 	
 	public static final RegistryObject<BlockItem> NETHERRACK_COAL_ORE = registerBlockItem(MSBlocks.NETHERRACK_COAL_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_COAL_ORE = registerBlockItem(MSBlocks.SHADE_STONE_COAL_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_COAL_ORE = registerBlockItem(MSBlocks.PINK_STONE_COAL_ORE);
+	
 	public static final RegistryObject<BlockItem> END_STONE_IRON_ORE = registerBlockItem(MSBlocks.END_STONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> SANDSTONE_IRON_ORE = registerBlockItem(MSBlocks.SANDSTONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_IRON_ORE = registerBlockItem(MSBlocks.RED_SANDSTONE_IRON_ORE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_IRON_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_IRON_ORE);
+	
 	public static final RegistryObject<BlockItem> SANDSTONE_GOLD_ORE = registerBlockItem(MSBlocks.SANDSTONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> RED_SANDSTONE_GOLD_ORE = registerBlockItem(MSBlocks.RED_SANDSTONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_GOLD_ORE = registerBlockItem(MSBlocks.SHADE_STONE_GOLD_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_GOLD_ORE = registerBlockItem(MSBlocks.PINK_STONE_GOLD_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_GOLD_ORE = registerBlockItem(MSBlocks.BLACK_STONE_GOLD_ORE);
+	
 	public static final RegistryObject<BlockItem> END_STONE_REDSTONE_ORE = registerBlockItem(MSBlocks.END_STONE_REDSTONE_ORE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_REDSTONE_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_REDSTONE_ORE = registerBlockItem(MSBlocks.BLACK_STONE_REDSTONE_ORE);
+	
 	public static final RegistryObject<BlockItem> STONE_QUARTZ_ORE = registerBlockItem(MSBlocks.STONE_QUARTZ_ORE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_QUARTZ_ORE = registerBlockItem(MSBlocks.BLACK_STONE_QUARTZ_ORE);
+	
 	public static final RegistryObject<BlockItem> PINK_STONE_LAPIS_ORE = registerBlockItem(MSBlocks.PINK_STONE_LAPIS_ORE);
+	
 	public static final RegistryObject<BlockItem> PINK_STONE_DIAMOND_ORE = registerBlockItem(MSBlocks.PINK_STONE_DIAMOND_ORE);
+	
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_EMERALD_ORE = registerBlockItem(MSBlocks.UNCARVED_WOOD_EMERALD_ORE);
 	
 	
@@ -880,12 +892,23 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FLOWERY_FROST_BRICK_WALL = registerBlockItem(MSBlocks.FLOWERY_FROST_BRICK_WALL);
 	
 	public static final RegistryObject<BlockItem> CAST_IRON = registerBlockItem(MSBlocks.CAST_IRON);
+	public static final RegistryObject<BlockItem> CAST_IRON_STAIRS = registerBlockItem(MSBlocks.CAST_IRON_STAIRS);
 	public static final RegistryObject<BlockItem> CAST_IRON_SLAB = registerBlockItem(MSBlocks.CAST_IRON_SLAB);
 	public static final RegistryObject<BlockItem> CAST_IRON_WALL = registerBlockItem(MSBlocks.CAST_IRON_WALL);
 	public static final RegistryObject<BlockItem> CAST_IRON_BUTTON = registerBlockItem(MSBlocks.CAST_IRON_BUTTON);
 	public static final RegistryObject<BlockItem> CAST_IRON_PRESSURE_PLATE = registerBlockItem(MSBlocks.CAST_IRON_PRESSURE_PLATE);
 	
+	public static final RegistryObject<BlockItem> CAST_IRON_TILE = registerBlockItem(MSBlocks.CAST_IRON_TILE);
+	public static final RegistryObject<BlockItem> CAST_IRON_TILE_STAIRS = registerBlockItem(MSBlocks.CAST_IRON_TILE_STAIRS);
+	public static final RegistryObject<BlockItem> CAST_IRON_TILE_SLAB = registerBlockItem(MSBlocks.CAST_IRON_TILE_SLAB);
+	
+	public static final RegistryObject<BlockItem> CAST_IRON_SHEET = registerBlockItem(MSBlocks.CAST_IRON_SHEET);
+	public static final RegistryObject<BlockItem> CAST_IRON_SHEET_STAIRS = registerBlockItem(MSBlocks.CAST_IRON_SHEET_STAIRS);
+	public static final RegistryObject<BlockItem> CAST_IRON_SHEET_SLAB = registerBlockItem(MSBlocks.CAST_IRON_SHEET_SLAB);
+	
 	public static final RegistryObject<BlockItem> CHISELED_CAST_IRON = registerBlockItem(MSBlocks.CHISELED_CAST_IRON);
+	public static final RegistryObject<BlockItem> CAST_IRON_FRAME = registerBlockItem(MSBlocks.CAST_IRON_FRAME);
+	
 	public static final RegistryObject<BlockItem> STEEL_BEAM = registerBlockItem(MSBlocks.STEEL_BEAM);
 	
 	public static final RegistryObject<BlockItem> MYCELIUM_COBBLESTONE = registerBlockItem(MSBlocks.MYCELIUM_COBBLESTONE);
@@ -922,6 +945,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FLOWERY_MYCELIUM_BRICK_WALL = registerBlockItem(MSBlocks.FLOWERY_MYCELIUM_BRICK_WALL);
 	
 	public static final RegistryObject<BlockItem> BLACK_STONE = registerBlockItem(MSBlocks.BLACK_STONE);
+	public static final RegistryObject<BlockItem> BLACK_STONE_STAIRS = registerBlockItem(MSBlocks.BLACK_STONE_STAIRS);
+	public static final RegistryObject<BlockItem> BLACK_STONE_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_SLAB);
 	public static final RegistryObject<BlockItem> BLACK_STONE_WALL = registerBlockItem(MSBlocks.BLACK_STONE_WALL);
 	public static final RegistryObject<BlockItem> BLACK_STONE_BUTTON = registerBlockItem(MSBlocks.BLACK_STONE_BUTTON);
 	public static final RegistryObject<BlockItem> BLACK_STONE_PRESSURE_PLATE = registerBlockItem(MSBlocks.BLACK_STONE_PRESSURE_PLATE);
@@ -937,14 +962,68 @@ public class MSItems
 	public static final RegistryObject<BlockItem> BLACK_COBBLESTONE_WALL = registerBlockItem(MSBlocks.BLACK_COBBLESTONE_WALL);
 	
 	public static final RegistryObject<BlockItem> BLACK_STONE_BRICKS = registerBlockItem(MSBlocks.BLACK_STONE_BRICKS);
+	public static final RegistryObject<BlockItem> BLACK_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.BLACK_STONE_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> BLACK_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> BLACK_STONE_BRICK_WALL = registerBlockItem(MSBlocks.BLACK_STONE_BRICK_WALL);
 	
 	public static final RegistryObject<BlockItem> BLACK_STONE_COLUMN = registerBlockItem(MSBlocks.BLACK_STONE_COLUMN);
 	public static final RegistryObject<BlockItem> CHISELED_BLACK_STONE_BRICKS = registerBlockItem(MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 	public static final RegistryObject<BlockItem> CRACKED_BLACK_STONE_BRICKS = registerBlockItem(MSBlocks.CRACKED_BLACK_STONE_BRICKS);
+	
+	public static final RegistryObject<BlockItem> MAGMATIC_BLACK_STONE_BRICKS = registerBlockItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+	public static final RegistryObject<BlockItem> MAGMATIC_BLACK_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> MAGMATIC_BLACK_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> MAGMATIC_BLACK_STONE_BRICK_WALL = registerBlockItem(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL);
+	
 	public static final RegistryObject<BlockItem> BLACK_SAND = registerBlockItem(MSBlocks.BLACK_SAND);
+	
 	public static final RegistryObject<BlockItem> IGNEOUS_STONE = registerBlockItem(MSBlocks.IGNEOUS_STONE);
+	public static final RegistryObject<BlockItem> IGNEOUS_STONE_STAIRS = registerBlockItem(MSBlocks.IGNEOUS_STONE_STAIRS);
+	public static final RegistryObject<BlockItem> IGNEOUS_STONE_SLAB = registerBlockItem(MSBlocks.IGNEOUS_STONE_SLAB);
+	public static final RegistryObject<BlockItem> IGNEOUS_STONE_WALL = registerBlockItem(MSBlocks.IGNEOUS_STONE_WALL);
+	public static final RegistryObject<BlockItem> IGNEOUS_STONE_BUTTON = registerBlockItem(MSBlocks.IGNEOUS_STONE_BUTTON);
+	public static final RegistryObject<BlockItem> IGNEOUS_STONE_PRESSURE_PLATE = registerBlockItem(MSBlocks.IGNEOUS_STONE_PRESSURE_PLATE);
+	
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_STONE = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_STONE);
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_STAIRS = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_SLAB = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_SLAB);
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_WALL = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_WALL);
+	
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_BRICKS = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_BRICKS);
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_BRICK_STAIRS = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_BRICK_SLAB = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_BRICK_WALL = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_BRICK_WALL);
+	
+	public static final RegistryObject<BlockItem> POLISHED_IGNEOUS_PILLAR = registerBlockItem(MSBlocks.POLISHED_IGNEOUS_PILLAR);
+	public static final RegistryObject<BlockItem> CHISELED_IGNEOUS_STONE = registerBlockItem(MSBlocks.CHISELED_IGNEOUS_STONE);
+	public static final RegistryObject<BlockItem> CRACKED_POLISHED_IGNEOUS_BRICKS = registerBlockItem(MSBlocks.CRACKED_POLISHED_IGNEOUS_BRICKS);
+	
+	public static final RegistryObject<BlockItem> MAGMATIC_POLISHED_IGNEOUS_BRICKS = registerBlockItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS);
+	public static final RegistryObject<BlockItem> MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS = registerBlockItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB = registerBlockItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL = registerBlockItem(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL);
+	
+	public static final RegistryObject<BlockItem> MAGMATIC_IGNEOUS_STONE = registerBlockItem(MSBlocks.MAGMATIC_IGNEOUS_STONE);
+	
 	public static final RegistryObject<BlockItem> PUMICE_STONE = registerBlockItem(MSBlocks.PUMICE_STONE);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_STAIRS = registerBlockItem(MSBlocks.PUMICE_STONE_STAIRS);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_SLAB = registerBlockItem(MSBlocks.PUMICE_STONE_SLAB);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_WALL = registerBlockItem(MSBlocks.PUMICE_STONE_WALL);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_BUTTON = registerBlockItem(MSBlocks.PUMICE_STONE_BUTTON);
+	public static final RegistryObject<BlockItem> PUMICE_STONE_PRESSURE_PLATE = registerBlockItem(MSBlocks.PUMICE_STONE_PRESSURE_PLATE);
+	
+	public static final RegistryObject<BlockItem> PUMICE_BRICKS = registerBlockItem(MSBlocks.PUMICE_BRICKS);
+	public static final RegistryObject<BlockItem> PUMICE_BRICK_STAIRS = registerBlockItem(MSBlocks.PUMICE_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> PUMICE_BRICK_SLAB = registerBlockItem(MSBlocks.PUMICE_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> PUMICE_BRICK_WALL = registerBlockItem(MSBlocks.PUMICE_BRICK_WALL);
+	
+	public static final RegistryObject<BlockItem> PUMICE_TILES = registerBlockItem(MSBlocks.PUMICE_TILES);
+	public static final RegistryObject<BlockItem> PUMICE_TILE_STAIRS = registerBlockItem(MSBlocks.PUMICE_TILE_STAIRS);
+	public static final RegistryObject<BlockItem> PUMICE_TILE_SLAB = registerBlockItem(MSBlocks.PUMICE_TILE_SLAB);
+	public static final RegistryObject<BlockItem> PUMICE_TILE_WALL = registerBlockItem(MSBlocks.PUMICE_TILE_WALL);
+	
+	public static final RegistryObject<BlockItem> HEAT_LAMP = registerBlockItem(MSBlocks.HEAT_LAMP);
+	
 	public static final RegistryObject<BlockItem> DECREPIT_STONE_BRICKS = registerBlockItem(MSBlocks.DECREPIT_STONE_BRICKS);
 	public static final RegistryObject<BlockItem> DECREPIT_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.DECREPIT_STONE_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> DECREPIT_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.DECREPIT_STONE_BRICK_SLAB);
@@ -1360,9 +1439,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_BRICK_STAIRS = registerBlockItem(MSBlocks.SHADE_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> FROST_TILE_STAIRS = registerBlockItem(MSBlocks.FROST_TILE_STAIRS);
 	public static final RegistryObject<BlockItem> FROST_BRICK_STAIRS = registerBlockItem(MSBlocks.FROST_BRICK_STAIRS);
-	public static final RegistryObject<BlockItem> CAST_IRON_STAIRS = registerBlockItem(MSBlocks.CAST_IRON_STAIRS);
-	public static final RegistryObject<BlockItem> BLACK_STONE_STAIRS = registerBlockItem(MSBlocks.BLACK_STONE_STAIRS);
-	public static final RegistryObject<BlockItem> BLACK_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.BLACK_STONE_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> MYCELIUM_STAIRS = registerBlockItem(MSBlocks.MYCELIUM_STAIRS);
 	public static final RegistryObject<BlockItem> MYCELIUM_BRICK_STAIRS = registerBlockItem(MSBlocks.MYCELIUM_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> CHALK_STAIRS = registerBlockItem(MSBlocks.CHALK_STAIRS);
@@ -1393,8 +1469,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> RAINBOW_PLANKS_SLAB = registerBlockItem(MSBlocks.RAINBOW_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> END_PLANKS_SLAB = registerBlockItem(MSBlocks.END_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> DEAD_PLANKS_SLAB = registerBlockItem(MSBlocks.DEAD_PLANKS_SLAB);
-	public static final RegistryObject<BlockItem> BLACK_STONE_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_SLAB);
-	public static final RegistryObject<BlockItem> BLACK_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> MYCELIUM_SLAB = registerBlockItem(MSBlocks.MYCELIUM_SLAB);
 	public static final RegistryObject<BlockItem> MYCELIUM_BRICK_SLAB = registerBlockItem(MSBlocks.MYCELIUM_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> FROST_TILE_SLAB = registerBlockItem(MSBlocks.FROST_TILE_SLAB);
