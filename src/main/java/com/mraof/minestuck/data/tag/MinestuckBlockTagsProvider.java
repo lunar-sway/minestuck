@@ -65,7 +65,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(SAND).add(BLACK_SAND.get());
 		tag(BEE_GROWABLES).add(BLOOMING_CACTUS.get(), GLOWFLOWER.get());
 		tag(PORTALS).add(GATE.get(), GATE_MAIN.get(), RETURN_NODE.get(), RETURN_NODE_MAIN.get());
-		tag(NETHER_CARVER_REPLACEABLES).add(BLACK_STONE.get());
+		tag(NETHER_CARVER_REPLACEABLES).addTag(HEAT_TERRAIN_BLOCKS);
 		tag(Tags.Blocks.COBBLESTONE).add(FLOWERY_MOSSY_COBBLESTONE.get(), MYCELIUM_COBBLESTONE.get(), BLACK_COBBLESTONE.get());
 		tag(Tags.Blocks.END_STONES).add(COARSE_END_STONE.get());
 		tag(Tags.Blocks.ORES).addTags(CRUXITE_ORES, ExtraForgeTags.Blocks.URANIUM_ORES);
