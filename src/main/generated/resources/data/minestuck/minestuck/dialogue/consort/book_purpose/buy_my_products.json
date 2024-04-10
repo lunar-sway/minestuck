@@ -1,0 +1,40 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.book_purpose.buy_my_products.a"
+      },
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.book_purpose.buy_my_products.b"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.consort.book_purpose.buy_my_products.description"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:always_true"
+            }
+          ],
+          "list_type": "none"
+        },
+        "fail_tooltip": "minestuck.dialogue.consort.book_purpose.buy_my_products.not_purchase",
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.book_purpose.buy_my_products.purchase"
+      },
+      {
+        "message": "minestuck.dialogue.consort.book_purpose.buy_my_products.decline"
+      },
+      {
+        "message": "minestuck.dialogue.consort.book_purpose.buy_my_products.decline_hard"
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:is_consort_in_home_land"
+  },
+  "dialogue": "minestuck:consort/underling_commission/start",
+  "dialogue_weight": 12
+}

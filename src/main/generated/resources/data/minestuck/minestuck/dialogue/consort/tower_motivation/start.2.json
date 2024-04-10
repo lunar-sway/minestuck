@@ -1,0 +1,16 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "entity_type"
+      ],
+      "key": "minestuck.dialogue.consort.tower_motivation.start.2"
+    },
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/tower_motivation/start.3"
+      }
+    ]
+  }
+}

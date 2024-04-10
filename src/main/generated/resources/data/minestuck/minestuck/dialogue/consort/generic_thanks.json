@@ -1,5 +1,16 @@
 {
-  "node": {
-    "message": "minestuck.dialogue.consort.generic_thanks"
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "helpingPlayer"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.generic_thanks.player_helped"
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.generic_thanks.other_helped"
   }
 }

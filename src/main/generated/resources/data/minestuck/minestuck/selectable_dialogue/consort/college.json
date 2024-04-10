@@ -2,5 +2,5 @@
   "condition": {
     "type": "minestuck:always_true"
   },
-  "dialogue": "minestuck:consort/college.1"
+  "dialogue": "minestuck:consort/college"
 }

@@ -3,5 +3,6 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:iguana"
   },
-  "dialogue": "minestuck:consort/whoops"
+  "dialogue": "minestuck:consort/whoops",
+  "dialogue_weight": 4
 }
