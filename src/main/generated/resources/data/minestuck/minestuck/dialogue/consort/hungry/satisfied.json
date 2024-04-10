@@ -1,0 +1,16 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "helpingPlayer"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.hungry.satisfied.player_specific"
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.hungry.satisfied"
+  }
+}

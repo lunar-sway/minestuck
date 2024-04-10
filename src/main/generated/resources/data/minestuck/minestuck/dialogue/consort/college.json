@@ -1,0 +1,22 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_boondollars",
+        "amount": 1000
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.college.1",
+        "responses": [
+          {
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/college.2"
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.college.poor"
+  }
+}

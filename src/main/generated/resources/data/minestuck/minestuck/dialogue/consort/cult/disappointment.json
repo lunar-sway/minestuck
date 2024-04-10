@@ -1,0 +1,23 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.cult.disappointment",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:item_tag_match",
+          "tag": "minestuck:magic_weapon"
+        },
+        "message": {
+          "arguments": [
+            "matched_item"
+          ],
+          "key": "minestuck.dialogue.consort.cult.disappointment.argue"
+        },
+        "next_dialogue": "minestuck:consort/cult/exchange"
+      },
+      {
+        "message": "minestuck.dialogue.consort.cult.disappointment.resign"
+      }
+    ]
+  }
+}

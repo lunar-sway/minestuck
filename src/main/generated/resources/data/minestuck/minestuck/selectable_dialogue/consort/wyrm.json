@@ -13,5 +13,6 @@
     ],
     "list_type": "any"
   },
-  "dialogue": "minestuck:consort/wyrm"
+  "dialogue": "minestuck:consort/wyrm",
+  "dialogue_weight": 4
 }
