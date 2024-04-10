@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_polished_lacquered_uncarved_wood": {
+    "has_polished_lacquered_carved_wood": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_polished_lacquered_uncarved_wood",
+      "has_polished_lacquered_carved_wood",
       "has_the_recipe"
     ]
   ],
