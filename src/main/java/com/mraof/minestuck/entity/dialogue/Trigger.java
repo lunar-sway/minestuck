@@ -30,6 +30,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -160,6 +161,61 @@ public sealed interface Trigger
 				//TODO using the entity for this instead of the player failed
 				level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), this.commandText);
 			}
+		}
+	}
+	
+	record CommandWithFlags(String commandText, int flagAmount) implements Trigger
+	{
+		static final Codec<CommandWithFlags> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("command").forGetter(CommandWithFlags::commandText),
+				Codec.INT.fieldOf("flag_amount").forGetter(CommandWithFlags::flagAmount)
+		).apply(instance, CommandWithFlags::new));
+		
+		@Override
+		public Codec<CommandWithFlags> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return;
+			
+			Level level = player.level();
+			if(!level.isClientSide && entity instanceof DialogueEntity dialogueEntity)
+			{
+				//flags relevant to this trigger will start with "command". This will be removed from the text before use
+				DialogueComponent component = dialogueEntity.getDialogueComponent();
+				List<String> initialFlags = new ArrayList<>();
+				initialFlags.addAll(component.playerFlags(player).stream().filter(flag -> flag.contains("command.")).toList());
+				initialFlags.addAll(component.flags().stream().filter(flag -> flag.contains("command.")).toList());
+				
+				String modCommandText = getModCommandText(initialFlags);
+				
+				level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), modCommandText);
+			}
+		}
+		
+		private String getModCommandText(List<String> initialFlags)
+		{
+			String modCommandText = this.commandText;
+			
+			//replace each placeholder [flag<i>] with the corresponding flag value
+			for (int i = 0; i < flagAmount; i++) {
+				String placeholder = "[flag" + i + "]";
+				String flagValue = "";
+				for (String flag : initialFlags) {
+					if (flag.contains("command." + i + ".")) {
+						flagValue = flag.replace("command." + i + ".", "");
+						break;
+					}
+				}
+				modCommandText = modCommandText.replace(placeholder, flagValue);
+			}
+			
+			return modCommandText;
 		}
 	}
 	

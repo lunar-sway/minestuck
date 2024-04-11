@@ -19,6 +19,7 @@ public final class Triggers
 		REGISTER.register("set_player_dialogue", () -> Trigger.SetPlayerDialogue.CODEC);
 		REGISTER.register("open_consort_merchant_gui", () -> Trigger.OpenConsortMerchantGui.CODEC);
 		REGISTER.register("command", () -> Trigger.Command.CODEC);
+		REGISTER.register("command_with_flags", () -> Trigger.CommandWithFlags.CODEC);
 		REGISTER.register("take_item", () -> Trigger.TakeItem.CODEC);
 		REGISTER.register("take_matched_item", () -> Trigger.TakeMatchedItem.CODEC);
 		REGISTER.register("give_item", () -> Trigger.GiveItem.CODEC);
