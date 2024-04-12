@@ -1,10 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.data.dialogue.ConsortDialogue;
-import com.mraof.minestuck.data.dialogue.ConsortFoodMerchantDialogue;
-import com.mraof.minestuck.data.dialogue.ConsortGeneralMerchantDialogue;
-import com.mraof.minestuck.data.dialogue.ShadyConsortDialogue;
+import com.mraof.minestuck.data.dialogue.*;
 import com.mraof.minestuck.data.loot_table.MSLootModifiers;
 import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
@@ -74,6 +71,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), ShadyConsortDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider));
+		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider));
 	}
 	
 	private static RegistrySetBuilder registrySetBuilder()

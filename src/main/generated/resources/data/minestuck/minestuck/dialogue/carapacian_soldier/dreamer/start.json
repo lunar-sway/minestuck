@@ -1,0 +1,39 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_entered"
+      },
+      "node": {
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dots"
+          },
+          {
+            "type": "description",
+            "message": "minestuck.dialogue.carapacian_soldier.dreamer.start.familiar"
+          }
+        ],
+        "responses": [
+          {
+            "message": "minestuck.dialogue.carapacian_soldier.dreamer.start.who",
+            "next_dialogue": "minestuck:carapacian_soldier/dreamer/explain_dreamers.1"
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dots"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.dreamer.start.unfamiliar"
+      }
+    ]
+  }
+}

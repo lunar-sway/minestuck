@@ -1,0 +1,20 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dots"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.not_so_bad.3"
+      }
+    ],
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:carapacian_soldier/not_so_bad.4"
+      }
+    ]
+  }
+}

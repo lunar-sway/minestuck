@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
+import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.*;
@@ -148,6 +150,31 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("NPC is not carapacian");
+		}
+	}
+	
+	record IsFromKingdom(EnumEntityKingdom kingdom) implements NpcOnlyCondition
+	{
+		static final Codec<IsFromKingdom> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				EnumEntityKingdom.CODEC.fieldOf("kingdom").forGetter(IsFromKingdom::kingdom)
+		).apply(instance, IsFromKingdom::new));
+		
+		@Override
+		public Codec<IsFromKingdom> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity instanceof CarapacianEntity carapacianEntity && carapacianEntity.getKingdom() == kingdom;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not from the correct kingdom");
 		}
 	}
 	
@@ -324,6 +351,40 @@ public interface Condition
 		}
 	}
 	
+	record InConsortTerrainLandType(EnumConsort consort) implements NpcOnlyCondition
+	{
+		static final Codec<InConsortTerrainLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				EnumConsort.CODEC.fieldOf("consort").forGetter(InConsortTerrainLandType::consort)
+		).apply(instance, InConsortTerrainLandType::new));
+		
+		@Override
+		public Codec<InConsortTerrainLandType> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				Optional<LandTypePair.Named> potentialLandTypes = LandTypePair.getNamed(serverLevel);
+				if(potentialLandTypes.isPresent())
+				{
+					return potentialLandTypes.get().landTypes().getTerrain().getConsortType() == consort.getConsortType();
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Is not in specific Land");
+		}
+	}
+	
 	record InTitleLandType(TitleLandType landType) implements NpcOnlyCondition
 	{
 		static final Codec<InTitleLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -418,6 +479,31 @@ public interface Condition
 		}
 	}
 	
+	record NPCIsHoldingItem(Item item) implements NpcOnlyCondition
+	{
+		static final Codec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(NPCIsHoldingItem::item)
+		).apply(instance, NPCIsHoldingItem::new));
+		
+		@Override
+		public Codec<NPCIsHoldingItem> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity.getMainHandItem().is(item) || entity.getOffhandItem().is(item);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not holding the right item");
+		}
+	}
+	
 	record PlayerHasItem(Item item, int amount) implements Condition
 	{
 		static final Codec<PlayerHasItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -487,6 +573,44 @@ public interface Condition
 				return true;
 			
 			List<Item> items = tag.stream().collect(Collectors.toCollection(ArrayList::new));
+			while(!items.isEmpty())
+			{
+				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
+				if(PlayerHasItem.findPlayerItem(nextItem, player, 1) != null)
+				{
+					component.setMatchedItem(nextItem, player);
+					return true;
+				}
+			}
+			
+			component.clearMatchedItem(player);
+			return false;
+		}
+	}
+	
+	record ItemTagMatchExclude(TagKey<Item> itemTag, Item exclusionItem) implements Condition
+	{
+		static final Codec<ItemTagMatchExclude> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				TagKey.codec(Registries.ITEM).fieldOf("tag").forGetter(ItemTagMatchExclude::itemTag),
+				ForgeRegistries.ITEMS.getCodec().fieldOf("exclusion_item").forGetter(ItemTagMatchExclude::exclusionItem)
+		).apply(instance, ItemTagMatchExclude::new));
+		
+		@Override
+		public Codec<ItemTagMatchExclude> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
+			ITag<Item> tag = Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.itemTag);
+			Optional<Item> lastMatched = component.getMatchedItem(player);
+			if(lastMatched.isPresent() && tag.contains(lastMatched.get()) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
+				return true;
+			
+			List<Item> items = tag.stream().filter(item -> item != exclusionItem).collect(Collectors.toCollection(ArrayList::new));
 			while(!items.isEmpty())
 			{
 				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
@@ -653,6 +777,34 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Your porkhollow doesn't meet requirement");
+		}
+	}
+	
+	enum PlayerHasEntered implements Condition
+	{
+		INSTANCE;
+		
+		static final Codec<PlayerHasEntered> CODEC = Codec.unit(INSTANCE);
+		
+		@Override
+		public Codec<PlayerHasEntered> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			return SburbPlayerData.get(player).hasEntered();
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Player has not Entered");
 		}
 	}
 	

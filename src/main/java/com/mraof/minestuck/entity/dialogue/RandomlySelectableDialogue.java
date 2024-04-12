@@ -76,6 +76,7 @@ public final class RandomlySelectableDialogue
 		SHADY_CONSORT("shady_consort"),
 		CONSORT_FOOD_MERCHANT("consort_food_merchant"),
 		CONSORT_GENERAL_MERCHANT("consort_general_merchant"),
+		CARAPACIAN_SOLDIER("carapacian_soldier"),
 		;
 		private final String folderName;
 		
