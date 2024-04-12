@@ -10,6 +10,7 @@ import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.AnimationControllerUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -324,6 +325,19 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	public DialogueComponent getDialogueComponent()
 	{
 		return this.dialogueComponent;
+	}
+	
+	@Override
+	public ChatFormatting getChatColor()
+	{
+		return ChatFormatting.BLACK;
+	}
+	
+	@Override
+	public String getSpriteType()
+	{
+		String color = this.getKingdom() == EnumEntityKingdom.PROSPITIAN ? "white" : "black";
+		return color + "_pawn";
 	}
 	
 	@Override
