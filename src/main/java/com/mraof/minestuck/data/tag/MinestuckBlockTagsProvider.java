@@ -83,7 +83,6 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(HEAT_TERRAIN_BLOCKS).add(IGNEOUS_STONE.get(), PUMICE_STONE.get(), BLACK_STONE.get());
 		
 		tag(ASPECT_TREE_PLACEABLE).add(UNCARVED_WOOD.get(), IGNEOUS_STONE.get(), CHALK.get(), Blocks.STONE, Blocks.SAND, Blocks.RED_SAND, Blocks.END_STONE, Blocks.MUD, Blocks.GRASS_BLOCK, Blocks.PODZOL, Blocks.MYCELIUM, Blocks.WHITE_WOOL, Blocks.GRAVEL, Blocks.SANDSTONE, BLUE_DIRT.get());
-		//tag(BlockTags.WOOL).addTags(ASPECT_TREE_PLACEABLE);
 		tag(ASPECT_TREE_PLACEABLE).addTag(BlockTags.WOOL);
 		
 		tag(MINEABLE_WITH_SHOVEL).add(BLUE_DIRT.get(), THOUGHT_DIRT.get());
