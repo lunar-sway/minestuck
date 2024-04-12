@@ -1,12 +1,10 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -24,7 +22,6 @@ import java.util.Objects;
 
 public abstract class CarapacianEntity extends AnimatedPathfinderMob
 {
-	public static final Codec<EnumEntityKingdom> CODEC = StringRepresentable.fromEnum(EnumEntityKingdom::values);
 	private final EnumEntityKingdom kingdom;
 	
 	protected List<EntityType<?>> enemyTypes = new ArrayList<>();    //TODO Save this!

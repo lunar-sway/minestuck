@@ -156,7 +156,7 @@ public interface Condition
 	record IsFromKingdom(EnumEntityKingdom kingdom) implements NpcOnlyCondition
 	{
 		static final Codec<IsFromKingdom> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				CarapacianEntity.CODEC.fieldOf("kingdom").forGetter(IsFromKingdom::kingdom)
+				EnumEntityKingdom.CODEC.fieldOf("kingdom").forGetter(IsFromKingdom::kingdom)
 		).apply(instance, IsFromKingdom::new));
 		
 		@Override
