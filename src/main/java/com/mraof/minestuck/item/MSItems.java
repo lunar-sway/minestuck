@@ -1363,6 +1363,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> VINE_WOOD = registerBlockItem(MSBlocks.VINE_WOOD);
 	
 	public static final RegistryObject<BlockItem> FROST_LEAVES = registerBlockItem(MSBlocks.FROST_LEAVES);
+	public static final RegistryObject<BlockItem> FROST_LEAVES_FLOWERING = registerBlockItem(MSBlocks.FROST_LEAVES_FLOWERING);
 	public static final RegistryObject<BlockItem> RAINBOW_LEAVES = registerBlockItem(MSBlocks.RAINBOW_LEAVES);
 	public static final RegistryObject<BlockItem> END_LEAVES = registerBlockItem(MSBlocks.END_LEAVES);
 	public static final RegistryObject<BlockItem> SHADEWOOD_LEAVES = registerBlockItem(MSBlocks.SHADEWOOD_LEAVES);

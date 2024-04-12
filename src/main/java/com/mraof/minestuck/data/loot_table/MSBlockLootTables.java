@@ -747,6 +747,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(DEAD_TRAPDOOR.get());
 		
 		add(FROST_LEAVES.get(), this::frostLeavesDrop);
+		add(FROST_LEAVES_FLOWERING.get(), this::floweringFrostLeavesDrop);
 		add(RAINBOW_LEAVES.get(), this::rainbowLeavesDrop);
 		add(SHADEWOOD_LEAVES.get(), this::shadewoodLeavesDrop);
 		add(SHROOMY_SHADEWOOD_LEAVES.get(), this::shadewoodLeavesDrop);
@@ -1018,6 +1019,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	}
 	
 	private LootTable.Builder frostLeavesDrop(Block block)
+	{
+		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
+	}
+	
+	private LootTable.Builder floweringFrostLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
 	}

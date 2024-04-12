@@ -317,7 +317,7 @@ public final class AspectTreeBlocksData
 						texture("blood_aspect_planks")));
 		provider.simpleHorizontal(BLOOD_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(BLOOD_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.BLOOD_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.BLOOD_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.BLOOD_ASPECT_SIGN.get(), AspectTreeBlocks.BLOOD_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.BLOOD_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.BLOOD_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.BLOOD_ASPECT_PLANKS.get()));
@@ -359,7 +359,7 @@ public final class AspectTreeBlocksData
 						texture("breath_aspect_planks")));
 		provider.simpleHorizontal(BREATH_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(BREATH_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.BREATH_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.BREATH_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.BREATH_ASPECT_SIGN.get(), AspectTreeBlocks.BREATH_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.BREATH_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.BREATH_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.BREATH_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.BREATH_ASPECT_PLANKS.get()));
@@ -402,7 +402,7 @@ public final class AspectTreeBlocksData
 						texture("doom_aspect_planks")));
 		provider.simpleHorizontal(DOOM_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(DOOM_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.DOOM_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.DOOM_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.DOOM_ASPECT_SIGN.get(), AspectTreeBlocks.DOOM_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.DOOM_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.DOOM_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.DOOM_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.DOOM_ASPECT_PLANKS.get()));
@@ -445,7 +445,7 @@ public final class AspectTreeBlocksData
 						texture("heart_aspect_planks")));
 		provider.simpleHorizontal(HEART_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(HEART_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.HEART_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.HEART_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.HEART_ASPECT_SIGN.get(), AspectTreeBlocks.HEART_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.HEART_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.HEART_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.HEART_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.HEART_ASPECT_PLANKS.get()));
@@ -488,7 +488,7 @@ public final class AspectTreeBlocksData
 						texture("hope_aspect_planks")));
 		provider.simpleHorizontal(HOPE_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(HOPE_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.HOPE_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.HOPE_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.HOPE_ASPECT_SIGN.get(), AspectTreeBlocks.HOPE_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.HOPE_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.HOPE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.HOPE_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.HOPE_ASPECT_PLANKS.get()));
@@ -531,7 +531,7 @@ public final class AspectTreeBlocksData
 						texture("life_aspect_planks")));
 		provider.simpleHorizontal(LIFE_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(LIFE_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.LIFE_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.LIFE_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.LIFE_ASPECT_SIGN.get(), AspectTreeBlocks.LIFE_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.LIFE_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.LIFE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.LIFE_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.LIFE_ASPECT_PLANKS.get()));
@@ -574,7 +574,7 @@ public final class AspectTreeBlocksData
 						texture("light_aspect_planks")));
 		provider.simpleHorizontal(LIGHT_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(LIGHT_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.LIGHT_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.LIGHT_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.LIGHT_ASPECT_SIGN.get(), AspectTreeBlocks.LIGHT_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.LIGHT_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.LIGHT_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.LIGHT_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.LIGHT_ASPECT_PLANKS.get()));
@@ -617,7 +617,7 @@ public final class AspectTreeBlocksData
 						texture("mind_aspect_planks")));
 		provider.simpleHorizontal(MIND_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(MIND_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.MIND_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.MIND_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.MIND_ASPECT_SIGN.get(), AspectTreeBlocks.MIND_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.MIND_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.MIND_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.MIND_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.MIND_ASPECT_PLANKS.get()));
@@ -660,7 +660,7 @@ public final class AspectTreeBlocksData
 						texture("rage_aspect_planks")));
 		provider.simpleHorizontal(RAGE_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(RAGE_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.RAGE_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.RAGE_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.RAGE_ASPECT_SIGN.get(), AspectTreeBlocks.RAGE_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.RAGE_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.RAGE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.RAGE_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.RAGE_ASPECT_PLANKS.get()));
@@ -703,7 +703,7 @@ public final class AspectTreeBlocksData
 						texture("space_aspect_planks")));
 		provider.simpleHorizontal(SPACE_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(SPACE_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.SPACE_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.SPACE_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.SPACE_ASPECT_SIGN.get(), AspectTreeBlocks.SPACE_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.SPACE_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.SPACE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.SPACE_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.SPACE_ASPECT_PLANKS.get()));
@@ -746,7 +746,7 @@ public final class AspectTreeBlocksData
 						texture("time_aspect_planks")));
 		provider.simpleHorizontal(TIME_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(TIME_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.TIME_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.TIME_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.TIME_ASPECT_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.TIME_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.TIME_ASPECT_PLANKS.get()));
@@ -788,7 +788,7 @@ public final class AspectTreeBlocksData
 						texture("void_aspect_planks")));
 		provider.simpleHorizontal(VOID_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(VOID_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(((StandingSignBlock) AspectTreeBlocks.VOID_ASPECT_SIGN.get()), ((WallSignBlock) AspectTreeBlocks.VOID_ASPECT_WALL_SIGN.get()),
+		provider.signBlock(AspectTreeBlocks.VOID_ASPECT_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.VOID_ASPECT_PLANKS.get()));
 		provider.hangingSignBlock(AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_HANGING_SIGN.get(),
 				provider.blockTexture(AspectTreeBlocks.VOID_ASPECT_PLANKS.get()));

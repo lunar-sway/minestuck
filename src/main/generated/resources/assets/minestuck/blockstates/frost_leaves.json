@@ -1,13 +1,7 @@
 {
   "variants": {
-    "": [
-      {
-        "model": "minestuck:block/frost_leaves0",
-        "weight": 12
-      },
-      {
-        "model": "minestuck:block/frost_leaves1"
-      }
-    ]
+    "": {
+      "model": "minestuck:block/frost_leaves"
+    }
   }
 }

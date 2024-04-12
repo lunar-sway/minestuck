@@ -673,6 +673,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADEWOOD_HANGING_SIGN, "Shadewood Hanging Sign");
 		
 		addBlock(MSBlocks.FROST_LEAVES, "Frost Leaves");
+		addBlock(MSBlocks.FROST_LEAVES_FLOWERING, "Flowering Frost Leaves");
 		addBlock(MSBlocks.RAINBOW_LEAVES, "Rainbow Leaves");
 		addBlock(MSBlocks.END_LEAVES, "End Leaves");
 		addBlock(MSBlocks.SHADEWOOD_LEAVES, "Shadewood Leaves");

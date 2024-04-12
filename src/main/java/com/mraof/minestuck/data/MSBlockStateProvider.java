@@ -924,8 +924,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		hangingSignBlock(MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.SHADEWOOD_PLANKS.get()));
 		
-		weightedVariantsWithItem(MSBlocks.FROST_LEAVES, new int[]{12, 1},
-				i -> models().cubeAll("frost_leaves" + i, texture("frost_leaves" + i)));
+		//weightedVariantsWithItem(MSBlocks.FROST_LEAVES, new int[]{12, 1},
+		//		i -> models().cubeAll("frost_leaves" + i, texture("frost_leaves" + i)));
+		simpleBlockWithItem(MSBlocks.FROST_LEAVES);
+		simpleBlockWithItem(MSBlocks.FROST_LEAVES_FLOWERING);
 		simpleBlockWithItem(MSBlocks.RAINBOW_LEAVES,
 				id -> models().singleTexture(id.getPath(), new ResourceLocation("block/leaves"), "all", texture(id)));
 		simpleBlockWithItem(MSBlocks.END_LEAVES);

@@ -1,9 +1,9 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.block.plant.AspectSaplingBlock;
 import com.mraof.minestuck.block.plant.FlammableLeavesBlock;
 import com.mraof.minestuck.block.plant.FlammableLogBlock;
 import com.mraof.minestuck.block.plant.StrippableFlammableLogBlock;
+import com.mraof.minestuck.block.plant.aspect.*;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.*;
@@ -45,7 +45,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> BLOOD_ASPECT_SAPLING = MSBlocks.REGISTER.register("blood_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new BloodAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> BLOOD_ASPECT_PLANKS = MSBlocks.REGISTER.register("blood_aspect_planks",
@@ -135,7 +135,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> BREATH_ASPECT_SAPLING = MSBlocks.REGISTER.register("breath_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new BreathAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> BREATH_ASPECT_PLANKS = MSBlocks.REGISTER.register("breath_aspect_planks",
@@ -225,7 +225,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> DOOM_ASPECT_SAPLING = MSBlocks.REGISTER.register("doom_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new DoomAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> DOOM_ASPECT_PLANKS = MSBlocks.REGISTER.register("doom_aspect_planks",
@@ -316,7 +316,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> HEART_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> HEART_ASPECT_SAPLING = MSBlocks.REGISTER.register("heart_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new HeartAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> HEART_ASPECT_PLANKS = MSBlocks.REGISTER.register("heart_aspect_planks",
@@ -406,7 +406,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> HOPE_ASPECT_SAPLING = MSBlocks.REGISTER.register("hope_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new HopeAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> HOPE_ASPECT_PLANKS = MSBlocks.REGISTER.register("hope_aspect_planks",
@@ -497,7 +497,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> LIFE_ASPECT_SAPLING = MSBlocks.REGISTER.register("life_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new LifeAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> LIFE_ASPECT_PLANKS = MSBlocks.REGISTER.register("life_aspect_planks",
@@ -587,7 +587,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> LIGHT_ASPECT_SAPLING = MSBlocks.REGISTER.register("light_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new LightAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> LIGHT_ASPECT_PLANKS = MSBlocks.REGISTER.register("light_aspect_planks",
@@ -678,7 +678,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> MIND_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> MIND_ASPECT_SAPLING = MSBlocks.REGISTER.register("mind_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new MindAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> MIND_ASPECT_PLANKS = MSBlocks.REGISTER.register("mind_aspect_planks",
@@ -768,7 +768,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> RAGE_ASPECT_SAPLING = MSBlocks.REGISTER.register("rage_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new RageAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> RAGE_ASPECT_PLANKS = MSBlocks.REGISTER.register("rage_aspect_planks",
@@ -858,7 +858,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> SPACE_ASPECT_SAPLING = MSBlocks.REGISTER.register("space_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new SpaceAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> SPACE_ASPECT_PLANKS = MSBlocks.REGISTER.register("space_aspect_planks",
@@ -948,7 +948,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> TIME_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> TIME_ASPECT_SAPLING = MSBlocks.REGISTER.register("time_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new TimeAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> TIME_ASPECT_PLANKS = MSBlocks.REGISTER.register("time_aspect_planks",
@@ -1038,7 +1038,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<BlockItem> VOID_ASPECT_LEAVES_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_LEAVES);
 	
 	public static final RegistryObject<Block> VOID_ASPECT_SAPLING = MSBlocks.REGISTER.register("void_aspect_sapling",
-			() -> new AspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+			() -> new VoidAspectSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final RegistryObject<Block> VOID_ASPECT_PLANKS = MSBlocks.REGISTER.register("void_aspect_planks",
