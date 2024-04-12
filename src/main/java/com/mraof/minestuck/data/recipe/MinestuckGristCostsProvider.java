@@ -917,6 +917,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.CARROT_CAKE.get()).grist(CHALK, 20).grist(AMETHYST, 10).grist(MARBLE, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.LARGE_CAKE.get()).grist(BUILD, 1).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE.get()).grist(BUILD, 1).grist(IODINE, 1).grist(CHALK, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.CHOCOLATEY_CAKE.get()).grist(AMBER, 20).grist(CHALK, 10).grist(IODINE, 5).grist(RUBY, 1).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.CRUXTRUDER_LID.get()).grist(BUILD, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BLENDER.get()).grist(BUILD, 16).build(recipeSaver);
