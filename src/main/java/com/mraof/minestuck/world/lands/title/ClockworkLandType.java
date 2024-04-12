@@ -48,6 +48,9 @@ public class ClockworkLandType extends TitleLandType
 		
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.FLOOR_COG, LandBiomeType.OCEAN);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.UNCOMMON_FLOOR_COG, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TIME_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
 	}
 	
 	@Override

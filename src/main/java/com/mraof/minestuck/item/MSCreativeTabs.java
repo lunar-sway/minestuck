@@ -405,8 +405,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_STAIRS.get());
@@ -424,8 +424,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.BREATH_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.BREATH_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_STAIRS.get());
@@ -443,8 +443,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.DOOM_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.DOOM_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_STAIRS.get());
@@ -462,8 +462,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.HEART_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.HEART_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.HEART_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_STAIRS.get());
@@ -481,8 +481,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.HOPE_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.HOPE_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_STAIRS.get());
@@ -500,8 +500,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.LIFE_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.LIFE_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_STAIRS.get());
@@ -519,8 +519,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_STAIRS.get());
@@ -538,8 +538,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.MIND_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.MIND_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.MIND_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_STAIRS.get());
@@ -557,8 +557,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.RAGE_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.RAGE_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_STAIRS.get());
@@ -576,8 +576,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.SPACE_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.SPACE_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_STAIRS.get());
@@ -595,8 +595,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.TIME_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.TIME_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.TIME_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_STAIRS.get());
@@ -614,8 +614,8 @@ public final class MSCreativeTabs
 		
 		output.accept(AspectTreeBlocks.VOID_ASPECT_LOG.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_WOOD.get());
-		output.accept(AspectTreeBlocks.VOID_ASPECT_STRIPPED_LOG_ITEM.get());
-		output.accept(AspectTreeBlocks.VOID_ASPECT_STRIPPED_WOOD_ITEM.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_STRIPPED_LOG.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_STRIPPED_WOOD.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_PLANKS.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_CARVED_PLANKS.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_STAIRS.get());

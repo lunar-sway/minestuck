@@ -129,7 +129,21 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> DEAD_TREE = key("tree/dead");
 	public static final ResourceKey<PlacedFeature> EXTRA_DEAD_TREE = key("tree/dead_extra");
 	public static final ResourceKey<PlacedFeature> CINDERED_TREE = key("tree/cindered");
+	
 	public static final ResourceKey<PlacedFeature> FROST_TREE = key("tree/frost");
+	
+	public static final ResourceKey<PlacedFeature> BLOOD_TREE = key("tree/blood");
+	public static final ResourceKey<PlacedFeature> BREATH_TREE = key("tree/breath");
+	public static final ResourceKey<PlacedFeature> DOOM_TREE = key("tree/doom");
+	public static final ResourceKey<PlacedFeature> HEART_TREE = key("tree/heart");
+	public static final ResourceKey<PlacedFeature> HOPE_TREE = key("tree/hope");
+	public static final ResourceKey<PlacedFeature> LIFE_TREE = key("tree/life");
+	public static final ResourceKey<PlacedFeature> LIGHT_TREE = key("tree/light");
+	public static final ResourceKey<PlacedFeature> MIND_TREE = key("tree/mind");
+	public static final ResourceKey<PlacedFeature> RAGE_TREE = key("tree/rage");
+	public static final ResourceKey<PlacedFeature> SPACE_TREE = key("tree/space");
+	public static final ResourceKey<PlacedFeature> TIME_TREE = key("tree/time");
+	public static final ResourceKey<PlacedFeature> VOID_TREE = key("tree/void");
 	
 	public static final ResourceKey<PlacedFeature> FOREST_LAND_TREES = key("tree/forest_land");
 	public static final ResourceKey<PlacedFeature> DENSE_FOREST_LAND_TREES = key("tree/forest_land_dense");

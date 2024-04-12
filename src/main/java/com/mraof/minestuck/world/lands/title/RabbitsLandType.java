@@ -39,6 +39,8 @@ public class RabbitsLandType extends TitleLandType
 	{
 		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.RABBIT_PLACEMENT, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.SMALL_RABBIT_PLACEMENT, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LIFE_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
 	}
 	
 	@Override

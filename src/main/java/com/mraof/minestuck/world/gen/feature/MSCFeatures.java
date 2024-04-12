@@ -105,6 +105,18 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CINDERED_TREE = key("cindered_tree");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FROST_TREE = key("frost_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOD_TREE = key("blood_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> BREATH_TREE = key("breath_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> DOOM_TREE = key("doom_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> HEART_TREE = key("heart_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> HOPE_TREE = key("hope_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> LIFE_TREE = key("life_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> LIGHT_TREE = key("light_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> MIND_TREE = key("mind_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> RAGE_TREE = key("rage_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SPACE_TREE = key("space_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TIME_TREE = key("time_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> VOID_TREE = key("void_tree");
 	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FOREST_LAND_TREES = key("forest_land_trees");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> TAIGA_LAND_TREES = key("taiga_land_trees");
