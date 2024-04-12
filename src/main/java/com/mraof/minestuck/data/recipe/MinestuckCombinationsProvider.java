@@ -1060,6 +1060,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.CARROT_CAKE.get()).input(Items.CAKE).or().input(Items.CARROT).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.LARGE_CAKE.get()).input(Items.CAKE).or().input(Items.BONE_MEAL).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE.get()).input(MSItems.LARGE_CAKE.get()).and().input(Items.PINK_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CHOCOLATEY_CAKE.get()).input(Items.CAKE).or().input(Items.COCOA_BEANS).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.ROCK_COOKIE.get()).input(Items.COOKIE).and().namedInput(Items.STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ROCK_COOKIE.get()).input(Items.COOKIE).and().namedInput(Items.COBBLESTONE).build(consumer);
