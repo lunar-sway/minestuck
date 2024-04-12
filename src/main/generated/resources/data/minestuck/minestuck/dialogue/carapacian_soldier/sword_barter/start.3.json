@@ -1,0 +1,43 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dots"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.sword_barter.start.3"
+      }
+    ],
+    "responses": [
+      {
+        "message": "minestuck.dialogue.carapacian_soldier.sword_barter.start.3.suggestion",
+        "next_dialogue": {
+          "id": "minestuck:carapacian_soldier/sword_barter/barter",
+          "reply_messages": [],
+          "set_as_entrypoint": true
+        }
+      },
+      {
+        "condition": {
+          "type": "minestuck:is_from_kingdom",
+          "kingdom": "dersite"
+        },
+        "message": "minestuck.dialogue.carapacian_soldier.sword_barter.start.3.derse_loyalty",
+        "next_dialogue": "minestuck:carapacian_soldier/sword_barter/bad_mood"
+      },
+      {
+        "condition": {
+          "type": "minestuck:is_from_kingdom",
+          "kingdom": "prospitian"
+        },
+        "message": "minestuck.dialogue.carapacian_soldier.sword_barter.start.3.prospitian_loyalty",
+        "next_dialogue": "minestuck:carapacian_soldier/sword_barter/frequently"
+      },
+      {
+        "message": "minestuck.dialogue.carapacian_soldier.sword_barter.start.3.goodbye"
+      }
+    ]
+  }
+}
