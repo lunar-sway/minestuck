@@ -2227,6 +2227,7 @@
   "minestuck.dialogue.carapacian_soldier.sword_barter.bad_mood": "They explain that the arch agent does not always get along with the Black Queen and when he gets in a bad mood he allegedly will order his minions to go and distribute a bunch of these swords around. Apparently the queen is even aware of it and finds it amusing.",
   "minestuck.dialogue.carapacian_soldier.sword_barter.barter": "They ask if you have a new sword for them.",
   "minestuck.dialogue.carapacian_soldier.sword_barter.barter.give_item": "[Give them the %s]",
+  "minestuck.dialogue.carapacian_soldier.sword_barter.barter.give_item.condition": "Must have a sword, excluding a regisword",
   "minestuck.dialogue.carapacian_soldier.sword_barter.barter.give_item.reply": "Here you go!",
   "minestuck.dialogue.carapacian_soldier.sword_barter.barter.not_yet": "Not yet.",
   "minestuck.dialogue.carapacian_soldier.sword_barter.frequently": "They mention that the last few times they were outside the palace, there was a bin labelled \"Regicide weapon disposal\". It was always full.",

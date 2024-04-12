@@ -17,7 +17,7 @@
           "exclusion_item": "minestuck:regisword",
           "tag": "minecraft:swords"
         },
-        "fail_tooltip": "Must have a sword, excluding a regisword",
+        "fail_tooltip": "minestuck.dialogue.carapacian_soldier.sword_barter.barter.give_item.condition",
         "hide_if_failed": false,
         "message": {
           "arguments": [
