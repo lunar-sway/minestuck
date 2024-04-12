@@ -7,6 +7,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
+/**
+ * Used to create modded sign block entities with custom textures.
+ *
+ * MSWallHangingSignBlock represents modded hanging signs, placed on the side of a block.
+ */
+
 public class MSWallHangingSignBlock extends WallHangingSignBlock
 {
 	public MSWallHangingSignBlock(Properties pProperties, WoodType pType)
