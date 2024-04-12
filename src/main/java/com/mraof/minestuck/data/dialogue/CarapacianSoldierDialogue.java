@@ -95,7 +95,7 @@ public final class CarapacianSoldierDialogue
 			var barter = builder.add("barter", new NodeBuilder(dots).addDescription(l.defaultKeyMsg("They ask if you have a new sword for them."))
 					.addResponse(new ResponseBuilder(l.subMsg("give_item", "[Give them the %s]", DialogueMessage.Argument.MATCHED_ITEM))
 							.addPlayerMessage(l.subMsg("give_item.reply", "Here you go!"))
-							.visibleCondition(resource -> "Must have a sword and must not be carrying a regisword", all(new Condition.ItemTagMatch(ItemTags.SWORDS), none(new Condition.PlayerHasItem(MSItems.REGISWORD.get(), 1))))
+							.visibleCondition(resource -> "Must have a sword, excluding a regisword", new Condition.ItemTagMatchExclude(ItemTags.SWORDS, MSItems.REGISWORD.get()))
 							.addTrigger(new Trigger.SetNPCMatchedItem(EquipmentSlot.MAINHAND))
 							.addTrigger(new Trigger.GiveItem(MSItems.REGISWORD.get(), 1))
 							.addTrigger(new Trigger.SetDialogue(thanks))

@@ -43,6 +43,7 @@ public final class Conditions
 		REGISTER.register("npc_holding_item", () -> Condition.NPCIsHoldingItem.CODEC);
 		REGISTER.register("player_item", () -> Condition.PlayerHasItem.CODEC);
 		REGISTER.register("item_tag_match", () -> Condition.ItemTagMatch.CODEC);
+		REGISTER.register("item_tag_match_exclude", () -> Condition.ItemTagMatchExclude.CODEC);
 		REGISTER.register("has_matched_item", () -> Condition.HasMatchedItem.CODEC);
 		REGISTER.register("player_class", () -> Condition.PlayerIsClass.CODEC);
 		REGISTER.register("player_aspect", () -> Condition.PlayerIsAspect.CODEC);

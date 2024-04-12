@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -221,8 +222,19 @@ public sealed interface Trigger
 		}
 	}
 	
-	Codec<EquipmentSlot> EQUIPMENT_CODEC = Codec.STRING.xmap(
-			EquipmentSlot::byName,
+	static DataResult<EquipmentSlot> parseSlot(String slotName)
+	{
+		try
+		{
+			return DataResult.success(EquipmentSlot.byName(slotName));
+		} catch(IllegalArgumentException e)
+		{
+			return DataResult.error(() -> "Not a valid name for an EquipmentSlot: " + slotName);
+		}
+	}
+	
+	Codec<EquipmentSlot> EQUIPMENT_CODEC = Codec.STRING.comapFlatMap(
+			Trigger::parseSlot,
 			EquipmentSlot::getName
 	);
 	

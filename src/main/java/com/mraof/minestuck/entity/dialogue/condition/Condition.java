@@ -588,6 +588,44 @@ public interface Condition
 		}
 	}
 	
+	record ItemTagMatchExclude(TagKey<Item> itemTag, Item exclusionItem) implements Condition
+	{
+		static final Codec<ItemTagMatchExclude> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				TagKey.codec(Registries.ITEM).fieldOf("tag").forGetter(ItemTagMatchExclude::itemTag),
+				ForgeRegistries.ITEMS.getCodec().fieldOf("exclusion_item").forGetter(ItemTagMatchExclude::exclusionItem)
+		).apply(instance, ItemTagMatchExclude::new));
+		
+		@Override
+		public Codec<ItemTagMatchExclude> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
+			ITag<Item> tag = Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.itemTag);
+			Optional<Item> lastMatched = component.getMatchedItem(player);
+			if(lastMatched.isPresent() && tag.contains(lastMatched.get()) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
+				return true;
+			
+			List<Item> items = tag.stream().filter(item -> item != exclusionItem).collect(Collectors.toCollection(ArrayList::new));
+			while(!items.isEmpty())
+			{
+				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
+				if(PlayerHasItem.findPlayerItem(nextItem, player, 1) != null)
+				{
+					component.setMatchedItem(nextItem, player);
+					return true;
+				}
+			}
+			
+			component.clearMatchedItem(player);
+			return false;
+		}
+	}
+	
 	/**
 	 * Specifically checks the item set by {@link ItemTagMatch} to make sure that it's still present.
 	 */

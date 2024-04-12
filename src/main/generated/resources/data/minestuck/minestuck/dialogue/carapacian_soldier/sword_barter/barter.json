@@ -13,26 +13,11 @@
     "responses": [
       {
         "condition": {
-          "type": "minestuck:list",
-          "conditions": [
-            {
-              "type": "minestuck:item_tag_match",
-              "tag": "minecraft:swords"
-            },
-            {
-              "type": "minestuck:list",
-              "conditions": [
-                {
-                  "type": "minestuck:player_item",
-                  "item": "minestuck:regisword"
-                }
-              ],
-              "list_type": "none"
-            }
-          ],
-          "list_type": "all"
+          "type": "minestuck:item_tag_match_exclude",
+          "exclusion_item": "minestuck:regisword",
+          "tag": "minecraft:swords"
         },
-        "fail_tooltip": "Must have a sword and must not be carrying a regisword",
+        "fail_tooltip": "Must have a sword, excluding a regisword",
         "hide_if_failed": false,
         "message": {
           "arguments": [
