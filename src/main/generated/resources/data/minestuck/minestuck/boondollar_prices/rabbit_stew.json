@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:rabbit_stew"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 150,
+      "min_inclusive": 130
+    }
+  }
+}

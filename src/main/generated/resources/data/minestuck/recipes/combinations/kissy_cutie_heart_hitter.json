@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:iron_cane"
+  },
+  "input2": {
+    "item": "minestuck:gamegrl_magazine"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:kissy_cutie_heart_hitter"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:bucket"
+  },
+  "input2": {
+    "item": "minecraft:obsidian"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:obsidian_bucket"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:mercury": 1
+  },
+  "ingredient": {
+    "item": "minecraft:rooted_dirt"
+  }
+}

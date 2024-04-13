@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:leaves"
+  },
+  "input2": {
+    "item": "minecraft:bowl"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:carved_wooden_leaf"
+  }
+}

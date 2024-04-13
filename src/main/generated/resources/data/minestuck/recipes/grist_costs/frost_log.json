@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 7,
+    "minestuck:cobalt": 1
+  },
+  "ingredient": {
+    "item": "minestuck:frost_log"
+  }
+}

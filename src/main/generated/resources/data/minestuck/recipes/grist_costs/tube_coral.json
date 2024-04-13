@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 4,
+    "minestuck:cobalt": 2
+  },
+  "ingredient": {
+    "item": "minecraft:tube_coral"
+  }
+}

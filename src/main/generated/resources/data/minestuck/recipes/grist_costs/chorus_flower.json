@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 23,
+    "minestuck:build": 26,
+    "minestuck:shale": 10
+  },
+  "ingredient": {
+    "item": "minecraft:chorus_flower"
+  }
+}

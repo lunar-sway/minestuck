@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 4,
+    "minestuck:build": 2,
+    "minestuck:cobalt": 2
+  },
+  "ingredient": {
+    "item": "minecraft:bubble_coral_block"
+  }
+}

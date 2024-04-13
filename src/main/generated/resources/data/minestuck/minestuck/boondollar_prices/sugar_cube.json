@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:sugar_cube"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 240,
+      "min_inclusive": 200
+    }
+  }
+}

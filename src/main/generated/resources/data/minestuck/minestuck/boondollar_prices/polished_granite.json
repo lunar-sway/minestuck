@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:polished_granite"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 10,
+      "min_inclusive": 5
+    }
+  }
+}

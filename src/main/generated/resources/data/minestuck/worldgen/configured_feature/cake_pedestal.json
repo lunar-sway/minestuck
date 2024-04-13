@@ -1,0 +1,7 @@
+{
+  "type": "minestuck:simple_template",
+  "config": {
+    "land_block_replacement": true,
+    "template": "minestuck:cake_pedestal"
+  }
+}

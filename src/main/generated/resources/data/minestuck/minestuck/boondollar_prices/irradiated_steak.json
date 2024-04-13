@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:irradiated_steak"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 80,
+      "min_inclusive": 70
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "criteria": {
+    "raw_cruxite": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:raw_cruxite"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minestuck:textures/gui/advancement_bg.png",
+    "description": {
+      "translate": "advancements.minestuck.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minestuck:raw_cruxite"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.minestuck.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "raw_cruxite"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

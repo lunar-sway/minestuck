@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:chiseled_stone_bricks"
+  },
+  "input2": {
+    "item": "minestuck:cast_iron"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:chiseled_cast_iron"
+  }
+}

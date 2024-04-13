@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:leafless_tree",
+  "config": {
+    "state": {
+      "Name": "minestuck:glowing_log",
+      "Properties": {
+        "axis": "y"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:water_bucket"
+  },
+  "input2": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:blood_bucket"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_hoe"
+  },
+  "input2": {
+    "item": "minecraft:wheat"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:sickle"
+  }
+}

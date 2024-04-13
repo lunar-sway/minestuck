@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 12,
+    "minestuck:build": 4,
+    "minestuck:caulk": 10,
+    "minestuck:chalk": 8
+  },
+  "ingredient": {
+    "item": "minecraft:name_tag"
+  }
+}

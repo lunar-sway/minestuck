@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:wooden_sword"
+  },
+  "input2": {
+    "item": "minecraft:arrow"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:bow"
+  }
+}

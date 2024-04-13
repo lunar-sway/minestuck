@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 4375,
+    "minestuck:quartz": 1200,
+    "minestuck:ruby": 600,
+    "minestuck:uranium": 6325
+  },
+  "ingredient": {
+    "item": "minestuck:unbreakable_katana"
+  }
+}

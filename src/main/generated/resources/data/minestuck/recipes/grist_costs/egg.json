@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 5
+  },
+  "ingredient": {
+    "item": "minecraft:egg"
+  }
+}

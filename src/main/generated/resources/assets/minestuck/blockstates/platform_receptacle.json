@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "machine_toggle=false,powered=false": {
+      "model": "minestuck:block/platform_receptacle_unpowered"
+    },
+    "machine_toggle=false,powered=true": {
+      "model": "minestuck:block/platform_receptacle_powered"
+    },
+    "machine_toggle=true,powered=false": {
+      "model": "minestuck:block/platform_receptacle_unpowered"
+    },
+    "machine_toggle=true,powered=true": {
+      "model": "minestuck:block/platform_receptacle_powered_absorbing"
+    }
+  }
+}

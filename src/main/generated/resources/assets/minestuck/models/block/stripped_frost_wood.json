@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/stripped_frost_log",
+    "side": "minestuck:block/stripped_frost_log"
+  }
+}

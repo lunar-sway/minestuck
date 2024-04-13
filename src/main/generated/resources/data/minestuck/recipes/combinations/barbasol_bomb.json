@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:build_gushers"
+  },
+  "input2": {
+    "item": "minestuck:barbasol"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:barbasol_bomb"
+  }
+}

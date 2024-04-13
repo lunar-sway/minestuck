@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 25,
+    "minestuck:diamond": 4,
+    "minestuck:quartz": 8,
+    "minestuck:tar": 15
+  },
+  "ingredient": {
+    "item": "minecraft:disc_fragment_5"
+  }
+}

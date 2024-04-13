@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button",
+  "textures": {
+    "texture": "minestuck:block/treated_uncarved_wood"
+  }
+}

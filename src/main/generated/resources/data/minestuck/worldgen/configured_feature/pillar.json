@@ -1,0 +1,8 @@
+{
+  "type": "minestuck:pillar",
+  "config": {
+    "state": {
+      "Name": "minecraft:stone_bricks"
+    }
+  }
+}

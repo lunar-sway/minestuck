@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 27,
+    "minestuck:cobalt": 18,
+    "minestuck:marble": 7
+  },
+  "ingredient": {
+    "item": "minestuck:prismarine_basher"
+  }
+}

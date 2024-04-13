@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/frost_planks_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/frost_planks"
+    },
+    "type=top": {
+      "model": "minestuck:block/frost_planks_slab_top"
+    }
+  }
+}

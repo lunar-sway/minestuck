@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:boats"
+  },
+  "input2": {
+    "item": "minecraft:gold_block"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:gold_boat"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:raw_cruxite"
+  },
+  "input2": {
+    "item": "minestuck:uncarved_wood"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:uncarved_wood_cruxite_ore"
+  }
+}

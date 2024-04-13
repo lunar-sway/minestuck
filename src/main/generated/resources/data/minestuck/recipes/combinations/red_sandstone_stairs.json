@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:red_sand"
+  },
+  "input2": {
+    "item": "minecraft:stone_brick_stairs"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:red_sandstone_stairs"
+  }
+}

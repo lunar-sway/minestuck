@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:raw_uranium_from_blasting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_uranium_ore": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "minestuck:ores/uranium"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_uranium_ore",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:raw_uranium_from_blasting"
+    ]
+  },
+  "sends_telemetry_event": false
+}

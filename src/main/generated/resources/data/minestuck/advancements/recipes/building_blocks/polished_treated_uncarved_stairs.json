@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_polished_treated_carved_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:polished_treated_carved_wood"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:polished_treated_uncarved_stairs"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_polished_treated_carved_wood",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:polished_treated_uncarved_stairs"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:lapis_lazuli"
+  },
+  "input2": {
+    "item": "minecraft:stone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:lapis_block"
+  }
+}

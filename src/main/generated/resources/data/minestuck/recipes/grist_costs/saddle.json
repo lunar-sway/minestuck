@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:chalk": 14,
+    "minestuck:iodine": 7,
+    "minestuck:rust": 16
+  },
+  "ingredient": {
+    "item": "minecraft:saddle"
+  }
+}

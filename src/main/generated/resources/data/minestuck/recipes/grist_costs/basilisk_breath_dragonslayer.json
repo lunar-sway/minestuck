@@ -1,0 +1,14 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 2453,
+    "minestuck:build": 8176,
+    "minestuck:quartz": 3270,
+    "minestuck:shale": 4088,
+    "minestuck:sulfur": 3270,
+    "minestuck:uranium": 1635
+  },
+  "ingredient": {
+    "item": "minestuck:basilisk_breath_dragonslayer"
+  }
+}

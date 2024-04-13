@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:cane"
+  },
+  "input2": {
+    "item": "minestuck:katana"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:spear_cane"
+  }
+}

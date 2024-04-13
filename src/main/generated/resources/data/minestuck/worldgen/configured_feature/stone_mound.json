@@ -1,0 +1,8 @@
+{
+  "type": "minestuck:stone_mound",
+  "config": {
+    "state": {
+      "Name": "minecraft:stone"
+    }
+  }
+}

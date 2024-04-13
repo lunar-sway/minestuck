@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:beef_sword"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 625,
+      "min_inclusive": 250
+    }
+  }
+}

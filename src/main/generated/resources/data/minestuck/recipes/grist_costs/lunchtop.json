@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 30,
+    "minestuck:marble": 20,
+    "minestuck:rust": 10
+  },
+  "ingredient": {
+    "item": "minestuck:lunchtop"
+  }
+}

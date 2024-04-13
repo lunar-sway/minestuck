@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/cast_iron_sheet_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/cast_iron_sheet"
+    },
+    "type=top": {
+      "model": "minestuck:block/cast_iron_sheet_slab_top"
+    }
+  }
+}

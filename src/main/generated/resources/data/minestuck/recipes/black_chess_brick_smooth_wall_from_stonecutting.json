@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:black_chess_brick_smooth"
+  },
+  "result": "minestuck:black_chess_brick_smooth_wall"
+}

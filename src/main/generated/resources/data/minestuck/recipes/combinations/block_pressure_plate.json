@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:observer"
+  },
+  "input2": {
+    "item": "minecraft:stone_pressure_plate"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:block_pressure_plate"
+  }
+}

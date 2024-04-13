@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:diamond_mint"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 240,
+      "min_inclusive": 200
+    }
+  }
+}

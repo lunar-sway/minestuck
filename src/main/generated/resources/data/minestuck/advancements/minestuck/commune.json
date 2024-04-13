@@ -1,0 +1,49 @@
+{
+  "parent": "minestuck:minestuck/entry",
+  "criteria": {
+    "talk_to_consort": {
+      "conditions": {},
+      "trigger": "minestuck:consort_talk"
+    },
+    "visit_village": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "minestuck:consort_village"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.minestuck.commune.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minestuck:stone_tablet"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.minestuck.commune.title"
+    }
+  },
+  "requirements": [
+    [
+      "talk_to_consort"
+    ],
+    [
+      "visit_village"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

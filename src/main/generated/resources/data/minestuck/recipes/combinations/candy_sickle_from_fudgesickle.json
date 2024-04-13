@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:fudgesickle"
+  },
+  "input2": {
+    "item": "minecraft:sugar"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:candy_sickle"
+  }
+}

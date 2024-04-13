@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:oak_log"
+  },
+  "input2": {
+    "item": "minecraft:vine"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:vine_log"
+  }
+}

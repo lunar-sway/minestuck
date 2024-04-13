@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/mind_aspect_stripped_log",
+    "side": "minestuck:block/mind_aspect_stripped_log"
+  }
+}

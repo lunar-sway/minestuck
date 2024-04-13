@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 16
+  },
+  "ingredient": {
+    "item": "minestuck:molten_amber_bucket"
+  }
+}

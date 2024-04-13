@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:bone_meal"
+  },
+  "input2": {
+    "item": "minecraft:small_dripleaf"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:big_dripleaf"
+  }
+}

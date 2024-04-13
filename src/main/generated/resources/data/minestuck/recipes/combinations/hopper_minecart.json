@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:minecart"
+  },
+  "input2": {
+    "item": "minecraft:hopper"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:hopper_minecart"
+  }
+}

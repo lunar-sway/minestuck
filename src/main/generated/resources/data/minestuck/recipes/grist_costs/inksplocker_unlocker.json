@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 15,
+    "minestuck:tar": 30
+  },
+  "ingredient": {
+    "item": "minestuck:inksplocker_unlocker"
+  }
+}

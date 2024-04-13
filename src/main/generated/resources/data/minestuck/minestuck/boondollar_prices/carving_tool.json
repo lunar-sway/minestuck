@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:carving_tool"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 90,
+      "min_inclusive": 60
+    }
+  }
+}

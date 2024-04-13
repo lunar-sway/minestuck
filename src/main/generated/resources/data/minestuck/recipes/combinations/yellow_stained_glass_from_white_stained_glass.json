@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "forge:dyes/yellow"
+  },
+  "input2": {
+    "item": "minecraft:white_stained_glass"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:yellow_stained_glass"
+  }
+}

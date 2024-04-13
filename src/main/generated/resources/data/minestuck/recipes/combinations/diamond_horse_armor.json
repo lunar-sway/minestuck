@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:diamond"
+  },
+  "input2": {
+    "item": "minecraft:saddle"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:diamond_horse_armor"
+  }
+}

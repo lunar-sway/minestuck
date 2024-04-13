@@ -1,0 +1,20 @@
+{
+  "values": [
+    "minestuck:uncarved_wood",
+    "minestuck:igneous_stone",
+    "minestuck:chalk",
+    "minecraft:stone",
+    "minecraft:sand",
+    "minecraft:red_sand",
+    "minecraft:end_stone",
+    "minecraft:mud",
+    "minecraft:grass_block",
+    "minecraft:podzol",
+    "minecraft:mycelium",
+    "minecraft:white_wool",
+    "minecraft:gravel",
+    "minecraft:sandstone",
+    "minestuck:blue_dirt",
+    "#minecraft:wool"
+  ]
+}

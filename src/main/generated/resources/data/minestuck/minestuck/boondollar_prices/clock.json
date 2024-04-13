@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:clock"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 200,
+      "min_inclusive": 150
+    }
+  }
+}

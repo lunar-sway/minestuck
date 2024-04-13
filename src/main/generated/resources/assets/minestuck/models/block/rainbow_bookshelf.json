@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/rainbow_planks",
+    "side": "minestuck:block/rainbow_bookshelf"
+  }
+}
