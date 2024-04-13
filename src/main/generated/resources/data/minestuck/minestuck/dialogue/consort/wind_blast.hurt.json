@@ -1,0 +1,13 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "happy"
+    },
+    "message": "minestuck.dialogue.consort.wind_blast.hurt",
+    "responses": [
+      {
+        "message": "minestuck.dots"
+      }
+    ]
+  }
+}

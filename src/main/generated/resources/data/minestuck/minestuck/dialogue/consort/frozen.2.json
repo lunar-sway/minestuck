@@ -1,0 +1,14 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.frozen.2"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.consort.frozen.2.desc"
+      }
+    ]
+  }
+}

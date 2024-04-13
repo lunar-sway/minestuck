@@ -25,5 +25,6 @@ public class MSArgumentTypes
 				SingletonArgumentInfo.contextFree(TitleArgument::title)));
 		//noinspection unchecked,rawtypes
 		REGISTER.register("list", () -> ArgumentTypeInfos.registerByClass(ListArgument.class, new ListArgument.Info()));
+		REGISTER.register("dialogue_category", () -> ArgumentTypeInfos.registerByClass(DialogueCategoryArgument.class, SingletonArgumentInfo.contextFree(DialogueCategoryArgument::new)));
 	}
 }

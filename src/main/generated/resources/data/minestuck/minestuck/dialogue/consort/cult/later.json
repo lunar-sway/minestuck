@@ -1,0 +1,10 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "entity_sound"
+      ],
+      "key": "minestuck.dialogue.consort.cult.later"
+    }
+  }
+}

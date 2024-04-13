@@ -1,0 +1,15 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.immortality_herb.3",
+    "responses": [
+      {
+        "message": "minestuck.dots",
+        "triggers": [
+          {
+            "type": "minestuck:explode"
+          }
+        ]
+      }
+    ]
+  }
+}

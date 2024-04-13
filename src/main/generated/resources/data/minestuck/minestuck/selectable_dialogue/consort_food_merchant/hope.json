@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:towers"
+  },
+  "dialogue": "minestuck:consort_food_merchant/hope",
+  "keep_on_reset": true
+}

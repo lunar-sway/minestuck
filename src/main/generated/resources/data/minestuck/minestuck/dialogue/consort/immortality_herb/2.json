@@ -1,0 +1,14 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "anxious"
+    },
+    "message": "minestuck.dialogue.consort.immortality_herb.2",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/immortality_herb/3"
+      }
+    ]
+  }
+}

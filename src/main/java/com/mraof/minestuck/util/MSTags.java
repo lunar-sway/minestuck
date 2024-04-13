@@ -109,6 +109,7 @@ public class MSTags
 		public static final TagKey<Item> CASSETTES = tag("cassettes");
 		public static final TagKey<Item> BUGS = tag("bugs");
 		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
+		public static final TagKey<Item> MAGIC_WEAPON = tag("magic_weapon");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
 		public static final TagKey<Item> LEGENDARY = tag("legendary");
@@ -206,6 +207,7 @@ public class MSTags
 		public static final TagKey<TerrainLandType> ROCK = tag("rock");
 		public static final TagKey<TerrainLandType> SAND = tag("sand");
 		public static final TagKey<TerrainLandType> SANDSTONE = tag("sandstone");
+		public static final TagKey<TerrainLandType> IS_DESOLATE = tag("is_desolate");
 		
 		private static TagKey<TerrainLandType> tag(String name)
 		{

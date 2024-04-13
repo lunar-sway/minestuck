@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:terrain_land_type",
+    "land_type": "minestuck:rainbow"
+  },
+  "dialogue": "minestuck:consort_general_merchant/eye_catching",
+  "keep_on_reset": true
+}

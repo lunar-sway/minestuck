@@ -1,0 +1,19 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.underling_commission.answer.2"
+    },
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.underling_commission.answer.2.ask_carapacian",
+        "next_dialogue": "minestuck:consort/underling_commission/explain_carapacian.1"
+      },
+      {
+        "message": "minestuck.dialogue.goodbye"
+      }
+    ]
+  }
+}

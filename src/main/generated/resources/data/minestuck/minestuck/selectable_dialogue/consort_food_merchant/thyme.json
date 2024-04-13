@@ -1,0 +1,18 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:clockwork"
+      },
+      {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:thought"
+      }
+    ],
+    "list_type": "any"
+  },
+  "dialogue": "minestuck:consort_food_merchant/thyme",
+  "keep_on_reset": true
+}

@@ -7,12 +7,14 @@ import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.command.MSSuggestionProviders;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortDialogue;
+import com.mraof.minestuck.entity.dialogue.Triggers;
+import com.mraof.minestuck.entity.dialogue.condition.Conditions;
 import com.mraof.minestuck.entry.BlockCopier;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
 import com.mraof.minestuck.entry.RSEntryBlockProcess;
@@ -91,7 +93,10 @@ public class Minestuck
 		MSLootTables.FUNCTION_REGISTER.register(eventBus);
 		MSLootTables.ENTRY_REGISTER.register(eventBus);
 		MSLootTables.MODIFIER_REGISTER.register(eventBus);
+		
 		ModusTypes.REGISTER.register(eventBus);
+		Conditions.REGISTER.register(eventBus);
+		Triggers.REGISTER.register(eventBus);
 		
 		MSFeatures.REGISTER.register(eventBus);
 		
@@ -130,8 +135,7 @@ public class Minestuck
 	private void mainThreadSetup()
 	{
 		MSCriteriaTriggers.register();
-		
-		ConsortDialogue.init();
+		MSSuggestionProviders.register();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();

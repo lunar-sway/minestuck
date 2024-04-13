@@ -1,0 +1,14 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "message": "minestuck.dialogue.consort.reckoning.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/reckoning/2"
+      }
+    ]
+  }
+}

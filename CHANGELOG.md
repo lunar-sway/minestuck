@@ -36,6 +36,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Sulfur Pools and Cast Iron features in Heat Lands
 - Wooden Lamp and Heat Lamp blocks, used in Wood and Heat lands respectively
 - Chocolatey Cake - the most scrumptious cake in the entire world!
+- New dialogue system that uses a gui screen, replacing the chat-based system
+- Dialogue in this new system is data-driven, and can be defined or tweaked through datapacks
+- New dialogue
+- Carapacian pawns now have dialogue
 
 ### Changed
 
@@ -59,6 +63,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Black Sand now generates in Heat lands
 - Updated Textures of Cast Iron blocks
 - Steel Beams are now alchemized with Iron Blocks instead of Cast Iron Blocks
+- Existing consort dialogue have been ported to the new dialogue system with some tweaks
 
 ### Fixed
 
@@ -69,6 +74,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - All walls will now connect with each other properly
 - Fixed name typos for some chess castle blocks
 - Area effect blocks now save their effect as a string id instead of an int id
+- Improved grammar on some dialogues
 
 ### Removed
 
@@ -76,7 +82,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipher
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipher, kirderf1
 
 ## [Unreleased]
 

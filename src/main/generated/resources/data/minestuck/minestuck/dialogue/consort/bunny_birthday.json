@@ -1,0 +1,18 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.bunny_birthday",
+    "responses": [
+      {
+        "message": "minestuck.dots"
+      },
+      {
+        "message": "minestuck.dialogue.consort.bunny_birthday.question",
+        "next_dialogue": {
+          "id": "minestuck:consort/bunny_birthday.whatever",
+          "player_message": "minestuck.dialogue.consort.bunny_birthday.question.reply",
+          "set_as_entrypoint": false
+        }
+      }
+    ]
+  }
+}

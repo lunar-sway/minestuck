@@ -1,0 +1,17 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:red_sand"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:red_sandstone"
+      }
+    ],
+    "list_type": "any"
+  },
+  "dialogue": "minestuck:consort/red_better"
+}
