@@ -1,6 +1,5 @@
 package com.mraof.minestuck.blockentity;
 
-import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
@@ -10,12 +9,12 @@ public class MSSignBlockEntity extends SignBlockEntity
 {
 	public MSSignBlockEntity(BlockPos pPos, BlockState pBlockState)
 	{
-		super(MSBlockEntityTypes.MOD_SIGN.get(), pPos, pBlockState);
+		super(MSBlockEntityTypes.SIGN.get(), pPos, pBlockState);
 	}
 	
 	@Override
 	public BlockEntityType<?> getType()
 	{
-		return MSBlockEntityTypes.MOD_SIGN.get();
+		return MSBlockEntityTypes.SIGN.get();
 	}
 }

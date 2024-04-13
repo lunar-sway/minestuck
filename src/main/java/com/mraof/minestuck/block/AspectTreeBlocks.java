@@ -101,15 +101,15 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.BLOOD));
 	public static final RegistryObject<WallSignBlock> BLOOD_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("blood_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.BLOOD));
+	public static final RegistryObject<Item> BLOOD_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("blood_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), BLOOD_ASPECT_SIGN.get(), BLOOD_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> BLOOD_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("blood_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.BLOOD));
 	public static final RegistryObject<Block> BLOOD_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("blood_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.BLOOD));
-	
-	public static final RegistryObject<Item> BLOOD_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("blood_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), BLOOD_ASPECT_SIGN.get(), BLOOD_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> BLOOD_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("blood_aspect_hanging_sign",
 			() -> new HangingSignItem(BLOOD_ASPECT_HANGING_SIGN.get(), BLOOD_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	
 	
 	//Breath
 	public static final RegistryObject<Block> BREATH_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("breath_aspect_stripped_log",
@@ -191,15 +191,15 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.BREATH));
 	public static final RegistryObject<WallSignBlock> BREATH_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("breath_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.BREATH));
+	public static final RegistryObject<Item> BREATH_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("breath_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), BREATH_ASPECT_SIGN.get(), BREATH_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> BREATH_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("breath_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.BREATH));
 	public static final RegistryObject<Block> BREATH_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("breath_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.BREATH));
-	
-	public static final RegistryObject<Item> BREATH_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("breath_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), BREATH_ASPECT_SIGN.get(), BREATH_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> BREATH_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("breath_aspect_hanging_sign",
 			() -> new HangingSignItem(BREATH_ASPECT_HANGING_SIGN.get(), BREATH_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	
 	
 	//Doom
 	public static final RegistryObject<Block> DOOM_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("doom_aspect_stripped_log",
@@ -281,13 +281,12 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.DOOM));
 	public static final RegistryObject<WallSignBlock> DOOM_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("doom_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.DOOM));
+	public static final RegistryObject<Item> DOOM_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("doom_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), DOOM_ASPECT_SIGN.get(), DOOM_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> DOOM_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("doom_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.DOOM));
 	public static final RegistryObject<Block> DOOM_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("doom_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.DOOM));
-	
-	public static final RegistryObject<Item> DOOM_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("doom_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), DOOM_ASPECT_SIGN.get(), DOOM_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> DOOM_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("doom_aspect_hanging_sign",
 			() -> new HangingSignItem(DOOM_ASPECT_HANGING_SIGN.get(), DOOM_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	
@@ -372,15 +371,15 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.HEART));
 	public static final RegistryObject<WallSignBlock> HEART_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("heart_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.HEART));
+	public static final RegistryObject<Item> HEART_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("heart_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), HEART_ASPECT_SIGN.get(), HEART_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> HEART_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("heart_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.HEART));
 	public static final RegistryObject<Block> HEART_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("heart_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.HEART));
-	
-	public static final RegistryObject<Item> HEART_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("heart_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), HEART_ASPECT_SIGN.get(), HEART_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> HEART_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("heart_aspect_hanging_sign",
 			() -> new HangingSignItem(HEART_ASPECT_HANGING_SIGN.get(), HEART_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	
 	
 	//Hope
 	public static final RegistryObject<Block> HOPE_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("hope_aspect_stripped_log",
@@ -462,13 +461,12 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.HOPE));
 	public static final RegistryObject<WallSignBlock> HOPE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("hope_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.HOPE));
+	public static final RegistryObject<Item> HOPE_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("hope_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), HOPE_ASPECT_SIGN.get(), HOPE_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> HOPE_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("hope_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.HOPE));
 	public static final RegistryObject<Block> HOPE_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("hope_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.HOPE));
-	
-	public static final RegistryObject<Item> HOPE_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("hope_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), HOPE_ASPECT_SIGN.get(), HOPE_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> HOPE_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("hope_aspect_hanging_sign",
 			() -> new HangingSignItem(HOPE_ASPECT_HANGING_SIGN.get(), HOPE_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	
@@ -553,15 +551,15 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LIFE));
 	public static final RegistryObject<WallSignBlock> LIFE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("life_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LIFE));
+	public static final RegistryObject<Item> LIFE_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("life_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), LIFE_ASPECT_SIGN.get(), LIFE_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> LIFE_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("life_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LIFE));
 	public static final RegistryObject<Block> LIFE_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("life_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.LIFE));
-	
-	public static final RegistryObject<Item> LIFE_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("life_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), LIFE_ASPECT_SIGN.get(), LIFE_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> LIFE_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("life_aspect_hanging_sign",
 			() -> new HangingSignItem(LIFE_ASPECT_HANGING_SIGN.get(), LIFE_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	
 	
 	//Light
 	public static final RegistryObject<Block> LIGHT_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("light_aspect_stripped_log",
@@ -643,13 +641,12 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LIGHT));
 	public static final RegistryObject<WallSignBlock> LIGHT_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("light_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LIGHT));
+	public static final RegistryObject<Item> LIGHT_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("light_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), LIGHT_ASPECT_SIGN.get(), LIGHT_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> LIGHT_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("light_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LIGHT));
 	public static final RegistryObject<Block> LIGHT_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("light_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.LIGHT));
-	
-	public static final RegistryObject<Item> LIGHT_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("light_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), LIGHT_ASPECT_SIGN.get(), LIGHT_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> LIGHT_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("light_aspect_hanging_sign",
 			() -> new HangingSignItem(LIGHT_ASPECT_HANGING_SIGN.get(), LIGHT_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	
@@ -734,15 +731,15 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.MIND));
 	public static final RegistryObject<WallSignBlock> MIND_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("mind_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.MIND));
+	public static final RegistryObject<Item> MIND_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("mind_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MIND_ASPECT_SIGN.get(), MIND_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> MIND_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("mind_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.MIND));
 	public static final RegistryObject<Block> MIND_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("mind_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.MIND));
-	
-	public static final RegistryObject<Item> MIND_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("mind_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), MIND_ASPECT_SIGN.get(), MIND_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> MIND_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("mind_aspect_hanging_sign",
 			() -> new HangingSignItem(MIND_ASPECT_HANGING_SIGN.get(), MIND_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	
 	
 	//Rage
 	public static final RegistryObject<Block> RAGE_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("rage_aspect_stripped_log",
@@ -824,15 +821,15 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.RAGE));
 	public static final RegistryObject<WallSignBlock> RAGE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("rage_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.RAGE));
+	public static final RegistryObject<Item> RAGE_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("rage_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), RAGE_ASPECT_SIGN.get(), RAGE_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> RAGE_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("rage_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.RAGE));
 	public static final RegistryObject<Block> RAGE_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("rage_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.RAGE));
-	
-	public static final RegistryObject<Item> RAGE_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("rage_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), RAGE_ASPECT_SIGN.get(), RAGE_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> RAGE_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("rage_aspect_hanging_sign",
 			() -> new HangingSignItem(RAGE_ASPECT_HANGING_SIGN.get(), RAGE_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	
 	
 	//Space
 	public static final RegistryObject<Block> SPACE_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("space_aspect_stripped_log",
@@ -914,15 +911,15 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.SPACE));
 	public static final RegistryObject<WallSignBlock> SPACE_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("space_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.SPACE));
+	public static final RegistryObject<Item> SPACE_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("space_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), SPACE_ASPECT_SIGN.get(), SPACE_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> SPACE_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("space_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.SPACE));
 	public static final RegistryObject<Block> SPACE_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("space_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.SPACE));
-	
-	public static final RegistryObject<Item> SPACE_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("space_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), SPACE_ASPECT_SIGN.get(), SPACE_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> SPACE_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("space_aspect_hanging_sign",
 			() -> new HangingSignItem(SPACE_ASPECT_HANGING_SIGN.get(), SPACE_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	
 	
 	//Time
 	public static final RegistryObject<Block> TIME_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("time_aspect_stripped_log",
@@ -1004,15 +1001,15 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.TIME));
 	public static final RegistryObject<WallSignBlock> TIME_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("time_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.TIME));
+	public static final RegistryObject<Item> TIME_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("time_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), TIME_ASPECT_SIGN.get(), TIME_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> TIME_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("time_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.TIME));
 	public static final RegistryObject<Block> TIME_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("time_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.TIME));
-	
-	public static final RegistryObject<Item> TIME_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("time_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), TIME_ASPECT_SIGN.get(), TIME_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> TIME_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("time_aspect_hanging_sign",
 			() -> new HangingSignItem(TIME_ASPECT_HANGING_SIGN.get(), TIME_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	
 	
 	//Void
 	public static final RegistryObject<Block> VOID_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("void_aspect_stripped_log",
@@ -1094,14 +1091,12 @@ public final class AspectTreeBlocks
 			() -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.VOID));
 	public static final RegistryObject<WallSignBlock> VOID_ASPECT_WALL_SIGN = MSBlocks.REGISTER.register("void_aspect_wall_sign",
 			() -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.VOID));
+	public static final RegistryObject<Item> VOID_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("void_aspect_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), VOID_ASPECT_SIGN.get(), VOID_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Block> VOID_ASPECT_HANGING_SIGN = MSBlocks.REGISTER.register("void_aspect_hanging_sign",
 			() -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.VOID));
 	public static final RegistryObject<Block> VOID_ASPECT_WALL_HANGING_SIGN = MSBlocks.REGISTER.register("void_aspect_wall_hanging_sign",
 			() -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.VOID));
-	
-	public static final RegistryObject<Item> VOID_ASPECT_SIGN_ITEM = MSItems.REGISTER.register("void_aspect_sign",
-			() -> new SignItem(new Item.Properties().stacksTo(16), VOID_ASPECT_SIGN.get(), VOID_ASPECT_WALL_SIGN.get()));
 	public static final RegistryObject<Item> VOID_ASPECT_HANGING_SIGN_ITEM = MSItems.REGISTER.register("void_aspect_hanging_sign",
 			() -> new HangingSignItem(VOID_ASPECT_HANGING_SIGN.get(), VOID_ASPECT_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
-	
 }

@@ -5,8 +5,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 
-import static net.minecraft.world.level.block.state.properties.BlockSetType.register;
-
 public class MSBlockSetType
 {
 	//WOOD
