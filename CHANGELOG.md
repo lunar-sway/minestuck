@@ -82,6 +82,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Removed
 
 - Removed "skaianetCheck" config option
+- Uncarved Wood no longer has a tooltip
 
 ### Fixed
 
@@ -99,10 +100,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Area effect blocks now save their effect as a string id instead of an int id
 - Improved grammar on some dialogues
 - Error handling when teleporting entities during entry
-
-### Removed
-
-- Uncarved Wood no longer has a tooltip
 
 ### Contributors for this release
 
