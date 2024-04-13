@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.properties.WoodType;
  *
  * MSWallSignBlock represents modded standing signs, placed on the side of a block.
  */
-
 public class MSWallSignBlock extends WallSignBlock
 {
 	public MSWallSignBlock(Properties pProperties, WoodType pType)

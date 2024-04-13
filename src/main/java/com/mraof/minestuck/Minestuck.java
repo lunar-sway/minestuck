@@ -134,8 +134,6 @@ public class Minestuck
 		
 		ConsortDialogue.init();
 		
-		MSWoodTypes.init();
-		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		DispenserBehaviourUtil.registerBehaviours();
