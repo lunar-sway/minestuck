@@ -84,9 +84,10 @@ public class SburbPredefineCommand
 	private static int define(CommandSourceStack source, ServerPlayer player, Title title, TerrainLandType terrainLand, TitleLandType titleLand) throws CommandSyntaxException
 	{
 		CommandSourceStack silentSource = source.withSuppressedOutput();
-		setTitle(silentSource, player, title);
-		setTitleLand(silentSource, player, titleLand);
-		setTerrainLand(silentSource, player, terrainLand);
+		PredefineData predefineData = getPredefineData(player);
+		predefineData.predefineTitle(title);
+		predefineData.predefineTitleLand(titleLand, silentSource);
+		predefineData.predefineTerrainLand(terrainLand, silentSource);
 		source.sendSuccess(() -> Component.translatable(DEFINE, player.getDisplayName()), true);
 		return 1;
 	}
