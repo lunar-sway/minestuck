@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/door_top_left_open",
-  "render_type": "minecraft:cutout",
+  "render_type": "minecraft:translucent",
   "textures": {
     "bottom": "minestuck:block/mind_aspect_door_bottom",
     "top": "minestuck:block/mind_aspect_door_top"

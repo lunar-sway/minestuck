@@ -67,7 +67,7 @@ public class RainLandType extends TerrainLandType
 		registry.setBlock("structure_secondary_stairs", MSBlocks.CHALK_BRICK_STAIRS);
 		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS);
 		registry.setBlock("structure_planks", MSBlocks.DEAD_PLANKS);
-		registry.setBlock("structure_planks_slab", MSBlocks.DEAD_PLANKS_SLAB);
+		registry.setBlock("structure_planks_slab", MSBlocks.DEAD_SLAB);
 		registry.setBlock("bush", Blocks.DEAD_BUSH);
 		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
 		registry.setBlock("structure_wool_3", Blocks.MAGENTA_WOOL);

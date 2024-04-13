@@ -1,13 +1,17 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.OreGeneration;
 import com.mraof.minestuck.world.gen.feature.RandomRockBlockBlobConfig;
 import com.mraof.minestuck.world.gen.feature.SimpleTemplateFeature;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
@@ -16,7 +20,10 @@ import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.util.valueproviders.WeightedListInt;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -27,16 +34,16 @@ import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.AttachedToLeavesDecorator;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.*;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.List;
 
@@ -202,6 +209,108 @@ public final class MSConfiguredFeatureProvider
 				new BlockStateConfiguration(MSBlocks.DEAD_LOG.get().defaultBlockState())));
 		context.register(CINDERED_TREE, new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 				new BlockStateConfiguration(MSBlocks.CINDERED_LOG.get().defaultBlockState())));
+	
+		context.register(FROST_TREE, new ConfiguredFeature<>(Feature.TREE,
+				(new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(MSBlocks.FROST_LOG.get()),
+						new FancyTrunkPlacer(20, 3, 0),
+						new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.FROST_LEAVES.get().defaultBlockState(), 3)
+								.add(MSBlocks.FROST_LEAVES_FLOWERING.get().defaultBlockState(), 1)),
+						new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+						new TwoLayersFeatureSize(1, 0, 1))).dirt(BlockStateProvider.simple(Blocks.SNOW_BLOCK)).forceDirt().build()));
+		
+		
+		context.register(BLOOD_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.BLOOD_ASPECT_LOG.get().defaultBlockState()),
+						new DarkOakTrunkPlacer(8, 4, 0), BlockStateProvider.simple(AspectTreeBlocks.BLOOD_ASPECT_LEAVES.get().defaultBlockState()),
+						new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(BREATH_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.BREATH_ASPECT_LOG.get().defaultBlockState()),
+						new CherryTrunkPlacer(7, 1, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(2, 4), UniformInt.of(-4, -3), UniformInt.of(-1, 0)),
+						BlockStateProvider.simple(AspectTreeBlocks.BREATH_ASPECT_LEAVES.get().defaultBlockState()),
+						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(DOOM_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.DOOM_ASPECT_LOG.get().defaultBlockState()),
+						new StraightTrunkPlacer(8, 4, 0), BlockStateProvider.simple(AspectTreeBlocks.DOOM_ASPECT_LEAVES.get().defaultBlockState()),
+						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(HEART_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.HEART_ASPECT_LOG.get().defaultBlockState()),
+						new ForkingTrunkPlacer(5, 2, 2), BlockStateProvider.simple(AspectTreeBlocks.HEART_ASPECT_LEAVES.get().defaultBlockState()),
+						new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(2), 4),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+				
+		context.register(HOPE_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.HOPE_ASPECT_LOG.get().defaultBlockState()),
+						new FancyTrunkPlacer(14, 2, 0),
+						BlockStateProvider.simple(AspectTreeBlocks.HOPE_ASPECT_LEAVES.get().defaultBlockState()),
+						new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(3), ConstantInt.of(4), 0.25F, 0.5F, 0.5F, 0.33333334F),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(LIFE_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.LIFE_ASPECT_LOG.get().defaultBlockState()),
+						new CherryTrunkPlacer(7, 1, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(2, 4), UniformInt.of(-4, -3), UniformInt.of(-1, 0)),
+						BlockStateProvider.simple(AspectTreeBlocks.LIFE_ASPECT_LEAVES.get().defaultBlockState()),
+						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), 3),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(LIGHT_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.LIGHT_ASPECT_LOG.get().defaultBlockState()),
+						new StraightTrunkPlacer(5, 2, 0),
+						BlockStateProvider.simple(AspectTreeBlocks.LIGHT_ASPECT_LEAVES.get().defaultBlockState()),
+						new SpruceFoliagePlacer(ConstantInt.of(2), ConstantInt.of(2), ConstantInt.of(3)),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+
+		context.register(MIND_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.MIND_ASPECT_LOG.get().defaultBlockState()),
+						new ForkingTrunkPlacer(6, 2, 0),
+						BlockStateProvider.simple(AspectTreeBlocks.MIND_ASPECT_LEAVES.get().defaultBlockState()),
+						new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(1), ConstantInt.of(4), 0.25F, 0.5F, 0.5F, 0.33333334F),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(RAGE_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.RAGE_ASPECT_LOG.get().defaultBlockState()),
+						new ForkingTrunkPlacer(5, 4, 0),
+						BlockStateProvider.simple(AspectTreeBlocks.RAGE_ASPECT_LEAVES.get().defaultBlockState()),
+						new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 50),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(SPACE_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.SPACE_ASPECT_LOG.get().defaultBlockState()),
+						new FancyTrunkPlacer(10, 4, 0),
+						BlockStateProvider.simple(AspectTreeBlocks.SPACE_ASPECT_LEAVES.get().defaultBlockState()),
+						new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(1), ConstantInt.of(4), 0.25F, 0.5F, 0.5F, 0.33333334F),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(TIME_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.TIME_ASPECT_LOG.get().defaultBlockState()),
+						new StraightTrunkPlacer(6, 4, 0),
+						BlockStateProvider.simple(AspectTreeBlocks.TIME_ASPECT_LEAVES.get().defaultBlockState()),
+						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
+		
+		context.register(VOID_TREE, new ConfiguredFeature<>(Feature.TREE,
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.VOID_ASPECT_LOG.get().defaultBlockState()),
+						new StraightTrunkPlacer(5, 2, 0),
+						BlockStateProvider.simple(AspectTreeBlocks.VOID_ASPECT_LEAVES.get().defaultBlockState()),
+						new CherryFoliagePlacer(ConstantInt.of(4), ConstantInt.of(1), ConstantInt.of(4), 0.1F, 0.1F, 0.75F, 0.5F),
+						new TwoLayersFeatureSize(1, 0, 1))
+						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(FOREST_LAND_TREES, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
 				new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(placedFeatures.getOrThrow(TreePlacements.BIRCH_CHECKED), 0.2F), new WeightedPlacedFeature(placedFeatures.getOrThrow(TreePlacements.FANCY_OAK_CHECKED), 0.1F)), placedFeatures.getOrThrow(TreePlacements.OAK_CHECKED))));

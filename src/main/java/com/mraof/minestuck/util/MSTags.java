@@ -42,6 +42,7 @@ public class MSTags
 		public static final TagKey<Block> CINDERED_LOGS = tag("logs/cindered");
 		public static final TagKey<Block> PETRIFIED_LOGS = tag("logs/petrified");
 		public static final TagKey<Block> ASPECT_LOGS = tag("logs/aspect");
+		public static final TagKey<Block> ASPECT_WOOD = tag("wood/aspect");
 		public static final TagKey<Block> ASPECT_PLANKS = tag("planks/aspect");
 		public static final TagKey<Block> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Block> ASPECT_SAPLINGS = tag("saplings/aspect");
@@ -51,6 +52,7 @@ public class MSTags
 		public static final TagKey<Block> SHADEWOOD_LEAVES = tag("leaves/shadewood");
 		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");
 		public static final TagKey<Block> HEAT_TERRAIN_BLOCKS = tag("terrain/heat_terrain_blocks");
+		public static final TagKey<Block> ASPECT_TREE_PLACEABLE = tag("terrain/aspect_tree_placeable");
 		public static final TagKey<Block> CRUXITE_ORES = tag("ores/cruxite");
 		public static final TagKey<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Block> COAL_ORES = tag("ores/coal");
@@ -87,6 +89,7 @@ public class MSTags
 		public static final TagKey<Item> CINDERED_LOGS = tag("logs/cindered");
 		public static final TagKey<Item> PETRIFIED_LOGS = tag("logs/petrified");
 		public static final TagKey<Item> ASPECT_LOGS = tag("logs/aspect");
+		public static final TagKey<Item> ASPECT_WOOD = tag("wood/aspect");
 		public static final TagKey<Item> ASPECT_PLANKS = tag("planks/aspect");
 		public static final TagKey<Item> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Item> ASPECT_SAPLINGS = tag("saplings/aspect");

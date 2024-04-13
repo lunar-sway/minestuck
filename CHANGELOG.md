@@ -41,6 +41,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New dialogue
 - Carapacian pawns now have dialogue
 - New structure in rain lands
+- Signs and hanging signs for all wood types
+- Shade and glowing block sets updated
+- Doors and trapdoors added
+- All aspect block sets updated
+- Minor Aspect trees added
 
 ### Changed
 
@@ -83,7 +88,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipher, kirderf1
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipherNil, kirderf1
 
 ## [Unreleased]
 

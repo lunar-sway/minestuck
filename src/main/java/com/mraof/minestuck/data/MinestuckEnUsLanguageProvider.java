@@ -136,7 +136,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CRUXITE_LAMP, "Cruxite Lamp");
 		addBlockTooltip(MSBlocks.CRUXITE_LAMP, "The instructions have an arrow pointing at a line figure's right arm. You decide not to get your lamps from IKEA next time.");
 		
-		
 		addBlock(MSBlocks.URANIUM_BLOCK, "Uranium Block");
 		addBlock(MSBlocks.URANIUM_STAIRS, "Uranium Stairs");
 		addBlock(MSBlocks.URANIUM_SLAB, "Uranium Slab");
@@ -154,6 +153,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PERFECTLY_GENERIC_PRESSURE_PLATE, "Perfectly Generic Pressure Plate");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_DOOR, "Perfectly Generic Door");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR, "Perfectly Generic Trapdoor");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_SIGN, "Perfectly Generic Sign");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, "Perfectly Generic Hanging Sign");
 		
 		addBlock(MSBlocks.BLUE_DIRT, "Blue Dirt");
 		addBlock(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
@@ -520,6 +521,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CARVED_FENCE_GATE, "Carved Fence Gate");
 		addBlock(MSBlocks.CARVED_DOOR, "Carved Door");
 		addBlock(MSBlocks.CARVED_TRAPDOOR, "Carved Trapdoor");
+		addBlock(MSBlocks.CARVED_SIGN, "Carved Sign");
+		addBlock(MSBlocks.CARVED_HANGING_SIGN, "Carved Hanging Sign");
 		
 		addBlock(MSBlocks.POLISHED_UNCARVED_WOOD, "Polished Uncarved Wood");
 		addBlock(MSBlocks.POLISHED_UNCARVED_STAIRS, "Polished Uncarved Stairs");
@@ -560,6 +563,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.TREATED_FENCE_GATE, "Treated Fence Gate");
 		addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
 		addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
+		addBlock(MSBlocks.TREATED_SIGN, "Treated Sign");
+		addBlock(MSBlocks.TREATED_HANGING_SIGN, "Treated Hanging Sign");
 		
 		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD, "Polished Treated Uncarved Wood");
 		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS, "Polished Treated Uncarved Stairs");
@@ -599,6 +604,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.LACQUERED_FENCE_GATE, "Lacquered Fence Gate");
 		addBlock(MSBlocks.LACQUERED_DOOR, "Lacquered Door");
 		addBlock(MSBlocks.LACQUERED_TRAPDOOR, "Lacquered Trapdoor");
+		addBlock(MSBlocks.LACQUERED_SIGN, "Lacquered Sign");
+		addBlock(MSBlocks.LACQUERED_HANGING_SIGN, "Lacquered Hanging Sign");
 		
 		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD, "Polished Lacquered Uncarved Wood");
 		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS, "Polished Lacquered Uncarved Stairs");
@@ -653,6 +660,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.GLOWING_FENCE_GATE, "Glowing Fence Gate");
 		addBlock(MSBlocks.GLOWING_DOOR, "Glowing Door");
 		addBlock(MSBlocks.GLOWING_TRAPDOOR, "Glowing Trapdoor");
+		addBlock(MSBlocks.STRIPPED_GLOWING_LOG, "Stripped Glowing Log");
+		addBlock(MSBlocks.STRIPPED_GLOWING_WOOD, "Stripped Glowing Wood");
+		addBlock(MSBlocks.GLOWING_SIGN, "Glowing Sign");
+		addBlock(MSBlocks.GLOWING_HANGING_SIGN, "Glowing Hanging Sign");
+		
 		
 		addBlock(MSBlocks.FROST_PLANKS, "Frost Planks");
 		addBlock(MSBlocks.FROST_STAIRS, "Frost Stairs");
@@ -663,6 +675,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FROST_FENCE_GATE, "Frost Fence Gate");
 		addBlock(MSBlocks.FROST_DOOR, "Frost Door");
 		addBlock(MSBlocks.FROST_TRAPDOOR, "Frost Trapdoor");
+		addBlock(MSBlocks.STRIPPED_FROST_LOG, "Stripped Frost Log");
+		addBlock(MSBlocks.STRIPPED_FROST_WOOD, "Stripped Frost Wood");
+		addBlock(MSBlocks.FROST_SAPLING, "Frost Sapling");
+		addBlock(MSBlocks.FROST_SIGN, "Frost Sign");
+		addBlock(MSBlocks.FROST_HANGING_SIGN, "Frost Hanging Sign");
 		
 		addBlock(MSBlocks.RAINBOW_PLANKS, "Rainbow Planks");
 		addBlock(MSBlocks.RAINBOW_BUTTON, "Rainbow Button");
@@ -671,6 +688,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_FENCE_GATE, "Rainbow Fence Gate");
 		addBlock(MSBlocks.RAINBOW_DOOR, "Rainbow Door");
 		addBlock(MSBlocks.RAINBOW_TRAPDOOR, "Rainbow Trapdoor");
+		addBlock(MSBlocks.STRIPPED_RAINBOW_LOG, "Stripped Rainbow Log");
+		addBlock(MSBlocks.STRIPPED_RAINBOW_WOOD, "Stripped Rainbow Wood");
+		addBlock(MSBlocks.RAINBOW_SIGN, "Rainbow Sign");
+		addBlock(MSBlocks.RAINBOW_HANGING_SIGN, "Rainbow Hanging Sign");
 		
 		addBlock(MSBlocks.END_PLANKS, "End Planks");
 		addBlock(MSBlocks.END_BUTTON, "End Button");
@@ -679,6 +700,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.END_FENCE_GATE, "End Fence Gate");
 		addBlock(MSBlocks.END_DOOR, "End Door");
 		addBlock(MSBlocks.END_TRAPDOOR, "End Trapdoor");
+		addBlock(MSBlocks.STRIPPED_END_LOG, "Stripped End Log");
+		addBlock(MSBlocks.STRIPPED_END_WOOD, "Stripped End Wood");
+		addBlock(MSBlocks.END_SIGN, "End Sign");
+		addBlock(MSBlocks.END_HANGING_SIGN, "End Hanging Sign");
 		
 		addBlock(MSBlocks.DEAD_PLANKS, "Dead Planks");
 		addBlock(MSBlocks.DEAD_BUTTON, "Dead Button");
@@ -687,6 +712,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_FENCE_GATE, "Dead Fence Gate");
 		addBlock(MSBlocks.DEAD_DOOR, "Dead Door");
 		addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
+		addBlock(MSBlocks.STRIPPED_DEAD_LOG, "Stripped Dead Log");
+		addBlock(MSBlocks.STRIPPED_DEAD_WOOD, "Stripped Dead Wood");
+		addBlock(MSBlocks.DEAD_SIGN, "Dead Sign");
+		addBlock(MSBlocks.DEAD_HANGING_SIGN, "Dead Hanging Sign");
 		
 		addBlock(MSBlocks.CINDERED_PLANKS, "Cindered Planks");
 		addBlock(MSBlocks.CINDERED_STAIRS, "Cindered Stairs");
@@ -697,6 +726,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CINDERED_FENCE_GATE, "Cindered Fence Gate");
 		addBlock(MSBlocks.CINDERED_DOOR, "Cindered Door");
 		addBlock(MSBlocks.CINDERED_TRAPDOOR, "Cindered Trapdoor");
+		addBlock(MSBlocks.STRIPPED_CINDERED_LOG, "Stripped Cindered Log");
+		addBlock(MSBlocks.STRIPPED_CINDERED_WOOD, "Stripped Cindered Wood");
+		addBlock(MSBlocks.CINDERED_SIGN, "Cindered Sign");
+		addBlock(MSBlocks.CINDERED_HANGING_SIGN, "Cindered Hanging Sign");
 		
 		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
 		addBlock(MSBlocks.SHADEWOOD_STAIRS, "Shadewood Stairs");
@@ -707,8 +740,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADEWOOD_FENCE_GATE, "Shadewood Fence Gate");
 		addBlock(MSBlocks.SHADEWOOD_DOOR, "Shadewood Door");
 		addBlock(MSBlocks.SHADEWOOD_TRAPDOOR, "Shadewood Trapdoor");
+		addBlock(MSBlocks.SHADEWOOD_SIGN, "Shadewood Sign");
+		addBlock(MSBlocks.SHADEWOOD_HANGING_SIGN, "Shadewood Hanging Sign");
 		
 		addBlock(MSBlocks.FROST_LEAVES, "Frost Leaves");
+		addBlock(MSBlocks.FROST_LEAVES_FLOWERING, "Flowering Frost Leaves");
 		addBlock(MSBlocks.RAINBOW_LEAVES, "Rainbow Leaves");
 		addBlock(MSBlocks.END_LEAVES, "End Leaves");
 		addBlock(MSBlocks.SHADEWOOD_LEAVES, "Shadewood Leaves");
@@ -775,9 +811,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BROWN_STONE_BRICK_STAIRS, "Brown Stone Brick Stairs");
 		addBlock(MSBlocks.GREEN_STONE_STAIRS, "Green Stone Stairs");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_STAIRS, "Green Stone Brick Stairs");
-		addBlock(MSBlocks.RAINBOW_PLANKS_STAIRS, "Rainbow Planks Stairs");
-		addBlock(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
-		addBlock(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
+		addBlock(MSBlocks.RAINBOW_STAIRS, "Rainbow Planks Stairs");
+		addBlock(MSBlocks.END_STAIRS, "End Planks Stairs");
+		addBlock(MSBlocks.DEAD_STAIRS, "Dead Planks Stairs");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, "Steep Green Stone Brick Stairs Base");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, "Steep Green Stone Brick Stairs Top");
 		
@@ -789,9 +825,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BROWN_STONE_BRICK_SLAB, "Brown Stone Brick Slab");
 		addBlock(MSBlocks.GREEN_STONE_SLAB, "Green Stone Slab");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_SLAB, "Green Stone Brick Slab");
-		addBlock(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
-		addBlock(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
-		addBlock(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
+		addBlock(MSBlocks.RAINBOW_SLAB, "Rainbow Planks Slab");
+		addBlock(MSBlocks.END_SLAB, "End Planks Slab");
+		addBlock(MSBlocks.DEAD_SLAB, "Dead Planks Slab");
+	
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");
 		addBlock(MSBlocks.MYCELIUM_BRICK_SLAB, "Mycelium Brick Slab");
 		addBlock(MSBlocks.FROST_TILE_SLAB, "Frost Tile Slab");

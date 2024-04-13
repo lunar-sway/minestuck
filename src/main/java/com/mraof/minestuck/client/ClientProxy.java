@@ -31,7 +31,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
@@ -40,6 +41,7 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -50,18 +52,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class ClientProxy
 {
-	private static void registerRenderers()
-	{
-		BlockEntityRenderers.register(MSBlockEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.GATE.get(), GateRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
-		BlockEntityRenderers.register(MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockRenderer::new);
-//		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
-	}
-	
 	@SubscribeEvent
 	public static void registerKeyMappings(RegisterKeyMappingsEvent event)
 	{
@@ -71,8 +61,6 @@ public class ClientProxy
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
-		registerRenderers();
-		
 		MSScreenFactories.registerScreenFactories();
 
 		EntityRenderers.register(MSEntityTypes.FROG.get(), FrogRenderer::new);
@@ -142,6 +130,21 @@ public class ClientProxy
 		
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "angle"), new CompassItemPropertyFunction((level, stack, entity) -> StructureScannerItem.getTargetFromNbt(stack)));
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "powered"), (stack, level, entity, seed) -> StructureScannerItem.isPowered(stack) ? 1 : 0);
+	}
+	
+	@SubscribeEvent
+	public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
+		
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.GATE.get(), GateRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockRenderer::new);
+		
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.SIGN.get(), SignRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.HANGING_SIGN.get(), HangingSignRenderer::new);
 	}
 	
 	@SubscribeEvent

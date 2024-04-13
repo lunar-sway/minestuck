@@ -1167,6 +1167,11 @@ public class MSItems
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_PRESSURE_PLATE = registerBlockItem(MSBlocks.UNCARVED_WOOD_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_FENCE = registerBlockItem(MSBlocks.UNCARVED_WOOD_FENCE);
 	public static final RegistryObject<BlockItem> UNCARVED_WOOD_FENCE_GATE = registerBlockItem(MSBlocks.UNCARVED_WOOD_FENCE_GATE);
+	public static final RegistryObject<Item> CARVED_HANGING_SIGN = REGISTER.register("carved_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.CARVED_HANGING_SIGN.get(), MSBlocks.CARVED_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> CARVED_SIGN = REGISTER.register("carved_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.CARVED_SIGN.get(), MSBlocks.CARVED_WALL_SIGN.get()));
+	
 	
 	public static final RegistryObject<BlockItem> CHIPBOARD = registerBlockItem(MSBlocks.CHIPBOARD);
 	public static final RegistryObject<BlockItem> CHIPBOARD_STAIRS = registerBlockItem(MSBlocks.CHIPBOARD_STAIRS);
@@ -1207,7 +1212,11 @@ public class MSItems
 	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_PRESSURE_PLATE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_FENCE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE);
 	public static final RegistryObject<BlockItem> TREATED_UNCARVED_WOOD_FENCE_GATE = registerBlockItem(MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE);
-	
+	public static final RegistryObject<Item> TREATED_HANGING_SIGN = REGISTER.register("treated_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.TREATED_HANGING_SIGN.get(), MSBlocks.TREATED_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> TREATED_SIGN = REGISTER.register("treated_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.TREATED_SIGN.get(), MSBlocks.TREATED_WALL_SIGN.get()));
+		
 	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD = registerBlockItem(MSBlocks.TREATED_CHIPBOARD);
 	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_STAIRS = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_STAIRS);
 	public static final RegistryObject<BlockItem> TREATED_CHIPBOARD_SLAB = registerBlockItem(MSBlocks.TREATED_CHIPBOARD_SLAB);
@@ -1246,6 +1255,10 @@ public class MSItems
 	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_FENCE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE);
 	public static final RegistryObject<BlockItem> LACQUERED_UNCARVED_WOOD_FENCE_GATE = registerBlockItem(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE);
+	public static final RegistryObject<Item> LACQUERED_HANGING_SIGN = REGISTER.register("lacquered_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.LACQUERED_HANGING_SIGN.get(), MSBlocks.LACQUERED_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> LACQUERED_SIGN = REGISTER.register("lacquered_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.LACQUERED_SIGN.get(), MSBlocks.LACQUERED_WALL_SIGN.get()));
 	
 	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD);
 	public static final RegistryObject<BlockItem> LACQUERED_CHIPBOARD_STAIRS = registerBlockItem(MSBlocks.LACQUERED_CHIPBOARD_STAIRS);
@@ -1287,36 +1300,9 @@ public class MSItems
 	
 	//Land Tree Blocks
 	public static final RegistryObject<BlockItem> GLOWING_LOG = registerBlockItem(MSBlocks.GLOWING_LOG);
-	public static final RegistryObject<BlockItem> SHADEWOOD_LOG = registerBlockItem(MSBlocks.SHADEWOOD_LOG);
-	public static final RegistryObject<BlockItem> SCARRED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.SCARRED_SHADEWOOD_LOG);
-	public static final RegistryObject<BlockItem> ROTTED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.ROTTED_SHADEWOOD_LOG);
-	public static final RegistryObject<BlockItem> STRIPPED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_SHADEWOOD_LOG);
-	public static final RegistryObject<BlockItem> STRIPPED_SCARRED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG);
-	public static final RegistryObject<BlockItem> STRIPPED_ROTTED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG);
-	public static final RegistryObject<BlockItem> FROST_LOG = registerBlockItem(MSBlocks.FROST_LOG);
-	public static final RegistryObject<BlockItem> RAINBOW_LOG = registerBlockItem(MSBlocks.RAINBOW_LOG);
-	public static final RegistryObject<BlockItem> END_LOG = registerBlockItem(MSBlocks.END_LOG);
-	public static final RegistryObject<BlockItem> VINE_LOG = registerBlockItem(MSBlocks.VINE_LOG);
-	public static final RegistryObject<BlockItem> FLOWERY_VINE_LOG = registerBlockItem(MSBlocks.FLOWERY_VINE_LOG);
-	public static final RegistryObject<BlockItem> DEAD_LOG = registerBlockItem(MSBlocks.DEAD_LOG);
-	public static final RegistryObject<BlockItem> PETRIFIED_LOG = registerBlockItem(MSBlocks.PETRIFIED_LOG);
-	public static final RegistryObject<BlockItem> CINDERED_LOG = registerBlockItem(MSBlocks.CINDERED_LOG);
 	public static final RegistryObject<BlockItem> GLOWING_WOOD = registerBlockItem(MSBlocks.GLOWING_WOOD);
-	public static final RegistryObject<BlockItem> SHADEWOOD = registerBlockItem(MSBlocks.SHADEWOOD);
-	public static final RegistryObject<BlockItem> SCARRED_SHADEWOOD = registerBlockItem(MSBlocks.SCARRED_SHADEWOOD);
-	public static final RegistryObject<BlockItem> ROTTED_SHADEWOOD = registerBlockItem(MSBlocks.ROTTED_SHADEWOOD);
-	public static final RegistryObject<BlockItem> STRIPPED_SHADEWOOD = registerBlockItem(MSBlocks.STRIPPED_SHADEWOOD);
-	public static final RegistryObject<BlockItem> STRIPPED_SCARRED_SHADEWOOD = registerBlockItem(MSBlocks.STRIPPED_SCARRED_SHADEWOOD);
-	public static final RegistryObject<BlockItem> STRIPPED_ROTTED_SHADEWOOD = registerBlockItem(MSBlocks.STRIPPED_ROTTED_SHADEWOOD);
-	public static final RegistryObject<BlockItem> FROST_WOOD = registerBlockItem(MSBlocks.FROST_WOOD);
-	public static final RegistryObject<BlockItem> RAINBOW_WOOD = registerBlockItem(MSBlocks.RAINBOW_WOOD);
-	public static final RegistryObject<BlockItem> END_WOOD = registerBlockItem(MSBlocks.END_WOOD);
-	public static final RegistryObject<BlockItem> VINE_WOOD = registerBlockItem(MSBlocks.VINE_WOOD);
-	public static final RegistryObject<BlockItem> FLOWERY_VINE_WOOD = registerBlockItem(MSBlocks.FLOWERY_VINE_WOOD);
-	public static final RegistryObject<BlockItem> DEAD_WOOD = registerBlockItem(MSBlocks.DEAD_WOOD);
-	public static final RegistryObject<BlockItem> PETRIFIED_WOOD = registerBlockItem(MSBlocks.PETRIFIED_WOOD);
-	public static final RegistryObject<BlockItem> CINDERED_WOOD = registerBlockItem(MSBlocks.CINDERED_WOOD);
-	
+	public static final RegistryObject<BlockItem> STRIPPED_GLOWING_LOG = registerBlockItem(MSBlocks.STRIPPED_GLOWING_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_GLOWING_WOOD = registerBlockItem(MSBlocks.STRIPPED_GLOWING_WOOD);
 	public static final RegistryObject<BlockItem> GLOWING_PLANKS = registerBlockItem(MSBlocks.GLOWING_PLANKS);
 	public static final RegistryObject<BlockItem> GLOWING_STAIRS = registerBlockItem(MSBlocks.GLOWING_STAIRS);
 	public static final RegistryObject<BlockItem> GLOWING_SLAB = registerBlockItem(MSBlocks.GLOWING_SLAB);
@@ -1326,7 +1312,16 @@ public class MSItems
 	public static final RegistryObject<BlockItem> GLOWING_FENCE_GATE = registerBlockItem(MSBlocks.GLOWING_FENCE_GATE);
 	public static final RegistryObject<BlockItem> GLOWING_DOOR = registerBlockItem(MSBlocks.GLOWING_DOOR);
 	public static final RegistryObject<BlockItem> GLOWING_TRAPDOOR = registerBlockItem(MSBlocks.GLOWING_TRAPDOOR);
+	public static final RegistryObject<Item> GLOWING_HANGING_SIGN = REGISTER.register("glowing_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.GLOWING_HANGING_SIGN.get(), MSBlocks.GLOWING_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> GLOWING_SIGN = REGISTER.register("glowing_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.GLOWING_SIGN.get(), MSBlocks.GLOWING_WALL_SIGN.get()));
 	
+	public static final RegistryObject<BlockItem> FROST_LOG = registerBlockItem(MSBlocks.FROST_LOG);
+	public static final RegistryObject<BlockItem> FROST_WOOD = registerBlockItem(MSBlocks.FROST_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_FROST_LOG = registerBlockItem(MSBlocks.STRIPPED_FROST_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_FROST_WOOD = registerBlockItem(MSBlocks.STRIPPED_FROST_WOOD);
+	public static final RegistryObject<BlockItem> FROST_SAPLING = registerBlockItem(MSBlocks.FROST_SAPLING);
 	public static final RegistryObject<BlockItem> FROST_PLANKS = registerBlockItem(MSBlocks.FROST_PLANKS);
 	public static final RegistryObject<BlockItem> FROST_STAIRS = registerBlockItem(MSBlocks.FROST_STAIRS);
 	public static final RegistryObject<BlockItem> FROST_SLAB = registerBlockItem(MSBlocks.FROST_SLAB);
@@ -1336,31 +1331,69 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FROST_FENCE_GATE = registerBlockItem(MSBlocks.FROST_FENCE_GATE);
 	public static final RegistryObject<BlockItem> FROST_DOOR = registerBlockItem(MSBlocks.FROST_DOOR);
 	public static final RegistryObject<BlockItem> FROST_TRAPDOOR = registerBlockItem(MSBlocks.FROST_TRAPDOOR);
+	public static final RegistryObject<Item> FROST_HANGING_SIGN = REGISTER.register("frost_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.FROST_HANGING_SIGN.get(), MSBlocks.FROST_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> FROST_SIGN = REGISTER.register("frost_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.FROST_SIGN.get(), MSBlocks.FROST_WALL_SIGN.get()));
 	
+	public static final RegistryObject<BlockItem> RAINBOW_LOG = registerBlockItem(MSBlocks.RAINBOW_LOG);
+	public static final RegistryObject<BlockItem> RAINBOW_WOOD = registerBlockItem(MSBlocks.RAINBOW_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_RAINBOW_LOG = registerBlockItem(MSBlocks.STRIPPED_RAINBOW_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_RAINBOW_WOOD = registerBlockItem(MSBlocks.STRIPPED_RAINBOW_WOOD);
 	public static final RegistryObject<BlockItem> RAINBOW_PLANKS = registerBlockItem(MSBlocks.RAINBOW_PLANKS);
+	public static final RegistryObject<BlockItem> RAINBOW_STAIRS = registerBlockItem(MSBlocks.RAINBOW_STAIRS);
+	public static final RegistryObject<BlockItem> RAINBOW_SLAB = registerBlockItem(MSBlocks.RAINBOW_SLAB);
 	public static final RegistryObject<BlockItem> RAINBOW_BUTTON = registerBlockItem(MSBlocks.RAINBOW_BUTTON);
 	public static final RegistryObject<BlockItem> RAINBOW_PRESSURE_PLATE = registerBlockItem(MSBlocks.RAINBOW_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> RAINBOW_FENCE = registerBlockItem(MSBlocks.RAINBOW_FENCE);
 	public static final RegistryObject<BlockItem> RAINBOW_FENCE_GATE = registerBlockItem(MSBlocks.RAINBOW_FENCE_GATE);
 	public static final RegistryObject<BlockItem> RAINBOW_DOOR = registerBlockItem(MSBlocks.RAINBOW_DOOR);
 	public static final RegistryObject<BlockItem> RAINBOW_TRAPDOOR = registerBlockItem(MSBlocks.RAINBOW_TRAPDOOR);
+	public static final RegistryObject<Item> RAINBOW_HANGING_SIGN = REGISTER.register("rainbow_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.RAINBOW_HANGING_SIGN.get(), MSBlocks.RAINBOW_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> RAINBOW_SIGN = REGISTER.register("rainbow_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.RAINBOW_SIGN.get(), MSBlocks.RAINBOW_WALL_SIGN.get()));
 	
+	public static final RegistryObject<BlockItem> END_LOG = registerBlockItem(MSBlocks.END_LOG);
+	public static final RegistryObject<BlockItem> END_WOOD = registerBlockItem(MSBlocks.END_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_END_LOG = registerBlockItem(MSBlocks.STRIPPED_END_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_END_WOOD = registerBlockItem(MSBlocks.STRIPPED_END_WOOD);
 	public static final RegistryObject<BlockItem> END_PLANKS = registerBlockItem(MSBlocks.END_PLANKS);
+	public static final RegistryObject<BlockItem> END_STAIRS = registerBlockItem(MSBlocks.END_STAIRS);
+	public static final RegistryObject<BlockItem> END_SLAB = registerBlockItem(MSBlocks.END_SLAB);
 	public static final RegistryObject<BlockItem> END_BUTTON = registerBlockItem(MSBlocks.END_BUTTON);
 	public static final RegistryObject<BlockItem> END_PRESSURE_PLATE = registerBlockItem(MSBlocks.END_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> END_FENCE = registerBlockItem(MSBlocks.END_FENCE);
 	public static final RegistryObject<BlockItem> END_FENCE_GATE = registerBlockItem(MSBlocks.END_FENCE_GATE);
 	public static final RegistryObject<BlockItem> END_DOOR = registerBlockItem(MSBlocks.END_DOOR);
 	public static final RegistryObject<BlockItem> END_TRAPDOOR = registerBlockItem(MSBlocks.END_TRAPDOOR);
+	public static final RegistryObject<Item> END_HANGING_SIGN = REGISTER.register("end_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.END_HANGING_SIGN.get(), MSBlocks.END_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> END_SIGN = REGISTER.register("end_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.END_SIGN.get(), MSBlocks.END_WALL_SIGN.get()));
 	
+	public static final RegistryObject<BlockItem> DEAD_LOG = registerBlockItem(MSBlocks.DEAD_LOG);
+	public static final RegistryObject<BlockItem> DEAD_WOOD = registerBlockItem(MSBlocks.DEAD_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_DEAD_LOG = registerBlockItem(MSBlocks.STRIPPED_DEAD_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_DEAD_WOOD = registerBlockItem(MSBlocks.STRIPPED_DEAD_WOOD);
 	public static final RegistryObject<BlockItem> DEAD_PLANKS = registerBlockItem(MSBlocks.DEAD_PLANKS);
+	public static final RegistryObject<BlockItem> DEAD_STAIRS = registerBlockItem(MSBlocks.DEAD_STAIRS);
+	public static final RegistryObject<BlockItem> DEAD_SLAB = registerBlockItem(MSBlocks.DEAD_SLAB);
 	public static final RegistryObject<BlockItem> DEAD_BUTTON = registerBlockItem(MSBlocks.DEAD_BUTTON);
 	public static final RegistryObject<BlockItem> DEAD_PRESSURE_PLATE = registerBlockItem(MSBlocks.DEAD_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> DEAD_FENCE = registerBlockItem(MSBlocks.DEAD_FENCE);
 	public static final RegistryObject<BlockItem> DEAD_FENCE_GATE = registerBlockItem(MSBlocks.DEAD_FENCE_GATE);
 	public static final RegistryObject<BlockItem> DEAD_DOOR = registerBlockItem(MSBlocks.DEAD_DOOR);
 	public static final RegistryObject<BlockItem> DEAD_TRAPDOOR = registerBlockItem(MSBlocks.DEAD_TRAPDOOR);
+	public static final RegistryObject<Item> DEAD_HANGING_SIGN = REGISTER.register("dead_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.DEAD_HANGING_SIGN.get(), MSBlocks.DEAD_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> DEAD_SIGN = REGISTER.register("dead_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.DEAD_SIGN.get(), MSBlocks.DEAD_WALL_SIGN.get()));
 	
+	public static final RegistryObject<BlockItem> CINDERED_LOG = registerBlockItem(MSBlocks.CINDERED_LOG);
+	public static final RegistryObject<BlockItem> CINDERED_WOOD = registerBlockItem(MSBlocks.CINDERED_WOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_CINDERED_LOG = registerBlockItem(MSBlocks.STRIPPED_CINDERED_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_CINDERED_WOOD = registerBlockItem(MSBlocks.STRIPPED_CINDERED_WOOD);
 	public static final RegistryObject<BlockItem> CINDERED_PLANKS = registerBlockItem(MSBlocks.CINDERED_PLANKS);
 	public static final RegistryObject<BlockItem> CINDERED_STAIRS = registerBlockItem(MSBlocks.CINDERED_STAIRS);
 	public static final RegistryObject<BlockItem> CINDERED_SLAB = registerBlockItem(MSBlocks.CINDERED_SLAB);
@@ -1370,7 +1403,15 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CINDERED_FENCE_GATE = registerBlockItem(MSBlocks.CINDERED_FENCE_GATE);
 	public static final RegistryObject<BlockItem> CINDERED_DOOR = registerBlockItem(MSBlocks.CINDERED_DOOR);
 	public static final RegistryObject<BlockItem> CINDERED_TRAPDOOR = registerBlockItem(MSBlocks.CINDERED_TRAPDOOR);
+	public static final RegistryObject<Item> CINDERED_SIGN = REGISTER.register("cindered_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.CINDERED_SIGN.get(), MSBlocks.CINDERED_WALL_SIGN.get()));
+	public static final RegistryObject<Item> CINDERED_HANGING_SIGN = REGISTER.register("cindered_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.CINDERED_HANGING_SIGN.get(), MSBlocks.CINDERED_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	
+	public static final RegistryObject<BlockItem> SHADEWOOD = registerBlockItem(MSBlocks.SHADEWOOD);
+	public static final RegistryObject<BlockItem> SHADEWOOD_LOG = registerBlockItem(MSBlocks.SHADEWOOD_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_SHADEWOOD = registerBlockItem(MSBlocks.STRIPPED_SHADEWOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_SHADEWOOD_LOG);
 	public static final RegistryObject<BlockItem> SHADEWOOD_PLANKS = registerBlockItem(MSBlocks.SHADEWOOD_PLANKS);
 	public static final RegistryObject<BlockItem> SHADEWOOD_STAIRS = registerBlockItem(MSBlocks.SHADEWOOD_STAIRS);
 	public static final RegistryObject<BlockItem> SHADEWOOD_SLAB = registerBlockItem(MSBlocks.SHADEWOOD_SLAB);
@@ -1380,8 +1421,28 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADEWOOD_FENCE_GATE = registerBlockItem(MSBlocks.SHADEWOOD_FENCE_GATE);
 	public static final RegistryObject<BlockItem> SHADEWOOD_DOOR = registerBlockItem(MSBlocks.SHADEWOOD_DOOR);
 	public static final RegistryObject<BlockItem> SHADEWOOD_TRAPDOOR = registerBlockItem(MSBlocks.SHADEWOOD_TRAPDOOR);
+	public static final RegistryObject<Item> SHADEWOOD_HANGING_SIGN = REGISTER.register("shadewood_hanging_sign",
+			() -> new HangingSignItem(MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign",
+			() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.SHADEWOOD_SIGN.get(), MSBlocks.SHADEWOOD_WALL_SIGN.get()));
+	public static final RegistryObject<BlockItem> ROTTED_SHADEWOOD = registerBlockItem(MSBlocks.ROTTED_SHADEWOOD);
+	public static final RegistryObject<BlockItem> ROTTED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.ROTTED_SHADEWOOD_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_ROTTED_SHADEWOOD = registerBlockItem(MSBlocks.STRIPPED_ROTTED_SHADEWOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_ROTTED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG);
+	public static final RegistryObject<BlockItem> SCARRED_SHADEWOOD = registerBlockItem(MSBlocks.SCARRED_SHADEWOOD);
+	public static final RegistryObject<BlockItem> SCARRED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.SCARRED_SHADEWOOD_LOG);
+	public static final RegistryObject<BlockItem> STRIPPED_SCARRED_SHADEWOOD = registerBlockItem(MSBlocks.STRIPPED_SCARRED_SHADEWOOD);
+	public static final RegistryObject<BlockItem> STRIPPED_SCARRED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG);
+	
+	public static final RegistryObject<BlockItem> FLOWERY_VINE_LOG = registerBlockItem(MSBlocks.FLOWERY_VINE_LOG);
+	public static final RegistryObject<BlockItem> FLOWERY_VINE_WOOD = registerBlockItem(MSBlocks.FLOWERY_VINE_WOOD);
+	public static final RegistryObject<BlockItem> PETRIFIED_LOG = registerBlockItem(MSBlocks.PETRIFIED_LOG);
+	public static final RegistryObject<BlockItem> PETRIFIED_WOOD = registerBlockItem(MSBlocks.PETRIFIED_WOOD);
+	public static final RegistryObject<BlockItem> VINE_LOG = registerBlockItem(MSBlocks.VINE_LOG);
+	public static final RegistryObject<BlockItem> VINE_WOOD = registerBlockItem(MSBlocks.VINE_WOOD);
 	
 	public static final RegistryObject<BlockItem> FROST_LEAVES = registerBlockItem(MSBlocks.FROST_LEAVES);
+	public static final RegistryObject<BlockItem> FROST_LEAVES_FLOWERING = registerBlockItem(MSBlocks.FROST_LEAVES_FLOWERING);
 	public static final RegistryObject<BlockItem> RAINBOW_LEAVES = registerBlockItem(MSBlocks.RAINBOW_LEAVES);
 	public static final RegistryObject<BlockItem> END_LEAVES = registerBlockItem(MSBlocks.END_LEAVES);
 	public static final RegistryObject<BlockItem> SHADEWOOD_LEAVES = registerBlockItem(MSBlocks.SHADEWOOD_LEAVES);
@@ -1449,9 +1510,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> BROWN_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.BROWN_STONE_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> GREEN_STONE_STAIRS = registerBlockItem(MSBlocks.GREEN_STONE_STAIRS);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_STAIRS = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_STAIRS);
-	public static final RegistryObject<BlockItem> RAINBOW_PLANKS_STAIRS = registerBlockItem(MSBlocks.RAINBOW_PLANKS_STAIRS);
-	public static final RegistryObject<BlockItem> END_PLANKS_STAIRS = registerBlockItem(MSBlocks.END_PLANKS_STAIRS);
-	public static final RegistryObject<BlockItem> DEAD_PLANKS_STAIRS = registerBlockItem(MSBlocks.DEAD_PLANKS_STAIRS);
 	
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE);
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP);
@@ -1466,9 +1524,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> BROWN_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.BROWN_STONE_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> GREEN_STONE_SLAB = registerBlockItem(MSBlocks.GREEN_STONE_SLAB);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_SLAB);
-	public static final RegistryObject<BlockItem> RAINBOW_PLANKS_SLAB = registerBlockItem(MSBlocks.RAINBOW_PLANKS_SLAB);
-	public static final RegistryObject<BlockItem> END_PLANKS_SLAB = registerBlockItem(MSBlocks.END_PLANKS_SLAB);
-	public static final RegistryObject<BlockItem> DEAD_PLANKS_SLAB = registerBlockItem(MSBlocks.DEAD_PLANKS_SLAB);
 	public static final RegistryObject<BlockItem> MYCELIUM_SLAB = registerBlockItem(MSBlocks.MYCELIUM_SLAB);
 	public static final RegistryObject<BlockItem> MYCELIUM_BRICK_SLAB = registerBlockItem(MSBlocks.MYCELIUM_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> FROST_TILE_SLAB = registerBlockItem(MSBlocks.FROST_TILE_SLAB);
@@ -1576,7 +1631,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> PERFECTLY_GENERIC_PRESSURE_PLATE = registerBlockItem(MSBlocks.PERFECTLY_GENERIC_PRESSURE_PLATE);
 	public static final RegistryObject<BlockItem> PERFECTLY_GENERIC_DOOR = registerBlockItem(MSBlocks.PERFECTLY_GENERIC_DOOR);
 	public static final RegistryObject<BlockItem> PERFECTLY_GENERIC_TRAPDOOR = registerBlockItem(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR);
-	
+	public static final RegistryObject<Item> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign",() -> new HangingSignItem(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+	public static final RegistryObject<Item> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign",() -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get()));
 	
 	/**
 	 * Helper function to register a standard BlockItem with just the source block, no item properties

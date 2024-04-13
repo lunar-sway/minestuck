@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minestuck:block/life_aspect_stripped_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minestuck:block/life_aspect_stripped_wood"
+    },
+    "axis=z": {
+      "model": "minestuck:block/life_aspect_stripped_wood",
+      "x": 90
+    }
+  }
+}

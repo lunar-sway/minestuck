@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "aspect_planks",
+  "ingredients": [
+    {
+      "item": "minestuck:blood_aspect_log"
+    }
+  ],
+  "result": {
+    "item": "minestuck:blood_aspect_planks"
+  }
+}

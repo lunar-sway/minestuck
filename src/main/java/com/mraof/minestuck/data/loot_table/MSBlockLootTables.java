@@ -59,6 +59,122 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		SkaiaBlocksData.addLootTables(this);
 		AspectTreeBlocksData.addLootTables(this);
 		
+		add(CARVED_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CARVED_SIGN.get()));
+		add(CARVED_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CARVED_SIGN.get()));
+		add(CARVED_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CARVED_HANGING_SIGN.get()));
+		add(CARVED_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CARVED_HANGING_SIGN.get()));
+		
+		add(DEAD_SIGN.get(), block ->
+				createSingleItemTable(MSItems.DEAD_SIGN.get()));
+		add(DEAD_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.DEAD_SIGN.get()));
+		add(DEAD_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.DEAD_HANGING_SIGN.get()));
+		add(DEAD_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.DEAD_HANGING_SIGN.get()));
+		
+		add(END_SIGN.get(), block ->
+				createSingleItemTable(MSItems.END_SIGN.get()));
+		add(END_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.END_SIGN.get()));
+		add(END_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.END_HANGING_SIGN.get()));
+		add(END_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.END_HANGING_SIGN.get()));
+		
+		add(FROST_SIGN.get(), block ->
+				createSingleItemTable(MSItems.FROST_SIGN.get()));
+		add(FROST_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.FROST_SIGN.get()));
+		add(FROST_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.FROST_HANGING_SIGN.get()));
+		add(FROST_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.FROST_HANGING_SIGN.get()));
+		
+		add(GLOWING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.GLOWING_SIGN.get()));
+		add(GLOWING_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.GLOWING_SIGN.get()));
+		add(GLOWING_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.GLOWING_HANGING_SIGN.get()));
+		add(GLOWING_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.GLOWING_HANGING_SIGN.get()));
+		
+		add(RAINBOW_SIGN.get(), block ->
+				createSingleItemTable(MSItems.RAINBOW_SIGN.get()));
+		add(RAINBOW_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.RAINBOW_SIGN.get()));
+		add(RAINBOW_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.RAINBOW_HANGING_SIGN.get()));
+		add(RAINBOW_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.RAINBOW_HANGING_SIGN.get()));
+		
+		add(SHADEWOOD_SIGN.get(), block ->
+				createSingleItemTable(MSItems.SHADEWOOD_SIGN.get()));
+		add(SHADEWOOD_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.SHADEWOOD_SIGN.get()));
+		add(SHADEWOOD_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.SHADEWOOD_HANGING_SIGN.get()));
+		add(SHADEWOOD_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.SHADEWOOD_HANGING_SIGN.get()));
+		
+		add(TREATED_SIGN.get(), block ->
+				createSingleItemTable(MSItems.TREATED_SIGN.get()));
+		add(TREATED_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.TREATED_SIGN.get()));
+		add(TREATED_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.TREATED_HANGING_SIGN.get()));
+		add(TREATED_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.TREATED_HANGING_SIGN.get()));
+		
+		add(LACQUERED_SIGN.get(), block ->
+				createSingleItemTable(MSItems.LACQUERED_SIGN.get()));
+		add(LACQUERED_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.LACQUERED_SIGN.get()));
+		add(LACQUERED_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.LACQUERED_HANGING_SIGN.get()));
+		add(LACQUERED_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.LACQUERED_HANGING_SIGN.get()));
+		
+		add(PERFECTLY_GENERIC_SIGN.get(), block ->
+				createSingleItemTable(MSItems.PERFECTLY_GENERIC_SIGN.get()));
+		add(PERFECTLY_GENERIC_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.PERFECTLY_GENERIC_SIGN.get()));
+		add(PERFECTLY_GENERIC_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.PERFECTLY_GENERIC_HANGING_SIGN.get()));
+		add(PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.PERFECTLY_GENERIC_HANGING_SIGN.get()));
+		
+		add(CINDERED_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CINDERED_SIGN.get()));
+		add(CINDERED_WALL_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CINDERED_SIGN.get()));
+		add(CINDERED_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CINDERED_HANGING_SIGN.get()));
+		add(CINDERED_WALL_HANGING_SIGN.get(), block ->
+				createSingleItemTable(MSItems.CINDERED_HANGING_SIGN.get()));
+		
+		dropSelf(STRIPPED_GLOWING_LOG.get());
+		dropSelf(STRIPPED_FROST_LOG.get());
+		dropSelf(STRIPPED_RAINBOW_LOG.get());
+		dropSelf(STRIPPED_END_LOG.get());
+		dropSelf(STRIPPED_DEAD_LOG.get());
+		dropSelf(STRIPPED_GLOWING_WOOD.get());
+		dropSelf(STRIPPED_CINDERED_LOG.get());
+		dropSelf(STRIPPED_FROST_WOOD.get());
+		dropSelf(STRIPPED_RAINBOW_WOOD.get());
+		dropSelf(STRIPPED_END_WOOD.get());
+		dropSelf(STRIPPED_DEAD_WOOD.get());
+		dropSelf(STRIPPED_CINDERED_WOOD.get());
+		
+		dropSelf(FROST_SAPLING.get());
+		
+		
+		
 		add(STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(COBBLESTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(SANDSTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
@@ -707,6 +823,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(DEAD_TRAPDOOR.get());
 		
 		add(FROST_LEAVES.get(), this::frostLeavesDrop);
+		add(FROST_LEAVES_FLOWERING.get(), this::floweringFrostLeavesDrop);
 		add(RAINBOW_LEAVES.get(), this::rainbowLeavesDrop);
 		add(SHADEWOOD_LEAVES.get(), this::shadewoodLeavesDrop);
 		add(SHROOMY_SHADEWOOD_LEAVES.get(), this::shadewoodLeavesDrop);
@@ -774,9 +891,9 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(BROWN_STONE_BRICK_STAIRS.get());
 		dropSelf(GREEN_STONE_STAIRS.get());
 		dropSelf(GREEN_STONE_BRICK_STAIRS.get());
-		dropSelf(RAINBOW_PLANKS_STAIRS.get());
-		dropSelf(END_PLANKS_STAIRS.get());
-		dropSelf(DEAD_PLANKS_STAIRS.get());
+		dropSelf(RAINBOW_STAIRS.get());
+		dropSelf(END_STAIRS.get());
+		dropSelf(DEAD_STAIRS.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get());
 		add(CHALK_SLAB.get(), this::createSlabItemTable);
@@ -787,9 +904,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(BROWN_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(GREEN_STONE_SLAB.get(), this::createSlabItemTable);
 		add(GREEN_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
-		add(RAINBOW_PLANKS_SLAB.get(), this::createSlabItemTable);
-		add(END_PLANKS_SLAB.get(), this::createSlabItemTable);
-		add(DEAD_PLANKS_SLAB.get(), this::createSlabItemTable);
+		add(RAINBOW_SLAB.get(), this::createSlabItemTable);
+		add(END_SLAB.get(), this::createSlabItemTable);
+		add(DEAD_SLAB.get(), this::createSlabItemTable);
+		add(BLACK_STONE_SLAB.get(), this::createSlabItemTable);
+		add(BLACK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(MYCELIUM_SLAB.get(), this::createSlabItemTable);
 		add(MYCELIUM_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(FROST_TILE_SLAB.get(), this::createSlabItemTable);
@@ -974,6 +1093,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	}
 	
 	private LootTable.Builder frostLeavesDrop(Block block)
+	{
+		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
+	}
+	
+	private LootTable.Builder floweringFrostLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
 	}

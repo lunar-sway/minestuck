@@ -511,6 +511,30 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.ANCIENT_THUMB_DRIVE);
 		simpleItem(MSItems.GUTTER_BALL);
 		
+		//Signs
+		simpleItem(MSItems.CARVED_SIGN);
+		simpleItem(MSItems.CARVED_HANGING_SIGN);
+		simpleItem(MSItems.DEAD_SIGN);
+		simpleItem(MSItems.DEAD_HANGING_SIGN);
+		simpleItem(MSItems.END_SIGN);
+		simpleItem(MSItems.END_HANGING_SIGN);
+		simpleItem(MSItems.FROST_SIGN);
+		simpleItem(MSItems.FROST_HANGING_SIGN);
+		simpleItem(MSItems.GLOWING_SIGN);
+		simpleItem(MSItems.GLOWING_HANGING_SIGN);
+		simpleItem(MSItems.RAINBOW_SIGN);
+		simpleItem(MSItems.RAINBOW_HANGING_SIGN);
+		simpleItem(MSItems.SHADEWOOD_SIGN);
+		simpleItem(MSItems.SHADEWOOD_HANGING_SIGN);
+		simpleItem(MSItems.TREATED_SIGN);
+		simpleItem(MSItems.TREATED_HANGING_SIGN);
+		simpleItem(MSItems.LACQUERED_SIGN);
+		simpleItem(MSItems.LACQUERED_HANGING_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_HANGING_SIGN);
+		simpleItem(MSItems.CINDERED_SIGN);
+		simpleItem(MSItems.CINDERED_HANGING_SIGN);
+		
 		//Buckets
 		simpleItem(MSItems.OIL_BUCKET);
 		simpleItem(MSItems.BLOOD_BUCKET);
@@ -625,7 +649,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.PROSPITIAN_ROOK_SPAWN_EGG);
 	}
 	
-	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
+	ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
 	{
 		return simpleItem(item, item.getId().getPath());
 	}
