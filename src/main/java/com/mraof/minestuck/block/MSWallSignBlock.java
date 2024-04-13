@@ -8,9 +8,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
 /**
- * Used to create modded sign block entities with custom textures.
- *
- * MSWallSignBlock represents modded standing signs, placed on the side of a block.
+ * A version of {@link WallSignBlock} for minestuck signs.
+ * To add new sign blocks, they need to use a new block entity type, which is why this class exists.
  */
 public class MSWallSignBlock extends WallSignBlock
 {

@@ -29,7 +29,6 @@ import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.DispenserBehaviourUtil;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.block.MSWoodTypes;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
