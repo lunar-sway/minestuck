@@ -70,6 +70,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated Textures of Cast Iron blocks
 - Steel Beams are now alchemized with Iron Blocks instead of Cast Iron Blocks
 - Existing consort dialogue have been ported to the new dialogue system with some tweaks
+- New format for the data file `grist_cost_generation_recipes.json`
 
 ### Fixed
 

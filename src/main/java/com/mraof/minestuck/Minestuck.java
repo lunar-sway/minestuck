@@ -1,7 +1,7 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterSerializers;
+import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterTypes;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
@@ -86,7 +86,7 @@ public class Minestuck
 		MSSoundEvents.REGISTER.register(eventBus);
 		LandTypes.TERRAIN_REGISTER.register(eventBus);
 		LandTypes.TITLE_REGISTER.register(eventBus);
-		InterpreterSerializers.REGISTER.register(eventBus);
+		InterpreterTypes.REGISTER.register(eventBus);
 		MSRecipeTypes.RECIPE_TYPE_REGISTER.register(eventBus);
 		MSRecipeTypes.SERIALIZER_REGISTER.register(eventBus);
 		MSLootTables.CONDITION_REGISTER.register(eventBus);
