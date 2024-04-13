@@ -259,7 +259,7 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.SINGED_GRASS.get()))));
 		
 		context.register(FROST_TREE, placed(features, MSCFeatures.FROST_TREE,
-				worldGenModifiers(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.FROST_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(5), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.FROST_SAPLING.get()))));
 		
 		context.register(BLOOD_TREE, placed(features, MSCFeatures.BLOOD_TREE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(80), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.BLOOD_ASPECT_SAPLING.get()))));
