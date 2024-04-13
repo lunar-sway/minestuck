@@ -45,7 +45,8 @@ public class PinkTowerStructure extends Structure
 		StructureTemplateManager templateManager = context.structureTemplateManager();
 		ResourceLocation templateId = Minestuck.id("pink_tower");
 		
-		int x = context.chunkPos().getBlockX(random.nextInt(16)), z = context.chunkPos().getBlockZ(random.nextInt(16));
+		// todo uses fixed positions as a workaround to the "button on chunk border" issue.
+		int x = context.chunkPos().getBlockX(1), z = context.chunkPos().getBlockZ(1);
 		var placement = TemplatePlacement.centeredWithRandomRotation(templateManager.getOrCreate(templateId), new BlockPos(x, 0, z), random);
 		
 		int y = context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
