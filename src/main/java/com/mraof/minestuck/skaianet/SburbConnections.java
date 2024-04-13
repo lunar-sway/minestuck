@@ -351,15 +351,15 @@ public final class SburbConnections
 	
 	public void unlinkClientPlayer(PlayerIdentifier clientPlayer)
 	{
-		if(!primaryClientToServerMap.containsKey(clientPlayer))
-			throw new IllegalStateException();
-		Optional<PlayerIdentifier> oldServerPlayer = primaryClientToServerMap.get(clientPlayer);
+		this.getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
 		
+		if(!primaryClientToServerMap.containsKey(clientPlayer))
+			return;
+		Optional<PlayerIdentifier> oldServerPlayer = primaryClientToServerMap.get(clientPlayer);
 		if(oldServerPlayer.isEmpty())
 			return;
 		
 		LOGGER.debug("Disconnecting server {} from client {}", oldServerPlayer.get(), clientPlayer);
-		this.getActiveConnection(clientPlayer).ifPresent(this::closeConnection);
 		primaryClientToServerMap.put(clientPlayer, Optional.empty());
 		
 		skaianetData.sessionHandler.onDisconnect(clientPlayer, oldServerPlayer.get());
