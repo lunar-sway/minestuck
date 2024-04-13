@@ -69,6 +69,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(PINK_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(MYCELIUM_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(UNCARVED_WOOD_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(BLACK_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		
 		add(STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(DEEPSLATE_URANIUM_ORE.get(), this::uraniumOreDrop);
@@ -81,6 +82,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(PINK_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(MYCELIUM_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(UNCARVED_WOOD_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(BLACK_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		
 		add(NETHERRACK_COAL_ORE.get(), this::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), this::coalOreDrop);
@@ -90,15 +92,24 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(RED_SANDSTONE_IRON_ORE.get(), this::ironOreDrop);
 		add(END_STONE_IRON_ORE.get(), this::ironOreDrop);
 		add(UNCARVED_WOOD_IRON_ORE.get(), this::ironOreDrop);
+		
 		add(SANDSTONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(RED_SANDSTONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(SHADE_STONE_GOLD_ORE.get(), this::goldOreDrop);
 		add(PINK_STONE_GOLD_ORE.get(), this::goldOreDrop);
+		add(BLACK_STONE_GOLD_ORE.get(), this::goldOreDrop);
+		
 		add(END_STONE_REDSTONE_ORE.get(), this::redstoneOreDrop);
 		add(UNCARVED_WOOD_REDSTONE_ORE.get(), this::redstoneOreDrop);
+		add(BLACK_STONE_REDSTONE_ORE.get(), this::redstoneOreDrop);
+		
 		add(STONE_QUARTZ_ORE.get(), this::quartzOreDrop);
+		add(BLACK_STONE_QUARTZ_ORE.get(), this::quartzOreDrop);
+		
 		add(PINK_STONE_LAPIS_ORE.get(), this::lapisOreDrop);
+		
 		add(PINK_STONE_DIAMOND_ORE.get(), this::diamondOreDrop);
+		
 		add(UNCARVED_WOOD_EMERALD_ORE.get(), this::emeraldOreDrop);
 		
 		dropSelf(CRUXITE_BLOCK.get());
@@ -208,12 +219,23 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(FLOWERY_FROST_BRICK_WALL.get());
 		
 		dropSelf(CAST_IRON.get());
+		dropSelf(CAST_IRON_STAIRS.get());
 		add(CAST_IRON_SLAB.get(), this::createSlabItemTable);
 		dropSelf(CAST_IRON_WALL.get());
 		dropSelf(CAST_IRON_BUTTON.get());
 		dropSelf(CAST_IRON_PRESSURE_PLATE.get());
 		
+		dropSelf(CAST_IRON_TILE.get());
+		dropSelf(CAST_IRON_TILE_STAIRS.get());
+		add(CAST_IRON_TILE_SLAB.get(), this::createSlabItemTable);
+		
+		dropSelf(CAST_IRON_SHEET.get());
+		dropSelf(CAST_IRON_SHEET_STAIRS.get());
+		add(CAST_IRON_SHEET_SLAB.get(), this::createSlabItemTable);
+		
 		dropSelf(CHISELED_CAST_IRON.get());
+		dropSelf(CAST_IRON_FRAME.get());
+		
 		dropSelf(STEEL_BEAM.get());
 		
 		dropSelf(MYCELIUM_COBBLESTONE.get());
@@ -250,6 +272,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(FLOWERY_MYCELIUM_BRICK_WALL.get());
 		
 		add(BLACK_STONE.get(), createSingleItemTableWithSilkTouch(BLACK_STONE.get(), BLACK_COBBLESTONE.get()));
+		dropSelf(BLACK_STONE_STAIRS.get());
+		add(BLACK_STONE_SLAB.get(), this::createSlabItemTable);
 		dropSelf(BLACK_STONE_WALL.get());
 		dropSelf(BLACK_STONE_BUTTON.get());
 		dropSelf(BLACK_STONE_PRESSURE_PLATE.get());
@@ -265,15 +289,67 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(POLISHED_BLACK_STONE_WALL.get());
 		
 		dropSelf(BLACK_STONE_BRICKS.get());
+		dropSelf(BLACK_STONE_BRICK_STAIRS.get());
+		add(BLACK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		dropSelf(BLACK_STONE_BRICK_WALL.get());
 		
 		dropSelf(BLACK_STONE_COLUMN.get());
 		dropSelf(CHISELED_BLACK_STONE_BRICKS.get());
 		dropSelf(CRACKED_BLACK_STONE_BRICKS.get());
+		
+		dropSelf(MAGMATIC_BLACK_STONE_BRICKS.get());
+		dropSelf(MAGMATIC_BLACK_STONE_BRICK_STAIRS.get());
+		add(MAGMATIC_BLACK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
+		dropSelf(MAGMATIC_BLACK_STONE_BRICK_WALL.get());
+		
 		dropSelf(BLACK_SAND.get());
 		
 		dropSelf(IGNEOUS_STONE.get());
+		dropSelf(IGNEOUS_STONE_STAIRS.get());
+		add(IGNEOUS_STONE_SLAB.get(), this::createSlabItemTable);
+		dropSelf(IGNEOUS_STONE_WALL.get());
+		dropSelf(IGNEOUS_STONE_BUTTON.get());
+		dropSelf(IGNEOUS_STONE_PRESSURE_PLATE.get());
+		
+		dropSelf(POLISHED_IGNEOUS_STONE.get());
+		dropSelf(POLISHED_IGNEOUS_STAIRS.get());
+		add(POLISHED_IGNEOUS_SLAB.get(), this::createSlabItemTable);
+		dropSelf(POLISHED_IGNEOUS_WALL.get());
+		
+		dropSelf(POLISHED_IGNEOUS_BRICKS.get());
+		dropSelf(POLISHED_IGNEOUS_BRICK_STAIRS.get());
+		add(POLISHED_IGNEOUS_BRICK_SLAB.get(), this::createSlabItemTable);
+		dropSelf(POLISHED_IGNEOUS_BRICK_WALL.get());
+		
+		dropSelf(POLISHED_IGNEOUS_PILLAR.get());
+		dropSelf(CHISELED_IGNEOUS_STONE.get());
+		dropSelf(CRACKED_POLISHED_IGNEOUS_BRICKS.get());
+		
+		dropSelf(MAGMATIC_POLISHED_IGNEOUS_BRICKS.get());
+		dropSelf(MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS.get());
+		add(MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB.get(), this::createSlabItemTable);
+		dropSelf(MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL.get());
+		
+		dropSelf(MAGMATIC_IGNEOUS_STONE.get());
+		
 		dropSelf(PUMICE_STONE.get());
+		dropSelf(PUMICE_STONE_STAIRS.get());
+		add(PUMICE_STONE_SLAB.get(), this::createSlabItemTable);
+		dropSelf(PUMICE_STONE_WALL.get());
+		dropSelf(PUMICE_STONE_BUTTON.get());
+		dropSelf(PUMICE_STONE_PRESSURE_PLATE.get());
+		
+		dropSelf(PUMICE_BRICKS.get());
+		dropSelf(PUMICE_BRICK_STAIRS.get());
+		add(PUMICE_BRICK_SLAB.get(), this::createSlabItemTable);
+		dropSelf(PUMICE_BRICK_WALL.get());
+		
+		dropSelf(PUMICE_TILES.get());
+		dropSelf(PUMICE_TILE_STAIRS.get());
+		add(PUMICE_TILE_SLAB.get(), this::createSlabItemTable);
+		dropSelf(PUMICE_TILE_WALL.get());
+		
+		dropSelf(HEAT_LAMP.get());
 		
 		dropSelf(DECREPIT_STONE_BRICKS.get());
 		dropSelf(DECREPIT_STONE_BRICK_STAIRS.get());
@@ -688,9 +764,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(SHADE_BRICK_STAIRS.get());
 		dropSelf(FROST_TILE_STAIRS.get());
 		dropSelf(FROST_BRICK_STAIRS.get());
-		dropSelf(CAST_IRON_STAIRS.get());
-		dropSelf(BLACK_STONE_STAIRS.get());
-		dropSelf(BLACK_STONE_BRICK_STAIRS.get());
 		dropSelf(MYCELIUM_STAIRS.get());
 		dropSelf(MYCELIUM_BRICK_STAIRS.get());
 		dropSelf(CHALK_STAIRS.get());
@@ -717,8 +790,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(RAINBOW_PLANKS_SLAB.get(), this::createSlabItemTable);
 		add(END_PLANKS_SLAB.get(), this::createSlabItemTable);
 		add(DEAD_PLANKS_SLAB.get(), this::createSlabItemTable);
-		add(BLACK_STONE_SLAB.get(), this::createSlabItemTable);
-		add(BLACK_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(MYCELIUM_SLAB.get(), this::createSlabItemTable);
 		add(MYCELIUM_BRICK_SLAB.get(), this::createSlabItemTable);
 		add(FROST_TILE_SLAB.get(), this::createSlabItemTable);
@@ -801,6 +872,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(CARROT_CAKE.get(), noDrop());
 		dropSelf(LARGE_CAKE.get());
 		dropSelf(PINK_FROSTED_TOP_LARGE_CAKE.get());
+		add(CHOCOLATEY_CAKE.get(), noDrop());
 		
 		dropSelf(PRIMED_TNT.get());
 		dropSelf(UNSTABLE_TNT.get());

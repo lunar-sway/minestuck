@@ -385,6 +385,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FUCHSIA_CAKE.get());
 		output.accept(MSItems.NEGATIVE_CAKE.get());
 		output.accept(MSItems.CARROT_CAKE.get());
+		output.accept(MSItems.CHOCOLATEY_CAKE.get());
 		
 		output.accept(MSItems.PRIMED_TNT.get());
 		output.accept(MSItems.UNSTABLE_TNT.get());
@@ -648,6 +649,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.PINK_STONE_CRUXITE_ORE.get());
 		output.accept(MSItems.MYCELIUM_STONE_CRUXITE_ORE.get());
 		output.accept(MSItems.UNCARVED_WOOD_CRUXITE_ORE.get());
+		output.accept(MSItems.BLACK_STONE_CRUXITE_ORE.get());
 		
 		output.accept(MSItems.STONE_URANIUM_ORE.get());
 		output.accept(MSItems.DEEPSLATE_URANIUM_ORE.get());
@@ -660,6 +662,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.PINK_STONE_URANIUM_ORE.get());
 		output.accept(MSItems.MYCELIUM_STONE_URANIUM_ORE.get());
 		output.accept(MSItems.UNCARVED_WOOD_URANIUM_ORE.get());
+		output.accept(MSItems.BLACK_STONE_URANIUM_ORE.get());
 		
 		output.accept(MSItems.NETHERRACK_COAL_ORE.get());
 		output.accept(MSItems.SHADE_STONE_COAL_ORE.get());
@@ -674,11 +677,14 @@ public final class MSCreativeTabs
 		output.accept(MSItems.RED_SANDSTONE_GOLD_ORE.get());
 		output.accept(MSItems.SHADE_STONE_GOLD_ORE.get());
 		output.accept(MSItems.PINK_STONE_GOLD_ORE.get());
+		output.accept(MSItems.BLACK_STONE_GOLD_ORE.get());
 		
 		output.accept(MSItems.END_STONE_REDSTONE_ORE.get());
 		output.accept(MSItems.UNCARVED_WOOD_REDSTONE_ORE.get());
+		output.accept(MSItems.BLACK_STONE_REDSTONE_ORE.get());
 		
 		output.accept(MSItems.STONE_QUARTZ_ORE.get());
+		output.accept(MSItems.BLACK_STONE_QUARTZ_ORE.get());
 		
 		output.accept(MSItems.PINK_STONE_LAPIS_ORE.get());
 		
@@ -754,12 +760,23 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FLOWERY_FROST_BRICK_WALL.get());
 		
 		output.accept(MSItems.CAST_IRON.get());
+		output.accept(MSItems.CAST_IRON_STAIRS.get());
 		output.accept(MSItems.CAST_IRON_SLAB.get());
 		output.accept(MSItems.CAST_IRON_WALL.get());
 		output.accept(MSItems.CAST_IRON_BUTTON.get());
 		output.accept(MSItems.CAST_IRON_PRESSURE_PLATE.get());
 		
+		output.accept(MSItems.CAST_IRON_TILE.get());
+		output.accept(MSItems.CAST_IRON_TILE_STAIRS.get());
+		output.accept(MSItems.CAST_IRON_TILE_SLAB.get());
+		
+		output.accept(MSItems.CAST_IRON_SHEET.get());
+		output.accept(MSItems.CAST_IRON_SHEET_STAIRS.get());
+		output.accept(MSItems.CAST_IRON_SHEET_SLAB.get());
+		
 		output.accept(MSItems.CHISELED_CAST_IRON.get());
+		output.accept(MSItems.CAST_IRON_FRAME.get());
+		
 		output.accept(MSItems.STEEL_BEAM.get());
 		
 		output.accept(MSItems.MYCELIUM_COBBLESTONE.get());
@@ -820,9 +837,61 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BLACK_STONE_COLUMN.get());
 		output.accept(MSItems.CHISELED_BLACK_STONE_BRICKS.get());
 		output.accept(MSItems.CRACKED_BLACK_STONE_BRICKS.get());
+		
+		output.accept(MSItems.MAGMATIC_BLACK_STONE_BRICKS.get());
+		output.accept(MSItems.MAGMATIC_BLACK_STONE_BRICK_STAIRS.get());
+		output.accept(MSItems.MAGMATIC_BLACK_STONE_BRICK_SLAB.get());
+		output.accept(MSItems.MAGMATIC_BLACK_STONE_BRICK_WALL.get());
+		
 		output.accept(MSItems.BLACK_SAND.get());
+		
 		output.accept(MSItems.IGNEOUS_STONE.get());
+		output.accept(MSItems.IGNEOUS_STONE_STAIRS.get());
+		output.accept(MSItems.IGNEOUS_STONE_SLAB.get());
+		output.accept(MSItems.IGNEOUS_STONE_WALL.get());
+		output.accept(MSItems.IGNEOUS_STONE_BUTTON.get());
+		output.accept(MSItems.IGNEOUS_STONE_PRESSURE_PLATE.get());
+		
+		output.accept(MSItems.POLISHED_IGNEOUS_STONE.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_STAIRS.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_SLAB.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_WALL.get());
+		
+		output.accept(MSItems.POLISHED_IGNEOUS_BRICKS.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_BRICK_STAIRS.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_BRICK_SLAB.get());
+		output.accept(MSItems.POLISHED_IGNEOUS_BRICK_WALL.get());
+		
+		output.accept(MSItems.POLISHED_IGNEOUS_PILLAR.get());
+		output.accept(MSItems.CHISELED_IGNEOUS_STONE.get());
+		output.accept(MSItems.CRACKED_POLISHED_IGNEOUS_BRICKS.get());
+		
+		output.accept(MSItems.MAGMATIC_POLISHED_IGNEOUS_BRICKS.get());
+		output.accept(MSItems.MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS.get());
+		output.accept(MSItems.MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB.get());
+		output.accept(MSItems.MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL.get());
+		
+		output.accept(MSItems.MAGMATIC_IGNEOUS_STONE.get());
+		
 		output.accept(MSItems.PUMICE_STONE.get());
+		output.accept(MSItems.PUMICE_STONE_STAIRS.get());
+		output.accept(MSItems.PUMICE_STONE_SLAB.get());
+		output.accept(MSItems.PUMICE_STONE_WALL.get());
+		output.accept(MSItems.PUMICE_STONE_BUTTON.get());
+		output.accept(MSItems.PUMICE_STONE_PRESSURE_PLATE.get());
+		
+		output.accept(MSItems.PUMICE_BRICKS.get());
+		output.accept(MSItems.PUMICE_BRICK_STAIRS.get());
+		output.accept(MSItems.PUMICE_BRICK_SLAB.get());
+		output.accept(MSItems.PUMICE_BRICK_WALL.get());
+		
+		output.accept(MSItems.PUMICE_TILES.get());
+		output.accept(MSItems.PUMICE_TILE_STAIRS.get());
+		output.accept(MSItems.PUMICE_TILE_SLAB.get());
+		output.accept(MSItems.PUMICE_TILE_WALL.get());
+		
+		output.accept(MSItems.HEAT_LAMP.get());
+		
 		output.accept(MSItems.DECREPIT_STONE_BRICKS.get());
 		output.accept(MSItems.DECREPIT_STONE_BRICK_STAIRS.get());
 		output.accept(MSItems.DECREPIT_STONE_BRICK_SLAB.get());
@@ -1191,7 +1260,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SHADE_BRICK_STAIRS.get());
 		output.accept(MSItems.FROST_TILE_STAIRS.get());
 		output.accept(MSItems.FROST_BRICK_STAIRS.get());
-		output.accept(MSItems.CAST_IRON_STAIRS.get());
 		output.accept(MSItems.MYCELIUM_STAIRS.get());
 		output.accept(MSItems.MYCELIUM_BRICK_STAIRS.get());
 		output.accept(MSItems.CHALK_STAIRS.get());

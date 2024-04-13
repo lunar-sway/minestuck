@@ -8,9 +8,11 @@ import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -148,7 +151,11 @@ public class AreaEffectBlockEntity extends BlockEntity
 	{
 		super.load(compound);
 		
-		MobEffect effectRead = MobEffect.byId(compound.getInt("effect"));
+		MobEffect effectRead;
+		if(compound.contains("effect", Tag.TAG_STRING))
+			effectRead = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(compound.getString("effect")));
+		else	// backwards-compatibility with Minestuck 1.20.1-1.11.2.1 and earlier
+			effectRead = MobEffect.byId(compound.getInt("effect"));
 		if(effectRead != null)
 			effect = effectRead;
 		
@@ -170,7 +177,7 @@ public class AreaEffectBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound);
 		
-		compound.putInt("effect", MobEffect.getId(getEffect()));
+		compound.putString("effect", String.valueOf(ForgeRegistries.MOB_EFFECTS.getKey(this.getEffect())));
 		compound.putInt("effectAmplifier", effectAmplifier);
 		
 		compound.putInt("minAreaOffsetX", minAreaOffset.getX());

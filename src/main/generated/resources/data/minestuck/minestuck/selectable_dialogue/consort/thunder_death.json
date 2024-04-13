@@ -1,0 +1,17 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:thunder"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:wood"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/thunder_death.1"
+}

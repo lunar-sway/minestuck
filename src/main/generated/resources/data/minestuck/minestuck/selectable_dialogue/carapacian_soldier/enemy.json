@@ -1,0 +1,16 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:is_in_skaia"
+      },
+      {
+        "type": "minestuck:is_from_kingdom",
+        "kingdom": "prospitian"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:carapacian_soldier/enemy"
+}

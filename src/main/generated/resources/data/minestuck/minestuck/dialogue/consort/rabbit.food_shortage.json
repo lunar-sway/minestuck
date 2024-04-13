@@ -1,0 +1,15 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.rabbit.food_shortage",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:entity_type",
+          "entity_type": "minestuck:nakagator"
+        },
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/rabbit.food_shortage.other_way"
+      }
+    ]
+  }
+}

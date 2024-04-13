@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -22,7 +23,7 @@ public class SulfurBubbleBlock extends BushBlock
 	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
 	{
-		return state.is(MSBlocks.NATIVE_SULFUR.get());
+		return state.is(MSTags.Blocks.HEAT_TERRAIN_BLOCKS) || state.is(MSBlocks.NATIVE_SULFUR.get());
 	}
 	
 	@Override

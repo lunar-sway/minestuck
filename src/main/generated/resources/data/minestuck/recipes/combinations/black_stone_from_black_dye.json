@@ -1,7 +1,7 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:stone"
+    "tag": "forge:stone"
   },
   "input2": {
     "item": "minecraft:black_dye"

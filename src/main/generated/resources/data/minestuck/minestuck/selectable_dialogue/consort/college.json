@@ -1,0 +1,6 @@
+{
+  "condition": {
+    "type": "minestuck:always_true"
+  },
+  "dialogue": "minestuck:consort/college"
+}

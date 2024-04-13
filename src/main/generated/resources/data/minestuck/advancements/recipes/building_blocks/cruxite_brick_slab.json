@@ -1,6 +1,18 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
+    "has_cruxite_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:cruxite_bricks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "has_raw_cruxite": {
       "conditions": {
         "items": [
@@ -22,6 +34,7 @@
   },
   "requirements": [
     [
+      "has_cruxite_bricks",
       "has_raw_cruxite",
       "has_the_recipe"
     ]

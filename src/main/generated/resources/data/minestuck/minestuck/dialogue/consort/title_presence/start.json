@@ -1,0 +1,38 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "player_title"
+      ],
+      "key": "minestuck.dialogue.consort.title_presence.start"
+    },
+    "responses": [
+      {
+        "message": {
+          "arguments": [
+            "player_title"
+          ],
+          "key": "minestuck.dialogue.consort.title_presence.start.i_am"
+        },
+        "next_dialogue": {
+          "id": "minestuck:consort/title_presence/i_am",
+          "player_message": {
+            "arguments": [
+              "player_title"
+            ],
+            "key": "minestuck.dialogue.consort.title_presence.start.i_am.reply"
+          },
+          "set_as_entrypoint": false
+        }
+      },
+      {
+        "message": "minestuck.dialogue.consort.title_presence.start.agree",
+        "next_dialogue": {
+          "id": "minestuck:consort/thanks",
+          "player_message": "minestuck.dialogue.consort.title_presence.start.agree.reply",
+          "set_as_entrypoint": false
+        }
+      }
+    ]
+  }
+}

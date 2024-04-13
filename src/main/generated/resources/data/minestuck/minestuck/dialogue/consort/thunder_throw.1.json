@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.thunder_throw.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/thunder_throw.2"
+      }
+    ]
+  }
+}

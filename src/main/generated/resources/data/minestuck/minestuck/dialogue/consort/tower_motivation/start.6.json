@@ -1,0 +1,27 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "anxious"
+    },
+    "message": "minestuck.dialogue.consort.tower_motivation.start.6",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.tower_motivation.start.6.dont_give_up",
+        "next_dialogue": {
+          "id": "minestuck:consort/tower_motivation/start.6.motivation",
+          "player_message": "minestuck.dialogue.consort.tower_motivation.start.6.dont_give_up.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": [
+          {
+            "type": "minestuck:set_dialogue",
+            "new_path": "minestuck:consort/tower_motivation/new_tower"
+          }
+        ]
+      },
+      {
+        "message": "minestuck.dialogue.goodbye"
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.underling_commission.answer.1"
+    },
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/underling_commission/answer.2"
+      }
+    ]
+  }
+}

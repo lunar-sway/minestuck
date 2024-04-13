@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/pumice_bricks_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/pumice_bricks"
+    },
+    "type=top": {
+      "model": "minestuck:block/pumice_bricks_slab_top"
+    }
+  }
+}

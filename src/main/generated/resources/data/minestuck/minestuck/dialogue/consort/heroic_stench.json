@@ -1,0 +1,18 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:has_player_entered"
+      },
+      "node": {
+        "animation": {
+          "emotion": "anxious"
+        },
+        "message": "minestuck.dialogue.consort.heroic_stench"
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.heroic_stench.leech"
+  }
+}

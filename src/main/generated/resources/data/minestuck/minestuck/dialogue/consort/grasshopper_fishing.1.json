@@ -1,0 +1,14 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "happy"
+    },
+    "message": "minestuck.dialogue.consort.grasshopper_fishing.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/grasshopper_fishing.2"
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "minestuck:block/cast_iron_frame"
+    },
+    "facing=east": {
+      "model": "minestuck:block/cast_iron_frame",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/cast_iron_frame",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "minestuck:block/cast_iron_frame",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "minestuck:block/cast_iron_frame"
+    },
+    "facing=west": {
+      "model": "minestuck:block/cast_iron_frame",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

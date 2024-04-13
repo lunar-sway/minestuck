@@ -1,0 +1,17 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:thought"
+      },
+      {
+        "type": "minestuck:entity_type",
+        "entity_type": "minestuck:nakagator"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/book_purpose/start.1"
+}

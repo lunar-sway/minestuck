@@ -19,8 +19,8 @@ public final class MSStructures
 	public static final ResourceKey<Structure> IMP_DUNGEON = key("imp_dungeon");
 	public static final ResourceKey<Structure> CONSORT_VILLAGE = key("consort_village");
 	
-	// Wood
 	public static final ResourceKey<Structure> LARGE_WOOD_OBJECT = key("large_wood_object");
+	public static final ResourceKey<Structure> PINK_TOWER = key("pink_tower");
 	
 	// Skaia
 	public static final ResourceKey<Structure> SKAIA_CASTLE = key("skaia_castle");

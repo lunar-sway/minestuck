@@ -98,6 +98,12 @@
         },
         {
           "type": "minecraft:item",
+          "name": "minestuck:chocolatey_cake",
+          "quality": 1,
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
           "functions": [
             {
               "add": false,

@@ -1,0 +1,40 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:at_or_above_y",
+        "y": 78.0
+      },
+      "node": {
+        "animation": {
+          "emotion": "anxious"
+        },
+        "message": "minestuck.dialogue.consort.height_fear.panic"
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:towers"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.height_fear.towers.1",
+        "responses": [
+          {
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/height_fear.towers.2"
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.height_fear.rock.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/height_fear.rock.2"
+      }
+    ]
+  }
+}

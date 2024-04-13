@@ -1,0 +1,16 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:is_consort_in_home_land"
+      },
+      {
+        "type": "minestuck:near_spawn",
+        "max_distance": 256
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/floating_island"
+}
