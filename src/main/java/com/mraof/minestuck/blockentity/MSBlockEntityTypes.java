@@ -7,6 +7,7 @@ import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -55,9 +56,9 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<RemoteComparatorBlockEntity>> REMOTE_COMPARATOR = REGISTER.register("remote_comparator", () -> BlockEntityType.Builder.of(RemoteComparatorBlockEntity::new, MSBlocks.REMOTE_COMPARATOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<StructureCoreBlockEntity>> STRUCTURE_CORE = REGISTER.register("structure_core", () -> BlockEntityType.Builder.of(StructureCoreBlockEntity::new, MSBlocks.STRUCTURE_CORE.get()).build(null));
 	
-	public static final RegistryObject<BlockEntityType<MSSignBlockEntity>> SIGN =
+	public static final RegistryObject<BlockEntityType<SignBlockEntity>> SIGN =
 			REGISTER.register("sign", () ->
-					BlockEntityType.Builder.of(MSSignBlockEntity::new,
+					BlockEntityType.Builder.of((pos, state) -> new SignBlockEntity(MSBlockEntityTypes.SIGN.get(), pos, state),
 									MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get(),
 									MSBlocks.CARVED_SIGN.get(), MSBlocks.CARVED_WALL_SIGN.get(),
 									MSBlocks.DEAD_SIGN.get(), MSBlocks.DEAD_WALL_SIGN.get(),

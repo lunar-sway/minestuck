@@ -1,9 +1,10 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.blockentity.MSSignBlockEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
@@ -13,14 +14,14 @@ import net.minecraft.world.level.block.state.properties.WoodType;
  */
 public class MSStandingSignBlock extends StandingSignBlock
 {
-	public MSStandingSignBlock(Properties pProperties, WoodType pType)
+	public MSStandingSignBlock(Properties properties, WoodType type)
 	{
-		super(pProperties, pType);
+		super(properties, type);
 	}
 	
 	@Override
-	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new MSSignBlockEntity(pPos, pState);
+		return new SignBlockEntity(MSBlockEntityTypes.SIGN.get(), pos, state);
 	}
 }
