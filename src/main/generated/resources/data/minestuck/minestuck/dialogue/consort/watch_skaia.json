@@ -23,6 +23,9 @@
         "type": "minestuck:is_in_skaia"
       },
       "node": {
+        "animation": {
+          "emotion": "happy"
+        },
         "message": {
           "arguments": [
             "entity_sound_2"

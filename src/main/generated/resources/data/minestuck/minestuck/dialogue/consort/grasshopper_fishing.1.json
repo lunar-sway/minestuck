@@ -1,5 +1,8 @@
 {
   "node": {
+    "animation": {
+      "emotion": "happy"
+    },
     "message": "minestuck.dialogue.consort.grasshopper_fishing.1",
     "responses": [
       {

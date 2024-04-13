@@ -13,9 +13,9 @@ import net.minecraft.resources.ResourceLocation;
 public record DialogueAnimationData(String emotion, int spriteHeight, int spriteWidth, int xOffset, int yOffset, float scale)
 {
 	public static final String GENERIC_EMOTION = "generic";
-	public static final String PLEASED_EMOTION = "pleased";
-	public static final String UPSET_EMOTION = "upset";
-	public static final String SCARED_EMOTION = "scared";
+	public static final String HAPPY_EMOTION = "happy";
+	public static final String ANGRY_EMOTION = "angry";
+	public static final String ANXIOUS_EMOTION = "anxious";
 	
 	public static final int DEFAULT_SPRITE_WIDTH = 224;
 	public static final int DEFAULT_SPRITE_HEIGHT = 224;
@@ -60,7 +60,7 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 	{
 		ResourceLocation spritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + emotion + ".png");
 		
-		//TODO the first time this is run using an invalid path, the Minecraft missing texture sprite appears briefly before fallback system activates. An error message is printed in chat
+		//TODO the first time this is run using an invalid path, an error message is printed in chat before fallback system activates. The Minecraft missing texture sprite may show briefly
 		AbstractTexture abstractTexture = Minecraft.getInstance().getTextureManager().getTexture(spritePath);
 		
 		//if the sprite for the given emotion cannot be found, it will try to render the generic sprite instead. If the generic sprite cannot be found, the invalid texture is allowed to proceed

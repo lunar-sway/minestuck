@@ -1,5 +1,8 @@
 {
   "node": {
+    "animation": {
+      "emotion": "angry"
+    },
     "message": "minestuck.dialogue.consort.underling_commission.start.start",
     "responses": [
       {

@@ -1,5 +1,8 @@
 {
   "node": {
+    "animation": {
+      "emotion": "anxious"
+    },
     "message": "minestuck.dialogue.consort.tower_motivation.start.6",
     "responses": [
       {
