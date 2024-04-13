@@ -1546,7 +1546,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CARROT_CAKE = registerBlockItem(MSBlocks.CARROT_CAKE, new Item.Properties().stacksTo(1));
 	public static final RegistryObject<BlockItem> LARGE_CAKE = registerBlockItem(MSBlocks.LARGE_CAKE);
 	public static final RegistryObject<BlockItem> PINK_FROSTED_TOP_LARGE_CAKE = registerBlockItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE);
-	
+	public static final RegistryObject<BlockItem> CHOCOLATEY_CAKE = registerBlockItem(MSBlocks.CHOCOLATEY_CAKE, new Item.Properties().stacksTo(1));
 	
 	//Explosives
 	public static final RegistryObject<BlockItem> PRIMED_TNT = registerBlockItem(MSBlocks.PRIMED_TNT);
