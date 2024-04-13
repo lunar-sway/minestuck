@@ -82,6 +82,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed name typos for some chess castle blocks
 - Area effect blocks now save their effect as a string id instead of an int id
 - Improved grammar on some dialogues
+- Error handling when teleporting entities during entry
 
 ### Removed
 

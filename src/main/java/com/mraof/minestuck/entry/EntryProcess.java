@@ -371,25 +371,31 @@ public class EntryProcess
 		Iterator<Entity> iterator = entities.iterator();
 		while(iterator.hasNext())
 		{
-			Entity e = iterator.next();
-			if(origin.distToCenterSqr(e.getX(), e.getY(), e.getZ()) <= artifactRange * artifactRange)
+			Entity entity = iterator.next();
+			if(origin.distToCenterSqr(entity.getX(), entity.getY(), entity.getZ()) <= artifactRange * artifactRange)
 			{
-				if(MinestuckConfig.SERVER.entryCrater.get() || e instanceof Player || !creative && e instanceof ItemEntity)
+				if(MinestuckConfig.SERVER.entryCrater.get() || entity instanceof Player || !creative && entity instanceof ItemEntity)
 				{
-					if(e instanceof Player && ServerEditHandler.getData((Player) e) != null)
-						ServerEditHandler.reset(ServerEditHandler.getData((Player) e));
-					else
+					try
 					{
-						Teleport.teleportEntity(e, level1, e.getX() + xDiff, e.getY() + yDiff, e.getZ() + zDiff);
+						if(entity instanceof Player && ServerEditHandler.getData((Player) entity) != null)
+							ServerEditHandler.reset(ServerEditHandler.getData((Player) entity));
+						else
+						{
+							Teleport.teleportEntity(entity, level1, entity.getX() + xDiff, entity.getY() + yDiff, entity.getZ() + zDiff);
+						}
+						//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
+						iterator.remove();
+					} catch(RuntimeException e)
+					{
+						LOGGER.error("Exception while teleporting entity during entry {}:", entity, e);
 					}
-					//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
-					iterator.remove();
 				} else    //Copy instead of teleport
 				{
-					Entity newEntity = e.getType().create(level1);
+					Entity newEntity = entity.getType().create(level1);
 					if(newEntity != null)
 					{
-						newEntity.restoreFrom(e);
+						newEntity.restoreFrom(entity);
 						newEntity.setPos(newEntity.getX() + xDiff, newEntity.getY() + yDiff, newEntity.getZ() + zDiff);
 						level1.addFreshEntity(newEntity);
 					}
