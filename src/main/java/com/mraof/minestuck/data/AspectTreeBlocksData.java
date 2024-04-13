@@ -1327,6 +1327,12 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(BLOOD_ASPECT_PRESSURE_PLATE, BLOOD_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(BLOOD_ASPECT_BUTTON, BLOOD_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BLOOD_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', BLOOD_ASPECT_PLANKS.get()).define('$', BLOOD_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.planksRecipe(BLOOD_ASPECT_PLANKS, BLOOD_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.woodRecipe(BLOOD_ASPECT_WOOD, BLOOD_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(BLOOD_ASPECT_STRIPPED_WOOD, BLOOD_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(BREATH_ASPECT_STAIRS, BREATH_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(BREATH_ASPECT_SLAB, BREATH_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1344,6 +1350,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(BREATH_ASPECT_PRESSURE_PLATE, BREATH_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(BREATH_ASPECT_BUTTON, BREATH_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BREATH_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', BREATH_ASPECT_PLANKS.get()).define('$', BREATH_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(BREATH_ASPECT_WOOD, BREATH_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(BREATH_ASPECT_STRIPPED_WOOD, BREATH_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(DOOM_ASPECT_STAIRS, DOOM_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(DOOM_ASPECT_SLAB, DOOM_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1361,6 +1372,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(DOOM_ASPECT_PRESSURE_PLATE, DOOM_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(DOOM_ASPECT_BUTTON, DOOM_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DOOM_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', DOOM_ASPECT_PLANKS.get()).define('$', DOOM_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(DOOM_ASPECT_WOOD, DOOM_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(DOOM_ASPECT_STRIPPED_WOOD, DOOM_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(HEART_ASPECT_STAIRS, HEART_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(HEART_ASPECT_SLAB, HEART_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1378,6 +1394,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(HEART_ASPECT_PRESSURE_PLATE, HEART_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(HEART_ASPECT_BUTTON, HEART_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HEART_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', HEART_ASPECT_PLANKS.get()).define('$', HEART_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(HEART_ASPECT_WOOD, HEART_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(HEART_ASPECT_STRIPPED_WOOD, HEART_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(HOPE_ASPECT_STAIRS, HOPE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(HOPE_ASPECT_SLAB, HOPE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1395,6 +1416,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(HOPE_ASPECT_PRESSURE_PLATE, HOPE_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(HOPE_ASPECT_BUTTON, HOPE_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HOPE_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', HOPE_ASPECT_PLANKS.get()).define('$', HOPE_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(HOPE_ASPECT_WOOD, HOPE_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(HOPE_ASPECT_STRIPPED_WOOD, HOPE_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(LIFE_ASPECT_STAIRS, LIFE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(LIFE_ASPECT_SLAB, LIFE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1412,6 +1438,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(LIFE_ASPECT_PRESSURE_PLATE, LIFE_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(LIFE_ASPECT_BUTTON, LIFE_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIFE_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', LIFE_ASPECT_PLANKS.get()).define('$', LIFE_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(LIFE_ASPECT_WOOD, LIFE_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(LIFE_ASPECT_STRIPPED_WOOD, LIFE_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(LIGHT_ASPECT_STAIRS, LIGHT_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(LIGHT_ASPECT_SLAB, LIGHT_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1429,6 +1460,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(LIGHT_ASPECT_PRESSURE_PLATE, LIGHT_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(LIGHT_ASPECT_BUTTON, LIGHT_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, LIGHT_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', LIGHT_ASPECT_PLANKS.get()).define('$', LIGHT_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(LIGHT_ASPECT_WOOD, LIGHT_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(LIGHT_ASPECT_STRIPPED_WOOD, LIGHT_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(MIND_ASPECT_STAIRS, MIND_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(MIND_ASPECT_SLAB, MIND_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1446,6 +1482,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(MIND_ASPECT_PRESSURE_PLATE, MIND_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(MIND_ASPECT_BUTTON, MIND_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MIND_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', MIND_ASPECT_PLANKS.get()).define('$', MIND_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(MIND_ASPECT_WOOD, MIND_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(MIND_ASPECT_STRIPPED_WOOD, MIND_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(RAGE_ASPECT_STAIRS, RAGE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(RAGE_ASPECT_SLAB, RAGE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1463,6 +1504,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(RAGE_ASPECT_PRESSURE_PLATE, RAGE_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(RAGE_ASPECT_BUTTON, RAGE_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, RAGE_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', RAGE_ASPECT_PLANKS.get()).define('$', RAGE_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(RAGE_ASPECT_WOOD, RAGE_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(RAGE_ASPECT_STRIPPED_WOOD, RAGE_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(SPACE_ASPECT_STAIRS, SPACE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(SPACE_ASPECT_SLAB, SPACE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1480,6 +1526,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(SPACE_ASPECT_PRESSURE_PLATE, SPACE_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(SPACE_ASPECT_BUTTON, SPACE_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SPACE_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', SPACE_ASPECT_PLANKS.get()).define('$', SPACE_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(SPACE_ASPECT_WOOD, SPACE_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(SPACE_ASPECT_STRIPPED_WOOD, SPACE_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(TIME_ASPECT_STAIRS, TIME_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(TIME_ASPECT_SLAB, TIME_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1497,6 +1548,11 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(TIME_ASPECT_PRESSURE_PLATE, TIME_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(TIME_ASPECT_BUTTON, TIME_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TIME_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', TIME_ASPECT_PLANKS.get()).define('$', TIME_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(TIME_ASPECT_WOOD, TIME_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(TIME_ASPECT_STRIPPED_WOOD, TIME_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(VOID_ASPECT_STAIRS, VOID_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(VOID_ASPECT_SLAB, VOID_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1514,5 +1570,10 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.pressurePlateRecipe(VOID_ASPECT_PRESSURE_PLATE, VOID_ASPECT_PLANKS).group("stone_pressure_plate").save(recipeSaver);
 		CommonRecipes.buttonRecipe(VOID_ASPECT_BUTTON, VOID_ASPECT_PLANKS).save(recipeSaver);
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, VOID_ASPECT_CARVED_PLANKS.get(), 8).group("aspect_carved_planks")
+				.define('#', VOID_ASPECT_PLANKS.get()).define('$', VOID_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
+				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
+		CommonRecipes.woodRecipe(VOID_ASPECT_WOOD, VOID_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
+		CommonRecipes.woodRecipe(VOID_ASPECT_STRIPPED_WOOD, VOID_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
 	}
 }

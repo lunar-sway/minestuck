@@ -1,5 +1,7 @@
 package com.mraof.minestuck.data.recipe;
 
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -99,6 +101,30 @@ public final class CommonRecipes
 	{
 		return ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, buttonBlock).requires(sourceBlock)
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+	}
+	
+	public static RecipeBuilder planksRecipe(Supplier<? extends ItemLike> planksBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return planksRecipe(planksBlock.get(), sourceBlock.get());
+	}
+	
+	public static RecipeBuilder planksRecipe(ItemLike planksBlock, ItemLike sourceBlock)
+	{
+		return ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, planksBlock).requires(sourceBlock)
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+	}
+	
+	public static RecipeBuilder woodRecipe(Supplier<? extends ItemLike> woodBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return woodRecipe(woodBlock.get(), sourceBlock.get());
+	}
+	
+	public static RecipeBuilder woodRecipe(ItemLike woodBlock, ItemLike sourceBlock)
+	{
+
+		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS,
+				woodBlock, 3).define('#', sourceBlock).pattern("##").pattern("##").group("bark").unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+		
 	}
 	
 	private static ResourceLocation id(ItemLike item)
