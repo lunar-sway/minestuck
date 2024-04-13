@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "minestuck:block/structure_core_bottom",
-    "side": "minestuck:block/structure_core_side",
-    "top": "minestuck:block/structure_core_top"
-  }
-}

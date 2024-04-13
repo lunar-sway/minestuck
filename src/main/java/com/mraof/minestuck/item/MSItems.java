@@ -1524,8 +1524,6 @@ public class MSItems
 	public static final RegistryObject<BlockItem> BROWN_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.BROWN_STONE_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> GREEN_STONE_SLAB = registerBlockItem(MSBlocks.GREEN_STONE_SLAB);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_SLAB);
-	public static final RegistryObject<BlockItem> BLACK_STONE_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_SLAB);
-	public static final RegistryObject<BlockItem> BLACK_STONE_BRICK_SLAB = registerBlockItem(MSBlocks.BLACK_STONE_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> MYCELIUM_SLAB = registerBlockItem(MSBlocks.MYCELIUM_SLAB);
 	public static final RegistryObject<BlockItem> MYCELIUM_BRICK_SLAB = registerBlockItem(MSBlocks.MYCELIUM_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> FROST_TILE_SLAB = registerBlockItem(MSBlocks.FROST_TILE_SLAB);

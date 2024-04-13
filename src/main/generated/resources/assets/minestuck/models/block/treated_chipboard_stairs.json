@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "minestuck:block/treated_chipboard",
-    "side": "minestuck:block/treated_chipboard",
-    "top": "minestuck:block/treated_chipboard"
-  }
-}

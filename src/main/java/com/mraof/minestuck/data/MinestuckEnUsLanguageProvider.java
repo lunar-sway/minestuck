@@ -827,8 +827,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_SLAB, "Rainbow Planks Slab");
 		addBlock(MSBlocks.END_SLAB, "End Planks Slab");
 		addBlock(MSBlocks.DEAD_SLAB, "Dead Planks Slab");
-		addBlock(MSBlocks.BLACK_STONE_SLAB, "Black Stone Slab");
-		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
+	
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");
 		addBlock(MSBlocks.MYCELIUM_BRICK_SLAB, "Mycelium Brick Slab");
 		addBlock(MSBlocks.FROST_TILE_SLAB, "Frost Tile Slab");

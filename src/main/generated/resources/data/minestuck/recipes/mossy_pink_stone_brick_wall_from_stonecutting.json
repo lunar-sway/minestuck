@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 2,
-  "ingredient": {
-    "item": "minestuck:mossy_pink_stone_bricks"
-  },
-  "result": "minestuck:mossy_pink_stone_brick_wall"
-}

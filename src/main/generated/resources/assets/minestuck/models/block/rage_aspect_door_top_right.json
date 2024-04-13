@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/door_top_right",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "bottom": "minestuck:block/rage_aspect_door_bottom",
-    "top": "minestuck:block/rage_aspect_door_top"
-  }
-}

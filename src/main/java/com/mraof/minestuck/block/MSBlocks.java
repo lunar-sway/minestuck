@@ -41,77 +41,6 @@ public final class MSBlocks
 {
 	public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Minestuck.MOD_ID);
 	
-	//Signs
-	public static final RegistryObject<StandingSignBlock> CARVED_SIGN = REGISTER.register("carved_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.CARVED));
-	public static final RegistryObject<WallSignBlock> CARVED_WALL_SIGN = REGISTER.register("carved_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.CARVED));
-	public static final RegistryObject<Block> CARVED_HANGING_SIGN = REGISTER.register("carved_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.CARVED));
-	public static final RegistryObject<Block> CARVED_WALL_HANGING_SIGN = REGISTER.register("carved_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.CARVED));
-	
-	public static final RegistryObject<StandingSignBlock> DEAD_SIGN = REGISTER.register("dead_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.DEAD));
-	public static final RegistryObject<WallSignBlock> DEAD_WALL_SIGN = REGISTER.register("dead_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.DEAD));
-	public static final RegistryObject<Block> DEAD_HANGING_SIGN = REGISTER.register("dead_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.DEAD));
-	public static final RegistryObject<Block> DEAD_WALL_HANGING_SIGN = REGISTER.register("dead_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.DEAD));
-	
-	public static final RegistryObject<StandingSignBlock> END_SIGN = REGISTER.register("end_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.END));
-	public static final RegistryObject<WallSignBlock> END_WALL_SIGN = REGISTER.register("end_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.END));
-	public static final RegistryObject<Block> END_HANGING_SIGN = REGISTER.register("end_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.END));
-	public static final RegistryObject<Block> END_WALL_HANGING_SIGN = REGISTER.register("end_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.END));
-	
-	public static final RegistryObject<StandingSignBlock> FROST_SIGN = REGISTER.register("frost_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.FROST));
-	public static final RegistryObject<WallSignBlock> FROST_WALL_SIGN = REGISTER.register("frost_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.FROST));
-	public static final RegistryObject<Block> FROST_HANGING_SIGN = REGISTER.register("frost_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.FROST));
-	public static final RegistryObject<Block> FROST_WALL_HANGING_SIGN = REGISTER.register("frost_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.FROST));
-	
-	public static final RegistryObject<StandingSignBlock> GLOWING_SIGN = REGISTER.register("glowing_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.GLOWING));
-	public static final RegistryObject<WallSignBlock> GLOWING_WALL_SIGN = REGISTER.register("glowing_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.GLOWING));
-	public static final RegistryObject<Block> GLOWING_HANGING_SIGN = REGISTER.register("glowing_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.GLOWING));
-	public static final RegistryObject<Block> GLOWING_WALL_HANGING_SIGN = REGISTER.register("glowing_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.GLOWING));
-	
-	public static final RegistryObject<StandingSignBlock> RAINBOW_SIGN = REGISTER.register("rainbow_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.RAINBOW));
-	public static final RegistryObject<WallSignBlock> RAINBOW_WALL_SIGN = REGISTER.register("rainbow_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.RAINBOW));
-	public static final RegistryObject<Block> RAINBOW_HANGING_SIGN = REGISTER.register("rainbow_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.RAINBOW));
-	public static final RegistryObject<Block> RAINBOW_WALL_HANGING_SIGN = REGISTER.register("rainbow_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.RAINBOW));
-	
-	public static final RegistryObject<StandingSignBlock> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.SHADEWOOD));
-	public static final RegistryObject<WallSignBlock> SHADEWOOD_WALL_SIGN = REGISTER.register("shadewood_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.SHADEWOOD));
-	public static final RegistryObject<Block> SHADEWOOD_HANGING_SIGN = REGISTER.register("shadewood_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.SHADEWOOD));
-	public static final RegistryObject<Block> SHADEWOOD_WALL_HANGING_SIGN = REGISTER.register("shadewood_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.SHADEWOOD));
-	
-	public static final RegistryObject<StandingSignBlock> TREATED_SIGN = REGISTER.register("treated_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.TREATED));
-	public static final RegistryObject<WallSignBlock> TREATED_WALL_SIGN = REGISTER.register("treated_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.TREATED));
-	public static final RegistryObject<Block> TREATED_HANGING_SIGN = REGISTER.register("treated_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.TREATED));
-	public static final RegistryObject<Block> TREATED_WALL_HANGING_SIGN = REGISTER.register("treated_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.TREATED));
-	
-	public static final RegistryObject<StandingSignBlock> LACQUERED_SIGN = REGISTER.register("lacquered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LACQUERED));
-	public static final RegistryObject<WallSignBlock> LACQUERED_WALL_SIGN = REGISTER.register("lacquered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LACQUERED));
-	public static final RegistryObject<Block> LACQUERED_HANGING_SIGN = REGISTER.register("lacquered_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LACQUERED));
-	public static final RegistryObject<Block> LACQUERED_WALL_HANGING_SIGN = REGISTER.register("lacquered_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.LACQUERED));
-	
-	public static final RegistryObject<StandingSignBlock> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
-	public static final RegistryObject<WallSignBlock> PERFECTLY_GENERIC_WALL_SIGN = REGISTER.register("perfectly_generic_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
-	public static final RegistryObject<Block> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
-	public static final RegistryObject<Block> PERFECTLY_GENERIC_WALL_HANGING_SIGN = REGISTER.register("perfectly_generic_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
-	
-	public static final RegistryObject<StandingSignBlock> CINDERED_SIGN = REGISTER.register("cindered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.CINDERED));
-	public static final RegistryObject<WallSignBlock> CINDERED_WALL_SIGN = REGISTER.register("cindered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.CINDERED));
-	public static final RegistryObject<Block> CINDERED_HANGING_SIGN = REGISTER.register("cindered_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.CINDERED));
-	public static final RegistryObject<Block> CINDERED_WALL_HANGING_SIGN = REGISTER.register("cindered_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.CINDERED));
-	
-	public static final RegistryObject<Block> STRIPPED_GLOWING_LOG = REGISTER.register("stripped_glowing_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_GLOWING_WOOD = REGISTER.register("stripped_glowing_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_FROST_LOG = REGISTER.register("stripped_frost_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_FROST_WOOD = REGISTER.register("stripped_frost_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_RAINBOW_LOG = REGISTER.register("stripped_rainbow_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_RAINBOW_WOOD = REGISTER.register("stripped_rainbow_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_END_LOG = REGISTER.register("stripped_end_log", () -> new DoubleLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.COLOR_MAGENTA, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_END_WOOD = REGISTER.register("stripped_end_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.COLOR_MAGENTA, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_DEAD_LOG = REGISTER.register("stripped_dead_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_DEAD_WOOD = REGISTER.register("stripped_dead_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_CINDERED_LOG = REGISTER.register("stripped_cindered_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> STRIPPED_CINDERED_WOOD = REGISTER.register("stripped_cindered_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	
-	public static final RegistryObject<Block> FROST_SAPLING = REGISTER.register("frost_sapling", () -> new FrostSaplingBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
-	
 	//Cruxite ores
 	public static final RegistryObject<Block> STONE_CRUXITE_ORE = REGISTER.register("stone_cruxite_ore", () -> cruxiteOre(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F, 3.0F).requiresCorrectToolForDrops()));
 	public static final RegistryObject<Block> NETHERRACK_CRUXITE_ORE = REGISTER.register("netherrack_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
@@ -227,6 +156,11 @@ public final class MSBlocks
 	public static final RegistryObject<PressurePlateBlock> PERFECTLY_GENERIC_PRESSURE_PLATE = REGISTER.register("perfectly_generic_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, copy(GENERIC_OBJECT.get()), BlockSetType.OAK));
 	public static final RegistryObject<DoorBlock> PERFECTLY_GENERIC_DOOR = REGISTER.register("perfectly_generic_door", () -> new DoorBlock(copy(Blocks.OAK_DOOR), BlockSetType.OAK));
 	public static final RegistryObject<TrapDoorBlock> PERFECTLY_GENERIC_TRAPDOOR = REGISTER.register("perfectly_generic_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	
+	public static final RegistryObject<StandingSignBlock> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
+	public static final RegistryObject<WallSignBlock> PERFECTLY_GENERIC_WALL_SIGN = REGISTER.register("perfectly_generic_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
+	public static final RegistryObject<Block> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
+	public static final RegistryObject<Block> PERFECTLY_GENERIC_WALL_HANGING_SIGN = REGISTER.register("perfectly_generic_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.PERFECTLY_GENERIC));
 	
 	//Land Environment
 	//Aspect Terrain Dirt
@@ -648,6 +582,11 @@ public final class MSBlocks
 	public static final RegistryObject<DoorBlock> CARVED_DOOR = REGISTER.register("carved_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	public static final RegistryObject<TrapDoorBlock> CARVED_TRAPDOOR = REGISTER.register("carved_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
+	public static final RegistryObject<StandingSignBlock> CARVED_SIGN = REGISTER.register("carved_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.CARVED));
+	public static final RegistryObject<WallSignBlock> CARVED_WALL_SIGN = REGISTER.register("carved_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.CARVED));
+	public static final RegistryObject<Block> CARVED_HANGING_SIGN = REGISTER.register("carved_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.CARVED));
+	public static final RegistryObject<Block> CARVED_WALL_HANGING_SIGN = REGISTER.register("carved_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.CARVED));
+	
 	public static final RegistryObject<Block> POLISHED_UNCARVED_WOOD = REGISTER.register("polished_carved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> POLISHED_UNCARVED_STAIRS = REGISTER.register("polished_uncarved_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_UNCARVED_WOOD.get().defaultBlockState(), copy(POLISHED_UNCARVED_WOOD.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_UNCARVED_SLAB = REGISTER.register("polished_uncarved_slab", () -> new SlabBlock(copy(POLISHED_UNCARVED_WOOD.get())));
@@ -689,6 +628,12 @@ public final class MSBlocks
 	public static final RegistryObject<DoorBlock> TREATED_DOOR = REGISTER.register("treated_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	public static final RegistryObject<TrapDoorBlock> TREATED_TRAPDOOR = REGISTER.register("treated_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
+	public static final RegistryObject<StandingSignBlock> TREATED_SIGN = REGISTER.register("treated_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.TREATED));
+	public static final RegistryObject<WallSignBlock> TREATED_WALL_SIGN = REGISTER.register("treated_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.TREATED));
+	public static final RegistryObject<Block> TREATED_HANGING_SIGN = REGISTER.register("treated_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.TREATED));
+	public static final RegistryObject<Block> TREATED_WALL_HANGING_SIGN = REGISTER.register("treated_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.TREATED));
+	
+	
 	public static final RegistryObject<Block> POLISHED_TREATED_UNCARVED_WOOD = REGISTER.register("polished_treated_carved_wood", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> POLISHED_TREATED_UNCARVED_STAIRS = REGISTER.register("polished_treated_uncarved_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_TREATED_UNCARVED_WOOD.get().defaultBlockState(), copy(POLISHED_TREATED_UNCARVED_WOOD.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_TREATED_UNCARVED_SLAB = REGISTER.register("polished_treated_uncarved_slab", () -> new SlabBlock(copy(POLISHED_TREATED_UNCARVED_WOOD.get())));
@@ -727,6 +672,11 @@ public final class MSBlocks
 	public static final RegistryObject<DoorBlock> LACQUERED_DOOR = REGISTER.register("lacquered_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	public static final RegistryObject<TrapDoorBlock> LACQUERED_TRAPDOOR = REGISTER.register("lacquered_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	
+	public static final RegistryObject<StandingSignBlock> LACQUERED_SIGN = REGISTER.register("lacquered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.LACQUERED));
+	public static final RegistryObject<WallSignBlock> LACQUERED_WALL_SIGN = REGISTER.register("lacquered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.LACQUERED));
+	public static final RegistryObject<Block> LACQUERED_HANGING_SIGN = REGISTER.register("lacquered_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.LACQUERED));
+	public static final RegistryObject<Block> LACQUERED_WALL_HANGING_SIGN = REGISTER.register("lacquered_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.LACQUERED));
+	
 	public static final RegistryObject<Block> POLISHED_LACQUERED_UNCARVED_WOOD = REGISTER.register("polished_lacquered_carved_wood", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> POLISHED_LACQUERED_UNCARVED_STAIRS = REGISTER.register("polished_lacquered_uncarved_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD.get().defaultBlockState(), copy(POLISHED_LACQUERED_UNCARVED_WOOD.get())));
 	public static final RegistryObject<SlabBlock> POLISHED_LACQUERED_UNCARVED_SLAB = REGISTER.register("polished_lacquered_uncarved_slab", () -> new SlabBlock(copy(POLISHED_LACQUERED_UNCARVED_WOOD.get())));
@@ -745,6 +695,8 @@ public final class MSBlocks
 	//Glowing
 	public static final RegistryObject<Block> GLOWING_LOG = REGISTER.register("glowing_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> GLOWING_WOOD = REGISTER.register("glowing_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_GLOWING_LOG = REGISTER.register("stripped_glowing_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_GLOWING_WOOD = REGISTER.register("stripped_glowing_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> GLOWING_PLANKS = REGISTER.register("glowing_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> GLOWING_BOOKSHELF = REGISTER.register("glowing_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> GLOWING_LADDER = REGISTER.register("glowing_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -757,9 +709,16 @@ public final class MSBlocks
 	public static final RegistryObject<DoorBlock> GLOWING_DOOR = REGISTER.register("glowing_door", () -> new DoorBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD), BlockSetType.OAK));
 	public static final RegistryObject<TrapDoorBlock> GLOWING_TRAPDOOR = REGISTER.register("glowing_trapdoor", () -> new TrapDoorBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD), BlockSetType.OAK));
 	
+	public static final RegistryObject<StandingSignBlock> GLOWING_SIGN = REGISTER.register("glowing_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN).lightLevel(state -> 11), MSWoodTypes.GLOWING));
+	public static final RegistryObject<WallSignBlock> GLOWING_WALL_SIGN = REGISTER.register("glowing_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN).lightLevel(state -> 11), MSWoodTypes.GLOWING));
+	public static final RegistryObject<Block> GLOWING_HANGING_SIGN = REGISTER.register("glowing_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN).lightLevel(state -> 11), MSWoodTypes.GLOWING));
+	public static final RegistryObject<Block> GLOWING_WALL_HANGING_SIGN = REGISTER.register("glowing_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN).lightLevel(state -> 11), MSWoodTypes.GLOWING));
+	
 	//Frost
 	public static final RegistryObject<Block> FROST_LOG = REGISTER.register("frost_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.ICE).strength(2.0F).ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FROST_WOOD = REGISTER.register("frost_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.ICE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_FROST_LOG = REGISTER.register("stripped_frost_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_FROST_WOOD = REGISTER.register("stripped_frost_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FROST_PLANKS = REGISTER.register("frost_planks", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.ICE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FROST_LEAVES = REGISTER.register("frost_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> FROST_LEAVES_FLOWERING = REGISTER.register("frost_leaves_flowering", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
@@ -773,10 +732,18 @@ public final class MSBlocks
 	public static final RegistryObject<FenceGateBlock> FROST_FENCE_GATE = REGISTER.register("frost_fence_gate", () -> new FenceGateBlock(copy(FROST_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	public static final RegistryObject<DoorBlock> FROST_DOOR = REGISTER.register("frost_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
 	public static final RegistryObject<TrapDoorBlock> FROST_TRAPDOOR = REGISTER.register("frost_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), BlockSetType.OAK));
+	public static final RegistryObject<Block> FROST_SAPLING = REGISTER.register("frost_sapling", () -> new FrostSaplingBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
+	
+	public static final RegistryObject<StandingSignBlock> FROST_SIGN = REGISTER.register("frost_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.FROST));
+	public static final RegistryObject<WallSignBlock> FROST_WALL_SIGN = REGISTER.register("frost_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.FROST));
+	public static final RegistryObject<Block> FROST_HANGING_SIGN = REGISTER.register("frost_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.FROST));
+	public static final RegistryObject<Block> FROST_WALL_HANGING_SIGN = REGISTER.register("frost_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.FROST));
 	
 	//Rainbow
 	public static final RegistryObject<Block> RAINBOW_LOG = REGISTER.register("rainbow_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> RAINBOW_WOOD = REGISTER.register("rainbow_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_RAINBOW_LOG = REGISTER.register("stripped_rainbow_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_RAINBOW_WOOD = REGISTER.register("stripped_rainbow_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> RAINBOW_PLANKS = REGISTER.register("rainbow_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> RAINBOW_STAIRS = REGISTER.register("rainbow_planks_stairs", () -> new StairBlock(() -> MSBlocks.RAINBOW_PLANKS.get().defaultBlockState(), copy(RAINBOW_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> RAINBOW_SLAB = REGISTER.register("rainbow_planks_slab", () -> new SlabBlock(copy(RAINBOW_PLANKS.get())));
@@ -791,9 +758,17 @@ public final class MSBlocks
 	public static final RegistryObject<DoorBlock> RAINBOW_DOOR = REGISTER.register("rainbow_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.RAINBOW));
 	public static final RegistryObject<TrapDoorBlock> RAINBOW_TRAPDOOR = REGISTER.register("rainbow_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.RAINBOW));
 	
+	public static final RegistryObject<StandingSignBlock> RAINBOW_SIGN = REGISTER.register("rainbow_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.RAINBOW));
+	public static final RegistryObject<WallSignBlock> RAINBOW_WALL_SIGN = REGISTER.register("rainbow_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.RAINBOW));
+	public static final RegistryObject<Block> RAINBOW_HANGING_SIGN = REGISTER.register("rainbow_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.RAINBOW));
+	public static final RegistryObject<Block> RAINBOW_WALL_HANGING_SIGN = REGISTER.register("rainbow_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.RAINBOW));
+	
+	
 	//End
 	public static final RegistryObject<Block> END_LOG = REGISTER.register("end_log", () -> new DoubleLogBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> END_WOOD = REGISTER.register("end_wood", () -> new FlammableLogBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_END_LOG = REGISTER.register("stripped_end_log", () -> new DoubleLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.COLOR_MAGENTA, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_END_WOOD = REGISTER.register("stripped_end_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.COLOR_MAGENTA, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> END_PLANKS = REGISTER.register("end_planks", () -> new FlammableBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> END_STAIRS = REGISTER.register("end_planks_stairs", () -> new StairBlock(() -> MSBlocks.END_PLANKS.get().defaultBlockState(), copy(END_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> END_SLAB = REGISTER.register("end_planks_slab", () -> new SlabBlock(copy(END_PLANKS.get())));
@@ -808,6 +783,11 @@ public final class MSBlocks
 	public static final RegistryObject<DoorBlock> END_DOOR = REGISTER.register("end_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.END));
 	public static final RegistryObject<TrapDoorBlock> END_TRAPDOOR = REGISTER.register("end_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.END));
 	
+	public static final RegistryObject<StandingSignBlock> END_SIGN = REGISTER.register("end_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.END));
+	public static final RegistryObject<WallSignBlock> END_WALL_SIGN = REGISTER.register("end_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.END));
+	public static final RegistryObject<Block> END_HANGING_SIGN = REGISTER.register("end_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.END));
+	public static final RegistryObject<Block> END_WALL_HANGING_SIGN = REGISTER.register("end_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.END));
+	
 	//Vine
 	public static final RegistryObject<Block> VINE_LOG = REGISTER.register("vine_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> VINE_WOOD = REGISTER.register("vine_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.PODZOL).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
@@ -818,6 +798,8 @@ public final class MSBlocks
 	//Dead
 	public static final RegistryObject<Block> DEAD_LOG = REGISTER.register("dead_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> DEAD_WOOD = REGISTER.register("dead_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.PODZOL).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_DEAD_LOG = REGISTER.register("stripped_dead_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_DEAD_WOOD = REGISTER.register("stripped_dead_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> DEAD_PLANKS = REGISTER.register("dead_planks", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> DEAD_STAIRS = REGISTER.register("dead_planks_stairs", () -> new StairBlock(() -> MSBlocks.DEAD_PLANKS.get().defaultBlockState(), copy(DEAD_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> DEAD_SLAB = REGISTER.register("dead_planks_slab", () -> new SlabBlock(copy(DEAD_PLANKS.get())));
@@ -830,6 +812,11 @@ public final class MSBlocks
 	public static final RegistryObject<DoorBlock> DEAD_DOOR = REGISTER.register("dead_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.DEAD));
 	public static final RegistryObject<TrapDoorBlock> DEAD_TRAPDOOR = REGISTER.register("dead_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.DEAD));
 	
+	public static final RegistryObject<StandingSignBlock> DEAD_SIGN = REGISTER.register("dead_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.DEAD));
+	public static final RegistryObject<WallSignBlock> DEAD_WALL_SIGN = REGISTER.register("dead_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.DEAD));
+	public static final RegistryObject<Block> DEAD_HANGING_SIGN = REGISTER.register("dead_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.DEAD));
+	public static final RegistryObject<Block> DEAD_WALL_HANGING_SIGN = REGISTER.register("dead_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.DEAD));
+	
 	//Petrified
 	public static final RegistryObject<Block> PETRIFIED_LOG = REGISTER.register("petrified_log", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> PETRIFIED_WOOD = REGISTER.register("petrified_wood", () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STONE)));
@@ -837,6 +824,8 @@ public final class MSBlocks
 	//Cindered
 	public static final RegistryObject<Block> CINDERED_LOG = REGISTER.register("cindered_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.GUITAR).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CINDERED_WOOD = REGISTER.register("cindered_wood", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.GUITAR).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_CINDERED_LOG = REGISTER.register("stripped_cindered_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> STRIPPED_CINDERED_WOOD = REGISTER.register("stripped_cindered_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CINDERED_PLANKS = REGISTER.register("cindered_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.GUITAR).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<StairBlock> CINDERED_STAIRS = REGISTER.register("cindered_stairs", () -> new StairBlock(() -> MSBlocks.CINDERED_PLANKS.get().defaultBlockState(), copy(CINDERED_PLANKS.get())));
 	public static final RegistryObject<SlabBlock> CINDERED_SLAB = REGISTER.register("cindered_slab", () -> new SlabBlock(copy(CINDERED_PLANKS.get())));
@@ -847,6 +836,10 @@ public final class MSBlocks
 	public static final RegistryObject<DoorBlock> CINDERED_DOOR = REGISTER.register("cindered_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.CINDERED));
 	public static final RegistryObject<TrapDoorBlock> CINDERED_TRAPDOOR = REGISTER.register("cindered_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.CINDERED));
 	
+	public static final RegistryObject<StandingSignBlock> CINDERED_SIGN = REGISTER.register("cindered_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.CINDERED));
+	public static final RegistryObject<WallSignBlock> CINDERED_WALL_SIGN = REGISTER.register("cindered_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.CINDERED));
+	public static final RegistryObject<Block> CINDERED_HANGING_SIGN = REGISTER.register("cindered_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.CINDERED));
+	public static final RegistryObject<Block> CINDERED_WALL_HANGING_SIGN = REGISTER.register("cindered_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.CINDERED));
 	
 	//Shadewood
 	public static final RegistryObject<Block> SHADEWOOD_LOG = REGISTER.register("shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_SHADEWOOD_LOG.get().defaultBlockState()));
@@ -860,6 +853,12 @@ public final class MSBlocks
 	public static final RegistryObject<FenceGateBlock> SHADEWOOD_FENCE_GATE = REGISTER.register("shadewood_fence_gate", () -> new FenceGateBlock(copy(SHADEWOOD_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	public static final RegistryObject<DoorBlock> SHADEWOOD_DOOR = REGISTER.register("shadewood_door", () -> new DoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.SHADEWOOD));
 	public static final RegistryObject<TrapDoorBlock> SHADEWOOD_TRAPDOOR = REGISTER.register("shadewood_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR), MSBlockSetType.SHADEWOOD));
+	
+	public static final RegistryObject<StandingSignBlock> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign", () -> new MSStandingSignBlock(Block.Properties.copy(Blocks.OAK_SIGN), MSWoodTypes.SHADEWOOD));
+	public static final RegistryObject<WallSignBlock> SHADEWOOD_WALL_SIGN = REGISTER.register("shadewood_wall_sign", () -> new MSWallSignBlock(Block.Properties.copy(Blocks.OAK_WALL_SIGN), MSWoodTypes.SHADEWOOD));
+	public static final RegistryObject<Block> SHADEWOOD_HANGING_SIGN = REGISTER.register("shadewood_hanging_sign", () -> new MSHangingSignBlock(Block.Properties.copy(Blocks.OAK_HANGING_SIGN), MSWoodTypes.SHADEWOOD));
+	public static final RegistryObject<Block> SHADEWOOD_WALL_HANGING_SIGN = REGISTER.register("shadewood_wall_hanging_sign", () -> new MSWallHangingSignBlock(Block.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MSWoodTypes.SHADEWOOD));
+	
 	
 	public static final RegistryObject<Block> SHADEWOOD_LEAVES = REGISTER.register("shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> SHROOMY_SHADEWOOD_LEAVES = REGISTER.register("shroomy_shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().lightLevel(state -> 11).sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));

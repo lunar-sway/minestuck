@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "minestuck:block/pushable_block_bottom",
-    "side": "minestuck:block/pushable_block_side",
-    "top": "minestuck:block/pushable_block_top"
-  }
-}

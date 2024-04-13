@@ -348,7 +348,7 @@ public final class AspectTreeBlocksData
 		provider.slabWithItem(BREATH_ASPECT_SLAB, BREATH_ASPECT_PLANKS);
 		provider.fenceWithItem(BREATH_ASPECT_FENCE, BREATH_ASPECT_PLANKS);
 		provider.fenceGateWithItem(BREATH_ASPECT_FENCE_GATE, BREATH_ASPECT_PLANKS);
-		provider.simpleDoorBlock(BREATH_ASPECT_DOOR);
+		provider.simpleDoorBlock(BREATH_ASPECT_DOOR, "translucent");
 		provider.trapDoorWithItem(BREATH_ASPECT_TRAPDOOR);
 		provider.flatItem(BREATH_ASPECT_DOOR_ITEM, MSBlockStateProvider::itemTexture);
 		provider.pressurePlateWithItem(BREATH_ASPECT_PRESSURE_PLATE, BREATH_ASPECT_PLANKS);
@@ -606,7 +606,7 @@ public final class AspectTreeBlocksData
 		provider.slabWithItem(MIND_ASPECT_SLAB, MIND_ASPECT_PLANKS);
 		provider.fenceWithItem(MIND_ASPECT_FENCE, MIND_ASPECT_PLANKS);
 		provider.fenceGateWithItem(MIND_ASPECT_FENCE_GATE, MIND_ASPECT_PLANKS);
-		provider.simpleDoorBlock(MIND_ASPECT_DOOR);
+		provider.simpleDoorBlock(MIND_ASPECT_DOOR, "translucent");
 		provider.trapDoorWithItem(MIND_ASPECT_TRAPDOOR);
 		provider.flatItem(MIND_ASPECT_DOOR_ITEM, MSBlockStateProvider::itemTexture);
 		provider.pressurePlateWithItem(MIND_ASPECT_PRESSURE_PLATE, MIND_ASPECT_PLANKS);

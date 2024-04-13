@@ -35,6 +35,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cast Iron Frame, Sheet, and Tile
 - Sulfur Pools and Cast Iron features in Heat Lands
 - Wooden Lamp and Heat Lamp blocks, used in Wood and Heat lands respectively
+- Signs and hanging signs for all wood types
+- Shade and glowing block sets updated
+- Doors and trapdoors added
+- All aspect block sets updated
+- Minor Aspect trees added
 
 ### Changed
 

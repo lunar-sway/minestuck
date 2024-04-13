@@ -417,6 +417,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.BLOOD_ASPECT_LEAVES.get());
@@ -436,6 +438,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.BREATH_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.BREATH_ASPECT_LEAVES.get());
@@ -455,6 +459,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.DOOM_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.DOOM_ASPECT_LEAVES.get());
@@ -474,6 +480,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.HEART_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.HEART_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.HEART_ASPECT_LEAVES.get());
@@ -493,6 +501,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.HOPE_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.HOPE_ASPECT_LEAVES.get());
@@ -512,6 +522,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.LIFE_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.LIFE_ASPECT_LEAVES.get());
@@ -531,6 +543,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.LIGHT_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.LIGHT_ASPECT_LEAVES.get());
@@ -550,6 +564,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.MIND_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.MIND_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.MIND_ASPECT_LEAVES.get());
@@ -569,6 +585,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.RAGE_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.RAGE_ASPECT_LEAVES.get());
@@ -588,6 +606,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.SPACE_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.SPACE_ASPECT_LEAVES.get());
@@ -607,6 +627,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.TIME_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.TIME_ASPECT_LEAVES.get());
@@ -626,6 +648,8 @@ public final class MSCreativeTabs
 		output.accept(AspectTreeBlocks.VOID_ASPECT_TRAPDOOR.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_PRESSURE_PLATE.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_BUTTON.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_SIGN.get());
+		output.accept(AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_BOOKSHELF.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_LADDER.get());
 		output.accept(AspectTreeBlocks.VOID_ASPECT_LEAVES.get());
@@ -1288,12 +1312,12 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SHADEWOOD_PLANKS.get());
 		output.accept(MSItems.SHADEWOOD_STAIRS.get());
 		output.accept(MSItems.SHADEWOOD_SLAB.get());
-		output.accept(MSItems.SHADEWOOD_BUTTON.get());
-		output.accept(MSItems.SHADEWOOD_PRESSURE_PLATE.get());
 		output.accept(MSItems.SHADEWOOD_FENCE.get());
 		output.accept(MSItems.SHADEWOOD_FENCE_GATE.get());
 		output.accept(MSItems.SHADEWOOD_DOOR.get());
 		output.accept(MSItems.SHADEWOOD_TRAPDOOR.get());
+		output.accept(MSItems.SHADEWOOD_PRESSURE_PLATE.get());
+		output.accept(MSItems.SHADEWOOD_BUTTON.get());
 		output.accept(MSItems.SHADEWOOD_SIGN.get());
 		output.accept(MSItems.SHADEWOOD_HANGING_SIGN.get());
 		output.accept(MSItems.SHADEWOOD_LEAVES.get());

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "minestuck:block/generic_object",
-    "side": "minestuck:block/generic_object",
-    "top": "minestuck:block/generic_object"
-  }
-}

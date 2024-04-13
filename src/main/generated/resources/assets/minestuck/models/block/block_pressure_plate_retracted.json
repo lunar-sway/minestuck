@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "minestuck:block/block_pressure_plate/bottom",
-    "side": "minestuck:block/block_pressure_plate/side",
-    "top": "minestuck:block/block_pressure_plate/top"
-  }
-}

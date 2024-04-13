@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/button_pressed",
-  "textures": {
-    "texture": "minestuck:block/heart_aspect_planks"
-  }
-}

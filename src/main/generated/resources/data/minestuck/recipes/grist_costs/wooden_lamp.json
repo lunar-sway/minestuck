@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:grist_cost",
-  "grist_cost": {
-    "minestuck:amber": 4
-  },
-  "ingredient": {
-    "item": "minestuck:wooden_lamp"
-  }
-}

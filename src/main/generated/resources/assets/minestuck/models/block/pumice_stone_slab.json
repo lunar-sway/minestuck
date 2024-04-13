@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "minestuck:block/pumice_stone",
-    "side": "minestuck:block/pumice_stone",
-    "top": "minestuck:block/pumice_stone"
-  }
-}
