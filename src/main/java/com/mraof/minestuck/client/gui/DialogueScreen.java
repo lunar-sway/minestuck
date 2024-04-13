@@ -209,6 +209,7 @@ public class DialogueScreen extends Screen
 		int moddedWidth = (int) (animationData.spriteWidth() * scale);
 		int moddedHeight = (int) (animationData.spriteHeight() * scale);
 		
+		//TODO single frame sprites with mcmeta files will cause a crash with setAndUpdate
 		//if there is a .png.mcmeta file associated with the sprite, the animation for it is updated here
 		AnimatableTexture.setAndUpdate(sprite, animationTick++);
 		guiGraphics.blit(sprite, xOffset + GUI_WIDTH + animationData.xOffset(), (this.height / 2) - (animationData.spriteHeight() / 2), 0, 0, moddedWidth, moddedHeight, moddedWidth, moddedHeight);

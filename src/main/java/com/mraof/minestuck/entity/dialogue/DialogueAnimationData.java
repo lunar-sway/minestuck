@@ -17,8 +17,8 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 	public static final String UPSET_EMOTION = "upset";
 	public static final String SCARED_EMOTION = "scared";
 	
-	public static final int DEFAULT_SPRITE_WIDTH = 128;
-	public static final int DEFAULT_SPRITE_HEIGHT = 128;
+	public static final int DEFAULT_SPRITE_WIDTH = 224;
+	public static final int DEFAULT_SPRITE_HEIGHT = 224;
 	
 	public static final DialogueAnimationData DEFAULT_ANIMATION = new DialogueAnimationData(GENERIC_EMOTION, DEFAULT_SPRITE_HEIGHT, DEFAULT_SPRITE_WIDTH, 0, 0, 1.0F);
 	
