@@ -1,0 +1,39 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.delicious_hair.start",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.delicious_hair.start.no",
+        "next_dialogue": "minestuck:consort/delicious_hair/disappointed"
+      },
+      {
+        "condition": {
+          "type": "minestuck:player_item",
+          "item": "minestuck:ponytail"
+        },
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.delicious_hair.start.yes",
+        "next_dialogue": {
+          "id": "minestuck:consort/delicious_hair/happy",
+          "player_message": "minestuck.dialogue.consort.delicious_hair.start.yes.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": [
+          {
+            "type": "minestuck:take_item",
+            "item": "minestuck:ponytail"
+          },
+          {
+            "type": "minestuck:set_dialogue",
+            "new_path": "minestuck:consort/generic_thanks"
+          },
+          {
+            "type": "minestuck:set_flag",
+            "flag": "helpingPlayer",
+            "player_specific": true
+          }
+        ]
+      }
+    ]
+  }
+}

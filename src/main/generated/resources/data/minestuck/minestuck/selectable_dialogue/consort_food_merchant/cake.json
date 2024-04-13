@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:cake"
+  },
+  "dialogue": "minestuck:consort_food_merchant/cake",
+  "keep_on_reset": true
+}

@@ -1,0 +1,18 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "message": "minestuck.dialogue.consort.underling_commission.start.start",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.underling_commission.start.ask",
+        "next_dialogue": "minestuck:consort/underling_commission/answer.1"
+      },
+      {
+        "message": "minestuck.dialogue.consort.underling_commission.start.agree",
+        "next_dialogue": "minestuck:consort/underling_commission/confront"
+      }
+    ]
+  }
+}

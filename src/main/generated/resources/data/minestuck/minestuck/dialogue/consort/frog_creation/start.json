@@ -1,0 +1,18 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.frog_creation.start",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.frog_creation.start.who",
+        "next_dialogue": {
+          "id": "minestuck:consort/frog_creation/explain",
+          "reply_messages": [],
+          "set_as_entrypoint": true
+        }
+      },
+      {
+        "message": "minestuck.dots"
+      }
+    ]
+  }
+}

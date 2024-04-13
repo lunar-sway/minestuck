@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_title",
+        "land_player_name"
+      ],
+      "key": "minestuck.dialogue.consort.identity"
+    }
+  }
+}

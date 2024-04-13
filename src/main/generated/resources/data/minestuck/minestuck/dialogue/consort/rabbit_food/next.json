@@ -1,0 +1,36 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:terrain_land_type",
+            "land_type": "minestuck:fungi"
+          },
+          {
+            "type": "minestuck:terrain_land_type",
+            "land_type": "minestuck:shade"
+          }
+        ],
+        "list_type": "any"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.rabbit_food.next.mushrooms"
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.rabbit_food.next.desolate",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:terrain_land_type_tag",
+          "land_type_tag": "minestuck:sand"
+        },
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/rabbit_food/cacti"
+      }
+    ]
+  }
+}

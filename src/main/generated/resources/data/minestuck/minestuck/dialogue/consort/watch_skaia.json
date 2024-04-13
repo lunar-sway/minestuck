@@ -1,0 +1,49 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:is_in_skaia"
+          },
+          {
+            "type": "minestuck:entity_type",
+            "entity_type": "minestuck:turtle"
+          }
+        ],
+        "list_type": "all"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.watch_skaia.at_skaia.turtle"
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:is_in_skaia"
+      },
+      "node": {
+        "animation": {
+          "emotion": "happy"
+        },
+        "message": {
+          "arguments": [
+            "entity_sound_2"
+          ],
+          "key": "minestuck.dialogue.consort.watch_skaia.at_skaia"
+        }
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:consort_visited_skaia"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.watch_skaia.has_visited"
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.watch_skaia"
+  }
+}

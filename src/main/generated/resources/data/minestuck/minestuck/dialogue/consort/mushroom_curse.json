@@ -1,0 +1,13 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.mushroom_curse"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_class"
+      ],
+      "key": "minestuck.dialogue.consort.denizen.explain"
+    },
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.denizen.explain.where",
+        "next_dialogue": "minestuck:consort/denizen/location"
+      }
+    ]
+  }
+}

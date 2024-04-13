@@ -1,0 +1,27 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:title_land_type",
+            "land_type": "minestuck:towers"
+          },
+          {
+            "type": "minestuck:title_land_type",
+            "land_type": "minestuck:wind"
+          }
+        ],
+        "list_type": "any"
+      },
+      {
+        "type": "minestuck:entity_type",
+        "entity_type": "minestuck:iguana"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/climb_high"
+}

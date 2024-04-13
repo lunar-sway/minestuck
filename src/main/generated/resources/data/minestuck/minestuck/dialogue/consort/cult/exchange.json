@@ -1,0 +1,57 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "has_sulfur"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.cult.exchange.exchange.proceed",
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:list",
+              "conditions": [
+                {
+                  "type": "minestuck:player_item",
+                  "amount": 10,
+                  "item": "minestuck:native_sulfur"
+                },
+                {
+                  "type": "minestuck:player_item",
+                  "item": "minecraft:goat_horn"
+                }
+              ],
+              "list_type": "all"
+            },
+            "hide_if_failed": false,
+            "message": "minestuck.dialogue.consort.cult.exchange.give_items",
+            "next_dialogue": "minestuck:consort/cult/pleased",
+            "triggers": [
+              {
+                "type": "minestuck:take_item",
+                "amount": 10,
+                "item": "minestuck:native_sulfur"
+              },
+              {
+                "type": "minestuck:take_item",
+                "item": "minecraft:goat_horn"
+              },
+              {
+                "type": "minestuck:give_item",
+                "item": "minestuck:long_forgotten_warhorn"
+              },
+              {
+                "type": "minestuck:set_dialogue",
+                "new_path": "minestuck:consort/cult/later"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.cult.exchange.exchange.decline"
+  }
+}

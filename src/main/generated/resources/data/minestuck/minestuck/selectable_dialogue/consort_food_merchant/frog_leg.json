@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:frogs"
+  },
+  "dialogue": "minestuck:consort_food_merchant/frog_leg",
+  "keep_on_reset": true
+}

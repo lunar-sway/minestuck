@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:terrain_land_type_tag",
+    "land_type_tag": "minestuck:forest"
+  },
+  "dialogue": "minestuck:consort/really_likes_trees"
+}

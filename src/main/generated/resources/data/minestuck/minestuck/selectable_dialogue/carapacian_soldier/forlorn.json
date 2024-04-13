@@ -1,0 +1,6 @@
+{
+  "condition": {
+    "type": "minestuck:is_in_skaia"
+  },
+  "dialogue": "minestuck:carapacian_soldier/forlorn"
+}
