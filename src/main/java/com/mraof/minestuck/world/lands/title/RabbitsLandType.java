@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
@@ -10,7 +11,6 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.material.Fluids;
 
 public class RabbitsLandType extends TitleLandType
 {
@@ -44,9 +44,7 @@ public class RabbitsLandType extends TitleLandType
 	@Override
 	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
-		StructureBlockRegistry registry = new StructureBlockRegistry();
-		otherType.registerBlocks(registry);
-		return !registry.getBlockState("ocean").getFluidState().is(Fluids.LAVA);
+		return !otherType.is(MSTags.TerrainLandTypes.IS_DANGEROUS);
 	}
 	
 	@Override
