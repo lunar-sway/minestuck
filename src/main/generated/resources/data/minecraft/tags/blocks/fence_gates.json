@@ -17,11 +17,17 @@
     "minestuck:uncarved_wood_fence_gate",
     "minestuck:chipboard_fence_gate",
     "minestuck:carved_fence_gate",
+    "minestuck:treated_uncarved_wood_fence_gate",
+    "minestuck:treated_chipboard_fence_gate",
+    "minestuck:treated_fence_gate",
+    "minestuck:lacquered_uncarved_wood_fence_gate",
+    "minestuck:lacquered_chipboard_fence_gate",
+    "minestuck:lacquered_fence_gate",
     "minestuck:frost_fence_gate",
     "minestuck:rainbow_fence_gate",
     "minestuck:end_fence_gate",
     "minestuck:dead_fence_gate",
     "minestuck:shadewood_fence_gate",
-    "minestuck:treated_fence_gate"
+    "minestuck:cindered_fence_gate"
   ]
 }

@@ -24,6 +24,9 @@ public final class MSStructureTypes
 	public static final RegistryObject<StructureType<ImpDungeonStructure>> IMP_DUNGEON = REGISTER.register("imp_dungeon", () -> asType(ImpDungeonStructure.CODEC));
 	public static final RegistryObject<StructureType<ConsortVillageStructure>> CONSORT_VILLAGE = REGISTER.register("consort_village", () -> asType(ConsortVillageStructure.CODEC));
 	
+	public static final RegistryObject<StructureType<LargeWoodObjectStructure>> LARGE_WOOD_OBJECT = REGISTER.register("large_wood_object", () -> asType(LargeWoodObjectStructure.CODEC));
+	public static final RegistryObject<StructureType<PinkTowerStructure>> PINK_TOWER = REGISTER.register("pink_tower", () -> asType(PinkTowerStructure.CODEC));
+	
 	// Skaia
 	public static final RegistryObject<StructureType<CastleStructure>> SKAIA_CASTLE = REGISTER.register("skaia_castle", () -> asType(CastleStructure.CODEC));
 	

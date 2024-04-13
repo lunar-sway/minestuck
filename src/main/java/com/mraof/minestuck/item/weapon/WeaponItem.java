@@ -223,6 +223,11 @@ public class WeaponItem extends TieredItem
 		return efficiency;
 	}
 	
+	public ItemRightClickEffect getItemRightClickEffect()
+	{
+		return itemRightClickEffect;
+	}
+	
 	public static class Builder
 	{
 		private final Tier tier;

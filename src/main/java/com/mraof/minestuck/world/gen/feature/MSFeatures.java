@@ -20,18 +20,39 @@ public final class MSFeatures
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> RETURN_NODE = REGISTER.register("return_node", () -> new ReturnNodeFeature(NoneFeatureConfiguration.CODEC));
 	
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SMALL_COG = REGISTER.register("small_cog", () -> new SmallCogFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_COG = REGISTER.register("large_cog", () -> new LargeCogFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<SimpleTemplateFeature.Config>> SIMPLE_TEMPLATE = REGISTER.register("simple_template", () -> new SimpleTemplateFeature(SimpleTemplateFeature.Config.CODEC));
+	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> FLOOR_COG = REGISTER.register("floor_cog", () -> new FloorCogFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SURFACE_FOSSIL = REGISTER.register("surface_fossil", () -> new SurfaceFossilsFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> BROKEN_SWORD = REGISTER.register("broken_sword", () -> new BrokenSwordFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> BUCKET = REGISTER.register("bucket", () -> new BucketFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CAKE_PEDESTAL = REGISTER.register("cake_pedestal", () -> new CakePedestalFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SMALL_LIBRARY = REGISTER.register("small_library", () -> new SmallLibraryFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TOWER = REGISTER.register("tower", () -> new TowerFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> new ParcelPyxisFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> FROG_RUINS = REGISTER.register("frog_ruins", () -> new FrogRuinFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CARVED_CHERRY_TREE = REGISTER.register("carved_cherry_tree", () -> new CarvedCherryTreeFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CARVED_HOUSE = REGISTER.register("carved_house", () -> new CarvedHouseFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CARVED_LOG = REGISTER.register("carved_log", () -> new CarvedLogFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_CARVED_LOG = REGISTER.register("large_carved_log", () -> new LargeCarvedLogFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TREATED_CHAIR = REGISTER.register("treated_chair", () -> new TreatedChairFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> TREATED_TABLE = REGISTER.register("treated_table", () -> new TreatedTableFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_BOOKSHELF = REGISTER.register("unfinished_carved_bookshelf", () -> new UnfinishedCarvedBookshelfFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_CHAIR = REGISTER.register("unfinished_carved_chair", () -> new UnfinishedCarvedChairFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_CREEPER = REGISTER.register("unfinished_carved_creeper", () -> new UnfinishedCarvedCreeperFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_DRAWER = REGISTER.register("unfinished_carved_drawer", () -> new UnfinishedCarvedDrawerFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_SALAMANDER = REGISTER.register("unfinished_carved_salamander", () -> new UnfinishedCarvedSalamanderFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_TABLE = REGISTER.register("unfinished_carved_table", () -> new UnfinishedCarvedTableFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_TREE = REGISTER.register("unfinished_carved_tree", () -> new UnfinishedCarvedTreeFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> UNFINISHED_CARVED_TUNNEL = REGISTER.register("unfinished_carved_tunnel", () -> new UnfinishedCarvedTunnelFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> WOOD_SHAVINGS_PILE = REGISTER.register("wood_shavings_pile", () -> new WoodShavingsPileFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> WOODEN_CACTUS_PAIR = REGISTER.register("wooden_cactus_pair", () -> new WoodenCactusPairFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MASSIVE_CHAIR = REGISTER.register("massive_chair", () -> new MassiveChairFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MASSIVE_STOOL = REGISTER.register("massive_stool", () -> new MassiveStoolFeature(NoneFeatureConfiguration.CODEC));
+	
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SULFUR_POOL = REGISTER.register("sulfur_pool", () -> new SulfurPoolFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CAST_IRON_BUILDING = REGISTER.register("cast_iron_building", () -> new CastIronBuildingFeature(NoneFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> CAST_IRON_PLATFORM = REGISTER.register("cast_iron_platform", () -> new CastIronPlatformFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OASIS = REGISTER.register("oasis", () -> new OasisFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> new OceanRundownFeature(NoneFeatureConfiguration.CODEC));

@@ -33,6 +33,34 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> PARCEL_PYXIS = key("parcel_pyxis");
 	public static final ResourceKey<PlacedFeature> FROG_RUINS = key("frog_ruins");
 	
+	public static final ResourceKey<PlacedFeature> CARVED_CHERRY_TREE = key("carved_cherry_tree");
+	public static final ResourceKey<PlacedFeature> CARVED_LOG = key("carved_log");
+	public static final ResourceKey<PlacedFeature> CARVED_HOUSE = key("carved_house");
+	public static final ResourceKey<PlacedFeature> LARGE_CARVED_LOG = key("large_carved_log");
+	public static final ResourceKey<PlacedFeature> SPARSE_TREATED_CHAIR = key("sparse_treated_chair");
+	public static final ResourceKey<PlacedFeature> TREATED_CHAIR = key("treated_chair");
+	public static final ResourceKey<PlacedFeature> SPARSE_TREATED_TABLE = key("sparse_treated_table");
+	public static final ResourceKey<PlacedFeature> TREATED_TABLE = key("treated_table");
+	public static final ResourceKey<PlacedFeature> UNFINISHED_CARVED_BOOKSHELF = key("unfinished_carved_bookshelf");
+	public static final ResourceKey<PlacedFeature> SPARSE_UNFINISHED_CARVED_CHAIR = key("sparse_unfinished_carved_chair");
+	public static final ResourceKey<PlacedFeature> UNFINISHED_CARVED_CHAIR = key("unfinished_carved_chair");
+	public static final ResourceKey<PlacedFeature> UNFINISHED_CARVED_CREEPER = key("unfinished_carved_creeper");
+	public static final ResourceKey<PlacedFeature> SPARSE_UNFINISHED_CARVED_DRAWER = key("sparse_unfinished_carved_drawer");
+	public static final ResourceKey<PlacedFeature> UNFINISHED_CARVED_DRAWER = key("unfinished_carved_drawer");
+	public static final ResourceKey<PlacedFeature> UNFINISHED_CARVED_SALAMANDER = key("unfinished_carved_salamander");
+	public static final ResourceKey<PlacedFeature> SPARSE_UNFINISHED_CARVED_TABLE = key("sparse_unfinished_carved_table");
+	public static final ResourceKey<PlacedFeature> UNFINISHED_CARVED_TABLE = key("unfinished_carved_table");
+	public static final ResourceKey<PlacedFeature> UNFINISHED_CARVED_TREE = key("unfinished_carved_tree");
+	public static final ResourceKey<PlacedFeature> UNFINISHED_CARVED_TUNNEL = key("unfinished_carved_tunnel");
+	public static final ResourceKey<PlacedFeature> WOOD_SHAVINGS_PILE = key("wood_shavings_pile");
+	public static final ResourceKey<PlacedFeature> WOODEN_CACTUS_PAIR = key("wooden_cactus_pair");
+	public static final ResourceKey<PlacedFeature> MASSIVE_CHAIR = key("massive_chair");
+	public static final ResourceKey<PlacedFeature> MASSIVE_STOOL = key("massive_stool");
+	
+	public static final ResourceKey<PlacedFeature> SULFUR_POOL = key("sulfur_pool");
+	public static final ResourceKey<PlacedFeature> CAST_IRON_BUILDING = key("cast_iron_building");
+	public static final ResourceKey<PlacedFeature> CAST_IRON_PLATFORM = key("cast_iron_platform");
+	
 	public static final ResourceKey<PlacedFeature> LARGE_CAKE = key("large_cake");
 	
 	public static final ResourceKey<PlacedFeature> BLOOD_POOL = key("blood_pool");
@@ -51,6 +79,15 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SLIME_DISK = key("slime_disk");
 	public static final ResourceKey<PlacedFeature> EXTRA_SLIME_DISK = key("extra_slime_disk");
 	public static final ResourceKey<PlacedFeature> NETHERRACK_DISK = key("netherrack_disk");
+	public static final ResourceKey<PlacedFeature> MAGMATIC_IGNEOUS_DISK = key("magmatic_igneous_disk");
+	public static final ResourceKey<PlacedFeature> BLACK_SAND_DISK = key("black_sand_disk");
+	public static final ResourceKey<PlacedFeature> PUMICE_STONE_DISK = key("pumice_stone_disk");
+	public static final ResourceKey<PlacedFeature> TREATED_PLANKS_DISK = key("treated_planks_disk");
+	public static final ResourceKey<PlacedFeature> LACQUERED_PLANKS_DISK = key("lacquered_planks_disk");
+	public static final ResourceKey<PlacedFeature> TREATED_UNCARVED_WOOD_DISK = key("treated_uncarved_wood_disk");
+	public static final ResourceKey<PlacedFeature> TREATED_CHIPBOARD_DISK = key("treated_chipboard_disk");
+	public static final ResourceKey<PlacedFeature> CHIPBOARD_DISK = key("chipboard_disk");
+	public static final ResourceKey<PlacedFeature> CARVED_PLANKS_DISK = key("carved_planks_disk");
 	public static final ResourceKey<PlacedFeature> COAGULATED_BLOOD_DISK = key("coagulated_blood_disk");
 	public static final ResourceKey<PlacedFeature> COBBLESTONE_SURFACE_DISK = key("cobblestone_surface_disk");
 	public static final ResourceKey<PlacedFeature> STONE_SURFACE_DISK = key("stone_surface_disk");
@@ -98,6 +135,7 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_TREE = key("tree/petrified_sparse");
 	public static final ResourceKey<PlacedFeature> DEAD_TREE = key("tree/dead");
 	public static final ResourceKey<PlacedFeature> EXTRA_DEAD_TREE = key("tree/dead_extra");
+	public static final ResourceKey<PlacedFeature> CINDERED_TREE = key("tree/cindered");
 	
 	public static final ResourceKey<PlacedFeature> FOREST_LAND_TREES = key("tree/forest_land");
 	public static final ResourceKey<PlacedFeature> DENSE_FOREST_LAND_TREES = key("tree/forest_land_dense");
@@ -112,12 +150,23 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> SPARSE_GLOWING_MUSHROOM_PATCH = key("sparse_glowing_mushroom_patch");
 	public static final ResourceKey<PlacedFeature> BROWN_MUSHROOM_PATCH = key("brown_mushroom_patch");
 	public static final ResourceKey<PlacedFeature> RED_MUSHROOM_PATCH = key("red_mushroom_patch");
+	public static final ResourceKey<PlacedFeature> WOODEN_GRASS_PATCH = key("wooden_grass_patch");
+	public static final ResourceKey<PlacedFeature> TREATED_WOODEN_GRASS_PATCH = key("treated_wooden_grass_patch");
+	public static final ResourceKey<PlacedFeature> LACQUERED_WOODEN_MUSHROOM_PATCH = key("lacquered_wooden_mushroom");
+	public static final ResourceKey<PlacedFeature> CARVED_BUSH_PATCH = key("carved_bush_patch");
 	public static final ResourceKey<PlacedFeature> TALL_END_GRASS_PATCH = key("tall_end_grass_patch");
 	public static final ResourceKey<PlacedFeature> PETRIFIED_GRASS_PATCH = key("petrified_grass_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_GRASS_PATCH = key("sparse_petrified_grass_patch");
 	public static final ResourceKey<PlacedFeature> PETRIFIED_POPPY_PATCH = key("petrified_poppy_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_POPPY_PATCH = key("sparse_petrified_poppy_patch");
+	public static final ResourceKey<PlacedFeature> SINGED_GRASS_PATCH = key("singed_grass_patch");
+	public static final ResourceKey<PlacedFeature> SINGED_FOLIAGE_PATCH = key("singed_foliage_patch");
+	public static final ResourceKey<PlacedFeature> IGNEOUS_SPIKE_PATCH = key("igneous_spike_patch");
+	public static final ResourceKey<PlacedFeature> SULFUR_BUBBLE_PATCH = key("sulfur_bubble_patch");
 	public static final ResourceKey<PlacedFeature> DESERT_BUSH_PATCH = key("desert_bush_patch");
+	public static final ResourceKey<PlacedFeature> SANDY_GRASS_PATCH = key("sandy_grass_patch");
+	public static final ResourceKey<PlacedFeature> TALL_SANDY_GRASS_PATCH = key("tall_sandy_grass_patch");
+	public static final ResourceKey<PlacedFeature> TALL_DEAD_BUSH_PATCH = key("tall_dead_bush_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_DESERT_BUSH_PATCH = key("sparse_desert_bush_patch");
 	public static final ResourceKey<PlacedFeature> MOSS_CARPET_PATCH = key("moss_carpet_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_MOSS_CARPET_PATCH = key("sparse_moss_carpet_patch");

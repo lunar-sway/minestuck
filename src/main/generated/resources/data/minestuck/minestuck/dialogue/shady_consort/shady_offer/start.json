@@ -1,0 +1,60 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.shady_consort.shady_offer.start"
+      },
+      {
+        "type": "description",
+        "message": {
+          "arguments": [
+            "entity_type"
+          ],
+          "key": "minestuck.dialogue.shady_consort.shady_offer.start.desc"
+        }
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:player_boondollars",
+          "amount": 1000
+        },
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.shady_consort.shady_offer.start.buy",
+        "next_dialogue": {
+          "id": "minestuck:shady_consort/shady_offer/item",
+          "player_message": "minestuck.dialogue.shady_consort.shady_offer.start.buy.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": [
+          {
+            "type": "minestuck:add_boondollars",
+            "boondollars": -1000
+          },
+          {
+            "type": "minestuck:add_consort_reputation",
+            "reputation": -15
+          },
+          {
+            "type": "minestuck:give_from_loot_table",
+            "loot_table": "minestuck:gameplay/consort_junk"
+          },
+          {
+            "type": "minestuck:set_player_dialogue",
+            "dialogue": "minestuck:shady_consort/shady_offer/purchase"
+          }
+        ]
+      },
+      {
+        "message": "minestuck.dialogue.shady_consort.shady_offer.start.deny",
+        "next_dialogue": {
+          "id": "minestuck:shady_consort/shady_offer/next",
+          "player_message": "minestuck.dialogue.shady_consort.shady_offer.start.deny.reply",
+          "set_as_entrypoint": false
+        }
+      }
+    ]
+  }
+}

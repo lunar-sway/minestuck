@@ -1,0 +1,30 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.cult.after_invitation",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.cult.after_invitation.no",
+        "next_dialogue": "minestuck:consort/cult/later"
+      },
+      {
+        "condition": {
+          "type": "minestuck:player_item",
+          "item": "minestuck:native_sulfur"
+        },
+        "message": "minestuck.dialogue.consort.cult.after_invitation.start",
+        "next_dialogue": "minestuck:consort/cult/disappointment",
+        "triggers": [
+          {
+            "type": "minestuck:set_flag",
+            "flag": "has_sulfur",
+            "player_specific": true
+          }
+        ]
+      },
+      {
+        "message": "minestuck.dialogue.consort.cult.after_invitation.candy_question",
+        "next_dialogue": "minestuck:consort/cult/disappointment"
+      }
+    ]
+  }
+}

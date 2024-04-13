@@ -1,0 +1,22 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "message": "minestuck.dialogue.consort.why_monsters.start",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.why_monsters.start.punishment",
+        "next_dialogue": "minestuck:consort/why_monsters/why_punish.1"
+      },
+      {
+        "message": "minestuck.dialogue.consort.why_monsters.start.no_reason",
+        "next_dialogue": "minestuck:consort/why_monsters/why_no_reason.1"
+      },
+      {
+        "message": "minestuck.dialogue.consort.why_monsters.start.confused",
+        "next_dialogue": "minestuck:consort/why_monsters/not_normal"
+      }
+    ]
+  }
+}

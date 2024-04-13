@@ -1,0 +1,17 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:rainbow"
+      },
+      {
+        "type": "minestuck:entity_type",
+        "entity_type": "minestuck:turtle"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/overwhelming_colors"
+}

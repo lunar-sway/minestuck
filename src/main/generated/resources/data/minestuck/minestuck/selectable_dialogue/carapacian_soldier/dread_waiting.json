@@ -1,0 +1,6 @@
+{
+  "condition": {
+    "type": "minestuck:is_is_land"
+  },
+  "dialogue": "minestuck:carapacian_soldier/dread_waiting"
+}

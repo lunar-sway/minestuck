@@ -54,7 +54,7 @@ public final class EditmodeDragPacket
 	{
 		BlockState block = player.level().getBlockState(pos);
 		ItemStack stack = block.getCloneItemStack(null, player.level(), pos, player);
-		DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level(), DeployList.EntryLists.ATHENEUM);
+		DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), player.level(), DeployList.EntryLists.ATHENEUM);
 		
 		if(block.isAir())
 			return false;
@@ -117,8 +117,8 @@ public final class EditmodeDragPacket
 			if(stack.isEmpty() || !(stack.getItem() instanceof BlockItem))
 				return;
 			
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level());
-			GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCostRecipe.findCostForItem(stack, null, false, player.level());
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), player.level());
+			GristSet cost = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(stack, null, false, player.level());
 			
 			MutableGristSet missingCost = MutableGristSet.newDefault();
 			boolean anyBlockPlaced = false;

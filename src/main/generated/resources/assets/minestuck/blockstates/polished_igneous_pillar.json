@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "minestuck:block/polished_igneous_pillar"
+    },
+    "facing=east": {
+      "model": "minestuck:block/polished_igneous_pillar",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/polished_igneous_pillar",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "minestuck:block/polished_igneous_pillar",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "minestuck:block/polished_igneous_pillar"
+    },
+    "facing=west": {
+      "model": "minestuck:block/polished_igneous_pillar",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

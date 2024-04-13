@@ -1,0 +1,14 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "message": "minestuck.dialogue.consort.mush_farm.2",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/mush_farm/3"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.underling_commission.no_idea",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.goodbye"
+      }
+    ]
+  }
+}

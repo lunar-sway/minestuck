@@ -1,0 +1,22 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "happy"
+    },
+    "message": "minestuck.dialogue.consort.rock_cycle.7",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.rock_cycle.7.insult",
+        "next_dialogue": "minestuck:consort/rock_cycle/7.sad"
+      },
+      {
+        "message": "minestuck.dialogue.consort.rock_cycle.7.intrigued",
+        "next_dialogue": "minestuck:consort/rock_cycle/7.hypocrite"
+      },
+      {
+        "message": "minestuck.dialogue.consort.rock_cycle.7.love_rocks",
+        "next_dialogue": "minestuck:consort/rock_cycle/7.agree"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.camel.no_camel"
+      },
+      {
+        "type": "description",
+        "message": {
+          "arguments": [
+            "entity_type"
+          ],
+          "key": "minestuck.dialogue.consort.camel.no_camel.desc"
+        }
+      }
+    ]
+  }
+}

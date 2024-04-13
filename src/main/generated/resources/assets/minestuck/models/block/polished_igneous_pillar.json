@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/polished_igneous_pillar_top",
+    "side": "minestuck:block/polished_igneous_pillar"
+  }
+}

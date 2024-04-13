@@ -31,12 +31,16 @@ public final class TerrainLandTypeTagsProvider extends IntrinsicHolderTagsProvid
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void addTags(HolderLookup.Provider provider)
 	{
 		this.tag(FOREST).add(LandTypes.FOREST.get(), LandTypes.TAIGA.get());
 		this.tag(ROCK).add(LandTypes.ROCK.get(), LandTypes.PETRIFICATION.get());
 		this.tag(SAND).add(LandTypes.SAND.get(), LandTypes.RED_SAND.get(), LandTypes.LUSH_DESERTS.get());
 		this.tag(SANDSTONE).add(LandTypes.SANDSTONE.get(), LandTypes.RED_SANDSTONE.get());
+		this.tag(IS_DESOLATE).addTags(SAND, SANDSTONE, ROCK);
+		this.tag(IS_DANGEROUS).add(LandTypes.HEAT.get());
+		this.tag(IS_FLUID_IMPORTANT).add(LandTypes.HEAT.get());
 	}
 	
 	@Override

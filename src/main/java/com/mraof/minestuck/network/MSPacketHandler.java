@@ -40,13 +40,24 @@ public class MSPacketHandler
 		registerToServerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
 		registerToServerMessage(RGBColorSelectPacket.class, RGBColorSelectPacket::decode);
 		registerToBothMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
+		
+		registerToClientMessage(DialoguePackets.OpenScreen.class, DialoguePackets.OpenScreen::decode);
+		registerToClientMessage(DialoguePackets.CloseScreen.class, DialoguePackets.CloseScreen::decode);
+		registerToServerMessage(DialoguePackets.OnCloseScreen.class, DialoguePackets.OnCloseScreen::decode);
+		registerToServerMessage(DialoguePackets.TriggerResponse.class, DialoguePackets.TriggerResponse::decode);
+		
 		registerToServerMessage(ConnectToSburbServerPacket.class, ConnectToSburbServerPacket::decode);
 		registerToServerMessage(OpenSburbServerPacket.class, OpenSburbServerPacket::decode);
 		registerToServerMessage(ResumeSburbConnectionPacket.class, ResumeSburbConnectionPacket::decode);
 		registerToServerMessage(CloseSburbConnectionPacket.class, CloseSburbConnectionPacket::decode);
 		registerToServerMessage(CloseRemoteSburbConnectionPacket.class, CloseRemoteSburbConnectionPacket::decode);
 		registerToServerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
-		registerToBothMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
+		
+		registerToClientMessage(SkaianetInfoPacket.Data.class, SkaianetInfoPacket.Data::decode);
+		registerToClientMessage(SkaianetInfoPacket.HasEntered.class, SkaianetInfoPacket.HasEntered::decode);
+		registerToServerMessage(SkaianetInfoPacket.Request.class, SkaianetInfoPacket.Request::decode);
+		registerToClientMessage(SkaianetInfoPacket.LandChains.class, SkaianetInfoPacket.LandChains::decode);
+		
 		registerToServerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
 		registerToServerMessage(ThemeSelectPacket.class, ThemeSelectPacket::decode);
 		registerToBothMessage(DataCheckerPacket.class, DataCheckerPacket::decode);

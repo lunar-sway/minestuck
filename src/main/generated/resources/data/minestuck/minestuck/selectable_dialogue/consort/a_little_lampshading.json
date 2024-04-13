@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:entity_type",
+    "entity_type": "minestuck:iguana"
+  },
+  "dialogue": "minestuck:consort/a_little_lampshading"
+}
