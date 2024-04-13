@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased upcoming-content]
+## [Unreleased]
+
+## [1.20.1-1.12.0.0] - 2024-04-13
 
 ### Added
 
@@ -49,6 +51,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Minor changes to what is shown in the data checker
+- Duplicate titles are now allowed in the same session,
+  and consequently the session size limit has been removed
+- Pre-entry players no longer play a part in grist gutter capacity,
+  and they no longer receive grist from the gutter
 - Wooden Cactus is now only placeable on the Wood Terrain Blocks tag instead of Sand
 - Carved Planks are now the surface block of Wood Lands instead of Treated Planks
 - Carved Planks no longer need to be mined with a Stone Axe or better
@@ -72,8 +79,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Existing consort dialogue have been ported to the new dialogue system with some tweaks
 - New format for the data file `grist_cost_generation_recipes.json`
 
+### Removed
+
+- Removed "skaianetCheck" config option
+
 ### Fixed
 
+- Fixes some niche issues with connections
+- `/sburbpredefine` now gives an error when applied to a player that already has a land
+- Fixed missing data sync for land types after using `/debuglands`
+- Added command success message to `/debuglands`
+- Fixed player owner id not loading for mini alchemiter and grist widget
 - Double slabs will now drop two slabs when broken
 - Sneaking now prevents trajectory blocks from moving the player
 - Blue dirt can now have the shovel used on it
@@ -91,32 +107,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipherNil, kirderf1
-
-## [Unreleased]
-
-### Changed
-
-- Minor changes to what is shown in the data checker
-- Duplicate titles are now allowed in the same session,
-  and consequently the session size limit has been removed
-- Pre-entry players no longer play a part in grist gutter capacity,
-  and they no longer receive grist from the gutter
-
-### Removed
-
-- Removed "skaianetCheck" config option
-
-### Fixed
-
-- Fixes some niche issues with connections
-- `/sburbpredefine` now gives an error when applied to a player that already has a land
-- Fixed missing data sync for land types after using `/debuglands`
-- Added command success message to `/debuglands`
-- Fixed player owner id not loading for mini alchemiter and grist widget
-
-### Contributors for this release
-
-- kirderf1
 
 ## [1.20.1-1.11.2.1] - 2024-03-10
 
