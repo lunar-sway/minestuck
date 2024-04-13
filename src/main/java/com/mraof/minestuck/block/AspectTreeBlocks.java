@@ -22,6 +22,16 @@ public final class AspectTreeBlocks
 	public static void init() {}
 	
 	//Blood
+	public static final RegistryObject<Block> BLOOD_ASPECT_LOG = MSBlocks.REGISTER.register("blood_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> BLOOD_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> BLOOD_ASPECT_WOOD = MSBlocks.REGISTER.register("blood_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> BLOOD_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> BLOOD_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("blood_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_LOG);
@@ -29,16 +39,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> BLOOD_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("blood_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> BLOOD_ASPECT_LOG = MSBlocks.REGISTER.register("blood_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> BLOOD_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> BLOOD_ASPECT_WOOD = MSBlocks.REGISTER.register("blood_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> BLOOD_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> BLOOD_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> BLOOD_ASPECT_LEAVES = MSBlocks.REGISTER.register("blood_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -112,6 +112,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Breath
+	public static final RegistryObject<Block> BREATH_ASPECT_LOG = MSBlocks.REGISTER.register("breath_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.BREATH_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> BREATH_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> BREATH_ASPECT_WOOD = MSBlocks.REGISTER.register("breath_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.BREATH_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> BREATH_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> BREATH_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("breath_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_STRIPPED_LOG);
@@ -119,16 +129,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> BREATH_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("breath_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> BREATH_ASPECT_LOG = MSBlocks.REGISTER.register("breath_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> BREATH_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> BREATH_ASPECT_WOOD = MSBlocks.REGISTER.register("breath_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> BREATH_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> BREATH_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> BREATH_ASPECT_LEAVES = MSBlocks.REGISTER.register("breath_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -202,6 +202,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Doom
+	public static final RegistryObject<Block> DOOM_ASPECT_LOG = MSBlocks.REGISTER.register("doom_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.DOOM_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> DOOM_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> DOOM_ASPECT_WOOD = MSBlocks.REGISTER.register("doom_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.DOOM_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> DOOM_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> DOOM_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("doom_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_STRIPPED_LOG);
@@ -209,16 +219,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> DOOM_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("doom_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> DOOM_ASPECT_LOG = MSBlocks.REGISTER.register("doom_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> DOOM_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> DOOM_ASPECT_WOOD = MSBlocks.REGISTER.register("doom_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> DOOM_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> DOOM_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> DOOM_ASPECT_LEAVES = MSBlocks.REGISTER.register("doom_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -292,6 +292,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Heart
+	public static final RegistryObject<Block> HEART_ASPECT_LOG = MSBlocks.REGISTER.register("heart_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.HEART_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> HEART_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> HEART_ASPECT_WOOD = MSBlocks.REGISTER.register("heart_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.HEART_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> HEART_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> HEART_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("heart_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_STRIPPED_LOG);
@@ -299,16 +309,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> HEART_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("heart_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> HEART_ASPECT_LOG = MSBlocks.REGISTER.register("heart_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> HEART_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> HEART_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> HEART_ASPECT_WOOD = MSBlocks.REGISTER.register("heart_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> HEART_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> HEART_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> HEART_ASPECT_LEAVES = MSBlocks.REGISTER.register("heart_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -382,6 +382,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Hope
+	public static final RegistryObject<Block> HOPE_ASPECT_LOG = MSBlocks.REGISTER.register("hope_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.HOPE_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> HOPE_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> HOPE_ASPECT_WOOD = MSBlocks.REGISTER.register("hope_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.HOPE_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> HOPE_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> HOPE_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("hope_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_STRIPPED_LOG);
@@ -389,16 +399,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> HOPE_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("hope_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> HOPE_ASPECT_LOG = MSBlocks.REGISTER.register("hope_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> HOPE_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> HOPE_ASPECT_WOOD = MSBlocks.REGISTER.register("hope_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> HOPE_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> HOPE_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> HOPE_ASPECT_LEAVES = MSBlocks.REGISTER.register("hope_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -472,6 +472,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Life
+	public static final RegistryObject<Block> LIFE_ASPECT_LOG = MSBlocks.REGISTER.register("life_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.LIFE_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> LIFE_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> LIFE_ASPECT_WOOD = MSBlocks.REGISTER.register("life_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.LIFE_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> LIFE_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> LIFE_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("life_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_STRIPPED_LOG);
@@ -479,16 +489,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> LIFE_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("life_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> LIFE_ASPECT_LOG = MSBlocks.REGISTER.register("life_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> LIFE_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> LIFE_ASPECT_WOOD = MSBlocks.REGISTER.register("life_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> LIFE_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> LIFE_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> LIFE_ASPECT_LEAVES = MSBlocks.REGISTER.register("life_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -562,6 +562,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Light
+	public static final RegistryObject<Block> LIGHT_ASPECT_LOG = MSBlocks.REGISTER.register("light_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> LIGHT_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> LIGHT_ASPECT_WOOD = MSBlocks.REGISTER.register("light_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> LIGHT_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> LIGHT_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("light_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_LOG);
@@ -569,16 +579,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> LIGHT_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("light_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> LIGHT_ASPECT_LOG = MSBlocks.REGISTER.register("light_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> LIGHT_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> LIGHT_ASPECT_WOOD = MSBlocks.REGISTER.register("light_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> LIGHT_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> LIGHT_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> LIGHT_ASPECT_LEAVES = MSBlocks.REGISTER.register("light_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -652,6 +652,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Mind
+	public static final RegistryObject<Block> MIND_ASPECT_LOG = MSBlocks.REGISTER.register("mind_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.MIND_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> MIND_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> MIND_ASPECT_WOOD = MSBlocks.REGISTER.register("mind_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.MIND_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> MIND_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> MIND_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("mind_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_STRIPPED_LOG);
@@ -659,16 +669,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> MIND_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("mind_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> MIND_ASPECT_LOG = MSBlocks.REGISTER.register("mind_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> MIND_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> MIND_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> MIND_ASPECT_WOOD = MSBlocks.REGISTER.register("mind_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> MIND_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> MIND_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> MIND_ASPECT_LEAVES = MSBlocks.REGISTER.register("mind_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -742,6 +742,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Rage
+	public static final RegistryObject<Block> RAGE_ASPECT_LOG = MSBlocks.REGISTER.register("rage_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.RAGE_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> RAGE_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> RAGE_ASPECT_WOOD = MSBlocks.REGISTER.register("rage_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.RAGE_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> RAGE_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> RAGE_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("rage_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_STRIPPED_LOG);
@@ -749,16 +759,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> RAGE_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("rage_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> RAGE_ASPECT_LOG = MSBlocks.REGISTER.register("rage_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> RAGE_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> RAGE_ASPECT_WOOD = MSBlocks.REGISTER.register("rage_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> RAGE_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> RAGE_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> RAGE_ASPECT_LEAVES = MSBlocks.REGISTER.register("rage_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -832,6 +832,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Space
+	public static final RegistryObject<Block> SPACE_ASPECT_LOG = MSBlocks.REGISTER.register("space_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.SPACE_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> SPACE_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> SPACE_ASPECT_WOOD = MSBlocks.REGISTER.register("space_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.SPACE_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> SPACE_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> SPACE_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("space_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_STRIPPED_LOG);
@@ -839,16 +849,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> SPACE_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("space_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> SPACE_ASPECT_LOG = MSBlocks.REGISTER.register("space_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> SPACE_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> SPACE_ASPECT_WOOD = MSBlocks.REGISTER.register("space_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> SPACE_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> SPACE_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> SPACE_ASPECT_LEAVES = MSBlocks.REGISTER.register("space_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -922,6 +922,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Time
+	public static final RegistryObject<Block> TIME_ASPECT_LOG = MSBlocks.REGISTER.register("time_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.TIME_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> TIME_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> TIME_ASPECT_WOOD = MSBlocks.REGISTER.register("time_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.TIME_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> TIME_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> TIME_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("time_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_STRIPPED_LOG);
@@ -929,16 +939,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> TIME_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("time_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> TIME_ASPECT_LOG = MSBlocks.REGISTER.register("time_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> TIME_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> TIME_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> TIME_ASPECT_WOOD = MSBlocks.REGISTER.register("time_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> TIME_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> TIME_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> TIME_ASPECT_LEAVES = MSBlocks.REGISTER.register("time_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()
@@ -1012,6 +1012,16 @@ public final class AspectTreeBlocks
 	
 	
 	//Void
+	public static final RegistryObject<Block> VOID_ASPECT_LOG = MSBlocks.REGISTER.register("void_aspect_log",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.VOID_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> VOID_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_LOG);
+	
+	public static final RegistryObject<Block> VOID_ASPECT_WOOD = MSBlocks.REGISTER.register("void_aspect_wood",
+			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
+					() -> AspectTreeBlocks.VOID_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
+	public static final RegistryObject<BlockItem> VOID_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_WOOD);
+	
 	public static final RegistryObject<Block> VOID_ASPECT_STRIPPED_LOG = MSBlocks.REGISTER.register("void_aspect_stripped_log",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_RED).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_STRIPPED_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_STRIPPED_LOG);
@@ -1019,16 +1029,6 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> VOID_ASPECT_STRIPPED_WOOD = MSBlocks.REGISTER.register("void_aspect_stripped_wood",
 			() -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_STRIPPED_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_STRIPPED_WOOD);
-	
-	public static final RegistryObject<Block> VOID_ASPECT_LOG = MSBlocks.REGISTER.register("void_aspect_log",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> VOID_ASPECT_STRIPPED_LOG.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> VOID_ASPECT_LOG_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_LOG);
-	
-	public static final RegistryObject<Block> VOID_ASPECT_WOOD = MSBlocks.REGISTER.register("void_aspect_wood",
-			() -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD),
-					() -> VOID_ASPECT_STRIPPED_WOOD.get().defaultBlockState()));
-	public static final RegistryObject<BlockItem> VOID_ASPECT_WOOD_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_WOOD);
 	
 	public static final RegistryObject<Block> VOID_ASPECT_LEAVES = MSBlocks.REGISTER.register("void_aspect_leaves",
 			() -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks()

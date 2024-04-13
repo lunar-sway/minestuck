@@ -1,6 +1,7 @@
 {
   "values": [
     "#minestuck:logs/aspect",
+    "#minestuck:wood/aspect",
     "#minestuck:logs/glowing",
     "#minestuck:logs/frost",
     "#minestuck:logs/rainbow",
