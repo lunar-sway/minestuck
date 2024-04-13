@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Sulfur Pools and Cast Iron features in Heat Lands
 - Wooden Lamp and Heat Lamp blocks, used in Wood and Heat lands respectively
 - Chocolatey Cake - the most scrumptious cake in the entire world!
+
 ### Changed
 
 - Wooden Cactus is now only placeable on the Wood Terrain Blocks tag instead of Sand
