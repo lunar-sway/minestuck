@@ -6,11 +6,17 @@
         "flag": "helpingPlayer"
       },
       "node": {
+        "animation": {
+          "emotion": "happy"
+        },
         "message": "minestuck.dialogue.consort.hungry.satisfied.player_specific"
       }
     }
   ],
   "default_node": {
+    "animation": {
+      "emotion": "happy"
+    },
     "message": "minestuck.dialogue.consort.hungry.satisfied"
   }
 }

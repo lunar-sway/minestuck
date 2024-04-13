@@ -6,11 +6,17 @@
         "flag": "helpingPlayer"
       },
       "node": {
+        "animation": {
+          "emotion": "happy"
+        },
         "message": "minestuck.dialogue.consort.generic_thanks.player_helped"
       }
     }
   ],
   "default_node": {
+    "animation": {
+      "emotion": "happy"
+    },
     "message": "minestuck.dialogue.consort.generic_thanks.other_helped"
   }
 }

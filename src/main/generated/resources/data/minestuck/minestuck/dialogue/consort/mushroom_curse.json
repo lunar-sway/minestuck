@@ -1,5 +1,8 @@
 {
   "node": {
+    "animation": {
+      "emotion": "angry"
+    },
     "message": {
       "arguments": [
         "land_denizen"

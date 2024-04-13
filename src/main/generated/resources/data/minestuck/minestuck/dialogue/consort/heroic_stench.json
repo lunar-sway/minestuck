@@ -5,6 +5,9 @@
         "type": "minestuck:has_player_entered"
       },
       "node": {
+        "animation": {
+          "emotion": "anxious"
+        },
         "message": "minestuck.dialogue.consort.heroic_stench"
       }
     }

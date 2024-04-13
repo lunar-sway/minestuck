@@ -1,5 +1,8 @@
 {
   "node": {
+    "animation": {
+      "emotion": "happy"
+    },
     "message": {
       "arguments": [
         "entity_sound"

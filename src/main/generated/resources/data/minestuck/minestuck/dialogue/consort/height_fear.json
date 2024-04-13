@@ -6,6 +6,9 @@
         "y": 78.0
       },
       "node": {
+        "animation": {
+          "emotion": "anxious"
+        },
         "message": "minestuck.dialogue.consort.height_fear.panic"
       }
     },

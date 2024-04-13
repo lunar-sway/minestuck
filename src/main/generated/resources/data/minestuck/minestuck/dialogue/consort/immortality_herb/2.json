@@ -1,5 +1,8 @@
 {
   "node": {
+    "animation": {
+      "emotion": "anxious"
+    },
     "message": "minestuck.dialogue.consort.immortality_herb.2",
     "responses": [
       {

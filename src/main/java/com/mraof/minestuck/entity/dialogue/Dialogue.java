@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.ChatFormatting;
@@ -34,8 +33,7 @@ import java.util.stream.Stream;
 public final class Dialogue
 {
 	public static final String DIALOGUE_FORMAT = "minestuck.dialogue.format";
-	public static final String DEFAULT_ANIMATION = "generic_animation";
-	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/generic_extra_large.png");
+	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/dialogue.png");
 	
 	public record NodeSelector(List<Pair<Condition, Node>> conditionedNodes, Node defaultNode)
 	{
@@ -86,8 +84,7 @@ public final class Dialogue
 	{
 	}
 	
-	//TODO animation is unused?
-	public record Node(List<Pair<MessageType, DialogueMessage>> messages, String animation, ResourceLocation guiPath, List<Response> responses)
+	public record Node(List<Pair<MessageType, DialogueMessage>> messages, DialogueAnimationData animation, ResourceLocation guiPath, List<Response> responses)
 	{
 		private static final Codec<Pair<MessageType, DialogueMessage>> MESSAGE_CODEC = Codec.mapPair(MessageType.CODEC.fieldOf("type"), DialogueMessage.CODEC.fieldOf("message")).codec();
 		private static final MapCodec<List<Pair<MessageType, DialogueMessage>>> MESSAGES_MAP_CODEC = Codec.mapEither(DialogueMessage.CODEC.fieldOf("message"), MESSAGE_CODEC.listOf().fieldOf("messages"))
@@ -95,7 +92,7 @@ public final class Dialogue
 						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.ENTITY ? Either.left(messages.get(0).getSecond()): Either.right(messages));
 		public static final Codec<Node> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				MESSAGES_MAP_CODEC.forGetter(Node::messages),
-				PreservingOptionalFieldCodec.withDefault(Codec.STRING, "animation", DEFAULT_ANIMATION).forGetter(Node::animation),
+				PreservingOptionalFieldCodec.withDefault(DialogueAnimationData.CODEC, "animation", DialogueAnimationData.DEFAULT_ANIMATION).forGetter(Node::animation),
 				PreservingOptionalFieldCodec.withDefault(ResourceLocation.CODEC, "gui", DEFAULT_GUI).forGetter(Node::guiPath),
 				PreservingOptionalFieldCodec.forList(Response.LIST_CODEC, "responses").forGetter(Node::responses)
 		).apply(instance, Node::new));
@@ -111,21 +108,7 @@ public final class Dialogue
 					this.messages.stream()
 			).map(messagePair -> this.buildMessage(messagePair, entity, player)).toList();
 			
-			return new DialogueData(combineLines(lines), this.guiPath(), responses);
-		}
-		
-		private static Component combineLines(Iterable<Component> lines)
-		{
-			MutableComponent component = Component.empty();
-			boolean isFirst = true;
-			for(Component line : lines)
-			{
-				if(!isFirst)
-					component.append("\n");
-				component.append(line);
-				isFirst = false;
-			}
-			return component;
+			return new DialogueData(lines, this.guiPath(), responses, this.animation, ((DialogueEntity) entity).getSpriteType());
 		}
 		
 		private Component buildMessage(Pair<MessageType, DialogueMessage> messagePair, LivingEntity entity, ServerPlayer player)
@@ -138,14 +121,14 @@ public final class Dialogue
 					MutableComponent component = Component.translatable(DIALOGUE_FORMAT,
 							entity.getDisplayName(), messageComponent);
 					
-					if(entity instanceof ConsortEntity consort)
-						component.withStyle(consort.getConsortType().getColor());
+					if(entity instanceof DialogueEntity dialogueEntity)
+						component.withStyle(dialogueEntity.getChatColor());
 					
 					yield component;
 				}
 				case PLAYER -> Component.translatable(DIALOGUE_FORMAT, player.getDisplayName(), messageComponent);
 				case DESCRIPTION ->
-						messageComponent.withStyle(style -> style.withItalic(true).applyFormat(ChatFormatting.GRAY));
+						messageComponent.withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
 			};
 		}
 		
@@ -260,22 +243,26 @@ public final class Dialogue
 		).apply(instance, SelectableDialogue::new));
 	}
 	
-	public record DialogueData(Component message, ResourceLocation guiBackground, List<ResponseData> responses)
+	public record DialogueData(List<Component> messages, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimationData animationData, String spriteType)
 	{
 		public static DialogueData read(FriendlyByteBuf buffer)
 		{
-			Component message = buffer.readComponent();
+			List<Component> messages = buffer.readList(FriendlyByteBuf::readComponent);
 			ResourceLocation guiBackground = buffer.readResourceLocation();
 			List<ResponseData> responses = buffer.readList(ResponseData::read);
+			DialogueAnimationData animation = DialogueAnimationData.read(buffer);
+			String spriteType = buffer.readUtf(25);
 			
-			return new DialogueData(message, guiBackground, responses);
+			return new DialogueData(messages, guiBackground, responses, animation, spriteType);
 		}
 		
 		public void write(FriendlyByteBuf buffer)
 		{
-			buffer.writeComponent(this.message);
+			buffer.writeCollection(this.messages, FriendlyByteBuf::writeComponent);
 			buffer.writeResourceLocation(this.guiBackground);
 			buffer.writeCollection(this.responses, (byteBuf, responseData) -> responseData.write(byteBuf));
+			this.animationData.write(buffer);
+			buffer.writeUtf(this.spriteType, 25);
 		}
 	}
 	

@@ -1,5 +1,8 @@
 {
   "node": {
+    "animation": {
+      "emotion": "angry"
+    },
     "message": "minestuck.dialogue.consort.reckoning.1",
     "responses": [
       {
