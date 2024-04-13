@@ -22,7 +22,6 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.*;
-import org.checkerframework.checker.units.qual.A;
 
 import javax.annotation.Nullable;
 import java.util.List;
