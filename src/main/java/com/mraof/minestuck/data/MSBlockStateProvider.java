@@ -1552,6 +1552,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.LARGE_CAKE);
 		weightedVariantsWithItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, new int[]{7, 2},
 				i -> models().getExistingFile(id("pink_frosted_top_large_cake" + i)));
+		cake(MSBlocks.CHOCOLATEY_CAKE);
+		flatItem(MSItems.CHOCOLATEY_CAKE, MSBlockStateProvider::itemTexture);
 		
 		//Explosives
 		{

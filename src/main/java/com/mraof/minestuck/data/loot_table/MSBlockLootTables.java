@@ -991,6 +991,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(CARROT_CAKE.get(), noDrop());
 		dropSelf(LARGE_CAKE.get());
 		dropSelf(PINK_FROSTED_TOP_LARGE_CAKE.get());
+		add(CHOCOLATEY_CAKE.get(), noDrop());
 		
 		dropSelf(PRIMED_TNT.get());
 		dropSelf(UNSTABLE_TNT.get());
