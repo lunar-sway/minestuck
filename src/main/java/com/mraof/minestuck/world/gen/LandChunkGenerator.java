@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.skaianet.UnderlingController;
+import com.mraof.minestuck.entity.underling.UnderlingSpawnSettings;
 import com.mraof.minestuck.world.biome.LandBiomeSource;
 import com.mraof.minestuck.world.biome.LandCustomBiomeSettings;
 import com.mraof.minestuck.world.biome.RegistryBackedBiomeSet;
@@ -116,7 +116,7 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	public WeightedRandomList<MobSpawnSettings.SpawnerData> getMobsAt(Holder<Biome> biome, StructureManager structures, MobCategory category, BlockPos pos)
 	{
 		if(category == MSEntityTypes.UNDERLING)
-			return UnderlingController.getUnderlingList(pos);
+			return UnderlingSpawnSettings.getUnderlingList(pos);
 		else return customBiomeSettings.get().customMobSpawnsFor(biome).getMobs(category);
 	}
 	

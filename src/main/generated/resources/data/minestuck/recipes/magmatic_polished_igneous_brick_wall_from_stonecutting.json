@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:magmatic_polished_igneous_bricks"
+  },
+  "result": "minestuck:magmatic_polished_igneous_brick_wall"
+}

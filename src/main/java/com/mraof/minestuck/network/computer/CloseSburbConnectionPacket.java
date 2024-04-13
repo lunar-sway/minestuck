@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network.computer;
 
-import com.mraof.minestuck.network.MSPacket;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.network.MSPacket;
+import com.mraof.minestuck.skaianet.ComputerInteractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -47,8 +47,8 @@ public class CloseSburbConnectionPacket implements MSPacket.PlayToServer
 	{
 		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> {
 			if(isClient)
-				SkaianetHandler.get(player.server).closeClientConnection(computer);
-			else SkaianetHandler.get(player.server).closeServerConnection(computer);
+				ComputerInteractions.get(player.server).closeClientConnection(computer);
+			else ComputerInteractions.get(player.server).closeServerConnection(computer);
 		});
 	}
 }

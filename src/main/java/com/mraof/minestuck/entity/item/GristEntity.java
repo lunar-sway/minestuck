@@ -1,7 +1,8 @@
 package com.mraof.minestuck.entity.item;
 
 
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristGutter;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -13,8 +14,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -182,15 +181,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		if(entityIn instanceof ServerPlayer player)
 		{
-			Session playerSession = SessionHandler.get(level()).getPlayerSession(IdentifierHandler.encode(entityIn));
-			
 			long cacheCapacity = GristCache.get(player).getRemainingCapacity(gristType);
 			
-			long gutterCapacity;
-			if(playerSession != null)
-				gutterCapacity = playerSession.getGristGutter().getRemainingCapacity();
-			else
-				gutterCapacity = 0;
+			long gutterCapacity = GristGutter.get(player).map(GristGutter::getRemainingCapacity).orElse(0L);
 			
 			return gutterCapacity + cacheCapacity;
 		}

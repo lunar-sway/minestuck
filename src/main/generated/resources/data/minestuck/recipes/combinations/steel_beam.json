@@ -4,7 +4,7 @@
     "item": "minecraft:quartz_pillar"
   },
   "input2": {
-    "item": "minestuck:cast_iron"
+    "item": "minecraft:iron_block"
   },
   "mode": "and",
   "output": {

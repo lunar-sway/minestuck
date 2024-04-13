@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
@@ -11,7 +11,6 @@ import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
@@ -51,7 +50,10 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public abstract class UnderlingEntity extends AttackingAnimatedEntity implements Enemy, GeoEntity
 {
@@ -321,7 +323,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
-			applyGristType(UnderlingController.getUnderlingType(this));
+			applyGristType(UnderlingSpawnSettings.getUnderlingType(this));
 			spawnDataIn = new UnderlingData(getGristType());
 		} else
 		{

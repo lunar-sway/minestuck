@@ -3,8 +3,8 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.lands.gen.LandTypeSelection;
 import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.gen.LandTypeSelection;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.ChatFormatting;
@@ -16,13 +16,13 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class PredefineData
 {
 	public static final String TITLE_ALREADY_SET = "minestuck.predefine.title_already_set";
-	public static final String TITLE_ALREADY_USED = "minestuck.predefine.title_already_used";
 	public static final String RESETTING_TERRAIN_TYPE = "minestuck.predefine.resetting_terrain_type";
 	public static final String GENERATED_TITLE = "minestuck.predefine.generated_title";
 	public static final String CHANGED_TITLE = "minestuck.predefine.changed_title";
@@ -30,21 +30,17 @@ public final class PredefineData
 	public static final String CHANGED_TITLE_LAND = "minestuck.predefine.changed_title_land";
 	
 	private final PlayerIdentifier player;
-	private final Session session;
-	private boolean lockedToSession;
 	private Title title;
 	private TerrainLandType terrainLandType;
 	private TitleLandType titleLandType;
 	
-	PredefineData(PlayerIdentifier player, Session session)
+	PredefineData(PlayerIdentifier player)
 	{
 		this.player = player;
-		this.session = session;
 	}
 	
 	PredefineData read(CompoundTag nbt)
 	{
-		lockedToSession = nbt.getBoolean("locked");
 		title = Title.tryRead(nbt, "title");
 		if(nbt.contains("landTerrain", Tag.TAG_STRING))
 			terrainLandType = LandTypes.TERRAIN_REGISTRY.get().getValue(ResourceLocation.tryParse(nbt.getString("landTerrain")));
@@ -57,7 +53,6 @@ public final class PredefineData
 	CompoundTag write()
 	{
 		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("locked", lockedToSession);
 		if(title != null)
 			title.write(nbt, "title");
 		if(terrainLandType != null)
@@ -68,24 +63,20 @@ public final class PredefineData
 		return nbt;
 	}
 	
-	public void predefineTitle(@Nonnull Title title, CommandSourceStack source) throws SkaianetException
+	public void predefineTitle(@Nonnull Title title)
 	{
-		if(title.equals(this.title))
-			throw new SkaianetException(TITLE_ALREADY_SET, title.asTextComponent());	//TODO when predefining with define, you wouldn't want this exception to get in the way. Fix this.
-		if(session.isTitleUsed(title))
-			throw new SkaianetException(TITLE_ALREADY_USED, title.asTextComponent());
-		else	//TODO Take a look at the title land type and warn if it's not connected to the set land type
-			this.title = title;
+		//TODO Take a look at the title land type and warn if it's not connected to the set land type
+		this.title = title;
 	}
 	
-	public void predefineTerrainLand(TerrainLandType landType, CommandSourceStack source) throws SkaianetException
+	public void predefineTerrainLand(TerrainLandType landType, CommandSourceStack source)
 	{
 		forceVerifyTitleLand(landType, source);
 		
 		this.terrainLandType = landType;
 	}
 	
-	public void predefineTitleLand(TitleLandType landType, CommandSourceStack source) throws SkaianetException
+	public void predefineTitleLand(TitleLandType landType, CommandSourceStack source)
 	{
 		forceVerifyTitle(Collections.singleton(landType), source);
 		
@@ -97,7 +88,7 @@ public final class PredefineData
 		this.titleLandType = landType;
 	}
 	
-	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSourceStack source) throws SkaianetException
+	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSourceStack source)
 	{
 		Set<EnumAspect> availableAspects = availableTypes.stream()
 				.flatMap(titleType -> LandTypeSelection.compatibleAspects(titleType).stream())
@@ -105,7 +96,7 @@ public final class PredefineData
 		if(title == null || !availableAspects.contains(title.getHeroAspect()))
 		{
 			Title previous = title;
-			title = Generator.generateTitle(session, availableAspects, player);
+			title = Generator.generateTitle(player, availableAspects, SkaianetData.get(source.getServer()));
 			
 			if(!availableAspects.contains(title.getHeroAspect()))
 			{
@@ -119,7 +110,7 @@ public final class PredefineData
 		}
 	}
 	
-	private void forceVerifyTitleLand(TerrainLandType type, CommandSourceStack source) throws SkaianetException
+	private void forceVerifyTitleLand(TerrainLandType type, CommandSourceStack source)
 	{
 		if(titleLandType == null || !titleLandType.isAspectCompatible(type))
 		{
@@ -134,8 +125,10 @@ public final class PredefineData
 				throw new IllegalStateException("Had no title land types to generate when some were expected.");
 			}
 			
+			SkaianetData skaianetData = SkaianetData.get(source.getServer());
 			TitleLandType previous = titleLandType;
-			titleLandType = Generator.generateWeightedTitleLandType(source.getServer(), session, title.getHeroAspect(), type, player);
+			List<PlayerIdentifier> otherPlayers = skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList();
+			titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), type, skaianetData);
 			
 			if(!titleLandType.isAspectCompatible(type))
 			{
@@ -147,11 +140,6 @@ public final class PredefineData
 				source.sendSuccess(() -> Component.translatable(GENERATED_TITLE_LAND, LandTypes.TITLE_REGISTRY.get().getKey(titleLandType)), true);
 			else source.sendSuccess(() -> Component.translatable(CHANGED_TITLE_LAND, LandTypes.TITLE_REGISTRY.get().getKey(previous), LandTypes.TITLE_REGISTRY.get().getKey(titleLandType)).withStyle(ChatFormatting.YELLOW), true);
 		}
-	}
-	
-	public boolean isLockedToSession()
-	{
-		return lockedToSession;
 	}
 	
 	public PlayerIdentifier getPlayer()

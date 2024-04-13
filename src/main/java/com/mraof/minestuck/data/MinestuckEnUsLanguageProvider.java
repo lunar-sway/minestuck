@@ -79,6 +79,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PINK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE, "Cruxite Ore");
+		addBlock(MSBlocks.BLACK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.DEEPSLATE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.COBBLESTONE_URANIUM_ORE, "Uranium Ore");
@@ -90,6 +91,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PINK_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.UNCARVED_WOOD_URANIUM_ORE, "Uranium Ore");
+		addBlock(MSBlocks.BLACK_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.NETHERRACK_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.SHADE_STONE_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.PINK_STONE_COAL_ORE, "Coal Ore");
@@ -101,9 +103,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RED_SANDSTONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.SHADE_STONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.PINK_STONE_GOLD_ORE, "Gold Ore");
+		addBlock(MSBlocks.BLACK_STONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.END_STONE_REDSTONE_ORE, "Redstone Ore");
 		addBlock(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE, "Redstone Ore");
+		addBlock(MSBlocks.BLACK_STONE_REDSTONE_ORE, "Redstone Ore");
 		addBlock(MSBlocks.STONE_QUARTZ_ORE, "Quartz Ore");
+		addBlock(MSBlocks.BLACK_STONE_QUARTZ_ORE, "Quartz Ore");
 		addBlock(MSBlocks.PINK_STONE_LAPIS_ORE, "Lapis Ore");
 		addBlock(MSBlocks.PINK_STONE_DIAMOND_ORE, "Diamond Ore");
 		addBlock(MSBlocks.UNCARVED_WOOD_EMERALD_ORE, "Emerald Ore");
@@ -217,13 +222,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_FROST_BRICK_SLAB, "Flowery Frost Brick Slab");
 		addBlock(MSBlocks.FLOWERY_FROST_BRICK_WALL, "Flowery Frost Brick Wall");
 		
-		addBlock(MSBlocks.CAST_IRON, "Cast-Iron");
+		addBlock(MSBlocks.CAST_IRON, "Cast Iron");
+		addBlock(MSBlocks.CAST_IRON_STAIRS, "Cast Iron Stairs");
 		addBlock(MSBlocks.CAST_IRON_SLAB, "Cast Iron Slab");
 		addBlock(MSBlocks.CAST_IRON_WALL, "Cast Iron Wall");
 		addBlock(MSBlocks.CAST_IRON_BUTTON, "Cast Iron Button");
 		addBlock(MSBlocks.CAST_IRON_PRESSURE_PLATE, "Cast Iron Pressure Plate");
 		
-		addBlock(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast-Iron");
+		addBlock(MSBlocks.CAST_IRON_TILE, "Cast Iron Tile");
+		addBlock(MSBlocks.CAST_IRON_TILE_STAIRS, "Cast Iron Tile Stairs");
+		addBlock(MSBlocks.CAST_IRON_TILE_SLAB, "Cast Iron Tile Slab");
+		
+		addBlock(MSBlocks.CAST_IRON_SHEET, "Cast Iron Sheet");
+		addBlock(MSBlocks.CAST_IRON_SHEET_STAIRS, "Cast Iron Sheet Stairs");
+		addBlock(MSBlocks.CAST_IRON_SHEET_SLAB, "Cast Iron Sheet Slab");
+		
+		addBlock(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast Iron");
+		addBlock(MSBlocks.CAST_IRON_FRAME, "Cast Iron Frame");
+		
 		addBlock(MSBlocks.STEEL_BEAM, "Steel Beam");
 		
 		addBlock(MSBlocks.MYCELIUM_COBBLESTONE, "Mycelium Cobblestone");
@@ -260,6 +276,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICK_WALL, "Flowery Mycelium Brick Wall");
 		
 		addBlock(MSBlocks.BLACK_STONE, "Black Stone");
+		addBlock(MSBlocks.BLACK_STONE_STAIRS, "Black Stone Stairs");
+		addBlock(MSBlocks.BLACK_STONE_SLAB, "Black Stone Slab");
 		addBlock(MSBlocks.BLACK_STONE_WALL, "Black Stone Wall");
 		addBlock(MSBlocks.BLACK_STONE_BUTTON, "Black Stone Button");
 		addBlock(MSBlocks.BLACK_STONE_PRESSURE_PLATE, "Black Stone Pressure Plate");
@@ -275,15 +293,67 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLACK_COBBLESTONE_WALL, "Black Cobblestone Wall");
 		
 		addBlock(MSBlocks.BLACK_STONE_BRICKS, "Black Stone Bricks");
+		addBlock(MSBlocks.BLACK_STONE_BRICK_STAIRS, "Black Stone Brick Stairs");
+		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
 		addBlock(MSBlocks.BLACK_STONE_BRICK_WALL, "Black Stone Brick Wall");
 		
 		addBlock(MSBlocks.BLACK_STONE_COLUMN, "Black Stone Column");
 		addBlock(MSBlocks.CHISELED_BLACK_STONE_BRICKS, "Chiseled Black Stone Bricks");
 		addBlock(MSBlocks.CRACKED_BLACK_STONE_BRICKS, "Cracked Black Stone Bricks");
+		
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICKS, "Magmatic Black Stone Bricks");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS, "Magmatic Black Stone Brick Stairs");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB, "Magmatic Black Stone Brick Slab");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL, "Magmatic Black Stone Brick Wall");
+		
 		addBlock(MSBlocks.BLACK_SAND, "Black Sand");
 		
 		addBlock(MSBlocks.IGNEOUS_STONE, "Igneous Stone");
+		addBlock(MSBlocks.IGNEOUS_STONE_STAIRS, "Igneous Stone Stairs");
+		addBlock(MSBlocks.IGNEOUS_STONE_SLAB, "Igneous Stone Slab");
+		addBlock(MSBlocks.IGNEOUS_STONE_WALL, "Igneous Stone Wall");
+		addBlock(MSBlocks.IGNEOUS_STONE_BUTTON, "Igneous Stone Button");
+		addBlock(MSBlocks.IGNEOUS_STONE_PRESSURE_PLATE, "Igneous Stone Pressure Plate");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_STONE, "Polished Igneous Stone");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_STAIRS, "Polished Igneous Stairs");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_SLAB, "Polished Igneous Slab");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_WALL, "Polished Igneous Wall");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICKS, "Polished Igneous Bricks");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS, "Polished Igneous Brick Stairs");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB, "Polished Igneous Brick Slab");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_WALL, "Polished Igneous Brick Wall");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_PILLAR, "Polished Igneous Pillar");
+		addBlock(MSBlocks.CHISELED_IGNEOUS_STONE, "Chiseled Igneous Stone");
+		addBlock(MSBlocks.CRACKED_POLISHED_IGNEOUS_BRICKS, "Cracked Polished Igneous Bricks");
+		
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS, "Magmatic Polished Igneous Bricks");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS, "Magmatic Polished Igneous Brick Stairs");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB, "Magmatic Polished Igneous Brick Slab");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL, "Magmatic Polished Igneous Brick Wall");
+		
+		addBlock(MSBlocks.MAGMATIC_IGNEOUS_STONE, "Magmatic Igneous Stone");
+		
 		addBlock(MSBlocks.PUMICE_STONE, "Pumice Stone");
+		addBlock(MSBlocks.PUMICE_STONE_STAIRS, "Pumice Stone Stairs");
+		addBlock(MSBlocks.PUMICE_STONE_SLAB, "Pumice Stone Slab");
+		addBlock(MSBlocks.PUMICE_STONE_WALL, "Pumice Stone Wall");
+		addBlock(MSBlocks.PUMICE_STONE_BUTTON, "Pumice Stone Button");
+		addBlock(MSBlocks.PUMICE_STONE_PRESSURE_PLATE, "Pumice Stone Pressure Plate");
+		
+		addBlock(MSBlocks.PUMICE_BRICKS, "Pumice Bricks");
+		addBlock(MSBlocks.PUMICE_BRICK_STAIRS, "Pumice Brick Stairs");
+		addBlock(MSBlocks.PUMICE_BRICK_SLAB, "Pumice Brick Slab");
+		addBlock(MSBlocks.PUMICE_BRICK_WALL, "Pumice Brick Wall");
+		
+		addBlock(MSBlocks.PUMICE_TILES, "Pumice Tiles");
+		addBlock(MSBlocks.PUMICE_TILE_STAIRS, "Pumice Tile Stairs");
+		addBlock(MSBlocks.PUMICE_TILE_SLAB, "Pumice Tile Slab");
+		addBlock(MSBlocks.PUMICE_TILE_WALL, "Pumice Tile Wall");
+		
+		addBlock(MSBlocks.HEAT_LAMP, "Heat Lamp");
 		
 		addBlock(MSBlocks.DECREPIT_STONE_BRICKS, "Decrepit Stone Bricks");
 		addBlock(MSBlocks.DECREPIT_STONE_BRICK_STAIRS, "Decrepit Stone Brick Stairs");
@@ -730,9 +800,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");
 		addBlock(MSBlocks.FROST_TILE_STAIRS, "Frost Tile Stairs");
 		addBlock(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
-		addBlock(MSBlocks.CAST_IRON_STAIRS, "Cast-Iron Stairs");
-		addBlock(MSBlocks.BLACK_STONE_STAIRS, "Black Stone Stairs");
-		addBlock(MSBlocks.BLACK_STONE_BRICK_STAIRS, "Black Stone Brick Stairs");
 		addBlock(MSBlocks.MYCELIUM_STAIRS, "Mycelium Stairs");
 		addBlock(MSBlocks.MYCELIUM_BRICK_STAIRS, "Mycelium Brick Stairs");
 		addBlock(MSBlocks.CHALK_STAIRS, "Chalk Stairs");
@@ -2266,7 +2333,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleSelectorScreen.RANDOMIZE, "Randomize");
 		add(EffectTogglePacket.ON, "Aspect Effects have been toggled on");
 		add(EffectTogglePacket.OFF, "Aspect Effects have been toggled off");
-		add(SkaianetHandler.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
+		add(InfoTracker.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
 		add(TransportalizerBlockEntity.DISABLED, "This transportalizer is currently disabled with a redstone signal.");
 		add(TransportalizerBlockEntity.BLOCKED, "The transportalizer appears to need more space above it to function.");
 		add(TransportalizerBlockEntity.BLOCKED_DESTINATION, "The destination seems to be blocked.");
@@ -2274,7 +2341,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerBlockEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
 		add(TransportalizerBlockEntity.TAKEN, "The code \"%s\" has been taken by another transportalizer.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
-		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
 		add(WirelessRedstoneTransmitterScreen.TITLE, "Wireless Redstone");
 		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
 		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
@@ -2295,8 +2361,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbClient.SELECT_COLOR, "Select a Color");
 		add(SburbClient.CONNECT, "Connected to %s");
 		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
-		add(SkaianetHandler.CLOSED, "Connection closed");
-		add(SkaianetHandler.CLOSED_SERVER, "Server closed");
+		add(SburbConnections.CLOSED, "Connection closed");
 		add(SburbServer.OFFLINE, "Server offline");
 		add(SburbClient.SELECT, "Select a server below");
 		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
@@ -2307,17 +2372,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurner.CHOOSE, "Choose disk type to write");
-		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
+		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
 		add(SettingsApp.THEME, "Choose Theme");
 		add(SettingsApp.TITLE, "Sburb Settings");
-		add(MergeResult.ABLE, "Able to merge");
-		add(MergeResult.LOCKED, "Either session is locked");
-		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
-		add(MergeResult.SESSION_FULL, "The session is full");
-		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
-		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
-		add(MergeResult.GENERIC_FAIL, "Merge failed");
-		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
 		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console");
@@ -2382,13 +2439,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerCommand.FAILURE_RESULT, "Failed the teleport anything.");
 		add(TransportalizerCommand.RESULT, "Successfully teleported %s entities to transportalizer");
 		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
-		add(SburbConnectionCommand.LOCKED, "Their session is locked, and should no longer be modified");
 		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
+		add(DebugLandsCommand.SUCCESS, "Created %d lands connected to %s");
 		add(DebugLandsCommand.MUST_ENTER, "You must have entered before you can create debug lands");
+		add(DebugLandsCommand.INVALID_CHAIN, "The given land list is not valid for this command");
 		add(SburbPredefineCommand.SET_TITLE, "Predefined %s's title as %s");
 		add(SburbPredefineCommand.SET_TERRAIN_LAND, "Predefined %s's terrain land type");
 		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
 		add(SburbPredefineCommand.DEFINE, "Predefined full data for %s");
+		add(SburbPredefineCommand.TOO_LATE, "It is too late to predefine data for this player");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
@@ -2400,7 +2459,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(LandTypePairArgument.INCOMPLETE, "Incomplete (expected two land aspects)");
 		
 		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
-		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
 		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
 		add(PredefineData.GENERATED_TITLE, "Generated %s as predefined title");
 		add(PredefineData.CHANGED_TITLE, "Changed predefined title from %s to %s due to a new title land type");
