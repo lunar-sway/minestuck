@@ -9,19 +9,21 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraftforge.common.world.PieceBeardifierModifier;
 
-public class SimpleTemplatePiece extends TemplateStructurePiece
+public final class PinkTowerPiece extends TemplateStructurePiece implements PieceBeardifierModifier
 {
-	public SimpleTemplatePiece(StructureTemplateManager pStructureManager, ResourceLocation pLocation, BlockPos pPos, Rotation pRotation)
+	public PinkTowerPiece(StructureTemplateManager pStructureManager, ResourceLocation pLocation, BlockPos pPos, Rotation pRotation)
 	{
-		super(MSStructurePieces.SIMPLE_TEMPLATE.get(), 0, pStructureManager, pLocation, pLocation.toString(), makeSettings(pRotation), pPos);
+		super(MSStructurePieces.PINK_TOWER.get(), 0, pStructureManager, pLocation, pLocation.toString(), makeSettings(pRotation), pPos);
 	}
 	
-	public SimpleTemplatePiece(StructureTemplateManager pStructureManager, CompoundTag pTag) {
-		super(MSStructurePieces.SIMPLE_TEMPLATE.get(), pTag, pStructureManager, id -> makeSettings(Rotation.valueOf(pTag.getString("Rot"))));
+	public PinkTowerPiece(StructureTemplateManager pStructureManager, CompoundTag pTag) {
+		super(MSStructurePieces.PINK_TOWER.get(), pTag, pStructureManager, id -> makeSettings(Rotation.valueOf(pTag.getString("Rot"))));
 	}
 	
 	private static StructurePlaceSettings makeSettings(Rotation pRotation) {
@@ -36,4 +38,21 @@ public class SimpleTemplatePiece extends TemplateStructurePiece
 	protected void handleDataMarker(String pName, BlockPos pPos, ServerLevelAccessor pLevel, RandomSource pRandom, BoundingBox pBox) {
 	}
 	
+	@Override
+	public BoundingBox getBeardifierBox()
+	{
+		return this.boundingBox;
+	}
+	
+	@Override
+	public TerrainAdjustment getTerrainAdjustment()
+	{
+		return TerrainAdjustment.BEARD_THIN;
+	}
+	
+	@Override
+	public int getGroundLevelDelta()
+	{
+		return 3;
+	}
 }

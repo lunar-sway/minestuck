@@ -40,6 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Dialogue in this new system is data-driven, and can be defined or tweaked through datapacks
 - New dialogue
 - Carapacian pawns now have dialogue
+- New structure in rain lands
 
 ### Changed
 
