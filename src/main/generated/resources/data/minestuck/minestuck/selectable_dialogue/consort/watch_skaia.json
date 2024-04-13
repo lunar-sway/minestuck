@@ -1,0 +1,6 @@
+{
+  "condition": {
+    "type": "minestuck:is_consort_from_land"
+  },
+  "dialogue": "minestuck:consort/watch_skaia"
+}

@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -15,7 +16,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 
 public class PulseLandType extends TitleLandType
@@ -61,14 +61,14 @@ public class PulseLandType extends TitleLandType
 	{
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COAGULATED_BLOOD_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BLOOD_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
 	}
 	
 	@Override
 	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
-		StructureBlockRegistry registry = new StructureBlockRegistry();
-		otherType.registerBlocks(registry);
-		return !registry.getBlockState("ocean").getFluidState().is(Fluids.LAVA);	//Lava is likely a too important part of the terrain aspect to be replaced
+		return !otherType.is(MSTags.TerrainLandTypes.IS_FLUID_IMPORTANT);
 	}
 	
 	@Override

@@ -1,12 +1,17 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.phys.Vec3;
 
 public class ThunderLandType extends TitleLandType
@@ -46,6 +51,12 @@ public class ThunderLandType extends TitleLandType
 	{
 		if(settings.hasOceanTerrain())
 			settings.oceanThreshold = Math.min(Math.max(0, settings.oceanThreshold), settings.oceanThreshold + 0.1F);	//Increase ocean chance by a factor 1.2, but not higher than to 0.5F
+	}
+	
+	@Override
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
+	{
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DOOM_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 	}
 	
 	@Override

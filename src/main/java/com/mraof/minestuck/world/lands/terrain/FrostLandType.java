@@ -83,6 +83,8 @@ public class FrostLandType extends TerrainLandType
 		
 		builder.addFeature(GenerationStep.Decoration.FLUID_SPRINGS, MiscOverworldPlacements.SPRING_LAVA_FROZEN, LandBiomeType.ROUGH);
 		
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.FROST_TREE, LandBiomeType.NORMAL);
+		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COARSE_DIRT_DISK, LandBiomeType.anyExcept(LandBiomeType.NORMAL));
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.SNOW_BLOCK_DISK, LandBiomeType.NORMAL);

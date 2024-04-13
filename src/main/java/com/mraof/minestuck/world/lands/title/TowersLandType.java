@@ -39,6 +39,8 @@ public class TowersLandType extends TitleLandType
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.MIXED_PILLARS, FeatureModifier.withState(blocks.getBlockState("structure_primary")), LandBiomeType.ROUGH);
 		
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.HOPE_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
 	}
 	
 	@Override

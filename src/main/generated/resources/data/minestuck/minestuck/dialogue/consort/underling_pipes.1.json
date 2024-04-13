@@ -1,0 +1,14 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "message": "minestuck.dialogue.consort.underling_pipes.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/underling_pipes.2"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.bunny_birthday.whatever",
+    "responses": [
+      {
+        "message": "minestuck.dots"
+      }
+    ]
+  }
+}

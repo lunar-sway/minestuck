@@ -52,6 +52,8 @@ public class SilenceLandType extends TitleLandType
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.PUMPKIN, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.VOID_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
 	}
 	
 	@Override

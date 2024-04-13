@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_title",
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.fungus_destroyer"
+    }
+  }
+}

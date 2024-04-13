@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button_pressed",
+  "textures": {
+    "texture": "minestuck:block/dark_gray_chess_brick_smooth"
+  }
+}

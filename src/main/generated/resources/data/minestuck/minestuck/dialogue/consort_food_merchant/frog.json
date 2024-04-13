@@ -1,0 +1,21 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_name"
+      ],
+      "key": "minestuck.dialogue.consort_food_merchant.frog"
+    },
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "triggers": [
+          {
+            "type": "minestuck:open_consort_merchant_gui",
+            "loot_table": "minestuck:gameplay/consort_food"
+          }
+        ]
+      }
+    ]
+  }
+}

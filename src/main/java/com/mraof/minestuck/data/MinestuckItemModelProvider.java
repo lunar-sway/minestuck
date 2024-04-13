@@ -511,6 +511,30 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.ANCIENT_THUMB_DRIVE);
 		simpleItem(MSItems.GUTTER_BALL);
 		
+		//Signs
+		simpleItem(MSItems.CARVED_SIGN);
+		simpleItem(MSItems.CARVED_HANGING_SIGN);
+		simpleItem(MSItems.DEAD_SIGN);
+		simpleItem(MSItems.DEAD_HANGING_SIGN);
+		simpleItem(MSItems.END_SIGN);
+		simpleItem(MSItems.END_HANGING_SIGN);
+		simpleItem(MSItems.FROST_SIGN);
+		simpleItem(MSItems.FROST_HANGING_SIGN);
+		simpleItem(MSItems.GLOWING_SIGN);
+		simpleItem(MSItems.GLOWING_HANGING_SIGN);
+		simpleItem(MSItems.RAINBOW_SIGN);
+		simpleItem(MSItems.RAINBOW_HANGING_SIGN);
+		simpleItem(MSItems.SHADEWOOD_SIGN);
+		simpleItem(MSItems.SHADEWOOD_HANGING_SIGN);
+		simpleItem(MSItems.TREATED_SIGN);
+		simpleItem(MSItems.TREATED_HANGING_SIGN);
+		simpleItem(MSItems.LACQUERED_SIGN);
+		simpleItem(MSItems.LACQUERED_HANGING_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_HANGING_SIGN);
+		simpleItem(MSItems.CINDERED_SIGN);
+		simpleItem(MSItems.CINDERED_HANGING_SIGN);
+		
 		//Buckets
 		simpleItem(MSItems.OIL_BUCKET);
 		simpleItem(MSItems.BLOOD_BUCKET);
@@ -519,6 +543,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.ENDER_BUCKET);
 		simpleItem(MSItems.LIGHT_WATER_BUCKET);
 		simpleItem(MSItems.OBSIDIAN_BUCKET);
+		simpleItem(MSItems.CAULK_BUCKET);
+		simpleItem(MSItems.MOLTEN_AMBER_BUCKET);
 		
 		
 		//Alchemy Items
@@ -606,9 +632,24 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CASSETTE_OTHERSIDE, "cassette/cassette_otherside");
 		simpleItem(MSItems.CASSETTE_5, "cassette/cassette_5");
 		
+		//Spawn Eggs
+		simpleItem(MSItems.IMP_SPAWN_EGG);
+		simpleItem(MSItems.OGRE_SPAWN_EGG);
+		simpleItem(MSItems.BASILISK_SPAWN_EGG);
+		simpleItem(MSItems.LICH_SPAWN_EGG);
+		simpleItem(MSItems.SALAMANDER_SPAWN_EGG);
+		simpleItem(MSItems.TURTLE_SPAWN_EGG);
+		simpleItem(MSItems.NAKAGATOR_SPAWN_EGG);
+		simpleItem(MSItems.IGUANA_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_PAWN_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_BISHOP_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_ROOK_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_PAWN_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_BISHOP_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_ROOK_SPAWN_EGG);
 	}
 	
-	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
+	ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
 	{
 		return simpleItem(item, item.getId().getPath());
 	}

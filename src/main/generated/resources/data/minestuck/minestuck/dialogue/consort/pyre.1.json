@@ -1,0 +1,14 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "happy"
+    },
+    "message": "minestuck.dialogue.consort.pyre.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/pyre.2"
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dots"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.dreamer.explain_dreamers.1"
+      }
+    ],
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:carapacian_soldier/dreamer/explain_dreamers.2"
+      }
+    ]
+  }
+}

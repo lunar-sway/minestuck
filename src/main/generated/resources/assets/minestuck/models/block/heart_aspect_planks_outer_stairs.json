@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/heart_aspect_planks",
+    "side": "minestuck:block/heart_aspect_planks",
+    "top": "minestuck:block/heart_aspect_planks"
+  }
+}

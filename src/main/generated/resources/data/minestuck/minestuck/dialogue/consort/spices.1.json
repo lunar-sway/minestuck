@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.spices.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/spices.2"
+      }
+    ]
+  }
+}

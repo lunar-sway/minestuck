@@ -1,44 +1,42 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
-import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
-import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 /**
  * A portion of the grist cost generation process responsible for generating grist costs from recipes.
@@ -51,8 +49,6 @@ import java.util.stream.Collectors;
 public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<List<RecipeGeneratedCostHandler.SourceEntry>> implements GeneratedCostProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	private static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(SourceEntry.class, (JsonDeserializer<SourceEntry>) RecipeGeneratedCostHandler::deserializeSourceEntry).create();
 	
 	public static final String PATH = "minestuck/grist_cost_generation_recipes.json";
 	
@@ -131,88 +127,23 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(String namespace : resourceManagerIn.getNamespaces())
 		{
 			resourceManagerIn.getResource(new ResourceLocation(namespace, PATH)).ifPresent(resource -> {
-				try
+				try(
+						Reader reader = resource.openAsReader()
+				)
 				{
-					try(
-							Reader reader = resource.openAsReader()
-					)
-					{
-						sources.addAll(readEntries(reader));
-						
-					} catch(RuntimeException runtimeexception)
-					{
-						LOGGER.warn("Invalid grist_cost_generation.json in data pack: '{}'", resource.sourcePackId(), runtimeexception);
-					}
-				} catch(IOException ignored)
+					JsonElement json = JsonParser.parseReader(reader);
+					SourceEntry.LIST_CODEC.parse(JsonOps.INSTANCE, json)
+							.resultOrPartial(LOGGER::error)
+							.ifPresent(sources::addAll);
+					
+				} catch(Exception runtimeexception)
 				{
+					LOGGER.warn("Unable to load grist_cost_generation.json in data pack: '{}'", resource.sourcePackId(), runtimeexception);
 				}
 			});
 		}
 		
 		return sources;
-	}
-	
-	private static List<SourceEntry> readEntries(Reader reader)
-	{
-		TypeToken<List<SourceEntry>> type = new TypeToken<>()
-		{
-		};
-		try
-		{
-			JsonReader jsonreader = new JsonReader(reader);
-			jsonreader.setLenient(false);
-			
-			return GSON.getAdapter(type).read(jsonreader);
-		} catch(IOException e)
-		{
-			throw new JsonParseException(e);
-		}
-	}
-	
-	private static SourceEntry deserializeSourceEntry(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-	{
-		JsonObject obj = GsonHelper.convertToJsonObject(json, "source entry");
-		
-		Source source = deserializeSource(obj);
-		
-		ResourceLocation name = new ResourceLocation(GsonHelper.getAsString(obj, "interpreter_type"));
-		InterpreterSerializer<?> serializer = InterpreterSerializers.REGISTRY.get().getValue(name);
-		
-		if(serializer == null)
-		{
-			LOGGER.error("No interpreter serializer by name {}. Using default interpreter instead.", name);
-			return new SourceEntry(source, DefaultInterpreter.INSTANCE);
-		} else return new SourceEntry(source, serializer.read(obj.get("interpreter")));
-	}
-	
-	private static Source deserializeSource(JsonObject json)
-	{
-		String type = GsonHelper.getAsString(json, "source_type");
-		switch(type)
-		{
-			case "recipe" ->
-			{
-				ResourceLocation recipe = new ResourceLocation(GsonHelper.getAsString(json, "source"));
-				return new RecipeSource(recipe);
-			}
-			case "recipe_serializer" ->
-			{
-				ResourceLocation serializerName = new ResourceLocation(GsonHelper.getAsString(json, "source"));
-				RecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
-				if(recipeSerializer == null)
-					throw new JsonParseException("No recipe type by name " + serializerName);
-				return new RecipeSerializerSource(recipeSerializer);
-			}
-			case "recipe_type" ->
-			{
-				ResourceLocation typeName = new ResourceLocation(GsonHelper.getAsString(json, "source"));
-				RecipeType<?> recipeType = ForgeRegistries.RECIPE_TYPES.getValue(typeName);
-				if(recipeType == null)
-					throw new JsonParseException("No recipe type by name " + typeName);
-				return new RecipeTypeSource(recipeType);
-			}
-		}
-		throw new JsonParseException("Invalid source type " + type);
 	}
 	
 	@Override
@@ -288,17 +219,17 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	private Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
 	{
 		//Step 1: sort recipe interpreters paired with their recipes in the order depending on the number of recipes in the list
-		List<Pair<List<Recipe<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
+		List<Pair<Collection<Recipe<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
 		for(SourceEntry entry : sources)
 		{
-			List<Recipe<?>> recipes = entry.source.findRecipes(recipeManager);
+			Collection<Recipe<?>> recipes = entry.source.findRecipes(recipeManager);
 			recipeLists.add(Pair.of(recipes, entry.interpreter));
 		}
 		recipeLists.sort(Comparator.comparingInt(pair -> -pair.getLeft().size()));
 		
 		//Step 2: Map recipes to interpreters such that each recipe only has one interpreter
 		Map<Recipe<?>, RecipeInterpreter> recipeMap = new HashMap<>();
-		for(Pair<List<Recipe<?>>, RecipeInterpreter> pair : recipeLists)
+		for(Pair<Collection<Recipe<?>>, RecipeInterpreter> pair : recipeLists)
 		{
 			for(Recipe<?> recipe : pair.getLeft())
 				recipeMap.put(recipe, pair.getRight());
@@ -317,66 +248,12 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		return itemLookupMap;
 	}
 	
-	static class SourceEntry
+	public record SourceEntry(RecipeSource source, RecipeInterpreter interpreter)
 	{
-		private final Source source;
-		private final RecipeInterpreter interpreter;
-		
-		private SourceEntry(Source source, RecipeInterpreter interpreter)
-		{
-			this.source = source;
-			this.interpreter = interpreter;
-		}
-	}
-	
-	public interface Source
-	{
-		List<Recipe<?>> findRecipes(RecipeManager recipeManager);
-	}
-	
-	private record RecipeSource(ResourceLocation recipe) implements Source
-	{
-		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
-		{
-			Optional<? extends Recipe<?>> recipe = recipeManager.byKey(this.recipe);
-			return recipe.<List<Recipe<?>>>map(Collections::singletonList).orElse(Collections.emptyList());
-		}
-		
-		@Override
-		public String toString()
-		{
-			return "recipe_source[recipe=" + recipe + "]";
-		}
-	}
-	
-	private record RecipeSerializerSource(RecipeSerializer<?> serializer) implements Source
-	{
-		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
-		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getSerializer() == serializer).collect(Collectors.toList());
-		}
-		
-		@Override
-		public String toString()
-		{
-			return "recipe_source[serializer=" + ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer) + "]";
-		}
-	}
-	
-	private record RecipeTypeSource(RecipeType<?> recipeType) implements Source
-	{
-		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
-		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getType() == recipeType).collect(Collectors.toList());
-		}
-		
-		@Override
-		public String toString()
-		{
-			return "recipe_source[type=" + recipeType + "]";
-		}
+		public static final Codec<SourceEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				RecipeSource.DISPATCH_CODEC.fieldOf("source").forGetter(SourceEntry::source),
+				RecipeInterpreter.DISPATCH_CODEC.fieldOf("interpreter").forGetter(SourceEntry::interpreter)
+		).apply(instance, SourceEntry::new));
+		public static final Codec<List<SourceEntry>> LIST_CODEC = CODEC.listOf();
 	}
 }

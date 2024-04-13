@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/heart_aspect_log",
+    "side": "minestuck:block/heart_aspect_log"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:entity_type",
+    "entity_type": "minestuck:iguana"
+  },
+  "dialogue": "minestuck:consort_food_merchant/grocery_store",
+  "keep_on_reset": true
+}

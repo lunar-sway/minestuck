@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:thunder"
+  },
+  "dialogue": "minestuck:consort/reckoning/1"
+}

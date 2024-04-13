@@ -46,6 +46,7 @@ public class WindLandType extends TitleLandType
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.PARCEL_PYXIS, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BREATH_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 	}
 	
 	@Override

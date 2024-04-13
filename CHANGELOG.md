@@ -4,6 +4,93 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased upcoming-content]
+
+### Added
+
+- Spawn egg items for main Underling types, Consorts, and Carapacians
+- Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+- Carved Logs, Carved Wooden Leaf, and Treated and Lacquered variants of Carved blocks
+- Tree Stump feature in Forest Lands
+- Frog Ruins feature in Frog Lands
+- Various Unfinished and Carved features in Wood Lands
+- Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
+- New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
+- Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
+- New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
+- New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
+- Carved Bush
+- Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
+- Silicone Caulk fluid, used in Wood lands
+- Cindered woodset and Trees in Heat lands
+- Igneous Stone, Magmatic Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
+- Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
+- Coffee Claws
+- TV Antenna
+- Molten Amber fluid, used in Heat lands
+- Cruxite block set
+- Black Stone Cruxite, Uranium, Gold, Redstone, and Quartz ores
+- Alchemy recipes for all Minestuck fluids
+- Magmatic Black Stone Bricks
+- Cast Iron Frame, Sheet, and Tile
+- Sulfur Pools and Cast Iron features in Heat Lands
+- Wooden Lamp and Heat Lamp blocks, used in Wood and Heat lands respectively
+- Chocolatey Cake - the most scrumptious cake in the entire world!
+- New dialogue system that uses a gui screen, replacing the chat-based system
+- Dialogue in this new system is data-driven, and can be defined or tweaked through datapacks
+- New dialogue
+- Carapacian pawns now have dialogue
+- New structure in rain lands
+- Signs and hanging signs for all wood types
+- Shade and glowing block sets updated
+- Doors and trapdoors added
+- All aspect block sets updated
+- Minor Aspect trees added
+
+### Changed
+
+- Wooden Cactus is now only placeable on the Wood Terrain Blocks tag instead of Sand
+- Carved Planks are now the surface block of Wood Lands instead of Treated Planks
+- Carved Planks no longer need to be mined with a Stone Axe or better
+- Transportalizers now stack to one instead of 64
+- Prismarine armor remodel and retexture
+- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
+- Computer Themes can now be added and rendered via resource pack
+- Default computer Theme for crockertop is now Crocker
+- Computer Theme is now chosen from a list of available Themes in separate GUI
+- Changes to computer Theme texture Crocker
+- Computer programs now always use Theme specific texture for arrow buttons
+- Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
+- Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
+- Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
+- Renamed Oil to Shale Oil
+- Pumord is now alchemized with Pumice Stone instead of any regular Stone
+- Minor change to land terrain height
+- Black Sand now generates in Heat lands
+- Updated Textures of Cast Iron blocks
+- Steel Beams are now alchemized with Iron Blocks instead of Cast Iron Blocks
+- Existing consort dialogue have been ported to the new dialogue system with some tweaks
+- New format for the data file `grist_cost_generation_recipes.json`
+
+### Fixed
+
+- Double slabs will now drop two slabs when broken
+- Sneaking now prevents trajectory blocks from moving the player
+- Blue dirt can now have the shovel used on it
+- Minestuck fences will now connect with vanilla fences appropriately
+- All walls will now connect with each other properly
+- Fixed name typos for some chess castle blocks
+- Area effect blocks now save their effect as a string id instead of an int id
+- Improved grammar on some dialogues
+
+### Removed
+
+- Uncarved Wood no longer has a tooltip
+
+### Contributors for this release
+
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipherNil, kirderf1
+
 ## [Unreleased]
 
 ### Changed
@@ -260,7 +347,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Added 75 more blocks to the default atheneum list.
 - Config option for delaying entry from when the land dimension is generated, which can help with performance.
-Note that this option is found in the common config and not the world config.
+  Note that this option is found in the common config and not the world config.
 - Particle effect while entering
 - Transportalizer particle
 
@@ -354,7 +441,7 @@ Note that this option is found in the common config and not the world config.
 - The "minestuck:land_type" loot condition now uses tags instead of land type groups
 - Some consort dialogue conditions now uses tags instead of land type groups
 - New way to determine which land types that can get picked at random,
-defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
+  defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
 - Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
@@ -407,7 +494,7 @@ defined using data files `data/<namespace>/minestuck/terrain_land_types.json` an
 ### Removed
 
 - Removed config options "generateCruxiteOre" and "generateUraniumOre".
-For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
+  For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
 
 ### Fixed
 

@@ -1,5 +1,7 @@
 {
   "values": [
+    "#minestuck:logs/aspect",
+    "#minestuck:wood/aspect",
     "#minestuck:logs/glowing",
     "#minestuck:logs/frost",
     "#minestuck:logs/rainbow",
@@ -9,6 +11,7 @@
     "#minestuck:logs/dead",
     "#minestuck:logs/petrified",
     "#minestuck:logs/aspect",
-    "#minestuck:logs/shadewood"
+    "#minestuck:logs/shadewood",
+    "#minestuck:logs/cindered"
   ]
 }

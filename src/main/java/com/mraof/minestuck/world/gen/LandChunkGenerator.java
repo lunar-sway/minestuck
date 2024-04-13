@@ -34,10 +34,12 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -46,6 +48,7 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			RegistryOps.retrieveGetter(Registries.NOISE),
 			RegistryOps.retrieveGetter(Registries.DENSITY_FUNCTION),
+			RegistryOps.retrieveGetter(Registries.STRUCTURE),
 			LandTypePair.Named.CODEC.fieldOf("named_land_types").forGetter(generator -> generator.namedTypes),
 			RegistryOps.retrieveGetter(Registries.BIOME),
 			RegistryOps.retrieveGetter(Registries.PLACED_FEATURE),
@@ -56,20 +59,21 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	public final StructureBlockRegistry blockRegistry;
 	private final LazyBiomeSettings customBiomeSettings;
 	public final GateStructure.PieceFactory gatePiece;
+	private final HolderGetter<Structure> structureLookup;
 	
-	public static LandChunkGenerator create(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, LandTypePair.Named namedTypes,
-											HolderGetter<Biome> biomeGetter, HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
+	public static LandChunkGenerator create(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, HolderGetter<Structure> structureLookup,
+											LandTypePair.Named namedTypes, HolderGetter<Biome> biomeGetter, HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
 	{
 		RegistryBackedBiomeSet biomes = new RegistryBackedBiomeSet(namedTypes.landTypes().getTerrain().getBiomeSet(), biomeGetter);
 		LandGenSettings genSettings = new LandGenSettings(namedTypes.landTypes());
 		
 		LazyBiomeSettings customBiomeSettings = new LazyBiomeSettings(extensions -> new LandCustomBiomeSettings(biomes, genSettings, extensions, features, carvers));
 		
-		return new LandChunkGenerator(noises, densityFunctions, namedTypes, biomes, customBiomeSettings, genSettings);
+		return new LandChunkGenerator(noises, densityFunctions, structureLookup, namedTypes, biomes, customBiomeSettings, genSettings);
 	}
 	
-	private LandChunkGenerator(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, LandTypePair.Named namedTypes,
-							   RegistryBackedBiomeSet biomes, LazyBiomeSettings customBiomeSettings, LandGenSettings genSettings)
+	private LandChunkGenerator(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, HolderGetter<Structure> structureLookup,
+							   LandTypePair.Named namedTypes, RegistryBackedBiomeSet biomes, LazyBiomeSettings customBiomeSettings, LandGenSettings genSettings)
 	{
 		super(new LandBiomeSource(biomes, genSettings), biome -> customBiomeSettings.get().generationFor(biome),
 				genSettings.createDimensionSettings(noises, densityFunctions));
@@ -78,6 +82,7 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 		this.namedTypes = namedTypes;
 		this.blockRegistry = genSettings.getBlockRegistry();
 		this.gatePiece = genSettings.getGatePiece();
+		this.structureLookup = structureLookup;
 	}
 	
 	@Override
@@ -89,9 +94,17 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	@Override
 	public ChunkGeneratorStructureState createState(HolderLookup<StructureSet> structureSetLookup, RandomState randomState, long seed)
 	{
-		List<Holder<StructureSet>> list = structureSetLookup.listElements().filter(structureSet -> hasStructureSet(structureSet.value()))
-				.<Holder<StructureSet>>map(holder -> holder).toList();
-		return new LandStructureState(randomState, biomeSource, seed, list);
+		List<StructureSet> landSpecificStructureSets = new ArrayList<>();
+		this.namedTypes.landTypes().getTerrain().addStructureSets(landSpecificStructureSets::add, this.structureLookup);
+		this.namedTypes.landTypes().getTitle().addStructureSets(landSpecificStructureSets::add, this.structureLookup);
+		
+		List<Holder<StructureSet>> structureSets = Stream.concat(
+				landSpecificStructureSets.stream().map(Holder::direct),
+				structureSetLookup.listElements()
+						.filter(structureSet -> hasStructureSet(structureSet.value()))
+						.<Holder<StructureSet>>map(holder -> holder)
+		).toList();
+		return new LandStructureState(randomState, biomeSource, seed, structureSets);
 	}
 	
 	private boolean hasStructureSet(StructureSet structureSet)

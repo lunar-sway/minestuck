@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "minestuck:block/glowing_planks",
+    "side": "minestuck:block/glowing_planks",
+    "top": "minestuck:block/glowing_planks"
+  }
+}

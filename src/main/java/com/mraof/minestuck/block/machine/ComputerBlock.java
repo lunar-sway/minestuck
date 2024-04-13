@@ -1,21 +1,18 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.Theme;
-import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.GlobalPos;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -55,12 +52,20 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	
 	public final Map<Direction, VoxelShape> shapeOn, shapeOff;
 	
+	public final ResourceLocation defaultTheme;
+	
 	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, Properties properties)
+	{
+		this(shapeOn, shapeOff, MSComputerThemes.DEFAULT, properties);
+	}
+	
+	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, ResourceLocation defaultTheme, Properties properties)
 	{
 		super(properties);
 		registerDefaultState(defaultBlockState().setValue(STATE, State.OFF));
 		this.shapeOn = shapeOn;
 		this.shapeOff = shapeOff;
+		this.defaultTheme = defaultTheme;
 	}
 	
 	@Override
@@ -116,8 +121,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			{
 				computer.owner = IdentifierHandler.encode(player);
 				
-				if(newState.is(MSBlocks.OLD_COMPUTER.get()))
-					computer.setTheme(Theme.SBURB_95);
+				computer.setTheme(defaultTheme);
 			}
 			
 			newState.use(level, player, handIn, hit);

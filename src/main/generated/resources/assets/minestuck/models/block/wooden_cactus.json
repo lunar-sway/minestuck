@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/cactus",
+  "render_type": "minecraft:cutout",
   "textures": {
     "bottom": "minestuck:block/wooden_cactus_bottom",
     "particle": "minestuck:block/wooden_cactus_side",

@@ -3,10 +3,11 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -28,6 +29,7 @@ import javax.annotation.Nullable;
 public class TransportalizerBlock extends MachineBlock implements EntityBlock
 {
 	public static final VoxelShape SHAPE = MSBlockShapes.TRANSPORTALIZER.create(Direction.NORTH);
+	public static final String LOCKED = "block.minestuck.transportalizer.locked";
 	
 	public TransportalizerBlock(Properties properties)
 	{
@@ -77,12 +79,15 @@ public class TransportalizerBlock extends MachineBlock implements EntityBlock
 		TransportalizerBlockEntity blockEntity = (TransportalizerBlockEntity) level.getBlockEntity(pos);
 
 		if (blockEntity == null || player.isShiftKeyDown())
-		{
 			return InteractionResult.PASS;
-		}
-
+		
 		if(level.isClientSide)
-			MSScreenFactories.displayTransportalizerScreen(blockEntity);
+		{
+			if (blockEntity.isLocked())
+				player.sendSystemMessage(Component.translatable(LOCKED));
+			else
+				MSScreenFactories.displayTransportalizerScreen(blockEntity);
+		}
 
 		return InteractionResult.SUCCESS;
 	}

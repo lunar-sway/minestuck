@@ -39,8 +39,10 @@ public class MSTags
 		public static final TagKey<Block> VINE_LOGS = tag("logs/vine");
 		public static final TagKey<Block> FLOWERY_VINE_LOGS = tag("logs/flowery_vine");
 		public static final TagKey<Block> DEAD_LOGS = tag("logs/dead");
+		public static final TagKey<Block> CINDERED_LOGS = tag("logs/cindered");
 		public static final TagKey<Block> PETRIFIED_LOGS = tag("logs/petrified");
 		public static final TagKey<Block> ASPECT_LOGS = tag("logs/aspect");
+		public static final TagKey<Block> ASPECT_WOOD = tag("wood/aspect");
 		public static final TagKey<Block> ASPECT_PLANKS = tag("planks/aspect");
 		public static final TagKey<Block> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Block> ASPECT_SAPLINGS = tag("saplings/aspect");
@@ -48,6 +50,9 @@ public class MSTags
 		public static final TagKey<Block> ASPECT_LADDERS = tag("ladders/aspect");
 		public static final TagKey<Block> SHADEWOOD_LOGS = tag("logs/shadewood");
 		public static final TagKey<Block> SHADEWOOD_LEAVES = tag("leaves/shadewood");
+		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");
+		public static final TagKey<Block> HEAT_TERRAIN_BLOCKS = tag("terrain/heat_terrain_blocks");
+		public static final TagKey<Block> ASPECT_TREE_PLACEABLE = tag("terrain/aspect_tree_placeable");
 		public static final TagKey<Block> CRUXITE_ORES = tag("ores/cruxite");
 		public static final TagKey<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Block> COAL_ORES = tag("ores/coal");
@@ -57,6 +62,7 @@ public class MSTags
 		public static final TagKey<Block> QUARTZ_ORES = tag("ores/quartz");
 		public static final TagKey<Block> LAPIS_ORES = tag("ores/lapis");
 		public static final TagKey<Block> DIAMOND_ORES = tag("ores/diamond");
+		public static final TagKey<Block> EMERALD_ORES = tag("ores/emerald");
 		public static final TagKey<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final TagKey<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final TagKey<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
@@ -80,8 +86,10 @@ public class MSTags
 		public static final TagKey<Item> VINE_LOGS = tag("logs/vine");
 		public static final TagKey<Item> FLOWERY_VINE_LOGS = tag("logs/flowery_vine");
 		public static final TagKey<Item> DEAD_LOGS = tag("logs/dead");
+		public static final TagKey<Item> CINDERED_LOGS = tag("logs/cindered");
 		public static final TagKey<Item> PETRIFIED_LOGS = tag("logs/petrified");
 		public static final TagKey<Item> ASPECT_LOGS = tag("logs/aspect");
+		public static final TagKey<Item> ASPECT_WOOD = tag("wood/aspect");
 		public static final TagKey<Item> ASPECT_PLANKS = tag("planks/aspect");
 		public static final TagKey<Item> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Item> ASPECT_SAPLINGS = tag("saplings/aspect");
@@ -96,6 +104,7 @@ public class MSTags
 		public static final TagKey<Item> QUARTZ_ORES = tag("ores/quartz");
 		public static final TagKey<Item> LAPIS_ORES = tag("ores/lapis");
 		public static final TagKey<Item> DIAMOND_ORES = tag("ores/diamond");
+		public static final TagKey<Item> EMERALD_ORES = tag("ores/emerald");
 		public static final TagKey<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final TagKey<Item> GRIST_CANDY = tag("grist_candy");
 		public static final TagKey<Item> FAYGO = tag("faygo");
@@ -103,8 +112,10 @@ public class MSTags
 		public static final TagKey<Item> CASSETTES = tag("cassettes");
 		public static final TagKey<Item> BUGS = tag("bugs");
 		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
+		public static final TagKey<Item> MAGIC_WEAPON = tag("magic_weapon");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
+		public static final TagKey<Item> LEGENDARY = tag("legendary");
 
 		private static TagKey<Item> tag(String name)
 		{
@@ -120,6 +131,7 @@ public class MSTags
 		public static final TagKey<Fluid> WATER_COLORS = tag("water_colors");
 		public static final TagKey<Fluid> ENDER = tag("ender");
 		public static final TagKey<Fluid> LIGHT_WATER = tag("light_water");
+		public static final TagKey<Fluid> CAULK = tag("caulk");
 		
 		private static TagKey<Fluid> tag(String name)
 		{
@@ -198,6 +210,9 @@ public class MSTags
 		public static final TagKey<TerrainLandType> ROCK = tag("rock");
 		public static final TagKey<TerrainLandType> SAND = tag("sand");
 		public static final TagKey<TerrainLandType> SANDSTONE = tag("sandstone");
+		public static final TagKey<TerrainLandType> IS_DESOLATE = tag("is_desolate");
+		public static final TagKey<TerrainLandType> IS_DANGEROUS = tag("is_dangerous");
+		public static final TagKey<TerrainLandType> IS_FLUID_IMPORTANT = tag("is_fluid_important");
 		
 		private static TagKey<TerrainLandType> tag(String name)
 		{

@@ -72,6 +72,7 @@ public final class PlayerData
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
+	@Nullable
 	private Title title;
 	private boolean effectToggle;
 	public final EditmodeLocations editmodeLocations;
@@ -290,6 +291,7 @@ public final class PlayerData
 		return gristCache;
 	}
 	
+	@Nullable
 	public Title getTitle()
 	{
 		return title;

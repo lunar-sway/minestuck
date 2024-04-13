@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_pressure_plate",
+  "key": {
+    "#": {
+      "item": "minestuck:cindered_planks"
+    }
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "item": "minestuck:cindered_pressure_plate"
+  },
+  "show_notification": true
+}

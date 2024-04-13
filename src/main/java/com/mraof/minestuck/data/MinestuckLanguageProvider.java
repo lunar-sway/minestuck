@@ -1,11 +1,14 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.block.ItemBlockPair;
+import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -30,6 +33,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 		this.modid = modid;
 	}
 	
+	protected void add(ItemBlockPair<?, ?> pair, String name)
+	{
+		add(pair.asBlock(), name);
+	}
 	protected void addBlockTooltip(Supplier<Block> key, String value)
 	{
 		addTooltip(key.get(), value);
@@ -143,10 +150,6 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("strife."+key, value);
 	}
-	protected void addDialogue(String key, String value)
-	{
-		add("consort."+key, value);
-	}
 	protected void addSubtitles(String key, String value)
 	{
 		add("subtitles."+modid+"."+key, value);
@@ -194,5 +197,9 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		addBaseDeathMessage(key, base);
 		addDeathMessageWithItem(key, withItem);
+	}
+	protected void addThemeName(ResourceLocation themeId, String themeName)
+	{
+		add(ComputerTheme.translationKeyFromId(themeId), themeName);
 	}
 }

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "minestuck:block/black_chess_brick_smooth_pressure_plate"
+    },
+    "powered=true": {
+      "model": "minestuck:block/black_chess_brick_smooth_pressure_plate_down"
+    }
+  }
+}

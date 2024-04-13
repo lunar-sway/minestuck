@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:blackstone"
+  },
+  "input2": {
+    "item": "minestuck:black_stone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:igneous_stone"
+  }
+}
