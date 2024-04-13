@@ -22,8 +22,6 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
-		AspectTreeBlocksData.addItemModels(this);
-		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);
 		handheldItem(MSItems.SLEDGE_HAMMER);

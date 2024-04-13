@@ -1,6 +1,5 @@
 package com.mraof.minestuck.data;
 
-import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.data.loot_table.MSBlockLootTables;
 import com.mraof.minestuck.data.recipe.CommonRecipes;
 import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
@@ -282,15 +281,15 @@ public final class AspectTreeBlocksData
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.BLOOD_ASPECT_WOOD,
+		provider.axisWithItem(BLOOD_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("blood_aspect_log"),
 						texture("blood_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(BLOOD_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.BLOOD_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(BLOOD_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("blood_aspect_stripped_log"),
 						texture("blood_aspect_stripped_log")));
@@ -315,24 +314,27 @@ public final class AspectTreeBlocksData
 						texture("blood_aspect_planks")));
 		provider.simpleHorizontal(BLOOD_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(BLOOD_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.BLOOD_ASPECT_SIGN.get(), AspectTreeBlocks.BLOOD_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.BLOOD_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.BLOOD_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.BLOOD_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(BLOOD_ASPECT_SIGN.get(), BLOOD_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(BLOOD_ASPECT_PLANKS.get()));
+		provider.flatItem(BLOOD_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(BLOOD_ASPECT_HANGING_SIGN.get(), BLOOD_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(BLOOD_ASPECT_PLANKS.get()));
+		provider.flatItem(BLOOD_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		provider.axisWithItem(BREATH_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.BREATH_ASPECT_WOOD,
+		provider.axisWithItem(BREATH_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("breath_aspect_log"),
 						texture("breath_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.BREATH_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(BREATH_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.BREATH_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(BREATH_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("breath_aspect_stripped_log"),
 						texture("breath_aspect_stripped_log")));
@@ -357,25 +359,28 @@ public final class AspectTreeBlocksData
 						texture("breath_aspect_planks")));
 		provider.simpleHorizontal(BREATH_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(BREATH_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.BREATH_ASPECT_SIGN.get(), AspectTreeBlocks.BREATH_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.BREATH_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.BREATH_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.BREATH_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.BREATH_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(BREATH_ASPECT_SIGN.get(), BREATH_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(BREATH_ASPECT_PLANKS.get()));
+		provider.flatItem(BREATH_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(BREATH_ASPECT_HANGING_SIGN.get(), BREATH_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(BREATH_ASPECT_PLANKS.get()));
+		provider.flatItem(BREATH_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(DOOM_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.DOOM_ASPECT_WOOD,
+		provider.axisWithItem(DOOM_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("doom_aspect_log"),
 						texture("doom_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.DOOM_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(DOOM_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.DOOM_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(DOOM_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("doom_aspect_stripped_log"),
 						texture("doom_aspect_stripped_log")));
@@ -400,25 +405,28 @@ public final class AspectTreeBlocksData
 						texture("doom_aspect_planks")));
 		provider.simpleHorizontal(DOOM_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(DOOM_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.DOOM_ASPECT_SIGN.get(), AspectTreeBlocks.DOOM_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.DOOM_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.DOOM_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.DOOM_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.DOOM_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(DOOM_ASPECT_SIGN.get(), DOOM_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(DOOM_ASPECT_PLANKS.get()));
+		provider.flatItem(DOOM_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(DOOM_ASPECT_HANGING_SIGN.get(), DOOM_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(DOOM_ASPECT_PLANKS.get()));
+		provider.flatItem(DOOM_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(HEART_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.HEART_ASPECT_WOOD,
+		provider.axisWithItem(HEART_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("heart_aspect_log"),
 						texture("heart_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.HEART_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(HEART_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.HEART_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(HEART_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("heart_aspect_stripped_log"),
 						texture("heart_aspect_stripped_log")));
@@ -443,25 +451,28 @@ public final class AspectTreeBlocksData
 						texture("heart_aspect_planks")));
 		provider.simpleHorizontal(HEART_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(HEART_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.HEART_ASPECT_SIGN.get(), AspectTreeBlocks.HEART_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.HEART_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.HEART_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.HEART_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.HEART_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(HEART_ASPECT_SIGN.get(), HEART_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(HEART_ASPECT_PLANKS.get()));
+		provider.flatItem(HEART_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(HEART_ASPECT_HANGING_SIGN.get(), HEART_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(HEART_ASPECT_PLANKS.get()));
+		provider.flatItem(HEART_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(HOPE_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.HOPE_ASPECT_WOOD,
+		provider.axisWithItem(HOPE_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("hope_aspect_log"),
 						texture("hope_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.HOPE_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(HOPE_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.HOPE_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(HOPE_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("hope_aspect_stripped_log"),
 						texture("hope_aspect_stripped_log")));
@@ -486,25 +497,28 @@ public final class AspectTreeBlocksData
 						texture("hope_aspect_planks")));
 		provider.simpleHorizontal(HOPE_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(HOPE_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.HOPE_ASPECT_SIGN.get(), AspectTreeBlocks.HOPE_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.HOPE_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.HOPE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.HOPE_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.HOPE_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(HOPE_ASPECT_SIGN.get(), HOPE_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(HOPE_ASPECT_PLANKS.get()));
+		provider.flatItem(HOPE_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(HOPE_ASPECT_HANGING_SIGN.get(), HOPE_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(HOPE_ASPECT_PLANKS.get()));
+		provider.flatItem(HOPE_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(LIFE_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.LIFE_ASPECT_WOOD,
+		provider.axisWithItem(LIFE_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("life_aspect_log"),
 						texture("life_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.LIFE_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(LIFE_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.LIFE_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(LIFE_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("life_aspect_stripped_log"),
 						texture("life_aspect_stripped_log")));
@@ -529,25 +543,28 @@ public final class AspectTreeBlocksData
 						texture("life_aspect_planks")));
 		provider.simpleHorizontal(LIFE_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(LIFE_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.LIFE_ASPECT_SIGN.get(), AspectTreeBlocks.LIFE_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.LIFE_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.LIFE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.LIFE_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.LIFE_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(LIFE_ASPECT_SIGN.get(), LIFE_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(LIFE_ASPECT_PLANKS.get()));
+		provider.flatItem(LIFE_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(LIFE_ASPECT_HANGING_SIGN.get(), LIFE_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(LIFE_ASPECT_PLANKS.get()));
+		provider.flatItem(LIFE_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(LIGHT_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.LIGHT_ASPECT_WOOD,
+		provider.axisWithItem(LIGHT_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("light_aspect_log"),
 						texture("light_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(LIGHT_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.LIGHT_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(LIGHT_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("light_aspect_stripped_log"),
 						texture("light_aspect_stripped_log")));
@@ -572,25 +589,28 @@ public final class AspectTreeBlocksData
 						texture("light_aspect_planks")));
 		provider.simpleHorizontal(LIGHT_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(LIGHT_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.LIGHT_ASPECT_SIGN.get(), AspectTreeBlocks.LIGHT_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.LIGHT_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.LIGHT_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.LIGHT_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.LIGHT_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(LIGHT_ASPECT_SIGN.get(), LIGHT_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(LIGHT_ASPECT_PLANKS.get()));
+		provider.flatItem(LIGHT_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(LIGHT_ASPECT_HANGING_SIGN.get(), LIGHT_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(LIGHT_ASPECT_PLANKS.get()));
+		provider.flatItem(LIGHT_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(MIND_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.MIND_ASPECT_WOOD,
+		provider.axisWithItem(MIND_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("mind_aspect_log"),
 						texture("mind_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.MIND_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(MIND_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.MIND_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(MIND_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("mind_aspect_stripped_log"),
 						texture("mind_aspect_stripped_log")));
@@ -615,25 +635,28 @@ public final class AspectTreeBlocksData
 						texture("mind_aspect_planks")));
 		provider.simpleHorizontal(MIND_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(MIND_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.MIND_ASPECT_SIGN.get(), AspectTreeBlocks.MIND_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.MIND_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.MIND_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.MIND_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.MIND_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(MIND_ASPECT_SIGN.get(), MIND_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(MIND_ASPECT_PLANKS.get()));
+		provider.flatItem(MIND_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(MIND_ASPECT_HANGING_SIGN.get(), MIND_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(MIND_ASPECT_PLANKS.get()));
+		provider.flatItem(MIND_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(RAGE_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.RAGE_ASPECT_WOOD,
+		provider.axisWithItem(RAGE_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("rage_aspect_log"),
 						texture("rage_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.RAGE_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(RAGE_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.RAGE_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(RAGE_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("rage_aspect_stripped_log"),
 						texture("rage_aspect_stripped_log")));
@@ -658,25 +681,28 @@ public final class AspectTreeBlocksData
 						texture("rage_aspect_planks")));
 		provider.simpleHorizontal(RAGE_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(RAGE_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.RAGE_ASPECT_SIGN.get(), AspectTreeBlocks.RAGE_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.RAGE_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.RAGE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.RAGE_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.RAGE_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(RAGE_ASPECT_SIGN.get(), RAGE_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(RAGE_ASPECT_PLANKS.get()));
+		provider.flatItem(RAGE_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(RAGE_ASPECT_HANGING_SIGN.get(), RAGE_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(RAGE_ASPECT_PLANKS.get()));
+		provider.flatItem(RAGE_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(SPACE_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.SPACE_ASPECT_WOOD,
+		provider.axisWithItem(SPACE_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("space_aspect_log"),
 						texture("space_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.SPACE_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(SPACE_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.SPACE_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(SPACE_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("space_aspect_stripped_log"),
 						texture("space_aspect_stripped_log")));
@@ -701,25 +727,27 @@ public final class AspectTreeBlocksData
 						texture("space_aspect_planks")));
 		provider.simpleHorizontal(SPACE_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(SPACE_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.SPACE_ASPECT_SIGN.get(), AspectTreeBlocks.SPACE_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.SPACE_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.SPACE_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.SPACE_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.SPACE_ASPECT_PLANKS.get()));
+		provider.signBlock(SPACE_ASPECT_SIGN.get(), SPACE_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(SPACE_ASPECT_PLANKS.get()));
+		provider.flatItem(SPACE_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(SPACE_ASPECT_HANGING_SIGN.get(), SPACE_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(SPACE_ASPECT_PLANKS.get()));
+		provider.flatItem(SPACE_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		
 		provider.axisWithItem(TIME_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.TIME_ASPECT_WOOD,
+		provider.axisWithItem(TIME_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("time_aspect_log"),
 						texture("time_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.TIME_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(TIME_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.TIME_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(TIME_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("time_aspect_stripped_log"),
 						texture("time_aspect_stripped_log")));
@@ -744,24 +772,27 @@ public final class AspectTreeBlocksData
 						texture("time_aspect_planks")));
 		provider.simpleHorizontal(TIME_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(TIME_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.TIME_ASPECT_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.TIME_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.TIME_ASPECT_PLANKS.get()));
+		
+		provider.signBlock(TIME_ASPECT_SIGN.get(), TIME_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(TIME_ASPECT_PLANKS.get()));
+		provider.flatItem(TIME_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(TIME_ASPECT_HANGING_SIGN.get(), TIME_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(TIME_ASPECT_PLANKS.get()));
+		provider.flatItem(TIME_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 		
 		provider.axisWithItem(VOID_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.VOID_ASPECT_WOOD,
+		provider.axisWithItem(VOID_ASPECT_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("void_aspect_log"),
 						texture("void_aspect_log")));
-		provider.axisWithItem(AspectTreeBlocks.VOID_ASPECT_STRIPPED_LOG,
+		provider.axisWithItem(VOID_ASPECT_STRIPPED_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_top"))));
-		provider.axisWithItem(AspectTreeBlocks.VOID_ASPECT_STRIPPED_WOOD,
+		provider.axisWithItem(VOID_ASPECT_STRIPPED_WOOD,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture("void_aspect_stripped_log"),
 						texture("void_aspect_stripped_log")));
@@ -786,48 +817,13 @@ public final class AspectTreeBlocksData
 						texture("void_aspect_planks")));
 		provider.simpleHorizontal(VOID_ASPECT_LADDER, provider::ladder);
 		provider.flatItem(VOID_ASPECT_LADDER_ITEM, MSBlockStateProvider::texture);
-		provider.signBlock(AspectTreeBlocks.VOID_ASPECT_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.VOID_ASPECT_PLANKS.get()));
-		provider.hangingSignBlock(AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_HANGING_SIGN.get(),
-				provider.blockTexture(AspectTreeBlocks.VOID_ASPECT_PLANKS.get()));
-	}
-	
-	public static void addItemModels(MinestuckItemModelProvider provider) {
-		provider.simpleItem(AspectTreeBlocks.BLOOD_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN_ITEM);
 		
-		provider.simpleItem(AspectTreeBlocks.BREATH_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.BREATH_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.DOOM_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.DOOM_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.HEART_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.HEART_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.HOPE_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.HOPE_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.LIFE_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.LIFE_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.LIGHT_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.LIGHT_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.MIND_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.MIND_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.RAGE_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.RAGE_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.SPACE_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.SPACE_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.TIME_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN_ITEM);
-		
-		provider.simpleItem(AspectTreeBlocks.VOID_ASPECT_SIGN_ITEM);
-		provider.simpleItem(AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN_ITEM);
+		provider.signBlock(VOID_ASPECT_SIGN.get(), VOID_ASPECT_WALL_SIGN.get(),
+				provider.blockTexture(VOID_ASPECT_PLANKS.get()));
+		provider.flatItem(VOID_ASPECT_SIGN_ITEM, MSBlockStateProvider::itemTexture);
+		provider.hangingSignBlock(VOID_ASPECT_HANGING_SIGN.get(), VOID_ASPECT_WALL_HANGING_SIGN.get(),
+				provider.blockTexture(VOID_ASPECT_PLANKS.get()));
+		provider.flatItem(VOID_ASPECT_HANGING_SIGN_ITEM, MSBlockStateProvider::itemTexture);
 	}
 	
 	public static void addLootTables(MSBlockLootTables provider)
@@ -856,9 +852,9 @@ public final class AspectTreeBlocksData
 		provider.add(BLOOD_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(BLOOD_ASPECT_SIGN_ITEM.get()));
 		provider.add(BLOOD_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(BLOOD_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(BLOOD_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.BLOOD_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(BLOOD_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(BREATH_ASPECT_LOG.get());
 		provider.dropSelf(BREATH_ASPECT_WOOD.get());
@@ -884,9 +880,9 @@ public final class AspectTreeBlocksData
 		provider.add(BREATH_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(BREATH_ASPECT_SIGN_ITEM.get()));
 		provider.add(BREATH_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.BREATH_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(BREATH_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(BREATH_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.BREATH_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(BREATH_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(DOOM_ASPECT_LOG.get());
 		provider.dropSelf(DOOM_ASPECT_WOOD.get());
@@ -912,9 +908,9 @@ public final class AspectTreeBlocksData
 		provider.add(DOOM_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(DOOM_ASPECT_SIGN_ITEM.get()));
 		provider.add(DOOM_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.DOOM_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(DOOM_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(DOOM_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.DOOM_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(DOOM_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(HEART_ASPECT_LOG.get());
 		provider.dropSelf(HEART_ASPECT_WOOD.get());
@@ -940,9 +936,9 @@ public final class AspectTreeBlocksData
 		provider.add(HEART_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(HEART_ASPECT_SIGN_ITEM.get()));
 		provider.add(HEART_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.HEART_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(HEART_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(HEART_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.HEART_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(HEART_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(HOPE_ASPECT_LOG.get());
 		provider.dropSelf(HOPE_ASPECT_WOOD.get());
@@ -968,9 +964,9 @@ public final class AspectTreeBlocksData
 		provider.add(HOPE_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(HOPE_ASPECT_SIGN_ITEM.get()));
 		provider.add(HOPE_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.HOPE_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(HOPE_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(HOPE_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.HOPE_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(HOPE_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(LIFE_ASPECT_LOG.get());
 		provider.dropSelf(LIFE_ASPECT_WOOD.get());
@@ -996,9 +992,9 @@ public final class AspectTreeBlocksData
 		provider.add(LIFE_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(LIFE_ASPECT_SIGN_ITEM.get()));
 		provider.add(LIFE_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.LIFE_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(LIFE_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(LIFE_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.LIFE_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(LIFE_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(LIGHT_ASPECT_LOG.get());
 		provider.dropSelf(LIGHT_ASPECT_WOOD.get());
@@ -1024,9 +1020,9 @@ public final class AspectTreeBlocksData
 		provider.add(LIGHT_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(LIGHT_ASPECT_SIGN_ITEM.get()));
 		provider.add(LIGHT_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.LIGHT_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(LIGHT_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(LIGHT_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.LIGHT_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(LIGHT_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(MIND_ASPECT_LOG.get());
 		provider.dropSelf(MIND_ASPECT_WOOD.get());
@@ -1052,9 +1048,9 @@ public final class AspectTreeBlocksData
 		provider.add(MIND_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(MIND_ASPECT_SIGN_ITEM.get()));
 		provider.add(MIND_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.MIND_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(MIND_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(MIND_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.MIND_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(MIND_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(RAGE_ASPECT_LOG.get());
 		provider.dropSelf(RAGE_ASPECT_WOOD.get());
@@ -1080,9 +1076,9 @@ public final class AspectTreeBlocksData
 		provider.add(RAGE_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(RAGE_ASPECT_SIGN_ITEM.get()));
 		provider.add(RAGE_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.RAGE_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(RAGE_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(RAGE_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.RAGE_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(RAGE_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(SPACE_ASPECT_LOG.get());
 		provider.dropSelf(SPACE_ASPECT_WOOD.get());
@@ -1108,9 +1104,9 @@ public final class AspectTreeBlocksData
 		provider.add(SPACE_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(SPACE_ASPECT_SIGN_ITEM.get()));
 		provider.add(SPACE_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.SPACE_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(SPACE_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(SPACE_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.SPACE_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(SPACE_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(TIME_ASPECT_LOG.get());
 		provider.dropSelf(TIME_ASPECT_WOOD.get());
@@ -1136,9 +1132,9 @@ public final class AspectTreeBlocksData
 		provider.add(TIME_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(TIME_ASPECT_SIGN_ITEM.get()));
 		provider.add(TIME_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(TIME_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(TIME_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(TIME_ASPECT_HANGING_SIGN_ITEM.get()));
 		
 		provider.dropSelf(VOID_ASPECT_LOG.get());
 		provider.dropSelf(VOID_ASPECT_WOOD.get());
@@ -1164,9 +1160,9 @@ public final class AspectTreeBlocksData
 		provider.add(VOID_ASPECT_WALL_SIGN.get(), block ->
 				provider.createSingleItemTable(VOID_ASPECT_SIGN_ITEM.get()));
 		provider.add(VOID_ASPECT_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(VOID_ASPECT_HANGING_SIGN_ITEM.get()));
 		provider.add(VOID_ASPECT_WALL_HANGING_SIGN.get(), block ->
-				provider.createSingleItemTable(AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN_ITEM.get()));
+				provider.createSingleItemTable(VOID_ASPECT_HANGING_SIGN_ITEM.get()));
 	}
 	
 	public static void addToBlockTags(MinestuckBlockTagsProvider provider)
