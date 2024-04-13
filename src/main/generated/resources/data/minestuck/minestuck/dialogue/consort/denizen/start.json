@@ -1,0 +1,28 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.denizen.start"
+    },
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.denizen.start.what",
+        "next_dialogue": {
+          "id": "minestuck:consort/denizen/explain",
+          "player_message": "minestuck.dialogue.consort.denizen.start.what.reply",
+          "set_as_entrypoint": false
+        }
+      },
+      {
+        "message": "minestuck.dialogue.consort.denizen.start.alignment",
+        "next_dialogue": {
+          "id": "minestuck:consort/denizen/alignment",
+          "player_message": "minestuck.dialogue.consort.denizen.start.alignment.reply",
+          "set_as_entrypoint": false
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_title"
+      ],
+      "key": "minestuck.dialogue.consort.why_monsters.why_no_reason.1"
+    },
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.why_monsters.why_no_reason.1.no_answer"
+      }
+    ]
+  }
+}

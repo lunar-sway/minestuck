@@ -7,6 +7,7 @@ import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.blockentity.redstone.*;
 import com.mraof.minestuck.client.gui.captchalouge.*;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
@@ -134,6 +135,18 @@ public class MSScreenFactories
 			SylladexScreen screen = SYLLADEX_FACTORIES.get(modus.getType()).apply(modus);
 			Minecraft.getInstance().setScreen(screen);
 		}
+	}
+	
+	public static void displayDialogueScreen(int dialogueId, Dialogue.DialogueData dialogueData)
+	{
+		Minecraft.getInstance().setScreen(new DialogueScreen(dialogueId, dialogueData));
+	}
+	
+	public static void closeDialogueScreen()
+	{
+		Minecraft minecraft = Minecraft.getInstance();
+		if(minecraft.screen instanceof DialogueScreen)
+			minecraft.setScreen(null);
 	}
 	
 	public static void updateSylladexScreen()

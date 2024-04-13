@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
@@ -26,7 +25,7 @@ public class SimpleTemplatePiece extends TemplateStructurePiece
 	}
 	
 	private static StructurePlaceSettings makeSettings(Rotation pRotation) {
-		return (new StructurePlaceSettings()).setRotation(pRotation).setMirror(Mirror.NONE).addProcessor(BlockIgnoreProcessor.STRUCTURE_AND_AIR);
+		return (new StructurePlaceSettings()).setRotation(pRotation).setMirror(Mirror.NONE);
 	}
 	
 	protected void addAdditionalSaveData(StructurePieceSerializationContext pContext, CompoundTag pTag) {

@@ -1,0 +1,77 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "barter"
+      },
+      "node": {
+        "message": "minestuck.dialogue.consort.hungry.first_no",
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:has_matched_item"
+            },
+            "message": {
+              "arguments": [
+                "matched_item"
+              ],
+              "key": "minestuck.dialogue.consort.hungry.first_no.yes"
+            },
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/finally",
+              "reply_messages": [
+                {
+                  "type": "player",
+                  "message": "minestuck.dialogue.consort.hungry.first_no.yes.reply"
+                },
+                {
+                  "type": "description",
+                  "message": {
+                    "arguments": [
+                      "matched_item"
+                    ],
+                    "key": "minestuck.dialogue.consort.hungry.first_no.yes.desc"
+                  }
+                }
+              ],
+              "set_as_entrypoint": false
+            },
+            "triggers": [
+              {
+                "type": "minestuck:take_matched_item"
+              },
+              {
+                "type": "minestuck:add_boondollars",
+                "boondollars": 10
+              },
+              {
+                "type": "minestuck:set_dialogue",
+                "new_path": "minestuck:consort/hungry/satisfied"
+              },
+              {
+                "type": "minestuck:set_flag",
+                "flag": "helpingPlayer",
+                "player_specific": true
+              }
+            ]
+          },
+          {
+            "message": "minestuck.dialogue.consort.hungry.first_no.no",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/end",
+              "player_message": "minestuck.dialogue.consort.hungry.first_no.no.reply",
+              "set_as_entrypoint": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {
+      "emotion": "anxious"
+    },
+    "message": "minestuck.dialogue.sad_face"
+  }
+}

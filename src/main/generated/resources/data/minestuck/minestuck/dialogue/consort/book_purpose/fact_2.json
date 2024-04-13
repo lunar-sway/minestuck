@@ -1,0 +1,27 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.book_purpose.fact_2.a"
+      },
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.book_purpose.fact_2.b"
+      }
+    ],
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.book_purpose.fact_2.request_more",
+        "next_dialogue": {
+          "id": "minestuck:consort/book_purpose/buy_my_products",
+          "reply_messages": [],
+          "set_as_entrypoint": true
+        }
+      },
+      {
+        "message": "minestuck.dialogue.goodbye"
+      }
+    ]
+  }
+}

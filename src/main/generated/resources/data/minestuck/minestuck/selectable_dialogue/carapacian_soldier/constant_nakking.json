@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:consort_terrain_land_type",
+    "consort": "nakagator"
+  },
+  "dialogue": "minestuck:carapacian_soldier/constant_nakking"
+}

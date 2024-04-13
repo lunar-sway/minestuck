@@ -1,0 +1,18 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:entity_type",
+        "entity_type": "minestuck:turtle"
+      },
+      {
+        "type": "minestuck:entity_type",
+        "entity_type": "minestuck:iguana"
+      }
+    ],
+    "list_type": "any"
+  },
+  "dialogue": "minestuck:consort/wyrm",
+  "dialogue_weight": 4
+}

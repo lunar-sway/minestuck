@@ -1,0 +1,195 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "rap_a"
+      },
+      "node": {
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.a1"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.a2"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.a3"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.a4"
+          }
+        ],
+        "responses": [
+          {
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "rap_b"
+      },
+      "node": {
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.b1"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.b2"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.b3"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.b4"
+          }
+        ],
+        "responses": [
+          {
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "rap_c"
+      },
+      "node": {
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.c1"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.c2"
+          },
+          {
+            "type": "entity",
+            "message": {
+              "arguments": [
+                "entity_sound"
+              ],
+              "key": "minestuck.dialogue.consort.rap_battle.raps.c3"
+            }
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.c4"
+          }
+        ],
+        "responses": [
+          {
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "rap_d"
+      },
+      "node": {
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.d1"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.d2"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.d3"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.d4"
+          }
+        ],
+        "responses": [
+          {
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "rap_e"
+      },
+      "node": {
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.e1"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.e2"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.e3"
+          },
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.consort.rap_battle.raps.e4"
+          }
+        ],
+        "responses": [
+          {
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.rap_battle.raps.f1"
+      },
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.rap_battle.raps.f2"
+      },
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.rap_battle.raps.f3"
+      },
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.rap_battle.raps.f4"
+      }
+    ],
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+      }
+    ]
+  }
+}

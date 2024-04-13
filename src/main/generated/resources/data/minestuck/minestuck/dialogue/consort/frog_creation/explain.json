@@ -1,0 +1,23 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "entity_type"
+      ],
+      "key": "minestuck.dialogue.consort.frog_creation.explain"
+    },
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.frog_creation.explain.doubt",
+        "next_dialogue": "minestuck:consort/frog_creation/explain.inside"
+      },
+      {
+        "message": "minestuck.dialogue.consort.frog_creation.explain.make",
+        "next_dialogue": "minestuck:consort/frog_creation/explain.no_idea"
+      },
+      {
+        "message": "minestuck.dialogue.goodbye"
+      }
+    ]
+  }
+}

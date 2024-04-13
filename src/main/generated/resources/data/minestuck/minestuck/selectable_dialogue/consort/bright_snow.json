@@ -1,0 +1,17 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:light"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:frost"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/bright_snow.1"
+}

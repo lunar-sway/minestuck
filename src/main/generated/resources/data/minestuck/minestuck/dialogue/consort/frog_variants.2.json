@@ -1,0 +1,15 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_name"
+      ],
+      "key": "minestuck.dialogue.consort.frog_variants.2"
+    },
+    "responses": [
+      {
+        "message": "minestuck.dots"
+      }
+    ]
+  }
+}

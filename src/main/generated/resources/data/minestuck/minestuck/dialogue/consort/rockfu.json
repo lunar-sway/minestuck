@@ -1,0 +1,10 @@
+{
+  "node": {
+    "message": {
+      "arguments": [
+        "land_name"
+      ],
+      "key": "minestuck.dialogue.consort.rockfu"
+    }
+  }
+}

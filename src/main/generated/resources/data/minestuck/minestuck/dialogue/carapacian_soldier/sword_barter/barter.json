@@ -1,0 +1,52 @@
+{
+  "node": {
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dots"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.sword_barter.barter"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:item_tag_match_exclude",
+          "exclusion_item": "minestuck:regisword",
+          "tag": "minecraft:swords"
+        },
+        "fail_tooltip": "minestuck.dialogue.carapacian_soldier.sword_barter.barter.give_item.condition",
+        "hide_if_failed": false,
+        "message": {
+          "arguments": [
+            "matched_item"
+          ],
+          "key": "minestuck.dialogue.carapacian_soldier.sword_barter.barter.give_item"
+        },
+        "next_dialogue": {
+          "id": "minestuck:carapacian_soldier/sword_barter/thanks",
+          "player_message": "minestuck.dialogue.carapacian_soldier.sword_barter.barter.give_item.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": [
+          {
+            "type": "minestuck:set_npc_matched_item"
+          },
+          {
+            "type": "minestuck:give_item",
+            "item": "minestuck:regisword"
+          },
+          {
+            "type": "minestuck:set_dialogue",
+            "new_path": "minestuck:carapacian_soldier/sword_barter/thanks"
+          }
+        ]
+      },
+      {
+        "message": "minestuck.dialogue.carapacian_soldier.sword_barter.barter.not_yet"
+      }
+    ]
+  }
+}
