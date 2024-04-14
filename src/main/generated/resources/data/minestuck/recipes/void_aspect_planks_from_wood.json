@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "aspect_planks",
+  "ingredients": [
+    {
+      "item": "minestuck:void_aspect_wood"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "minestuck:void_aspect_planks"
+  }
+}

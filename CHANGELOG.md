@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - More logging for grist cost generator to help identify bottlenecks
 - Perfectly generic and cindered signs work again
 - Fixed execution permissions for the `minestuck:command` dialogue trigger
+- Add missing wood-related recipes
 
 ## [1.20.1-1.12.0.0] - 2024-04-13
 

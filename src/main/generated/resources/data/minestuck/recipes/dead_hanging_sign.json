@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "dead_hanging_sign",
+  "key": {
+    "c": {
+      "item": "minecraft:chain"
+    },
+    "w": {
+      "item": "minestuck:stripped_dead_log"
+    }
+  },
+  "pattern": [
+    "c c",
+    "www",
+    "www"
+  ],
+  "result": {
+    "count": 6,
+    "item": "minestuck:dead_hanging_sign"
+  },
+  "show_notification": true
+}

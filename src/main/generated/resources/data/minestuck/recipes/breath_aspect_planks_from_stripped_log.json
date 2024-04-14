@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "aspect_planks",
+  "ingredients": [
+    {
+      "item": "minestuck:breath_aspect_stripped_log"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "minestuck:breath_aspect_planks"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "lacquered_hanging_sign",
+  "key": {
+    "c": {
+      "item": "minecraft:chain"
+    },
+    "w": {
+      "item": "minestuck:lacquered_uncarved_wood"
+    }
+  },
+  "pattern": [
+    "c c",
+    "www",
+    "www"
+  ],
+  "result": {
+    "count": 6,
+    "item": "minestuck:lacquered_hanging_sign"
+  },
+  "show_notification": true
+}
