@@ -14,6 +14,8 @@ import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +25,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -156,12 +157,9 @@ public sealed interface Trigger
 			if(player == null)
 				return;
 			
-			Level level = player.level();
-			if(!level.isClientSide)
-			{
-				//TODO using the entity for this instead of the player failed
-				level.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), this.commandText);
-			}
+			//TODO using the entity for this instead of the player failed
+			CommandSourceStack sourceStack = player.createCommandSourceStack().withSuppressedOutput().withPermission(Commands.LEVEL_GAMEMASTERS);
+			player.server.getCommands().performPrefixedCommand(sourceStack, this.commandText);
 		}
 	}
 	
