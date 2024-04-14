@@ -126,7 +126,7 @@ public final class AspectTreeBlocksData
 		provider.addBlock(HOPE_ASPECT_BOOKSHELF, "Hope Bookshelf");
 		provider.addBlock(HOPE_ASPECT_LADDER, "Hope Ladder");
 		provider.addBlock(HOPE_ASPECT_SIGN, "Hope Sign");
-		provider.addBlock(HOPE_ASPECT_HANGING_SIGN, "Hope Sign");;
+		provider.addBlock(HOPE_ASPECT_HANGING_SIGN, "Hope Sign");
 		
 		provider.addBlock(LIFE_ASPECT_LOG, "Life Log");
 		provider.addBlock(LIFE_ASPECT_WOOD, "Life Wood");
