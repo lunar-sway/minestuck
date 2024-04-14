@@ -153,6 +153,34 @@ public final class CommonRecipes
 		
 	}
 	
+	public static RecipeBuilder signRecipe(Supplier<? extends ItemLike> signBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return signRecipe(signBlock.get(), sourceBlock.get());
+	}
+	
+	public static RecipeBuilder signRecipe(ItemLike signBlock, ItemLike sourceBlock)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, signBlock, 3)
+				.define('s', Items.STICK).define('p', sourceBlock)
+				.pattern("ppp").pattern("ppp").pattern(" s ")
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+		
+	}
+	
+	public static RecipeBuilder hangingSignRecipe(Supplier<? extends ItemLike> hangingSignBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return hangingSignRecipe(hangingSignBlock.get(), sourceBlock.get());
+	}
+	
+	public static RecipeBuilder hangingSignRecipe(ItemLike hangingSignBlock, ItemLike sourceBlock)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, hangingSignBlock, 6)
+				.define('c', Items.CHAIN).define('w', sourceBlock)
+				.pattern("c c").pattern("www").pattern("www")
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+		
+	}
+	
 	private static ResourceLocation id(ItemLike item)
 	{
 		return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem()));
