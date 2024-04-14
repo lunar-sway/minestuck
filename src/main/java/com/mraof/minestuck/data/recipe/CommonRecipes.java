@@ -135,7 +135,7 @@ public final class CommonRecipes
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bookshelfBlock)
 				.define('b', Items.BOOK).define('p',sourceBlock)
-				.pattern("ppp").pattern("bpb").pattern("ppp").group("bookshelf")
+				.pattern("ppp").pattern("bpb").pattern("ppp")
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
@@ -148,7 +148,7 @@ public final class CommonRecipes
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ladderBlock, 4)
 				.define('s', Items.STICK).define('p', sourceBlock)
-				.pattern("s s").pattern("sps").pattern("s s").group("ladder")
+				.pattern("s s").pattern("sps").pattern("s s")
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 		
 	}
