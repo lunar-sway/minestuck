@@ -3,8 +3,8 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -80,9 +80,15 @@ public final class GristCostGenerator
 		//Iterate through items
 		process.providersByItem.keySet().stream()
 				.sorted(Comparator.comparingInt(item -> -lookupCount.getInt(item)))
-				.forEach(item ->
-						lookupCost(process, new GenerationContext(item, (context1) -> lookupCost(process, context1)))
-				);
+				.forEach(item -> {
+					long itemStartTime = System.currentTimeMillis();
+					
+					lookupCost(process, new GenerationContext(item, (context1) -> lookupCost(process, context1)));
+					
+					double itemTime = (System.currentTimeMillis() - itemStartTime)/1000D;
+					if(itemTime > 0.5)
+						LOGGER.warn("Cost generation for {} took {}s", ForgeRegistries.ITEMS.getKey(item), itemTime);
+				});
 		
 		for(GeneratedCostProvider provider : process.providers)
 		{
@@ -95,7 +101,7 @@ public final class GristCostGenerator
 			}
 		}
 		
-		LOGGER.debug("Finished grist cost generation in {}s", (System.currentTimeMillis() - startTime)/1000D);
+		LOGGER.info("Finished grist cost generation in {}s", (System.currentTimeMillis() - startTime)/1000D);
 	}
 	
 	private static GristSet lookupCost(GeneratorProcess process, GenerationContext context)
