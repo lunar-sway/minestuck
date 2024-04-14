@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "building",
-  "group": "aspect_planks_from_stripped",
+  "group": "aspect_planks",
   "ingredients": [
     {
       "item": "minestuck:space_aspect_stripped_log"
