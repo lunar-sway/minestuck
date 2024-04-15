@@ -256,7 +256,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PERFECTLY_GENERIC_DOOR.get(), 3).define('#', MSBlocks.GENERIC_OBJECT.get()).pattern("## ").pattern("## ").pattern("## ").group("wooden_door").unlockedBy("has_generic_object", has(MSBlocks.GENERIC_OBJECT.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.PERFECTLY_GENERIC_TRAPDOOR.get(), 2).define('#', MSBlocks.GENERIC_OBJECT.get()).pattern("###").pattern("###").group("wooden_trapdoor").unlockedBy("has_generic_object", has(MSBlocks.GENERIC_OBJECT.get())).save(recipeBuilder);
 		CommonRecipes.signRecipe(MSBlocks.PERFECTLY_GENERIC_SIGN, MSBlocks.GENERIC_OBJECT).save(recipeBuilder);
-		CommonRecipes.signRecipe(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, MSBlocks.GENERIC_OBJECT).save(recipeBuilder);
+		CommonRecipes.hangingSignRecipe(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, MSBlocks.GENERIC_OBJECT).save(recipeBuilder);
 		
 		CommonRecipes.stairsRecipe(MSBlocks.CRUXITE_STAIRS, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);

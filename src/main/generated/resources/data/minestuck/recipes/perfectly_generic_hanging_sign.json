@@ -2,20 +2,20 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "p": {
-      "item": "minestuck:generic_object"
+    "c": {
+      "item": "minecraft:chain"
     },
-    "s": {
-      "item": "minecraft:stick"
+    "w": {
+      "item": "minestuck:generic_object"
     }
   },
   "pattern": [
-    "ppp",
-    "ppp",
-    " s "
+    "c c",
+    "www",
+    "www"
   ],
   "result": {
-    "count": 3,
+    "count": 6,
     "item": "minestuck:perfectly_generic_hanging_sign"
   },
   "show_notification": true
