@@ -3,10 +3,12 @@ package com.mraof.minestuck.data.recipe;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.CookingBookCategory;
@@ -16,7 +18,6 @@ import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -41,7 +42,7 @@ public final class IrradiatingRecipeBuilder implements RecipeBuilder
 	}
 	
 	@Override
-	public RecipeBuilder unlockedBy(String criterionName, CriterionTriggerInstance criterionTrigger)
+	public RecipeBuilder unlockedBy(String criterionName, Criterion<?> criterionTrigger)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -59,33 +60,40 @@ public final class IrradiatingRecipeBuilder implements RecipeBuilder
 	}
 	
 	@Override
-	public void save(Consumer<FinishedRecipe> finishedRecipeConsumer, ResourceLocation recipeId)
+	public void save(RecipeOutput output, ResourceLocation recipeId)
 	{
-		finishedRecipeConsumer.accept(new Result(recipeId, this.ingredient, this.result, this.experience, this.cookingTime));
+		output.accept(new Result(recipeId, this.ingredient, this.result, this.experience, this.cookingTime));
 	}
 	
-	private record Result(ResourceLocation id, Ingredient ingredient, Item result, float experience, int cookingTime) implements AdvancementFreeRecipe
+	private record Result(ResourceLocation id, Ingredient ingredient, Item result, float experience, int cookingTime) implements FinishedRecipe
 	{
 		@Override
 		public void serializeRecipeData(JsonObject json)
 		{
 			json.addProperty("category", CookingBookCategory.MISC.getSerializedName());
-			json.add("ingredient", this.ingredient.toJson());
+			json.add("ingredient", this.ingredient.toJson(false));
 			json.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
 			json.addProperty("experience", this.experience);
 			json.addProperty("cookingtime", this.cookingTime);
 		}
 		
 		@Override
-		public ResourceLocation getId()
+		public ResourceLocation id()
 		{
 			return this.id;
 		}
 		
 		@Override
-		public RecipeSerializer<?> getType()
+		public RecipeSerializer<?> type()
 		{
 			return MSRecipeTypes.IRRADIATING.get();
+		}
+		
+		@Nullable
+		@Override
+		public AdvancementHolder advancement()
+		{
+			return null;
 		}
 	}
 }

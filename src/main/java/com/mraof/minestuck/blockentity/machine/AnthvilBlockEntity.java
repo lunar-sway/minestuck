@@ -1,10 +1,10 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.inventory.*;
+import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.core.BlockPos;
@@ -21,12 +21,12 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -197,7 +197,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
+		if(cap == Capabilities.ITEM_HANDLER && side != null)
 		{
 			if(side == Direction.UP)
 				return inputHandler.cast();

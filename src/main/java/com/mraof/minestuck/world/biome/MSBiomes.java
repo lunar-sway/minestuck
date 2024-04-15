@@ -5,9 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MSBiomes
 {
 	public static final ResourceKey<Biome> SKAIA = ResourceKey.create(Registries.BIOME, new ResourceLocation(Minestuck.MOD_ID, "skaia"));

@@ -15,7 +15,7 @@ public class MoveToTargetGoal extends MeleeAttackGoal
 	}
 	
 	@Override
-	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
+	protected void checkAndPerformAttack(LivingEntity enemy)
 	{
 	}
 }

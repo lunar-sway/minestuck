@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item.crafting;
 
 import com.mraof.minestuck.block.MSBlocks;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -13,11 +13,12 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
+@MethodsReturnNonnullByDefault
 public class IrradiatingRecipe extends AbstractCookingRecipe
 {
-	public IrradiatingRecipe(ResourceLocation idIn, String groupIn, CookingBookCategory category, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn)
+	public IrradiatingRecipe(String groupIn, CookingBookCategory category, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn)
 	{
-		super(MSRecipeTypes.IRRADIATING_TYPE.get(), idIn, groupIn, category, ingredientIn, resultIn, experienceIn, cookTimeIn);
+		super(MSRecipeTypes.IRRADIATING_TYPE.get(), groupIn, category, ingredientIn, resultIn, experienceIn, cookTimeIn);
 	}
 	
 	@Override

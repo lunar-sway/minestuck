@@ -3,7 +3,7 @@ package com.mraof.minestuck.data.dialogue;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.MessageProducer;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.List;
 import java.util.function.Function;

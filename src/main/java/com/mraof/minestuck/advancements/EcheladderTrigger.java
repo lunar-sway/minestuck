@@ -1,19 +1,21 @@
 package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class EcheladderTrigger extends SimpleCriterionTrigger<EcheladderTrigger.Instance>
 {
-	public static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "echeladder");
-	
 	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext deserializationContext)
+	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext deserializationContext)
 	{
 		MinMaxBounds.Ints rung = MinMaxBounds.Ints.fromJson(json.get("rung"));
 		return new EcheladderTrigger.Instance(predicate, rung);
@@ -24,25 +26,20 @@ public class EcheladderTrigger extends SimpleCriterionTrigger<EcheladderTrigger.
 		trigger(player, instance -> instance.test(rung));
 	}
 	
-	@Override
-	public ResourceLocation getId()
-	{
-		return ID;
-	}
-	
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final MinMaxBounds.Ints rung;
 		
-		public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints rung)
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> predicate, MinMaxBounds.Ints rung)
 		{
-			super(ID, predicate);
+			super(predicate);
 			this.rung = Objects.requireNonNull(rung);
 		}
 		
-		public static Instance rung(MinMaxBounds.Ints rung)
+		public static Criterion<Instance> rung(MinMaxBounds.Ints rung)
 		{
-			return new Instance(ContextAwarePredicate.ANY, rung);
+			return MSCriteriaTriggers.ECHELADDER.createCriterion(new Instance(Optional.empty(), rung));
 		}
 		
 		public boolean test(int count)
@@ -51,9 +48,9 @@ public class EcheladderTrigger extends SimpleCriterionTrigger<EcheladderTrigger.
 		}
 
 		@Override
-		public JsonObject serializeToJson(SerializationContext context)
+		public JsonObject serializeToJson()
 		{
-			JsonObject json = super.serializeToJson(context);
+			JsonObject json = super.serializeToJson();
 			json.add("rung", rung.serializeToJson());
 
 			return json;

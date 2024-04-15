@@ -1,12 +1,12 @@
 package com.mraof.minestuck.item.weapon;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.ToolAction;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -69,7 +69,7 @@ public class MSToolType
 	{
 		for(EnchantmentCategory type : enchantmentTypes)
 		{
-			ForgeRegistries.ENCHANTMENTS.forEach(enchantment ->
+			BuiltInRegistries.ENCHANTMENT.forEach(enchantment ->
 			{
 				if(enchantment.category == type) addEnchantments(enchantment);
 			});

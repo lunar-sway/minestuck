@@ -5,8 +5,8 @@ import com.mraof.minestuck.item.MSItemTypes;
 import com.mraof.minestuck.item.loot.GristLootModifier;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.data.GlobalLootModifierProvider;
-import net.minecraftforge.common.loot.CanToolPerformAction;
+import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.CanToolPerformAction;
 
 public class MSLootModifiers extends GlobalLootModifierProvider
 {

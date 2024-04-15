@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/connect",
   "criteria": {
     "use_artifact": {
-      "conditions": {},
       "trigger": "minestuck:cruxite_artifact"
     }
   },

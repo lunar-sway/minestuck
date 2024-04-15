@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.armor;
 
 import com.mraof.minestuck.client.model.armor.ArmorModels;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -9,8 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -75,7 +75,7 @@ public class MSArmorItem extends ArmorItem
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type)
 	{
-		ResourceLocation name = ForgeRegistries.ITEMS.getKey(this);
+		ResourceLocation name = BuiltInRegistries.ITEM.getKey(this);
         return name.getNamespace() + ":textures/models/armor/" + (texture.isEmpty() ? name.getPath() : texture) + ".png";
     }
 }

@@ -3,27 +3,27 @@ package com.mraof.minestuck.api.alchemy.recipe;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.data.recipe.AdvancementFreeRecipe;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.DefaultImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -49,7 +49,7 @@ public final class GristCostRecipeBuilder
 	
 	public static GristCostRecipeBuilder of(ItemLike item)
 	{
-		return new GristCostRecipeBuilder(ForgeRegistries.ITEMS.getKey(item.asItem()), Ingredient.of(item));
+		return new GristCostRecipeBuilder(BuiltInRegistries.ITEM.getKey(item.asItem()), Ingredient.of(item));
 	}
 	
 	public static GristCostRecipeBuilder of(Ingredient ingredient)
@@ -80,44 +80,51 @@ public final class GristCostRecipeBuilder
 		return this;
 	}
 	
-	public void build(Consumer<FinishedRecipe> recipeSaver)
+	public void build(RecipeOutput recipeOutput)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
-		build(recipeSaver, name);
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : BuiltInRegistries.ITEM.getKey(ingredient.getItems()[0].getItem()));
+		build(recipeOutput, name);
 	}
 	
-	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
+	public void buildFor(RecipeOutput recipeOutput, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
-		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : BuiltInRegistries.ITEM.getKey(ingredient.getItems()[0].getItem()));
+		build(recipeOutput, new ResourceLocation(modId, name.getPath()));
 	}
 	
-	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
+	public void build(RecipeOutput recipeOutput, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(id.withPrefix("grist_costs/"), ingredient, new DefaultImmutableGristSet(costBuilder), priority));
+		recipeOutput.accept(new Result(id.withPrefix("grist_costs/"), ingredient, new DefaultImmutableGristSet(costBuilder), priority));
 	}
 	
-	private record Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, @Nullable Integer priority) implements AdvancementFreeRecipe
+	private record Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, @Nullable Integer priority) implements FinishedRecipe
 	{
 		@Override
 		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			jsonObject.add("ingredient", ingredient.toJson());
+			jsonObject.add("ingredient", ingredient.toJson(false));
 			jsonObject.add("grist_cost", ImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
 			if(priority != null)
 				jsonObject.addProperty("priority", priority);
 		}
 		
 		@Override
-		public ResourceLocation getId()
+		public ResourceLocation id()
 		{
 			return id;
 		}
 		
 		@Override
-		public RecipeSerializer<?> getType()
+		public RecipeSerializer<?> type()
 		{
 			return MSRecipeTypes.GRIST_COST.get();
+		}
+		
+		@Nullable
+		@Override
+		public AdvancementHolder advancement()
+		{
+			return null;
 		}
 	}
 }

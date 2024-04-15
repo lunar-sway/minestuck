@@ -33,12 +33,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.TickEvent;
 import org.joml.Matrix4f;
 
 /** Class for handling the click-and-drag editmode tools (Revise and Recycle) on the client-side.
@@ -348,7 +348,7 @@ public class ClientEditToolDrag
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = player.getAttribute(ForgeMod.BLOCK_REACH.get()).getValue();
+		double reachDistance = player.getAttribute(NeoForgeMod.BLOCK_REACH.value()).getValue();
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 	}

@@ -1,36 +1,25 @@
 package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 {
-	public static final ResourceLocation SBURB_CONNECTION_ID = new ResourceLocation(Minestuck.MOD_ID, "sburb_connection");
-	public static final ResourceLocation CRUXITE_ARTIFACT_ID = new ResourceLocation(Minestuck.MOD_ID, "cruxite_artifact");
-	public static final ResourceLocation RETURN_NODE_ID = new ResourceLocation(Minestuck.MOD_ID, "return_node");
-	public static final ResourceLocation MELON_OVERLOAD_ID = new ResourceLocation(Minestuck.MOD_ID, "melon_overload");
-	public static final ResourceLocation BUY_OUT_SHOP_ID = new ResourceLocation(Minestuck.MOD_ID, "buy_out_shop");
-	
-	private final ResourceLocation id;
-	
-	public EventTrigger(ResourceLocation id)
-	{
-		this.id = id;
-	}
-	
 	@Override
-	public ResourceLocation getId()
+	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
 	{
-		return id;
-	}
-	
-	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
-	{
-		return new Instance(predicate, id);
+		return new Instance(predicate);
 	}
 	
 	public void trigger(ServerPlayer player)
@@ -40,33 +29,35 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 	
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
-		public static Instance sburbConnection()
+		public static Criterion<Instance> sburbConnection()
 		{
-			return new Instance(ContextAwarePredicate.ANY, SBURB_CONNECTION_ID);
+			return MSCriteriaTriggers.SBURB_CONNECTION.createCriterion(new Instance(Optional.empty()));
 		}
 		
-		public static Instance cruxiteArtifact()
+		public static Criterion<Instance> cruxiteArtifact()
 		{
-			return new Instance(ContextAwarePredicate.ANY, CRUXITE_ARTIFACT_ID);
+			return MSCriteriaTriggers.CRUXITE_ARTIFACT.createCriterion(new Instance(Optional.empty()));
 		}
 		
-		public static Instance returnNode()
+		public static Criterion<Instance> returnNode()
 		{
-			return new Instance(ContextAwarePredicate.ANY, RETURN_NODE_ID);
+			return MSCriteriaTriggers.RETURN_NODE.createCriterion(new Instance(Optional.empty()));
 		}
 		
-		public static Instance melonOverload()
+		public static Criterion<Instance> melonOverload()
 		{
-			return new Instance(ContextAwarePredicate.ANY, MELON_OVERLOAD_ID);
+			return MSCriteriaTriggers.MELON_OVERLOAD.createCriterion(new Instance(Optional.empty()));
 		}
 		
-		public static Instance buyOutShop()
+		public static Criterion<Instance> buyOutShop()
 		{
-			return new Instance(ContextAwarePredicate.ANY, BUY_OUT_SHOP_ID);
+			return MSCriteriaTriggers.BUY_OUT_SHOP.createCriterion(new Instance(Optional.empty()));
 		}
-		public Instance(ContextAwarePredicate predicate, ResourceLocation id)
+		
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> predicate)
 		{
-			super(id, predicate);
+			super(predicate);
 		}
 		
 		public boolean test()

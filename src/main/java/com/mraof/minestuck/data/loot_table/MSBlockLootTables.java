@@ -10,6 +10,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
@@ -29,7 +30,6 @@ import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
@@ -1151,7 +1151,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	@Override
 	protected Iterable<Block> getKnownBlocks()
 	{
-		return ForgeRegistries.BLOCKS.getEntries().stream()
+		return BuiltInRegistries.BLOCK.entrySet().stream()
 				.filter(entry -> entry.getKey().location().getNamespace().equals(Minestuck.MOD_ID))
 				.map(Map.Entry::getValue).toList();
 	}

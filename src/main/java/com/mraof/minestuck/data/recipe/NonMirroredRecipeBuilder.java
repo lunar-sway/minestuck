@@ -2,18 +2,23 @@ package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 {
 	public NonMirroredRecipeBuilder(RecipeCategory category, ItemLike result, int size)
@@ -32,20 +37,27 @@ public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 	}
 	
 	@Override
-	public void save(Consumer<FinishedRecipe> recipeBuilder, ResourceLocation recipeName)
+	public void save(RecipeOutput recipeOutput, ResourceLocation recipeName)
 	{
-		super.save(recipe -> recipeBuilder.accept(new ResultWrapper(recipe)), recipeName);
+		super.save(new RecipeOutput()
+		{
+			@Override
+			public Advancement.Builder advancement()
+			{
+				return recipeOutput.advancement();
+			}
+			
+			@Override
+			public void accept(FinishedRecipe finishedRecipe, ICondition... conditions)
+			{
+				recipeOutput.accept(new ResultWrapper(finishedRecipe), conditions);
+			}
+		}, recipeName);
 		
 	}
 	
-	private static class ResultWrapper implements FinishedRecipe
+	private record ResultWrapper(FinishedRecipe shapedRecipe) implements FinishedRecipe
 	{
-		private final FinishedRecipe shapedRecipe;
-		
-		private ResultWrapper(FinishedRecipe shapedRecipe)
-		{
-			this.shapedRecipe = shapedRecipe;
-		}
 		
 		@Override
 		public void serializeRecipeData(JsonObject jsonObject)
@@ -54,29 +66,22 @@ public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 		}
 		
 		@Override
-		public ResourceLocation getId()
+		public ResourceLocation id()
 		{
-			return shapedRecipe.getId();
+			return shapedRecipe.id();
 		}
 		
 		@Override
-		public RecipeSerializer<?> getType()
+		public RecipeSerializer<?> type()
 		{
 			return MSRecipeTypes.NON_MIRRORED.get();
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject serializeAdvancement()
+		public AdvancementHolder advancement()
 		{
-			return shapedRecipe.serializeAdvancement();
-		}
-		
-		@Nullable
-		@Override
-		public ResourceLocation getAdvancementId()
-		{
-			return shapedRecipe.getAdvancementId();
+			return this.shapedRecipe.advancement();
 		}
 	}
 }

@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_grub_sauce",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_grub_sauce"
     ]
   ],
   "rewards": {

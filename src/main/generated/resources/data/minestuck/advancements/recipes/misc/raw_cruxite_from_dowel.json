@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_cruxite_dowel",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cruxite_dowel"
     ]
   ],
   "rewards": {

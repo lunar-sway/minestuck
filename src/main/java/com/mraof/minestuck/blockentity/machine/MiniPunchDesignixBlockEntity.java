@@ -1,6 +1,6 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
@@ -18,14 +18,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -157,7 +157,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
+		if(cap == Capabilities.ITEM_HANDLER && side != null)
 		{
 			return side == Direction.DOWN ? downHandler.cast() :
 					side == Direction.UP ? upHandler.cast() : sideHandler.cast();

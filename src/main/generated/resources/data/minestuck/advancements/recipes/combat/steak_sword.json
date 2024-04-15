@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_beef_sword",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_beef_sword"
     ]
   ],
   "rewards": {

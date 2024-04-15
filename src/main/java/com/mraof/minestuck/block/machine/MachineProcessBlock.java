@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
 
 import javax.annotation.Nullable;
 
@@ -29,7 +29,7 @@ public abstract class MachineProcessBlock extends MachineBlock
 			BlockEntity blockEntity = level.getBlockEntity(pos);
 			if(blockEntity instanceof MachineProcessBlockEntity)
 			{
-				blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler ->
+				blockEntity.getCapability(Capabilities.ITEM_HANDLER).ifPresent(handler ->
 				{
 					for(int i = 0; i < handler.getSlots(); i++)
 						Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));

@@ -27,13 +27,13 @@ public class GristWildcardPacket implements MSPacket.PlayToServer
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(GristTypes.getRegistry(), gristType);
+		buffer.writeId(GristTypes.REGISTRY, gristType);
 		buffer.writeBlockPos(pos);
 	}
 	
 	public static GristWildcardPacket decode(FriendlyByteBuf buffer)
 	{
-		GristType gristType = buffer.readRegistryIdSafe(GristType.class);
+		GristType gristType = buffer.readById(GristTypes.REGISTRY);
 		BlockPos pos = buffer.readBlockPos();
 		
 		return new GristWildcardPacket(pos, gristType);

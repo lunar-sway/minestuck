@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -21,9 +21,9 @@ public enum SmithingInterpreter implements RecipeInterpreter
 	
 	public static final Codec<SmithingInterpreter> CODEC = Codec.unit(INSTANCE);
 	
-	private static final Field templateField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265949_");
-	private static final Field baseField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265888_");
-	private static final Field additionField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "f_265907_");
+	private static final Field templateField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "template");
+	private static final Field baseField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "base");
+	private static final Field additionField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "addition");
 	
 	@Override
 	public List<Item> getOutputItems(Recipe<?> recipe)

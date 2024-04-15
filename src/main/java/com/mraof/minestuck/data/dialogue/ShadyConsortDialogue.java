@@ -10,7 +10,7 @@ import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
 import static com.mraof.minestuck.entity.MSEntityTypes.*;

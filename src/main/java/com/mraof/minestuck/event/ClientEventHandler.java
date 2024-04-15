@@ -12,6 +12,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -19,14 +20,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 /**
  * Used to track mixed client sided events.
@@ -71,7 +71,7 @@ public class ClientEventHandler
 				if(I18n.exists(tooltip))
 					event.getToolTip().add(Component.translatable(tooltip, arg1).withStyle(ChatFormatting.GRAY));
 			} else {
-				final ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(stack.getItem());
+				final ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
 				if(itemId != null && itemId.getNamespace().equals(Minestuck.MOD_ID))
 				{
 					String name = stack.getDescriptionId() + ".tooltip";

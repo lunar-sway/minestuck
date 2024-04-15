@@ -3,13 +3,13 @@ package com.mraof.minestuck.inventory.musicplayer;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,7 +29,7 @@ public class MusicPlayerItemCapProvider implements ICapabilityProvider, INBTSeri
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		return ForgeCapabilities.ITEM_HANDLER.orEmpty(cap, lazyInitSupplierItemHandler);
+		return Capabilities.ITEM_HANDLER.orEmpty(cap, lazyInitSupplierItemHandler);
 	}
 	
 	private @Nonnull ItemStackHandler getCachedInventory()

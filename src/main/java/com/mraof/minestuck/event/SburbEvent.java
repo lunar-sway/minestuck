@@ -2,7 +2,7 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.skaianet.ActiveConnection;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public abstract class SburbEvent extends Event
 {

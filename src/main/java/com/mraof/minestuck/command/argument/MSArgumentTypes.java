@@ -4,12 +4,12 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class MSArgumentTypes
 {
-	public static final DeferredRegister<ArgumentTypeInfo<?, ?>> REGISTER = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, Minestuck.MOD_ID);
+	public static final DeferredRegister<ArgumentTypeInfo<?, ?>> REGISTER = DeferredRegister.create(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, Minestuck.MOD_ID);
 	
 	static {
 		REGISTER.register("grist_type", () -> ArgumentTypeInfos.registerByClass(GristTypeArgument.class,

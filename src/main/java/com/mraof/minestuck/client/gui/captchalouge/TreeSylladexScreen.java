@@ -9,7 +9,7 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
 public class TreeSylladexScreen extends SylladexScreen
 {

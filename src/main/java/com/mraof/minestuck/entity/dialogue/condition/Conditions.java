@@ -7,13 +7,11 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.function.Supplier;
 public final class Conditions
 {
 	public static final DeferredRegister<Codec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
-	public static final Supplier<IForgeRegistry<Codec<? extends Condition>>> REGISTRY = REGISTER.makeRegistry(() -> new RegistryBuilder<Codec<? extends Condition>>().disableSaving().disableSync());
+	public static final Registry<Codec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
 	
 	static {
 		REGISTER.register("always_true", () -> Condition.AlwaysTrue.CODEC);
@@ -99,7 +97,7 @@ public final class Conditions
 		return Condition.IsConsortInHomeLand.INSTANCE;
 	}
 	
-	public static Condition isInTerrainLand(RegistryObject<TerrainLandType> landType)
+	public static Condition isInTerrainLand(Supplier<TerrainLandType> landType)
 	{
 		return new Condition.InTerrainLandType(landType.get());
 	}
@@ -114,7 +112,7 @@ public final class Conditions
 		return new Condition.InConsortTerrainLandType(consort);
 	}
 	
-	public static Condition isInTitleLand(RegistryObject<TitleLandType> landType)
+	public static Condition isInTitleLand(Supplier<TitleLandType> landType)
 	{
 		return new Condition.InTitleLandType(landType.get());
 	}
@@ -150,9 +148,9 @@ public final class Conditions
 	}
 	
 	@SafeVarargs
-	public static Condition isAnyEntityType(RegistryObject<EntityType<ConsortEntity>>... entityType)
+	public static Condition isAnyEntityType(Supplier<EntityType<ConsortEntity>>... entityType)
 	{
-		return isAnyEntityType(Arrays.stream(entityType).map(RegistryObject::get).toArray(EntityType<?>[]::new));
+		return isAnyEntityType(Arrays.stream(entityType).map(Supplier::get).toArray(EntityType<?>[]::new));
 	}
 	
 	public static Condition isAnyEntityType(EntityType<?>... entityTypes)

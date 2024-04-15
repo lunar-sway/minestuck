@@ -4,6 +4,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -19,7 +20,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -76,7 +76,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 				//Turn the Strings into ResourceLocations
 				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
 				//Turn the ResourceLocations into Blocks
-				.flatMap(blockId -> Stream.ofNullable(ForgeRegistries.BLOCKS.getValue(blockId)))
+				.flatMap(blockId -> Stream.ofNullable(BuiltInRegistries.BLOCK.get(blockId)))
 				//Gather the blocks into a set
 				.collect(Collectors.toSet());
 	}

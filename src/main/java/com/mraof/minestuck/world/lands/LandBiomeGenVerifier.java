@@ -51,7 +51,7 @@ public class LandBiomeGenVerifier
 			}
 		};
 		
-		for(TerrainLandType landType : LandTypes.TERRAIN_REGISTRY.get())
+		for(TerrainLandType landType : LandTypes.TERRAIN_REGISTRY)
 		{
 			try
 			{
@@ -61,7 +61,7 @@ public class LandBiomeGenVerifier
 				LOGGER.error("Detected issue with terrain land type {}:", landType, e);
 			}
 		}
-		for(TitleLandType landType : LandTypes.TITLE_REGISTRY.get())
+		for(TitleLandType landType : LandTypes.TITLE_REGISTRY)
 		{
 			try
 			{

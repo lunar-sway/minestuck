@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/alchemy",
   "criteria": {
     "use_intellibeam": {
-      "conditions": {},
       "trigger": "minestuck:intellibeam_laserstation"
     }
   },

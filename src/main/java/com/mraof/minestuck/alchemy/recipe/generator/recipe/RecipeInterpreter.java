@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
-import com.mraof.minestuck.util.CodecUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 
@@ -13,7 +12,7 @@ import java.util.function.Function;
 
 public interface RecipeInterpreter
 {
-	Codec<RecipeInterpreter> DISPATCH_CODEC = CodecUtil.registryCodec(InterpreterTypes.REGISTRY).dispatch(RecipeInterpreter::codec, Function.identity());
+	Codec<RecipeInterpreter> DISPATCH_CODEC = InterpreterTypes.REGISTRY.byNameCodec().dispatch(RecipeInterpreter::codec, Function.identity());
 	
 	List<Item> getOutputItems(Recipe<?> recipe);
 	

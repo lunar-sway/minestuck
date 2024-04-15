@@ -2,12 +2,18 @@ package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-import java.util.function.Consumer;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public final class GeneratedGristCostBuilder
 {
 	public static GeneratedGristCostBuilder create()
@@ -18,12 +24,12 @@ public final class GeneratedGristCostBuilder
 	private GeneratedGristCostBuilder()
 	{}
 	
-	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
+	public void build(RecipeOutput recipeOutput, ResourceLocation id)
 	{
-		recipeSaver.accept(new GeneratedGristCostBuilder.Result(id.withPrefix("grist_costs/")));
+		recipeOutput.accept(new GeneratedGristCostBuilder.Result(id.withPrefix("grist_costs/")));
 	}
 	
-	private record Result(ResourceLocation id) implements AdvancementFreeRecipe
+	private record Result(ResourceLocation id) implements FinishedRecipe
 	{
 		@Override
 		public void serializeRecipeData(JsonObject jsonObject)
@@ -31,15 +37,22 @@ public final class GeneratedGristCostBuilder
 		}
 		
 		@Override
-		public ResourceLocation getId()
+		public ResourceLocation id()
 		{
 			return id;
 		}
 		
 		@Override
-		public RecipeSerializer<?> getType()
+		public RecipeSerializer<?> type()
 		{
 			return MSRecipeTypes.RECIPE_GRIST_COST.get();
+		}
+		
+		@Nullable
+		@Override
+		public AdvancementHolder advancement()
+		{
+			return null;
 		}
 	}
 }

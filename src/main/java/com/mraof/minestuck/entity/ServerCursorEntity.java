@@ -13,8 +13,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
+import net.neoforged.neoforge.network.NetworkHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -127,7 +127,7 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 	
 	//Remove linear interpolation so that the position is more immediately clear.
 	@Override
-	public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements, boolean pTeleport)
+	public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements)
 	{
 		this.setPos(pX, pY, pZ);
 		this.setRot(pYaw, pPitch);

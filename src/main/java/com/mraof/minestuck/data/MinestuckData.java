@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.data.dialogue.*;
 import com.mraof.minestuck.data.loot_table.MSLootModifiers;
 import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
@@ -14,12 +15,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +31,8 @@ public final class MinestuckData
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event)
 	{
+		MSCriteriaTriggers.register();
+		
 		DataGenerator gen = event.getGenerator();
 		PackOutput output = gen.getPackOutput();
 		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider().thenApply(provider -> {
@@ -51,7 +54,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new TitleLandTypeTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MSDamageTypeProvider.Tags(output, lookupProvider, fileHelper));
 		
-		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output));
+		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output, lookupProvider));
 		gen.addProvider(event.includeServer(), new GeneratedGristCostConfigProvider(output, Minestuck.MOD_ID));
 		
 		gen.addProvider(event.includeServer(), new ComputerThemeProvider(output));
@@ -85,6 +88,6 @@ public final class MinestuckData
 				.add(Registries.STRUCTURE, MSStructureProvider::register)
 				.add(Registries.STRUCTURE_SET, MSStructureSetProvider::register)
 				.add(Registries.DAMAGE_TYPE, MSDamageTypeProvider::register)
-				.add(ForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifierProvider::register);
+				.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifierProvider::register);
 	}
 }

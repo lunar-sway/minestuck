@@ -12,17 +12,17 @@ import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.EntityMountEvent;
-import net.minecraftforge.event.entity.living.ZombieEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.EntityMountEvent;
+import net.neoforged.neoforge.event.entity.living.ZombieEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * The Suspicion effect causes mobs to forcibly move away from other entities.
  *
- * @see #onMount(net.minecraftforge.event.entity.EntityMountEvent) Cancels out attempts to ride affected entities
+ * @see #onMount(net.neoforged.neoforge.event.entity.EntityMountEvent) Cancels out attempts to ride affected entities
  * @see #summonAttempt(ZombieEvent.SummonAidEvent) Cancels out attempts to spawn reinforcements
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -94,7 +94,7 @@ public class SuspicionEffect extends MobEffect
 	}
 	
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier)
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier)
 	{
 		return duration % 2 == 0;
 	}

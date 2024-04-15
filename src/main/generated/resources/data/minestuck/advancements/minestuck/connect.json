@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/root",
   "criteria": {
     "connection": {
-      "conditions": {},
       "trigger": "minestuck:sburb_connection"
     }
   },

@@ -1,12 +1,12 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -26,20 +26,12 @@ import java.util.function.BiConsumer;
 @MethodsReturnNonnullByDefault
 public final class RecipeGeneratedGristCost implements GristCostRecipe
 {
-	private final ResourceLocation id;
 	@Nullable
 	private RecipeGeneratedCostHandler handler;
 	
-	private RecipeGeneratedGristCost(ResourceLocation id, @Nullable RecipeGeneratedCostHandler handler)
+	private RecipeGeneratedGristCost(@Nullable RecipeGeneratedCostHandler handler)
 	{
-		this.id = id;
 		this.handler = handler;
-	}
-	
-	@Override
-	public ResourceLocation getId()
-	{
-		return this.id;
 	}
 	
 	void setHandler(RecipeGeneratedCostHandler handler)
@@ -74,7 +66,7 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId)
 	{
 		if(handler != null)
 			handler.addAsProvider(consumer);
@@ -96,16 +88,18 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<RecipeGeneratedGristCost>
 	{
+		private static final Codec<RecipeGeneratedGristCost> CODEC = Codec.unit(() -> new RecipeGeneratedGristCost(null));
+		
 		@Override
-		public RecipeGeneratedGristCost fromJson(ResourceLocation recipeId, JsonObject json)
+		public Codec<RecipeGeneratedGristCost> codec()
 		{
-			return new RecipeGeneratedGristCost(recipeId, null);
+			return CODEC;
 		}
 		
 		@Override
-		public RecipeGeneratedGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		public RecipeGeneratedGristCost fromNetwork(FriendlyByteBuf buffer)
 		{
-			return new RecipeGeneratedGristCost(recipeId, RecipeGeneratedCostHandler.read(buffer));
+			return new RecipeGeneratedGristCost(RecipeGeneratedCostHandler.read(buffer));
 		}
 		
 		@Override

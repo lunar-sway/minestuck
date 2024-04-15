@@ -1,31 +1,25 @@
 package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Objects;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTrigger.Instance>
 {
-	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "punch_designix");
-	
 	@Override
-	public ResourceLocation getId()
+	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
 	{
-		return ID;
-	}
-	
-	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
-	{
-		
-		ItemPredicate input = ItemPredicate.fromJson(json.get("input"));
-		ItemPredicate target = ItemPredicate.fromJson(json.get("target"));
-		ItemPredicate output = ItemPredicate.fromJson(json.get("output"));
+		Optional<ItemPredicate> input = ItemPredicate.fromJson(json.get("input"));
+		Optional<ItemPredicate> target = ItemPredicate.fromJson(json.get("target"));
+		Optional<ItemPredicate> output = ItemPredicate.fromJson(json.get("output"));
 		return new Instance(predicate, input, target, output);
 	}
 	
@@ -34,42 +28,45 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 		trigger(player, instance -> instance.test(input, target, result));
 	}
 	
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
-		private final ItemPredicate input;
-		private final ItemPredicate target;
-		private final ItemPredicate output;
+		private final Optional<ItemPredicate> input;
+		private final Optional<ItemPredicate> target;
+		private final Optional<ItemPredicate> output;
 		
-		public Instance(ContextAwarePredicate predicate, ItemPredicate input, ItemPredicate target, ItemPredicate output)
+		public Instance(Optional<ContextAwarePredicate> predicate, Optional<ItemPredicate> input, Optional<ItemPredicate> target, Optional<ItemPredicate> output)
 		{
-			super(ID, predicate);
-			this.input = Objects.requireNonNull(input);
-			this.target = Objects.requireNonNull(target);
-			this.output = Objects.requireNonNull(output);
+			super(predicate);
+			this.input = input;
+			this.target = target;
+			this.output = output;
 		}
 		
-		public static Instance any()
+		public static Criterion<Instance> any()
 		{
-			return create(ItemPredicate.ANY, ItemPredicate.ANY, ItemPredicate.ANY);
+			return create(Optional.empty(), Optional.empty(), Optional.empty());
 		}
 		
-		public static Instance create(ItemPredicate input, ItemPredicate target, ItemPredicate output)
+		public static Criterion<Instance> create(Optional<ItemPredicate> input, Optional<ItemPredicate> target, Optional<ItemPredicate> output)
 		{
-			return new Instance(ContextAwarePredicate.ANY, input, target, output);
+			return MSCriteriaTriggers.PUNCH_DESIGNIX.createCriterion(new Instance(Optional.empty(), input, target, output));
 		}
 		
 		public boolean test(ItemStack input, ItemStack target, ItemStack output)
 		{
-			return this.input.matches(input) && this.target.matches(target) && this.output.matches(output);
+			return (this.input.isEmpty() || this.input.get().matches(input))
+					&& (this.target.isEmpty() || this.target.get().matches(target))
+					&& (this.output.isEmpty() || this.output.get().matches(output));
 		}
 		
 		@Override
-		public JsonObject serializeToJson(SerializationContext context)
+		public JsonObject serializeToJson()
 		{
-			JsonObject json = super.serializeToJson(context);
-			json.add("input", input.serializeToJson());
-			json.add("target", target.serializeToJson());
-			json.add("output", output.serializeToJson());
+			JsonObject json = super.serializeToJson();
+			this.input.ifPresent(input -> json.add("input", input.serializeToJson()));
+			this.target.ifPresent(target -> json.add("target", target.serializeToJson()));
+			this.output.ifPresent(output -> json.add("output", output.serializeToJson()));
 			
 			return json;
 		}

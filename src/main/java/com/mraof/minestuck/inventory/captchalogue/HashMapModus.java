@@ -4,12 +4,12 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.LogicalSide;
 
 import java.util.Iterator;
 
@@ -87,7 +87,7 @@ public class HashMapModus extends Modus
 		if(list.size() == 0 || item.isEmpty())
 			return false;
 		
-		String itemName = ForgeRegistries.ITEMS.getKey(item.getItem()).getPath().replace('_', ' ');
+		String itemName = BuiltInRegistries.ITEM.getKey(item.getItem()).getPath().replace('_', ' ');
 		
 		int index = ((item.hasCustomHoverName()) ? item.getHoverName() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
 		

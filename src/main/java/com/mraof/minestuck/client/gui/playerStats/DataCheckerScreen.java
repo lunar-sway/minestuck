@@ -22,7 +22,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,6 +78,16 @@ public class DataCheckerScreen extends Screen
 	}
 	
 	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		int xOffset = (width - GUI_WIDTH)/2;
+		int yOffset = (height - GUI_HEIGHT)/2;
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+	}
+	
+	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		int xOffset = (width - GUI_WIDTH)/2;
@@ -95,11 +105,6 @@ public class DataCheckerScreen extends Screen
 				updateGuiButtons();
 			}
 		}
-		
-		renderBackground(guiGraphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
@@ -144,16 +149,16 @@ public class DataCheckerScreen extends Screen
 	}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 	{
-		if(scroll != 0 && guiComponent != null)
+		if(scrollY != 0 && guiComponent != null)
 		{
 			int size = guiComponent.getComponentList().size();
 			if(size <= 5)
-				return super.mouseScrolled(mouseX, mouseY, scroll);
+				return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 			
 			int prevIndex = index;
-			if(scroll > 0)
+			if(scrollY > 0)
 				index -= 1;
 			else index += 1;
 			index = Mth.clamp(index, 0, size - 5);
@@ -164,7 +169,7 @@ public class DataCheckerScreen extends Screen
 				updateGuiButtons();
 			}
 			return true;
-		} else return super.mouseScrolled(mouseX, mouseY, scroll);
+		} else return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 	
 	@Override

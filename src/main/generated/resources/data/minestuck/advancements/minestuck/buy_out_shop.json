@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/commune",
   "criteria": {
     "buy_everything": {
-      "conditions": {},
       "trigger": "minestuck:buy_out_shop"
     }
   },

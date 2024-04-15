@@ -3,7 +3,7 @@ name: Gradle CI
 on:
   push:
     branches: 
-      - '1.20.1'
+      - 'main'
       - 'upcoming-content'
   pull_request:
 

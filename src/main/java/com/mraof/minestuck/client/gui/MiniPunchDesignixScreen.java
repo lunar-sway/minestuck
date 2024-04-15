@@ -1,8 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import com.mraof.minestuck.blockentity.machine.MiniPunchDesignixBlockEntity;
+import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +30,6 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

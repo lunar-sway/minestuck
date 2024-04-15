@@ -37,18 +37,18 @@ public class GristTypeArgument implements ArgumentType<GristType>
 	{
 		int start2 = reader.getCursor();
 		ResourceLocation gristName = ResourceLocation.read(reader);
-		if(!GristTypes.getRegistry().containsKey(gristName))
+		if(!GristTypes.REGISTRY.containsKey(gristName))
 		{
 			reader.setCursor(start2);
 			throw INVALID_TYPE.createWithContext(reader, gristName);
 		}
-		return GristTypes.getRegistry().getValue(gristName);
+		return GristTypes.REGISTRY.get(gristName);
 	}
 	
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return SharedSuggestionProvider.suggestResource(GristTypes.getRegistry().getKeys(), builder);
+		return SharedSuggestionProvider.suggestResource(GristTypes.REGISTRY.keySet(), builder);
 	}
 	
 	@Override

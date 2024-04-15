@@ -1,10 +1,13 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -14,10 +17,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by mraof on 2017 December 06 at 11:31 PM.
@@ -48,9 +48,7 @@ public abstract class MinestuckScreen extends Screen
 		GristSet clientGrist = cache.set();
 		long cacheLimit = cache.limit();
 		
-		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
-		Collections.sort(types);
-		types = types.stream().skip((long) page * rows * columns).limit(rows * columns).collect(Collectors.toList());
+		List<GristType> types = GristTypes.REGISTRY.stream().sorted().skip((long) page * rows * columns).limit(rows * columns).toList();
 
 		int offset = 0;
 		for (GristType type : types)

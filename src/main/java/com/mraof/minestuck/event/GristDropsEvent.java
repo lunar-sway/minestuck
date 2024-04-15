@@ -2,19 +2,18 @@ package com.mraof.minestuck.event;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.Cancelable;
+import net.neoforged.bus.api.ICancellableEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
 import java.util.Map;
 
-@Cancelable
 @SuppressWarnings("unused")
-public class GristDropsEvent extends LivingEvent
+public class GristDropsEvent extends LivingEvent implements ICancellableEvent
 {
 	private final UnderlingEntity underling;
 	private final Map<PlayerIdentifier, Double> damageMap;

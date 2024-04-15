@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueAnimationData;
@@ -179,15 +178,19 @@ public class DialogueScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		guiGraphics.blit(dialogueData.guiBackground(), xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		renderAnimation(guiGraphics);
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		int pY = yOffset + 20;
 		for(FormattedCharSequence line : messageLines)
@@ -195,8 +198,6 @@ public class DialogueScreen extends Screen
 			guiGraphics.drawString(font, line, xOffset + 10, pY, 0x000000, false);
 			pY += DialogueButton.TEXT_SPACING;
 		}
-		
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	/**

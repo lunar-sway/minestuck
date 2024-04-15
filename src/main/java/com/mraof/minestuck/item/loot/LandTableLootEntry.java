@@ -1,28 +1,27 @@
 package com.mraof.minestuck.item.loot;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -32,10 +31,16 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	public static final Codec<LandTableLootEntry> CODEC = RecordCodecBuilder.create(instance ->
+			instance.group(
+					ResourceLocation.CODEC.fieldOf("name").forGetter(entry -> entry.table),
+					Codec.STRING.fieldOf("pool").forGetter(entry -> entry.poolName)
+			).and(commonFields(instance).t1()).apply(instance, LandTableLootEntry::new));
+	
 	private final ResourceLocation table;
 	private final String poolName;
 	
-	private LandTableLootEntry(ResourceLocation table, String pool, LootItemCondition[] conditions)
+	private LandTableLootEntry(ResourceLocation table, String pool, List<LootItemCondition> conditions)
 	{
 		super(conditions);
 		this.table = table;
@@ -69,13 +74,13 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 	private ResourceLocation getTerrainTableName(TerrainLandType terrainType)
 	{
 		return new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/"
-				+ Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().getKey(terrainType)).toString().replace(':', '/'));
+				+ Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.getKey(terrainType)).toString().replace(':', '/'));
 	}
 	
 	private ResourceLocation getTitleTableName(TitleLandType titleType)
 	{
 		return new ResourceLocation(table.getNamespace(), table.getPath() + "/title/"
-				+ Objects.requireNonNull(LandTypes.TITLE_REGISTRY.get().getKey(titleType)).toString().replace(':', '/'));
+				+ Objects.requireNonNull(LandTypes.TITLE_REGISTRY.getKey(titleType)).toString().replace(':', '/'));
 	}
 	
 	private void expandFrom(ResourceLocation tableName, LootContext context, Consumer<LootPoolEntry> lootGenCollector)
@@ -116,9 +121,9 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 	public void validate(ValidationContext context)
 	{
 		super.validate(context);
-		for(TerrainLandType type : LandTypes.TERRAIN_REGISTRY.get())
+		for(TerrainLandType type : LandTypes.TERRAIN_REGISTRY)
 			validateRecursiveTable(context, getTerrainTableName(type));
-		for(TitleLandType type : LandTypes.TITLE_REGISTRY.get())
+		for(TitleLandType type : LandTypes.TITLE_REGISTRY)
 			validateRecursiveTable(context, getTitleTableName(type));
 	}
 	
@@ -165,23 +170,6 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 				LOGGER.error("Got exception when accessing loot entries field for loot pool. Will use simpler behaviour for this time.", e);
 				return null;
 			}
-		}
-	}
-	
-	public static class SerializerImpl extends Serializer<LandTableLootEntry>
-	{
-		@Override
-		public void serializeCustom(JsonObject json, LandTableLootEntry entryIn, JsonSerializationContext context)
-		{
-			json.addProperty("name", entryIn.table.toString());
-			json.addProperty("pool", entryIn.poolName);
-		}
-		
-		public final LandTableLootEntry deserializeCustom(JsonObject json, JsonDeserializationContext context, LootItemCondition[] conditions)
-		{
-			ResourceLocation table = new ResourceLocation(GsonHelper.getAsString(json, "name"));
-			String pool = GsonHelper.getAsString(json, "pool");
-			return new LandTableLootEntry(table, pool, conditions);
 		}
 	}
 	

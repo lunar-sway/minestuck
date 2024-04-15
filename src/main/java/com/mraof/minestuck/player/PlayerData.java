@@ -18,10 +18,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -335,7 +335,7 @@ public final class PlayerData
 		{
 			modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
 			setModus(modus);
-		} else LOGGER.warn("Couldn't create a starting modus type {}.", ModusTypes.REGISTRY.get().getKey(type));
+		} else LOGGER.warn("Couldn't create a starting modus type {}.", ModusTypes.REGISTRY.getKey(type));
 	}
 	
 	public void onPlayerLoggedIn(ServerPlayer player)

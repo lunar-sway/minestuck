@@ -8,8 +8,8 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -67,7 +67,7 @@ public class MiscContainerPacket implements MSPacket.PlayToServer
 				
 			player.containerMenu = menu;
 			player.initMenu(menu);
-			MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(player, menu));
+			NeoForge.EVENT_BUS.post(new PlayerContainerEvent.Open(player, menu));
 		}
 	}
 }

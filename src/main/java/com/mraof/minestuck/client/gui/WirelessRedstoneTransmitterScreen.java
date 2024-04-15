@@ -10,7 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
 public class WirelessRedstoneTransmitterScreen extends Screen
 {
@@ -56,15 +56,13 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		guiGraphics.blit(GUI_BACKGROUND, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	private void findReceiver()

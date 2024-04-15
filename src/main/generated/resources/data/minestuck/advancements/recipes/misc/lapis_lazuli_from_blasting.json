@@ -20,8 +20,8 @@
   },
   "requirements": [
     [
-      "has_lapis_ore",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lapis_ore"
     ]
   ],
   "rewards": {

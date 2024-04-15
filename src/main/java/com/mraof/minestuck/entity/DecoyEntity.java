@@ -18,9 +18,9 @@ import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
+import net.neoforged.neoforge.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

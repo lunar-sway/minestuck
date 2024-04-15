@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.redstone.StructureCoreBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StructureCorePacket;
@@ -10,8 +9,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class StructureCoreScreen extends Screen
 {
 	public static final String TITLE = "minestuck.structure_core";
@@ -77,18 +79,20 @@ public class StructureCoreScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
 		guiGraphics.blit(GUI_BACKGROUND, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		guiGraphics.drawString(font, Integer.toString(shutdownRange), (width / 2) - 5, (height - GUI_HEIGHT) / 2 + 16, 0x404040, false);
-		
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	private void finish()

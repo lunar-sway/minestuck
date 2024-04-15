@@ -9,6 +9,7 @@ import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -33,7 +34,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -102,7 +102,8 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 		{
 			be.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
 			
-			player.displayClientMessage(Component.translatable(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, ForgeRegistries.MOB_EFFECTS.getKey(firstEffect.getEffect()), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
+			player.displayClientMessage(Component.translatable(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE,
+					BuiltInRegistries.MOB_EFFECT.getKey(firstEffect.getEffect()), firstEffect.getAmplifier()), true);
 			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
 		}
 	}

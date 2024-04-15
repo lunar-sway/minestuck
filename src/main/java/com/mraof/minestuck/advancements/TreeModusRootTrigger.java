@@ -1,28 +1,23 @@
 package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTrigger.Instance>
 {
-	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "tree_modus_root");
-	
 	@Override
-	public ResourceLocation getId()
+	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
 	{
-		return ID;
-	}
-	
-	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
-	{
-		MinMaxBounds.Ints count = MinMaxBounds.Ints.fromJson(json.get("count"));
-		return new Instance(predicate, count);
+		return new Instance(predicate, MinMaxBounds.Ints.fromJson(json.get("count")));
 	}
 	
 	public void trigger(ServerPlayer player, int count)
@@ -33,15 +28,17 @@ public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTr
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final MinMaxBounds.Ints count;
-		public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints count)
+		
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> predicate, MinMaxBounds.Ints count)
 		{
-			super(ID, predicate);
+			super(predicate);
 			this.count = Objects.requireNonNull(count);
 		}
 		
-		public static Instance count(MinMaxBounds.Ints count)
+		public static Criterion<Instance> count(MinMaxBounds.Ints count)
 		{
-			return new Instance(ContextAwarePredicate.ANY, count);
+			return MSCriteriaTriggers.TREE_MODUS_ROOT.createCriterion(new Instance(Optional.empty(), count));
 		}
 		
 		public boolean test(int count)
@@ -50,9 +47,9 @@ public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTr
 		}
 		
 		@Override
-		public JsonObject serializeToJson(SerializationContext context)
+		public JsonObject serializeToJson()
 		{
-			JsonObject json = super.serializeToJson(context);
+			JsonObject json = super.serializeToJson();
 			json.add("count", count.serializeToJson());
 			
 			return json;

@@ -9,8 +9,8 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class ListArgument<T> implements ArgumentType<List<T>>
 		@SuppressWarnings("unchecked")
 		private static <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> void serializeArgument(FriendlyByteBuf buffer, ArgumentTypeInfo<A, T> argumentInfo, ArgumentTypeInfo.Template<A> template)
 		{
-			buffer.writeRegistryId(ForgeRegistries.COMMAND_ARGUMENT_TYPES, argumentInfo);
+			buffer.writeId(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, argumentInfo);
 			argumentInfo.serializeToNetwork((T)template, buffer);
 		}
 		
@@ -78,7 +78,7 @@ public class ListArgument<T> implements ArgumentType<List<T>>
 		{
 			try
 			{
-				ArgumentTypeInfo<?, ?> elementArgInfo = buffer.readRegistryIdSafe(ArgumentTypeInfo.class);
+				ArgumentTypeInfo<?, ?> elementArgInfo = buffer.readById(BuiltInRegistries.COMMAND_ARGUMENT_TYPE);
 				return new Template((ArgumentTypeInfo.Template<? extends ArgumentType<T>>) elementArgInfo.deserializeFromNetwork(buffer));
 			} catch(Exception e)
 			{

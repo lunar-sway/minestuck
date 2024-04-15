@@ -5,7 +5,7 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
 
 import java.util.Iterator;
 

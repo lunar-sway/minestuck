@@ -34,9 +34,9 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_polished_cruxite_block",
-      "has_raw_cruxite",
-      "has_the_recipe"
+      "has_raw_cruxite"
     ]
   ],
   "rewards": {

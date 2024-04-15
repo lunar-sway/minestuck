@@ -1,25 +1,26 @@
 package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigger.Instance>
 {
-	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "consort_talk");
-	
 	@Override
-	public ResourceLocation getId()
-	{
-		return ID;
-	}
-	
-	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
+	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
 	{
 		String message = json.has("message") ? GsonHelper.getAsString(json, "message") : null;
 		return new Instance(predicate, message);
@@ -32,21 +33,24 @@ public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigge
 	
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
+		@Nullable
 		private final String message;
-		public Instance(ContextAwarePredicate predicate, String message)
+		
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> predicate, @Nullable String message)
 		{
-			super(ID, predicate);
+			super(predicate);
 			this.message = message;
 		}
 		
-		public static Instance any()
+		public static Criterion<Instance> any()
 		{
 			return forMessage(null);
 		}
 		
-		public static Instance forMessage(String message)
+		public static Criterion<Instance> forMessage(@Nullable String message)
 		{
-			return new Instance(ContextAwarePredicate.ANY, message);
+			return MSCriteriaTriggers.CONSORT_TALK.createCriterion(new Instance(Optional.empty(), message));
 		}
 		
 		public boolean test(String message)
@@ -55,9 +59,9 @@ public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigge
 		}
 		
 		@Override
-		public JsonObject serializeToJson(SerializationContext context)
+		public JsonObject serializeToJson()
 		{
-			JsonObject json = super.serializeToJson(context);
+			JsonObject json = super.serializeToJson();
 			if(message != null)
 				json.addProperty("message", message);
 			

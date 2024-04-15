@@ -71,7 +71,7 @@ public final class GristCache
 	{
 		long capacity = data.getEcheladder().getGristCapacity();
 		NonNegativeGristSet capacitySet = new NonNegativeGristSet();
-		for(GristType type : GristTypes.values())
+		for(GristType type : GristTypes.REGISTRY)
 		{
 			long amountInCache = this.getGristSet().getGrist(type);
 			if(amountInCache < capacity)

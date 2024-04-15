@@ -25,11 +25,11 @@ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.event.village.WandererTradesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
+import net.neoforged.neoforge.event.village.VillagerTradesEvent;
+import net.neoforged.neoforge.event.village.WandererTradesEvent;
 
 import java.util.List;
 import java.util.Set;

@@ -29,8 +29,8 @@ public class LandTypesDataPacket implements MSPacket.PlayToClient
 		for (Map.Entry<ResourceKey<Level>, LandTypePair> entry : types.entrySet())
 		{
 			buffer.writeResourceLocation(entry.getKey().location());
-			buffer.writeRegistryId(LandTypes.TERRAIN_REGISTRY.get(), entry.getValue().getTerrain());
-			buffer.writeRegistryId(LandTypes.TITLE_REGISTRY.get(), entry.getValue().getTitle());
+			buffer.writeId(LandTypes.TERRAIN_REGISTRY, entry.getValue().getTerrain());
+			buffer.writeId(LandTypes.TITLE_REGISTRY, entry.getValue().getTitle());
 		}
 	}
 	
@@ -41,8 +41,8 @@ public class LandTypesDataPacket implements MSPacket.PlayToClient
 		while (buffer.isReadable())
 		{
 			ResourceKey<Level> world = ResourceKey.create(Registries.DIMENSION, buffer.readResourceLocation());
-			TerrainLandType terrain = buffer.readRegistryIdSafe(TerrainLandType.class);
-			TitleLandType title = buffer.readRegistryIdSafe(TitleLandType.class);
+			TerrainLandType terrain = buffer.readById(LandTypes.TERRAIN_REGISTRY);
+			TitleLandType title = buffer.readById(LandTypes.TITLE_REGISTRY);
 			builder.put(world, new LandTypePair(terrain, title));
 		}
 		

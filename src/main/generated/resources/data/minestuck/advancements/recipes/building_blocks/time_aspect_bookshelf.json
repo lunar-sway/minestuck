@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_time_aspect_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_time_aspect_planks"
     ]
   ],
   "rewards": {

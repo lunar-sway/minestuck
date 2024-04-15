@@ -9,15 +9,15 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 
@@ -66,7 +66,7 @@ public class AlchemyHelper
 		}
 		CompoundTag tag = card.getTag();
 		
-		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString(("contentID"))));
+		Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString(("contentID"))));
 		if (item == null) {return ItemStack.EMPTY;}
 		
 		int count = 1;
@@ -145,7 +145,7 @@ public class AlchemyHelper
 		if(!itemIn.isEmpty())
 		{
 			nbt = new CompoundTag();
-			nbt.putString("contentID", ForgeRegistries.ITEMS.getKey(itemIn.getItem()).toString());
+			nbt.putString("contentID", BuiltInRegistries.ITEM.getKey(itemIn.getItem()).toString());
 		}
 		
 		itemOut.setTag(nbt);

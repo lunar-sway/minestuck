@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -8,7 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
 public class GristCacheScreen extends PlayerStatsScreen
 {
@@ -36,28 +35,31 @@ public class GristCacheScreen extends PlayerStatsScreen
 		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
 		previousButton.visible = false;
-		if(GristTypes.getRegistry().getValues().size() <= rows * columns)
+		if(GristTypes.REGISTRY.size() <= rows * columns)
 		{
 			nextButton.visible = false;
 		}
 	}
 	
 	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		drawTabs(guiGraphics);
+		guiGraphics.blit(guiGristcache, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+	}
+	
+	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-
-		drawTabs(guiGraphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiGristcache, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		String cacheMessage;
 		if(ClientEditmodeData.isInEditmode() || ClientPlayerData.getTitle() == null)
 			cacheMessage = getTitle().getString();
 		else cacheMessage = ClientPlayerData.getTitle().asTextComponent().getString();
 		guiGraphics.drawString(font, cacheMessage, (this.width / 2F) - mc.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 
 		drawActiveTabAndOther(guiGraphics, mouseX, mouseY);
 		
@@ -78,7 +80,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 	
 	private void nextPage()
 	{
-		int maxPage = (GristTypes.getRegistry().getValues().size() - 1) / (rows * columns);
+		int maxPage = (GristTypes.REGISTRY.size() - 1) / (rows * columns);
 		if(page < maxPage)
 		{
 			page++;

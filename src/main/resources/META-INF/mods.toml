@@ -8,7 +8,7 @@
 modLoader="javafml" #mandatory
 
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[47,)" #mandatory
+loaderVersion="[1,)" #mandatory
 
 license="HUGWARE"
 
@@ -50,11 +50,11 @@ Adds Homestuck to your Minecraft!
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.minestuck]] #optional
     # the modid of the dependency
-    modId="forge" #mandatory
+    modId="neoforge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[47,)" #mandatory
+    versionRange="[20.2,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -63,21 +63,21 @@ Adds Homestuck to your Minecraft!
 [[dependencies.minestuck]]
     modId="geckolib"
     mandatory=true
-    versionRange="[4.0,)"
+    versionRange="[4.3,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.minestuck]]
-    modId="infiniverse"
-    mandatory=true
-    versionRange="[1.0,1.1)"
-    ordering="NONE"
-    side="BOTH"
+#[[dependencies.minestuck]]
+#    modId="infiniverse"
+#    mandatory=true
+#    versionRange="[1.0,1.1)"
+#    ordering="NONE"
+#    side="BOTH"
 
 # Here's another dependency
 [[dependencies.minestuck]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.20.1]"
+    versionRange="[1.20.2]"
     ordering="NONE"
     side="BOTH"

@@ -6,17 +6,17 @@ import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -1559,7 +1559,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		{
 			ModelFile model = models().getExistingFile(new ResourceLocation("tnt"));
 			ModelFile itemModel = itemModels().getExistingFile(new ResourceLocation("tnt"));
-			for(RegistryObject<Block> block : Arrays.asList(MSBlocks.PRIMED_TNT, MSBlocks.UNSTABLE_TNT, MSBlocks.INSTANT_TNT))
+			for(Supplier<Block> block : Arrays.asList(MSBlocks.PRIMED_TNT, MSBlocks.UNSTABLE_TNT, MSBlocks.INSTANT_TNT))
 			{
 				getVariantBuilder(block.get()).partialState().setModels(ConfiguredModel.allYRotations(model, 0, false));
 				simpleBlockItem(block.get(), itemModel);
@@ -1657,7 +1657,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	
 	private ResourceLocation key(Block block)
 	{
-		return ForgeRegistries.BLOCKS.getKey(block);
+		return BuiltInRegistries.BLOCK.getKey(block);
 	}
 	
 	private BlockModelBuilder cubeAll(ResourceLocation id)
@@ -1694,21 +1694,21 @@ public class MSBlockStateProvider extends BlockStateProvider
 	}
 	
 	@SuppressWarnings("SameParameterValue")
-	private void variantsWithItem(RegistryObject<Block> block, int count, IntFunction<ModelFile> modelProvider)
+	private void variantsWithItem(DeferredBlock<?> block, int count, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = variantModels(count, modelProvider);
 		getVariantBuilder(block.get()).partialState().setModels(models);
 		simpleBlockItem(block.get(), models[0].model);
 	}
 	
-	private void weightedVariantsWithItem(RegistryObject<Block> block, int[] weights, IntFunction<ModelFile> modelProvider)
+	private void weightedVariantsWithItem(DeferredBlock<?> block, int[] weights, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = weightedVariantModels(weights, modelProvider);
 		getVariantBuilder(block.get()).partialState().setModels(models);
 		simpleBlockItem(block.get(), models[0].model);
 	}
 	
-	private void fluid(RegistryObject<LiquidBlock> block)
+	private void fluid(DeferredBlock<LiquidBlock> block)
 	{
 		simpleBlock(block, this::fluidModel);
 	}
@@ -1723,33 +1723,33 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(block.get(), cubeAll(block.get()));
 	}
 	
-	public void simpleBlock(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	public void simpleBlock(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		simpleBlock(block.get(), modelProvider.apply(block.getId()));
 	}
 	
-	public void simpleBlockWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	public void simpleBlockWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		simpleBlockWithItem(block.get(), modelProvider.apply(block.getId()));
 	}
 	
-	public void simpleHorizontal(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	public void simpleHorizontal(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		simpleHorizontal(block, 180, modelProvider);
 	}
 	
-	private void simpleHorizontal(RegistryObject<? extends Block> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
+	private void simpleHorizontal(DeferredBlock<?> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		horizontal(block, angleOffset, $ -> model, BlockStateProperties.WATERLOGGED, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED, BlockStateProperties.POWER);
 	}
 	
-	private void horizontal(RegistryObject<? extends Block> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	private void horizontal(DeferredBlock<?> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
 	{
 		horizontal(block, 180, modelProvider, ignored);
 	}
 	
-	private void horizontal(RegistryObject<? extends Block> block, int angleOffset, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	private void horizontal(DeferredBlock<?> block, int angleOffset, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
 	{
 		getVariantBuilder(block.get())
 				.forAllStatesExcept(state -> ConfiguredModel.builder()
@@ -1760,7 +1760,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 				);
 	}
 	
-	private void simpleHorizontalWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	private void simpleHorizontalWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		simpleHorizontal(block, $ -> model);
@@ -1768,14 +1768,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 	}
 	
 	@SuppressWarnings("SameParameterValue")
-	private void simpleHorizontalWithItem(RegistryObject<Block> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
+	private void simpleHorizontalWithItem(DeferredBlock<?> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		simpleHorizontal(block, angleOffset, $ -> model);
 		simpleBlockItem(block.get(), model);
 	}
 	
-	private void directionalUpWithItem(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	private void directionalUpWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		directionalUp(block, $ -> model, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED);
@@ -1786,7 +1786,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	 * Sets up a blockstate definition with rotation based on the facing direction with all six directions.
 	 * Assumes that the model is facing upwards when unrotated.
 	 */
-	private void directionalUp(RegistryObject<? extends Block> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	private void directionalUp(DeferredBlock<?> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
 	{
 		getVariantBuilder(block.get())
 				.forAllStatesExcept(state -> {
@@ -1800,7 +1800,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	}
 	
 	@SuppressWarnings("SameParameterValue")
-	private void directionalNorthWithItem(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	private void directionalNorthWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		directionalNorth(block, $ -> model, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED, BlockStateProperties.POWER, BlockStateProperties.WATERLOGGED);
@@ -1811,7 +1811,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	 * Sets up a blockstate definition with rotation based on the facing direction with all six directions.
 	 * Assumes that the model is facing northwards when unrotated.
 	 */
-	private void directionalNorth(RegistryObject<? extends Block> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	private void directionalNorth(DeferredBlock<?> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
 	{
 		getVariantBuilder(block.get())
 				.forAllStatesExcept(state -> {
@@ -1825,10 +1825,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 	}
 	
 	/**
-	 * While the standard directional block (with {@link MSBlockStateProvider#directionalUp(RegistryObject, Function, Property[])}) has the down-facing state rotated 180 degrees along the y-axis,
+	 * While the standard directional block (with {@link MSBlockStateProvider#directionalUp(DeferredBlock, Function, Property[])}) has the down-facing state rotated 180 degrees along the y-axis,
 	 * blocks with this function are instead not rotated in both the up-facing state and the down-facing state.
 	 */
-	private void unflippedColumnWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	private void unflippedColumnWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		getVariantBuilder(block.get())
@@ -1843,7 +1843,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), model);
 	}
 	
-	void trimWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider, Function<ResourceLocation, ModelFile> flippedModelProvider)
+	void trimWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider, Function<ResourceLocation, ModelFile> flippedModelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		var flippedModel = flippedModelProvider.apply(block.getId());
@@ -1860,14 +1860,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), model);
 	}
 	
-	public void axisWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	public void axisWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		axisBlock((RotatedPillarBlock) block.get(), model, model);
 		simpleBlockItem(block.get(), model);
 	}
 	
-	public void stairsWithItem(Supplier<StairBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void stairsWithItem(Supplier<StairBlock> block, DeferredBlock<?> sourceBlock)
 	{
 		stairsWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
@@ -1886,7 +1886,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), stairs);
 	}
 	
-	public void slabWithItem(Supplier<SlabBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void slabWithItem(Supplier<SlabBlock> block, DeferredBlock<?> sourceBlock)
 	{
 		slabWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
@@ -1905,7 +1905,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), slabBottom);
 	}
 	
-	void wallWithItem(Supplier<WallBlock> block, RegistryObject<? extends Block> sourceBlock)
+	void wallWithItem(Supplier<WallBlock> block, DeferredBlock<?> sourceBlock)
 	{
 		wallWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
@@ -1918,12 +1918,12 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), wallInventory);
 	}
 	
-	public void fenceWithItem(RegistryObject<FenceBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void fenceWithItem(Supplier<FenceBlock> block, DeferredBlock<?> sourceBlock)
 	{
 		fenceWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void fenceWithItem(RegistryObject<FenceBlock> block, String baseName, ResourceLocation texture)
+	private void fenceWithItem(Supplier<FenceBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile fenceInventory = models().fenceInventory(baseName + "_fence_inventory", texture);
 		
@@ -1931,19 +1931,19 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), fenceInventory);
 	}
 	
-	public void fenceGateWithItem(RegistryObject<FenceGateBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void fenceGateWithItem(Supplier<FenceGateBlock> block, DeferredBlock<?> sourceBlock)
 	{
 		fenceGateWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void fenceGateWithItem(RegistryObject<FenceGateBlock> block, String baseName, ResourceLocation texture)
+	private void fenceGateWithItem(Supplier<FenceGateBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile fenceGateInventory = models().fenceGate(baseName + "_fence_gate", texture);
 		fenceGateBlock(block.get(), texture);
 		simpleBlockItem(block.get(), fenceGateInventory);
 	}
 	
-	public void simpleDoorBlock(RegistryObject<DoorBlock> block)
+	public void simpleDoorBlock(DeferredBlock<DoorBlock> block)
 	{
 		String baseName = block.getId().getPath();
 		ResourceLocation doorBottom = new ResourceLocation("minestuck:block/" + baseName + "_bottom");
@@ -1952,7 +1952,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		doorBlockWithRenderType(block.get(), doorBottom, doorTop, "cutout");
 	}
 	
-	public void simpleDoorBlock(RegistryObject<DoorBlock> block, String renderType)
+	public void simpleDoorBlock(DeferredBlock<DoorBlock> block, String renderType)
 	{
 		String baseName = block.getId().getPath();
 		ResourceLocation doorBottom = new ResourceLocation("minestuck:block/" + baseName + "_bottom");
@@ -1961,17 +1961,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 		doorBlockWithRenderType(block.get(), doorBottom, doorTop, renderType);
 	}
 	
-	public void trapDoorWithItem(RegistryObject<TrapDoorBlock> block)
+	public void trapDoorWithItem(DeferredBlock<TrapDoorBlock> block)
 	{
 		trapDoorWithItem(block, block.getId().getPath(), texture(block), "cutout");
 	}
 	
-	public void trapDoorWithItem(RegistryObject<TrapDoorBlock> block, String renderType)
+	public void trapDoorWithItem(DeferredBlock<TrapDoorBlock> block, String renderType)
 	{
 		trapDoorWithItem(block, block.getId().getPath(), texture(block), renderType);
 	}
 	
-	private void trapDoorWithItem(RegistryObject<TrapDoorBlock> block, String baseName, ResourceLocation texture, String renderType)
+	private void trapDoorWithItem(Supplier<TrapDoorBlock> block, String baseName, ResourceLocation texture, String renderType)
 	{
 		ModelFile trapDoorInventory = models().trapdoorBottom(baseName + "_bottom", texture);
 		
@@ -1979,7 +1979,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), trapDoorInventory);
 	}
 	
-	public void buttonWithItem(Supplier<ButtonBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void buttonWithItem(Supplier<ButtonBlock> block, DeferredBlock<?> sourceBlock)
 	{
 		buttonWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
@@ -1991,7 +1991,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), buttonInventory);
 	}
 	
-	public void pressurePlateWithItem(Supplier<PressurePlateBlock> block, RegistryObject<? extends Block> sourceBlock)
+	public void pressurePlateWithItem(Supplier<PressurePlateBlock> block, DeferredBlock<?> sourceBlock)
 	{
 		pressurePlateWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
@@ -2003,12 +2003,12 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), pressurePlateInventory);
 	}
 	
-	private void customLampWithItem(RegistryObject<Block> block)
+	private void customLampWithItem(DeferredBlock<?> block)
 	{
 		customLampWithItem(block, block.getId().getPath(), texture(block));
 	}
 	
-	private void customLampWithItem(RegistryObject<Block> block, String baseName, ResourceLocation texture)
+	private void customLampWithItem(Supplier<? extends Block> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile lampOn = models().cubeAll(baseName + "_on", new ResourceLocation(texture + "_on"));
 		ModelFile lampOff = models().cubeAll(baseName + "_off", new ResourceLocation(texture + "_off"));
@@ -2027,7 +2027,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 				new ResourceLocation(Minestuck.MOD_ID, "block/" + baseName + "_on")));
 	}
 	
-	private void powerVariableWithItem(RegistryObject<Block> block, ModelFile highPowerModel, ModelFile mediumPowerModel, ModelFile lowPowerModel, ModelFile unpoweredModel)
+	private void powerVariableWithItem(DeferredBlock<?> block, ModelFile highPowerModel, ModelFile mediumPowerModel, ModelFile lowPowerModel, ModelFile unpoweredModel)
 	{
 		getVariantBuilder(block.get())
 				.forAllStates(state -> {
@@ -2090,7 +2090,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 	}
 	
-	private void cake(RegistryObject<Block> block)
+	private void cake(DeferredBlock<?> block)
 	{
 		ResourceLocation id = block.getId();
 		getVariantBuilder(block.get()).forAllStates(state -> {
@@ -2099,7 +2099,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		});
 	}
 	
-	private void computerBlockWithExistingModels(RegistryObject<Block> block)
+	private void computerBlockWithExistingModels(DeferredBlock<?> block)
 	{
 		computerBlock(block,
 				existing(block.getId().withSuffix("_off")),
@@ -2108,7 +2108,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 				existing(block.getId().withSuffix("_bsod")));
 	}
 	
-	private void computerBlock(RegistryObject<Block> block, ModelFile off, ModelFile on, ModelFile gameLoaded, ModelFile bsod)
+	private void computerBlock(DeferredBlock<?> block, ModelFile off, ModelFile on, ModelFile gameLoaded, ModelFile bsod)
 	{
 		horizontal(block, state -> switch(state.getValue(ComputerBlock.STATE))
 		{
@@ -2119,14 +2119,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 		});
 	}
 	
-	public void flatItem(RegistryObject<? extends BlockItem> item, Function<ResourceLocation, ResourceLocation> textureProvider)
+	public void flatItem(DeferredItem<?> item, Function<ResourceLocation, ResourceLocation> textureProvider)
 	{
 		itemModels().withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/generated")).texture("layer0",
 				textureProvider.apply(item.getId()));
 	}
 	
-	public static ResourceLocation texture(RegistryObject<? extends Block> block)
+	public static ResourceLocation texture(DeferredBlock<?> block)
 	{
 		return texture(block.getId());
 	}

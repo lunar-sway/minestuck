@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.blockentity.machine.IOwnable;
 import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
+import com.mraof.minestuck.player.IdentifierHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Map;

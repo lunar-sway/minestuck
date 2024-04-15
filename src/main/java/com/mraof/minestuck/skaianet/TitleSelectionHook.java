@@ -14,9 +14,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +27,7 @@ import java.util.Map;
  * A class that determines when to stop entry and tell the player to pick a title,
  * and to then handle the selection once it's been sent back.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus= Mod.EventBusSubscriber.Bus.FORGE)
 public class TitleSelectionHook
 {
 	private static final Logger LOGGER = LogManager.getLogger();

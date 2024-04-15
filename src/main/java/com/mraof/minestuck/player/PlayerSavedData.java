@@ -54,7 +54,12 @@ public final class PlayerSavedData extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(nbt -> load(mcServer, nbt), () -> new PlayerSavedData(mcServer), DATA_NAME);
+		return storage.computeIfAbsent(factory(mcServer), DATA_NAME);
+	}
+	
+	private static Factory<PlayerSavedData> factory(MinecraftServer mcServer)
+	{
+		return new Factory<>(() -> new PlayerSavedData(mcServer), nbt -> load(mcServer, nbt));
 	}
 	
 	@Override

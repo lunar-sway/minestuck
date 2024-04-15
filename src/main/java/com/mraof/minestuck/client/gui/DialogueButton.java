@@ -79,7 +79,7 @@ public class DialogueButton extends Button
 		int hoverFocusShift = isResponse ? (hoveredOrFocused ? 7 : 0) : 0;
 		
 		if(hoveredOrFocused && !wasHoveredOrFocused && this.active)
-			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.2F, 2.0F);
+			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.2F, 2.0F);
 		
 		guiGraphics.blitWithBorder(gui, this.getX() + hoverFocusShift, this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
 		

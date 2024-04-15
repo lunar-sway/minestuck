@@ -21,9 +21,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -193,7 +193,7 @@ public class Echeladder
 	public void updateAttribute(AttributeInstance attribute, AttributeModifier modifier)
 	{
 		if(attribute.hasModifier(modifier))
-			attribute.removeModifier(attribute.getModifier(modifier.getId()));
+			attribute.removeModifier(modifier.getId());
 		attribute.addPermanentModifier(modifier);
 	}
 	

@@ -37,18 +37,18 @@ public class TitleLandTypeArgument implements ArgumentType<TitleLandType>
 	{
 		int start2 = reader.getCursor();
 		ResourceLocation gristName = ResourceLocation.read(reader);
-		if(!LandTypes.TITLE_REGISTRY.get().containsKey(gristName))
+		if(!LandTypes.TITLE_REGISTRY.containsKey(gristName))
 		{
 			reader.setCursor(start2);
 			throw INVALID_TYPE.createWithContext(reader, gristName);
 		}
-		return LandTypes.TITLE_REGISTRY.get().getValue(gristName);
+		return LandTypes.TITLE_REGISTRY.get(gristName);
 	}
 	
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return SharedSuggestionProvider.suggestResource(LandTypes.TITLE_REGISTRY.get().getKeys(), builder);
+		return SharedSuggestionProvider.suggestResource(LandTypes.TITLE_REGISTRY.keySet(), builder);
 	}
 	
 	@Override

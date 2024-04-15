@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -15,8 +14,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class AlchemiterScreen extends Screen
 {
 	public static final String TITLE = "minestuck.alchemiter";
@@ -64,15 +66,21 @@ public class AlchemiterScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
 		
-		this.renderBackground(guiGraphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
 		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		guiGraphics.drawString(font, Integer.toString(((int) (itemQuantity / Math.pow(10, 2)) % 10)), (width - guiWidth) / 2F + 15, (height - guiHeight) / 2F + 46, 0xFFFFFF, false);
 		guiGraphics.drawString(font, Integer.toString(((int) (itemQuantity / Math.pow(10, 1)) % 10)), (width - guiWidth) / 2F + 36, (height - guiHeight) / 2F + 46, 0xFFFFFF, false);
@@ -89,7 +97,6 @@ public class AlchemiterScreen extends Screen
 		Component tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.LARGE_ALCHEMITER, mouseX, mouseY, 9, 45, font);
 		if(tooltip != null)
 			guiGraphics.renderTooltip(font, tooltip, mouseX, mouseY);
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override

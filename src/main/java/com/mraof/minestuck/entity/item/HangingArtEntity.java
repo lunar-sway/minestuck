@@ -16,8 +16,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
+import net.neoforged.neoforge.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -144,8 +144,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public void lerpTo(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
-					   boolean teleport)
+	public void lerpTo(double x, double y, double z, float yaw, float pitch, int posRotationIncrements)
 	{
 		BlockPos blockpos = this.pos.offset(Mth.floor(x - this.getX()), Mth.floor(y - this.getY()), Mth.floor(z - this.getZ()));
 		this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());

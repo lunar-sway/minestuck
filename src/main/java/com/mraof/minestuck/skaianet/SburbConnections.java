@@ -12,7 +12,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -270,7 +270,7 @@ public final class SburbConnections
 		client.connected(server.getOwner(), true);
 		server.connected(client.getOwner(), false);
 		
-		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(skaianetData.mcServer, activeConnection, type));
+		NeoForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(skaianetData.mcServer, activeConnection, type));
 	}
 	
 	private void closeConnectionIf(Predicate<ActiveConnection> predicate)
@@ -305,7 +305,7 @@ public final class SburbConnections
 			serverComputer.putServerMessage(CLOSED);
 		}
 		
-		MinecraftForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(skaianetData.mcServer, connection));
+		NeoForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(skaianetData.mcServer, connection));
 	}
 	
 	public void setPrimaryConnection(ActiveConnection connection)

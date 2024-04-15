@@ -21,7 +21,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -612,13 +612,13 @@ public class MSChestLootTables implements LootTableSubProvider
 	
 	public static ResourceLocation locationForTerrain(Supplier<TerrainLandType> landType, ResourceLocation baseLoot)
 	{
-		ResourceLocation landName = Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().getKey(landType.get()));
+		ResourceLocation landName = Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.getKey(landType.get()));
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/terrain/" + landName.toString().replace(':', '/'));
 	}
 	
 	public static ResourceLocation locationForTitle(Supplier<TitleLandType> landType, ResourceLocation baseLoot)
 	{
-		ResourceLocation landName = Objects.requireNonNull(LandTypes.TITLE_REGISTRY.get().getKey(landType.get()));
+		ResourceLocation landName = Objects.requireNonNull(LandTypes.TITLE_REGISTRY.getKey(landType.get()));
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/title/" + landName.toString().replace(':', '/'));
 	}
 }

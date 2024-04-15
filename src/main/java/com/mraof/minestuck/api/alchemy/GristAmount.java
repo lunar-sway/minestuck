@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 public record GristAmount(GristType type, long amount) implements ImmutableGristSet
 {
 	public static final Codec<GristAmount> CODEC = RecordCodecBuilder.create(instance ->
-			instance.group(GristTypes.getRegistry().getCodec().fieldOf("type").forGetter(GristAmount::type),
+			instance.group(GristTypes.REGISTRY.byNameCodec().fieldOf("type").forGetter(GristAmount::type),
 							Codec.LONG.fieldOf("amount").forGetter(GristAmount::amount))
 					.apply(instance, GristAmount::new));
 	public static final Codec<List<GristAmount>> LIST_CODEC = CODEC.listOf();
@@ -84,13 +84,13 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 	
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(GristTypes.getRegistry(), type());
+		buffer.writeId(GristTypes.REGISTRY, type());
 		buffer.writeLong(amount());
 	}
 	
 	public static GristAmount read(FriendlyByteBuf buffer)
 	{
-		GristType type = buffer.readRegistryIdSafe(GristType.class);
+		GristType type = buffer.readById(GristTypes.REGISTRY);
 		long amount = buffer.readLong();
 		return new GristAmount(type, amount);
 	}

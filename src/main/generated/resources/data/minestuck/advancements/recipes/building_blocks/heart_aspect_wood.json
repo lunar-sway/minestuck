@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_heart_aspect_log",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_heart_aspect_log"
     ]
   ],
   "rewards": {

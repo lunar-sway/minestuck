@@ -3,7 +3,7 @@
   "conditions": [
     {
       "action": "grist_harvest",
-      "condition": "forge:can_tool_perform_action"
+      "condition": "neoforge:can_tool_perform_action"
     }
   ],
   "multiplier": 0.5

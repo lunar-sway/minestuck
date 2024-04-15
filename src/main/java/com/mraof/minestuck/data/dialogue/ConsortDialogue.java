@@ -14,7 +14,7 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.List;
 

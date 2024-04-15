@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -13,10 +12,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+@ParametersAreNonnullByDefault
 public class SummonerScreen extends Screen
 {
 	public static final String TITLE = "minestuck.summoner";
@@ -95,17 +96,19 @@ public class SummonerScreen extends Screen
 	}
 	
 	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		guiGraphics.blit(GUI_BACKGROUND, (this.width - GUI_WIDTH / 2), (this.height - GUI_HEIGHT) / 2, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+	}
+	
+	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-		int yOffset = (height - GUI_HEIGHT) / 2;
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(GUI_BACKGROUND, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		
-		guiGraphics.drawString(font, Integer.toString(summonRange), (width / 2) - 5, yOffset + 16, 0x404040, false);
-		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		guiGraphics.drawString(font, Integer.toString(summonRange), (width / 2) - 5, (this.height - GUI_HEIGHT) / 2 + 16, 0x404040, false);
 	}
 	
 	private void finish()

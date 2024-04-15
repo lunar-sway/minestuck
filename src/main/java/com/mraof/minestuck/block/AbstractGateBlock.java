@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -95,7 +96,7 @@ public abstract class AbstractGateBlock extends Block implements LiquidBlockCont
 	
 	// Implement LiquidBlockContainer and explicitly disallow fluids to get FlowingFluid.canHoldFluid(...) to return false.
 	@Override
-	public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
+	public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
 	{
 		return false;
 	}

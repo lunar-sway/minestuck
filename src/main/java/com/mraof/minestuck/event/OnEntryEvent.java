@@ -2,7 +2,7 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public final class OnEntryEvent extends Event
 {

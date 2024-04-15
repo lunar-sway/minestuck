@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
@@ -17,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -116,13 +115,18 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 	}
 	
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(graphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
+		super.renderBackground(graphics, mouseX, mouseY, partialTicks);
 		
 		graphics.blit(GUI_BACKGROUND, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		
+	}
+	
+	@Override
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.render(graphics, mouseX, mouseY, partialTicks);
 		
 		graphics.drawString(this.font, this.title, xOffset + 10, yOffset + 10, 4210752, false);
 		graphics.drawString(this.font, Component.translatable(EDITMODE_LOCATIONS), xOffset + 55, yOffset + 30, 9013641, false);
@@ -138,7 +142,6 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 		if(overtopToggleableIconBounds(mouseX, mouseY, xOffset, yOffset, NOCLIP_ICON_X, NOCLIP_ICON_Y))
 			graphics.renderTooltip(font, Component.translatable(NOCLIP_UNAVAILABLE), mouseX, mouseY);
 		
-		super.render(graphics, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override

@@ -6,19 +6,23 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 {
 	public static List<GristAmount> createList()
 	{
 		List<GristAmount> list = new ArrayList<>();
-		for(GristType gristType : GristTypes.values())
+		for(GristType gristType : GristTypes.REGISTRY)
 			list.add(gristType.amount(1));
 		return list;
 	}

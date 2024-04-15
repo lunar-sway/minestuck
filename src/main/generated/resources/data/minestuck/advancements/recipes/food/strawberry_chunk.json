@@ -34,9 +34,9 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_strawberry_chunks",
-      "has_strawberry_block",
-      "has_the_recipe"
+      "has_strawberry_block"
     ]
   ],
   "rewards": {

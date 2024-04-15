@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_mycelium_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mycelium_bricks"
     ]
   ],
   "rewards": {

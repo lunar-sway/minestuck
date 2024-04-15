@@ -7,7 +7,7 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.msg;
 import static com.mraof.minestuck.data.dialogue.DialogueProvider.ARROW;

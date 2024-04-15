@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_coagulated_blood",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_coagulated_blood"
     ]
   ],
   "rewards": {

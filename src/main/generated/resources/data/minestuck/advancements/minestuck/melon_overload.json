@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/alchemy",
   "criteria": {
     "melon_overload": {
-      "conditions": {},
       "trigger": "minestuck:melon_overload"
     }
   },

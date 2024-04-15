@@ -46,7 +46,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 	
 	@Override
-	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient)
+	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state)
 	{
 		return true;
 	}
@@ -112,7 +112,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 		{
 			super.tick(state, level, pos, random);
 			
-			if (isValidBonemealTarget(level, pos, state, false) && random.nextInt(7) == 0)	//The world is not remote, therefore the side is not client.
+			if (isValidBonemealTarget(level, pos, state) && random.nextInt(7) == 0)	//The world is not remote, therefore the side is not client.
 			{
 				this.performBonemeal(level, random, pos, state);
 			}

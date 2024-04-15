@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/entry",
   "criteria": {
     "use_punch_designix": {
-      "conditions": {},
       "trigger": "minestuck:punch_designix"
     }
   },

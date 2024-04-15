@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/entry",
   "criteria": {
     "touch_return_node": {
-      "conditions": {},
       "trigger": "minestuck:return_node"
     }
   },

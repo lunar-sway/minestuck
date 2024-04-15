@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_solid_switch",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_solid_switch"
     ]
   ],
   "rewards": {

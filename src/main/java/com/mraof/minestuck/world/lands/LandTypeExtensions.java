@@ -30,11 +30,10 @@ import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -116,19 +115,19 @@ public final class LandTypeExtensions
 		{
 			ImmutableMap.Builder<ILandType, List<Extension>> mapBuilder = ImmutableMap.builder();
 			
-			loadAllExtensionsAt(TERRAIN_EXTENSIONS_LOCATION, LandTypes.TERRAIN_REGISTRY.get(), mapBuilder, resourceManager);
-			loadAllExtensionsAt(TITLE_EXTENSIONS_LOCATION, LandTypes.TITLE_REGISTRY.get(), mapBuilder, resourceManager);
+			loadAllExtensionsAt(TERRAIN_EXTENSIONS_LOCATION, LandTypes.TERRAIN_REGISTRY, mapBuilder, resourceManager);
+			loadAllExtensionsAt(TITLE_EXTENSIONS_LOCATION, LandTypes.TITLE_REGISTRY, mapBuilder, resourceManager);
 			
 			return mapBuilder.build();
 		}
 		
-		private void loadAllExtensionsAt(FileToIdConverter location, IForgeRegistry<? extends ILandType> registry,
+		private void loadAllExtensionsAt(FileToIdConverter location, Registry<? extends ILandType> registry,
 										 ImmutableMap.Builder<ILandType, List<Extension>> mapBuilder, ResourceManager resourceManager)
 		{
 			for(Map.Entry<ResourceLocation, List<Resource>> entry : location.listMatchingResourceStacks(resourceManager).entrySet())
 			{
 				ResourceLocation id = location.fileToId(entry.getKey());
-				ILandType landType = registry.getValue(id);
+				ILandType landType = registry.get(id);
 				if(landType == null)
 				{
 					LOGGER.error("Found extension for unknown land type '{}'", id);

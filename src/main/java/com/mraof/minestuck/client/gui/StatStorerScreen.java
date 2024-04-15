@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StatStorerPacket;
@@ -10,8 +9,11 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class StatStorerScreen extends Screen
 {
 	public static final String TITLE = "minestuck.stat_storer";
@@ -62,16 +64,21 @@ public class StatStorerScreen extends Screen
 	}
 	
 	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
+		guiGraphics.blit(GUI_BACKGROUND, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+	}
+	
+	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(GUI_BACKGROUND, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		
-		guiGraphics.drawString(font, Component.translatable(DIVIDE_VALUE_MESSAGE), (width / 2) - font.width(Component.translatable(DIVIDE_VALUE_MESSAGE)) / 2, yOffset + 40, 0x404040, false);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
+		guiGraphics.drawString(font, Component.translatable(DIVIDE_VALUE_MESSAGE), (width / 2) - font.width(Component.translatable(DIVIDE_VALUE_MESSAGE)) / 2, yOffset + 40, 0x404040, false);
 	}
 	
 	private void finish()

@@ -135,8 +135,8 @@ public class DataCheckerManager
 		TerrainLandType terrainType = data.getTerrainLandType();
 		TitleLandType titleType = data.getTitleLandType();
 		if(terrainType != null)
-			tag.putString("terrainLandType", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainType).toString());
+			tag.putString("terrainLandType", LandTypes.TERRAIN_REGISTRY.getKey(terrainType).toString());
 		if(titleType != null)
-			tag.putString("titleLandType", LandTypes.TITLE_REGISTRY.get().getKey(titleType).toString());
+			tag.putString("titleLandType", LandTypes.TITLE_REGISTRY.getKey(titleType).toString());
 	}
 }

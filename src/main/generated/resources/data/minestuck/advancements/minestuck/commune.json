@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/entry",
   "criteria": {
     "talk_to_consort": {
-      "conditions": {},
       "trigger": "minestuck:consort_talk"
     },
     "visit_village": {

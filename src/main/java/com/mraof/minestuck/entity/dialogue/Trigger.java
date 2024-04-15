@@ -10,12 +10,12 @@ import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -28,8 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +43,7 @@ import java.util.function.Function;
 @MethodsReturnNonnullByDefault
 public sealed interface Trigger
 {
-	Codec<Trigger> CODEC = CodecUtil.registryCodec(Triggers.REGISTRY).dispatch(Trigger::codec, Function.identity());
+	Codec<Trigger> CODEC = Triggers.REGISTRY.byNameCodec().dispatch(Trigger::codec, Function.identity());
 	Codec<List<Trigger>> LIST_CODEC = Trigger.CODEC.listOf();
 	
 	Codec<? extends Trigger> codec();
@@ -166,7 +165,7 @@ public sealed interface Trigger
 	record TakeItem(Item item, int amount) implements Trigger
 	{
 		static final Codec<TakeItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(TakeItem::item),
+				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(TakeItem::item),
 				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(TakeItem::amount)
 		).apply(instance, TakeItem::new));
 		
@@ -239,7 +238,7 @@ public sealed interface Trigger
 	record SetNPCItem(Item item, EquipmentSlot slot) implements Trigger
 	{
 		static final Codec<SetNPCItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(SetNPCItem::item),
+				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(SetNPCItem::item),
 				PreservingOptionalFieldCodec.withDefault(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCItem::slot)
 		).apply(instance, SetNPCItem::new));
 		
@@ -290,7 +289,7 @@ public sealed interface Trigger
 	record GiveItem(Item item, int amount) implements Trigger
 	{
 		static final Codec<GiveItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(GiveItem::item),
+				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(GiveItem::item),
 				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(GiveItem::amount)
 		).apply(instance, GiveItem::new));
 		

@@ -9,6 +9,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
 import com.mraof.minestuck.client.model.blockentity.TotemLatheModel;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -20,13 +21,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
 import software.bernie.geckolib.util.RenderUtils;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEntity>
 {
 	public TotemLatheRenderer(BlockEntityRendererProvider.Context ignored)
@@ -79,5 +84,11 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 			return;
 		}
 		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+	}
+	
+	@Override
+	public AABB getRenderBoundingBox(TotemLatheDowelBlockEntity blockEntity)
+	{
+		return INFINITE_EXTENT_AABB;
 	}
 }

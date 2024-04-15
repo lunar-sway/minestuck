@@ -9,7 +9,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -52,12 +51,6 @@ public class TotemLatheDowelBlockEntity extends ItemStackBlockEntity implements 
 		}
 		
 		return null;
-	}
-	
-	@Override
-	public AABB getRenderBoundingBox()
-	{
-		return INFINITE_EXTENT_AABB;
 	}
 	
 	@Override

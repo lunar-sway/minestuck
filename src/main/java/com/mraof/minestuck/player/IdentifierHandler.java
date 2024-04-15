@@ -7,8 +7,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.UsernameCache;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.UsernameCache;
+import net.neoforged.neoforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

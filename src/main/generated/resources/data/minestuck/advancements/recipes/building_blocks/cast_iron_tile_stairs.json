@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_cast_iron_tile",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cast_iron_tile"
     ]
   ],
   "rewards": {

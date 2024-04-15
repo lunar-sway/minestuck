@@ -13,7 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -89,7 +89,6 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 		// Make the update button clickable only when there is a parsed position and it is different from the original
 		updateButton.active = parsedPos != null && !parsedPos.equals(this.menu.getDestination());
 		
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

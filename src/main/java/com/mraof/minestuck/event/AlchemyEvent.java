@@ -8,7 +8,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public class AlchemyEvent extends Event
 {

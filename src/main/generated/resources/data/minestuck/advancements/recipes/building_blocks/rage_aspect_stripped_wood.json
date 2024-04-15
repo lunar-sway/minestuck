@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_rage_aspect_stripped_log",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_rage_aspect_stripped_log"
     ]
   ],
   "rewards": {

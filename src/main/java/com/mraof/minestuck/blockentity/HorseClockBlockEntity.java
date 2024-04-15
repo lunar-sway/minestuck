@@ -10,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -114,12 +113,6 @@ public class HorseClockBlockEntity extends BlockEntity implements GeoBlockEntity
 	private static boolean isNotMuffled(HorseClockBlockEntity blockEntity)
 	{
 		return !blockEntity.level.getBlockState(blockEntity.getBlockPos().below()).is(BlockTags.OCCLUDES_VIBRATION_SIGNALS);
-	}
-	
-	@Override
-	public AABB getRenderBoundingBox()
-	{
-		return INFINITE_EXTENT_AABB; //keeps the model rendered even when the blockpos is no longer viewed by the camera
 	}
 	
 	@Override

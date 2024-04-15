@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_doom_aspect_wood",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_doom_aspect_wood"
     ]
   ],
   "rewards": {

@@ -11,21 +11,19 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.Tags;
-
-import java.util.function.Consumer;
+import net.neoforged.neoforge.common.Tags;
 
 import static com.mraof.minestuck.api.alchemy.GristTypes.*;
 
 public final class MinestuckGristCostsProvider
 {
-	public static void buildRecipes(Consumer<FinishedRecipe> recipeSaver)
+	public static void buildRecipes(RecipeOutput recipeSaver)
 	{
 		GeneratedGristCostBuilder.create().build(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "generated"));
 		
@@ -778,7 +776,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.SPORK.get()).grist(BUILD, 50).grist(RUST, 9).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_CORN.get()).grist(CHALK, 1).grist(SULFUR, 1).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TUIX_BAR.get()).grist(BUILD, 5).grist(IODINE, 1).build(recipeSaver);
-		for(GristType type : GristTypes.values())
+		for(GristType type : GristTypes.REGISTRY)
 		{
 			if(type.getIdOrThrow().getNamespace().equals(Minestuck.MOD_ID))
 				GristCostRecipeBuilder.of(type.getCandyItem().getItem()).grist(type, 3).build(recipeSaver);
@@ -973,13 +971,13 @@ public final class MinestuckGristCostsProvider
 		oreCost(ExtraForgeTags.Items.ARDITE_ORES, ExtraForgeTags.Items.ARDITE_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
 	}
 	
-	public static void oreCost(TagKey<Item> ores, TagKey<Item> material, float multiplier, Consumer<FinishedRecipe> recipeSaver, String modId)
+	public static void oreCost(TagKey<Item> ores, TagKey<Item> material, float multiplier, RecipeOutput recipeOutput, String modId)
 	{
-		SourceGristCostBuilder.of(ores).source(material).multiplier(multiplier).grist(BUILD, 4).buildFor(recipeSaver, modId);
+		SourceGristCostBuilder.of(ores).source(material).multiplier(multiplier).grist(BUILD, 4).buildFor(recipeOutput, modId);
 	}
 	
-	public static void oreCost(TagKey<Item> ores, Item material, float multiplier, Consumer<FinishedRecipe> recipeSaver, String modId)
+	public static void oreCost(TagKey<Item> ores, Item material, float multiplier, RecipeOutput recipeOutput, String modId)
 	{
-		SourceGristCostBuilder.of(ores).source(material).multiplier(multiplier).grist(BUILD, 4).buildFor(recipeSaver, modId);
+		SourceGristCostBuilder.of(ores).source(material).multiplier(multiplier).grist(BUILD, 4).buildFor(recipeOutput, modId);
 	}
 }

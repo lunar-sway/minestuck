@@ -8,19 +8,19 @@ import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class GristCostGenerator
@@ -52,7 +52,7 @@ public final class GristCostGenerator
 		}
 	}
 	
-	private static void run(RecipeManager recipes)
+	private static void run(RecipeManager recipeManager)
 	{
 		long startTime = System.currentTimeMillis();
 		LOGGER.debug("Starting grist cost generation");
@@ -60,14 +60,14 @@ public final class GristCostGenerator
 		GeneratorProcess process = new GeneratorProcess();
 		
 		//Collect providers
-		Stream<GristCostRecipe> stream = recipes.getRecipes().stream().filter(recipe -> recipe instanceof GristCostRecipe).map(recipe -> (GristCostRecipe) recipe);
-		for(GristCostRecipe recipe : stream.sorted(Comparator.comparingInt(value -> -value.getPriority())).toList())
+		List<RecipeHolder<GristCostRecipe>> recipeHolders = recipeManager.getAllRecipesFor(GristCostRecipe.RECIPE_TYPE.get());
+		for(RecipeHolder<GristCostRecipe> holder : recipeHolders.stream().sorted(Comparator.comparingInt(holder -> -holder.value().getPriority())).toList())
 		{
-			recipe.addCostProvider((item, provider) ->
+			holder.value().addCostProvider((item, provider) ->
 			{
 				process.providersByItem.computeIfAbsent(item, i -> new ArrayList<>()).add(provider);
 				process.providers.add(provider);
-			});
+			}, holder.id());
 		}
 		
 		Object2IntMap<Item> lookupCount = new Object2IntOpenHashMap<>();
@@ -87,7 +87,7 @@ public final class GristCostGenerator
 					
 					double itemTime = (System.currentTimeMillis() - itemStartTime)/1000D;
 					if(itemTime > 0.5)
-						LOGGER.warn("Cost generation for {} took {}s", ForgeRegistries.ITEMS.getKey(item), itemTime);
+						LOGGER.warn("Cost generation for {} took {}s", BuiltInRegistries.ITEM.getKey(item), itemTime);
 				});
 		
 		for(GeneratedCostProvider provider : process.providers)
@@ -124,7 +124,7 @@ public final class GristCostGenerator
 		}
 		
 		if(providers.isEmpty() && MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get())
-			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", ForgeRegistries.ITEMS.getKey(item));
+			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", BuiltInRegistries.ITEM.getKey(item));
 		
 		return cost != null ? cost.cost() : null;
 	}

@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_lacquered_chipboard",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lacquered_chipboard"
     ]
   ],
   "rewards": {

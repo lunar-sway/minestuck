@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.MSBiomes;
@@ -12,6 +11,7 @@ import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  */
 public abstract class TerrainLandType implements ILandType
 {
-	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(LandTypes.TERRAIN_REGISTRY);
+	public static final Codec<TerrainLandType> CODEC = LandTypes.TERRAIN_REGISTRY.byNameCodec();
 	
 	protected static final RandomSpreadStructurePlacement SMALL_RUIN_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 59273643);
 	protected static final RandomSpreadStructurePlacement IMP_DUNGEON_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 34527185);
@@ -126,7 +126,12 @@ public abstract class TerrainLandType implements ILandType
 	
 	public final boolean is(TagKey<TerrainLandType> tag)
 	{
-		return Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().tags()).getTag(tag).contains(this);
+		return this.is(LandTypes.TERRAIN_REGISTRY.getOrCreateTag(tag));
+	}
+	
+	public final boolean is(HolderSet<TerrainLandType> set)
+	{
+		return set.stream().anyMatch(holder -> holder.value() == this);
 	}
 	
 	public static class Builder

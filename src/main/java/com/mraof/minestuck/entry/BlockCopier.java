@@ -1,12 +1,12 @@
 package com.mraof.minestuck.entry;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,7 +58,7 @@ public final class BlockCopier
 		if(newBE != null)
 			targetChunk.addAndRegisterBlockEntity(newBE);
 		else
-			LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(blockEntity.getType()));
+			LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntity.getType()));
 		return newBE;
 	}
 }

@@ -3,17 +3,17 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.network.data.*;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.INetworkDirection;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PlayNetworkDirection;
+import net.neoforged.neoforge.network.simple.MessageFunctions;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 public class MSPacketHandler
 {
@@ -105,26 +105,26 @@ public class MSPacketHandler
 		registerToClientMessage(EntryEffectPackets.Clear.class, EntryEffectPackets.Clear::decode);
 	}
 	
-	private static <MSG extends MSPacket.PlayToBoth> void registerToBothMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	private static <MSG extends MSPacket.PlayToBoth> void registerToBothMessage(Class<MSG> messageType, MessageFunctions.MessageDecoder<MSG> decoder)
 	{
 		registerMessage(messageType, decoder, Optional.empty());
 	}
 	
-	private static <MSG extends MSPacket.PlayToClient> void registerToClientMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	private static <MSG extends MSPacket.PlayToClient> void registerToClientMessage(Class<MSG> messageType, MessageFunctions.MessageDecoder<MSG> decoder)
 	{
-		registerMessage(messageType, decoder, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		registerMessage(messageType, decoder, Optional.of(PlayNetworkDirection.PLAY_TO_CLIENT));
 	}
 	
-	private static <MSG extends MSPacket.PlayToServer> void registerToServerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	private static <MSG extends MSPacket.PlayToServer> void registerToServerMessage(Class<MSG> messageType, MessageFunctions.MessageDecoder<MSG> decoder)
 	{
-		registerMessage(messageType, decoder, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		registerMessage(messageType, decoder, Optional.of(PlayNetworkDirection.PLAY_TO_SERVER));
 	}
 	
 	private static int nextIndex;
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	private static <MSG extends MSPacket> void registerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder,
-															   Optional<NetworkDirection> networkDirection)
+	private static <MSG extends MSPacket> void registerMessage(Class<MSG> messageType, MessageFunctions.MessageDecoder<MSG> decoder,
+															   Optional<INetworkDirection<?>> networkDirection)
 	{
 		INSTANCE.registerMessage(nextIndex++, messageType, MSPacket::encode, decoder, MSPacket::consume, networkDirection);
 	}

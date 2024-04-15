@@ -21,12 +21,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.function.BiFunction;
  * items accessible by the server.
  * @author kirderf1
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus= Mod.EventBusSubscriber.Bus.FORGE)
 public final class DeployList
 {
 	public static final IAvailabilityCondition HAS_NOT_ENTERED = playerData -> !playerData.hasEntered();
@@ -382,7 +382,7 @@ public final class DeployList
 		boolean test(SburbPlayerData playerData);
 	}
 	
-	public static IAvailabilityCondition config(ForgeConfigSpec.BooleanValue config)
+	public static IAvailabilityCondition config(ModConfigSpec.BooleanValue config)
 	{
 		return playerData -> config.get();
 	}

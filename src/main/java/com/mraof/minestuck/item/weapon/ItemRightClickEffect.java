@@ -24,7 +24,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
+import net.neoforged.neoforge.common.NeoForgeMod;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -182,7 +182,7 @@ public interface ItemRightClickEffect
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = playerEntity.getAttribute(ForgeMod.BLOCK_REACH.get()).getValue();
+		double reachDistance = playerEntity.getAttribute(NeoForgeMod.BLOCK_REACH.value()).getValue();
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.OUTLINE, ClipContext.Fluid.SOURCE_ONLY, playerEntity));
 	}

@@ -9,12 +9,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class MSCreativeTabs
@@ -25,11 +26,11 @@ public final class MSCreativeTabs
 	
 	public static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Minestuck.MOD_ID);
 	
-	public static final RegistryObject<CreativeModeTab> MAIN = REGISTER.register("main", () -> CreativeModeTab.builder()
+	public static final Supplier<CreativeModeTab> MAIN = REGISTER.register("main", () -> CreativeModeTab.builder()
 			.title(Component.translatable(MAIN_KEY)).icon(() -> new ItemStack(MSItems.CLIENT_DISK.get())).displayItems(MSCreativeTabs::buildMainTab).build());
-	public static final RegistryObject<CreativeModeTab> LANDS = REGISTER.register("lands", () -> CreativeModeTab.builder()
+	public static final Supplier<CreativeModeTab> LANDS = REGISTER.register("lands", () -> CreativeModeTab.builder()
 			.title(Component.translatable(LANDS_KEY)).icon(() -> new ItemStack(MSItems.GLOWING_MUSHROOM.get())).displayItems(MSCreativeTabs::buildLandsTab).build());
-	public static final RegistryObject<CreativeModeTab> WEAPONS = REGISTER.register("weapons", () -> CreativeModeTab.builder()
+	public static final Supplier<CreativeModeTab> WEAPONS = REGISTER.register("weapons", () -> CreativeModeTab.builder()
 			.title(Component.translatable(WEAPONS_KEY)).icon(() -> new ItemStack(MSItems.ZILLYHOO_HAMMER.get())).displayItems(MSCreativeTabs::buildWeaponsTab).build());
 	
 	private static void buildMainTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output)

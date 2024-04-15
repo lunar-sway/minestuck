@@ -1,21 +1,23 @@
 package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class IntellibeamLaserstationTrigger extends SimpleCriterionTrigger<IntellibeamLaserstationTrigger.Instance>
 {
-	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "intellibeam_laserstation");
-	
 	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
+	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
 	{
-		ItemPredicate item = ItemPredicate.fromJson(json.get("item"));
-		return new Instance(predicate, item);
+		return new Instance(predicate, ItemPredicate.fromJson(json.get("item")));
 	}
 	
 	public void trigger(ServerPlayer player, ItemStack item)
@@ -23,42 +25,37 @@ public class IntellibeamLaserstationTrigger extends SimpleCriterionTrigger<Intel
 		trigger(player, instance -> instance.test(item));
 	}
 	
-	@Override
-	public ResourceLocation getId()
-	{
-		return ID;
-	}
-	
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
-		private final ItemPredicate item;
+		private final Optional<ItemPredicate> item;
 		
-		public Instance(ContextAwarePredicate predicate, ItemPredicate item)
+		public Instance(Optional<ContextAwarePredicate> predicate, Optional<ItemPredicate> item)
 		{
-			super(ID, predicate);
+			super(predicate);
 			this.item = item;
 		}
 		
-		public static Instance any()
+		public static Criterion<Instance> any()
 		{
-			return create(ItemPredicate.ANY);
+			return create(Optional.empty());
 		}
 		
-		public static Instance create(ItemPredicate item)
+		public static Criterion<Instance> create(Optional<ItemPredicate> item)
 		{
-			return new Instance(ContextAwarePredicate.ANY, item);
+			return MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.createCriterion(new Instance(Optional.empty(), item));
 		}
 		
 		public boolean test(ItemStack item)
 		{
-			return this.item.matches(item);
+			return this.item.isEmpty() || this.item.get().matches(item);
 		}
 		
 		@Override
-		public JsonObject serializeToJson(SerializationContext context)
+		public JsonObject serializeToJson()
 		{
-			JsonObject json = super.serializeToJson(context);
-			json.add("item", this.item.serializeToJson());
+			JsonObject json = super.serializeToJson();
+			this.item.ifPresent(item -> json.add("item", item.serializeToJson()));
 			return json;
 		}
 	}

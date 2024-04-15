@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_carved_heavy_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_carved_heavy_planks"
     ]
   ],
   "rewards": {

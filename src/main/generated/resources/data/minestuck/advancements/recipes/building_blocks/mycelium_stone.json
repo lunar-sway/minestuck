@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_mycelium_cobblestone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mycelium_cobblestone"
     ]
   ],
   "rewards": {

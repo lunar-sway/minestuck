@@ -87,16 +87,16 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 	}
 	
 	@Override
-	public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta)
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 	{
-		if(pMouseX >= xOffset && pMouseX < xOffset + guiWidth)
+		if(mouseX >= xOffset && mouseX < xOffset + guiWidth)
 		{
-			if(pMouseY >= yOffset && pMouseY < yOffset + guiHeight)
+			if(mouseY >= yOffset && mouseY < yOffset + guiHeight)
 			{
 				AtheneumPacket.Scroll packet = null;
-				if(less && pDelta > 0)
+				if(less && scrollY > 0)
 					packet = new AtheneumPacket.Scroll(true);
-				else if(more && pDelta < 0)
+				else if(more && scrollY < 0)
 					packet = new AtheneumPacket.Scroll(false);
 				
 				if(packet != null)
@@ -106,6 +106,6 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 				}
 			}
 		}
-		return super.mouseScrolled(pMouseX,pMouseY,pDelta);
+		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 }

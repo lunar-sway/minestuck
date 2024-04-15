@@ -5,12 +5,16 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryManager;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -91,8 +95,8 @@ public final class LandTypeSelection
 		{
 			return this.entries.map(list -> list,
 					tag -> {
-						IForgeRegistry<A> registry = RegistryManager.ACTIVE.getRegistry(tag.registry());
-						return Objects.requireNonNull(registry.tags()).getTag(tag).stream().toList();
+						Registry<A> registry = (Registry<A>) BuiltInRegistries.REGISTRY.get(tag.registry().location());
+						return registry.getTag(tag).stream().flatMap(set -> set.stream().map(Holder::value)).toList();
 					});
 		}
 		

@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_chiseled_sandstone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_chiseled_sandstone"
     ]
   ],
   "rewards": {

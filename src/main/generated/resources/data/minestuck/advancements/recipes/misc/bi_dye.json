@@ -46,10 +46,10 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_blue_dye",
       "has_pink_dye",
-      "has_purple_dye",
-      "has_the_recipe"
+      "has_purple_dye"
     ]
   ],
   "rewards": {

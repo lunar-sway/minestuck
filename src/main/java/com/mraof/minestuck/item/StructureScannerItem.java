@@ -144,7 +144,7 @@ public class StructureScannerItem extends Item
 	
 	private boolean tryActivateScanner(ServerLevel level, Player player, ItemStack stack)
 	{
-		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.AMBIENT, 0.8F, 1.3F);
 		GlobalPos pos = findStructureTarget(player, level);
 		
 		if(pos == null)

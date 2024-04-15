@@ -1,29 +1,31 @@
 package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigger.Instance>
 {
-	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "change_modus");
-	
 	@Override
-	public ResourceLocation getId()
+	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
 	{
-		return ID;
-	}
-	
-	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
-	{
-		ModusType<?> modusType = json.has("modus") ? ModusTypes.REGISTRY.get().getValue(new ResourceLocation(GsonHelper.getAsString(json, "modus"))) : null;
+		ModusType<?> modusType = json.has("modus") ? ModusTypes.REGISTRY.get(new ResourceLocation(GsonHelper.getAsString(json, "modus"))) : null;
 		return new Instance(predicate, modusType);
 	}
 	
@@ -34,21 +36,24 @@ public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigge
 	
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
+		@Nullable
 		private final ModusType<?> modusType;
-		public Instance(ContextAwarePredicate predicate, ModusType<?> modusType)
+		
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> predicate, @Nullable ModusType<?> modusType)
 		{
-			super(ID, predicate);
+			super(predicate);
 			this.modusType = modusType;
 		}
 		
-		public static Instance any()
+		public static Criterion<Instance> any()
 		{
-			return new Instance(ContextAwarePredicate.ANY, null);
+			return MSCriteriaTriggers.CHANGE_MODUS.createCriterion(new Instance(Optional.empty(), null));
 		}
 		
-		public static Instance to(ModusType<?> type)
+		public static Criterion<Instance> to(ModusType<?> type)
 		{
-			return new Instance(ContextAwarePredicate.ANY, type);
+			return MSCriteriaTriggers.CHANGE_MODUS.createCriterion(new Instance(Optional.empty(), type));
 		}
 		
 		public boolean test(ModusType<?> modusType)
@@ -57,11 +62,11 @@ public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigge
 		}
 		
 		@Override
-		public JsonObject serializeToJson(SerializationContext context)
+		public JsonObject serializeToJson()
 		{
-			JsonObject json = super.serializeToJson(context);
+			JsonObject json = super.serializeToJson();
 			if(modusType != null)
-				json.addProperty("modus", String.valueOf(ModusTypes.REGISTRY.get().getKey(modusType)));
+				json.addProperty("modus", String.valueOf(ModusTypes.REGISTRY.getKey(modusType)));
 			return json;
 		}
 	}

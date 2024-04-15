@@ -9,7 +9,7 @@ import net.minecraft.world.level.biome.FeatureSorter;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
 import java.util.List;
 import java.util.function.Function;
