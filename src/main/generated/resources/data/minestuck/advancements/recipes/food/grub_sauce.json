@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:grub_sauce"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

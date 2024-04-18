@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:treated_chipboard_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

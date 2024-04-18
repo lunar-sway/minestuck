@@ -1,13 +1,13 @@
 package com.mraof.minestuck.advancements;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
@@ -17,9 +17,9 @@ import java.util.Optional;
 public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 {
 	@Override
-	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
+	public Codec<Instance> codec()
 	{
-		return new Instance(predicate);
+		return Instance.CODEC;
 	}
 	
 	public void trigger(ServerPlayer player)
@@ -27,37 +27,34 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 		trigger(player, Instance::test);
 	}
 	
-	public static class Instance extends AbstractCriterionTriggerInstance
+	public record Instance(Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance
 	{
+		private static final Codec<Instance> CODEC = ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player")
+				.codec().xmap(Instance::new, Instance::player);
+		
 		public static Criterion<Instance> sburbConnection()
 		{
-			return MSCriteriaTriggers.SBURB_CONNECTION.createCriterion(new Instance(Optional.empty()));
+			return MSCriteriaTriggers.SBURB_CONNECTION.get().createCriterion(new Instance(Optional.empty()));
 		}
 		
 		public static Criterion<Instance> cruxiteArtifact()
 		{
-			return MSCriteriaTriggers.CRUXITE_ARTIFACT.createCriterion(new Instance(Optional.empty()));
+			return MSCriteriaTriggers.CRUXITE_ARTIFACT.get().createCriterion(new Instance(Optional.empty()));
 		}
 		
 		public static Criterion<Instance> returnNode()
 		{
-			return MSCriteriaTriggers.RETURN_NODE.createCriterion(new Instance(Optional.empty()));
+			return MSCriteriaTriggers.RETURN_NODE.get().createCriterion(new Instance(Optional.empty()));
 		}
 		
 		public static Criterion<Instance> melonOverload()
 		{
-			return MSCriteriaTriggers.MELON_OVERLOAD.createCriterion(new Instance(Optional.empty()));
+			return MSCriteriaTriggers.MELON_OVERLOAD.get().createCriterion(new Instance(Optional.empty()));
 		}
 		
 		public static Criterion<Instance> buyOutShop()
 		{
-			return MSCriteriaTriggers.BUY_OUT_SHOP.createCriterion(new Instance(Optional.empty()));
-		}
-		
-		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-		public Instance(Optional<ContextAwarePredicate> predicate)
-		{
-			super(predicate);
+			return MSCriteriaTriggers.BUY_OUT_SHOP.get().createCriterion(new Instance(Optional.empty()));
 		}
 		
 		public boolean test()

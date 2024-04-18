@@ -170,7 +170,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		this.dialogueComponent.tryStartDialogue(serverPlayer);
 		
 		this.dialogueComponent.getStartingDialogue().ifPresent(dialogueId -> {
-			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogueId.toString(), this);
+			MSCriteriaTriggers.CONSORT_TALK.get().trigger(serverPlayer, dialogueId.toString(), this);
 			if(ticksUntilDialogueReset == 0)
 				ticksUntilDialogueReset = 24000 + level().random.nextInt(24000);
 		});

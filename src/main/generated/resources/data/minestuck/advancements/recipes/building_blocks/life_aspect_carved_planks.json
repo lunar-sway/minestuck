@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:life_aspect_carved_planks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

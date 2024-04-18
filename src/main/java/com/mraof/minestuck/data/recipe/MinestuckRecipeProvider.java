@@ -10,7 +10,6 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -24,15 +23,14 @@ import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class MinestuckRecipeProvider extends RecipeProvider
 {
-	public MinestuckRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
+	public MinestuckRecipeProvider(PackOutput output)
 	{
-		super(output, lookupProvider);
+		super(output);
 	}
 	
 	@Override

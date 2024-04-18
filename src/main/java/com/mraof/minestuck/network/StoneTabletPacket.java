@@ -1,14 +1,18 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 public class StoneTabletPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("stone_tablet");
+	
 	private final String text;
 	private final InteractionHand hand;
 	
@@ -16,6 +20,24 @@ public class StoneTabletPacket implements MSPacket.PlayToServer
 	{
 		this.text = text;
 		this.hand = hand;
+	}
+	
+	@Override
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
+	{
+		buffer.writeUtf(text);
+		buffer.writeInt(hand.ordinal());
+	}
+	
+	public static StoneTabletPacket read(FriendlyByteBuf buffer)
+	{
+		return new StoneTabletPacket(buffer.readUtf(), InteractionHand.values()[buffer.readInt()]);
 	}
 	
 	@Override
@@ -31,18 +53,5 @@ public class StoneTabletPacket implements MSPacket.PlayToServer
 			nbt.putString("text", text);
 			tablet.setTag(nbt);
 		}
-		
-	}
-	
-	public static StoneTabletPacket decode(FriendlyByteBuf buffer)
-	{
-		return new StoneTabletPacket(buffer.readUtf(32767), InteractionHand.values()[buffer.readInt()]);
-	}
-	
-	@Override
-	public void encode(FriendlyByteBuf buffer)
-	{
-		buffer.writeUtf(text);
-		buffer.writeInt(hand.ordinal());
 	}
 }

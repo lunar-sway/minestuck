@@ -6,7 +6,6 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.ColorSelectPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.RGBColorSelectPacket;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.util.ColorHandler;
@@ -15,6 +14,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -112,7 +112,7 @@ public final class ClientPlayerData
 	
 	public static void selectColor(int colorIndex)
 	{
-		MSPacketHandler.sendToServer(new ColorSelectPacket(colorIndex));
+		PacketDistributor.SERVER.noArg().send(new ColorSelectPacket(colorIndex));
 		playerColor = ColorHandler.getColor(colorIndex);
 	}
 	
@@ -120,7 +120,7 @@ public final class ClientPlayerData
 	{
 		if (color < 0 || color > 256*256*256) return;
 		
-		MSPacketHandler.sendToServer(new RGBColorSelectPacket(color));
+		PacketDistributor.SERVER.noArg().send(new RGBColorSelectPacket(color));
 		playerColor = color;
 	}
 	

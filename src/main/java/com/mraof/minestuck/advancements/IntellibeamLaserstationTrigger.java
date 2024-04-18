@@ -1,10 +1,15 @@
 package com.mraof.minestuck.advancements;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -15,9 +20,9 @@ import java.util.Optional;
 public class IntellibeamLaserstationTrigger extends SimpleCriterionTrigger<IntellibeamLaserstationTrigger.Instance>
 {
 	@Override
-	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
+	public Codec<Instance> codec()
 	{
-		return new Instance(predicate, ItemPredicate.fromJson(json.get("item")));
+		return Instance.CODEC;
 	}
 	
 	public void trigger(ServerPlayer player, ItemStack item)
@@ -25,38 +30,26 @@ public class IntellibeamLaserstationTrigger extends SimpleCriterionTrigger<Intel
 		trigger(player, instance -> instance.test(item));
 	}
 	
-	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public static class Instance extends AbstractCriterionTriggerInstance
+	public record Instance(Optional<ContextAwarePredicate> player, Optional<ItemPredicate> item) implements SimpleCriterionTrigger.SimpleInstance
 	{
-		private final Optional<ItemPredicate> item;
-		
-		public Instance(Optional<ContextAwarePredicate> predicate, Optional<ItemPredicate> item)
-		{
-			super(predicate);
-			this.item = item;
-		}
+		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
+				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "item").forGetter(Instance::item)
+		).apply(instance, Instance::new));
 		
 		public static Criterion<Instance> any()
 		{
-			return create(Optional.empty());
+			return MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().createCriterion(new Instance(Optional.empty(), Optional.empty()));
 		}
 		
-		public static Criterion<Instance> create(Optional<ItemPredicate> item)
+		public static Criterion<Instance> create(ItemPredicate item)
 		{
-			return MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.createCriterion(new Instance(Optional.empty(), item));
+			return MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().createCriterion(new Instance(Optional.empty(), Optional.of(item)));
 		}
 		
 		public boolean test(ItemStack item)
 		{
 			return this.item.isEmpty() || this.item.get().matches(item);
-		}
-		
-		@Override
-		public JsonObject serializeToJson()
-		{
-			JsonObject json = super.serializeToJson();
-			this.item.ifPresent(item -> json.add("item", item.serializeToJson()));
-			return json;
 		}
 	}
 }

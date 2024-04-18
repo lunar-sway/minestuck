@@ -7,7 +7,6 @@ import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.EffectTogglePacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -21,6 +20,7 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -90,7 +90,7 @@ public class MSKeyHandler
 				captchalogueInGame();
 			
 			if(effectToggleKey.isActiveAndMatches(input))
-				MSPacketHandler.sendToServer(new EffectTogglePacket());
+				PacketDistributor.SERVER.noArg().send(new EffectTogglePacket());
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
@@ -101,7 +101,7 @@ public class MSKeyHandler
 	private static void captchalogueInGame()
 	{
 		if(!Minecraft.getInstance().player.getMainHandItem().isEmpty())
-			MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
+			PacketDistributor.SERVER.noArg().send(CaptchaDeckPacket.captchalogue());
 	}
 	
 	private static void captchalogueInGui(AbstractContainerScreen<?> screen)
@@ -110,7 +110,7 @@ public class MSKeyHandler
 		{
 			Slot slot = screen.getSlotUnderMouse();
 			if(slot != null && slot.hasItem())
-				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.index, screen.getMenu().containerId));
+				PacketDistributor.SERVER.noArg().send(CaptchaDeckPacket.captchalogueInv(slot.index, screen.getMenu().containerId));
 		}
 	}
 }

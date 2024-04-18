@@ -1,10 +1,12 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
@@ -15,6 +17,8 @@ import java.util.Optional;
 
 public class SummonerPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("summoner");
+	
 	private final boolean isUntriggerable;
 	private final int summonRange;
 	private final BlockPos beBlockPos;
@@ -29,7 +33,13 @@ public class SummonerPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(isUntriggerable);
 		buffer.writeInt(summonRange);
@@ -42,7 +52,7 @@ public class SummonerPacket implements MSPacket.PlayToServer
 		
 	}
 	
-	public static SummonerPacket decode(FriendlyByteBuf buffer)
+	public static SummonerPacket read(FriendlyByteBuf buffer)
 	{
 		boolean isUntriggerable = buffer.readBoolean();
 		int summonRange = buffer.readInt();

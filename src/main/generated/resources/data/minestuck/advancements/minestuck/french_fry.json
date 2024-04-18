@@ -13,16 +13,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.french_fry.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:french_fry"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.french_fry.title"
     }

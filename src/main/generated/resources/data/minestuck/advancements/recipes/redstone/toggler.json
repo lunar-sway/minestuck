@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:toggler"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

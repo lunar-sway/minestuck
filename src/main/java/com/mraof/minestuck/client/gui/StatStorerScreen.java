@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StatStorerPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -10,6 +9,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -83,7 +83,7 @@ public class StatStorerScreen extends Screen
 	
 	private void finish()
 	{
-		MSPacketHandler.sendToServer(new StatStorerPacket(activeType, be.getBlockPos(), textToInt()));
+		PacketDistributor.SERVER.noArg().send(new StatStorerPacket(activeType, be.getBlockPos(), textToInt()));
 		onClose();
 	}
 	

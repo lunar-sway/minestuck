@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:black_chess_brick_smooth_pressure_plate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

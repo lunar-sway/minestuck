@@ -52,9 +52,9 @@ Adds Homestuck to your Minecraft!
     # the modid of the dependency
     modId="neoforge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
+    type="required"
     # The version range of the dependency
-    versionRange="[20.2,)" #mandatory
+    versionRange="[20.4,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -62,22 +62,22 @@ Adds Homestuck to your Minecraft!
 
 [[dependencies.minestuck]]
     modId="geckolib"
-    mandatory=true
-    versionRange="[4.3,)"
+    type="required"
+    versionRange="[4.4,)"
     ordering="NONE"
     side="BOTH"
 
-#[[dependencies.minestuck]]
-#    modId="infiniverse"
-#    mandatory=true
-#    versionRange="[1.0,1.1)"
-#    ordering="NONE"
-#    side="BOTH"
+[[dependencies.minestuck]]
+    modId="infiniverse"
+    type="required"
+    versionRange="[2.0,2.1)"
+    ordering="NONE"
+    side="BOTH"
 
 # Here's another dependency
 [[dependencies.minestuck]]
     modId="minecraft"
-    mandatory=true
-    versionRange="[1.20.2]"
+    type="required"
+    versionRange="[1.20.4]"
     ordering="NONE"
     side="BOTH"

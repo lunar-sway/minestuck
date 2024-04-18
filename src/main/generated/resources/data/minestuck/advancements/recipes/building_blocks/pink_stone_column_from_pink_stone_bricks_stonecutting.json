@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:pink_stone_column_from_pink_stone_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

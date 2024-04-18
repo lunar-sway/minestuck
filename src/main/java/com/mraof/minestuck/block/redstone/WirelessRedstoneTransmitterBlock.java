@@ -1,10 +1,11 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -42,6 +43,12 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock
 	{
 		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWER, 0).setValue(POWERED, false));
+	}
+	
+	@Override
+	protected MapCodec<WirelessRedstoneTransmitterBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Nullable

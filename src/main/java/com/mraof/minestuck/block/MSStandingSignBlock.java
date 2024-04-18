@@ -14,9 +14,9 @@ import net.minecraft.world.level.block.state.properties.WoodType;
  */
 public class MSStandingSignBlock extends StandingSignBlock
 {
-	public MSStandingSignBlock(Properties properties, WoodType type)
+	public MSStandingSignBlock(WoodType type, Properties properties)
 	{
-		super(properties, type);
+		super(type, properties);
 	}
 	
 	@Override

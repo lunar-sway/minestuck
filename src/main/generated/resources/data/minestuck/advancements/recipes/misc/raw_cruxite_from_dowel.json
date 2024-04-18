@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:raw_cruxite_from_dowel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

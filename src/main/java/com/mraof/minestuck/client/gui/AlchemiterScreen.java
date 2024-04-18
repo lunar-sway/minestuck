@@ -7,7 +7,6 @@ import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.AlchemiterPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -108,7 +108,7 @@ public class AlchemiterScreen extends Screen
 	private void alchemize()
 	{
 		AlchemiterPacket packet = new AlchemiterPacket(alchemiter.getBlockPos(), itemQuantity);
-		MSPacketHandler.sendToServer(packet);
+		PacketDistributor.SERVER.noArg().send(packet);
 		this.minecraft.setScreen(null);
 	}
 	

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.network.data;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.playerStats.EcheladderScreen;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -7,9 +8,12 @@ import com.mraof.minestuck.player.Echeladder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 public class EcheladderDataPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("echeladder_data");
+	
 	private final int rung;
 	private final float progress;
 	private final boolean sendMessage;
@@ -32,14 +36,20 @@ public class EcheladderDataPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(rung);
 		buffer.writeFloat(progress);
 		buffer.writeBoolean(sendMessage);
 	}
 	
-	public static EcheladderDataPacket decode(FriendlyByteBuf buffer)
+	public static EcheladderDataPacket read(FriendlyByteBuf buffer)
 	{
 		int rung = buffer.readInt();
 		float progress = buffer.readFloat();

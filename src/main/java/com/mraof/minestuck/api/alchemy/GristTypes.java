@@ -4,8 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,7 +12,7 @@ import java.util.function.Supplier;
 
 public final class GristTypes
 {
-	public static final ResourceKey<Registry<GristType>> REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "grist"));
+	public static final ResourceKey<Registry<GristType>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("grist"));
 	private static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(REGISTRY_KEY, Minestuck.MOD_ID);
 	
 	public static final Registry<GristType> REGISTRY = GRIST_TYPES.makeRegistry(builder -> builder.sync(true));
@@ -41,8 +40,8 @@ public final class GristTypes
 	public static final Supplier<GristType> ZILLIUM = GRIST_TYPES.register("zillium", () -> new GristType(new GristType.Properties(0.0F, 10).candy(MSItems.ZILLIUM_SKITTLES)));
 	
 	@ApiStatus.Internal
-	public static void register()
+	public static void register(IEventBus eventBus)
 	{
-		GRIST_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		GRIST_TYPES.register(eventBus);
 	}
 }

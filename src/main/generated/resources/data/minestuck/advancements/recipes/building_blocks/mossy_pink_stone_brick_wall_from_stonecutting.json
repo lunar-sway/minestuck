@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:mossy_pink_stone_brick_wall_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

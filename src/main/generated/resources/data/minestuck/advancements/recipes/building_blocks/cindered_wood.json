@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cindered_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

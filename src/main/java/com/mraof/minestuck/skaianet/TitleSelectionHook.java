@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entry.EntryProcess;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -17,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,7 +52,7 @@ public class TitleSelectionHook
 		
 		playersInTitleSelection.put(player, new Pair<>(new Vec3(player.getX(), player.getY(), player.getZ()), savedPos));
 		TitleSelectPacket packet = new TitleSelectPacket();
-		MSPacketHandler.sendToPlayer(packet, player);
+		PacketDistributor.PLAYER.with(player).send(packet);
 		return false;
 	}
 	

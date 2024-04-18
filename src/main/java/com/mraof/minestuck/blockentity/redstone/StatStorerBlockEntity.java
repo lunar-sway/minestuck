@@ -327,7 +327,7 @@ public class StatStorerBlockEntity extends BlockEntity
 	@SubscribeEvent
 	public static void onExplosion(ExplosionEvent.Detonate event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, BlockPos.containing(event.getExplosion().getPosition()), event.getLevel());
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, BlockPos.containing(event.getExplosion().center()), event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)

@@ -168,7 +168,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(Items.BROWN_MUSHROOM).grist(IODINE, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.RED_MUSHROOM).grist(IODINE, 3).grist(RUBY, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.CACTUS).grist(AMBER, 4).grist(IODINE, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.GRASS).grist(BUILD, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.SHORT_GRASS).grist(BUILD, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.FERN).grist(BUILD, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.VINE).grist(BUILD, 2).grist(AMBER, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.LILY_PAD).grist(AMBER, 4).grist(IODINE, 1).buildFor(recipeSaver, Minestuck.MOD_ID);

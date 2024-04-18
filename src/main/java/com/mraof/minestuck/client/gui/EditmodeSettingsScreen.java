@@ -5,7 +5,6 @@ import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.network.EditmodeTeleportPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -17,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -161,7 +161,7 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 	private void teleport(BlockPos pos)
 	{
 		EditmodeTeleportPacket packet = new EditmodeTeleportPacket(pos);
-		MSPacketHandler.sendToServer(packet);
+		PacketDistributor.SERVER.noArg().send(packet);
 	}
 	
 	private void prevPage()

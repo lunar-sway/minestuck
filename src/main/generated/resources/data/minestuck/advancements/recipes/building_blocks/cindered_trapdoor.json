@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cindered_trapdoor"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

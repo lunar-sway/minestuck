@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
@@ -23,6 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,7 +72,7 @@ public class DataCheckerScreen extends Screen
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
 		
 		if(activeComponent == null)
-			MSPacketHandler.sendToServer(DataCheckerPacket.request());
+			PacketDistributor.SERVER.noArg().send(DataCheckerPacket.request());
 		
 		componentChanged();
 	}
@@ -220,7 +220,7 @@ public class DataCheckerScreen extends Screen
 	
 	private void refresh()
 	{
-		MSPacketHandler.sendToServer(DataCheckerPacket.request());
+		PacketDistributor.SERVER.noArg().send(DataCheckerPacket.request());
 		activeComponent = null;
 		componentChanged();
 	}

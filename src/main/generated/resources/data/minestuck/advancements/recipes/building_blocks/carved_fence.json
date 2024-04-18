@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:carved_fence"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

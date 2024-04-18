@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
@@ -12,6 +11,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -116,13 +116,13 @@ public class TitleSelectorScreen extends Screen
 	
 	private void select()
 	{
-		MSPacketHandler.sendToServer(new TitleSelectPacket(new Title(currentClass, currentAspect)));
+		PacketDistributor.SERVER.noArg().send(new TitleSelectPacket(new Title(currentClass, currentAspect)));
 		onClose();
 	}
 	
 	private void random()
 	{
-		MSPacketHandler.sendToServer(new TitleSelectPacket());
+		PacketDistributor.SERVER.noArg().send(new TitleSelectPacket());
 		onClose();
 	}
 	

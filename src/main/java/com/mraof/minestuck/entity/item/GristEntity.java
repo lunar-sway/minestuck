@@ -10,7 +10,6 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.GristRejectAnimationPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -19,8 +18,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -29,14 +26,14 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
-import net.neoforged.neoforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class GristEntity extends Entity implements IEntityAdditionalSpawnData
+public class GristEntity extends Entity implements IEntityWithComplexSpawn
 {
 	//TODO Perhaps use a data manager for grist type in the same way as the underling entity?
 	public int cycle;
@@ -326,7 +323,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		else
 		{
 			GristRejectAnimationPacket packet = GristRejectAnimationPacket.createPacket(this);
-			MSPacketHandler.sendToTracking(packet, this);
+			PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
 		}
 	}
 	
@@ -380,11 +377,5 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		gristType = data.readById(GristTypes.REGISTRY);
 		gristValue = data.readLong();
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

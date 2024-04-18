@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:frost_tile_wall"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

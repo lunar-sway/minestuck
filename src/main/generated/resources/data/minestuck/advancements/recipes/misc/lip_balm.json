@@ -43,6 +43,5 @@
     "recipes": [
       "minestuck:lip_balm"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

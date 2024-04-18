@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.data.dialogue.*;
 import com.mraof.minestuck.data.loot_table.MSLootModifiers;
 import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
@@ -9,9 +8,7 @@ import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
 import com.mraof.minestuck.data.tag.*;
 import com.mraof.minestuck.data.worldgen.*;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -31,16 +28,12 @@ public final class MinestuckData
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event)
 	{
-		MSCriteriaTriggers.register();
-		
 		DataGenerator gen = event.getGenerator();
 		PackOutput output = gen.getPackOutput();
-		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider().thenApply(provider -> {
-			return registrySetBuilder().buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), provider);
-		});
 		ExistingFileHelper fileHelper = event.getExistingFileHelper();
 		
-		gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, Set.of(Minestuck.MOD_ID)));
+		var builtinEntries = gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, event.getLookupProvider(), registrySetBuilder(), Set.of(Minestuck.MOD_ID)));
+		CompletableFuture<HolderLookup.Provider> lookupProvider = builtinEntries.getRegistryProvider();
 		
 		var blockTags = gen.addProvider(event.includeServer(), new MinestuckBlockTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MinestuckItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), fileHelper));
@@ -54,7 +47,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new TitleLandTypeTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MSDamageTypeProvider.Tags(output, lookupProvider, fileHelper));
 		
-		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output, lookupProvider));
+		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output));
 		gen.addProvider(event.includeServer(), new GeneratedGristCostConfigProvider(output, Minestuck.MOD_ID));
 		
 		gen.addProvider(event.includeServer(), new ComputerThemeProvider(output));

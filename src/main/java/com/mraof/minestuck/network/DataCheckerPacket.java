@@ -1,18 +1,16 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.playerStats.DataCheckerScreen;
 import com.mraof.minestuck.skaianet.DataCheckerManager;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class DataCheckerPacket implements MSPacket.PlayToBoth
 {
+	public static final ResourceLocation ID = Minestuck.id("data_checker");
 	
 	private static int index = 0;
 	
@@ -40,40 +38,28 @@ public class DataCheckerPacket implements MSPacket.PlayToBoth
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(packetIndex);
 		if(nbtData != null)
 		{
-			try
-			{
-				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				NbtIo.writeCompressed(nbtData, bytes);
-				buffer.writeBytes(bytes.toByteArray());
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			buffer.writeNbt(nbtData);
 		}
 	}
 	
-	public static DataCheckerPacket decode(FriendlyByteBuf buffer)
+	public static DataCheckerPacket read(FriendlyByteBuf buffer)
 	{
 		int packetIndex = buffer.readInt();
 		CompoundTag nbt = null;
 		if(buffer.readableBytes() > 0)
 		{
-			byte[] bytes = new byte[buffer.readableBytes()];
-			buffer.readBytes(bytes);
-			try
-			{
-				nbt = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
+			nbt = buffer.readNbt();
 		}
 		
 		return new DataCheckerPacket(packetIndex, nbt);

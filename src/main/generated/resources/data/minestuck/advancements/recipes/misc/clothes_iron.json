@@ -39,6 +39,5 @@
     "recipes": [
       "minestuck:clothes_iron"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

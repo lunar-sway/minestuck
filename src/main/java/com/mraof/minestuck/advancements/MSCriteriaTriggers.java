@@ -1,44 +1,28 @@
 package com.mraof.minestuck.advancements;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Supplier;
 
 public class MSCriteriaTriggers
 {
-	private static final Map<ResourceLocation, CriterionTrigger<?>> triggers = new HashMap<>();
+	public static final DeferredRegister<CriterionTrigger<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, Minestuck.MOD_ID);
 	
-	public static final EventTrigger SBURB_CONNECTION = registerLater("sburb_connection", new EventTrigger());
-	public static final EventTrigger CRUXITE_ARTIFACT = registerLater("cruxite_artifact", new EventTrigger());
-	public static final EventTrigger RETURN_NODE = registerLater("return_node", new EventTrigger());
-	public static final EventTrigger MELON_OVERLOAD = registerLater("melon_overload", new EventTrigger());
-	public static final EventTrigger BUY_OUT_SHOP = registerLater("buy_out_shop", new EventTrigger());
+	public static final Supplier<EventTrigger> SBURB_CONNECTION = REGISTER.register("sburb_connection", EventTrigger::new);
+	public static final Supplier<EventTrigger> CRUXITE_ARTIFACT = REGISTER.register("cruxite_artifact", EventTrigger::new);
+	public static final Supplier<EventTrigger> RETURN_NODE = REGISTER.register("return_node", EventTrigger::new);
+	public static final Supplier<EventTrigger> MELON_OVERLOAD = REGISTER.register("melon_overload", EventTrigger::new);
+	public static final Supplier<EventTrigger> BUY_OUT_SHOP = REGISTER.register("buy_out_shop", EventTrigger::new);
 	
-	public static final PunchDesignixTrigger PUNCH_DESIGNIX = registerLater("punch_designix", new PunchDesignixTrigger());
-	public static final IntellibeamLaserstationTrigger INTELLIBEAM_LASERSTATION = registerLater("intellibeam_laserstation", new IntellibeamLaserstationTrigger());
-	public static final CaptchalogueTrigger CAPTCHALOGUE = registerLater("captchalogue", new CaptchalogueTrigger());
-	public static final ChangeModusTrigger CHANGE_MODUS = registerLater("change_modus", new ChangeModusTrigger());
-	public static final TreeModusRootTrigger TREE_MODUS_ROOT = registerLater("tree_modus_root", new TreeModusRootTrigger());
-	public static final EcheladderTrigger ECHELADDER = registerLater("echeladder", new EcheladderTrigger());
-	public static final ConsortItemTrigger CONSORT_ITEM = registerLater("consort_item", new ConsortItemTrigger());
-	public static final ConsortTalkTrigger CONSORT_TALK = registerLater("consort_talk", new ConsortTalkTrigger());
-	
-	private static <T extends CriterionTrigger<?>> T registerLater(String name, T trigger)
-	{
-		triggers.put(Minestuck.id(name), trigger);
-		return trigger;
-	}
-	
-	/**
-	 * Currently (1.15), this is not thread safe and need to be deferred
-	 */
-	public static void register()
-	{
-		for(Map.Entry<ResourceLocation, CriterionTrigger<?>> entry : triggers.entrySet())
-			CriteriaTriggers.register(entry.getKey().toString(), entry.getValue());
-	}
+	public static final Supplier<PunchDesignixTrigger> PUNCH_DESIGNIX = REGISTER.register("punch_designix", PunchDesignixTrigger::new);
+	public static final Supplier<IntellibeamLaserstationTrigger> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", IntellibeamLaserstationTrigger::new);
+	public static final Supplier<CaptchalogueTrigger> CAPTCHALOGUE = REGISTER.register("captchalogue", CaptchalogueTrigger::new);
+	public static final Supplier<ChangeModusTrigger> CHANGE_MODUS = REGISTER.register("change_modus", ChangeModusTrigger::new);
+	public static final Supplier<TreeModusRootTrigger> TREE_MODUS_ROOT = REGISTER.register("tree_modus_root", TreeModusRootTrigger::new);
+	public static final Supplier<EcheladderTrigger> ECHELADDER = REGISTER.register("echeladder", EcheladderTrigger::new);
+	public static final Supplier<ConsortItemTrigger> CONSORT_ITEM = REGISTER.register("consort_item", ConsortItemTrigger::new);
+	public static final Supplier<ConsortTalkTrigger> CONSORT_TALK = REGISTER.register("consort_talk", ConsortTalkTrigger::new);
 }

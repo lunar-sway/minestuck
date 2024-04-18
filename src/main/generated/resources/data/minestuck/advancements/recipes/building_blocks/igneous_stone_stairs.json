@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:igneous_stone_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

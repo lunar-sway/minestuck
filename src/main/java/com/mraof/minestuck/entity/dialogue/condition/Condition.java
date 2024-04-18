@@ -36,7 +36,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.Score;
+import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.Scoreboard;
 
 import javax.annotation.Nullable;
@@ -839,7 +839,7 @@ public interface Condition
 			if(objective == null)
 				return false;
 			
-			Collection<Score> scores = scoreboard.getPlayerScores(objective);
+			Collection<PlayerScoreEntry> scores = scoreboard.listPlayerScores(objective);
 			
 			//go with originally written scoreboard name if not "player" or "npc"
 			String modOwnerName = switch(ownerName)
@@ -849,7 +849,7 @@ public interface Condition
 				default -> ownerName;
 			};
 			
-			return scores.stream().filter(score -> score.getOwner().equals(modOwnerName)).anyMatch(score -> score.getScore() == value);
+			return scores.stream().filter(score -> score.owner().equals(modOwnerName)).anyMatch(score -> score.value() == value);
 		}
 		
 		@Override

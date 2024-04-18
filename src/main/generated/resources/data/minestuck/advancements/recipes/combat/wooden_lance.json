@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:wooden_lance"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -52,6 +52,5 @@
     "recipes": [
       "minestuck:horn"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

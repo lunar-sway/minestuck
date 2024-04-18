@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:stack_modus_card"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

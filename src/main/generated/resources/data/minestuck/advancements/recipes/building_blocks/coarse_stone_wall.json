@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:coarse_stone_wall"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

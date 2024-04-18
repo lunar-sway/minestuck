@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:polished_black_stone_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

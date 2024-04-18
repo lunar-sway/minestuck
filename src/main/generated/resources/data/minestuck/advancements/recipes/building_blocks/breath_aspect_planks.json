@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:breath_aspect_planks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

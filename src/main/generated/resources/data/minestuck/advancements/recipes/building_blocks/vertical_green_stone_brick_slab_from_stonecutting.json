@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:vertical_green_stone_brick_slab_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

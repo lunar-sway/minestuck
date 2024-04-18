@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:obsidian_axe_knife"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

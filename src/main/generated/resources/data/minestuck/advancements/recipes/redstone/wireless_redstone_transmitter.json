@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:wireless_redstone_transmitter"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

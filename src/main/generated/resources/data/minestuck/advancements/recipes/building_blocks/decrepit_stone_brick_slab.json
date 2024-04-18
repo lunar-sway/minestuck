@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:decrepit_stone_brick_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

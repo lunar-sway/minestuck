@@ -68,13 +68,15 @@ public class AreaEffectBlockEntity extends BlockEntity
 		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
-			for(LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, new AABB(minAreaPos, maxAreaPos)))
+			for(LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class,
+					AABB.encapsulatingFullBlocks(minAreaPos, maxAreaPos)))
 			{
 				iterateThroughEntities(livingEntity);
 			}
 		} else
 		{
-			for(Player playerEntity : level.getEntitiesOfClass(Player.class, new AABB(minAreaPos, maxAreaPos)))
+			for(Player playerEntity : level.getEntitiesOfClass(Player.class,
+					AABB.encapsulatingFullBlocks(minAreaPos, maxAreaPos)))
 			{
 				iterateThroughEntities(playerEntity);
 			}

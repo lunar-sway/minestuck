@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:mycelium_bricks_from_mycelium_stone_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

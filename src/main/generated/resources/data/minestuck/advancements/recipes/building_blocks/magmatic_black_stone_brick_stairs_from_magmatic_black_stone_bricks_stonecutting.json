@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:magmatic_black_stone_brick_stairs_from_magmatic_black_stone_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

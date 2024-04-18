@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueAnimationData;
 import com.mraof.minestuck.network.DialoguePackets;
-import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -13,6 +12,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.neoforged.neoforge.network.PacketDistributor;
 import software.bernie.geckolib.cache.texture.AnimatableTexture;
 
 import java.util.ArrayList;
@@ -167,13 +167,13 @@ public class DialogueScreen extends Screen
 	{
 		if(responseData.shouldClose())
 			Objects.requireNonNull(this.minecraft).popGuiLayer();
-		MSPacketHandler.sendToServer(new DialoguePackets.TriggerResponse(responseData.index(), this.dialogueId));
+		PacketDistributor.SERVER.noArg().send(new DialoguePackets.TriggerResponse(responseData.index(), this.dialogueId));
 	}
 	
 	@Override
 	public void onClose()
 	{
-		MSPacketHandler.sendToServer(new DialoguePackets.OnCloseScreen(this.dialogueId));
+		PacketDistributor.SERVER.noArg().send(new DialoguePackets.OnCloseScreen(this.dialogueId));
 		super.onClose();
 	}
 	

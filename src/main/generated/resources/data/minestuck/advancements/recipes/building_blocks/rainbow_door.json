@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:rainbow_door"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

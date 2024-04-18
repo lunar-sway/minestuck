@@ -49,7 +49,7 @@ public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<Serv
 			player.setPortalCooldown();
 			player.setDeltaMovement(Vec3.ZERO);
 			player.fallDistance = 0;
-			MSCriteriaTriggers.RETURN_NODE.trigger(player);
+			MSCriteriaTriggers.RETURN_NODE.get().trigger(player);
 		}
 	}
 	

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:mossy_decrepit_stone_brick_slab_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -93,7 +93,7 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 			return;
 		}
 		
-		LootPoolEntryContainer[] entries = accessWithReflection(pool);
+		List<LootPoolEntryContainer> entries = accessWithReflection(pool);
 		if(entries != null)
 		{
 			for(LootPoolEntryContainer entry : entries)
@@ -147,7 +147,7 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 	{
 		try
 		{
-			return ObfuscationReflectionHelper.findField(LootPool.class, "f_79023_");
+			return ObfuscationReflectionHelper.findField(LootPool.class, "entries");
 		} catch(ObfuscationReflectionHelper.UnableToFindFieldException e)
 		{
 			LOGGER.error("Unable to get field for lootPool.lootEntries. Will be unable to fully insert loot from land type loot tables.", e);
@@ -156,7 +156,7 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 	}
 	
 	@Nullable
-	private LootPoolEntryContainer[] accessWithReflection(LootPool pool)
+	private List<LootPoolEntryContainer> accessWithReflection(LootPool pool)
 	{
 		if(lootEntries == null)
 			return null;
@@ -164,7 +164,7 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 		{
 			try
 			{
-				return (LootPoolEntryContainer[]) lootEntries.get(pool);
+				return (List<LootPoolEntryContainer>) lootEntries.get(pool);
 			} catch(Exception e)
 			{
 				LOGGER.error("Got exception when accessing loot entries field for loot pool. Will use simpler behaviour for this time.", e);

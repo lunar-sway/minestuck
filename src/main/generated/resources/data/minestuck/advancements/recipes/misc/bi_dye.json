@@ -56,6 +56,5 @@
     "recipes": [
       "minestuck:bi_dye"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -13,7 +13,7 @@ public class WorldEventUtil
 		if(success)
 		{
 			int i = direction.getStepX() + 1 + (direction.getStepZ() + 1) * 3;
-			level.levelEvent(LevelEvent.PARTICLES_SHOOT, pos, i);
+			level.levelEvent(LevelEvent.PARTICLES_SHOOT_SMOKE, pos, i);
 		}
 	}
 }

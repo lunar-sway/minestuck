@@ -66,7 +66,7 @@ public class RungCommand
 	{
 		for (ServerPlayer player : players) {
 			PlayerSavedData.getData(player).getEcheladder().setByCommand(rung, progress);
-			MSCriteriaTriggers.ECHELADDER.trigger(player, rung);
+			MSCriteriaTriggers.ECHELADDER.get().trigger(player, rung);
 		}
 		context.getSource().sendSuccess(() -> Component.translatable(SET_SUCCESS, players.size(), rung, progress), true);
 		return players.size();

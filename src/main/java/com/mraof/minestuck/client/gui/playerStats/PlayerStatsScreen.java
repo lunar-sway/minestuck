@@ -7,7 +7,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -26,6 +25,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -274,7 +274,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				
 				mc.setScreen(containerScreen);
 				if(mc.screen == containerScreen)
-					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
+					PacketDistributor.SERVER.noArg().send(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
 			}
 			else mc.setScreen(ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}

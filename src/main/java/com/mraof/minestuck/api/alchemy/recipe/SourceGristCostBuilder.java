@@ -1,33 +1,24 @@
 package com.mraof.minestuck.api.alchemy.recipe;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.recipe.generator.SourceGristCost;
 import com.mraof.minestuck.api.alchemy.DefaultImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -37,13 +28,11 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public final class SourceGristCostBuilder
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	@Nullable
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
 	private final ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
-	private final List<String> sources = new ArrayList<>();
+	private final List<SourceGristCost.Source> sources = new ArrayList<>();
 	private float multiplier = 1;
 	@Nullable
 	private Integer priority = null;
@@ -88,14 +77,14 @@ public final class SourceGristCostBuilder
 	
 	public SourceGristCostBuilder source(TagKey<Item> source)
 	{
-		sources.add(SourceGristCost.tagString(source));
+		sources.add(new SourceGristCost.TagSource(source));
 		return this;
 	}
 	
 	
 	public SourceGristCostBuilder source(Item source)
 	{
-		sources.add(SourceGristCost.itemString(source));
+		sources.add(new SourceGristCost.ItemSource(source));
 		return this;
 	}
 	
@@ -119,46 +108,6 @@ public final class SourceGristCostBuilder
 	
 	public void build(RecipeOutput recipeOutput, ResourceLocation id)
 	{
-		recipeOutput.accept(new Result(id.withPrefix("grist_costs/"), ingredient, priority, sources, multiplier, new DefaultImmutableGristSet(costBuilder)));
-	}
-	
-	private record Result(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority,
-						  List<String> sources, float multiplier, ImmutableGristSet cost) implements FinishedRecipe
-	{
-		@Override
-		public void serializeRecipeData(JsonObject jsonObject)
-		{
-			jsonObject.add("ingredient", ingredient.toJson(false));
-			
-			if(priority != null)
-				jsonObject.addProperty("priority", priority);
-			
-			JsonArray sourceArray = new JsonArray();
-			sources.forEach(sourceArray::add);
-			jsonObject.add("sources", sourceArray);
-			
-			if(multiplier != 1)
-				jsonObject.addProperty("multiplier", multiplier);
-			
-			jsonObject.add("grist_cost", ImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
-		}
-		
-		@Override
-		public ResourceLocation id()
-		{
-			return id;
-		}
-		@Override
-		public RecipeSerializer<?> type()
-		{
-			return MSRecipeTypes.SOURCE_GRIST_COST.get();
-		}
-		
-		@Nullable
-		@Override
-		public AdvancementHolder advancement()
-		{
-			return null;
-		}
+		recipeOutput.accept(id.withPrefix("grist_costs/"), new SourceGristCost(ingredient, sources, multiplier, new DefaultImmutableGristSet(costBuilder), Optional.ofNullable(priority)), null);
 	}
 }

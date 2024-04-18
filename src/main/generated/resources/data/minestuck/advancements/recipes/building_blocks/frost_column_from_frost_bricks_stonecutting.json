@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:frost_column_from_frost_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

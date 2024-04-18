@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cruxite_brick_stairs_from_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

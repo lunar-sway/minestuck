@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:green_stone_bricks_from_polished_green_stone_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

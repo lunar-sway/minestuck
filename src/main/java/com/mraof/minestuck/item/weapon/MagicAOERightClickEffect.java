@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.client.util.MagicEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MagicAOEEffectPacket;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -119,8 +118,8 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 			Vec3 minAOEBound = new Vec3(aabb.minX, aabb.minY, aabb.minZ);
 			Vec3 maxAOEBound = new Vec3(aabb.maxX, aabb.maxY, aabb.maxZ);
 			
-			MSPacketHandler.sendToNear(new MagicAOEEffectPacket(type, minAOEBound, maxAOEBound),
-					new PacketDistributor.TargetPoint(centerPos.x, centerPos.y, centerPos.z, 64, level.dimension()));
+			PacketDistributor.NEAR.with(new PacketDistributor.TargetPoint(centerPos.x, centerPos.y, centerPos.z, 64, level.dimension()))
+					.send(new MagicAOEEffectPacket(type, minAOEBound, maxAOEBound));
 		}
 	}
 	

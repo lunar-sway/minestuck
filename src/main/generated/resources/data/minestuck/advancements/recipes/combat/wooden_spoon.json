@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:wooden_spoon"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

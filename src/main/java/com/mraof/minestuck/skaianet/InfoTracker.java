@@ -3,7 +3,6 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -18,6 +17,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,8 +82,8 @@ public final class InfoTracker
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		getSet(identifier).add(identifier);
 		sendConnectionInfo(identifier);
-		MSPacketHandler.sendToPlayer(createLandChainPacket(), player);
-		MSPacketHandler.sendToPlayer(new SkaianetInfoPacket.HasEntered(SburbPlayerData.get(player).hasEntered()), player);
+		PacketDistributor.PLAYER.with(player).send(createLandChainPacket(),
+				new SkaianetInfoPacket.HasEntered(SburbPlayerData.get(player).hasEntered()));
 	}
 	
 	private Set<PlayerIdentifier> getSet(PlayerIdentifier identifier)
@@ -107,7 +107,7 @@ public final class InfoTracker
 			LOGGER.warn("[Skaianet] Player {} already got the requested data.", player.getName());
 		}
 		
-		MSPacketHandler.sendToPlayer(generateClientInfoPacket(p1), player);
+		PacketDistributor.PLAYER.with(player).send(generateClientInfoPacket(p1));
 	}
 	
 	
@@ -213,7 +213,7 @@ public final class InfoTracker
 		
 		if(resendLandChains)
 		{
-			MSPacketHandler.sendToAll(createLandChainPacket());
+			PacketDistributor.ALL.noArg().send(createLandChainPacket());
 			resendLandChains = false;
 		}
 	}
@@ -231,10 +231,10 @@ public final class InfoTracker
 				if(player.equals(listener))
 				{
 					if(skaianet.connections.activeConnections().anyMatch(c -> c.hasPlayer(player)))
-						MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerListener);
+						MSCriteriaTriggers.SBURB_CONNECTION.get().trigger(playerListener);
 				}
 				
-				MSPacketHandler.sendToPlayer(packet, playerListener);
+				PacketDistributor.PLAYER.with(playerListener).send(packet);
 			}
 		}
 	}

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:black_chess_brick_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

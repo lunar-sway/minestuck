@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:deuce_club"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:treated_heavy_planks_from_treated_uncarved_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

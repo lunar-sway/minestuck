@@ -18,9 +18,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -134,10 +131,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		return Component.translatable(TITLE);
 	}
 	
-	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(this::createInputSlotHandler);
-	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new CombinedInvWrapper(createInputSlotHandler(), new RangedWrapper(itemHandler, 2, 3)));
-	
 	private IItemHandlerModifiable createInputSlotHandler()
 	{
 		return new RangedWrapper(itemHandler, 0, 1)
@@ -153,16 +146,16 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		};
 	}
 	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == Capabilities.ITEM_HANDLER && side != null)
-		{
-			return side == Direction.DOWN ? downHandler.cast() :
-					side == Direction.UP ? upHandler.cast() : sideHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.DOWN)
+			return new CombinedInvWrapper(this.createInputSlotHandler(), new RangedWrapper(this.itemHandler, 2, 3));
+		if(side == Direction.UP)
+			return new RangedWrapper(this.itemHandler, 1, 2);
+		return this.createInputSlotHandler();
 	}
 	
 	@Nullable

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cast_iron_sheet_stairs_from_cast_iron_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

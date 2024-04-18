@@ -6,7 +6,6 @@ import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.AtheneumPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -18,6 +17,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,7 +143,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 		}
 		
 		AtheneumPacket.Update packet = new AtheneumPacket.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
-		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+		PacketDistributor.PLAYER.with(serverPlayer).send(packet);
 	}
 	
 	public void receiveUpdatePacket(AtheneumPacket.Update packet)

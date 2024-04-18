@@ -28,7 +28,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -133,7 +132,7 @@ public sealed interface Trigger
 					consortEntity.stocks = new ConsortMerchantInventory(consortEntity, ConsortRewardHandler.generateStock(this.lootTable, consortEntity, consortEntity.level().random));
 				}
 				
-				NetworkHooks.openScreen(player, new SimpleMenuProvider(consortEntity, Component.literal("Consort shop")), consortEntity::writeShopMenuBuffer);
+				player.openMenu(new SimpleMenuProvider(consortEntity, Component.literal("Consort shop")), consortEntity::writeShopMenuBuffer);
 			}
 		}
 	}
@@ -345,7 +344,7 @@ public sealed interface Trigger
 			{
 				player.spawnAtLocation(itemstack, 0.0F);
 				if(entity instanceof ConsortEntity consortEntity)
-					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTable.toString(), itemstack, consortEntity);
+					MSCriteriaTriggers.CONSORT_ITEM.get().trigger(player, lootTable.toString(), itemstack, consortEntity);
 			}
 		}
 	}

@@ -9,7 +9,6 @@ import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.network.AnthvilPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -17,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -53,7 +53,8 @@ public class AnthvilScreen extends AbstractContainerScreen<AnthvilMenu>
 	
 	private void mend()
 	{
-		MSPacketHandler.sendToServer(new AnthvilPacket()); //sends a request to mend and refuel uranium
+		//sends a request to mend and refuel uranium
+		PacketDistributor.SERVER.noArg().send(new AnthvilPacket());
 	}
 	
 	private void finish()

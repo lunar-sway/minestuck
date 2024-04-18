@@ -3,8 +3,6 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -13,7 +11,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 public class HologramEntity extends Entity
 {
@@ -74,11 +71,5 @@ public class HologramEntity extends Entity
 	
 	public void setItem(int id)
 	{
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PunchDesignixPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -10,6 +9,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.regex.Pattern;
 
@@ -73,7 +73,7 @@ public class PunchDesignixScreen extends Screen
 			String captcha = captchaTextField.getValue();
 			be.setCaptcha(captcha);
 			PunchDesignixPacket packet = new PunchDesignixPacket(be.getBlockPos(), captcha);
-			MSPacketHandler.sendToServer(packet);
+			PacketDistributor.SERVER.noArg().send(packet);
 			this.minecraft.setScreen(null);
 		}
 	}

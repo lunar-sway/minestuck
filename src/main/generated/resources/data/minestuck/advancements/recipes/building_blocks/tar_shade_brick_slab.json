@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:tar_shade_brick_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

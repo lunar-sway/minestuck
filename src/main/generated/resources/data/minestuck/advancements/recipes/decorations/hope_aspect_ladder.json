@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:hope_aspect_ladder"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -48,12 +46,8 @@ public class AnthvilBlock extends MachineProcessBlock implements EntityBlock
 		if(player instanceof ServerPlayer serverPlayer)
 		{
 			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if(blockEntity instanceof AnthvilBlockEntity)
-			{
-				MenuProvider menuProvider = (MenuProvider) blockEntity;
-				
-				NetworkHooks.openScreen(serverPlayer, menuProvider);
-			}
+			if(blockEntity instanceof AnthvilBlockEntity anthvil)
+				serverPlayer.openMenu(anthvil);
 		}
 		return InteractionResult.sidedSuccess(level.isClientSide);
 	}

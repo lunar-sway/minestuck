@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:time_aspect_planks_from_stripped_log"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

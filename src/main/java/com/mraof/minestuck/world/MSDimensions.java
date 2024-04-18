@@ -2,7 +2,6 @@ package com.mraof.minestuck.world;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.LandTypesDataPacket;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.registries.Registries;
@@ -11,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class MSDimensions
 {
@@ -38,12 +38,12 @@ public class MSDimensions
 	
 	public static void sendLandTypesToAll(MinecraftServer server)
 	{
-		MSPacketHandler.sendToAll(createLandTypesPacket(server));
+		PacketDistributor.ALL.noArg().send(createLandTypesPacket(server));
 	}
 	
 	public static void sendDimensionData(ServerPlayer player)
 	{
-		MSPacketHandler.sendToPlayer(createLandTypesPacket(player.getServer()), player);
+		PacketDistributor.PLAYER.with(player).send(createLandTypesPacket(player.getServer()));
 	}
 	
 	private static LandTypesDataPacket createLandTypesPacket(MinecraftServer server)

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
@@ -11,6 +12,7 @@ import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +21,8 @@ import java.util.Optional;
 
 public class ClientEditPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("client_edit");
+	
 	private final int user;
 	private final int target;
 	
@@ -39,7 +43,13 @@ public class ClientEditPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		if(user != -1)
 		{
@@ -48,7 +58,7 @@ public class ClientEditPacket implements MSPacket.PlayToServer
 		}
 	}
 	
-	public static ClientEditPacket decode(FriendlyByteBuf buffer)
+	public static ClientEditPacket read(FriendlyByteBuf buffer)
 	{
 		if(buffer.readableBytes() > 0)
 		{

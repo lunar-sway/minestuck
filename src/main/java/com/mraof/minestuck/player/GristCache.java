@@ -7,7 +7,6 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristToastPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.GristCachePacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -15,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -213,7 +213,7 @@ public final class GristCache
 		if(player != null)
 		{
 			GristCachePacket packet = new GristCachePacket(this.getGristSet(), false);
-			MSPacketHandler.sendToPlayer(packet, player);
+			PacketDistributor.PLAYER.with(player).send(packet);
 		}
 		
 		//Also send to the editing player, if there is any

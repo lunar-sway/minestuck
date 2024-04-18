@@ -14,6 +14,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,7 +73,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		
 		if(newState != this.getBlockState())
 			this.level.setBlock(this.getBlockPos(), newState, Block.UPDATE_CLIENTS);
-			
+		
 	}
 	
 	private boolean isItemValid(int slot, ItemStack stack)
@@ -112,7 +114,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	
 	public static int getGristWidgetBoondollarValue(GristSet set)
 	{
-		return set == null ? 0 : Math.max(1, (int) Math.pow(set.getValue(), 1/1.5));
+		return set == null ? 0 : Math.max(1, (int) Math.pow(set.getValue(), 1 / 1.5));
 	}
 	
 	@Override
@@ -189,5 +191,10 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	public PlayerIdentifier getOwner()
 	{
 		return owner;
+	}
+	
+	public IItemHandler getItemHandler(@Nullable Direction ignored)
+	{
+		return this.itemHandler;
 	}
 }

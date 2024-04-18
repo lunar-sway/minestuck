@@ -43,6 +43,5 @@
     "recipes": [
       "minestuck:polished_cruxite_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

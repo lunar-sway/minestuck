@@ -6,12 +6,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
-import com.mraof.minestuck.inventory.musicplayer.MusicPlayerItemCapProvider;
 import com.mraof.minestuck.item.CassetteItem;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import com.mraof.minestuck.util.MSCapabilities;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -30,14 +27,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.network.NetworkHooks;
-
-import javax.annotation.Nullable;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * <p>
@@ -56,7 +48,6 @@ import javax.annotation.Nullable;
  * The sprite of the item can change depending of if a cassette is currently inside or not.
  * The tag used to do so is HasCassette.
  * </p>
- * {@link #getShareTag(ItemStack)}
  * {@link #hasCassette(ItemStack)}
  */
 
@@ -66,25 +57,6 @@ public class MusicPlayerWeapon extends WeaponItem
 	public static final String TITLE = "minestuck.music_player";
 	private final float volume;
 	private final float pitch;
-	
-	private static IItemHandler getItemHandler(ItemStack itemStack)
-	{
-		return itemStack.getCapability(Capabilities.ITEM_HANDLER).orElseThrow(() ->
-				new IllegalArgumentException("Expected an item handler for the music player item, but " + itemStack + " does not expose an item handler."));
-	}
-	
-	private static IMusicPlaying getMusicPlaying(LivingEntity entity)
-	{
-		return entity.getCapability(MSCapabilities.MUSIC_PLAYING_CAPABILITY).orElseThrow(() ->
-				new IllegalArgumentException("Expected an music playing for this entity, but " + entity + " does not expose a music playing."));
-	}
-	
-	@Nullable
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
-	{
-		return new MusicPlayerItemCapProvider();
-	}
 	
 	public MusicPlayerWeapon(Builder builder, Properties properties, float volume, float pitch)
 	{
@@ -106,10 +78,10 @@ public class MusicPlayerWeapon extends WeaponItem
 	{
 		ItemStack musicPlayer = playerIn.getItemInHand(handIn);
 		
-		IItemHandler itemStackHandlerMusicPlayer = getItemHandler(musicPlayer);
-		IMusicPlaying musicPlayingCap = getMusicPlaying(playerIn);
+		IItemHandler itemStackHandlerMusicPlayer = musicPlayer.getData(MSCapabilities.MUSIC_PLAYER_INVENTORY_ATTACHMENT.get());
+		IMusicPlaying musicPlayingCap = playerIn.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT.get());
 		
-		if(!level.isClientSide)
+		if(playerIn instanceof ServerPlayer serverPlayer)
 		{
 			if(playerIn.isCrouching())
 			{
@@ -126,7 +98,7 @@ public class MusicPlayerWeapon extends WeaponItem
 						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE, 0, 0);
 						musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 					}
-					MSPacketHandler.sendToTrackingAndSelf(packet, playerIn);
+					PacketDistributor.TRACKING_ENTITY_AND_SELF.with(playerIn).send(packet);
 				}
 			}
 			//open the GUI if right-clicked
@@ -134,9 +106,10 @@ public class MusicPlayerWeapon extends WeaponItem
 			{
 				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE, 0, 0);
 				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
-				MSPacketHandler.sendToTrackingAndSelf(packet, playerIn); //This will stop the music before opening the GUI
+				//This will stop the music before opening the GUI
+				PacketDistributor.TRACKING_ENTITY_AND_SELF.with(playerIn).send(packet);
 				
-				NetworkHooks.openScreen((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
+				serverPlayer.openMenu(new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
 						new CassetteContainerMenu(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
 						Component.translatable(TITLE)));
 			}
@@ -159,7 +132,7 @@ public class MusicPlayerWeapon extends WeaponItem
 		if(tickEvent.side.isServer() && tickEvent.phase == TickEvent.Phase.END && tickEvent.player.isAlive())
 		{
 			Player player = tickEvent.player;
-			IMusicPlaying musicPlayingCap = getMusicPlaying(player);
+			IMusicPlaying musicPlayingCap = player.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT.get());
 			
 			if(!(player.getItemInHand(InteractionHand.MAIN_HAND) == musicPlayingCap.getCurrentMusicPlayer() ||
 					player.getItemInHand(InteractionHand.OFF_HAND) == musicPlayingCap.getCurrentMusicPlayer()) ||
@@ -169,7 +142,7 @@ public class MusicPlayerWeapon extends WeaponItem
 				{ //If the Cassette player isn't in hand and is playing music, stop it
 					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE, 0, 0);
 					musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
-					MSPacketHandler.sendToTrackingAndSelf(packet, player);
+					PacketDistributor.TRACKING_ENTITY_AND_SELF.with(player).send(packet);
 				}
 			}
 			
@@ -185,7 +158,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		IMusicPlaying musicPlaying = getMusicPlaying(attacker);
+		IMusicPlaying musicPlaying = attacker.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT.get());
 		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE && musicPlaying.getCurrentMusicPlayer() == stack)
 		{
 			RandomSource r = attacker.level().getRandom();
@@ -218,33 +191,8 @@ public class MusicPlayerWeapon extends WeaponItem
 		return super.hurtEnemy(stack, target, attacker);
 	}
 	
-	@Nullable
-	@Override
-	public CompoundTag getShareTag(ItemStack stack)
-	{
-		IItemHandler iitemHandler = getItemHandler(stack);
-		CompoundTag nbt = stack.getTag() != null ? stack.getTag() : new CompoundTag();
-		if(iitemHandler instanceof ItemStackHandler itemHandler)
-			nbt.put("cassette", itemHandler.serializeNBT());
-		return nbt;
-	}
-	
-	@Override
-	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt)
-	{
-		if(nbt == null)
-			stack.setTag(null);
-		else
-		{
-			IItemHandler iitemHandler = getItemHandler(stack);
-			if(iitemHandler instanceof ItemStackHandler itemHandler)
-				itemHandler.deserializeNBT(nbt.getCompound("cassette"));
-			stack.setTag(nbt);
-		}
-	}
-	
 	public static boolean hasCassette(ItemStack stack)
 	{
-		return !getItemHandler(stack).getStackInSlot(0).isEmpty();
+		return !stack.getData(MSCapabilities.MUSIC_PLAYER_INVENTORY_ATTACHMENT.get()).getStackInSlot(0).isEmpty();
 	}
 }

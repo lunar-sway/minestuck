@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:bug_mac"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

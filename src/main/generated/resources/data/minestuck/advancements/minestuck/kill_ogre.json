@@ -17,17 +17,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.kill_ogre.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:pogo_hammer",
       "nbt": "{Damage:0}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.kill_ogre.title"
     }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cast_iron_tile_from_cast_iron_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

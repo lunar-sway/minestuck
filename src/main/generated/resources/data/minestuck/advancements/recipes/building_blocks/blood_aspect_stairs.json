@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:blood_aspect_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

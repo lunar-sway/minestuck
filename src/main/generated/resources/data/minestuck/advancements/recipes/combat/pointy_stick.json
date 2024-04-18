@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:pointy_stick"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

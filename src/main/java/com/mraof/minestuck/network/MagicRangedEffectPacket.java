@@ -1,12 +1,16 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.util.MagicEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 public class MagicRangedEffectPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("magic_ranged_effect");
+	
 	private final MagicEffect.RangedType type;
 	private final Vec3 pos, lookVec;
 	private final int length;
@@ -22,7 +26,13 @@ public class MagicRangedEffectPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(type.toInt());
 		buffer.writeDouble(pos.x);
@@ -35,7 +45,7 @@ public class MagicRangedEffectPacket implements MSPacket.PlayToClient
 		buffer.writeBoolean(collides);
 	}
 	
-	public static MagicRangedEffectPacket decode(FriendlyByteBuf buffer)
+	public static MagicRangedEffectPacket read(FriendlyByteBuf buffer)
 	{
 		MagicEffect.RangedType type = MagicEffect.RangedType.fromInt(buffer.readInt());
 		Vec3 pos = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());

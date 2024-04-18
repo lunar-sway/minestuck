@@ -15,16 +15,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.long_time_coming.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:sburb_code"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.long_time_coming.title"
     }

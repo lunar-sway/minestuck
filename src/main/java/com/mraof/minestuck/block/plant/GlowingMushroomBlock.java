@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +22,12 @@ public class GlowingMushroomBlock extends BushBlock
 	public GlowingMushroomBlock(Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Override
+	protected MapCodec<GlowingMushroomBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

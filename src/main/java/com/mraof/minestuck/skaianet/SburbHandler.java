@@ -179,7 +179,7 @@ public final class SburbHandler
 		
 		SessionHandler.get(server).getOrCreateSession(playerData.playerId()).checkIfCompleted();
 		
-		MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
+		MSCriteriaTriggers.CRUXITE_ARTIFACT.get().trigger(player);
 		
 		EditmodeLocations.onEntry(server, playerData.playerId());
 		

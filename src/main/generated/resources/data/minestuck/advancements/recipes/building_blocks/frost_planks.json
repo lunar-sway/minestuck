@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:frost_planks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

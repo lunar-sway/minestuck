@@ -43,6 +43,5 @@
     "recipes": [
       "minestuck:raw_cruxite_from_block"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

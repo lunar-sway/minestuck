@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:dead_bookshelf"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

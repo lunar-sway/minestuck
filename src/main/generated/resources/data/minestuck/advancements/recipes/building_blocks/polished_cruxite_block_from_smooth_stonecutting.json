@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:polished_cruxite_block_from_smooth_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:treated_planks_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

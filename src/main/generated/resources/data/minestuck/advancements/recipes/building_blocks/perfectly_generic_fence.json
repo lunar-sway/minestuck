@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:perfectly_generic_fence"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

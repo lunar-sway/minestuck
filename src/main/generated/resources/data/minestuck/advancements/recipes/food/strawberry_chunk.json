@@ -43,6 +43,5 @@
     "recipes": [
       "minestuck:strawberry_chunk"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

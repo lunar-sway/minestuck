@@ -1,8 +1,10 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.gen.feature.tree.EndTree;
+import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +15,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -21,6 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -30,12 +33,18 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	public static final BooleanProperty OMEGA = MSProperties.OMEGA;
 	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
-	private final AbstractTreeGrower tree = new EndTree();
+	private final TreeGrower tree = new TreeGrower(Minestuck.id("end").toString(), Optional.empty(), Optional.of(MSCFeatures.END_TREE), Optional.empty());
 	
 	public EndSaplingBlock(Properties properties)
 	{
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(ALPHA, false).setValue(OMEGA, false));
+	}
+	
+	@Override
+	protected MapCodec<EndSaplingBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

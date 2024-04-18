@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:solid_switch"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

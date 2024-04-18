@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:glowing_hanging_sign"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

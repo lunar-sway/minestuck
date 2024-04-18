@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:pumice_brick_stairs_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

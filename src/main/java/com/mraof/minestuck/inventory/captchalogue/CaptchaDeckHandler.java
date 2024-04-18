@@ -7,7 +7,6 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerData;
@@ -28,6 +27,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -132,7 +132,7 @@ public final class CaptchaDeckHandler
 		
 		PlayerSavedData.getData(player).setModus(newModus);
 		
-		MSCriteriaTriggers.CHANGE_MODUS.trigger(player, newModus);
+		MSCriteriaTriggers.CHANGE_MODUS.get().trigger(player, newModus);
 		
 		return oldModus == null ? ItemStack.EMPTY : oldModus.getModusItem();
 	}
@@ -240,7 +240,7 @@ public final class CaptchaDeckHandler
 		boolean result = modus.putItemStack(player, stack.copy());
 		if(result)
 		{
-			MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+			MSCriteriaTriggers.CAPTCHALOGUE.get().trigger(player, modus, stack);
 			stack.setCount(0);
 		}
 		return result;
@@ -325,7 +325,7 @@ public final class CaptchaDeckHandler
 		} else
 		{
 			modus.initModus(null, player, null, size);
-			MSPacketHandler.sendToPlayer(ModusDataPacket.create(modus), player);
+			PacketDistributor.PLAYER.with(player).send(ModusDataPacket.create(modus));
 		}
 	}
 	

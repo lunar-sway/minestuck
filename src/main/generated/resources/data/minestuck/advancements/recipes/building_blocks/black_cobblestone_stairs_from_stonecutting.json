@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:black_cobblestone_stairs_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

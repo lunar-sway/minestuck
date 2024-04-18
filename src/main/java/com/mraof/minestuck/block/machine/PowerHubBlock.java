@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.PowerHubBlockEntity;
@@ -31,6 +32,12 @@ public class PowerHubBlock extends HorizontalDirectionalBlock implements EntityB
 	{
 		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+	}
+	
+	@Override
+	protected MapCodec<PowerHubBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

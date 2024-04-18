@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cracked_coarse_stone_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

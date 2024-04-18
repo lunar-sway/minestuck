@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:end_planks_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

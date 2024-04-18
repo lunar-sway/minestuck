@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:end_sign"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

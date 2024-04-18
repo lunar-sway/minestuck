@@ -220,6 +220,6 @@ public class ComputerScreen extends Screen
 		}
 		
 		@Override
-		public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt) { /* invisible */ }
+		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt) { /* invisible */ }
 	}
 }

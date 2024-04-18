@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.client.util.MagicEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MagicRangedEffectPacket;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -110,8 +109,8 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 	protected void sendEffectPacket(Level level, Vec3 pos, Vec3 lookVec, int length, boolean collides)
 	{
 		if(type != null)
-			MSPacketHandler.sendToNear(new MagicRangedEffectPacket(type, pos, lookVec, length, collides),
-					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, level.dimension()));
+			PacketDistributor.NEAR.with(new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, level.dimension()))
+					.send(new MagicRangedEffectPacket(type, pos, lookVec, length, collides));
 	}
 	
 	protected void targetEffect(ServerPlayer player)

@@ -75,16 +75,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.all_modi.description"
     },
     "frame": "goal",
-    "hidden": false,
     "icon": {
       "item": "minestuck:queuestack_modus_card"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.all_modi.title"
     }

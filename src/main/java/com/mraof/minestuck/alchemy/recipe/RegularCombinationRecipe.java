@@ -12,7 +12,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipeCodecs;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -81,7 +80,7 @@ public final class RegularCombinationRecipe implements CombinationRecipe
 						Ingredient.CODEC_NONEMPTY.fieldOf("input1").forGetter(recipe -> recipe.input1),
 						Ingredient.CODEC_NONEMPTY.fieldOf("input2").forGetter(recipe -> recipe.input2),
 						CombinationMode.CODEC.fieldOf("mode").forGetter(recipe -> recipe.mode),
-						CraftingRecipeCodecs.ITEMSTACK_OBJECT_CODEC.fieldOf("output").forGetter(recipe -> recipe.output)
+						ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("output").forGetter(recipe -> recipe.output)
 				).apply(instance, RegularCombinationRecipe::new));
 		
 		@Override

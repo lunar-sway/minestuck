@@ -21,14 +21,10 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 
@@ -190,23 +186,18 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		return fuel >= MAX_FUEL;
 	}
 	
-	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //regenerating item slot
-	private final LazyOptional<IItemHandler> fuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	@Nullable
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == Capabilities.ITEM_HANDLER && side != null)
-		{
-			if(side == Direction.UP)
-				return inputHandler.cast();
-			else if(side == Direction.DOWN)
-				return LazyOptional.empty();
-			else
-				return fuelHandler.cast(); //will fill the anthvil with fuel if fed from the sides
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.UP)
+			return new RangedWrapper(itemHandler, 0, 1);
+		if(side == Direction.DOWN)
+			return null;
+		
+		return new RangedWrapper(itemHandler, 1, 2);
 	}
 	
 	@Nullable

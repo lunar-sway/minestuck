@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * @see ClientEditHandler
  */
-
+@Deprecated //todo switch to just EditTools
 public interface IEditTools
 {
 	enum ToolMode

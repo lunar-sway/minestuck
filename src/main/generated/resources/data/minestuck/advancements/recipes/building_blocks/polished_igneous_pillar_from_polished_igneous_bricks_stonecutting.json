@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:polished_igneous_pillar_from_polished_igneous_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

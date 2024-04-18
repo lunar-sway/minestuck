@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:lacquered_heavy_plank_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

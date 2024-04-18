@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -18,6 +19,12 @@ public class SulfurBubbleBlock extends BushBlock
 	public SulfurBubbleBlock(BlockBehaviour.Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Override
+	protected MapCodec<SulfurBubbleBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

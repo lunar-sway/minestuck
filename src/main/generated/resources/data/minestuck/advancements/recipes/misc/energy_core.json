@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:energy_core"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

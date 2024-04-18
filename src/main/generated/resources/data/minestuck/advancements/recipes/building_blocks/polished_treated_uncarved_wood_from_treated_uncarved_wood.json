@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:polished_treated_uncarved_wood_from_treated_uncarved_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

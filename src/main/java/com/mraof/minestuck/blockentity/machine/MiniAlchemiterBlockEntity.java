@@ -27,14 +27,10 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
@@ -174,18 +170,14 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		return Component.translatable(TITLE);
 	}
 	
-	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, INPUT, INPUT + 1));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, OUTPUT, OUTPUT + 1));
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == Capabilities.ITEM_HANDLER && side != null)
-		{
-			return side == Direction.DOWN ? downHandler.cast() : sideHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.DOWN)
+			return new RangedWrapper(this.itemHandler, OUTPUT, OUTPUT + 1);
+		return new RangedWrapper(this.itemHandler, INPUT, INPUT + 1);
 	}
 	
 	public int comparatorValue()

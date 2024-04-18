@@ -8,7 +8,6 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.StoneTabletUtils.Point;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StoneTabletPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
@@ -26,6 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.glfw.GLFW;
 
@@ -230,7 +230,7 @@ public class StoneTabletScreen extends Screen
 	private void sendTabletToServer()
 	{
 		if(isModified && text != null)
-			MSPacketHandler.sendToServer(new StoneTabletPacket(text, hand));
+			PacketDistributor.SERVER.noArg().send(new StoneTabletPacket(text, hand));
 	}
 	
 	private void setText(String text)

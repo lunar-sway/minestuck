@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:polished_treated_uncarved_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

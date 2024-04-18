@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:rage_aspect_door"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:temple_scanner"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:gutter_thumb_drive"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

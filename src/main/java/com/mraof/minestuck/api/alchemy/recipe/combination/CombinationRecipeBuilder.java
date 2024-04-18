@@ -1,21 +1,16 @@
 package com.mraof.minestuck.api.alchemy.recipe.combination;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.alchemy.recipe.RegularCombinationRecipe;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
@@ -118,44 +113,6 @@ public final class CombinationRecipeBuilder
 	
 	public void build(RecipeOutput recipeOutput, ResourceLocation id)
 	{
-		recipeOutput.accept(new Result(id.withPrefix("combinations/"), output, input1, input2, mode));
-	}
-	
-	private record Result(ResourceLocation id, ItemStack output, Ingredient input1, Ingredient input2, CombinationMode mode) implements FinishedRecipe
-	{
-		@Override
-		public void serializeRecipeData(JsonObject json)
-		{
-			json.add("input1", input1.toJson(false));
-			json.add("input2", input2.toJson(false));
-			json.addProperty("mode", mode.getSerializedName());
-			JsonObject outputJson = new JsonObject();
-			ResourceLocation outputId = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(output.getItem()));
-			outputJson.addProperty("item", outputId.toString());
-			if(output.getCount() > 1)
-			{
-				outputJson.addProperty("count", output.getCount());
-			}
-			json.add("output", outputJson);
-		}
-		
-		@Override
-		public ResourceLocation id()
-		{
-			return id;
-		}
-		
-		@Override
-		public RecipeSerializer<?> type()
-		{
-			return MSRecipeTypes.COMBINATION.get();
-		}
-		
-		@Nullable
-		@Override
-		public AdvancementHolder advancement()
-		{
-			return null;
-		}
+		recipeOutput.accept(id.withPrefix("combinations/"), new RegularCombinationRecipe(input1, input2, mode, output), null);
 	}
 }

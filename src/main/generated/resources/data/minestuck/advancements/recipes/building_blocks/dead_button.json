@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:dead_button"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

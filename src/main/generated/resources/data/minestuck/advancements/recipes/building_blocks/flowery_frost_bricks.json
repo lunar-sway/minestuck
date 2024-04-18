@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:flowery_frost_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

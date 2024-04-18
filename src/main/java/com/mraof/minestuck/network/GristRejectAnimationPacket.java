@@ -1,14 +1,18 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Objects;
 
 public class GristRejectAnimationPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("grist_reject_animation");
+	
 	private final int entityID;
 	
 	public static GristRejectAnimationPacket createPacket(GristEntity entity)
@@ -23,12 +27,18 @@ public class GristRejectAnimationPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(entityID);
 	}
 	
-	public static GristRejectAnimationPacket decode(FriendlyByteBuf buffer)
+	public static GristRejectAnimationPacket read(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt();
 		

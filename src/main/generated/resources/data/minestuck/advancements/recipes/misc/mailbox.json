@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:mailbox"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

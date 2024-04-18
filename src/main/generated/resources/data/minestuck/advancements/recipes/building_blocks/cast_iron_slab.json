@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cast_iron_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

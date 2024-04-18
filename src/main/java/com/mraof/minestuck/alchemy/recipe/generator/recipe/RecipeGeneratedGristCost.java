@@ -29,6 +29,11 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	@Nullable
 	private RecipeGeneratedCostHandler handler;
 	
+	public RecipeGeneratedGristCost()
+	{
+		this(null);
+	}
+	
 	private RecipeGeneratedGristCost(@Nullable RecipeGeneratedCostHandler handler)
 	{
 		this.handler = handler;
@@ -88,7 +93,7 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<RecipeGeneratedGristCost>
 	{
-		private static final Codec<RecipeGeneratedGristCost> CODEC = Codec.unit(() -> new RecipeGeneratedGristCost(null));
+		private static final Codec<RecipeGeneratedGristCost> CODEC = Codec.unit(RecipeGeneratedGristCost::new);
 		
 		@Override
 		public Codec<RecipeGeneratedGristCost> codec()

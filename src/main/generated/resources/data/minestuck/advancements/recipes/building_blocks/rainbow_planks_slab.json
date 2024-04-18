@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:rainbow_planks_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
@@ -17,6 +18,12 @@ public class DesertFloraBlock extends BushBlock
 	public DesertFloraBlock(Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Override
+	protected MapCodec<DesertFloraBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

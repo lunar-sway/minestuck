@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.DataCheckerPermissionPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,6 +15,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -68,7 +68,7 @@ public class DataCheckerPermission
 			dataCheckerPermission.add(player.getGameProfile().getId());
 		else dataCheckerPermission.remove(player.getGameProfile().getId());
 		packet = new DataCheckerPermissionPacket(permission);
-		MSPacketHandler.sendToPlayer(packet, player);
+		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	
 	public static boolean hasPermission(ServerPlayer player)

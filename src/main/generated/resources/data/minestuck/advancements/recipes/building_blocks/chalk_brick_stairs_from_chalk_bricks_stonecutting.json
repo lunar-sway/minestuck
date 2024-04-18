@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:chalk_brick_stairs_from_chalk_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -194,7 +194,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	@Override
 	public void performRangedAttack(LivingEntity target, float distanceFactor)
 	{
-		Arrow arrow = new Arrow(this.level(), this);
+		Arrow arrow = new Arrow(this.level(), this, new ItemStack(Items.ARROW));
 		double d0 = target.getX() - this.getX();
 		double d1 = target.getBoundingBox().minY + (double) (target.getBbHeight() / 3.0F) - arrow.getY();
 		double d2 = target.getZ() - this.getZ();

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.StructureCoreBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StructureCorePacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -10,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -97,7 +97,7 @@ public class StructureCoreScreen extends Screen
 	
 	private void finish()
 	{
-		MSPacketHandler.sendToServer(new StructureCorePacket(actionType, shutdownRange, be.getBlockPos()));
+		PacketDistributor.SERVER.noArg().send(new StructureCorePacket(actionType, shutdownRange, be.getBlockPos()));
 		onClose();
 	}
 }

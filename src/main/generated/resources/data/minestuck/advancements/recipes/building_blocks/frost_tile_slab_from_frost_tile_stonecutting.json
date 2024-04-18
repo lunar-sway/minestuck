@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:frost_tile_slab_from_frost_tile_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

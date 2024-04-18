@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:mind_aspect_fence_gate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

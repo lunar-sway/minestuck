@@ -53,16 +53,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.bugs.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:chocolate_beetle"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.bugs.title"
     }

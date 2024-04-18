@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:smooth_shade_stone_slab_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

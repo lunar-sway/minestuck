@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:item_magnet"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:fan"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

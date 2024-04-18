@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:redstone_clock"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

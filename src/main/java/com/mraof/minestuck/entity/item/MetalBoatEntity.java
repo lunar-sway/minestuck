@@ -6,8 +6,6 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,8 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
-import net.neoforged.neoforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
+public class MetalBoatEntity extends Boat implements IEntityWithComplexSpawn
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -140,12 +137,6 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
 		this.type = Type.fromString(additionalData.readUtf(16));
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	public enum Type implements CustomBoatItem.BoatProvider

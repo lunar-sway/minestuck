@@ -1,12 +1,16 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class LotusFlowerPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("lotus_flower");
+	
 	private final int entityID;
 	private final LotusFlowerEntity.Animation animation;
 	
@@ -22,13 +26,19 @@ public class LotusFlowerPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(entityID);
 		buffer.writeInt(animation.ordinal());
 	}
 	
-	public static LotusFlowerPacket decode(FriendlyByteBuf buffer)
+	public static LotusFlowerPacket read(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
 		LotusFlowerEntity.Animation animation = LotusFlowerEntity.Animation.values()[buffer.readInt()];

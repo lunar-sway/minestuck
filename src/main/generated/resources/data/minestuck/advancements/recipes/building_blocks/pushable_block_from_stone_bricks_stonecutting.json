@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:pushable_block_from_stone_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:trans_portalizer"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

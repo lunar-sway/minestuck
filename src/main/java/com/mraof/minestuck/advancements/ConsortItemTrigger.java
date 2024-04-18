@@ -1,16 +1,19 @@
 package com.mraof.minestuck.advancements;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
@@ -19,12 +22,9 @@ import java.util.Optional;
 public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigger.Instance>
 {
 	@Override
-	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
+	public Codec<Instance> codec()
 	{
-		String table = json.has("table") ? GsonHelper.getAsString(json, "table") : null;
-		Optional<ItemPredicate> item = ItemPredicate.fromJson(json.get("item"));
-		EnumConsort.MerchantType type = json.has("type") ? EnumConsort.MerchantType.getFromName(GsonHelper.getAsString(json, "type")) : null;
-		return new Instance(predicate, table, item, type);
+		return Instance.CODEC;
 	}
 	
 	public void trigger(ServerPlayer player, String table, ItemStack item, ConsortEntity consort)
@@ -32,46 +32,26 @@ public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigge
 		trigger(player, instance -> instance.test(table, item, consort.merchantType));
 	}
 	
-	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public static class Instance extends AbstractCriterionTriggerInstance
+	public record Instance(Optional<ContextAwarePredicate> player, Optional<String> table,
+						   Optional<ItemPredicate> item, Optional<EnumConsort.MerchantType> type) implements SimpleCriterionTrigger.SimpleInstance
 	{
-		@Nullable
-		private final String table;
-		private final Optional<ItemPredicate> item;
-		@Nullable
-		private final EnumConsort.MerchantType type;
-		
-		public Instance(Optional<ContextAwarePredicate> predicate, @Nullable String table, Optional<ItemPredicate> item, @Nullable EnumConsort.MerchantType type)
-		{
-			super(predicate);
-			this.table = table;
-			this.item = item;
-			this.type = type;
-		}
+		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
+				ExtraCodecs.strictOptionalField(Codec.STRING, "table").forGetter(Instance::table),
+				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "item").forGetter(Instance::item),
+				ExtraCodecs.strictOptionalField(EnumConsort.MerchantType.CODEC, "type").forGetter(Instance::type)
+		).apply(instance, Instance::new));
 		
 		public static Criterion<Instance> forType(EnumConsort.MerchantType type)
 		{
-			return MSCriteriaTriggers.CONSORT_ITEM.createCriterion(new Instance(Optional.empty(), null, Optional.empty(), type));
+			return MSCriteriaTriggers.CONSORT_ITEM.get().createCriterion(new Instance(Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(type)));
 		}
 		
 		public boolean test(String table, ItemStack item, EnumConsort.MerchantType type)
 		{
-			return (this.table == null || this.table.equals(table))
+			return (this.table.isEmpty() || this.table.get().equals(table))
 					&& (this.item.isEmpty() || this.item.get().matches(item))
-					&& (this.type == null || this.type == type);
-		}
-		
-		@Override
-		public JsonObject serializeToJson()
-		{
-			JsonObject json = super.serializeToJson();
-			if(table != null)
-				json.addProperty("table", table);
-			this.item.ifPresent(item -> json.add("item", item.serializeToJson()));
-			if(type != null)
-				json.addProperty("type", type.toString().toLowerCase());
-			
-			return json;
+					&& (this.type.isEmpty() || this.type.get() == type);
 		}
 	}
 }

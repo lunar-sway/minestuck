@@ -43,6 +43,5 @@
     "recipes": [
       "minestuck:sugar_from_cube"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

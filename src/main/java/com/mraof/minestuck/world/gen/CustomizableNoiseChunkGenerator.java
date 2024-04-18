@@ -35,11 +35,11 @@ public abstract class CustomizableNoiseChunkGenerator extends NoiseBasedChunkGen
 	 */
 	private void setWorldgenSettingsGetter(Function<Holder<Biome>, BiomeGenerationSettings> settingsGetter)
 	{
-		ObfuscationReflectionHelper.setPrivateValue(ChunkGenerator.class, this, settingsGetter, "f_223021_");
+		ObfuscationReflectionHelper.setPrivateValue(ChunkGenerator.class, this, settingsGetter, "generationSettingsGetter");
 		
 		@SuppressWarnings("deprecation")
 		Supplier<List<FeatureSorter.StepFeatureData>> featuresSupplier = Suppliers.memoize(() -> FeatureSorter.buildFeaturesPerStep(
 				List.copyOf(this.getBiomeSource().possibleBiomes()), biome -> getBiomeGenerationSettings(biome).features(), true));
-		ObfuscationReflectionHelper.setPrivateValue(ChunkGenerator.class, this, featuresSupplier, "f_223020_");
+		ObfuscationReflectionHelper.setPrivateValue(ChunkGenerator.class, this, featuresSupplier, "featuresPerStep");
 	}
 }

@@ -8,7 +8,6 @@ import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSTags;
@@ -40,6 +39,7 @@ import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.EntityItemPickupEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.Objects;
@@ -52,7 +52,7 @@ public final class ClientEditHandler
 	public static void onKeyPressed()
 	{
 		ClientEditPacket packet = ClientEditPacket.exit();
-		MSPacketHandler.sendToServer(packet);
+		PacketDistributor.SERVER.noArg().send(packet);
 	}
 	
 	@SubscribeEvent

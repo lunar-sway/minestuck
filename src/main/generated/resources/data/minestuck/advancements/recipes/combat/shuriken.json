@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:shuriken"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

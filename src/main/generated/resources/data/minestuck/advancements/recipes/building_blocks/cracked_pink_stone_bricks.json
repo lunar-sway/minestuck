@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cracked_pink_stone_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

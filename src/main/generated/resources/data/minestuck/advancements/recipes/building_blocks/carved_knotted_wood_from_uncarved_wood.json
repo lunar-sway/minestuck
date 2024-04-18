@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:carved_knotted_wood_from_uncarved_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

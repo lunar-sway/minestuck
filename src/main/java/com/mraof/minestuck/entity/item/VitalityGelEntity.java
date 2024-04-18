@@ -7,18 +7,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
-import net.neoforged.neoforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
-public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnData
+public class VitalityGelEntity extends Entity implements IEntityWithComplexSpawn
 {
 	public int cycle;
 	
@@ -247,11 +244,5 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	public void readSpawnData(FriendlyByteBuf data)
 	{
 		this.healAmount = data.readInt();
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

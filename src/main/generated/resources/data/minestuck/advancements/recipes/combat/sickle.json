@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:sickle"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

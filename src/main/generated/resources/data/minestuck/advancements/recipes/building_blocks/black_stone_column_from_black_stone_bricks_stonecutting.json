@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:black_stone_column_from_black_stone_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

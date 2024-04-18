@@ -1,12 +1,16 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.util.MagicEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 public class MagicAOEEffectPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("magic_aoe_effect");
+	
 	private final MagicEffect.AOEType type;
 	private final Vec3 minAOEBound, maxAOEBound;
 	
@@ -18,7 +22,13 @@ public class MagicAOEEffectPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(type.toInt());
 		buffer.writeDouble(minAOEBound.x);
@@ -29,7 +39,7 @@ public class MagicAOEEffectPacket implements MSPacket.PlayToClient
 		buffer.writeDouble(maxAOEBound.z);
 	}
 	
-	public static MagicAOEEffectPacket decode(FriendlyByteBuf buffer)
+	public static MagicAOEEffectPacket read(FriendlyByteBuf buffer)
 	{
 		MagicEffect.AOEType type = MagicEffect.AOEType.fromInt(buffer.readInt());
 		Vec3 minAOEBound = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());

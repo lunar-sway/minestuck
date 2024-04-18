@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:carved_planks_from_uncarved_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.data;
 
 import com.google.common.collect.ImmutableMap;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -10,12 +11,15 @@ import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 import java.util.Map;
 
 public class LandTypesDataPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("land_types_data");
+	
 	private final Map<ResourceKey<Level>, LandTypePair> types;
 	
 	public LandTypesDataPacket(Map<ResourceKey<Level>, LandTypePair> types)
@@ -24,7 +28,13 @@ public class LandTypesDataPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		for (Map.Entry<ResourceKey<Level>, LandTypePair> entry : types.entrySet())
 		{
@@ -34,7 +44,7 @@ public class LandTypesDataPacket implements MSPacket.PlayToClient
 		}
 	}
 	
-	public static LandTypesDataPacket decode(FriendlyByteBuf buffer)
+	public static LandTypesDataPacket read(FriendlyByteBuf buffer)
 	{
 		ImmutableMap.Builder<ResourceKey<Level>, LandTypePair> builder = new ImmutableMap.Builder<>();
 		

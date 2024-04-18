@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:treated_chipboard_fence"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:space_aspect_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

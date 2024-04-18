@@ -1,22 +1,19 @@
 package com.mraof.minestuck.api.alchemy.recipe;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.alchemy.recipe.WildcardGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Used to datagen a grist cost which accepts an amount of any grist type chosen by the player.
@@ -82,37 +79,6 @@ public final class WildcardGristCostBuilder
 	{
 		if(this.cost == 0)
 			throw new IllegalStateException("Must set the wildcard cost before building!");
-		recipeOutput.accept(new Result(id.withPrefix("grist_costs/"), ingredient, cost, priority));
-	}
-	
-	private record Result(ResourceLocation id, Ingredient ingredient, long cost, @Nullable Integer priority) implements FinishedRecipe
-	{
-		@Override
-		public void serializeRecipeData(JsonObject jsonObject)
-		{
-			jsonObject.add("ingredient", ingredient.toJson(false));
-			jsonObject.addProperty("grist_cost", cost);
-			if(priority != null)
-				jsonObject.addProperty("priority", priority);
-		}
-		
-		@Override
-		public ResourceLocation id()
-		{
-			return id;
-		}
-		
-		@Override
-		public RecipeSerializer<?> type()
-		{
-			return MSRecipeTypes.WILDCARD_GRIST_COST.get();
-		}
-		
-		@Nullable
-		@Override
-		public AdvancementHolder advancement()
-		{
-			return null;
-		}
+		recipeOutput.accept(id.withPrefix("grist_costs/"), new WildcardGristCost(ingredient, cost, Optional.ofNullable(priority)), null);
 	}
 }

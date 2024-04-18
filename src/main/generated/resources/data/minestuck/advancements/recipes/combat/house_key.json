@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:house_key"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

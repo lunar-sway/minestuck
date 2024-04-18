@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:red_sandstone_column"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:makeshift_claws_drawn"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

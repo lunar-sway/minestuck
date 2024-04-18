@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:polished_pink_stone_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

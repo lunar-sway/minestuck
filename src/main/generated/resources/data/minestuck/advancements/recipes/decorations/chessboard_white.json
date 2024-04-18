@@ -43,6 +43,5 @@
     "recipes": [
       "minestuck:chessboard_white"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

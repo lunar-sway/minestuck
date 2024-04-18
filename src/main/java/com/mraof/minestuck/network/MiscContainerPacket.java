@@ -1,11 +1,13 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.AtheneumMenu;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.common.NeoForge;
@@ -15,6 +17,8 @@ import org.apache.logging.log4j.Logger;
 
 public class MiscContainerPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("misc_container");
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final int index;
@@ -27,13 +31,19 @@ public class MiscContainerPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(index);
 		buffer.writeBoolean(editmode);
 	}
 	
-	public static MiscContainerPacket decode(FriendlyByteBuf buffer)
+	public static MiscContainerPacket read(FriendlyByteBuf buffer)
 	{
 		int index = buffer.readInt();
 		boolean editmode = buffer.readBoolean();

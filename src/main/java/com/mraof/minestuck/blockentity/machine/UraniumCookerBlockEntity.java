@@ -20,14 +20,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
-import javax.annotation.Nonnull;
+
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Optional;
@@ -158,20 +155,16 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		return false;
 	}
 	
-	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 2, 3));
-	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2));
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == Capabilities.ITEM_HANDLER && side != null)
-		{
-			return side == Direction.DOWN ? downHandler.cast() :
-					side == Direction.UP ? upHandler.cast() : sideHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.DOWN)
+			return new RangedWrapper(itemHandler, 2, 3);
+		if(side == Direction.UP)
+			return new RangedWrapper(itemHandler, 0, 1);
+		return new RangedWrapper(itemHandler, 1, 2);
 	}
 	
 	@Nullable

@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:scarred_shadewood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

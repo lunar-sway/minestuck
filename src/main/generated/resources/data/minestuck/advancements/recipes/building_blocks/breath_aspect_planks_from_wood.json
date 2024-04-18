@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:breath_aspect_planks_from_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

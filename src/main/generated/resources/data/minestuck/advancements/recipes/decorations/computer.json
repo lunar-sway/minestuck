@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:computer"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -4,13 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.AtheneumMenu;
 import com.mraof.minestuck.network.AtheneumPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -79,7 +79,7 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 			}
 			if(packet != null)
 			{
-				MSPacketHandler.INSTANCE.sendToServer(packet);
+				PacketDistributor.SERVER.noArg().send(packet);
 				return true;
 			}
 		}
@@ -101,7 +101,7 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 				
 				if(packet != null)
 				{
-					MSPacketHandler.INSTANCE.sendToServer(packet);
+					PacketDistributor.SERVER.noArg().send(packet);
 					return true;
 				}
 			}

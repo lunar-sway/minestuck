@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:brown_stone_column"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

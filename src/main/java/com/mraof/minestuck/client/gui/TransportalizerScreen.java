@@ -1,8 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TransportalizerPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -11,6 +9,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -83,11 +82,11 @@ public class TransportalizerScreen extends Screen
 		if(be.hasId()) {
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
 			TransportalizerPacket.DestId packet = new TransportalizerPacket.DestId(be.getBlockPos(), text);
-			MSPacketHandler.sendToServer(packet);
+			PacketDistributor.SERVER.noArg().send(packet);
 			minecraft.setScreen(null);
 		} else {
 			TransportalizerPacket.Id packet = new TransportalizerPacket.Id(be.getBlockPos(), text);
-			MSPacketHandler.sendToServer(packet);
+			PacketDistributor.SERVER.noArg().send(packet);
 			minecraft.setScreen(null);
 		}
 	}

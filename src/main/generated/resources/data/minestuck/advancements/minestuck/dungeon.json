@@ -19,16 +19,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.dungeon.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:frost_bricks"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.dungeon.title"
     }

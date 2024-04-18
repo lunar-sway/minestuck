@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:polished_chalk_from_chalk_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

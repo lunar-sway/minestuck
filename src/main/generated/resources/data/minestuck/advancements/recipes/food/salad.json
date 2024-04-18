@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:salad"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:black_stone"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

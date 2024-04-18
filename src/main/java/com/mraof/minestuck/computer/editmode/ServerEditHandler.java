@@ -14,7 +14,6 @@ import com.mraof.minestuck.entity.ServerCursorEntity;
 import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.GristCache;
@@ -71,6 +70,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -178,7 +178,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		editData.recover();    //TODO handle exception from failed recovery
 		
-		MSPacketHandler.sendToPlayer(new ServerEditPacket.Exit(), player);
+		PacketDistributor.PLAYER.with(player).send(new ServerEditPacket.Exit());
 		
 		editData.getDecoy().markedForDespawn = true;
 		
@@ -218,7 +218,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			data.locations().validateClosestSource(player, targetData);
 			
-			MSPacketHandler.sendToPlayer(new ServerEditPacket.Activate(), player);
+			PacketDistributor.PLAYER.with(player).send(new ServerEditPacket.Activate());
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
@@ -273,7 +273,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			MSPacketHandler.sendToPlayer(new ServerEditPacket.Activate(), editor);
+			PacketDistributor.PLAYER.with(editor).send(new ServerEditPacket.Activate());
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
@@ -281,7 +281,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			data.sendCacheLimitToEditor();
 		} else
 		{
-			MSPacketHandler.sendToPlayer(new ServerEditPacket.Exit(), editor);
+			PacketDistributor.PLAYER.with(editor).send(new ServerEditPacket.Exit());
 		}
 	}
 	
@@ -380,7 +380,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	{
 		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in RightClickBlock event on the server!"));
+			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
@@ -433,7 +433,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	{
 		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in LeftClickBlock event on the server!"));
+			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
@@ -570,7 +570,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			throw LOGGER.throwing(new IllegalStateException("Server Level is clientside in updateEditToolsServer()!"));
 		
 		
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTools Capability is empty in updateEditToolsServer()!")));
+		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 		
 		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();
@@ -639,7 +639,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	 */
 	public static void removeCursorEntity(ServerPlayer player, boolean rejected)
 	{
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTools Capability is empty in removeCursorEntity()!")));
+		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 		
 		if(cap.getEditCursorID() != null)
 		{

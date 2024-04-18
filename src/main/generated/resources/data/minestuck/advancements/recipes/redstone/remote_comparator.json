@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:remote_comparator"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

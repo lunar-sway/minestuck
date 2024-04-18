@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:chiseled_igneous_stone_from_polished_igneous_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:chalk_column"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

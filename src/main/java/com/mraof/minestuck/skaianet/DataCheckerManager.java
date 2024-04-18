@@ -1,7 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.network.DataCheckerPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
@@ -17,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +31,7 @@ public class DataCheckerManager
 		if(DataCheckerPermission.hasPermission(player))
 		{
 			CompoundTag data = createDataTag(player.server, SessionHandler.get(player.server));
-			MSPacketHandler.sendToPlayer(DataCheckerPacket.data(index, data), player);
+			PacketDistributor.PLAYER.with(player).send(DataCheckerPacket.data(index, data));
 		}
 	}
 	/**

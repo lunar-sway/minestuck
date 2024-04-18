@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -52,6 +53,12 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 	{
 		super(properties);
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false).setValue(SHUT_DOWN, false));
+	}
+	
+	@Override
+	protected MapCodec<AreaEffectBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Nullable

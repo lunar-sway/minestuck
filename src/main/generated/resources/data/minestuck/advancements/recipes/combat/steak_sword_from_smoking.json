@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:steak_sword_from_smoking"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

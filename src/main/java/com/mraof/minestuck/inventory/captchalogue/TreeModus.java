@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,7 +144,7 @@ public class TreeModus extends Modus
 		}
 		
 		if(id == 0)
-			MSCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
+			MSCriteriaTriggers.TREE_MODUS_ROOT.get().trigger(player, node.getSize());
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
 		markDirty();

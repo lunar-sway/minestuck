@@ -1,13 +1,17 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class StatStorerPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("stat_storer");
+	
 	private final StatStorerBlockEntity.ActiveType activeType;
 	private final BlockPos beBlockPos;
 	private final int divideValueBy;
@@ -20,14 +24,20 @@ public class StatStorerPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(activeType);
 		buffer.writeBlockPos(beBlockPos);
 		buffer.writeInt(divideValueBy);
 	}
 	
-	public static StatStorerPacket decode(FriendlyByteBuf buffer)
+	public static StatStorerPacket read(FriendlyByteBuf buffer)
 	{
 		StatStorerBlockEntity.ActiveType activeType = buffer.readEnum(StatStorerBlockEntity.ActiveType.class);
 		BlockPos beBlockPos = buffer.readBlockPos();

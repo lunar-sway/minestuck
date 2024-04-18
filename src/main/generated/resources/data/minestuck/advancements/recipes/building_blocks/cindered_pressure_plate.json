@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:cindered_pressure_plate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

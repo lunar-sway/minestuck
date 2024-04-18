@@ -4,13 +4,13 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ThemeSelectPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -174,7 +174,7 @@ public class ComputerThemeScreen extends Screen
 	{
 		if(!selectedTheme.id().equals(computer.getTheme()))
 		{
-			MSPacketHandler.sendToServer(ThemeSelectPacket.create(computer, selectedTheme.id()));
+			PacketDistributor.SERVER.noArg().send(ThemeSelectPacket.create(computer, selectedTheme.id()));
 		}
 		
 		onClose();
@@ -191,7 +191,7 @@ public class ComputerThemeScreen extends Screen
 		}
 		
 		@Override
-		public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt)
+		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt)
 		{
 		}
 	}

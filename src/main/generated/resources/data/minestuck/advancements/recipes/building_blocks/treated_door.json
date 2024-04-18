@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:treated_door"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

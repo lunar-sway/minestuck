@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:smooth_shade_stone_wall"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

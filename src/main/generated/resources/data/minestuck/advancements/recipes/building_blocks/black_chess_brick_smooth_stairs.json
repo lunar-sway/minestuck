@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:black_chess_brick_smooth_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

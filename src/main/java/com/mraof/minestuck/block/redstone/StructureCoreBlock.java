@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -44,6 +45,12 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	{
 		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(POWERED, false).setValue(ACTIVE, false));
+	}
+	
+	@Override
+	protected MapCodec<StructureCoreBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

@@ -26,9 +26,9 @@ import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.DispenserBehaviourUtil;
+import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
@@ -46,7 +46,6 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import software.bernie.geckolib.GeckoLib;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
@@ -61,18 +60,17 @@ public class Minestuck
 		return new ResourceLocation(MOD_ID, path);
 	}
 	
-	public Minestuck()
+	public Minestuck(IEventBus eventBus)
 	{
 		
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		eventBus.addListener(this::setup);
 		
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonSpec);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		GeckoLib.initialize();
+		GeckoLib.initialize(eventBus);
 		
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
@@ -80,7 +78,7 @@ public class Minestuck
 		MSBlockEntityTypes.REGISTER.register(eventBus);
 		MSEntityTypes.REGISTER.register(eventBus);
 		MSMenuTypes.REGISTER.register(eventBus);
-		GristTypes.register();
+		GristTypes.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
 		MSParticleType.REGISTER.register(eventBus);
 		MSSoundEvents.REGISTER.register(eventBus);
@@ -89,6 +87,8 @@ public class Minestuck
 		InterpreterTypes.REGISTER.register(eventBus);
 		MSRecipeTypes.RECIPE_TYPE_REGISTER.register(eventBus);
 		MSRecipeTypes.SERIALIZER_REGISTER.register(eventBus);
+		MSCriteriaTriggers.REGISTER.register(eventBus);
+		
 		MSLootTables.CONDITION_REGISTER.register(eventBus);
 		MSLootTables.FUNCTION_REGISTER.register(eventBus);
 		MSLootTables.ENTRY_REGISTER.register(eventBus);
@@ -112,6 +112,8 @@ public class Minestuck
 		
 		MSCreativeTabs.REGISTER.register(eventBus);
 		
+		MSCapabilities.ATTACHMENT_REGISTER.register(eventBus);
+		
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();
 	}
@@ -123,9 +125,6 @@ public class Minestuck
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		event.enqueueWork(this::mainThreadSetup);
-		
-		//register channel handler
-		MSPacketHandler.setupChannel();
 	}
 	
 	/**
@@ -134,7 +133,6 @@ public class Minestuck
 	 */
 	private void mainThreadSetup()
 	{
-		MSCriteriaTriggers.register();
 		MSSuggestionProviders.register();
 		
 		KindAbstratusList.registerTypes();

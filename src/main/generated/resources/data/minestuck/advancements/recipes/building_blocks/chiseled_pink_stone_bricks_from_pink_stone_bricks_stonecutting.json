@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:chiseled_pink_stone_bricks_from_pink_stone_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

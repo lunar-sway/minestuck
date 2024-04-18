@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:chiseled_cast_iron_from_cast_iron_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

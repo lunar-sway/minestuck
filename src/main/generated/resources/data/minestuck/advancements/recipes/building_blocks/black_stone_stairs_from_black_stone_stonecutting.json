@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:black_stone_stairs_from_black_stone_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

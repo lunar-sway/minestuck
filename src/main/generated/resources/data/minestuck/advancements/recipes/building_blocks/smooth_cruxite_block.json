@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:smooth_cruxite_block"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:frost_hanging_sign"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

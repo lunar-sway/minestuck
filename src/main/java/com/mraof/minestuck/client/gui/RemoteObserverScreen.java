@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.RemoteObserverPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -12,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Optional;
 
@@ -118,7 +118,7 @@ public class RemoteObserverScreen extends Screen
 			if(isValidAndObservableEntityType)
 				entityType = attemptedEntityType.get();
 			
-			MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, observingRange, be.getBlockPos(), entityType));
+			PacketDistributor.SERVER.noArg().send(new RemoteObserverPacket(activeType, observingRange, be.getBlockPos(), entityType));
 			onClose();
 		} else
 		{

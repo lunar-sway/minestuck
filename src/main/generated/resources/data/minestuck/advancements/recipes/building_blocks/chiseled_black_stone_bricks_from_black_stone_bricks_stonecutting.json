@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:chiseled_black_stone_bricks_from_black_stone_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

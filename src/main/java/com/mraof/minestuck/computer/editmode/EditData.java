@@ -1,7 +1,6 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.network.data.GristCachePacket;
@@ -24,6 +23,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -93,18 +93,18 @@ public class EditData
 	public void sendGristCacheToEditor()
 	{
 		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), true);
-		MSPacketHandler.sendToPlayer(packet, this.getEditor());
+		PacketDistributor.PLAYER.with(this.getEditor()).send(packet);
 	}
 	
 	public void sendCacheLimitToEditor()
 	{
 		long limit = PlayerSavedData.getData(this.getTarget(), player.server).getEcheladder().getGristCapacity();
-		MSPacketHandler.sendToPlayer(new EditmodeCacheLimitPacket(limit), this.getEditor());
+		PacketDistributor.PLAYER.with(this.getEditor()).send(new EditmodeCacheLimitPacket(limit));
 	}
 	
 	public void sendGivenItemsToEditor()
 	{
-		MSPacketHandler.sendToPlayer(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())), getEditor());
+		PacketDistributor.PLAYER.with(getEditor()).send(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())));
 	}
 	
 	public CompoundTag writeRecoveryData()

@@ -15,7 +15,7 @@ import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
-import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -75,31 +75,81 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	@Override
 	public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper)
 	{
-		AdvancementHolder root = Advancement.Builder.advancement().display(MSItems.RAW_CRUXITE.get(), Component.translatable(title(ROOT)), Component.translatable(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), FrameType.TASK, false, false, false).addCriterion("raw_cruxite", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.RAW_CRUXITE.get())).save(saver, save_loc(ROOT));
-		AdvancementHolder searching = Advancement.Builder.advancement().parent(root).display(Items.COMPASS, Component.translatable(title(SEARCHING)), Component.translatable(desc(SEARCHING)), null, FrameType.TASK, true, true, false).addCriterion("possess_scanner", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.TEMPLE_SCANNER.get())).save(saver, save_loc(SEARCHING));
-		AdvancementHolder longTimeComing = Advancement.Builder.advancement().parent(root).display(MSItems.SBURB_CODE.get(), Component.translatable(title(LONG_TIME_COMING)), Component.translatable(desc(LONG_TIME_COMING)), null, FrameType.TASK, true, true, false).addCriterion("possess_code", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.SBURB_CODE.get())).save(saver, save_loc(LONG_TIME_COMING));
-		AdvancementHolder connect = Advancement.Builder.advancement().parent(root).display(MSItems.CLIENT_DISK.get(), Component.translatable(title(CONNECT)), Component.translatable(desc(CONNECT)), null, FrameType.TASK, true, true, false).addCriterion("connection", EventTrigger.Instance.sburbConnection()).save(saver, save_loc(CONNECT));
-		AdvancementHolder entry = Advancement.Builder.advancement().parent(connect).display(ColorHandler.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE.get())), Component.translatable(title(ENTRY)), Component.translatable(desc(ENTRY)), null, FrameType.TASK, true, true, false).addCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).save(saver, save_loc(ENTRY));
-		AdvancementHolder alchemy = Advancement.Builder.advancement().parent(entry).display(MSItems.CAPTCHA_CARD.get(), Component.translatable(title(ALCHEMY)), Component.translatable(desc(ALCHEMY)), null, FrameType.TASK, true, true, false).addCriterion("use_punch_designix", PunchDesignixTrigger.Instance.any()).save(saver, save_loc(ALCHEMY));
-		AdvancementHolder newModus = Advancement.Builder.advancement().parent(alchemy).display(MSItems.HASHMAP_MODUS_CARD.get(), Component.translatable(title(NEW_MODUS)), Component.translatable(desc(NEW_MODUS)), null, FrameType.TASK, true, true, false).addCriterion("change_modus_type", ChangeModusTrigger.Instance.any()).save(saver, save_loc(NEW_MODUS));
-		AdvancementHolder allModi = changeModusCriteria(Advancement.Builder.advancement().parent(newModus).display(MSItems.QUEUESTACK_MODUS_CARD.get(), Component.translatable(title(ALL_MODI)), Component.translatable(desc(ALL_MODI)), null, FrameType.GOAL, true, true, false).requirements(AdvancementRequirements.Strategy.AND)).save(saver, save_loc(ALL_MODI));
-		AdvancementHolder goldSeeds = Advancement.Builder.advancement().parent(alchemy).display(MSBlocks.GOLD_SEEDS.get(), Component.translatable(title(GOLD_SEEDS)), Component.translatable(desc(GOLD_SEEDS)), null, FrameType.TASK, true, true, false).addCriterion("plant_gold_seeds", ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(MSBlocks.GOLD_SEEDS.get())).save(saver, save_loc(GOLD_SEEDS));
-		AdvancementHolder melonOverload = Advancement.Builder.advancement().parent(alchemy).display(MSItems.MELONSBANE.get(), Component.translatable(title(MELON_OVERLOAD)), Component.translatable(desc(MELON_OVERLOAD)), null, FrameType.TASK, true, true, true).addCriterion("melon_overload", EventTrigger.Instance.melonOverload()).save(saver, save_loc(MELON_OVERLOAD));
-		AdvancementHolder treeModus = Advancement.Builder.advancement().parent(newModus).display(MSItems.TREE_MODUS_CARD.get(), Component.translatable(title(TREE_MODUS)), Component.translatable(desc(TREE_MODUS)), null, FrameType.TASK, true, true, false).addCriterion("tree_root", TreeModusRootTrigger.Instance.count(MinMaxBounds.Ints.atLeast(16))).save(saver, save_loc(TREE_MODUS));
-		AdvancementHolder killOgre = Advancement.Builder.advancement().parent(entry).display(MSItems.POGO_HAMMER.get(), Component.translatable(title(KILL_OGRE)), Component.translatable(desc(KILL_OGRE)), null, FrameType.TASK, true, true, false).addCriterion("kill_ogre", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(MSEntityTypes.OGRE.get()))).save(saver, save_loc(KILL_OGRE));
-		AdvancementHolder returnNode = Advancement.Builder.advancement().parent(entry).display(Items.RED_BED, Component.translatable(title(RETURN_NODE)), Component.translatable(desc(RETURN_NODE)), null, FrameType.TASK, true, true, false).addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(saver, save_loc(RETURN_NODE));
-		AdvancementHolder dungeon = Advancement.Builder.advancement().parent(returnNode).display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, FrameType.TASK, true, true, false).addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.IMP_DUNGEON))).save(saver, save_loc(DUNGEON));
-		AdvancementHolder commune = Advancement.Builder.advancement().parent(entry).display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, FrameType.TASK, true, true, false).requirements(AdvancementRequirements.Strategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.CONSORT_VILLAGE))).save(saver, save_loc(COMMUNE));
-		AdvancementHolder frenchFry = Advancement.Builder.advancement().parent(commune).display(MSItems.FRENCH_FRY.get(), Component.translatable(title(FRENCH_FRY)), Component.translatable(desc(FRENCH_FRY)), null, FrameType.TASK, true, true, false).addCriterion("has_french_fry", ConsumeItemTrigger.TriggerInstance.usedItem(MSItems.FRENCH_FRY.get())).save(saver, save_loc(FRENCH_FRY));
-		AdvancementHolder bugs = consumeBugCriteria(Advancement.Builder.advancement().parent(commune).display(MSItems.CHOCOLATE_BEETLE.get(), Component.translatable(title(BUGS)), Component.translatable(desc(BUGS)), null, FrameType.TASK, true, true, false).requirements(AdvancementRequirements.Strategy.OR)).save(saver, save_loc(BUGS));
-		AdvancementHolder shadyBuyer = Advancement.Builder.advancement().parent(commune).display(MSItems.ROCK_COOKIE.get(), Component.translatable(title(SHADY_BUYER)), Component.translatable(desc(SHADY_BUYER)), null, FrameType.TASK, true, true, false).addCriterion("buy_item", ConsortItemTrigger.Instance.forType(EnumConsort.MerchantType.SHADY)).save(saver, save_loc(SHADY_BUYER));
-		AdvancementHolder firstStep = Advancement.Builder.advancement().parent(root).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1), Component.translatable(title(FIRST_STEP)), Component.translatable(desc(FIRST_STEP)), null, FrameType.TASK, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(1))).save(saver, save_loc(FIRST_STEP));
-		AdvancementHolder doubleDigits = Advancement.Builder.advancement().parent(firstStep).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 100), Component.translatable(title(DOUBLE_DIGITS)), Component.translatable(desc(DOUBLE_DIGITS)), null, FrameType.TASK, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(10))).save(saver, save_loc(DOUBLE_DIGITS));
-		AdvancementHolder halfwayPoint = Advancement.Builder.advancement().parent(doubleDigits).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1000), Component.translatable(title(HALFWAY_POINT)), Component.translatable(desc(HALFWAY_POINT)), null, FrameType.TASK, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(25))).save(saver, save_loc(HALFWAY_POINT));
-		AdvancementHolder bigOneMil = Advancement.Builder.advancement().parent(halfwayPoint).display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1_000_000), Component.translatable(title(BIG_ONE_MIL)), Component.translatable(desc(BIG_ONE_MIL)), null, FrameType.GOAL, true, true, false).addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(44))).save(saver, save_loc(BIG_ONE_MIL));
-		AdvancementHolder intellibeam = Advancement.Builder.advancement().parent(alchemy).display(MSItems.INTELLIBEAM_LASERSTATION.get(), Component.translatable(title(INTELLIBEAM)), Component.translatable(desc(INTELLIBEAM)), null, FrameType.TASK, true, true, false).addCriterion("use_intellibeam", IntellibeamLaserstationTrigger.Instance.any()).save(saver, save_loc(INTELLIBEAM));
-		AdvancementHolder strongWeapon = Advancement.Builder.advancement().parent(alchemy).display(MSItems.CALEDFWLCH.get(), Component.translatable(title(LEGENDARY_WEAPON)), Component.translatable(desc(LEGENDARY_WEAPON)), null, FrameType.TASK, true, true, false).addCriterion("get_max_tier_weapon", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(MSTags.Items.LEGENDARY).build())).save(saver, save_loc(LEGENDARY_WEAPON));
-		AdvancementHolder buyOutShop = Advancement.Builder.advancement().parent(commune).display(MSItems.CONE_OF_FLIES.get(), Component.translatable(title(BUY_OUT_SHOP)), Component.translatable(desc(BUY_OUT_SHOP)), null, FrameType.TASK, true, true, false).addCriterion("buy_everything", EventTrigger.Instance.buyOutShop()).save(saver, save_loc(BUY_OUT_SHOP));
+		AdvancementHolder root = Advancement.Builder.advancement()
+				.display(MSItems.RAW_CRUXITE.get(), Component.translatable(title(ROOT)), Component.translatable(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), AdvancementType.TASK, false, false, false)
+				.addCriterion("raw_cruxite", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.RAW_CRUXITE.get())).save(saver, save_loc(ROOT));
+		AdvancementHolder searching = Advancement.Builder.advancement().parent(root)
+				.display(Items.COMPASS, Component.translatable(title(SEARCHING)), Component.translatable(desc(SEARCHING)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("possess_scanner", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.TEMPLE_SCANNER.get())).save(saver, save_loc(SEARCHING));
+		AdvancementHolder longTimeComing = Advancement.Builder.advancement().parent(root)
+				.display(MSItems.SBURB_CODE.get(), Component.translatable(title(LONG_TIME_COMING)), Component.translatable(desc(LONG_TIME_COMING)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("possess_code", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.SBURB_CODE.get())).save(saver, save_loc(LONG_TIME_COMING));
+		AdvancementHolder connect = Advancement.Builder.advancement().parent(root)
+				.display(MSItems.CLIENT_DISK.get(), Component.translatable(title(CONNECT)), Component.translatable(desc(CONNECT)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("connection", EventTrigger.Instance.sburbConnection()).save(saver, save_loc(CONNECT));
+		AdvancementHolder entry = Advancement.Builder.advancement().parent(connect)
+				.display(ColorHandler.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE.get())), Component.translatable(title(ENTRY)), Component.translatable(desc(ENTRY)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).save(saver, save_loc(ENTRY));
+		AdvancementHolder alchemy = Advancement.Builder.advancement().parent(entry)
+				.display(MSItems.CAPTCHA_CARD.get(), Component.translatable(title(ALCHEMY)), Component.translatable(desc(ALCHEMY)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("use_punch_designix", PunchDesignixTrigger.Instance.any()).save(saver, save_loc(ALCHEMY));
+		AdvancementHolder newModus = Advancement.Builder.advancement().parent(alchemy)
+				.display(MSItems.HASHMAP_MODUS_CARD.get(), Component.translatable(title(NEW_MODUS)), Component.translatable(desc(NEW_MODUS)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("change_modus_type", ChangeModusTrigger.Instance.any()).save(saver, save_loc(NEW_MODUS));
+		AdvancementHolder allModi = changeModusCriteria(Advancement.Builder.advancement().parent(newModus)
+				.display(MSItems.QUEUESTACK_MODUS_CARD.get(), Component.translatable(title(ALL_MODI)), Component.translatable(desc(ALL_MODI)), null, AdvancementType.GOAL, true, true, false)
+				.requirements(AdvancementRequirements.Strategy.AND)).save(saver, save_loc(ALL_MODI));
+		AdvancementHolder goldSeeds = Advancement.Builder.advancement().parent(alchemy)
+				.display(MSBlocks.GOLD_SEEDS.get(), Component.translatable(title(GOLD_SEEDS)), Component.translatable(desc(GOLD_SEEDS)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("plant_gold_seeds", ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(MSBlocks.GOLD_SEEDS.get())).save(saver, save_loc(GOLD_SEEDS));
+		AdvancementHolder melonOverload = Advancement.Builder.advancement().parent(alchemy)
+				.display(MSItems.MELONSBANE.get(), Component.translatable(title(MELON_OVERLOAD)), Component.translatable(desc(MELON_OVERLOAD)), null, AdvancementType.TASK, true, true, true)
+				.addCriterion("melon_overload", EventTrigger.Instance.melonOverload()).save(saver, save_loc(MELON_OVERLOAD));
+		AdvancementHolder treeModus = Advancement.Builder.advancement().parent(newModus)
+				.display(MSItems.TREE_MODUS_CARD.get(), Component.translatable(title(TREE_MODUS)), Component.translatable(desc(TREE_MODUS)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("tree_root", TreeModusRootTrigger.Instance.count(MinMaxBounds.Ints.atLeast(16))).save(saver, save_loc(TREE_MODUS));
+		AdvancementHolder killOgre = Advancement.Builder.advancement().parent(entry)
+				.display(MSItems.POGO_HAMMER.get(), Component.translatable(title(KILL_OGRE)), Component.translatable(desc(KILL_OGRE)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("kill_ogre", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(MSEntityTypes.OGRE.get()))).save(saver, save_loc(KILL_OGRE));
+		AdvancementHolder returnNode = Advancement.Builder.advancement().parent(entry)
+				.display(Items.RED_BED, Component.translatable(title(RETURN_NODE)), Component.translatable(desc(RETURN_NODE)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(saver, save_loc(RETURN_NODE));
+		AdvancementHolder dungeon = Advancement.Builder.advancement().parent(returnNode)
+				.display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.IMP_DUNGEON))).save(saver, save_loc(DUNGEON));
+		AdvancementHolder commune = Advancement.Builder.advancement().parent(entry)
+				.display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, AdvancementType.TASK, true, true, false)
+				.requirements(AdvancementRequirements.Strategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.CONSORT_VILLAGE))).save(saver, save_loc(COMMUNE));
+		AdvancementHolder frenchFry = Advancement.Builder.advancement().parent(commune)
+				.display(MSItems.FRENCH_FRY.get(), Component.translatable(title(FRENCH_FRY)), Component.translatable(desc(FRENCH_FRY)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("has_french_fry", ConsumeItemTrigger.TriggerInstance.usedItem(MSItems.FRENCH_FRY.get())).save(saver, save_loc(FRENCH_FRY));
+		AdvancementHolder bugs = consumeBugCriteria(Advancement.Builder.advancement()
+				.parent(commune).display(MSItems.CHOCOLATE_BEETLE.get(), Component.translatable(title(BUGS)), Component.translatable(desc(BUGS)), null, AdvancementType.TASK, true, true, false)
+				.requirements(AdvancementRequirements.Strategy.OR)).save(saver, save_loc(BUGS));
+		AdvancementHolder shadyBuyer = Advancement.Builder.advancement().parent(commune)
+				.display(MSItems.ROCK_COOKIE.get(), Component.translatable(title(SHADY_BUYER)), Component.translatable(desc(SHADY_BUYER)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("buy_item", ConsortItemTrigger.Instance.forType(EnumConsort.MerchantType.SHADY)).save(saver, save_loc(SHADY_BUYER));
+		AdvancementHolder firstStep = Advancement.Builder.advancement().parent(root)
+				.display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1), Component.translatable(title(FIRST_STEP)), Component.translatable(desc(FIRST_STEP)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(1))).save(saver, save_loc(FIRST_STEP));
+		AdvancementHolder doubleDigits = Advancement.Builder.advancement().parent(firstStep)
+				.display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 100), Component.translatable(title(DOUBLE_DIGITS)), Component.translatable(desc(DOUBLE_DIGITS)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(10))).save(saver, save_loc(DOUBLE_DIGITS));
+		AdvancementHolder halfwayPoint = Advancement.Builder.advancement().parent(doubleDigits)
+				.display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1000), Component.translatable(title(HALFWAY_POINT)), Component.translatable(desc(HALFWAY_POINT)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(25))).save(saver, save_loc(HALFWAY_POINT));
+		AdvancementHolder bigOneMil = Advancement.Builder.advancement().parent(halfwayPoint)
+				.display(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1_000_000), Component.translatable(title(BIG_ONE_MIL)), Component.translatable(desc(BIG_ONE_MIL)), null, AdvancementType.GOAL, true, true, false)
+				.addCriterion("reach_rung", EcheladderTrigger.Instance.rung(MinMaxBounds.Ints.atLeast(44))).save(saver, save_loc(BIG_ONE_MIL));
+		AdvancementHolder intellibeam = Advancement.Builder.advancement().parent(alchemy)
+				.display(MSItems.INTELLIBEAM_LASERSTATION.get(), Component.translatable(title(INTELLIBEAM)), Component.translatable(desc(INTELLIBEAM)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("use_intellibeam", IntellibeamLaserstationTrigger.Instance.any()).save(saver, save_loc(INTELLIBEAM));
+		AdvancementHolder strongWeapon = Advancement.Builder.advancement().parent(alchemy)
+				.display(MSItems.CALEDFWLCH.get(), Component.translatable(title(LEGENDARY_WEAPON)), Component.translatable(desc(LEGENDARY_WEAPON)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("get_max_tier_weapon", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(MSTags.Items.LEGENDARY).build())).save(saver, save_loc(LEGENDARY_WEAPON));
+		AdvancementHolder buyOutShop = Advancement.Builder.advancement().parent(commune)
+				.display(MSItems.CONE_OF_FLIES.get(), Component.translatable(title(BUY_OUT_SHOP)), Component.translatable(desc(BUY_OUT_SHOP)), null, AdvancementType.TASK, true, true, false)
+				.addCriterion("buy_everything", EventTrigger.Instance.buyOutShop()).save(saver, save_loc(BUY_OUT_SHOP));
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)

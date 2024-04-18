@@ -7,8 +7,6 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -23,7 +21,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 public class ReturningProjectileEntity extends ThrowableItemProjectile
 {
@@ -146,12 +143,6 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 		compound.putInt("maxTick", maxTick);
 		compound.putInt("inBlockTicks", inBlockTicks);
 		compound.putBoolean("noBlockCollision", noBlockCollision);
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.LotusFlowerPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,8 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -26,8 +23,8 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
-import net.neoforged.neoforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -47,7 +44,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntityAdditionalSpawnData
+public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntityWithComplexSpawn
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -203,7 +200,7 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	{
 		this.animationType = animation;
 		LotusFlowerPacket packet = LotusFlowerPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-		MSPacketHandler.sendToTracking(packet, this);
+		PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
 	}
 	
 	/**
@@ -257,12 +254,6 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
 		animationType = Animation.values()[additionalData.readInt()];
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	public void setAnimationFromPacket(Animation newAnimation)

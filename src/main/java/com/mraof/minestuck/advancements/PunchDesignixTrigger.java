@@ -1,10 +1,15 @@
 package com.mraof.minestuck.advancements;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -15,12 +20,9 @@ import java.util.Optional;
 public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTrigger.Instance>
 {
 	@Override
-	protected Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> predicate, DeserializationContext context)
+	public Codec<Instance> codec()
 	{
-		Optional<ItemPredicate> input = ItemPredicate.fromJson(json.get("input"));
-		Optional<ItemPredicate> target = ItemPredicate.fromJson(json.get("target"));
-		Optional<ItemPredicate> output = ItemPredicate.fromJson(json.get("output"));
-		return new Instance(predicate, input, target, output);
+		return Instance.CODEC;
 	}
 	
 	public void trigger(ServerPlayer player, ItemStack input, ItemStack target, ItemStack result)
@@ -29,19 +31,15 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 	}
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public static class Instance extends AbstractCriterionTriggerInstance
+	public record Instance(Optional<ContextAwarePredicate> player, Optional<ItemPredicate> input,
+						   Optional<ItemPredicate> target, Optional<ItemPredicate> output) implements SimpleCriterionTrigger.SimpleInstance
 	{
-		private final Optional<ItemPredicate> input;
-		private final Optional<ItemPredicate> target;
-		private final Optional<ItemPredicate> output;
-		
-		public Instance(Optional<ContextAwarePredicate> predicate, Optional<ItemPredicate> input, Optional<ItemPredicate> target, Optional<ItemPredicate> output)
-		{
-			super(predicate);
-			this.input = input;
-			this.target = target;
-			this.output = output;
-		}
+		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
+				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "input").forGetter(Instance::input),
+				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "target").forGetter(Instance::target),
+				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "output").forGetter(Instance::output)
+		).apply(instance, Instance::new));
 		
 		public static Criterion<Instance> any()
 		{
@@ -50,7 +48,7 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 		
 		public static Criterion<Instance> create(Optional<ItemPredicate> input, Optional<ItemPredicate> target, Optional<ItemPredicate> output)
 		{
-			return MSCriteriaTriggers.PUNCH_DESIGNIX.createCriterion(new Instance(Optional.empty(), input, target, output));
+			return MSCriteriaTriggers.PUNCH_DESIGNIX.get().createCriterion(new Instance(Optional.empty(), input, target, output));
 		}
 		
 		public boolean test(ItemStack input, ItemStack target, ItemStack output)
@@ -58,17 +56,6 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 			return (this.input.isEmpty() || this.input.get().matches(input))
 					&& (this.target.isEmpty() || this.target.get().matches(target))
 					&& (this.output.isEmpty() || this.output.get().matches(output));
-		}
-		
-		@Override
-		public JsonObject serializeToJson()
-		{
-			JsonObject json = super.serializeToJson();
-			this.input.ifPresent(input -> json.add("input", input.serializeToJson()));
-			this.target.ifPresent(target -> json.add("target", target.serializeToJson()));
-			this.output.ifPresent(output -> json.add("output", output.serializeToJson()));
-			
-			return json;
 		}
 	}
 }

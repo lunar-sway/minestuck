@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SummonerPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -13,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
@@ -116,7 +116,7 @@ public class SummonerScreen extends Screen
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
 		if(attemptedEntityType.isPresent())
 		{
-			MSPacketHandler.sendToServer(new SummonerPacket(isUntriggerable, summonRange, be.getBlockPos(), attemptedEntityType.get()));
+			PacketDistributor.SERVER.noArg().send(new SummonerPacket(isUntriggerable, summonRange, be.getBlockPos(), attemptedEntityType.get()));
 			onClose();
 		} else
 		{

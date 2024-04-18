@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:polished_igneous_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

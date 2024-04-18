@@ -28,6 +28,5 @@
     "recipes": [
       "minestuck:iron_cane"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

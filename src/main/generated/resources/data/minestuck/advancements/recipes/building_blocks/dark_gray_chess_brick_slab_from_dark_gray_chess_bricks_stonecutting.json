@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:dark_gray_chess_brick_slab_from_dark_gray_chess_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

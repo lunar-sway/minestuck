@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:uranium_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

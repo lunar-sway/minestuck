@@ -47,7 +47,7 @@ public final class SourceGristCost implements GristCostRecipe
 	private final GeneratedGristCostCache cache = new GeneratedGristCostCache();
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	private SourceGristCost(Ingredient ingredient, List<Source> sources, float multiplier, ImmutableGristSet addedCost, Optional<Integer> priority)
+	public SourceGristCost(Ingredient ingredient, List<Source> sources, float multiplier, ImmutableGristSet addedCost, Optional<Integer> priority)
 	{
 		this.ingredient = ingredient;
 		this.sources = sources;
@@ -148,8 +148,9 @@ public final class SourceGristCost implements GristCostRecipe
 		}
 	}
 	
-	private sealed interface Source
+	public sealed interface Source
 	{
+		//todo handle resource location parse errors
 		Codec<Source> CODEC = Codec.STRING.xmap(
 				name -> name.startsWith("#")
 						? new TagSource(new ResourceLocation(name.substring(1)))
@@ -161,13 +162,11 @@ public final class SourceGristCost implements GristCostRecipe
 		GristSet getCostFor(GeneratorCallback callback);
 	}
 	
-	private static final class ItemSource implements Source
+	public record ItemSource(Item item) implements Source
 	{
-		final Item item;
-		
 		private ItemSource(ResourceLocation name)
 		{
-			this.item = BuiltInRegistries.ITEM.get(name);
+			this(BuiltInRegistries.ITEM.get(name));
 		}
 		
 		@Override
@@ -183,18 +182,11 @@ public final class SourceGristCost implements GristCostRecipe
 		}
 	}
 	
-	public static String itemString(Item item)
+	public record TagSource(TagKey<Item> tag) implements Source
 	{
-		return Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item)).toString();
-	}
-	
-	private static final class TagSource implements Source
-	{
-		final TagKey<Item> tag;
-		
 		private TagSource(ResourceLocation name)
 		{
-			this.tag = TagKey.create(Registries.ITEM, name);
+			this(TagKey.create(Registries.ITEM, name));
 		}
 		
 		@Override
@@ -216,10 +208,5 @@ public final class SourceGristCost implements GristCostRecipe
 		{
 			return "#" + this.tag.location();
 		}
-	}
-	
-	public static String tagString(TagKey<Item> tag)
-	{
-		return "#" + tag.location();
 	}
 }

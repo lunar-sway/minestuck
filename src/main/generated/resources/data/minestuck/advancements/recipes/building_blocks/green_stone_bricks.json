@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:green_stone_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

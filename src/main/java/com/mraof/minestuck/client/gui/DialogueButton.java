@@ -59,15 +59,6 @@ public class DialogueButton extends Button
 	}
 	
 	@Override
-	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
-	{
-		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-		
-		//occurs after renderWidget where the value is checked
-		wasHoveredOrFocused = isMouseOver(pMouseX, pMouseY) || isFocused();
-	}
-	
-	@Override
 	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 	{
 		//overrides setting of boolean from AbstractWidget which uses normal height value
@@ -101,5 +92,7 @@ public class DialogueButton extends Button
 			guiGraphics.drawString(mc.font, messageLines.get(i), textX , pY, getFGColor(), false);
 			pY += TEXT_SPACING;
 		}
+		
+		wasHoveredOrFocused = isMouseOver(mouseX, mouseY) || isFocused();
 	}
 }

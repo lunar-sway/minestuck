@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:chiseled_frost_tile"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

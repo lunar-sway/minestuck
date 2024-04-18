@@ -9,16 +9,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.shady_buyer.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:rock_cookie"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.shady_buyer.title"
     }

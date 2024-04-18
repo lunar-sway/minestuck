@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:magmatic_polished_igneous_bricks_from_magma"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

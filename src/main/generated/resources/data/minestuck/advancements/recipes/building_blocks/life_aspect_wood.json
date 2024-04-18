@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:life_aspect_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

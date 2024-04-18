@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:pumice_tiles"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

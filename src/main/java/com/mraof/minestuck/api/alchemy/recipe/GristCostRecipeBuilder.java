@@ -1,29 +1,22 @@
 package com.mraof.minestuck.api.alchemy.recipe;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
+import com.mraof.minestuck.alchemy.recipe.GristCost;
 import com.mraof.minestuck.api.alchemy.DefaultImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -33,8 +26,6 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public final class GristCostRecipeBuilder
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	@Nullable
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
@@ -94,37 +85,6 @@ public final class GristCostRecipeBuilder
 	
 	public void build(RecipeOutput recipeOutput, ResourceLocation id)
 	{
-		recipeOutput.accept(new Result(id.withPrefix("grist_costs/"), ingredient, new DefaultImmutableGristSet(costBuilder), priority));
-	}
-	
-	private record Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, @Nullable Integer priority) implements FinishedRecipe
-	{
-		@Override
-		public void serializeRecipeData(JsonObject jsonObject)
-		{
-			jsonObject.add("ingredient", ingredient.toJson(false));
-			jsonObject.add("grist_cost", ImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
-			if(priority != null)
-				jsonObject.addProperty("priority", priority);
-		}
-		
-		@Override
-		public ResourceLocation id()
-		{
-			return id;
-		}
-		
-		@Override
-		public RecipeSerializer<?> type()
-		{
-			return MSRecipeTypes.GRIST_COST.get();
-		}
-		
-		@Nullable
-		@Override
-		public AdvancementHolder advancement()
-		{
-			return null;
-		}
+		recipeOutput.accept(id.withPrefix("grist_costs/"), new GristCost(ingredient, new DefaultImmutableGristSet(costBuilder), Optional.ofNullable(priority)), null);
 	}
 }

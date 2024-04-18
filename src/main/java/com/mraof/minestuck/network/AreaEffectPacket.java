@@ -1,11 +1,13 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import com.mraof.minestuck.effects.MSEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.block.Block;
@@ -15,6 +17,8 @@ import java.util.Objects;
 
 public class AreaEffectPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("area_effect");
+	
 	private final MobEffect effect;
 	private final int effectAmp;
 	private final boolean isAllMobs;
@@ -33,7 +37,13 @@ public class AreaEffectPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeId(BuiltInRegistries.MOB_EFFECT, effect);
 		buffer.writeInt(effectAmp);
@@ -43,7 +53,7 @@ public class AreaEffectPacket implements MSPacket.PlayToServer
 		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static AreaEffectPacket decode(FriendlyByteBuf buffer)
+	public static AreaEffectPacket read(FriendlyByteBuf buffer)
 	{
 		MobEffect effect = Objects.requireNonNullElse(buffer.readById(BuiltInRegistries.MOB_EFFECT), MSEffects.CREATIVE_SHOCK.get());
 		

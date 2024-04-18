@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -14,6 +13,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +54,7 @@ public class SkaiaClient
 		boolean b = playerStateMap.get(computer.ownerId) != null;
 		if(!b)
 		{
-			MSPacketHandler.sendToServer(new SkaianetInfoPacket.Request(computer.ownerId));
+			PacketDistributor.SERVER.noArg().send(new SkaianetInfoPacket.Request(computer.ownerId));
 			be = computer;
 		}
 		return b;

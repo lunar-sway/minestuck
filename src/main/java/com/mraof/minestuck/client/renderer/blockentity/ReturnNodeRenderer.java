@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -79,6 +80,7 @@ public class ReturnNodeRenderer implements BlockEntityRenderer<ReturnNodeBlockEn
 	@Override
 	public AABB getRenderBoundingBox(ReturnNodeBlockEntity blockEntity)
 	{
-		return new AABB(blockEntity.getBlockPos().offset(-1, 0, -1), blockEntity.getBlockPos().offset(1, 1, 1));
+		Vec3 corner = Vec3.atLowerCornerOf(blockEntity.getBlockPos().offset(-1, 0, -1));
+		return new AABB(corner, corner.add(2, 1, 2));
 	}
 }

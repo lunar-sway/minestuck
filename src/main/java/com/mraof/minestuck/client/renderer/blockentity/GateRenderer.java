@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -61,6 +62,7 @@ public class GateRenderer implements BlockEntityRenderer<GateBlockEntity>
 	@Override
 	public AABB getRenderBoundingBox(GateBlockEntity blockEntity)
 	{
-		return new AABB(blockEntity.getBlockPos().offset(-1, 0, -1), blockEntity.getBlockPos().offset(1, 1, 1));
+		Vec3 corner = Vec3.atLowerCornerOf(blockEntity.getBlockPos().offset(-1, 0, -1));
+		return new AABB(corner, corner.add(3, 1, 3));
 	}
 }

@@ -1,22 +1,19 @@
 package com.mraof.minestuck.api.alchemy.recipe;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.alchemy.recipe.UnavailableGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Used to datagen a grist cost that makes the ingredient unalchemizable.
@@ -73,36 +70,6 @@ public final class UnavailableGristCostBuilder
 	
 	public void build(RecipeOutput recipeOutput, ResourceLocation id)
 	{
-		recipeOutput.accept(new Result(id.withPrefix("grist_costs/"), ingredient, priority));
-	}
-	
-	private record Result(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority) implements FinishedRecipe
-	{
-		@Override
-		public void serializeRecipeData(JsonObject jsonObject)
-		{
-			jsonObject.add("ingredient", ingredient.toJson(false));
-			if(priority != null)
-				jsonObject.addProperty("priority", priority);
-		}
-		
-		@Override
-		public ResourceLocation id()
-		{
-			return id;
-		}
-		
-		@Override
-		public RecipeSerializer<?> type()
-		{
-			return MSRecipeTypes.UNAVAILABLE_GRIST_COST.get();
-		}
-		
-		@Nullable
-		@Override
-		public AdvancementHolder advancement()
-		{
-			return null;
-		}
+		recipeOutput.accept(id.withPrefix("grist_costs/"), new UnavailableGristCost(ingredient, Optional.ofNullable(priority)), null);
 	}
 }

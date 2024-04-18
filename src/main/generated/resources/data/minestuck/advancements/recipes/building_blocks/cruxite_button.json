@@ -43,6 +43,5 @@
     "recipes": [
       "minestuck:cruxite_button"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -23,6 +24,12 @@ public class MSDirectionalBlock extends DirectionalBlock
 	{
 		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+	}
+	
+	@Override
+	protected MapCodec<? extends MSDirectionalBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

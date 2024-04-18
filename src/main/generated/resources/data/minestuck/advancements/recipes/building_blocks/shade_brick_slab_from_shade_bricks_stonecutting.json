@@ -30,6 +30,5 @@
     "recipes": [
       "minestuck:shade_brick_slab_from_shade_bricks_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
