@@ -6,7 +6,7 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -63,7 +63,6 @@ public final class PlayerData extends AttachmentHolder
 	
 	private final MinecraftServer mcServer;
 	private final Echeladder echeladder;
-	private int color = ColorHandler.DEFAULT_COLOR;
 	
 	private boolean givenModus;
 	private Modus modus;
@@ -100,8 +99,6 @@ public final class PlayerData extends AttachmentHolder
 		
 		echeladder = new Echeladder(mcServer, identifier);
 		echeladder.loadEcheladder(nbt);
-		if (nbt.contains("color"))
-			this.color = nbt.getInt("color");
 		
 		if (nbt.contains("modus"))
 		{
@@ -140,7 +137,6 @@ public final class PlayerData extends AttachmentHolder
 			nbt.put(ATTACHMENTS_NBT_KEY, attachments);
 		
 		echeladder.saveEcheladder(nbt);
-		nbt.putInt("color", color);
 		
 		if (this.modus != null)
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
@@ -174,17 +170,18 @@ public final class PlayerData extends AttachmentHolder
 	
 	public int getColor()
 	{
-		return color;
+		return this.getData(MSCapabilities.PLAYER_COLOR);
 	}
 	
 	public void trySetColor(int color)
 	{
-		if(SburbHandler.canSelectColor(identifier, mcServer) && this.color != color)
-		{
-			this.color = color;
-			
-			sendColor(getPlayer(), false);
-		}
+		if(!SburbHandler.canSelectColor(identifier, mcServer))
+			return;
+		
+		Integer prevColor = this.setData(MSCapabilities.PLAYER_COLOR, color);
+		
+		if(!Objects.equals(prevColor, color))
+			this.sendColor(getPlayer(), false);
 	}
 	
 	public Modus getModus()
