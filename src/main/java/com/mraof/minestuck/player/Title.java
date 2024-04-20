@@ -23,33 +23,23 @@ public final class Title
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final Map<EnumAspect, MobEffect> ASPECT_EFFECTS = Map.ofEntries(
-			Map.entry(EnumAspect.BLOOD, MobEffects.ABSORPTION),
-			Map.entry(EnumAspect.BREATH, MobEffects.MOVEMENT_SPEED),
-			Map.entry(EnumAspect.DOOM, MobEffects.DAMAGE_RESISTANCE),
-			Map.entry(EnumAspect.HEART, MobEffects.ABSORPTION),
-			Map.entry(EnumAspect.HOPE, MobEffects.FIRE_RESISTANCE),
-			Map.entry(EnumAspect.LIFE, MobEffects.REGENERATION),
-			Map.entry(EnumAspect.LIGHT, MobEffects.LUCK),
-			Map.entry(EnumAspect.MIND, MobEffects.NIGHT_VISION),
-			Map.entry(EnumAspect.RAGE, MobEffects.DAMAGE_BOOST),
-			Map.entry(EnumAspect.SPACE, MobEffects.JUMP),
-			Map.entry(EnumAspect.TIME, MobEffects.DIG_SPEED),
-			Map.entry(EnumAspect.VOID, MobEffects.INVISIBILITY)
-	);
-	private static final Map<EnumAspect, Float> ASPECT_STRENGTH = Map.ofEntries(
-			Map.entry(EnumAspect.BLOOD, 1.0F/14),
-			Map.entry(EnumAspect.BREATH, 1.0F/15),
-			Map.entry(EnumAspect.DOOM, 1.0F/28),
-			Map.entry(EnumAspect.HEART, 1.0F/14),
-			Map.entry(EnumAspect.HOPE, 1.0F/18),
-			Map.entry(EnumAspect.LIFE, 1.0F/20),
-			Map.entry(EnumAspect.LIGHT, 1.0F/10),
-			Map.entry(EnumAspect.MIND, 1.0F/12),
-			Map.entry(EnumAspect.RAGE, 1.0F/25),
-			Map.entry(EnumAspect.SPACE, 1.0F/10),
-			Map.entry(EnumAspect.TIME, 1.0F/13),
-			Map.entry(EnumAspect.VOID, 1.0F/12)
+	private record AspectEffect(MobEffect effect, float strength)
+	{
+	}
+	
+	private static final Map<EnumAspect, AspectEffect> ASPECT_EFFECTS = Map.ofEntries(
+			Map.entry(EnumAspect.BLOOD, new AspectEffect(MobEffects.ABSORPTION, 1.0F / 14)),
+			Map.entry(EnumAspect.BREATH, new AspectEffect(MobEffects.MOVEMENT_SPEED, 1.0F / 15)),
+			Map.entry(EnumAspect.DOOM, new AspectEffect(MobEffects.DAMAGE_RESISTANCE, 1.0F / 28)),
+			Map.entry(EnumAspect.HEART, new AspectEffect(MobEffects.ABSORPTION, 1.0F / 14)),
+			Map.entry(EnumAspect.HOPE, new AspectEffect(MobEffects.FIRE_RESISTANCE, 1.0F / 18)),
+			Map.entry(EnumAspect.LIFE, new AspectEffect(MobEffects.REGENERATION, 1.0F / 20)),
+			Map.entry(EnumAspect.LIGHT, new AspectEffect(MobEffects.LUCK, 1.0F / 10)),
+			Map.entry(EnumAspect.MIND, new AspectEffect(MobEffects.NIGHT_VISION, 1.0F / 12)),
+			Map.entry(EnumAspect.RAGE, new AspectEffect(MobEffects.DAMAGE_BOOST, 1.0F / 25)),
+			Map.entry(EnumAspect.SPACE, new AspectEffect(MobEffects.JUMP, 1.0F / 10)),
+			Map.entry(EnumAspect.TIME, new AspectEffect(MobEffects.DIG_SPEED, 1.0F / 13)),
+			Map.entry(EnumAspect.VOID, new AspectEffect(MobEffects.INVISIBILITY, 1.0F / 12))
 	);
 	
 	
@@ -87,14 +77,14 @@ public final class Title
 		
 		int rung = data.getEcheladder().getRung();
 		EnumAspect aspect = this.getHeroAspect();
-		int potionLevel = (int) (ASPECT_STRENGTH.get(aspect) * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+		int potionLevel = (int) (ASPECT_EFFECTS.get(aspect).strength() * rung);
 		
 		if(rung > 18 && aspect == EnumAspect.HOPE)
 			player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 600, 0));
 		
 		if(potionLevel > 0)
 		{
-			player.addEffect(new MobEffectInstance(ASPECT_EFFECTS.get(aspect), 600, potionLevel - 1));
+			player.addEffect(new MobEffectInstance(ASPECT_EFFECTS.get(aspect).effect(), 600, potionLevel - 1));
 			LOGGER.debug("Applied aspect potion effect to {}", player.getDisplayName().getString());
 		}
 	}
