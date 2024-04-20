@@ -26,6 +26,8 @@ public class MSCapabilities
 	
 	public static final Supplier<AttachmentType<Integer>> PLAYER_COLOR = ATTACHMENT_REGISTER.register("player_color",
 			() -> AttachmentType.builder(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR).serialize(Codec.INT).build());
+	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = ATTACHMENT_REGISTER.register("boondollars",
+			() -> AttachmentType.builder(() -> 0L).serialize(Codec.LONG).build());
 	
 	public static final Supplier<AttachmentType<ItemStackHandler>> MUSIC_PLAYER_INVENTORY_ATTACHMENT = ATTACHMENT_REGISTER.register("music_player_inventory",
 			() -> AttachmentType.serializable(() -> new ItemStackHandler(1)).build());

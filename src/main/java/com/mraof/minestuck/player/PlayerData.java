@@ -8,6 +8,7 @@ import com.mraof.minestuck.network.data.BoondollarDataPacket;
 import com.mraof.minestuck.network.data.ConsortReputationDataPacket;
 import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.network.data.TitleDataPacket;
+import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -67,7 +68,6 @@ public final class PlayerData extends AttachmentHolder
 	
 	private boolean givenModus;
 	private Modus modus;
-	private long boondollars;
 	final GristCache gristCache;
 	private double gutterMultiplier = 1;
 	
@@ -104,7 +104,6 @@ public final class PlayerData extends AttachmentHolder
 			givenModus = true;
 		}
 		else givenModus = nbt.getBoolean("given_modus");
-		boondollars = nbt.getLong("boondollars");
 		
 		gristCache = new GristCache(this, mcServer);
 		gristCache.read(nbt);
@@ -138,7 +137,6 @@ public final class PlayerData extends AttachmentHolder
 		if (this.modus != null)
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
 		else nbt.putBoolean("given_modus", givenModus);
-		nbt.putLong("boondollars", boondollars);
 		gristCache.write(nbt);
 		
 		ListTag list = new ListTag();
@@ -203,55 +201,49 @@ public final class PlayerData extends AttachmentHolder
 		gutterMultiplier += amount;
 	}
 	
-	
 	public long getBoondollars()
 	{
-		return boondollars;
+		return this.getData(MSCapabilities.BOONDOLLARS);
 	}
 	
 	public void addBoondollars(long amount)
 	{
 		if(amount < 0)
 			throw new IllegalArgumentException("Boondollar amount may not be negative.");
-		else if(amount > 0)
-		{
-			boondollars += amount;
-			sendBoondollars(getPlayer());
-		}
+		
+		this.setBoondollars(this.getBoondollars() + amount);
 	}
 	
 	public void takeBoondollars(long amount)
 	{
 		if(amount < 0)
 			throw new IllegalArgumentException("Boondollar amount may not be negative.");
-		else if(amount > 0)
-		{
-			if(boondollars - amount < 0)
-				throw new IllegalStateException("Can't go to negative boondollars");
-			
-			boondollars -= amount;
-			sendBoondollars(getPlayer());
-		}
+		
+		this.setBoondollars(this.getBoondollars() - amount);
 	}
 	
 	public boolean tryTakeBoondollars(long amount)
 	{
-		if(getBoondollars() - amount < 0)
+		if(amount < 0)
+			throw new IllegalArgumentException("Boondollar amount may not be negative.");
+		
+		long newAmount = this.getBoondollars() - amount;
+		
+		if(newAmount < 0)
 			return false;
-		else
-		{
-			takeBoondollars(amount);
-			return true;
-		}
+		
+		this.setBoondollars(newAmount);
+		return true;
 	}
 	
 	public void setBoondollars(long amount)
 	{
 		if(amount < 0)
 			throw new IllegalArgumentException("Boondollar amount may not be negative.");
-		else if(amount != boondollars)
+		
+		if(amount != this.getBoondollars())
 		{
-			boondollars = amount;
+			this.setData(MSCapabilities.BOONDOLLARS, amount);
 			sendBoondollars(getPlayer());
 		}
 	}
