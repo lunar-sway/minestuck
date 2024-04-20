@@ -111,7 +111,7 @@ public final class EditmodeDragPacket
 			if(data == null)
 				return;
 			
-			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT);
 			
 			cap.setEditPos1(positionStart);
 			cap.setEditPos2(positionEnd);
@@ -201,7 +201,7 @@ public final class EditmodeDragPacket
 			if(data == null)
 				return;
 			
-			EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT);
 			
 			cap.setEditPos1(positionStart);
 			cap.setEditPos2(positionEnd);
@@ -271,7 +271,7 @@ public final class EditmodeDragPacket
 		{
 			if(!player.level().isClientSide() && ServerEditHandler.getData(player) != null)
 			{
-				EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+				EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT);
 				
 				cap.setEditPos1(positionStart);
 				cap.setEditPos2(positionEnd);
@@ -306,7 +306,7 @@ public final class EditmodeDragPacket
 		{
 			if(!player.level().isClientSide())
 			{
-				EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+				EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT);
 				
 				ServerEditHandler.removeCursorEntity(player, true);
 				cap.resetDragTools();

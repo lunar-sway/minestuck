@@ -62,7 +62,7 @@ public class ClientEditToolDrag
 		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
 			return;
 		
-		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT);
 		
 		ClientEditToolDrag.doRecycleCode(mc, player, cap);
 		ClientEditToolDrag.doReviseCode(mc, player, cap);
@@ -369,7 +369,7 @@ public class ClientEditToolDrag
 			Player player = mc.player;
 			Camera info = event.getCamera();
 			
-			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT);
 			
 			double d1 = info.getPosition().x;
 			double d2 = info.getPosition().y;

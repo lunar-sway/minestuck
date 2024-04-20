@@ -98,7 +98,7 @@ public final class DialoguePackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get())
+			player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT)
 					.validateAndGetComponent(player.level(), this.dialogueId)
 					.ifPresent(component -> component.clearOngoingDialogue(player));
 		}
@@ -132,7 +132,7 @@ public final class DialoguePackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get())
+			player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT)
 					.validateAndGetComponent(player.level(), this.dialogueId)
 					.ifPresent(component -> findAndTriggerResponse(player, component));
 		}

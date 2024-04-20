@@ -252,7 +252,7 @@ public final class DialogueComponent
 		if(player == null)
 			return;
 		
-		if(player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get()).lastTalkedTo(this.entity))
+		if(player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT).lastTalkedTo(this.entity))
 			PacketDistributor.PLAYER.with(player).send(new DialoguePackets.CloseScreen());
 	}
 	
@@ -282,7 +282,7 @@ public final class DialogueComponent
 	
 	public void openScreenForDialogue(ServerPlayer player, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue, @Nullable Dialogue.NextDialogue source)
 	{
-		CurrentDialogue dialogueData = player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get());
+		CurrentDialogue dialogueData = player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT);
 		dialogueData.getComponent(player.level()).ifPresent(oldComponent -> oldComponent.clearOngoingDialogue(player));
 		
 		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, player);

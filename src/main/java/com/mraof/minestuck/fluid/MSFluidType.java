@@ -86,7 +86,7 @@ public class MSFluidType extends FluidType
 		Vec3 fallAdjustedMoveVec = entity.getFluidFallingAdjustedMovement(gravity, isSinking, entity.getDeltaMovement());
 		entity.setDeltaMovement(fallAdjustedMoveVec);
 		
-		LastFluidTickData data = entity.getData(MSCapabilities.LAST_FLUID_TICK_ATTACHMENT.get());
+		LastFluidTickData data = entity.getData(MSCapabilities.LAST_FLUID_TICK_ATTACHMENT);
 		long tick = entity.level().getGameTime();
 		long lastTick = Objects.requireNonNullElse(data.lastTickMap.get(fluidType), 0L);
 		

@@ -78,8 +78,8 @@ public class MusicPlayerWeapon extends WeaponItem
 	{
 		ItemStack musicPlayer = playerIn.getItemInHand(handIn);
 		
-		IItemHandler itemStackHandlerMusicPlayer = musicPlayer.getData(MSCapabilities.MUSIC_PLAYER_INVENTORY_ATTACHMENT.get());
-		IMusicPlaying musicPlayingCap = playerIn.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT.get());
+		IItemHandler itemStackHandlerMusicPlayer = musicPlayer.getData(MSCapabilities.MUSIC_PLAYER_INVENTORY_ATTACHMENT);
+		IMusicPlaying musicPlayingCap = playerIn.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT);
 		
 		if(playerIn instanceof ServerPlayer serverPlayer)
 		{
@@ -132,7 +132,7 @@ public class MusicPlayerWeapon extends WeaponItem
 		if(tickEvent.side.isServer() && tickEvent.phase == TickEvent.Phase.END && tickEvent.player.isAlive())
 		{
 			Player player = tickEvent.player;
-			IMusicPlaying musicPlayingCap = player.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT.get());
+			IMusicPlaying musicPlayingCap = player.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT);
 			
 			if(!(player.getItemInHand(InteractionHand.MAIN_HAND) == musicPlayingCap.getCurrentMusicPlayer() ||
 					player.getItemInHand(InteractionHand.OFF_HAND) == musicPlayingCap.getCurrentMusicPlayer()) ||
@@ -158,7 +158,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		IMusicPlaying musicPlaying = attacker.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT.get());
+		IMusicPlaying musicPlaying = attacker.getData(MSCapabilities.MUSIC_PLAYING_ATTACHMENT);
 		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE && musicPlaying.getCurrentMusicPlayer() == stack)
 		{
 			RandomSource r = attacker.level().getRandom();
@@ -193,6 +193,6 @@ public class MusicPlayerWeapon extends WeaponItem
 	
 	public static boolean hasCassette(ItemStack stack)
 	{
-		return !stack.getData(MSCapabilities.MUSIC_PLAYER_INVENTORY_ATTACHMENT.get()).getStackInSlot(0).isEmpty();
+		return !stack.getData(MSCapabilities.MUSIC_PLAYER_INVENTORY_ATTACHMENT).getStackInSlot(0).isEmpty();
 	}
 }
