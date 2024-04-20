@@ -376,18 +376,23 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType());
 		
 		if(totalModifier > maxSharedProgress)
+		{
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level(), (int) (maxProgress * modifiers[i] / totalModifier));
-		else
+				Echeladder.get(playerList[i], level())
+						.increaseProgress((int) (maxProgress * modifiers[i] / totalModifier));
+		} else
+		{
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level(), (int) (progress * modifiers[i]));
+				Echeladder.get(playerList[i], level())
+						.increaseProgress((int) (progress * modifiers[i]));
+		}
 	}
 	
 	protected static void firstKillBonus(Entity killer, EcheladderBonusType type)
 	{
-		if(killer instanceof ServerPlayer && (!(killer instanceof FakePlayer)))
+		if(killer instanceof ServerPlayer player && (!(killer instanceof FakePlayer)))
 		{
-			Echeladder ladder = PlayerSavedData.getData((ServerPlayer) killer).getEcheladder();
+			Echeladder ladder = Echeladder.get(player);
 			ladder.checkBonus(type);
 		}
 	}

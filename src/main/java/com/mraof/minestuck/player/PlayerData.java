@@ -55,7 +55,6 @@ public final class PlayerData extends AttachmentHolder
 	final PlayerIdentifier identifier;
 	
 	private final MinecraftServer mcServer;
-	private final Echeladder echeladder;
 	
 	private boolean givenModus;
 	private Modus modus;
@@ -67,7 +66,6 @@ public final class PlayerData extends AttachmentHolder
 	{
 		this.mcServer = mcServer;
 		this.identifier = player;
-		echeladder = new Echeladder(mcServer, player);
 	}
 	
 	PlayerData(MinecraftServer mcServer, CompoundTag nbt)
@@ -77,9 +75,6 @@ public final class PlayerData extends AttachmentHolder
 		
 		if(nbt.contains(ATTACHMENTS_NBT_KEY, Tag.TAG_COMPOUND))
 			this.deserializeAttachments(nbt.getCompound(ATTACHMENTS_NBT_KEY));
-		
-		echeladder = new Echeladder(mcServer, identifier);
-		echeladder.loadEcheladder(nbt);
 		
 		if (nbt.contains("modus"))
 		{
@@ -107,8 +102,6 @@ public final class PlayerData extends AttachmentHolder
 		if(attachments != null)
 			nbt.put(ATTACHMENTS_NBT_KEY, attachments);
 		
-		echeladder.saveEcheladder(nbt);
-		
 		if (this.modus != null)
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
 		else nbt.putBoolean("given_modus", givenModus);
@@ -124,11 +117,6 @@ public final class PlayerData extends AttachmentHolder
 		nbt.put("consort_reputation", list);
 		
 		return nbt;
-	}
-	
-	public Echeladder getEcheladder()
-	{
-		return echeladder;
 	}
 	
 	public Modus getModus()
@@ -254,7 +242,7 @@ public final class PlayerData extends AttachmentHolder
 	
 	public void onPlayerLoggedIn(ServerPlayer player)
 	{
-		getEcheladder().updateEcheladderBonuses(player);
+		Echeladder.get(this).updateEcheladderBonuses(player);
 		
 		if(getModus() != null)
 			PacketDistributor.PLAYER.with(player).send(ModusDataPacket.create(getModus()));
@@ -262,7 +250,7 @@ public final class PlayerData extends AttachmentHolder
 		if(getModus() == null && !hasGivenModus())
 			tryGiveStartingModus(player);
 		
-		echeladder.sendInitialPacket(player);
+		Echeladder.get(this).sendInitialPacket(player);
 		sendBoondollars(player);
 	}
 	

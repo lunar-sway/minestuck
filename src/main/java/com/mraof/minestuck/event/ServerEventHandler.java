@@ -89,7 +89,7 @@ public class ServerEventHandler
 					exp = Math.min(((Slime) event.getEntity()).getSize() - 1, 9);
 				
 				if(exp > 0)
-					Echeladder.increaseProgress(player, exp);
+					Echeladder.get(player).increaseProgress(exp);
 			}
 		}
 		if(event.getEntity() instanceof ServerPlayer)
@@ -130,12 +130,12 @@ public class ServerEventHandler
 				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 				{
 					//Increase damage to underling
-					double modifier = PlayerSavedData.getData((ServerPlayer) attacker).getEcheladder().getUnderlingDamageModifier();
+					double modifier = Echeladder.get((ServerPlayer) attacker).getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
 				{
 					//Decrease damage to player
-					double modifier = PlayerSavedData.getData((ServerPlayer) injured).getEcheladder().getUnderlingProtectionModifier();
+					double modifier = Echeladder.get((ServerPlayer) injured).getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 			}

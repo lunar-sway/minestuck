@@ -115,7 +115,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 		if(data == null)
 			return;
 		
-		int rung = data.getEcheladder().getRung();
+		int rung = Echeladder.get(data).getRung();
 		EnumAspect aspect = this.heroAspect();
 		int potionLevel = (int) (ASPECT_EFFECTS.get(aspect).strength() * rung);
 		

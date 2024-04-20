@@ -9,6 +9,7 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.Title;
@@ -30,7 +31,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class MSCapabilities
+public final class MSCapabilities
 {
 	public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_REGISTER = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, Minestuck.MOD_ID);
 	
@@ -40,6 +41,8 @@ public class MSCapabilities
 			() -> AttachmentType.builder(restricted(() -> 0L, PlayerData.class)).serialize(Codec.LONG).build());
 	public static final Supplier<AttachmentType<GristCache>> GRIST_CACHE = ATTACHMENT_REGISTER.register("grist_cache",
 			() -> AttachmentType.serializable(restricted(GristCache::new, PlayerData.class)).build());
+	public static final Supplier<AttachmentType<Echeladder>> ECHELADDER = ATTACHMENT_REGISTER.register("echeladder",
+			() -> AttachmentType.serializable(restricted(Echeladder::new, PlayerData.class)).build());
 	
 	public static final Supplier<AttachmentType<Title>> TITLE = ATTACHMENT_REGISTER.register("title",
 			() -> AttachmentType.<Title>builder(noDefault()).serialize(Title.CODEC).build());

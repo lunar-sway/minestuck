@@ -7,7 +7,9 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.data.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -22,16 +24,19 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.UUID;
 
+@MethodsReturnNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class Echeladder
+public final class Echeladder implements INBTSerializable<CompoundTag>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -49,21 +54,27 @@ public class Echeladder
 			145147, 181433, 226791, 283488, 354360, 442950, 553687, 692108, 865135, 1081418, 1351772, 1689715, 2112143, 2640178, 3300222};
 			//each value is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
 	
-	public static void increaseProgress(PlayerIdentifier player, Level level, int progress)
+	public static Echeladder get(PlayerIdentifier player, Level level)
 	{
-		PlayerSavedData.getData(player, level).getEcheladder().increaseProgress(progress);
+		return get(PlayerSavedData.getData(player, level));
 	}
 	
-	public static void increaseProgress(ServerPlayer player, int progress)
+	public static Echeladder get(ServerPlayer player)
 	{
-		PlayerSavedData.getData(player).getEcheladder().increaseProgress(progress);
+		return get(Objects.requireNonNull(PlayerSavedData.getData(player), () -> "Cannot get player data for player " + player));
+	}
+	
+	public static Echeladder get(PlayerData playerData)
+	{
+		return playerData.getData(MSCapabilities.ECHELADDER);
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+	private static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		Echeladder echeladder = PlayerSavedData.getData((ServerPlayer) event.getEntity()).getEcheladder();
-		echeladder.updateEcheladderBonuses((ServerPlayer) event.getEntity());
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		Echeladder echeladder = get(player);
+		echeladder.updateEcheladderBonuses(player);
 		if(MinestuckConfig.SERVER.rungHealthOnRespawn.get())
 			event.getEntity().heal(event.getEntity().getMaxHealth());
 	}
@@ -74,10 +85,10 @@ public class Echeladder
 	private int progress;
 	private final EnumSet<EcheladderBonusType> usedBonuses = EnumSet.noneOf(EcheladderBonusType.class);
 	
-	public Echeladder(MinecraftServer mcServer, PlayerIdentifier identifier)
+	public Echeladder(PlayerData playerData)
 	{
-		this.mcServer = mcServer;
-		this.identifier = identifier;
+		this.mcServer = playerData.getMinecraftServer();
+		this.identifier = playerData.identifier;
 	}
 	
 	private int getRungProgressReq()
@@ -197,30 +208,30 @@ public class Echeladder
 		attribute.addPermanentModifier(modifier);
 	}
 	
-	public void saveEcheladder(CompoundTag nbt)
+	@Override
+	public CompoundTag serializeNBT()
 	{
+		CompoundTag nbt = new CompoundTag();
+		
 		nbt.putInt("rung", rung);
 		nbt.putInt("rungProgress", progress);
 		
 		ListTag bonuses = new ListTag();
-		
 		for(EcheladderBonusType bonus : usedBonuses)
-		{
 			bonuses.add(StringTag.valueOf(bonus.toString()));
-		}
-		
 		nbt.put("rungBonuses", bonuses);
+		
+		return nbt;
 	}
 	
-	public void loadEcheladder(CompoundTag nbt)
+	@Override
+	public void deserializeNBT(CompoundTag nbt)
 	{
 		rung = nbt.getInt("rung");
 		progress = nbt.getInt("rungProgress");
 		
 		for(Tag tag : nbt.getList("rungBonuses", Tag.TAG_STRING))
-		{
 			usedBonuses.add(EcheladderBonusType.fromString(tag.getAsString()));
-		}
 	}
 	
 	public static double attackBonus(int rung)

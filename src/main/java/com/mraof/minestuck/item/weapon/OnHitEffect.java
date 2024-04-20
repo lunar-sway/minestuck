@@ -7,9 +7,8 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.ClientMovementPacket;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.util.MSTags;
@@ -47,7 +46,6 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.player.EnumAspect.*;
@@ -255,12 +253,11 @@ public interface OnHitEffect
 			
 			if(attacker instanceof ServerPlayer serverPlayer && !(attacker instanceof FakePlayer))
 			{
-				PlayerData data = Objects.requireNonNull(PlayerSavedData.getData(serverPlayer));
 				boolean isMissingAspectBonus = !Title.isPlayerOfAspect(serverPlayer, aspect);
 				
 				if(target instanceof UnderlingEntity)
 				{
-					float modifier = (float) (data.getEcheladder().getUnderlingDamageModifier());
+					float modifier = (float) (Echeladder.get(serverPlayer).getUnderlingDamageModifier());
 					
 					if(isMissingAspectBonus)
 						modifier /= 1.2F;

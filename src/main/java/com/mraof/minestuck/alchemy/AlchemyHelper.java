@@ -7,7 +7,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -30,7 +29,7 @@ public class AlchemyHelper
 	@SubscribeEvent
 	public static void onAlchemizedItem(AlchemyEvent event)
 	{
-		Echeladder e = PlayerSavedData.getData(event.getPlayer(), event.getLevel()).getEcheladder();
+		Echeladder e = Echeladder.get(event.getPlayer(), event.getLevel());
 		
 		if(!(event.getItemResult().getItem() instanceof CruxiteArtifactItem))
 		{

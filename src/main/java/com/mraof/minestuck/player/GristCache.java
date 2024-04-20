@@ -91,7 +91,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	 */
 	public NonNegativeGristSet getCapacitySet()
 	{
-		long capacity = data.getEcheladder().getGristCapacity();
+		long capacity = Echeladder.get(data).getGristCapacity();
 		NonNegativeGristSet capacitySet = new NonNegativeGristSet();
 		for(GristType type : GristTypes.REGISTRY)
 		{
@@ -124,7 +124,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	
 	public long getRemainingCapacity(GristType type)
 	{
-		return Math.max(0, data.getEcheladder().getGristCapacity() - gristSet.getGrist(type));
+		return Math.max(0, Echeladder.get(data).getGristCapacity() - gristSet.getGrist(type));
 	}
 	
 	public boolean canAfford(GristSet cost)
@@ -134,7 +134,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	
 	public boolean canAdd(GristSet addition)
 	{
-		return addWithinCapacity(this.gristSet.mutableCopy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
+		return addWithinCapacity(this.gristSet.mutableCopy(), addition, Echeladder.get(data).getGristCapacity()).isEmpty();
 	}
 	
 	public static boolean canAfford(GristSet source, GristSet cost, long limit)
@@ -155,7 +155,7 @@ public final class GristCache implements INBTSerializable<Tag>
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		GristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
+		GristSet excessGrist = addWithinCapacity(newCache, change, Echeladder.get(data).getGristCapacity());
 		
 		if(excessGrist.isEmpty())
 		{
@@ -209,7 +209,7 @@ public final class GristCache implements INBTSerializable<Tag>
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		MutableGristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
+		MutableGristSet excessGrist = addWithinCapacity(newCache, set, Echeladder.get(data).getGristCapacity());
 		
 		if(!excessGrist.equalContent(set))
 		{

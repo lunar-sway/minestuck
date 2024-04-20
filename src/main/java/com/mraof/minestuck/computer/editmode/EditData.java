@@ -4,10 +4,7 @@ import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.network.data.GristCachePacket;
-import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
@@ -99,7 +96,7 @@ public class EditData
 	
 	public void sendCacheLimitToEditor()
 	{
-		long limit = PlayerSavedData.getData(this.getTarget(), player.server).getEcheladder().getGristCapacity();
+		long limit = Echeladder.get(this.getTarget(), player.level()).getGristCapacity();
 		PacketDistributor.PLAYER.with(this.getEditor()).send(new EditmodeCacheLimitPacket(limit));
 	}
 	
