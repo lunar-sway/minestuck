@@ -4,7 +4,6 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.ReturningProjectileEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,7 +14,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.FakePlayer;
 
 import java.util.Optional;
 
@@ -36,10 +34,10 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 		
 		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
-		if(!level.isClientSide && !(playerIn instanceof FakePlayer))
+		if(playerIn instanceof ServerPlayer serverPlayer)
 		{
 			boolean noBlockCollision = false;
-			Optional<Title> title = Title.getTitle(PlayerSavedData.getData((ServerPlayer) playerIn));
+			Optional<Title> title = Title.getTitle(serverPlayer);
 			if(title.isPresent())
 			{
 				noBlockCollision = title.get().heroAspect() == EnumAspect.VOID && item.is(MSItems.UMBRAL_INFILTRATOR);

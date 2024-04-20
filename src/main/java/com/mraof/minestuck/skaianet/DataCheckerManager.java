@@ -2,7 +2,6 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.DataCheckerPermission;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -115,7 +114,7 @@ public class DataCheckerManager
 		landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
 				.ifPresent(landPairTag -> tag.put("landTypes", landPairTag));
 		
-		Title.getTitle(PlayerSavedData.getData(player, mcServer)).ifPresent(title ->
+		Title.getTitle(player, mcServer).ifPresent(title ->
 		{
 			tag.putByte("class", (byte) title.heroClass().ordinal());
 			tag.putByte("aspect", (byte) title.heroAspect().ordinal());

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -41,7 +40,7 @@ public interface InventoryTickEffect
 		return (stack, worldIn, entityIn, itemSlot, isSelected) -> {
 			if(isSelected && entityIn instanceof ServerPlayer player)
 			{
-				Title.getTitle(PlayerSavedData.getData(player)).ifPresent(title ->
+				Title.getTitle(player).ifPresent(title ->
 				{
 					if(title.heroAspect() == aspect)
 						player.addEffect(effect.get());

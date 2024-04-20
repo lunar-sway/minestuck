@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,7 +23,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -64,10 +64,19 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
-		PlayerData playerData = Objects.requireNonNull(PlayerSavedData.getData(player));
 		
-		getTitle(playerData).ifPresent(title ->
+		getTitle(player).ifPresent(title ->
 				player.connection.send(TitleDataPacket.create(title)));
+	}
+	
+	public static Optional<Title> getTitle(ServerPlayer player)
+	{
+		return getTitle(PlayerSavedData.getData(player));
+	}
+	
+	public static Optional<Title> getTitle(PlayerIdentifier playerId, MinecraftServer mcServer)
+	{
+		return getTitle(PlayerSavedData.getData(playerId, mcServer));
 	}
 	
 	public static Optional<Title> getTitle(@Nullable PlayerData playerData)

@@ -105,7 +105,7 @@ public final class SburbHandler
 	{
 		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		List<PlayerIdentifier> otherPlayers = skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList();
-		Title title = Title.getTitle(PlayerSavedData.getData(player, mcServer)).orElseThrow();
+		Title title = Title.getTitle(player, mcServer).orElseThrow();
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		

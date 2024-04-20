@@ -1,6 +1,9 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -71,7 +74,7 @@ class Generator
 	@NotNull
 	private static Optional<Title> titleForPlayer(PlayerIdentifier player, SkaianetData skaianetData)
 	{
-		return Title.getTitle(PlayerSavedData.getData(player, skaianetData.mcServer))
+		return Title.getTitle(player, skaianetData.mcServer)
 				.or(() -> skaianetData.getOrCreatePredefineData(player).flatMap(data -> Optional.ofNullable(data.getTitle())));
 	}
 	

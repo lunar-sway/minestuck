@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -74,7 +73,7 @@ public record DialogueMessage(String key, List<Argument> arguments)
 		ENTITY_TYPES((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".plural")),
 		PLAYER_TITLE((npc, player) -> {
 			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
-			return Title.getTitle(PlayerSavedData.getData(identifier, player.server))
+			return Title.getTitle(identifier, player.server)
 					.map(Title::asTextComponent)
 					.orElseGet(player::getName);
 		}),
@@ -122,6 +121,6 @@ public record DialogueMessage(String key, List<Argument> arguments)
 	private static Optional<Title> homeLandTitle(LivingEntity entity)
 	{
 		return homeLandClientPlayer(entity)
-				.flatMap(clientPlayer -> Title.getTitle(PlayerSavedData.getData(clientPlayer, Objects.requireNonNull(entity.getServer()))));
+				.flatMap(clientPlayer -> Title.getTitle(clientPlayer, Objects.requireNonNull(entity.getServer())));
 	}
 }

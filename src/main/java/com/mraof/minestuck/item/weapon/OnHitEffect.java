@@ -436,7 +436,7 @@ public interface OnHitEffect
 		return (stack, target, attacker) -> {
 			if(attacker instanceof ServerPlayer player && !(attacker instanceof FakePlayer))
 			{
-				Optional<Title> title = Title.getTitle(PlayerSavedData.getData(player));
+				Optional<Title> title = Title.getTitle(player);
 				
 				if((title.isPresent() && title.get().heroAspect() == aspect) || player.isCreative())
 					effect.onHit(stack, target, attacker);
