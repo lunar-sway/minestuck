@@ -81,9 +81,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
 		
-		PlayerData playerData = PlayerSavedData.getData(player);
-		if(playerData != null)
-			get(playerData).sendPacket(player);
+		get(player).sendPacket(player);
 	}
 	
 	/**

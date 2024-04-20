@@ -70,6 +70,16 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	}
 	
 	@SubscribeEvent
+	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		
+		Echeladder echeladder = get(player);
+		echeladder.updateEcheladderBonuses(player);
+		echeladder.sendInitialPacket(player);
+	}
+	
+	@SubscribeEvent
 	private static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();

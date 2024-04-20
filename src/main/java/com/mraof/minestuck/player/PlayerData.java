@@ -182,15 +182,11 @@ public final class PlayerData extends AttachmentHolder
 	
 	public void onPlayerLoggedIn(ServerPlayer player)
 	{
-		Echeladder.get(this).updateEcheladderBonuses(player);
-		
 		if(getModus() != null)
 			PacketDistributor.PLAYER.with(player).send(ModusDataPacket.create(getModus()));
 		
 		if(getModus() == null && !hasGivenModus())
 			tryGiveStartingModus(player);
-		
-		Echeladder.get(this).sendInitialPacket(player);
 	}
 	
 	@Nullable
