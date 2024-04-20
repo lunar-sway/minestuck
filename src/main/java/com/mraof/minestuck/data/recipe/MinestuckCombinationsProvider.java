@@ -6,10 +6,8 @@ import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -912,7 +910,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.WATER_COLORS_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Tags.Items.DYES).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ENDER_BUCKET.get()).input(Items.LAVA_BUCKET).and().input(Items.ENDER_PEARL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LIGHT_WATER_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.GLOWSTONE_DUST).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.CAULK_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.QUARTZ).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CAULK_BUCKET.get()).input(Items.WATER_BUCKET).and().input(Items.AMETHYST_SHARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MOLTEN_AMBER_BUCKET.get()).input(Items.LAVA_BUCKET).and().input(Items.HONEY_BOTTLE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.UNKNOWABLE_EGG.get()).input(MSItems.SURPRISE_EMBRYO.get()).or().input(MSItems.GRIMOIRE.get()).build(consumer);
