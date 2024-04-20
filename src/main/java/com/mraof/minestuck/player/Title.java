@@ -14,9 +14,8 @@ import net.minecraft.world.effect.MobEffects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
 import java.util.Objects;
-
-import static com.mraof.minestuck.player.EnumAspect.HOPE;
 
 public final class Title
 {
@@ -24,9 +23,34 @@ public final class Title
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final MobEffect[] aspectEffects = {MobEffects.ABSORPTION, MobEffects.MOVEMENT_SPEED, MobEffects.DAMAGE_RESISTANCE, MobEffects.ABSORPTION, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION, MobEffects.LUCK, MobEffects.NIGHT_VISION, MobEffects.DAMAGE_BOOST, MobEffects.JUMP, MobEffects.DIG_SPEED, MobEffects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-	// Increase the starting rungs
-	private static final float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/14, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
+	private static final Map<EnumAspect, MobEffect> ASPECT_EFFECTS = Map.ofEntries(
+			Map.entry(EnumAspect.BLOOD, MobEffects.ABSORPTION),
+			Map.entry(EnumAspect.BREATH, MobEffects.MOVEMENT_SPEED),
+			Map.entry(EnumAspect.DOOM, MobEffects.DAMAGE_RESISTANCE),
+			Map.entry(EnumAspect.HEART, MobEffects.ABSORPTION),
+			Map.entry(EnumAspect.HOPE, MobEffects.FIRE_RESISTANCE),
+			Map.entry(EnumAspect.LIFE, MobEffects.REGENERATION),
+			Map.entry(EnumAspect.LIGHT, MobEffects.LUCK),
+			Map.entry(EnumAspect.MIND, MobEffects.NIGHT_VISION),
+			Map.entry(EnumAspect.RAGE, MobEffects.DAMAGE_BOOST),
+			Map.entry(EnumAspect.SPACE, MobEffects.JUMP),
+			Map.entry(EnumAspect.TIME, MobEffects.DIG_SPEED),
+			Map.entry(EnumAspect.VOID, MobEffects.INVISIBILITY)
+	);
+	private static final Map<EnumAspect, Float> ASPECT_STRENGTH = Map.ofEntries(
+			Map.entry(EnumAspect.BLOOD, 1.0F/14),
+			Map.entry(EnumAspect.BREATH, 1.0F/15),
+			Map.entry(EnumAspect.DOOM, 1.0F/28),
+			Map.entry(EnumAspect.HEART, 1.0F/14),
+			Map.entry(EnumAspect.HOPE, 1.0F/18),
+			Map.entry(EnumAspect.LIFE, 1.0F/20),
+			Map.entry(EnumAspect.LIGHT, 1.0F/10),
+			Map.entry(EnumAspect.MIND, 1.0F/12),
+			Map.entry(EnumAspect.RAGE, 1.0F/25),
+			Map.entry(EnumAspect.SPACE, 1.0F/10),
+			Map.entry(EnumAspect.TIME, 1.0F/13),
+			Map.entry(EnumAspect.VOID, 1.0F/12)
+	);
 	
 	
 	private final EnumClass heroClass;
@@ -63,14 +87,14 @@ public final class Title
 		
 		int rung = data.getEcheladder().getRung();
 		EnumAspect aspect = this.getHeroAspect();
-		int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+		int potionLevel = (int) (ASPECT_STRENGTH.get(aspect) * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 		
-		if(rung > 18 && aspect == HOPE)
+		if(rung > 18 && aspect == EnumAspect.HOPE)
 			player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 600, 0));
 		
 		if(potionLevel > 0)
 		{
-			player.addEffect(new MobEffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
+			player.addEffect(new MobEffectInstance(ASPECT_EFFECTS.get(aspect), 600, potionLevel - 1));
 			LOGGER.debug("Applied aspect potion effect to {}", player.getDisplayName().getString());
 		}
 	}
