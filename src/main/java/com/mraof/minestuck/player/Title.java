@@ -69,6 +69,13 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 				player.connection.send(TitleDataPacket.create(title)));
 	}
 	
+	public static boolean isPlayerOfAspect(ServerPlayer player, EnumAspect aspect)
+	{
+		return getTitle(player)
+				.map(title -> title.heroAspect() == aspect)
+				.orElse(false);
+	}
+	
 	public static Optional<Title> getTitle(ServerPlayer player)
 	{
 		return getTitle(PlayerSavedData.getData(player));

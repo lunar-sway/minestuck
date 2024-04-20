@@ -38,13 +38,10 @@ public interface InventoryTickEffect
 	static InventoryTickEffect passiveAspectEffect(EnumAspect aspect, Supplier<MobEffectInstance> effect)
 	{
 		return (stack, worldIn, entityIn, itemSlot, isSelected) -> {
-			if(isSelected && entityIn instanceof ServerPlayer player)
+			if(isSelected && entityIn instanceof ServerPlayer player
+					&& Title.isPlayerOfAspect(player, aspect))
 			{
-				Title.getTitle(player).ifPresent(title ->
-				{
-					if(title.heroAspect() == aspect)
-						player.addEffect(effect.get());
-				});
+				player.addEffect(effect.get());
 			}
 		};
 	}

@@ -46,7 +46,6 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
@@ -157,8 +156,7 @@ public class ServerEventHandler
 	{
 		if(event.getEntity() instanceof ServerPlayer injuredPlayer && !(injuredPlayer instanceof FakePlayer))
 		{
-			Optional<Title> title = Title.getTitle(injuredPlayer);
-			boolean isDoom = title.filter(value -> value.heroAspect() == EnumAspect.DOOM).isPresent();
+			boolean isDoom = Title.isPlayerOfAspect(injuredPlayer, EnumAspect.DOOM);
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			

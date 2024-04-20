@@ -15,8 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.Optional;
-
 public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponItem
 {
 	protected final int maxTick;
@@ -36,13 +34,8 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 		
 		if(playerIn instanceof ServerPlayer serverPlayer)
 		{
-			boolean noBlockCollision = false;
-			Optional<Title> title = Title.getTitle(serverPlayer);
-			if(title.isPresent())
-			{
-				noBlockCollision = title.get().heroAspect() == EnumAspect.VOID && item.is(MSItems.UMBRAL_INFILTRATOR);
-			} else if(playerIn.isCreative() && item.is(MSItems.UMBRAL_INFILTRATOR))
-				noBlockCollision = true;
+			boolean noBlockCollision = item.is(MSItems.UMBRAL_INFILTRATOR)
+					&& (playerIn.isCreative() || Title.isPlayerOfAspect(serverPlayer, EnumAspect.VOID));
 			
 			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE.get(), playerIn, level, maxTick, noBlockCollision);
 			projectileEntity.setItem(item);

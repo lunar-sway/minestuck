@@ -48,7 +48,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.player.EnumAspect.*;
@@ -257,9 +256,7 @@ public interface OnHitEffect
 			if(attacker instanceof ServerPlayer serverPlayer && !(attacker instanceof FakePlayer))
 			{
 				PlayerData data = Objects.requireNonNull(PlayerSavedData.getData(serverPlayer));
-				boolean isMissingAspectBonus = Title.getTitle(data)
-						.map(value -> value.heroAspect() != aspect)
-						.orElse(true);
+				boolean isMissingAspectBonus = !Title.isPlayerOfAspect(serverPlayer, aspect);
 				
 				if(target instanceof UnderlingEntity)
 				{
@@ -434,12 +431,10 @@ public interface OnHitEffect
 	static OnHitEffect requireAspect(EnumAspect aspect, OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
-			if(attacker instanceof ServerPlayer player && !(attacker instanceof FakePlayer))
+			if(attacker instanceof ServerPlayer player
+					&& (player.isCreative() || Title.isPlayerOfAspect(player, aspect)))
 			{
-				Optional<Title> title = Title.getTitle(player);
-				
-				if((title.isPresent() && title.get().heroAspect() == aspect) || player.isCreative())
-					effect.onHit(stack, target, attacker);
+				effect.onHit(stack, target, attacker);
 			}
 		};
 	}

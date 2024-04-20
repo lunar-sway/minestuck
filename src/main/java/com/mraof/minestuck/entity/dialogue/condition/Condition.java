@@ -703,9 +703,7 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			return Title.getTitle(player)
-					.map(value -> value.heroAspect().equals(enumAspect))
-					.orElse(false);
+			return Title.isPlayerOfAspect(player, this.enumAspect);
 		}
 		
 		@Override
