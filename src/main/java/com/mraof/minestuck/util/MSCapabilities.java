@@ -28,11 +28,14 @@ public class MSCapabilities
 			() -> AttachmentType.builder(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR).serialize(Codec.INT).build());
 	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = ATTACHMENT_REGISTER.register("boondollars",
 			() -> AttachmentType.builder(() -> 0L).serialize(Codec.LONG).build());
+	public static final Supplier<AttachmentType<Boolean>> EFFECT_TOGGLE = ATTACHMENT_REGISTER.register("effect_toggle",
+			() -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).build());
 	
 	public static final Supplier<AttachmentType<ItemStackHandler>> MUSIC_PLAYER_INVENTORY_ATTACHMENT = ATTACHMENT_REGISTER.register("music_player_inventory",
 			() -> AttachmentType.serializable(() -> new ItemStackHandler(1)).build());
 	public static final Supplier<AttachmentType<MusicPlaying>> MUSIC_PLAYING_ATTACHMENT = ATTACHMENT_REGISTER.register("music_playing",
 			() -> AttachmentType.builder(MusicPlaying::new).build());
+	
 	public static final Supplier<AttachmentType<EditTools>> EDIT_TOOLS_ATTACHMENT = ATTACHMENT_REGISTER.register("edit_tools",
 			() -> AttachmentType.builder(EditTools::new).build());
 	public static final Supplier<AttachmentType<MSFluidType.LastFluidTickData>> LAST_FLUID_TICK_ATTACHMENT = ATTACHMENT_REGISTER.register("last_fluid_tick",

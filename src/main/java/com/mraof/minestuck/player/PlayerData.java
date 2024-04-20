@@ -67,7 +67,6 @@ public final class PlayerData extends AttachmentHolder
 	
 	@Nullable
 	private Title title;
-	private boolean effectToggle;
 	public final EditmodeLocations editmodeLocations;
 	
 	PlayerData(MinecraftServer mcServer, @Nonnull PlayerIdentifier player)
@@ -110,7 +109,6 @@ public final class PlayerData extends AttachmentHolder
 		}
 		
 		title = Title.tryRead(nbt, "title");
-		effectToggle = nbt.getBoolean("effect_toggle");
 		editmodeLocations = EditmodeLocations.read(nbt.getCompound("editmode_locations"));
 		
 	}
@@ -143,7 +141,6 @@ public final class PlayerData extends AttachmentHolder
 		
 		if(title != null)
 			title.write(nbt, "title");
-		nbt.putBoolean("effect_toggle", effectToggle);
 		
 		nbt.put("editmode_locations", editmodeLocations.write());
 		
@@ -272,16 +269,6 @@ public final class PlayerData extends AttachmentHolder
 			title = Objects.requireNonNull(newTitle);
 			sendTitle(getPlayer());
 		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
-	}
-	
-	public boolean effectToggle()
-	{
-		return effectToggle;
-	}
-	
-	public void effectToggle(boolean toggle)
-	{
-		effectToggle = toggle;
 	}
 	
 	private void tryGiveStartingModus(ServerPlayer player)

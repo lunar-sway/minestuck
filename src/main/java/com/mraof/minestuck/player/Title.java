@@ -2,6 +2,7 @@ package com.mraof.minestuck.player;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -55,25 +56,24 @@ public final class Title
 		if(!MinestuckConfig.SERVER.aspectEffects.get())
 			return;
 		PlayerData data = PlayerSavedData.getData(player);
-		if(data.effectToggle())
+		if(data == null)
+			return;
+		if(!data.getData(MSCapabilities.EFFECT_TOGGLE))
+			return;
+		if(player.getCommandSenderWorld().getGameTime() % 380 != 0)
+			return;
+		
+		int rung = data.getEcheladder().getRung();
+		EnumAspect aspect = this.getHeroAspect();
+		int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+		
+		if(rung > 18 && aspect == HOPE)
+			player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 600, 0));
+		
+		if(potionLevel > 0)
 		{
-			int rung = data.getEcheladder().getRung();
-			EnumAspect aspect = data.getTitle().getHeroAspect();
-			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-			
-			if(player.getCommandSenderWorld().getGameTime() % 380 == 0)
-			{
-				if(rung > 18 && aspect == HOPE)
-				{
-					player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 600, 0));
-				}
-				
-				if(potionLevel > 0)
-				{
-					player.addEffect(new MobEffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
-					LOGGER.debug("Applied aspect potion effect to {}", player.getDisplayName().getString());
-				}
-			}
+			player.addEffect(new MobEffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
+			LOGGER.debug("Applied aspect potion effect to {}", player.getDisplayName().getString());
 		}
 	}
 	
