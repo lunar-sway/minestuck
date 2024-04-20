@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.attachment.AttachmentHolder;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
@@ -38,7 +39,7 @@ import java.util.Objects;
  * @author kirderf1
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class PlayerData
+public final class PlayerData extends AttachmentHolder
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -94,6 +95,9 @@ public final class PlayerData
 		this.mcServer = mcServer;
 		this.identifier = IdentifierHandler.loadOrThrow(nbt, "player");
 		
+		if(nbt.contains(ATTACHMENTS_NBT_KEY, Tag.TAG_COMPOUND))
+			this.deserializeAttachments(nbt.getCompound(ATTACHMENTS_NBT_KEY));
+		
 		echeladder = new Echeladder(mcServer, identifier);
 		echeladder.loadEcheladder(nbt);
 		if (nbt.contains("color"))
@@ -130,6 +134,11 @@ public final class PlayerData
 	{
 		CompoundTag nbt = new CompoundTag();
 		identifier.saveToNBT(nbt, "player");
+		
+		CompoundTag attachments = this.serializeAttachments();
+		if(attachments != null)
+			nbt.put(ATTACHMENTS_NBT_KEY, attachments);
+		
 		echeladder.saveEcheladder(nbt);
 		nbt.putInt("color", color);
 		
