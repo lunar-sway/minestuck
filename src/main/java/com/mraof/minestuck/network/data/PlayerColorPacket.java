@@ -3,7 +3,6 @@ package com.mraof.minestuck.network.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
@@ -95,7 +94,7 @@ public final class PlayerColorPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			PlayerSavedData.getData(player).trySetColor(ColorHandler.getColor(colorIndex));
+			ColorHandler.trySetColor(player, ColorHandler.getColor(colorIndex));
 		}
 	}
 	
@@ -123,7 +122,7 @@ public final class PlayerColorPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			PlayerSavedData.getData(player).trySetColor(color);
+			ColorHandler.trySetColor(player, color);
 		}
 	}
 }

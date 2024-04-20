@@ -3,9 +3,12 @@ package com.mraof.minestuck.util;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.AlchemizedColored;
+import com.mraof.minestuck.network.data.PlayerColorPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -15,10 +18,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Stores the array with colors that the player picks from, and provides utility function to handle colors.
@@ -119,6 +125,47 @@ public class ColorHandler
 	
 	public static int getColorForPlayer(PlayerIdentifier identifier, Level level)
 	{
-		return PlayerSavedData.getData(identifier, level).getColor();
+		return getColor(PlayerSavedData.getData(identifier, level));
+	}
+	
+	public static int getColor(PlayerData playerData)
+	{
+		return playerData.getData(MSCapabilities.PLAYER_COLOR);
+	}
+	
+	public static void trySetColor(ServerPlayer player, int color)
+	{
+		PlayerIdentifier playerId = IdentifierHandler.encode(player);
+		if(playerId == null || !SburbHandler.canSelectColor(playerId, player.server))
+			return;
+		
+		PlayerData playerData = PlayerSavedData.getData(playerId, player.server);
+		Integer prevColor = playerData.setData(MSCapabilities.PLAYER_COLOR, color);
+		
+		if(!Objects.equals(prevColor, color))
+			sendColor(player, playerData);
+	}
+	
+	@SubscribeEvent
+	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		PlayerData playerData = PlayerSavedData.getData(player);
+		ColorHandler.sendColor(player, playerData);
+	}
+	
+	private static void sendColor(ServerPlayer player, PlayerData playerData)
+	{
+		if(player == null)
+			return;
+		
+		boolean firstTime = playerData.getExistingData(MSCapabilities.PLAYER_COLOR).isEmpty();
+		
+		if(firstTime && !player.isSpectator())
+		{
+			playerData.setData(MSCapabilities.PLAYER_COLOR, DEFAULT_COLOR);
+			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.OpenSelection());
+		} else
+			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.Data(getColor(playerData)));
 	}
 }

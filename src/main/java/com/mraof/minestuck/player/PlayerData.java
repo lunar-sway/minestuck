@@ -4,10 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.inventory.captchalogue.*;
-import com.mraof.minestuck.network.data.*;
-import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.network.data.BoondollarDataPacket;
+import com.mraof.minestuck.network.data.ConsortReputationDataPacket;
+import com.mraof.minestuck.network.data.ModusDataPacket;
+import com.mraof.minestuck.network.data.TitleDataPacket;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -163,22 +163,6 @@ public final class PlayerData extends AttachmentHolder
 	public Echeladder getEcheladder()
 	{
 		return echeladder;
-	}
-	
-	public int getColor()
-	{
-		return this.getData(MSCapabilities.PLAYER_COLOR);
-	}
-	
-	public void trySetColor(int color)
-	{
-		if(!SburbHandler.canSelectColor(identifier, mcServer))
-			return;
-		
-		Integer prevColor = this.setData(MSCapabilities.PLAYER_COLOR, color);
-		
-		if(!Objects.equals(prevColor, color))
-			this.sendColor(getPlayer());
 	}
 	
 	public Modus getModus()
@@ -352,26 +336,10 @@ public final class PlayerData extends AttachmentHolder
 			tryGiveStartingModus(player);
 		
 		echeladder.sendInitialPacket(player);
-		sendColor(player);
 		sendBoondollars(player);
 		gristCache.sendPacket(player);
 		sendTitle(player);
 		
-	}
-	
-	private void sendColor(ServerPlayer player)
-	{
-		if(player == null)
-			return;
-		
-		boolean firstTime = this.getExistingData(MSCapabilities.PLAYER_COLOR).isEmpty();
-		
-		if(firstTime && !player.isSpectator())
-		{
-			this.setData(MSCapabilities.PLAYER_COLOR, ColorHandler.DEFAULT_COLOR);
-			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.OpenSelection());
-		} else
-			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.Data(getColor()));
 	}
 	
 	private void sendBoondollars(ServerPlayer player)
