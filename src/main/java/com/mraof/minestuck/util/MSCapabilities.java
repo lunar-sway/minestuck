@@ -8,6 +8,7 @@ import com.mraof.minestuck.computer.editmode.EditTools;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
+import com.mraof.minestuck.player.Title;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -28,6 +29,11 @@ public class MSCapabilities
 			() -> AttachmentType.builder(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR).serialize(Codec.INT).build());
 	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = ATTACHMENT_REGISTER.register("boondollars",
 			() -> AttachmentType.builder(() -> 0L).serialize(Codec.LONG).build());
+	
+	public static final Supplier<AttachmentType<Title>> TITLE = ATTACHMENT_REGISTER.register("title",
+			() -> AttachmentType.<Title>builder(() -> {
+				throw new UnsupportedOperationException();
+			}).serialize(Title.CODEC).build());
 	public static final Supplier<AttachmentType<Boolean>> EFFECT_TOGGLE = ATTACHMENT_REGISTER.register("effect_toggle",
 			() -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).build());
 	

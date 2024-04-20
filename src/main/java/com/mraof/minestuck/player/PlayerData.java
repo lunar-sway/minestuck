@@ -32,7 +32,6 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Stores and sends any data connected to a specific player.
@@ -65,8 +64,6 @@ public final class PlayerData extends AttachmentHolder
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
-	@Nullable
-	private Title title;
 	public final EditmodeLocations editmodeLocations;
 	
 	PlayerData(MinecraftServer mcServer, @Nonnull PlayerIdentifier player)
@@ -108,7 +105,6 @@ public final class PlayerData extends AttachmentHolder
 				consortReputation.put(dimension, dimensionRep.getInt("rep"));
 		}
 		
-		title = Title.tryRead(nbt, "title");
 		editmodeLocations = EditmodeLocations.read(nbt.getCompound("editmode_locations"));
 		
 	}
@@ -138,9 +134,6 @@ public final class PlayerData extends AttachmentHolder
 			list.add(dimensionRep);
 		}
 		nbt.put("consort_reputation", list);
-		
-		if(title != null)
-			title.write(nbt, "title");
 		
 		nbt.put("editmode_locations", editmodeLocations.write());
 		
@@ -259,16 +252,16 @@ public final class PlayerData extends AttachmentHolder
 	@Nullable
 	public Title getTitle()
 	{
-		return title;
+		return this.getExistingData(MSCapabilities.TITLE).orElse(null);
 	}
 	
 	public void setTitle(Title newTitle)
 	{
-		if(title == null)
-		{
-			title = Objects.requireNonNull(newTitle);
-			sendTitle(getPlayer());
-		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
+		if(this.getTitle() != null)
+			throw new IllegalStateException("Can't set title for player " + identifier.getUsername() + " because they already have one");
+		
+		this.setData(MSCapabilities.TITLE, newTitle);
+		sendTitle(getPlayer());
 	}
 	
 	private void tryGiveStartingModus(ServerPlayer player)
