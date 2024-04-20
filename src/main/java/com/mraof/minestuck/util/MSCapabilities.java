@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.computer.editmode.EditTools;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
@@ -36,6 +37,8 @@ public class MSCapabilities
 			}).serialize(Title.CODEC).build());
 	public static final Supplier<AttachmentType<Boolean>> EFFECT_TOGGLE = ATTACHMENT_REGISTER.register("effect_toggle",
 			() -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).build());
+	public static final Supplier<AttachmentType<EditmodeLocations>> EDITMODE_LOCATIONS = ATTACHMENT_REGISTER.register("editmode_locations",
+			() -> AttachmentType.serializable(EditmodeLocations::new).build());
 	
 	public static final Supplier<AttachmentType<ItemStackHandler>> MUSIC_PLAYER_INVENTORY_ATTACHMENT = ATTACHMENT_REGISTER.register("music_player_inventory",
 			() -> AttachmentType.serializable(() -> new ItemStackHandler(1)).build());

@@ -2,7 +2,6 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.network.data.BoondollarDataPacket;
 import com.mraof.minestuck.network.data.ModusDataPacket;
@@ -63,15 +62,12 @@ public final class PlayerData extends AttachmentHolder
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
-	public final EditmodeLocations editmodeLocations;
-	
 	PlayerData(MinecraftServer mcServer, @Nonnull PlayerIdentifier player)
 	{
 		this.mcServer = mcServer;
 		this.identifier = player;
 		echeladder = new Echeladder(mcServer, player);
 		gristCache = new GristCache(this, mcServer);
-		editmodeLocations = new EditmodeLocations();
 	}
 	
 	PlayerData(MinecraftServer mcServer, CompoundTag nbt)
@@ -103,9 +99,6 @@ public final class PlayerData extends AttachmentHolder
 			if(dimension != null)
 				consortReputation.put(dimension, dimensionRep.getInt("rep"));
 		}
-		
-		editmodeLocations = EditmodeLocations.read(nbt.getCompound("editmode_locations"));
-		
 	}
 	
 	CompoundTag writeToNBT()
@@ -133,8 +126,6 @@ public final class PlayerData extends AttachmentHolder
 			list.add(dimensionRep);
 		}
 		nbt.put("consort_reputation", list);
-		
-		nbt.put("editmode_locations", editmodeLocations.write());
 		
 		return nbt;
 	}

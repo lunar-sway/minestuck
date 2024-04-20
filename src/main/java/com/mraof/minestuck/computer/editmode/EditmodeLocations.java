@@ -8,6 +8,7 @@ import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +38,7 @@ import java.util.stream.Stream;
 /**
  * Contains a list of block positions in a radius around which an editmode player can move freely.
  */
-public final class EditmodeLocations
+public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -60,7 +62,8 @@ public final class EditmodeLocations
 	public record Area(BlockPos center, int range)
 	{}
 	
-	public CompoundTag write()
+	@Override
+	public CompoundTag serializeNBT()
 	{
 		CompoundTag compoundTag = new CompoundTag();
 		
@@ -86,10 +89,9 @@ public final class EditmodeLocations
 		return compoundTag;
 	}
 	
-	public static EditmodeLocations read(CompoundTag compoundTag)
+	@Override
+	public void deserializeNBT(CompoundTag compoundTag)
 	{
-		EditmodeLocations locations = new EditmodeLocations();
-		
 		ListTag locationsTag = compoundTag.getList("computers", Tag.TAG_COMPOUND);
 		
 		for(int i = 0; i < locationsTag.size(); i++)
@@ -102,9 +104,14 @@ public final class EditmodeLocations
 			int posY = nbt.getInt("y");
 			int posZ = nbt.getInt("z");
 			
-			locations.computers.put(dimension, new BlockPos(posX, posY, posZ));
+			this.computers.put(dimension, new BlockPos(posX, posY, posZ));
 		}
-		
+	}
+	
+	public static EditmodeLocations read(CompoundTag compoundTag)
+	{
+		EditmodeLocations locations = new EditmodeLocations();
+		locations.deserializeNBT(compoundTag);
 		return locations;
 	}
 	
@@ -119,7 +126,7 @@ public final class EditmodeLocations
 	{
 		PlayerIdentifier owner = data.getTarget();
 		ResourceKey<Level> land = data.sburbData().getLandDimensionIfEntered();
-		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).editmodeLocations;
+		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).getData(MSCapabilities.EDITMODE_LOCATIONS);
 		
 		if(level == land && ENTRY_POSITIONS.contains(pos))
 			return true;
@@ -160,7 +167,7 @@ public final class EditmodeLocations
 		if(computer.getOwner() == null)
 			return;
 		
-		var locations = PlayerSavedData.getData(computer.getOwner(), level).editmodeLocations;
+		var locations = PlayerSavedData.getData(computer.getOwner(), level).getData(MSCapabilities.EDITMODE_LOCATIONS);
 		
 		if(locations.computers.containsEntry(level.dimension(), computer.getBlockPos()))
 			return;
@@ -173,7 +180,7 @@ public final class EditmodeLocations
 	
 	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
 	{
-		var locations = PlayerSavedData.getData(owner, mcServer).editmodeLocations;
+		var locations = PlayerSavedData.getData(owner, mcServer).getData(MSCapabilities.EDITMODE_LOCATIONS);
 		
 		boolean wasRemoved = locations.computers.remove(level, pos);
 		if(wasRemoved)

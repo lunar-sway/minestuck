@@ -38,7 +38,7 @@ public record EditmodeLocationsPacket(@Nullable ResourceKey<Level> land, Editmod
 	{
 		buffer.writeOptional(Optional.ofNullable(this.land), FriendlyByteBuf::writeResourceKey);
 		
-		buffer.writeNbt(this.locations.write());
+		buffer.writeNbt(this.locations.serializeNBT());
 	}
 	
 	public static EditmodeLocationsPacket read(FriendlyByteBuf buffer)
