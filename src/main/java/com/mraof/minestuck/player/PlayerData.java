@@ -367,13 +367,11 @@ public final class PlayerData extends AttachmentHolder
 	{
 		if(player == null)
 			return;
+		
 		if(firstTime && !player.isSpectator())
-			PacketDistributor.PLAYER.with(player).send(ColorDataPacket.selector());
+			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.OpenSelection());
 		else
-		{
-			ColorDataPacket packet = ColorDataPacket.data(getColor());
-			PacketDistributor.PLAYER.with(player).send(packet);
-		}
+			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.Data(getColor()));
 	}
 	
 	private void sendBoondollars(ServerPlayer player)

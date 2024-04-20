@@ -5,8 +5,6 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.network.ColorSelectPacket;
-import com.mraof.minestuck.network.RGBColorSelectPacket;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.util.ColorHandler;
 import net.neoforged.api.distmarker.Dist;
@@ -112,7 +110,7 @@ public final class ClientPlayerData
 	
 	public static void selectColor(int colorIndex)
 	{
-		PacketDistributor.SERVER.noArg().send(new ColorSelectPacket(colorIndex));
+		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectIndex(colorIndex));
 		playerColor = ColorHandler.getColor(colorIndex);
 	}
 	
@@ -120,7 +118,7 @@ public final class ClientPlayerData
 	{
 		if (color < 0 || color > 256*256*256) return;
 		
-		PacketDistributor.SERVER.noArg().send(new RGBColorSelectPacket(color));
+		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectRGB(color));
 		playerColor = color;
 	}
 	
@@ -181,13 +179,15 @@ public final class ClientPlayerData
 		targetCacheLimit = packet.limit();
 	}
 	
-	public static void handleDataPacket(ColorDataPacket packet)
+	public static void handleDataPacket(PlayerColorPacket.OpenSelection packet)
 	{
-		if(packet.hasNoColor())
-		{
-			ClientPlayerData.playerColor = ColorHandler.DEFAULT_COLOR;
-			ClientPlayerData.displaySelectionGui = true;
-		} else ClientPlayerData.playerColor = packet.getColor();
+		ClientPlayerData.playerColor = ColorHandler.DEFAULT_COLOR;
+		ClientPlayerData.displaySelectionGui = true;
+	}
+	
+	public static void handleDataPacket(PlayerColorPacket.Data packet)
+	{
+		ClientPlayerData.playerColor = packet.color();
 	}
 	
 	public static void handleDataPacket(DataCheckerPermissionPacket packet)

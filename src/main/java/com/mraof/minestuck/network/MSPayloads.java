@@ -17,7 +17,6 @@ public class MSPayloads
 				.versioned("1")
 				.play(DataCheckerPermissionPacket.ID, DataCheckerPermissionPacket::read, MSPacket.PlayToClient::handler)
 				.play(EcheladderDataPacket.ID, EcheladderDataPacket::read, MSPacket.PlayToClient::handler)
-				.play(ColorDataPacket.ID, ColorDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(ModusDataPacket.ID, ModusDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(BoondollarDataPacket.ID, BoondollarDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(ConsortReputationDataPacket.ID, ConsortReputationDataPacket::read, MSPacket.PlayToClient::handler)
@@ -26,9 +25,12 @@ public class MSPayloads
 				.play(TitleDataPacket.ID, TitleDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(LandTypesDataPacket.ID, LandTypesDataPacket::read, MSPacket.PlayToClient::handler)
 				
+				.play(PlayerColorPacket.OpenSelection.ID, PlayerColorPacket.OpenSelection::read, MSPacket.PlayToClient::handler)
+				.play(PlayerColorPacket.Data.ID, PlayerColorPacket.Data::read, MSPacket.PlayToClient::handler)
+				.play(PlayerColorPacket.SelectIndex.ID, PlayerColorPacket.SelectIndex::read, MSPacket.PlayToServer::handler)
+				.play(PlayerColorPacket.SelectRGB.ID, PlayerColorPacket.SelectRGB::read, MSPacket.PlayToServer::handler)
+				
 				.play(CaptchaDeckPacket.ID, CaptchaDeckPacket::read, MSPacket.PlayToServer::handler)
-				.play(ColorSelectPacket.ID, ColorSelectPacket::read, MSPacket.PlayToServer::handler)
-				.play(RGBColorSelectPacket.ID, RGBColorSelectPacket::read, MSPacket.PlayToServer::handler)
 				.play(TitleSelectPacket.ID, TitleSelectPacket::read, MSPacket.PlayToBoth::handlerBoth)
 				
 				.play(DialoguePackets.OpenScreen.ID, DialoguePackets.OpenScreen::read, MSPacket.PlayToClient::handler)
