@@ -42,7 +42,7 @@ public interface InventoryTickEffect
 		return (stack, worldIn, entityIn, itemSlot, isSelected) -> {
 			if(isSelected && entityIn instanceof ServerPlayer player && !(entityIn instanceof FakePlayer))
 			{
-				Title title = PlayerSavedData.getData(player).getTitle();
+				Title title = Title.getTitle(PlayerSavedData.getData(player));
 				if(title != null && title.heroAspect() == aspect)
 					player.addEffect(effect.get());
 			}

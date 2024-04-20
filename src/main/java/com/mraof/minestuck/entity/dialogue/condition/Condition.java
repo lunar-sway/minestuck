@@ -673,8 +673,8 @@ public interface Condition
 				return false;
 			
 			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null && data.getTitle() != null)
-				return data.getTitle().heroClass().equals(enumClass);
+			if(data != null && Title.getTitle(data) != null)
+				return Title.getTitle(data).heroClass().equals(enumClass);
 			
 			return false;
 		}
@@ -705,8 +705,8 @@ public interface Condition
 				return false;
 			
 			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null && data.getTitle() != null)
-				return data.getTitle().heroAspect().equals(enumAspect);
+			if(data != null && Title.getTitle(data) != null)
+				return Title.getTitle(data).heroAspect().equals(enumAspect);
 			
 			return false;
 		}

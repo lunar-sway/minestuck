@@ -157,7 +157,7 @@ public class ServerEventHandler
 	{
 		if(event.getEntity() instanceof Player injuredPlayer && !(injuredPlayer instanceof FakePlayer))
 		{
-			Title title = PlayerSavedData.getData((ServerPlayer) injuredPlayer).getTitle();
+			Title title = Title.getTitle(PlayerSavedData.getData((ServerPlayer) injuredPlayer));
 			boolean isDoom = title != null && title.heroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
@@ -242,8 +242,8 @@ public class ServerEventHandler
 		if(!event.player.level().isClientSide && !(event.player instanceof FakePlayer))
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
-			if(data.getTitle() != null)
-				data.getTitle().handleAspectEffects((ServerPlayer) event.player);
+			if(Title.getTitle(data) != null)
+				Title.getTitle(data).handleAspectEffects((ServerPlayer) event.player);
 		}
 	}
 	

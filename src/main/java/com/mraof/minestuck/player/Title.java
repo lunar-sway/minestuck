@@ -2,7 +2,9 @@ package com.mraof.minestuck.player;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.network.data.TitleDataPacket;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -12,12 +14,17 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public record Title(EnumClass heroClass, EnumAspect heroAspect)
 {
 	public static final String FORMAT = "title.format";
@@ -52,12 +59,34 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 			ASPECT_CODEC.fieldOf("aspect").forGetter(Title::heroAspect)
 	).apply(instance, Title::new));
 	
-	public Title(EnumClass heroClass, EnumAspect heroAspect)
+	@SubscribeEvent
+	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		this.heroClass = Objects.requireNonNull(heroClass);
-		this.heroAspect = Objects.requireNonNull(heroAspect);
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		PlayerData playerData = Objects.requireNonNull(PlayerSavedData.getData(player));
+		
+		Title title = getTitle(playerData);
+		if(title != null)
+			player.connection.send(TitleDataPacket.create(title));
 	}
 	
+	@Nullable
+	public static Title getTitle(PlayerData playerData)
+	{
+		return playerData.getExistingData(MSCapabilities.TITLE).orElse(null);
+	}
+	
+	public static void setTitle(PlayerData playerData, Title newTitle)
+	{
+		if(getTitle(playerData) != null)
+			throw new IllegalStateException("Can't set title for player " + playerData.identifier.getUsername() + " because they already have one");
+		
+		playerData.setData(MSCapabilities.TITLE, newTitle);
+		
+		ServerPlayer player = playerData.getPlayer();
+		if(player != null)
+			player.connection.send(TitleDataPacket.create(newTitle));
+	}
 	
 	public void handleAspectEffects(ServerPlayer player)
 	{

@@ -47,7 +47,7 @@ public class TitleSelectionHook
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		if(SkaianetData.get(player.server).getOrCreatePredefineData(identifier).map(data -> data.getTitle() != null).orElse(false)
-				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
+				|| Title.getTitle(PlayerSavedData.getData(identifier, player.server)) != null)
 			return true;
 		
 		playersInTitleSelection.put(player, new Pair<>(new Vec3(player.getX(), player.getY(), player.getZ()), savedPos));
@@ -74,7 +74,7 @@ public class TitleSelectionHook
 		if(title == null)
 			SburbHandler.generateAndSetTitle(identifier, player.server);
 		else
-			PlayerSavedData.getData(identifier, player.server).setTitle(title);
+			Title.setTitle(PlayerSavedData.getData(identifier, player.server), title);
 		
 		//Once the title selection has finished successfully, restore player position and trigger entry
 		var both = playersInTitleSelection.remove(player);

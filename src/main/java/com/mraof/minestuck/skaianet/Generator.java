@@ -71,7 +71,7 @@ class Generator
 	@NotNull
 	private static Optional<Title> titleForPlayer(PlayerIdentifier player, SkaianetData skaianetData)
 	{
-		return Optional.ofNullable(PlayerSavedData.getData(player, skaianetData.mcServer).getTitle())
+		return Optional.ofNullable(Title.getTitle(PlayerSavedData.getData(player, skaianetData.mcServer)))
 				.or(() -> skaianetData.getOrCreatePredefineData(player).flatMap(data -> Optional.ofNullable(data.getTitle())));
 	}
 	

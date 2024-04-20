@@ -253,7 +253,7 @@ public interface OnHitEffect
 			
 			if(attacker instanceof ServerPlayer serverPlayer && !(attacker instanceof FakePlayer))
 			{
-				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
+				Title title = Title.getTitle(PlayerSavedData.getData(serverPlayer));
 				
 				if(target instanceof UnderlingEntity)
 				{
@@ -430,7 +430,7 @@ public interface OnHitEffect
 		return (stack, target, attacker) -> {
 			if(attacker instanceof ServerPlayer player && !(attacker instanceof FakePlayer))
 			{
-				Title title = PlayerSavedData.getData(player).getTitle();
+				Title title = Title.getTitle(PlayerSavedData.getData(player));
 				
 				if((title != null && title.heroAspect() == aspect) || player.isCreative())
 					effect.onHit(stack, target, attacker);

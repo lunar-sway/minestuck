@@ -6,7 +6,6 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.network.data.BoondollarDataPacket;
 import com.mraof.minestuck.network.data.ModusDataPacket;
-import com.mraof.minestuck.network.data.TitleDataPacket;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
@@ -249,21 +248,6 @@ public final class PlayerData extends AttachmentHolder
 		return gristCache;
 	}
 	
-	@Nullable
-	public Title getTitle()
-	{
-		return this.getExistingData(MSCapabilities.TITLE).orElse(null);
-	}
-	
-	public void setTitle(Title newTitle)
-	{
-		if(this.getTitle() != null)
-			throw new IllegalStateException("Can't set title for player " + identifier.getUsername() + " because they already have one");
-		
-		this.setData(MSCapabilities.TITLE, newTitle);
-		sendTitle(getPlayer());
-	}
-	
 	private void tryGiveStartingModus(ServerPlayer player)
 	{
 		List<ModusType<?>> startingTypes = StartingModusManager.getStartingModusTypes();
@@ -299,8 +283,6 @@ public final class PlayerData extends AttachmentHolder
 		echeladder.sendInitialPacket(player);
 		sendBoondollars(player);
 		gristCache.sendPacket(player);
-		sendTitle(player);
-		
 	}
 	
 	private void sendBoondollars(ServerPlayer player)
@@ -308,15 +290,6 @@ public final class PlayerData extends AttachmentHolder
 		if(player == null)
 			return;
 		BoondollarDataPacket packet = BoondollarDataPacket.create(getBoondollars());
-		PacketDistributor.PLAYER.with(player).send(packet);
-	}
-	
-	private void sendTitle(ServerPlayer player)
-	{
-		Title newTitle = getTitle();
-		if(newTitle == null || player == null)
-			return;
-		TitleDataPacket packet = TitleDataPacket.create(newTitle);
 		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	

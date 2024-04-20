@@ -115,7 +115,7 @@ public class DataCheckerManager
 		landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
 				.ifPresent(landPairTag -> tag.put("landTypes", landPairTag));
 		
-		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
+		Title title = Title.getTitle(PlayerSavedData.getData(player, mcServer));
 		if(title != null)
 		{
 			tag.putByte("class", (byte) title.heroClass().ordinal());
