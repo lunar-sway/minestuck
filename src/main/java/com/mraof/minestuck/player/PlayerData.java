@@ -6,6 +6,7 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
@@ -77,8 +78,6 @@ public final class PlayerData extends AttachmentHolder
 	private boolean effectToggle;
 	public final EditmodeLocations editmodeLocations;
 	
-	private boolean hasLoggedIn;
-	
 	PlayerData(MinecraftServer mcServer, @Nonnull PlayerIdentifier player)
 	{
 		this.mcServer = mcServer;
@@ -86,7 +85,6 @@ public final class PlayerData extends AttachmentHolder
 		echeladder = new Echeladder(mcServer, player);
 		gristCache = new GristCache(this, mcServer);
 		editmodeLocations = new EditmodeLocations();
-		hasLoggedIn = false;
 	}
 	
 	PlayerData(MinecraftServer mcServer, CompoundTag nbt)
@@ -124,7 +122,6 @@ public final class PlayerData extends AttachmentHolder
 		effectToggle = nbt.getBoolean("effect_toggle");
 		editmodeLocations = EditmodeLocations.read(nbt.getCompound("editmode_locations"));
 		
-		hasLoggedIn = true;
 	}
 	
 	CompoundTag writeToNBT()
@@ -181,7 +178,7 @@ public final class PlayerData extends AttachmentHolder
 		Integer prevColor = this.setData(MSCapabilities.PLAYER_COLOR, color);
 		
 		if(!Objects.equals(prevColor, color))
-			this.sendColor(getPlayer(), false);
+			this.sendColor(getPlayer());
 	}
 	
 	public Modus getModus()
@@ -355,22 +352,25 @@ public final class PlayerData extends AttachmentHolder
 			tryGiveStartingModus(player);
 		
 		echeladder.sendInitialPacket(player);
-		sendColor(player, !hasLoggedIn);
+		sendColor(player);
 		sendBoondollars(player);
 		gristCache.sendPacket(player);
 		sendTitle(player);
 		
-		hasLoggedIn = true;
 	}
 	
-	private void sendColor(ServerPlayer player, boolean firstTime)
+	private void sendColor(ServerPlayer player)
 	{
 		if(player == null)
 			return;
 		
+		boolean firstTime = this.getExistingData(MSCapabilities.PLAYER_COLOR).isEmpty();
+		
 		if(firstTime && !player.isSpectator())
+		{
+			this.setData(MSCapabilities.PLAYER_COLOR, ColorHandler.DEFAULT_COLOR);
 			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.OpenSelection());
-		else
+		} else
 			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.Data(getColor()));
 	}
 	
