@@ -9,16 +9,23 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.Title;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -27,30 +34,44 @@ public class MSCapabilities
 	public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_REGISTER = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, Minestuck.MOD_ID);
 	
 	public static final Supplier<AttachmentType<Integer>> PLAYER_COLOR = ATTACHMENT_REGISTER.register("player_color",
-			() -> AttachmentType.builder(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR).serialize(Codec.INT).build());
+			() -> AttachmentType.builder(restricted(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR, PlayerData.class)).serialize(Codec.INT).build());
 	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = ATTACHMENT_REGISTER.register("boondollars",
-			() -> AttachmentType.builder(() -> 0L).serialize(Codec.LONG).build());
+			() -> AttachmentType.builder(restricted(() -> 0L, PlayerData.class)).serialize(Codec.LONG).build());
 	
 	public static final Supplier<AttachmentType<Title>> TITLE = ATTACHMENT_REGISTER.register("title",
-			() -> AttachmentType.<Title>builder(() -> {
-				throw new UnsupportedOperationException();
-			}).serialize(Title.CODEC).build());
+			() -> AttachmentType.<Title>builder(noDefault()).serialize(Title.CODEC).build());
 	public static final Supplier<AttachmentType<Boolean>> EFFECT_TOGGLE = ATTACHMENT_REGISTER.register("effect_toggle",
-			() -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).build());
+			() -> AttachmentType.builder(restricted(() -> false, ServerPlayer.class)).serialize(Codec.BOOL).build());
 	public static final Supplier<AttachmentType<EditmodeLocations>> EDITMODE_LOCATIONS = ATTACHMENT_REGISTER.register("editmode_locations",
 			() -> AttachmentType.serializable(EditmodeLocations::new).build());
 	
 	public static final Supplier<AttachmentType<ItemStackHandler>> MUSIC_PLAYER_INVENTORY_ATTACHMENT = ATTACHMENT_REGISTER.register("music_player_inventory",
-			() -> AttachmentType.serializable(() -> new ItemStackHandler(1)).build());
+			() -> AttachmentType.serializable(restricted(() -> new ItemStackHandler(1), ItemStack.class)).build());
 	public static final Supplier<AttachmentType<MusicPlaying>> MUSIC_PLAYING_ATTACHMENT = ATTACHMENT_REGISTER.register("music_playing",
-			() -> AttachmentType.builder(MusicPlaying::new).build());
+			() -> AttachmentType.builder(restricted(MusicPlaying::new, LivingEntity.class)).build());
 	
 	public static final Supplier<AttachmentType<EditTools>> EDIT_TOOLS_ATTACHMENT = ATTACHMENT_REGISTER.register("edit_tools",
-			() -> AttachmentType.builder(EditTools::new).build());
+			() -> AttachmentType.builder(restricted(EditTools::new, Player.class)).build());
 	public static final Supplier<AttachmentType<MSFluidType.LastFluidTickData>> LAST_FLUID_TICK_ATTACHMENT = ATTACHMENT_REGISTER.register("last_fluid_tick",
-			() -> AttachmentType.builder(MSFluidType.LastFluidTickData::new).build());
+			() -> AttachmentType.builder(restricted(MSFluidType.LastFluidTickData::new, LivingEntity.class)).build());
 	public static final Supplier<AttachmentType<DialogueComponent.CurrentDialogue>> CURRENT_DIALOGUE_ATTACHMENT = ATTACHMENT_REGISTER.register("current_dialogue",
-			() -> AttachmentType.builder(DialogueComponent.CurrentDialogue::new).build());
+			() -> AttachmentType.builder(restricted(DialogueComponent.CurrentDialogue::new, ServerPlayer.class)).build());
+	
+	private static <T> Supplier<T> noDefault()
+	{
+		return () -> {
+			throw new UnsupportedOperationException("This attachment does not support default values. Use 'getExistingData()' instead.");
+		};
+	}
+	
+	private static <H extends IAttachmentHolder, T> Function<IAttachmentHolder, T> restricted(Supplier<T> defaultValueSupplier, Class<H> permittedHolder)
+	{
+		return holder -> {
+			if(!permittedHolder.isInstance(holder))
+				throw new UnsupportedOperationException("Only a holder of class " + permittedHolder + " is permitted.");
+			return defaultValueSupplier.get();
+		};
+	}
 	
 	@SubscribeEvent
 	public static void registerCapabilities(RegisterCapabilitiesEvent event)
