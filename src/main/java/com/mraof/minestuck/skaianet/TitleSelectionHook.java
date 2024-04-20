@@ -47,7 +47,7 @@ public class TitleSelectionHook
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		if(SkaianetData.get(player.server).getOrCreatePredefineData(identifier).map(data -> data.getTitle() != null).orElse(false)
-				|| Title.getTitle(PlayerSavedData.getData(identifier, player.server)) != null)
+				|| Title.getTitle(PlayerSavedData.getData(identifier, player.server)).isPresent())
 			return true;
 		
 		playersInTitleSelection.put(player, new Pair<>(new Vec3(player.getX(), player.getY(), player.getZ()), savedPos));

@@ -12,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.FakePlayer;
 
 import java.util.function.Supplier;
 
@@ -40,11 +39,13 @@ public interface InventoryTickEffect
 	static InventoryTickEffect passiveAspectEffect(EnumAspect aspect, Supplier<MobEffectInstance> effect)
 	{
 		return (stack, worldIn, entityIn, itemSlot, isSelected) -> {
-			if(isSelected && entityIn instanceof ServerPlayer player && !(entityIn instanceof FakePlayer))
+			if(isSelected && entityIn instanceof ServerPlayer player)
 			{
-				Title title = Title.getTitle(PlayerSavedData.getData(player));
-				if(title != null && title.heroAspect() == aspect)
-					player.addEffect(effect.get());
+				Title.getTitle(PlayerSavedData.getData(player)).ifPresent(title ->
+				{
+					if(title.heroAspect() == aspect)
+						player.addEffect(effect.get());
+				});
 			}
 		};
 	}

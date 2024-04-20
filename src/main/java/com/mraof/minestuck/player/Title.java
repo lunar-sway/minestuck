@@ -23,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public record Title(EnumClass heroClass, EnumAspect heroAspect)
@@ -65,20 +66,20 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 		ServerPlayer player = (ServerPlayer) event.getEntity();
 		PlayerData playerData = Objects.requireNonNull(PlayerSavedData.getData(player));
 		
-		Title title = getTitle(playerData);
-		if(title != null)
-			player.connection.send(TitleDataPacket.create(title));
+		getTitle(playerData).ifPresent(title ->
+				player.connection.send(TitleDataPacket.create(title)));
 	}
 	
-	@Nullable
-	public static Title getTitle(PlayerData playerData)
+	public static Optional<Title> getTitle(@Nullable PlayerData playerData)
 	{
-		return playerData.getExistingData(MSCapabilities.TITLE).orElse(null);
+		if(playerData == null)
+			return Optional.empty();
+		return playerData.getExistingData(MSCapabilities.TITLE);
 	}
 	
 	public static void setTitle(PlayerData playerData, Title newTitle)
 	{
-		if(getTitle(playerData) != null)
+		if(getTitle(playerData).isPresent())
 			throw new IllegalStateException("Can't set title for player " + playerData.identifier.getUsername() + " because they already have one");
 		
 		playerData.setData(MSCapabilities.TITLE, newTitle);

@@ -115,12 +115,11 @@ public class DataCheckerManager
 		landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
 				.ifPresent(landPairTag -> tag.put("landTypes", landPairTag));
 		
-		Title title = Title.getTitle(PlayerSavedData.getData(player, mcServer));
-		if(title != null)
+		Title.getTitle(PlayerSavedData.getData(player, mcServer)).ifPresent(title ->
 		{
 			tag.putByte("class", (byte) title.heroClass().ordinal());
 			tag.putByte("aspect", (byte) title.heroAspect().ordinal());
-		}
+		});
 	}
 	
 	private static void putPredefinedData(CompoundTag tag, PredefineData data)

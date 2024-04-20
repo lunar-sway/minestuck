@@ -74,11 +74,9 @@ public record DialogueMessage(String key, List<Argument> arguments)
 		ENTITY_TYPES((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".plural")),
 		PLAYER_TITLE((npc, player) -> {
 			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
-			Title playerTitle = Title.getTitle(PlayerSavedData.getData(identifier, player.server));
-			if(playerTitle != null)
-				return playerTitle.asTextComponent();
-			else
-				return player.getName();
+			return Title.getTitle(PlayerSavedData.getData(identifier, player.server))
+					.map(Title::asTextComponent)
+					.orElseGet(player::getName);
 		}),
 		/**
 		 * Becomes the name of the item that was matched by a {@link com.mraof.minestuck.entity.dialogue.condition.Condition.ItemTagMatch}.
@@ -124,6 +122,6 @@ public record DialogueMessage(String key, List<Argument> arguments)
 	private static Optional<Title> homeLandTitle(LivingEntity entity)
 	{
 		return homeLandClientPlayer(entity)
-				.flatMap(clientPlayer -> Optional.ofNullable(Title.getTitle(PlayerSavedData.getData(clientPlayer, Objects.requireNonNull(entity.getServer())))));
+				.flatMap(clientPlayer -> Title.getTitle(PlayerSavedData.getData(clientPlayer, Objects.requireNonNull(entity.getServer()))));
 	}
 }

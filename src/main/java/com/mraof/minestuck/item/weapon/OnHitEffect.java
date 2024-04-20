@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.ClientMovementPacket;
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSDamageSources;
@@ -46,6 +47,8 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.player.EnumAspect.*;
@@ -253,20 +256,23 @@ public interface OnHitEffect
 			
 			if(attacker instanceof ServerPlayer serverPlayer && !(attacker instanceof FakePlayer))
 			{
-				Title title = Title.getTitle(PlayerSavedData.getData(serverPlayer));
+				PlayerData data = Objects.requireNonNull(PlayerSavedData.getData(serverPlayer));
+				boolean isMissingAspectBonus = Title.getTitle(data)
+						.map(value -> value.heroAspect() != aspect)
+						.orElse(true);
 				
 				if(target instanceof UnderlingEntity)
 				{
-					float modifier = (float) (PlayerSavedData.getData(serverPlayer).getEcheladder().getUnderlingDamageModifier());
+					float modifier = (float) (data.getEcheladder().getUnderlingDamageModifier());
 					
-					if(title == null || title.heroAspect() != aspect)
-						modifier = modifier / 1.2F;
+					if(isMissingAspectBonus)
+						modifier /= 1.2F;
 					
-					damage = damage * modifier;
+					damage *= modifier;
 				} else
 				{
-					if(title == null || title.heroAspect() != aspect)
-						damage = damage / 1.2F;
+					if(isMissingAspectBonus)
+						damage /= 1.2F;
 				}
 			}
 			
@@ -430,9 +436,9 @@ public interface OnHitEffect
 		return (stack, target, attacker) -> {
 			if(attacker instanceof ServerPlayer player && !(attacker instanceof FakePlayer))
 			{
-				Title title = Title.getTitle(PlayerSavedData.getData(player));
+				Optional<Title> title = Title.getTitle(PlayerSavedData.getData(player));
 				
-				if((title != null && title.heroAspect() == aspect) || player.isCreative())
+				if((title.isPresent() && title.get().heroAspect() == aspect) || player.isCreative())
 					effect.onHit(stack, target, attacker);
 			}
 		};

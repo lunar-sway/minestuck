@@ -17,6 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
+import java.util.Optional;
+
 public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponItem
 {
 	protected final int maxTick;
@@ -37,11 +39,11 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 		if(!level.isClientSide && !(playerIn instanceof FakePlayer))
 		{
 			boolean noBlockCollision = false;
-			Title title = Title.getTitle(PlayerSavedData.getData((ServerPlayer) playerIn));
-			if(title != null)
+			Optional<Title> title = Title.getTitle(PlayerSavedData.getData((ServerPlayer) playerIn));
+			if(title.isPresent())
 			{
-				noBlockCollision = title.heroAspect() == EnumAspect.VOID && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get();
-			} else if(playerIn.isCreative() && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get())
+				noBlockCollision = title.get().heroAspect() == EnumAspect.VOID && item.is(MSItems.UMBRAL_INFILTRATOR);
+			} else if(playerIn.isCreative() && item.is(MSItems.UMBRAL_INFILTRATOR))
 				noBlockCollision = true;
 			
 			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE.get(), playerIn, level, maxTick, noBlockCollision);

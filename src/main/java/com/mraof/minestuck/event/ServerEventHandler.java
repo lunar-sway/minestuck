@@ -25,7 +25,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
@@ -47,6 +46,7 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
@@ -155,10 +155,10 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
 	public static void onPlayerInjured(LivingHurtEvent event)
 	{
-		if(event.getEntity() instanceof Player injuredPlayer && !(injuredPlayer instanceof FakePlayer))
+		if(event.getEntity() instanceof ServerPlayer injuredPlayer && !(injuredPlayer instanceof FakePlayer))
 		{
-			Title title = Title.getTitle(PlayerSavedData.getData((ServerPlayer) injuredPlayer));
-			boolean isDoom = title != null && title.heroAspect() == EnumAspect.DOOM;
+			Optional<Title> title = Title.getTitle(PlayerSavedData.getData(injuredPlayer));
+			boolean isDoom = title.filter(value -> value.heroAspect() == EnumAspect.DOOM).isPresent();
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			
@@ -239,11 +239,10 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(!event.player.level().isClientSide && !(event.player instanceof FakePlayer))
+		if(event.player instanceof ServerPlayer player)
 		{
-			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
-			if(Title.getTitle(data) != null)
-				Title.getTitle(data).handleAspectEffects((ServerPlayer) event.player);
+			Title.getTitle(PlayerSavedData.getData(player))
+					.ifPresent(value -> value.handleAspectEffects(player));
 		}
 	}
 	

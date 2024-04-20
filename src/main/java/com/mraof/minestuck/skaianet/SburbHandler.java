@@ -61,12 +61,12 @@ public final class SburbHandler
 	static void generateAndSetTitle(PlayerIdentifier player, MinecraftServer mcServer)
 	{
 		PlayerData data = PlayerSavedData.getData(player, mcServer);
-		if(Title.getTitle(data) == null)
+		if(Title.getTitle(data).isEmpty())
 		{
 			Title title = produceTitle(player, mcServer);
 			if(title == null)
 				return;
-			Title.setTitle(PlayerSavedData.getData(player, mcServer), title);
+			Title.setTitle(data, title);
 		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
 	}
@@ -105,7 +105,7 @@ public final class SburbHandler
 	{
 		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		List<PlayerIdentifier> otherPlayers = skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList();
-		Title title = Title.getTitle(PlayerSavedData.getData(player, mcServer));
+		Title title = Title.getTitle(PlayerSavedData.getData(player, mcServer)).orElseThrow();
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		
