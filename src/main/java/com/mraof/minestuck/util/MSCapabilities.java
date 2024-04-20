@@ -9,6 +9,7 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,6 +38,8 @@ public class MSCapabilities
 			() -> AttachmentType.builder(restricted(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR, PlayerData.class)).serialize(Codec.INT).build());
 	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = ATTACHMENT_REGISTER.register("boondollars",
 			() -> AttachmentType.builder(restricted(() -> 0L, PlayerData.class)).serialize(Codec.LONG).build());
+	public static final Supplier<AttachmentType<GristCache>> GRIST_CACHE = ATTACHMENT_REGISTER.register("grist_cache",
+			() -> AttachmentType.serializable(restricted(GristCache::new, PlayerData.class)).build());
 	
 	public static final Supplier<AttachmentType<Title>> TITLE = ATTACHMENT_REGISTER.register("title",
 			() -> AttachmentType.<Title>builder(noDefault()).serialize(Title.CODEC).build());
@@ -66,10 +69,15 @@ public class MSCapabilities
 	
 	private static <H extends IAttachmentHolder, T> Function<IAttachmentHolder, T> restricted(Supplier<T> defaultValueSupplier, Class<H> permittedHolder)
 	{
+		return restricted(holder -> defaultValueSupplier.get(), permittedHolder);
+	}
+	
+	private static <H extends IAttachmentHolder, T> Function<IAttachmentHolder, T> restricted(Function<H, T> defaultValueSupplier, Class<H> permittedHolder)
+	{
 		return holder -> {
 			if(!permittedHolder.isInstance(holder))
 				throw new UnsupportedOperationException("Only a holder of class " + permittedHolder + " is permitted.");
-			return defaultValueSupplier.get();
+			return defaultValueSupplier.apply(permittedHolder.cast(holder));
 		};
 	}
 	

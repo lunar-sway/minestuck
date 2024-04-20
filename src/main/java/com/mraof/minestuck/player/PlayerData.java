@@ -27,6 +27,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import java.util.Map;
  * This class is for server-side use only.
  * @author kirderf1
  */
+@ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PlayerData extends AttachmentHolder
 {
@@ -57,17 +59,15 @@ public final class PlayerData extends AttachmentHolder
 	
 	private boolean givenModus;
 	private Modus modus;
-	final GristCache gristCache;
 	private double gutterMultiplier = 1;
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
-	PlayerData(MinecraftServer mcServer, @Nonnull PlayerIdentifier player)
+	PlayerData(MinecraftServer mcServer, PlayerIdentifier player)
 	{
 		this.mcServer = mcServer;
 		this.identifier = player;
 		echeladder = new Echeladder(mcServer, player);
-		gristCache = new GristCache(this, mcServer);
 	}
 	
 	PlayerData(MinecraftServer mcServer, CompoundTag nbt)
@@ -87,9 +87,6 @@ public final class PlayerData extends AttachmentHolder
 			givenModus = true;
 		}
 		else givenModus = nbt.getBoolean("given_modus");
-		
-		gristCache = new GristCache(this, mcServer);
-		gristCache.read(nbt);
 		
 		ListTag list = nbt.getList("consort_reputation", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
@@ -115,7 +112,6 @@ public final class PlayerData extends AttachmentHolder
 		if (this.modus != null)
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
 		else nbt.putBoolean("given_modus", givenModus);
-		gristCache.write(nbt);
 		
 		ListTag list = new ListTag();
 		for(Map.Entry<ResourceLocation, Integer> entry : consortReputation.entrySet())
@@ -234,11 +230,6 @@ public final class PlayerData extends AttachmentHolder
 			consortReputation.put(dim.location(), newRep);
 	}
 	
-	public GristCache getGristCache()
-	{
-		return gristCache;
-	}
-	
 	private void tryGiveStartingModus(ServerPlayer player)
 	{
 		List<ModusType<?>> startingTypes = StartingModusManager.getStartingModusTypes();
@@ -273,7 +264,6 @@ public final class PlayerData extends AttachmentHolder
 		
 		echeladder.sendInitialPacket(player);
 		sendBoondollars(player);
-		gristCache.sendPacket(player);
 	}
 	
 	private void sendBoondollars(ServerPlayer player)
@@ -288,5 +278,10 @@ public final class PlayerData extends AttachmentHolder
 	ServerPlayer getPlayer()
 	{
 		return identifier.getPlayer(mcServer);
+	}
+	
+	public MinecraftServer getMinecraftServer()
+	{
+		return this.mcServer;
 	}
 }
