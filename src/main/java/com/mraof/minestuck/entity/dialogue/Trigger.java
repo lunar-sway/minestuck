@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
@@ -392,9 +393,9 @@ public sealed interface Trigger
 			if(data != null && boondollars != 0)
 			{
 				if(boondollars > 0)
-					data.addBoondollars(boondollars);
+					PlayerBoondollars.addBoondollars(data, boondollars);
 				else
-					data.takeBoondollars(-boondollars);
+					PlayerBoondollars.takeBoondollars(data, -boondollars);
 			}
 		}
 	}

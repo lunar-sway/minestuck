@@ -768,7 +768,7 @@ public interface Condition
 			
 			PlayerData data = PlayerSavedData.getData(player);
 			if(data != null)
-				return data.getBoondollars() >= amount;
+				return PlayerBoondollars.getBoondollars(data) >= amount;
 			
 			return false;
 		}

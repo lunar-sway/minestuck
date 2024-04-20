@@ -135,7 +135,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 				LOGGER.debug("Remaining exp {} is below 1, and will therefore be ignored", exp);
 		}
 		
-		PlayerSavedData.getData(identifier, mcServer).addBoondollars(boondollarsGained);
+		PlayerBoondollars.addBoondollars(PlayerSavedData.getData(identifier, mcServer), boondollarsGained);
 		
 		LOGGER.debug("Finished echeladder climbing for {} at {} with progress {}", identifier.getUsername(), rung, progress);
 		ServerPlayer player = identifier.getPlayer(mcServer);

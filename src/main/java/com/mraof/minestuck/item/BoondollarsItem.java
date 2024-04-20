@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -31,7 +32,7 @@ public class BoondollarsItem extends Item
 	{
 		if(!level.isClientSide && !(playerIn instanceof FakePlayer))
 		{
-			PlayerSavedData.getData((ServerPlayer) playerIn).addBoondollars(getCount(playerIn.getItemInHand(handIn)));
+			PlayerBoondollars.addBoondollars(PlayerSavedData.getData((ServerPlayer) playerIn), getCount(playerIn.getItemInHand(handIn)));
 		}
 		return InteractionResultHolder.success(ItemStack.EMPTY);
 	}

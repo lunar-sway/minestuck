@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
@@ -65,13 +66,13 @@ public class ConsortMerchantInventory implements Container
 			if (stack.isEmpty())
 				return;
 			PlayerData playerData = PlayerSavedData.getData(player);
-			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.getBoondollars() / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
+			int amountPurchased = (int) Math.min(prices[index] != 0 ? PlayerBoondollars.getBoondollars(playerData) / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
 				player.sendSystemMessage(Component.translatable(CANT_AFFORD));
 			} else
 			{
-				playerData.takeBoondollars(amountPurchased * prices[index]);
+				PlayerBoondollars.takeBoondollars(playerData, amountPurchased * prices[index]);
 				playerData.addConsortReputation(5, consort.getHomeDimension());
 				ItemStack items = stack.split(amountPurchased);
 				if(stack.isEmpty())

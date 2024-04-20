@@ -9,6 +9,7 @@ import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
@@ -195,7 +196,7 @@ public final class CaptchaDeckHandler
 		
 		if(stack.getItem() == MSItems.BOONDOLLARS.get())
 		{
-			PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
+			PlayerBoondollars.addBoondollars(PlayerSavedData.getData(player), BoondollarsItem.getCount(stack));
 			stack.shrink(1);
 			return;
 		}

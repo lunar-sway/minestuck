@@ -3,9 +3,7 @@ package com.mraof.minestuck.player;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.*;
-import com.mraof.minestuck.network.data.BoondollarDataPacket;
 import com.mraof.minestuck.network.data.ModusDataPacket;
-import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -146,53 +144,6 @@ public final class PlayerData extends AttachmentHolder
 		givenModus = true;
 	}
 	
-	public long getBoondollars()
-	{
-		return this.getData(MSCapabilities.BOONDOLLARS);
-	}
-	
-	public void addBoondollars(long amount)
-	{
-		if(amount < 0)
-			throw new IllegalArgumentException("Boondollar amount may not be negative.");
-		
-		this.setBoondollars(this.getBoondollars() + amount);
-	}
-	
-	public void takeBoondollars(long amount)
-	{
-		if(amount < 0)
-			throw new IllegalArgumentException("Boondollar amount may not be negative.");
-		
-		this.setBoondollars(this.getBoondollars() - amount);
-	}
-	
-	public boolean tryTakeBoondollars(long amount)
-	{
-		if(amount < 0)
-			throw new IllegalArgumentException("Boondollar amount may not be negative.");
-		
-		long newAmount = this.getBoondollars() - amount;
-		
-		if(newAmount < 0)
-			return false;
-		
-		this.setBoondollars(newAmount);
-		return true;
-	}
-	
-	public void setBoondollars(long amount)
-	{
-		if(amount < 0)
-			throw new IllegalArgumentException("Boondollar amount may not be negative.");
-		
-		if(amount != this.getBoondollars())
-		{
-			this.setData(MSCapabilities.BOONDOLLARS, amount);
-			sendBoondollars(getPlayer());
-		}
-	}
-	
 	public int getConsortReputation(ResourceKey<Level> dim)
 	{
 		return consortReputation.getOrDefault(dim.location(), 0);
@@ -240,15 +191,6 @@ public final class PlayerData extends AttachmentHolder
 			tryGiveStartingModus(player);
 		
 		Echeladder.get(this).sendInitialPacket(player);
-		sendBoondollars(player);
-	}
-	
-	private void sendBoondollars(ServerPlayer player)
-	{
-		if(player == null)
-			return;
-		BoondollarDataPacket packet = BoondollarDataPacket.create(getBoondollars());
-		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	
 	@Nullable

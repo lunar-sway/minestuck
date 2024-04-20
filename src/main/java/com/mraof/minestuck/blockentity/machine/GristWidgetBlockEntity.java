@@ -10,6 +10,7 @@ import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -130,14 +131,14 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		if(level.hasNeighborSignal(this.getBlockPos()))
 			return false;
 		int i = getGristWidgetBoondollarValue();
-		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, level).getBoondollars();
+		return owner != null && i != 0 && i <= PlayerBoondollars.getBoondollars(PlayerSavedData.getData(owner, level));
 	}
 	
 	private void processContents()
 	{
 		GristSet gristSet = getGristWidgetResult();
 		
-		if(!PlayerSavedData.getData(owner, level).tryTakeBoondollars(getGristWidgetBoondollarValue()))
+		if(!PlayerBoondollars.tryTakeBoondollars(PlayerSavedData.getData(owner, level), getGristWidgetBoondollarValue()))
 		{
 			LOGGER.warn("Failed to remove boondollars for a grist widget from {}'s porkhollow", owner.getUsername());
 			return;
