@@ -8,6 +8,7 @@ import com.mraof.minestuck.computer.editmode.EditTools;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.GristCache;
@@ -35,6 +36,8 @@ public final class MSCapabilities
 {
 	public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_REGISTER = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, Minestuck.MOD_ID);
 	
+	public static final Supplier<AttachmentType<CaptchaDeckHandler.ModusHolder>> MODUS_HOLDER = ATTACHMENT_REGISTER.register("modus_holder",
+			() -> AttachmentType.serializable(restricted(CaptchaDeckHandler.ModusHolder::new, PlayerData.class)).build());
 	public static final Supplier<AttachmentType<Integer>> PLAYER_COLOR = ATTACHMENT_REGISTER.register("player_color",
 			() -> AttachmentType.builder(restricted(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR, PlayerData.class)).serialize(Codec.INT).build());
 	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = ATTACHMENT_REGISTER.register("boondollars",

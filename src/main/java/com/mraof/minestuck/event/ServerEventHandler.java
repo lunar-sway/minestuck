@@ -7,10 +7,14 @@ import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.server.MinecraftServer;
@@ -218,13 +222,9 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public static void onServerChat(ServerChatEvent event)
 	{
-		ServerPlayer player = event.getPlayer();
-		if(!(player instanceof FakePlayer))
-		{
-			Modus modus = PlayerSavedData.getData(player).getModus();
-			if(modus instanceof HashMapModus)
-				((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage().getString());
-		}
+		Modus modus = CaptchaDeckHandler.getModus(event.getPlayer());
+		if(modus instanceof HashMapModus hashMapModus)
+			hashMapModus.onChatMessage(event.getPlayer(), event.getMessage().getString());
 	}
 	
 	@SubscribeEvent
