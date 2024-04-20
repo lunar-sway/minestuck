@@ -58,7 +58,6 @@ public final class PlayerData extends AttachmentHolder
 	
 	private boolean givenModus;
 	private Modus modus;
-	private double gutterMultiplier = 1;
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
@@ -145,16 +144,6 @@ public final class PlayerData extends AttachmentHolder
 	private void setGivenModus()
 	{
 		givenModus = true;
-	}
-	public double getGutterMultipler()
-	{
-		return gutterMultiplier;
-	}
-	public void addGutterMultiplier(double amount)
-	{
-		if(amount < 0)
-			throw new IllegalArgumentException("Multiplier amount may not be negative.");
-		gutterMultiplier += amount;
 	}
 	
 	public long getBoondollars()

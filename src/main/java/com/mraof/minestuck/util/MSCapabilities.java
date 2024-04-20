@@ -41,6 +41,8 @@ public final class MSCapabilities
 			() -> AttachmentType.builder(restricted(() -> 0L, PlayerData.class)).serialize(Codec.LONG).build());
 	public static final Supplier<AttachmentType<GristCache>> GRIST_CACHE = ATTACHMENT_REGISTER.register("grist_cache",
 			() -> AttachmentType.serializable(restricted(GristCache::new, PlayerData.class)).build());
+	public static final Supplier<AttachmentType<Double>> GUTTER_MULTIPLIER = ATTACHMENT_REGISTER.register("gutter_multiplier",
+			() -> AttachmentType.builder(restricted(() -> 1D, PlayerData.class)).serialize(Codec.DOUBLE).build());
 	public static final Supplier<AttachmentType<Echeladder>> ECHELADDER = ATTACHMENT_REGISTER.register("echeladder",
 			() -> AttachmentType.serializable(restricted(Echeladder::new, PlayerData.class)).build());
 	
