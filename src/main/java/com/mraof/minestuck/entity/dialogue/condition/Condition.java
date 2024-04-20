@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
@@ -735,10 +736,12 @@ public interface Condition
 			Level level = player.level();
 			
 			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
-				return greaterThan ? data.getConsortReputation(level.dimension()) > amount : data.getConsortReputation(level.dimension()) < amount;
+			if(data == null)
+				return false;
 			
-			return false;
+			return greaterThan
+					? ConsortReputation.get(data).getConsortReputation(level.dimension()) > amount
+					: ConsortReputation.get(data).getConsortReputation(level.dimension()) < amount;
 		}
 		
 		@Override

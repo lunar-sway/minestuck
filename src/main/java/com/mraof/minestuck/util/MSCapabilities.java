@@ -6,6 +6,7 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.computer.editmode.EditTools;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
@@ -55,6 +56,8 @@ public final class MSCapabilities
 			() -> AttachmentType.builder(restricted(() -> false, ServerPlayer.class)).serialize(Codec.BOOL).build());
 	public static final Supplier<AttachmentType<EditmodeLocations>> EDITMODE_LOCATIONS = ATTACHMENT_REGISTER.register("editmode_locations",
 			() -> AttachmentType.serializable(EditmodeLocations::new).build());
+	public static final Supplier<AttachmentType<ConsortReputation>> CONSORT_REPUTATION = ATTACHMENT_REGISTER.register("consort_reputation",
+			() -> AttachmentType.serializable(restricted(ConsortReputation::new, PlayerData.class)).build());
 	
 	public static final Supplier<AttachmentType<ItemStackHandler>> MUSIC_PLAYER_INVENTORY_ATTACHMENT = ATTACHMENT_REGISTER.register("music_player_inventory",
 			() -> AttachmentType.serializable(restricted(() -> new ItemStackHandler(1), ItemStack.class)).build());

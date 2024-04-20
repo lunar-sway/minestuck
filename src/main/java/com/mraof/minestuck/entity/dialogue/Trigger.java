@@ -5,6 +5,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
@@ -370,7 +371,7 @@ public sealed interface Trigger
 			
 			PlayerData data = PlayerSavedData.getData(player);
 			if(data != null)
-				data.addConsortReputation(this.reputation, consortEntity.getHomeDimension());
+				ConsortReputation.get(data).addConsortReputation(this.reputation, consortEntity.getHomeDimension());
 		}
 	}
 	

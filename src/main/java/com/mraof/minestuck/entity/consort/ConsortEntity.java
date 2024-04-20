@@ -122,7 +122,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
 	{
-		return entity instanceof ServerPlayer && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && PlayerSavedData.getData((ServerPlayer) entity).getConsortReputation(homeDimension) <= -1000;
+		return entity instanceof ServerPlayer player && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity)
+				&& ConsortReputation.get(player).getConsortReputation(homeDimension) <= -1000;
 	}
 	
 	protected void applyAdditionalAITasks()
@@ -153,7 +154,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			return InteractionResult.FAIL;
 		
 		PlayerData playerData = PlayerSavedData.getData(serverPlayer);
-		if(playerData == null || playerData.getConsortReputation(homeDimension) <= -1000)
+		if(playerData == null || ConsortReputation.get(playerData).getConsortReputation(homeDimension) <= -1000)
 			return InteractionResult.FAIL;
 		
 		handleConsortRepFromTalking(serverPlayer);
@@ -191,7 +192,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		if(!talkRepPlayerList.contains(identifier))
 		{
-			PlayerSavedData.getData(player).addConsortReputation(1, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(1, homeDimension);
 			talkRepPlayerList.add(identifier);
 		}
 	}
@@ -347,7 +348,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public boolean skipAttackInteraction(Entity entityIn)
 	{
 		if(!(entityIn instanceof FakePlayer) && entityIn instanceof ServerPlayer player)
-			PlayerSavedData.getData(player).addConsortReputation(-5, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(-5, homeDimension);
 		return super.skipAttackInteraction(entityIn);
 	}
 	
@@ -356,7 +357,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		LivingEntity livingEntity = this.getKillCredit();
 		if(livingEntity instanceof ServerPlayer player && (!(player instanceof FakePlayer)))
-			PlayerSavedData.getData(player).addConsortReputation(-100, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(-100, homeDimension);
 		super.die(cause);
 	}
 	

@@ -8,9 +8,13 @@ import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EcheladderBonusType;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
@@ -233,7 +237,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		LivingEntity entity = this.getKillCredit();
 		if(entity instanceof ServerPlayer player && (!(player instanceof FakePlayer)))
-			PlayerSavedData.getData(player).addConsortReputation(consortRep, level().dimension());
+			ConsortReputation.get(player).addConsortReputation(consortRep, level().dimension());
 		
 		super.die(cause);
 	}

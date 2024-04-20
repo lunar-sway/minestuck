@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -73,7 +74,7 @@ public class ConsortMerchantInventory implements Container
 			} else
 			{
 				PlayerBoondollars.takeBoondollars(playerData, amountPurchased * prices[index]);
-				playerData.addConsortReputation(5, consort.getHomeDimension());
+				ConsortReputation.get(playerData).addConsortReputation(5, consort.getHomeDimension());
 				ItemStack items = stack.split(amountPurchased);
 				if(stack.isEmpty())
 				{
@@ -213,13 +214,13 @@ public class ConsortMerchantInventory implements Container
 	
 	public ContainerData createPricesFor(ServerPlayer player)
 	{
-		PlayerData data = PlayerSavedData.getData(player);
+		ConsortReputation reputation = ConsortReputation.get(player);
 		return new ContainerData()
 		{
 			@Override
 			public int get(int index)
 			{
-				return calculatePrice(prices[index], data.getConsortReputation(consort.getHomeDimension()));
+				return calculatePrice(prices[index], reputation.getConsortReputation(consort.getHomeDimension()));
 			}
 			
 			@Override
