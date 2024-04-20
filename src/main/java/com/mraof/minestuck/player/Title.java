@@ -53,14 +53,12 @@ public final class Title
 	
 	public void handleAspectEffects(ServerPlayer player)
 	{
-		if(!MinestuckConfig.SERVER.aspectEffects.get())
+		if(!MinestuckConfig.SERVER.aspectEffects.get() || !player.getData(MSCapabilities.EFFECT_TOGGLE))
+			return;
+		if(player.getCommandSenderWorld().getGameTime() % 380 != 0)
 			return;
 		PlayerData data = PlayerSavedData.getData(player);
 		if(data == null)
-			return;
-		if(!data.getData(MSCapabilities.EFFECT_TOGGLE))
-			return;
-		if(player.getCommandSenderWorld().getGameTime() % 380 != 0)
 			return;
 		
 		int rung = data.getEcheladder().getRung();
