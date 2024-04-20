@@ -5,7 +5,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.network.data.BoondollarDataPacket;
-import com.mraof.minestuck.network.data.ConsortReputationDataPacket;
 import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.network.data.TitleDataPacket;
 import com.mraof.minestuck.util.MSCapabilities;
@@ -51,13 +50,6 @@ public final class PlayerData extends AttachmentHolder
 		ServerPlayer player = (ServerPlayer) event.getEntity();
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
 		MSDimensions.sendDimensionData(player);
-	}
-	
-	@SubscribeEvent
-	public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event)
-	{
-		ServerPlayer player = (ServerPlayer) event.getEntity();
-		PlayerSavedData.getData(player).sendConsortReputation(player);
 	}
 	
 	@Nonnull
@@ -259,10 +251,7 @@ public final class PlayerData extends AttachmentHolder
 		int newRep = Mth.clamp(oldRep + amount, -10000, 10000);
 		
 		if(newRep != oldRep)
-		{
 			consortReputation.put(dim.location(), newRep);
-			sendConsortReputation(getPlayer());
-		}
 	}
 	
 	public GristCache getGristCache()
@@ -340,14 +329,6 @@ public final class PlayerData extends AttachmentHolder
 			return;
 		BoondollarDataPacket packet = BoondollarDataPacket.create(getBoondollars());
 		PacketDistributor.PLAYER.with(player).send(packet);
-	}
-	
-	private void sendConsortReputation(ServerPlayer player)
-	{
-		if(player == null)
-			return;
-		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.level().dimension()));
-		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	private void sendTitle(ServerPlayer player)

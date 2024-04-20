@@ -19,7 +19,6 @@ public class MSPayloads
 				.play(EcheladderDataPacket.ID, EcheladderDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(ModusDataPacket.ID, ModusDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(BoondollarDataPacket.ID, BoondollarDataPacket::read, MSPacket.PlayToClient::handler)
-				.play(ConsortReputationDataPacket.ID, ConsortReputationDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(GristCachePacket.ID, GristCachePacket::read, MSPacket.PlayToClient::handler)
 				.play(EditmodeCacheLimitPacket.ID, EditmodeCacheLimitPacket::read, MSPacket.PlayToClient::handler)
 				.play(TitleDataPacket.ID, TitleDataPacket::read, MSPacket.PlayToClient::handler)
