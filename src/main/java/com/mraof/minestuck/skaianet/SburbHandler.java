@@ -118,16 +118,16 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !Generator.titleLandTypesUsedBy(otherPlayers, skaianetData).contains(LandTypes.FROGS.get()) &&
+			if(title.heroAspect() == EnumAspect.SPACE && !Generator.titleLandTypesUsedBy(otherPlayers, skaianetData).contains(LandTypes.FROGS.get()) &&
 					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS.get();
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), terrainLandType, skaianetData);
+				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.heroAspect(), terrainLandType, skaianetData);
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.getKey(terrainLandType));
-					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), null, skaianetData);
+					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.heroAspect(), null, skaianetData);
 				}
 			}
 		}

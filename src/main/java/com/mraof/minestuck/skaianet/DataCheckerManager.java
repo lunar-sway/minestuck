@@ -118,8 +118,8 @@ public class DataCheckerManager
 		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
 		if(title != null)
 		{
-			tag.putByte("class", (byte) title.getHeroClass().ordinal());
-			tag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
+			tag.putByte("class", (byte) title.heroClass().ordinal());
+			tag.putByte("aspect", (byte) title.heroAspect().ordinal());
 		}
 	}
 	
@@ -128,8 +128,8 @@ public class DataCheckerManager
 		Title title = data.getTitle();
 		if(title != null)
 		{
-			tag.putByte("class", (byte) data.getTitle().getHeroClass().ordinal());
-			tag.putByte("aspect", (byte) data.getTitle().getHeroAspect().ordinal());
+			tag.putByte("class", (byte) data.getTitle().heroClass().ordinal());
+			tag.putByte("aspect", (byte) data.getTitle().heroAspect().ordinal());
 		}
 		
 		TerrainLandType terrainType = data.getTerrainLandType();

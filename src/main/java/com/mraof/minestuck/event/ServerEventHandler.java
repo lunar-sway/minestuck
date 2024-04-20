@@ -158,7 +158,7 @@ public class ServerEventHandler
 		if(event.getEntity() instanceof Player injuredPlayer && !(injuredPlayer instanceof FakePlayer))
 		{
 			Title title = PlayerSavedData.getData((ServerPlayer) injuredPlayer).getTitle();
-			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
+			boolean isDoom = title != null && title.heroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			

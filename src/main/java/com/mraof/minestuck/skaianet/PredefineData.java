@@ -93,12 +93,12 @@ public final class PredefineData
 		Set<EnumAspect> availableAspects = availableTypes.stream()
 				.flatMap(titleType -> LandTypeSelection.compatibleAspects(titleType).stream())
 				.collect(Collectors.toSet());
-		if(title == null || !availableAspects.contains(title.getHeroAspect()))
+		if(title == null || !availableAspects.contains(title.heroAspect()))
 		{
 			Title previous = title;
 			title = Generator.generateTitle(player, availableAspects, SkaianetData.get(source.getServer()));
 			
-			if(!availableAspects.contains(title.getHeroAspect()))
+			if(!availableAspects.contains(title.heroAspect()))
 			{
 				terrainLandType = null; titleLandType = null;
 				throw new IllegalStateException("Generated title did not meet requirements!");
@@ -118,7 +118,7 @@ public final class PredefineData
 			forceVerifyTitle(availableTypes, source);
 			
 			//title should be assumed to be non-null after this point
-			availableTypes = LandTypeSelection.compatibleTitleTypes(type, title.getHeroAspect());
+			availableTypes = LandTypeSelection.compatibleTitleTypes(type, title.heroAspect());
 			if(availableTypes.isEmpty())
 			{
 				terrainLandType = null; titleLandType = null;
@@ -128,7 +128,7 @@ public final class PredefineData
 			SkaianetData skaianetData = SkaianetData.get(source.getServer());
 			TitleLandType previous = titleLandType;
 			List<PlayerIdentifier> otherPlayers = skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList();
-			titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), type, skaianetData);
+			titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.heroAspect(), type, skaianetData);
 			
 			if(!titleLandType.isAspectCompatible(type))
 			{

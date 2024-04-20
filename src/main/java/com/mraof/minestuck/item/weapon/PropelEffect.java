@@ -55,11 +55,11 @@ public class PropelEffect implements ItemRightClickEffect
 		} else if(player instanceof ServerPlayer)
 		{
 			title = PlayerSavedData.getData((ServerPlayer) player).getTitle();
-			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && ((title != null && title.getHeroAspect() == aspect) || player.isCreative()))
+			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && ((title != null && title.heroAspect() == aspect) || player.isCreative()))
 				propelActionSound(player.level(), player);
 		}
 		
-		if((title != null && title.getHeroAspect() == aspect) || player.isCreative())
+		if((title != null && title.heroAspect() == aspect) || player.isCreative())
 		{
 			Vec3 lookVec = player.getLookAngle().scale(velocity);
 			if(player.isFallFlying())

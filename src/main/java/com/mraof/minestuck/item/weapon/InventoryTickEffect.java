@@ -43,7 +43,7 @@ public interface InventoryTickEffect
 			if(isSelected && entityIn instanceof ServerPlayer player && !(entityIn instanceof FakePlayer))
 			{
 				Title title = PlayerSavedData.getData(player).getTitle();
-				if(title != null && title.getHeroAspect() == aspect)
+				if(title != null && title.heroAspect() == aspect)
 					player.addEffect(effect.get());
 			}
 		};

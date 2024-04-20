@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Objects;
 
-public final class Title
+public record Title(EnumClass heroClass, EnumAspect heroAspect)
 {
 	public static final String FORMAT = "title.format";
 	
@@ -43,27 +43,15 @@ public final class Title
 	);
 	
 	
-	private final EnumClass heroClass;
-	private final EnumAspect heroAspect;
-	
 	public static final Codec<EnumClass> CLASS_CODEC = Codec.STRING.xmap(EnumClass::valueOf, EnumClass::name);
 	public static final Codec<EnumAspect> ASPECT_CODEC = Codec.STRING.xmap(EnumAspect::valueOf, EnumAspect::name);
-
+	
 	public Title(EnumClass heroClass, EnumAspect heroAspect)
 	{
 		this.heroClass = Objects.requireNonNull(heroClass);
 		this.heroAspect = Objects.requireNonNull(heroAspect);
 	}
 	
-	public EnumClass getHeroClass()
-	{
-		return this.heroClass;
-	}
-	
-	public EnumAspect getHeroAspect()
-	{
-		return this.heroAspect;
-	}
 	
 	public void handleAspectEffects(ServerPlayer player)
 	{
@@ -76,7 +64,7 @@ public final class Title
 			return;
 		
 		int rung = data.getEcheladder().getRung();
-		EnumAspect aspect = this.getHeroAspect();
+		EnumAspect aspect = this.heroAspect();
 		int potionLevel = (int) (ASPECT_EFFECTS.get(aspect).strength() * rung);
 		
 		if(rung > 18 && aspect == EnumAspect.HOPE)
@@ -110,12 +98,6 @@ public final class Title
 		return false;
 	}
 	
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(heroClass, heroAspect);
-	}
-	
 	private static String makeNBTPrefix(String prefix)
 	{
 		return prefix != null && !prefix.isEmpty() ? prefix + "_" : "";
@@ -137,18 +119,18 @@ public final class Title
 	public static Title read(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
-		EnumClass c = EnumClass.getClassFromInt(nbt.getByte(keyPrefix+"class"));
-		EnumAspect a = EnumAspect.getAspectFromInt(nbt.getByte(keyPrefix+"aspect"));
+		EnumClass c = EnumClass.getClassFromInt(nbt.getByte(keyPrefix + "class"));
+		EnumAspect a = EnumAspect.getAspectFromInt(nbt.getByte(keyPrefix + "aspect"));
 		return new Title(c, a);
 	}
 	
 	public static Title tryRead(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
-		if(nbt.contains(keyPrefix+"class", Tag.TAG_ANY_NUMERIC))
+		if(nbt.contains(keyPrefix + "class", Tag.TAG_ANY_NUMERIC))
 		{
-			EnumClass c = EnumClass.getClassFromInt(nbt.getByte(keyPrefix+"class"));
-			EnumAspect a = EnumAspect.getAspectFromInt(nbt.getByte(keyPrefix+"aspect"));
+			EnumClass c = EnumClass.getClassFromInt(nbt.getByte(keyPrefix + "class"));
+			EnumAspect a = EnumAspect.getAspectFromInt(nbt.getByte(keyPrefix + "aspect"));
 			if(c != null && a != null)
 				return new Title(c, a);
 		}
@@ -158,8 +140,8 @@ public final class Title
 	public CompoundTag write(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
-		nbt.putByte(keyPrefix+"class", (byte) EnumClass.getIntFromClass(heroClass));
-		nbt.putByte(keyPrefix+"aspect", (byte) EnumAspect.getIntFromAspect(heroAspect));
+		nbt.putByte(keyPrefix + "class", (byte) EnumClass.getIntFromClass(heroClass));
+		nbt.putByte(keyPrefix + "aspect", (byte) EnumAspect.getIntFromAspect(heroAspect));
 		return nbt;
 	}
 }

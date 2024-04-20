@@ -40,7 +40,7 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 			Title title = PlayerSavedData.getData((ServerPlayer) playerIn).getTitle();
 			if(title != null)
 			{
-				noBlockCollision = title.getHeroAspect() == EnumAspect.VOID && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get();
+				noBlockCollision = title.heroAspect() == EnumAspect.VOID && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get();
 			} else if(playerIn.isCreative() && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get())
 				noBlockCollision = true;
 			

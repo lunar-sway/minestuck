@@ -60,13 +60,13 @@ public record DialogueMessage(String key, List<Argument> arguments)
 				.map(Title::asTextComponent)
 				.orElseGet(() -> Component.literal("Player title"))),
 		LAND_CLASS((npc, player) -> homeLandTitle(npc)
-				.map(title -> title.getHeroClass().asTextComponent())
+				.map(title -> title.heroClass().asTextComponent())
 				.orElseGet(() -> Component.literal("Player class"))),
 		LAND_ASPECT((npc, player) -> homeLandTitle(npc)
-				.map(title -> title.getHeroAspect().asTextComponent())
+				.map(title -> title.heroAspect().asTextComponent())
 				.orElseGet(() -> Component.literal("Player aspect"))),
 		LAND_DENIZEN((npc, player) -> homeLandTitle(npc)
-				.map(title -> Component.translatable("denizen." + title.getHeroAspect().getTranslationKey()))
+				.map(title -> Component.translatable("denizen." + title.heroAspect().getTranslationKey()))
 				.orElseGet(() -> Component.literal("Denizen"))),
 		ENTITY_SOUND((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".sound")),
 		ENTITY_SOUND_2((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".sound.2")),

@@ -259,13 +259,13 @@ public interface OnHitEffect
 				{
 					float modifier = (float) (PlayerSavedData.getData(serverPlayer).getEcheladder().getUnderlingDamageModifier());
 					
-					if(title == null || title.getHeroAspect() != aspect)
+					if(title == null || title.heroAspect() != aspect)
 						modifier = modifier / 1.2F;
 					
 					damage = damage * modifier;
 				} else
 				{
-					if(title == null || title.getHeroAspect() != aspect)
+					if(title == null || title.heroAspect() != aspect)
 						damage = damage / 1.2F;
 				}
 			}
@@ -432,7 +432,7 @@ public interface OnHitEffect
 			{
 				Title title = PlayerSavedData.getData(player).getTitle();
 				
-				if((title != null && title.getHeroAspect() == aspect) || player.isCreative())
+				if((title != null && title.heroAspect() == aspect) || player.isCreative())
 					effect.onHit(stack, target, attacker);
 			}
 		};

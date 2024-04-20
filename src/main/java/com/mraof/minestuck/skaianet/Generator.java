@@ -77,13 +77,13 @@ class Generator
 	
 	private static List<EnumAspect> unusedAspects(Set<EnumAspect> base, Set<Title> usedTitles)
 	{
-		Set<EnumAspect> usedAspects = usedTitles.stream().map(Title::getHeroAspect).collect(Collectors.toSet());
+		Set<EnumAspect> usedAspects = usedTitles.stream().map(Title::heroAspect).collect(Collectors.toSet());
 		return base.stream().filter(a -> !usedAspects.contains(a)).collect(Collectors.toList());
 	}
 	
 	private static List<EnumClass> unusedClasses(Set<Title> usedTitles)
 	{
-		Set<EnumClass> usedClasses = usedTitles.stream().map(Title::getHeroClass).collect(Collectors.toSet());
+		Set<EnumClass> usedClasses = usedTitles.stream().map(Title::heroClass).collect(Collectors.toSet());
 		return EnumClass.valuesStream().filter(c -> !usedClasses.contains(c)).collect(Collectors.toList());
 	}
 	
