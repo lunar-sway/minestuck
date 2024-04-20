@@ -111,7 +111,7 @@ public final class ClientPlayerData
 	public static void selectColor(int colorIndex)
 	{
 		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectIndex(colorIndex));
-		playerColor = ColorHandler.getColor(colorIndex);
+		playerColor = ColorHandler.BuiltinColors.getColor(colorIndex);
 	}
 	
 	public static void selectColorRGB(int color)
@@ -181,7 +181,7 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(PlayerColorPacket.OpenSelection packet)
 	{
-		ClientPlayerData.playerColor = ColorHandler.DEFAULT_COLOR;
+		ClientPlayerData.playerColor = ColorHandler.BuiltinColors.DEFAULT_COLOR;
 		ClientPlayerData.displaySelectionGui = true;
 	}
 	

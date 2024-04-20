@@ -94,7 +94,7 @@ public final class PlayerColorPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			ColorHandler.trySetPlayerColor(player, ColorHandler.getColor(colorIndex));
+			ColorHandler.trySetPlayerColor(player, ColorHandler.BuiltinColors.getColor(colorIndex));
 		}
 	}
 	

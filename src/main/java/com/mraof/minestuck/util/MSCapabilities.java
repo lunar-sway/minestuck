@@ -25,7 +25,7 @@ public class MSCapabilities
 	public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_REGISTER = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, Minestuck.MOD_ID);
 	
 	public static final Supplier<AttachmentType<Integer>> PLAYER_COLOR = ATTACHMENT_REGISTER.register("player_color",
-			() -> AttachmentType.builder(() -> ColorHandler.DEFAULT_COLOR).serialize(Codec.INT).build());
+			() -> AttachmentType.builder(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR).serialize(Codec.INT).build());
 	
 	public static final Supplier<AttachmentType<ItemStackHandler>> MUSIC_PLAYER_INVENTORY_ATTACHMENT = ATTACHMENT_REGISTER.register("music_player_inventory",
 			() -> AttachmentType.serializable(() -> new ItemStackHandler(1)).build());
