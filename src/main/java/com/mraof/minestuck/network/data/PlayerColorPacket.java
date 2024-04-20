@@ -94,7 +94,7 @@ public final class PlayerColorPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			ColorHandler.trySetColor(player, ColorHandler.getColor(colorIndex));
+			ColorHandler.trySetPlayerColor(player, ColorHandler.getColor(colorIndex));
 		}
 	}
 	
@@ -122,7 +122,7 @@ public final class PlayerColorPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			ColorHandler.trySetColor(player, color);
+			ColorHandler.trySetPlayerColor(player, color);
 		}
 	}
 }

@@ -19,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -125,15 +124,10 @@ public class ColorHandler
 	
 	public static int getColorForPlayer(PlayerIdentifier identifier, Level level)
 	{
-		return getColor(PlayerSavedData.getData(identifier, level));
+		return PlayerSavedData.getData(identifier, level).getData(MSCapabilities.PLAYER_COLOR);
 	}
 	
-	public static int getColor(PlayerData playerData)
-	{
-		return playerData.getData(MSCapabilities.PLAYER_COLOR);
-	}
-	
-	public static void trySetColor(ServerPlayer player, int color)
+	public static void trySetPlayerColor(ServerPlayer player, int color)
 	{
 		PlayerIdentifier playerId = IdentifierHandler.encode(player);
 		if(playerId == null || !SburbHandler.canSelectColor(playerId, player.server))
@@ -143,29 +137,22 @@ public class ColorHandler
 		Integer prevColor = playerData.setData(MSCapabilities.PLAYER_COLOR, color);
 		
 		if(!Objects.equals(prevColor, color))
-			sendColor(player, playerData);
+			player.connection.send(new PlayerColorPacket.Data(color));
 	}
 	
 	@SubscribeEvent
 	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
-		PlayerData playerData = PlayerSavedData.getData(player);
-		ColorHandler.sendColor(player, playerData);
-	}
-	
-	private static void sendColor(ServerPlayer player, PlayerData playerData)
-	{
-		if(player == null)
-			return;
+		PlayerData playerData = Objects.requireNonNull(PlayerSavedData.getData(player));
 		
 		boolean firstTime = playerData.getExistingData(MSCapabilities.PLAYER_COLOR).isEmpty();
 		
 		if(firstTime && !player.isSpectator())
 		{
 			playerData.setData(MSCapabilities.PLAYER_COLOR, DEFAULT_COLOR);
-			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.OpenSelection());
+			player.connection.send(new PlayerColorPacket.OpenSelection());
 		} else
-			PacketDistributor.PLAYER.with(player).send(new PlayerColorPacket.Data(getColor(playerData)));
+			player.connection.send(new PlayerColorPacket.Data(playerData.getData(MSCapabilities.PLAYER_COLOR)));
 	}
 }
