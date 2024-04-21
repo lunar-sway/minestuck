@@ -22,6 +22,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -295,8 +296,24 @@ public final class ProspitStructure
 		
 		builder.add(new PieceEntry(pos -> null, symmetric(ConnectionType.AIR, ConnectionType.AIR, ConnectionType.AIR), Weight.of(10)));
 		builder.add(new PieceEntry(SolidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.SOLID, ConnectionType.WALL), Weight.of(10)));
-		builder.add(new PieceEntry(PyramidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.AIR, ConnectionType.AIR), Weight.of(2)));
+		builder.add(new PieceEntry(PyramidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.AIR, ConnectionType.ROOF_SIDE), Weight.of(2)));
 		addAxisSymmetric(builder::add, BridgePiece::new, ConnectionType.AIR, ConnectionType.AIR, ConnectionType.BRIDGE, ConnectionType.AIR, Weight.of(4));
+		addRotating(builder::add, LedgePiece::new, Map.of(
+				Direction.DOWN, ConnectionType.SOLID,
+				Direction.UP, ConnectionType.AIR,
+				Direction.NORTH, ConnectionType.LEDGE_FRONT,
+				Direction.EAST, ConnectionType.LEDGE_RIGHT,
+				Direction.SOUTH, ConnectionType.LEDGE_BACK,
+				Direction.WEST, ConnectionType.LEDGE_LEFT
+		), Weight.of(3));
+		addRotating(builder::add, LedgeCornerPiece::new, Map.of(
+				Direction.DOWN, ConnectionType.SOLID,
+				Direction.UP, ConnectionType.AIR,
+				Direction.NORTH, ConnectionType.LEDGE_FRONT,
+				Direction.EAST, ConnectionType.LEDGE_RIGHT,
+				Direction.SOUTH, ConnectionType.LEDGE_LEFT,
+				Direction.WEST, ConnectionType.LEDGE_FRONT
+		), Weight.of(3));
 		
 		return builder.build();
 	});
@@ -316,22 +333,38 @@ public final class ProspitStructure
 	private static void addAxisSymmetric(Consumer<PieceEntry> consumer, BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
 										 ConnectionType down, ConnectionType up, ConnectionType front, ConnectionType side, Weight individualWeight)
 	{
-		consumer.accept(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), Map.of(
+		Map<Direction, ConnectionType> connections = Map.of(
 				Direction.DOWN, down,
 				Direction.UP, up,
 				Direction.NORTH, side,
 				Direction.EAST, front,
 				Direction.SOUTH, side,
 				Direction.WEST, front
-		), individualWeight));
-		consumer.accept(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), Map.of(
-				Direction.DOWN, down,
-				Direction.UP, up,
-				Direction.NORTH, front,
-				Direction.EAST, side,
-				Direction.SOUTH, front,
-				Direction.WEST, side
-		), individualWeight));
+		);
+		consumer.accept(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), connections, individualWeight));
+		consumer.accept(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90), individualWeight));
+	}
+	
+	private static void addRotating(Consumer<PieceEntry> consumer, BiFunction<BlockPos, Rotation, StructurePiece> constructor,
+										 Map<Direction, ConnectionType> connections, Weight individualWeight)
+	{
+		for(Rotation rotation : Rotation.values())
+			consumer.accept(new PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation), individualWeight));
+	}
+	
+	private static Map<Direction, ConnectionType> rotateConnections(Map<Direction, ConnectionType> connections, Rotation rotation)
+	{
+		if(rotation == Rotation.NONE)
+			return connections;
+		
+		return Map.of(
+				Direction.DOWN, connections.get(Direction.DOWN),
+				Direction.UP, connections.get(Direction.UP),
+				rotation.rotate(Direction.NORTH), connections.get(Direction.NORTH),
+				rotation.rotate(Direction.EAST), connections.get(Direction.EAST),
+				rotation.rotate(Direction.SOUTH), connections.get(Direction.SOUTH),
+				rotation.rotate(Direction.WEST), connections.get(Direction.WEST)
+		);
 	}
 	
 	private enum ConnectionType
@@ -339,7 +372,12 @@ public final class ProspitStructure
 		AIR,
 		SOLID,
 		WALL,
+		ROOF_SIDE,
 		BRIDGE,
+		LEDGE_FRONT,
+		LEDGE_LEFT,
+		LEDGE_RIGHT,
+		LEDGE_BACK,
 	}
 	
 	private static final Map<ConnectionType, Set<ConnectionType>> SUPPORTED_CONNECTIONS = Util.make(() -> {
@@ -348,8 +386,16 @@ public final class ProspitStructure
 				Pair.of(ConnectionType.SOLID, ConnectionType.SOLID),
 				Pair.of(ConnectionType.AIR, ConnectionType.WALL),
 				Pair.of(ConnectionType.WALL, ConnectionType.WALL),
+				Pair.of(ConnectionType.ROOF_SIDE, ConnectionType.WALL),
+				Pair.of(ConnectionType.ROOF_SIDE, ConnectionType.AIR),
 				Pair.of(ConnectionType.BRIDGE, ConnectionType.BRIDGE),
-				Pair.of(ConnectionType.BRIDGE, ConnectionType.WALL)
+				Pair.of(ConnectionType.BRIDGE, ConnectionType.WALL),
+				Pair.of(ConnectionType.LEDGE_FRONT, ConnectionType.AIR),
+				Pair.of(ConnectionType.LEDGE_LEFT, ConnectionType.LEDGE_RIGHT),
+				Pair.of(ConnectionType.LEDGE_BACK, ConnectionType.LEDGE_BACK),
+				Pair.of(ConnectionType.LEDGE_LEFT, ConnectionType.WALL),
+				Pair.of(ConnectionType.LEDGE_RIGHT, ConnectionType.WALL),
+				Pair.of(ConnectionType.LEDGE_BACK, ConnectionType.WALL)
 		);
 		
 		ImmutableMap.Builder<ConnectionType, Set<ConnectionType>> mapBuilder = ImmutableMap.builder();
@@ -374,6 +420,10 @@ public final class ProspitStructure
 			() -> PyramidPiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> BRIDGE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_bridge",
 			() -> BridgePiece::new);
+	public static final Supplier<StructurePieceType.ContextlessType> LEDGE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_ledge",
+			() -> LedgePiece::new);
+	public static final Supplier<StructurePieceType.ContextlessType> LEDGE_CORNER_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_ledge_corner",
+			() -> LedgeCornerPiece::new);
 	
 	public static final class SolidPiece extends ImprovedStructurePiece
 	{
@@ -465,6 +515,72 @@ public final class ProspitStructure
 					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
 			generateBox(level, box, 5, 2, 0, 5, 2, 7,
 					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+		}
+	}
+	
+	public static final class LedgePiece extends ImprovedStructurePiece
+	{
+		public LedgePiece(BlockPos bottomCornerPos, Rotation rotation)
+		{
+			super(LEDGE_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
+					bottomCornerPos.offset(PIECE_SIZE - 1, PIECE_SIZE - 1, PIECE_SIZE - 1)));
+			setOrientation(rotation.rotate(Direction.SOUTH));
+		}
+		
+		public LedgePiece(CompoundTag tag)
+		{
+			super(LEDGE_PIECE_TYPE.get(), tag);
+		}
+		
+		@Override
+		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag)
+		{
+		}
+		
+		@Override
+		public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
+		{
+			generateBox(level, box, 0, 0, 0, 7, 0, 7,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 0, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 3, 1, 0, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 4, 1, 0, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 7, 1, 0, box);
+		}
+	}
+	
+	public static final class LedgeCornerPiece extends ImprovedStructurePiece
+	{
+		public LedgeCornerPiece(BlockPos bottomCornerPos, Rotation rotation)
+		{
+			super(LEDGE_CORNER_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
+					bottomCornerPos.offset(PIECE_SIZE - 1, PIECE_SIZE - 1, PIECE_SIZE - 1)));
+			setOrientation(rotation.rotate(Direction.SOUTH));
+		}
+		
+		public LedgeCornerPiece(CompoundTag tag)
+		{
+			super(LEDGE_CORNER_PIECE_TYPE.get(), tag);
+		}
+		
+		@Override
+		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag)
+		{
+		}
+		
+		@Override
+		public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
+		{
+			generateBox(level, box, 0, 0, 0, 7, 0, 7,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 7, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 4, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 3, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 0, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 2, 0, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 3, 1, 0, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 4, 1, 0, box);
+			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 7, 1, 0, box);
 		}
 	}
 }
