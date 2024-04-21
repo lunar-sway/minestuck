@@ -6,11 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-## [1.20.1-1.12.0.1] - 2024-04-15
-
 ### Changed
 
-- Silicone Caulk Bucket alchemy recipe was changed from Water Bucket && Quartz to Water Bucket && Amethyst Shard
+- Silicone Caulk Bucket alchemy recipe was changed from Water Bucket && Quartz to Water Bucket && Amethyst Shard, to avoid conflict with Prismarine Shard alchemy recipe
+
+## [1.20.1-1.12.0.1] - 2024-04-15
+
 
 ### Fixed
 
@@ -18,7 +19,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Perfectly generic and cindered signs work again
 - Fixed execution permissions for the `minestuck:command` dialogue trigger
 - Add missing wood-related recipes
-- Fixed alchemy recipe conflict between Prismarine Shard and Silicone Caulk Bucket
 
 ### Contributors for this release
 
