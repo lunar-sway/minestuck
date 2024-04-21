@@ -110,7 +110,7 @@ public final class ProspitStructure
 			List<PieceEntry> pieces = List.of(
 					new PieceEntry(pos -> null, ConnectionType.AIR, ConnectionType.AIR, Weight.of(10)),
 					new PieceEntry(SolidPiece::new, ConnectionType.SOLID, ConnectionType.SOLID, Weight.of(10)),
-					new PieceEntry(PyramidPiece::new, ConnectionType.AIR, ConnectionType.SOLID, Weight.of(10))
+					new PieceEntry(PyramidPiece::new, ConnectionType.AIR, ConnectionType.SOLID, Weight.of(2))
 			);
 			
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
