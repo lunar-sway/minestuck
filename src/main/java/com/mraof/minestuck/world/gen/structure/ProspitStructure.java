@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -30,9 +30,10 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
 
@@ -101,39 +102,104 @@ public final class ProspitStructure
 		
 		private void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
 		{
-			WeightedRandomList<PieceEntry> pieces = WeightedRandomList.create(
-					new PieceEntry(pos -> null, Weight.of(10)),
-					new PieceEntry(SolidPiece::new, Weight.of(10))
+			List<PieceEntry> pieces = List.of(
+					new PieceEntry(pos -> null, PieceType.AIR, Weight.of(10)),
+					new PieceEntry(SolidPiece::new, PieceType.SOLID, Weight.of(10))
 			);
 			
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
+			
+			Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
+			List<PiecePos> piecesToGenerate = new ArrayList<>();
+			
 			for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
 			{
 				for(int zIndex = 0; zIndex < WIDTH_IN_PIECES; zIndex++)
 				{
 					for(int yIndex = 0; yIndex < HEIGHT_IN_PIECES; yIndex++)
 					{
-						var pieceConstructor = pieces.getRandom(context.random());
-						if(pieceConstructor.isEmpty())
-							continue;
-						
-						BlockPos piecePos = cornerPos.offset(xIndex * PIECE_SIZE, yIndex * PIECE_SIZE, zIndex * PIECE_SIZE);
-						StructurePiece piece = pieceConstructor.get().constructor().apply(piecePos);
-						if(piece != null)
-							builder.addPiece(piece);
+						PiecePos pos = new PiecePos(xIndex, yIndex, zIndex);
+						availablePiecesMap.put(pos, new ArrayList<>(pieces));
+						piecesToGenerate.add(pos);
 					}
 				}
+			}
+			
+			while(!piecesToGenerate.isEmpty())
+			{
+				PiecePos pos = piecesToGenerate.remove(context.random().nextInt(piecesToGenerate.size()));
+				
+				List<PieceEntry> availablePieces = availablePiecesMap.get(pos);
+				var chosenEntry = WeightedRandom.getRandomItem(context.random(), availablePieces);
+				if(chosenEntry.isEmpty())
+					continue;
+				
+				BlockPos piecePos = pos.toBlockPos(cornerPos);
+				StructurePiece piece = chosenEntry.get().constructor().apply(piecePos);
+				if(piece != null)
+					builder.addPiece(piece);
+				
+				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
+					removeConflictingPieces(pos, availablePiecesMap);
 			}
 		}
 	}
 	
-	private record PieceEntry(Function<BlockPos, StructurePiece> constructor, Weight weight) implements WeightedEntry
+	private static void removeConflictingPieces(PiecePos pos, Map<PiecePos, List<PieceEntry>> availablePiecesMap)
+	{
+		Set<PieceType> availableTypes = availablePiecesMap.get(pos).stream().map(PieceEntry::type).collect(Collectors.toSet());
+		
+		if(pos.y > 0)
+		{
+			PiecePos belowPos = new PiecePos(pos.x, pos.y - 1, pos.z);
+			if(availablePiecesMap.get(belowPos).removeIf(belowEntry -> !canConnectToAnyAbove(belowEntry.type(), availableTypes)))
+				removeConflictingPieces(belowPos, availablePiecesMap);
+		}
+		
+		if(pos.y < HEIGHT_IN_PIECES - 1)
+		{
+			PiecePos abovePos = new PiecePos(pos.x, pos.y + 1, pos.z);
+			if(availablePiecesMap.get(abovePos).removeIf(aboveEntry -> !canConnectToAnyBelow(aboveEntry.type(), availableTypes)))
+				removeConflictingPieces(abovePos, availablePiecesMap);
+		}
+	}
+	
+	private static boolean canConnectToAnyAbove(PieceType type, Set<PieceType> aboveTypes)
+	{
+		return aboveTypes.stream().anyMatch(aboveType -> canConnect(aboveType, type));
+	}
+	
+	private static boolean canConnectToAnyBelow(PieceType type, Set<PieceType> belowTypes)
+	{
+		return belowTypes.stream().anyMatch(belowType -> canConnect(type, belowType));
+	}
+	
+	private static boolean canConnect(PieceType above, PieceType below)
+	{
+		return above == PieceType.AIR || below == PieceType.SOLID;
+	}
+	
+	private record PiecePos(int x, int y, int z)
+	{
+		public BlockPos toBlockPos(BlockPos cornerPos)
+		{
+			return cornerPos.offset(this.x * PIECE_SIZE, this.y * PIECE_SIZE, this.z * PIECE_SIZE);
+		}
+	}
+	
+	private record PieceEntry(Function<BlockPos, StructurePiece> constructor, PieceType type, Weight weight) implements WeightedEntry
 	{
 		@Override
 		public Weight getWeight()
 		{
 			return weight;
 		}
+	}
+	
+	private enum PieceType
+	{
+		SOLID,
+		AIR,
 	}
 	
 	public static final Supplier<StructurePieceType.ContextlessType> SOLID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_solid_piece",
