@@ -146,14 +146,9 @@ public final class ProspitStructure
 			}
 			Set<PiecePos> piecesToGenerate = new HashSet<>(availablePiecesMap.keySet());
 			
-			for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
-			{
-				for(int zIndex = 0; zIndex < WIDTH_IN_PIECES; zIndex++)
-				{
-					PiecePos topPos = new PiecePos(xIndex, HEIGHT_IN_PIECES - 1, zIndex);
-					removeConflictsFromConnection(topPos, Direction.UP, Set.of(ConnectionType.AIR), availablePiecesMap);
-				}
-			}
+			setupTopBounds(availablePiecesMap);
+			for(Direction direction : Direction.Plane.HORIZONTAL)
+				setupSideBounds(direction, availablePiecesMap);
 			
 			while(!piecesToGenerate.isEmpty())
 			{
@@ -178,6 +173,35 @@ public final class ProspitStructure
 				
 				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
 					removeConflictingPieces(pos, availablePiecesMap, null);
+			}
+		}
+	}
+	
+	private static void setupTopBounds(Map<PiecePos, List<PieceEntry>> availablePiecesMap)
+	{
+		for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
+		{
+			for(int zIndex = 0; zIndex < WIDTH_IN_PIECES; zIndex++)
+			{
+				PiecePos topPos = new PiecePos(xIndex, HEIGHT_IN_PIECES - 1, zIndex);
+				removeConflictsFromConnection(topPos, Direction.UP, Set.of(ConnectionType.AIR), availablePiecesMap);
+			}
+		}
+	}
+	
+	private static void setupSideBounds(Direction direction, Map<PiecePos, List<PieceEntry>> availablePiecesMap)
+	{
+		int edgeIndex = direction.getAxisDirection() == Direction.AxisDirection.POSITIVE
+				? WIDTH_IN_PIECES - 1 : 0;
+		for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
+		{
+			for(int yIndex = 0; yIndex < HEIGHT_IN_PIECES; yIndex++)
+			{
+				PiecePos edgePos = direction.getAxis() == Direction.Axis.X
+						? new PiecePos(edgeIndex, yIndex, xIndex)
+						: new PiecePos(xIndex, yIndex, edgeIndex);
+				
+				removeConflictsFromConnection(edgePos, direction, Set.of(ConnectionType.AIR), availablePiecesMap);
 			}
 		}
 	}
