@@ -21,7 +21,7 @@
             "next_dialogue": {
               "id": "minestuck:consort/hungry/thanks",
               "player_message": "minestuck.dialogue.consort.hungry.start.yes_reply",
-              "set_as_entrypoint": true
+              "set_as_entrypoint": false
             },
             "triggers": [
               {
@@ -30,6 +30,15 @@
               {
                 "type": "minestuck:add_consort_reputation",
                 "reputation": 15
+              },
+              {
+                "type": "minestuck:set_dialogue",
+                "new_path": "minestuck:consort/hungry/satisfied"
+              },
+              {
+                "type": "minestuck:set_flag",
+                "flag": "helpingPlayer",
+                "player_specific": true
               }
             ]
           },

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.data;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.data.loot_table.MSBlockLootTables;
 import com.mraof.minestuck.data.recipe.CommonRecipes;
 import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
@@ -7,6 +8,7 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
@@ -124,7 +126,7 @@ public final class AspectTreeBlocksData
 		provider.addBlock(HOPE_ASPECT_BOOKSHELF, "Hope Bookshelf");
 		provider.addBlock(HOPE_ASPECT_LADDER, "Hope Ladder");
 		provider.addBlock(HOPE_ASPECT_SIGN, "Hope Sign");
-		provider.addBlock(HOPE_ASPECT_HANGING_SIGN, "Hope Sign");;
+		provider.addBlock(HOPE_ASPECT_HANGING_SIGN, "Hope Sign");
 		
 		provider.addBlock(LIFE_ASPECT_LOG, "Life Log");
 		provider.addBlock(LIFE_ASPECT_WOOD, "Life Wood");
@@ -1334,8 +1336,15 @@ public final class AspectTreeBlocksData
 				.define('#', BLOOD_ASPECT_PLANKS.get()).define('$', BLOOD_ASPECT_STRIPPED_LOG.get()).pattern("#$").pattern("$#")
 				.unlockedBy("has_blood_aspect_planks", has(BLOOD_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.planksRecipe(BLOOD_ASPECT_PLANKS, BLOOD_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(BLOOD_ASPECT_PLANKS, BLOOD_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "blood_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(BLOOD_ASPECT_PLANKS, BLOOD_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "blood_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(BLOOD_ASPECT_PLANKS, BLOOD_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "blood_aspect_planks_from_stripped_wood"));
 		CommonRecipes.woodRecipe(BLOOD_ASPECT_WOOD, BLOOD_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(BLOOD_ASPECT_STRIPPED_WOOD, BLOOD_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.bookshelfRecipe(BLOOD_ASPECT_BOOKSHELF, BLOOD_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(BLOOD_ASPECT_LADDER, BLOOD_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(BLOOD_ASPECT_SIGN, BLOOD_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(BLOOD_ASPECT_HANGING_SIGN, BLOOD_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(BREATH_ASPECT_STAIRS, BREATH_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(BREATH_ASPECT_SLAB, BREATH_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1358,6 +1367,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_breath_aspect_planks", has(BREATH_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(BREATH_ASPECT_WOOD, BREATH_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(BREATH_ASPECT_STRIPPED_WOOD, BREATH_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(BREATH_ASPECT_PLANKS, BREATH_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(BREATH_ASPECT_PLANKS, BREATH_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "breath_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(BREATH_ASPECT_PLANKS, BREATH_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "breath_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(BREATH_ASPECT_PLANKS, BREATH_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "breath_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(BREATH_ASPECT_BOOKSHELF, BREATH_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(BREATH_ASPECT_LADDER, BREATH_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(BREATH_ASPECT_SIGN, BREATH_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(BREATH_ASPECT_HANGING_SIGN, BREATH_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(DOOM_ASPECT_STAIRS, DOOM_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(DOOM_ASPECT_SLAB, DOOM_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1380,6 +1397,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_doom_aspect_planks", has(DOOM_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(DOOM_ASPECT_WOOD, DOOM_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(DOOM_ASPECT_STRIPPED_WOOD, DOOM_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(DOOM_ASPECT_PLANKS, DOOM_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(DOOM_ASPECT_PLANKS, DOOM_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "doom_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(DOOM_ASPECT_PLANKS, DOOM_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "doom_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(DOOM_ASPECT_PLANKS, DOOM_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "doom_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(DOOM_ASPECT_BOOKSHELF, DOOM_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(DOOM_ASPECT_LADDER, DOOM_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(DOOM_ASPECT_SIGN, DOOM_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(DOOM_ASPECT_HANGING_SIGN, DOOM_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(HEART_ASPECT_STAIRS, HEART_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(HEART_ASPECT_SLAB, HEART_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1402,6 +1427,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_heart_aspect_planks", has(HEART_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(HEART_ASPECT_WOOD, HEART_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(HEART_ASPECT_STRIPPED_WOOD, HEART_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(HEART_ASPECT_PLANKS, HEART_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(HEART_ASPECT_PLANKS, HEART_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "heart_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(HEART_ASPECT_PLANKS, HEART_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "heart_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(HEART_ASPECT_PLANKS, HEART_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "heart_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(HEART_ASPECT_BOOKSHELF, HEART_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(HEART_ASPECT_LADDER, HEART_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(HEART_ASPECT_SIGN, HEART_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(HEART_ASPECT_HANGING_SIGN, HEART_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(HOPE_ASPECT_STAIRS, HOPE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(HOPE_ASPECT_SLAB, HOPE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1424,6 +1457,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_hope_aspect_planks", has(HOPE_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(HOPE_ASPECT_WOOD, HOPE_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(HOPE_ASPECT_STRIPPED_WOOD, HOPE_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(HOPE_ASPECT_PLANKS, HOPE_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(HOPE_ASPECT_PLANKS, HOPE_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "hope_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(HOPE_ASPECT_PLANKS, HOPE_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "hope_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(HOPE_ASPECT_PLANKS, HOPE_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "hope_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(HOPE_ASPECT_BOOKSHELF, HOPE_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(HOPE_ASPECT_LADDER, HOPE_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(HOPE_ASPECT_SIGN, HOPE_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(HOPE_ASPECT_HANGING_SIGN, HOPE_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(LIFE_ASPECT_STAIRS, LIFE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(LIFE_ASPECT_SLAB, LIFE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1446,6 +1487,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_life_aspect_planks", has(LIFE_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(LIFE_ASPECT_WOOD, LIFE_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(LIFE_ASPECT_STRIPPED_WOOD, LIFE_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(LIFE_ASPECT_PLANKS, LIFE_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(LIFE_ASPECT_PLANKS, LIFE_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "life_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(LIFE_ASPECT_PLANKS, LIFE_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "life_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(LIFE_ASPECT_PLANKS, LIFE_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "life_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(LIFE_ASPECT_BOOKSHELF, LIFE_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(LIFE_ASPECT_LADDER, LIFE_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(LIFE_ASPECT_SIGN, LIFE_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(LIFE_ASPECT_HANGING_SIGN, LIFE_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(LIGHT_ASPECT_STAIRS, LIGHT_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(LIGHT_ASPECT_SLAB, LIGHT_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1468,6 +1517,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_light_aspect_planks", has(LIGHT_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(LIGHT_ASPECT_WOOD, LIGHT_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(LIGHT_ASPECT_STRIPPED_WOOD, LIGHT_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(LIGHT_ASPECT_PLANKS, LIGHT_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(LIGHT_ASPECT_PLANKS, LIGHT_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "light_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(LIGHT_ASPECT_PLANKS, LIGHT_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "light_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(LIGHT_ASPECT_PLANKS, LIGHT_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "light_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(LIGHT_ASPECT_BOOKSHELF, LIGHT_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(LIGHT_ASPECT_LADDER, LIGHT_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(LIGHT_ASPECT_SIGN, LIGHT_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(LIGHT_ASPECT_HANGING_SIGN, LIGHT_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(MIND_ASPECT_STAIRS, MIND_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(MIND_ASPECT_SLAB, MIND_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1490,6 +1547,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_mind_aspect_planks", has(MIND_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(MIND_ASPECT_WOOD, MIND_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(MIND_ASPECT_STRIPPED_WOOD, MIND_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(MIND_ASPECT_PLANKS, MIND_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(MIND_ASPECT_PLANKS, MIND_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "mind_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(MIND_ASPECT_PLANKS, MIND_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "mind_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(MIND_ASPECT_PLANKS, MIND_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "mind_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(MIND_ASPECT_BOOKSHELF, MIND_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(MIND_ASPECT_LADDER, MIND_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(MIND_ASPECT_SIGN, MIND_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(MIND_ASPECT_HANGING_SIGN, MIND_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(RAGE_ASPECT_STAIRS, RAGE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(RAGE_ASPECT_SLAB, RAGE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1512,6 +1577,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_rage_aspect_planks", has(RAGE_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(RAGE_ASPECT_WOOD, RAGE_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(RAGE_ASPECT_STRIPPED_WOOD, RAGE_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(RAGE_ASPECT_PLANKS, RAGE_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(RAGE_ASPECT_PLANKS, RAGE_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "rage_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(RAGE_ASPECT_PLANKS, RAGE_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "rage_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(RAGE_ASPECT_PLANKS, RAGE_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "rage_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(RAGE_ASPECT_BOOKSHELF, RAGE_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(RAGE_ASPECT_LADDER, RAGE_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(RAGE_ASPECT_SIGN, RAGE_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(RAGE_ASPECT_HANGING_SIGN, RAGE_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(SPACE_ASPECT_STAIRS, SPACE_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(SPACE_ASPECT_SLAB, SPACE_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1534,6 +1607,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_space_aspect_planks", has(SPACE_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(SPACE_ASPECT_WOOD, SPACE_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(SPACE_ASPECT_STRIPPED_WOOD, SPACE_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(SPACE_ASPECT_PLANKS, SPACE_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(SPACE_ASPECT_PLANKS, SPACE_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "space_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(SPACE_ASPECT_PLANKS, SPACE_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "space_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(SPACE_ASPECT_PLANKS, SPACE_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "space_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(SPACE_ASPECT_BOOKSHELF, SPACE_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(SPACE_ASPECT_LADDER, SPACE_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(SPACE_ASPECT_SIGN, SPACE_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(SPACE_ASPECT_HANGING_SIGN, SPACE_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(TIME_ASPECT_STAIRS, TIME_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(TIME_ASPECT_SLAB, TIME_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1556,6 +1637,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_time_aspect_planks", has(TIME_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(TIME_ASPECT_WOOD, TIME_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(TIME_ASPECT_STRIPPED_WOOD, TIME_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(TIME_ASPECT_PLANKS, TIME_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(TIME_ASPECT_PLANKS, TIME_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "time_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(TIME_ASPECT_PLANKS, TIME_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "time_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(TIME_ASPECT_PLANKS, TIME_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "time_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(TIME_ASPECT_BOOKSHELF, TIME_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(TIME_ASPECT_LADDER, TIME_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(TIME_ASPECT_SIGN, TIME_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(TIME_ASPECT_HANGING_SIGN, TIME_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
 		
 		CommonRecipes.stairsRecipe(VOID_ASPECT_STAIRS, VOID_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(VOID_ASPECT_SLAB, VOID_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);
@@ -1578,5 +1667,14 @@ public final class AspectTreeBlocksData
 				.unlockedBy("has_void_aspect_planks", has(VOID_ASPECT_PLANKS.get())).save(recipeSaver);
 		CommonRecipes.woodRecipe(VOID_ASPECT_WOOD, VOID_ASPECT_LOG).group("aspect_wood").save(recipeSaver);
 		CommonRecipes.woodRecipe(VOID_ASPECT_STRIPPED_WOOD, VOID_ASPECT_STRIPPED_LOG).group("aspect_stripped_wood").save(recipeSaver);
+		CommonRecipes.planksRecipe(VOID_ASPECT_PLANKS, VOID_ASPECT_LOG).group("aspect_planks").save(recipeSaver);
+		CommonRecipes.planksRecipe(VOID_ASPECT_PLANKS, VOID_ASPECT_STRIPPED_LOG).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "void_aspect_planks_from_stripped_log"));
+		CommonRecipes.planksRecipe(VOID_ASPECT_PLANKS, VOID_ASPECT_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "void_aspect_planks_from_wood"));
+		CommonRecipes.planksRecipe(VOID_ASPECT_PLANKS, VOID_ASPECT_STRIPPED_WOOD).group("aspect_planks").save(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "void_aspect_planks_from_stripped_wood"));
+		CommonRecipes.bookshelfRecipe(VOID_ASPECT_BOOKSHELF, VOID_ASPECT_PLANKS).group("aspect_bookshelf").save(recipeSaver);
+		CommonRecipes.ladderRecipe(VOID_ASPECT_LADDER, VOID_ASPECT_PLANKS).group("aspect_ladder").save(recipeSaver);
+		CommonRecipes.signRecipe(VOID_ASPECT_SIGN, VOID_ASPECT_PLANKS).group("aspect_sign").save(recipeSaver);
+		CommonRecipes.hangingSignRecipe(VOID_ASPECT_HANGING_SIGN, VOID_ASPECT_STRIPPED_LOG).group("aspect_hanging_sign").save(recipeSaver);
+		
 	}
 }

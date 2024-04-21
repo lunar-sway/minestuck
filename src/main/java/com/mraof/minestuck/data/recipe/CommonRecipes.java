@@ -1,12 +1,11 @@
 package com.mraof.minestuck.data.recipe;
 
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -110,7 +109,7 @@ public final class CommonRecipes
 	
 	public static RecipeBuilder planksRecipe(ItemLike planksBlock, ItemLike sourceBlock)
 	{
-		return ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, planksBlock).requires(sourceBlock)
+		return ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, planksBlock, 4).requires(sourceBlock)
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
@@ -121,9 +120,64 @@ public final class CommonRecipes
 	
 	public static RecipeBuilder woodRecipe(ItemLike woodBlock, ItemLike sourceBlock)
 	{
-
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS,
-				woodBlock, 3).define('#', sourceBlock).pattern("##").pattern("##").group("bark").unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+				woodBlock, 3).define('#', sourceBlock).pattern("##").pattern("##")
+				.group("bark").unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+	}
+	
+	
+	public static RecipeBuilder bookshelfRecipe(Supplier<? extends ItemLike> bookshelfBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return bookshelfRecipe(bookshelfBlock.get(), sourceBlock.get());
+	}
+	
+	public static RecipeBuilder bookshelfRecipe(ItemLike bookshelfBlock, ItemLike sourceBlock)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bookshelfBlock)
+				.define('b', Items.BOOK).define('p',sourceBlock)
+				.pattern("ppp").pattern("bpb").pattern("ppp")
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+	}
+	
+	public static RecipeBuilder ladderRecipe(Supplier<? extends ItemLike> ladderBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return ladderRecipe(ladderBlock.get(), sourceBlock.get());
+	}
+	
+	public static RecipeBuilder ladderRecipe(ItemLike ladderBlock, ItemLike sourceBlock)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ladderBlock, 4)
+				.define('s', Items.STICK).define('p', sourceBlock)
+				.pattern("s s").pattern("sps").pattern("s s")
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+		
+	}
+	
+	public static RecipeBuilder signRecipe(Supplier<? extends ItemLike> signBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return signRecipe(signBlock.get(), sourceBlock.get());
+	}
+	
+	public static RecipeBuilder signRecipe(ItemLike signBlock, ItemLike sourceBlock)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, signBlock, 3)
+				.define('s', Items.STICK).define('p', sourceBlock)
+				.pattern("ppp").pattern("ppp").pattern(" s ")
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
+		
+	}
+	
+	public static RecipeBuilder hangingSignRecipe(Supplier<? extends ItemLike> hangingSignBlock, Supplier<? extends ItemLike> sourceBlock)
+	{
+		return hangingSignRecipe(hangingSignBlock.get(), sourceBlock.get());
+	}
+	
+	public static RecipeBuilder hangingSignRecipe(ItemLike hangingSignBlock, ItemLike sourceBlock)
+	{
+		return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, hangingSignBlock, 6)
+				.define('c', Items.CHAIN).define('w', sourceBlock)
+				.pattern("c c").pattern("www").pattern("www")
+				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 		
 	}
 	

@@ -134,4 +134,22 @@ public final class SkaianetTests
 					&& session == sessions.getOrCreateSession(server), "Session changed after disconnecting");
 		});
 	}
+	
+	@GameTest(timeoutTicks = 0, template = "empty_gametest")
+	public static void redundantCalls(GameTestHelper helper)
+	{
+		helper.succeedIf(() -> {
+			SkaianetData skaianetData = SkaianetData.newInstanceForGameTest(false, helper);
+			SburbConnections connections = skaianetData.connections;
+			
+			PlayerIdentifier client = IdentifierHandler.createNewFakeIdentifier(),
+					server = IdentifierHandler.createNewFakeIdentifier();
+			
+			connections.unlinkClientPlayer(client);
+			connections.unlinkServerPlayer(client);
+			
+			connections.setPrimaryConnection(client, server);
+			connections.setPrimaryConnection(client, server);
+		});
+	}
 }

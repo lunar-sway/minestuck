@@ -54,6 +54,8 @@ public class MSWoodTypes
 		WoodType.register(MSWoodTypes.SHADEWOOD);
 		WoodType.register(MSWoodTypes.TREATED);
 		WoodType.register(MSWoodTypes.LACQUERED);
+		WoodType.register(MSWoodTypes.PERFECTLY_GENERIC);
+		WoodType.register(MSWoodTypes.CINDERED);
 		
 		WoodType.register(MSWoodTypes.BLOOD);
 		WoodType.register(MSWoodTypes.BREATH);
