@@ -37,6 +37,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
@@ -115,7 +116,7 @@ public final class ProspitStructure
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
 			Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
-			List<PiecePos> piecesToGenerate = new ArrayList<>();
+			Set<PiecePos> piecesToGenerate = new HashSet<>();
 			
 			for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
 			{
@@ -132,7 +133,14 @@ public final class ProspitStructure
 			
 			while(!piecesToGenerate.isEmpty())
 			{
-				PiecePos pos = piecesToGenerate.remove(context.random().nextInt(piecesToGenerate.size()));
+				MinValueSearchResult<PiecePos> leastEntropyResult = MinValueSearchResult.search(piecesToGenerate,
+						pos -> entropy(availablePiecesMap.get(pos)));
+				
+				if(leastEntropyResult.entries.isEmpty())
+					break;
+				
+				PiecePos pos = Util.getRandom(leastEntropyResult.entries, context.random());
+				piecesToGenerate.remove(pos);
 				
 				List<PieceEntry> availablePieces = availablePiecesMap.get(pos);
 				var chosenEntry = WeightedRandom.getRandomItem(context.random(), availablePieces);
@@ -148,6 +156,55 @@ public final class ProspitStructure
 					removeConflictingPieces(pos, availablePiecesMap);
 			}
 		}
+	}
+	
+	private static final class MinValueSearchResult<T>
+	{
+		private final List<T> entries = new ArrayList<>();
+		private final double value;
+		
+		public MinValueSearchResult(T entry, double value)
+		{
+			this.value = value;
+			entries.add(entry);
+		}
+		
+		public MinValueSearchResult()
+		{
+			this.value = Double.MAX_VALUE;
+		}
+		
+		public static <T> MinValueSearchResult<T> search(Collection<T> collection, ToDoubleFunction<T> valueExtraction)
+		{
+			return collection.stream().map(entry -> new MinValueSearchResult<>(entry, valueExtraction.applyAsDouble(entry)))
+					.reduce(new MinValueSearchResult<>(), MinValueSearchResult::combine);
+		}
+		
+		public MinValueSearchResult<T> combine(MinValueSearchResult<T> other)
+		{
+			if(this.value < other.value)
+				return this;
+			if(other.value < this.value)
+				return other;
+			
+			this.entries.addAll(other.entries);
+			return this;
+		}
+	}
+	
+	private static double entropy(List<PieceEntry> entries)
+	{
+		int totalWeight = WeightedRandom.getTotalWeight(entries);
+		double entropy = 0;
+		for(PieceEntry entry : entries)
+		{
+			if(entry.weight.asInt() == 0)
+				continue;
+			
+			double probability = (double) entry.weight.asInt() / totalWeight;
+			entropy += - probability * Math.log(probability);
+		}
+		return entropy;
 	}
 	
 	private static void removeConflictingPieces(PiecePos pos, Map<PiecePos, List<PieceEntry>> availablePiecesMap)
