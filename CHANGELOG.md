@@ -12,7 +12,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [1.20.1-1.12.0.1] - 2024-04-15
 
-
 ### Fixed
 
 - More logging for grist cost generator to help identify bottlenecks
