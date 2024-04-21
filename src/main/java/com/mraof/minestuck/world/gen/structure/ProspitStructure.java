@@ -108,7 +108,8 @@ public final class ProspitStructure
 		{
 			List<PieceEntry> pieces = List.of(
 					new PieceEntry(pos -> null, ConnectionType.AIR, ConnectionType.AIR, Weight.of(10)),
-					new PieceEntry(SolidPiece::new, ConnectionType.TOP_SOLID, ConnectionType.SOLID, Weight.of(10))
+					new PieceEntry(SolidPiece::new, ConnectionType.SOLID, ConnectionType.SOLID, Weight.of(10)),
+					new PieceEntry(PyramidPiece::new, ConnectionType.AIR, ConnectionType.SOLID, Weight.of(10))
 			);
 			
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
@@ -194,15 +195,13 @@ public final class ProspitStructure
 	private enum ConnectionType
 	{
 		AIR,
-		TOP_SOLID,
 		SOLID,
 	}
 	
 	private static final Map<ConnectionType, Set<ConnectionType>> SUPPORTED_CONNECTIONS = Util.make(() -> {
 		List<Pair<ConnectionType, ConnectionType>> allowedConnections = List.of(
 				Pair.of(ConnectionType.AIR, ConnectionType.AIR),
-				Pair.of(ConnectionType.AIR, ConnectionType.TOP_SOLID),
-				Pair.of(ConnectionType.TOP_SOLID, ConnectionType.SOLID)
+				Pair.of(ConnectionType.SOLID, ConnectionType.SOLID)
 		);
 		
 		ImmutableMap.Builder<ConnectionType, Set<ConnectionType>> mapBuilder = ImmutableMap.builder();
@@ -223,6 +222,8 @@ public final class ProspitStructure
 	
 	public static final Supplier<StructurePieceType.ContextlessType> SOLID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_solid_piece",
 			() -> SolidPiece::new);
+	public static final Supplier<StructurePieceType.ContextlessType> PYRAMID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_pyramid_piece",
+			() -> PyramidPiece::new);
 	
 	public static final class SolidPiece extends ImprovedStructurePiece
 	{
@@ -247,6 +248,39 @@ public final class ProspitStructure
 		public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
 		{
 			generateBox(level, box, 0, 0, 0, PIECE_SIZE - 1, PIECE_SIZE - 1, PIECE_SIZE - 1,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+		}
+	}
+	
+	public static final class PyramidPiece extends ImprovedStructurePiece
+	{
+		public PyramidPiece(BlockPos bottomCornerPos)
+		{
+			super(PYRAMID_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
+					bottomCornerPos.offset(PIECE_SIZE - 1, PIECE_SIZE - 1, PIECE_SIZE - 1)));
+			setOrientation(Direction.NORTH);
+		}
+		
+		public PyramidPiece(CompoundTag tag)
+		{
+			super(PYRAMID_PIECE_TYPE.get(), tag);
+		}
+		
+		@Override
+		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag)
+		{
+		}
+		
+		@Override
+		public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
+		{
+			generateBox(level, box, 0, 0, 0, 7, 0, 7,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+			generateBox(level, box, 1, 1, 1, 6, 1, 6,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+			generateBox(level, box, 2, 2, 2, 5, 2, 5,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+			generateBox(level, box, 3, 3, 3, 4, 3, 4,
 					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
 		}
 	}
