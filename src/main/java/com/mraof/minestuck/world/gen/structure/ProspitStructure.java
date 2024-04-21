@@ -1,8 +1,12 @@
 package com.mraof.minestuck.world.gen.structure;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -103,8 +107,8 @@ public final class ProspitStructure
 		private void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
 		{
 			List<PieceEntry> pieces = List.of(
-					new PieceEntry(pos -> null, PieceType.AIR, Weight.of(10)),
-					new PieceEntry(SolidPiece::new, PieceType.SOLID, Weight.of(10))
+					new PieceEntry(pos -> null, ConnectionType.AIR, ConnectionType.AIR, Weight.of(10)),
+					new PieceEntry(SolidPiece::new, ConnectionType.TOP_SOLID, ConnectionType.SOLID, Weight.of(10))
 			);
 			
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
@@ -147,36 +151,27 @@ public final class ProspitStructure
 	
 	private static void removeConflictingPieces(PiecePos pos, Map<PiecePos, List<PieceEntry>> availablePiecesMap)
 	{
-		Set<PieceType> availableTypes = availablePiecesMap.get(pos).stream().map(PieceEntry::type).collect(Collectors.toSet());
-		
 		if(pos.y > 0)
 		{
+			Set<ConnectionType> connections = availablePiecesMap.get(pos).stream().map(PieceEntry::belowConnection).collect(Collectors.toSet());
 			PiecePos belowPos = new PiecePos(pos.x, pos.y - 1, pos.z);
-			if(availablePiecesMap.get(belowPos).removeIf(belowEntry -> !canConnectToAnyAbove(belowEntry.type(), availableTypes)))
+			if(availablePiecesMap.get(belowPos).removeIf(belowEntry -> cannotConnect(belowEntry.aboveConnection(), connections)))
 				removeConflictingPieces(belowPos, availablePiecesMap);
 		}
 		
 		if(pos.y < HEIGHT_IN_PIECES - 1)
 		{
+			Set<ConnectionType> connections = availablePiecesMap.get(pos).stream().map(PieceEntry::aboveConnection).collect(Collectors.toSet());
 			PiecePos abovePos = new PiecePos(pos.x, pos.y + 1, pos.z);
-			if(availablePiecesMap.get(abovePos).removeIf(aboveEntry -> !canConnectToAnyBelow(aboveEntry.type(), availableTypes)))
+			if(availablePiecesMap.get(abovePos).removeIf(aboveEntry -> cannotConnect(aboveEntry.belowConnection(), connections)))
 				removeConflictingPieces(abovePos, availablePiecesMap);
 		}
 	}
 	
-	private static boolean canConnectToAnyAbove(PieceType type, Set<PieceType> aboveTypes)
+	private static boolean cannotConnect(ConnectionType type, Set<ConnectionType> otherTypes)
 	{
-		return aboveTypes.stream().anyMatch(aboveType -> canConnect(aboveType, type));
-	}
-	
-	private static boolean canConnectToAnyBelow(PieceType type, Set<PieceType> belowTypes)
-	{
-		return belowTypes.stream().anyMatch(belowType -> canConnect(type, belowType));
-	}
-	
-	private static boolean canConnect(PieceType above, PieceType below)
-	{
-		return above == PieceType.AIR || below == PieceType.SOLID;
+		Set<ConnectionType> supportedTypes = SUPPORTED_CONNECTIONS.get(type);
+		return otherTypes.stream().noneMatch(supportedTypes::contains);
 	}
 	
 	private record PiecePos(int x, int y, int z)
@@ -187,7 +182,7 @@ public final class ProspitStructure
 		}
 	}
 	
-	private record PieceEntry(Function<BlockPos, StructurePiece> constructor, PieceType type, Weight weight) implements WeightedEntry
+	private record PieceEntry(Function<BlockPos, StructurePiece> constructor, ConnectionType aboveConnection, ConnectionType belowConnection, Weight weight) implements WeightedEntry
 	{
 		@Override
 		public Weight getWeight()
@@ -196,11 +191,35 @@ public final class ProspitStructure
 		}
 	}
 	
-	private enum PieceType
+	private enum ConnectionType
 	{
-		SOLID,
 		AIR,
+		TOP_SOLID,
+		SOLID,
 	}
+	
+	private static final Map<ConnectionType, Set<ConnectionType>> SUPPORTED_CONNECTIONS = Util.make(() -> {
+		List<Pair<ConnectionType, ConnectionType>> allowedConnections = List.of(
+				Pair.of(ConnectionType.AIR, ConnectionType.AIR),
+				Pair.of(ConnectionType.AIR, ConnectionType.TOP_SOLID),
+				Pair.of(ConnectionType.TOP_SOLID, ConnectionType.SOLID)
+		);
+		
+		ImmutableMap.Builder<ConnectionType, Set<ConnectionType>> mapBuilder = ImmutableMap.builder();
+		for(ConnectionType type : ConnectionType.values())
+		{
+			ImmutableSet.Builder<ConnectionType> setBuilder = ImmutableSet.builder();
+			for(Pair<ConnectionType, ConnectionType> pair : allowedConnections)
+			{
+				if(pair.getFirst() == type)
+					setBuilder.add(pair.getSecond());
+				if(pair.getSecond() == type)
+					setBuilder.add(pair.getFirst());
+			}
+			mapBuilder.put(type, setBuilder.build());
+		}
+		return mapBuilder.build();
+	});
 	
 	public static final Supplier<StructurePieceType.ContextlessType> SOLID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_solid_piece",
 			() -> SolidPiece::new);
