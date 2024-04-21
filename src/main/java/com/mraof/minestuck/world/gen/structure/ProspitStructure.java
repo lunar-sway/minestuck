@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
@@ -36,9 +37,7 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.ToDoubleFunction;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
@@ -108,28 +107,6 @@ public final class ProspitStructure
 		
 		private void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
 		{
-			List<PieceEntry> pieces = List.of(
-					new PieceEntry(pos -> null, symmetric(ConnectionType.AIR, ConnectionType.AIR, ConnectionType.AIR), Weight.of(10)),
-					new PieceEntry(SolidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.SOLID, ConnectionType.WALL), Weight.of(10)),
-					new PieceEntry(PyramidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.AIR, ConnectionType.AIR), Weight.of(2)),
-					new PieceEntry(pos -> new BridgePiece(pos, Direction.Axis.X), Map.of(
-							Direction.DOWN, ConnectionType.AIR,
-							Direction.UP, ConnectionType.AIR,
-							Direction.NORTH, ConnectionType.AIR,
-							Direction.EAST, ConnectionType.BRIDGE,
-							Direction.SOUTH, ConnectionType.AIR,
-							Direction.WEST, ConnectionType.BRIDGE
-					), Weight.of(4)),
-					new PieceEntry(pos -> new BridgePiece(pos, Direction.Axis.Z), Map.of(
-							Direction.DOWN, ConnectionType.AIR,
-							Direction.UP, ConnectionType.AIR,
-							Direction.NORTH, ConnectionType.BRIDGE,
-							Direction.EAST, ConnectionType.AIR,
-							Direction.SOUTH, ConnectionType.BRIDGE,
-							Direction.WEST, ConnectionType.AIR
-					), Weight.of(4))
-			);
-			
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
 			Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
@@ -140,7 +117,7 @@ public final class ProspitStructure
 					for(int yIndex = 0; yIndex < HEIGHT_IN_PIECES; yIndex++)
 					{
 						PiecePos pos = new PiecePos(xIndex, yIndex, zIndex);
-						availablePiecesMap.put(pos, new ArrayList<>(pieces));
+						availablePiecesMap.put(pos, new ArrayList<>(ProspitStructure.PIECE_ENTRIES));
 					}
 				}
 			}
@@ -313,6 +290,17 @@ public final class ProspitStructure
 		}
 	}
 	
+	private static final Collection<PieceEntry> PIECE_ENTRIES = Util.make(() -> {
+		ImmutableList.Builder<PieceEntry> builder = ImmutableList.builder();
+		
+		builder.add(new PieceEntry(pos -> null, symmetric(ConnectionType.AIR, ConnectionType.AIR, ConnectionType.AIR), Weight.of(10)));
+		builder.add(new PieceEntry(SolidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.SOLID, ConnectionType.WALL), Weight.of(10)));
+		builder.add(new PieceEntry(PyramidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.AIR, ConnectionType.AIR), Weight.of(2)));
+		addAxisSymmetric(builder::add, BridgePiece::new, ConnectionType.AIR, ConnectionType.AIR, ConnectionType.BRIDGE, ConnectionType.AIR, Weight.of(4));
+		
+		return builder.build();
+	});
+	
 	private static Map<Direction, ConnectionType> symmetric(ConnectionType down, ConnectionType up, ConnectionType side)
 	{
 		return Map.of(
@@ -323,6 +311,27 @@ public final class ProspitStructure
 				Direction.SOUTH, side,
 				Direction.WEST, side
 		);
+	}
+	
+	private static void addAxisSymmetric(Consumer<PieceEntry> consumer, BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
+										 ConnectionType down, ConnectionType up, ConnectionType front, ConnectionType side, Weight individualWeight)
+	{
+		consumer.accept(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), Map.of(
+				Direction.DOWN, down,
+				Direction.UP, up,
+				Direction.NORTH, side,
+				Direction.EAST, front,
+				Direction.SOUTH, side,
+				Direction.WEST, front
+		), individualWeight));
+		consumer.accept(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), Map.of(
+				Direction.DOWN, down,
+				Direction.UP, up,
+				Direction.NORTH, front,
+				Direction.EAST, side,
+				Direction.SOUTH, front,
+				Direction.WEST, side
+		), individualWeight));
 	}
 	
 	private enum ConnectionType
