@@ -1,11 +1,13 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.*;
 import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.world.level.biome.Biome;
@@ -34,5 +36,9 @@ public final class MSStructureProvider
 		context.register(PINK_TOWER, new PinkTowerStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.LAND_NORMAL), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN)));
 		
 		context.register(SKAIA_CASTLE, new CastleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SKAIA_CASTLE), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+		
+		context.register(ProspitStructure.STRUCTURE, new ProspitStructure.TerrainStructure(
+				new Structure.StructureSettings(HolderSet.direct(biomes.getOrThrow(MSBiomes.PROSPIT)),
+						Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 	}
 }

@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.ProspitStructure;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -27,6 +28,8 @@ public final class MSStructureSetProvider
 		
 		// Skaia
 		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(MSStructures.SKAIA_CASTLE), new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
+		
+		context.register(key("prospit_terrain"), new StructureSet(structures.getOrThrow(ProspitStructure.STRUCTURE), new ProspitStructure.FixedPlacement()));
 	}
 	
 	private static ResourceKey<StructureSet> key(String path)

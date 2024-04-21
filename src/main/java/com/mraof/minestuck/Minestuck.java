@@ -38,6 +38,7 @@ import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
+import com.mraof.minestuck.world.gen.structure.ProspitStructure;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -116,6 +117,7 @@ public class Minestuck
 		
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();
+		ProspitStructure.init();
 	}
 	
 	/**

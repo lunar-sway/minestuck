@@ -1,0 +1,6 @@
+{
+  "type": "minestuck:prospit_terrain",
+  "biomes": "minestuck:prospit",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

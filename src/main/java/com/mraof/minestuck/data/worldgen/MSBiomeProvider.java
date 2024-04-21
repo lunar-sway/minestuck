@@ -14,6 +14,13 @@ public final class MSBiomeProvider
 	public static void register(BootstapContext<Biome> context)
 	{
 		context.register(MSBiomes.SKAIA, skaiaBiome());
+		context.register(MSBiomes.PROSPIT,
+				new Biome.BiomeBuilder().temperature(0.5F).downfall(0.5F)
+						.specialEffects(new BiomeSpecialEffects.Builder().waterColor(0x3F76E4).waterFogColor(0x050533)
+								.fogColor(0xCECEA7).skyColor(0x979CA8).build())
+						.mobSpawnSettings(new MobSpawnSettings.Builder().build())
+						.generationSettings(new BiomeGenerationSettings.PlainBuilder().build())
+						.build());
 		
 		MSBiomes.DEFAULT_LAND.createForDataGen(context);
 		MSBiomes.HIGH_HUMID_LAND.createForDataGen(context);

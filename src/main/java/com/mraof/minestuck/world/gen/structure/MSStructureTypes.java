@@ -31,7 +31,7 @@ public final class MSStructureTypes
 	// Skaia
 	public static final Supplier<StructureType<CastleStructure>> SKAIA_CASTLE = REGISTER.register("skaia_castle", () -> asType(CastleStructure.CODEC));
 	
-	private static <S extends Structure> StructureType<S> asType(Codec<S> codec)
+	public static <S extends Structure> StructureType<S> asType(Codec<S> codec)
 	{
 		return () -> codec;
 	}
