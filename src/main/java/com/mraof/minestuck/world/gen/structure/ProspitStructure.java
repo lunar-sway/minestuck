@@ -116,8 +116,6 @@ public final class ProspitStructure
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
 			Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
-			Set<PiecePos> piecesToGenerate = new HashSet<>();
-			
 			for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
 			{
 				for(int zIndex = 0; zIndex < WIDTH_IN_PIECES; zIndex++)
@@ -126,8 +124,17 @@ public final class ProspitStructure
 					{
 						PiecePos pos = new PiecePos(xIndex, yIndex, zIndex);
 						availablePiecesMap.put(pos, new ArrayList<>(pieces));
-						piecesToGenerate.add(pos);
 					}
+				}
+			}
+			Set<PiecePos> piecesToGenerate = new HashSet<>(availablePiecesMap.keySet());
+			
+			for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
+			{
+				for(int zIndex = 0; zIndex < WIDTH_IN_PIECES; zIndex++)
+				{
+					PiecePos topPos = new PiecePos(xIndex, HEIGHT_IN_PIECES - 1, zIndex);
+					removeConflictsFromAboveConnection(topPos, Set.of(ConnectionType.AIR), availablePiecesMap);
 				}
 			}
 			
@@ -213,8 +220,7 @@ public final class ProspitStructure
 		{
 			Set<ConnectionType> connections = availablePiecesMap.get(pos).stream().map(PieceEntry::belowConnection).collect(Collectors.toSet());
 			PiecePos belowPos = new PiecePos(pos.x, pos.y - 1, pos.z);
-			if(availablePiecesMap.get(belowPos).removeIf(belowEntry -> cannotConnect(belowEntry.aboveConnection(), connections)))
-				removeConflictingPieces(belowPos, availablePiecesMap);
+			removeConflictsFromAboveConnection(belowPos, connections, availablePiecesMap);
 		}
 		
 		if(pos.y < HEIGHT_IN_PIECES - 1)
@@ -224,6 +230,12 @@ public final class ProspitStructure
 			if(availablePiecesMap.get(abovePos).removeIf(aboveEntry -> cannotConnect(aboveEntry.belowConnection(), connections)))
 				removeConflictingPieces(abovePos, availablePiecesMap);
 		}
+	}
+	
+	private static void removeConflictsFromAboveConnection(PiecePos pos, Set<ConnectionType> connections, Map<PiecePos, List<PieceEntry>> availablePiecesMap)
+	{
+		if(availablePiecesMap.get(pos).removeIf(belowEntry -> cannotConnect(belowEntry.aboveConnection(), connections)))
+			removeConflictingPieces(pos, availablePiecesMap);
 	}
 	
 	private static boolean cannotConnect(ConnectionType type, Set<ConnectionType> otherTypes)
