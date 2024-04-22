@@ -16,11 +16,14 @@ import java.util.stream.Collectors;
 
 final class WaveFunctionCollapseBuilder
 {
+	private final ConnectionTester connectionTester;
+	
 	private final Map<ProspitStructure.PiecePos, List<ProspitStructure.PieceEntry>> availablePiecesMap = new HashMap<>();
 	private final Set<ProspitStructure.PiecePos> piecesToGenerate = new HashSet<>();
 	
-	public WaveFunctionCollapseBuilder(Collection<ProspitStructure.PieceEntry> entries)
+	public WaveFunctionCollapseBuilder(Collection<ProspitStructure.PieceEntry> entries, ConnectionTester connectionTester)
 	{
+		this.connectionTester = connectionTester;
 		for(int xIndex = 0; xIndex < ProspitStructure.WIDTH_IN_PIECES; xIndex++)
 		{
 			for(int zIndex = 0; zIndex < ProspitStructure.WIDTH_IN_PIECES; zIndex++)
@@ -106,7 +109,7 @@ final class WaveFunctionCollapseBuilder
 	
 	private void removeConflictsFromConnection(ProspitStructure.PiecePos pos, Direction direction, Set<ProspitStructure.ConnectionType> connections)
 	{
-		if(this.availablePiecesMap.get(pos).removeIf(entry -> entry.connections().get(direction).cannotConnect(connections)))
+		if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.connections().get(direction), connections)))
 			this.removeConflictingPieces(pos, direction);
 	}
 	
@@ -157,5 +160,10 @@ final class WaveFunctionCollapseBuilder
 			this.entries.addAll(other.entries);
 			return this;
 		}
+	}
+	
+	public interface ConnectionTester
+	{
+		boolean canConnect(ProspitStructure.ConnectionType connection, Set<ProspitStructure.ConnectionType> connections);
 	}
 }

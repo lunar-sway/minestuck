@@ -109,7 +109,7 @@ public final class ProspitStructure
 		{
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
-			WaveFunctionCollapseBuilder builder = new WaveFunctionCollapseBuilder(ProspitStructure.PIECE_ENTRIES);
+			WaveFunctionCollapseBuilder builder = new WaveFunctionCollapseBuilder(ProspitStructure.PIECE_ENTRIES, ConnectionType.SUPPORTED_CONNECTIONS);
 			
 			builder.setupTopBounds();
 			for(Direction direction : Direction.Plane.HORIZONTAL)
@@ -230,28 +230,19 @@ public final class ProspitStructure
 		);
 	}
 	
-	public enum ConnectionType
+	public record ConnectionType(String name)
 	{
-		AIR,
-		SOLID,
-		WALL,
-		ROOF_SIDE,
-		BRIDGE,
-		LEDGE_FRONT,
-		LEDGE_LEFT,
-		LEDGE_RIGHT,
-		LEDGE_BACK,
-		;
+		public static final ConnectionType AIR = new ConnectionType("air"),
+				SOLID = new ConnectionType("solid"),
+				WALL = new ConnectionType("wall"),
+				ROOF_SIDE = new ConnectionType("roof_side"),
+				BRIDGE = new ConnectionType("bridge"),
+				LEDGE_FRONT = new ConnectionType("ledge/front"),
+				LEDGE_LEFT = new ConnectionType("ledge/left"),
+				LEDGE_RIGHT = new ConnectionType("ledge/right"),
+				LEDGE_BACK = new ConnectionType("ledge/back");
 		
-		public boolean cannotConnect(Set<ConnectionType> otherTypes)
-		{
-			Set<ConnectionType> supportedTypes = SUPPORTED_CONNECTIONS.get(this);
-			if(supportedTypes == null)
-				return true;
-			return otherTypes.stream().noneMatch(supportedTypes::contains);
-		}
-		
-		private static final Map<ConnectionType, Set<ConnectionType>> SUPPORTED_CONNECTIONS = Util.make(() -> {
+		private static final WaveFunctionCollapseBuilder.ConnectionTester SUPPORTED_CONNECTIONS = Util.make(() -> {
 			ConnectionsBuilder builder = new ConnectionsBuilder();
 			
 			builder.connectSelf(ConnectionType.AIR);
@@ -288,9 +279,16 @@ public final class ProspitStructure
 			builderMap.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
 		}
 		
-		Map<ConnectionType, Set<ConnectionType>> build()
+		WaveFunctionCollapseBuilder.ConnectionTester build()
 		{
-			return builderMap.entrySet().stream().collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
+			Map<ConnectionType, Set<ConnectionType>> map = builderMap.entrySet().stream()
+					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
+			return (type, otherTypes) -> {
+				Set<ConnectionType> supportedTypes = map.get(type);
+				if(supportedTypes == null)
+					return false;
+				return otherTypes.stream().anyMatch(supportedTypes::contains);
+			};
 		}
 	}
 	
