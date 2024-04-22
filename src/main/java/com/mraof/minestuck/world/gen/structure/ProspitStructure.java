@@ -17,7 +17,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -35,11 +34,12 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
-import java.util.function.*;
-import java.util.stream.Collectors;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
 
@@ -106,161 +106,25 @@ public final class ProspitStructure
 			return Optional.of(new GenerationStub(context.chunkPos().getWorldPosition(), builder -> generatePieces(builder, context)));
 		}
 		
-		private void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
+		private void generatePieces(StructurePiecesBuilder piecesBuilder, GenerationContext context)
 		{
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
-			Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
-			for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
-			{
-				for(int zIndex = 0; zIndex < WIDTH_IN_PIECES; zIndex++)
-				{
-					for(int yIndex = 0; yIndex < HEIGHT_IN_PIECES; yIndex++)
-					{
-						PiecePos pos = new PiecePos(xIndex, yIndex, zIndex);
-						availablePiecesMap.put(pos, new ArrayList<>(ProspitStructure.PIECE_ENTRIES));
-					}
-				}
-			}
-			Set<PiecePos> piecesToGenerate = new HashSet<>(availablePiecesMap.keySet());
+			WaveFunctionCollapseBuilder builder = new WaveFunctionCollapseBuilder(ProspitStructure.PIECE_ENTRIES);
 			
-			setupTopBounds(availablePiecesMap);
+			builder.setupTopBounds();
 			for(Direction direction : Direction.Plane.HORIZONTAL)
-				setupSideBounds(direction, availablePiecesMap);
+				builder.setupSideBounds(direction);
 			
-			while(!piecesToGenerate.isEmpty())
-			{
-				MinValueSearchResult<PiecePos> leastEntropyResult = MinValueSearchResult.search(piecesToGenerate,
-						pos -> entropy(availablePiecesMap.get(pos)));
-				
-				if(leastEntropyResult.entries.isEmpty())
-					break;
-				
-				PiecePos pos = Util.getRandom(leastEntropyResult.entries, context.random());
-				piecesToGenerate.remove(pos);
-				
-				List<PieceEntry> availablePieces = availablePiecesMap.get(pos);
-				var chosenEntry = WeightedRandom.getRandomItem(context.random(), availablePieces);
-				if(chosenEntry.isEmpty())
-					continue;
-				
-				BlockPos piecePos = pos.toBlockPos(cornerPos);
-				StructurePiece piece = chosenEntry.get().constructor().apply(piecePos);
+			builder.collapse(context.random(), (piecePos, pieceConstructor) -> {
+				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(cornerPos));
 				if(piece != null)
-					builder.addPiece(piece);
-				
-				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
-					removeConflictingPieces(pos, availablePiecesMap, null);
-			}
-		}
-	}
-	
-	private static void setupTopBounds(Map<PiecePos, List<PieceEntry>> availablePiecesMap)
-	{
-		for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
-		{
-			for(int zIndex = 0; zIndex < WIDTH_IN_PIECES; zIndex++)
-			{
-				PiecePos topPos = new PiecePos(xIndex, HEIGHT_IN_PIECES - 1, zIndex);
-				removeConflictsFromConnection(topPos, Direction.UP, Set.of(ConnectionType.AIR), availablePiecesMap);
-			}
-		}
-	}
-	
-	private static void setupSideBounds(Direction direction, Map<PiecePos, List<PieceEntry>> availablePiecesMap)
-	{
-		int edgeIndex = direction.getAxisDirection() == Direction.AxisDirection.POSITIVE
-				? WIDTH_IN_PIECES - 1 : 0;
-		for(int xIndex = 0; xIndex < WIDTH_IN_PIECES; xIndex++)
-		{
-			for(int yIndex = 0; yIndex < HEIGHT_IN_PIECES; yIndex++)
-			{
-				PiecePos edgePos = direction.getAxis() == Direction.Axis.X
-						? new PiecePos(edgeIndex, yIndex, xIndex)
-						: new PiecePos(xIndex, yIndex, edgeIndex);
-				
-				removeConflictsFromConnection(edgePos, direction, Set.of(ConnectionType.AIR), availablePiecesMap);
-			}
-		}
-	}
-	
-	private static final class MinValueSearchResult<T>
-	{
-		private final List<T> entries = new ArrayList<>();
-		private final double value;
-		
-		public MinValueSearchResult(T entry, double value)
-		{
-			this.value = value;
-			entries.add(entry);
-		}
-		
-		public MinValueSearchResult()
-		{
-			this.value = Double.MAX_VALUE;
-		}
-		
-		public static <T> MinValueSearchResult<T> search(Collection<T> collection, ToDoubleFunction<T> valueExtraction)
-		{
-			return collection.stream().map(entry -> new MinValueSearchResult<>(entry, valueExtraction.applyAsDouble(entry)))
-					.reduce(new MinValueSearchResult<>(), MinValueSearchResult::combine);
-		}
-		
-		public MinValueSearchResult<T> combine(MinValueSearchResult<T> other)
-		{
-			if(this.value < other.value)
-				return this;
-			if(other.value < this.value)
-				return other;
-			
-			this.entries.addAll(other.entries);
-			return this;
-		}
-	}
-	
-	private static double entropy(List<PieceEntry> entries)
-	{
-		int totalWeight = WeightedRandom.getTotalWeight(entries);
-		double entropy = 0;
-		for(PieceEntry entry : entries)
-		{
-			if(entry.weight.asInt() == 0)
-				continue;
-			
-			double probability = (double) entry.weight.asInt() / totalWeight;
-			entropy += - probability * Math.log(probability);
-		}
-		return entropy;
-	}
-	
-	private static void removeConflictingPieces(PiecePos pos, Map<PiecePos, List<PieceEntry>> availablePiecesMap, @Nullable Direction excluding)
-	{
-		for(Direction direction : Direction.values())
-		{
-			if(direction == excluding)
-				continue;
-			
-			pos.tryOffset(direction).ifPresent(adjacentPos ->
-			{
-				Set<ConnectionType> connections = availablePiecesMap.get(pos).stream().map(entry -> entry.connections.get(direction)).collect(Collectors.toSet());
-				removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections, availablePiecesMap);
+					piecesBuilder.addPiece(piece);
 			});
 		}
 	}
 	
-	private static void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectionType> connections, Map<PiecePos, List<PieceEntry>> availablePiecesMap)
-	{
-		if(availablePiecesMap.get(pos).removeIf(entry -> cannotConnect(entry.connections.get(direction), connections)))
-			removeConflictingPieces(pos, availablePiecesMap, direction);
-	}
-	
-	private static boolean cannotConnect(ConnectionType type, Set<ConnectionType> otherTypes)
-	{
-		Set<ConnectionType> supportedTypes = SUPPORTED_CONNECTIONS.get(type);
-		return otherTypes.stream().noneMatch(supportedTypes::contains);
-	}
-	
-	private record PiecePos(int x, int y, int z)
+	public record PiecePos(int x, int y, int z)
 	{
 		public BlockPos toBlockPos(BlockPos cornerPos)
 		{
@@ -282,7 +146,7 @@ public final class ProspitStructure
 		}
 	}
 	
-	private record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectionType> connections, Weight weight) implements WeightedEntry
+	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectionType> connections, Weight weight) implements WeightedEntry
 	{
 		@Override
 		public Weight getWeight()
@@ -367,7 +231,7 @@ public final class ProspitStructure
 		);
 	}
 	
-	private enum ConnectionType
+	public enum ConnectionType
 	{
 		AIR,
 		SOLID,
@@ -378,42 +242,48 @@ public final class ProspitStructure
 		LEDGE_LEFT,
 		LEDGE_RIGHT,
 		LEDGE_BACK,
-	}
-	
-	private static final Map<ConnectionType, Set<ConnectionType>> SUPPORTED_CONNECTIONS = Util.make(() -> {
-		List<Pair<ConnectionType, ConnectionType>> allowedConnections = List.of(
-				Pair.of(ConnectionType.AIR, ConnectionType.AIR),
-				Pair.of(ConnectionType.SOLID, ConnectionType.SOLID),
-				Pair.of(ConnectionType.AIR, ConnectionType.WALL),
-				Pair.of(ConnectionType.WALL, ConnectionType.WALL),
-				Pair.of(ConnectionType.ROOF_SIDE, ConnectionType.WALL),
-				Pair.of(ConnectionType.ROOF_SIDE, ConnectionType.AIR),
-				Pair.of(ConnectionType.BRIDGE, ConnectionType.BRIDGE),
-				Pair.of(ConnectionType.BRIDGE, ConnectionType.WALL),
-				Pair.of(ConnectionType.LEDGE_FRONT, ConnectionType.AIR),
-				Pair.of(ConnectionType.LEDGE_LEFT, ConnectionType.LEDGE_RIGHT),
-				Pair.of(ConnectionType.LEDGE_BACK, ConnectionType.LEDGE_BACK),
-				Pair.of(ConnectionType.LEDGE_LEFT, ConnectionType.WALL),
-				Pair.of(ConnectionType.LEDGE_RIGHT, ConnectionType.WALL),
-				Pair.of(ConnectionType.LEDGE_BACK, ConnectionType.WALL)
-		);
+		;
 		
-		ImmutableMap.Builder<ConnectionType, Set<ConnectionType>> mapBuilder = ImmutableMap.builder();
-		for(ConnectionType type : ConnectionType.values())
+		public boolean cannotConnect(Set<ConnectionType> otherTypes)
 		{
-			ImmutableSet.Builder<ConnectionType> setBuilder = ImmutableSet.builder();
-			for(Pair<ConnectionType, ConnectionType> pair : allowedConnections)
-			{
-				if(pair.getFirst() == type)
-					setBuilder.add(pair.getSecond());
-				if(pair.getSecond() == type)
-					setBuilder.add(pair.getFirst());
-			}
-			mapBuilder.put(type, setBuilder.build());
+			Set<ConnectionType> supportedTypes = SUPPORTED_CONNECTIONS.get(this);
+			return otherTypes.stream().noneMatch(supportedTypes::contains);
 		}
-		return mapBuilder.build();
-	});
-	
+		
+		private static final Map<ConnectionType, Set<ConnectionType>> SUPPORTED_CONNECTIONS = Util.make(() -> {
+			List<Pair<ConnectionType, ConnectionType>> allowedConnections = List.of(
+					Pair.of(ConnectionType.AIR, ConnectionType.AIR),
+					Pair.of(ConnectionType.SOLID, ConnectionType.SOLID),
+					Pair.of(ConnectionType.AIR, ConnectionType.WALL),
+					Pair.of(ConnectionType.WALL, ConnectionType.WALL),
+					Pair.of(ConnectionType.ROOF_SIDE, ConnectionType.WALL),
+					Pair.of(ConnectionType.ROOF_SIDE, ConnectionType.AIR),
+					Pair.of(ConnectionType.BRIDGE, ConnectionType.BRIDGE),
+					Pair.of(ConnectionType.BRIDGE, ConnectionType.WALL),
+					Pair.of(ConnectionType.LEDGE_FRONT, ConnectionType.AIR),
+					Pair.of(ConnectionType.LEDGE_LEFT, ConnectionType.LEDGE_RIGHT),
+					Pair.of(ConnectionType.LEDGE_BACK, ConnectionType.LEDGE_BACK),
+					Pair.of(ConnectionType.LEDGE_LEFT, ConnectionType.WALL),
+					Pair.of(ConnectionType.LEDGE_RIGHT, ConnectionType.WALL),
+					Pair.of(ConnectionType.LEDGE_BACK, ConnectionType.WALL)
+			);
+			
+			ImmutableMap.Builder<ConnectionType, Set<ConnectionType>> mapBuilder = ImmutableMap.builder();
+			for(ConnectionType type : ConnectionType.values())
+			{
+				ImmutableSet.Builder<ConnectionType> setBuilder = ImmutableSet.builder();
+				for(Pair<ConnectionType, ConnectionType> pair : allowedConnections)
+				{
+					if(pair.getFirst() == type)
+						setBuilder.add(pair.getSecond());
+					if(pair.getSecond() == type)
+						setBuilder.add(pair.getFirst());
+				}
+				mapBuilder.put(type, setBuilder.build());
+			}
+			return mapBuilder.build();
+		});
+	}
 	public static final Supplier<StructurePieceType.ContextlessType> SOLID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_solid",
 			() -> SolidPiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> PYRAMID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_pyramid",
