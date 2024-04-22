@@ -31,6 +31,7 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
@@ -104,9 +105,9 @@ public final class ProspitStructure
 			
 			WFC.Generator generator = new WFC.Generator(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.ENTRIES_DATA);
 			
-			generator.setupTopBounds();
+			generator.setupFixedEdgeBounds(Direction.UP, Set.of(WFC.ConnectorType.AIR));
 			for(Direction direction : Direction.Plane.HORIZONTAL)
-				generator.setupSideBounds(direction);
+				generator.setupFixedEdgeBounds(direction, Set.of(WFC.ConnectorType.AIR));
 			
 			generator.collapse(context.random(), (piecePos, pieceConstructor) -> {
 				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(cornerPos, PIECE_SIZE, PIECE_SIZE));

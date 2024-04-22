@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
+import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -39,44 +40,17 @@ public final class WFC
 			this.dimensions = dimensions;
 			this.connectionTester = entriesData.connectionTester();
 			
-			for(int xIndex = 0; xIndex < this.dimensions.widthInPieces(); xIndex++)
+			for(PiecePos pos : this.dimensions.iterateAll())
 			{
-				for(int zIndex = 0; zIndex < this.dimensions.widthInPieces(); zIndex++)
-				{
-					for(int yIndex = 0; yIndex < this.dimensions.heightInPieces(); yIndex++)
-					{
-						PiecePos pos = new PiecePos(xIndex, yIndex, zIndex);
-						this.availablePiecesMap.put(pos, new ArrayList<>(entriesData.entries()));
-					}
-				}
+				this.availablePiecesMap.put(pos, new ArrayList<>(entriesData.entries()));
 			}
 		}
 		
-		public void setupTopBounds()
+		public void setupFixedEdgeBounds(Direction direction, Set<ConnectorType> connections)
 		{
-			for(int xIndex = 0; xIndex < this.dimensions.widthInPieces(); xIndex++)
+			for(PiecePos pos : this.dimensions.iterateEdge(direction))
 			{
-				for(int zIndex = 0; zIndex < this.dimensions.widthInPieces(); zIndex++)
-				{
-					PiecePos topPos = new PiecePos(xIndex, this.dimensions.topEdge(), zIndex);
-					this.removeConflictsFromConnection(topPos, Direction.UP, Set.of(ConnectorType.AIR));
-				}
-			}
-		}
-		
-		public void setupSideBounds(Direction direction)
-		{
-			int edgeIndex = this.dimensions.horizontalEdge(direction.getAxisDirection());
-			for(int xIndex = 0; xIndex < this.dimensions.widthInPieces(); xIndex++)
-			{
-				for(int yIndex = 0; yIndex < this.dimensions.heightInPieces(); yIndex++)
-				{
-					PiecePos edgePos = direction.getAxis() == Direction.Axis.X
-							? new PiecePos(edgeIndex, yIndex, xIndex)
-							: new PiecePos(xIndex, yIndex, edgeIndex);
-					
-					this.removeConflictsFromConnection(edgePos, direction, Set.of(ConnectorType.AIR));
-				}
+				this.removeConflictsFromConnection(pos, direction, connections);
 			}
 		}
 		
@@ -185,22 +159,28 @@ public final class WFC
 	
 	public record Dimensions(int widthInPieces, int heightInPieces)
 	{
-		public int horizontalEdge(Direction.AxisDirection direction)
-		{
-			return direction == Direction.AxisDirection.POSITIVE
-					? this.widthInPieces() - 1 : 0;
-		}
-		
-		public int topEdge()
-		{
-			return this.heightInPieces() - 1;
-		}
-		
 		public boolean isInBounds(int x, int y, int z)
 		{
 			return 0 <= x && x < this.widthInPieces()
 					&& 0 <= y && y < this.heightInPieces()
 					&& 0 <= z && z < this.widthInPieces();
+		}
+		
+		public Iterable<PiecePos> iterateAll()
+		{
+			return PiecePos.iterateBox(0, 0, 0,
+					this.widthInPieces() - 1, this.heightInPieces() - 1, this.widthInPieces() - 1);
+		}
+		
+		public Iterable<PiecePos> iterateEdge(Direction direction)
+		{
+			int minX = direction != Direction.EAST ? 0 : this.widthInPieces() - 1;
+			int minY = direction != Direction.UP ? 0 : this.heightInPieces() - 1;
+			int minZ = direction != Direction.SOUTH ? 0 : this.widthInPieces() - 1;
+			int maxX = direction != Direction.WEST ? this.widthInPieces() - 1 : 0;
+			int maxY = direction != Direction.DOWN ? this.heightInPieces() - 1 : 0;
+			int maxZ = direction != Direction.NORTH ? this.widthInPieces() - 1 : 0;
+			return PiecePos.iterateBox(minX, minY, minZ, maxX, maxY, maxZ);
 		}
 	}
 	
@@ -221,6 +201,33 @@ public final class WFC
 				return Optional.empty();
 			
 			return Optional.of(new PiecePos(newX, newY, newZ));
+		}
+		
+		public static Iterable<PiecePos> iterateBox(int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
+		{
+			return () -> new AbstractIterator<>()
+			{
+				@Nullable
+				PiecePos pos = null;
+				
+				@Nullable
+				@Override
+				protected PiecePos computeNext()
+				{
+					if(pos == null)
+						pos = new PiecePos(minX, minY, minZ);
+					else if(pos.y < maxY)
+						pos = new PiecePos(pos.x, pos.y + 1, pos.z);
+					else if(pos.z < maxZ)
+						pos = new PiecePos(pos.x, minY, pos.z + 1);
+					else if(pos.x < maxX)
+						pos = new PiecePos(pos.x + 1, minY, minZ);
+					else
+						return this.endOfData();
+					
+					return pos;
+				}
+			};
 		}
 	}
 	
