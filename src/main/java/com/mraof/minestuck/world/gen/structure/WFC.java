@@ -13,6 +13,8 @@ import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -30,6 +32,8 @@ public final class WFC
 {
 	public static final class Generator
 	{
+		private static final Logger LOGGER = LogManager.getLogger();
+		
 		private final Dimensions dimensions;
 		private final ConnectionTester connectionTester;
 		
@@ -72,7 +76,10 @@ public final class WFC
 				List<PieceEntry> availablePieces = this.availablePiecesMap.get(pos);
 				var chosenEntry = WeightedRandom.getRandomItem(random, availablePieces);
 				if(chosenEntry.isEmpty())
+				{
+					LOGGER.warn("No entries possible at piece pos {}!", pos);
 					continue;
+				}
 				
 				piecePlacer.accept(pos, chosenEntry.get().constructor());
 				
@@ -90,8 +97,11 @@ public final class WFC
 				
 				pos.tryOffset(direction, this.dimensions).ifPresent(adjacentPos ->
 				{
-					Set<ConnectorType> connections = this.availablePiecesMap.get(pos).stream().map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
-					this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
+					Set<ConnectorType> connections = this.availablePiecesMap.get(pos).stream()
+							.map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
+					
+					if(!connections.isEmpty())
+						this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
 				});
 			}
 		}
