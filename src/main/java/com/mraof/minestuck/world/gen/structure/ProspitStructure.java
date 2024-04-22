@@ -102,13 +102,13 @@ public final class ProspitStructure
 		{
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
-			WFC.Builder builder = new WFC.Builder(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.ENTRIES_DATA);
+			WFC.Generator generator = new WFC.Generator(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.ENTRIES_DATA);
 			
-			builder.setupTopBounds();
+			generator.setupTopBounds();
 			for(Direction direction : Direction.Plane.HORIZONTAL)
-				builder.setupSideBounds(direction);
+				generator.setupSideBounds(direction);
 			
-			builder.collapse(context.random(), (piecePos, pieceConstructor) -> {
+			generator.collapse(context.random(), (piecePos, pieceConstructor) -> {
 				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(cornerPos, PIECE_SIZE, PIECE_SIZE));
 				if(piece != null)
 					piecesBuilder.addPiece(piece);

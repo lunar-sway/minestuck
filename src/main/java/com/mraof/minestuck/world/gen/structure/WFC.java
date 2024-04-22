@@ -23,19 +23,18 @@ import java.util.stream.Collectors;
 
 /**
  * Contains components for an implementation of Wave Function Collapse.
- * The main component being {@link Builder}.
+ * The main component being {@link Generator}.
  */
 public final class WFC
 {
-	public static final class Builder
+	public static final class Generator
 	{
 		private final Dimensions dimensions;
 		private final ConnectionTester connectionTester;
 		
 		private final Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
-		private final Set<PiecePos> piecesToGenerate = new HashSet<>();
 		
-		public Builder(Dimensions dimensions, EntriesData entriesData)
+		public Generator(Dimensions dimensions, EntriesData entriesData)
 		{
 			this.dimensions = dimensions;
 			this.connectionTester = entriesData.connectionTester();
@@ -51,7 +50,6 @@ public final class WFC
 					}
 				}
 			}
-			this.piecesToGenerate.addAll(availablePiecesMap.keySet());
 		}
 		
 		public void setupTopBounds()
@@ -84,16 +82,18 @@ public final class WFC
 		
 		public void collapse(WorldgenRandom random, BiConsumer<PiecePos, Function<BlockPos, StructurePiece>> piecePlacer)
 		{
-			while(!this.piecesToGenerate.isEmpty())
+			Set<PiecePos> piecesToGenerate = new HashSet<>(availablePiecesMap.keySet());
+			
+			while(!piecesToGenerate.isEmpty())
 			{
-				MinValueSearchResult<PiecePos> leastEntropyResult = MinValueSearchResult.search(this.piecesToGenerate,
+				MinValueSearchResult<PiecePos> leastEntropyResult = MinValueSearchResult.search(piecesToGenerate,
 						pos -> entropy(this.availablePiecesMap.get(pos)));
 				
 				if(leastEntropyResult.entries.isEmpty())
 					break;
 				
 				PiecePos pos = Util.getRandom(leastEntropyResult.entries, random);
-				this.piecesToGenerate.remove(pos);
+				piecesToGenerate.remove(pos);
 				
 				List<PieceEntry> availablePieces = this.availablePiecesMap.get(pos);
 				var chosenEntry = WeightedRandom.getRandomItem(random, availablePieces);
