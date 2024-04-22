@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.gen.structure;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -247,43 +246,55 @@ public final class ProspitStructure
 		public boolean cannotConnect(Set<ConnectionType> otherTypes)
 		{
 			Set<ConnectionType> supportedTypes = SUPPORTED_CONNECTIONS.get(this);
+			if(supportedTypes == null)
+				return true;
 			return otherTypes.stream().noneMatch(supportedTypes::contains);
 		}
 		
 		private static final Map<ConnectionType, Set<ConnectionType>> SUPPORTED_CONNECTIONS = Util.make(() -> {
-			List<Pair<ConnectionType, ConnectionType>> allowedConnections = List.of(
-					Pair.of(ConnectionType.AIR, ConnectionType.AIR),
-					Pair.of(ConnectionType.SOLID, ConnectionType.SOLID),
-					Pair.of(ConnectionType.AIR, ConnectionType.WALL),
-					Pair.of(ConnectionType.WALL, ConnectionType.WALL),
-					Pair.of(ConnectionType.ROOF_SIDE, ConnectionType.WALL),
-					Pair.of(ConnectionType.ROOF_SIDE, ConnectionType.AIR),
-					Pair.of(ConnectionType.BRIDGE, ConnectionType.BRIDGE),
-					Pair.of(ConnectionType.BRIDGE, ConnectionType.WALL),
-					Pair.of(ConnectionType.LEDGE_FRONT, ConnectionType.AIR),
-					Pair.of(ConnectionType.LEDGE_LEFT, ConnectionType.LEDGE_RIGHT),
-					Pair.of(ConnectionType.LEDGE_BACK, ConnectionType.LEDGE_BACK),
-					Pair.of(ConnectionType.LEDGE_LEFT, ConnectionType.WALL),
-					Pair.of(ConnectionType.LEDGE_RIGHT, ConnectionType.WALL),
-					Pair.of(ConnectionType.LEDGE_BACK, ConnectionType.WALL)
-			);
+			ConnectionsBuilder builder = new ConnectionsBuilder();
 			
-			ImmutableMap.Builder<ConnectionType, Set<ConnectionType>> mapBuilder = ImmutableMap.builder();
-			for(ConnectionType type : ConnectionType.values())
-			{
-				ImmutableSet.Builder<ConnectionType> setBuilder = ImmutableSet.builder();
-				for(Pair<ConnectionType, ConnectionType> pair : allowedConnections)
-				{
-					if(pair.getFirst() == type)
-						setBuilder.add(pair.getSecond());
-					if(pair.getSecond() == type)
-						setBuilder.add(pair.getFirst());
-				}
-				mapBuilder.put(type, setBuilder.build());
-			}
-			return mapBuilder.build();
+			builder.connectSelf(ConnectionType.AIR);
+			builder.connectSelf(ConnectionType.SOLID);
+			builder.connect(ConnectionType.AIR, ConnectionType.WALL);
+			builder.connectSelf(ConnectionType.WALL);
+			builder.connect(ConnectionType.ROOF_SIDE, ConnectionType.WALL);
+			builder.connect(ConnectionType.ROOF_SIDE, ConnectionType.AIR);
+			builder.connectSelf(ConnectionType.BRIDGE);
+			builder.connect(ConnectionType.BRIDGE, ConnectionType.WALL);
+			builder.connect(ConnectionType.LEDGE_FRONT, ConnectionType.AIR);
+			builder.connect(ConnectionType.LEDGE_LEFT, ConnectionType.LEDGE_RIGHT);
+			builder.connectSelf(ConnectionType.LEDGE_BACK);
+			builder.connect(ConnectionType.LEDGE_LEFT, ConnectionType.WALL);
+			builder.connect(ConnectionType.LEDGE_RIGHT, ConnectionType.WALL);
+			builder.connect(ConnectionType.LEDGE_BACK, ConnectionType.WALL);
+			
+			return builder.build();
 		});
 	}
+	
+	private static final class ConnectionsBuilder
+	{
+		private final Map<ConnectionType, ImmutableSet.Builder<ConnectionType>> builderMap = new HashMap<>();
+		
+		public void connectSelf(ConnectionType type)
+		{
+			this.connect(type, type);
+		}
+		
+		public void connect(ConnectionType type1, ConnectionType type2)
+		{
+			builderMap.computeIfAbsent(type1, ignored -> ImmutableSet.builder()).add(type2);
+			builderMap.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
+		}
+		
+		Map<ConnectionType, Set<ConnectionType>> build()
+		{
+			return builderMap.entrySet().stream().collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
+		}
+	}
+	
+	
 	public static final Supplier<StructurePieceType.ContextlessType> SOLID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_solid",
 			() -> SolidPiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> PYRAMID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_pyramid",
