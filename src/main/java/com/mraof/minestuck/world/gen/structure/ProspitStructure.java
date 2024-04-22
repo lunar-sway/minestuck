@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.Weight;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -37,7 +36,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
@@ -47,8 +45,8 @@ import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
 public final class ProspitStructure
 {
 	public static final int PIECE_SIZE = 8;
-	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 16;
-	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE * WIDTH_IN_PIECES) / 16;
+	public static final WaveFunctionCollapseBuilder.Dimensions WFC_DIMENSIONS = new WaveFunctionCollapseBuilder.Dimensions(16, 16);
+	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE * WFC_DIMENSIONS.widthInPieces()) / 16;
 	
 	public static void init()
 	{
@@ -109,57 +107,26 @@ public final class ProspitStructure
 		{
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
-			WaveFunctionCollapseBuilder builder = new WaveFunctionCollapseBuilder(ProspitStructure.PIECE_ENTRIES, ConnectionType.SUPPORTED_CONNECTIONS);
+			WaveFunctionCollapseBuilder builder = new WaveFunctionCollapseBuilder(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.PIECE_ENTRIES, ConnectionType.SUPPORTED_CONNECTIONS);
 			
 			builder.setupTopBounds();
 			for(Direction direction : Direction.Plane.HORIZONTAL)
 				builder.setupSideBounds(direction);
 			
 			builder.collapse(context.random(), (piecePos, pieceConstructor) -> {
-				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(cornerPos));
+				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(cornerPos, PIECE_SIZE, PIECE_SIZE));
 				if(piece != null)
 					piecesBuilder.addPiece(piece);
 			});
 		}
 	}
 	
-	public record PiecePos(int x, int y, int z)
-	{
-		public BlockPos toBlockPos(BlockPos cornerPos)
-		{
-			return cornerPos.offset(this.x * PIECE_SIZE, this.y * PIECE_SIZE, this.z * PIECE_SIZE);
-		}
+	private static final Collection<WaveFunctionCollapseBuilder.PieceEntry> PIECE_ENTRIES = Util.make(() -> {
+		ImmutableList.Builder<WaveFunctionCollapseBuilder.PieceEntry> builder = ImmutableList.builder();
 		
-		public Optional<PiecePos> tryOffset(Direction direction)
-		{
-			int newX = this.x + direction.getStepX();
-			int newY = this.y + direction.getStepY();
-			int newZ = this.z + direction.getStepZ();
-			
-			if(newX < 0 || WIDTH_IN_PIECES <= newX
-					|| newY < 0 || HEIGHT_IN_PIECES <= newY
-					|| newZ < 0 || WIDTH_IN_PIECES <= newZ)
-				return Optional.empty();
-			
-			return Optional.of(new PiecePos(newX, newY, newZ));
-		}
-	}
-	
-	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectionType> connections, Weight weight) implements WeightedEntry
-	{
-		@Override
-		public Weight getWeight()
-		{
-			return weight;
-		}
-	}
-	
-	private static final Collection<PieceEntry> PIECE_ENTRIES = Util.make(() -> {
-		ImmutableList.Builder<PieceEntry> builder = ImmutableList.builder();
-		
-		builder.add(new PieceEntry(pos -> null, symmetric(ConnectionType.AIR, ConnectionType.AIR, ConnectionType.AIR), Weight.of(10)));
-		builder.add(new PieceEntry(SolidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.SOLID, ConnectionType.WALL), Weight.of(10)));
-		builder.add(new PieceEntry(PyramidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.AIR, ConnectionType.ROOF_SIDE), Weight.of(2)));
+		builder.add(new WaveFunctionCollapseBuilder.PieceEntry(pos -> null, symmetric(ConnectionType.AIR, ConnectionType.AIR, ConnectionType.AIR), Weight.of(10)));
+		builder.add(new WaveFunctionCollapseBuilder.PieceEntry(SolidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.SOLID, ConnectionType.WALL), Weight.of(10)));
+		builder.add(new WaveFunctionCollapseBuilder.PieceEntry(PyramidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.AIR, ConnectionType.ROOF_SIDE), Weight.of(2)));
 		addAxisSymmetric(builder::add, BridgePiece::new, ConnectionType.AIR, ConnectionType.AIR, ConnectionType.BRIDGE, ConnectionType.AIR, Weight.of(4));
 		addRotating(builder::add, LedgePiece::new, Map.of(
 				Direction.DOWN, ConnectionType.SOLID,
@@ -193,7 +160,7 @@ public final class ProspitStructure
 		);
 	}
 	
-	private static void addAxisSymmetric(Consumer<PieceEntry> consumer, BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
+	private static void addAxisSymmetric(Consumer<WaveFunctionCollapseBuilder.PieceEntry> consumer, BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
 										 ConnectionType down, ConnectionType up, ConnectionType front, ConnectionType side, Weight individualWeight)
 	{
 		Map<Direction, ConnectionType> connections = Map.of(
@@ -204,15 +171,15 @@ public final class ProspitStructure
 				Direction.SOUTH, side,
 				Direction.WEST, front
 		);
-		consumer.accept(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), connections, individualWeight));
-		consumer.accept(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90), individualWeight));
+		consumer.accept(new WaveFunctionCollapseBuilder.PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), connections, individualWeight));
+		consumer.accept(new WaveFunctionCollapseBuilder.PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90), individualWeight));
 	}
 	
-	private static void addRotating(Consumer<PieceEntry> consumer, BiFunction<BlockPos, Rotation, StructurePiece> constructor,
-										 Map<Direction, ConnectionType> connections, Weight individualWeight)
+	private static void addRotating(Consumer<WaveFunctionCollapseBuilder.PieceEntry> consumer, BiFunction<BlockPos, Rotation, StructurePiece> constructor,
+									Map<Direction, ConnectionType> connections, Weight individualWeight)
 	{
 		for(Rotation rotation : Rotation.values())
-			consumer.accept(new PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation), individualWeight));
+			consumer.accept(new WaveFunctionCollapseBuilder.PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation), individualWeight));
 	}
 	
 	private static Map<Direction, ConnectionType> rotateConnections(Map<Direction, ConnectionType> connections, Rotation rotation)
