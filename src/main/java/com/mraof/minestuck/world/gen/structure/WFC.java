@@ -32,10 +32,10 @@ public final class WFC
 		private final Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
 		private final Set<PiecePos> piecesToGenerate = new HashSet<>();
 		
-		public Builder(Dimensions dimensions, Collection<PieceEntry> entries, ConnectionTester connectionTester)
+		public Builder(Dimensions dimensions, EntriesData entriesData)
 		{
 			this.dimensions = dimensions;
-			this.connectionTester = connectionTester;
+			this.connectionTester = entriesData.connectionTester();
 			
 			for(int xIndex = 0; xIndex < this.dimensions.widthInPieces(); xIndex++)
 			{
@@ -44,7 +44,7 @@ public final class WFC
 					for(int yIndex = 0; yIndex < this.dimensions.heightInPieces(); yIndex++)
 					{
 						PiecePos pos = new PiecePos(xIndex, yIndex, zIndex);
-						this.availablePiecesMap.put(pos, new ArrayList<>(entries));
+						this.availablePiecesMap.put(pos, new ArrayList<>(entriesData.entries()));
 					}
 				}
 			}
@@ -291,5 +291,9 @@ public final class WFC
 				return otherTypes.stream().anyMatch(supportedTypes::contains);
 			};
 		}
+	}
+	
+	public record EntriesData(Collection<PieceEntry> entries, ConnectionTester connectionTester)
+	{
 	}
 }

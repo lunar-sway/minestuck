@@ -31,7 +31,6 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -107,7 +106,7 @@ public final class ProspitStructure
 		{
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
-			WFC.Builder builder = new WFC.Builder(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.PIECE_ENTRIES, ProspitStructure.CONNECTIONS);
+			WFC.Builder builder = new WFC.Builder(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.ENTRIES_DATA);
 			
 			builder.setupTopBounds();
 			for(Direction direction : Direction.Plane.HORIZONTAL)
@@ -121,8 +120,9 @@ public final class ProspitStructure
 		}
 	}
 	
-	private static final Collection<WFC.PieceEntry> PIECE_ENTRIES = Util.make(() -> {
+	private static final WFC.EntriesData ENTRIES_DATA = Util.make(() -> {
 		ImmutableList.Builder<WFC.PieceEntry> builder = ImmutableList.builder();
+		WFC.ConnectionsBuilder connectionsBuilder = WFC.ConnectionType.getBuilderWithCoreConnections();
 		
 		builder.add(new WFC.PieceEntry(pos -> null, symmetric(WFC.ConnectionType.AIR, WFC.ConnectionType.AIR, WFC.ConnectionType.AIR), Weight.of(10)));
 		builder.add(new WFC.PieceEntry(SolidPiece::new, symmetric(WFC.ConnectionType.SOLID, WFC.ConnectionType.SOLID, WFC.ConnectionType.WALL), Weight.of(10)));
@@ -145,10 +145,8 @@ public final class ProspitStructure
 				Direction.WEST, WFC.ConnectionType.LEDGE_FRONT
 		), Weight.of(3));
 		
-		return builder.build();
+		return new WFC.EntriesData(builder.build(), connectionsBuilder.build());
 	});
-	private static final WFC.ConnectionTester CONNECTIONS = WFC.ConnectionType.getBuilderWithCoreConnections().build();
-	
 	
 	private static Map<Direction, WFC.ConnectionType> symmetric(WFC.ConnectionType down, WFC.ConnectionType up, WFC.ConnectionType side)
 	{
