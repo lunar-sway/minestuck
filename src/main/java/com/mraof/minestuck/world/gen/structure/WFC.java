@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.gen.structure;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,7 +58,7 @@ public final class WFC
 				for(int zIndex = 0; zIndex < this.dimensions.widthInPieces(); zIndex++)
 				{
 					PiecePos topPos = new PiecePos(xIndex, this.dimensions.topEdge(), zIndex);
-					this.removeConflictsFromConnection(topPos, Direction.UP, Set.of(ProspitStructure.ConnectionType.AIR));
+					this.removeConflictsFromConnection(topPos, Direction.UP, Set.of(ConnectionType.AIR));
 				}
 			}
 		}
@@ -72,7 +74,7 @@ public final class WFC
 							? new PiecePos(edgeIndex, yIndex, xIndex)
 							: new PiecePos(xIndex, yIndex, edgeIndex);
 					
-					this.removeConflictsFromConnection(edgePos, direction, Set.of(ProspitStructure.ConnectionType.AIR));
+					this.removeConflictsFromConnection(edgePos, direction, Set.of(ConnectionType.AIR));
 				}
 			}
 		}
@@ -111,13 +113,13 @@ public final class WFC
 				
 				pos.tryOffset(direction, this.dimensions).ifPresent(adjacentPos ->
 				{
-					Set<ProspitStructure.ConnectionType> connections = this.availablePiecesMap.get(pos).stream().map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
+					Set<ConnectionType> connections = this.availablePiecesMap.get(pos).stream().map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
 					this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
 				});
 			}
 		}
 		
-		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ProspitStructure.ConnectionType> connections)
+		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectionType> connections)
 		{
 			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.connections().get(direction), connections)))
 				this.removeConflictingPieces(pos, direction);
@@ -175,7 +177,7 @@ public final class WFC
 	
 	public interface ConnectionTester
 	{
-		boolean canConnect(ProspitStructure.ConnectionType connection, Set<ProspitStructure.ConnectionType> connections);
+		boolean canConnect(ConnectionType connection, Set<ConnectionType> connections);
 	}
 	
 	public record Dimensions(int widthInPieces, int heightInPieces)
@@ -219,12 +221,75 @@ public final class WFC
 		}
 	}
 	
-	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ProspitStructure.ConnectionType> connections, Weight weight) implements WeightedEntry
+	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectionType> connections, Weight weight) implements WeightedEntry
 	{
 		@Override
 		public Weight getWeight()
 		{
 			return weight;
+		}
+	}
+	
+	public record ConnectionType(String name)
+	{
+		public static final ConnectionType AIR = new ConnectionType("air"),
+				SOLID = new ConnectionType("solid"),
+				WALL = new ConnectionType("wall"),
+				ROOF_SIDE = new ConnectionType("roof_side"),
+				BRIDGE = new ConnectionType("bridge"),
+				LEDGE_FRONT = new ConnectionType("ledge/front"),
+				LEDGE_LEFT = new ConnectionType("ledge/left"),
+				LEDGE_RIGHT = new ConnectionType("ledge/right"),
+				LEDGE_BACK = new ConnectionType("ledge/back");
+		
+		public static ConnectionsBuilder getBuilderWithCoreConnections()
+		{
+			ConnectionsBuilder builder = new ConnectionsBuilder();
+			
+			builder.connectSelf(ConnectionType.AIR);
+			builder.connectSelf(ConnectionType.SOLID);
+			builder.connect(ConnectionType.AIR, ConnectionType.WALL);
+			builder.connectSelf(ConnectionType.WALL);
+			builder.connect(ConnectionType.ROOF_SIDE, ConnectionType.WALL);
+			builder.connect(ConnectionType.ROOF_SIDE, ConnectionType.AIR);
+			builder.connectSelf(ConnectionType.BRIDGE);
+			builder.connect(ConnectionType.BRIDGE, ConnectionType.WALL);
+			builder.connect(ConnectionType.LEDGE_FRONT, ConnectionType.AIR);
+			builder.connect(ConnectionType.LEDGE_LEFT, ConnectionType.LEDGE_RIGHT);
+			builder.connectSelf(ConnectionType.LEDGE_BACK);
+			builder.connect(ConnectionType.LEDGE_LEFT, ConnectionType.WALL);
+			builder.connect(ConnectionType.LEDGE_RIGHT, ConnectionType.WALL);
+			builder.connect(ConnectionType.LEDGE_BACK, ConnectionType.WALL);
+			
+			return builder;
+		}
+	}
+	
+	public static final class ConnectionsBuilder
+	{
+		private final Map<ConnectionType, ImmutableSet.Builder<ConnectionType>> builderMap = new HashMap<>();
+		
+		public void connectSelf(ConnectionType type)
+		{
+			this.connect(type, type);
+		}
+		
+		public void connect(ConnectionType type1, ConnectionType type2)
+		{
+			builderMap.computeIfAbsent(type1, ignored -> ImmutableSet.builder()).add(type2);
+			builderMap.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
+		}
+		
+		ConnectionTester build()
+		{
+			Map<ConnectionType, Set<ConnectionType>> map = builderMap.entrySet().stream()
+					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
+			return (type, otherTypes) -> {
+				Set<ConnectionType> supportedTypes = map.get(type);
+				if(supportedTypes == null)
+					return false;
+				return otherTypes.stream().anyMatch(supportedTypes::contains);
+			};
 		}
 	}
 }

@@ -1,8 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -33,7 +31,9 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -107,7 +107,7 @@ public final class ProspitStructure
 		{
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
-			WFC.Builder builder = new WFC.Builder(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.PIECE_ENTRIES, ConnectionType.SUPPORTED_CONNECTIONS);
+			WFC.Builder builder = new WFC.Builder(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.PIECE_ENTRIES, ProspitStructure.CONNECTIONS);
 			
 			builder.setupTopBounds();
 			for(Direction direction : Direction.Plane.HORIZONTAL)
@@ -124,31 +124,33 @@ public final class ProspitStructure
 	private static final Collection<WFC.PieceEntry> PIECE_ENTRIES = Util.make(() -> {
 		ImmutableList.Builder<WFC.PieceEntry> builder = ImmutableList.builder();
 		
-		builder.add(new WFC.PieceEntry(pos -> null, symmetric(ConnectionType.AIR, ConnectionType.AIR, ConnectionType.AIR), Weight.of(10)));
-		builder.add(new WFC.PieceEntry(SolidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.SOLID, ConnectionType.WALL), Weight.of(10)));
-		builder.add(new WFC.PieceEntry(PyramidPiece::new, symmetric(ConnectionType.SOLID, ConnectionType.AIR, ConnectionType.ROOF_SIDE), Weight.of(2)));
-		addAxisSymmetric(builder::add, BridgePiece::new, ConnectionType.AIR, ConnectionType.AIR, ConnectionType.BRIDGE, ConnectionType.AIR, Weight.of(4));
+		builder.add(new WFC.PieceEntry(pos -> null, symmetric(WFC.ConnectionType.AIR, WFC.ConnectionType.AIR, WFC.ConnectionType.AIR), Weight.of(10)));
+		builder.add(new WFC.PieceEntry(SolidPiece::new, symmetric(WFC.ConnectionType.SOLID, WFC.ConnectionType.SOLID, WFC.ConnectionType.WALL), Weight.of(10)));
+		builder.add(new WFC.PieceEntry(PyramidPiece::new, symmetric(WFC.ConnectionType.SOLID, WFC.ConnectionType.AIR, WFC.ConnectionType.ROOF_SIDE), Weight.of(2)));
+		addAxisSymmetric(builder::add, BridgePiece::new, WFC.ConnectionType.AIR, WFC.ConnectionType.AIR, WFC.ConnectionType.BRIDGE, WFC.ConnectionType.AIR, Weight.of(4));
 		addRotating(builder::add, LedgePiece::new, Map.of(
-				Direction.DOWN, ConnectionType.SOLID,
-				Direction.UP, ConnectionType.AIR,
-				Direction.NORTH, ConnectionType.LEDGE_FRONT,
-				Direction.EAST, ConnectionType.LEDGE_RIGHT,
-				Direction.SOUTH, ConnectionType.LEDGE_BACK,
-				Direction.WEST, ConnectionType.LEDGE_LEFT
+				Direction.DOWN, WFC.ConnectionType.SOLID,
+				Direction.UP, WFC.ConnectionType.AIR,
+				Direction.NORTH, WFC.ConnectionType.LEDGE_FRONT,
+				Direction.EAST, WFC.ConnectionType.LEDGE_RIGHT,
+				Direction.SOUTH, WFC.ConnectionType.LEDGE_BACK,
+				Direction.WEST, WFC.ConnectionType.LEDGE_LEFT
 		), Weight.of(3));
 		addRotating(builder::add, LedgeCornerPiece::new, Map.of(
-				Direction.DOWN, ConnectionType.SOLID,
-				Direction.UP, ConnectionType.AIR,
-				Direction.NORTH, ConnectionType.LEDGE_FRONT,
-				Direction.EAST, ConnectionType.LEDGE_RIGHT,
-				Direction.SOUTH, ConnectionType.LEDGE_LEFT,
-				Direction.WEST, ConnectionType.LEDGE_FRONT
+				Direction.DOWN, WFC.ConnectionType.SOLID,
+				Direction.UP, WFC.ConnectionType.AIR,
+				Direction.NORTH, WFC.ConnectionType.LEDGE_FRONT,
+				Direction.EAST, WFC.ConnectionType.LEDGE_RIGHT,
+				Direction.SOUTH, WFC.ConnectionType.LEDGE_LEFT,
+				Direction.WEST, WFC.ConnectionType.LEDGE_FRONT
 		), Weight.of(3));
 		
 		return builder.build();
 	});
+	private static final WFC.ConnectionTester CONNECTIONS = WFC.ConnectionType.getBuilderWithCoreConnections().build();
 	
-	private static Map<Direction, ConnectionType> symmetric(ConnectionType down, ConnectionType up, ConnectionType side)
+	
+	private static Map<Direction, WFC.ConnectionType> symmetric(WFC.ConnectionType down, WFC.ConnectionType up, WFC.ConnectionType side)
 	{
 		return Map.of(
 				Direction.DOWN, down,
@@ -161,9 +163,9 @@ public final class ProspitStructure
 	}
 	
 	private static void addAxisSymmetric(Consumer<WFC.PieceEntry> consumer, BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
-										 ConnectionType down, ConnectionType up, ConnectionType front, ConnectionType side, Weight individualWeight)
+										 WFC.ConnectionType down, WFC.ConnectionType up, WFC.ConnectionType front, WFC.ConnectionType side, Weight individualWeight)
 	{
-		Map<Direction, ConnectionType> connections = Map.of(
+		Map<Direction, WFC.ConnectionType> connections = Map.of(
 				Direction.DOWN, down,
 				Direction.UP, up,
 				Direction.NORTH, side,
@@ -176,13 +178,13 @@ public final class ProspitStructure
 	}
 	
 	private static void addRotating(Consumer<WFC.PieceEntry> consumer, BiFunction<BlockPos, Rotation, StructurePiece> constructor,
-									Map<Direction, ConnectionType> connections, Weight individualWeight)
+									Map<Direction, WFC.ConnectionType> connections, Weight individualWeight)
 	{
 		for(Rotation rotation : Rotation.values())
 			consumer.accept(new WFC.PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation), individualWeight));
 	}
 	
-	private static Map<Direction, ConnectionType> rotateConnections(Map<Direction, ConnectionType> connections, Rotation rotation)
+	private static Map<Direction, WFC.ConnectionType> rotateConnections(Map<Direction, WFC.ConnectionType> connections, Rotation rotation)
 	{
 		if(rotation == Rotation.NONE)
 			return connections;
@@ -195,68 +197,6 @@ public final class ProspitStructure
 				rotation.rotate(Direction.SOUTH), connections.get(Direction.SOUTH),
 				rotation.rotate(Direction.WEST), connections.get(Direction.WEST)
 		);
-	}
-	
-	public record ConnectionType(String name)
-	{
-		public static final ConnectionType AIR = new ConnectionType("air"),
-				SOLID = new ConnectionType("solid"),
-				WALL = new ConnectionType("wall"),
-				ROOF_SIDE = new ConnectionType("roof_side"),
-				BRIDGE = new ConnectionType("bridge"),
-				LEDGE_FRONT = new ConnectionType("ledge/front"),
-				LEDGE_LEFT = new ConnectionType("ledge/left"),
-				LEDGE_RIGHT = new ConnectionType("ledge/right"),
-				LEDGE_BACK = new ConnectionType("ledge/back");
-		
-		private static final WFC.ConnectionTester SUPPORTED_CONNECTIONS = Util.make(() -> {
-			ConnectionsBuilder builder = new ConnectionsBuilder();
-			
-			builder.connectSelf(ConnectionType.AIR);
-			builder.connectSelf(ConnectionType.SOLID);
-			builder.connect(ConnectionType.AIR, ConnectionType.WALL);
-			builder.connectSelf(ConnectionType.WALL);
-			builder.connect(ConnectionType.ROOF_SIDE, ConnectionType.WALL);
-			builder.connect(ConnectionType.ROOF_SIDE, ConnectionType.AIR);
-			builder.connectSelf(ConnectionType.BRIDGE);
-			builder.connect(ConnectionType.BRIDGE, ConnectionType.WALL);
-			builder.connect(ConnectionType.LEDGE_FRONT, ConnectionType.AIR);
-			builder.connect(ConnectionType.LEDGE_LEFT, ConnectionType.LEDGE_RIGHT);
-			builder.connectSelf(ConnectionType.LEDGE_BACK);
-			builder.connect(ConnectionType.LEDGE_LEFT, ConnectionType.WALL);
-			builder.connect(ConnectionType.LEDGE_RIGHT, ConnectionType.WALL);
-			builder.connect(ConnectionType.LEDGE_BACK, ConnectionType.WALL);
-			
-			return builder.build();
-		});
-	}
-	
-	private static final class ConnectionsBuilder
-	{
-		private final Map<ConnectionType, ImmutableSet.Builder<ConnectionType>> builderMap = new HashMap<>();
-		
-		public void connectSelf(ConnectionType type)
-		{
-			this.connect(type, type);
-		}
-		
-		public void connect(ConnectionType type1, ConnectionType type2)
-		{
-			builderMap.computeIfAbsent(type1, ignored -> ImmutableSet.builder()).add(type2);
-			builderMap.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
-		}
-		
-		WFC.ConnectionTester build()
-		{
-			Map<ConnectionType, Set<ConnectionType>> map = builderMap.entrySet().stream()
-					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
-			return (type, otherTypes) -> {
-				Set<ConnectionType> supportedTypes = map.get(type);
-				if(supportedTypes == null)
-					return false;
-				return otherTypes.stream().anyMatch(supportedTypes::contains);
-			};
-		}
 	}
 	
 	
