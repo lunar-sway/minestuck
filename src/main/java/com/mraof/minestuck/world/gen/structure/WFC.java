@@ -58,7 +58,7 @@ public final class WFC
 				for(int zIndex = 0; zIndex < this.dimensions.widthInPieces(); zIndex++)
 				{
 					PiecePos topPos = new PiecePos(xIndex, this.dimensions.topEdge(), zIndex);
-					this.removeConflictsFromConnection(topPos, Direction.UP, Set.of(ConnectionType.AIR));
+					this.removeConflictsFromConnection(topPos, Direction.UP, Set.of(ConnectorType.AIR));
 				}
 			}
 		}
@@ -74,7 +74,7 @@ public final class WFC
 							? new PiecePos(edgeIndex, yIndex, xIndex)
 							: new PiecePos(xIndex, yIndex, edgeIndex);
 					
-					this.removeConflictsFromConnection(edgePos, direction, Set.of(ConnectionType.AIR));
+					this.removeConflictsFromConnection(edgePos, direction, Set.of(ConnectorType.AIR));
 				}
 			}
 		}
@@ -113,13 +113,13 @@ public final class WFC
 				
 				pos.tryOffset(direction, this.dimensions).ifPresent(adjacentPos ->
 				{
-					Set<ConnectionType> connections = this.availablePiecesMap.get(pos).stream().map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
+					Set<ConnectorType> connections = this.availablePiecesMap.get(pos).stream().map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
 					this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
 				});
 			}
 		}
 		
-		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectionType> connections)
+		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectorType> connections)
 		{
 			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.connections().get(direction), connections)))
 				this.removeConflictingPieces(pos, direction);
@@ -177,7 +177,7 @@ public final class WFC
 	
 	public interface ConnectionTester
 	{
-		boolean canConnect(ConnectionType connection, Set<ConnectionType> connections);
+		boolean canConnect(ConnectorType connection, Set<ConnectorType> connections);
 	}
 	
 	public record Dimensions(int widthInPieces, int heightInPieces)
@@ -221,7 +221,7 @@ public final class WFC
 		}
 	}
 	
-	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectionType> connections, Weight weight) implements WeightedEntry
+	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectorType> connections, Weight weight) implements WeightedEntry
 	{
 		@Override
 		public Weight getWeight()
@@ -230,36 +230,36 @@ public final class WFC
 		}
 	}
 	
-	public record ConnectionType(String name)
+	public record ConnectorType(String name)
 	{
-		public static final ConnectionType AIR = new ConnectionType("air"),
-				SOLID = new ConnectionType("solid"),
-				WALL = new ConnectionType("wall"),
-				ROOF_SIDE = new ConnectionType("roof_side"),
-				BRIDGE = new ConnectionType("bridge"),
-				LEDGE_FRONT = new ConnectionType("ledge/front"),
-				LEDGE_LEFT = new ConnectionType("ledge/left"),
-				LEDGE_RIGHT = new ConnectionType("ledge/right"),
-				LEDGE_BACK = new ConnectionType("ledge/back");
+		public static final ConnectorType AIR = new ConnectorType("air"),
+				SOLID = new ConnectorType("solid"),
+				WALL = new ConnectorType("wall"),
+				ROOF_SIDE = new ConnectorType("roof_side"),
+				BRIDGE = new ConnectorType("bridge"),
+				LEDGE_FRONT = new ConnectorType("ledge/front"),
+				LEDGE_LEFT = new ConnectorType("ledge/left"),
+				LEDGE_RIGHT = new ConnectorType("ledge/right"),
+				LEDGE_BACK = new ConnectorType("ledge/back");
 		
 		public static ConnectionsBuilder getBuilderWithCoreConnections()
 		{
 			ConnectionsBuilder builder = new ConnectionsBuilder();
 			
-			builder.connectSelf(ConnectionType.AIR);
-			builder.connectSelf(ConnectionType.SOLID);
-			builder.connect(ConnectionType.AIR, ConnectionType.WALL);
-			builder.connectSelf(ConnectionType.WALL);
-			builder.connect(ConnectionType.ROOF_SIDE, ConnectionType.WALL);
-			builder.connect(ConnectionType.ROOF_SIDE, ConnectionType.AIR);
-			builder.connectSelf(ConnectionType.BRIDGE);
-			builder.connect(ConnectionType.BRIDGE, ConnectionType.WALL);
-			builder.connect(ConnectionType.LEDGE_FRONT, ConnectionType.AIR);
-			builder.connect(ConnectionType.LEDGE_LEFT, ConnectionType.LEDGE_RIGHT);
-			builder.connectSelf(ConnectionType.LEDGE_BACK);
-			builder.connect(ConnectionType.LEDGE_LEFT, ConnectionType.WALL);
-			builder.connect(ConnectionType.LEDGE_RIGHT, ConnectionType.WALL);
-			builder.connect(ConnectionType.LEDGE_BACK, ConnectionType.WALL);
+			builder.connectSelf(ConnectorType.AIR);
+			builder.connectSelf(ConnectorType.SOLID);
+			builder.connect(ConnectorType.AIR, ConnectorType.WALL);
+			builder.connectSelf(ConnectorType.WALL);
+			builder.connect(ConnectorType.ROOF_SIDE, ConnectorType.WALL);
+			builder.connect(ConnectorType.ROOF_SIDE, ConnectorType.AIR);
+			builder.connectSelf(ConnectorType.BRIDGE);
+			builder.connect(ConnectorType.BRIDGE, ConnectorType.WALL);
+			builder.connect(ConnectorType.LEDGE_FRONT, ConnectorType.AIR);
+			builder.connect(ConnectorType.LEDGE_LEFT, ConnectorType.LEDGE_RIGHT);
+			builder.connectSelf(ConnectorType.LEDGE_BACK);
+			builder.connect(ConnectorType.LEDGE_LEFT, ConnectorType.WALL);
+			builder.connect(ConnectorType.LEDGE_RIGHT, ConnectorType.WALL);
+			builder.connect(ConnectorType.LEDGE_BACK, ConnectorType.WALL);
 			
 			return builder;
 		}
@@ -267,14 +267,14 @@ public final class WFC
 	
 	public static final class ConnectionsBuilder
 	{
-		private final Map<ConnectionType, ImmutableSet.Builder<ConnectionType>> builderMap = new HashMap<>();
+		private final Map<ConnectorType, ImmutableSet.Builder<ConnectorType>> builderMap = new HashMap<>();
 		
-		public void connectSelf(ConnectionType type)
+		public void connectSelf(ConnectorType type)
 		{
 			this.connect(type, type);
 		}
 		
-		public void connect(ConnectionType type1, ConnectionType type2)
+		public void connect(ConnectorType type1, ConnectorType type2)
 		{
 			builderMap.computeIfAbsent(type1, ignored -> ImmutableSet.builder()).add(type2);
 			builderMap.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
@@ -282,10 +282,10 @@ public final class WFC
 		
 		ConnectionTester build()
 		{
-			Map<ConnectionType, Set<ConnectionType>> map = builderMap.entrySet().stream()
+			Map<ConnectorType, Set<ConnectorType>> map = builderMap.entrySet().stream()
 					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
 			return (type, otherTypes) -> {
-				Set<ConnectionType> supportedTypes = map.get(type);
+				Set<ConnectorType> supportedTypes = map.get(type);
 				if(supportedTypes == null)
 					return false;
 				return otherTypes.stream().anyMatch(supportedTypes::contains);

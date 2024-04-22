@@ -122,33 +122,33 @@ public final class ProspitStructure
 	
 	private static final WFC.EntriesData ENTRIES_DATA = Util.make(() -> {
 		ImmutableList.Builder<WFC.PieceEntry> builder = ImmutableList.builder();
-		WFC.ConnectionsBuilder connectionsBuilder = WFC.ConnectionType.getBuilderWithCoreConnections();
+		WFC.ConnectionsBuilder connectionsBuilder = WFC.ConnectorType.getBuilderWithCoreConnections();
 		
-		builder.add(new WFC.PieceEntry(pos -> null, symmetric(WFC.ConnectionType.AIR, WFC.ConnectionType.AIR, WFC.ConnectionType.AIR), Weight.of(10)));
-		builder.add(new WFC.PieceEntry(SolidPiece::new, symmetric(WFC.ConnectionType.SOLID, WFC.ConnectionType.SOLID, WFC.ConnectionType.WALL), Weight.of(10)));
-		builder.add(new WFC.PieceEntry(PyramidPiece::new, symmetric(WFC.ConnectionType.SOLID, WFC.ConnectionType.AIR, WFC.ConnectionType.ROOF_SIDE), Weight.of(2)));
-		addAxisSymmetric(builder::add, BridgePiece::new, WFC.ConnectionType.AIR, WFC.ConnectionType.AIR, WFC.ConnectionType.BRIDGE, WFC.ConnectionType.AIR, Weight.of(4));
+		builder.add(new WFC.PieceEntry(pos -> null, symmetric(WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR), Weight.of(10)));
+		builder.add(new WFC.PieceEntry(SolidPiece::new, symmetric(WFC.ConnectorType.SOLID, WFC.ConnectorType.SOLID, WFC.ConnectorType.WALL), Weight.of(10)));
+		builder.add(new WFC.PieceEntry(PyramidPiece::new, symmetric(WFC.ConnectorType.SOLID, WFC.ConnectorType.AIR, WFC.ConnectorType.ROOF_SIDE), Weight.of(2)));
+		addAxisSymmetric(builder::add, BridgePiece::new, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, WFC.ConnectorType.BRIDGE, WFC.ConnectorType.AIR, Weight.of(4));
 		addRotating(builder::add, LedgePiece::new, Map.of(
-				Direction.DOWN, WFC.ConnectionType.SOLID,
-				Direction.UP, WFC.ConnectionType.AIR,
-				Direction.NORTH, WFC.ConnectionType.LEDGE_FRONT,
-				Direction.EAST, WFC.ConnectionType.LEDGE_RIGHT,
-				Direction.SOUTH, WFC.ConnectionType.LEDGE_BACK,
-				Direction.WEST, WFC.ConnectionType.LEDGE_LEFT
+				Direction.DOWN, WFC.ConnectorType.SOLID,
+				Direction.UP, WFC.ConnectorType.AIR,
+				Direction.NORTH, WFC.ConnectorType.LEDGE_FRONT,
+				Direction.EAST, WFC.ConnectorType.LEDGE_RIGHT,
+				Direction.SOUTH, WFC.ConnectorType.LEDGE_BACK,
+				Direction.WEST, WFC.ConnectorType.LEDGE_LEFT
 		), Weight.of(3));
 		addRotating(builder::add, LedgeCornerPiece::new, Map.of(
-				Direction.DOWN, WFC.ConnectionType.SOLID,
-				Direction.UP, WFC.ConnectionType.AIR,
-				Direction.NORTH, WFC.ConnectionType.LEDGE_FRONT,
-				Direction.EAST, WFC.ConnectionType.LEDGE_RIGHT,
-				Direction.SOUTH, WFC.ConnectionType.LEDGE_LEFT,
-				Direction.WEST, WFC.ConnectionType.LEDGE_FRONT
+				Direction.DOWN, WFC.ConnectorType.SOLID,
+				Direction.UP, WFC.ConnectorType.AIR,
+				Direction.NORTH, WFC.ConnectorType.LEDGE_FRONT,
+				Direction.EAST, WFC.ConnectorType.LEDGE_RIGHT,
+				Direction.SOUTH, WFC.ConnectorType.LEDGE_LEFT,
+				Direction.WEST, WFC.ConnectorType.LEDGE_FRONT
 		), Weight.of(3));
 		
 		return new WFC.EntriesData(builder.build(), connectionsBuilder.build());
 	});
 	
-	private static Map<Direction, WFC.ConnectionType> symmetric(WFC.ConnectionType down, WFC.ConnectionType up, WFC.ConnectionType side)
+	private static Map<Direction, WFC.ConnectorType> symmetric(WFC.ConnectorType down, WFC.ConnectorType up, WFC.ConnectorType side)
 	{
 		return Map.of(
 				Direction.DOWN, down,
@@ -161,9 +161,9 @@ public final class ProspitStructure
 	}
 	
 	private static void addAxisSymmetric(Consumer<WFC.PieceEntry> consumer, BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
-										 WFC.ConnectionType down, WFC.ConnectionType up, WFC.ConnectionType front, WFC.ConnectionType side, Weight individualWeight)
+										 WFC.ConnectorType down, WFC.ConnectorType up, WFC.ConnectorType front, WFC.ConnectorType side, Weight individualWeight)
 	{
-		Map<Direction, WFC.ConnectionType> connections = Map.of(
+		Map<Direction, WFC.ConnectorType> connections = Map.of(
 				Direction.DOWN, down,
 				Direction.UP, up,
 				Direction.NORTH, side,
@@ -176,13 +176,13 @@ public final class ProspitStructure
 	}
 	
 	private static void addRotating(Consumer<WFC.PieceEntry> consumer, BiFunction<BlockPos, Rotation, StructurePiece> constructor,
-									Map<Direction, WFC.ConnectionType> connections, Weight individualWeight)
+									Map<Direction, WFC.ConnectorType> connections, Weight individualWeight)
 	{
 		for(Rotation rotation : Rotation.values())
 			consumer.accept(new WFC.PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation), individualWeight));
 	}
 	
-	private static Map<Direction, WFC.ConnectionType> rotateConnections(Map<Direction, WFC.ConnectionType> connections, Rotation rotation)
+	private static Map<Direction, WFC.ConnectorType> rotateConnections(Map<Direction, WFC.ConnectorType> connections, Rotation rotation)
 	{
 		if(rotation == Rotation.NONE)
 			return connections;
