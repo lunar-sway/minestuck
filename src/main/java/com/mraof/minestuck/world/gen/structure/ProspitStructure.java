@@ -117,14 +117,15 @@ public final class ProspitStructure
 	}
 	
 	private static final WFC.EntriesData ENTRIES_DATA = Util.make(() -> {
-		WFC.EntriesBuilder entriesBuilder = new WFC.EntriesBuilder();
-		WFC.ConnectionsBuilder connectionsBuilder = WFC.ConnectorType.getBuilderWithCoreConnections();
+		WFC.EntriesBuilder builder = new WFC.EntriesBuilder();
 		
-		entriesBuilder.addSymmetric(pos -> null, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, 10);
-		entriesBuilder.addSymmetric(SolidPiece::new, WFC.ConnectorType.SOLID, WFC.ConnectorType.SOLID, WFC.ConnectorType.WALL, 10);
-		entriesBuilder.addSymmetric(PyramidPiece::new, WFC.ConnectorType.SOLID, WFC.ConnectorType.AIR, WFC.ConnectorType.ROOF_SIDE, 2);
-		entriesBuilder.addAxisSymmetric(BridgePiece::new, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, WFC.ConnectorType.BRIDGE, WFC.ConnectorType.AIR, 4);
-		entriesBuilder.addRotating(LedgePiece::new, Map.of(
+		WFC.ConnectorType.addCoreConnections(builder);
+		
+		builder.addSymmetric(pos -> null, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, 10);
+		builder.addSymmetric(SolidPiece::new, WFC.ConnectorType.SOLID, WFC.ConnectorType.SOLID, WFC.ConnectorType.WALL, 10);
+		builder.addSymmetric(PyramidPiece::new, WFC.ConnectorType.SOLID, WFC.ConnectorType.AIR, WFC.ConnectorType.ROOF_SIDE, 2);
+		builder.addAxisSymmetric(BridgePiece::new, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, WFC.ConnectorType.BRIDGE, WFC.ConnectorType.AIR, 4);
+		builder.addRotating(LedgePiece::new, Map.of(
 				Direction.DOWN, WFC.ConnectorType.SOLID,
 				Direction.UP, WFC.ConnectorType.AIR,
 				Direction.NORTH, WFC.ConnectorType.LEDGE_FRONT,
@@ -132,7 +133,7 @@ public final class ProspitStructure
 				Direction.SOUTH, WFC.ConnectorType.LEDGE_BACK,
 				Direction.WEST, WFC.ConnectorType.LEDGE_LEFT
 		), 3);
-		entriesBuilder.addRotating(LedgeCornerPiece::new, Map.of(
+		builder.addRotating(LedgeCornerPiece::new, Map.of(
 				Direction.DOWN, WFC.ConnectorType.SOLID,
 				Direction.UP, WFC.ConnectorType.AIR,
 				Direction.NORTH, WFC.ConnectorType.LEDGE_FRONT,
@@ -141,7 +142,7 @@ public final class ProspitStructure
 				Direction.WEST, WFC.ConnectorType.LEDGE_FRONT
 		), 3);
 		
-		return new WFC.EntriesData(entriesBuilder.build(), connectionsBuilder.build());
+		return builder.build();
 	});
 	
 	

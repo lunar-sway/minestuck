@@ -245,10 +245,8 @@ public final class WFC
 				LEDGE_RIGHT = new ConnectorType("ledge/right"),
 				LEDGE_BACK = new ConnectorType("ledge/back");
 		
-		public static ConnectionsBuilder getBuilderWithCoreConnections()
+		public static void addCoreConnections(EntriesBuilder builder)
 		{
-			ConnectionsBuilder builder = new ConnectionsBuilder();
-			
 			builder.connectSelf(ConnectorType.AIR);
 			builder.connectSelf(ConnectorType.SOLID);
 			builder.connect(ConnectorType.AIR, ConnectorType.WALL);
@@ -263,36 +261,6 @@ public final class WFC
 			builder.connect(ConnectorType.LEDGE_LEFT, ConnectorType.WALL);
 			builder.connect(ConnectorType.LEDGE_RIGHT, ConnectorType.WALL);
 			builder.connect(ConnectorType.LEDGE_BACK, ConnectorType.WALL);
-			
-			return builder;
-		}
-	}
-	
-	public static final class ConnectionsBuilder
-	{
-		private final Map<ConnectorType, ImmutableSet.Builder<ConnectorType>> builderMap = new HashMap<>();
-		
-		public void connectSelf(ConnectorType type)
-		{
-			this.connect(type, type);
-		}
-		
-		public void connect(ConnectorType type1, ConnectorType type2)
-		{
-			builderMap.computeIfAbsent(type1, ignored -> ImmutableSet.builder()).add(type2);
-			builderMap.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
-		}
-		
-		ConnectionTester build()
-		{
-			Map<ConnectorType, Set<ConnectorType>> map = builderMap.entrySet().stream()
-					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
-			return (type, otherTypes) -> {
-				Set<ConnectorType> supportedTypes = map.get(type);
-				if(supportedTypes == null)
-					return false;
-				return otherTypes.stream().anyMatch(supportedTypes::contains);
-			};
 		}
 	}
 	
@@ -302,11 +270,24 @@ public final class WFC
 	
 	public static final class EntriesBuilder
 	{
-		private final ImmutableList.Builder<PieceEntry> builder = ImmutableList.builder();
+		private final Map<ConnectorType, ImmutableSet.Builder<ConnectorType>> connections = new HashMap<>();
+		private final ImmutableList.Builder<PieceEntry> pieceEntries = ImmutableList.builder();
+		
+		public void connectSelf(ConnectorType type)
+		{
+			this.connect(type, type);
+		}
+		
+		public void connect(ConnectorType type1, ConnectorType type2)
+		{
+			connections.computeIfAbsent(type1, ignored -> ImmutableSet.builder()).add(type2);
+			connections.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
+		}
+		
 		
 		public void add(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectorType> connections, int weight)
 		{
-			this.builder.add(new PieceEntry(constructor, connections, Weight.of(weight)));
+			this.pieceEntries.add(new PieceEntry(constructor, connections, Weight.of(weight)));
 		}
 		
 		public void addSymmetric(Function<BlockPos, StructurePiece> constructor, ConnectorType down, ConnectorType up, ConnectorType side, int weight)
@@ -358,9 +339,22 @@ public final class WFC
 			);
 		}
 		
-		public Collection<PieceEntry> build()
+		
+		public EntriesData build()
 		{
-			return this.builder.build();
+			return new EntriesData(this.pieceEntries.build(), this.buildConnectionTester());
+		}
+		
+		private ConnectionTester buildConnectionTester()
+		{
+			Map<ConnectorType, Set<ConnectorType>> map = connections.entrySet().stream()
+					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
+			return (type, otherTypes) -> {
+				Set<ConnectorType> supportedTypes = map.get(type);
+				if(supportedTypes == null)
+					return false;
+				return otherTypes.stream().anyMatch(supportedTypes::contains);
+			};
 		}
 	}
 }
