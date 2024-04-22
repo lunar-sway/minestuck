@@ -157,29 +157,29 @@ public final class WFC
 		boolean canConnect(ConnectorType connection, Set<ConnectorType> connections);
 	}
 	
-	public record Dimensions(int widthInPieces, int heightInPieces)
+	public record Dimensions(int xAxisPieces, int yAxisPieces, int zAxisPieces)
 	{
 		public boolean isInBounds(int x, int y, int z)
 		{
-			return 0 <= x && x < this.widthInPieces()
-					&& 0 <= y && y < this.heightInPieces()
-					&& 0 <= z && z < this.widthInPieces();
+			return 0 <= x && x < this.xAxisPieces()
+					&& 0 <= y && y < this.yAxisPieces()
+					&& 0 <= z && z < this.zAxisPieces();
 		}
 		
 		public Iterable<PiecePos> iterateAll()
 		{
 			return PiecePos.iterateBox(0, 0, 0,
-					this.widthInPieces() - 1, this.heightInPieces() - 1, this.widthInPieces() - 1);
+					this.xAxisPieces() - 1, this.yAxisPieces() - 1, this.zAxisPieces() - 1);
 		}
 		
 		public Iterable<PiecePos> iterateEdge(Direction direction)
 		{
-			int minX = direction != Direction.EAST ? 0 : this.widthInPieces() - 1;
-			int minY = direction != Direction.UP ? 0 : this.heightInPieces() - 1;
-			int minZ = direction != Direction.SOUTH ? 0 : this.widthInPieces() - 1;
-			int maxX = direction != Direction.WEST ? this.widthInPieces() - 1 : 0;
-			int maxY = direction != Direction.DOWN ? this.heightInPieces() - 1 : 0;
-			int maxZ = direction != Direction.NORTH ? this.widthInPieces() - 1 : 0;
+			int minX = direction != Direction.EAST ? 0 : this.xAxisPieces() - 1;
+			int minY = direction != Direction.UP ? 0 : this.yAxisPieces() - 1;
+			int minZ = direction != Direction.SOUTH ? 0 : this.zAxisPieces() - 1;
+			int maxX = direction != Direction.WEST ? this.xAxisPieces() - 1 : 0;
+			int maxY = direction != Direction.DOWN ? this.yAxisPieces() - 1 : 0;
+			int maxZ = direction != Direction.NORTH ? this.zAxisPieces() - 1 : 0;
 			return PiecePos.iterateBox(minX, minY, minZ, maxX, maxY, maxZ);
 		}
 	}

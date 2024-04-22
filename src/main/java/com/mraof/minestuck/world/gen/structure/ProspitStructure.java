@@ -41,8 +41,9 @@ import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
 public final class ProspitStructure
 {
 	public static final int PIECE_SIZE = 8;
-	public static final WFC.Dimensions WFC_DIMENSIONS = new WFC.Dimensions(16, 16);
-	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE * WFC_DIMENSIONS.widthInPieces()) / 16;
+	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 16;
+	public static final WFC.Dimensions WFC_DIMENSIONS = new WFC.Dimensions(WIDTH_IN_PIECES, HEIGHT_IN_PIECES, WIDTH_IN_PIECES);
+	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE * WIDTH_IN_PIECES) / 16;
 	
 	public static void init()
 	{
