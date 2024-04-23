@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
@@ -27,13 +26,8 @@ public final class WFCData
 		boolean canConnect(ConnectorType connection, Set<ConnectorType> connections);
 	}
 	
-	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectorType> connections, Weight weight) implements WeightedEntry
+	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectorType> connections)
 	{
-		@Override
-		public Weight getWeight()
-		{
-			return weight;
-		}
 	}
 	
 	public record ConnectorType(String name)
@@ -67,14 +61,14 @@ public final class WFCData
 		}
 	}
 	
-	public record EntriesData(Collection<PieceEntry> entries, ConnectionTester connectionTester)
+	public record EntriesData(Collection<WeightedEntry.Wrapper<PieceEntry>> entries, ConnectionTester connectionTester)
 	{
 	}
 	
 	public static final class EntriesBuilder
 	{
 		private final Map<ConnectorType, ImmutableSet.Builder<ConnectorType>> connections = new HashMap<>();
-		private final ImmutableList.Builder<PieceEntry> pieceEntries = ImmutableList.builder();
+		private final ImmutableList.Builder<WeightedEntry.Wrapper<PieceEntry>> pieceEntries = ImmutableList.builder();
 		
 		public void connectSelf(ConnectorType type)
 		{
@@ -88,21 +82,21 @@ public final class WFCData
 		}
 		
 		
-		public void add(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectorType> connections, int weight)
+		public void add(PieceEntry pieceEntry, int weight)
 		{
-			this.pieceEntries.add(new PieceEntry(constructor, connections, Weight.of(weight)));
+			this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight));
 		}
 		
 		public void addSymmetric(Function<BlockPos, StructurePiece> constructor, ConnectorType down, ConnectorType up, ConnectorType side, int weight)
 		{
-			this.add(constructor, Map.of(
+			this.add(new PieceEntry(constructor, Map.of(
 					Direction.DOWN, down,
 					Direction.UP, up,
 					Direction.NORTH, side,
 					Direction.EAST, side,
 					Direction.SOUTH, side,
 					Direction.WEST, side
-			), weight);
+			)), weight);
 		}
 		
 		public void addAxisSymmetric(BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
@@ -116,15 +110,15 @@ public final class WFCData
 					Direction.SOUTH, side,
 					Direction.WEST, front
 			);
-			this.add(pos -> constructor.apply(pos, Direction.Axis.X), connections, individualWeight);
-			this.add(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90), individualWeight);
+			this.add(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), connections), individualWeight);
+			this.add(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90)), individualWeight);
 		}
 		
 		public void addRotating(BiFunction<BlockPos, Rotation, StructurePiece> constructor,
 										Map<Direction, ConnectorType> connections, int individualWeight)
 		{
 			for(Rotation rotation : Rotation.values())
-				this.add(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation), individualWeight);
+				this.add(new PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)), individualWeight);
 		}
 		
 		private static Map<Direction, ConnectorType> rotateConnections(Map<Direction, ConnectorType> connections, Rotation rotation)

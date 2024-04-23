@@ -5,6 +5,7 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import org.apache.logging.log4j.LogManager;
@@ -69,7 +70,7 @@ public final class WFC
 					this.grid.connectionTester, this::entriesFromTemplate);
 		}
 		
-		private void entriesFromTemplate(PiecePos pos, List<WFCData.PieceEntry> entryList)
+		private void entriesFromTemplate(PiecePos pos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>> entryList)
 		{
 			entryList.addAll(this.grid.availablePiecesMap.get(new PiecePos(0, pos.y(), 0)));
 		}
@@ -81,7 +82,8 @@ public final class WFC
 		
 		private final PieceEntryGrid grid;
 		
-		Generator(Dimensions dimensions, WFCData.ConnectionTester connectionTester, BiConsumer<PiecePos, List<WFCData.PieceEntry>> dataInitializer)
+		Generator(Dimensions dimensions, WFCData.ConnectionTester connectionTester, BiConsumer<PiecePos,
+				List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> dataInitializer)
 		{
 			this.grid = new PieceEntryGrid(dimensions, connectionTester, false, dataInitializer);
 		}
@@ -111,7 +113,7 @@ public final class WFC
 				PiecePos pos = Util.getRandom(leastEntropyResult.entries, random);
 				piecesToGenerate.remove(pos);
 				
-				List<WFCData.PieceEntry> availablePieces = this.grid.availablePiecesMap.get(pos);
+				List<WeightedEntry.Wrapper<WFCData.PieceEntry>> availablePieces = this.grid.availablePiecesMap.get(pos);
 				var chosenEntry = WeightedRandom.getRandomItem(random, availablePieces);
 				if(chosenEntry.isEmpty())
 				{
@@ -119,7 +121,7 @@ public final class WFC
 					continue;
 				}
 				
-				piecePlacer.accept(pos, chosenEntry.get().constructor());
+				piecePlacer.accept(pos, chosenEntry.get().getData().constructor());
 				
 				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
 					this.grid.removeConflictingPieces(pos, null);
@@ -133,9 +135,10 @@ public final class WFC
 		final WFCData.ConnectionTester connectionTester;
 		final boolean loopHorizontally;
 		
-		private final Map<PiecePos, List<WFCData.PieceEntry>> availablePiecesMap = new HashMap<>();
+		private final Map<PiecePos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> availablePiecesMap = new HashMap<>();
 		
-		public PieceEntryGrid(Dimensions dimensions, WFCData.ConnectionTester connectionTester, boolean loopHorizontally, BiConsumer<PiecePos, List<WFCData.PieceEntry>> dataInitializer)
+		public PieceEntryGrid(Dimensions dimensions, WFCData.ConnectionTester connectionTester, boolean loopHorizontally,
+							  BiConsumer<PiecePos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> dataInitializer)
 		{
 			this.dimensions = dimensions;
 			this.connectionTester = connectionTester;
@@ -143,7 +146,7 @@ public final class WFC
 			
 			for(PiecePos pos : this.dimensions.iterateAll())
 			{
-				List<WFCData.PieceEntry> list = new ArrayList<>();
+				List<WeightedEntry.Wrapper<WFCData.PieceEntry>> list = new ArrayList<>();
 				dataInitializer.accept(pos, list);
 				this.availablePiecesMap.put(pos, list);
 			}
@@ -152,7 +155,7 @@ public final class WFC
 		Set<WFCData.ConnectorType> availableConnections(PiecePos pos, Direction direction)
 		{
 			return this.availablePiecesMap.get(pos).stream()
-					.map(entry -> entry.connections().get(direction))
+					.map(entry -> entry.getData().connections().get(direction))
 					.collect(Collectors.toSet());
 		}
 		
@@ -176,21 +179,21 @@ public final class WFC
 		{
 			if(connections.isEmpty())
 				return;
-			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.connections().get(direction), connections)))
+			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.getData().connections().get(direction), connections)))
 				this.removeConflictingPieces(pos, direction);
 		}
 	}
 	
-	private static double entropy(List<WFCData.PieceEntry> entries)
+	private static double entropy(List<? extends WeightedEntry> entries)
 	{
 		int totalWeight = WeightedRandom.getTotalWeight(entries);
 		double entropy = 0;
-		for(WFCData.PieceEntry entry : entries)
+		for(WeightedEntry entry : entries)
 		{
-			if(entry.weight().asInt() == 0)
+			if(entry.getWeight().asInt() == 0)
 				continue;
 			
-			double probability = (double) entry.weight().asInt() / totalWeight;
+			double probability = (double) entry.getWeight().asInt() / totalWeight;
 			entropy += -probability * Math.log(probability);
 		}
 		return entropy;
