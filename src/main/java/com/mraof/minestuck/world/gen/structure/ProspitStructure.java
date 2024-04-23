@@ -30,6 +30,7 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -180,31 +181,40 @@ public final class ProspitStructure
 		}
 	}
 	
+	public static final WFCData.PieceEntry SOLID = WFCData.PieceEntry.symmetric(SolidPiece::new,
+			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.WALL);
+	public static final WFCData.PieceEntry PYRAMID_ROOF = WFCData.PieceEntry.symmetric(PyramidPiece::new,
+			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, WFCData.ConnectorType.ROOF_SIDE);
+	public static final Collection<WFCData.PieceEntry> BRIDGE = WFCData.PieceEntry.axisSymmetric(BridgePiece::new,
+			WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.BRIDGE, WFCData.ConnectorType.AIR);
+	public static final Collection<WFCData.PieceEntry> LEDGE = WFCData.PieceEntry.rotatable(LedgePiece::new, Map.of(
+			Direction.DOWN, WFCData.ConnectorType.SOLID,
+			Direction.UP, WFCData.ConnectorType.AIR,
+			Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
+			Direction.EAST, WFCData.ConnectorType.LEDGE_RIGHT,
+			Direction.SOUTH, WFCData.ConnectorType.LEDGE_BACK,
+			Direction.WEST, WFCData.ConnectorType.LEDGE_LEFT
+	));
+	public static final Collection<WFCData.PieceEntry> LEDGE_CORNER = WFCData.PieceEntry.rotatable(LedgeCornerPiece::new, Map.of(
+			Direction.DOWN, WFCData.ConnectorType.SOLID,
+			Direction.UP, WFCData.ConnectorType.AIR,
+			Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
+			Direction.EAST, WFCData.ConnectorType.LEDGE_RIGHT,
+			Direction.SOUTH, WFCData.ConnectorType.LEDGE_LEFT,
+			Direction.WEST, WFCData.ConnectorType.LEDGE_FRONT
+	));
+	
 	private static final WFCData.EntriesData CENTER_ENTRIES = Util.make(() -> {
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder();
 		
 		WFCData.ConnectorType.addCoreConnections(builder);
 		
-		builder.addSymmetric(pos -> null, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, 10);
-		builder.addSymmetric(SolidPiece::new, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.WALL, 10);
-		builder.addSymmetric(PyramidPiece::new, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, WFCData.ConnectorType.ROOF_SIDE, 2);
-		builder.addAxisSymmetric(BridgePiece::new, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.BRIDGE, WFCData.ConnectorType.AIR, 4);
-		builder.addRotating(LedgePiece::new, Map.of(
-				Direction.DOWN, WFCData.ConnectorType.SOLID,
-				Direction.UP, WFCData.ConnectorType.AIR,
-				Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
-				Direction.EAST, WFCData.ConnectorType.LEDGE_RIGHT,
-				Direction.SOUTH, WFCData.ConnectorType.LEDGE_BACK,
-				Direction.WEST, WFCData.ConnectorType.LEDGE_LEFT
-		), 3);
-		builder.addRotating(LedgeCornerPiece::new, Map.of(
-				Direction.DOWN, WFCData.ConnectorType.SOLID,
-				Direction.UP, WFCData.ConnectorType.AIR,
-				Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
-				Direction.EAST, WFCData.ConnectorType.LEDGE_RIGHT,
-				Direction.SOUTH, WFCData.ConnectorType.LEDGE_LEFT,
-				Direction.WEST, WFCData.ConnectorType.LEDGE_FRONT
-		), 3);
+		builder.add(WFCData.PieceEntry.EMPTY, 10);
+		builder.add(SOLID, 10);
+		builder.add(PYRAMID_ROOF, 2);
+		builder.add(BRIDGE, 4);
+		builder.add(LEDGE, 3);
+		builder.add(LEDGE_CORNER, 3);
 		
 		return builder.build();
 	});
@@ -213,9 +223,9 @@ public final class ProspitStructure
 		
 		WFCData.ConnectorType.addCoreConnections(builder);
 		
-		builder.addSymmetric(pos -> null, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, 10);
-		builder.addSymmetric(SolidPiece::new, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.WALL, 10);
-		builder.addSymmetric(PyramidPiece::new, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, WFCData.ConnectorType.ROOF_SIDE, 2);
+		builder.add(WFCData.PieceEntry.EMPTY, 10);
+		builder.add(SOLID, 10);
+		builder.add(PYRAMID_ROOF, 2);
 		
 		return builder.build();
 	});

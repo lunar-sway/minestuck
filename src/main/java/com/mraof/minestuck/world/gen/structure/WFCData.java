@@ -9,10 +9,7 @@ import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -26,8 +23,64 @@ public final class WFCData
 		boolean canConnect(ConnectorType connection, Set<ConnectorType> connections);
 	}
 	
-	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectorType> connections)
+	public record PieceEntry(Function<BlockPos, StructurePiece> constructor,
+							 Map<Direction, ConnectorType> connections)
 	{
+		public static final PieceEntry EMPTY = PieceEntry.symmetric(pos -> null, ConnectorType.AIR, ConnectorType.AIR, ConnectorType.AIR);
+		
+		public static PieceEntry symmetric(Function<BlockPos, StructurePiece> constructor,
+										   ConnectorType down, ConnectorType up, ConnectorType side)
+		{
+			return new PieceEntry(constructor, Map.of(
+					Direction.DOWN, down,
+					Direction.UP, up,
+					Direction.NORTH, side,
+					Direction.EAST, side,
+					Direction.SOUTH, side,
+					Direction.WEST, side
+			));
+		}
+		
+		public static Collection<PieceEntry> axisSymmetric(BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
+														   ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side)
+		{
+			Map<Direction, ConnectorType> connections = Map.of(
+					Direction.DOWN, down,
+					Direction.UP, up,
+					Direction.NORTH, side,
+					Direction.EAST, front,
+					Direction.SOUTH, side,
+					Direction.WEST, front
+			);
+			
+			return List.of(
+					new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), connections),
+					new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90))
+			);
+		}
+		
+		public static Collection<PieceEntry> rotatable(BiFunction<BlockPos, Rotation, StructurePiece> constructor,
+													   Map<Direction, ConnectorType> connections)
+		{
+			return Arrays.stream(Rotation.values())
+					.map(rotation -> new PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)))
+					.toList();
+		}
+		
+		private static Map<Direction, ConnectorType> rotateConnections(Map<Direction, ConnectorType> connections, Rotation rotation)
+		{
+			if(rotation == Rotation.NONE)
+				return connections;
+			
+			return Map.of(
+					Direction.DOWN, connections.get(Direction.DOWN),
+					Direction.UP, connections.get(Direction.UP),
+					rotation.rotate(Direction.NORTH), connections.get(Direction.NORTH),
+					rotation.rotate(Direction.EAST), connections.get(Direction.EAST),
+					rotation.rotate(Direction.SOUTH), connections.get(Direction.SOUTH),
+					rotation.rotate(Direction.WEST), connections.get(Direction.WEST)
+			);
+		}
 	}
 	
 	public record ConnectorType(String name)
@@ -82,58 +135,14 @@ public final class WFCData
 		}
 		
 		
+		public void add(Collection<PieceEntry> entries, int weight)
+		{
+			entries.forEach(pieceEntry -> this.add(pieceEntry, weight));
+		}
+		
 		public void add(PieceEntry pieceEntry, int weight)
 		{
 			this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight));
-		}
-		
-		public void addSymmetric(Function<BlockPos, StructurePiece> constructor, ConnectorType down, ConnectorType up, ConnectorType side, int weight)
-		{
-			this.add(new PieceEntry(constructor, Map.of(
-					Direction.DOWN, down,
-					Direction.UP, up,
-					Direction.NORTH, side,
-					Direction.EAST, side,
-					Direction.SOUTH, side,
-					Direction.WEST, side
-			)), weight);
-		}
-		
-		public void addAxisSymmetric(BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
-									 ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side, int individualWeight)
-		{
-			Map<Direction, ConnectorType> connections = Map.of(
-					Direction.DOWN, down,
-					Direction.UP, up,
-					Direction.NORTH, side,
-					Direction.EAST, front,
-					Direction.SOUTH, side,
-					Direction.WEST, front
-			);
-			this.add(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), connections), individualWeight);
-			this.add(new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90)), individualWeight);
-		}
-		
-		public void addRotating(BiFunction<BlockPos, Rotation, StructurePiece> constructor,
-										Map<Direction, ConnectorType> connections, int individualWeight)
-		{
-			for(Rotation rotation : Rotation.values())
-				this.add(new PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)), individualWeight);
-		}
-		
-		private static Map<Direction, ConnectorType> rotateConnections(Map<Direction, ConnectorType> connections, Rotation rotation)
-		{
-			if(rotation == Rotation.NONE)
-				return connections;
-			
-			return Map.of(
-					Direction.DOWN, connections.get(Direction.DOWN),
-					Direction.UP, connections.get(Direction.UP),
-					rotation.rotate(Direction.NORTH), connections.get(Direction.NORTH),
-					rotation.rotate(Direction.EAST), connections.get(Direction.EAST),
-					rotation.rotate(Direction.SOUTH), connections.get(Direction.SOUTH),
-					rotation.rotate(Direction.WEST), connections.get(Direction.WEST)
-			);
 		}
 		
 		
