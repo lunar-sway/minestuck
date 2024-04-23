@@ -30,10 +30,7 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
@@ -185,6 +182,8 @@ public final class ProspitStructure
 			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.WALL);
 	public static final WFCData.PieceEntry PYRAMID_ROOF = WFCData.PieceEntry.symmetric(PyramidPiece::new,
 			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, WFCData.ConnectorType.ROOF_SIDE);
+	public static final WFCData.MultiPieceEntry SPIKE = WFCData.MultiPieceEntry.symmetricPillar(SpikePiece::new, "spike", 2,
+			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, List.of(WFCData.ConnectorType.ROOF_SIDE, WFCData.ConnectorType.AIR));
 	public static final Collection<WFCData.PieceEntry> BRIDGE = WFCData.PieceEntry.axisSymmetric(BridgePiece::new,
 			WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.BRIDGE, WFCData.ConnectorType.AIR);
 	public static final Collection<WFCData.PieceEntry> LEDGE = WFCData.PieceEntry.rotatable(LedgePiece::new, Map.of(
@@ -209,12 +208,13 @@ public final class ProspitStructure
 		
 		WFCData.ConnectorType.addCoreConnections(builder);
 		
-		builder.add(WFCData.PieceEntry.EMPTY, 10);
+		builder.add(WFCData.PieceEntry.EMPTY, 30);
 		builder.add(SOLID, 10);
 		builder.add(PYRAMID_ROOF, 2);
-		builder.add(BRIDGE, 4);
-		builder.add(LEDGE, 3);
-		builder.add(LEDGE_CORNER, 3);
+		builder.add(SPIKE, 1);
+		builder.add(BRIDGE, 3);
+		builder.add(LEDGE, 2);
+		builder.add(LEDGE_CORNER, 2);
 		
 		return builder.build();
 	});
@@ -225,7 +225,8 @@ public final class ProspitStructure
 		
 		builder.add(WFCData.PieceEntry.EMPTY, 10);
 		builder.add(SOLID, 10);
-		builder.add(PYRAMID_ROOF, 2);
+		builder.add(PYRAMID_ROOF, 3);
+		builder.add(SPIKE, 1);
 		
 		return builder.build();
 	});
@@ -235,6 +236,8 @@ public final class ProspitStructure
 			() -> SolidPiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> PYRAMID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_pyramid",
 			() -> PyramidPiece::new);
+	public static final Supplier<StructurePieceType.ContextlessType> SPIKE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_spike",
+			() -> SpikePiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> BRIDGE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_bridge",
 			() -> PyramidPiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> LEDGE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_ledge",
@@ -298,6 +301,39 @@ public final class ProspitStructure
 			generateBox(level, box, 2, 2, 2, 5, 2, 5,
 					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
 			generateBox(level, box, 3, 3, 3, 4, 3, 4,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+		}
+	}
+	
+	public static final class SpikePiece extends ImprovedStructurePiece
+	{
+		public SpikePiece(BlockPos bottomCornerPos)
+		{
+			super(SPIKE_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
+					bottomCornerPos.offset(PIECE_SIZE - 1, 2 * PIECE_SIZE - 1, PIECE_SIZE - 1)));
+			setOrientation(Direction.SOUTH);
+		}
+		
+		public SpikePiece(CompoundTag tag)
+		{
+			super(SPIKE_PIECE_TYPE.get(), tag);
+		}
+		
+		@Override
+		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag)
+		{
+		}
+		
+		@Override
+		public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
+		{
+			generateBox(level, box, 0, 0, 0, 7, 1, 7,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+			generateBox(level, box, 1, 2, 1, 6, 4, 6,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+			generateBox(level, box, 2, 5, 2, 5, 8, 5,
+					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
+			generateBox(level, box, 3, 9, 3, 4, 13, 4,
 					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
 		}
 	}

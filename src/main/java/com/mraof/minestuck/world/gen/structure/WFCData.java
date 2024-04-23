@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.random.WeightedEntry;
@@ -12,17 +13,13 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 /**
  * Contains types for describing pieces and how they connect, as well as builders for defining data of these types.
  */
 public final class WFCData
 {
-	public interface ConnectionTester
-	{
-		boolean canConnect(ConnectorType connection, Set<ConnectorType> connections);
-	}
-	
 	public record PieceEntry(Function<BlockPos, StructurePiece> constructor,
 							 Map<Direction, ConnectorType> connections)
 	{
@@ -114,6 +111,34 @@ public final class WFCData
 		}
 	}
 	
+	public record MultiPieceEntry(Collection<PieceEntry> entries, Collection<Pair<ConnectorType, ConnectorType>> connections)
+	{
+		public static MultiPieceEntry symmetricPillar(Function<BlockPos, StructurePiece> constructor, String name, int height,
+													  ConnectorType down, ConnectorType up, List<ConnectorType> sides)
+		{
+			if(sides.size() != height)
+				throw new IllegalArgumentException("Number of sides must match height");
+			
+			List<Pair<ConnectorType, ConnectorType>> verticalConnections = IntStream.range(0, height - 1).mapToObj(y -> {
+				ConnectorType connector = new ConnectorType(name + "/vertical_" + y);
+				return Pair.of(connector, connector);
+			}).toList();
+			
+			ImmutableList.Builder<PieceEntry> entriesBuilder = ImmutableList.builder();
+			entriesBuilder.add(PieceEntry.symmetric(constructor, down, verticalConnections.get(0).getFirst(), sides.get(0)));
+			for(int y = 1; y < height - 1; y++)
+				entriesBuilder.add(PieceEntry.symmetric(pos -> null, verticalConnections.get(y - 1).getSecond(), verticalConnections.get(y).getFirst(), sides.get(y)));
+			entriesBuilder.add(PieceEntry.symmetric(pos -> null, verticalConnections.get(height - 2).getSecond(), up, sides.get(height - 1)));
+			
+			return new MultiPieceEntry(entriesBuilder.build(), verticalConnections);
+		}
+	}
+	
+	public interface ConnectionTester
+	{
+		boolean canConnect(ConnectorType connection, Set<ConnectorType> connections);
+	}
+	
 	public record EntriesData(Collection<WeightedEntry.Wrapper<PieceEntry>> entries, ConnectionTester connectionTester)
 	{
 	}
@@ -134,6 +159,12 @@ public final class WFCData
 			connections.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
 		}
 		
+		
+		public void add(MultiPieceEntry entry, int weight)
+		{
+			entry.connections().forEach(pair -> this.connect(pair.getFirst(), pair.getSecond()));
+			this.add(entry.entries(), weight);
+		}
 		
 		public void add(Collection<PieceEntry> entries, int weight)
 		{
