@@ -36,17 +36,34 @@ public final class WFC
 		
 		private final Dimensions dimensions;
 		private final ConnectionTester connectionTester;
+		private final boolean isTemplate;
 		
 		private final Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
 		
-		public Generator(Dimensions dimensions, EntriesData entriesData)
+		public static Generator initTemplateColumn(Dimensions dimensions, EntriesData entriesData)
+		{
+			return new Generator(new Dimensions(1, dimensions.yAxisPieces(), 1),
+					entriesData.connectionTester(), true, (ignored, list) -> list.addAll(entriesData.entries()));
+		}
+		
+		public static Generator init(Dimensions dimensions, Generator template)
+		{
+			if(dimensions.yAxisPieces() != template.dimensions.yAxisPieces())
+				throw new IllegalArgumentException("Dimensions of template does not match");
+			return new Generator(dimensions, template.connectionTester, false, (pos, list) -> list.addAll(template.availablePiecesMap.get(new PiecePos(0, pos.y(), 0))));
+		}
+		
+		public Generator(Dimensions dimensions, ConnectionTester connectionTester, boolean isTemplate, BiConsumer<PiecePos, List<PieceEntry>> dataInitializer)
 		{
 			this.dimensions = dimensions;
-			this.connectionTester = entriesData.connectionTester();
+			this.connectionTester = connectionTester;
+			this.isTemplate = isTemplate;
 			
 			for(PiecePos pos : this.dimensions.iterateAll())
 			{
-				this.availablePiecesMap.put(pos, new ArrayList<>(entriesData.entries()));
+				List<PieceEntry> list = new ArrayList<>();
+				dataInitializer.accept(pos, list);
+				this.availablePiecesMap.put(pos, list);
 			}
 		}
 		
@@ -54,12 +71,15 @@ public final class WFC
 		{
 			for(PiecePos pos : this.dimensions.iterateEdge(direction))
 			{
-				this.removeConflictsFromConnection(pos, direction, connections);
+				this.removeConflictsFromConnection(pos, direction, connections, this.isTemplate);
 			}
 		}
 		
 		public void collapse(WorldgenRandom random, BiConsumer<PiecePos, Function<BlockPos, StructurePiece>> piecePlacer)
 		{
+			if(isTemplate)
+				throw new UnsupportedOperationException();
+			
 			Set<PiecePos> piecesToGenerate = new HashSet<>(availablePiecesMap.keySet());
 			
 			while(!piecesToGenerate.isEmpty())
@@ -84,32 +104,32 @@ public final class WFC
 				piecePlacer.accept(pos, chosenEntry.get().constructor());
 				
 				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
-					this.removeConflictingPieces(pos, null);
+					removeConflictingPieces(pos, null, false);
 			}
 		}
 		
-		private void removeConflictingPieces(PiecePos pos, @Nullable Direction excluding)
+		private void removeConflictingPieces(PiecePos pos, @Nullable Direction excluding, boolean loopHorizontalEdges)
 		{
 			for(Direction direction : Direction.values())
 			{
 				if(direction == excluding)
 					continue;
 				
-				pos.tryOffset(direction, this.dimensions).ifPresent(adjacentPos ->
+				pos.tryOffset(direction, this.dimensions, loopHorizontalEdges).ifPresent(adjacentPos ->
 				{
 					Set<ConnectorType> connections = this.availablePiecesMap.get(pos).stream()
 							.map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
 					
 					if(!connections.isEmpty())
-						this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
+						this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections, loopHorizontalEdges);
 				});
 			}
 		}
 		
-		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectorType> connections)
+		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectorType> connections, boolean loopHorizontalEdges)
 		{
 			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.connections().get(direction), connections)))
-				this.removeConflictingPieces(pos, direction);
+				this.removeConflictingPieces(pos, direction, loopHorizontalEdges);
 		}
 	}
 	
@@ -169,11 +189,38 @@ public final class WFC
 	
 	public record Dimensions(int xAxisPieces, int yAxisPieces, int zAxisPieces)
 	{
+		public Dimensions {
+			if(xAxisPieces <= 0)
+				throw new IllegalArgumentException("Nonpositive x size: " + xAxisPieces);
+			if(yAxisPieces <= 0)
+				throw new IllegalArgumentException("Nonpositive y size: " + xAxisPieces);
+			if(zAxisPieces <= 0)
+				throw new IllegalArgumentException("Nonpositive z size: " + xAxisPieces);
+		}
+		
 		public boolean isInBounds(int x, int y, int z)
 		{
 			return 0 <= x && x < this.xAxisPieces()
 					&& 0 <= y && y < this.yAxisPieces()
 					&& 0 <= z && z < this.zAxisPieces();
+		}
+		
+		public int loopX(int x)
+		{
+			if(x < 0)
+				return this.xAxisPieces() - 1;
+			if(x >= this.xAxisPieces())
+				return 0;
+			return x;
+		}
+		
+		public int loopZ(int z)
+		{
+			if(z < 0)
+				return this.zAxisPieces() - 1;
+			if(z >= this.zAxisPieces())
+				return 0;
+			return z;
 		}
 		
 		public Iterable<PiecePos> iterateAll()
@@ -201,11 +248,17 @@ public final class WFC
 			return cornerPos.offset(this.x * pieceWidth, this.y * pieceHeight, this.z * pieceWidth);
 		}
 		
-		public Optional<PiecePos> tryOffset(Direction direction, Dimensions dimensions)
+		public Optional<PiecePos> tryOffset(Direction direction, Dimensions dimensions, boolean loopHorizontalEdges)
 		{
 			int newX = this.x + direction.getStepX();
 			int newY = this.y + direction.getStepY();
 			int newZ = this.z + direction.getStepZ();
+			
+			if(loopHorizontalEdges)
+			{
+				newX = dimensions.loopX(newX);
+				newZ = dimensions.loopZ(newZ);
+			}
 			
 			if(!dimensions.isInBounds(newX, newY, newZ))
 				return Optional.empty();
