@@ -4,8 +4,8 @@ import com.google.common.collect.AbstractIterator;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,9 +45,28 @@ public final class WFC
 			}
 		}
 		
-		public Generator initGenerator()
+		public Generator cornerGenerator()
 		{
-			return new Generator(this.fullDimensions, this.grid.connectionTester, this::entriesFromTemplate);
+			return new Generator(new Dimensions(1, this.fullDimensions.yAxisPieces(), 1),
+					this.grid.connectionTester, this::entriesFromTemplate);
+		}
+		
+		public Generator xEdgeGenerator()
+		{
+			return new Generator(new Dimensions(1, this.fullDimensions.yAxisPieces(), this.fullDimensions.zAxisPieces() - 1),
+					this.grid.connectionTester, this::entriesFromTemplate);
+		}
+		
+		public Generator zEdgeGenerator()
+		{
+			return new Generator(new Dimensions(this.fullDimensions.xAxisPieces() - 1, this.fullDimensions.yAxisPieces(), 1),
+					this.grid.connectionTester, this::entriesFromTemplate);
+		}
+		
+		public Generator centerGenerator()
+		{
+			return new Generator(new Dimensions(this.fullDimensions.xAxisPieces() - 1, this.fullDimensions.yAxisPieces(), this.fullDimensions.zAxisPieces() - 1),
+					this.grid.connectionTester, this::entriesFromTemplate);
 		}
 		
 		private void entriesFromTemplate(PiecePos pos, List<WFCData.PieceEntry> entryList)
@@ -67,7 +86,17 @@ public final class WFC
 			this.grid = new PieceEntryGrid(dimensions, connectionTester, false, dataInitializer);
 		}
 		
-		public void collapse(WorldgenRandom random, BiConsumer<PiecePos, Function<BlockPos, StructurePiece>> piecePlacer)
+		public void setupEdgeBounds(Direction direction, Generator adjacentGenerator)
+		{
+			for(PiecePos pos : this.grid.dimensions.iterateEdge(direction))
+			{
+				PiecePos projectedPos = adjacentGenerator.grid.dimensions.projectOntoEdge(pos, direction.getOpposite());
+				Set<WFCData.ConnectorType> connections = adjacentGenerator.grid.availableConnections(projectedPos, direction.getOpposite());
+				this.grid.removeConflictsFromConnection(pos, direction, connections);
+			}
+		}
+		
+		public void collapse(RandomSource random, BiConsumer<PiecePos, Function<BlockPos, StructurePiece>> piecePlacer)
 		{
 			Set<PiecePos> piecesToGenerate = new HashSet<>(this.grid.availablePiecesMap.keySet());
 			
@@ -120,7 +149,14 @@ public final class WFC
 			}
 		}
 		
-		private void removeConflictingPieces(PiecePos pos, @Nullable Direction excluding)
+		Set<WFCData.ConnectorType> availableConnections(PiecePos pos, Direction direction)
+		{
+			return this.availablePiecesMap.get(pos).stream()
+					.map(entry -> entry.connections().get(direction))
+					.collect(Collectors.toSet());
+		}
+		
+		void removeConflictingPieces(PiecePos pos, @Nullable Direction excluding)
 		{
 			for(Direction direction : Direction.values())
 			{
@@ -129,17 +165,17 @@ public final class WFC
 				
 				pos.tryOffset(direction, this.dimensions, this.loopHorizontally).ifPresent(adjacentPos ->
 				{
-					Set<WFCData.ConnectorType> connections = this.availablePiecesMap.get(pos).stream()
-							.map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
+					Set<WFCData.ConnectorType> connections = this.availableConnections(pos, direction);
 					
-					if(!connections.isEmpty())
-						this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
+					this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
 				});
 			}
 		}
 		
-		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<WFCData.ConnectorType> connections)
+		void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<WFCData.ConnectorType> connections)
 		{
+			if(connections.isEmpty())
+				return;
 			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.connections().get(direction), connections)))
 				this.removeConflictingPieces(pos, direction);
 		}
@@ -228,6 +264,35 @@ public final class WFC
 			if(z >= this.zAxisPieces())
 				return 0;
 			return z;
+		}
+		
+		public PiecePos projectOntoEdge(PiecePos pos, Direction edge)
+		{
+			int x, y, z;
+			if(edge == Direction.WEST)
+				x = 0;
+			else if(edge == Direction.EAST)
+				x = this.xAxisPieces() - 1;
+			else
+				x = pos.x;
+			
+			if(edge == Direction.DOWN)
+				y = 0;
+			else if(edge == Direction.UP)
+				y = this.yAxisPieces() - 1;
+			else
+				y = pos.y;
+			
+			if(edge == Direction.NORTH)
+				z = 0;
+			else if(edge == Direction.SOUTH)
+				z = this.zAxisPieces() - 1;
+			else
+				z = pos.z;
+			
+			if(!this.isInBounds(x, y, z))
+				throw new IllegalArgumentException("Unable to project pos " + pos + " on edge " + edge + " in dimensions " + this);
+			return new PiecePos(x, y, z);
 		}
 		
 		public Iterable<PiecePos> iterateAll()
