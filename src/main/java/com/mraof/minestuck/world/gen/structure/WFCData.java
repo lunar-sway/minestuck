@@ -6,9 +6,12 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -20,15 +23,15 @@ import java.util.stream.IntStream;
  */
 public final class WFCData
 {
-	public record PieceEntry(Function<BlockPos, StructurePiece> constructor,
+	public record PieceEntry(BiFunction<StructureTemplateManager, BlockPos, StructurePiece> constructor,
 							 Map<Direction, ConnectorType> connections)
 	{
 		public static final PieceEntry EMPTY = PieceEntry.symmetric(pos -> null, ConnectorType.AIR, ConnectorType.AIR, ConnectorType.AIR);
 		
-		public static PieceEntry symmetric(Function<BlockPos, StructurePiece> constructor,
+		public static PieceEntry symmetric(ResourceLocation templateId,
 										   ConnectorType down, ConnectorType up, ConnectorType side)
 		{
-			return new PieceEntry(constructor, Map.of(
+			return new PieceEntry(templateConstructor(templateId, Rotation.NONE), Map.of(
 					Direction.DOWN, down,
 					Direction.UP, up,
 					Direction.NORTH, side,
@@ -38,21 +41,52 @@ public final class WFCData
 			));
 		}
 		
+		public static PieceEntry symmetric(Function<BlockPos, StructurePiece> constructor,
+										   ConnectorType down, ConnectorType up, ConnectorType side)
+		{
+			return new PieceEntry((ignored, pos) -> constructor.apply(pos), Map.of(
+					Direction.DOWN, down,
+					Direction.UP, up,
+					Direction.NORTH, side,
+					Direction.EAST, side,
+					Direction.SOUTH, side,
+					Direction.WEST, side
+			));
+		}
+		
+		public static Collection<PieceEntry> axisSymmetric(ResourceLocation templateId,
+														   ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side)
+		{
+			Map<Direction, ConnectorType> connections = Map.of(
+					Direction.DOWN, down,
+					Direction.UP, up,
+					Direction.NORTH, front,
+					Direction.EAST, side,
+					Direction.SOUTH, front,
+					Direction.WEST, side
+			);
+			
+			return List.of(
+					new PieceEntry(templateConstructor(templateId, Rotation.NONE), connections),
+					new PieceEntry(templateConstructor(templateId, Rotation.CLOCKWISE_90), rotateConnections(connections, Rotation.CLOCKWISE_90))
+			);
+		}
+		
 		public static Collection<PieceEntry> axisSymmetric(BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
 														   ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side)
 		{
 			Map<Direction, ConnectorType> connections = Map.of(
 					Direction.DOWN, down,
 					Direction.UP, up,
-					Direction.NORTH, side,
-					Direction.EAST, front,
-					Direction.SOUTH, side,
-					Direction.WEST, front
+					Direction.NORTH, front,
+					Direction.EAST, side,
+					Direction.SOUTH, front,
+					Direction.WEST, side
 			);
 			
 			return List.of(
-					new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.X), connections),
-					new PieceEntry(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90))
+					new PieceEntry((ignored, pos) -> constructor.apply(pos, Direction.Axis.Z), connections),
+					new PieceEntry((ignored, pos) -> constructor.apply(pos, Direction.Axis.X), rotateConnections(connections, Rotation.CLOCKWISE_90))
 			);
 		}
 		
@@ -60,7 +94,7 @@ public final class WFCData
 													   Map<Direction, ConnectorType> connections)
 		{
 			return Arrays.stream(Rotation.values())
-					.map(rotation -> new PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)))
+					.map(rotation -> new PieceEntry((ignored, pos) -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)))
 					.toList();
 		}
 		
@@ -77,6 +111,14 @@ public final class WFCData
 					rotation.rotate(Direction.SOUTH), connections.get(Direction.SOUTH),
 					rotation.rotate(Direction.WEST), connections.get(Direction.WEST)
 			);
+		}
+		
+		private static BiFunction<StructureTemplateManager, BlockPos, StructurePiece> templateConstructor(ResourceLocation templateId, Rotation rotation)
+		{
+			return (templateManager, pos) -> {
+				BlockPos templatePos = templateManager.getOrCreate(templateId).getZeroPositionWithTransform(pos, Mirror.NONE, rotation);
+				return new SimpleTemplatePiece(templateManager, templateId, templatePos, rotation);
+			};
 		}
 	}
 	

@@ -7,14 +7,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
@@ -109,7 +107,7 @@ public final class WFC
 			}
 		}
 		
-		public void collapse(RandomSource random, BiConsumer<PiecePos, Function<BlockPos, StructurePiece>> piecePlacer)
+		public void collapse(RandomSource random, BiConsumer<PiecePos, WFCData.PieceEntry> piecePlacer)
 		{
 			Set<PiecePos> piecesToGenerate = new HashSet<>(this.grid.availablePiecesMap.keySet());
 			
@@ -132,7 +130,7 @@ public final class WFC
 					continue;
 				}
 				
-				piecePlacer.accept(pos, chosenEntry.get().getData().constructor());
+				piecePlacer.accept(pos, chosenEntry.get().getData());
 				
 				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
 					this.grid.removeConflictingPieces(pos, null);
