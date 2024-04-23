@@ -132,9 +132,7 @@ public final class ProspitStructure
 			
 			
 			BlockPos northPos = cornerPos.offset(PIECE_SIZE, 0, 0);
-			WFC.Generator northGenerator = borderTemplate.zEdgeGenerator();
-			northGenerator.setupEdgeBounds(Direction.WEST, northWestGenerator);
-			northGenerator.setupEdgeBounds(Direction.EAST, northEastGenerator);
+			WFC.Generator northGenerator = borderTemplate.zEdgeGenerator(northWestGenerator, northEastGenerator);
 			northGenerator.collapse(randomFactory.at(northPos), (piecePos, pieceConstructor) -> {
 				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(northPos, PIECE_SIZE, PIECE_SIZE));
 				if(piece != null)
@@ -142,9 +140,7 @@ public final class ProspitStructure
 			});
 			
 			BlockPos westPos = cornerPos.offset(0, 0, PIECE_SIZE);
-			WFC.Generator westGenerator = borderTemplate.xEdgeGenerator();
-			westGenerator.setupEdgeBounds(Direction.NORTH, northWestGenerator);
-			westGenerator.setupEdgeBounds(Direction.SOUTH, southWestGenerator);
+			WFC.Generator westGenerator = borderTemplate.xEdgeGenerator(northWestGenerator, southWestGenerator);
 			westGenerator.collapse(randomFactory.at(westPos), (piecePos, pieceConstructor) -> {
 				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(westPos, PIECE_SIZE, PIECE_SIZE));
 				if(piece != null)
@@ -152,24 +148,16 @@ public final class ProspitStructure
 			});
 			
 			BlockPos southPos = cornerPos.offset(PIECE_SIZE, 0, WIDTH_IN_PIECES * PIECE_SIZE);
-			WFC.Generator southGenerator = borderTemplate.zEdgeGenerator();
-			southGenerator.setupEdgeBounds(Direction.WEST, southWestGenerator);
-			southGenerator.setupEdgeBounds(Direction.EAST, southEastGenerator);
+			WFC.Generator southGenerator = borderTemplate.zEdgeGenerator(southWestGenerator, southEastGenerator);
 			southGenerator.collapse(randomFactory.at(southPos), (piecePos, pieceConstructor) -> {});
 			
 			BlockPos eastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE, 0, PIECE_SIZE);
-			WFC.Generator eastGenerator = borderTemplate.xEdgeGenerator();
-			eastGenerator.setupEdgeBounds(Direction.NORTH, northEastGenerator);
-			eastGenerator.setupEdgeBounds(Direction.SOUTH, southEastGenerator);
+			WFC.Generator eastGenerator = borderTemplate.xEdgeGenerator(northEastGenerator, southEastGenerator);
 			eastGenerator.collapse(randomFactory.at(eastPos), (piecePos, pieceConstructor) -> {});
 			
 			
 			BlockPos centerPos = cornerPos.offset(PIECE_SIZE, 0, PIECE_SIZE);
-			WFC.Generator centerGenerator = centerTemplate.centerGenerator();
-			centerGenerator.setupEdgeBounds(Direction.NORTH, northGenerator);
-			centerGenerator.setupEdgeBounds(Direction.WEST, westGenerator);
-			centerGenerator.setupEdgeBounds(Direction.SOUTH, southGenerator);
-			centerGenerator.setupEdgeBounds(Direction.EAST, eastGenerator);
+			WFC.Generator centerGenerator = centerTemplate.centerGenerator(northGenerator, westGenerator, southGenerator, eastGenerator);
 			centerGenerator.collapse(randomFactory.at(centerPos), (piecePos, pieceConstructor) -> {
 				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(centerPos, PIECE_SIZE, PIECE_SIZE));
 				if(piece != null)

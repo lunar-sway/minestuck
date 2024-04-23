@@ -52,22 +52,33 @@ public final class WFC
 					this.grid.connectionTester, this::entriesFromTemplate);
 		}
 		
-		public Generator xEdgeGenerator()
+		public Generator xEdgeGenerator(Generator northCorner, Generator southCorner)
 		{
-			return new Generator(new Dimensions(1, this.fullDimensions.yAxisPieces(), this.fullDimensions.zAxisPieces() - 1),
+			Generator generator = new Generator(new Dimensions(1, this.fullDimensions.yAxisPieces(), this.fullDimensions.zAxisPieces() - 1),
 					this.grid.connectionTester, this::entriesFromTemplate);
+			generator.setupEdgeBounds(Direction.NORTH, northCorner);
+			generator.setupEdgeBounds(Direction.SOUTH, southCorner);
+			return generator;
 		}
 		
-		public Generator zEdgeGenerator()
+		public Generator zEdgeGenerator(Generator westCorner, Generator eastCorner)
 		{
-			return new Generator(new Dimensions(this.fullDimensions.xAxisPieces() - 1, this.fullDimensions.yAxisPieces(), 1),
+			Generator generator = new Generator(new Dimensions(this.fullDimensions.xAxisPieces() - 1, this.fullDimensions.yAxisPieces(), 1),
 					this.grid.connectionTester, this::entriesFromTemplate);
+			generator.setupEdgeBounds(Direction.WEST, westCorner);
+			generator.setupEdgeBounds(Direction.EAST, eastCorner);
+			return generator;
 		}
 		
-		public Generator centerGenerator()
+		public Generator centerGenerator(Generator northSide, Generator westSide, Generator southSide, Generator eastSide)
 		{
-			return new Generator(new Dimensions(this.fullDimensions.xAxisPieces() - 1, this.fullDimensions.yAxisPieces(), this.fullDimensions.zAxisPieces() - 1),
+			Generator generator = new Generator(new Dimensions(this.fullDimensions.xAxisPieces() - 1, this.fullDimensions.yAxisPieces(), this.fullDimensions.zAxisPieces() - 1),
 					this.grid.connectionTester, this::entriesFromTemplate);
+			generator.setupEdgeBounds(Direction.NORTH, northSide);
+			generator.setupEdgeBounds(Direction.WEST, westSide);
+			generator.setupEdgeBounds(Direction.SOUTH, southSide);
+			generator.setupEdgeBounds(Direction.EAST, eastSide);
+			return generator;
 		}
 		
 		private void entriesFromTemplate(PiecePos pos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>> entryList)
@@ -88,7 +99,7 @@ public final class WFC
 			this.grid = new PieceEntryGrid(dimensions, connectionTester, false, dataInitializer);
 		}
 		
-		public void setupEdgeBounds(Direction direction, Generator adjacentGenerator)
+		void setupEdgeBounds(Direction direction, Generator adjacentGenerator)
 		{
 			for(PiecePos pos : this.grid.dimensions.iterateEdge(direction))
 			{
