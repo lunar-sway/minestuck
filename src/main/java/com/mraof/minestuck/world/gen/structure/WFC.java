@@ -1,16 +1,10 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.google.common.collect.AbstractIterator;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.random.Weight;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import org.apache.logging.log4j.LogManager;
@@ -19,14 +13,14 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
 /**
  * Contains components for an implementation of Wave Function Collapse.
- * The main component being {@link Generator}.
+ * The main component for running WFC is {@link Generator}.
+ * @see WFCData
  */
 public final class WFC
 {
@@ -36,14 +30,14 @@ public final class WFC
 		
 		private final PieceEntryGrid grid;
 		
-		public Template(Dimensions dimensions, EntriesData entriesData)
+		public Template(Dimensions dimensions, WFCData.EntriesData entriesData)
 		{
 			this.fullDimensions = dimensions;
 			this.grid = new PieceEntryGrid(new Dimensions(1, dimensions.yAxisPieces(), 1),
 					entriesData.connectionTester(), true, (ignored, list) -> list.addAll(entriesData.entries()));
 		}
 		
-		public void setupFixedEdgeBounds(Direction direction, Set<ConnectorType> connections)
+		public void setupFixedEdgeBounds(Direction direction, Set<WFCData.ConnectorType> connections)
 		{
 			for(PiecePos pos : this.grid.dimensions.iterateEdge(direction))
 			{
@@ -56,7 +50,7 @@ public final class WFC
 			return new Generator(this.fullDimensions, this.grid.connectionTester, this::entriesFromTemplate);
 		}
 		
-		private void entriesFromTemplate(PiecePos pos, List<PieceEntry> entryList)
+		private void entriesFromTemplate(PiecePos pos, List<WFCData.PieceEntry> entryList)
 		{
 			entryList.addAll(this.grid.availablePiecesMap.get(new PiecePos(0, pos.y(), 0)));
 		}
@@ -68,7 +62,7 @@ public final class WFC
 		
 		private final PieceEntryGrid grid;
 		
-		Generator(Dimensions dimensions, ConnectionTester connectionTester, BiConsumer<PiecePos, List<PieceEntry>> dataInitializer)
+		Generator(Dimensions dimensions, WFCData.ConnectionTester connectionTester, BiConsumer<PiecePos, List<WFCData.PieceEntry>> dataInitializer)
 		{
 			this.grid = new PieceEntryGrid(dimensions, connectionTester, false, dataInitializer);
 		}
@@ -88,7 +82,7 @@ public final class WFC
 				PiecePos pos = Util.getRandom(leastEntropyResult.entries, random);
 				piecesToGenerate.remove(pos);
 				
-				List<PieceEntry> availablePieces = this.grid.availablePiecesMap.get(pos);
+				List<WFCData.PieceEntry> availablePieces = this.grid.availablePiecesMap.get(pos);
 				var chosenEntry = WeightedRandom.getRandomItem(random, availablePieces);
 				if(chosenEntry.isEmpty())
 				{
@@ -107,12 +101,12 @@ public final class WFC
 	private static final class PieceEntryGrid
 	{
 		final Dimensions dimensions;
-		final ConnectionTester connectionTester;
+		final WFCData.ConnectionTester connectionTester;
 		final boolean loopHorizontally;
 		
-		private final Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
+		private final Map<PiecePos, List<WFCData.PieceEntry>> availablePiecesMap = new HashMap<>();
 		
-		public PieceEntryGrid(Dimensions dimensions, ConnectionTester connectionTester, boolean loopHorizontally, BiConsumer<PiecePos, List<PieceEntry>> dataInitializer)
+		public PieceEntryGrid(Dimensions dimensions, WFCData.ConnectionTester connectionTester, boolean loopHorizontally, BiConsumer<PiecePos, List<WFCData.PieceEntry>> dataInitializer)
 		{
 			this.dimensions = dimensions;
 			this.connectionTester = connectionTester;
@@ -120,7 +114,7 @@ public final class WFC
 			
 			for(PiecePos pos : this.dimensions.iterateAll())
 			{
-				List<PieceEntry> list = new ArrayList<>();
+				List<WFCData.PieceEntry> list = new ArrayList<>();
 				dataInitializer.accept(pos, list);
 				this.availablePiecesMap.put(pos, list);
 			}
@@ -135,7 +129,7 @@ public final class WFC
 				
 				pos.tryOffset(direction, this.dimensions, this.loopHorizontally).ifPresent(adjacentPos ->
 				{
-					Set<ConnectorType> connections = this.availablePiecesMap.get(pos).stream()
+					Set<WFCData.ConnectorType> connections = this.availablePiecesMap.get(pos).stream()
 							.map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
 					
 					if(!connections.isEmpty())
@@ -144,18 +138,18 @@ public final class WFC
 			}
 		}
 		
-		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectorType> connections)
+		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<WFCData.ConnectorType> connections)
 		{
 			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.connections().get(direction), connections)))
 				this.removeConflictingPieces(pos, direction);
 		}
 	}
 	
-	private static double entropy(List<PieceEntry> entries)
+	private static double entropy(List<WFCData.PieceEntry> entries)
 	{
 		int totalWeight = WeightedRandom.getTotalWeight(entries);
 		double entropy = 0;
-		for(PieceEntry entry : entries)
+		for(WFCData.PieceEntry entry : entries)
 		{
 			if(entry.weight().asInt() == 0)
 				continue;
@@ -198,11 +192,6 @@ public final class WFC
 			this.entries.addAll(other.entries);
 			return this;
 		}
-	}
-	
-	public interface ConnectionTester
-	{
-		boolean canConnect(ConnectorType connection, Set<ConnectorType> connections);
 	}
 	
 	public record Dimensions(int xAxisPieces, int yAxisPieces, int zAxisPieces)
@@ -308,140 +297,6 @@ public final class WFC
 					
 					return pos;
 				}
-			};
-		}
-	}
-	
-	public record PieceEntry(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectorType> connections, Weight weight) implements WeightedEntry
-	{
-		@Override
-		public Weight getWeight()
-		{
-			return weight;
-		}
-	}
-	
-	public record ConnectorType(String name)
-	{
-		public static final ConnectorType AIR = new ConnectorType("air"),
-				SOLID = new ConnectorType("solid"),
-				WALL = new ConnectorType("wall"),
-				ROOF_SIDE = new ConnectorType("roof_side"),
-				BRIDGE = new ConnectorType("bridge"),
-				LEDGE_FRONT = new ConnectorType("ledge/front"),
-				LEDGE_LEFT = new ConnectorType("ledge/left"),
-				LEDGE_RIGHT = new ConnectorType("ledge/right"),
-				LEDGE_BACK = new ConnectorType("ledge/back");
-		
-		public static void addCoreConnections(EntriesBuilder builder)
-		{
-			builder.connectSelf(ConnectorType.AIR);
-			builder.connectSelf(ConnectorType.SOLID);
-			builder.connect(ConnectorType.AIR, ConnectorType.WALL);
-			builder.connectSelf(ConnectorType.WALL);
-			builder.connect(ConnectorType.ROOF_SIDE, ConnectorType.WALL);
-			builder.connect(ConnectorType.ROOF_SIDE, ConnectorType.AIR);
-			builder.connectSelf(ConnectorType.BRIDGE);
-			builder.connect(ConnectorType.BRIDGE, ConnectorType.WALL);
-			builder.connect(ConnectorType.LEDGE_FRONT, ConnectorType.AIR);
-			builder.connect(ConnectorType.LEDGE_LEFT, ConnectorType.LEDGE_RIGHT);
-			builder.connectSelf(ConnectorType.LEDGE_BACK);
-			builder.connect(ConnectorType.LEDGE_LEFT, ConnectorType.WALL);
-			builder.connect(ConnectorType.LEDGE_RIGHT, ConnectorType.WALL);
-			builder.connect(ConnectorType.LEDGE_BACK, ConnectorType.WALL);
-		}
-	}
-	
-	public record EntriesData(Collection<PieceEntry> entries, ConnectionTester connectionTester)
-	{
-	}
-	
-	public static final class EntriesBuilder
-	{
-		private final Map<ConnectorType, ImmutableSet.Builder<ConnectorType>> connections = new HashMap<>();
-		private final ImmutableList.Builder<PieceEntry> pieceEntries = ImmutableList.builder();
-		
-		public void connectSelf(ConnectorType type)
-		{
-			this.connect(type, type);
-		}
-		
-		public void connect(ConnectorType type1, ConnectorType type2)
-		{
-			connections.computeIfAbsent(type1, ignored -> ImmutableSet.builder()).add(type2);
-			connections.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
-		}
-		
-		
-		public void add(Function<BlockPos, StructurePiece> constructor, Map<Direction, ConnectorType> connections, int weight)
-		{
-			this.pieceEntries.add(new PieceEntry(constructor, connections, Weight.of(weight)));
-		}
-		
-		public void addSymmetric(Function<BlockPos, StructurePiece> constructor, ConnectorType down, ConnectorType up, ConnectorType side, int weight)
-		{
-			this.add(constructor, Map.of(
-					Direction.DOWN, down,
-					Direction.UP, up,
-					Direction.NORTH, side,
-					Direction.EAST, side,
-					Direction.SOUTH, side,
-					Direction.WEST, side
-			), weight);
-		}
-		
-		public void addAxisSymmetric(BiFunction<BlockPos, Direction.Axis, StructurePiece> constructor,
-									 ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side, int individualWeight)
-		{
-			Map<Direction, ConnectorType> connections = Map.of(
-					Direction.DOWN, down,
-					Direction.UP, up,
-					Direction.NORTH, side,
-					Direction.EAST, front,
-					Direction.SOUTH, side,
-					Direction.WEST, front
-			);
-			this.add(pos -> constructor.apply(pos, Direction.Axis.X), connections, individualWeight);
-			this.add(pos -> constructor.apply(pos, Direction.Axis.Z), rotateConnections(connections, Rotation.CLOCKWISE_90), individualWeight);
-		}
-		
-		public void addRotating(BiFunction<BlockPos, Rotation, StructurePiece> constructor,
-										Map<Direction, ConnectorType> connections, int individualWeight)
-		{
-			for(Rotation rotation : Rotation.values())
-				this.add(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation), individualWeight);
-		}
-		
-		private static Map<Direction, ConnectorType> rotateConnections(Map<Direction, ConnectorType> connections, Rotation rotation)
-		{
-			if(rotation == Rotation.NONE)
-				return connections;
-			
-			return Map.of(
-					Direction.DOWN, connections.get(Direction.DOWN),
-					Direction.UP, connections.get(Direction.UP),
-					rotation.rotate(Direction.NORTH), connections.get(Direction.NORTH),
-					rotation.rotate(Direction.EAST), connections.get(Direction.EAST),
-					rotation.rotate(Direction.SOUTH), connections.get(Direction.SOUTH),
-					rotation.rotate(Direction.WEST), connections.get(Direction.WEST)
-			);
-		}
-		
-		
-		public EntriesData build()
-		{
-			return new EntriesData(this.pieceEntries.build(), this.buildConnectionTester());
-		}
-		
-		private ConnectionTester buildConnectionTester()
-		{
-			Map<ConnectorType, Set<ConnectorType>> map = connections.entrySet().stream()
-					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
-			return (type, otherTypes) -> {
-				Set<ConnectorType> supportedTypes = map.get(type);
-				if(supportedTypes == null)
-					return false;
-				return otherTypes.stream().anyMatch(supportedTypes::contains);
 			};
 		}
 	}

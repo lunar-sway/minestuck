@@ -105,7 +105,7 @@ public final class ProspitStructure
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
 			WFC.Template template = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.ENTRIES_DATA);
-			template.setupFixedEdgeBounds(Direction.UP, Set.of(WFC.ConnectorType.AIR));
+			template.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			
 			WFC.Generator generator = template.initGenerator();
 			generator.collapse(context.random(), (piecePos, pieceConstructor) -> {
@@ -116,30 +116,30 @@ public final class ProspitStructure
 		}
 	}
 	
-	private static final WFC.EntriesData ENTRIES_DATA = Util.make(() -> {
-		WFC.EntriesBuilder builder = new WFC.EntriesBuilder();
+	private static final WFCData.EntriesData ENTRIES_DATA = Util.make(() -> {
+		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder();
 		
-		WFC.ConnectorType.addCoreConnections(builder);
+		WFCData.ConnectorType.addCoreConnections(builder);
 		
-		builder.addSymmetric(pos -> null, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, 10);
-		builder.addSymmetric(SolidPiece::new, WFC.ConnectorType.SOLID, WFC.ConnectorType.SOLID, WFC.ConnectorType.WALL, 10);
-		builder.addSymmetric(PyramidPiece::new, WFC.ConnectorType.SOLID, WFC.ConnectorType.AIR, WFC.ConnectorType.ROOF_SIDE, 2);
-		builder.addAxisSymmetric(BridgePiece::new, WFC.ConnectorType.AIR, WFC.ConnectorType.AIR, WFC.ConnectorType.BRIDGE, WFC.ConnectorType.AIR, 4);
+		builder.addSymmetric(pos -> null, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, 10);
+		builder.addSymmetric(SolidPiece::new, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.WALL, 10);
+		builder.addSymmetric(PyramidPiece::new, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, WFCData.ConnectorType.ROOF_SIDE, 2);
+		builder.addAxisSymmetric(BridgePiece::new, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.BRIDGE, WFCData.ConnectorType.AIR, 4);
 		builder.addRotating(LedgePiece::new, Map.of(
-				Direction.DOWN, WFC.ConnectorType.SOLID,
-				Direction.UP, WFC.ConnectorType.AIR,
-				Direction.NORTH, WFC.ConnectorType.LEDGE_FRONT,
-				Direction.EAST, WFC.ConnectorType.LEDGE_RIGHT,
-				Direction.SOUTH, WFC.ConnectorType.LEDGE_BACK,
-				Direction.WEST, WFC.ConnectorType.LEDGE_LEFT
+				Direction.DOWN, WFCData.ConnectorType.SOLID,
+				Direction.UP, WFCData.ConnectorType.AIR,
+				Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
+				Direction.EAST, WFCData.ConnectorType.LEDGE_RIGHT,
+				Direction.SOUTH, WFCData.ConnectorType.LEDGE_BACK,
+				Direction.WEST, WFCData.ConnectorType.LEDGE_LEFT
 		), 3);
 		builder.addRotating(LedgeCornerPiece::new, Map.of(
-				Direction.DOWN, WFC.ConnectorType.SOLID,
-				Direction.UP, WFC.ConnectorType.AIR,
-				Direction.NORTH, WFC.ConnectorType.LEDGE_FRONT,
-				Direction.EAST, WFC.ConnectorType.LEDGE_RIGHT,
-				Direction.SOUTH, WFC.ConnectorType.LEDGE_LEFT,
-				Direction.WEST, WFC.ConnectorType.LEDGE_FRONT
+				Direction.DOWN, WFCData.ConnectorType.SOLID,
+				Direction.UP, WFCData.ConnectorType.AIR,
+				Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
+				Direction.EAST, WFCData.ConnectorType.LEDGE_RIGHT,
+				Direction.SOUTH, WFCData.ConnectorType.LEDGE_LEFT,
+				Direction.WEST, WFCData.ConnectorType.LEDGE_FRONT
 		), 3);
 		
 		return builder.build();
