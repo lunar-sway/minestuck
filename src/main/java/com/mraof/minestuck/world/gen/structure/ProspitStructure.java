@@ -107,11 +107,13 @@ public final class ProspitStructure
 			
 			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
 			
-			WFC.Template template = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.ENTRIES_DATA);
-			template.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
+			WFC.Template borderTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.BORDER_ENTRIES);
+			WFC.Template centerTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.CENTER_ENTRIES);
+			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
+			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			
 			BlockPos northWestPos = cornerPos;
-			WFC.Generator northWestGenerator = template.cornerGenerator();
+			WFC.Generator northWestGenerator = borderTemplate.cornerGenerator();
 			northWestGenerator.collapse(randomFactory.at(northWestPos), (piecePos, pieceConstructor) -> {
 				StructurePiece piece = pieceConstructor.apply(piecePos.toBlockPos(northWestPos, PIECE_SIZE, PIECE_SIZE));
 				if(piece != null)
@@ -119,20 +121,20 @@ public final class ProspitStructure
 			});
 			
 			BlockPos northEast = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE, 0, 0);
-			WFC.Generator northEastGenerator = template.cornerGenerator();
+			WFC.Generator northEastGenerator = borderTemplate.cornerGenerator();
 			northEastGenerator.collapse(randomFactory.at(northEast), (piecePos, pieceConstructor) -> {});
 			
 			BlockPos southWest = cornerPos.offset(0, 0, WIDTH_IN_PIECES * PIECE_SIZE);
-			WFC.Generator southWestGenerator = template.cornerGenerator();
+			WFC.Generator southWestGenerator = borderTemplate.cornerGenerator();
 			southWestGenerator.collapse(randomFactory.at(southWest), (piecePos, pieceConstructor) -> {});
 			
 			BlockPos southEastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE, 0, WIDTH_IN_PIECES * PIECE_SIZE);
-			WFC.Generator southEastGenerator = template.cornerGenerator();
+			WFC.Generator southEastGenerator = borderTemplate.cornerGenerator();
 			southEastGenerator.collapse(randomFactory.at(southEastPos), (piecePos, pieceConstructor) -> {});
 			
 			
 			BlockPos northPos = cornerPos.offset(PIECE_SIZE, 0, 0);
-			WFC.Generator northGenerator = template.zEdgeGenerator();
+			WFC.Generator northGenerator = borderTemplate.zEdgeGenerator();
 			northGenerator.setupEdgeBounds(Direction.WEST, northWestGenerator);
 			northGenerator.setupEdgeBounds(Direction.EAST, northEastGenerator);
 			northGenerator.collapse(randomFactory.at(northPos), (piecePos, pieceConstructor) -> {
@@ -142,7 +144,7 @@ public final class ProspitStructure
 			});
 			
 			BlockPos westPos = cornerPos.offset(0, 0, PIECE_SIZE);
-			WFC.Generator westGenerator = template.xEdgeGenerator();
+			WFC.Generator westGenerator = borderTemplate.xEdgeGenerator();
 			westGenerator.setupEdgeBounds(Direction.NORTH, northWestGenerator);
 			westGenerator.setupEdgeBounds(Direction.SOUTH, southWestGenerator);
 			westGenerator.collapse(randomFactory.at(westPos), (piecePos, pieceConstructor) -> {
@@ -152,20 +154,20 @@ public final class ProspitStructure
 			});
 			
 			BlockPos southPos = cornerPos.offset(PIECE_SIZE, 0, WIDTH_IN_PIECES * PIECE_SIZE);
-			WFC.Generator southGenerator = template.zEdgeGenerator();
+			WFC.Generator southGenerator = borderTemplate.zEdgeGenerator();
 			southGenerator.setupEdgeBounds(Direction.WEST, southWestGenerator);
 			southGenerator.setupEdgeBounds(Direction.EAST, southEastGenerator);
 			southGenerator.collapse(randomFactory.at(southPos), (piecePos, pieceConstructor) -> {});
 			
 			BlockPos eastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE, 0, PIECE_SIZE);
-			WFC.Generator eastGenerator = template.xEdgeGenerator();
+			WFC.Generator eastGenerator = borderTemplate.xEdgeGenerator();
 			eastGenerator.setupEdgeBounds(Direction.NORTH, northEastGenerator);
 			eastGenerator.setupEdgeBounds(Direction.SOUTH, southEastGenerator);
 			eastGenerator.collapse(randomFactory.at(eastPos), (piecePos, pieceConstructor) -> {});
 			
 			
 			BlockPos centerPos = cornerPos.offset(PIECE_SIZE, 0, PIECE_SIZE);
-			WFC.Generator centerGenerator = template.centerGenerator();
+			WFC.Generator centerGenerator = centerTemplate.centerGenerator();
 			centerGenerator.setupEdgeBounds(Direction.NORTH, northGenerator);
 			centerGenerator.setupEdgeBounds(Direction.WEST, westGenerator);
 			centerGenerator.setupEdgeBounds(Direction.SOUTH, southGenerator);
@@ -178,7 +180,7 @@ public final class ProspitStructure
 		}
 	}
 	
-	private static final WFCData.EntriesData ENTRIES_DATA = Util.make(() -> {
+	private static final WFCData.EntriesData CENTER_ENTRIES = Util.make(() -> {
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder();
 		
 		WFCData.ConnectorType.addCoreConnections(builder);
@@ -206,6 +208,17 @@ public final class ProspitStructure
 		
 		return builder.build();
 	});
+	private static final WFCData.EntriesData BORDER_ENTRIES = Util.make(() -> {
+		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder();
+		
+		WFCData.ConnectorType.addCoreConnections(builder);
+		
+		builder.addSymmetric(pos -> null, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, 10);
+		builder.addSymmetric(SolidPiece::new, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.WALL, 10);
+		builder.addSymmetric(PyramidPiece::new, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, WFCData.ConnectorType.ROOF_SIDE, 2);
+		
+		return builder.build();
+	});
 	
 	
 	public static final Supplier<StructurePieceType.ContextlessType> SOLID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_solid",
@@ -213,7 +226,7 @@ public final class ProspitStructure
 	public static final Supplier<StructurePieceType.ContextlessType> PYRAMID_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_pyramid",
 			() -> PyramidPiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> BRIDGE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_bridge",
-			() -> BridgePiece::new);
+			() -> PyramidPiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> LEDGE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_ledge",
 			() -> LedgePiece::new);
 	public static final Supplier<StructurePieceType.ContextlessType> LEDGE_CORNER_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_ledge_corner",
