@@ -30,62 +30,57 @@ import java.util.stream.Collectors;
  */
 public final class WFC
 {
-	public static final class Generator
+	public static final class Template
 	{
-		private static final Logger LOGGER = LogManager.getLogger();
+		private final Dimensions fullDimensions;
 		
-		private final Dimensions dimensions;
-		private final ConnectionTester connectionTester;
-		private final boolean isTemplate;
+		private final PieceEntryGrid grid;
 		
-		private final Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
-		
-		public static Generator initTemplateColumn(Dimensions dimensions, EntriesData entriesData)
+		public Template(Dimensions dimensions, EntriesData entriesData)
 		{
-			return new Generator(new Dimensions(1, dimensions.yAxisPieces(), 1),
+			this.fullDimensions = dimensions;
+			this.grid = new PieceEntryGrid(new Dimensions(1, dimensions.yAxisPieces(), 1),
 					entriesData.connectionTester(), true, (ignored, list) -> list.addAll(entriesData.entries()));
-		}
-		
-		public static Generator init(Dimensions dimensions, Generator template)
-		{
-			if(dimensions.yAxisPieces() != template.dimensions.yAxisPieces())
-				throw new IllegalArgumentException("Dimensions of template does not match");
-			return new Generator(dimensions, template.connectionTester, false, (pos, list) -> list.addAll(template.availablePiecesMap.get(new PiecePos(0, pos.y(), 0))));
-		}
-		
-		public Generator(Dimensions dimensions, ConnectionTester connectionTester, boolean isTemplate, BiConsumer<PiecePos, List<PieceEntry>> dataInitializer)
-		{
-			this.dimensions = dimensions;
-			this.connectionTester = connectionTester;
-			this.isTemplate = isTemplate;
-			
-			for(PiecePos pos : this.dimensions.iterateAll())
-			{
-				List<PieceEntry> list = new ArrayList<>();
-				dataInitializer.accept(pos, list);
-				this.availablePiecesMap.put(pos, list);
-			}
 		}
 		
 		public void setupFixedEdgeBounds(Direction direction, Set<ConnectorType> connections)
 		{
-			for(PiecePos pos : this.dimensions.iterateEdge(direction))
+			for(PiecePos pos : this.grid.dimensions.iterateEdge(direction))
 			{
-				this.removeConflictsFromConnection(pos, direction, connections, this.isTemplate);
+				this.grid.removeConflictsFromConnection(pos, direction, connections);
 			}
+		}
+		
+		public Generator initGenerator()
+		{
+			return new Generator(this.fullDimensions, this.grid.connectionTester, this::entriesFromTemplate);
+		}
+		
+		private void entriesFromTemplate(PiecePos pos, List<PieceEntry> entryList)
+		{
+			entryList.addAll(this.grid.availablePiecesMap.get(new PiecePos(0, pos.y(), 0)));
+		}
+	}
+	
+	public static final class Generator
+	{
+		private static final Logger LOGGER = LogManager.getLogger();
+		
+		private final PieceEntryGrid grid;
+		
+		Generator(Dimensions dimensions, ConnectionTester connectionTester, BiConsumer<PiecePos, List<PieceEntry>> dataInitializer)
+		{
+			this.grid = new PieceEntryGrid(dimensions, connectionTester, false, dataInitializer);
 		}
 		
 		public void collapse(WorldgenRandom random, BiConsumer<PiecePos, Function<BlockPos, StructurePiece>> piecePlacer)
 		{
-			if(isTemplate)
-				throw new UnsupportedOperationException();
-			
-			Set<PiecePos> piecesToGenerate = new HashSet<>(availablePiecesMap.keySet());
+			Set<PiecePos> piecesToGenerate = new HashSet<>(this.grid.availablePiecesMap.keySet());
 			
 			while(!piecesToGenerate.isEmpty())
 			{
 				MinValueSearchResult<PiecePos> leastEntropyResult = MinValueSearchResult.search(piecesToGenerate,
-						pos -> entropy(this.availablePiecesMap.get(pos)));
+						pos -> entropy(this.grid.availablePiecesMap.get(pos)));
 				
 				if(leastEntropyResult.entries.isEmpty())
 					break;
@@ -93,7 +88,7 @@ public final class WFC
 				PiecePos pos = Util.getRandom(leastEntropyResult.entries, random);
 				piecesToGenerate.remove(pos);
 				
-				List<PieceEntry> availablePieces = this.availablePiecesMap.get(pos);
+				List<PieceEntry> availablePieces = this.grid.availablePiecesMap.get(pos);
 				var chosenEntry = WeightedRandom.getRandomItem(random, availablePieces);
 				if(chosenEntry.isEmpty())
 				{
@@ -104,32 +99,55 @@ public final class WFC
 				piecePlacer.accept(pos, chosenEntry.get().constructor());
 				
 				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
-					removeConflictingPieces(pos, null, false);
+					this.grid.removeConflictingPieces(pos, null);
+			}
+		}
+	}
+	
+	private static final class PieceEntryGrid
+	{
+		final Dimensions dimensions;
+		final ConnectionTester connectionTester;
+		final boolean loopHorizontally;
+		
+		private final Map<PiecePos, List<PieceEntry>> availablePiecesMap = new HashMap<>();
+		
+		public PieceEntryGrid(Dimensions dimensions, ConnectionTester connectionTester, boolean loopHorizontally, BiConsumer<PiecePos, List<PieceEntry>> dataInitializer)
+		{
+			this.dimensions = dimensions;
+			this.connectionTester = connectionTester;
+			this.loopHorizontally = loopHorizontally;
+			
+			for(PiecePos pos : this.dimensions.iterateAll())
+			{
+				List<PieceEntry> list = new ArrayList<>();
+				dataInitializer.accept(pos, list);
+				this.availablePiecesMap.put(pos, list);
 			}
 		}
 		
-		private void removeConflictingPieces(PiecePos pos, @Nullable Direction excluding, boolean loopHorizontalEdges)
+		private void removeConflictingPieces(PiecePos pos, @Nullable Direction excluding)
 		{
 			for(Direction direction : Direction.values())
 			{
 				if(direction == excluding)
 					continue;
 				
-				pos.tryOffset(direction, this.dimensions, loopHorizontalEdges).ifPresent(adjacentPos ->
+				pos.tryOffset(direction, this.dimensions, this.loopHorizontally).ifPresent(adjacentPos ->
 				{
 					Set<ConnectorType> connections = this.availablePiecesMap.get(pos).stream()
 							.map(entry -> entry.connections().get(direction)).collect(Collectors.toSet());
 					
 					if(!connections.isEmpty())
-						this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections, loopHorizontalEdges);
+						this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
 				});
 			}
 		}
 		
-		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectorType> connections, boolean loopHorizontalEdges)
+		private void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<ConnectorType> connections)
 		{
 			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.connections().get(direction), connections)))
-				this.removeConflictingPieces(pos, direction, loopHorizontalEdges);
+				this.removeConflictingPieces(pos, direction);
 		}
 	}
 	
