@@ -252,9 +252,27 @@ public final class WFCData
 		void build(EntryBuilderContext context);
 	}
 	
-	public interface ConnectionTester
+	public static final class ConnectionTester
 	{
-		boolean canConnect(ConnectorType connection, Set<ConnectorType> connections);
+		private final Map<ConnectorType, Set<ConnectorType>> connectionMap;
+		
+		private ConnectionTester(Map<ConnectorType, Set<ConnectorType>> connectionMap)
+		{
+			this.connectionMap = connectionMap;
+		}
+		
+		public boolean canConnect(ConnectorType type, Set<ConnectorType> otherTypes)
+		{
+			Set<ConnectorType> supportedTypes = this.connectionMap.get(type);
+			if(supportedTypes == null)
+				return false;
+			return otherTypes.stream().anyMatch(supportedTypes::contains);
+		}
+		
+		public boolean isKnown(ConnectorType connectorType)
+		{
+			return this.connectionMap.containsKey(connectorType);
+		}
 	}
 	
 	public record EntriesData(Collection<WeightedEntry.Wrapper<PieceEntry>> entries, ConnectionTester connectionTester)
@@ -280,12 +298,7 @@ public final class WFCData
 		{
 			Map<ConnectorType, Set<ConnectorType>> map = this.connections.entrySet().stream()
 					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
-			return (type, otherTypes) -> {
-				Set<ConnectorType> supportedTypes = map.get(type);
-				if(supportedTypes == null)
-					return false;
-				return otherTypes.stream().anyMatch(supportedTypes::contains);
-			};
+			return new ConnectionTester(map);
 		}
 	}
 	
@@ -315,7 +328,15 @@ public final class WFCData
 		
 		public EntriesData build()
 		{
-			return new EntriesData(this.pieceEntries.build(), this.connectionsBuilder.buildConnectionTester());
+			ImmutableList<WeightedEntry.Wrapper<PieceEntry>> entriesList = this.pieceEntries.build();
+			ConnectionTester connectionTester = this.connectionsBuilder.buildConnectionTester();
+			
+			entriesList.stream().flatMap(entry -> entry.getData().connections.values().stream()).forEach(connector -> {
+				if(!connectionTester.isKnown(connector))
+					LOGGER.warn("Found unknown connector: {}", connector.id());
+			});
+			
+			return new EntriesData(entriesList, connectionTester);
 		}
 	}
 }
