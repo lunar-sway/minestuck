@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -156,14 +157,14 @@ public final class WFC
 			}
 		};
 		
-		static PiecePlacer placeAt(BlockPos cornerPos, PieceSize pieceSize, StructureTemplateManager templateManager, StructurePiecesBuilder piecesBuilder)
+		static PiecePlacer placeAt(PositionTransform transform, StructureTemplateManager templateManager, StructurePiecesBuilder piecesBuilder)
 		{
 			return new PiecePlacer()
 			{
 				@Override
 				public void place(PiecePos piecePos, WFCData.PieceEntry entry)
 				{
-					BlockPos pos = piecePos.toBlockPos(cornerPos, pieceSize);
+					BlockPos pos = transform.toBlockPos(piecePos);
 					StructurePiece piece = entry.constructor().apply(templateManager, pos);
 					if(piece != null)
 						piecesBuilder.addPiece(piece);
@@ -172,7 +173,7 @@ public final class WFC
 				@Override
 				public void logNoEntries(PiecePos piecePos)
 				{
-					BlockPos pos = piecePos.toBlockPos(cornerPos, pieceSize);
+					BlockPos pos = transform.toBlockPos(piecePos);
 					WFC.LOGGER.warn("No entries possible at {}!", pos);
 				}
 			};
@@ -375,11 +376,6 @@ public final class WFC
 	
 	public record PiecePos(int x, int y, int z)
 	{
-		public BlockPos toBlockPos(BlockPos cornerPos, PieceSize pieceSize)
-		{
-			return cornerPos.offset(this.x * pieceSize.width(), this.y * pieceSize.height(), this.z * pieceSize.width());
-		}
-		
 		public Optional<PiecePos> tryOffset(Direction direction, Dimensions dimensions, boolean loopHorizontalEdges)
 		{
 			int newX = this.x + direction.getStepX();
@@ -423,6 +419,24 @@ public final class WFC
 					return pos;
 				}
 			};
+		}
+	}
+	
+	public record PositionTransform(BlockPos cornerPos, PieceSize pieceSize)
+	{
+		public BlockPos toBlockPos(PiecePos piecePos)
+		{
+			return this.cornerPos.offset(piecePos.x * this.pieceSize.width(), piecePos.y * this.pieceSize.height(), piecePos.z * this.pieceSize.width());
+		}
+		
+		public RandomSource random(PositionalRandomFactory randomFactory)
+		{
+			return randomFactory.at(this.cornerPos);
+		}
+		
+		public PositionTransform offset(int x, int z)
+		{
+			return new PositionTransform(this.cornerPos.offset(x * this.pieceSize.width(), 0, z * this.pieceSize.width()), this.pieceSize);
 		}
 	}
 }

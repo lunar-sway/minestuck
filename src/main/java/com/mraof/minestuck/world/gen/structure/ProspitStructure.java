@@ -114,47 +114,47 @@ public final class ProspitStructure
 			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			
-			BlockPos northWestPos = cornerPos;
+			WFC.PositionTransform northWestTransform = new WFC.PositionTransform(cornerPos, PIECE_SIZE);
 			WFC.Generator northWestGenerator = borderTemplate.cornerGenerator();
-			northWestGenerator.collapse(randomFactory.at(northWestPos),
-					WFC.PiecePlacer.placeAt(northWestPos, PIECE_SIZE, templateManager, piecesBuilder));
+			northWestGenerator.collapse(northWestTransform.random(randomFactory),
+					WFC.PiecePlacer.placeAt(northWestTransform, templateManager, piecesBuilder));
 			
-			BlockPos northEast = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE.width(), 0, 0);
+			WFC.PositionTransform northEastTransform = northWestTransform.offset(WIDTH_IN_PIECES, 0);
 			WFC.Generator northEastGenerator = borderTemplate.cornerGenerator();
-			northEastGenerator.collapse(randomFactory.at(northEast), WFC.PiecePlacer.EMPTY);
+			northEastGenerator.collapse(northEastTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
 			
-			BlockPos southWest = cornerPos.offset(0, 0, WIDTH_IN_PIECES * PIECE_SIZE.width());
+			WFC.PositionTransform southWestTransform = northWestTransform.offset(0, WIDTH_IN_PIECES);
 			WFC.Generator southWestGenerator = borderTemplate.cornerGenerator();
-			southWestGenerator.collapse(randomFactory.at(southWest), WFC.PiecePlacer.EMPTY);
+			southWestGenerator.collapse(southWestTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
 			
-			BlockPos southEastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE.width(), 0, WIDTH_IN_PIECES * PIECE_SIZE.width());
+			WFC.PositionTransform southEastTransform = northWestTransform.offset(WIDTH_IN_PIECES, WIDTH_IN_PIECES);
 			WFC.Generator southEastGenerator = borderTemplate.cornerGenerator();
-			southEastGenerator.collapse(randomFactory.at(southEastPos), WFC.PiecePlacer.EMPTY);
+			southEastGenerator.collapse(southEastTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
 			
 			
-			BlockPos northPos = cornerPos.offset(PIECE_SIZE.width(), 0, 0);
 			WFC.Generator northGenerator = borderTemplate.zEdgeGenerator(northWestGenerator, northEastGenerator);
-			northGenerator.collapse(randomFactory.at(northPos),
-					WFC.PiecePlacer.placeAt(northPos, PIECE_SIZE, templateManager, piecesBuilder));
+			WFC.PositionTransform northTransform = northWestTransform.offset(1, 0);
+			northGenerator.collapse(northTransform.random(randomFactory),
+					WFC.PiecePlacer.placeAt(northTransform, templateManager, piecesBuilder));
 			
-			BlockPos westPos = cornerPos.offset(0, 0, PIECE_SIZE.width());
 			WFC.Generator westGenerator = borderTemplate.xEdgeGenerator(northWestGenerator, southWestGenerator);
-			westGenerator.collapse(randomFactory.at(westPos),
-					WFC.PiecePlacer.placeAt(westPos, PIECE_SIZE, templateManager, piecesBuilder));
+			WFC.PositionTransform westTransform = northWestTransform.offset(0, 1);
+			westGenerator.collapse(westTransform.random(randomFactory),
+					WFC.PiecePlacer.placeAt(westTransform, templateManager, piecesBuilder));
 			
-			BlockPos southPos = cornerPos.offset(PIECE_SIZE.width(), 0, WIDTH_IN_PIECES * PIECE_SIZE.width());
+			WFC.PositionTransform southTransform = northWestTransform.offset(1, WIDTH_IN_PIECES);
 			WFC.Generator southGenerator = borderTemplate.zEdgeGenerator(southWestGenerator, southEastGenerator);
-			southGenerator.collapse(randomFactory.at(southPos), WFC.PiecePlacer.EMPTY);
+			southGenerator.collapse(southTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
 			
-			BlockPos eastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE.width(), 0, PIECE_SIZE.width());
+			WFC.PositionTransform eastTransform = northWestTransform.offset(WIDTH_IN_PIECES, 1);
 			WFC.Generator eastGenerator = borderTemplate.xEdgeGenerator(northEastGenerator, southEastGenerator);
-			eastGenerator.collapse(randomFactory.at(eastPos), WFC.PiecePlacer.EMPTY);
+			eastGenerator.collapse(eastTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
 			
 			
-			BlockPos centerPos = cornerPos.offset(PIECE_SIZE.width(), 0, PIECE_SIZE.width());
+			WFC.PositionTransform centerTransform = northWestTransform.offset(1, 1);
 			WFC.Generator centerGenerator = centerTemplate.centerGenerator(northGenerator, westGenerator, southGenerator, eastGenerator);
-			centerGenerator.collapse(randomFactory.at(centerPos),
-					WFC.PiecePlacer.placeAt(centerPos, PIECE_SIZE, templateManager, piecesBuilder));
+			centerGenerator.collapse(centerTransform.random(randomFactory),
+					WFC.PiecePlacer.placeAt(centerTransform, templateManager, piecesBuilder));
 		}
 	}
 	
