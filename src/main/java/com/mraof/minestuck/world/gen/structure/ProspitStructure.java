@@ -43,10 +43,10 @@ import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
 @MethodsReturnNonnullByDefault
 public final class ProspitStructure
 {
-	public static final int PIECE_SIZE = 8;
+	public static final WFC.PieceSize PIECE_SIZE = new WFC.PieceSize(8, 8);
 	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 16;
 	public static final WFC.Dimensions WFC_DIMENSIONS = new WFC.Dimensions(WIDTH_IN_PIECES, HEIGHT_IN_PIECES, WIDTH_IN_PIECES);
-	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE * WIDTH_IN_PIECES) / 16;
+	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE.width() * WIDTH_IN_PIECES) / 16;
 	
 	public static void init()
 	{
@@ -118,53 +118,53 @@ public final class ProspitStructure
 			BlockPos northWestPos = cornerPos;
 			WFC.Generator northWestGenerator = borderTemplate.cornerGenerator();
 			northWestGenerator.collapse(randomFactory.at(northWestPos), (piecePos, entry) -> {
-				StructurePiece piece = entry.constructor().apply(templateManager, piecePos.toBlockPos(northWestPos, PIECE_SIZE, PIECE_SIZE));
+				StructurePiece piece = entry.constructor().apply(templateManager, piecePos.toBlockPos(northWestPos, PIECE_SIZE));
 				if(piece != null)
 					piecesBuilder.addPiece(piece);
 			});
 			
-			BlockPos northEast = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE, 0, 0);
+			BlockPos northEast = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE.width(), 0, 0);
 			WFC.Generator northEastGenerator = borderTemplate.cornerGenerator();
 			northEastGenerator.collapse(randomFactory.at(northEast), (piecePos, pieceConstructor) -> {});
 			
-			BlockPos southWest = cornerPos.offset(0, 0, WIDTH_IN_PIECES * PIECE_SIZE);
+			BlockPos southWest = cornerPos.offset(0, 0, WIDTH_IN_PIECES * PIECE_SIZE.width());
 			WFC.Generator southWestGenerator = borderTemplate.cornerGenerator();
 			southWestGenerator.collapse(randomFactory.at(southWest), (piecePos, pieceConstructor) -> {});
 			
-			BlockPos southEastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE, 0, WIDTH_IN_PIECES * PIECE_SIZE);
+			BlockPos southEastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE.width(), 0, WIDTH_IN_PIECES * PIECE_SIZE.width());
 			WFC.Generator southEastGenerator = borderTemplate.cornerGenerator();
 			southEastGenerator.collapse(randomFactory.at(southEastPos), (piecePos, pieceConstructor) -> {});
 			
 			
-			BlockPos northPos = cornerPos.offset(PIECE_SIZE, 0, 0);
+			BlockPos northPos = cornerPos.offset(PIECE_SIZE.width(), 0, 0);
 			WFC.Generator northGenerator = borderTemplate.zEdgeGenerator(northWestGenerator, northEastGenerator);
 			northGenerator.collapse(randomFactory.at(northPos), (piecePos, entry) -> {
-				StructurePiece piece = entry.constructor().apply(templateManager, piecePos.toBlockPos(northPos, PIECE_SIZE, PIECE_SIZE));
+				StructurePiece piece = entry.constructor().apply(templateManager, piecePos.toBlockPos(northPos, PIECE_SIZE));
 				if(piece != null)
 					piecesBuilder.addPiece(piece);
 			});
 			
-			BlockPos westPos = cornerPos.offset(0, 0, PIECE_SIZE);
+			BlockPos westPos = cornerPos.offset(0, 0, PIECE_SIZE.width());
 			WFC.Generator westGenerator = borderTemplate.xEdgeGenerator(northWestGenerator, southWestGenerator);
 			westGenerator.collapse(randomFactory.at(westPos), (piecePos, entry) -> {
-				StructurePiece piece = entry.constructor().apply(templateManager, piecePos.toBlockPos(westPos, PIECE_SIZE, PIECE_SIZE));
+				StructurePiece piece = entry.constructor().apply(templateManager, piecePos.toBlockPos(westPos, PIECE_SIZE));
 				if(piece != null)
 					piecesBuilder.addPiece(piece);
 			});
 			
-			BlockPos southPos = cornerPos.offset(PIECE_SIZE, 0, WIDTH_IN_PIECES * PIECE_SIZE);
+			BlockPos southPos = cornerPos.offset(PIECE_SIZE.width(), 0, WIDTH_IN_PIECES * PIECE_SIZE.width());
 			WFC.Generator southGenerator = borderTemplate.zEdgeGenerator(southWestGenerator, southEastGenerator);
 			southGenerator.collapse(randomFactory.at(southPos), (piecePos, pieceConstructor) -> {});
 			
-			BlockPos eastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE, 0, PIECE_SIZE);
+			BlockPos eastPos = cornerPos.offset(WIDTH_IN_PIECES * PIECE_SIZE.width(), 0, PIECE_SIZE.width());
 			WFC.Generator eastGenerator = borderTemplate.xEdgeGenerator(northEastGenerator, southEastGenerator);
 			eastGenerator.collapse(randomFactory.at(eastPos), (piecePos, pieceConstructor) -> {});
 			
 			
-			BlockPos centerPos = cornerPos.offset(PIECE_SIZE, 0, PIECE_SIZE);
+			BlockPos centerPos = cornerPos.offset(PIECE_SIZE.width(), 0, PIECE_SIZE.width());
 			WFC.Generator centerGenerator = centerTemplate.centerGenerator(northGenerator, westGenerator, southGenerator, eastGenerator);
 			centerGenerator.collapse(randomFactory.at(centerPos), (piecePos, entry) -> {
-				StructurePiece piece = entry.constructor().apply(templateManager, piecePos.toBlockPos(centerPos, PIECE_SIZE, PIECE_SIZE));
+				StructurePiece piece = entry.constructor().apply(templateManager, piecePos.toBlockPos(centerPos, PIECE_SIZE));
 				if(piece != null)
 					piecesBuilder.addPiece(piece);
 			});
@@ -237,7 +237,7 @@ public final class ProspitStructure
 		public SpikePiece(BlockPos bottomCornerPos)
 		{
 			super(SPIKE_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
-					bottomCornerPos.offset(PIECE_SIZE - 1, 2 * PIECE_SIZE - 1, PIECE_SIZE - 1)));
+					bottomCornerPos.offset(7, 15, 7)));
 			setOrientation(Direction.SOUTH);
 		}
 		
@@ -270,7 +270,7 @@ public final class ProspitStructure
 		public LedgePiece(BlockPos bottomCornerPos, Rotation rotation)
 		{
 			super(LEDGE_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
-					bottomCornerPos.offset(PIECE_SIZE - 1, PIECE_SIZE - 1, PIECE_SIZE - 1)));
+					bottomCornerPos.offset(7, 7, 7)));
 			setOrientation(rotation.rotate(Direction.SOUTH));
 		}
 		
@@ -301,7 +301,7 @@ public final class ProspitStructure
 		public LedgeCornerPiece(BlockPos bottomCornerPos, Rotation rotation)
 		{
 			super(LEDGE_CORNER_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
-					bottomCornerPos.offset(PIECE_SIZE - 1, PIECE_SIZE - 1, PIECE_SIZE - 1)));
+					bottomCornerPos.offset(7, 7, 7)));
 			setOrientation(rotation.rotate(Direction.SOUTH));
 		}
 		

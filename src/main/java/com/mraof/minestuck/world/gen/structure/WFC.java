@@ -325,11 +325,14 @@ public final class WFC
 		}
 	}
 	
+	public record PieceSize(int width, int height)
+	{}
+	
 	public record PiecePos(int x, int y, int z)
 	{
-		public BlockPos toBlockPos(BlockPos cornerPos, int pieceWidth, int pieceHeight)
+		public BlockPos toBlockPos(BlockPos cornerPos, PieceSize pieceSize)
 		{
-			return cornerPos.offset(this.x * pieceWidth, this.y * pieceHeight, this.z * pieceWidth);
+			return cornerPos.offset(this.x * pieceSize.width(), this.y * pieceSize.height(), this.z * pieceSize.width());
 		}
 		
 		public Optional<PiecePos> tryOffset(Direction direction, Dimensions dimensions, boolean loopHorizontalEdges)
