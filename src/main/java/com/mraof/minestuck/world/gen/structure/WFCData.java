@@ -24,8 +24,8 @@ import java.util.stream.IntStream;
  */
 public final class WFCData
 {
-	public static PieceEntry symmetricTemplate(ResourceLocation templateId,
-											   ConnectorType down, ConnectorType up, ConnectorType side)
+	public static EntryProvider symmetricTemplate(ResourceLocation templateId,
+												  ConnectorType down, ConnectorType up, ConnectorType side)
 	{
 		return new PieceEntry(templateConstructor(templateId, Rotation.NONE), Map.of(
 				Direction.DOWN, down,
@@ -50,8 +50,8 @@ public final class WFCData
 		));
 	}
 	
-	public static MultiPieceEntry symmetricPillarPieces(Function<BlockPos, StructurePiece> constructor, String name, int height,
-														ConnectorType down, ConnectorType up, List<ConnectorType> sides)
+	public static EntryProvider symmetricPillarPieces(Function<BlockPos, StructurePiece> constructor, String name, int height,
+													  ConnectorType down, ConnectorType up, List<ConnectorType> sides)
 	{
 		if(sides.size() != height)
 			throw new IllegalArgumentException("Number of sides must match height");
@@ -70,8 +70,8 @@ public final class WFCData
 		return new MultiPieceEntry(entriesBuilder.build(), verticalConnections);
 	}
 	
-	public static Collection<PieceEntry> axisSymmetricTemplate(ResourceLocation templateId,
-															   ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side)
+	public static EntryProvider axisSymmetricTemplate(ResourceLocation templateId,
+													  ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side)
 	{
 		Map<Direction, ConnectorType> connections = Map.of(
 				Direction.DOWN, down,
@@ -82,18 +82,18 @@ public final class WFCData
 				Direction.WEST, side
 		);
 		
-		return List.of(
-				new PieceEntry(templateConstructor(templateId, Rotation.NONE), connections),
-				new PieceEntry(templateConstructor(templateId, Rotation.CLOCKWISE_90), rotateConnections(connections, Rotation.CLOCKWISE_90))
-		);
+		PieceEntry zAxisEntry = new PieceEntry(templateConstructor(templateId, Rotation.NONE), connections);
+		PieceEntry xAxisEntry = new PieceEntry(templateConstructor(templateId, Rotation.CLOCKWISE_90), rotateConnections(connections, Rotation.CLOCKWISE_90));
+		return (connectionsBuilder, entriesBuilder) -> entriesBuilder.add(zAxisEntry, xAxisEntry);
 	}
 	
-	public static Collection<PieceEntry> rotatablePiece(BiFunction<BlockPos, Rotation, StructurePiece> constructor,
-														Map<Direction, ConnectorType> connections)
+	public static EntryProvider rotatablePiece(BiFunction<BlockPos, Rotation, StructurePiece> constructor,
+											   Map<Direction, ConnectorType> connections)
 	{
-		return Arrays.stream(Rotation.values())
+		List<PieceEntry> rotatedPieces = Arrays.stream(Rotation.values())
 				.map(rotation -> new PieceEntry((ignored, pos) -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)))
 				.toList();
+		return (connectionsBuilder, entriesBuilder) -> entriesBuilder.add(rotatedPieces);
 	}
 	
 	private static Map<Direction, ConnectorType> rotateConnections(Map<Direction, ConnectorType> connections, Rotation rotation)
@@ -156,14 +156,47 @@ public final class WFCData
 	}
 	
 	public record PieceEntry(BiFunction<StructureTemplateManager, BlockPos, StructurePiece> constructor,
-							 Map<Direction, ConnectorType> connections)
+							 Map<Direction, ConnectorType> connections) implements EntryProvider
 	{
-		public static final PieceEntry EMPTY = symmetricPiece(pos -> null, ConnectorType.AIR, ConnectorType.AIR, ConnectorType.AIR);
+		public static final EntryProvider EMPTY = symmetricPiece(pos -> null, ConnectorType.AIR, ConnectorType.AIR, ConnectorType.AIR);
+		
+		@Override
+		public void build(ConnectionsBuilder connectionsBuilder, WeightedEntriesBuilder entriesBuilder)
+		{
+			entriesBuilder.add(this);
+		}
 		
 	}
 	
-	public record MultiPieceEntry(Collection<PieceEntry> entries, Collection<Pair<ConnectorType, ConnectorType>> connections)
+	public record MultiPieceEntry(Collection<PieceEntry> entries, Collection<Pair<ConnectorType, ConnectorType>> connections) implements EntryProvider
 	{
+		@Override
+		public void build(ConnectionsBuilder connectionsBuilder, WeightedEntriesBuilder entriesBuilder)
+		{
+			this.connections.forEach(pair -> connectionsBuilder.connect(pair.getFirst(), pair.getSecond()));
+			entriesBuilder.add(this.entries);
+		}
+	}
+	
+	public interface WeightedEntriesBuilder
+	{
+		void add(PieceEntry entry);
+		
+		default void add(PieceEntry... entries)
+		{
+			for(PieceEntry entry : entries)
+				this.add(entry);
+		}
+		
+		default void add(Iterable<PieceEntry> entries)
+		{
+			entries.forEach(this::add);
+		}
+	}
+	
+	public interface EntryProvider
+	{
+		void build(ConnectionsBuilder connectionsBuilder, WeightedEntriesBuilder entriesBuilder);
 	}
 	
 	public interface ConnectionTester
@@ -213,23 +246,10 @@ public final class WFCData
 			return this.connectionsBuilder;
 		}
 		
-		
-		public void add(MultiPieceEntry entry, int weight)
+		public void add(EntryProvider provider, int weight)
 		{
-			entry.connections().forEach(pair -> this.connections().connect(pair.getFirst(), pair.getSecond()));
-			this.add(entry.entries(), weight);
+			provider.build(this.connections(), pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)));
 		}
-		
-		public void add(Collection<PieceEntry> entries, int weight)
-		{
-			entries.forEach(pieceEntry -> this.add(pieceEntry, weight));
-		}
-		
-		public void add(PieceEntry pieceEntry, int weight)
-		{
-			this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight));
-		}
-		
 		
 		public EntriesData build()
 		{
