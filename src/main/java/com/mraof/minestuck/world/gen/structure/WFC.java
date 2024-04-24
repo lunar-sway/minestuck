@@ -352,6 +352,19 @@ public final class WFC
 					&& 0 <= z && z < this.zAxisPieces();
 		}
 		
+		public boolean isOnEdge(PiecePos piecePos, Direction edge)
+		{
+			return switch(edge)
+			{
+				case DOWN -> piecePos.y() == 0;
+				case UP -> piecePos.y() == this.yAxisPieces() - 1;
+				case NORTH -> piecePos.z() == 0;
+				case SOUTH -> piecePos.z() == this.zAxisPieces() - 1;
+				case WEST -> piecePos.x() == 0;
+				case EAST -> piecePos.x() == this.xAxisPieces() - 1;
+			};
+		}
+		
 		public int loopX(int x)
 		{
 			if(x < 0)

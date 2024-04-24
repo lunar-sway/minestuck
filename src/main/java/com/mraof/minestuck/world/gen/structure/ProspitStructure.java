@@ -3,32 +3,21 @@ package com.mraof.minestuck.world.gen.structure;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureManager;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -118,8 +107,7 @@ public final class ProspitStructure
 	
 	public static final WFCData.EntryProvider SOLID = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/solid"));
 	public static final WFCData.EntryProvider PYRAMID_ROOF = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/pyramid_roof"));
-	public static final WFCData.EntryProvider SPIKE = WFCData.symmetricPillarPieces(SpikePiece::new, "spike", 2,
-			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, List.of(WFCData.ConnectorType.ROOF_SIDE, WFCData.ConnectorType.AIR));
+	public static final WFCData.EntryProvider SPIKE = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/spike"));
 	public static final WFCData.EntryProvider BRIDGE = WFCData.TemplateEntry.axisSymmetric(Minestuck.id("prospit/bridge"));
 	public static final WFCData.EntryProvider LEDGE = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/ledge"));
 	public static final WFCData.EntryProvider LEDGE_CORNER = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/ledge_corner"));
@@ -153,42 +141,5 @@ public final class ProspitStructure
 		builder.add(SPIKE, 1);
 		
 		return builder.build();
-	}
-	
-	
-	public static final Supplier<StructurePieceType.ContextlessType> SPIKE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_spike",
-			() -> SpikePiece::new);
-	
-	public static final class SpikePiece extends ImprovedStructurePiece
-	{
-		public SpikePiece(BlockPos bottomCornerPos)
-		{
-			super(SPIKE_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
-					bottomCornerPos.offset(7, 15, 7)));
-			setOrientation(Direction.SOUTH);
-		}
-		
-		public SpikePiece(CompoundTag tag)
-		{
-			super(SPIKE_PIECE_TYPE.get(), tag);
-		}
-		
-		@Override
-		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag)
-		{
-		}
-		
-		@Override
-		public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
-		{
-			generateBox(level, box, 0, 0, 0, 7, 1, 7,
-					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
-			generateBox(level, box, 1, 2, 1, 6, 4, 6,
-					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
-			generateBox(level, box, 2, 5, 2, 5, 8, 5,
-					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
-			generateBox(level, box, 3, 9, 3, 4, 13, 4,
-					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
-		}
 	}
 }
