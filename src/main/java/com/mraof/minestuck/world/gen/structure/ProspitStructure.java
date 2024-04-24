@@ -46,6 +46,7 @@ public final class ProspitStructure
 	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 16;
 	public static final WFC.Dimensions WFC_DIMENSIONS = new WFC.Dimensions(WIDTH_IN_PIECES, HEIGHT_IN_PIECES, WIDTH_IN_PIECES);
 	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE.width() * WIDTH_IN_PIECES) / 16;
+	public static final int BOTTOM_Y = 0;
 	
 	public static void init()
 	{
@@ -107,14 +108,13 @@ public final class ProspitStructure
 			StructureTemplateManager templateManager = context.structureTemplateManager();
 			PositionalRandomFactory randomFactory = RandomSource.create(context.seed()).forkPositional().fromHashOf(Minestuck.id("prospit")).forkPositional();
 			
-			BlockPos cornerPos = context.chunkPos().getWorldPosition().offset(-(WIDTH_IN_CHUNKS * 8), 0, -(WIDTH_IN_CHUNKS * 8));
-			
 			WFC.Template borderTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.BORDER_ENTRIES);
 			WFC.Template centerTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.CENTER_ENTRIES);
 			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			
-			WFC.PositionTransform northWestTransform = new WFC.PositionTransform(cornerPos, PIECE_SIZE);
+			WFC.PositionTransform northWestTransform = new WFC.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE)
+					.offset(-WIDTH_IN_PIECES / 2, -WIDTH_IN_PIECES / 2);
 			WFC.Generator northWestGenerator = borderTemplate.cornerGenerator();
 			northWestGenerator.collapse(northWestTransform.random(randomFactory),
 					WFC.PiecePlacer.placeAt(northWestTransform, templateManager, piecesBuilder));
