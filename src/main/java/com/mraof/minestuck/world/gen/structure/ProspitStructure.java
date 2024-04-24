@@ -14,7 +14,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
@@ -30,7 +29,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -118,30 +116,13 @@ public final class ProspitStructure
 		}
 	}
 	
-	public static final WFCData.EntryProvider SOLID = WFCData.symmetricTemplate(Minestuck.id("prospit/solid"),
-			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.WALL);
-	public static final WFCData.EntryProvider PYRAMID_ROOF = WFCData.symmetricTemplate(Minestuck.id("prospit/pyramid_roof"),
-			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, WFCData.ConnectorType.ROOF_SIDE);
+	public static final WFCData.EntryProvider SOLID = WFCData.symmetricTemplate(Minestuck.id("prospit/solid"));
+	public static final WFCData.EntryProvider PYRAMID_ROOF = WFCData.symmetricTemplate(Minestuck.id("prospit/pyramid_roof"));
 	public static final WFCData.EntryProvider SPIKE = WFCData.symmetricPillarPieces(SpikePiece::new, "spike", 2,
 			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, List.of(WFCData.ConnectorType.ROOF_SIDE, WFCData.ConnectorType.AIR));
-	public static final WFCData.EntryProvider BRIDGE = WFCData.axisSymmetricTemplate(Minestuck.id("prospit/bridge"),
-			WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.BRIDGE, WFCData.ConnectorType.AIR);
-	public static final WFCData.EntryProvider LEDGE = WFCData.rotatablePiece(LedgePiece::new, Map.of(
-			Direction.DOWN, WFCData.ConnectorType.SOLID,
-			Direction.UP, WFCData.ConnectorType.AIR,
-			Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
-			Direction.EAST, WFCData.ConnectorType.LEDGE_RIGHT,
-			Direction.SOUTH, WFCData.ConnectorType.LEDGE_BACK,
-			Direction.WEST, WFCData.ConnectorType.LEDGE_LEFT
-	));
-	public static final WFCData.EntryProvider LEDGE_CORNER = WFCData.rotatablePiece(LedgeCornerPiece::new, Map.of(
-			Direction.DOWN, WFCData.ConnectorType.SOLID,
-			Direction.UP, WFCData.ConnectorType.AIR,
-			Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
-			Direction.EAST, WFCData.ConnectorType.LEDGE_RIGHT,
-			Direction.SOUTH, WFCData.ConnectorType.LEDGE_LEFT,
-			Direction.WEST, WFCData.ConnectorType.LEDGE_FRONT
-	));
+	public static final WFCData.EntryProvider BRIDGE = WFCData.axisSymmetricTemplate(Minestuck.id("prospit/bridge"));
+	public static final WFCData.EntryProvider LEDGE = WFCData.rotatableTemplate(Minestuck.id("prospit/ledge"));
+	public static final WFCData.EntryProvider LEDGE_CORNER = WFCData.rotatableTemplate(Minestuck.id("prospit/ledge_corner"));
 	
 	private static WFCData.EntriesData buildCenterEntries(StructureTemplateManager templateManager)
 	{
@@ -177,10 +158,6 @@ public final class ProspitStructure
 	
 	public static final Supplier<StructurePieceType.ContextlessType> SPIKE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_spike",
 			() -> SpikePiece::new);
-	public static final Supplier<StructurePieceType.ContextlessType> LEDGE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_ledge",
-			() -> LedgePiece::new);
-	public static final Supplier<StructurePieceType.ContextlessType> LEDGE_CORNER_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_ledge_corner",
-			() -> LedgeCornerPiece::new);
 	
 	public static final class SpikePiece extends ImprovedStructurePiece
 	{
@@ -212,72 +189,6 @@ public final class ProspitStructure
 					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
 			generateBox(level, box, 3, 9, 3, 4, 13, 4,
 					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
-		}
-	}
-	
-	public static final class LedgePiece extends ImprovedStructurePiece
-	{
-		public LedgePiece(BlockPos bottomCornerPos, Rotation rotation)
-		{
-			super(LEDGE_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
-					bottomCornerPos.offset(7, 7, 7)));
-			setOrientation(rotation.rotate(Direction.SOUTH));
-		}
-		
-		public LedgePiece(CompoundTag tag)
-		{
-			super(LEDGE_PIECE_TYPE.get(), tag);
-		}
-		
-		@Override
-		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag)
-		{
-		}
-		
-		@Override
-		public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
-		{
-			generateBox(level, box, 0, 0, 0, 7, 0, 7,
-					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 0, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 3, 1, 0, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 4, 1, 0, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 7, 1, 0, box);
-		}
-	}
-	
-	public static final class LedgeCornerPiece extends ImprovedStructurePiece
-	{
-		public LedgeCornerPiece(BlockPos bottomCornerPos, Rotation rotation)
-		{
-			super(LEDGE_CORNER_PIECE_TYPE.get(), 0, BoundingBox.fromCorners(bottomCornerPos,
-					bottomCornerPos.offset(7, 7, 7)));
-			setOrientation(rotation.rotate(Direction.SOUTH));
-		}
-		
-		public LedgeCornerPiece(CompoundTag tag)
-		{
-			super(LEDGE_CORNER_PIECE_TYPE.get(), tag);
-		}
-		
-		@Override
-		protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag)
-		{
-		}
-		
-		@Override
-		public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
-		{
-			generateBox(level, box, 0, 0, 0, 7, 0, 7,
-					Blocks.GOLD_BLOCK.defaultBlockState(), Blocks.GOLD_BLOCK.defaultBlockState(), false);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 7, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 4, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 3, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 1, 0, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 0, 2, 0, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 3, 1, 0, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 4, 1, 0, box);
-			placeBlock(level, Blocks.GOLD_BLOCK.defaultBlockState(), 7, 1, 0, box);
 		}
 	}
 }

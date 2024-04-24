@@ -10,16 +10,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -30,31 +33,9 @@ public final class WFCData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static EntryProvider symmetricTemplate(ResourceLocation templateId,
-												  ConnectorType down, ConnectorType up, ConnectorType side)
+	public static EntryProvider symmetricTemplate(ResourceLocation templateId)
 	{
-		return context -> {
-			StructureTemplate template = context.templateManager().getOrCreate(templateId);
-			
-			Vec3i size = template.getSize();
-			WFC.PieceSize pieceSize = context.pieceSize();
-			if(size.getX() != pieceSize.width() || size.getY() != pieceSize.height() || size.getZ() != pieceSize.width())
-			{
-				LOGGER.error("Template {} of size {} does not have the right size.", templateId, size);
-				return;
-			}
-			
-			Map<Direction, ConnectorType> connectors = Map.of(
-					Direction.DOWN, down,
-					Direction.UP, up,
-					Direction.NORTH, side,
-					Direction.EAST, side,
-					Direction.SOUTH, side,
-					Direction.WEST, side
-			);
-			
-			context.entriesBuilder().add(new PieceEntry(templateConstructor(templateId, template, Rotation.NONE, context.templateManager()), connectors));
-		};
+		return template(templateId, Rotation.NONE);
 	}
 	
 	public static PieceEntry symmetricPiece(Function<BlockPos, StructurePiece> constructor,
@@ -90,44 +71,33 @@ public final class WFCData
 		return new MultiPieceEntry(entriesBuilder.build(), verticalConnections);
 	}
 	
-	public static EntryProvider axisSymmetricTemplate(ResourceLocation templateId,
-													  ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side)
+	public static EntryProvider axisSymmetricTemplate(ResourceLocation templateId)
+	{
+		return template(templateId, Rotation.NONE, Rotation.CLOCKWISE_90);
+	}
+	
+	public static EntryProvider rotatableTemplate(ResourceLocation templateId)
+	{
+		return template(templateId, Rotation.values());
+	}
+	
+	public static EntryProvider template(ResourceLocation templateId, Rotation... rotations)
 	{
 		return context -> {
 			StructureTemplate template = context.templateManager().getOrCreate(templateId);
 			
-			Vec3i size = template.getSize();
-			WFC.PieceSize pieceSize = context.pieceSize();
-			if(size.getX() != pieceSize.width() || size.getY() != pieceSize.height() || size.getZ() != pieceSize.width())
-			{
-				LOGGER.error("Template {} of size {} does not have the right size.", templateId, size);
-				return;
-			}
-			Map<Direction, ConnectorType> connections = Map.of(
-					Direction.DOWN, down,
-					Direction.UP, up,
-					Direction.NORTH, front,
-					Direction.EAST, side,
-					Direction.SOUTH, front,
-					Direction.WEST, side
-			);
-			
-			PieceEntry zAxisEntry = new PieceEntry(templateConstructor(templateId, template, Rotation.NONE, context.templateManager()), connections);
-			PieceEntry xAxisEntry = new PieceEntry(templateConstructor(templateId, template, Rotation.CLOCKWISE_90, context.templateManager()), rotateConnections(connections, Rotation.CLOCKWISE_90));
-			context.entriesBuilder().add(zAxisEntry, xAxisEntry);
+			loadTemplateConnectors(templateId, template, context.pieceSize()).ifPresent(connectors -> {
+				for(Rotation rotation : rotations)
+				{
+					Function<BlockPos, StructurePiece> constructor = templateConstructor(templateId, template, rotation, context.templateManager());
+					PieceEntry entry = new PieceEntry(constructor, rotateConnectors(connectors, rotation));
+					context.entriesBuilder().add(entry);
+				}
+			});
 		};
 	}
 	
-	public static EntryProvider rotatablePiece(BiFunction<BlockPos, Rotation, StructurePiece> constructor,
-											   Map<Direction, ConnectorType> connections)
-	{
-		List<PieceEntry> rotatedPieces = Arrays.stream(Rotation.values())
-				.map(rotation -> new PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)))
-				.toList();
-		return context -> context.entriesBuilder().add(rotatedPieces);
-	}
-	
-	private static Map<Direction, ConnectorType> rotateConnections(Map<Direction, ConnectorType> connections, Rotation rotation)
+	private static Map<Direction, ConnectorType> rotateConnectors(Map<Direction, ConnectorType> connections, Rotation rotation)
 	{
 		if(rotation == Rotation.NONE)
 			return connections;
@@ -140,6 +110,54 @@ public final class WFCData
 				rotation.rotate(Direction.SOUTH), connections.get(Direction.SOUTH),
 				rotation.rotate(Direction.WEST), connections.get(Direction.WEST)
 		);
+	}
+	
+	private static Optional<Map<Direction, ConnectorType>> loadTemplateConnectors(ResourceLocation templateId, StructureTemplate template, WFC.PieceSize pieceSize)
+	{
+		Vec3i size = template.getSize();
+		if(size.getX() != pieceSize.width() || size.getY() != pieceSize.height() || size.getZ() != pieceSize.width())
+		{
+			LOGGER.error("Template {} of size {} does not have the right size.", templateId, size);
+			return Optional.empty();
+		}
+		
+		Map<Direction, ConnectorType> connectors = new HashMap<>();
+		
+		for(StructureTemplate.StructureBlockInfo blockInfo : template.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, false))
+		{
+			if(blockInfo.nbt() == null)
+			{
+				LOGGER.warn("Jigsaw block is missing data in template {} at {}", templateId, blockInfo.pos());
+				continue;
+			}
+			String connectorName = blockInfo.nbt().getString(JigsawBlockEntity.NAME);
+			ResourceLocation connectorId = ResourceLocation.tryParse(connectorName);
+			if(connectorId == null)
+			{
+				LOGGER.error("Connector name \"{}\" in template {} is not a valid id", connectorName, templateId);
+				continue;
+			}
+			
+			ConnectorType connectorType = new ConnectorType(connectorId);
+			Direction direction = blockInfo.state().getValue(JigsawBlock.ORIENTATION).front();
+			
+			if(connectors.containsKey(direction))
+			{
+				LOGGER.error("Template {} has multiple jigsaws for the same side ({})", templateId, direction);
+				return Optional.empty();
+			}
+			
+			connectors.put(direction, connectorType);
+		}
+		
+		List<Direction> missingDirections = Arrays.stream(Direction.values()).filter(key -> !connectors.containsKey(key)).toList();
+		if(!missingDirections.isEmpty())
+		{
+			LOGGER.error("Template {} is missing connector type for the following sides: {}", templateId, missingDirections);
+			return Optional.empty();
+		}
+		
+		return Optional.of(Map.copyOf(connectors));
 	}
 	
 	private static Function<BlockPos, StructurePiece> templateConstructor(ResourceLocation templateId, StructureTemplate template,
