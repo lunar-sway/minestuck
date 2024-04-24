@@ -7,6 +7,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +26,8 @@ import java.util.stream.Collectors;
  */
 public final class WFC
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final class Template
 	{
 		private final Dimensions fullDimensions;
@@ -87,8 +92,6 @@ public final class WFC
 	
 	public static final class Generator
 	{
-		private static final Logger LOGGER = LogManager.getLogger();
-		
 		private final PieceEntryGrid grid;
 		
 		Generator(Dimensions dimensions, WFCData.ConnectionTester connectionTester, BiConsumer<PiecePos,
@@ -107,7 +110,7 @@ public final class WFC
 			}
 		}
 		
-		public void collapse(RandomSource random, BiConsumer<PiecePos, WFCData.PieceEntry> piecePlacer)
+		public void collapse(RandomSource random, PiecePlacer piecePlacer)
 		{
 			Set<PiecePos> piecesToGenerate = new HashSet<>(this.grid.availablePiecesMap.keySet());
 			
@@ -126,16 +129,58 @@ public final class WFC
 				var chosenEntry = WeightedRandom.getRandomItem(random, availablePieces);
 				if(chosenEntry.isEmpty())
 				{
-					LOGGER.warn("No entries possible at piece pos {}!", pos);
+					piecePlacer.logNoEntries(pos);
 					continue;
 				}
 				
-				piecePlacer.accept(pos, chosenEntry.get().getData());
+				piecePlacer.place(pos, chosenEntry.get().getData());
 				
 				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
 					this.grid.removeConflictingPieces(pos, null);
 			}
 		}
+	}
+	
+	public interface PiecePlacer
+	{
+		PiecePlacer EMPTY = new PiecePlacer()
+		{
+			@Override
+			public void place(PiecePos piecePos, WFCData.PieceEntry entry)
+			{
+			}
+			
+			@Override
+			public void logNoEntries(PiecePos piecePos)
+			{
+			}
+		};
+		
+		static PiecePlacer placeAt(BlockPos cornerPos, PieceSize pieceSize, StructureTemplateManager templateManager, StructurePiecesBuilder piecesBuilder)
+		{
+			return new PiecePlacer()
+			{
+				@Override
+				public void place(PiecePos piecePos, WFCData.PieceEntry entry)
+				{
+					BlockPos pos = piecePos.toBlockPos(cornerPos, pieceSize);
+					StructurePiece piece = entry.constructor().apply(templateManager, pos);
+					if(piece != null)
+						piecesBuilder.addPiece(piece);
+				}
+				
+				@Override
+				public void logNoEntries(PiecePos piecePos)
+				{
+					BlockPos pos = piecePos.toBlockPos(cornerPos, pieceSize);
+					WFC.LOGGER.warn("No entries possible at {}!", pos);
+				}
+			};
+		}
+		
+		void place(PiecePos piecePos, WFCData.PieceEntry entry);
+		
+		void logNoEntries(PiecePos piecePos);
 	}
 	
 	private static final class PieceEntryGrid
