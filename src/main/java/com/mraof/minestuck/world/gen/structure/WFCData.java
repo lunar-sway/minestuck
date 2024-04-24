@@ -140,7 +140,7 @@ public final class WFCData
 				LEDGE_RIGHT = new ConnectorType("ledge/right"),
 				LEDGE_BACK = new ConnectorType("ledge/back");
 		
-		public static void addCoreConnections(EntriesBuilder builder)
+		public static void addCoreConnections(ConnectionsBuilder builder)
 		{
 			builder.connectSelf(ConnectorType.AIR);
 			builder.connectSelf(ConnectorType.SOLID);
@@ -191,10 +191,9 @@ public final class WFCData
 	{
 	}
 	
-	public static final class EntriesBuilder
+	public static final class ConnectionsBuilder
 	{
 		private final Map<ConnectorType, ImmutableSet.Builder<ConnectorType>> connections = new HashMap<>();
-		private final ImmutableList.Builder<WeightedEntry.Wrapper<PieceEntry>> pieceEntries = ImmutableList.builder();
 		
 		public void connectSelf(ConnectorType type)
 		{
@@ -207,10 +206,33 @@ public final class WFCData
 			connections.computeIfAbsent(type2, ignored -> ImmutableSet.builder()).add(type1);
 		}
 		
+		private ConnectionTester buildConnectionTester()
+		{
+			Map<ConnectorType, Set<ConnectorType>> map = this.connections.entrySet().stream()
+					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
+			return (type, otherTypes) -> {
+				Set<ConnectorType> supportedTypes = map.get(type);
+				if(supportedTypes == null)
+					return false;
+				return otherTypes.stream().anyMatch(supportedTypes::contains);
+			};
+		}
+	}
+	
+	public static final class EntriesBuilder
+	{
+		private final ConnectionsBuilder connectionsBuilder = new ConnectionsBuilder();
+		private final ImmutableList.Builder<WeightedEntry.Wrapper<PieceEntry>> pieceEntries = ImmutableList.builder();
+		
+		public ConnectionsBuilder connections()
+		{
+			return this.connectionsBuilder;
+		}
+		
 		
 		public void add(MultiPieceEntry entry, int weight)
 		{
-			entry.connections().forEach(pair -> this.connect(pair.getFirst(), pair.getSecond()));
+			entry.connections().forEach(pair -> this.connections().connect(pair.getFirst(), pair.getSecond()));
 			this.add(entry.entries(), weight);
 		}
 		
@@ -227,19 +249,7 @@ public final class WFCData
 		
 		public EntriesData build()
 		{
-			return new EntriesData(this.pieceEntries.build(), this.buildConnectionTester());
-		}
-		
-		private ConnectionTester buildConnectionTester()
-		{
-			Map<ConnectorType, Set<ConnectorType>> map = connections.entrySet().stream()
-					.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> entry.getValue().build()));
-			return (type, otherTypes) -> {
-				Set<ConnectorType> supportedTypes = map.get(type);
-				if(supportedTypes == null)
-					return false;
-				return otherTypes.stream().anyMatch(supportedTypes::contains);
-			};
+			return new EntriesData(this.pieceEntries.build(), this.connectionsBuilder.buildConnectionTester());
 		}
 	}
 }

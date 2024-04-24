@@ -196,7 +196,7 @@ public final class ProspitStructure
 	private static final WFCData.EntriesData CENTER_ENTRIES = Util.make(() -> {
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder();
 		
-		WFCData.ConnectorType.addCoreConnections(builder);
+		WFCData.ConnectorType.addCoreConnections(builder.connections());
 		
 		builder.add(WFCData.PieceEntry.EMPTY, 30);
 		builder.add(SOLID, 10);
@@ -211,7 +211,7 @@ public final class ProspitStructure
 	private static final WFCData.EntriesData BORDER_ENTRIES = Util.make(() -> {
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder();
 		
-		WFCData.ConnectorType.addCoreConnections(builder);
+		WFCData.ConnectorType.addCoreConnections(builder.connections());
 		
 		builder.add(WFCData.PieceEntry.EMPTY, 10);
 		builder.add(SOLID, 10);
