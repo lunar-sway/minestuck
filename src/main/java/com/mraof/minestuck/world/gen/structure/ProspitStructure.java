@@ -116,13 +116,13 @@ public final class ProspitStructure
 		}
 	}
 	
-	public static final WFCData.EntryProvider SOLID = WFCData.symmetricTemplate(Minestuck.id("prospit/solid"));
-	public static final WFCData.EntryProvider PYRAMID_ROOF = WFCData.symmetricTemplate(Minestuck.id("prospit/pyramid_roof"));
+	public static final WFCData.EntryProvider SOLID = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/solid"));
+	public static final WFCData.EntryProvider PYRAMID_ROOF = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/pyramid_roof"));
 	public static final WFCData.EntryProvider SPIKE = WFCData.symmetricPillarPieces(SpikePiece::new, "spike", 2,
 			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, List.of(WFCData.ConnectorType.ROOF_SIDE, WFCData.ConnectorType.AIR));
-	public static final WFCData.EntryProvider BRIDGE = WFCData.axisSymmetricTemplate(Minestuck.id("prospit/bridge"));
-	public static final WFCData.EntryProvider LEDGE = WFCData.rotatableTemplate(Minestuck.id("prospit/ledge"));
-	public static final WFCData.EntryProvider LEDGE_CORNER = WFCData.rotatableTemplate(Minestuck.id("prospit/ledge_corner"));
+	public static final WFCData.EntryProvider BRIDGE = WFCData.TemplateEntry.axisSymmetric(Minestuck.id("prospit/bridge"));
+	public static final WFCData.EntryProvider LEDGE = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/ledge"));
+	public static final WFCData.EntryProvider LEDGE_CORNER = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/ledge_corner"));
 	
 	private static WFCData.EntriesData buildCenterEntries(StructureTemplateManager templateManager)
 	{
