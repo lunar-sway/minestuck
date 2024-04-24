@@ -168,15 +168,15 @@ public final class ProspitStructure
 		}
 	}
 	
-	public static final WFCData.PieceEntry SOLID = WFCData.PieceEntry.symmetric(Minestuck.id("prospit/solid"),
+	public static final WFCData.PieceEntry SOLID = WFCData.symmetricTemplate(Minestuck.id("prospit/solid"),
 			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.SOLID, WFCData.ConnectorType.WALL);
-	public static final WFCData.PieceEntry PYRAMID_ROOF = WFCData.PieceEntry.symmetric(Minestuck.id("prospit/pyramid_roof"),
+	public static final WFCData.PieceEntry PYRAMID_ROOF = WFCData.symmetricTemplate(Minestuck.id("prospit/pyramid_roof"),
 			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, WFCData.ConnectorType.ROOF_SIDE);
-	public static final WFCData.MultiPieceEntry SPIKE = WFCData.MultiPieceEntry.symmetricPillar(SpikePiece::new, "spike", 2,
+	public static final WFCData.MultiPieceEntry SPIKE = WFCData.symmetricPillarPieces(SpikePiece::new, "spike", 2,
 			WFCData.ConnectorType.SOLID, WFCData.ConnectorType.AIR, List.of(WFCData.ConnectorType.ROOF_SIDE, WFCData.ConnectorType.AIR));
-	public static final Collection<WFCData.PieceEntry> BRIDGE = WFCData.PieceEntry.axisSymmetric(Minestuck.id("prospit/bridge"),
+	public static final Collection<WFCData.PieceEntry> BRIDGE = WFCData.axisSymmetricTemplate(Minestuck.id("prospit/bridge"),
 			WFCData.ConnectorType.AIR, WFCData.ConnectorType.AIR, WFCData.ConnectorType.BRIDGE, WFCData.ConnectorType.AIR);
-	public static final Collection<WFCData.PieceEntry> LEDGE = WFCData.PieceEntry.rotatable(LedgePiece::new, Map.of(
+	public static final Collection<WFCData.PieceEntry> LEDGE = WFCData.rotatablePiece(LedgePiece::new, Map.of(
 			Direction.DOWN, WFCData.ConnectorType.SOLID,
 			Direction.UP, WFCData.ConnectorType.AIR,
 			Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
@@ -184,7 +184,7 @@ public final class ProspitStructure
 			Direction.SOUTH, WFCData.ConnectorType.LEDGE_BACK,
 			Direction.WEST, WFCData.ConnectorType.LEDGE_LEFT
 	));
-	public static final Collection<WFCData.PieceEntry> LEDGE_CORNER = WFCData.PieceEntry.rotatable(LedgeCornerPiece::new, Map.of(
+	public static final Collection<WFCData.PieceEntry> LEDGE_CORNER = WFCData.rotatablePiece(LedgeCornerPiece::new, Map.of(
 			Direction.DOWN, WFCData.ConnectorType.SOLID,
 			Direction.UP, WFCData.ConnectorType.AIR,
 			Direction.NORTH, WFCData.ConnectorType.LEDGE_FRONT,
