@@ -113,48 +113,9 @@ public final class ProspitStructure
 			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			
-			WFC.PositionTransform northWestTransform = new WFC.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE)
-					.offset(-WIDTH_IN_PIECES / 2, -WIDTH_IN_PIECES / 2);
-			WFC.Generator northWestGenerator = borderTemplate.cornerGenerator();
-			northWestGenerator.collapse(northWestTransform.random(randomFactory),
-					WFC.PiecePlacer.placeAt(northWestTransform, templateManager, piecesBuilder));
+			WFC.PositionTransform middleTransform = new WFC.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
 			
-			WFC.PositionTransform northEastTransform = northWestTransform.offset(WIDTH_IN_PIECES, 0);
-			WFC.Generator northEastGenerator = borderTemplate.cornerGenerator();
-			northEastGenerator.collapse(northEastTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
-			
-			WFC.PositionTransform southWestTransform = northWestTransform.offset(0, WIDTH_IN_PIECES);
-			WFC.Generator southWestGenerator = borderTemplate.cornerGenerator();
-			southWestGenerator.collapse(southWestTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
-			
-			WFC.PositionTransform southEastTransform = northWestTransform.offset(WIDTH_IN_PIECES, WIDTH_IN_PIECES);
-			WFC.Generator southEastGenerator = borderTemplate.cornerGenerator();
-			southEastGenerator.collapse(southEastTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
-			
-			
-			WFC.Generator northGenerator = borderTemplate.zEdgeGenerator(northWestGenerator, northEastGenerator);
-			WFC.PositionTransform northTransform = northWestTransform.offset(1, 0);
-			northGenerator.collapse(northTransform.random(randomFactory),
-					WFC.PiecePlacer.placeAt(northTransform, templateManager, piecesBuilder));
-			
-			WFC.Generator westGenerator = borderTemplate.xEdgeGenerator(northWestGenerator, southWestGenerator);
-			WFC.PositionTransform westTransform = northWestTransform.offset(0, 1);
-			westGenerator.collapse(westTransform.random(randomFactory),
-					WFC.PiecePlacer.placeAt(westTransform, templateManager, piecesBuilder));
-			
-			WFC.PositionTransform southTransform = northWestTransform.offset(1, WIDTH_IN_PIECES);
-			WFC.Generator southGenerator = borderTemplate.zEdgeGenerator(southWestGenerator, southEastGenerator);
-			southGenerator.collapse(southTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
-			
-			WFC.PositionTransform eastTransform = northWestTransform.offset(WIDTH_IN_PIECES, 1);
-			WFC.Generator eastGenerator = borderTemplate.xEdgeGenerator(northEastGenerator, southEastGenerator);
-			eastGenerator.collapse(eastTransform.random(randomFactory), WFC.PiecePlacer.EMPTY);
-			
-			
-			WFC.PositionTransform centerTransform = northWestTransform.offset(1, 1);
-			WFC.Generator centerGenerator = centerTemplate.centerGenerator(northGenerator, westGenerator, southGenerator, eastGenerator);
-			centerGenerator.collapse(centerTransform.random(randomFactory),
-					WFC.PiecePlacer.placeAt(centerTransform, templateManager, piecesBuilder));
+			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS, centerTemplate, borderTemplate, randomFactory, piecesBuilder, templateManager);
 		}
 	}
 	

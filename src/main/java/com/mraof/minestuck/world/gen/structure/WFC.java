@@ -29,15 +29,97 @@ public final class WFC
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	public static final class InfiniteModularGeneration
+	{
+		public static void generateModule(PositionTransform middleTransform, Dimensions dimensions, Template centerTemplate, Template borderTemplate,
+										  PositionalRandomFactory randomFactory, StructurePiecesBuilder piecesBuilder, StructureTemplateManager templateManager)
+		{
+			PositionTransform northWestTransform = middleTransform.offset(-dimensions.xAxisPieces() / 2, -dimensions.zAxisPieces() / 2);
+			Generator northWestGenerator = cornerGenerator(borderTemplate, dimensions);
+			northWestGenerator.collapse(northWestTransform.random(randomFactory),
+					PiecePlacer.placeAt(northWestTransform, templateManager, piecesBuilder));
+			
+			PositionTransform northEastTransform = northWestTransform.offset(dimensions.xAxisPieces(), 0);
+			Generator northEastGenerator = cornerGenerator(borderTemplate, dimensions);
+			northEastGenerator.collapse(northEastTransform.random(randomFactory), PiecePlacer.EMPTY);
+			
+			PositionTransform southWestTransform = northWestTransform.offset(0, dimensions.zAxisPieces());
+			Generator southWestGenerator = cornerGenerator(borderTemplate, dimensions);
+			southWestGenerator.collapse(southWestTransform.random(randomFactory), PiecePlacer.EMPTY);
+			
+			PositionTransform southEastTransform = northWestTransform.offset(dimensions.xAxisPieces(), dimensions.zAxisPieces());
+			Generator southEastGenerator = cornerGenerator(borderTemplate, dimensions);
+			southEastGenerator.collapse(southEastTransform.random(randomFactory), PiecePlacer.EMPTY);
+			
+			
+			Generator northGenerator = zEdgeGenerator(borderTemplate, dimensions, northWestGenerator, northEastGenerator);
+			PositionTransform northTransform = northWestTransform.offset(1, 0);
+			northGenerator.collapse(northTransform.random(randomFactory),
+					PiecePlacer.placeAt(northTransform, templateManager, piecesBuilder));
+			
+			Generator westGenerator = xEdgeGenerator(borderTemplate, dimensions, northWestGenerator, southWestGenerator);
+			PositionTransform westTransform = northWestTransform.offset(0, 1);
+			westGenerator.collapse(westTransform.random(randomFactory),
+					PiecePlacer.placeAt(westTransform, templateManager, piecesBuilder));
+			
+			PositionTransform southTransform = northWestTransform.offset(1, dimensions.zAxisPieces());
+			Generator southGenerator = zEdgeGenerator(borderTemplate, dimensions, southWestGenerator, southEastGenerator);
+			southGenerator.collapse(southTransform.random(randomFactory), PiecePlacer.EMPTY);
+			
+			PositionTransform eastTransform = northWestTransform.offset(dimensions.xAxisPieces(), 1);
+			Generator eastGenerator = xEdgeGenerator(borderTemplate, dimensions, northEastGenerator, southEastGenerator);
+			eastGenerator.collapse(eastTransform.random(randomFactory), PiecePlacer.EMPTY);
+			
+			
+			PositionTransform centerTransform = northWestTransform.offset(1, 1);
+			Generator centerGenerator = centerGenerator(centerTemplate, dimensions,
+					northGenerator, westGenerator, southGenerator, eastGenerator);
+			centerGenerator.collapse(centerTransform.random(randomFactory),
+					PiecePlacer.placeAt(centerTransform, templateManager, piecesBuilder));
+		}
+		
+		private static Generator cornerGenerator(Template template, Dimensions fullDimensions)
+		{
+			return new Generator(new Dimensions(1, fullDimensions.yAxisPieces(), 1),
+					template.grid.connectionTester, template::entriesFromTemplate);
+		}
+		
+		private static Generator xEdgeGenerator(Template template, Dimensions fullDimensions, Generator northCorner, Generator southCorner)
+		{
+			Generator generator = new Generator(new Dimensions(1, fullDimensions.yAxisPieces(), fullDimensions.zAxisPieces() - 1),
+					template.grid.connectionTester, template::entriesFromTemplate);
+			generator.setupEdgeBounds(Direction.NORTH, northCorner);
+			generator.setupEdgeBounds(Direction.SOUTH, southCorner);
+			return generator;
+		}
+		
+		private static Generator zEdgeGenerator(Template template, Dimensions fullDimensions, Generator westCorner, Generator eastCorner)
+		{
+			Generator generator = new Generator(new Dimensions(fullDimensions.xAxisPieces() - 1, fullDimensions.yAxisPieces(), 1),
+					template.grid.connectionTester, template::entriesFromTemplate);
+			generator.setupEdgeBounds(Direction.WEST, westCorner);
+			generator.setupEdgeBounds(Direction.EAST, eastCorner);
+			return generator;
+		}
+		
+		private static Generator centerGenerator(Template template, Dimensions fullDimensions, Generator northSide, Generator westSide, Generator southSide, Generator eastSide)
+		{
+			Generator generator = new Generator(new Dimensions(fullDimensions.xAxisPieces() - 1, fullDimensions.yAxisPieces(), fullDimensions.zAxisPieces() - 1),
+					template.grid.connectionTester, template::entriesFromTemplate);
+			generator.setupEdgeBounds(Direction.NORTH, northSide);
+			generator.setupEdgeBounds(Direction.WEST, westSide);
+			generator.setupEdgeBounds(Direction.SOUTH, southSide);
+			generator.setupEdgeBounds(Direction.EAST, eastSide);
+			return generator;
+		}
+	}
+	
 	public static final class Template
 	{
-		private final Dimensions fullDimensions;
-		
 		private final PieceEntryGrid grid;
 		
 		public Template(Dimensions dimensions, WFCData.EntriesData entriesData)
 		{
-			this.fullDimensions = dimensions;
 			this.grid = new PieceEntryGrid(new Dimensions(1, dimensions.yAxisPieces(), 1),
 					entriesData.connectionTester(), true, (ignored, list) -> list.addAll(entriesData.entries()));
 		}
@@ -50,42 +132,7 @@ public final class WFC
 			}
 		}
 		
-		public Generator cornerGenerator()
-		{
-			return new Generator(new Dimensions(1, this.fullDimensions.yAxisPieces(), 1),
-					this.grid.connectionTester, this::entriesFromTemplate);
-		}
-		
-		public Generator xEdgeGenerator(Generator northCorner, Generator southCorner)
-		{
-			Generator generator = new Generator(new Dimensions(1, this.fullDimensions.yAxisPieces(), this.fullDimensions.zAxisPieces() - 1),
-					this.grid.connectionTester, this::entriesFromTemplate);
-			generator.setupEdgeBounds(Direction.NORTH, northCorner);
-			generator.setupEdgeBounds(Direction.SOUTH, southCorner);
-			return generator;
-		}
-		
-		public Generator zEdgeGenerator(Generator westCorner, Generator eastCorner)
-		{
-			Generator generator = new Generator(new Dimensions(this.fullDimensions.xAxisPieces() - 1, this.fullDimensions.yAxisPieces(), 1),
-					this.grid.connectionTester, this::entriesFromTemplate);
-			generator.setupEdgeBounds(Direction.WEST, westCorner);
-			generator.setupEdgeBounds(Direction.EAST, eastCorner);
-			return generator;
-		}
-		
-		public Generator centerGenerator(Generator northSide, Generator westSide, Generator southSide, Generator eastSide)
-		{
-			Generator generator = new Generator(new Dimensions(this.fullDimensions.xAxisPieces() - 1, this.fullDimensions.yAxisPieces(), this.fullDimensions.zAxisPieces() - 1),
-					this.grid.connectionTester, this::entriesFromTemplate);
-			generator.setupEdgeBounds(Direction.NORTH, northSide);
-			generator.setupEdgeBounds(Direction.WEST, westSide);
-			generator.setupEdgeBounds(Direction.SOUTH, southSide);
-			generator.setupEdgeBounds(Direction.EAST, eastSide);
-			return generator;
-		}
-		
-		private void entriesFromTemplate(PiecePos pos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>> entryList)
+		void entriesFromTemplate(PiecePos pos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>> entryList)
 		{
 			entryList.addAll(this.grid.availablePiecesMap.get(new PiecePos(0, pos.y(), 0)));
 		}
