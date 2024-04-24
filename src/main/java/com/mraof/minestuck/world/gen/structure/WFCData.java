@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -122,8 +123,13 @@ public final class WFCData
 		}
 	}
 	
-	public record ConnectorType(String name)
+	public record ConnectorType(ResourceLocation id)
 	{
+		public ConnectorType(String path)
+		{
+			this(Minestuck.id(path));
+		}
+		
 		public static final ConnectorType AIR = new ConnectorType("air"),
 				SOLID = new ConnectorType("solid"),
 				WALL = new ConnectorType("wall"),
