@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.gen.structure;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -108,14 +107,14 @@ public final class ProspitStructure
 			StructureTemplateManager templateManager = context.structureTemplateManager();
 			PositionalRandomFactory randomFactory = RandomSource.create(context.seed()).forkPositional().fromHashOf(Minestuck.id("prospit")).forkPositional();
 			
-			WFC.Template borderTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.BORDER_ENTRIES);
-			WFC.Template centerTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, ProspitStructure.CENTER_ENTRIES);
+			WFC.Template borderTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, buildBorderEntries(templateManager));
+			WFC.Template centerTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, buildCenterEntries(templateManager));
 			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.AIR));
 			
 			WFC.PositionTransform middleTransform = new WFC.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
 			
-			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS, centerTemplate, borderTemplate, randomFactory, piecesBuilder, templateManager);
+			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS, centerTemplate, borderTemplate, randomFactory, piecesBuilder);
 		}
 	}
 	
@@ -144,8 +143,9 @@ public final class ProspitStructure
 			Direction.WEST, WFCData.ConnectorType.LEDGE_FRONT
 	));
 	
-	private static final WFCData.EntriesData CENTER_ENTRIES = Util.make(() -> {
-		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder();
+	private static WFCData.EntriesData buildCenterEntries(StructureTemplateManager templateManager)
+	{
+		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
 		WFCData.ConnectorType.addCoreConnections(builder.connections());
 		
@@ -158,9 +158,11 @@ public final class ProspitStructure
 		builder.add(LEDGE_CORNER, 2);
 		
 		return builder.build();
-	});
-	private static final WFCData.EntriesData BORDER_ENTRIES = Util.make(() -> {
-		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder();
+	}
+	
+	private static WFCData.EntriesData buildBorderEntries(StructureTemplateManager templateManager)
+	{
+		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
 		WFCData.ConnectorType.addCoreConnections(builder.connections());
 		
@@ -170,7 +172,7 @@ public final class ProspitStructure
 		builder.add(SPIKE, 1);
 		
 		return builder.build();
-	});
+	}
 	
 	
 	public static final Supplier<StructurePieceType.ContextlessType> SPIKE_PIECE_TYPE = MSStructurePieces.REGISTER.register("prospit_spike",

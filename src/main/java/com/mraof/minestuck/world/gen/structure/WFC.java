@@ -10,7 +10,6 @@ import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,12 +31,12 @@ public final class WFC
 	public static final class InfiniteModularGeneration
 	{
 		public static void generateModule(PositionTransform middleTransform, Dimensions dimensions, Template centerTemplate, Template borderTemplate,
-										  PositionalRandomFactory randomFactory, StructurePiecesBuilder piecesBuilder, StructureTemplateManager templateManager)
+										  PositionalRandomFactory randomFactory, StructurePiecesBuilder piecesBuilder)
 		{
 			PositionTransform northWestTransform = middleTransform.offset(-dimensions.xAxisPieces() / 2, -dimensions.zAxisPieces() / 2);
 			Generator northWestGenerator = cornerGenerator(borderTemplate, dimensions);
 			northWestGenerator.collapse(northWestTransform.random(randomFactory),
-					PiecePlacer.placeAt(northWestTransform, templateManager, piecesBuilder));
+					PiecePlacer.placeAt(northWestTransform, piecesBuilder));
 			
 			PositionTransform northEastTransform = northWestTransform.offset(dimensions.xAxisPieces(), 0);
 			Generator northEastGenerator = cornerGenerator(borderTemplate, dimensions);
@@ -55,12 +54,12 @@ public final class WFC
 			Generator northGenerator = zEdgeGenerator(borderTemplate, dimensions, northWestGenerator, northEastGenerator);
 			PositionTransform northTransform = northWestTransform.offset(1, 0);
 			northGenerator.collapse(northTransform.random(randomFactory),
-					PiecePlacer.placeAt(northTransform, templateManager, piecesBuilder));
+					PiecePlacer.placeAt(northTransform, piecesBuilder));
 			
 			Generator westGenerator = xEdgeGenerator(borderTemplate, dimensions, northWestGenerator, southWestGenerator);
 			PositionTransform westTransform = northWestTransform.offset(0, 1);
 			westGenerator.collapse(westTransform.random(randomFactory),
-					PiecePlacer.placeAt(westTransform, templateManager, piecesBuilder));
+					PiecePlacer.placeAt(westTransform, piecesBuilder));
 			
 			PositionTransform southTransform = northWestTransform.offset(1, dimensions.zAxisPieces());
 			Generator southGenerator = zEdgeGenerator(borderTemplate, dimensions, southWestGenerator, southEastGenerator);
@@ -75,7 +74,7 @@ public final class WFC
 			Generator centerGenerator = centerGenerator(centerTemplate, dimensions,
 					northGenerator, westGenerator, southGenerator, eastGenerator);
 			centerGenerator.collapse(centerTransform.random(randomFactory),
-					PiecePlacer.placeAt(centerTransform, templateManager, piecesBuilder));
+					PiecePlacer.placeAt(centerTransform, piecesBuilder));
 		}
 		
 		private static Generator cornerGenerator(Template template, Dimensions fullDimensions)
@@ -204,7 +203,7 @@ public final class WFC
 			}
 		};
 		
-		static PiecePlacer placeAt(PositionTransform transform, StructureTemplateManager templateManager, StructurePiecesBuilder piecesBuilder)
+		static PiecePlacer placeAt(PositionTransform transform, StructurePiecesBuilder piecesBuilder)
 		{
 			return new PiecePlacer()
 			{
@@ -212,7 +211,7 @@ public final class WFC
 				public void place(PiecePos piecePos, WFCData.PieceEntry entry)
 				{
 					BlockPos pos = transform.toBlockPos(piecePos);
-					StructurePiece piece = entry.constructor().apply(templateManager, pos);
+					StructurePiece piece = entry.constructor().apply(pos);
 					if(piece != null)
 						piecesBuilder.addPiece(piece);
 				}

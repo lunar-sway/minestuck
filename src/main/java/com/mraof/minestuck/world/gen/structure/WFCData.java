@@ -7,12 +7,16 @@ import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -24,23 +28,39 @@ import java.util.stream.IntStream;
  */
 public final class WFCData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static EntryProvider symmetricTemplate(ResourceLocation templateId,
 												  ConnectorType down, ConnectorType up, ConnectorType side)
 	{
-		return new PieceEntry(templateConstructor(templateId, Rotation.NONE), Map.of(
-				Direction.DOWN, down,
-				Direction.UP, up,
-				Direction.NORTH, side,
-				Direction.EAST, side,
-				Direction.SOUTH, side,
-				Direction.WEST, side
-		));
+		return context -> {
+			StructureTemplate template = context.templateManager().getOrCreate(templateId);
+			
+			Vec3i size = template.getSize();
+			WFC.PieceSize pieceSize = context.pieceSize();
+			if(size.getX() != pieceSize.width() || size.getY() != pieceSize.height() || size.getZ() != pieceSize.width())
+			{
+				LOGGER.error("Template {} of size {} does not have the right size.", templateId, size);
+				return;
+			}
+			
+			Map<Direction, ConnectorType> connectors = Map.of(
+					Direction.DOWN, down,
+					Direction.UP, up,
+					Direction.NORTH, side,
+					Direction.EAST, side,
+					Direction.SOUTH, side,
+					Direction.WEST, side
+			);
+			
+			context.entriesBuilder().add(new PieceEntry(templateConstructor(templateId, template, Rotation.NONE, context.templateManager()), connectors));
+		};
 	}
 	
 	public static PieceEntry symmetricPiece(Function<BlockPos, StructurePiece> constructor,
 											ConnectorType down, ConnectorType up, ConnectorType side)
 	{
-		return new PieceEntry((ignored, pos) -> constructor.apply(pos), Map.of(
+		return new PieceEntry(constructor, Map.of(
 				Direction.DOWN, down,
 				Direction.UP, up,
 				Direction.NORTH, side,
@@ -73,27 +93,38 @@ public final class WFCData
 	public static EntryProvider axisSymmetricTemplate(ResourceLocation templateId,
 													  ConnectorType down, ConnectorType up, ConnectorType front, ConnectorType side)
 	{
-		Map<Direction, ConnectorType> connections = Map.of(
-				Direction.DOWN, down,
-				Direction.UP, up,
-				Direction.NORTH, front,
-				Direction.EAST, side,
-				Direction.SOUTH, front,
-				Direction.WEST, side
-		);
-		
-		PieceEntry zAxisEntry = new PieceEntry(templateConstructor(templateId, Rotation.NONE), connections);
-		PieceEntry xAxisEntry = new PieceEntry(templateConstructor(templateId, Rotation.CLOCKWISE_90), rotateConnections(connections, Rotation.CLOCKWISE_90));
-		return (connectionsBuilder, entriesBuilder) -> entriesBuilder.add(zAxisEntry, xAxisEntry);
+		return context -> {
+			StructureTemplate template = context.templateManager().getOrCreate(templateId);
+			
+			Vec3i size = template.getSize();
+			WFC.PieceSize pieceSize = context.pieceSize();
+			if(size.getX() != pieceSize.width() || size.getY() != pieceSize.height() || size.getZ() != pieceSize.width())
+			{
+				LOGGER.error("Template {} of size {} does not have the right size.", templateId, size);
+				return;
+			}
+			Map<Direction, ConnectorType> connections = Map.of(
+					Direction.DOWN, down,
+					Direction.UP, up,
+					Direction.NORTH, front,
+					Direction.EAST, side,
+					Direction.SOUTH, front,
+					Direction.WEST, side
+			);
+			
+			PieceEntry zAxisEntry = new PieceEntry(templateConstructor(templateId, template, Rotation.NONE, context.templateManager()), connections);
+			PieceEntry xAxisEntry = new PieceEntry(templateConstructor(templateId, template, Rotation.CLOCKWISE_90, context.templateManager()), rotateConnections(connections, Rotation.CLOCKWISE_90));
+			context.entriesBuilder().add(zAxisEntry, xAxisEntry);
+		};
 	}
 	
 	public static EntryProvider rotatablePiece(BiFunction<BlockPos, Rotation, StructurePiece> constructor,
 											   Map<Direction, ConnectorType> connections)
 	{
 		List<PieceEntry> rotatedPieces = Arrays.stream(Rotation.values())
-				.map(rotation -> new PieceEntry((ignored, pos) -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)))
+				.map(rotation -> new PieceEntry(pos -> constructor.apply(pos, rotation), rotateConnections(connections, rotation)))
 				.toList();
-		return (connectionsBuilder, entriesBuilder) -> entriesBuilder.add(rotatedPieces);
+		return context -> context.entriesBuilder().add(rotatedPieces);
 	}
 	
 	private static Map<Direction, ConnectorType> rotateConnections(Map<Direction, ConnectorType> connections, Rotation rotation)
@@ -111,12 +142,11 @@ public final class WFCData
 		);
 	}
 	
-	private static BiFunction<StructureTemplateManager, BlockPos, StructurePiece> templateConstructor(ResourceLocation templateId, Rotation rotation)
+	private static Function<BlockPos, StructurePiece> templateConstructor(ResourceLocation templateId, StructureTemplate template,
+																									  Rotation rotation, StructureTemplateManager templateManager)
 	{
-		return (templateManager, pos) -> {
-			BlockPos templatePos = templateManager.getOrCreate(templateId).getZeroPositionWithTransform(pos, Mirror.NONE, rotation);
-			return new SimpleTemplatePiece(templateManager, templateId, templatePos, rotation);
-		};
+		BlockPos zeroPos = template.getZeroPositionWithTransform(BlockPos.ZERO, Mirror.NONE, rotation);
+		return pos -> new SimpleTemplatePiece(templateManager, templateId, pos.offset(zeroPos), rotation);
 	}
 	
 	public record ConnectorType(ResourceLocation id)
@@ -155,15 +185,15 @@ public final class WFCData
 		}
 	}
 	
-	public record PieceEntry(BiFunction<StructureTemplateManager, BlockPos, StructurePiece> constructor,
+	public record PieceEntry(Function<BlockPos, StructurePiece> constructor,
 							 Map<Direction, ConnectorType> connections) implements EntryProvider
 	{
 		public static final EntryProvider EMPTY = symmetricPiece(pos -> null, ConnectorType.AIR, ConnectorType.AIR, ConnectorType.AIR);
 		
 		@Override
-		public void build(ConnectionsBuilder connectionsBuilder, WeightedEntriesBuilder entriesBuilder)
+		public void build(EntryBuilderContext context)
 		{
-			entriesBuilder.add(this);
+			context.entriesBuilder().add(this);
 		}
 		
 	}
@@ -171,10 +201,10 @@ public final class WFCData
 	public record MultiPieceEntry(Collection<PieceEntry> entries, Collection<Pair<ConnectorType, ConnectorType>> connections) implements EntryProvider
 	{
 		@Override
-		public void build(ConnectionsBuilder connectionsBuilder, WeightedEntriesBuilder entriesBuilder)
+		public void build(EntryBuilderContext context)
 		{
-			this.connections.forEach(pair -> connectionsBuilder.connect(pair.getFirst(), pair.getSecond()));
-			entriesBuilder.add(this.entries);
+			this.connections.forEach(pair -> context.connectionsBuilder().connect(pair.getFirst(), pair.getSecond()));
+			context.entriesBuilder().add(this.entries);
 		}
 	}
 	
@@ -194,9 +224,14 @@ public final class WFCData
 		}
 	}
 	
+	public record EntryBuilderContext(ConnectionsBuilder connectionsBuilder, WeightedEntriesBuilder entriesBuilder,
+									  WFC.PieceSize pieceSize, StructureTemplateManager templateManager)
+	{
+	}
+	
 	public interface EntryProvider
 	{
-		void build(ConnectionsBuilder connectionsBuilder, WeightedEntriesBuilder entriesBuilder);
+		void build(EntryBuilderContext context);
 	}
 	
 	public interface ConnectionTester
@@ -238,8 +273,17 @@ public final class WFCData
 	
 	public static final class EntriesBuilder
 	{
+		private final WFC.PieceSize pieceSize;
+		private final StructureTemplateManager templateManager;
+		
 		private final ConnectionsBuilder connectionsBuilder = new ConnectionsBuilder();
 		private final ImmutableList.Builder<WeightedEntry.Wrapper<PieceEntry>> pieceEntries = ImmutableList.builder();
+		
+		public EntriesBuilder(WFC.PieceSize pieceSize, StructureTemplateManager templateManager)
+		{
+			this.pieceSize = pieceSize;
+			this.templateManager = templateManager;
+		}
 		
 		public ConnectionsBuilder connections()
 		{
@@ -248,7 +292,7 @@ public final class WFCData
 		
 		public void add(EntryProvider provider, int weight)
 		{
-			provider.build(this.connections(), pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)));
+			provider.build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)), this.pieceSize, this.templateManager));
 		}
 		
 		public EntriesData build()
