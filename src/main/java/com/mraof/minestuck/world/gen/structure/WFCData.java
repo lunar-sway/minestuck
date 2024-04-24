@@ -161,37 +161,20 @@ public final class WFCData
 		{
 			StructureTemplate template = context.templateManager().getOrCreate(this.templateId);
 			
-			WFC.PieceSize pieceSize = context.pieceSize();
-			Vec3i size = template.getSize();
-			if(size.getX() != pieceSize.width() || size.getY() != pieceSize.height() || size.getZ() != pieceSize.width())
-			{
-				LOGGER.error("Template {} of size {} does not have the right size.", this.templateId, size);
-				return;
-			}
-			
-			Map<Direction, ConnectorType> connectors = new HashMap<>();
-			boolean failed = loadConnectorsFromJigsaws(this.templateId, template, connectors);
-			
-			List<Direction> missingDirections = Arrays.stream(Direction.values()).filter(key -> !connectors.containsKey(key)).toList();
-			if(!missingDirections.isEmpty())
-			{
-				LOGGER.error("Template {} is missing connector type for the following sides: {}", this.templateId, missingDirections);
-				return;
-			}
-			if(failed)
-				return;
-			
-			for(Rotation rotation : this.rotations)
-			{
-				Function<BlockPos, StructurePiece> constructor = templateConstructor(this.templateId, template, rotation, context.templateManager());
-				PieceEntry entry = new PieceEntry(constructor, rotateConnectors(connectors, rotation));
-				context.entriesBuilder().add(entry);
-			}
+			TemplateEntryBuilder
+					.init(this.templateId, template.getSize(), context.pieceSize())
+					.flatMap(builder -> {
+						loadConnectorsFromJigsaws(this.templateId, template, builder);
+						return builder.verify();
+					})
+					.ifPresent(loadedEntry -> {
+						for(Rotation rotation : this.rotations)
+							loadedEntry.build(rotation, context);
+					});
 		}
 		
-		private static boolean loadConnectorsFromJigsaws(ResourceLocation templateId, StructureTemplate template, Map<Direction, ConnectorType> connectors)
+		private static void loadConnectorsFromJigsaws(ResourceLocation templateId, StructureTemplate template, TemplateEntryBuilder builder)
 		{
-			boolean failed = false;
 			for(StructureTemplate.StructureBlockInfo blockInfo : template.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, false))
 			{
 				if(blockInfo.nbt() == null)
@@ -210,20 +193,67 @@ public final class WFCData
 				ConnectorType connectorType = new ConnectorType(connectorId);
 				Direction direction = blockInfo.state().getValue(JigsawBlock.ORIENTATION).front();
 				
-				if(connectors.put(direction, connectorType) != null)
+				if(builder.connectors.put(direction, connectorType) != null)
 				{
 					LOGGER.error("Template {} has multiple jigsaws for the same side ({})", templateId, direction);
-					failed = true;
+					builder.failed = false;
 				}
 			}
-			return failed;
+		}
+	}
+	
+	private static final class TemplateEntryBuilder
+	{
+		private final ResourceLocation templateId;
+		
+		final Map<Direction, ConnectorType> connectors = new HashMap<>();
+		boolean failed = false;
+		
+		private TemplateEntryBuilder(ResourceLocation templateId)
+		{
+			this.templateId = templateId;
 		}
 		
-		private static Function<BlockPos, StructurePiece> templateConstructor(ResourceLocation templateId, StructureTemplate template,
-																			  Rotation rotation, StructureTemplateManager templateManager)
+		static Optional<TemplateEntryBuilder> init(ResourceLocation templateId, Vec3i templateSize, WFC.PieceSize pieceSize)
 		{
-			BlockPos zeroPos = template.getZeroPositionWithTransform(BlockPos.ZERO, Mirror.NONE, rotation);
-			return pos -> new SimpleTemplatePiece(templateManager, templateId, pos.offset(zeroPos), rotation);
+			if(templateSize.getX() != pieceSize.width() || templateSize.getY() != pieceSize.height() || templateSize.getZ() != pieceSize.width())
+			{
+				LOGGER.error("Template {} of size {} does not have the right size.", templateId, templateSize);
+				return Optional.empty();
+			}
+			
+			return Optional.of(new TemplateEntryBuilder(templateId));
+		}
+		
+		Optional<LoadedTemplateEntry> verify()
+		{
+			List<Direction> missingDirections = Arrays.stream(Direction.values()).filter(key -> !this.connectors.containsKey(key)).toList();
+			if(!missingDirections.isEmpty())
+			{
+				LOGGER.error("Template {} is missing connector type for the following sides: {}", this.templateId, missingDirections);
+				return Optional.empty();
+			}
+			
+			if(this.failed)
+				return Optional.empty();
+			
+			return Optional.of(new LoadedTemplateEntry(this.templateId, Map.copyOf(this.connectors)));
+		}
+	}
+	
+	private record LoadedTemplateEntry(ResourceLocation templateId, Map<Direction, ConnectorType> connectors)
+	{
+		void build(Rotation rotation, EntryBuilderContext context)
+		{
+			Function<BlockPos, StructurePiece> constructor = templateConstructor(context.pieceSize(), rotation, context.templateManager());
+			PieceEntry entry = new PieceEntry(constructor, rotateConnectors(this.connectors, rotation));
+			context.entriesBuilder().add(entry);
+		}
+		
+		private Function<BlockPos, StructurePiece> templateConstructor(WFC.PieceSize pieceSize, Rotation rotation, StructureTemplateManager templateManager)
+		{
+			BlockPos zeroPos = StructureTemplate.getZeroPositionWithTransform(BlockPos.ZERO, Mirror.NONE, rotation, pieceSize.width(), pieceSize.width());
+			return pos -> new SimpleTemplatePiece(templateManager, this.templateId, pos.offset(zeroPos), rotation);
 		}
 	}
 	
