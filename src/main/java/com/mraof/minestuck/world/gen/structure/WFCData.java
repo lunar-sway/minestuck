@@ -161,7 +161,7 @@ public final class WFCData
 		{
 			StructureTemplate template = context.templateManager().getOrCreate(templateId);
 			
-			loadTemplateConnectors(templateId, template, context.pieceSize()).ifPresent(connectors -> {
+			loadAndVerifyTemplateConnectors(templateId, template, context.pieceSize()).ifPresent(connectors -> {
 				for(Rotation rotation : rotations)
 				{
 					Function<BlockPos, StructurePiece> constructor = templateConstructor(templateId, template, rotation, context.templateManager());
@@ -171,7 +171,7 @@ public final class WFCData
 			});
 		}
 		
-		private static Optional<Map<Direction, ConnectorType>> loadTemplateConnectors(ResourceLocation templateId, StructureTemplate template, WFC.PieceSize pieceSize)
+		private static Optional<Map<Direction, ConnectorType>> loadAndVerifyTemplateConnectors(ResourceLocation templateId, StructureTemplate template, WFC.PieceSize pieceSize)
 		{
 			Vec3i size = template.getSize();
 			if(size.getX() != pieceSize.width() || size.getY() != pieceSize.height() || size.getZ() != pieceSize.width())
@@ -181,7 +181,24 @@ public final class WFCData
 			}
 			
 			Map<Direction, ConnectorType> connectors = new HashMap<>();
+			boolean failed = loadConnectorsFromJigsaws(templateId, template, connectors);
 			
+			List<Direction> missingDirections = Arrays.stream(Direction.values()).filter(key -> !connectors.containsKey(key)).toList();
+			if(!missingDirections.isEmpty())
+			{
+				LOGGER.error("Template {} is missing connector type for the following sides: {}", templateId, missingDirections);
+				return Optional.empty();
+			}
+			
+			if(failed)
+				return Optional.empty();
+			
+			return Optional.of(Map.copyOf(connectors));
+		}
+		
+		private static boolean loadConnectorsFromJigsaws(ResourceLocation templateId, StructureTemplate template, Map<Direction, ConnectorType> connectors)
+		{
+			boolean failed = false;
 			for(StructureTemplate.StructureBlockInfo blockInfo : template.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, false))
 			{
 				if(blockInfo.nbt() == null)
@@ -200,23 +217,13 @@ public final class WFCData
 				ConnectorType connectorType = new ConnectorType(connectorId);
 				Direction direction = blockInfo.state().getValue(JigsawBlock.ORIENTATION).front();
 				
-				if(connectors.containsKey(direction))
+				if(connectors.put(direction, connectorType) != null)
 				{
 					LOGGER.error("Template {} has multiple jigsaws for the same side ({})", templateId, direction);
-					return Optional.empty();
+					failed = true;
 				}
-				
-				connectors.put(direction, connectorType);
 			}
-			
-			List<Direction> missingDirections = Arrays.stream(Direction.values()).filter(key -> !connectors.containsKey(key)).toList();
-			if(!missingDirections.isEmpty())
-			{
-				LOGGER.error("Template {} is missing connector type for the following sides: {}", templateId, missingDirections);
-				return Optional.empty();
-			}
-			
-			return Optional.of(Map.copyOf(connectors));
+			return failed;
 		}
 		
 		private static Function<BlockPos, StructurePiece> templateConstructor(ResourceLocation templateId, StructureTemplate template,
