@@ -79,14 +79,9 @@ public final class PlayerSavedData extends SavedData
 		for (int i = 0; i < list.size(); i++)
 		{
 			CompoundTag dataCompound = list.getCompound(i);
-			try
-			{
-				PlayerData data = new PlayerData(server, dataCompound);
-				savedData.dataMap.put(data.identifier, data);
-			} catch(Exception e)
-			{
-				LOGGER.error("Got exception when loading minestuck player data instance:", e);
-			}
+			PlayerData.load(server, dataCompound)
+					.resultOrPartial(message -> LOGGER.error("Problem while loading player data: {}", message))
+					.ifPresent(data -> savedData.dataMap.put(data.identifier, data));
 		}
 		return savedData;
 	}

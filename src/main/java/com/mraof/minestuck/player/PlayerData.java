@@ -1,5 +1,6 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.DataResult;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
@@ -30,13 +31,16 @@ public final class PlayerData extends AttachmentHolder
 		this.identifier = player;
 	}
 	
-	PlayerData(MinecraftServer mcServer, CompoundTag nbt)
+	static DataResult<PlayerData> load(MinecraftServer mcServer, CompoundTag nbt)
 	{
-		this.mcServer = mcServer;
-		this.identifier = IdentifierHandler.loadOrThrow(nbt, "player");
-		
-		if(nbt.contains(ATTACHMENTS_NBT_KEY, Tag.TAG_COMPOUND))
-			this.deserializeAttachments(nbt.getCompound(ATTACHMENTS_NBT_KEY));
+		return IdentifierHandler.load(nbt, "player").map(player -> {
+			PlayerData playerData = new PlayerData(mcServer, player);
+			
+			if(nbt.contains(ATTACHMENTS_NBT_KEY, Tag.TAG_COMPOUND))
+				playerData.deserializeAttachments(nbt.getCompound(ATTACHMENTS_NBT_KEY));
+			
+			return playerData;
+		});
 	}
 	
 	@Nullable
