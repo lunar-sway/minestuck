@@ -106,6 +106,8 @@ public final class ProspitStructure
 		public static final WFCData.ConnectorType
 				AIR = new WFCData.ConnectorType(Minestuck.id("air")),
 				SOLID = new WFCData.ConnectorType(Minestuck.id("solid")),
+				ROOF_BOTTOM = new WFCData.ConnectorType(Minestuck.id("roof_bottom")),
+				SUPPORT_TOP = new WFCData.ConnectorType(Minestuck.id("support_top")),
 				WALL = new WFCData.ConnectorType(Minestuck.id("wall")),
 				WALL_ATTACHMENT = new WFCData.ConnectorType(Minestuck.id("wall_attachment")),
 				ROOF_SIDE = new WFCData.ConnectorType(Minestuck.id("roof_side")),
@@ -121,6 +123,8 @@ public final class ProspitStructure
 		{
 			builder.connectSelf(AIR);
 			builder.connectSelf(SOLID);
+			builder.connect(ROOF_BOTTOM, SOLID);
+			builder.connect(SUPPORT_TOP, SOLID);
 			builder.connect(AIR, WALL);
 			builder.connectSelf(WALL);
 			builder.connect(WALL_ATTACHMENT, WALL);
