@@ -13,7 +13,6 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public final class ConsortReputation implements INBTSerializable<ListTag>
 {
@@ -61,7 +60,7 @@ public final class ConsortReputation implements INBTSerializable<ListTag>
 	
 	public static ConsortReputation get(ServerPlayer player)
 	{
-		return get(Objects.requireNonNull(PlayerData.get(player)));
+		return get(PlayerData.get(player).orElseThrow());
 	}
 	
 	public static ConsortReputation get(PlayerData playerData)

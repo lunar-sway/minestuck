@@ -86,15 +86,11 @@ public final class PlayerSavedData extends SavedData
 		return savedData;
 	}
 	
-	public PlayerData getData(PlayerIdentifier player)
+	public PlayerData getOrCreateData(PlayerIdentifier player)
 	{
 		Objects.requireNonNull(player);
-		if(!dataMap.containsKey(player))
-		{
-			PlayerData data = new PlayerData(this.mcServer, player);
-			dataMap.put(player, data);
-		}
-		return dataMap.get(player);
+		
+		return this.dataMap.computeIfAbsent(player, ignored -> new PlayerData(this.mcServer, player));
 	}
 	
 	@Override

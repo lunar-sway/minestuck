@@ -735,13 +735,13 @@ public interface Condition
 			
 			Level level = player.level();
 			
-			PlayerData data = PlayerData.get(player);
-			if(data == null)
+			Optional<ConsortReputation> reputation = PlayerData.get(player).map(ConsortReputation::get);
+			if(reputation.isEmpty())
 				return false;
 			
 			return greaterThan
-					? ConsortReputation.get(data).getConsortReputation(level.dimension()) > amount
-					: ConsortReputation.get(data).getConsortReputation(level.dimension()) < amount;
+					? reputation.get().getConsortReputation(level.dimension()) > amount
+					: reputation.get().getConsortReputation(level.dimension()) < amount;
 		}
 		
 		@Override
@@ -769,9 +769,9 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			PlayerData data = PlayerData.get(player);
-			if(data != null)
-				return PlayerBoondollars.getBoondollars(data) >= amount;
+			Optional<PlayerData> data = PlayerData.get(player);
+			if(data.isPresent())
+				return PlayerBoondollars.getBoondollars(data.get()) >= amount;
 			
 			return false;
 		}

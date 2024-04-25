@@ -21,7 +21,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
@@ -78,7 +77,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	
 	public static Optional<Title> getTitle(ServerPlayer player)
 	{
-		return getTitle(PlayerData.get(player));
+		return PlayerData.get(player).flatMap(Title::getTitle);
 	}
 	
 	public static Optional<Title> getTitle(PlayerIdentifier playerId, MinecraftServer mcServer)
@@ -86,10 +85,8 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 		return getTitle(PlayerData.get(playerId, mcServer));
 	}
 	
-	public static Optional<Title> getTitle(@Nullable PlayerData playerData)
+	public static Optional<Title> getTitle(PlayerData playerData)
 	{
-		if(playerData == null)
-			return Optional.empty();
 		return playerData.getExistingData(MSAttachments.TITLE);
 	}
 	
@@ -111,11 +108,11 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 			return;
 		if(player.getCommandSenderWorld().getGameTime() % 380 != 0)
 			return;
-		PlayerData data = PlayerData.get(player);
-		if(data == null)
+		Optional<PlayerData> data = PlayerData.get(player);
+		if(data.isEmpty())
 			return;
 		
-		int rung = Echeladder.get(data).getRung();
+		int rung = Echeladder.get(data.get()).getRung();
 		EnumAspect aspect = this.heroAspect();
 		int potionLevel = (int) (ASPECT_EFFECTS.get(aspect).strength() * rung);
 		

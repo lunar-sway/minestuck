@@ -136,7 +136,7 @@ public final class ColorHandler
 	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
-		PlayerData playerData = Objects.requireNonNull(PlayerData.get(player));
+		PlayerData playerData = PlayerData.get(player).orElseThrow();
 		
 		boolean firstTime = playerData.getExistingData(MSAttachments.PLAYER_COLOR).isEmpty();
 		

@@ -96,7 +96,7 @@ public class GristGutter
 		PlayerSavedData playerSavedData = PlayerSavedData.get(mcServer);
 		
 		return this.gutterPlayers()
-				.map(player -> playerSavedData.getData(player).getData(MSAttachments.GUTTER_MULTIPLIER))
+				.map(player -> playerSavedData.getOrCreateData(player).getData(MSAttachments.GUTTER_MULTIPLIER))
 				.reduce(0D, Double::sum);
 	}
 	

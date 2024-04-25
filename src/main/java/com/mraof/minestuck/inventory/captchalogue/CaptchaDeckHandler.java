@@ -35,7 +35,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 //todo this class could use some spring cleaning
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -213,16 +213,16 @@ public final class CaptchaDeckHandler
 	{
 		Modus modus = getModus(player);
 		
-		if(stack.getItem() == MSItems.BOONDOLLARS.get())
+		if(stack.is(MSItems.BOONDOLLARS))
 		{
-			PlayerBoondollars.addBoondollars(PlayerData.get(player), BoondollarsItem.getCount(stack));
+			PlayerBoondollars.addBoondollars(PlayerData.get(player).orElseThrow(), BoondollarsItem.getCount(stack));
 			stack.shrink(1);
 			return;
 		}
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			if(stack.getItem() == MSItems.CAPTCHA_CARD.get() && AlchemyHelper.hasDecodedItem(stack)
+			if(stack.is(MSItems.CAPTCHA_CARD) && AlchemyHelper.hasDecodedItem(stack)
 					&& !AlchemyHelper.isPunchedCard(stack))
 				handleCardCaptchalogue(player, modus, stack);
 			else putInModus(player, modus, stack);
@@ -394,10 +394,10 @@ public final class CaptchaDeckHandler
 	@Nullable
 	public static Modus getModus(ServerPlayer player)
 	{
-		PlayerData playerData = PlayerData.get(player);
-		if(playerData == null)
+		Optional<PlayerData> playerData = PlayerData.get(player);
+		if(playerData.isEmpty())
 			return null;
-		return playerData.getData(MSAttachments.MODUS_HOLDER).modus;
+		return playerData.get().getData(MSAttachments.MODUS_HOLDER).modus;
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
@@ -449,7 +449,7 @@ public final class CaptchaDeckHandler
 	
 	private static ModusHolder getHolder(ServerPlayer player)
 	{
-		PlayerData data = Objects.requireNonNull(PlayerData.get(player));
+		PlayerData data = PlayerData.get(player).orElseThrow();
 		return data.getData(MSAttachments.MODUS_HOLDER);
 	}
 	

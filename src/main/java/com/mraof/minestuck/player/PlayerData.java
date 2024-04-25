@@ -11,6 +11,7 @@ import net.neoforged.neoforge.attachment.AttachmentHolder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
 /**
  * Stores and sends any data connected to a specific player.
@@ -43,23 +44,22 @@ public final class PlayerData extends AttachmentHolder
 		});
 	}
 	
-	@Nullable
-	public static PlayerData get(ServerPlayer player)
+	public static Optional<PlayerData> get(ServerPlayer player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		if(identifier == null)
-			return null;
-		return PlayerSavedData.get(player.server).getData(identifier);
+			return Optional.empty();
+		return Optional.of(PlayerSavedData.get(player.server).getOrCreateData(identifier));
 	}
 	
 	public static PlayerData get(PlayerIdentifier player, Level level)
 	{
-		return PlayerSavedData.get(level).getData(player);
+		return PlayerSavedData.get(level).getOrCreateData(player);
 	}
 	
 	public static PlayerData get(PlayerIdentifier player, MinecraftServer server)
 	{
-		return PlayerSavedData.get(server).getData(player);
+		return PlayerSavedData.get(server).getOrCreateData(player);
 	}
 	
 	CompoundTag writeToNBT()

@@ -16,12 +16,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.FakePlayer;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -41,11 +39,12 @@ public class GutterBallItem extends Item
 		itemStack.shrink(1);
 		player.displayClientMessage(Component.translatable(MINOR_INCREASE).withStyle(ChatFormatting.BOLD), true);
 		
-		if(player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer))
+		if(player instanceof ServerPlayer serverPlayer)
 		{
-			PlayerData playerData = Objects.requireNonNull(PlayerData.get(serverPlayer));
-			double newMultiplier = playerData.getData(MSAttachments.GUTTER_MULTIPLIER) + 0.2;
-			playerData.setData(MSAttachments.GUTTER_MULTIPLIER, newMultiplier);
+			PlayerData.get(serverPlayer).ifPresent(playerData -> {
+				double newMultiplier = playerData.getData(MSAttachments.GUTTER_MULTIPLIER) + 0.2;
+				playerData.setData(MSAttachments.GUTTER_MULTIPLIER, newMultiplier);
+			});
 		}
 		
 		return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());

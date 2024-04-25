@@ -46,9 +46,9 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		
-		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player), amount))
+		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player).orElseThrow(), amount))
 		{
-			PlayerBoondollars.addBoondollars(PlayerData.get(target), amount);
+			PlayerBoondollars.addBoondollars(PlayerData.get(target).orElseThrow(), amount);
 			source.sendSuccess(() -> Component.translatable(SEND, amount, target.getDisplayName()), true);
 			target.sendSystemMessage(Component.translatable(RECEIVE, amount, player.getDisplayName()));
 			return 1;
@@ -59,7 +59,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		
-		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player), amount))
+		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player).orElseThrow(), amount))
 		{
 			ItemStack stack = BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), amount);
 			if(!player.addItem(stack))

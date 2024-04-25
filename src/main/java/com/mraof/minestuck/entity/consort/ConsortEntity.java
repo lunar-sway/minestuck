@@ -59,6 +59,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @ParametersAreNonnullByDefault
@@ -152,8 +153,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(this.dialogueComponent.hasAnyOngoingDialogue())	//todo do we want this? feel free to remove it if not
 			return InteractionResult.FAIL;
 		
-		PlayerData playerData = PlayerData.get(serverPlayer);
-		if(playerData == null || ConsortReputation.get(playerData).getConsortReputation(homeDimension) <= -1000)
+		Optional<PlayerData> playerData = PlayerData.get(serverPlayer);
+		if(playerData.isEmpty() || ConsortReputation.get(playerData.get()).getConsortReputation(homeDimension) <= -1000)
 			return InteractionResult.FAIL;
 		
 		handleConsortRepFromTalking(serverPlayer);

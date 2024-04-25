@@ -368,9 +368,9 @@ public sealed interface Trigger
 			if(!(entity instanceof ConsortEntity consortEntity))
 				return;
 			
-			PlayerData data = PlayerData.get(player);
-			if(data != null)
-				ConsortReputation.get(data).addConsortReputation(this.reputation, consortEntity.getHomeDimension());
+			PlayerData.get(player).ifPresent(playerData ->
+					ConsortReputation.get(playerData).addConsortReputation(this.reputation, consortEntity.getHomeDimension())
+			);
 		}
 	}
 	
@@ -389,13 +389,13 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerData data = PlayerData.get(player);
-			if(data != null && boondollars != 0)
+			Optional<PlayerData> data = PlayerData.get(player);
+			if(data.isPresent() && boondollars != 0)
 			{
 				if(boondollars > 0)
-					PlayerBoondollars.addBoondollars(data, boondollars);
+					PlayerBoondollars.addBoondollars(data.get(), boondollars);
 				else
-					PlayerBoondollars.takeBoondollars(data, -boondollars);
+					PlayerBoondollars.takeBoondollars(data.get(), -boondollars);
 			}
 		}
 	}

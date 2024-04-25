@@ -8,8 +8,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import java.util.Objects;
-
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PlayerBoondollars
 {
@@ -65,7 +63,7 @@ public final class PlayerBoondollars
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
 		
-		PlayerData playerData = Objects.requireNonNull(PlayerData.get(player));
+		PlayerData playerData = PlayerData.get(player).orElseThrow();
 		PlayerBoondollars.sendBoondollars(player, playerData);
 	}
 	

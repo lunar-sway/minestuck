@@ -31,7 +31,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.EnumSet;
-import java.util.Objects;
 import java.util.UUID;
 
 @MethodsReturnNonnullByDefault
@@ -61,7 +60,8 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static Echeladder get(ServerPlayer player)
 	{
-		return get(Objects.requireNonNull(PlayerData.get(player), () -> "Cannot get player data for player " + player));
+		PlayerData playerData = PlayerData.get(player).orElseThrow(() -> new IllegalArgumentException("Cannot get player data for player " + player));
+		return get(playerData);
 	}
 	
 	public static Echeladder get(PlayerData playerData)

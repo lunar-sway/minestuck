@@ -65,7 +65,7 @@ public class ConsortMerchantInventory implements Container
 			ItemStack stack = inv.get(index);
 			if (stack.isEmpty())
 				return;
-			PlayerData playerData = PlayerData.get(player);
+			PlayerData playerData = PlayerData.get(player).orElseThrow();
 			int amountPurchased = (int) Math.min(prices[index] != 0 ? PlayerBoondollars.getBoondollars(playerData) / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
