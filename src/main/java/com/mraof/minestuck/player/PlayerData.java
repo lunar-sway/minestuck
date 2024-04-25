@@ -14,7 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
 /**
- * Stores and sends any data connected to a specific player.
+ * Stores any data connected to a specific player.
+ * Useful for data attachments that need to be available even when the specific player is offline.
  * This class is for server-side use only.
  * @author kirderf1
  */
