@@ -20,7 +20,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
@@ -33,7 +32,7 @@ public final class ProspitStructure
 	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 16;
 	public static final WFC.Dimensions WFC_DIMENSIONS = new WFC.Dimensions(WIDTH_IN_PIECES, HEIGHT_IN_PIECES, WIDTH_IN_PIECES);
 	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE.width() * WIDTH_IN_PIECES) / 16;
-	public static final int BOTTOM_Y = 0;
+	public static final int BOTTOM_Y = 1;
 	
 	public static void init()
 	{
@@ -95,14 +94,10 @@ public final class ProspitStructure
 			StructureTemplateManager templateManager = context.structureTemplateManager();
 			PositionalRandomFactory randomFactory = RandomSource.create(context.seed()).forkPositional().fromHashOf(Minestuck.id("prospit")).forkPositional();
 			
-			WFC.Template borderTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, buildBorderEntries(templateManager));
-			WFC.Template centerTemplate = new WFC.Template(ProspitStructure.WFC_DIMENSIONS, buildCenterEntries(templateManager));
-			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(Connectors.AIR));
-			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(Connectors.AIR));
-			
 			WFC.PositionTransform middleTransform = new WFC.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
 			
-			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS, centerTemplate, borderTemplate, randomFactory, piecesBuilder);
+			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
+					buildCenterEntries(templateManager), buildBorderEntries(templateManager), randomFactory, piecesBuilder);
 		}
 	}
 	
@@ -147,6 +142,9 @@ public final class ProspitStructure
 			builder.connect(CORRIDOR, LEDGE_RIGHT);
 			builder.connect(CORRIDOR, LEDGE_BACK);
 			builder.connect(WINDOW, AIR);
+			
+			builder.connect(WFCData.ConnectorType.TOP_BORDER, AIR);
+			builder.connect(WFCData.ConnectorType.BOTTOM_BORDER, SOLID);
 		}
 	}
 	

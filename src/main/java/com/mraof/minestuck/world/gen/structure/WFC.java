@@ -30,9 +30,18 @@ public final class WFC
 	
 	public static final class InfiniteModularGeneration
 	{
-		public static void generateModule(PositionTransform middleTransform, Dimensions dimensions, Template centerTemplate, Template borderTemplate,
+		public static void generateModule(PositionTransform middleTransform, Dimensions dimensions,
+										  WFCData.EntriesData centerEntries, WFCData.EntriesData borderEntries,
 										  PositionalRandomFactory randomFactory, StructurePiecesBuilder piecesBuilder)
 		{
+			WFC.Template borderTemplate = new WFC.Template(dimensions, borderEntries);
+			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
+			borderTemplate.setupFixedEdgeBounds(Direction.DOWN, Set.of(WFCData.ConnectorType.BOTTOM_BORDER));
+			
+			WFC.Template centerTemplate = new WFC.Template(dimensions, centerEntries);
+			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
+			centerTemplate.setupFixedEdgeBounds(Direction.DOWN, Set.of(WFCData.ConnectorType.BOTTOM_BORDER));
+			
 			PositionTransform northWestTransform = middleTransform.offset(-dimensions.xAxisPieces() / 2, -dimensions.zAxisPieces() / 2);
 			Generator northWestGenerator = cornerGenerator(borderTemplate, dimensions);
 			northWestGenerator.collapse(northWestTransform.random(randomFactory),

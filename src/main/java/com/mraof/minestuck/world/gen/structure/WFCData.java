@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -49,6 +50,9 @@ public final class WFCData
 	
 	public record ConnectorType(ResourceLocation id)
 	{
+		public static final ConnectorType
+				TOP_BORDER = new ConnectorType(Minestuck.id("top_border")),
+				BOTTOM_BORDER = new ConnectorType(Minestuck.id("bottom_border"));
 	}
 	
 	public record PieceEntry(Function<BlockPos, StructurePiece> constructor,
