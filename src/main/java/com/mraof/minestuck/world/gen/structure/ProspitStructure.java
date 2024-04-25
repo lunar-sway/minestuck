@@ -111,6 +111,14 @@ public final class ProspitStructure
 	public static final WFCData.EntryProvider BRIDGE = WFCData.TemplateEntry.axisSymmetric(Minestuck.id("prospit/bridge"));
 	public static final WFCData.EntryProvider LEDGE = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/ledge"));
 	public static final WFCData.EntryProvider LEDGE_CORNER = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/ledge_corner"));
+	public static final WFCData.EntryProvider SUPPORT = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/support"));
+	public static final WFCData.EntryProvider CORRIDOR = WFCData.TemplateEntry.axisSymmetric(Minestuck.id("prospit/corridor"));
+	public static final WFCData.EntryProvider CORRIDOR_WINDOW = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/corridor_window"));
+	public static final WFCData.EntryProvider TURN_CORRIDOR = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/turn_corridor"));
+	public static final WFCData.EntryProvider T_CORRIDOR = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/t_corridor"));
+	public static final WFCData.EntryProvider T_CORRIDOR_WINDOW = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/t_corridor_window"));
+	public static final WFCData.EntryProvider ROOM = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/room"));
+	public static final WFCData.EntryProvider INTERIOR_STAIRS = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/interior_stairs"));
 	
 	private static WFCData.EntriesData buildCenterEntries(StructureTemplateManager templateManager)
 	{
@@ -120,11 +128,19 @@ public final class ProspitStructure
 		
 		builder.add(WFCData.PieceEntry.EMPTY, 30);
 		builder.add(SOLID, 10);
+		builder.add(SUPPORT, 4);
 		builder.add(PYRAMID_ROOF, 2);
 		builder.add(SPIKE, 1);
 		builder.add(BRIDGE, 3);
 		builder.add(LEDGE, 2);
 		builder.add(LEDGE_CORNER, 2);
+		builder.add(CORRIDOR, 5);
+		builder.add(CORRIDOR_WINDOW, 3);
+		builder.add(TURN_CORRIDOR, 3);
+		builder.add(T_CORRIDOR, 4);
+		builder.add(T_CORRIDOR_WINDOW, 5);
+		builder.add(ROOM, 1);
+		builder.add(INTERIOR_STAIRS, 4);
 		
 		return builder.build();
 	}
@@ -137,8 +153,12 @@ public final class ProspitStructure
 		
 		builder.add(WFCData.PieceEntry.EMPTY, 10);
 		builder.add(SOLID, 10);
+		builder.add(SUPPORT, 1);
 		builder.add(PYRAMID_ROOF, 3);
 		builder.add(SPIKE, 1);
+		builder.add(CORRIDOR, 3);
+		builder.add(T_CORRIDOR, 5);
+		builder.add(INTERIOR_STAIRS, 4);
 		
 		return builder.build();
 	}

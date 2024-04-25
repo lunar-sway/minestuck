@@ -33,19 +33,6 @@ public final class WFCData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static PieceEntry symmetricPiece(Function<BlockPos, StructurePiece> constructor,
-											ConnectorType down, ConnectorType up, ConnectorType side)
-	{
-		return new PieceEntry(constructor, Map.of(
-				Direction.DOWN, down,
-				Direction.UP, up,
-				Direction.NORTH, side,
-				Direction.EAST, side,
-				Direction.SOUTH, side,
-				Direction.WEST, side
-		));
-	}
-	
 	private static Map<Direction, ConnectorType> rotateConnectors(Map<Direction, ConnectorType> connections, Rotation rotation)
 	{
 		if(rotation == Rotation.NONE)
@@ -71,12 +58,15 @@ public final class WFCData
 		public static final ConnectorType AIR = new ConnectorType("air"),
 				SOLID = new ConnectorType("solid"),
 				WALL = new ConnectorType("wall"),
+				WALL_ATTACHMENT = new ConnectorType("wall_attachment"),
 				ROOF_SIDE = new ConnectorType("roof_side"),
 				BRIDGE = new ConnectorType("bridge"),
 				LEDGE_FRONT = new ConnectorType("ledge/front"),
 				LEDGE_LEFT = new ConnectorType("ledge/left"),
 				LEDGE_RIGHT = new ConnectorType("ledge/right"),
-				LEDGE_BACK = new ConnectorType("ledge/back");
+				LEDGE_BACK = new ConnectorType("ledge/back"),
+				CORRIDOR = new ConnectorType("corridor"),
+				WINDOW = new ConnectorType("window");
 		
 		public static void addCoreConnections(ConnectionsBuilder builder)
 		{
@@ -84,23 +74,39 @@ public final class WFCData
 			builder.connectSelf(ConnectorType.SOLID);
 			builder.connect(ConnectorType.AIR, ConnectorType.WALL);
 			builder.connectSelf(ConnectorType.WALL);
+			builder.connect(ConnectorType.WALL_ATTACHMENT, ConnectorType.WALL);
 			builder.connect(ConnectorType.ROOF_SIDE, ConnectorType.WALL);
 			builder.connect(ConnectorType.ROOF_SIDE, ConnectorType.AIR);
 			builder.connectSelf(ConnectorType.BRIDGE);
 			builder.connect(ConnectorType.BRIDGE, ConnectorType.WALL);
 			builder.connect(ConnectorType.LEDGE_FRONT, ConnectorType.AIR);
+			builder.connect(ConnectorType.LEDGE_FRONT, ConnectorType.BRIDGE);
 			builder.connect(ConnectorType.LEDGE_LEFT, ConnectorType.LEDGE_RIGHT);
 			builder.connectSelf(ConnectorType.LEDGE_BACK);
 			builder.connect(ConnectorType.LEDGE_LEFT, ConnectorType.WALL);
 			builder.connect(ConnectorType.LEDGE_RIGHT, ConnectorType.WALL);
 			builder.connect(ConnectorType.LEDGE_BACK, ConnectorType.WALL);
+			builder.connect(ConnectorType.LEDGE_BACK, ConnectorType.ROOF_SIDE);
+			builder.connectSelf(ConnectorType.CORRIDOR);
+			builder.connect(ConnectorType.CORRIDOR, ConnectorType.BRIDGE);
+			builder.connect(ConnectorType.CORRIDOR, ConnectorType.LEDGE_LEFT);
+			builder.connect(ConnectorType.CORRIDOR, ConnectorType.LEDGE_RIGHT);
+			builder.connect(ConnectorType.CORRIDOR, ConnectorType.LEDGE_BACK);
+			builder.connect(ConnectorType.WINDOW, ConnectorType.AIR);
 		}
 	}
 	
 	public record PieceEntry(Function<BlockPos, StructurePiece> constructor,
 							 Map<Direction, ConnectorType> connections) implements EntryProvider
 	{
-		public static final EntryProvider EMPTY = symmetricPiece(pos -> null, ConnectorType.AIR, ConnectorType.AIR, ConnectorType.AIR);
+		public static final EntryProvider EMPTY = new PieceEntry(pos -> null, Map.of(
+				Direction.DOWN, ConnectorType.AIR,
+				Direction.UP, ConnectorType.AIR,
+				Direction.NORTH, ConnectorType.AIR,
+				Direction.EAST, ConnectorType.AIR,
+				Direction.SOUTH, ConnectorType.AIR,
+				Direction.WEST, ConnectorType.AIR
+		));
 		
 		@Override
 		public void build(EntryBuilderContext context)
