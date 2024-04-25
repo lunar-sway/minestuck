@@ -1,16 +1,11 @@
 package com.mraof.minestuck.player;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.attachment.AttachmentHolder;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,16 +17,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @author kirderf1
  */
 @ParametersAreNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PlayerData extends AttachmentHolder
 {
-	@SubscribeEvent
-	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
-	{
-		ServerPlayer player = (ServerPlayer) event.getEntity();
-		MSDimensions.sendDimensionData(player);
-	}
-	
 	@Nonnull
 	final PlayerIdentifier identifier;
 	
