@@ -8,7 +8,6 @@ import com.mraof.minestuck.network.data.PlayerColorPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.nbt.Tag;
@@ -117,7 +116,7 @@ public final class ColorHandler
 	
 	public static int getColorForPlayer(PlayerIdentifier identifier, Level level)
 	{
-		return PlayerSavedData.getData(identifier, level).getData(MSCapabilities.PLAYER_COLOR);
+		return PlayerData.get(identifier, level).getData(MSCapabilities.PLAYER_COLOR);
 	}
 	
 	public static void trySetPlayerColor(ServerPlayer player, int color)
@@ -126,7 +125,7 @@ public final class ColorHandler
 		if(playerId == null || !SburbHandler.canSelectColor(playerId, player.server))
 			return;
 		
-		PlayerData playerData = PlayerSavedData.getData(playerId, player.server);
+		PlayerData playerData = PlayerData.get(playerId, player.server);
 		Integer prevColor = playerData.setData(MSCapabilities.PLAYER_COLOR, color);
 		
 		if(!Objects.equals(prevColor, color))
@@ -137,7 +136,7 @@ public final class ColorHandler
 	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
-		PlayerData playerData = Objects.requireNonNull(PlayerSavedData.getData(player));
+		PlayerData playerData = Objects.requireNonNull(PlayerData.get(player));
 		
 		boolean firstTime = playerData.getExistingData(MSCapabilities.PLAYER_COLOR).isEmpty();
 		

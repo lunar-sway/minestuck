@@ -9,7 +9,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.PlayerBoondollars;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -46,9 +46,9 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		
-		if(PlayerBoondollars.tryTakeBoondollars(PlayerSavedData.getData(player), amount))
+		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player), amount))
 		{
-			PlayerBoondollars.addBoondollars(PlayerSavedData.getData(target), amount);
+			PlayerBoondollars.addBoondollars(PlayerData.get(target), amount);
 			source.sendSuccess(() -> Component.translatable(SEND, amount, target.getDisplayName()), true);
 			target.sendSystemMessage(Component.translatable(RECEIVE, amount, player.getDisplayName()));
 			return 1;
@@ -59,7 +59,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		
-		if(PlayerBoondollars.tryTakeBoondollars(PlayerSavedData.getData(player), amount))
+		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player), amount))
 		{
 			ItemStack stack = BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), amount);
 			if(!player.addItem(stack))

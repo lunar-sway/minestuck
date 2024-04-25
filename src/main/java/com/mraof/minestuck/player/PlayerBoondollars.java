@@ -65,7 +65,7 @@ public final class PlayerBoondollars
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
 		
-		PlayerData playerData = Objects.requireNonNull(PlayerSavedData.getData(player));
+		PlayerData playerData = Objects.requireNonNull(PlayerData.get(player));
 		PlayerBoondollars.sendBoondollars(player, playerData);
 	}
 	

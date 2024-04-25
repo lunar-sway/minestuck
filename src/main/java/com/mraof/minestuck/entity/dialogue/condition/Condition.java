@@ -735,7 +735,7 @@ public interface Condition
 			
 			Level level = player.level();
 			
-			PlayerData data = PlayerSavedData.getData(player);
+			PlayerData data = PlayerData.get(player);
 			if(data == null)
 				return false;
 			
@@ -769,7 +769,7 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			PlayerData data = PlayerSavedData.getData(player);
+			PlayerData data = PlayerData.get(player);
 			if(data != null)
 				return PlayerBoondollars.getBoondollars(data) >= amount;
 			

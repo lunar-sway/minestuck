@@ -11,7 +11,6 @@ import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
@@ -369,7 +368,7 @@ public sealed interface Trigger
 			if(!(entity instanceof ConsortEntity consortEntity))
 				return;
 			
-			PlayerData data = PlayerSavedData.getData(player);
+			PlayerData data = PlayerData.get(player);
 			if(data != null)
 				ConsortReputation.get(data).addConsortReputation(this.reputation, consortEntity.getHomeDimension());
 		}
@@ -390,7 +389,7 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerData data = PlayerSavedData.getData(player);
+			PlayerData data = PlayerData.get(player);
 			if(data != null && boondollars != 0)
 			{
 				if(boondollars > 0)

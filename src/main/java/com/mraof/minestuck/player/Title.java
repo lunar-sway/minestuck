@@ -78,12 +78,12 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	
 	public static Optional<Title> getTitle(ServerPlayer player)
 	{
-		return getTitle(PlayerSavedData.getData(player));
+		return getTitle(PlayerData.get(player));
 	}
 	
 	public static Optional<Title> getTitle(PlayerIdentifier playerId, MinecraftServer mcServer)
 	{
-		return getTitle(PlayerSavedData.getData(playerId, mcServer));
+		return getTitle(PlayerData.get(playerId, mcServer));
 	}
 	
 	public static Optional<Title> getTitle(@Nullable PlayerData playerData)
@@ -111,7 +111,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 			return;
 		if(player.getCommandSenderWorld().getGameTime() % 380 != 0)
 			return;
-		PlayerData data = PlayerSavedData.getData(player);
+		PlayerData data = PlayerData.get(player);
 		if(data == null)
 			return;
 		

@@ -60,7 +60,7 @@ public final class SburbHandler
 	
 	static void generateAndSetTitle(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		PlayerData data = PlayerSavedData.getData(player, mcServer);
+		PlayerData data = PlayerData.get(player, mcServer);
 		if(Title.getTitle(data).isEmpty())
 		{
 			Title title = produceTitle(player, mcServer);

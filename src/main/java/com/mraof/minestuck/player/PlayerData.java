@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.attachment.AttachmentHolder;
@@ -49,6 +50,25 @@ public final class PlayerData extends AttachmentHolder
 		
 		if(nbt.contains(ATTACHMENTS_NBT_KEY, Tag.TAG_COMPOUND))
 			this.deserializeAttachments(nbt.getCompound(ATTACHMENTS_NBT_KEY));
+	}
+	
+	@Nullable
+	public static PlayerData get(ServerPlayer player)
+	{
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		if(identifier == null)
+			return null;
+		return PlayerSavedData.get(player.server).getData(identifier);
+	}
+	
+	public static PlayerData get(PlayerIdentifier player, Level level)
+	{
+		return PlayerSavedData.get(level).getData(player);
+	}
+	
+	public static PlayerData get(PlayerIdentifier player, MinecraftServer server)
+	{
+		return PlayerSavedData.get(server).getData(player);
 	}
 	
 	CompoundTag writeToNBT()

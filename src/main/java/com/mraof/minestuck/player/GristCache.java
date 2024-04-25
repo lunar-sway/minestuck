@@ -52,18 +52,18 @@ public final class GristCache implements INBTSerializable<Tag>
 	
 	public static GristCache get(ServerPlayer player)
 	{
-		PlayerData data = Objects.requireNonNull(PlayerSavedData.getData(player));
+		PlayerData data = Objects.requireNonNull(PlayerData.get(player));
 		return get(data);
 	}
 	
 	public static GristCache get(Level level, PlayerIdentifier player)
 	{
-		return get(PlayerSavedData.getData(player, level));
+		return get(PlayerData.get(player, level));
 	}
 	
 	public static GristCache get(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		return get(PlayerSavedData.getData(player, mcServer));
+		return get(PlayerData.get(player, mcServer));
 	}
 	
 	public static GristCache get(PlayerData playerData)

@@ -56,12 +56,12 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static Echeladder get(PlayerIdentifier player, Level level)
 	{
-		return get(PlayerSavedData.getData(player, level));
+		return get(PlayerData.get(player, level));
 	}
 	
 	public static Echeladder get(ServerPlayer player)
 	{
-		return get(Objects.requireNonNull(PlayerSavedData.getData(player), () -> "Cannot get player data for player " + player));
+		return get(Objects.requireNonNull(PlayerData.get(player), () -> "Cannot get player data for player " + player));
 	}
 	
 	public static Echeladder get(PlayerData playerData)
@@ -145,7 +145,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 				LOGGER.debug("Remaining exp {} is below 1, and will therefore be ignored", exp);
 		}
 		
-		PlayerBoondollars.addBoondollars(PlayerSavedData.getData(identifier, mcServer), boondollarsGained);
+		PlayerBoondollars.addBoondollars(PlayerData.get(identifier, mcServer), boondollarsGained);
 		
 		LOGGER.debug("Finished echeladder climbing for {} at {} with progress {}", identifier.getUsername(), rung, progress);
 		ServerPlayer player = identifier.getPlayer(mcServer);

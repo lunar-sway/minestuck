@@ -186,7 +186,7 @@ public class GristGutter
 	
 	private void tickDistributionToPlayer(PlayerIdentifier player, RandomSource rand)
 	{
-		PlayerData data = PlayerSavedData.getData(player, mcServer);
+		PlayerData data = PlayerData.get(player, mcServer);
 		
 		long spliceAmount = (long) (Echeladder.get(data).getGristCapacity() * getDistributionRateModifier());
 		

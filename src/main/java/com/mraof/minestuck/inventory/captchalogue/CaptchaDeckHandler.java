@@ -11,7 +11,6 @@ import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -216,7 +215,7 @@ public final class CaptchaDeckHandler
 		
 		if(stack.getItem() == MSItems.BOONDOLLARS.get())
 		{
-			PlayerBoondollars.addBoondollars(PlayerSavedData.getData(player), BoondollarsItem.getCount(stack));
+			PlayerBoondollars.addBoondollars(PlayerData.get(player), BoondollarsItem.getCount(stack));
 			stack.shrink(1);
 			return;
 		}
@@ -395,7 +394,7 @@ public final class CaptchaDeckHandler
 	@Nullable
 	public static Modus getModus(ServerPlayer player)
 	{
-		PlayerData playerData = PlayerSavedData.getData(player);
+		PlayerData playerData = PlayerData.get(player);
 		if(playerData == null)
 			return null;
 		return playerData.getData(MSCapabilities.MODUS_HOLDER).modus;
@@ -450,7 +449,7 @@ public final class CaptchaDeckHandler
 	
 	private static ModusHolder getHolder(ServerPlayer player)
 	{
-		PlayerData data = Objects.requireNonNull(PlayerSavedData.getData(player));
+		PlayerData data = Objects.requireNonNull(PlayerData.get(player));
 		return data.getData(MSCapabilities.MODUS_HOLDER);
 	}
 	

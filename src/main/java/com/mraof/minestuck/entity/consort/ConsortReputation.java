@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -62,7 +61,7 @@ public final class ConsortReputation implements INBTSerializable<ListTag>
 	
 	public static ConsortReputation get(ServerPlayer player)
 	{
-		return get(Objects.requireNonNull(PlayerSavedData.getData(player)));
+		return get(Objects.requireNonNull(PlayerData.get(player)));
 	}
 	
 	public static ConsortReputation get(PlayerData playerData)

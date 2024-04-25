@@ -5,8 +5,8 @@ import com.google.common.collect.Multimap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.core.BlockPos;
@@ -126,7 +126,7 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 	{
 		PlayerIdentifier owner = data.getTarget();
 		ResourceKey<Level> land = data.sburbData().getLandDimensionIfEntered();
-		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).getData(MSCapabilities.EDITMODE_LOCATIONS);
+		EditmodeLocations locations = PlayerData.get(owner, data.getEditor().server).getData(MSCapabilities.EDITMODE_LOCATIONS);
 		
 		if(level == land && ENTRY_POSITIONS.contains(pos))
 			return true;
@@ -167,7 +167,7 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 		if(computer.getOwner() == null)
 			return;
 		
-		var locations = PlayerSavedData.getData(computer.getOwner(), level).getData(MSCapabilities.EDITMODE_LOCATIONS);
+		var locations = PlayerData.get(computer.getOwner(), level).getData(MSCapabilities.EDITMODE_LOCATIONS);
 		
 		if(locations.computers.containsEntry(level.dimension(), computer.getBlockPos()))
 			return;
@@ -180,7 +180,7 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 	
 	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
 	{
-		var locations = PlayerSavedData.getData(owner, mcServer).getData(MSCapabilities.EDITMODE_LOCATIONS);
+		var locations = PlayerData.get(owner, mcServer).getData(MSCapabilities.EDITMODE_LOCATIONS);
 		
 		boolean wasRemoved = locations.computers.remove(level, pos);
 		if(wasRemoved)

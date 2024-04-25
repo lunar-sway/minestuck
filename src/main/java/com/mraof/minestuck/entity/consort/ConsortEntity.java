@@ -14,7 +14,6 @@ import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.ChatFormatting;
@@ -153,7 +152,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(this.dialogueComponent.hasAnyOngoingDialogue())	//todo do we want this? feel free to remove it if not
 			return InteractionResult.FAIL;
 		
-		PlayerData playerData = PlayerSavedData.getData(serverPlayer);
+		PlayerData playerData = PlayerData.get(serverPlayer);
 		if(playerData == null || ConsortReputation.get(playerData).getConsortReputation(homeDimension) <= -1000)
 			return InteractionResult.FAIL;
 		

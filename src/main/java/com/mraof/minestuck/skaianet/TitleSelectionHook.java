@@ -6,8 +6,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -74,7 +74,7 @@ public class TitleSelectionHook
 		if(title == null)
 			SburbHandler.generateAndSetTitle(identifier, player.server);
 		else
-			Title.setTitle(PlayerSavedData.getData(identifier, player.server), title);
+			Title.setTitle(PlayerData.get(identifier, player.server), title);
 		
 		//Once the title selection has finished successfully, restore player position and trigger entry
 		var both = playersInTitleSelection.remove(player);

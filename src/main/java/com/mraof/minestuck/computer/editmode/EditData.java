@@ -64,7 +64,7 @@ public class EditData
 	
 	public EditmodeLocations locations()
 	{
-		return PlayerSavedData.getData(this.getTarget(), player.server).getData(MSCapabilities.EDITMODE_LOCATIONS);
+		return PlayerData.get(this.getTarget(), player.server).getData(MSCapabilities.EDITMODE_LOCATIONS);
 	}
 	
 	public GristCache getGristCache()

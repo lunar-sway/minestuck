@@ -7,14 +7,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,25 +89,6 @@ public final class PlayerSavedData extends SavedData
 			}
 		}
 		return savedData;
-	}
-	
-	@Nullable
-	public static PlayerData getData(ServerPlayer player)
-	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		if(identifier == null)
-			return null;
-		return get(player.server).getData(identifier);
-	}
-	
-	public static PlayerData getData(PlayerIdentifier player, Level level)
-	{
-		return get(level).getData(player);
-	}
-	
-	public static PlayerData getData(PlayerIdentifier player, MinecraftServer server)
-	{
-		return get(server).getData(player);
 	}
 	
 	public PlayerData getData(PlayerIdentifier player)
