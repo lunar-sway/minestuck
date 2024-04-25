@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.data.TitleDataPacket;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -90,7 +90,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	{
 		if(playerData == null)
 			return Optional.empty();
-		return playerData.getExistingData(MSCapabilities.TITLE);
+		return playerData.getExistingData(MSAttachments.TITLE);
 	}
 	
 	public static void setTitle(PlayerData playerData, Title newTitle)
@@ -98,7 +98,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 		if(getTitle(playerData).isPresent())
 			throw new IllegalStateException("Can't set title for player " + playerData.identifier.getUsername() + " because they already have one");
 		
-		playerData.setData(MSCapabilities.TITLE, newTitle);
+		playerData.setData(MSAttachments.TITLE, newTitle);
 		
 		ServerPlayer player = playerData.getPlayer();
 		if(player != null)
@@ -107,7 +107,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	
 	public void handleAspectEffects(ServerPlayer player)
 	{
-		if(!MinestuckConfig.SERVER.aspectEffects.get() || !player.getData(MSCapabilities.EFFECT_TOGGLE))
+		if(!MinestuckConfig.SERVER.aspectEffects.get() || !player.getData(MSAttachments.EFFECT_TOGGLE))
 			return;
 		if(player.getCommandSenderWorld().getGameTime() % 380 != 0)
 			return;

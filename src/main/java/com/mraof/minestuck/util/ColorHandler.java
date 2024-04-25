@@ -116,7 +116,7 @@ public final class ColorHandler
 	
 	public static int getColorForPlayer(PlayerIdentifier identifier, Level level)
 	{
-		return PlayerData.get(identifier, level).getData(MSCapabilities.PLAYER_COLOR);
+		return PlayerData.get(identifier, level).getData(MSAttachments.PLAYER_COLOR);
 	}
 	
 	public static void trySetPlayerColor(ServerPlayer player, int color)
@@ -126,7 +126,7 @@ public final class ColorHandler
 			return;
 		
 		PlayerData playerData = PlayerData.get(playerId, player.server);
-		Integer prevColor = playerData.setData(MSCapabilities.PLAYER_COLOR, color);
+		Integer prevColor = playerData.setData(MSAttachments.PLAYER_COLOR, color);
 		
 		if(!Objects.equals(prevColor, color))
 			player.connection.send(new PlayerColorPacket.Data(color));
@@ -138,13 +138,13 @@ public final class ColorHandler
 		ServerPlayer player = (ServerPlayer) event.getEntity();
 		PlayerData playerData = Objects.requireNonNull(PlayerData.get(player));
 		
-		boolean firstTime = playerData.getExistingData(MSCapabilities.PLAYER_COLOR).isEmpty();
+		boolean firstTime = playerData.getExistingData(MSAttachments.PLAYER_COLOR).isEmpty();
 		
 		if(firstTime && !player.isSpectator())
 		{
-			playerData.setData(MSCapabilities.PLAYER_COLOR, BuiltinColors.DEFAULT_COLOR);
+			playerData.setData(MSAttachments.PLAYER_COLOR, BuiltinColors.DEFAULT_COLOR);
 			player.connection.send(new PlayerColorPacket.OpenSelection());
 		} else
-			player.connection.send(new PlayerColorPacket.Data(playerData.getData(MSCapabilities.PLAYER_COLOR)));
+			player.connection.send(new PlayerColorPacket.Data(playerData.getData(MSAttachments.PLAYER_COLOR)));
 	}
 }

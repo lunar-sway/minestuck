@@ -6,7 +6,7 @@ import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.nbt.EndTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -96,7 +96,7 @@ public class GristGutter
 		PlayerSavedData playerSavedData = PlayerSavedData.get(mcServer);
 		
 		return this.gutterPlayers()
-				.map(player -> playerSavedData.getData(player).getData(MSCapabilities.GUTTER_MULTIPLIER))
+				.map(player -> playerSavedData.getData(player).getData(MSAttachments.GUTTER_MULTIPLIER))
 				.reduce(0D, Double::sum);
 	}
 	

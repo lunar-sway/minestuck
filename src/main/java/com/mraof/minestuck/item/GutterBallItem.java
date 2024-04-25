@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
@@ -44,8 +44,8 @@ public class GutterBallItem extends Item
 		if(player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer))
 		{
 			PlayerData playerData = Objects.requireNonNull(PlayerData.get(serverPlayer));
-			double newMultiplier = playerData.getData(MSCapabilities.GUTTER_MULTIPLIER) + 0.2;
-			playerData.setData(MSCapabilities.GUTTER_MULTIPLIER, newMultiplier);
+			double newMultiplier = playerData.getData(MSAttachments.GUTTER_MULTIPLIER) + 0.2;
+			playerData.setData(MSAttachments.GUTTER_MULTIPLIER, newMultiplier);
 		}
 		
 		return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());

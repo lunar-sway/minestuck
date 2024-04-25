@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -34,8 +34,8 @@ public record EffectTogglePacket() implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		boolean newToggle = !player.getData(MSCapabilities.EFFECT_TOGGLE);
-		player.setData(MSCapabilities.EFFECT_TOGGLE, newToggle);
+		boolean newToggle = !player.getData(MSAttachments.EFFECT_TOGGLE);
+		player.setData(MSAttachments.EFFECT_TOGGLE, newToggle);
 		
 		MutableComponent message = newToggle
 				? Component.translatable(ON)

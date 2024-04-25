@@ -9,7 +9,7 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.data.GristCachePacket;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -68,7 +68,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	
 	public static GristCache get(PlayerData playerData)
 	{
-		return playerData.getData(MSCapabilities.GRIST_CACHE);
+		return playerData.getData(MSAttachments.GRIST_CACHE);
 	}
 	
 	public static Component createMissingMessage(GristSet gristSet)

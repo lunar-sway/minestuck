@@ -8,7 +8,7 @@ import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -64,7 +64,7 @@ public class EditData
 	
 	public EditmodeLocations locations()
 	{
-		return PlayerData.get(this.getTarget(), player.server).getData(MSCapabilities.EDITMODE_LOCATIONS);
+		return PlayerData.get(this.getTarget(), player.server).getData(MSAttachments.EDITMODE_LOCATIONS);
 	}
 	
 	public GristCache getGristCache()

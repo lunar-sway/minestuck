@@ -2,7 +2,7 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.data.BoondollarDataPacket;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -15,7 +15,7 @@ public final class PlayerBoondollars
 {
 	public static long getBoondollars(PlayerData playerData)
 	{
-		return playerData.getData(MSCapabilities.BOONDOLLARS);
+		return playerData.getData(MSAttachments.BOONDOLLARS);
 	}
 	
 	public static void addBoondollars(PlayerData playerData, long amount)
@@ -55,7 +55,7 @@ public final class PlayerBoondollars
 		
 		if(amount != getBoondollars(playerData))
 		{
-			playerData.setData(MSCapabilities.BOONDOLLARS, amount);
+			playerData.setData(MSAttachments.BOONDOLLARS, amount);
 			sendBoondollars(playerData.getPlayer(), playerData);
 		}
 	}

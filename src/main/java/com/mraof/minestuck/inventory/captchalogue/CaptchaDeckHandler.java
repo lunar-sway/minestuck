@@ -11,7 +11,7 @@ import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -397,7 +397,7 @@ public final class CaptchaDeckHandler
 		PlayerData playerData = PlayerData.get(player);
 		if(playerData == null)
 			return null;
-		return playerData.getData(MSCapabilities.MODUS_HOLDER).modus;
+		return playerData.getData(MSAttachments.MODUS_HOLDER).modus;
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
@@ -450,7 +450,7 @@ public final class CaptchaDeckHandler
 	private static ModusHolder getHolder(ServerPlayer player)
 	{
 		PlayerData data = Objects.requireNonNull(PlayerData.get(player));
-		return data.getData(MSCapabilities.MODUS_HOLDER);
+		return data.getData(MSAttachments.MODUS_HOLDER);
 	}
 	
 	public static class ModusHolder implements INBTSerializable<CompoundTag>

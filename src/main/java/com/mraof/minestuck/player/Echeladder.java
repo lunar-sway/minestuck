@@ -7,7 +7,7 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.data.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
@@ -66,7 +66,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static Echeladder get(PlayerData playerData)
 	{
-		return playerData.getData(MSCapabilities.ECHELADDER);
+		return playerData.getData(MSAttachments.ECHELADDER);
 	}
 	
 	@SubscribeEvent

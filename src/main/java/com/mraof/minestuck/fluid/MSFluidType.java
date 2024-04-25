@@ -1,6 +1,6 @@
 package com.mraof.minestuck.fluid;
 
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -86,7 +86,7 @@ public class MSFluidType extends FluidType
 		Vec3 fallAdjustedMoveVec = entity.getFluidFallingAdjustedMovement(gravity, isSinking, entity.getDeltaMovement());
 		entity.setDeltaMovement(fallAdjustedMoveVec);
 		
-		LastFluidTickData data = entity.getData(MSCapabilities.LAST_FLUID_TICK_ATTACHMENT);
+		LastFluidTickData data = entity.getData(MSAttachments.LAST_FLUID_TICK);
 		long tick = entity.level().getGameTime();
 		long lastTick = Objects.requireNonNullElse(data.lastTickMap.get(fluidType), 0L);
 		
