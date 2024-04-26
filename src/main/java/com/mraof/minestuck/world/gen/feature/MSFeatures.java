@@ -22,6 +22,8 @@ public final class MSFeatures
 	
 	public static final RegistryObject<Feature<SimpleTemplateFeature.Config>> SIMPLE_TEMPLATE = REGISTER.register("simple_template", () -> new SimpleTemplateFeature(SimpleTemplateFeature.Config.CODEC));
 	
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> ROOK_OUTPOST = REGISTER.register("rook_outpost", () -> new RookOutpostFeature(NoneFeatureConfiguration.CODEC));
+	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> FLOOR_COG = REGISTER.register("floor_cog", () -> new FloorCogFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> SURFACE_FOSSIL = REGISTER.register("surface_fossil", () -> new SurfaceFossilsFeature(NoneFeatureConfiguration.CODEC));
