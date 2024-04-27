@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Perfectly generic and cindered signs work again
 - Fixed execution permissions for the `minestuck:command` dialogue trigger
 - Add missing wood-related recipes
+- Frost Trees will now drop saplings
+- Saplings are now pottable
 
 ### Contributors for this release
 
