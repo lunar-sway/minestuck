@@ -10,9 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - New rook themed towers on the Battlefield
 
+### Changed
+
+- Silicone Caulk Bucket alchemy recipe was changed from Water Bucket && Quartz to Water Bucket && Amethyst Shard, to avoid conflict with Prismarine Shard alchemy recipe
+
 ### Contributors for this release
 
-- Dweblenod, shadowLink
+- Akisephila, Dweblenod, shadowLink
 
 ## [1.20.1-1.12.0.1] - 2024-04-15
 
