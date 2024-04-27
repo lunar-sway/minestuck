@@ -2,12 +2,24 @@ package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
+
+import java.util.List;
 
 public final class MSBiomeProvider
 {
@@ -35,6 +47,9 @@ public final class MSBiomeProvider
 		
 		BiomeSpecialEffects.Builder ambience = new BiomeSpecialEffects.Builder().waterColor(0x3F76E4).waterFogColor(0x050533);
 		ambience.fogColor(0xCDCDFF).skyColor(0x7AA4FF);
+		
+		genSettings.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, Holder.direct(new PlacedFeature(Holder.direct(new ConfiguredFeature<>(MSFeatures.ROOK_OUTPOST.get(), FeatureConfiguration.NONE)),
+				List.of(RarityFilter.onAverageOnceEvery(120), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, RandomOffsetPlacement.vertical(ConstantInt.of(-4))))));
 		
 		return new Biome.BiomeBuilder().hasPrecipitation(false).temperature(0.5F).downfall(0.5F).specialEffects(ambience.build()).mobSpawnSettings(spawnInfo.build()).generationSettings(genSettings.build()).build();
 	}

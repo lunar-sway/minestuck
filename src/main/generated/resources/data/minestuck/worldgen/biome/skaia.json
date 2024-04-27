@@ -7,7 +7,35 @@
     "water_color": 4159204,
     "water_fog_color": 329011
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [
+      {
+        "feature": {
+          "type": "minestuck:rook_outpost",
+          "config": {}
+        },
+        "placement": [
+          {
+            "type": "minecraft:rarity_filter",
+            "chance": 120
+          },
+          {
+            "type": "minecraft:heightmap",
+            "heightmap": "OCEAN_FLOOR"
+          },
+          {
+            "type": "minecraft:random_offset",
+            "xz_spread": 0,
+            "y_spread": -4
+          }
+        ]
+      }
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {
