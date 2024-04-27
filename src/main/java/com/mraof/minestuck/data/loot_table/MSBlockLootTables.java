@@ -1,6 +1,8 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.AspectTreeBlocks;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
@@ -172,8 +174,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(STRIPPED_CINDERED_WOOD.get());
 		
 		dropSelf(FROST_SAPLING.get());
-		
-		
 		
 		add(STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(COBBLESTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
@@ -832,6 +832,25 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(END_SAPLING.get());
 		dropSelf(SHADEWOOD_SAPLING.get());
 		
+		dropPottedContents(POTTED_FROST_SAPLING.get());
+		dropPottedContents(POTTED_RAINBOW_SAPLING.get());
+		dropPottedContents(POTTED_END_SAPLING.get());
+		dropPottedContents(POTTED_SHADEWOOD_SAPLING.get());
+		
+		dropPottedContents(AspectTreeBlocks.POTTED_BLOOD_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_BREATH_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_DOOM_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_HEART_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_HOPE_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_LIFE_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_LIGHT_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_MIND_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_RAGE_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_SPACE_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_TIME_ASPECT_SAPLING.get());
+		dropPottedContents(AspectTreeBlocks.POTTED_VOID_ASPECT_SAPLING.get());
+
+		
 		add(GLOWING_BOOKSHELF.get(), this::bookshelfDrop);
 		add(FROST_BOOKSHELF.get(), this::bookshelfDrop);
 		add(RAINBOW_BOOKSHELF.get(), this::bookshelfDrop);
@@ -1094,12 +1113,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	
 	private LootTable.Builder frostLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
+		return createLeavesDrops(block, FROST_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder floweringFrostLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
+		return createLeavesDrops(block, FROST_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder rainbowLeavesDrop(Block block)
