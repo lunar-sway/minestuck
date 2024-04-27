@@ -1230,6 +1230,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FROST_BOOKSHELF.get());
 		output.accept(MSItems.FROST_LADDER.get());
 		output.accept(MSItems.FROST_LEAVES.get());
+		output.accept(MSItems.FROST_LEAVES_FLOWERING.get());
 		output.accept(MSItems.FROST_SAPLING.get());
 		
 		output.accept(MSItems.RAINBOW_LOG.get());
