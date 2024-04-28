@@ -9,6 +9,7 @@ import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
@@ -92,18 +93,18 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		boolean clickedInArrowIconYRange = ycor >= yOffset + ARROW_Y && ycor < yOffset + ARROW_Y + ARROW_SIZE;
 		if(clickedInArrowIconYRange)
 		{
-			EditmodeInventoryPacket packet = null;
+			CustomPacketPayload packet = null;
 			
 			boolean clickedInLeftArrowXRange = less && xcor >= xOffset + LEFT_ARROW_X && xcor < xOffset + LEFT_ARROW_X + ARROW_SIZE;
 			boolean clickedInRightArrowXRange = more && xcor >= xOffset + RIGHT_ARROW_X && xcor < xOffset + RIGHT_ARROW_X + ARROW_SIZE;
 			if(clickedInLeftArrowXRange)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = EditmodeInventoryPacket.scroll(false);
+				packet = new EditmodeInventoryPacket.Scroll(false);
 			} else if(clickedInRightArrowXRange)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = EditmodeInventoryPacket.scroll(true);
+				packet = new EditmodeInventoryPacket.Scroll(true);
 			}
 			if(packet != null)
 			{

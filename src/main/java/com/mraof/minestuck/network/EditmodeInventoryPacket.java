@@ -9,89 +9,75 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class EditmodeInventoryPacket implements MSPacket.PlayToBoth
+public final class EditmodeInventoryPacket
 {
-	public static final ResourceLocation ID = Minestuck.id("editmode_inventory");
-	
-	private final boolean b1, b2;
-	private final List<ItemStack> inventory;
-	
-	private EditmodeInventoryPacket(boolean b1, boolean b2, List<ItemStack> inventory)
+	public record Update(List<ItemStack> inventory, boolean canScrollLeft, boolean canScrollRight) implements MSPacket.PlayToClient
 	{
-		this.b1 = b1;
-		this.b2 = b2;
-		this.inventory = inventory;
-	}
-	
-	public static EditmodeInventoryPacket update(List<ItemStack> inventory, boolean scrollLeft, boolean scrollRight)
-	{
-		return new EditmodeInventoryPacket(scrollLeft, scrollRight, inventory);
-	}
-	
-	public static EditmodeInventoryPacket scroll(boolean isRight)
-	{
-		return new EditmodeInventoryPacket(isRight, false, null);
-	}
-	
-	@Override
-	public ResourceLocation id()
-	{
-		return ID;
-	}
-	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeBoolean(b1);
-		if(inventory != null)
+		public static final ResourceLocation ID = Minestuck.id("editmode_inventory/update");
+		
+		@Override
+		public ResourceLocation id()
 		{
-			buffer.writeBoolean(b2);
-			for(ItemStack stack : inventory)
-				buffer.writeItem(stack);
-		}
-	}
-	
-	public static EditmodeInventoryPacket read(FriendlyByteBuf buffer)
-	{
-		boolean b1 = buffer.readBoolean();
-		if(buffer.readableBytes() > 0)
-		{
-			boolean b2 = buffer.readBoolean();
-			List<ItemStack> inventory = new ArrayList<>();
-			while(buffer.readableBytes() > 0)
-			{
-				inventory.add(buffer.readItem());
-			}
-			return update(inventory, b1, b2);
+			return ID;
 		}
 		
-		return scroll(b1);
-	}
-	
-	@Override
-	public void execute()
-	{
-		if(Minecraft.getInstance().screen instanceof InventoryEditmodeScreen)
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
-			InventoryEditmodeScreen gui = (InventoryEditmodeScreen) Minecraft.getInstance().screen;
-			gui.less = b1;
-			gui.more = b2;
-			gui.getMenu().receiveUpdatePacket(this);
+			buffer.writeCollection(this.inventory, FriendlyByteBuf::writeItem);
+			buffer.writeBoolean(this.canScrollLeft);
+			buffer.writeBoolean(this.canScrollRight);
+		}
+		
+		public static Update read(FriendlyByteBuf buffer)
+		{
+			List<ItemStack> inventory = buffer.readList(FriendlyByteBuf::readItem);
+			boolean canScrollLeft = buffer.readBoolean();
+			boolean canScrollRight = buffer.readBoolean();
+			return new Update(inventory, canScrollLeft, canScrollRight);
+		}
+		
+		@Override
+		public void execute()
+		{
+			if(Minecraft.getInstance().screen instanceof InventoryEditmodeScreen gui)
+			{
+				gui.less = this.canScrollLeft;
+				gui.more = this.canScrollRight;
+				gui.getMenu().receiveUpdatePacket(this);
+			}
 		}
 	}
 	
-	@Override
-	public void execute(ServerPlayer player)
+	public record Scroll(boolean isRight) implements MSPacket.PlayToServer
 	{
-		if(player.containerMenu instanceof EditmodeMenu)
-			((EditmodeMenu)player.containerMenu).updateScroll(b1);
-	}
-	
-	public List<ItemStack> getInventory()
-	{
-		return inventory;
+		public static final ResourceLocation ID = Minestuck.id("editmode_inventory/scroll");
+		
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+			buffer.writeBoolean(this.isRight);
+		}
+		
+		public static Scroll read(FriendlyByteBuf buffer)
+		{
+			boolean isRight = buffer.readBoolean();
+			return new Scroll(isRight);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			if(player.containerMenu instanceof EditmodeMenu menu)
+				menu.updateScroll(this.isRight);
+		}
 	}
 }

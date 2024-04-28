@@ -72,7 +72,8 @@ public class MSPayloads
 				.play(EditmodeDragPacket.Reset.ID, EditmodeDragPacket.Reset::read, MSPacket.PlayToServer::handler)
 				
 				.play(EditmodeLocationsPacket.ID, EditmodeLocationsPacket::read, MSPacket.PlayToClient::handler)
-				.play(EditmodeInventoryPacket.ID, EditmodeInventoryPacket::read, MSPacket.PlayToBoth::handlerBoth)
+				.play(EditmodeInventoryPacket.Update.ID, EditmodeInventoryPacket.Update::read, MSPacket.PlayToClient::handler)
+				.play(EditmodeInventoryPacket.Scroll.ID, EditmodeInventoryPacket.Scroll::read, MSPacket.PlayToServer::handler)
 				.play(EditmodeTeleportPacket.ID, EditmodeTeleportPacket::read, MSPacket.PlayToServer::handler)
 				
 				.play(MachinePacket.SetRunning.ID, MachinePacket.SetRunning::read, MSPacket.PlayToServer::handler)
