@@ -44,7 +44,8 @@ public class MSPayloads
 				.play(ConnectToSburbServerPacket.ID, ConnectToSburbServerPacket::read, MSPacket.PlayToServer::handler)
 				.play(OpenSburbServerPacket.ID, OpenSburbServerPacket::read, MSPacket.PlayToServer::handler)
 				.play(ResumeSburbConnectionPacket.ID, ResumeSburbConnectionPacket::read, MSPacket.PlayToServer::handler)
-				.play(CloseSburbConnectionPacket.ID, CloseSburbConnectionPacket::read, MSPacket.PlayToServer::handler)
+				.play(CloseSburbConnectionPacket.AsClient.ID, CloseSburbConnectionPacket.AsClient::read, MSPacket.PlayToServer::handler)
+				.play(CloseSburbConnectionPacket.AsServer.ID, CloseSburbConnectionPacket.AsServer::read, MSPacket.PlayToServer::handler)
 				.play(CloseRemoteSburbConnectionPacket.ID, CloseRemoteSburbConnectionPacket::read, MSPacket.PlayToServer::handler)
 				.play(ClearMessagePacket.ID, ClearMessagePacket::read, MSPacket.PlayToServer::handler)
 				
