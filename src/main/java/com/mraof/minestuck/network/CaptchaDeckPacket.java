@@ -4,150 +4,180 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 
-//todo this packet should really be split into multiple packets
-public class CaptchaDeckPacket implements MSPacket.PlayToServer
+public final class CaptchaDeckPacket
 {
-	public static final ResourceLocation ID = Minestuck.id("captcha_deck");
-	
-	private static final byte MODUS = 0;
-	private static final byte CAPTCHALOGUE = 1;
-	private static final byte GET = 2;
-	private static final byte MODUS_PARAM = 3;
-	private static final byte CAPTCHALOGUE_INV = 4;
-	
-	private byte type;
-	
-	private int itemIndex;
-	private boolean asCard;
-	
-	private byte valueType;
-	private int value;
-	
-	private int slotIndex;
-	private int windowId;
-	
-	public static CaptchaDeckPacket modus()
+	public record TriggerModusButton() implements MSPacket.PlayToServer
 	{
-		CaptchaDeckPacket packet = new CaptchaDeckPacket();
-		packet.type = MODUS;
+		public static final ResourceLocation ID = Minestuck.id("captcha_deck/trigger_modus_button");
 		
-		return packet;
-	}
-	
-	public static CaptchaDeckPacket captchalogue()
-	{
-		CaptchaDeckPacket packet = new CaptchaDeckPacket();
-		packet.type = CAPTCHALOGUE;
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
 		
-		return packet;
-	}
-	
-	public static CaptchaDeckPacket get(int index, boolean asCard)
-	{
-		CaptchaDeckPacket packet = new CaptchaDeckPacket();
-		packet.type = GET;
-		packet.itemIndex = index;
-		packet.asCard = asCard;
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+		}
 		
-		return packet;
-	}
-	
-	public static CaptchaDeckPacket modusParam(byte valueType, int value)
-	{
-		CaptchaDeckPacket packet = new CaptchaDeckPacket();
-		packet.type = MODUS_PARAM;
-		packet.valueType = valueType;
-		packet.value = value;
+		public static TriggerModusButton read(FriendlyByteBuf ignored)
+		{
+			return new TriggerModusButton();
+		}
 		
-		return packet;
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			if(ServerEditHandler.getData(player) != null)
+				return;
+			
+			if(player.containerMenu instanceof CaptchaDeckMenu)
+				CaptchaDeckHandler.useItem(player);
+		}
 	}
 	
-	public static CaptchaDeckPacket captchalogueInv(int slotIndex, int windowId)
+	public record CaptchalogueHeldItem() implements MSPacket.PlayToServer
 	{
-		CaptchaDeckPacket packet = new CaptchaDeckPacket();
-		packet.type = CAPTCHALOGUE_INV;
-		packet.slotIndex = slotIndex;
-		packet.windowId = windowId;
+		public static final ResourceLocation ID = Minestuck.id("captcha_deck/captchalogue_held_item");
 		
-		return packet;
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+		}
+		
+		public static CaptchalogueHeldItem read(FriendlyByteBuf ignored)
+		{
+			return new CaptchalogueHeldItem();
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			if(ServerEditHandler.getData(player) != null)
+				return;
+			
+			if(!player.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty())
+				CaptchaDeckHandler.captchalogueItem(player);
+		}
 	}
 	
-	@Override
-	public ResourceLocation id()
+	public record CaptchalogueInventorySlot(int slotIndex, int windowId) implements MSPacket.PlayToServer
 	{
-		return ID;
+		public static final ResourceLocation ID = Minestuck.id("captcha_deck/captchalogue_inventory_slot");
+		
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+			buffer.writeInt(this.slotIndex);
+			buffer.writeInt(this.windowId);
+		}
+		
+		public static CaptchalogueInventorySlot read(FriendlyByteBuf buffer)
+		{
+			int slotIndex = buffer.readInt();
+			int windowId = buffer.readInt();
+			return new CaptchalogueInventorySlot(slotIndex, windowId);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			if(ServerEditHandler.getData(player) != null)
+				return;
+			
+			CaptchaDeckHandler.captchalogueItemInSlot(player, slotIndex, windowId);
+		}
 	}
 	
-	@Override
-	public void write(FriendlyByteBuf buffer)
+	public record GetItem(int itemIndex, boolean asCard) implements MSPacket.PlayToServer
 	{
-		buffer.writeByte(type);	//Packet type
-		if(type == GET)	//Take item from modus
+		public static final ResourceLocation ID = Minestuck.id("captcha_deck/get_item");
+		
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeInt(itemIndex);
 			buffer.writeBoolean(asCard);
-		} else if(type == MODUS_PARAM)
-		{
-			buffer.writeByte(valueType);
-			buffer.writeInt(value);
-		} else if(type == CAPTCHALOGUE_INV)
-		{
-			buffer.writeInt(slotIndex);
-			buffer.writeInt(windowId);
-		}
-	}
-	
-	public static CaptchaDeckPacket read(FriendlyByteBuf buffer)
-	{
-		CaptchaDeckPacket packet = new CaptchaDeckPacket();
-		packet.type = buffer.readByte();
-		
-		if(buffer.readableBytes() > 0)
-		{
-			if(packet.type == GET)
-			{
-				packet.itemIndex = buffer.readInt();
-				packet.asCard = buffer.readBoolean();
-			}
-			else if(packet.type == MODUS_PARAM)
-			{
-				packet.valueType = buffer.readByte();
-				packet.value = buffer.readInt();
-			}
-			else if(packet.type == CAPTCHALOGUE_INV)
-			{
-				packet.slotIndex = buffer.readInt();
-				packet.windowId = buffer.readInt();
-			}
 		}
 		
-		return packet;
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		if(ServerEditHandler.getData(player) != null)
-			return;
-		
-		if(this.type == MODUS && player.containerMenu instanceof CaptchaDeckMenu)
-			CaptchaDeckHandler.useItem(player);
-		else if(this.type == CAPTCHALOGUE && !player.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty())
-			CaptchaDeckHandler.captchalogueItem(player);
-		else if(this.type == CAPTCHALOGUE_INV)
+		public static GetItem read(FriendlyByteBuf buffer)
 		{
-			CaptchaDeckHandler.captchalogueItemInSlot(player, slotIndex, windowId);
-		} else if(this.type == GET)
+			int itemIndex = buffer.readInt();
+			boolean asCard = buffer.readBoolean();
+			return new GetItem(itemIndex, asCard);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			if(ServerEditHandler.getData(player) != null)
+				return;
+			
 			CaptchaDeckHandler.getItem(player, itemIndex, asCard);
-		else if(this.type == MODUS_PARAM && CaptchaDeckHandler.getModus(player) != null)
+		}
+	}
+	
+	public record SetModusParameter(byte parameterType, int parameterValue) implements MSPacket.PlayToServer
+	{
+		public static final ResourceLocation ID = Minestuck.id("captcha_deck/set_modus_parameter");
+		
+		@Override
+		public ResourceLocation id()
 		{
-			CaptchaDeckHandler.getModus(player).setValue(player, valueType, value);
-			CaptchaDeckHandler.getModus(player).checkAndResend(player);
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+			buffer.writeByte(this.parameterType);
+			buffer.writeInt(this.parameterValue);
+		}
+		
+		public static SetModusParameter read(FriendlyByteBuf buffer)
+		{
+			byte parameterType = buffer.readByte();
+			int parameterValue = buffer.readInt();
+			return new SetModusParameter(parameterType, parameterValue);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			if(ServerEditHandler.getData(player) != null)
+				return;
+			
+			Modus modus = CaptchaDeckHandler.getModus(player);
+			if(modus != null)
+			{
+				modus.setValue(player, this.parameterType, this.parameterValue);
+				modus.checkAndResend(player);
+			}
 		}
 	}
 }

@@ -101,7 +101,7 @@ public class MSKeyHandler
 	private static void captchalogueInGame()
 	{
 		if(!Minecraft.getInstance().player.getMainHandItem().isEmpty())
-			PacketDistributor.SERVER.noArg().send(CaptchaDeckPacket.captchalogue());
+			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPacket.CaptchalogueHeldItem());
 	}
 	
 	private static void captchalogueInGui(AbstractContainerScreen<?> screen)
@@ -110,7 +110,7 @@ public class MSKeyHandler
 		{
 			Slot slot = screen.getSlotUnderMouse();
 			if(slot != null && slot.hasItem())
-				PacketDistributor.SERVER.noArg().send(CaptchaDeckPacket.captchalogueInv(slot.index, screen.getMenu().containerId));
+				PacketDistributor.SERVER.noArg().send(new CaptchaDeckPacket.CaptchalogueInventorySlot(slot.index, screen.getMenu().containerId));
 		}
 	}
 }

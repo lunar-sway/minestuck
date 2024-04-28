@@ -29,7 +29,11 @@ public class MSPayloads
 				.play(PlayerColorPacket.SelectIndex.ID, PlayerColorPacket.SelectIndex::read, MSPacket.PlayToServer::handler)
 				.play(PlayerColorPacket.SelectRGB.ID, PlayerColorPacket.SelectRGB::read, MSPacket.PlayToServer::handler)
 				
-				.play(CaptchaDeckPacket.ID, CaptchaDeckPacket::read, MSPacket.PlayToServer::handler)
+				.play(CaptchaDeckPacket.TriggerModusButton.ID, CaptchaDeckPacket.TriggerModusButton::read, MSPacket.PlayToServer::handler)
+				.play(CaptchaDeckPacket.CaptchalogueHeldItem.ID, CaptchaDeckPacket.CaptchalogueHeldItem::read, MSPacket.PlayToServer::handler)
+				.play(CaptchaDeckPacket.CaptchalogueInventorySlot.ID, CaptchaDeckPacket.CaptchalogueInventorySlot::read, MSPacket.PlayToServer::handler)
+				.play(CaptchaDeckPacket.GetItem.ID, CaptchaDeckPacket.GetItem::read, MSPacket.PlayToServer::handler)
+				.play(CaptchaDeckPacket.SetModusParameter.ID, CaptchaDeckPacket.SetModusParameter::read, MSPacket.PlayToServer::handler)
 				.play(TitleSelectPacket.ID, TitleSelectPacket::read, MSPacket.PlayToBoth::handlerBoth)
 				
 				.play(DialoguePackets.OpenScreen.ID, DialoguePackets.OpenScreen::read, MSPacket.PlayToClient::handler)
