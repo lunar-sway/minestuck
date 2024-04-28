@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:container_grist_cost",
-  "grist_cost": {
-    "minestuck:shale": 16
-  },
-  "ingredient": {
-    "item": "minestuck:oil_bucket"
-  }
-}

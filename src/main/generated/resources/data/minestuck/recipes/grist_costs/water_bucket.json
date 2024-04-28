@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:container_grist_cost",
-  "grist_cost": {
-    "minestuck:cobalt": 4
-  },
-  "ingredient": {
-    "item": "minecraft:water_bucket"
-  }
-}

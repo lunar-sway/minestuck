@@ -2011,7 +2011,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		customLampWithItem(block, block.getId().getPath(), texture(block));
 	}
 	
-	public void pottedSaplingBlock(RegistryObject<Block> block, RegistryObject<Block> saplingBlock) {
+	public void pottedSaplingBlock(RegistryObject<Block> block, RegistryObject<? extends Block> saplingBlock) {
 		simpleBlock(block.get(),
 				models().withExistingParent(block.getId().getPath(), "block/flower_pot_cross")
 						.renderType("cutout").texture("plant", blockTexture(saplingBlock.get())));

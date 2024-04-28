@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "minestuck:block/rage_aspect_planks",
-    "side": "minestuck:block/rage_aspect_planks",
-    "top": "minestuck:block/rage_aspect_planks"
-  }
-}

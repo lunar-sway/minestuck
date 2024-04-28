@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "minestuck:block/igneous_stone",
-    "side": "minestuck:block/igneous_stone",
-    "top": "minestuck:block/igneous_stone"
-  }
-}

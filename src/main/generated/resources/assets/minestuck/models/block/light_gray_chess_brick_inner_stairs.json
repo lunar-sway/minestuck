@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "minestuck:block/light_gray_chess_bricks",
-    "side": "minestuck:block/light_gray_chess_bricks",
-    "top": "minestuck:block/light_gray_chess_bricks"
-  }
-}

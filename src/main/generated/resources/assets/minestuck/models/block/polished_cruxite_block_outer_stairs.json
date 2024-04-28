@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "minestuck:block/polished_cruxite_block",
-    "side": "minestuck:block/polished_cruxite_block",
-    "top": "minestuck:block/polished_cruxite_block"
-  }
-}

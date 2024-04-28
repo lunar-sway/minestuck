@@ -1315,6 +1315,9 @@ public final class AspectTreeBlocksData
 		provider.tag(BlockTags.LEAVES).addTag(MSTags.Blocks.ASPECT_LEAVES);
 		provider.tag(BlockTags.SAPLINGS).addTag(MSTags.Blocks.ASPECT_SAPLINGS);
 		provider.tag(BlockTags.PLANKS).addTag(MSTags.Blocks.ASPECT_PLANKS);
+		provider.tag(BlockTags.WOODEN_SLABS).add(BLOOD_ASPECT_SLAB.get(), BREATH_ASPECT_SLAB.get(), DOOM_ASPECT_SLAB.get(), HEART_ASPECT_SLAB.get(),
+				HOPE_ASPECT_SLAB.get(), LIFE_ASPECT_SLAB.get(), LIGHT_ASPECT_SLAB.get(), MIND_ASPECT_SLAB.get(),
+				RAGE_ASPECT_SLAB.get(), SPACE_ASPECT_SLAB.get(), TIME_ASPECT_SLAB.get(), VOID_ASPECT_SLAB.get());
 		provider.tag(BlockTags.FENCES).add(BLOOD_ASPECT_FENCE.get(), BREATH_ASPECT_FENCE.get(), DOOM_ASPECT_FENCE.get(), HEART_ASPECT_FENCE.get(),
 				HOPE_ASPECT_FENCE.get(), LIFE_ASPECT_FENCE.get(), LIGHT_ASPECT_FENCE.get(), MIND_ASPECT_FENCE.get(),
 				RAGE_ASPECT_FENCE.get(), SPACE_ASPECT_FENCE.get(), TIME_ASPECT_FENCE.get(), VOID_ASPECT_FENCE.get());
@@ -1328,7 +1331,6 @@ public final class AspectTreeBlocksData
 				HOPE_ASPECT_PRESSURE_PLATE.get(), LIFE_ASPECT_PRESSURE_PLATE.get(), LIGHT_ASPECT_PRESSURE_PLATE.get(), MIND_ASPECT_PRESSURE_PLATE.get(),
 				RAGE_ASPECT_PRESSURE_PLATE.get(), SPACE_ASPECT_PRESSURE_PLATE.get(), TIME_ASPECT_PRESSURE_PLATE.get(), VOID_ASPECT_PRESSURE_PLATE.get());
 		provider.tag(Tags.Blocks.BOOKSHELVES).addTag(MSTags.Blocks.ASPECT_BOOKSHELVES);
-		provider.tag(BlockTags.SLABS).addTag(MSTags.Blocks.ASPECT_SLABS);
 		provider.tag(BlockTags.CLIMBABLE).addTag(MSTags.Blocks.ASPECT_LADDERS);
 	}
 	

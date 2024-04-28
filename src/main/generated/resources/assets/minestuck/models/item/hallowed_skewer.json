@@ -1,6 +1,0 @@
-{
-  "parent": "minestuck:item/knife_weapon",
-  "textures": {
-    "layer0": "minestuck:item/hallowed_skewer"
-  }
-}

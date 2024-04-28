@@ -1,7 +1,0 @@
-{
-  "condition": {
-    "type": "minestuck:entity_type",
-    "entity_type": "minestuck:turtle"
-  },
-  "dialogue": "minestuck:consort/wwizard"
-}
