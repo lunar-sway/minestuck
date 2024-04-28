@@ -6,62 +6,79 @@ import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.skaianet.ComputerInteractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class ResumeSburbConnectionPacket implements MSPacket.PlayToServer
+public final class ResumeSburbConnectionPacket
 {
-	public static final ResourceLocation ID = Minestuck.id("resume_sburb_connection");
-	
-	private final BlockPos pos;
-	private final boolean isClient;
-	
-	private ResumeSburbConnectionPacket(BlockPos pos, boolean isClient)
+	public static CustomPacketPayload asClient(ComputerBlockEntity be)
 	{
-		this.pos = pos;
-		this.isClient = isClient;
+		return new ResumeSburbConnectionPacket.AsClient(be.getBlockPos());
 	}
 	
-	public static ResumeSburbConnectionPacket asClient(ComputerBlockEntity be)
+	public static CustomPacketPayload asServer(ComputerBlockEntity be)
 	{
-		return new ResumeSburbConnectionPacket(be.getBlockPos(), true);
+		return new ResumeSburbConnectionPacket.AsServer(be.getBlockPos());
 	}
 	
-	public static ResumeSburbConnectionPacket asServer(ComputerBlockEntity be)
+	public record AsClient(BlockPos pos) implements MSPacket.PlayToServer
 	{
-		return new ResumeSburbConnectionPacket(be.getBlockPos(), false);
+		public static final ResourceLocation ID = Minestuck.id("resume_sburb_connection/as_client");
+		
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+			buffer.writeBlockPos(this.pos);
+		}
+		
+		public static AsClient read(FriendlyByteBuf buffer)
+		{
+			BlockPos computer = buffer.readBlockPos();
+			return new AsClient(computer);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			ComputerBlockEntity.forNetworkIfPresent(player, this.pos, computer ->
+					ComputerInteractions.get(player.server).resumeClientConnection(computer));
+		}
 	}
 	
-	@Override
-	public ResourceLocation id()
+	public record AsServer(BlockPos pos) implements MSPacket.PlayToServer
 	{
-		return ID;
-	}
-	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeBlockPos(pos);
-		buffer.writeBoolean(isClient);
-	}
-	
-	public static ResumeSburbConnectionPacket read(FriendlyByteBuf buffer)
-	{
-		BlockPos computer = buffer.readBlockPos();
-		boolean isClient = buffer.readBoolean();
-		return new ResumeSburbConnectionPacket(computer, isClient);
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> {
-					var interactions = ComputerInteractions.get(player.server);
-					if(isClient)
-						interactions.resumeClientConnection(computer);
-					else
-						interactions.resumeServerConnection(computer);
-				});
+		public static final ResourceLocation ID = Minestuck.id("resume_sburb_connection/as_server");
+		
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+			buffer.writeBlockPos(this.pos);
+		}
+		
+		public static AsServer read(FriendlyByteBuf buffer)
+		{
+			BlockPos computer = buffer.readBlockPos();
+			return new AsServer(computer);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			ComputerBlockEntity.forNetworkIfPresent(player, this.pos, computer ->
+					ComputerInteractions.get(player.server).resumeServerConnection(computer));
+		}
 	}
 }
