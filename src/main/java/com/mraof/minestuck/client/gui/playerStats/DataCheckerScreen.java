@@ -72,7 +72,7 @@ public class DataCheckerScreen extends Screen
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
 		
 		if(activeComponent == null)
-			PacketDistributor.SERVER.noArg().send(DataCheckerPacket.request());
+			PacketDistributor.SERVER.noArg().send(DataCheckerPacket.Request.create());
 		
 		componentChanged();
 	}
@@ -220,7 +220,7 @@ public class DataCheckerScreen extends Screen
 	
 	private void refresh()
 	{
-		PacketDistributor.SERVER.noArg().send(DataCheckerPacket.request());
+		PacketDistributor.SERVER.noArg().send(DataCheckerPacket.Request.create());
 		activeComponent = null;
 		componentChanged();
 	}

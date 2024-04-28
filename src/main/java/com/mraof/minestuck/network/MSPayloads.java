@@ -55,7 +55,8 @@ public class MSPayloads
 				
 				.play(BurnDiskPacket.ID, BurnDiskPacket::read, MSPacket.PlayToServer::handler)
 				.play(ThemeSelectPacket.ID, ThemeSelectPacket::read, MSPacket.PlayToServer::handler)
-				.play(DataCheckerPacket.ID, DataCheckerPacket::read, MSPacket.PlayToBoth::handlerBoth)
+				.play(DataCheckerPacket.Request.ID, DataCheckerPacket.Request::read, MSPacket.PlayToServer::handler)
+				.play(DataCheckerPacket.Data.ID, DataCheckerPacket.Data::read, MSPacket.PlayToClient::handler)
 				
 				.play(MiscContainerPacket.ID, MiscContainerPacket::read, MSPacket.PlayToServer::handler)
 				
