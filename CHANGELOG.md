@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Silicone Caulk Bucket alchemy recipe was changed from Water Bucket && Quartz to Water Bucket && Amethyst Shard, to avoid conflict with Prismarine Shard alchemy recipe
+- Frost Trees will now drop saplings
+- Saplings are now pottable
+- Aspect slabs can now be used in crafting recipes
 
 ### Contributors for this release
 
@@ -22,8 +25,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Perfectly generic and cindered signs work again
 - Fixed execution permissions for the `minestuck:command` dialogue trigger
 - Add missing wood-related recipes
-- Frost Trees will now drop saplings
-- Saplings are now pottable
 
 ### Contributors for this release
 
