@@ -19,103 +19,107 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
-public class ClientEditPacket implements MSPacket.PlayToServer
+public final class ClientEditPacket
 {
-	public static final ResourceLocation ID = Minestuck.id("client_edit");
-	
-	private final int user;
-	private final int target;
-	
-	private ClientEditPacket(int user, int target)
+	public record Exit() implements MSPacket.PlayToServer
 	{
-		this.user = user;
-		this.target = target;
-	}
-	
-	public static ClientEditPacket exit()
-	{
-		return new ClientEditPacket(-1, 0);
-	}
-	
-	public static ClientEditPacket activate(int user, int target)
-	{
-		return new ClientEditPacket(user, target);
-	}
-	
-	@Override
-	public ResourceLocation id()
-	{
-		return ID;
-	}
-	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		if(user != -1)
+		public static final ResourceLocation ID = Minestuck.id("client_edit/exit");
+		
+		@Override
+		public ResourceLocation id()
 		{
-			buffer.writeInt(user);
-			buffer.writeInt(target);
-		}
-	}
-	
-	public static ClientEditPacket read(FriendlyByteBuf buffer)
-	{
-		if(buffer.readableBytes() > 0)
-		{
-			int user = buffer.readInt();
-			int target = buffer.readInt();
-			return activate(user, target);
+			return ID;
 		}
 		
-		return exit();
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		if(player == null || player.getServer() == null)
-			return;
-		ServerOpListEntry opsEntry = player.getServer().getPlayerList().getOps().get(player.getGameProfile());
-		if(!MinestuckConfig.SERVER.giveItems.get())
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
-			if(user == -1)
-				ServerEditHandler.onPlayerExit(player);
-			else if(!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.user || opsEntry != null && opsEntry.getLevel() >= 2)
-			{
-				PlayerIdentifier user = IdentifierHandler.getById(this.user);
-				PlayerIdentifier target = IdentifierHandler.getById(this.target);
-				if(user != null && target != null)
-					ServerEditHandler.newServerEditor(player, user, target);
-			}
-			return;
 		}
 		
-		PlayerIdentifier user = IdentifierHandler.getById(this.user);
-		PlayerIdentifier target = IdentifierHandler.getById(this.target);
-		if(user != null && target != null)
+		public static Exit read(FriendlyByteBuf ignored)
+		{
+			return new Exit();
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			ServerEditHandler.onPlayerExit(player);
+		}
+	}
+	
+	//todo should reference a computer and get data from there instead
+	public record Activate(int userId, int targetId) implements MSPacket.PlayToServer
+	{
+		public static final ResourceLocation ID = Minestuck.id("client_edit/activate");
+		
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+			buffer.writeInt(this.userId);
+			buffer.writeInt(this.targetId);
+		}
+		
+		public static Activate read(FriendlyByteBuf buffer)
+		{
+			int userId = buffer.readInt();
+			int targetId = buffer.readInt();
+			return new Activate(userId, targetId);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			PlayerIdentifier user = IdentifierHandler.getById(this.userId);
+			PlayerIdentifier target = IdentifierHandler.getById(this.targetId);
+			if(user == null || target == null)
+				return;
+			
+			if(isMissingPermission(player, user))
+				return;
+			
+			if(MinestuckConfig.SERVER.giveItems.get())
+				runGiveItems(player, user, target);
+			else
+				ServerEditHandler.newServerEditor(player, user, target);
+		}
+		
+		private static boolean isMissingPermission(ServerPlayer player, PlayerIdentifier user)
+		{
+			ServerOpListEntry opsEntry = player.getServer().getPlayerList().getOps().get(player.getGameProfile());
+			return MinestuckConfig.SERVER.privateComputers.get() && !user.appliesTo(player) && (opsEntry == null || opsEntry.getLevel() < 2);
+		}
+		
+		private void runGiveItems(ServerPlayer player, PlayerIdentifier user, PlayerIdentifier target)
 		{
 			ServerPlayer targetPlayer = target.getPlayer(player.getServer());
 			
-			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getLevel() >= 2))
+			if(targetPlayer == null)
+				return;
+			
+			Optional<ActiveConnection> c = SburbConnections.get(player.server).getCheckedActiveConnection(target);
+			if(c.isEmpty() || c.get().server() != user)
+				return;
+			
+			SburbHandler.onEntryItemsDeployed(player.server, target);
+			
+			SburbPlayerData targetData = SburbPlayerData.get(target, player.server);
+			for(DeployEntry entry : DeployList.getItemList(player.server, targetData, DeployList.EntryLists.DEPLOY))
 			{
-				Optional<ActiveConnection> c = SburbConnections.get(player.server).getCheckedActiveConnection(target);
-				if(c.isEmpty() || c.get().server() != user)
-					return;
-				
-				SburbHandler.onEntryItemsDeployed(player.server, target);
-				
-				SburbPlayerData targetData = SburbPlayerData.get(target, player.server);
-				for(DeployEntry entry : DeployList.getItemList(player.server, targetData, DeployList.EntryLists.DEPLOY))
+				if(!targetData.hasGivenItem(entry))
 				{
-					if(!targetData.hasGivenItem(entry))
-					{
-						ItemStack item = entry.getItemStack(targetData, player.level());
-						if(!targetPlayer.getInventory().contains(item) && targetPlayer.getInventory().add(item))
-							targetData.setHasGivenItem(entry);
-					}
+					ItemStack item = entry.getItemStack(targetData, player.level());
+					if(!targetPlayer.getInventory().contains(item) && targetPlayer.getInventory().add(item))
+						targetData.setHasGivenItem(entry);
 				}
-				player.getServer().getPlayerList().sendAllPlayerInfo(targetPlayer);
 			}
+			player.getServer().getPlayerList().sendAllPlayerInfo(targetPlayer);
 		}
 	}
 }

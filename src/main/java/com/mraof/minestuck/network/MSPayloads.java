@@ -59,7 +59,8 @@ public class MSPayloads
 				
 				.play(MiscContainerPacket.ID, MiscContainerPacket::read, MSPacket.PlayToServer::handler)
 				
-				.play(ClientEditPacket.ID, ClientEditPacket::read, MSPacket.PlayToServer::handler)
+				.play(ClientEditPacket.Exit.ID, ClientEditPacket.Exit::read, MSPacket.PlayToServer::handler)
+				.play(ClientEditPacket.Activate.ID, ClientEditPacket.Activate::read, MSPacket.PlayToServer::handler)
 				.play(ServerEditPacket.Activate.ID, ServerEditPacket.Activate::read, MSPacket.PlayToClient::handler)
 				.play(ServerEditPacket.UpdateDeployList.ID, ServerEditPacket.UpdateDeployList::read, MSPacket.PlayToClient::handler)
 				.play(ServerEditPacket.Exit.ID, ServerEditPacket.Exit::read, MSPacket.PlayToClient::handler)

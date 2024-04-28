@@ -9,6 +9,7 @@ import com.mraof.minestuck.network.computer.OpenSburbServerPacket;
 import com.mraof.minestuck.network.computer.ResumeSburbConnectionPacket;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -68,7 +69,7 @@ public class SburbServer extends ButtonListProgram
 		{
 			case EDIT_BUTTON, GIVE_BUTTON ->
 			{
-				ClientEditPacket packet = ClientEditPacket.activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
+				CustomPacketPayload packet = new ClientEditPacket.Activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
 				PacketDistributor.SERVER.noArg().send(packet);
 			}
 			case RESUME_BUTTON -> PacketDistributor.SERVER.noArg().send(ResumeSburbConnectionPacket.asServer(be));
