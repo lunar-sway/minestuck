@@ -127,43 +127,49 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		super.saveAdditional(compound, provider);
 		
-		for(Entry<Integer, String> e : latestmessage.entrySet())
-			compound.putString("text" + e.getKey(), e.getValue());
-		
-		
-		compound.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
-		
 		compound.put("sburb_client_data", sburbClientProgramData.write());
 		compound.put("sburb_server_data", sburbServerProgramData.copy());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		
-		IncompleteSburbCodeItem.writeBlockSet(compound, "hieroglyphsStored", hieroglyphsStored);
-		compound.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
-		
-		compound.putInt("blankDisksStored", blankDisksStored);
-		
-		compound.putString("theme", computerTheme.toString());
+		writeSharedData(compound);
 	}
 	
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag tagCompound = this.saveWithoutMetadata(provider);
-		tagCompound.remove("owner");
-		tagCompound.remove("ownerMost");
-		tagCompound.remove("ownerLeast");
+		CompoundTag compoundtag = new CompoundTag();
+		super.saveAdditional(compoundtag, provider);
+		
+		compoundtag.put("sburb_client_data", sburbClientProgramData.write());
+		compoundtag.put("sburb_server_data", sburbServerProgramData.copy());
+		SburbConnections.get(getLevel().getServer()).getServerConnection(this).ifPresent(c ->
+				compoundtag.getCompound("sburb_server_data")
+						.putInt("connectedClient", c.client().getId())
+		);
+		
 		if(owner != null)
-			tagCompound.putInt("ownerId", owner.getId());
-		if(hasProgram(1))
-		{
-			SburbConnections.get(getLevel().getServer()).getServerConnection(this).ifPresent(c ->
-					tagCompound.getCompound("sburb_server_data")
-							.putInt("connectedClient", c.client().getId())
-			);
-		}
-		return tagCompound;
+			compoundtag.putInt("ownerId", owner.getId());
+		
+		writeSharedData(compoundtag);
+		
+		return compoundtag;
+	}
+	
+	private void writeSharedData(CompoundTag compoundtag)
+	{
+		for(Entry<Integer, String> e : latestmessage.entrySet())
+			compoundtag.putString("text" + e.getKey(), e.getValue());
+		
+		compoundtag.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
+		
+		IncompleteSburbCodeItem.writeBlockSet(compoundtag, "hieroglyphsStored", hieroglyphsStored);
+		compoundtag.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
+		
+		compoundtag.putInt("blankDisksStored", blankDisksStored);
+		
+		compoundtag.putString("theme", computerTheme.toString());
 	}
 	
 	@Nullable
