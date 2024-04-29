@@ -44,7 +44,7 @@ public record ClearMessagePacket(BlockPos computerPos, int program) implements M
 	{
 		ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
 			computer.latestmessage.put(program, "");
-			computer.markBlockForUpdate();
+			computer.markDirtyAndResend();
 		});
 	}
 }

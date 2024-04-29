@@ -25,6 +25,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -223,8 +224,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		{
 			getSburbServerData().putBoolean("isOpen", false);
 		}
-		setChanged();
-		markBlockForUpdate();
+		markDirtyAndResend();
 	}
 	
 	@Override
@@ -254,39 +254,34 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void putClientBoolean(String name, boolean value)
 	{
 		getSburbClientData().putBoolean(name, value);
-		setChanged();
-		markBlockForUpdate();
+		markDirtyAndResend();
 	}
 	@Override
 	public void putServerBoolean(String name, boolean value)
 	{
 		getSburbServerData().putBoolean(name, value);
-		setChanged();
-		markBlockForUpdate();
+		markDirtyAndResend();
 	}
 	
 	@Override
 	public void clearConnectedClient()
 	{
 		getSburbServerData().putString("connectedClient", "");
-		setChanged();
-		markBlockForUpdate();
+		markDirtyAndResend();
 	}
 	
 	@Override
 	public void putClientMessage(String message)
 	{
 		latestmessage.put(0, message);
-		setChanged();
-		markBlockForUpdate();
+		markDirtyAndResend();
 	}
 	
 	@Override
 	public void putServerMessage(String message)
 	{
 		latestmessage.put(1, message);
-		setChanged();
-		markBlockForUpdate();
+		markDirtyAndResend();
 	}
 	
 	public ResourceLocation getTheme()
@@ -297,8 +292,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void setTheme(ResourceLocation themeId)
 	{
 		this.computerTheme = themeId;
-		setChanged();
-		markBlockForUpdate();
+		markDirtyAndResend();
 	}
 	
 	public void burnDisk(int programId)
@@ -322,9 +316,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			
 			blankDisksStored--;
 			
-			//Imitates the structure block to ensure that changes are sent client-side
-			setChanged();
-			markBlockForUpdate();
+			markDirtyAndResend();
 		}
 	}
 	
@@ -336,11 +328,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return hasParadoxInfoStored && hieroglyphsStored.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
 	}
 	
-	public void markBlockForUpdate()
+	public void markDirtyAndResend()
 	{
-		if(level==null) return;
-		BlockState state = level.getBlockState(worldPosition);
-		this.level.sendBlockUpdated(worldPosition, state, state, 3);
+		setChanged();
+		if(level instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(worldPosition);
 	}
 	
 	public static Optional<ComputerBlockEntity> getAccessibleComputer(ServerPlayer player, BlockPos pos)
