@@ -7,18 +7,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class AlchemiterPacket implements MSPacket.PlayToServer
+public record AlchemiterPacket(BlockPos pos, int quantity) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("alchemiter");
-	
-	private final BlockPos pos;
-	private final int quantity;
-	
-	public AlchemiterPacket(BlockPos pos, int quantity)
-	{
-		this.pos = pos;
-		this.quantity = quantity;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -44,6 +35,7 @@ public class AlchemiterPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
+		//todo also check distance
 		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
 			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof AlchemiterBlockEntity alchemiter)

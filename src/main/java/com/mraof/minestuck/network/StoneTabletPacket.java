@@ -9,18 +9,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
-public class StoneTabletPacket implements MSPacket.PlayToServer
+public record StoneTabletPacket(String text, InteractionHand hand) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("stone_tablet");
-	
-	private final String text;
-	private final InteractionHand hand;
-	
-	public StoneTabletPacket(String text, InteractionHand hand)
-	{
-		this.text = text;
-		this.hand = hand;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -46,8 +37,8 @@ public class StoneTabletPacket implements MSPacket.PlayToServer
 		ItemStack tablet = player.getItemInHand(hand);
 		ItemStack tool = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
 		
-		if(tablet.getItem() == MSItems.STONE_TABLET.get() &&
-				tool.getItem() == MSItems.CARVING_TOOL.get())
+		if(tablet.is(MSItems.STONE_TABLET) &&
+				tool.is(MSItems.CARVING_TOOL))
 		{
 			CompoundTag nbt = tablet.getOrCreateTag();
 			nbt.putString("text", text);

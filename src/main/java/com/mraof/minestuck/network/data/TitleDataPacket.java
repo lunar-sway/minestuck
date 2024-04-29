@@ -7,18 +7,9 @@ import com.mraof.minestuck.player.Title;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.Objects;
-
-public class TitleDataPacket implements MSPacket.PlayToClient
+public record TitleDataPacket(Title title) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("title_data");
-	
-	private final Title title;
-	
-	private TitleDataPacket(Title title)
-	{
-		this.title = Objects.requireNonNull(title);
-	}
 	
 	public static TitleDataPacket create(Title title)
 	{

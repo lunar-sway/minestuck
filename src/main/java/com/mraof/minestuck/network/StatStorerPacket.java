@@ -8,20 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class StatStorerPacket implements MSPacket.PlayToServer
+public record StatStorerPacket(StatStorerBlockEntity.ActiveType activeType, BlockPos beBlockPos, int divideValueBy) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("stat_storer");
-	
-	private final StatStorerBlockEntity.ActiveType activeType;
-	private final BlockPos beBlockPos;
-	private final int divideValueBy;
-	
-	public StatStorerPacket(StatStorerBlockEntity.ActiveType activeType, BlockPos beBlockPos, int divideValueBy)
-	{
-		this.activeType = activeType;
-		this.beBlockPos = beBlockPos;
-		this.divideValueBy = divideValueBy;
-	}
 	
 	@Override
 	public ResourceLocation id()

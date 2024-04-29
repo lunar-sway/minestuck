@@ -7,22 +7,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class LotusFlowerPacket implements MSPacket.PlayToClient
+public record LotusFlowerPacket(int entityID, LotusFlowerEntity.Animation animation) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("lotus_flower");
-	
-	private final int entityID;
-	private final LotusFlowerEntity.Animation animation;
 	
 	public static LotusFlowerPacket createPacket(LotusFlowerEntity entity, LotusFlowerEntity.Animation animation)
 	{
 		return new LotusFlowerPacket(entity.getId(), animation);
-	}
-	
-	private LotusFlowerPacket(int entityID, LotusFlowerEntity.Animation animation)
-	{
-		this.entityID = entityID;
-		this.animation = animation;
 	}
 	
 	@Override

@@ -10,20 +10,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class StructureCorePacket implements MSPacket.PlayToServer
+public record StructureCorePacket(StructureCoreBlockEntity.ActionType actionType, int shutdownRange, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("structure_core");
-	
-	private final StructureCoreBlockEntity.ActionType actionType;
-	private final int shutdownRange;
-	private final BlockPos beBlockPos;
-	
-	public StructureCorePacket(StructureCoreBlockEntity.ActionType actionType, int shutdownRange, BlockPos beBlockPos)
-	{
-		this.actionType = actionType;
-		this.shutdownRange = shutdownRange;
-		this.beBlockPos = beBlockPos;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -51,22 +40,18 @@ public class StructureCorePacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0))
+		if(player.level().isAreaLoaded(beBlockPos, 0)
+				&& player.level().getBlockEntity(beBlockPos) instanceof StructureCoreBlockEntity structureCore
+				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 		{
-			if(player.level().getBlockEntity(beBlockPos) instanceof StructureCoreBlockEntity structureCore)
-			{
-				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
-				{
-					structureCore.setActionType(actionType);
-					structureCore.setShutdownRange(shutdownRange);
-					structureCore.setHasWiped(false);
-					//Imitates the structure block to ensure that changes are sent client-side
-					structureCore.setChanged();
-					player.level().setBlock(beBlockPos, structureCore.getBlockState().setValue(StructureCoreBlock.POWERED, false), Block.UPDATE_ALL);
-					BlockState state = player.level().getBlockState(beBlockPos);
-					player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-				}
-			}
+			structureCore.setActionType(actionType);
+			structureCore.setShutdownRange(shutdownRange);
+			structureCore.setHasWiped(false);
+			//Imitates the structure block to ensure that changes are sent client-side
+			structureCore.setChanged();
+			player.level().setBlock(beBlockPos, structureCore.getBlockState().setValue(StructureCoreBlock.POWERED, false), Block.UPDATE_ALL);
+			BlockState state = player.level().getBlockState(beBlockPos);
+			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
 		}
 	}
 }

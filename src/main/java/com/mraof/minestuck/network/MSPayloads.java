@@ -8,10 +8,10 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class MSPayloads
+public final class MSPayloads
 {
 	@SubscribeEvent
-	private static void regsiter(RegisterPayloadHandlerEvent event)
+	private static void register(RegisterPayloadHandlerEvent event)
 	{
 		event.registrar(Minestuck.MOD_ID)
 				.versioned("1")

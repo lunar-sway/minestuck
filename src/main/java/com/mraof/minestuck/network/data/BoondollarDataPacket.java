@@ -6,16 +6,9 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public class BoondollarDataPacket implements MSPacket.PlayToClient
+public record BoondollarDataPacket(long amount) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("boondollar_data");
-	
-	private final long count;
-	
-	private BoondollarDataPacket(long count)
-	{
-		this.count = count;
-	}
 	
 	public static BoondollarDataPacket create(long count)
 	{
@@ -31,7 +24,7 @@ public class BoondollarDataPacket implements MSPacket.PlayToClient
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeLong(count);
+		buffer.writeLong(amount);
 	}
 	
 	public static BoondollarDataPacket read(FriendlyByteBuf buffer)
@@ -44,10 +37,5 @@ public class BoondollarDataPacket implements MSPacket.PlayToClient
 	public void execute()
 	{
 		ClientPlayerData.handleDataPacket(this);
-	}
-	
-	public long getBoondollars()
-	{
-		return count;
 	}
 }

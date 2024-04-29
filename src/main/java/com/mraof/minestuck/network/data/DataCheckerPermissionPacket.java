@@ -6,19 +6,9 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public class DataCheckerPermissionPacket implements MSPacket.PlayToClient
+public record DataCheckerPermissionPacket(boolean isAvailable) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("data_checker_permission");
-	
-	private final boolean available;
-	
-	/**
-	 * @param available if the player has access to and thus should see the data checker
-	 */
-	public DataCheckerPermissionPacket(boolean available)
-	{
-		this.available = available;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -29,24 +19,19 @@ public class DataCheckerPermissionPacket implements MSPacket.PlayToClient
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeBoolean(available);
+		buffer.writeBoolean(isAvailable);
 	}
 	
 	public static DataCheckerPermissionPacket read(FriendlyByteBuf buffer)
 	{
-		boolean dataChecker = buffer.readBoolean();
+		boolean isAvailable = buffer.readBoolean();
 		
-		return new DataCheckerPermissionPacket(dataChecker);
+		return new DataCheckerPermissionPacket(isAvailable);
 	}
 	
 	@Override
 	public void execute()
 	{
 		ClientPlayerData.handleDataPacket(this);
-	}
-	
-	public boolean isDataCheckerAvailable()
-	{
-		return available;
 	}
 }

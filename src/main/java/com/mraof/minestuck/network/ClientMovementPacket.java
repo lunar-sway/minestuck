@@ -10,24 +10,13 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Used for when the player needs to be moved but only server side access is available
  */
-public class ClientMovementPacket implements MSPacket.PlayToClient
+public record ClientMovementPacket(double moveX, double moveY, double moveZ) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("client_movement");
-	
-	private final double moveX;
-	private final double moveY;
-	private final double moveZ;
 	
 	public static ClientMovementPacket createPacket(Vec3 moveVec)
 	{
 		return new ClientMovementPacket(moveVec.x, moveVec.y, moveVec.z);
-	}
-	
-	private ClientMovementPacket(double moveX, double moveY, double moveZ)
-	{
-		this.moveX = moveX;
-		this.moveY = moveY;
-		this.moveZ = moveZ;
 	}
 	
 	@Override

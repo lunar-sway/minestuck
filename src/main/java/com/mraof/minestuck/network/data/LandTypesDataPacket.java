@@ -16,16 +16,9 @@ import net.minecraft.world.level.Level;
 
 import java.util.Map;
 
-public class LandTypesDataPacket implements MSPacket.PlayToClient
+public record LandTypesDataPacket(Map<ResourceKey<Level>, LandTypePair> types) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("land_types_data");
-	
-	private final Map<ResourceKey<Level>, LandTypePair> types;
-	
-	public LandTypesDataPacket(Map<ResourceKey<Level>, LandTypePair> types)
-	{
-		this.types = types;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -36,7 +29,7 @@ public class LandTypesDataPacket implements MSPacket.PlayToClient
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
-		for (Map.Entry<ResourceKey<Level>, LandTypePair> entry : types.entrySet())
+		for(Map.Entry<ResourceKey<Level>, LandTypePair> entry : types.entrySet())
 		{
 			buffer.writeResourceLocation(entry.getKey().location());
 			buffer.writeId(LandTypes.TERRAIN_REGISTRY, entry.getValue().getTerrain());
@@ -48,7 +41,7 @@ public class LandTypesDataPacket implements MSPacket.PlayToClient
 	{
 		ImmutableMap.Builder<ResourceKey<Level>, LandTypePair> builder = new ImmutableMap.Builder<>();
 		
-		while (buffer.isReadable())
+		while(buffer.isReadable())
 		{
 			ResourceKey<Level> world = ResourceKey.create(Registries.DIMENSION, buffer.readResourceLocation());
 			TerrainLandType terrain = buffer.readById(LandTypes.TERRAIN_REGISTRY);
@@ -63,10 +56,5 @@ public class LandTypesDataPacket implements MSPacket.PlayToClient
 	public void execute()
 	{
 		ClientDimensionData.receivePacket(this);
-	}
-	
-	public Map<ResourceKey<Level>, LandTypePair> getTypes()
-	{
-		return types;
 	}
 }

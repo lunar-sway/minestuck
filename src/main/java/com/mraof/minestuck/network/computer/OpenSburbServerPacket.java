@@ -9,16 +9,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class OpenSburbServerPacket implements MSPacket.PlayToServer
+public record OpenSburbServerPacket(BlockPos computerPos) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("open_sburb_server");
-	
-	private final BlockPos pos;
-	
-	private OpenSburbServerPacket(BlockPos pos)
-	{
-		this.pos = pos;
-	}
 	
 	public static OpenSburbServerPacket create(ComputerBlockEntity be)
 	{
@@ -34,7 +27,7 @@ public class OpenSburbServerPacket implements MSPacket.PlayToServer
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeBlockPos(pos);
+		buffer.writeBlockPos(computerPos);
 	}
 	
 	public static OpenSburbServerPacket read(FriendlyByteBuf buffer)
@@ -46,7 +39,7 @@ public class OpenSburbServerPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos,
+		ComputerBlockEntity.forNetworkIfPresent(player, computerPos,
 				computer -> ComputerInteractions.get(player.server).openServer(computer));
 	}
 }

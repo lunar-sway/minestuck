@@ -7,22 +7,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class ServerCursorPacket implements MSPacket.PlayToClient
+public record ServerCursorPacket(int entityID, ServerCursorEntity.AnimationType animation) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("server_cursor");
-	
-	private final int entityID;
-	private final ServerCursorEntity.AnimationType animation;
 	
 	public static ServerCursorPacket createPacket(ServerCursorEntity entity, ServerCursorEntity.AnimationType animation)
 	{
 		return new ServerCursorPacket(entity.getId(), animation);
-	}
-	
-	private ServerCursorPacket(int entityID, ServerCursorEntity.AnimationType animation)
-	{
-		this.entityID = entityID;
-		this.animation = animation;
 	}
 	
 	@Override

@@ -15,26 +15,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
 
-public class AreaEffectPacket implements MSPacket.PlayToServer
+public record AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMobs, BlockPos minEffectPos, BlockPos maxEffectPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("area_effect");
-	
-	private final MobEffect effect;
-	private final int effectAmp;
-	private final boolean isAllMobs;
-	private final BlockPos minEffectPos;
-	private final BlockPos maxEffectPos;
-	private final BlockPos beBlockPos;
-	
-	public AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMobs, BlockPos minPos, BlockPos maxPos, BlockPos beBlockPos)
-	{
-		this.effect = effect;
-		this.effectAmp = effectAmp;
-		this.isAllMobs = isAllMobs;
-		this.minEffectPos = minPos;
-		this.maxEffectPos = maxPos;
-		this.beBlockPos = beBlockPos;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -71,21 +54,17 @@ public class AreaEffectPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0))
+		if(player.level().isAreaLoaded(beBlockPos, 0)
+				&& player.level().getBlockEntity(beBlockPos) instanceof AreaEffectBlockEntity areaEffect
+				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 		{
-			if(player.level().getBlockEntity(beBlockPos) instanceof AreaEffectBlockEntity areaEffect)
-			{
-				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
-				{
-					areaEffect.setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);
-					areaEffect.setEffect(effect, effectAmp);
-					//Imitates the structure block to ensure that changes are sent client-side
-					areaEffect.setChanged();
-					player.level().setBlock(beBlockPos, areaEffect.getBlockState().setValue(AreaEffectBlock.ALL_MOBS, isAllMobs), Block.UPDATE_ALL);
-					BlockState state = player.level().getBlockState(beBlockPos);
-					player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-				}
-			}
+			areaEffect.setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);
+			areaEffect.setEffect(effect, effectAmp);
+			//Imitates the structure block to ensure that changes are sent client-side
+			areaEffect.setChanged();
+			player.level().setBlock(beBlockPos, areaEffect.getBlockState().setValue(AreaEffectBlock.ALL_MOBS, isAllMobs), Block.UPDATE_ALL);
+			BlockState state = player.level().getBlockState(beBlockPos);
+			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
 		}
 	}
 }

@@ -8,18 +8,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class BurnDiskPacket implements MSPacket.PlayToServer
+public record BurnDiskPacket(BlockPos computerPos, int programId) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("burn_disk");
-	
-	private final BlockPos bePos;
-	private final int programId;
-	
-	public BurnDiskPacket(BlockPos pos, int programId)
-	{
-		this.bePos = pos;
-		this.programId = programId;
-	}
 	
 	public static BurnDiskPacket create(ComputerBlockEntity be, int programId)
 	{
@@ -35,7 +26,7 @@ public class BurnDiskPacket implements MSPacket.PlayToServer
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeBlockPos(bePos);
+		buffer.writeBlockPos(computerPos);
 		buffer.writeInt(programId);
 	}
 	
@@ -49,7 +40,7 @@ public class BurnDiskPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, bePos,
+		ComputerBlockEntity.forNetworkIfPresent(player, computerPos,
 				computer -> computer.burnDisk(programId));
 	}
 }

@@ -10,16 +10,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SendificatorPacket implements MSPacket.PlayToServer
+public record SendificatorPacket(BlockPos destinationBlockPos) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("sendificator");
-	
-	private final BlockPos destinationBlockPos;
-	
-	public SendificatorPacket(BlockPos pos)
-	{
-		this.destinationBlockPos = pos;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -44,19 +37,19 @@ public class SendificatorPacket implements MSPacket.PlayToServer
 	public void execute(ServerPlayer player)
 	{
 		AbstractContainerMenu playerContainer = player.containerMenu;
-		if(playerContainer instanceof SendificatorMenu sendificatorMenu)
-		{
-			sendificatorMenu.getPosition().execute((level, machinePos) -> {
-				SendificatorBlockEntity blockEntity = (SendificatorBlockEntity) level.getBlockEntity(machinePos);
-				if(blockEntity != null)
-				{
-					blockEntity.setDestinationBlockPos(destinationBlockPos);
-					//Imitates the structure block to ensure that changes are sent client-side
-					blockEntity.setChanged();
-					BlockState state = level.getBlockState(machinePos);
-					level.sendBlockUpdated(machinePos, state, state, 3);
-				}
-			});
-		}
+		if(!(playerContainer instanceof SendificatorMenu sendificatorMenu))
+			return;
+		
+		sendificatorMenu.getPosition().execute((level, machinePos) -> {
+			SendificatorBlockEntity blockEntity = (SendificatorBlockEntity) level.getBlockEntity(machinePos);
+			if(blockEntity != null)
+			{
+				blockEntity.setDestinationBlockPos(destinationBlockPos);
+				//Imitates the structure block to ensure that changes are sent client-side
+				blockEntity.setChanged();
+				BlockState state = level.getBlockState(machinePos);
+				level.sendBlockUpdated(machinePos, state, state, 3);
+			}
+		});
 	}
 }

@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
-public class TransportalizerPacket
+public final class TransportalizerPacket
 {
 	public record Id(BlockPos pos, String selfId) implements MSPacket.PlayToServer
 	{

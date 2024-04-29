@@ -10,20 +10,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class EcheladderDataPacket implements MSPacket.PlayToClient
+public record EcheladderDataPacket(int rung, float progress, boolean sendMessage) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("echeladder_data");
-	
-	private final int rung;
-	private final float progress;
-	private final boolean sendMessage;
-	
-	private EcheladderDataPacket(int rung, float progress, boolean sendMessage)
-	{
-		this.rung = rung;
-		this.progress = progress;
-		this.sendMessage = sendMessage;
-	}
 	
 	public static EcheladderDataPacket create(int rung, float progress, boolean sendMessage)
 	{

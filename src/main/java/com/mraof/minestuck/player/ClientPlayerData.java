@@ -152,7 +152,7 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(BoondollarDataPacket packet)
 	{
-		boondollars = packet.getBoondollars();
+		boondollars = packet.amount();
 	}
 	
 	public static void handleDataPacket(GristCachePacket packet)
@@ -181,6 +181,6 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(DataCheckerPermissionPacket packet)
 	{
-		dataCheckerAccess = packet.isDataCheckerAvailable();
+		dataCheckerAccess = packet.isAvailable();
 	}
 }

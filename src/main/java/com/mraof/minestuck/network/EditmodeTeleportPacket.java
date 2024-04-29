@@ -9,16 +9,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class EditmodeTeleportPacket implements MSPacket.PlayToServer
+public record EditmodeTeleportPacket(BlockPos pos) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("editmode_teleport");
-	
-	private final BlockPos pos;
-	
-	public EditmodeTeleportPacket(BlockPos pos)
-	{
-		this.pos = pos;
-	}
 	
 	@Override
 	public ResourceLocation id()

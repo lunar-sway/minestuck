@@ -7,18 +7,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class PunchDesignixPacket implements MSPacket.PlayToServer
+public record PunchDesignixPacket(BlockPos pos, String captcha) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("punch_designix");
-	
-	private final BlockPos pos;
-	private final String captcha;
-	
-	public PunchDesignixPacket(BlockPos pos, String captcha)
-	{
-		this.pos = pos;
-		this.captcha = captcha;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -44,16 +35,12 @@ public class PunchDesignixPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
+		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0)
+				&& player.level().getBlockEntity(pos) instanceof PunchDesignixBlockEntity punchDesignix
+				&& Math.sqrt(player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) <= 8)
 		{
-			if(player.level().getBlockEntity(pos) instanceof PunchDesignixBlockEntity punchDesignix)
-			{
-				if(Math.sqrt(player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) <= 8)
-				{
-					punchDesignix.setCaptcha(captcha);
-					punchDesignix.punchCard(player);
-				}
-			}
+			punchDesignix.setCaptcha(captcha);
+			punchDesignix.punchCard(player);
 		}
 	}
 }

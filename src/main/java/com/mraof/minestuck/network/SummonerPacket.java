@@ -15,22 +15,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class SummonerPacket implements MSPacket.PlayToServer
+public record SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos beBlockPos, @Nullable EntityType<?> entityType) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("summoner");
-	
-	private final boolean isUntriggerable;
-	private final int summonRange;
-	private final BlockPos beBlockPos;
-	private final EntityType<?> entityType;
-	
-	public SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos beBlockPos, @Nullable EntityType<?> entityType)
-	{
-		this.isUntriggerable = isUntriggerable;
-		this.summonRange = summonRange;
-		this.beBlockPos = beBlockPos;
-		this.entityType = entityType;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -65,22 +52,18 @@ public class SummonerPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0))
+		if(player.level().isAreaLoaded(beBlockPos, 0)
+				&& player.level().getBlockEntity(beBlockPos) instanceof SummonerBlockEntity summoner
+				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 		{
-			if(player.level().getBlockEntity(beBlockPos) instanceof SummonerBlockEntity summoner)
-			{
-				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
-				{
-					if(entityType != null)
-						summoner.setSummonedEntity(entityType);
-					summoner.setSummonRange(summonRange);
-					//Imitates the structure block to ensure that changes are sent client-side
-					summoner.setChanged();
-					player.level().setBlock(beBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
-					BlockState state = player.level().getBlockState(beBlockPos);
-					player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-				}
-			}
+			if(entityType != null)
+				summoner.setSummonedEntity(entityType);
+			summoner.setSummonRange(summonRange);
+			//Imitates the structure block to ensure that changes are sent client-side
+			summoner.setChanged();
+			player.level().setBlock(beBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
+			BlockState state = player.level().getBlockState(beBlockPos);
+			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
 		}
 	}
 }

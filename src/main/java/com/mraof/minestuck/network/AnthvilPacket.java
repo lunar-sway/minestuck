@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
-public class AnthvilPacket implements MSPacket.PlayToServer
+public record AnthvilPacket() implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("anthvil");
 	
@@ -32,14 +32,14 @@ public class AnthvilPacket implements MSPacket.PlayToServer
 	public void execute(ServerPlayer player)
 	{
 		AbstractContainerMenu playerContainer = player.containerMenu;
-		if(playerContainer instanceof AnthvilMenu anthvilMenu)
-		{
-			anthvilMenu.getPosition().execute((level, machinePos) -> {
-				if(level.getBlockEntity(machinePos) instanceof AnthvilBlockEntity anthvilBlockEntity)
-				{
-					AnthvilBlockEntity.attemptMendAndRefuel(anthvilBlockEntity, player);
-				}
-			});
-		}
+		if(!(playerContainer instanceof AnthvilMenu anthvilMenu))
+			return;
+		
+		anthvilMenu.getPosition().execute((level, machinePos) -> {
+			if(level.getBlockEntity(machinePos) instanceof AnthvilBlockEntity anthvilBlockEntity)
+			{
+				AnthvilBlockEntity.attemptMendAndRefuel(anthvilBlockEntity, player);
+			}
+		});
 	}
 }

@@ -7,18 +7,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class WirelessRedstoneTransmitterPacket implements MSPacket.PlayToServer
+public record WirelessRedstoneTransmitterPacket(BlockPos destinationBlockPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("wireless_redstone_transmitter");
-	
-	private final BlockPos destinationBlockPos;
-	private final BlockPos beBlockPos;
-	
-	public WirelessRedstoneTransmitterPacket(BlockPos pos, BlockPos beBlockPos)
-	{
-		this.destinationBlockPos = pos;
-		this.beBlockPos = beBlockPos;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -44,15 +35,11 @@ public class WirelessRedstoneTransmitterPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0))
+		if(player.level().isAreaLoaded(beBlockPos, 0)
+				&& player.level().getBlockEntity(beBlockPos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter
+				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 		{
-			if(player.level().getBlockEntity(beBlockPos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter)
-			{
-				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
-				{
-					transmitter.setOffsetFromDestinationBlockPos(destinationBlockPos);
-				}
-			}
+			transmitter.setOffsetFromDestinationBlockPos(destinationBlockPos);
 		}
 	}
 }

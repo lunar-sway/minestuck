@@ -61,6 +61,6 @@ public class ClientDimensionData
 	public static void receivePacket(LandTypesDataPacket packet)
 	{
 		landTypes.clear();
-		landTypes.putAll(packet.getTypes());
+		landTypes.putAll(packet.types());
 	}
 }
