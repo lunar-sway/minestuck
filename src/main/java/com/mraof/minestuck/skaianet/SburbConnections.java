@@ -270,7 +270,7 @@ public final class SburbConnections
 		
 		client.getSburbClientData().setIsResuming(false);
 		client.getSburbClientData().setIsConnectedToServer(true);
-		server.putServerBoolean("isOpen", false);
+		server.getSburbServerData().setIsOpen(false);
 		
 		NeoForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(skaianetData.mcServer, activeConnection, type));
 	}
@@ -303,7 +303,7 @@ public final class SburbConnections
 		}
 		if(serverComputer != null)
 		{
-			serverComputer.clearConnectedClient();
+			serverComputer.getSburbServerData().setIsConnected();
 			serverComputer.putServerMessage(CLOSED);
 		}
 		

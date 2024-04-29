@@ -7,12 +7,7 @@ public interface ISburbComputer
 	PlayerIdentifier getOwner();
 	
 	SburbClientData getSburbClientData();
-	
-	boolean getServerBoolean(String name);
-	
-	void putServerBoolean(String name, boolean value);
-	
-	void clearConnectedClient();
+	SburbServerData getSburbServerData();
 	
 	void putClientMessage(String message);
 	void putServerMessage(String message);

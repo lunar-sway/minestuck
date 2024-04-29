@@ -112,6 +112,7 @@ public final class SkaiaClient
 	
 	//Methods called from the actionPerformed method in the gui.
 	
+	@Nullable
 	public static ReducedConnection getClientConnection(int client)
 	{
 		for(ReducedConnection c : connections)

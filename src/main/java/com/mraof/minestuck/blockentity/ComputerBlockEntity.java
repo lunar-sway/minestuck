@@ -3,17 +3,13 @@ package com.mraof.minestuck.blockentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.ComputerBlock;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.computer.ComputerReference;
-import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.SburbClientData;
+import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.Commands;
@@ -66,7 +62,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public int ownerId;
 	public Hashtable<Integer, String> latestmessage = new Hashtable<>();
 	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
-	private CompoundTag sburbServerProgramData = new CompoundTag();
+	private SburbServerData sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	public int programSelected = -1;
 	@Nonnull
 	public Set<Block> hieroglyphsStored = new HashSet<>();
@@ -99,7 +95,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			latestmessage.put(id, nbt.getString("text" + id));
 		
 		sburbClientProgramData.read(nbt.getCompound("sburb_client_data"));
-		sburbServerProgramData = nbt.getCompound("sburb_server_data");
+		sburbServerProgramData.read(nbt.getCompound("sburb_server_data"));
 		
 		if(nbt.contains("theme", Tag.TAG_STRING))
 			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(nbt.getString("theme")), computerTheme);
@@ -128,7 +124,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		super.saveAdditional(compound, provider);
 		
 		compound.put("sburb_client_data", sburbClientProgramData.write());
-		compound.put("sburb_server_data", sburbServerProgramData.copy());
+		compound.put("sburb_server_data", sburbServerProgramData.write());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -143,11 +139,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		super.saveAdditional(compoundtag, provider);
 		
 		compoundtag.put("sburb_client_data", sburbClientProgramData.write());
-		compoundtag.put("sburb_server_data", sburbServerProgramData.copy());
-		SburbConnections.get(getLevel().getServer()).getServerConnection(this).ifPresent(c ->
-				compoundtag.getCompound("sburb_server_data")
-						.putInt("connectedClient", c.client().getId())
-		);
+		compoundtag.put("sburb_server_data", sburbServerProgramData.writeForUpdatePacket(this, getLevel().getServer()));
+		
 		
 		if(owner != null)
 			compoundtag.putInt("ownerId", owner.getId());
@@ -203,7 +196,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return this.sburbClientProgramData;
 	}
 	
-	public CompoundTag getSburbServerData()
+	@Override
+	public SburbServerData getSburbServerData()
 	{
 		return this.sburbServerProgramData;
 	}
@@ -212,7 +206,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void clearComputerData()
 	{
 		this.sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
-		this.sburbServerProgramData = new CompoundTag();
+		this.sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	}
 	
 	public void closeAll()
@@ -231,26 +225,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public ComputerReference createReference()
 	{
 		return ComputerReference.of(this);
-	}
-	
-	@Override
-	public boolean getServerBoolean(String name)
-	{
-		return getSburbServerData().getBoolean(name);
-	}
-	
-	@Override
-	public void putServerBoolean(String name, boolean value)
-	{
-		getSburbServerData().putBoolean(name, value);
-		markDirtyAndResend();
-	}
-	
-	@Override
-	public void clearConnectedClient()
-	{
-		getSburbServerData().putString("connectedClient", "");
-		markDirtyAndResend();
 	}
 	
 	@Override

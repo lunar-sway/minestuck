@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
+import java.util.OptionalInt;
 
 public class SburbServer extends ButtonListProgram
 {
@@ -32,8 +33,8 @@ public class SburbServer extends ButtonListProgram
 	@Override
 	protected ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
 	{
-		int clientId = be.getSburbServerData().contains("connectedClient") ? be.getSburbServerData().getInt("connectedClient") : -1;
-		ReducedConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
+		OptionalInt clientId = be.getSburbServerData().getConnectedClientId();
+		ReducedConnection connection = clientId.isPresent() ? SkaiaClient.getClientConnection(clientId.getAsInt()) : null;
 		if(connection != null && connection.server().id() != be.ownerId)
 			connection = null;
 		
@@ -44,7 +45,7 @@ public class SburbServer extends ButtonListProgram
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
 			list.add(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
-		} else if (be.getSburbServerData().getBoolean("isOpen"))
+		} else if (be.getSburbServerData().isOpen())
 		{
 			list.add(new UnlocalizedString(RESUME_SERVER));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
@@ -69,7 +70,7 @@ public class SburbServer extends ButtonListProgram
 		{
 			case EDIT_BUTTON, GIVE_BUTTON ->
 			{
-				CustomPacketPayload packet = new ClientEditPackets.Activate(be.ownerId, be.getSburbServerData().getInt("connectedClient"));
+				CustomPacketPayload packet = new ClientEditPackets.Activate(be.ownerId, be.getSburbServerData().getConnectedClientId().orElseThrow());
 				PacketDistributor.sendToServer(packet);
 			}
 			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(be));
@@ -84,4 +85,3 @@ public class SburbServer extends ButtonListProgram
 		return ICON;
 	}
 }
-

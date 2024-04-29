@@ -54,7 +54,7 @@ public final class ComputerInteractions
 	
 	private static boolean isValidServerOpenOrResuming(ISburbComputer computer)
 	{
-		return computer.getServerBoolean("isOpen");
+		return computer.getSburbServerData().isOpen();
 	}
 	
 	public static ComputerInteractions get(MinecraftServer mcServer)
@@ -135,7 +135,7 @@ public final class ComputerInteractions
 			return;
 		}
 		
-		computer.putServerBoolean("isOpen", true);
+		computer.getSburbServerData().setIsOpen(true);
 		resumingServers.put(player, computer.createReference());
 	}
 	
@@ -153,7 +153,7 @@ public final class ComputerInteractions
 			return;
 		}
 		
-		computer.putServerBoolean("isOpen", true);
+		computer.getSburbServerData().setIsOpen(true);
 		openedServers.put(player, computer.createReference());
 	}
 	
@@ -203,7 +203,7 @@ public final class ComputerInteractions
 		if(map.contains(computer))
 		{
 			map.remove(owner);
-			computer.putServerBoolean("isOpen", false);
+			computer.getSburbServerData().setIsOpen(false);
 			computer.putServerMessage(STOP_RESUME);
 		}
 	}
