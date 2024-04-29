@@ -10,7 +10,6 @@ import com.mraof.minestuck.network.computer.ResumeSburbConnectionPackets;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -34,15 +33,15 @@ public class SburbClient extends ButtonListProgram
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
 	{
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		CompoundTag nbt = be.getSburbClientData();
+		SburbClientData data = be.getSburbClientData();
 		
 		ReducedConnection c = SkaiaClient.getClientConnection(be.ownerId);
-		if(nbt.getBoolean("connectedToServer") && c != null) //If it is connected to someone.
+		if(data.isConnectedToServer() && c != null) //If it is connected to someone.
 		{
 			String displayPlayer = c.server().name();
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
-		} else if(nbt.getBoolean("isResuming"))
+		} else if(data.isResuming())
 		{
 			list.add(new UnlocalizedString(RESUME_CLIENT));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
@@ -64,16 +63,16 @@ public class SburbClient extends ButtonListProgram
 	}
 	
 	@Override
-	public void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
+	public void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] buttonData)
 	{
 		switch(buttonName)
 		{
 			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(be));
-			case CONNECT_BUTTON -> PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(be, (Integer) data[1]));
+			case CONNECT_BUTTON -> PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(be, (Integer) buttonData[1]));
 			case CLOSE_BUTTON ->
 			{
-				CompoundTag nbt = be.getSburbClientData();
-				if(!nbt.getBoolean("isResuming") && !nbt.getBoolean("connectedToServer"))
+				SburbClientData data = be.getSburbClientData();
+				if(!data.isResuming() && !data.isConnectedToServer())
 					PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(be));
 				else
 					PacketDistributor.sendToServer(CloseSburbConnectionPackets.asClient(be));
@@ -88,3 +87,4 @@ public class SburbClient extends ButtonListProgram
 		return ICON;
 	}
 }
+

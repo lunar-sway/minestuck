@@ -6,6 +6,7 @@ import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.computer.SburbClientData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.IncompleteSburbCodeItem;
@@ -64,7 +65,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	//client side only
 	public int ownerId;
 	public Hashtable<Integer, String> latestmessage = new Hashtable<>();
-	private CompoundTag sburbClientProgramData = new CompoundTag();
+	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
 	private CompoundTag sburbServerProgramData = new CompoundTag();
 	public int programSelected = -1;
 	@Nonnull
@@ -97,7 +98,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		for(int id : installedPrograms)
 			latestmessage.put(id, nbt.getString("text" + id));
 		
-		sburbClientProgramData = nbt.getCompound("sburb_client_data");
+		sburbClientProgramData.read(nbt.getCompound("sburb_client_data"));
 		sburbServerProgramData = nbt.getCompound("sburb_server_data");
 		
 		if(nbt.contains("theme", Tag.TAG_STRING))
@@ -132,7 +133,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		compound.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
 		
-		compound.put("sburb_client_data", sburbClientProgramData.copy());
+		compound.put("sburb_client_data", sburbClientProgramData.write());
 		compound.put("sburb_server_data", sburbServerProgramData.copy());
 		
 		if(owner != null)
@@ -190,7 +191,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return installedPrograms.contains(id);
 	}
 	
-	public CompoundTag getSburbClientData()
+	@Override
+	public SburbClientData getSburbClientData()
 	{
 		return this.sburbClientProgramData;
 	}
@@ -203,7 +205,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	@Deprecated
 	public void clearComputerData()
 	{
-		this.sburbClientProgramData = new CompoundTag();
+		this.sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
 		this.sburbServerProgramData = new CompoundTag();
 	}
 	
@@ -211,20 +213,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		for(int id : installedPrograms)
 			ProgramData.getHandler(id).ifPresent(handler -> handler.onClosed(this));
-	}
-	
-	@Override
-	public void connected(PlayerIdentifier player, boolean isClient)
-	{
-		if(isClient)
-		{
-			getSburbClientData().putBoolean("isResuming", false);
-			getSburbClientData().putBoolean("connectedToServer", true);
-		} else
-		{
-			getSburbServerData().putBoolean("isOpen", false);
-		}
-		markDirtyAndResend();
 	}
 	
 	@Override
@@ -240,22 +228,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@Override
-	public boolean getClientBoolean(String name)
-	{
-		return getSburbClientData().getBoolean(name);
-	}
-	@Override
 	public boolean getServerBoolean(String name)
 	{
 		return getSburbServerData().getBoolean(name);
 	}
 	
-	@Override
-	public void putClientBoolean(String name, boolean value)
-	{
-		getSburbClientData().putBoolean(name, value);
-		markDirtyAndResend();
-	}
 	@Override
 	public void putServerBoolean(String name, boolean value)
 	{

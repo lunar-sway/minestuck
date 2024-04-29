@@ -49,7 +49,7 @@ public final class ComputerInteractions
 	
 	private static boolean isValidClientResuming(ISburbComputer computer)
 	{
-		return computer.getClientBoolean("isResuming");
+		return computer.getSburbClientData().isResuming();
 	}
 	
 	private static boolean isValidServerOpenOrResuming(ISburbComputer computer)
@@ -114,7 +114,7 @@ public final class ComputerInteractions
 			return;
 		}
 		
-		computer.putClientBoolean("isResuming", true);
+		computer.getSburbClientData().setIsResuming(true);
 		resumingClients.put(player, computer.createReference());
 	}
 	
@@ -162,7 +162,7 @@ public final class ComputerInteractions
 		if(resumingClients.contains(player))
 		{
 			resumingClients.useComputerAndRemoveOnSuccess(player, computer -> {
-				computer.putClientBoolean("isResuming", false);
+				computer.getSburbClientData().setIsResuming(false);
 				computer.putClientMessage(STOP_RESUME);
 				return true;
 			});
@@ -179,7 +179,7 @@ public final class ComputerInteractions
 		if(resumingClients.contains(computer))
 		{
 			resumingClients.remove(owner);
-			computer.putClientBoolean("isResuming", false);
+			computer.getSburbClientData().setIsResuming(false);
 			computer.putClientMessage(STOP_RESUME);
 		} else
 		{
