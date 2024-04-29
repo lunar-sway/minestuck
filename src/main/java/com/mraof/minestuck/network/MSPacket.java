@@ -7,20 +7,6 @@ import net.neoforged.neoforge.network.registration.IDirectionAwarePayloadHandler
 
 public interface MSPacket
 {
-	@Deprecated	// Generally bad design to write multi-purpose packets. Such a packet should *generally* be written as several types of packets instead.
-	interface PlayToBoth extends PlayToClient, PlayToServer
-	{
-		void execute();
-		
-		void execute(ServerPlayer player);
-		
-		static <P extends PlayToBoth> void handlerBoth(IDirectionAwarePayloadHandlerBuilder<P, IPlayPayloadHandler<P>> builder)
-		{
-			PlayToClient.handler(builder);
-			PlayToServer.handler(builder);
-		}
-	}
-	
 	interface PlayToClient extends CustomPacketPayload
 	{
 		void execute();

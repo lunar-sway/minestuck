@@ -34,7 +34,8 @@ public class MSPayloads
 				.play(CaptchaDeckPacket.CaptchalogueInventorySlot.ID, CaptchaDeckPacket.CaptchalogueInventorySlot::read, MSPacket.PlayToServer::handler)
 				.play(CaptchaDeckPacket.GetItem.ID, CaptchaDeckPacket.GetItem::read, MSPacket.PlayToServer::handler)
 				.play(CaptchaDeckPacket.SetModusParameter.ID, CaptchaDeckPacket.SetModusParameter::read, MSPacket.PlayToServer::handler)
-				.play(TitleSelectPacket.ID, TitleSelectPacket::read, MSPacket.PlayToBoth::handlerBoth)
+				.play(TitleSelectPacket.OpenScreen.ID, TitleSelectPacket.OpenScreen::read, MSPacket.PlayToClient::handler)
+				.play(TitleSelectPacket.PickTitle.ID, TitleSelectPacket.PickTitle::read, MSPacket.PlayToServer::handler)
 				
 				.play(DialoguePackets.OpenScreen.ID, DialoguePackets.OpenScreen::read, MSPacket.PlayToClient::handler)
 				.play(DialoguePackets.CloseScreen.ID, DialoguePackets.CloseScreen::read, MSPacket.PlayToClient::handler)

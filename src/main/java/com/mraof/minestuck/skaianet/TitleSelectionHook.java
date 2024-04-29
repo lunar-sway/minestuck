@@ -20,8 +20,10 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * A class that determines when to stop entry and tell the player to pick a title,
@@ -51,8 +53,7 @@ public class TitleSelectionHook
 			return true;
 		
 		playersInTitleSelection.put(player, new Pair<>(new Vec3(player.getX(), player.getY(), player.getZ()), savedPos));
-		TitleSelectPacket packet = new TitleSelectPacket();
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.PLAYER.with(player).send(new TitleSelectPacket.OpenScreen(Optional.empty()));
 		return false;
 	}
 	
@@ -61,7 +62,7 @@ public class TitleSelectionHook
 		playersInTitleSelection.remove(player);
 	}
 	
-	public static void handleTitleSelection(ServerPlayer player, Title title)
+	public static void handleTitleSelection(ServerPlayer player, @Nullable Title title)
 	{
 		if(!MinestuckConfig.SERVER.playerSelectedTitle.get() || !playersInTitleSelection.containsKey(player))
 		{
