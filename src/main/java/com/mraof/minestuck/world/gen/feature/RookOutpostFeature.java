@@ -38,7 +38,7 @@ public class RookOutpostFeature extends Feature<NoneFeatureConfiguration>
 		if(placement.heightRange(Heightmap.Types.OCEAN_FLOOR, context.level()).difference() > 3)
 			return false;
 		
-		placement.placeWithStructureBlockRegistry(context);
+		placement.place(context);
 		
 		return true;
 	}
