@@ -30,9 +30,9 @@ public class SburbServer extends ButtonListProgram
 	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_server.png");
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
+	protected ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
 	{
-		int clientId = be.getData(1).contains("connectedClient") ? be.getData(1).getInt("connectedClient") : -1;
+		int clientId = be.getSburbServerData().contains("connectedClient") ? be.getSburbServerData().getInt("connectedClient") : -1;
 		ReducedConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
 		if(connection != null && connection.server().id() != be.ownerId)
 			connection = null;
@@ -44,7 +44,7 @@ public class SburbServer extends ButtonListProgram
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
 			list.add(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
-		} else if (be.getData(getId()).getBoolean("isOpen"))
+		} else if (be.getSburbServerData().getBoolean("isOpen"))
 		{
 			list.add(new UnlocalizedString(RESUME_SERVER));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
@@ -69,7 +69,7 @@ public class SburbServer extends ButtonListProgram
 		{
 			case EDIT_BUTTON, GIVE_BUTTON ->
 			{
-				CustomPacketPayload packet = new ClientEditPackets.Activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
+				CustomPacketPayload packet = new ClientEditPackets.Activate(be.ownerId, be.getSburbServerData().getInt("connectedClient"));
 				PacketDistributor.sendToServer(packet);
 			}
 			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(be));
@@ -84,3 +84,4 @@ public class SburbServer extends ButtonListProgram
 		return ICON;
 	}
 }
+

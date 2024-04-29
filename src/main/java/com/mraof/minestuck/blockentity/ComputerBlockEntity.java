@@ -63,7 +63,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	//client side only
 	public int ownerId;
 	public Hashtable<Integer, String> latestmessage = new Hashtable<>();
-	public CompoundTag programData = new CompoundTag();
+	private CompoundTag sburbClientProgramData = new CompoundTag();
+	private CompoundTag sburbServerProgramData = new CompoundTag();
 	public int programSelected = -1;
 	@Nonnull
 	public Set<Block> hieroglyphsStored = new HashSet<>();
@@ -95,7 +96,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		for(int id : installedPrograms)
 			latestmessage.put(id, nbt.getString("text" + id));
 		
-		programData = nbt.getCompound("programData");
+		sburbClientProgramData = nbt.getCompound("sburb_client_data");
+		sburbServerProgramData = nbt.getCompound("sburb_server_data");
+		
 		if(nbt.contains("theme", Tag.TAG_STRING))
 			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(nbt.getString("theme")), computerTheme);
 		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
@@ -127,7 +130,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		
 		compound.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
-		compound.put("programData", programData.copy());
+		
+		compound.put("sburb_client_data", sburbClientProgramData.copy());
+		compound.put("sburb_server_data", sburbServerProgramData.copy());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -152,7 +157,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(hasProgram(1))
 		{
 			SburbConnections.get(getLevel().getServer()).getServerConnection(this).ifPresent(c ->
-					tagCompound.getCompound("programData").getCompound("program_1")
+					tagCompound.getCompound("sburb_server_data")
 							.putInt("connectedClient", c.client().getId())
 			);
 		}
@@ -184,11 +189,21 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return installedPrograms.contains(id);
 	}
 	
-	public CompoundTag getData(int id)
+	public CompoundTag getSburbClientData()
 	{
-		if(!programData.contains("program_" + id))
-			programData.put("program_" + id, new CompoundTag());
-		return programData.getCompound("program_" + id);
+		return this.sburbClientProgramData;
+	}
+	
+	public CompoundTag getSburbServerData()
+	{
+		return this.sburbServerProgramData;
+	}
+	
+	@Deprecated
+	public void clearComputerData()
+	{
+		this.sburbClientProgramData = new CompoundTag();
+		this.sburbServerProgramData = new CompoundTag();
 	}
 	
 	public void closeAll()
@@ -202,11 +217,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		if(isClient)
 		{
-			getData(0).putBoolean("isResuming", false);
-			getData(0).putBoolean("connectedToServer", true);
+			getSburbClientData().putBoolean("isResuming", false);
+			getSburbClientData().putBoolean("connectedToServer", true);
 		} else
 		{
-			getData(1).putBoolean("isOpen", false);
+			getSburbServerData().putBoolean("isOpen", false);
 		}
 		setChanged();
 		markBlockForUpdate();
@@ -227,25 +242,25 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	@Override
 	public boolean getClientBoolean(String name)
 	{
-		return getData(0).getBoolean(name);
+		return getSburbClientData().getBoolean(name);
 	}
 	@Override
 	public boolean getServerBoolean(String name)
 	{
-		return getData(1).getBoolean(name);
+		return getSburbServerData().getBoolean(name);
 	}
 	
 	@Override
 	public void putClientBoolean(String name, boolean value)
 	{
-		getData(0).putBoolean(name, value);
+		getSburbClientData().putBoolean(name, value);
 		setChanged();
 		markBlockForUpdate();
 	}
 	@Override
 	public void putServerBoolean(String name, boolean value)
 	{
-		getData(1).putBoolean(name, value);
+		getSburbServerData().putBoolean(name, value);
 		setChanged();
 		markBlockForUpdate();
 	}
@@ -253,7 +268,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	@Override
 	public void clearConnectedClient()
 	{
-		getData(1).putString("connectedClient", "");
+		getSburbServerData().putString("connectedClient", "");
 		setChanged();
 		markBlockForUpdate();
 	}

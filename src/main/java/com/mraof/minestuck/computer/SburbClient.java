@@ -34,7 +34,7 @@ public class SburbClient extends ButtonListProgram
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
 	{
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		CompoundTag nbt = be.getData(getId());
+		CompoundTag nbt = be.getSburbClientData();
 		
 		ReducedConnection c = SkaiaClient.getClientConnection(be.ownerId);
 		if(nbt.getBoolean("connectedToServer") && c != null) //If it is connected to someone.
@@ -72,7 +72,7 @@ public class SburbClient extends ButtonListProgram
 			case CONNECT_BUTTON -> PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(be, (Integer) data[1]));
 			case CLOSE_BUTTON ->
 			{
-				CompoundTag nbt = be.getData(getId());
+				CompoundTag nbt = be.getSburbClientData();
 				if(!nbt.getBoolean("isResuming") && !nbt.getBoolean("connectedToServer"))
 					PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(be));
 				else
