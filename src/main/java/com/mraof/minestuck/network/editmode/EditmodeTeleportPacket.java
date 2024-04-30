@@ -1,8 +1,9 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

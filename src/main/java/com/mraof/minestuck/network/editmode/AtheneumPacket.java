@@ -1,8 +1,9 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.playerStats.AtheneumScreen;
 import com.mraof.minestuck.inventory.AtheneumMenu;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

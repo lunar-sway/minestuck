@@ -5,7 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
 import com.mraof.minestuck.inventory.EditmodeMenu;
-import com.mraof.minestuck.network.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.editmode.EditmodeInventoryPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;

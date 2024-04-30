@@ -1,4 +1,4 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -7,6 +7,7 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.computer.editmode.*;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;

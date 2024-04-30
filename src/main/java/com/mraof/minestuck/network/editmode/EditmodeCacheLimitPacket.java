@@ -1,4 +1,4 @@
-package com.mraof.minestuck.network.data;
+package com.mraof.minestuck.network.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacket;

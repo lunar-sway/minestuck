@@ -1,8 +1,9 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.ClientDeployList;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

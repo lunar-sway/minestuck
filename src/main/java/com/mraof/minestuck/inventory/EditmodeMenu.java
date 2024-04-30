@@ -4,7 +4,7 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.editmode.EditmodeInventoryPacket;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;

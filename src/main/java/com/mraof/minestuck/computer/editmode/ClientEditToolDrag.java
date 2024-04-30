@@ -8,7 +8,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
-import com.mraof.minestuck.network.EditmodeDragPacket;
+import com.mraof.minestuck.network.editmode.EditmodeDragPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
