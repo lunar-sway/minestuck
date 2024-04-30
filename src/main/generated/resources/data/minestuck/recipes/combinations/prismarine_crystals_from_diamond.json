@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:prismarine_shard"
+  },
+  "input2": {
+    "item": "minecraft:diamond"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:prismarine_crystals"
+  }
+}

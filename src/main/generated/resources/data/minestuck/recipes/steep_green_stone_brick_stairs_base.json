@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minestuck:green_stone_brick_stairs"
+    }
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "count": 2,
+    "item": "minestuck:steep_green_stone_brick_stairs_base"
+  },
+  "show_notification": true
+}

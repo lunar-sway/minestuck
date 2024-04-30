@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:observer"
+  },
+  "input2": {
+    "item": "minestuck:plutonium_core"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:remote_observer"
+  }
+}

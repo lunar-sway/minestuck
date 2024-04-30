@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 82,
+    "minestuck:rust": 49,
+    "minestuck:tar": 82
+  },
+  "ingredient": {
+    "item": "minestuck:blacksmith_bane"
+  }
+}

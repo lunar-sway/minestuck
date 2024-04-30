@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "minestuck:item/telescopic_beatdown_bruiser"
+  }
+}

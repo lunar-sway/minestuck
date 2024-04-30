@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:raw_iron"
+  },
+  "input2": {
+    "item": "minecraft:orange_dye"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:raw_copper"
+  }
+}

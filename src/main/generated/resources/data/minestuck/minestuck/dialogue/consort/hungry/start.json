@@ -1,0 +1,112 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:item_tag_match",
+        "tag": "minestuck:consort_snacks"
+      },
+      "node": {
+        "message": {
+          "arguments": [
+            "matched_item"
+          ],
+          "key": "minestuck.dialogue.consort.hungry.start.ask"
+        },
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:has_matched_item"
+            },
+            "message": "minestuck.dialogue.yes",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/thanks",
+              "player_message": "minestuck.dialogue.consort.hungry.start.yes_reply",
+              "set_as_entrypoint": false
+            },
+            "triggers": [
+              {
+                "type": "minestuck:take_matched_item"
+              },
+              {
+                "type": "minestuck:add_consort_reputation",
+                "reputation": 15
+              },
+              {
+                "type": "minestuck:set_dialogue",
+                "new_path": "minestuck:consort/hungry/satisfied"
+              },
+              {
+                "type": "minestuck:set_flag",
+                "flag": "helpingPlayer",
+                "player_specific": true
+              }
+            ]
+          },
+          {
+            "condition": {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:nakagator"
+            },
+            "message": "minestuck.dialogue.no",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/first_no",
+              "player_message": "minestuck.dialogue.consort.hungry.start.first_no_reply",
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "minestuck:set_flag",
+                "flag": "barter",
+                "player_specific": false
+              }
+            ]
+          },
+          {
+            "condition": {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:iguana"
+            },
+            "message": "minestuck.dialogue.no",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/first_no",
+              "player_message": "minestuck.dialogue.consort.hungry.start.first_no_reply",
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "minestuck:set_flag",
+                "flag": "no_barter",
+                "player_specific": false
+              }
+            ]
+          },
+          {
+            "condition": {
+              "type": "minestuck:entity_type",
+              "entity_type": "minestuck:salamander"
+            },
+            "message": "minestuck.dialogue.no",
+            "next_dialogue": {
+              "id": "minestuck:consort/hungry/first_no",
+              "player_message": "minestuck.dialogue.consort.hungry.start.first_no_reply",
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "minestuck:set_random_flag",
+                "flags": [
+                  "barter",
+                  "no_barter"
+                ],
+                "player_specific": false
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "message": "minestuck.dialogue.consort.hungry.start"
+  }
+}

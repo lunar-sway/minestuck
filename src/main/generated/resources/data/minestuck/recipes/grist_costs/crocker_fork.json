@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 850,
+    "minestuck:chalk": 170,
+    "minestuck:iodine": 170,
+    "minestuck:ruby": 51
+  },
+  "ingredient": {
+    "item": "minestuck:crocker_fork"
+  }
+}

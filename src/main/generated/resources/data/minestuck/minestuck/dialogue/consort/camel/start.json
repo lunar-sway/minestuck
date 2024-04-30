@@ -1,0 +1,23 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.camel.start",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.camel.start.yes",
+        "next_dialogue": {
+          "id": "minestuck:consort/camel/no_camel",
+          "player_message": "minestuck.dialogue.consort.camel.start.yes.reply",
+          "set_as_entrypoint": true
+        }
+      },
+      {
+        "message": "minestuck.dialogue.consort.camel.start.no",
+        "next_dialogue": {
+          "id": "minestuck:consort/camel/dancing_camel",
+          "player_message": "minestuck.dialogue.consort.camel.start.no.reply",
+          "set_as_entrypoint": false
+        }
+      }
+    ]
+  }
+}

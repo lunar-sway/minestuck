@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/light_aspect_planks_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/light_aspect_planks"
+    },
+    "type=top": {
+      "model": "minestuck:block/light_aspect_planks_slab_top"
+    }
+  }
+}

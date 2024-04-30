@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 5,
+      "min_inclusive": 1
+    }
+  }
+}

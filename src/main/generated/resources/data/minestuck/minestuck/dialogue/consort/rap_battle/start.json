@@ -1,0 +1,37 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.rap_battle.start",
+    "responses": [
+      {
+        "message": "minestuck.dialogue.consort.rap_battle.start.accept",
+        "next_dialogue": {
+          "id": "minestuck:consort/rap_battle/raps",
+          "player_message": "minestuck.dialogue.consort.rap_battle.start.accept.reply",
+          "set_as_entrypoint": true
+        },
+        "triggers": [
+          {
+            "type": "minestuck:set_random_flag",
+            "flags": [
+              "rap_a",
+              "rap_b",
+              "rap_c",
+              "rap_d",
+              "rap_e",
+              "rap_f"
+            ],
+            "player_specific": false
+          }
+        ]
+      },
+      {
+        "message": "minestuck.dialogue.consort.rap_battle.start.deny",
+        "next_dialogue": {
+          "id": "minestuck:consort/rap_battle/deny",
+          "player_message": "minestuck.dialogue.consort.rap_battle.start.deny.reply",
+          "set_as_entrypoint": false
+        }
+      }
+    ]
+  }
+}

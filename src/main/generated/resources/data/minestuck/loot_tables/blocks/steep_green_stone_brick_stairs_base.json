@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:steep_green_stone_brick_stairs_base"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minestuck:blocks/steep_green_stone_brick_stairs_base"
+}
