@@ -35,13 +35,7 @@ public record AlchemiterPacket(BlockPos pos, int quantity) implements MSPacket.P
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		//todo also check distance
-		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
-		{
-			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof AlchemiterBlockEntity alchemiter)
-			{
-				alchemiter.processContents(quantity, player);
-			}
-		}
+		MSPacket.getAccessibleBlockEntity(player, this.pos, AlchemiterBlockEntity.class)
+				.ifPresent(alchemiter -> alchemiter.processContents(quantity, player));
 	}
 }

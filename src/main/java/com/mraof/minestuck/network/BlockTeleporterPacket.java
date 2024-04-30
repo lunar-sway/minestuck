@@ -41,17 +41,13 @@ public record BlockTeleporterPacket(BlockPos offsetPos, BlockPos beBlockPos) imp
 		if(CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 			return;
 		
-		if(player.level().isAreaLoaded(beBlockPos, 0))
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, BlockTeleporterBlockEntity.class).ifPresent(blockTeleporter ->
 		{
-			boolean isNearby = Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8;
-			if(isNearby && player.level().getBlockEntity(beBlockPos) instanceof BlockTeleporterBlockEntity blockTeleporter)
-			{
-				blockTeleporter.setTeleportOffset(offsetPos);
-				//Imitates the structure block to ensure that changes are sent client-side
-				blockTeleporter.setChanged();
-				BlockState state = player.level().getBlockState(beBlockPos);
-				player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-			}
-		}
+			blockTeleporter.setTeleportOffset(offsetPos);
+			//Imitates the structure block to ensure that changes are sent client-side
+			blockTeleporter.setChanged();
+			BlockState state = player.level().getBlockState(beBlockPos);
+			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
+		});
 	}
 }

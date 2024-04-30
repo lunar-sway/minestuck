@@ -52,9 +52,7 @@ public record SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos 
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0)
-				&& player.level().getBlockEntity(beBlockPos) instanceof SummonerBlockEntity summoner
-				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, SummonerBlockEntity.class).ifPresent(summoner ->
 		{
 			if(entityType != null)
 				summoner.setSummonedEntity(entityType);
@@ -64,6 +62,6 @@ public record SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos 
 			player.level().setBlock(beBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
 			BlockState state = player.level().getBlockState(beBlockPos);
 			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-		}
+		});
 	}
 }

@@ -35,12 +35,10 @@ public record PunchDesignixPacket(BlockPos pos, String captcha) implements MSPac
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0)
-				&& player.level().getBlockEntity(pos) instanceof PunchDesignixBlockEntity punchDesignix
-				&& Math.sqrt(player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) <= 8)
+		MSPacket.getAccessibleBlockEntity(player, this.pos, PunchDesignixBlockEntity.class).ifPresent(punchDesignix ->
 		{
 			punchDesignix.setCaptcha(captcha);
 			punchDesignix.punchCard(player);
-		}
+		});
 	}
 }

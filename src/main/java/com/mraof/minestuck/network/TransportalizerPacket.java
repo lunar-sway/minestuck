@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.phys.Vec3;
 
 public final class TransportalizerPacket
 {
@@ -38,11 +37,11 @@ public final class TransportalizerPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(player.getCommandSenderWorld().isAreaLoaded(pos, 0)
-					&& player.distanceToSqr(Vec3.atCenterOf(pos)) <= 8 * 8
-					&& selfId.length() == 4)
-				if(player.level().getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
-					transportalizer.trySetId(selfId, player);
+			if(selfId.length() != 4)
+				return;
+			
+			MSPacket.getAccessibleBlockEntity(player, this.pos, TransportalizerBlockEntity.class)
+					.ifPresent(transportalizer -> transportalizer.trySetId(selfId, player));
 		}
 	}
 	
@@ -74,11 +73,11 @@ public final class TransportalizerPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(player.getCommandSenderWorld().isAreaLoaded(pos, 0)
-					&& player.distanceToSqr(Vec3.atCenterOf(pos)) <= 8 * 8
-					&& destId.length() == 4)
-				if(player.level().getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
-					transportalizer.setDestId(destId);
+			if(destId.length() != 4)
+				return;
+			
+			MSPacket.getAccessibleBlockEntity(player, this.pos, TransportalizerBlockEntity.class)
+					.ifPresent(transportalizer -> transportalizer.setDestId(destId));
 		}
 	}
 }

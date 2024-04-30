@@ -8,6 +8,7 @@ import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnections;
@@ -332,15 +333,15 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public static void forNetworkIfPresent(ServerPlayer player, BlockPos pos, Consumer<ComputerBlockEntity> consumer)
 	{
-		if(player.level().isAreaLoaded(pos, 0))    //TODO also check distance to the computer pos (together with a continual check clientside)
+		MSPacket.getAccessibleBlockEntity(player, pos, ComputerBlockEntity.class).ifPresent(computer ->
 		{
-			if(player.level().getBlockEntity(pos) instanceof ComputerBlockEntity computer && !computer.isBroken())
+			if(!computer.isBroken())
 			{
 				MinecraftServer mcServer = Objects.requireNonNull(player.getServer());
 				ServerOpListEntry opsEntry = mcServer.getPlayerList().getOps().get(player.getGameProfile());
 				if((!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getLevel() >= 2) && ServerEditHandler.getData(player) == null)
 					consumer.accept(computer);
 			}
-		}
+		});
 	}
 }

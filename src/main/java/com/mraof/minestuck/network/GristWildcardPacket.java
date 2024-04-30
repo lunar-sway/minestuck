@@ -8,14 +8,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public record GristWildcardPacket(BlockPos pos, GristType gristType) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("grist_wildcard");
-	
-	private static final Logger LOGGER = LogManager.getLogger();
 	
 	@Override
 	public ResourceLocation id()
@@ -41,12 +37,7 @@ public record GristWildcardPacket(BlockPos pos, GristType gristType) implements 
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player != null && player.getCommandSenderWorld().isAreaLoaded(pos, 0))
-		{
-			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof GristWildcardHolder blockEntity)
-				blockEntity.setWildcardGrist(gristType);
-			else
-				LOGGER.warn("No block entity found at {} for packet sent by player {}!", pos, player.getName());
-		}
+		MSPacket.getAccessibleBlockEntity(player, this.pos, GristWildcardHolder.class)
+				.ifPresent(blockEntity -> blockEntity.setWildcardGrist(gristType));
 	}
 }

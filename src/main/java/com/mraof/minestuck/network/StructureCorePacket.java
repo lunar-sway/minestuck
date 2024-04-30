@@ -37,12 +37,11 @@ public record StructureCorePacket(StructureCoreBlockEntity.ActionType actionType
 		return new StructureCorePacket(actionType, summonRange, beBlockPos);
 	}
 	
+	@SuppressWarnings("resource")
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0)
-				&& player.level().getBlockEntity(beBlockPos) instanceof StructureCoreBlockEntity structureCore
-				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, StructureCoreBlockEntity.class).ifPresent(structureCore ->
 		{
 			structureCore.setActionType(actionType);
 			structureCore.setShutdownRange(shutdownRange);
@@ -52,6 +51,6 @@ public record StructureCorePacket(StructureCoreBlockEntity.ActionType actionType
 			player.level().setBlock(beBlockPos, structureCore.getBlockState().setValue(StructureCoreBlock.POWERED, false), Block.UPDATE_ALL);
 			BlockState state = player.level().getBlockState(beBlockPos);
 			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-		}
+		});
 	}
 }

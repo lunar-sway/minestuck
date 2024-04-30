@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 public record StatStorerPacket(StatStorerBlockEntity.ActiveType activeType, BlockPos beBlockPos, int divideValueBy) implements MSPacket.PlayToServer
 {
@@ -38,16 +37,10 @@ public record StatStorerPacket(StatStorerBlockEntity.ActiveType activeType, Bloc
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0)
-				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, StatStorerBlockEntity.class).ifPresent(statStorer ->
 		{
-			BlockEntity te = player.level().getBlockEntity(beBlockPos);
-			
-			if(te instanceof StatStorerBlockEntity statStorer)
-			{
-				int largestDivideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
-				statStorer.setActiveTypeAndDivideValue(activeType, largestDivideValueBy);
-			}
-		}
+			int largestDivideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
+			statStorer.setActiveTypeAndDivideValue(activeType, largestDivideValueBy);
+		});
 	}
 }

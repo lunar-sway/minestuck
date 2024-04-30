@@ -54,9 +54,7 @@ public record AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMob
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0)
-				&& player.level().getBlockEntity(beBlockPos) instanceof AreaEffectBlockEntity areaEffect
-				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, AreaEffectBlockEntity.class).ifPresent(areaEffect ->
 		{
 			areaEffect.setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);
 			areaEffect.setEffect(effect, effectAmp);
@@ -65,6 +63,6 @@ public record AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMob
 			player.level().setBlock(beBlockPos, areaEffect.getBlockState().setValue(AreaEffectBlock.ALL_MOBS, isAllMobs), Block.UPDATE_ALL);
 			BlockState state = player.level().getBlockState(beBlockPos);
 			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-		}
+		});
 	}
 }

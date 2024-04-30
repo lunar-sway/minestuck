@@ -35,11 +35,7 @@ public record WirelessRedstoneTransmitterPacket(BlockPos destinationBlockPos, Bl
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level().isAreaLoaded(beBlockPos, 0)
-				&& player.level().getBlockEntity(beBlockPos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter
-				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
-		{
-			transmitter.setOffsetFromDestinationBlockPos(destinationBlockPos);
-		}
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, WirelessRedstoneTransmitterBlockEntity.class)
+				.ifPresent(transmitter -> transmitter.setOffsetFromDestinationBlockPos(destinationBlockPos));
 	}
 }
