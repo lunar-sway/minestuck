@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.MachineContainerMenu;
-import com.mraof.minestuck.network.MachinePacket;
+import com.mraof.minestuck.network.block.MachinePacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;

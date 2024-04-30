@@ -1,9 +1,10 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

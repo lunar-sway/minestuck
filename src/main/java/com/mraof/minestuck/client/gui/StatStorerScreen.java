@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
-import com.mraof.minestuck.network.StatStorerPacket;
+import com.mraof.minestuck.network.block.StatStorerPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;

@@ -1,9 +1,10 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;

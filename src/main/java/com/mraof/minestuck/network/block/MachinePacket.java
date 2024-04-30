@@ -1,7 +1,8 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.MachineContainerMenu;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

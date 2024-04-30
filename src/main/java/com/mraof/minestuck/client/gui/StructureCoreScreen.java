@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.StructureCoreBlockEntity;
-import com.mraof.minestuck.network.StructureCorePacket;
+import com.mraof.minestuck.network.block.StructureCorePacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;

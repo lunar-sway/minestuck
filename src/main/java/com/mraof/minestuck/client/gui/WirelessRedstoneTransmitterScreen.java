@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
-import com.mraof.minestuck.network.WirelessRedstoneTransmitterPacket;
+import com.mraof.minestuck.network.block.WirelessRedstoneTransmitterPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
