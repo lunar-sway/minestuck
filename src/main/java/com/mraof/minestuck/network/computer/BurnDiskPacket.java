@@ -40,7 +40,7 @@ public record BurnDiskPacket(BlockPos computerPos, int programId) implements MSP
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, computerPos,
-				computer -> computer.burnDisk(programId));
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
+				.ifPresent(computer -> computer.burnDisk(programId));
 	}
 }

@@ -44,7 +44,7 @@ public record ClearMessagePacket(BlockPos computerPos, int program) implements M
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, computerPos, computer -> {
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
 			computer.latestmessage.put(program, "");
 			computer.markBlockForUpdate();
 		});

@@ -47,7 +47,7 @@ public final class CloseSburbConnectionPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			ComputerBlockEntity.forNetworkIfPresent(player, this.pos, computer ->
+			ComputerBlockEntity.getAccessibleComputer(player, this.pos).ifPresent(computer ->
 					ComputerInteractions.get(player.server).closeClientConnection(computer));
 		}
 	}
@@ -77,8 +77,8 @@ public final class CloseSburbConnectionPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			ComputerBlockEntity.forNetworkIfPresent(player, this.pos, computer ->
-					ComputerInteractions.get(player.server).closeServerConnection(computer));
+			ComputerBlockEntity.getAccessibleComputer(player, this.pos).ifPresent(computer ->
+						ComputerInteractions.get(player.server).closeServerConnection(computer));
 		}
 	}
 }

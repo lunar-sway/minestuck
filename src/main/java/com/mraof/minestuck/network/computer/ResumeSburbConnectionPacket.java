@@ -47,7 +47,7 @@ public final class ResumeSburbConnectionPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			ComputerBlockEntity.forNetworkIfPresent(player, this.pos, computer ->
+			ComputerBlockEntity.getAccessibleComputer(player, this.pos).ifPresent(computer ->
 					ComputerInteractions.get(player.server).resumeClientConnection(computer));
 		}
 	}
@@ -77,7 +77,7 @@ public final class ResumeSburbConnectionPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			ComputerBlockEntity.forNetworkIfPresent(player, this.pos, computer ->
+			ComputerBlockEntity.getAccessibleComputer(player, this.pos).ifPresent(computer ->
 					ComputerInteractions.get(player.server).resumeServerConnection(computer));
 		}
 	}

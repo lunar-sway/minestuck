@@ -39,7 +39,7 @@ public record OpenSburbServerPacket(BlockPos computerPos) implements MSPacket.Pl
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, computerPos,
-				computer -> ComputerInteractions.get(player.server).openServer(computer));
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
+				.ifPresent(computer -> ComputerInteractions.get(player.server).openServer(computer));
 	}
 }

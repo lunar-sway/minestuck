@@ -39,7 +39,7 @@ public record CloseRemoteSburbConnectionPacket(BlockPos computerPos) implements 
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, computerPos,
-				computer -> ComputerInteractions.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
+				.ifPresent(computer -> ComputerInteractions.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
 	}
 }

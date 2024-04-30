@@ -43,8 +43,8 @@ public record ConnectToSburbServerPacket(BlockPos computerPos, int serverPlayerI
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, computerPos,
-				computer -> {
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
+				.ifPresent(computer -> {
 					PlayerIdentifier serverPlayer = IdentifierHandler.getById(serverPlayerId);
 					ComputerInteractions.get(player.server).connectToServerPlayer(computer, serverPlayer);
 				});
