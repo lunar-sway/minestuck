@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:mycelium"
+  },
+  "input2": {
+    "item": "minecraft:crimson_fungus"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:crimson_nylium"
+  }
+}

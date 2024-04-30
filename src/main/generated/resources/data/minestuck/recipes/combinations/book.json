@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:ink_sac"
+  },
+  "input2": {
+    "item": "minecraft:paper"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:book"
+  }
+}

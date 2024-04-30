@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:saddle"
+  },
+  "input2": {
+    "item": "minestuck:redstone_clock"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:horse_clock"
+  }
+}

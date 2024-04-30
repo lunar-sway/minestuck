@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 30
+  },
+  "ingredient": {
+    "item": "minestuck:iron_boat"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:stack_modus_card"
+  },
+  "input2": {
+    "item": "minestuck:queue_modus_card"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:queuestack_modus_card"
+  }
+}

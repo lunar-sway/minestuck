@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:beacon"
+  },
+  "input2": {
+    "item": "minecraft:diamond_sword"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:shatter_beacon"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 5
+  },
+  "ingredient": {
+    "item": "minestuck:white_pawn_stained_glass"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:ink_sac"
+  },
+  "input2": {
+    "item": "minecraft:chiseled_sandstone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:chiseled_deepslate"
+  }
+}

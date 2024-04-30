@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:white_pawn_stained_glass"
+  },
+  "input2": {
+    "item": "minestuck:prim_and_proper_walking_pole"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:white_crown_stained_glass"
+  }
+}

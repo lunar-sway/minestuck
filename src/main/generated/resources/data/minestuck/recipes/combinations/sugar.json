@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:cookie"
+  },
+  "input2": {
+    "item": "minecraft:redstone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:sugar"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "minestuck:block/lacquered_uncarved_wood",
+    "side": "minestuck:block/lacquered_uncarved_wood",
+    "top": "minestuck:block/lacquered_uncarved_wood"
+  }
+}

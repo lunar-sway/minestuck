@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 30,
+    "minestuck:iodine": 15,
+    "minestuck:marble": 12
+  },
+  "ingredient": {
+    "item": "minestuck:coffee_claws_drawn"
+  }
+}

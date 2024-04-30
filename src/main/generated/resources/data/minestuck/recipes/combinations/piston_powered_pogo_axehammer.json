@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:copse_crusher"
+  },
+  "input2": {
+    "item": "minestuck:pogo_hammer"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:piston_powered_pogo_axehammer"
+  }
+}

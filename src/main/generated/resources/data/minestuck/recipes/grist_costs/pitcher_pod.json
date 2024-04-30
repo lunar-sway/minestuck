@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:caulk": 1,
+    "minestuck:iodine": 1,
+    "minestuck:rust": 1
+  },
+  "ingredient": {
+    "item": "minecraft:pitcher_pod"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 3,
+    "minestuck:build": 10,
+    "minestuck:caulk": 8
+  },
+  "ingredient": {
+    "item": "minestuck:glub_club"
+  }
+}

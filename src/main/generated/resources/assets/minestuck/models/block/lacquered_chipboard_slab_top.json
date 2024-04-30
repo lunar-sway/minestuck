@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "minestuck:block/lacquered_chipboard",
+    "side": "minestuck:block/lacquered_chipboard",
+    "top": "minestuck:block/lacquered_chipboard"
+  }
+}

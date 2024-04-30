@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:bread"
+  },
+  "input2": {
+    "item": "minecraft:stick"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:stale_baguette"
+  }
+}

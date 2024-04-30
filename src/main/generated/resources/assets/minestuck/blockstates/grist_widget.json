@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,has_card=false": {
+      "model": "minestuck:block/grist_widget",
+      "y": 270
+    },
+    "facing=east,has_card=true": {
+      "model": "minestuck:block/grist_widget_with_card",
+      "y": 270
+    },
+    "facing=north,has_card=false": {
+      "model": "minestuck:block/grist_widget",
+      "y": 180
+    },
+    "facing=north,has_card=true": {
+      "model": "minestuck:block/grist_widget_with_card",
+      "y": 180
+    },
+    "facing=south,has_card=false": {
+      "model": "minestuck:block/grist_widget"
+    },
+    "facing=south,has_card=true": {
+      "model": "minestuck:block/grist_widget_with_card"
+    },
+    "facing=west,has_card=false": {
+      "model": "minestuck:block/grist_widget",
+      "y": 90
+    },
+    "facing=west,has_card=true": {
+      "model": "minestuck:block/grist_widget_with_card",
+      "y": 90
+    }
+  }
+}

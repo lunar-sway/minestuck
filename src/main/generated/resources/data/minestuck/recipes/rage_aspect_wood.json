@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "aspect_wood",
+  "key": {
+    "#": {
+      "item": "minestuck:rage_aspect_log"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 3,
+    "item": "minestuck:rage_aspect_wood"
+  },
+  "show_notification": true
+}

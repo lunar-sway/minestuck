@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/black_cobblestone_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/black_cobblestone"
+    },
+    "type=top": {
+      "model": "minestuck:block/black_cobblestone_slab_top"
+    }
+  }
+}

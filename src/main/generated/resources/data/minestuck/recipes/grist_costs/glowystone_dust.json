@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 1,
+    "minestuck:build": 1
+  },
+  "ingredient": {
+    "item": "minestuck:glowystone_dust"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.rock_cycle.4",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/rock_cycle/5"
+      }
+    ]
+  }
+}

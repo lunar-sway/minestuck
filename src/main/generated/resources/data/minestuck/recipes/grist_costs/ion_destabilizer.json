@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 857,
+    "minestuck:build": 2572,
+    "minestuck:ruby": 650,
+    "minestuck:uranium": 85
+  },
+  "ingredient": {
+    "item": "minestuck:ion_destabilizer"
+  }
+}

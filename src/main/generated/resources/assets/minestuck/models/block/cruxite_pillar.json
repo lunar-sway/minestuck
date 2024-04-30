@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/cruxite_pillar_top",
+    "side": "minestuck:block/cruxite_pillar"
+  }
+}

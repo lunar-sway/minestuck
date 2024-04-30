@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:garnet": 4,
+    "minestuck:iodine": 1
+  },
+  "ingredient": {
+    "item": "minecraft:pink_tulip"
+  }
+}

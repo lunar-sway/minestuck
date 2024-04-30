@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 4,
+    "minestuck:amethyst": 4,
+    "minestuck:chalk": 4,
+    "minestuck:garnet": 4
+  },
+  "ingredient": {
+    "item": "minestuck:water_colors_bucket"
+  }
+}

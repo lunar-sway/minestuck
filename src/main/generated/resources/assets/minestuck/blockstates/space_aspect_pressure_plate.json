@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "minestuck:block/space_aspect_pressure_plate"
+    },
+    "powered=true": {
+      "model": "minestuck:block/space_aspect_pressure_plate_down"
+    }
+  }
+}

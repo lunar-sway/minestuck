@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 24,
+    "minestuck:sulfur": 48
+  },
+  "ingredient": {
+    "item": "minecraft:netherite_scrap"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minestuck:energy_core"
+    },
+    {
+      "item": "minestuck:computer_parts"
+    },
+    {
+      "item": "minecraft:quartz"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minestuck:raw_cruxite"
+    }
+  ],
+  "result": {
+    "item": "minestuck:computer"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:always_true"
+  },
+  "dialogue": "minestuck:consort_general_merchant/generic",
+  "keep_on_reset": true
+}

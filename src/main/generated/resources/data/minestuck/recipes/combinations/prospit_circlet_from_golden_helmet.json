@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:golden_helmet"
+  },
+  "input2": {
+    "item": "minestuck:white_crown_stained_glass"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:prospit_circlet"
+  }
+}

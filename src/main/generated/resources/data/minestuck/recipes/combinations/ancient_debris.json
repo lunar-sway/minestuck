@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:steel_beam"
+  },
+  "input2": {
+    "item": "minestuck:raw_uranium"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:ancient_debris"
+  }
+}

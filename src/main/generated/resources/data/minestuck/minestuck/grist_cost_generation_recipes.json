@@ -1,0 +1,71 @@
+[
+  {
+    "interpreter": {
+      "type": "minestuck:default"
+    },
+    "source": {
+      "type": "recipe_serializer",
+      "serializer": "minecraft:crafting_shaped"
+    }
+  },
+  {
+    "interpreter": {
+      "type": "minestuck:default"
+    },
+    "source": {
+      "type": "recipe_serializer",
+      "serializer": "minecraft:crafting_shapeless"
+    }
+  },
+  {
+    "interpreter": {
+      "type": "minestuck:default"
+    },
+    "source": {
+      "type": "recipe_serializer",
+      "serializer": "minestuck:non_mirrored"
+    }
+  },
+  {
+    "interpreter": {
+      "type": "minestuck:default"
+    },
+    "source": {
+      "type": "recipe_type",
+      "recipe_type": "minecraft:stonecutting"
+    }
+  },
+  {
+    "interpreter": {
+      "type": "minestuck:smithing"
+    },
+    "source": {
+      "type": "recipe_serializer",
+      "serializer": "minecraft:smithing_transform"
+    }
+  },
+  {
+    "interpreter": {
+      "type": "minestuck:cooking",
+      "added_cost": {
+        "minestuck:tar": 1
+      }
+    },
+    "source": {
+      "type": "recipe_type",
+      "recipe_type": "minecraft:smelting"
+    }
+  },
+  {
+    "interpreter": {
+      "type": "minestuck:cooking",
+      "added_cost": {
+        "minestuck:uranium": 1
+      }
+    },
+    "source": {
+      "type": "recipe_type",
+      "recipe_type": "minestuck:irradiating"
+    }
+  }
+]

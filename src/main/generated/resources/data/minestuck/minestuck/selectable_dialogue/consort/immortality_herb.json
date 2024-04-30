@@ -1,0 +1,17 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:flora"
+      },
+      {
+        "type": "minestuck:first_time_generating"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/immortality_herb/1",
+  "keep_on_reset": true
+}

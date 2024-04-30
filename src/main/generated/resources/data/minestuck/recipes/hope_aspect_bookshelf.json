@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "aspect_bookshelf",
+  "key": {
+    "b": {
+      "item": "minecraft:book"
+    },
+    "p": {
+      "item": "minestuck:hope_aspect_planks"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "bpb",
+    "ppp"
+  ],
+  "result": {
+    "item": "minestuck:hope_aspect_bookshelf"
+  },
+  "show_notification": true
+}

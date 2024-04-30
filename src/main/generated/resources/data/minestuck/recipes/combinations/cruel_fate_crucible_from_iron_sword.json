@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_sword"
+  },
+  "input2": {
+    "item": "minestuck:grimoire"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:cruel_fate_crucible"
+  }
+}

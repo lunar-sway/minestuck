@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "minestuck:block/rainbow_leaves"
+  }
+}

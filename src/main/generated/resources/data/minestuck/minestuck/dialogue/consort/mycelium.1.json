@@ -1,0 +1,14 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "happy"
+    },
+    "message": "minestuck.dialogue.consort.mycelium.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/mycelium.2"
+      }
+    ]
+  }
+}

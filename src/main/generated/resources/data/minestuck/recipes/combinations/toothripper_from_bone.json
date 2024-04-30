@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:dagger"
+  },
+  "input2": {
+    "item": "minecraft:bone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:toothripper"
+  }
+}

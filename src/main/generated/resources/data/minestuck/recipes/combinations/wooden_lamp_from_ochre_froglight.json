@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:lacquered_uncarved_wood"
+  },
+  "input2": {
+    "item": "minecraft:ochre_froglight"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:wooden_lamp"
+  }
+}

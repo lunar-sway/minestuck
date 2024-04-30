@@ -1,0 +1,7 @@
+{
+  "condition": {
+    "type": "minestuck:terrain_land_type",
+    "land_type": "minestuck:wood"
+  },
+  "dialogue": "minestuck:consort/early_work"
+}

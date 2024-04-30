@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:string"
+  },
+  "input2": {
+    "item": "minecraft:bucket"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:bug_net"
+  }
+}

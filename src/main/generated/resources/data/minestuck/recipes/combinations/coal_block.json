@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:coal"
+  },
+  "input2": {
+    "item": "minecraft:stone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:coal_block"
+  }
+}

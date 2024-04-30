@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:phlegm_gushers"
+  },
+  "input2": {
+    "item": "minestuck:ink_squid_pro_quo"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:sorrow_gushers"
+  }
+}

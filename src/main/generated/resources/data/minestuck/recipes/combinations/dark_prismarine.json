@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:prismarine"
+  },
+  "input2": {
+    "item": "minecraft:black_dye"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:dark_prismarine"
+  }
+}

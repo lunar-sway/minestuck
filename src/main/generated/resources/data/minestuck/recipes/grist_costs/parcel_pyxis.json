@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 25,
+    "minestuck:chalk": 2,
+    "minestuck:mercury": 5,
+    "minestuck:rust": 10
+  },
+  "ingredient": {
+    "item": "minestuck:parcel_pyxis"
+  }
+}

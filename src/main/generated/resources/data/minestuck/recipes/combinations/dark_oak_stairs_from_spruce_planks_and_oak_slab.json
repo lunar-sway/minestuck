@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:spruce_planks"
+  },
+  "input2": {
+    "item": "minecraft:oak_slab"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:dark_oak_stairs"
+  }
+}

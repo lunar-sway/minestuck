@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 80,
+    "minestuck:cobalt": 64,
+    "minestuck:marble": 32
+  },
+  "ingredient": {
+    "item": "minestuck:rubiks_mace"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:water_bucket"
+  },
+  "input2": {
+    "item": "minecraft:amethyst_shard"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:caulk_bucket"
+  }
+}

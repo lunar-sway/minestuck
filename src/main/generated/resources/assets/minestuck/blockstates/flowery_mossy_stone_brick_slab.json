@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/flowery_mossy_stone_bricks1_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/flowery_mossy_stone_bricks1"
+    },
+    "type=top": {
+      "model": "minestuck:block/flowery_mossy_stone_bricks1_slab_top"
+    }
+  }
+}

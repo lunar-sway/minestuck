@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.book_purpose.unenlightened",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/book_purpose/buy_my_products"
+      }
+    ]
+  }
+}

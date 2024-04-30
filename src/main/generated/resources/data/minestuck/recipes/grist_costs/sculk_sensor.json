@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:garnet": 6,
+    "minestuck:tar": 16
+  },
+  "ingredient": {
+    "item": "minecraft:sculk_sensor"
+  }
+}

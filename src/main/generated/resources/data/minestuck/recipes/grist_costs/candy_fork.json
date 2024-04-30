@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 42,
+    "minestuck:iodine": 18
+  },
+  "ingredient": {
+    "item": "minestuck:candy_fork"
+  }
+}

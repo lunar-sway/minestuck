@@ -1,0 +1,172 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:silver_spoon",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:fudgesickle",
+          "quality": 1,
+          "weight": 2
+        }
+      ],
+      "name": "weapons",
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cake",
+          "quality": -1,
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:reverse_cake"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:apple_cake",
+          "quality": -1,
+          "weight": 7
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:cold_cake",
+          "quality": -2,
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:hot_cake",
+          "quality": -2,
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:blue_cake",
+          "quality": 1,
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:red_cake",
+          "quality": 1,
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:negative_cake",
+          "quality": 1,
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:carrot_cake",
+          "quality": 1,
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:chocolatey_cake",
+          "quality": 1,
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5.0,
+                "min": 2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:cookie",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:candy_corn",
+          "weight": 3
+        }
+      ],
+      "name": "supplies",
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:sugar",
+          "quality": -1,
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:milk_bucket",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cocoa_beans",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:thresh_dvd",
+          "quality": 2,
+          "weight": 4
+        }
+      ],
+      "name": "misc",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minestuck:chests/medium_basic/title/minestuck/cake"
+}

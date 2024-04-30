@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 350,
+    "minestuck:mercury": 29
+  },
+  "ingredient": {
+    "item": "minestuck:set_modus_card"
+  }
+}

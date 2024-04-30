@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_frost_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:frost_bricks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:frost_brick_slab_from_frost_bricks_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_frost_bricks",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:frost_brick_slab_from_frost_bricks_stonecutting"
+    ]
+  },
+  "sends_telemetry_event": false
+}

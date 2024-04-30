@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 1,
+    "minestuck:shale": 81
+  },
+  "ingredient": {
+    "item": "minecraft:exposed_copper"
+  }
+}

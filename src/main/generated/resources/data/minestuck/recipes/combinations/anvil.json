@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:crafting_table"
+  },
+  "input2": {
+    "item": "minecraft:iron_block"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:anvil"
+  }
+}

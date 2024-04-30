@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:wooden_trapdoors"
+  },
+  "input2": {
+    "item": "minecraft:iron_block"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:iron_trapdoor"
+  }
+}

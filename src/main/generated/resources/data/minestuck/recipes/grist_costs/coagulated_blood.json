@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:garnet": 8,
+    "minestuck:iodine": 8
+  },
+  "ingredient": {
+    "item": "minestuck:coagulated_blood"
+  }
+}

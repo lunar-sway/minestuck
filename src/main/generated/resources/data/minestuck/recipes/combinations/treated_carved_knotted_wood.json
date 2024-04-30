@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:carved_knotted_wood"
+  },
+  "input2": {
+    "item": "minestuck:molten_amber_bucket"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:treated_carved_knotted_wood"
+  }
+}

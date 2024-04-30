@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:stone_axe"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 300,
+      "min_inclusive": 250
+    }
+  }
+}

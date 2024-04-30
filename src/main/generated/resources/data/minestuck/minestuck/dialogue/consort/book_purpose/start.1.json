@@ -1,0 +1,11 @@
+{
+  "node": {
+    "message": "minestuck.dialogue.consort.book_purpose.start.1",
+    "responses": [
+      {
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/book_purpose/start.2"
+      }
+    ]
+  }
+}

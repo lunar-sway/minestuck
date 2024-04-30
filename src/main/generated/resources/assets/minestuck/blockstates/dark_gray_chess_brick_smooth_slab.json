@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/dark_gray_chess_brick_smooth_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/dark_gray_chess_brick_smooth"
+    },
+    "type=top": {
+      "model": "minestuck:block/dark_gray_chess_brick_smooth_slab_top"
+    }
+  }
+}

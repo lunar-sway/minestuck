@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:pulse"
+  },
+  "dialogue": "minestuck:consort_food_merchant/blood",
+  "keep_on_reset": true
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "minestuck:pink_stone"
+  },
+  "result": "minestuck:pink_stone_slab"
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 512,
+    "minestuck:build": 2000,
+    "minestuck:gold": 512,
+    "minestuck:quartz": 2400
+  },
+  "ingredient": {
+    "item": "minestuck:skaithe"
+  }
+}

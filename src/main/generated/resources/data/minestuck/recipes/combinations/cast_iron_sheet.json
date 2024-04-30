@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:cast_iron"
+  },
+  "input2": {
+    "tag": "minecraft:planks"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cast_iron_sheet"
+  }
+}

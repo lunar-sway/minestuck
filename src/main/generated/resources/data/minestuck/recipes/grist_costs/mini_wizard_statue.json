@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 30
+  },
+  "ingredient": {
+    "item": "minestuck:mini_wizard_statue"
+  }
+}

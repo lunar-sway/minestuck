@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minecraft:book"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 65,
+      "min_inclusive": 50
+    }
+  }
+}

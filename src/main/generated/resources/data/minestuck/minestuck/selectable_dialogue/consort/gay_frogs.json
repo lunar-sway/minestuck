@@ -1,0 +1,17 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:frogs"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:rainbow"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/gay_frogs"
+}

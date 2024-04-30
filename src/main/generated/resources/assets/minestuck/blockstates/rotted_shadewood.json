@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minestuck:block/rotted_shadewood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minestuck:block/rotted_shadewood"
+    },
+    "axis=z": {
+      "model": "minestuck:block/rotted_shadewood",
+      "x": 90
+    }
+  }
+}
