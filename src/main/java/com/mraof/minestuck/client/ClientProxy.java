@@ -3,7 +3,6 @@ package com.mraof.minestuck.client;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.client.model.armor.*;
 import com.mraof.minestuck.client.model.entity.BishopModel;
@@ -61,8 +60,6 @@ public class ClientProxy
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
-		MSScreenFactories.registerScreenFactories();
-
 		EntityRenderers.register(MSEntityTypes.FROG.get(), FrogRenderer::new);
 		EntityRenderers.register(MSEntityTypes.HOLOGRAM.get(), HologramRenderer::new);
 		EntityRenderers.register(MSEntityTypes.LOTUS_FLOWER.get(), LotusFlowerRenderer::new);
