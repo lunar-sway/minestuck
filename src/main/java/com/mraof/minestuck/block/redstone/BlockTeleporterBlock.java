@@ -42,18 +42,21 @@ public class BlockTeleporterBlock extends MSHorizontalDirectionalBlock implement
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		if(CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!canInteract(player))
 			return InteractionResult.PASS;
 		
-		if(level.getBlockEntity(pos) instanceof BlockTeleporterBlockEntity be)
-		{
-			if(level.isClientSide)
-				MSScreenFactories.displayBlockTeleporterScreen(be);
-			
-			return InteractionResult.sidedSuccess(level.isClientSide);
-		}
+		if(!(level.getBlockEntity(pos) instanceof BlockTeleporterBlockEntity be))
+			return InteractionResult.PASS;
 		
-		return InteractionResult.PASS;
+		if(level.isClientSide)
+			MSScreenFactories.displayBlockTeleporterScreen(be);
+		
+		return InteractionResult.sidedSuccess(level.isClientSide);
+	}
+	
+	public static boolean canInteract(Player player)
+	{
+		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
 	@SuppressWarnings("deprecation")

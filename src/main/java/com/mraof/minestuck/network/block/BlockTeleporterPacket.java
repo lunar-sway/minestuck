@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network.block;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.redstone.BlockTeleporterBlock;
 import com.mraof.minestuck.blockentity.redstone.BlockTeleporterBlockEntity;
-import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -39,7 +39,7 @@ public record BlockTeleporterPacket(BlockPos offsetPos, BlockPos beBlockPos) imp
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!BlockTeleporterBlock.canInteract(player))
 			return;
 		
 		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, BlockTeleporterBlockEntity.class).ifPresent(blockTeleporter ->

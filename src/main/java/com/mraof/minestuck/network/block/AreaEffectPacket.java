@@ -55,6 +55,9 @@ public record AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMob
 	@Override
 	public void execute(ServerPlayer player)
 	{
+		if(!AreaEffectBlock.canInteract(player))
+			return;
+		
 		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, AreaEffectBlockEntity.class).ifPresent(areaEffect ->
 		{
 			areaEffect.setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);

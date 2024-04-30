@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.block;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.redstone.WirelessRedstoneTransmitterBlock;
 import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
@@ -36,6 +37,9 @@ public record WirelessRedstoneTransmitterPacket(BlockPos destinationBlockPos, Bl
 	@Override
 	public void execute(ServerPlayer player)
 	{
+		if(!WirelessRedstoneTransmitterBlock.canInteract(player))
+			return;
+		
 		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, WirelessRedstoneTransmitterBlockEntity.class)
 				.ifPresent(transmitter -> transmitter.setOffsetFromDestinationBlockPos(destinationBlockPos));
 	}

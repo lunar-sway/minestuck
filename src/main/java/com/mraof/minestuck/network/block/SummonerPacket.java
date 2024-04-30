@@ -53,6 +53,9 @@ public record SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos 
 	@Override
 	public void execute(ServerPlayer player)
 	{
+		if(!SummonerBlock.canInteract(player))
+			return;
+		
 		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, SummonerBlockEntity.class).ifPresent(summoner ->
 		{
 			if(entityType != null)

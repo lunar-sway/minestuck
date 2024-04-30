@@ -42,6 +42,9 @@ public record StructureCorePacket(StructureCoreBlockEntity.ActionType actionType
 	@Override
 	public void execute(ServerPlayer player)
 	{
+		if(!StructureCoreBlock.canInteract(player))
+			return;
+		
 		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, StructureCoreBlockEntity.class).ifPresent(structureCore ->
 		{
 			structureCore.setActionType(actionType);

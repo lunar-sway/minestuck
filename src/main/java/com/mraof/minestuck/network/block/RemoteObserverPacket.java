@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.block;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.redstone.RemoteObserverBlock;
 import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
@@ -50,6 +51,9 @@ public record RemoteObserverPacket(RemoteObserverBlockEntity.ActiveType activeTy
 	@Override
 	public void execute(ServerPlayer player)
 	{
+		if(!RemoteObserverBlock.canInteract(player))
+			return;
+		
 		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, RemoteObserverBlockEntity.class).ifPresent(observerBE ->
 		{
 			observerBE.setActiveType(activeType);

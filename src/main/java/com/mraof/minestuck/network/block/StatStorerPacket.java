@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.block;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
@@ -38,6 +39,9 @@ public record StatStorerPacket(StatStorerBlockEntity.ActiveType activeType, Bloc
 	@Override
 	public void execute(ServerPlayer player)
 	{
+		if(!StatStorerBlock.canInteract(player))
+			return;
+		
 		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, StatStorerBlockEntity.class).ifPresent(statStorer ->
 		{
 			int largestDivideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
