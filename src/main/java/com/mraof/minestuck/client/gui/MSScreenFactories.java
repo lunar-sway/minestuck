@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.google.common.collect.Maps;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
@@ -14,10 +15,13 @@ import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import java.util.Map;
 import java.util.Set;
@@ -28,22 +32,24 @@ import java.util.function.Supplier;
  * This is the class which registers container type -> screen constructor factories,
  * and this is also the class to hide away all screen display code to prevent standalone server crashes due to references to {@link net.minecraft.client.gui.screens.Screen}
  */
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class MSScreenFactories
 {
 	private static final Map<ModusType<?>, Function<Modus, ? extends SylladexScreen>> SYLLADEX_FACTORIES = Maps.newHashMap();
 	
-	public static void registerScreenFactories()
+	@SubscribeEvent
+	public static void registerScreenFactories(RegisterMenuScreensEvent event)
 	{
-		MenuScreens.register(MSMenuTypes.MINI_CRUXTRUDER.get(), MiniCruxtruderScreen::new);
-		MenuScreens.register(MSMenuTypes.MINI_TOTEM_LATHE.get(), MiniTotemLatheScreen::new);
-		MenuScreens.register(MSMenuTypes.MINI_ALCHEMITER.get(), MiniAlchemiterScreen::new);
-		MenuScreens.register(MSMenuTypes.MINI_PUNCH_DESIGNIX.get(), MiniPunchDesignixScreen::new);
-		MenuScreens.register(MSMenuTypes.SENDIFICATOR.get(), SendificatorScreen::new);
-		MenuScreens.register(MSMenuTypes.GRIST_WIDGET.get(), GristWidgetScreen::new);
-		MenuScreens.register(MSMenuTypes.URANIUM_COOKER.get(), UraniumCookerScreen::new);
-		MenuScreens.register(MSMenuTypes.ANTHVIL.get(), AnthvilScreen::new);
-		MenuScreens.register(MSMenuTypes.CONSORT_MERCHANT.get(), ConsortShopScreen::new);
-		MenuScreens.register(MSMenuTypes.CASSETTE_CONTAINER.get(), CassetteContainerScreen::new);
+		event.register(MSMenuTypes.MINI_CRUXTRUDER.get(), MiniCruxtruderScreen::new);
+		event.register(MSMenuTypes.MINI_TOTEM_LATHE.get(), MiniTotemLatheScreen::new);
+		event.register(MSMenuTypes.MINI_ALCHEMITER.get(), MiniAlchemiterScreen::new);
+		event.register(MSMenuTypes.MINI_PUNCH_DESIGNIX.get(), MiniPunchDesignixScreen::new);
+		event.register(MSMenuTypes.SENDIFICATOR.get(), SendificatorScreen::new);
+		event.register(MSMenuTypes.GRIST_WIDGET.get(), GristWidgetScreen::new);
+		event.register(MSMenuTypes.URANIUM_COOKER.get(), UraniumCookerScreen::new);
+		event.register(MSMenuTypes.ANTHVIL.get(), AnthvilScreen::new);
+		event.register(MSMenuTypes.CONSORT_MERCHANT.get(), ConsortShopScreen::new);
+		event.register(MSMenuTypes.CASSETTE_CONTAINER.get(), CassetteContainerScreen::new);
 		
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);
