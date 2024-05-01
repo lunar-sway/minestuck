@@ -892,6 +892,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.BLOCK_PRESSURE_PLATE, "Lets off a redstone signal when a block is above it or if a player is standing on it without crouching.");
 		addBlock(MSBlocks.PUSHABLE_BLOCK, "Pushable Block");
 		addBlockTooltip(MSBlocks.PUSHABLE_BLOCK, "Right click to push and shift right click to pull! Affected by gravity.");
+		addBlock(MSBlocks.BLOCK_TELEPORTER, "Block Teleporter");
+		addBlockTooltip(MSBlocks.BLOCK_TELEPORTER, "Teleports the block above it to a specified point in relation to where it is facing.");
 		addBlock(MSBlocks.AND_GATE_BLOCK, "AND Gate");
 		addBlock(MSBlocks.OR_GATE_BLOCK, "OR Gate");
 		addBlock(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");

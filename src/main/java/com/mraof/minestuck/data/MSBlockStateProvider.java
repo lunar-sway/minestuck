@@ -1368,6 +1368,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_side")),
 						texture(id.withSuffix("_bottom")),
 						texture(id.withSuffix("_top"))));
+		simpleHorizontalWithItem(MSBlocks.BLOCK_TELEPORTER,
+				id -> models().getExistingFile(id));
 		
 		simpleHorizontalWithItem(MSBlocks.AND_GATE_BLOCK,
 				id -> models().getExistingFile(id));

@@ -236,7 +236,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(ITEM_MAGNET.get(), REDSTONE_CLOCK.get());
 		needsWoodPickaxe(ROTATOR.get(), TOGGLER.get());
 		needsWoodPickaxe(REMOTE_COMPARATOR.get(), STRUCTURE_CORE.get(), FALL_PAD.get(), FRAGILE_STONE.get());
-		needsWoodPickaxe(RETRACTABLE_SPIKES.get(), BLOCK_PRESSURE_PLATE.get(), PUSHABLE_BLOCK.get());
+		needsWoodPickaxe(RETRACTABLE_SPIKES.get(), BLOCK_PRESSURE_PLATE.get(), PUSHABLE_BLOCK.get(), BLOCK_TELEPORTER.get());
 		needsWoodPickaxe(AND_GATE_BLOCK.get(), OR_GATE_BLOCK.get(), XOR_GATE_BLOCK.get(), NAND_GATE_BLOCK.get(), NOR_GATE_BLOCK.get(), XNOR_GATE_BLOCK.get());
 		
 		needsWoodPickaxe(CRUXTRUDER_LID.get());

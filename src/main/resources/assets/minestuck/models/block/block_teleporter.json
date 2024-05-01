@@ -1,0 +1,12 @@
+{
+    "parent": "minestuck:block/cube_up_mirrored",
+    "textures": {
+        "down": "minestuck:block/block_teleporter_bottom",
+        "up": "minestuck:block/block_teleporter_top",
+        "north": "minestuck:block/block_teleporter_front",
+        "south": "minestuck:block/block_teleporter_side",
+        "west": "minestuck:block/block_teleporter_side",
+        "east": "minestuck:block/block_teleporter_side",
+        "particle": "minestuck:block/block_teleporter_side"
+    }
+}

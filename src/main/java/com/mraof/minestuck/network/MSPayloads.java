@@ -85,6 +85,7 @@ public class MSPayloads
 				.play(RemoteObserverPacket.ID, RemoteObserverPacket::read, MSPacket.PlayToServer::handler)
 				.play(SummonerPacket.ID, SummonerPacket::read, MSPacket.PlayToServer::handler)
 				.play(StructureCorePacket.ID, StructureCorePacket::read, MSPacket.PlayToServer::handler)
+				.play(BlockTeleporterPacket.ID, BlockTeleporterPacket::read, MSPacket.PlayToServer::handler)
 				
 				.play(EffectTogglePacket.ID, EffectTogglePacket::read, MSPacket.PlayToServer::handler)
 				.play(StoneTabletPacket.ID, StoneTabletPacket::read, MSPacket.PlayToServer::handler)

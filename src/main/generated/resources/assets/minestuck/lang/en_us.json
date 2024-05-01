@@ -112,6 +112,8 @@
   "block.minestuck.blender": "Blender",
   "block.minestuck.block_pressure_plate": "Block Pressure Plate",
   "block.minestuck.block_pressure_plate.tooltip": "Lets off a redstone signal when a block is above it or if a player is standing on it without crouching.",
+  "block.minestuck.block_teleporter": "Block Teleporter",
+  "block.minestuck.block_teleporter.tooltip": "Teleports the block it is facing when powered with redstone.",
   "block.minestuck.blood": "Blood",
   "block.minestuck.blood_aspect_bookshelf": "Blood Bookshelf",
   "block.minestuck.blood_aspect_button": "Blood Button",

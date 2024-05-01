@@ -943,6 +943,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(RETRACTABLE_SPIKES.get());
 		dropSelf(BLOCK_PRESSURE_PLATE.get());
 		dropSelf(PUSHABLE_BLOCK.get());
+		dropSelf(BLOCK_TELEPORTER.get());
 		dropSelf(AND_GATE_BLOCK.get());
 		dropSelf(OR_GATE_BLOCK.get());
 		dropSelf(XOR_GATE_BLOCK.get());
