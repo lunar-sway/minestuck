@@ -2306,6 +2306,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(AreaEffectScreen.DONE_MESSAGE, "DONE");
 		add(AreaEffectScreen.ALL_MOBS_MESSAGE, "ALL MOBS");
 		add(AreaEffectScreen.JUST_PLAYERS_MESSAGE, "JUST PLAYERS");
+		add(BlockTeleporterScreen.TITLE, "Block Teleporter");
+		add(BlockTeleporterScreen.X_MESSAGE, "X Offset");
+		add(BlockTeleporterScreen.Y_MESSAGE, "Y Offset");
+		add(BlockTeleporterScreen.Z_MESSAGE, "Z Offset");
+		add(BlockTeleporterScreen.DONE_MESSAGE, "DONE");
 		addColor("blue", "Blue");
 		addColor("orchid", "Orchid");
 		addColor("red", "Red");

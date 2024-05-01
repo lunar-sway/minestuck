@@ -1,5 +1,6 @@
 package com.mraof.minestuck.blockentity.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -11,7 +12,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -46,15 +46,19 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 			return;
 		
 		PushReaction pushReaction = aboveState.getPistonPushReaction();
+		boolean badPushReaction = pushReaction == PushReaction.BLOCK || pushReaction == PushReaction.IGNORE;
+		float defaultDestroyTime = aboveState.getBlock().defaultDestroyTime();
+		boolean hardToDestroy = defaultDestroyTime < 0 || defaultDestroyTime > 30;
 		
-		if(pushReaction == PushReaction.BLOCK || pushReaction == PushReaction.IGNORE)
+		//TODO consider adding functionality for transferring block entities
+		if(badPushReaction || hardToDestroy || aboveState.hasBlockEntity())
 			return;
 		
 		BlockPos offsetMod = teleportOffset.rotate(MSRotationUtil.rotationBetween(Direction.EAST, facingDirection));
 		BlockPos destinationPos = new BlockPos(this.getBlockPos().offset(offsetMod));
 		
 		BlockState destinationState = level.getBlockState(destinationPos);
-		if(!isReplaceable(destinationState))
+		if(!BlockUtil.isReplaceable(destinationState))
 			return;
 		
 		level.playSound(null, destinationPos, MSSoundEvents.TRANSPORTALIZER_TELEPORT.get(), SoundSource.BLOCKS, 1, 1);
@@ -62,11 +66,6 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 		
 		level.playSound(null, abovePos, MSSoundEvents.TRANSPORTALIZER_TELEPORT.get(), SoundSource.BLOCKS, 1, 1);
 		level.removeBlock(abovePos, true); //TODO consider whether isMoving = true is appropriate
-	}
-	
-	private static boolean isReplaceable(BlockState state)
-	{
-		return state.isAir() || state.is(BlockTags.FIRE) || state.liquid() || state.canBeReplaced();
 	}
 	
 	@Nonnull
