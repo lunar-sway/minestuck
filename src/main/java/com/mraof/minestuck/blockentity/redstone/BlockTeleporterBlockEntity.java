@@ -12,6 +12,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -102,7 +103,7 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 	
 	public static BlockPos clampPos(int x, int y, int z)
 	{
-		return new BlockPos(Math.min(Math.max(x, -32), 32), Math.min(Math.max(y, -32), 32), Math.min(Math.max(z, -32), 32));
+		return new BlockPos(Mth.clamp(x, -32, 32), Mth.clamp(y, -32, 32), Mth.clamp(z, -32, 32));
 	}
 	
 	@Override
