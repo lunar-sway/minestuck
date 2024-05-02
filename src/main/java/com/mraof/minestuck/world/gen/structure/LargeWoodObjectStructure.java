@@ -36,7 +36,7 @@ public class LargeWoodObjectStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructureTypes.LARGE_WOOD_OBJECT.get();
+		return MSStructures.LARGE_WOOD_OBJECT_TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

@@ -27,7 +27,7 @@ public class ImpDungeonStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructureTypes.IMP_DUNGEON.get();
+		return MSStructures.IMP_DUNGEON_TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
