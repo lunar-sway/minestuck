@@ -9,10 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Block Teleporter
+- Block for the Particle Accelerator
 
 ### Contributors for this release
 
-- Dweblenod, sipherNil
+- Dweblenod, sipherNil, hadean
 
 ## [Unreleased]
 
