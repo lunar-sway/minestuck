@@ -1,5 +1,6 @@
 package com.mraof.minestuck.blockentity.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.PlatformBlock;
 import com.mraof.minestuck.block.redstone.PlatformGeneratorBlock;
@@ -10,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -66,7 +66,7 @@ public class PlatformGeneratorBlockEntity extends BlockEntity
 					} else if(iterateBlockState.is(MSTags.Blocks.PLATFORM_ABSORBING))
 					{
 						break;
-					} else if(isReplaceable(iterateBlockState))
+					} else if(BlockUtil.isReplaceable(iterateBlockState))
 					{
 						if(!iterateBlockState.isAir())
 							level.destroyBlock(iteratePos, true);
@@ -92,11 +92,6 @@ public class PlatformGeneratorBlockEntity extends BlockEntity
 				}
 			}
 		}
-	}
-	
-	private static boolean isReplaceable(BlockState state)
-	{
-		return state.isAir() || state.is(BlockTags.FIRE) || state.liquid() || state.canBeReplaced();
 	}
 	
 	private boolean shouldReplaceExistingPlatformBlock(BlockPos pos, int loopIteration)

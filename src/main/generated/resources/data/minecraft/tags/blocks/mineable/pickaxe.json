@@ -394,6 +394,7 @@
     "minestuck:retractable_spikes",
     "minestuck:block_pressure_plate",
     "minestuck:pushable_block",
+    "minestuck:block_teleporter",
     "minestuck:and_gate_block",
     "minestuck:or_gate_block",
     "minestuck:xor_gate_block",
