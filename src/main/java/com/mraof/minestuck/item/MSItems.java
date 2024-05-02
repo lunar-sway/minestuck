@@ -1554,6 +1554,7 @@ public class MSItems
 	public static final DeferredItem<BlockItem> RETRACTABLE_SPIKES = registerBlockItem(MSBlocks.RETRACTABLE_SPIKES, block -> new ExtraInfoBlockItem(block, new Item.Properties()));
 	public static final DeferredItem<BlockItem> BLOCK_PRESSURE_PLATE = registerBlockItem(MSBlocks.BLOCK_PRESSURE_PLATE);
 	public static final DeferredItem<BlockItem> PUSHABLE_BLOCK = registerBlockItem(MSBlocks.PUSHABLE_BLOCK);
+	public static final DeferredItem<BlockItem> BLOCK_TELEPORTER = registerBlockItem(MSBlocks.BLOCK_TELEPORTER);
 	public static final DeferredItem<BlockItem> AND_GATE_BLOCK = registerBlockItem(MSBlocks.AND_GATE_BLOCK);
 	public static final DeferredItem<BlockItem> OR_GATE_BLOCK = registerBlockItem(MSBlocks.OR_GATE_BLOCK);
 	public static final DeferredItem<BlockItem> XOR_GATE_BLOCK = registerBlockItem(MSBlocks.XOR_GATE_BLOCK);

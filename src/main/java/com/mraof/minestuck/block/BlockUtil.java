@@ -3,11 +3,13 @@ package com.mraof.minestuck.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -25,6 +27,14 @@ public class BlockUtil
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Expanded variety of canBeReplaced
+	 */
+	public static boolean isReplaceable(BlockState state)
+	{
+		return state.isAir() || state.is(BlockTags.FIRE) || state.liquid() || state.canBeReplaced();
 	}
 	
 	public static void spawnParticlesAroundSolidBlock(Level level, BlockPos pos, Supplier<ParticleOptions> particle)

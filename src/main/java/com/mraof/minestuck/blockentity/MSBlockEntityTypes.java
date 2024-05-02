@@ -57,6 +57,7 @@ public class MSBlockEntityTypes
 	public static final Supplier<BlockEntityType<RedstoneClockBlockEntity>> REDSTONE_CLOCK = REGISTER.register("redstone_clock", () -> BlockEntityType.Builder.of(RedstoneClockBlockEntity::new, MSBlocks.REDSTONE_CLOCK.get()).build(null));
 	public static final Supplier<BlockEntityType<RemoteComparatorBlockEntity>> REMOTE_COMPARATOR = REGISTER.register("remote_comparator", () -> BlockEntityType.Builder.of(RemoteComparatorBlockEntity::new, MSBlocks.REMOTE_COMPARATOR.get()).build(null));
 	public static final Supplier<BlockEntityType<StructureCoreBlockEntity>> STRUCTURE_CORE = REGISTER.register("structure_core", () -> BlockEntityType.Builder.of(StructureCoreBlockEntity::new, MSBlocks.STRUCTURE_CORE.get()).build(null));
+	public static final Supplier<BlockEntityType<BlockTeleporterBlockEntity>> BLOCK_TELEPORTER = REGISTER.register("block_teleporter", () -> BlockEntityType.Builder.of(BlockTeleporterBlockEntity::new, MSBlocks.BLOCK_TELEPORTER.get()).build(null));
 	
 	public static final Supplier<BlockEntityType<SignBlockEntity>> SIGN =
 			REGISTER.register("sign", () ->

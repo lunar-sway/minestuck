@@ -109,6 +109,11 @@ public class MSScreenFactories
 		Minecraft.getInstance().setScreen(new StructureCoreScreen(blockEntity));
 	}
 	
+	public static void displayBlockTeleporterScreen(BlockTeleporterBlockEntity blockEntity)
+	{
+		Minecraft.getInstance().setScreen(new BlockTeleporterScreen(blockEntity));
+	}
+	
 	public static void displayAlchemiterScreen(AlchemiterBlockEntity blockEntity)
 	{
 		Minecraft.getInstance().setScreen(new AlchemiterScreen(blockEntity));
