@@ -617,7 +617,6 @@ public class MSItems
 	public static final DeferredItem<Item> ELECTRIC_AUTOHARP = REGISTER.register("electric_autoharp", () -> new RightClickMusicItem(new Item.Properties(), RightClickMusicItem.Type.ELECTRIC_AUTOHARP));
 	public static final DeferredItem<Item> CARDBOARD_TUBE = REGISTER.register("cardboard_tube", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> CRYPTID_PHOTO = REGISTER.register("cryptid_photo", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> PARTICLE_ACCELERATOR = REGISTER.register("particle_accelerator", () -> new Item(new Item.Properties()));
 	
 	
 	//Other
@@ -727,7 +726,7 @@ public class MSItems
 	public static final DeferredItem<BlockItem> MINI_PUNCH_DESIGNIX = registerBlockItem(MSBlocks.MINI_PUNCH_DESIGNIX);
 	public static final DeferredItem<BlockItem> HOLOPAD = registerBlockItem(MSBlocks.HOLOPAD);
 	public static final DeferredItem<BlockItem> INTELLIBEAM_LASERSTATION = registerBlockItem(MSBlocks.INTELLIBEAM_LASERSTATION);
-	
+	public static final DeferredItem<BlockItem> PARTICLE_ACCELERATOR = registerBlockItem(MSBlocks.PARTICLE_ACCELERATOR);
 	
 	//Misc Core Objects
 	public static final DeferredItem<BlockItem> CRUXITE_DOWEL = registerBlockItem(MSBlocks.CRUXITE_DOWEL, block -> new DowelItem(block, new Item.Properties()));

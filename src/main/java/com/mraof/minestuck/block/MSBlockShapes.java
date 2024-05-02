@@ -114,4 +114,5 @@ public class MSBlockShapes
 	public static CustomVoxelShape LUNCHTOP_OPEN = new CustomVoxelShape(/*base*/new double[]{4,0,1.5,12,3,15.5}, /*core*/new double[]{5,3,2.5,11,5,7.5});
 	
 	public static CustomVoxelShape MIRROR = new CustomVoxelShape(new double[]{16,16,16,0,0,14});
+	public static CustomVoxelShape PARTICLE_ACCELERATOR = new CustomVoxelShape(new double[]{1, 1, 4, 11, 7, 14}, new double[]{0, 0, 3, 12, 1, 15}, new double[]{0, 2, 2, 7, 8, 4}, new double[]{10, 0.001, 2, 16, 2.001, 7}, new double[]{10, 0, 1, 16, 1, 2}, new double[]{1, 0.001, 0, 11, 0.001, 3});
 }

@@ -991,7 +991,7 @@ public final class MSBlocks
 	
 	public static final DeferredBlock<Block> HOLOPAD = REGISTER.register("holopad", () -> new HolopadBlock(Block.Properties.of().mapColor(MapColor.SNOW).requiresCorrectToolForDrops().strength(3.0F)));
 	public static final DeferredBlock<Block> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", () -> new IntellibeamLaserstationBlock(Block.Properties.of().mapColor(MapColor.SNOW).requiresCorrectToolForDrops().strength(3.0F)));
-	
+	public static final DeferredBlock<Block> PARTICLE_ACCELERATOR = REGISTER.register("particle_accelerator", () -> new SmallMachineBlock<>(MSBlockShapes.PARTICLE_ACCELERATOR.createRotatedShapes(), MSBlockEntityTypes.PARTICLE_ACCELERATOR, Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F)));
 	
 	//Misc Machines
 	public static final DeferredBlock<Block> COMPUTER = REGISTER.register("computer", () -> new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_SHAPE, Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(4.0F)));

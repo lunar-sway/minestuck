@@ -908,6 +908,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		MSBlocks.ALCHEMITER.forEachBlock(block -> add(block, "Alchemiter"));
 		MSBlocks.PUNCH_DESIGNIX.forEachBlock(block -> add(block, "Punch Designix"));
 		addBlock(MSBlocks.HOLOPAD, "Holopad");
+		addBlock(MSBlocks.PARTICLE_ACCELERATOR, "Particle Accelerator");
 		addBlock(MSBlocks.INTELLIBEAM_LASERSTATION, "Intellibeam Laserstation");
 		addBlock(MSBlocks.MINI_CRUXTRUDER, "Miniature Cruxtruder");
 		addBlock(MSBlocks.MINI_TOTEM_LATHE, "Miniature Totem Lathe");
@@ -1780,7 +1781,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CARDBOARD_TUBE, "Cardboard Tube");
 		addItem(MSItems.CRYPTID_PHOTO, "Cryptid Photo");
 		addItemTooltip(MSItems.CRYPTID_PHOTO, "You can make out a blurry figure surrounded by trees.");
-		addItem(MSItems.PARTICLE_ACCELERATOR, "Particle Accelerator");
 		addItem(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addItemTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		addItem(MSItems.CUEBALL, "Magic Cueball");
