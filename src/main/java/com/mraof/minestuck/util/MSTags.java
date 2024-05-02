@@ -92,7 +92,7 @@ public class MSTags
 		public static final TagKey<Item> ASPECT_LOGS = tag("logs/aspect");
 		public static final TagKey<Item> ASPECT_WOOD = tag("wood/aspect");
 		public static final TagKey<Item> ASPECT_PLANKS = tag("planks/aspect");
-		public static final TagKey<Item> ASPECT_SLABS = tag("planks/aspect");
+		public static final TagKey<Item> ASPECT_SLABS = tag("slabs/aspect");
 		public static final TagKey<Item> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Item> ASPECT_SAPLINGS = tag("saplings/aspect");
 		public static final TagKey<Item> SHADEWOOD_LOGS = tag("logs/shadewood");
