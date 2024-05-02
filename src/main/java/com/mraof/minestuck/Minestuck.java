@@ -36,7 +36,6 @@ import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
-import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -102,7 +101,7 @@ public class Minestuck
 		
 		MSStructurePieces.REGISTER.register(eventBus);
 		MSStructures.TYPE_REGISTER.register(eventBus);
-		MSStructurePlacements.REGISTER.register(eventBus);
+		MSStructures.PLACEMENT_REGISTER.register(eventBus);
 		
 		MSStructureProcessorTypes.REGISTER.register(eventBus);
 		MSSurfaceRules.REGISTER.register(eventBus);

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
+import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.core.registries.Registries;
@@ -11,6 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -18,6 +20,7 @@ import java.util.function.Supplier;
 @FieldsAreNonnullByDefault
 public final class MSStructures
 {
+	public static final DeferredRegister<StructurePlacementType<?>> PLACEMENT_REGISTER = DeferredRegister.create(Registries.STRUCTURE_PLACEMENT, Minestuck.MOD_ID);
 	public static final DeferredRegister<StructureType<?>> TYPE_REGISTER = DeferredRegister.create(Registries.STRUCTURE_TYPE, Minestuck.MOD_ID);
 	
 	// Overworld
@@ -26,6 +29,8 @@ public final class MSStructures
 	public static final ResourceKey<Structure> FROG_TEMPLE = key("frog_temple");
 	
 	// Land
+	public static final Supplier<StructurePlacementType<LandGatePlacement>> LAND_GATE_PLACEMENT =
+			PLACEMENT_REGISTER.register("land_gate", () -> () -> LandGatePlacement.CODEC);
 	public static final Supplier<StructureType<GateStructure>> LAND_GATE_TYPE =
 			TYPE_REGISTER.register("land_gate", () -> asType(GateStructure.CODEC));
 	public static final ResourceKey<Structure> LAND_GATE = key("land_gate");
