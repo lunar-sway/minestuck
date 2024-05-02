@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.data.loot_table.MSBlockLootTables;
 import com.mraof.minestuck.data.recipe.CommonRecipes;
 import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
@@ -280,19 +279,6 @@ public final class AspectTreeBlocksData
 	
 	public static void addModels(MSBlockStateProvider provider)
 	{
-		provider.pottedSaplingBlock(POTTED_BLOOD_ASPECT_SAPLING, BLOOD_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_BREATH_ASPECT_SAPLING, BREATH_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_DOOM_ASPECT_SAPLING, DOOM_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_HEART_ASPECT_SAPLING, HEART_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_HOPE_ASPECT_SAPLING, HOPE_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_LIFE_ASPECT_SAPLING, LIFE_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_LIGHT_ASPECT_SAPLING, LIGHT_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_MIND_ASPECT_SAPLING, MIND_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_RAGE_ASPECT_SAPLING, RAGE_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_SPACE_ASPECT_SAPLING, SPACE_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_TIME_ASPECT_SAPLING, TIME_ASPECT_SAPLING);
-		provider.pottedSaplingBlock(POTTED_VOID_ASPECT_SAPLING, VOID_ASPECT_SAPLING);
-		
 		provider.axisWithItem(BLOOD_ASPECT_LOG,
 				id -> provider.models().cubeColumn(id.getPath(),
 						texture(id),
@@ -313,6 +299,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(BLOOD_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(BLOOD_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_BLOOD_ASPECT_SAPLING, BLOOD_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(BLOOD_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(BLOOD_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(BLOOD_ASPECT_STAIRS, BLOOD_ASPECT_PLANKS);
@@ -358,6 +345,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(BREATH_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(BREATH_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_BREATH_ASPECT_SAPLING, BREATH_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(BREATH_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(BREATH_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(BREATH_ASPECT_STAIRS, BREATH_ASPECT_PLANKS);
@@ -404,6 +392,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(DOOM_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(DOOM_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_DOOM_ASPECT_SAPLING, DOOM_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(DOOM_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(DOOM_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(DOOM_ASPECT_STAIRS, DOOM_ASPECT_PLANKS);
@@ -450,6 +439,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(HEART_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(HEART_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_HEART_ASPECT_SAPLING, HEART_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(HEART_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(HEART_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(HEART_ASPECT_STAIRS, HEART_ASPECT_PLANKS);
@@ -496,6 +486,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(HOPE_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(HOPE_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_HOPE_ASPECT_SAPLING, HOPE_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(HOPE_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(HOPE_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(HOPE_ASPECT_STAIRS, HOPE_ASPECT_PLANKS);
@@ -542,6 +533,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(LIFE_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(LIFE_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_LIFE_ASPECT_SAPLING, LIFE_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(LIFE_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(LIFE_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(LIFE_ASPECT_STAIRS, LIFE_ASPECT_PLANKS);
@@ -588,6 +580,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(LIGHT_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(LIGHT_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_LIGHT_ASPECT_SAPLING, LIGHT_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(LIGHT_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(LIGHT_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(LIGHT_ASPECT_STAIRS, LIGHT_ASPECT_PLANKS);
@@ -634,6 +627,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(MIND_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(MIND_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_MIND_ASPECT_SAPLING, MIND_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(MIND_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(MIND_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(MIND_ASPECT_STAIRS, MIND_ASPECT_PLANKS);
@@ -680,6 +674,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(RAGE_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(RAGE_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_RAGE_ASPECT_SAPLING, RAGE_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(RAGE_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(RAGE_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(RAGE_ASPECT_STAIRS, RAGE_ASPECT_PLANKS);
@@ -726,6 +721,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(SPACE_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(SPACE_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_SPACE_ASPECT_SAPLING, SPACE_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(SPACE_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(SPACE_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(SPACE_ASPECT_STAIRS, SPACE_ASPECT_PLANKS);
@@ -771,6 +767,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(TIME_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(TIME_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_TIME_ASPECT_SAPLING, TIME_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(TIME_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(TIME_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(TIME_ASPECT_STAIRS, TIME_ASPECT_PLANKS);
@@ -816,6 +813,7 @@ public final class AspectTreeBlocksData
 		provider.simpleBlock(VOID_ASPECT_SAPLING,
 				id -> provider.models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		provider.flatItem(VOID_ASPECT_SAPLING_ITEM, MSBlockStateProvider::texture);
+		provider.pottedSaplingBlock(POTTED_VOID_ASPECT_SAPLING, VOID_ASPECT_SAPLING);
 		provider.simpleBlockWithItem(VOID_ASPECT_PLANKS);
 		provider.simpleBlockWithItem(VOID_ASPECT_CARVED_PLANKS);
 		provider.stairsWithItem(VOID_ASPECT_STAIRS, VOID_ASPECT_PLANKS);
@@ -851,6 +849,7 @@ public final class AspectTreeBlocksData
 		provider.add(BLOOD_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, BLOOD_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(BLOOD_ASPECT_SAPLING.get());
+		provider.add(POTTED_BLOOD_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(BLOOD_ASPECT_PLANKS.get());
 		provider.dropSelf(BLOOD_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(BLOOD_ASPECT_STAIRS.get());
@@ -879,6 +878,7 @@ public final class AspectTreeBlocksData
 		provider.add(BREATH_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, BREATH_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(BREATH_ASPECT_SAPLING.get());
+		provider.add(POTTED_BREATH_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(BREATH_ASPECT_PLANKS.get());
 		provider.dropSelf(BREATH_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(BREATH_ASPECT_STAIRS.get());
@@ -907,6 +907,7 @@ public final class AspectTreeBlocksData
 		provider.add(DOOM_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, DOOM_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(DOOM_ASPECT_SAPLING.get());
+		provider.add(POTTED_DOOM_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(DOOM_ASPECT_PLANKS.get());
 		provider.dropSelf(DOOM_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(DOOM_ASPECT_STAIRS.get());
@@ -935,6 +936,7 @@ public final class AspectTreeBlocksData
 		provider.add(HEART_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, HEART_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(HEART_ASPECT_SAPLING.get());
+		provider.add(POTTED_HEART_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(HEART_ASPECT_PLANKS.get());
 		provider.dropSelf(HEART_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(HEART_ASPECT_STAIRS.get());
@@ -963,6 +965,7 @@ public final class AspectTreeBlocksData
 		provider.add(HOPE_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, HOPE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(HOPE_ASPECT_SAPLING.get());
+		provider.add(POTTED_HOPE_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(HOPE_ASPECT_PLANKS.get());
 		provider.dropSelf(HOPE_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(HOPE_ASPECT_STAIRS.get());
@@ -991,6 +994,7 @@ public final class AspectTreeBlocksData
 		provider.add(LIFE_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, LIFE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(LIFE_ASPECT_SAPLING.get());
+		provider.add(POTTED_LIFE_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(LIFE_ASPECT_PLANKS.get());
 		provider.dropSelf(LIFE_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(LIFE_ASPECT_STAIRS.get());
@@ -1019,6 +1023,7 @@ public final class AspectTreeBlocksData
 		provider.add(LIGHT_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, LIGHT_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(LIGHT_ASPECT_SAPLING.get());
+		provider.add(POTTED_LIGHT_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(LIGHT_ASPECT_PLANKS.get());
 		provider.dropSelf(LIGHT_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(LIGHT_ASPECT_STAIRS.get());
@@ -1047,6 +1052,7 @@ public final class AspectTreeBlocksData
 		provider.add(MIND_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, MIND_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(MIND_ASPECT_SAPLING.get());
+		provider.add(POTTED_MIND_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(MIND_ASPECT_PLANKS.get());
 		provider.dropSelf(MIND_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(MIND_ASPECT_STAIRS.get());
@@ -1075,6 +1081,7 @@ public final class AspectTreeBlocksData
 		provider.add(RAGE_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, RAGE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(RAGE_ASPECT_SAPLING.get());
+		provider.add(POTTED_RAGE_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(RAGE_ASPECT_PLANKS.get());
 		provider.dropSelf(RAGE_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(RAGE_ASPECT_STAIRS.get());
@@ -1103,6 +1110,7 @@ public final class AspectTreeBlocksData
 		provider.add(SPACE_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, SPACE_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(SPACE_ASPECT_SAPLING.get());
+		provider.add(POTTED_SPACE_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(SPACE_ASPECT_PLANKS.get());
 		provider.dropSelf(SPACE_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(SPACE_ASPECT_STAIRS.get());
@@ -1131,6 +1139,7 @@ public final class AspectTreeBlocksData
 		provider.add(TIME_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, TIME_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(TIME_ASPECT_SAPLING.get());
+		provider.add(POTTED_TIME_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(TIME_ASPECT_PLANKS.get());
 		provider.dropSelf(TIME_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(TIME_ASPECT_STAIRS.get());
@@ -1159,6 +1168,7 @@ public final class AspectTreeBlocksData
 		provider.add(VOID_ASPECT_LEAVES.get(), block ->
 				provider.createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), MSBlockLootTables.SAPLING_CHANCES));
 		provider.dropSelf(VOID_ASPECT_SAPLING.get());
+		provider.add(POTTED_VOID_ASPECT_SAPLING.get(), provider::dropPottedPlant);
 		provider.dropSelf(VOID_ASPECT_PLANKS.get());
 		provider.dropSelf(VOID_ASPECT_CARVED_PLANKS.get());
 		provider.dropSelf(VOID_ASPECT_STAIRS.get());

@@ -1,8 +1,6 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.AspectTreeBlocks;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
@@ -18,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
@@ -832,24 +831,10 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(END_SAPLING.get());
 		dropSelf(SHADEWOOD_SAPLING.get());
 		
-		dropPottedContents(POTTED_FROST_SAPLING.get());
-		dropPottedContents(POTTED_RAINBOW_SAPLING.get());
-		dropPottedContents(POTTED_END_SAPLING.get());
-		dropPottedContents(POTTED_SHADEWOOD_SAPLING.get());
-		
-		dropPottedContents(AspectTreeBlocks.POTTED_BLOOD_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_BREATH_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_DOOM_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_HEART_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_HOPE_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_LIFE_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_LIGHT_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_MIND_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_RAGE_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_SPACE_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_TIME_ASPECT_SAPLING.get());
-		dropPottedContents(AspectTreeBlocks.POTTED_VOID_ASPECT_SAPLING.get());
-
+		add(POTTED_FROST_SAPLING.get(), this::dropPottedPlant);
+		add(POTTED_RAINBOW_SAPLING.get(), this::dropPottedPlant);
+		add(POTTED_END_SAPLING.get(), this::dropPottedPlant);
+		add(POTTED_SHADEWOOD_SAPLING.get(), this::dropPottedPlant);
 		
 		add(GLOWING_BOOKSHELF.get(), this::bookshelfDrop);
 		add(FROST_BOOKSHELF.get(), this::bookshelfDrop);
@@ -1154,6 +1139,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	private LootTable.Builder droppingWithTEItem(Block block)
 	{
 		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackBlockEntity.ITEM_DYNAMIC))));
+	}
+	
+	public LootTable.Builder dropPottedPlant(Block pottedItem) {
+
+		return this.createPotFlowerItemTable(((FlowerPotBlock)pottedItem).getContent());
 	}
 	
 	private LootTable.Builder droppingWithIds(Block block)
