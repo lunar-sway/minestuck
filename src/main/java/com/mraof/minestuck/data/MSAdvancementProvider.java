@@ -119,7 +119,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.ImpDungeon.KEY))).save(saver, save_loc(DUNGEON));
 		AdvancementHolder commune = Advancement.Builder.advancement().parent(entry)
 				.display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, AdvancementType.TASK, true, true, false)
-				.requirements(AdvancementRequirements.Strategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.CONSORT_VILLAGE))).save(saver, save_loc(COMMUNE));
+				.requirements(AdvancementRequirements.Strategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.ConsortVillage.KEY))).save(saver, save_loc(COMMUNE));
 		AdvancementHolder frenchFry = Advancement.Builder.advancement().parent(commune)
 				.display(MSItems.FRENCH_FRY.get(), Component.translatable(title(FRENCH_FRY)), Component.translatable(desc(FRENCH_FRY)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("has_french_fry", ConsumeItemTrigger.TriggerInstance.usedItem(MSItems.FRENCH_FRY.get())).save(saver, save_loc(FRENCH_FRY));

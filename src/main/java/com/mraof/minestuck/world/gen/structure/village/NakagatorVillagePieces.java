@@ -47,13 +47,13 @@ public class NakagatorVillagePieces
 	{
 		public RadioTowerCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
-			super(MSStructures.RADIO_TOWER_CENTER_PIECE.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 8 - 1, 90, z + 8 - 1), 0);
+			super(MSStructures.ConsortVillage.RADIO_TOWER_CENTER_PIECE.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 8 - 1, 90, z + 8 - 1), 0);
 			this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
 		}
 		
 		public RadioTowerCenter(CompoundTag nbt)
 		{
-			super(MSStructures.TURTLE_WELL_CENTER_PIECE.get(), nbt, 0);
+			super(MSStructures.ConsortVillage.TURTLE_WELL_CENTER_PIECE.get(), nbt, 0);
 		}
 		
 		@Override
@@ -200,13 +200,13 @@ public class NakagatorVillagePieces
 	{
 		public HighNakHousing1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructures.HIGH_NAK_HOUSING_1_PIECE.get(), 0, boundingBox, 3);
+			super(MSStructures.ConsortVillage.HIGH_NAK_HOUSING_1_PIECE.get(), 0, boundingBox, 3);
 			setOrientation(facing);
 		}
 		
 		public HighNakHousing1(CompoundTag nbt)
 		{
-			super(MSStructures.HIGH_NAK_HOUSING_1_PIECE.get(), nbt, 3);
+			super(MSStructures.ConsortVillage.HIGH_NAK_HOUSING_1_PIECE.get(), nbt, 3);
 		}
 		
 		public static HighNakHousing1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
@@ -322,13 +322,13 @@ public class NakagatorVillagePieces
 	{
 		public HighNakMarket1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructures.HIGH_NAK_MARKET_PIECE.get(), 0, boundingBox, 3);
+			super(MSStructures.ConsortVillage.HIGH_NAK_MARKET_PIECE.get(), 0, boundingBox, 3);
 			setOrientation(facing);
 		}
 		
 		public HighNakMarket1(CompoundTag nbt)
 		{
-			super(MSStructures.HIGH_NAK_MARKET_PIECE.get(), nbt, 3);
+			super(MSStructures.ConsortVillage.HIGH_NAK_MARKET_PIECE.get(), nbt, 3);
 		}
 		
 		public static HighNakMarket1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
@@ -448,13 +448,13 @@ public class NakagatorVillagePieces
 	{
 		public HighNakInn1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructures.HIGH_NAK_INN_PIECE.get(), 0, boundingBox, 3);
+			super(MSStructures.ConsortVillage.HIGH_NAK_INN_PIECE.get(), 0, boundingBox, 3);
 			setOrientation(facing);
 		}
 		
 		public HighNakInn1(CompoundTag nbt)
 		{
-			super(MSStructures.HIGH_NAK_INN_PIECE.get(), nbt, 3);
+			super(MSStructures.ConsortVillage.HIGH_NAK_INN_PIECE.get(), nbt, 3);
 		}
 		
 		public static HighNakInn1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)

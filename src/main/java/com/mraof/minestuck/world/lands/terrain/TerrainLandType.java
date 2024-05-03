@@ -121,7 +121,7 @@ public abstract class TerrainLandType implements ILandType
 	{
 		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), SMALL_RUIN_PLACEMENT));
 		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.ImpDungeon.KEY), IMP_DUNGEON_PLACEMENT));
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.CONSORT_VILLAGE), CONSORT_VILLAGE_PLACEMENT));
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT));
 	}
 	
 	public final boolean is(TagKey<TerrainLandType> tag)

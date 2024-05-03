@@ -99,53 +99,64 @@ public final class MSStructures
 		ImpDungeon.init();
 	}
 	
-	public static final Supplier<StructureType<ConsortVillageStructure>> CONSORT_VILLAGE_TYPE =
-			TYPE_REGISTER.register("consort_village", () -> asType(ConsortVillageStructure.CODEC));
-	public static final ResourceKey<Structure> CONSORT_VILLAGE = key("consort_village");
+	public static final class ConsortVillage
+	{
+		public static final Supplier<StructureType<ConsortVillageStructure>> TYPE =
+				TYPE_REGISTER.register("consort_village", () -> asType(ConsortVillageStructure.CODEC));
+		public static final ResourceKey<Structure> KEY = key("consort_village");
+		
+		public static final Supplier<StructurePieceType.ContextlessType> VILLAGE_PATH_PIECE =
+				PIECE_REGISTER.register("village_path", () -> ConsortVillagePieces.VillagePath::new);
+		public static final Supplier<StructurePieceType.ContextlessType> MARKET_CENTER_PIECE =
+				PIECE_REGISTER.register("market_center", () -> ConsortVillageCenter.VillageMarketCenter::new);
+		public static final Supplier<StructurePieceType.ContextlessType> ROCK_CENTER_PIECE =
+				PIECE_REGISTER.register("rock_center", () -> ConsortVillageCenter.RockCenter::new);
+		public static final Supplier<StructurePieceType.ContextlessType> CACTUS_PYRAMID_CENTER_PIECE =
+				PIECE_REGISTER.register("cactus_pyramid_center", () -> ConsortVillageCenter.CactusPyramidCenter::new);
+		public static final Supplier<StructurePieceType.ContextlessType> MUSHROOM_TOWER_CENTER_PIECE =
+				PIECE_REGISTER.register("mushroom_tower_center", () -> SalamanderVillagePieces.RuinedTowerMushroomCenter::new);
+		public static final Supplier<StructurePieceType.ContextlessType> TURTLE_WELL_CENTER_PIECE =
+				PIECE_REGISTER.register("turtle_well_center", () -> TurtleVillagePieces.TurtleWellCenter::new);
+		public static final Supplier<StructurePieceType.ContextlessType> RADIO_TOWER_CENTER_PIECE =
+				PIECE_REGISTER.register("radio_tower_center", () -> NakagatorVillagePieces.RadioTowerCenter::new);
+		
+		public static final Supplier<StructurePieceType.ContextlessType> PIPE_HOUSE_1_PIECE =
+				PIECE_REGISTER.register("pipe_house_1", () -> SalamanderVillagePieces.PipeHouse1::new);
+		public static final Supplier<StructurePieceType.ContextlessType> HIGH_PIPE_HOUSE_1_PIECE =
+				PIECE_REGISTER.register("high_pipe_house_1", () -> SalamanderVillagePieces.HighPipeHouse1::new);
+		public static final Supplier<StructurePieceType.ContextlessType> SMALL_TOWER_STORE_PIECE =
+				PIECE_REGISTER.register("small_tower_store", () -> SalamanderVillagePieces.SmallTowerStore::new);
+		
+		public static final Supplier<StructurePieceType.ContextlessType> SHELL_HOUSE_1_PIECE =
+				PIECE_REGISTER.register("village_shell_house_1", () -> TurtleVillagePieces.ShellHouse1::new);
+		public static final Supplier<StructurePieceType.ContextlessType> TURTLE_MARKET_1_PIECE =
+				PIECE_REGISTER.register("turtle_market_1", () -> TurtleVillagePieces.TurtleMarket1::new);
+		public static final Supplier<StructurePieceType.ContextlessType> TURTLE_TEMPLE_1_PIECE =
+				PIECE_REGISTER.register("turtle_temple_1", () -> TurtleVillagePieces.TurtleTemple1::new);
+		
+		public static final Supplier<StructurePieceType.ContextlessType> SMALL_VILLAGE_TENT_1_PIECE =
+				PIECE_REGISTER.register("small_village_tent_1", () -> IguanaVillagePieces.SmallTent1::new);
+		public static final Supplier<StructurePieceType.ContextlessType> LARGE_VILLAGE_TENT_1_PIECE =
+				PIECE_REGISTER.register("large_village_tent_1", () -> IguanaVillagePieces.LargeTent1::new);
+		public static final Supplier<StructurePieceType.ContextlessType> SMALL_TENT_STORE_PIECE =
+				PIECE_REGISTER.register("small_tent_store", () -> IguanaVillagePieces.SmallTentStore::new);
+		
+		public static final Supplier<StructurePieceType.ContextlessType> HIGH_NAK_HOUSING_1_PIECE =
+				PIECE_REGISTER.register("high_nak_housing_1", () -> NakagatorVillagePieces.HighNakHousing1::new);
+		public static final Supplier<StructurePieceType.ContextlessType> HIGH_NAK_MARKET_PIECE =
+				PIECE_REGISTER.register("high_nak_market", () -> NakagatorVillagePieces.HighNakMarket1::new);
+		public static final Supplier<StructurePieceType.ContextlessType> HIGH_NAK_INN_PIECE =
+				PIECE_REGISTER.register("high_nak_inn", () -> NakagatorVillagePieces.HighNakInn1::new);
+		
+		private static void init()
+		{
+		}
+	}
 	
-	public static final Supplier<StructurePieceType.ContextlessType> VILLAGE_PATH_PIECE =
-			PIECE_REGISTER.register("village_path", () -> ConsortVillagePieces.VillagePath::new);
-	public static final Supplier<StructurePieceType.ContextlessType> MARKET_CENTER_PIECE =
-			PIECE_REGISTER.register("market_center", () -> ConsortVillageCenter.VillageMarketCenter::new);
-	public static final Supplier<StructurePieceType.ContextlessType> ROCK_CENTER_PIECE =
-			PIECE_REGISTER.register("rock_center", () -> ConsortVillageCenter.RockCenter::new);
-	public static final Supplier<StructurePieceType.ContextlessType> CACTUS_PYRAMID_CENTER_PIECE =
-			PIECE_REGISTER.register("cactus_pyramid_center", () -> ConsortVillageCenter.CactusPyramidCenter::new);
-	public static final Supplier<StructurePieceType.ContextlessType> MUSHROOM_TOWER_CENTER_PIECE =
-			PIECE_REGISTER.register("mushroom_tower_center", () -> SalamanderVillagePieces.RuinedTowerMushroomCenter::new);
-	public static final Supplier<StructurePieceType.ContextlessType> TURTLE_WELL_CENTER_PIECE =
-			PIECE_REGISTER.register("turtle_well_center", () -> TurtleVillagePieces.TurtleWellCenter::new);
-	public static final Supplier<StructurePieceType.ContextlessType> RADIO_TOWER_CENTER_PIECE =
-			PIECE_REGISTER.register("radio_tower_center", () -> NakagatorVillagePieces.RadioTowerCenter::new);
-	
-	public static final Supplier<StructurePieceType.ContextlessType> PIPE_HOUSE_1_PIECE =
-			PIECE_REGISTER.register("pipe_house_1", () -> SalamanderVillagePieces.PipeHouse1::new);
-	public static final Supplier<StructurePieceType.ContextlessType> HIGH_PIPE_HOUSE_1_PIECE =
-			PIECE_REGISTER.register("high_pipe_house_1", () -> SalamanderVillagePieces.HighPipeHouse1::new);
-	public static final Supplier<StructurePieceType.ContextlessType> SMALL_TOWER_STORE_PIECE =
-			PIECE_REGISTER.register("small_tower_store", () -> SalamanderVillagePieces.SmallTowerStore::new);
-	
-	public static final Supplier<StructurePieceType.ContextlessType> SHELL_HOUSE_1_PIECE =
-			PIECE_REGISTER.register("village_shell_house_1", () -> TurtleVillagePieces.ShellHouse1::new);
-	public static final Supplier<StructurePieceType.ContextlessType> TURTLE_MARKET_1_PIECE =
-			PIECE_REGISTER.register("turtle_market_1", () -> TurtleVillagePieces.TurtleMarket1::new);
-	public static final Supplier<StructurePieceType.ContextlessType> TURTLE_TEMPLE_1_PIECE =
-			PIECE_REGISTER.register("turtle_temple_1", () -> TurtleVillagePieces.TurtleTemple1::new);
-	
-	public static final Supplier<StructurePieceType.ContextlessType> SMALL_VILLAGE_TENT_1_PIECE =
-			PIECE_REGISTER.register("small_village_tent_1", () -> IguanaVillagePieces.SmallTent1::new);
-	public static final Supplier<StructurePieceType.ContextlessType> LARGE_VILLAGE_TENT_1_PIECE =
-			PIECE_REGISTER.register("large_village_tent_1", () -> IguanaVillagePieces.LargeTent1::new);
-	public static final Supplier<StructurePieceType.ContextlessType> SMALL_TENT_STORE_PIECE =
-			PIECE_REGISTER.register("small_tent_store", () -> IguanaVillagePieces.SmallTentStore::new);
-	
-	public static final Supplier<StructurePieceType.ContextlessType> HIGH_NAK_HOUSING_1_PIECE =
-			PIECE_REGISTER.register("high_nak_housing_1", () -> NakagatorVillagePieces.HighNakHousing1::new);
-	public static final Supplier<StructurePieceType.ContextlessType> HIGH_NAK_MARKET_PIECE =
-			PIECE_REGISTER.register("high_nak_market", () -> NakagatorVillagePieces.HighNakMarket1::new);
-	public static final Supplier<StructurePieceType.ContextlessType> HIGH_NAK_INN_PIECE =
-			PIECE_REGISTER.register("high_nak_inn", () -> NakagatorVillagePieces.HighNakInn1::new);
-	
+	static
+	{
+		ConsortVillage.init();
+	}
 	
 	public static final Supplier<StructureType<LargeWoodObjectStructure>> LARGE_WOOD_OBJECT_TYPE =
 			TYPE_REGISTER.register("large_wood_object", () -> asType(LargeWoodObjectStructure.CODEC));

@@ -31,7 +31,7 @@ public class ConsortVillageStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructures.CONSORT_VILLAGE_TYPE.get();
+		return MSStructures.ConsortVillage.TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

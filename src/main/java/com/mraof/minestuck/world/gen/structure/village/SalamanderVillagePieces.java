@@ -46,13 +46,13 @@ public class SalamanderVillagePieces
 	{
 		public RuinedTowerMushroomCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
-			super(MSStructures.MUSHROOM_TOWER_CENTER_PIECE.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 9 - 1, 80, z + 9 - 1), 0);
+			super(MSStructures.ConsortVillage.MUSHROOM_TOWER_CENTER_PIECE.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 9 - 1, 80, z + 9 - 1), 0);
 			this.setOrientation(getRandomHorizontalDirection(rand));
 		}
 		
 		public RuinedTowerMushroomCenter(CompoundTag nbt)
 		{
-			super(MSStructures.MUSHROOM_TOWER_CENTER_PIECE.get(), nbt, 0);
+			super(MSStructures.ConsortVillage.MUSHROOM_TOWER_CENTER_PIECE.get(), nbt, 0);
 		}
 		
 		@Override
@@ -203,13 +203,13 @@ public class SalamanderVillagePieces
 	{
 		public PipeHouse1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructures.PIPE_HOUSE_1_PIECE.get(), 0, boundingBox, 2);
+			super(MSStructures.ConsortVillage.PIPE_HOUSE_1_PIECE.get(), 0, boundingBox, 2);
 			this.setOrientation(facing);
 		}
 		
 		public PipeHouse1(CompoundTag nbt)
 		{
-			super(MSStructures.PIPE_HOUSE_1_PIECE.get(), nbt, 2);
+			super(MSStructures.ConsortVillage.PIPE_HOUSE_1_PIECE.get(), nbt, 2);
 		}
 		
 		public static PipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
@@ -268,13 +268,13 @@ public class SalamanderVillagePieces
 	{
 		public HighPipeHouse1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructures.HIGH_PIPE_HOUSE_1_PIECE.get(), 0, boundingBox, 3);
+			super(MSStructures.ConsortVillage.HIGH_PIPE_HOUSE_1_PIECE.get(), 0, boundingBox, 3);
 			this.setOrientation(facing);
 		}
 		
 		public HighPipeHouse1(CompoundTag nbt)
 		{
-			super(MSStructures.HIGH_PIPE_HOUSE_1_PIECE.get(), nbt, 3);
+			super(MSStructures.ConsortVillage.HIGH_PIPE_HOUSE_1_PIECE.get(), nbt, 3);
 		}
 		
 		public static HighPipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
@@ -367,13 +367,13 @@ public class SalamanderVillagePieces
 	{
 		public SmallTowerStore(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructures.SMALL_TOWER_STORE_PIECE.get(), 0, boundingBox, 1);
+			super(MSStructures.ConsortVillage.SMALL_TOWER_STORE_PIECE.get(), 0, boundingBox, 1);
 			setOrientation(facing);
 		}
 		
 		public SmallTowerStore(CompoundTag nbt)
 		{
-			super(MSStructures.SMALL_TOWER_STORE_PIECE.get(), nbt, 1);
+			super(MSStructures.ConsortVillage.SMALL_TOWER_STORE_PIECE.get(), nbt, 1);
 		}
 		
 		public static SmallTowerStore createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
