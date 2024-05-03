@@ -160,12 +160,12 @@ public final class MSStructures
 		public static final ResourceKey<Structure> KEY = key("skaia_castle");
 		
 		public static final Supplier<StructurePieceType>
-				START_PIECE = PIECE_REGISTER.register("skaia_castle_start", () -> contextless(CastleStartPiece::new)),
-				SOLID_PIECE = PIECE_REGISTER.register("skaia_castle_solid", () -> contextless(CastleSolidPiece::new)),
-				WALL_PIECE = PIECE_REGISTER.register("skaia_castle_wall", () -> contextless(CastleWallPiece::new)),
-				ROOM_PIECE = PIECE_REGISTER.register("skaia_castle_room", () -> contextless(CastleRoomPiece::new)),
-				LIBRARY_PIECE = PIECE_REGISTER.register("skaia_castle_library", () -> contextless(CastleLibraryPiece::new)),
-				STAIRCASE_PIECE = PIECE_REGISTER.register("skaia_castle_staircase", () -> contextless(CastleStaircasePiece::new));
+				START_PIECE = PIECE_REGISTER.register("skaia_castle/start", () -> contextless(CastleStartPiece::new)),
+				SOLID_PIECE = PIECE_REGISTER.register("skaia_castle/solid", () -> contextless(CastleSolidPiece::new)),
+				WALL_PIECE = PIECE_REGISTER.register("skaia_castle/wall", () -> contextless(CastleWallPiece::new)),
+				ROOM_PIECE = PIECE_REGISTER.register("skaia_castle/room", () -> contextless(CastleRoomPiece::new)),
+				LIBRARY_PIECE = PIECE_REGISTER.register("skaia_castle/library", () -> contextless(CastleLibraryPiece::new)),
+				STAIRCASE_PIECE = PIECE_REGISTER.register("skaia_castle/staircase", () -> contextless(CastleStaircasePiece::new));
 		
 		private static void init()
 		{
