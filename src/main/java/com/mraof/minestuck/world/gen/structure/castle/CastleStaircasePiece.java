@@ -18,12 +18,12 @@ public class CastleStaircasePiece extends CastleRoomPiece
 {
 	public CastleStaircasePiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructures.SKAIA_CASTLE_STAIRCASE_PIECE.get(), isBlack, boundingBox);
+		super(MSStructures.SkaiaCastle.STAIRCASE_PIECE.get(), isBlack, boundingBox);
 	}
 	
 	public CastleStaircasePiece(CompoundTag nbt)
 	{
-		super(MSStructures.SKAIA_CASTLE_STAIRCASE_PIECE.get(), nbt);
+		super(MSStructures.SkaiaCastle.STAIRCASE_PIECE.get(), nbt);
 	}
 	
 	public static CastleStaircasePiece findValidPlacement(boolean isBlack, int x, int y, int z)

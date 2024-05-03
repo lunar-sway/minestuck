@@ -169,21 +169,34 @@ public final class MSStructures
 			PIECE_REGISTER.register("pink_tower", () -> PinkTowerPiece::new);
 	
 	// Skaia
-	public static final Supplier<StructureType<CastleStructure>> SKAIA_CASTLE_TYPE =
-			TYPE_REGISTER.register("skaia_castle", () -> asType(CastleStructure.CODEC));
-	public static final ResourceKey<Structure> SKAIA_CASTLE = key("skaia_castle");
-	public static final Supplier<StructurePieceType.ContextlessType> SKAIA_CASTLE_START_PIECE =
-			PIECE_REGISTER.register("skaia_castle_start", () -> CastleStartPiece::new);
-	public static final Supplier<StructurePieceType.ContextlessType> SKAIA_CASTLE_SOLID_PIECE =
-			PIECE_REGISTER.register("skaia_castle_solid", () -> CastleSolidPiece::new);
-	public static final Supplier<StructurePieceType.ContextlessType> SKAIA_CASTLE_WALL_PIECE =
-			PIECE_REGISTER.register("skaia_castle_wall", () -> CastleWallPiece::new);
-	public static final Supplier<StructurePieceType.ContextlessType> SKAIA_CASTLE_ROOM_PIECE =
-			PIECE_REGISTER.register("skaia_castle_room", () -> CastleRoomPiece::new);
-	public static final Supplier<StructurePieceType.ContextlessType> SKAIA_CASTLE_LIBRARY_PIECE =
-			PIECE_REGISTER.register("skaia_castle_library", () -> CastleLibraryPiece::new);
-	public static final Supplier<StructurePieceType.ContextlessType> SKAIA_CASTLE_STAIRCASE_PIECE =
-			PIECE_REGISTER.register("skaia_castle_staircase", () -> CastleStaircasePiece::new);
+	public static final class SkaiaCastle
+	{
+		public static final Supplier<StructureType<CastleStructure>> TYPE =
+				TYPE_REGISTER.register("skaia_castle", () -> asType(CastleStructure.CODEC));
+		public static final ResourceKey<Structure> KEY = key("skaia_castle");
+		
+		public static final Supplier<StructurePieceType.ContextlessType> START_PIECE =
+				PIECE_REGISTER.register("skaia_castle_start", () -> CastleStartPiece::new);
+		public static final Supplier<StructurePieceType.ContextlessType> SOLID_PIECE =
+				PIECE_REGISTER.register("skaia_castle_solid", () -> CastleSolidPiece::new);
+		public static final Supplier<StructurePieceType.ContextlessType> WALL_PIECE =
+				PIECE_REGISTER.register("skaia_castle_wall", () -> CastleWallPiece::new);
+		public static final Supplier<StructurePieceType.ContextlessType> ROOM_PIECE =
+				PIECE_REGISTER.register("skaia_castle_room", () -> CastleRoomPiece::new);
+		public static final Supplier<StructurePieceType.ContextlessType> LIBRARY_PIECE =
+				PIECE_REGISTER.register("skaia_castle_library", () -> CastleLibraryPiece::new);
+		public static final Supplier<StructurePieceType.ContextlessType> STAIRCASE_PIECE =
+				PIECE_REGISTER.register("skaia_castle_staircase", () -> CastleStaircasePiece::new);
+		
+		private static void init()
+		{
+		}
+	}
+	
+	static
+	{
+		SkaiaCastle.init();
+	}
 	
 	
 	private static <S extends Structure> StructureType<S> asType(Codec<S> codec)

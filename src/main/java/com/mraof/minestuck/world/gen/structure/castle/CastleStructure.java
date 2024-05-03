@@ -33,7 +33,7 @@ public class CastleStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructures.SKAIA_CASTLE_TYPE.get();
+		return MSStructures.SkaiaCastle.TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

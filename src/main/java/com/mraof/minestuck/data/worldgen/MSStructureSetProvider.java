@@ -26,7 +26,7 @@ public final class MSStructureSetProvider
 		context.register(key("land_gate"), new StructureSet(structures.getOrThrow(MSStructures.LAND_GATE), new LandGatePlacement()));
 		
 		// Skaia
-		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(MSStructures.SKAIA_CASTLE), new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
+		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(MSStructures.SkaiaCastle.KEY), new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
 	}
 	
 	private static ResourceKey<StructureSet> key(String path)
