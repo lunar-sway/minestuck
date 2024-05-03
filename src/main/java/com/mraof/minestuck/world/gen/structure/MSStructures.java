@@ -37,7 +37,7 @@ public final class MSStructures
 	public static final ResourceKey<Structure> FROG_TEMPLE = key("frog_temple");
 	public static final Supplier<StructurePieceType>
 			FROG_TEMPLE_PIECE = PIECE_REGISTER.register("frog_temple", () -> contextless(FrogTemplePiece::new)),
-			FROG_TEMPLE_PILLAR_PIECE = PIECE_REGISTER.register("frog_temple_pillar", () -> contextless(FrogTemplePillarPiece::new));
+			FROG_TEMPLE_PILLAR_PIECE = PIECE_REGISTER.register("frog_temple/pillar", () -> contextless(FrogTemplePillarPiece::new));
 	
 	// Land
 	public static final Supplier<StructurePlacementType<LandGatePlacement>> LAND_GATE_PLACEMENT =
