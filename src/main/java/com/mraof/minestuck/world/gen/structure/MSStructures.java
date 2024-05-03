@@ -46,8 +46,8 @@ public final class MSStructures
 			TYPE_REGISTER.register("land_gate", () -> asType(GateStructure.CODEC));
 	public static final ResourceKey<Structure> LAND_GATE = key("land_gate");
 	public static final Supplier<StructurePieceType>
-			GATE_PILLAR_PIECE = PIECE_REGISTER.register("gate_pillar", () -> contextless(GatePillarPiece::new)),
-			GATE_MUSHROOM_PIECE = PIECE_REGISTER.register("gate_mushroom", () -> contextless(GateMushroomPiece::new));
+			GATE_PILLAR_PIECE = PIECE_REGISTER.register("land_gate/pillar", () -> contextless(GatePillarPiece::new)),
+			GATE_MUSHROOM_PIECE = PIECE_REGISTER.register("land_gate/mushroom", () -> contextless(GateMushroomPiece::new));
 	
 	public static final Supplier<StructureType<SmallRuinStructure>> SMALL_RUIN_TYPE =
 			TYPE_REGISTER.register("small_ruin", () -> asType(SmallRuinStructure.CODEC));
