@@ -107,17 +107,16 @@ public final class MSStructures
 				VILLAGE_PATH_PIECE = PIECE_REGISTER.register("village_path", () -> contextless(ConsortVillagePieces.VillagePath::new)),
 				MARKET_CENTER_PIECE = PIECE_REGISTER.register("market_center", () -> contextless(ConsortVillageCenter.VillageMarketCenter::new)),
 				ROCK_CENTER_PIECE = PIECE_REGISTER.register("rock_center", () -> contextless(ConsortVillageCenter.RockCenter::new)),
-				CACTUS_PYRAMID_CENTER_PIECE = PIECE_REGISTER.register("cactus_pyramid_center", () -> contextless(ConsortVillageCenter.CactusPyramidCenter::new)),
-				MUSHROOM_TOWER_CENTER_PIECE = PIECE_REGISTER.register("mushroom_tower_center", () -> contextless(SalamanderVillagePieces.RuinedTowerMushroomCenter::new)),
-				TURTLE_WELL_CENTER_PIECE = PIECE_REGISTER.register("turtle_well_center", () -> contextless(TurtleVillagePieces.TurtleWellCenter::new)),
-				RADIO_TOWER_CENTER_PIECE = PIECE_REGISTER.register("radio_tower_center", () -> contextless(NakagatorVillagePieces.RadioTowerCenter::new));
+				CACTUS_PYRAMID_CENTER_PIECE = PIECE_REGISTER.register("cactus_pyramid_center", () -> contextless(ConsortVillageCenter.CactusPyramidCenter::new));
 		
 		public static final Supplier<StructurePieceType>
+				MUSHROOM_TOWER_CENTER_PIECE = PIECE_REGISTER.register("mushroom_tower_center", () -> contextless(SalamanderVillagePieces.RuinedTowerMushroomCenter::new)),
 				PIPE_HOUSE_1_PIECE = PIECE_REGISTER.register("pipe_house_1", () -> contextless(SalamanderVillagePieces.PipeHouse1::new)),
 				HIGH_PIPE_HOUSE_1_PIECE = PIECE_REGISTER.register("high_pipe_house_1", () -> contextless(SalamanderVillagePieces.HighPipeHouse1::new)),
 				SMALL_TOWER_STORE_PIECE = PIECE_REGISTER.register("small_tower_store", () -> contextless(SalamanderVillagePieces.SmallTowerStore::new));
 		
 		public static final Supplier<StructurePieceType>
+				TURTLE_WELL_CENTER_PIECE = PIECE_REGISTER.register("turtle_well_center", () -> contextless(TurtleVillagePieces.TurtleWellCenter::new)),
 				SHELL_HOUSE_1_PIECE = PIECE_REGISTER.register("village_shell_house_1", () -> contextless(TurtleVillagePieces.ShellHouse1::new)),
 				TURTLE_MARKET_1_PIECE = PIECE_REGISTER.register("turtle_market_1", () -> contextless(TurtleVillagePieces.TurtleMarket1::new)),
 				TURTLE_TEMPLE_1_PIECE = PIECE_REGISTER.register("turtle_temple_1", () -> contextless(TurtleVillagePieces.TurtleTemple1::new));
@@ -128,6 +127,7 @@ public final class MSStructures
 				SMALL_TENT_STORE_PIECE = PIECE_REGISTER.register("small_tent_store", () -> contextless(IguanaVillagePieces.SmallTentStore::new));
 		
 		public static final Supplier<StructurePieceType>
+				RADIO_TOWER_CENTER_PIECE = PIECE_REGISTER.register("radio_tower_center", () -> contextless(NakagatorVillagePieces.RadioTowerCenter::new)),
 				HIGH_NAK_HOUSING_1_PIECE = PIECE_REGISTER.register("high_nak_housing_1", () -> contextless(NakagatorVillagePieces.HighNakHousing1::new)),
 				HIGH_NAK_MARKET_PIECE = PIECE_REGISTER.register("high_nak_market", () -> contextless(NakagatorVillagePieces.HighNakMarket1::new)),
 				HIGH_NAK_INN_PIECE = PIECE_REGISTER.register("high_nak_inn", () -> contextless(NakagatorVillagePieces.HighNakInn1::new));
