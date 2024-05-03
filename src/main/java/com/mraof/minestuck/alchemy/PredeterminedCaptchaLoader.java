@@ -1,4 +1,6 @@
 package com.mraof.minestuck.alchemy;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.gson.*;
 import com.mojang.serialization.Codec;
@@ -35,27 +37,31 @@ public final class PredeterminedCaptchaLoader extends SimplePreparableReloadList
 	@Override
 	protected Map<String, Item> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		AtomicReference<Boolean> success = new AtomicReference<>(true);
-		Map<String, Item> captchaData = new HashMap<>();
+		BiMap<String, Item> captchaData = HashBiMap.create();
 		
 		for(String namespace : resourceManager.getNamespaces())
 		{
 			parseCaptchaCodesFromNamespace(resourceManager, namespace).ifPresent(parsedData -> {
-					for(Item item : parsedData.values())
+					for(Map.Entry<String, Item> entry : parsedData.entrySet())
 					{
+						String captcha = entry.getKey();
+						Item item = entry.getValue();
+						
 						if(captchaData.containsValue(item))
 						{
-							LOGGER.error(item + " already has an assigned code.");
-							success.set(false);
+							LOGGER.error("Item: {} already has an existing captcha code of {}!", item , captchaData.inverse().get(item));
 						}
-					}
-					if(success.get())
-					{
-						captchaData.putAll(parsedData);
+						else if(captchaData.containsKey(captcha))
+						{
+							LOGGER.error("Code: {} is already assigned to Item: {}!", captcha, captchaData.get(captcha));
+						}
+						else
+						{
+							captchaData.put(entry.getKey(), entry.getValue());
+						}
 					}
 			});
 		}
-		
 		return captchaData;
 	}
 	
