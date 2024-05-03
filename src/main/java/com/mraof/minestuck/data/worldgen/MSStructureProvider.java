@@ -27,7 +27,7 @@ public final class MSStructureProvider
 		
 		context.register(LAND_GATE, new GateStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_LAND_GATE), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(SMALL_RUIN, new SmallRuinStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SMALL_RUIN), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
-		context.register(IMP_DUNGEON, new ImpDungeonStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_IMP_DUNGEON), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+		context.register(ImpDungeon.KEY, new ImpDungeonStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_IMP_DUNGEON), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(CONSORT_VILLAGE, new ConsortVillageStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_CONSORT_VILLAGE), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		
 		context.register(LARGE_WOOD_OBJECT, new LargeWoodObjectStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.LAND_ROUGH), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));

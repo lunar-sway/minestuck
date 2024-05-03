@@ -116,7 +116,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 				.addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(saver, save_loc(RETURN_NODE));
 		AdvancementHolder dungeon = Advancement.Builder.advancement().parent(returnNode)
 				.display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, AdvancementType.TASK, true, true, false)
-				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.IMP_DUNGEON))).save(saver, save_loc(DUNGEON));
+				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.ImpDungeon.KEY))).save(saver, save_loc(DUNGEON));
 		AdvancementHolder commune = Advancement.Builder.advancement().parent(entry)
 				.display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, AdvancementType.TASK, true, true, false)
 				.requirements(AdvancementRequirements.Strategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.CONSORT_VILLAGE))).save(saver, save_loc(COMMUNE));
