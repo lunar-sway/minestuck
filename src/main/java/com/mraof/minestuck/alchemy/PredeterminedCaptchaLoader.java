@@ -21,6 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @ParametersAreNonnullByDefault
@@ -34,11 +35,25 @@ public final class PredeterminedCaptchaLoader extends SimplePreparableReloadList
 	@Override
 	protected Map<String, Item> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
 	{
+		AtomicReference<Boolean> success = new AtomicReference<>(true);
 		Map<String, Item> captchaData = new HashMap<>();
 		
 		for(String namespace : resourceManager.getNamespaces())
 		{
-			parseCaptchaCodesFromNamespace(resourceManager, namespace).ifPresent(captchaData::putAll);
+			parseCaptchaCodesFromNamespace(resourceManager, namespace).ifPresent(parsedData -> {
+					for(Item item : parsedData.values())
+					{
+						if(captchaData.containsValue(item))
+						{
+							LOGGER.error(item + " already has an assigned code.");
+							success.set(false);
+						}
+					}
+					if(success.get())
+					{
+						captchaData.putAll(parsedData);
+					}
+			});
 		}
 		
 		return captchaData;

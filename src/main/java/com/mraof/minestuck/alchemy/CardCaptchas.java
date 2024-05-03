@@ -140,6 +140,7 @@ public final class CardCaptchas
 	 */
 	private String createCaptchaForItem(Item item, long seed)
 	{
+		
 		ResourceLocation itemId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
 		
 		RandomSource itemRandom = RandomSource.create(seed)
@@ -151,7 +152,7 @@ public final class CardCaptchas
 		String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
 		String captcha = captchaFromHash(cutHash);
 		
-		if(captchasMap.containsValue(captcha))
+		if(captchasMap.containsValue(captcha) || PredeterminedCardCaptchas.GetData().containsValue(captcha))
 			return generateBackupCaptcha(itemRandom);
 		
 		return captcha;
