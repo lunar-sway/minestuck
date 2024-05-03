@@ -62,30 +62,30 @@ public final class MSStructures
 		public static final ResourceKey<Structure> KEY = key("imp_dungeon");
 		
 		public static final Supplier<StructurePieceType.ContextlessType> ENTRY_PIECE =
-				PIECE_REGISTER.register("imp_entry", () -> ImpDungeonEntryPiece::new);
+				PIECE_REGISTER.register("imp_dungeon/entry", () -> ImpDungeonEntryPiece::new);
 		public static final Supplier<StructurePieceType.ContextlessType> ENTRY_CORRIDOR_PIECE =
-				PIECE_REGISTER.register("imp_entry_corridor", () -> ImpDungeonPieces.EntryCorridor::new);
+				PIECE_REGISTER.register("imp_dungeon/entry_corridor", () -> ImpDungeonPieces.EntryCorridor::new);
 		public static final Supplier<StructurePieceType.ContextlessType> STRAIGHT_CORRIDOR_PIECE =
-				PIECE_REGISTER.register("imp_straight_corridor", () -> ImpDungeonPieces.StraightCorridor::new);
+				PIECE_REGISTER.register("imp_dungeon/straight_corridor", () -> ImpDungeonPieces.StraightCorridor::new);
 		public static final Supplier<StructurePieceType.ContextlessType> CROSS_CORRIDOR_PIECE =
-				PIECE_REGISTER.register("imp_cross_corridor", () -> ImpDungeonPieces.CrossCorridor::new);
+				PIECE_REGISTER.register("imp_dungeon/cross_corridor", () -> ImpDungeonPieces.CrossCorridor::new);
 		public static final Supplier<StructurePieceType.ContextlessType> TURN_CORRIDOR_PIECE =
-				PIECE_REGISTER.register("imp_turn_corridor", () -> ImpDungeonPieces.TurnCorridor::new);
+				PIECE_REGISTER.register("imp_dungeon/turn_corridor", () -> ImpDungeonPieces.TurnCorridor::new);
 		
 		public static final Supplier<StructurePieceType.ContextlessType> RETURN_ROOM_PIECE =
-				PIECE_REGISTER.register("imp_return_room", () -> ImpDungeonPieces.ReturnRoom::new);
+				PIECE_REGISTER.register("imp_dungeon/return_room", () -> ImpDungeonPieces.ReturnRoom::new);
 		public static final Supplier<StructurePieceType.ContextlessType> ALT_RETURN_ROOM_PIECE =
-				PIECE_REGISTER.register("imp_alt_return_room", () -> ImpDungeonPieces.ReturnRoomAlt::new);
+				PIECE_REGISTER.register("imp_dungeon/alt_return_room", () -> ImpDungeonPieces.ReturnRoomAlt::new);
 		public static final Supplier<StructurePieceType.ContextlessType> SPAWNER_ROOM_PIECE =
-				PIECE_REGISTER.register("imp_spawner_room", () -> ImpDungeonPieces.SpawnerRoom::new);
+				PIECE_REGISTER.register("imp_dungeon/spawner_room", () -> ImpDungeonPieces.SpawnerRoom::new);
 		public static final Supplier<StructurePieceType.ContextlessType> SPAWNER_CORRIDOR_PIECE =
-				PIECE_REGISTER.register("imp_spawner_corridor", () -> ImpDungeonPieces.SpawnerCorridor::new);
+				PIECE_REGISTER.register("imp_dungeon/spawner_corridor", () -> ImpDungeonPieces.SpawnerCorridor::new);
 		public static final Supplier<StructurePieceType.ContextlessType> LARGE_SPAWNER_CORRIDOR_PIECE =
-				PIECE_REGISTER.register("imp_large_spawner_corridor", () -> ImpDungeonPieces.LargeSpawnerCorridor::new);
+				PIECE_REGISTER.register("imp_dungeon/large_spawner_corridor", () -> ImpDungeonPieces.LargeSpawnerCorridor::new);
 		public static final Supplier<StructurePieceType.ContextlessType> BOOKCASE_ROOM_PIECE =
-				PIECE_REGISTER.register("imp_bookcase_room", () -> ImpDungeonPieces.BookcaseRoom::new);
+				PIECE_REGISTER.register("imp_dungeon/bookcase_room", () -> ImpDungeonPieces.BookcaseRoom::new);
 		public static final Supplier<StructurePieceType.ContextlessType> OGRE_CORRIDOR_PIECE =
-				PIECE_REGISTER.register("imp_ogre_corridor", () -> ImpDungeonPieces.OgreCorridor::new);
+				PIECE_REGISTER.register("imp_dungeon/ogre_corridor", () -> ImpDungeonPieces.OgreCorridor::new);
 		
 		private static void init()
 		{
