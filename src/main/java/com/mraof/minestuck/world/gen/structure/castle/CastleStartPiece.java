@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
 import com.mraof.minestuck.block.SkaiaBlocks;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -28,7 +28,7 @@ public class CastleStartPiece extends CastlePiece
     
     protected CastleStartPiece(int x, int z, boolean isBlack)
     {
-        super(MSStructurePieces.SKAIA_CASTLE_START.get(), 0, new BoundingBox(x, 0, z, x + 8, 8, z + 8), isBlack);
+        super(MSStructures.SKAIA_CASTLE_START_PIECE.get(), 0, new BoundingBox(x, 0, z, x + 8, 8, z + 8), isBlack);
         this.x = x;
         this.z = z;
         this.bottom = true;
@@ -36,7 +36,7 @@ public class CastleStartPiece extends CastlePiece
     
     public CastleStartPiece(CompoundTag nbt)
     {
-        super(MSStructurePieces.SKAIA_CASTLE_START.get(), nbt);
+        super(MSStructures.SKAIA_CASTLE_START_PIECE.get(), nbt);
     }
     
     @Override

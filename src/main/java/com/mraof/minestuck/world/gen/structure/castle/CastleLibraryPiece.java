@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -15,12 +15,12 @@ public class CastleLibraryPiece extends CastleRoomPiece
 {
 	public CastleLibraryPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_LIBRARY.get(), isBlack, boundingBox);
+		super(MSStructures.SKAIA_CASTLE_LIBRARY_PIECE.get(), isBlack, boundingBox);
 	}
 	
 	public CastleLibraryPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_LIBRARY.get(), nbt);
+		super(MSStructures.SKAIA_CASTLE_LIBRARY_PIECE.get(), nbt);
 	}
 	
 	public static CastleLibraryPiece findValidPlacement(boolean isBlack, int x, int y, int z)

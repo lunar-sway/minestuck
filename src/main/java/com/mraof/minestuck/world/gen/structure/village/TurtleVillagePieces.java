@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.structure.village;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import net.minecraft.core.BlockPos;
@@ -47,13 +47,13 @@ public class TurtleVillagePieces
 	{
 		public TurtleWellCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
-			super(MSStructurePieces.TURTLE_WELL_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 60, z, x + 8 - 1, 70, z + 8 - 1), 0);
+			super(MSStructures.TURTLE_WELL_CENTER_PIECE.get(), pieceWeightList, 0, new BoundingBox(x, 60, z, x + 8 - 1, 70, z + 8 - 1), 0);
 			this.setOrientation(getRandomHorizontalDirection(rand));
 		}
 		
 		public TurtleWellCenter(CompoundTag nbt)
 		{
-			super(MSStructurePieces.TURTLE_WELL_CENTER.get(), nbt, 0);
+			super(MSStructures.TURTLE_WELL_CENTER_PIECE.get(), nbt, 0);
 		}
 		
 		@Override
@@ -150,13 +150,13 @@ public class TurtleVillagePieces
 	{
 		ShellHouse1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.SHELL_HOUSE_1.get(), 0, boundingBox, 2);
+			super(MSStructures.SHELL_HOUSE_1_PIECE.get(), 0, boundingBox, 2);
 			setOrientation(facing);
 		}
 		
 		public ShellHouse1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.SHELL_HOUSE_1.get(), nbt, 2);
+			super(MSStructures.SHELL_HOUSE_1_PIECE.get(), nbt, 2);
 		}
 		
 		public static ShellHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
@@ -221,13 +221,13 @@ public class TurtleVillagePieces
 	{
 		TurtleMarket1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.TURTLE_MARKET_1.get(), 0, boundingBox, 2);
+			super(MSStructures.TURTLE_MARKET_1_PIECE.get(), 0, boundingBox, 2);
 			setOrientation(facing);
 		}
 		
 		public TurtleMarket1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.TURTLE_MARKET_1.get(), nbt, 2);
+			super(MSStructures.TURTLE_MARKET_1_PIECE.get(), nbt, 2);
 		}
 		
 		public static TurtleMarket1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
@@ -328,13 +328,13 @@ public class TurtleVillagePieces
 	{
 		TurtleTemple1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.TURTLE_TEMPLE_1.get(), 0, boundingBox, 3);
+			super(MSStructures.TURTLE_TEMPLE_1_PIECE.get(), 0, boundingBox, 3);
 			setOrientation(facing);
 		}
 		
 		public TurtleTemple1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.TURTLE_TEMPLE_1.get(), nbt, 3);
+			super(MSStructures.TURTLE_TEMPLE_1_PIECE.get(), nbt, 3);
 		}
 		
 		public static TurtleTemple1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)

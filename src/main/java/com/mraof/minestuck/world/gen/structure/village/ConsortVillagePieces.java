@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.gen.structure.ImprovedStructurePiece;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -359,14 +359,14 @@ public class ConsortVillagePieces
 		
 		VillagePath(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.VILLAGE_PATH.get(), 0, boundingBox, 0);
+			super(MSStructures.VILLAGE_PATH_PIECE.get(), 0, boundingBox, 0);
 			this.setOrientation(facing);
 			this.length = Math.max(boundingBox.getXSpan(), boundingBox.getZSpan());
 		}
 		
 		public VillagePath(CompoundTag nbt)
 		{
-			super(MSStructurePieces.VILLAGE_PATH.get(), nbt, 0);
+			super(MSStructures.VILLAGE_PATH_PIECE.get(), nbt, 0);
 			this.length = nbt.getInt("Length");
 		}
 		
