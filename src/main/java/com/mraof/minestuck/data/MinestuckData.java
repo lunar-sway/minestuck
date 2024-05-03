@@ -78,8 +78,8 @@ public final class MinestuckData
 				.add(Registries.CONFIGURED_FEATURE, MSConfiguredFeatureProvider::register)
 				.add(Registries.PLACED_FEATURE, MSPlacedFeatureProvider::register)
 				.add(Registries.BIOME, MSBiomeProvider::register)
-				.add(Registries.STRUCTURE, MSStructureProvider::register)
-				.add(Registries.STRUCTURE_SET, MSStructureSetProvider::register)
+				.add(Registries.STRUCTURE, MSStructureProvider::registerStructures)
+				.add(Registries.STRUCTURE_SET, MSStructureProvider::registerStructureSets)
 				.add(Registries.DAMAGE_TYPE, MSDamageTypeProvider::register)
 				.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifierProvider::register);
 	}
