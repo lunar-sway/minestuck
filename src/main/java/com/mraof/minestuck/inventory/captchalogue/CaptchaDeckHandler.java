@@ -470,7 +470,7 @@ public final class CaptchaDeckHandler
 			else
 				nbt.putBoolean("given_modus", givenModus);
 			
-			return null;
+			return nbt;
 		}
 		
 		@Override
