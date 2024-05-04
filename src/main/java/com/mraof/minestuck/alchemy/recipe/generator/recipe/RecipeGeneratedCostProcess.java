@@ -2,14 +2,14 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,10 +20,10 @@ class RecipeGeneratedCostProcess
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> lookupMap;
+	private final Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> lookupMap;
 	private final Map<Item, ImmutableGristSet> generatedCosts = new HashMap<>();
 	
-	RecipeGeneratedCostProcess(Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> lookupMap)
+	RecipeGeneratedCostProcess(Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> lookupMap)
 	{
 		this.lookupMap = lookupMap;
 	}
@@ -43,11 +43,11 @@ class RecipeGeneratedCostProcess
 	
 	void reportPreliminaryLookups(LookupTracker tracker)
 	{
-		for(List<Pair<Recipe<?>, RecipeInterpreter>> recipes : this.lookupMap.values())
+		for(List<Pair<RecipeHolder<?>, RecipeInterpreter>> recipes : this.lookupMap.values())
 		{
-			for(Pair<Recipe<?>, RecipeInterpreter> recipe : recipes)
+			for(Pair<RecipeHolder<?>, RecipeInterpreter> recipe : recipes)
 			{
-				recipe.getValue().reportPreliminaryLookups(recipe.getKey(), tracker);
+				recipe.getValue().reportPreliminaryLookups(recipe.getKey().value(), tracker);
 			}
 		}
 	}
@@ -76,12 +76,12 @@ class RecipeGeneratedCostProcess
 	
 	private GristSet costFromRecipes(Item item, GeneratorCallback callback)
 	{
-		List<Pair<Recipe<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
+		List<Pair<RecipeHolder<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
 		
 		if(!recipes.isEmpty())
 		{
 			GristSet minCost = null;
-			for(Pair<Recipe<?>, RecipeInterpreter> recipePair : recipes)
+			for(Pair<RecipeHolder<?>, RecipeInterpreter> recipePair : recipes)
 			{
 				GristSet cost = costForRecipe(recipePair.getLeft(), recipePair.getRight(), item, callback);
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
@@ -94,14 +94,14 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private GristSet costForRecipe(Recipe<?> recipe, RecipeInterpreter interpreter, Item item, GeneratorCallback callback)
+	private GristSet costForRecipe(RecipeHolder<?> recipe, RecipeInterpreter interpreter, Item item, GeneratorCallback callback)
 	{
 		try
 		{
-			return interpreter.generateCost(recipe, item, callback);
+			return interpreter.generateCost(recipe.value(), item, callback);
 		} catch(Exception e)
 		{
-			LOGGER.error("Got exception while getting cost for recipe {}", recipe.getId(), e);
+			LOGGER.error("Got exception while getting cost for recipe {}", recipe.id(), e);
 			return null;
 		}
 	}

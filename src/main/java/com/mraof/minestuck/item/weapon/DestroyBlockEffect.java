@@ -51,7 +51,7 @@ public interface DestroyBlockEffect
 					entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 1800, 3));
 					
 					if(entity instanceof ServerPlayer player)
-						MSCriteriaTriggers.MELON_OVERLOAD.trigger(player);
+						MSCriteriaTriggers.MELON_OVERLOAD.get().trigger(player);
 				}
 			}
 		};

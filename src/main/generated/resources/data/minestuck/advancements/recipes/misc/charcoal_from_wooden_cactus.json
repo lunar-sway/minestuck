@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_wooden_cactus",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_wooden_cactus"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:charcoal_from_wooden_cactus"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

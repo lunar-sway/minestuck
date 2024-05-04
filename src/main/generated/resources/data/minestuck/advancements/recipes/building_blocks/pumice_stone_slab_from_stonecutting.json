@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_pumice_stone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_pumice_stone"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:pumice_stone_slab_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

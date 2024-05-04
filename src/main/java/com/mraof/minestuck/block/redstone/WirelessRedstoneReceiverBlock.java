@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -49,6 +50,12 @@ public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock im
 	{
 		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(POWER, 0).setValue(POWERED, false).setValue(AUTO_RESET, true).setValue(FACING, Direction.NORTH));
+	}
+	
+	@Override
+	protected MapCodec<WirelessRedstoneReceiverBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Nullable

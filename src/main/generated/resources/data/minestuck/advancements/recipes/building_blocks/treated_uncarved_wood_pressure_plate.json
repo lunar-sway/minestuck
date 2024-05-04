@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_treated_uncarved_wood",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_treated_uncarved_wood"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:treated_uncarved_wood_pressure_plate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

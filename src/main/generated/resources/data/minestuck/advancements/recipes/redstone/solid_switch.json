@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_glowstone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_glowstone"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:solid_switch"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

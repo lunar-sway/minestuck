@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_coagulated_blood",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_coagulated_blood"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:flowery_mossy_stone_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

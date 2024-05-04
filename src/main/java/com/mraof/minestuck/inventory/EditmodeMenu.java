@@ -5,7 +5,6 @@ import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -16,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +137,7 @@ public class EditmodeMenu extends AbstractContainerMenu
 		}
 		
 		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
-		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+		PacketDistributor.PLAYER.with(serverPlayer).send(packet);
 	}
 	
 	public void receiveUpdatePacket(EditmodeInventoryPacket packet)

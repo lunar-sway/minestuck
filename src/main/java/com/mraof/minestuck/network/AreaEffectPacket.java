@@ -1,17 +1,24 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import com.mraof.minestuck.effects.MSEffects;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Objects;
+
 public class AreaEffectPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("area_effect");
+	
 	private final MobEffect effect;
 	private final int effectAmp;
 	private final boolean isAllMobs;
@@ -30,9 +37,15 @@ public class AreaEffectPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
 	{
-		buffer.writeInt(MobEffect.getId(effect));
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
+	{
+		buffer.writeId(BuiltInRegistries.MOB_EFFECT, effect);
 		buffer.writeInt(effectAmp);
 		buffer.writeBoolean(isAllMobs);
 		buffer.writeBlockPos(minEffectPos);
@@ -40,14 +53,9 @@ public class AreaEffectPacket implements MSPacket.PlayToServer
 		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static AreaEffectPacket decode(FriendlyByteBuf buffer)
+	public static AreaEffectPacket read(FriendlyByteBuf buffer)
 	{
-		MobEffect effect = MSEffects.CREATIVE_SHOCK.get(); //will keep this as its type if effectRead is null
-		MobEffect effectRead = MobEffect.byId(buffer.readInt());
-		if(effectRead != null)
-		{
-			effect = effectRead;
-		}
+		MobEffect effect = Objects.requireNonNullElse(buffer.readById(BuiltInRegistries.MOB_EFFECT), MSEffects.CREATIVE_SHOCK.get());
 		
 		int effectAmp = buffer.readInt();
 		boolean isAllMobs = buffer.readBoolean();
@@ -59,6 +67,7 @@ public class AreaEffectPacket implements MSPacket.PlayToServer
 		return new AreaEffectPacket(effect, effectAmp, isAllMobs, minEffectPos, maxEffectPos, beBlockPos);
 	}
 	
+	@SuppressWarnings("resource")
 	@Override
 	public void execute(ServerPlayer player)
 	{

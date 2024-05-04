@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_space_aspect_stripped_wood",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_space_aspect_stripped_wood"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:space_aspect_planks_from_stripped_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

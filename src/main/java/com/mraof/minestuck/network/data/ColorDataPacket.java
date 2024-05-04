@@ -1,11 +1,15 @@
 package com.mraof.minestuck.network.data;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 public class ColorDataPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("color_data");
+	
 	private static final int NO_COLOR = -2;    //Can be removed if we remove -1 as a default color when colors are made to hexes
 	
 	private final int color;
@@ -26,13 +30,19 @@ public class ColorDataPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		if(color != NO_COLOR)
 			buffer.writeInt(color);
 	}
 	
-	public static ColorDataPacket decode(FriendlyByteBuf buffer)
+	public static ColorDataPacket read(FriendlyByteBuf buffer)
 	{
 		int color;
 		if(buffer.readableBytes() > 0)

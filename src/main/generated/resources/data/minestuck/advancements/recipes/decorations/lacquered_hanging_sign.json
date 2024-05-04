@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_lacquered_uncarved_wood",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lacquered_uncarved_wood"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:lacquered_hanging_sign"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

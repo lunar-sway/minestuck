@@ -1,12 +1,16 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.client.sounds.PlayerMusicClientHandler;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
 public class MusicPlayerPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("music_player");
+	
 	private final int entityID;
 	private final EnumCassetteType cassetteType;
 	private final float volume;
@@ -37,7 +41,13 @@ public class MusicPlayerPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(entityID);
 		buffer.writeFloat(volume);
@@ -45,7 +55,7 @@ public class MusicPlayerPacket implements MSPacket.PlayToClient
 		buffer.writeInt(cassetteType.ordinal());
 	}
 	
-	public static MusicPlayerPacket decode(FriendlyByteBuf buffer)
+	public static MusicPlayerPacket read(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
 		float volume = buffer.readFloat();

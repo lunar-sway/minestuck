@@ -1,9 +1,11 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.playerStats.AtheneumScreen;
 import com.mraof.minestuck.inventory.AtheneumMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
@@ -15,14 +17,21 @@ public final class AtheneumPacket
 	
 	public record Scroll(boolean scrollUp) implements MSPacket.PlayToServer
 	{
+		public static final ResourceLocation ID = Minestuck.id("atheneum/scroll");
 		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeBoolean(scrollUp);
 		}
 		
-		public static Scroll decode(FriendlyByteBuf buffer)
+		public static Scroll read(FriendlyByteBuf buffer)
 		{
 			boolean scrollUp = buffer.readBoolean();
 			return new Scroll(scrollUp);
@@ -39,8 +48,16 @@ public final class AtheneumPacket
 	
 	public record Update(boolean less, boolean more, List<ItemStack> inventory) implements MSPacket.PlayToClient
 	{
+		public static final ResourceLocation ID = Minestuck.id("atheneum/update");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeBoolean(less);
 			buffer.writeBoolean(more);
@@ -48,7 +65,7 @@ public final class AtheneumPacket
 				buffer.writeItem(stack);
 		}
 		
-		public static Update decode(FriendlyByteBuf buffer)
+		public static Update read(FriendlyByteBuf buffer)
 		{
 			boolean less = buffer.readBoolean();
 			boolean more = buffer.readBoolean();

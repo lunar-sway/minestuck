@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_transportalizer",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_transportalizer"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:trans_portalizer"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

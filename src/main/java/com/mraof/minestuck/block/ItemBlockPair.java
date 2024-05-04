@@ -6,7 +6,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -16,7 +17,7 @@ import java.util.function.Supplier;
  * Since this is not a block registry object in itself, you may need to call {@link ItemBlockPair#asBlock()} or {@link ItemBlockPair#blockHolder()} to use the block behind this pair.
  */
 @MethodsReturnNonnullByDefault
-public record ItemBlockPair<B extends Block, I extends Item>(RegistryObject<B> blockHolder, RegistryObject<I> itemHolder) implements ItemLike
+public record ItemBlockPair<B extends Block, I extends Item>(DeferredBlock<B> blockHolder, DeferredItem<I> itemHolder) implements ItemLike
 {
 	public B asBlock()
 	{
@@ -41,8 +42,8 @@ public record ItemBlockPair<B extends Block, I extends Item>(RegistryObject<B> b
 	
 	public static <B extends Block, I extends Item> ItemBlockPair<B, I> register(String name, Supplier<B> blockSupplier, Function<B, I> itemSupplier)
 	{
-		RegistryObject<B> blockHolder = MSBlocks.REGISTER.register(name, blockSupplier);
-		RegistryObject<I> itemHolder = MSItems.REGISTER.register(name, () -> itemSupplier.apply(blockHolder.get()));
+		DeferredBlock<B> blockHolder = MSBlocks.REGISTER.register(name, blockSupplier);
+		DeferredItem<I> itemHolder = MSItems.REGISTER.register(name, () -> itemSupplier.apply(blockHolder.get()));
 		return new ItemBlockPair<>(blockHolder, itemHolder);
 	}
 }

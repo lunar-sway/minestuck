@@ -1,22 +1,27 @@
 package com.mraof.minestuck.advancements;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 
-import java.util.Objects;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class EcheladderTrigger extends SimpleCriterionTrigger<EcheladderTrigger.Instance>
 {
-	public static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "echeladder");
-	
 	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext deserializationContext)
+	public Codec<Instance> codec()
 	{
-		MinMaxBounds.Ints rung = MinMaxBounds.Ints.fromJson(json.get("rung"));
-		return new EcheladderTrigger.Instance(predicate, rung);
+		return Instance.CODEC;
 	}
 	
 	public void trigger(ServerPlayer player, int rung)
@@ -24,39 +29,21 @@ public class EcheladderTrigger extends SimpleCriterionTrigger<EcheladderTrigger.
 		trigger(player, instance -> instance.test(rung));
 	}
 	
-	@Override
-	public ResourceLocation getId()
+	public record Instance(Optional<ContextAwarePredicate> player, MinMaxBounds.Ints rung) implements SimpleCriterionTrigger.SimpleInstance
 	{
-		return ID;
-	}
-	
-	public static class Instance extends AbstractCriterionTriggerInstance
-	{
-		private final MinMaxBounds.Ints rung;
+		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
+				MinMaxBounds.Ints.CODEC.fieldOf("rung").forGetter(Instance::rung)
+		).apply(instance, Instance::new));
 		
-		public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints rung)
+		public static Criterion<Instance> rung(MinMaxBounds.Ints rung)
 		{
-			super(ID, predicate);
-			this.rung = Objects.requireNonNull(rung);
-		}
-		
-		public static Instance rung(MinMaxBounds.Ints rung)
-		{
-			return new Instance(ContextAwarePredicate.ANY, rung);
+			return MSCriteriaTriggers.ECHELADDER.get().createCriterion(new Instance(Optional.empty(), rung));
 		}
 		
 		public boolean test(int count)
 		{
 			return this.rung.matches(count);
-		}
-
-		@Override
-		public JsonObject serializeToJson(SerializationContext context)
-		{
-			JsonObject json = super.serializeToJson(context);
-			json.add("rung", rung.serializeToJson());
-
-			return json;
 		}
 	}
 }

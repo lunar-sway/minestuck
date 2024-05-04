@@ -1,15 +1,16 @@
 package com.mraof.minestuck.alchemy.recipe;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,28 +21,22 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class UnavailableGristCost implements GristCostRecipe
 {
-	private final ResourceLocation id;
 	private final Ingredient ingredient;
 	@Nullable
 	private final Integer priority;
 	
-	public UnavailableGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	public UnavailableGristCost(Ingredient ingredient, Optional<Integer> priority)
 	{
-		this.id = id;
 		this.ingredient = ingredient;
-		this.priority = priority;
-	}
-	
-	@Override
-	public ResourceLocation getId()
-	{
-		return this.id;
+		this.priority = priority.orElse(null);
 	}
 	
 	@Override
@@ -64,7 +59,7 @@ public final class UnavailableGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId)
 	{
 		GristCostRecipe.addSimpleCostProvider(consumer, this, this.ingredient);
 	}
@@ -77,13 +72,16 @@ public final class UnavailableGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<UnavailableGristCost>
 	{
+		private static final Codec<UnavailableGristCost> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(
+						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+						ExtraCodecs.strictOptionalField(Codec.INT, "priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+				).apply(instance, UnavailableGristCost::new));
+		
 		@Override
-		public UnavailableGristCost fromJson(ResourceLocation recipeId, JsonObject json)
+		public Codec<UnavailableGristCost> codec()
 		{
-			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
-			Integer priority = json.has("priority") ? GsonHelper.getAsInt(json, "priority") : null;
-			
-			return new UnavailableGristCost(recipeId, ingredient, priority);
+			return CODEC;
 		}
 		
 		@Override
@@ -93,14 +91,13 @@ public final class UnavailableGristCost implements GristCostRecipe
 			buffer.writeInt(recipe.getPriority());
 		}
 		
-		@Nullable
 		@Override
-		public UnavailableGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		public UnavailableGristCost fromNetwork(FriendlyByteBuf buffer)
 		{
 			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 			int priority = buffer.readInt();
 			
-			return new UnavailableGristCost(recipeId, ingredient, priority);
+			return new UnavailableGristCost(ingredient, Optional.of(priority));
 		}
 	}
 }

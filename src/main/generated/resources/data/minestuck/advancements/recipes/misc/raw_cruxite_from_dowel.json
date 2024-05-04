@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_cruxite_dowel",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cruxite_dowel"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:raw_cruxite_from_dowel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

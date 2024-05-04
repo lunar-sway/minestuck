@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -21,6 +22,12 @@ public class WoodenFloraBlock extends BushBlock
 	{
 		super(properties);
 		this.shape = shape;
+	}
+	
+	@Override
+	protected MapCodec<WoodenFloraBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

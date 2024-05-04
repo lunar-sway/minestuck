@@ -10,6 +10,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantMenu>
 {
 	private final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/consort_shop.png");
@@ -62,7 +65,6 @@ public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantMe
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

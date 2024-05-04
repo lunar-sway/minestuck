@@ -3,6 +3,7 @@ package com.mraof.minestuck.blockentity;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Teleport;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+@MethodsReturnNonnullByDefault
 public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlayer>
 {
 	//Only used client-side
@@ -47,14 +49,8 @@ public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<Serv
 			player.setPortalCooldown();
 			player.setDeltaMovement(Vec3.ZERO);
 			player.fallDistance = 0;
-			MSCriteriaTriggers.RETURN_NODE.trigger(player);
+			MSCriteriaTriggers.RETURN_NODE.get().trigger(player);
 		}
-	}
-	
-	@Override
-	public AABB getRenderBoundingBox()
-	{
-		return new AABB(this.getBlockPos().offset(-1, 0, -1), this.getBlockPos().offset(1, 1, 1));
 	}
 	
 	@Override

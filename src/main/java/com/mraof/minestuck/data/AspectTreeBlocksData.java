@@ -5,15 +5,13 @@ import com.mraof.minestuck.data.loot_table.MSBlockLootTables;
 import com.mraof.minestuck.data.recipe.CommonRecipes;
 import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.Tags;
-
-import java.util.function.Consumer;
+import net.neoforged.neoforge.common.Tags;
 
 import static com.mraof.minestuck.block.AspectTreeBlocks.*;
 import static com.mraof.minestuck.data.MSBlockStateProvider.texture;
@@ -1314,7 +1312,7 @@ public final class AspectTreeBlocksData
 		provider.tag(BlockTags.CLIMBABLE).addTag(MSTags.Blocks.ASPECT_LADDERS);
 	}
 	
-	public static void addRecipes(Consumer<FinishedRecipe> recipeSaver)
+	public static void addRecipes(RecipeOutput recipeSaver)
 	{
 		CommonRecipes.stairsRecipe(BLOOD_ASPECT_STAIRS, BLOOD_ASPECT_PLANKS).group("wooden_stairs").save(recipeSaver);
 		CommonRecipes.slabRecipe(BLOOD_ASPECT_SLAB, BLOOD_ASPECT_PLANKS).group("wooden_slab").save(recipeSaver);

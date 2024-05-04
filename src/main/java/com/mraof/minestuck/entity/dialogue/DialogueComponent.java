@@ -2,8 +2,8 @@ package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.network.DialoguePackets;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSCapabilities;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,7 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -73,7 +73,7 @@ public final class DialogueComponent
 			tag.getList("matched_item", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag ->
 			{
 				UUID player = entryTag.getUUID("player");
-				ForgeRegistries.ITEMS.getCodec().parse(NbtOps.INSTANCE, entryTag.get("item"))
+				BuiltInRegistries.ITEM.byNameCodec().parse(NbtOps.INSTANCE, entryTag.get("item"))
 						.resultOrPartial(LOGGER::error)
 						.ifPresent(item -> this.matchedItem.put(player, item));
 			});
@@ -123,7 +123,7 @@ public final class DialogueComponent
 			{
 				CompoundTag entryTag = new CompoundTag();
 				entryTag.putUUID("player", player);
-				ForgeRegistries.ITEMS.getCodec().encodeStart(NbtOps.INSTANCE, item)
+				BuiltInRegistries.ITEM.byNameCodec().encodeStart(NbtOps.INSTANCE, item)
 						.resultOrPartial(LOGGER::error)
 						.ifPresent(itemTag -> {
 							entryTag.put("item", itemTag);
@@ -252,8 +252,8 @@ public final class DialogueComponent
 		if(player == null)
 			return;
 		
-		if(player.getCapability(MSCapabilities.CURRENT_DIALOGUE).orElseThrow(IllegalStateException::new).lastTalkedTo(this.entity))
-			MSPacketHandler.sendToPlayer(new DialoguePackets.CloseScreen(), player);
+		if(player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get()).lastTalkedTo(this.entity))
+			PacketDistributor.PLAYER.with(player).send(new DialoguePackets.CloseScreen());
 	}
 	
 	public void tryStartDialogue(ServerPlayer player)
@@ -282,8 +282,7 @@ public final class DialogueComponent
 	
 	public void openScreenForDialogue(ServerPlayer player, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue, @Nullable Dialogue.NextDialogue source)
 	{
-		CurrentDialogue dialogueData = player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
-				.orElseThrow(IllegalStateException::new);
+		CurrentDialogue dialogueData = player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get());
 		dialogueData.getComponent(player.level()).ifPresent(oldComponent -> oldComponent.clearOngoingDialogue(player));
 		
 		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, player);
@@ -292,7 +291,7 @@ public final class DialogueComponent
 		
 		this.ongoingDialogue.put(player.getUUID(), new OngoingDialogue(nodeReference, player.position()));
 		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(dialogueData.newDialogue(this.entity), data);
-		MSPacketHandler.sendToPlayer(packet, player);
+		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	
 	public Optional<Dialogue.Node> validateAndGetCurrentNode(ServerPlayer player)

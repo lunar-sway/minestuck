@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_solid_switch",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_solid_switch"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:variable_solid_switch"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

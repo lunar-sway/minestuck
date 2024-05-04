@@ -11,17 +11,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.double_digits.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:boondollars",
       "nbt": "{value:100}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.double_digits.title"
     }

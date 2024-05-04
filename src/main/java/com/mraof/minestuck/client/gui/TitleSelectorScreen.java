@@ -1,7 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
@@ -12,8 +10,12 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class TitleSelectorScreen extends Screen
 {
 	public static final String TITLE = "minestuck.title_selector";
@@ -70,17 +72,22 @@ public class TitleSelectorScreen extends Screen
 	}
 	
 	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		int xOffset = (width - guiWidth)/2;
+		int yOffset = (height - guiHeight)/2;
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+	}
+	
+	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		selectButton.active = currentClass != null && currentAspect != null;
 		
-		int xOffset = (width - guiWidth)/2;
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
 		int yOffset = (height - guiHeight)/2;
-		
-		this.renderBackground(guiGraphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String message = previous == null ? I18n.get(SELECT_TITLE) : I18n.get(USED_TITLE, previous.asTextComponent().getString());
 		guiGraphics.drawString(font, message, (this.width / 2F) - font.width(message) / 2F, yOffset + 10, 0x404040, false);
@@ -88,7 +95,6 @@ public class TitleSelectorScreen extends Screen
 		message = I18n.get(Title.FORMAT, "", "");
 		guiGraphics.drawString(font, message, (this.width / 2F) - font.width(message) / 2F, yOffset + 72 - font.lineHeight/2F, 0x404040, false);
 		
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 	}
 	
@@ -110,13 +116,13 @@ public class TitleSelectorScreen extends Screen
 	
 	private void select()
 	{
-		MSPacketHandler.sendToServer(new TitleSelectPacket(new Title(currentClass, currentAspect)));
+		PacketDistributor.SERVER.noArg().send(new TitleSelectPacket(new Title(currentClass, currentAspect)));
 		onClose();
 	}
 	
 	private void random()
 	{
-		MSPacketHandler.sendToServer(new TitleSelectPacket());
+		PacketDistributor.SERVER.noArg().send(new TitleSelectPacket());
 		onClose();
 	}
 	

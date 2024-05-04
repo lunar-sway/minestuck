@@ -1,10 +1,12 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
@@ -13,14 +15,22 @@ public final class DialoguePackets
 {
 	public record OpenScreen(int dialogueId, Dialogue.DialogueData dialogueData) implements MSPacket.PlayToClient
 	{
+		public static final ResourceLocation ID = Minestuck.id("dialogue/open_screen");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeInt(this.dialogueId);
 			this.dialogueData.write(buffer);
 		}
 		
-		public static OpenScreen decode(FriendlyByteBuf buffer)
+		public static OpenScreen read(FriendlyByteBuf buffer)
 		{
 			int dialogueId = buffer.readInt();
 			var dialogueData = Dialogue.DialogueData.read(buffer);
@@ -37,12 +47,20 @@ public final class DialoguePackets
 	
 	public record CloseScreen() implements MSPacket.PlayToClient
 	{
+		public static final ResourceLocation ID = Minestuck.id("dialogue/close_screen");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 		}
 		
-		public static CloseScreen decode(FriendlyByteBuf ignored)
+		public static CloseScreen read(FriendlyByteBuf ignored)
 		{
 			return new CloseScreen();
 		}
@@ -56,13 +74,21 @@ public final class DialoguePackets
 	
 	public record OnCloseScreen(int dialogueId) implements MSPacket.PlayToServer
 	{
+		public static final ResourceLocation ID = Minestuck.id("dialogue/on_close_screen");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeInt(this.dialogueId);
 		}
 		
-		public static OnCloseScreen decode(FriendlyByteBuf buffer)
+		public static OnCloseScreen read(FriendlyByteBuf buffer)
 		{
 			int dialogueId = buffer.readInt();
 			
@@ -72,8 +98,7 @@ public final class DialoguePackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
-					.orElseThrow(IllegalStateException::new)
+			player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get())
 					.validateAndGetComponent(player.level(), this.dialogueId)
 					.ifPresent(component -> component.clearOngoingDialogue(player));
 		}
@@ -81,14 +106,22 @@ public final class DialoguePackets
 	
 	public record TriggerResponse(int responseIndex, int dialogueId) implements MSPacket.PlayToServer
 	{
+		public static final ResourceLocation ID = Minestuck.id("dialogue/trigger_response");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeInt(this.responseIndex);
 			buffer.writeInt(this.dialogueId);
 		}
 		
-		public static TriggerResponse decode(FriendlyByteBuf buffer)
+		public static TriggerResponse read(FriendlyByteBuf buffer)
 		{
 			int responseIndex = buffer.readInt();
 			int dialogueId = buffer.readInt();
@@ -99,8 +132,7 @@ public final class DialoguePackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			player.getCapability(MSCapabilities.CURRENT_DIALOGUE)
-					.orElseThrow(IllegalStateException::new)
+			player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get())
 					.validateAndGetComponent(player.level(), this.dialogueId)
 					.ifPresent(component -> findAndTriggerResponse(player, component));
 		}

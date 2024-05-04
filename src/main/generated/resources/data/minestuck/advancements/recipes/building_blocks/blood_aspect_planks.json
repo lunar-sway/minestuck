@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_blood_aspect_log",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_blood_aspect_log"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:blood_aspect_planks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -2,26 +2,26 @@ package com.mraof.minestuck.effects;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StopCreativeShockEffectPacket;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnderpearlItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.level.ExplosionEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.EffectCure;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * This is an adapted version of Cibernet's code in Minestuck Universe, credit goes to him!
@@ -67,9 +67,9 @@ public class CreativeShockEffect extends MobEffect
 	}
 	
 	@Override
-	public List<ItemStack> getCurativeItems()
+	public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance)
 	{
-		return new ArrayList<>(); //prevent milk from curing creative shock
+		//prevent milk from curing creative shock
 	}
 	
 	@Override
@@ -87,7 +87,7 @@ public class CreativeShockEffect extends MobEffect
 	}
 	
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier)
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier)
 	{
 		return (duration % 5) == 0;
 	}
@@ -162,6 +162,6 @@ public class CreativeShockEffect extends MobEffect
 		serverPlayerEntity.getAbilities().mayBuild = !serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted(); //block placing restricted was hasLimitedInteractions(), mayBuild was allowEdit
 		
 		StopCreativeShockEffectPacket packet = new StopCreativeShockEffectPacket(serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted());
-		MSPacketHandler.sendToPlayer(packet, serverPlayerEntity);
+		PacketDistributor.PLAYER.with(serverPlayerEntity).send(packet);
 	}
 }

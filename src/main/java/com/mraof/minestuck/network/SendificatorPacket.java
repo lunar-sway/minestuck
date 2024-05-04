@@ -1,15 +1,19 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SendificatorPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("sendificator");
+	
 	private final BlockPos destinationBlockPos;
 	
 	public SendificatorPacket(BlockPos pos)
@@ -18,12 +22,18 @@ public class SendificatorPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(destinationBlockPos);
 	}
 	
-	public static SendificatorPacket decode(FriendlyByteBuf buffer)
+	public static SendificatorPacket read(FriendlyByteBuf buffer)
 	{
 		BlockPos destinationBlockPos = buffer.readBlockPos();
 		

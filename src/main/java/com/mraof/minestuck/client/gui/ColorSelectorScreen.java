@@ -13,15 +13,17 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
-import net.minecraftforge.client.gui.widget.ForgeSlider;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@ParametersAreNonnullByDefault
 public class ColorSelectorScreen extends Screen
 {
 	public static final String TITLE = "minestuck.color_selector";
@@ -39,7 +41,7 @@ public class ColorSelectorScreen extends Screen
 	
 	private final boolean firstTime;
 	private int selectedIndex = -1;
-	private ForgeSlider redSlider, greenSlider, blueSlider;
+	private ExtendedSlider redSlider, greenSlider, blueSlider;
 	private ExtendedButton tabButton;
 	private EditBox hexBox;
 	private Tab tab = Tab.Canon;
@@ -147,12 +149,16 @@ public class ColorSelectorScreen extends Screen
 	}
 	
 	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+	}
+	
+	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		renderBackground(guiGraphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		String cacheMessage = I18n.get(SELECT_COLOR);
 		guiGraphics.drawString(font, cacheMessage, (width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);
@@ -180,7 +186,6 @@ public class ColorSelectorScreen extends Screen
 		
 		//resets shader color to avoid tinting the whole gui
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		if(tab==Tab.Canon)
 			for(ColorSelector canonColor : canonColors)
@@ -274,7 +279,7 @@ public class ColorSelectorScreen extends Screen
 		}
 	}
 	
-	private class ColorSlider extends ForgeSlider
+	private class ColorSlider extends ExtendedSlider
 	{
 		public enum ColorComp {
 			R(34, Component.literal("r: ").withStyle(ChatFormatting.RED)),

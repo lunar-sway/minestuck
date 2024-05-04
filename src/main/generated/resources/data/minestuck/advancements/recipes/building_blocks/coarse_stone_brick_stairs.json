@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_coarse_stone_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_coarse_stone_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:coarse_stone_brick_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

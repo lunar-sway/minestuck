@@ -2,21 +2,16 @@
   "parent": "minestuck:minestuck/alchemy",
   "criteria": {
     "use_intellibeam": {
-      "conditions": {},
       "trigger": "minestuck:intellibeam_laserstation"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.intellibeam.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:intellibeam_laserstation"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.intellibeam.title"
     }

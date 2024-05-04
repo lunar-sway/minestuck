@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_plutonium_core",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_plutonium_core"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:wireless_redstone_receiver"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_white_chess_brick_smooth",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_white_chess_brick_smooth"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:white_chess_brick_smooth_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

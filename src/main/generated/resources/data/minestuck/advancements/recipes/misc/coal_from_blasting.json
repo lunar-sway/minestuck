@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_coal_ore",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_coal_ore"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:coal_from_blasting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

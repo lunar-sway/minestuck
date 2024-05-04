@@ -8,18 +8,16 @@ import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
 import com.mraof.minestuck.data.tag.*;
 import com.mraof.minestuck.data.worldgen.*;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -32,12 +30,10 @@ public final class MinestuckData
 	{
 		DataGenerator gen = event.getGenerator();
 		PackOutput output = gen.getPackOutput();
-		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider().thenApply(provider -> {
-			return registrySetBuilder().buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), provider);
-		});
 		ExistingFileHelper fileHelper = event.getExistingFileHelper();
 		
-		gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, Set.of(Minestuck.MOD_ID)));
+		var builtinEntries = gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, event.getLookupProvider(), registrySetBuilder(), Set.of(Minestuck.MOD_ID)));
+		CompletableFuture<HolderLookup.Provider> lookupProvider = builtinEntries.getRegistryProvider();
 		
 		var blockTags = gen.addProvider(event.includeServer(), new MinestuckBlockTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MinestuckItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), fileHelper));
@@ -85,6 +81,6 @@ public final class MinestuckData
 				.add(Registries.STRUCTURE, MSStructureProvider::register)
 				.add(Registries.STRUCTURE_SET, MSStructureSetProvider::register)
 				.add(Registries.DAMAGE_TYPE, MSDamageTypeProvider::register)
-				.add(ForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifierProvider::register);
+				.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifierProvider::register);
 	}
 }

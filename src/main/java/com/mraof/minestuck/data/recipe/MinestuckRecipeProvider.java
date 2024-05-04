@@ -8,7 +8,9 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -17,12 +19,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -34,7 +34,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 	}
 	
 	@Override
-	protected void buildRecipes(Consumer<FinishedRecipe> recipeBuilder)
+	protected void buildRecipes(RecipeOutput recipeBuilder)
 	{
 		SkaiaBlocksData.addRecipes(recipeBuilder);
 		AspectTreeBlocksData.addRecipes(recipeBuilder);
@@ -88,7 +88,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER.get(), 3).define('#', MSBlocks.GREEN_STONE_BRICKS.get()).pattern("# #").pattern("###").pattern("# #").unlockedBy("has_green_stone_bricks", has(MSBlocks.GREEN_STONE_BRICKS.get())).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.get()).requires(MSBlocks.DECREPIT_STONE_BRICKS.get()).requires(Items.VINE).unlockedBy("has_vine", has(Items.VINE)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get()).requires(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.get()).requires(MSBlocks.COAGULATED_BLOOD.get()).unlockedBy("has_coagulated_blood", has(MSBlocks.COAGULATED_BLOOD.get())).save(recipeBuilder);
-		CommonRecipes.stairsRecipe(MSBlocks.COARSE_STONE_STAIRS,MSBlocks.COARSE_STONE).save(recipeBuilder);
+		CommonRecipes.stairsRecipe(MSBlocks.COARSE_STONE_STAIRS, MSBlocks.COARSE_STONE).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.COARSE_STONE_BRICK_STAIRS, MSBlocks.COARSE_STONE_BRICKS).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.SHADE_STAIRS, MSBlocks.SHADE_STONE).save(recipeBuilder);
 		CommonRecipes.stairsRecipe(MSBlocks.SHADE_BRICK_STAIRS, MSBlocks.SHADE_BRICKS).save(recipeBuilder);
@@ -973,17 +973,17 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		MinestuckCombinationsProvider.buildRecipes(recipeBuilder);
 	}
 	
-	public static InventoryChangeTrigger.TriggerInstance has(ItemLike itemLike)
+	public static Criterion<InventoryChangeTrigger.TriggerInstance> has(ItemLike itemLike)
 	{
 		return RecipeProvider.has(itemLike);
 	}
 	
 	@SuppressWarnings("SameParameterValue")
-	private void cookingRecipesFor(Consumer<FinishedRecipe> recipeBuilder, Ingredient input, RecipeCategory category, ItemLike result, float experience, String criterionName, InventoryChangeTrigger.TriggerInstance criterion)
+	private void cookingRecipesFor(RecipeOutput recipeOutput, Ingredient input, RecipeCategory category, ItemLike result, float experience, String criterionName, Criterion<?> criterion)
 	{
-		ResourceLocation itemName = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(result.asItem()), "Registry name for " + result + " was found to be null!");
-		SimpleCookingRecipeBuilder.smelting(input, category, result, experience, 200).unlockedBy(criterionName, criterion).save(recipeBuilder);
-		SimpleCookingRecipeBuilder.smoking(input, category, result, experience, 100).unlockedBy(criterionName, criterion).save(recipeBuilder, new ResourceLocation(itemName.getNamespace(), itemName.getPath() + "_from_smoking"));
-		SimpleCookingRecipeBuilder.campfireCooking(input, category, result, experience, 600).unlockedBy(criterionName, criterion).save(recipeBuilder, new ResourceLocation(itemName.getNamespace(), itemName.getPath() + "_from_campfire_cooking"));
+		ResourceLocation itemName = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(result.asItem()), "Registry name for " + result + " was found to be null!");
+		SimpleCookingRecipeBuilder.smelting(input, category, result, experience, 200).unlockedBy(criterionName, criterion).save(recipeOutput);
+		SimpleCookingRecipeBuilder.smoking(input, category, result, experience, 100).unlockedBy(criterionName, criterion).save(recipeOutput, new ResourceLocation(itemName.getNamespace(), itemName.getPath() + "_from_smoking"));
+		SimpleCookingRecipeBuilder.campfireCooking(input, category, result, experience, 600).unlockedBy(criterionName, criterion).save(recipeOutput, new ResourceLocation(itemName.getNamespace(), itemName.getPath() + "_from_campfire_cooking"));
 	}
 }

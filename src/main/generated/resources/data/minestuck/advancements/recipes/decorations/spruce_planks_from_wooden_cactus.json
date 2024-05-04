@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_cactus",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cactus"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:spruce_planks_from_wooden_cactus"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

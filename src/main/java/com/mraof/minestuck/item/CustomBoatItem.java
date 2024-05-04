@@ -1,8 +1,9 @@
 package com.mraof.minestuck.item;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
@@ -19,9 +20,12 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CustomBoatItem extends Item
 {
 	private static final Predicate<Entity> CAN_COLLIDE_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
@@ -75,12 +79,12 @@ public class CustomBoatItem extends Item
 		@Override
 		public ItemStack execute(BlockSource source, ItemStack stack)
 		{
-			Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-			Level level = source.getLevel();
-			double x = source.x() + (double)((float)direction.getStepX() * 1.125F);
-			double y = source.y() + (double)((float)direction.getStepY() * 1.125F);
-			double z = source.z() + (double)((float)direction.getStepZ() * 1.125F);
-			BlockPos pos = source.getPos().relative(direction);
+			Direction direction = source.state().getValue(DispenserBlock.FACING);
+			Level level = source.level();
+			double x = source.center().x() + (double)((float)direction.getStepX() * 1.125F);
+			double y = source.center().y() + (double)((float)direction.getStepY() * 1.125F);
+			double z = source.center().z() + (double)((float)direction.getStepZ() * 1.125F);
+			BlockPos pos = source.pos().relative(direction);
 			double waterOffset = level.getFluidState(pos).is(FluidTags.WATER)? 1 : 0;
 			
 			if(!level.getBlockState(pos).isAir() || !level.getFluidState(pos.below()).is(FluidTags.WATER))

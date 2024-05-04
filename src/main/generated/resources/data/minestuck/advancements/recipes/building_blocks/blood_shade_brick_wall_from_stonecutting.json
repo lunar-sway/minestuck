@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_blood_shade_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_blood_shade_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:blood_shade_brick_wall_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

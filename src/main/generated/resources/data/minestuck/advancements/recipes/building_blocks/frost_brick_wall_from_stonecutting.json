@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_frost_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_frost_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:frost_brick_wall_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

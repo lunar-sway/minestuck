@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_coarse_stone_slab",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_coarse_stone_slab"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:chiseled_coarse_stone"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

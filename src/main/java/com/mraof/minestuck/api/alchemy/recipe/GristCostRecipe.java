@@ -9,16 +9,13 @@ import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -27,12 +24,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public interface GristCostRecipe extends Recipe<Container>
 {
-	RegistryObject<RecipeType<GristCostRecipe>> RECIPE_TYPE = MSRecipeTypes.GRIST_COST_TYPE;
+	Supplier<RecipeType<GristCostRecipe>> RECIPE_TYPE = MSRecipeTypes.GRIST_COST_TYPE;
 	
 	@Nullable
 	static GristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
@@ -48,7 +46,7 @@ public interface GristCostRecipe extends Recipe<Container>
 	static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level, RecipeManager recipeManager)
 	{
 		return recipeManager.getRecipesFor(GristCostRecipe.RECIPE_TYPE.get(), new SimpleContainer(input), level)
-				.stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
+				.stream().map(RecipeHolder::value).max(Comparator.comparingInt(GristCostRecipe::getPriority));
 	}
 	
 	int getPriority();
@@ -65,7 +63,7 @@ public interface GristCostRecipe extends Recipe<Container>
 	 * Adds grist cost providers for all items which this recipe might potentially provide a grist cost for,
 	 * which then get used during grist cost generation.
 	 */
-	void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer);
+	void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId);
 	
 	default List<JeiGristCost> getJeiCosts(Level level)
 	{

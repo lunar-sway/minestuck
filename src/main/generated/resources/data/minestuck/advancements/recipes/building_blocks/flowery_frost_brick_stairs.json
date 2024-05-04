@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_flowery_frost_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_flowery_frost_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:flowery_frost_brick_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

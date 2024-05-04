@@ -34,15 +34,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_cruxite_bricks",
-      "has_raw_cruxite",
-      "has_the_recipe"
+      "has_raw_cruxite"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:cruxite_brick_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

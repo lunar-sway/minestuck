@@ -1,19 +1,23 @@
 package com.mraof.minestuck.data.recipe;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import net.minecraft.data.recipes.FinishedRecipe;
+import com.mraof.minestuck.item.crafting.NonMirroredRecipe;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 {
 	public NonMirroredRecipeBuilder(RecipeCategory category, ItemLike result, int size)
@@ -32,51 +36,23 @@ public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 	}
 	
 	@Override
-	public void save(Consumer<FinishedRecipe> recipeBuilder, ResourceLocation recipeName)
+	public void save(RecipeOutput recipeOutput, ResourceLocation recipeName)
 	{
-		super.save(recipe -> recipeBuilder.accept(new ResultWrapper(recipe)), recipeName);
-		
-	}
-	
-	private static class ResultWrapper implements FinishedRecipe
-	{
-		private final FinishedRecipe shapedRecipe;
-		
-		private ResultWrapper(FinishedRecipe shapedRecipe)
+		super.save(new RecipeOutput()
 		{
-			this.shapedRecipe = shapedRecipe;
-		}
+			@Override
+			public Advancement.Builder advancement()
+			{
+				return recipeOutput.advancement();
+			}
+			
+			@Override
+			public void accept(ResourceLocation id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions)
+			{
+				if(recipe instanceof ShapedRecipe shapedRecipe)
+					recipeOutput.accept(id, new NonMirroredRecipe(shapedRecipe), advancement, conditions);
+			}
+		}, recipeName);
 		
-		@Override
-		public void serializeRecipeData(JsonObject jsonObject)
-		{
-			shapedRecipe.serializeRecipeData(jsonObject);
-		}
-		
-		@Override
-		public ResourceLocation getId()
-		{
-			return shapedRecipe.getId();
-		}
-		
-		@Override
-		public RecipeSerializer<?> getType()
-		{
-			return MSRecipeTypes.NON_MIRRORED.get();
-		}
-		
-		@Nullable
-		@Override
-		public JsonObject serializeAdvancement()
-		{
-			return shapedRecipe.serializeAdvancement();
-		}
-		
-		@Nullable
-		@Override
-		public ResourceLocation getAdvancementId()
-		{
-			return shapedRecipe.getAdvancementId();
-		}
 	}
 }

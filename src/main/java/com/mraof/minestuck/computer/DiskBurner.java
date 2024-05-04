@@ -2,9 +2,9 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.BurnDiskPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 
@@ -42,10 +42,10 @@ public class DiskBurner extends ButtonListProgram
 	{
 		if(buttonName.equals(BURN_CLIENT_DISK))
 		{
-			MSPacketHandler.sendToServer(BurnDiskPacket.create(be, 0));
+			PacketDistributor.SERVER.noArg().send(BurnDiskPacket.create(be, 0));
 		} else if(buttonName.equals(BURN_SERVER_DISK))
 		{
-			MSPacketHandler.sendToServer(BurnDiskPacket.create(be, 1));
+			PacketDistributor.SERVER.noArg().send(BurnDiskPacket.create(be, 1));
 		}
 	}
 	

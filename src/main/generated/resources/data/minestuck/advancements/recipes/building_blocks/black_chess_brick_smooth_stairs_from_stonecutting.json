@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_black_chess_brick_smooth",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_black_chess_brick_smooth"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:black_chess_brick_smooth_stairs_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

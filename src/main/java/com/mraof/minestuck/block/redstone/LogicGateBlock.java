@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,6 +33,12 @@ public class LogicGateBlock extends DiodeBlock
 		super(properties);
 		this.logicOperator = gateState;
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
+	}
+	
+	@Override
+	protected MapCodec<LogicGateBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

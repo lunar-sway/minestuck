@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.block.BlockUtil;
@@ -29,7 +30,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
@@ -42,6 +43,12 @@ public class GristCollectorBlock extends HorizontalDirectionalBlock implements E
 	{
 		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
+	}
+	
+	@Override
+	protected MapCodec<GristCollectorBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

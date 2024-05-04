@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -16,10 +15,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 
+@ParametersAreNonnullByDefault
 public abstract class SylladexScreen extends Screen
 {
 	public static final String TITLE = "minestuck.sylladex";
@@ -69,8 +71,6 @@ public abstract class SylladexScreen extends Screen
 	@Override
 	public void render(GuiGraphics guiGraphics, int xcor, int ycor, float f)
 	{
-		this.renderBackground(guiGraphics);
-		
 		int xOffset = (width - GUI_WIDTH)/2;
 		int yOffset = (height - GUI_HEIGHT)/2;
 		
@@ -96,6 +96,8 @@ public abstract class SylladexScreen extends Screen
 			mousePosX = -1;
 			mousePosY = -1;
 		}
+		
+		super.render(guiGraphics, xcor, ycor, f);
 		
 		PoseStack modelPoseStack = RenderSystem.getModelViewStack();
 		modelPoseStack.pushPose();
@@ -129,8 +131,6 @@ public abstract class SylladexScreen extends Screen
 		String str = ClientPlayerData.getModus().getName().getString();
 		guiGraphics.drawString(font, str, xOffset + GUI_WIDTH - font.width(str) - 16, yOffset + 5, 0x404040, false);
 		
-		super.render(guiGraphics, xcor, ycor, f);
-		
 		if(isMouseInContainer(xcor, ycor))
 		{
 			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
@@ -146,13 +146,13 @@ public abstract class SylladexScreen extends Screen
 	}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 	{
 		float prevScroll = this.scroll;
 		
-		if (scroll < 0)
+		if (scrollY < 0)
 			this.scroll += 0.25F;
-		else if (scroll > 0)
+		else if (scrollY > 0)
 			this.scroll -= 0.25F;
 		this.scroll = Mth.clamp(this.scroll, 1.0F, 2.0F);
 		
@@ -169,7 +169,7 @@ public abstract class SylladexScreen extends Screen
 			mapY = Math.max(0, Math.min(maxHeight - mapHeight, mapY));
 			return true;
 		}
-		return super.mouseScrolled(mouseX, mouseY, scroll);
+		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 	
 	@Override
@@ -253,7 +253,7 @@ public abstract class SylladexScreen extends Screen
 	public void onEmptyConfirm(boolean result)
 	{
 		if(result)
-			MSPacketHandler.sendToServer(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
+			PacketDistributor.SERVER.noArg().send(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
 		minecraft.screen = this;
 	}
 	
@@ -335,7 +335,7 @@ public abstract class SylladexScreen extends Screen
 			if(toSend != -1)
 			{
 				CaptchaDeckPacket packet = CaptchaDeckPacket.get(toSend, mouseButton != 0);
-				MSPacketHandler.sendToServer(packet);
+				PacketDistributor.SERVER.noArg().send(packet);
 			}
 		}
 

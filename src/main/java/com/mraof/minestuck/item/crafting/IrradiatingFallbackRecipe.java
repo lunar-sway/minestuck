@@ -1,15 +1,15 @@
 package com.mraof.minestuck.item.crafting;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -17,13 +17,14 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 {
 	protected final RecipeType<?> fallbackType;
 	
-	public IrradiatingFallbackRecipe(ResourceLocation idIn, RecipeType<?> fallbackType)
+	public IrradiatingFallbackRecipe(RecipeType<?> fallbackType)
 	{
-		super(idIn, "", CookingBookCategory.MISC, Ingredient.EMPTY, ItemStack.EMPTY, 0, 20);
+		super("", CookingBookCategory.MISC, Ingredient.EMPTY, ItemStack.EMPTY, 0, 20);
 		this.fallbackType = fallbackType;
 	}
 	
@@ -45,9 +46,9 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	private Stream<AbstractCookingRecipe> getFallbackRecipes(RecipeManager recipeManager)
 	{
 		return recipeManager.getRecipes().stream()
-				.filter(recipe -> recipe.getType() == this.fallbackType)
+				.filter(recipe -> recipe.value().getType() == this.fallbackType)
 				.flatMap(recipe -> {
-					if(recipe instanceof AbstractCookingRecipe cookingRecipe)
+					if(recipe.value() instanceof AbstractCookingRecipe cookingRecipe)
 						return Stream.of(cookingRecipe);
 					else
 						return Stream.empty();
@@ -75,36 +76,31 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	
 	public static class Serializer implements RecipeSerializer<IrradiatingFallbackRecipe>
 	{
+		private static final Codec<IrradiatingFallbackRecipe> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(
+						BuiltInRegistries.RECIPE_TYPE.byNameCodec().fieldOf("fallback_type").forGetter(recipe -> recipe.fallbackType)
+				).apply(instance, IrradiatingFallbackRecipe::new));
+		
 		@Override
-		public IrradiatingFallbackRecipe fromJson(ResourceLocation recipeId, JsonObject json)
+		public Codec<IrradiatingFallbackRecipe> codec()
 		{
-			RecipeType<?> fallbackType = deserializeRecipeType(json);
-			return new IrradiatingFallbackRecipe(recipeId, fallbackType);
+			return CODEC;
 		}
 		
 		@Override
-		public IrradiatingFallbackRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		public IrradiatingFallbackRecipe fromNetwork(FriendlyByteBuf buffer)
 		{
 			ResourceLocation typeName = buffer.readResourceLocation();
-			RecipeType<?> fallbackType = ForgeRegistries.RECIPE_TYPES.getValue(typeName);
+			RecipeType<?> fallbackType = BuiltInRegistries.RECIPE_TYPE.get(typeName);
 			if(fallbackType == null)
 				throw new IllegalArgumentException("Can not deserialize unknown Recipe type: " + typeName);
-			return new IrradiatingFallbackRecipe(recipeId, fallbackType);
+			return new IrradiatingFallbackRecipe(fallbackType);
 		}
 		
 		@Override
 		public void toNetwork(FriendlyByteBuf buffer, IrradiatingFallbackRecipe recipe)
 		{
-			buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.RECIPE_TYPES.getKey(recipe.fallbackType)));
+			buffer.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.RECIPE_TYPE.getKey(recipe.fallbackType)));
 		}
-	}
-	
-	private static RecipeType<?> deserializeRecipeType(JsonObject json)
-	{
-		String typeName = GsonHelper.getAsString(json, "fallback_type");
-		RecipeType<?> fallbackType = ForgeRegistries.RECIPE_TYPES.getValue(new ResourceLocation(typeName));
-		if(fallbackType == null)
-			throw new JsonSyntaxException("Unknown recipe type '" + typeName + "'");
-		return fallbackType;
 	}
 }

@@ -84,7 +84,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	{
 		AttributeInstance instance = getAttributes().getInstance(Attributes.MOVEMENT_SPEED);
 		if(instance != null)
-			instance.removeModifier(STATIONARY_MOB_MODIFIER);
+			instance.removeModifier(STATIONARY_MOB_MODIFIER.getId());
 	}
 	
 	/**

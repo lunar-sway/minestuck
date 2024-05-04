@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_mind_aspect_log",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mind_aspect_log"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:mind_aspect_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

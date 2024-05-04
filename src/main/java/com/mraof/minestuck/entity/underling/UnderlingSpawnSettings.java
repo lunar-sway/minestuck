@@ -11,7 +11,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public final class UnderlingSpawnSettings
 		if(giclopsWeight > 0 && !MinestuckConfig.SERVER.disableGiclops.get())
 			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.GICLOPS.get(), giclopsWeight, 1, Math.min(5, Math.max(1, giclopsWeight / 2))));
 		
-		MinecraftForge.EVENT_BUS.post(new UnderlingSpawnListEvent(difficulty, list));
+		NeoForge.EVENT_BUS.post(new UnderlingSpawnListEvent(difficulty, list));
 		
 		return difficultyList[difficulty] = WeightedRandomList.create(list);
 	}

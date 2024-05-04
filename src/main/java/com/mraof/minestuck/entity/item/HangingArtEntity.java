@@ -5,8 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -16,8 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends HangingEntity implements IEntityAdditionalSpawnData
+public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends HangingEntity implements IEntityWithComplexSpawn
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -144,8 +141,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public void lerpTo(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
-					   boolean teleport)
+	public void lerpTo(double x, double y, double z, float yaw, float pitch, int posRotationIncrements)
 	{
 		BlockPos blockpos = this.pos.offset(Mth.floor(x - this.getX()), Mth.floor(y - this.getY()), Mth.floor(z - this.getZ()));
 		this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
@@ -182,12 +178,6 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		this.art = this.getArtSet().stream().filter(art -> art.getTitle().equals(name)).findAny().orElseGet(this::getDefault);
 		
 		this.setDirection(facing);
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	public abstract Set<T> getArtSet();

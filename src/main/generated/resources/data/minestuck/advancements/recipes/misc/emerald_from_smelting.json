@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_emerald_ore",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_emerald_ore"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:emerald_from_smelting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

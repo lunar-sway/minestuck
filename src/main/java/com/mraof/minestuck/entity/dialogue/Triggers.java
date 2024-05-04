@@ -2,16 +2,13 @@ package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-
-import java.util.function.Supplier;
+import net.minecraft.core.Registry;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class Triggers
 {
 	public static final DeferredRegister<Codec<? extends Trigger>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_trigger"), Minestuck.MOD_ID);
-	public static final Supplier<IForgeRegistry<Codec<? extends Trigger>>> REGISTRY = REGISTER.makeRegistry(() -> new RegistryBuilder<Codec<? extends Trigger>>().disableSaving().disableSync());
+	public static final Registry<Codec<? extends Trigger>> REGISTRY = REGISTER.makeRegistry(builder -> {});
 	
 	static {
 		REGISTER.register("set_dialogue", () -> Trigger.SetDialogue.CODEC);

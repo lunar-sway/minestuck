@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_cindered_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cindered_planks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:cindered_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_shadewood_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_shadewood_planks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:shadewood_door"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

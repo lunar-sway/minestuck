@@ -99,6 +99,6 @@ public class TransportalizerSavedData extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(TransportalizerSavedData::load, TransportalizerSavedData::new, DATA_NAME);
+		return storage.computeIfAbsent(new Factory<>(TransportalizerSavedData::new, TransportalizerSavedData::load), DATA_NAME);
 	}
 }

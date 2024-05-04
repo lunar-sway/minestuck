@@ -51,7 +51,7 @@ public class FarmineEffect implements DestroyBlockEffect
 	{
 		farMineForbiddenBlocks.add(Blocks.OBSIDIAN);
 		
-		addAssociation(Blocks.DIRT, Blocks.GRASS);
+		addAssociation(Blocks.DIRT, Blocks.GRASS_BLOCK);
 		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
 		addAssociation(Blocks.DIRT, Blocks.DIRT_PATH);
 		addAssociation(Blocks.END_STONE, MSBlocks.END_GRASS.get());

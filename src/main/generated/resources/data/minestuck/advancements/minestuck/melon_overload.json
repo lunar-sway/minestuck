@@ -2,22 +2,18 @@
   "parent": "minestuck:minestuck/alchemy",
   "criteria": {
     "melon_overload": {
-      "conditions": {},
       "trigger": "minestuck:melon_overload"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.melon_overload.description"
     },
-    "frame": "task",
     "hidden": true,
     "icon": {
       "item": "minestuck:melonsbane",
       "nbt": "{Damage:0}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.melon_overload.title"
     }

@@ -3,6 +3,7 @@ package com.mraof.minestuck.api.alchemy;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.Util;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -12,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
@@ -52,7 +53,7 @@ public final class GristType implements Comparable<GristType>
 	@Nullable
 	public ResourceLocation getId()
 	{
-		return GristTypes.getRegistry().getKey(this);
+		return GristTypes.REGISTRY.getKey(this);
 	}
 	
 	public ResourceLocation getIdOrThrow()
@@ -122,10 +123,9 @@ public final class GristType implements Comparable<GristType>
 		return candyItem.get();
 	}
 	
-	public List<GristType> getSecondaryTypes()
+	public Optional<HolderSet.Named<GristType>> getSecondaryTypes()
 	{
-		return Objects.requireNonNull(GristTypes.getRegistry().tags())
-				.getTag(this.getSecondaryTypesTag()).stream().toList();
+		return GristTypes.REGISTRY.getTag(this.getSecondaryTypesTag());
 	}
 	
 	public TagKey<GristType> getSecondaryTypesTag()

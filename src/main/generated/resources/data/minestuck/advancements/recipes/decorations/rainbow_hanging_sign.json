@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_stripped_rainbow_log",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_stripped_rainbow_log"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:rainbow_hanging_sign"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

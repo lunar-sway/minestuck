@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_jag_of_bugs",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_jag_of_bugs"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:bug_on_a_stick"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

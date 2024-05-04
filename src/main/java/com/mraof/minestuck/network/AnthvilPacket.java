@@ -1,20 +1,29 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
 import com.mraof.minestuck.inventory.AnthvilMenu;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public class AnthvilPacket implements MSPacket.PlayToServer
 {
-	@Override
-	public void encode(FriendlyByteBuf buffer)
-	{
+	public static final ResourceLocation ID = Minestuck.id("anthvil");
 	
+	@Override
+	public ResourceLocation id()
+	{
+		return ID;
 	}
 	
-	public static AnthvilPacket decode(FriendlyByteBuf buffer)
+	@Override
+	public void write(FriendlyByteBuf buffer)
+	{
+	}
+	
+	public static AnthvilPacket read(FriendlyByteBuf ignored)
 	{
 		return new AnthvilPacket();
 	}

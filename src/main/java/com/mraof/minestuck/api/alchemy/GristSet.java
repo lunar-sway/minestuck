@@ -41,7 +41,7 @@ public interface GristSet
 	
 	default boolean equalContent(GristSet other)
 	{
-		for(GristType type : GristTypes.values())
+		for(GristType type : GristTypes.REGISTRY)
 			if(this.getGrist(type) != other.getGrist(type))
 				return false;
 		return true;

@@ -42,16 +42,15 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_stick",
       "has_iron_ingot",
-      "has_white_wool",
-      "has_the_recipe"
+      "has_white_wool"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:horn"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

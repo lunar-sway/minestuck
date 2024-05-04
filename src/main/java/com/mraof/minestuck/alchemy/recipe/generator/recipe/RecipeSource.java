@@ -2,13 +2,13 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -18,7 +18,7 @@ public sealed interface RecipeSource
 {
 	Codec<RecipeSource> DISPATCH_CODEC = Type.CODEC.dispatch(RecipeSource::type, type -> type.sourceCodec.get());
 	
-	Collection<Recipe<?>> findRecipes(RecipeManager recipeManager);
+	Collection<RecipeHolder<?>> findRecipes(RecipeManager recipeManager);
 	
 	Type type();
 	
@@ -50,10 +50,10 @@ public sealed interface RecipeSource
 				.xmap(SingleRecipe::new, SingleRecipe::recipe).codec();
 		
 		@Override
-		public Collection<Recipe<?>> findRecipes(RecipeManager recipeManager)
+		public Collection<RecipeHolder<?>> findRecipes(RecipeManager recipeManager)
 		{
-			Optional<? extends Recipe<?>> recipe = recipeManager.byKey(this.recipe);
-			return recipe.map(Collections::<Recipe<?>>singleton).orElse(Collections.emptySet());
+			Optional<? extends RecipeHolder<?>> recipe = recipeManager.byKey(this.recipe);
+			return recipe.map(Collections::<RecipeHolder<?>>singleton).orElse(Collections.emptySet());
 		}
 		
 		@Override
@@ -71,13 +71,13 @@ public sealed interface RecipeSource
 	
 	record BySerializer(RecipeSerializer<?> serializer) implements RecipeSource
 	{
-		static final Codec<BySerializer> CODEC = ForgeRegistries.RECIPE_SERIALIZERS.getCodec().fieldOf("serializer")
+		static final Codec<BySerializer> CODEC = BuiltInRegistries.RECIPE_SERIALIZER.byNameCodec().fieldOf("serializer")
 				.xmap(BySerializer::new, BySerializer::serializer).codec();
 		
 		@Override
-		public Collection<Recipe<?>> findRecipes(RecipeManager recipeManager)
+		public Collection<RecipeHolder<?>> findRecipes(RecipeManager recipeManager)
 		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getSerializer() == serializer).toList();
+			return recipeManager.getRecipes().stream().filter(recipeHolder -> recipeHolder.value().getSerializer() == serializer).toList();
 		}
 		
 		@Override
@@ -89,19 +89,19 @@ public sealed interface RecipeSource
 		@Override
 		public String toString()
 		{
-			return "recipe_source[serializer=" + ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer) + "]";
+			return "recipe_source[serializer=" + BuiltInRegistries.RECIPE_SERIALIZER.getKey(serializer) + "]";
 		}
 	}
 	
 	record ByType(RecipeType<?> recipeType) implements RecipeSource
 	{
-		static final Codec<ByType> CODEC = ForgeRegistries.RECIPE_TYPES.getCodec().fieldOf("recipe_type")
+		static final Codec<ByType> CODEC = BuiltInRegistries.RECIPE_TYPE.byNameCodec().fieldOf("recipe_type")
 				.xmap(ByType::new, ByType::recipeType).codec();
 		
 		@Override
-		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
+		public List<RecipeHolder<?>> findRecipes(RecipeManager recipeManager)
 		{
-			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getType() == recipeType).toList();
+			return recipeManager.getRecipes().stream().filter(recipeHolder -> recipeHolder.value().getType() == recipeType).toList();
 		}
 		
 		@Override

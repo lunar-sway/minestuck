@@ -5,10 +5,11 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -21,11 +22,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AreaEffectBlockEntity extends BlockEntity
 {
 	@Nonnull
@@ -65,13 +68,15 @@ public class AreaEffectBlockEntity extends BlockEntity
 		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
-			for(LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, new AABB(minAreaPos, maxAreaPos)))
+			for(LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class,
+					AABB.encapsulatingFullBlocks(minAreaPos, maxAreaPos)))
 			{
 				iterateThroughEntities(livingEntity);
 			}
 		} else
 		{
-			for(Player playerEntity : level.getEntitiesOfClass(Player.class, new AABB(minAreaPos, maxAreaPos)))
+			for(Player playerEntity : level.getEntitiesOfClass(Player.class,
+					AABB.encapsulatingFullBlocks(minAreaPos, maxAreaPos)))
 			{
 				iterateThroughEntities(playerEntity);
 			}
@@ -151,11 +156,7 @@ public class AreaEffectBlockEntity extends BlockEntity
 	{
 		super.load(compound);
 		
-		MobEffect effectRead;
-		if(compound.contains("effect", Tag.TAG_STRING))
-			effectRead = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(compound.getString("effect")));
-		else	// backwards-compatibility with Minestuck 1.20.1-1.11.2.1 and earlier
-			effectRead = MobEffect.byId(compound.getInt("effect"));
+		MobEffect effectRead = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(compound.getString("effect")));
 		if(effectRead != null)
 			effect = effectRead;
 		
@@ -177,7 +178,7 @@ public class AreaEffectBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound);
 		
-		compound.putString("effect", String.valueOf(ForgeRegistries.MOB_EFFECTS.getKey(this.getEffect())));
+		compound.putString("effect", String.valueOf(BuiltInRegistries.MOB_EFFECT.getKey(this.effect)));
 		compound.putInt("effectAmplifier", effectAmplifier);
 		
 		compound.putInt("minAreaOffsetX", minAreaOffset.getX());

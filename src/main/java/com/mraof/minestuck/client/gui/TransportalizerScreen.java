@@ -1,8 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TransportalizerPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -10,8 +8,12 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class TransportalizerScreen extends Screen
 {
 	public static final String TITLE = "minestuck.transportalizer";
@@ -51,21 +53,24 @@ public class TransportalizerScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		renderBackground(guiGraphics);
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		int yOffset = (height / 2) - (guiHeight / 2);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
 		guiGraphics.blit(guiBackground, (width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
+		int yOffset = (height / 2) - (guiHeight / 2);
 		if(!be.hasId())
 			guiGraphics.drawString(font, "Enter ID:", width / 2F - font.width("Enter ID:") / 2F, yOffset + 10, 0x404040, false);
 		else
 			guiGraphics.drawString(font, be.getId(), (width / 2F) - font.width(be.getId()) / 2F, yOffset + 10, be.isActive() ? 0x404040 : 0xFF0000, false);
-		
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 
 	private void finish()
@@ -77,11 +82,11 @@ public class TransportalizerScreen extends Screen
 		if(be.hasId()) {
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
 			TransportalizerPacket.DestId packet = new TransportalizerPacket.DestId(be.getBlockPos(), text);
-			MSPacketHandler.sendToServer(packet);
+			PacketDistributor.SERVER.noArg().send(packet);
 			minecraft.setScreen(null);
 		} else {
 			TransportalizerPacket.Id packet = new TransportalizerPacket.Id(be.getBlockPos(), text);
-			MSPacketHandler.sendToServer(packet);
+			PacketDistributor.SERVER.noArg().send(packet);
 			minecraft.setScreen(null);
 		}
 	}

@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_quartz_ore",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_quartz_ore"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:quartz_from_blasting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

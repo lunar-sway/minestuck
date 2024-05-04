@@ -46,7 +46,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import org.slf4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -170,7 +170,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		this.dialogueComponent.tryStartDialogue(serverPlayer);
 		
 		this.dialogueComponent.getStartingDialogue().ifPresent(dialogueId -> {
-			MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, dialogueId.toString(), this);
+			MSCriteriaTriggers.CONSORT_TALK.get().trigger(serverPlayer, dialogueId.toString(), this);
 			if(ticksUntilDialogueReset == 0)
 				ticksUntilDialogueReset = 24000 + level().random.nextInt(24000);
 		});

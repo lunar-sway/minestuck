@@ -2,21 +2,16 @@
   "parent": "minestuck:minestuck/root",
   "criteria": {
     "connection": {
-      "conditions": {},
       "trigger": "minestuck:sburb_connection"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.connect.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:client_disk"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.connect.title"
     }

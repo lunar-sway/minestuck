@@ -113,8 +113,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-		this.renderBackground(guiGraphics);
-		
 		
 		drawTabs(guiGraphics);
 		
@@ -305,17 +303,17 @@ public class EcheladderScreen extends PlayerStatsScreen
 	}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 	{
-		if(scroll != 0)
+		if(scrollY != 0)
 		{
-			if(scroll > 0)
+			if(scrollY > 0)
 				scrollIndex += 14;
 			else scrollIndex -= 14;
 			scrollIndex = Mth.clamp(scrollIndex, 0, MAX_SCROLL);
 			return true;
 		}
-		else return super.mouseScrolled(mouseX, mouseY, scroll);
+		else return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 	
 	@Override

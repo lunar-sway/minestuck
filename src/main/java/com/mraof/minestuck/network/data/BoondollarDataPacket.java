@@ -1,11 +1,15 @@
 package com.mraof.minestuck.network.data;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 public class BoondollarDataPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("boondollar_data");
+	
 	private final long count;
 	
 	private BoondollarDataPacket(long count)
@@ -19,12 +23,18 @@ public class BoondollarDataPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeLong(count);
 	}
 	
-	public static BoondollarDataPacket decode(FriendlyByteBuf buffer)
+	public static BoondollarDataPacket read(FriendlyByteBuf buffer)
 	{
 		long count = buffer.readLong();
 		return create(count);

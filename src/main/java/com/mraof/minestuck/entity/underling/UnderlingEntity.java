@@ -41,7 +41,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -127,7 +127,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.getId()));
+		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.REGISTRY.getKey(GristTypes.ARTIFACT.get())));
 	}
 	
 	protected void applyGristType(GristType type)
@@ -161,7 +161,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	@Nonnull
 	public GristType getGristType()
 	{
-		GristType type = GristTypes.getRegistry().getValue(ResourceLocation.tryParse(entityData.get(GRIST_TYPE)));
+		GristType type = GristTypes.REGISTRY.get(ResourceLocation.tryParse(entityData.get(GRIST_TYPE)));
 		
 		if(type != null)
 		{

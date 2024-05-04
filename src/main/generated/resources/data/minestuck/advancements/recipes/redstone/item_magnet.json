@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_plutonium_core",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_plutonium_core"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:item_magnet"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

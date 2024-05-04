@@ -16,14 +16,10 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity implements MenuProvider
@@ -89,18 +85,14 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 		return Component.translatable(TITLE);
 	}
 	
-	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2));
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			return side == Direction.DOWN ? downHandler.cast() : sideHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.DOWN)
+			return new RangedWrapper(this.itemHandler, 1, 2);
+		return new RangedWrapper(this.itemHandler, 0, 1);
 	}
 	
 	@Nullable

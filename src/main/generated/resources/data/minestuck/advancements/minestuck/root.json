@@ -19,8 +19,6 @@
     "description": {
       "translate": "advancements.minestuck.root.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:raw_cruxite"
     },

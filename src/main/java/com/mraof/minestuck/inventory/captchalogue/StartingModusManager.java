@@ -8,9 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -70,7 +70,7 @@ public final class StartingModusManager extends SimplePreparableReloadListener<L
 		if(name == null)
 			LOGGER.error("Unable to parse starting modus type {} as a resource location!", key);
 		
-		ModusType<?> modusType = ModusTypes.REGISTRY.get().getValue(name);
+		ModusType<?> modusType = ModusTypes.REGISTRY.get(name);
 		
 		if(modusType == null)
 			LOGGER.error("Unable to get the modus type '{}' from the registry", name);

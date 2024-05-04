@@ -1,8 +1,10 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -10,6 +12,8 @@ import net.minecraft.world.phys.Vec3;
  */
 public class ClientMovementPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("client_movement");
+	
 	private final double moveX;
 	private final double moveY;
 	private final double moveZ;
@@ -27,14 +31,20 @@ public class ClientMovementPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeDouble(moveX);
 		buffer.writeDouble(moveY);
 		buffer.writeDouble(moveZ);
 	}
 	
-	public static ClientMovementPacket decode(FriendlyByteBuf buffer)
+	public static ClientMovementPacket read(FriendlyByteBuf buffer)
 	{
 		double moveX = buffer.readDouble();
 		double moveY = buffer.readDouble();

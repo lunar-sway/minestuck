@@ -78,7 +78,7 @@ public class ConsortMerchantInventory implements Container
 				{
 					prices[index] = 0;
 					if (Arrays.stream(prices).sum() == 0)
-						MSCriteriaTriggers.BUY_OUT_SHOP.trigger(player);
+						MSCriteriaTriggers.BUY_OUT_SHOP.get().trigger(player);
 				}
 				
 				if (player.addItem(items))

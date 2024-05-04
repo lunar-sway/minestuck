@@ -1,34 +1,30 @@
 package com.mraof.minestuck.advancements;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Objects;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigger.Instance>
 {
-	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "consort_item");
-	
 	@Override
-	public ResourceLocation getId()
+	public Codec<Instance> codec()
 	{
-		return ID;
-	}
-	
-	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
-	{
-		String table = json.has("table") ? GsonHelper.getAsString(json, "table") : null;
-		ItemPredicate item = ItemPredicate.fromJson(json.get("item"));
-		EnumConsort.MerchantType type = json.has("type") ? EnumConsort.MerchantType.getFromName(GsonHelper.getAsString(json, "type")) : null;
-		return new Instance(predicate, table, item, type);
+		return Instance.CODEC;
 	}
 	
 	public void trigger(ServerPlayer player, String table, ItemStack item, ConsortEntity consort)
@@ -36,41 +32,26 @@ public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigge
 		trigger(player, instance -> instance.test(table, item, consort.merchantType));
 	}
 	
-	public static class Instance extends AbstractCriterionTriggerInstance
+	public record Instance(Optional<ContextAwarePredicate> player, Optional<String> table,
+						   Optional<ItemPredicate> item, Optional<EnumConsort.MerchantType> type) implements SimpleCriterionTrigger.SimpleInstance
 	{
-		private final String table;
-		private final ItemPredicate item;
-		private final EnumConsort.MerchantType type;
+		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
+				ExtraCodecs.strictOptionalField(Codec.STRING, "table").forGetter(Instance::table),
+				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "item").forGetter(Instance::item),
+				ExtraCodecs.strictOptionalField(EnumConsort.MerchantType.CODEC, "type").forGetter(Instance::type)
+		).apply(instance, Instance::new));
 		
-		public Instance(ContextAwarePredicate predicate, String table, ItemPredicate item, EnumConsort.MerchantType type)
+		public static Criterion<Instance> forType(EnumConsort.MerchantType type)
 		{
-			super(ID, predicate);
-			this.table = table;
-			this.item = Objects.requireNonNull(item);
-			this.type = type;
-		}
-		
-		public static Instance forType(EnumConsort.MerchantType type)
-		{
-			return new Instance(ContextAwarePredicate.ANY, null, ItemPredicate.ANY, type);
+			return MSCriteriaTriggers.CONSORT_ITEM.get().createCriterion(new Instance(Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(type)));
 		}
 		
 		public boolean test(String table, ItemStack item, EnumConsort.MerchantType type)
 		{
-			return (this.table == null || this.table.equals(table)) && this.item.matches(item) && (this.type == null || this.type == type);
-		}
-		
-		@Override
-		public JsonObject serializeToJson(SerializationContext context)
-		{
-			JsonObject json = super.serializeToJson(context);
-			if(table != null)
-				json.addProperty("table", table);
-			json.add("item", item.serializeToJson());
-			if(type != null)
-				json.addProperty("type", type.toString().toLowerCase());
-			
-			return json;
+			return (this.table.isEmpty() || this.table.get().equals(table))
+					&& (this.item.isEmpty() || this.item.get().matches(item))
+					&& (this.type.isEmpty() || this.type.get() == type);
 		}
 	}
 }

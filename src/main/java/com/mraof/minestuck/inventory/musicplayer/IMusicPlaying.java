@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
  *
  * @see MusicPlayerWeapon
  */
-
+@Deprecated //todo switch to just MusicPlaying
 public interface IMusicPlaying
 {
 	void setMusicPlaying(ItemStack cassettePlayer, EnumCassetteType cassetteType);

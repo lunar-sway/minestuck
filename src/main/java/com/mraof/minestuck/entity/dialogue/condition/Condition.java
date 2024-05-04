@@ -11,13 +11,15 @@ import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -34,13 +36,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.Score;
+import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.Scoreboard;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITag;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -49,7 +52,7 @@ import java.util.stream.Collectors;
  */
 public interface Condition
 {
-	Codec<Condition> CODEC = CodecUtil.registryCodec(Conditions.REGISTRY).dispatch(Condition::codec, Function.identity());
+	Codec<Condition> CODEC = Conditions.REGISTRY.byNameCodec().dispatch(Condition::codec, Function.identity());
 	Codec<Condition> NPC_ONLY_CODEC = ExtraCodecs.validate(Condition.CODEC,
 			condition -> condition.isNpcOnly() ? DataResult.success(condition) : DataResult.error(() -> "Player condition not supported here"));
 	
@@ -181,7 +184,7 @@ public interface Condition
 	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
 	{
 		static final Codec<IsEntityType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ForgeRegistries.ENTITY_TYPES.getCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
+				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
 		).apply(instance, IsEntityType::new));
 		
 		@Override
@@ -284,7 +287,7 @@ public interface Condition
 	record InTerrainLandType(TerrainLandType landType) implements NpcOnlyCondition
 	{
 		static final Codec<InTerrainLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				LandTypes.TERRAIN_REGISTRY.get().getCodec().fieldOf("land_type").forGetter(InTerrainLandType::landType)
+				LandTypes.TERRAIN_REGISTRY.byNameCodec().fieldOf("land_type").forGetter(InTerrainLandType::landType)
 		).apply(instance, InTerrainLandType::new));
 		
 		@Override
@@ -319,7 +322,7 @@ public interface Condition
 	record InTerrainLandTypeTag(TagKey<TerrainLandType> landTypeTag) implements NpcOnlyCondition
 	{
 		static final Codec<InTerrainLandTypeTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				TagKey.codec(LandTypes.TERRAIN_REGISTRY.get().getRegistryKey()).fieldOf("land_type_tag").forGetter(InTerrainLandTypeTag::landTypeTag)
+				TagKey.codec(LandTypes.TERRAIN_REGISTRY.key()).fieldOf("land_type_tag").forGetter(InTerrainLandTypeTag::landTypeTag)
 		).apply(instance, InTerrainLandTypeTag::new));
 		
 		@Override
@@ -388,7 +391,7 @@ public interface Condition
 	record InTitleLandType(TitleLandType landType) implements NpcOnlyCondition
 	{
 		static final Codec<InTitleLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				LandTypes.TITLE_REGISTRY.get().getCodec().fieldOf("land_type").forGetter(InTitleLandType::landType)
+				LandTypes.TITLE_REGISTRY.byNameCodec().fieldOf("land_type").forGetter(InTitleLandType::landType)
 		).apply(instance, InTitleLandType::new));
 		
 		@Override
@@ -423,7 +426,7 @@ public interface Condition
 	record InTitleLandTypeTag(TagKey<TitleLandType> landTypeTag) implements NpcOnlyCondition
 	{
 		static final Codec<InTitleLandTypeTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				TagKey.codec(LandTypes.TITLE_REGISTRY.get().getRegistryKey()).fieldOf("land_type_tag").forGetter(InTitleLandTypeTag::landTypeTag)
+				TagKey.codec(LandTypes.TITLE_REGISTRY.key()).fieldOf("land_type_tag").forGetter(InTitleLandTypeTag::landTypeTag)
 		).apply(instance, InTitleLandTypeTag::new));
 		
 		@Override
@@ -482,7 +485,7 @@ public interface Condition
 	record NPCIsHoldingItem(Item item) implements NpcOnlyCondition
 	{
 		static final Codec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(NPCIsHoldingItem::item)
+				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(NPCIsHoldingItem::item)
 		).apply(instance, NPCIsHoldingItem::new));
 		
 		@Override
@@ -507,7 +510,7 @@ public interface Condition
 	record PlayerHasItem(Item item, int amount) implements Condition
 	{
 		static final Codec<PlayerHasItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(PlayerHasItem::item),
+				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(PlayerHasItem::item),
 				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasItem::amount)
 		).apply(instance, PlayerHasItem::new));
 		
@@ -567,12 +570,13 @@ public interface Condition
 		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
-			ITag<Item> tag = Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.itemTag);
 			Optional<Item> lastMatched = component.getMatchedItem(player);
-			if(lastMatched.isPresent() && tag.contains(lastMatched.get()) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
+			if(lastMatched.isPresent() && lastMatched.get().builtInRegistryHolder().is(this.itemTag) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
 				return true;
 			
-			List<Item> items = tag.stream().collect(Collectors.toCollection(ArrayList::new));
+			Optional<HolderSet.Named<Item>> tag = BuiltInRegistries.ITEM.getTag(this.itemTag);
+			List<Item> items = tag.stream().flatMap(HolderSet.ListBacked::stream).map(Holder::value)
+					.collect(Collectors.toCollection(ArrayList::new));
 			while(!items.isEmpty())
 			{
 				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
@@ -592,7 +596,7 @@ public interface Condition
 	{
 		static final Codec<ItemTagMatchExclude> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				TagKey.codec(Registries.ITEM).fieldOf("tag").forGetter(ItemTagMatchExclude::itemTag),
-				ForgeRegistries.ITEMS.getCodec().fieldOf("exclusion_item").forGetter(ItemTagMatchExclude::exclusionItem)
+				BuiltInRegistries.ITEM.byNameCodec().fieldOf("exclusion_item").forGetter(ItemTagMatchExclude::exclusionItem)
 		).apply(instance, ItemTagMatchExclude::new));
 		
 		@Override
@@ -605,12 +609,13 @@ public interface Condition
 		public boolean test(LivingEntity entity, ServerPlayer player)
 		{
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
-			ITag<Item> tag = Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.itemTag);
 			Optional<Item> lastMatched = component.getMatchedItem(player);
-			if(lastMatched.isPresent() && tag.contains(lastMatched.get()) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
+			if(lastMatched.isPresent() && lastMatched.get().builtInRegistryHolder().is(this.itemTag) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
 				return true;
 			
-			List<Item> items = tag.stream().filter(item -> item != exclusionItem).collect(Collectors.toCollection(ArrayList::new));
+			Optional<HolderSet.Named<Item>> tag = BuiltInRegistries.ITEM.getTag(this.itemTag);
+			List<Item> items = tag.stream().flatMap(HolderSet.ListBacked::stream).map(Holder::value)
+					.filter(item -> item != exclusionItem).collect(Collectors.toCollection(ArrayList::new));
 			while(!items.isEmpty())
 			{
 				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
@@ -834,7 +839,7 @@ public interface Condition
 			if(objective == null)
 				return false;
 			
-			Collection<Score> scores = scoreboard.getPlayerScores(objective);
+			Collection<PlayerScoreEntry> scores = scoreboard.listPlayerScores(objective);
 			
 			//go with originally written scoreboard name if not "player" or "npc"
 			String modOwnerName = switch(ownerName)
@@ -844,7 +849,7 @@ public interface Condition
 				default -> ownerName;
 			};
 			
-			return scores.stream().filter(score -> score.getOwner().equals(modOwnerName)).anyMatch(score -> score.getScore() == value);
+			return scores.stream().filter(score -> score.owner().equals(modOwnerName)).anyMatch(score -> score.value() == value);
 		}
 		
 		@Override

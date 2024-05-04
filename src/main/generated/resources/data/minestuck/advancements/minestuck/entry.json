@@ -2,22 +2,17 @@
   "parent": "minestuck:minestuck/connect",
   "criteria": {
     "use_artifact": {
-      "conditions": {},
       "trigger": "minestuck:cruxite_artifact"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.entry.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:cruxite_apple",
       "nbt": "{color:10542335}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.entry.title"
     }

@@ -34,15 +34,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_sugar",
-      "has_sugar_cube",
-      "has_the_recipe"
+      "has_sugar_cube"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:sugar_from_cube"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

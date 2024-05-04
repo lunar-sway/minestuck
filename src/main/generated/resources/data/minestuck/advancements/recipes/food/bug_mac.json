@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_grub_sauce",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_grub_sauce"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:bug_mac"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.inventory.*;
+import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.core.BlockPos;
@@ -21,14 +21,10 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 
@@ -190,23 +186,18 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		return fuel >= MAX_FUEL;
 	}
 	
-	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //regenerating item slot
-	private final LazyOptional<IItemHandler> fuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	@Nullable
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			if(side == Direction.UP)
-				return inputHandler.cast();
-			else if(side == Direction.DOWN)
-				return LazyOptional.empty();
-			else
-				return fuelHandler.cast(); //will fill the anthvil with fuel if fed from the sides
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.UP)
+			return new RangedWrapper(itemHandler, 0, 1);
+		if(side == Direction.DOWN)
+			return null;
+		
+		return new RangedWrapper(itemHandler, 1, 2);
 	}
 	
 	@Nullable

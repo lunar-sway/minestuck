@@ -34,15 +34,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_honeycomb",
-      "has_iron_nugget",
-      "has_the_recipe"
+      "has_iron_nugget"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:lip_balm"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

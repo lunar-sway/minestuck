@@ -35,6 +35,7 @@ public class BoondollarPricing
 		return ingredient.test(stack);
 	}
 	
+	//todo replace serializer with codec
 	public static class Serializer implements JsonDeserializer<BoondollarPricing>, JsonSerializer<BoondollarPricing>
 	{
 		@Override
@@ -42,14 +43,14 @@ public class BoondollarPricing
 		{
 			JsonObject json = GsonHelper.convertToJsonObject(jsonElement, "boolean pricing");
 			IntProvider priceProvider = IntProvider.CODEC.parse(JsonOps.INSTANCE, json.get("range")).getOrThrow(false, LOGGER::error);
-			return new BoondollarPricing(Ingredient.fromJson(json.get("ingredient")), priceProvider);
+			return new BoondollarPricing(Ingredient.fromJson(json.get("ingredient"), false), priceProvider);
 		}
 		
 		@Override
 		public JsonElement serialize(BoondollarPricing pricing, Type type, JsonSerializationContext context)
 		{
 			JsonObject json = new JsonObject();
-			json.add("ingredient", pricing.ingredient.toJson());
+			json.add("ingredient", Ingredient.CODEC_NONEMPTY.encodeStart(JsonOps.INSTANCE, pricing.ingredient).getOrThrow(false, LOGGER::error));
 			json.add("range", IntProvider.CODEC.encodeStart(JsonOps.INSTANCE, pricing.priceRange).getOrThrow(false, LOGGER::error));
 			return json;
 		}

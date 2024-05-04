@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_chalk",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_chalk"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:chalk_button"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

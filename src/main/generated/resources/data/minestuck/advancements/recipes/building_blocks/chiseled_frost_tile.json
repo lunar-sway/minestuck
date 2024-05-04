@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_frost_tile_slab",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_frost_tile_slab"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:chiseled_frost_tile"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

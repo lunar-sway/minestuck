@@ -9,7 +9,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 
@@ -26,16 +27,15 @@ public abstract class MachineProcessBlock extends MachineBlock
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
-			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if(blockEntity instanceof MachineProcessBlockEntity)
+			@SuppressWarnings("DataFlowIssue")
+			IItemHandler itemHandler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, state, null, null);
+			
+			if(itemHandler != null)
 			{
-				blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler ->
-				{
-					for(int i = 0; i < handler.getSlots(); i++)
-						Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
-				});
-				level.updateNeighbourForOutputSignal(pos, this);
+				for(int i = 0; i < itemHandler.getSlots(); i++)
+					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
 			}
+			level.updateNeighbourForOutputSignal(pos, this);
 			
 			super.onRemove(state, level, pos, newState, isMoving);
 		}

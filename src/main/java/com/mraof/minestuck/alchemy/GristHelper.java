@@ -7,10 +7,11 @@ import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.List;
 import java.util.Map;
@@ -45,10 +46,8 @@ public class GristHelper
 	 */
 	public static GristType getSecondaryGrist(RandomSource random, GristType primary)
 	{
-		List<GristType> secondaryTypes = primary.getSecondaryTypes();
-		if(secondaryTypes.size() > 0)
-			return secondaryTypes.get(random.nextInt(secondaryTypes.size()));
-		else return primary;
+		return primary.getSecondaryTypes().flatMap(set -> set.getRandomElement(random).map(Holder::value))
+				.orElse(primary);
 	}
 	
 	
@@ -66,8 +65,8 @@ public class GristHelper
 		set.add(primary, (int) (1 * multiplier + random.nextDouble() * 9 * multiplier));
 		set.add(secondary, (int) (0.5 * multiplier + random.nextDouble() * 4 * multiplier));
 		
-		GristDropsEvent event = new GristDropsEvent(entity, damageMap, set, primary, secondary, multiplier);
-		if(MinecraftForge.EVENT_BUS.post(event))
+		GristDropsEvent event = NeoForge.EVENT_BUS.post(new GristDropsEvent(entity, damageMap, set, primary, secondary, multiplier));
+		if(event.isCanceled())
 			return null;
 		
 		return event.getNewDrops();

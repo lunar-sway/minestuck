@@ -43,9 +43,9 @@ public final class PredefineData
 	{
 		title = Title.tryRead(nbt, "title");
 		if(nbt.contains("landTerrain", Tag.TAG_STRING))
-			terrainLandType = LandTypes.TERRAIN_REGISTRY.get().getValue(ResourceLocation.tryParse(nbt.getString("landTerrain")));
+			terrainLandType = LandTypes.TERRAIN_REGISTRY.get(ResourceLocation.tryParse(nbt.getString("landTerrain")));
 		if(nbt.contains("landTitle", Tag.TAG_STRING))
-			titleLandType = LandTypes.TITLE_REGISTRY.get().getValue(ResourceLocation.tryParse(nbt.getString("landTitle")));
+			titleLandType = LandTypes.TITLE_REGISTRY.get(ResourceLocation.tryParse(nbt.getString("landTitle")));
 		
 		return this;
 	}
@@ -56,9 +56,9 @@ public final class PredefineData
 		if(title != null)
 			title.write(nbt, "title");
 		if(terrainLandType != null)
-			nbt.putString("landTerrain", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType).toString());
+			nbt.putString("landTerrain", LandTypes.TERRAIN_REGISTRY.getKey(terrainLandType).toString());
 		if(titleLandType != null)
-			nbt.putString("landTitle", LandTypes.TITLE_REGISTRY.get().getKey(titleLandType).toString());
+			nbt.putString("landTitle", LandTypes.TITLE_REGISTRY.getKey(titleLandType).toString());
 		
 		return nbt;
 	}
@@ -82,7 +82,7 @@ public final class PredefineData
 		
 		if(terrainLandType != null && !landType.isAspectCompatible(terrainLandType))
 		{
-			source.sendSuccess(() -> Component.translatable(RESETTING_TERRAIN_TYPE, LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType)).withStyle(ChatFormatting.YELLOW), true);
+			source.sendSuccess(() -> Component.translatable(RESETTING_TERRAIN_TYPE, LandTypes.TERRAIN_REGISTRY.getKey(terrainLandType)).withStyle(ChatFormatting.YELLOW), true);
 			terrainLandType = null;
 		}
 		this.titleLandType = landType;
@@ -137,8 +137,8 @@ public final class PredefineData
 			}
 			
 			if(previous == null)
-				source.sendSuccess(() -> Component.translatable(GENERATED_TITLE_LAND, LandTypes.TITLE_REGISTRY.get().getKey(titleLandType)), true);
-			else source.sendSuccess(() -> Component.translatable(CHANGED_TITLE_LAND, LandTypes.TITLE_REGISTRY.get().getKey(previous), LandTypes.TITLE_REGISTRY.get().getKey(titleLandType)).withStyle(ChatFormatting.YELLOW), true);
+				source.sendSuccess(() -> Component.translatable(GENERATED_TITLE_LAND, LandTypes.TITLE_REGISTRY.getKey(titleLandType)), true);
+			else source.sendSuccess(() -> Component.translatable(CHANGED_TITLE_LAND, LandTypes.TITLE_REGISTRY.getKey(previous), LandTypes.TITLE_REGISTRY.getKey(titleLandType)).withStyle(ChatFormatting.YELLOW), true);
 		}
 	}
 	

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_mind_aspect_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mind_aspect_planks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:mind_aspect_button"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

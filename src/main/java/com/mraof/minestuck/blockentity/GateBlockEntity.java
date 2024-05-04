@@ -2,6 +2,7 @@ package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.GateHandler;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -13,6 +14,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GateBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlayer>
 {
 	//Only used client-side
@@ -36,12 +41,6 @@ public class GateBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlay
 	{
 		if(level instanceof ServerLevel serverLevel)
 			GateHandler.teleport(gateType, serverLevel, player);
-	}
-	
-	@Override
-	public AABB getRenderBoundingBox()
-	{
-		return new AABB(this.getBlockPos().offset(-1, 0, -1), this.getBlockPos().offset(1, 1, 1));
 	}
 	
 	@Override

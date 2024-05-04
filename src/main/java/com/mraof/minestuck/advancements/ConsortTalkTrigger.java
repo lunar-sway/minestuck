@@ -1,28 +1,27 @@
 package com.mraof.minestuck.advancements;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigger.Instance>
 {
-	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "consort_talk");
-	
 	@Override
-	public ResourceLocation getId()
+	public Codec<Instance> codec()
 	{
-		return ID;
-	}
-	
-	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
-	{
-		String message = json.has("message") ? GsonHelper.getAsString(json, "message") : null;
-		return new Instance(predicate, message);
+		return Instance.CODEC;
 	}
 	
 	public void trigger(ServerPlayer player, String message, ConsortEntity consort)
@@ -30,39 +29,26 @@ public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigge
 		trigger(player, instance -> instance.test(message));
 	}
 	
-	public static class Instance extends AbstractCriterionTriggerInstance
+	public record Instance(Optional<ContextAwarePredicate> player, Optional<String> message) implements SimpleCriterionTrigger.SimpleInstance
 	{
-		private final String message;
-		public Instance(ContextAwarePredicate predicate, String message)
+		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
+				ExtraCodecs.strictOptionalField(Codec.STRING, "message").forGetter(Instance::message)
+		).apply(instance, Instance::new));
+		
+		public static Criterion<Instance> any()
 		{
-			super(ID, predicate);
-			this.message = message;
+			return MSCriteriaTriggers.CONSORT_TALK.get().createCriterion(new Instance(Optional.empty(), Optional.empty()));
 		}
 		
-		public static Instance any()
+		public static Criterion<Instance> forMessage(String message)
 		{
-			return forMessage(null);
-		}
-		
-		public static Instance forMessage(String message)
-		{
-			return new Instance(ContextAwarePredicate.ANY, message);
+			return MSCriteriaTriggers.CONSORT_TALK.get().createCriterion(new Instance(Optional.empty(), Optional.of(message)));
 		}
 		
 		public boolean test(String message)
 		{
-			return this.message == null || this.message.equals(message);
-		}
-		
-		@Override
-		public JsonObject serializeToJson(SerializationContext context)
-		{
-			JsonObject json = super.serializeToJson(context);
-			if(message != null)
-				json.addProperty("message", message);
-			
-			return json;
+			return this.message.isEmpty() || this.message.get().equals(message);
 		}
 	}
-	
 }

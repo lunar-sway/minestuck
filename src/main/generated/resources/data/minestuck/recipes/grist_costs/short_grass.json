@@ -4,6 +4,6 @@
     "minestuck:build": 1
   },
   "ingredient": {
-    "item": "minecraft:grass"
+    "item": "minecraft:short_grass"
   }
 }

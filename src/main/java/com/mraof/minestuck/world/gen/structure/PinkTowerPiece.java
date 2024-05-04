@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import net.minecraftforge.common.world.PieceBeardifierModifier;
+import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
 
 public final class PinkTowerPiece extends TemplateStructurePiece implements PieceBeardifierModifier
 {

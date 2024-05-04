@@ -166,7 +166,12 @@ public final class SkaianetData extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(nbt -> new SkaianetData(server, nbt), () -> new SkaianetData(MinestuckConfig.SERVER.globalSession.get(), server), DATA_NAME);
+		return storage.computeIfAbsent(factory(server), DATA_NAME);
+	}
+	
+	private static Factory<SkaianetData> factory(MinecraftServer mcServer)
+	{
+		return new Factory<>(() -> new SkaianetData(MinestuckConfig.SERVER.globalSession.get(), mcServer), nbt -> new SkaianetData(mcServer, nbt));
 	}
 	
 	// Always save skaianet data, since it's difficult to reliably tell when skaianet data has changed.

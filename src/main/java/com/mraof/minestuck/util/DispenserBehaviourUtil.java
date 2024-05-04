@@ -2,7 +2,7 @@ package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.world.item.DispensibleContainerItem;
 import net.minecraft.world.item.ItemStack;
@@ -29,8 +29,8 @@ public class DispenserBehaviourUtil
 		protected ItemStack execute(BlockSource source, ItemStack stack)
 		{
 			DispensibleContainerItem item = (DispensibleContainerItem) stack.getItem();
-			BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
-			Level level = source.getLevel();
+			BlockPos blockpos = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
+			Level level = source.level();
 			if (item.emptyContents(null, level, blockpos, null, stack)) {
 				item.checkExtraContent(null, level, stack, blockpos);
 				return Items.BUCKET.getDefaultInstance();

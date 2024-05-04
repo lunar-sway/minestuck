@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_cast_iron",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cast_iron"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:cast_iron_pressure_plate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -5,12 +5,12 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.LogicalSide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,7 +144,7 @@ public class TreeModus extends Modus
 		}
 		
 		if(id == 0)
-			MSCriteriaTriggers.TREE_MODUS_ROOT.trigger(player, node.getSize());
+			MSCriteriaTriggers.TREE_MODUS_ROOT.get().trigger(player, node.getSize());
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
 		markDirty();
@@ -274,7 +274,7 @@ public class TreeModus extends Modus
 		
 		private String itemToString()
 		{
-			ResourceLocation name = ForgeRegistries.ITEMS.getKey(stack.getItem());
+			ResourceLocation name = BuiltInRegistries.ITEM.getKey(stack.getItem());
 			if(name == null)
 				throw new IllegalStateException("Item "+stack.getItem()+" does not have a registry name, but ended up in a tree modus!");
 			return name.getPath()+":"+name.getNamespace();	//Don't want the items to be sorted mod-wise.

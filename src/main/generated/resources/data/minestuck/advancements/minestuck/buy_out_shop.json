@@ -2,21 +2,16 @@
   "parent": "minestuck:minestuck/commune",
   "criteria": {
     "buy_everything": {
-      "conditions": {},
       "trigger": "minestuck:buy_out_shop"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.buy_out_shop.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:cone_of_flies"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.buy_out_shop.title"
     }

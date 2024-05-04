@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
@@ -213,7 +213,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		{
 			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
 			if(instance != null)
-				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING);
+				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING.getId());
 		}
 	}
 }

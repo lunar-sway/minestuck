@@ -1,11 +1,8 @@
 package com.mraof.minestuck.entity;
 
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerCursorPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
@@ -13,8 +10,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -28,7 +25,7 @@ import java.util.Collections;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEntityAdditionalSpawnData
+public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEntityWithComplexSpawn
 {
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -87,12 +84,6 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 	}
 	
 	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-	
-	@Override
 	public void aiStep()
 	{
 		super.aiStep();
@@ -127,7 +118,7 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 	
 	//Remove linear interpolation so that the position is more immediately clear.
 	@Override
-	public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements, boolean pTeleport)
+	public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements)
 	{
 		this.setPos(pX, pY, pZ);
 		this.setRot(pYaw, pPitch);
@@ -172,7 +163,7 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 			if(!removalFlag)
 				this.despawnTimer = 0;
 			ServerCursorPacket packet = ServerCursorPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-			MSPacketHandler.sendToTracking(packet, this);
+			PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
 		} else
 			setAnimationFromPacket(animation);
 	}

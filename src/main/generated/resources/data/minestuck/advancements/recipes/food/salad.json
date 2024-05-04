@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_bowl",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_bowl"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:salad"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

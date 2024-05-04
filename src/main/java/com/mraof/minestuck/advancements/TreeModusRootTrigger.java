@@ -1,28 +1,27 @@
 package com.mraof.minestuck.advancements;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.Minestuck;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 
-import java.util.Objects;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTrigger.Instance>
 {
-	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "tree_modus_root");
-	
 	@Override
-	public ResourceLocation getId()
+	public Codec<Instance> codec()
 	{
-		return ID;
-	}
-	
-	@Override
-	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
-	{
-		MinMaxBounds.Ints count = MinMaxBounds.Ints.fromJson(json.get("count"));
-		return new Instance(predicate, count);
+		return Instance.CODEC;
 	}
 	
 	public void trigger(ServerPlayer player, int count)
@@ -30,32 +29,21 @@ public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTr
 		trigger(player, instance -> instance.test(count));
 	}
 	
-	public static class Instance extends AbstractCriterionTriggerInstance
+	public record Instance(Optional<ContextAwarePredicate> player, MinMaxBounds.Ints count) implements SimpleCriterionTrigger.SimpleInstance
 	{
-		private final MinMaxBounds.Ints count;
-		public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints count)
-		{
-			super(ID, predicate);
-			this.count = Objects.requireNonNull(count);
-		}
+		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
+				MinMaxBounds.Ints.CODEC.fieldOf("count").forGetter(Instance::count)
+		).apply(instance, Instance::new));
 		
-		public static Instance count(MinMaxBounds.Ints count)
+		public static Criterion<Instance> count(MinMaxBounds.Ints count)
 		{
-			return new Instance(ContextAwarePredicate.ANY, count);
+			return MSCriteriaTriggers.TREE_MODUS_ROOT.get().createCriterion(new Instance(Optional.empty(), count));
 		}
 		
 		public boolean test(int count)
 		{
 			return this.count.matches(count);
-		}
-		
-		@Override
-		public JsonObject serializeToJson(SerializationContext context)
-		{
-			JsonObject json = super.serializeToJson(context);
-			json.add("count", count.serializeToJson());
-			
-			return json;
 		}
 	}
 }

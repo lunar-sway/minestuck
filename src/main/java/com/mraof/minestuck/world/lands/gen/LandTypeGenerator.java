@@ -38,7 +38,7 @@ public final class LandTypeGenerator
 			return aspect;
 		else
 		{
-			LOGGER.error("No land aspect is compatible with the title aspect {}! Defaulting to null land aspect.", LandTypes.TITLE_REGISTRY.get().getKey(aspect2));
+			LOGGER.error("No land aspect is compatible with the title aspect {}! Defaulting to null land aspect.", LandTypes.TITLE_REGISTRY.getKey(aspect2));
 			return LandTypes.TERRAIN_NULL.get();
 		}
 	}

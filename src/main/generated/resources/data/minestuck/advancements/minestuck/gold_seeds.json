@@ -14,16 +14,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.gold_seeds.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:gold_seeds"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.gold_seeds.title"
     }

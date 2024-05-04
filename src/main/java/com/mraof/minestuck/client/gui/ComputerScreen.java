@@ -15,7 +15,7 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -60,9 +60,10 @@ public class ComputerScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
 		boolean bsod = be.isBroken();
 		int xOffset = (this.width / 2) - (xSize / 2);
 		int yOffset = (this.height / 2) - (ySize / 2);
@@ -72,17 +73,24 @@ public class ComputerScreen extends Screen
 		guiGraphics.blit(guiMain, xOffset, yOffset, 0, 0, xSize, ySize);
 		
 		if(bsod)
-		{
-			//blue screen of death
 			guiGraphics.blit(guiBsod, xOffset+9, yOffset+38, 0, 0, 158, 120);
-		} else
-		{
-			//desktop background
+		else
 			guiGraphics.blit(this.getTheme().data().texturePath(), xOffset + 9, yOffset + 38, 0, 0, 158, 120);
-			
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		boolean bsod = be.isBroken();
+		int xOffset = (this.width / 2) - (xSize / 2);
+		int yOffset = (this.height / 2) - (ySize / 2);
+		
+		if(!bsod)
+		{
 			//program and widgets
 			if(program != null) program.paintGui(guiGraphics, this, be);
-			super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		}
 		
 		//corner bits (goes on top of computer screen slightly)
@@ -212,6 +220,6 @@ public class ComputerScreen extends Screen
 		}
 		
 		@Override
-		public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt) { /* invisible */ }
+		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt) { /* invisible */ }
 	}
 }

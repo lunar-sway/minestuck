@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_polished_igneous_stone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_polished_igneous_stone"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:polished_igneous_wall_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

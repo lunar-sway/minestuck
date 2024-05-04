@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_mycelium_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mycelium_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:mycelium_brick_wall_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

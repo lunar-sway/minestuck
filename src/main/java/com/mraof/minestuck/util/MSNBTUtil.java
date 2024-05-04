@@ -2,12 +2,12 @@ package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -98,7 +98,7 @@ public class MSNBTUtil
 				//Turn the Strings into ResourceLocations
 				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
 				//Turn the ResourceLocations into Blocks
-				.flatMap(blockId -> Stream.ofNullable(ForgeRegistries.BLOCKS.getValue(blockId)))
+				.flatMap(blockId -> Stream.ofNullable(BuiltInRegistries.BLOCK.get(blockId)))
 				//Gather the blocks into a set
 				.collect(Collectors.toSet());
 	}
@@ -108,7 +108,7 @@ public class MSNBTUtil
 		ListTag listTag = new ListTag();
 		for(Block blockIterate : blocks)
 		{
-			String blockName = String.valueOf(ForgeRegistries.BLOCKS.getKey(blockIterate));
+			String blockName = String.valueOf(BuiltInRegistries.BLOCK.getKey(blockIterate));
 			listTag.add(StringTag.valueOf(blockName));
 		}
 		
@@ -117,7 +117,7 @@ public class MSNBTUtil
 	
 	public static boolean tryAddBlockToSet(CompoundTag nbt, String key, Block block)
 	{
-		StringTag blockIdTag = StringTag.valueOf(String.valueOf(ForgeRegistries.BLOCKS.getKey(block)));
+		StringTag blockIdTag = StringTag.valueOf(String.valueOf(BuiltInRegistries.BLOCK.getKey(block)));
 		
 		if(!nbt.contains(key, Tag.TAG_LIST))
 		{
@@ -153,7 +153,7 @@ public class MSNBTUtil
 		ResourceLocation name = tryReadResourceLocation(nbt, key);
 		if(name != null)
 		{
-			GristType type = GristTypes.getRegistry().getValue(name);
+			GristType type = GristTypes.REGISTRY.get(name);
 			if(type != null)
 				return type;
 			else

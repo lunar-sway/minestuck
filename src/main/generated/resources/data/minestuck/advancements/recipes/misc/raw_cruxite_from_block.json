@@ -34,15 +34,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_raw_cruxite",
-      "has_cruxite_block",
-      "has_the_recipe"
+      "has_cruxite_block"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:raw_cruxite_from_block"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

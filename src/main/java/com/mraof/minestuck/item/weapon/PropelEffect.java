@@ -1,10 +1,10 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.Title;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 
 public class PropelEffect implements ItemRightClickEffect
 {

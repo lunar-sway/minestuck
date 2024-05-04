@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_strawberry_chunks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_strawberry_chunks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:strawberry"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.PlantType;
+import net.neoforged.neoforge.common.PlantType;
 
 public class GlowingMushroomBlock extends BushBlock
 {
@@ -21,6 +22,12 @@ public class GlowingMushroomBlock extends BushBlock
 	public GlowingMushroomBlock(Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Override
+	protected MapCodec<GlowingMushroomBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

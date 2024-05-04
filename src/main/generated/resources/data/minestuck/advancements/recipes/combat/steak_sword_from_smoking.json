@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_beef_sword",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_beef_sword"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:steak_sword_from_smoking"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

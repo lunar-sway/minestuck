@@ -1,17 +1,16 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ThemeSelectPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -108,20 +107,22 @@ public class ComputerThemeScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		int xOffset = (this.width / 2) - (GUI_WIDTH / 2);
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		//TODO theme texture keeps getting placed on top
-		RenderSystem.setShaderColor(1, 1, 1, 1);
 		guiGraphics.blit(selectedTheme.data().texturePath(), xOffset + SCREEN_OFFSET_X, yOffset + SCREEN_OFFSET_Y, 0, 0, COMPUTER_SCREEN_WIDTH, COMPUTER_SCREEN_HEIGHT);
 		guiGraphics.blit(ComputerScreen.guiMain, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		guiGraphics.drawString(font, Component.translatable(SELECTED_THEME), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 8, selectedTheme.data().textColor(), false);
 		guiGraphics.drawString(font, selectedTheme.name(), xOffset + SCREEN_OFFSET_X + 8, yOffset + SCREEN_OFFSET_Y + 18, selectedTheme.data().textColor(), false);
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
@@ -173,7 +174,7 @@ public class ComputerThemeScreen extends Screen
 	{
 		if(!selectedTheme.id().equals(computer.getTheme()))
 		{
-			MSPacketHandler.sendToServer(ThemeSelectPacket.create(computer, selectedTheme.id()));
+			PacketDistributor.SERVER.noArg().send(ThemeSelectPacket.create(computer, selectedTheme.id()));
 		}
 		
 		onClose();
@@ -190,7 +191,7 @@ public class ComputerThemeScreen extends Screen
 		}
 		
 		@Override
-		public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt)
+		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt)
 		{
 		}
 	}

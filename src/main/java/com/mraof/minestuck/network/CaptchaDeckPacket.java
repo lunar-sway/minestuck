@@ -1,14 +1,18 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 
+//todo this packet should really be split into multiple packets
 public class CaptchaDeckPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("captcha_deck");
 	
 	private static final byte MODUS = 0;
 	private static final byte CAPTCHALOGUE = 1;
@@ -74,7 +78,13 @@ public class CaptchaDeckPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeByte(type);	//Packet type
 		if(type == GET)	//Take item from modus
@@ -92,7 +102,7 @@ public class CaptchaDeckPacket implements MSPacket.PlayToServer
 		}
 	}
 	
-	public static CaptchaDeckPacket decode(FriendlyByteBuf buffer)
+	public static CaptchaDeckPacket read(FriendlyByteBuf buffer)
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = buffer.readByte();

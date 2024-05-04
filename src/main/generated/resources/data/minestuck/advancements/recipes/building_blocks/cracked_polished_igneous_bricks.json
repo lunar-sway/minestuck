@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_polished_igneous_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_polished_igneous_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:cracked_polished_igneous_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -18,16 +18,13 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Optional;
@@ -108,7 +105,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 			return ItemStack.EMPTY;
 		
 		//List of all recipes that match to the current input
-		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE.get(), recipeInventory, level).stream();
+		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE.get(), recipeInventory, level).stream().map(RecipeHolder::value);
 		//Sort the stream to get non-fallback recipes first, and fallback recipes second
 		stream = stream.sorted(Comparator.comparingInt(o -> (o.isFallback() ? 1 : 0)));
 		//Let the recipe return the recipe actually used (for fallbacks), to clear out all that are not present, and then get the first
@@ -158,20 +155,16 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		return false;
 	}
 	
-	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 2, 3));
-	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2));
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			return side == Direction.DOWN ? downHandler.cast() :
-					side == Direction.UP ? upHandler.cast() : sideHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.DOWN)
+			return new RangedWrapper(itemHandler, 2, 3);
+		if(side == Direction.UP)
+			return new RangedWrapper(itemHandler, 0, 1);
+		return new RangedWrapper(itemHandler, 1, 2);
 	}
 	
 	@Nullable

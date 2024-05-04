@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_treated_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_treated_planks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:treated_planks_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

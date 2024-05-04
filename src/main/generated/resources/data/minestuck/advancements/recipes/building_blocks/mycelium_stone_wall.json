@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_mycelium_stone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mycelium_stone"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:mycelium_stone_wall"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.data.dialogue;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.MessageProducer;
-import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
+import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
+import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
@@ -15,7 +15,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.weighted;

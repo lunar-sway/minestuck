@@ -8,7 +8,6 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EntryEffectPackets;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbHandler;
@@ -39,9 +38,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -148,7 +148,7 @@ public class EntryProcess
 		
 		waitingProcess = process;
 		startTime = player.level().getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
-		MSPacketHandler.sendToAll(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
+		PacketDistributor.ALL.noArg().send(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
@@ -191,7 +191,7 @@ public class EntryProcess
 				waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
 				waitingProcess.runEntry();
 				waitingProcess = null;
-				MSPacketHandler.sendToAll(new EntryEffectPackets.Clear());
+				PacketDistributor.ALL.noArg().send(new EntryEffectPackets.Clear());
 			}
 		}
 	}

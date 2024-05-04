@@ -19,18 +19,18 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 import static com.mraof.minestuck.item.MSItems.*;
 import static com.mraof.minestuck.util.MSTags.Items.*;
 import static net.minecraft.tags.ItemTags.*;
-import static net.minecraftforge.common.Tags.Items.*;
+import static net.neoforged.neoforge.common.Tags.Items.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -154,10 +154,10 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(CASSETTES).add(MSItems.CASSETTE_MELLOHI.get(), CASSETTE_13.get(), CASSETTE_BLOCKS.get(), CASSETTE_CAT.get(), CASSETTE_CHIRP.get(), CASSETTE_FAR.get(), CASSETTE_MALL.get(), CASSETTE_DANCE_STAB.get(), CASSETTE_RETRO_BATTLE.get(), CASSETTE_EMISSARY.get(), CASSETTE_11.get(), CASSETTE_PIGSTEP.get(), CASSETTE_STAL.get(), CASSETTE_STRAD.get(), CASSETTE_WAIT.get(), CASSETTE_WARD.get(), CASSETTE_OTHERSIDE.get(), CASSETTE_5.get());
 		tag(BUGS).add(BUG_ON_A_STICK.get(), CHOCOLATE_BEETLE.get(), CONE_OF_FLIES.get(), GRASSHOPPER.get(), CICADA.get(), JAR_OF_BUGS.get());
 		tag(CONSORT_SNACKS).add(Items.COOKIE).addTag(BUGS);
-		tag(MAGIC_WEAPON).add(MSItems.REGISTER.getEntries().stream().map(RegistryObject::get).filter(item -> item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect)).toArray(Item[]::new));
+		tag(MAGIC_WEAPON).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect)).toArray(Item[]::new));
 		tag(CREATIVE_SHOCK_RIGHT_CLICK_LIMIT).add(Items.CHORUS_FRUIT);
 		tag(UNREADABLE).add(CRUEL_FATE_CRUCIBLE.get(), ROYAL_DERINGER.get(), TRANSPORTALIZER.get(), TRANS_PORTALIZER.get(), FEAR_NO_ANVIL.get(), TYPHONIC_TRIVIALIZER.get(), QUILL_OF_ECHIDNA.get(), UMBRAL_INFILTRATOR.get(), FLUORITE_OCTET.get(), CLIENT_DISK.get(), SERVER_DISK.get(), GUTTER_THUMB_DRIVE.get(), GUTTER_BALL.get(), CAPTCHA_CARD.get(), CUEBALL.get(), BLACK_QUEENS_RING.get(), WHITE_QUEENS_RING.get(), BLACK_KINGS_SCEPTER.get(), WHITE_KINGS_SCEPTER.get()).add(Items.DRAGON_EGG).add(Items.DRAGON_HEAD).add(Items.DRAGON_BREATH).add(Items.NETHER_STAR).add(Items.COMMAND_BLOCK).add(Items.COMMAND_BLOCK_MINECART).add(Items.CHAIN_COMMAND_BLOCK).add(Items.REPEATING_COMMAND_BLOCK).add(Items.END_CRYSTAL).add(Items.EXPERIENCE_BOTTLE).add(Items.ELYTRA).add(Items.TOTEM_OF_UNDYING).add(Items.BEACON).add(Items.BEDROCK).add(Items.PUMPKIN);
-		tag(LEGENDARY).add(MSItems.REGISTER.getEntries().stream().map(RegistryObject::get).filter(item -> item instanceof WeaponItem weapon && (weapon.getTier() == MSItemTypes.DENIZEN_TIER || weapon.getTier() == MSItemTypes.ZILLY_TIER || weapon.getTier() == MSItemTypes.WELSH_TIER)).toArray(Item[]::new));
+		tag(LEGENDARY).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem weapon && (weapon.getTier() == MSItemTypes.DENIZEN_TIER || weapon.getTier() == MSItemTypes.ZILLY_TIER || weapon.getTier() == MSItemTypes.WELSH_TIER)).toArray(Item[]::new));
 	}
 
 	@Override

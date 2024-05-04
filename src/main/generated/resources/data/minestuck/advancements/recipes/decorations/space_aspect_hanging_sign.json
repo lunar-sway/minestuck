@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_space_aspect_stripped_log",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_space_aspect_stripped_log"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:space_aspect_hanging_sign"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

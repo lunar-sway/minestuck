@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_frost_tile",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_frost_tile"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:frost_tile_wall"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

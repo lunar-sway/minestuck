@@ -58,8 +58,8 @@ public final class LandTypePair
 	
 	public CompoundTag write(CompoundTag nbt)
 	{
-		nbt.putString("terrain_aspect", LandTypes.TERRAIN_REGISTRY.get().getKey(terrain).toString());
-		nbt.putString("title_aspect", LandTypes.TITLE_REGISTRY.get().getKey(title).toString());
+		nbt.putString("terrain_aspect", LandTypes.TERRAIN_REGISTRY.getKey(terrain).toString());
+		nbt.putString("title_aspect", LandTypes.TITLE_REGISTRY.getKey(title).toString());
 		return nbt;
 	}
 	
@@ -67,8 +67,8 @@ public final class LandTypePair
 	{
 		String terrainName = nbt.getString("terrain_aspect");
 		String titleName = nbt.getString("title_aspect");
-		TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.get().getValue(new ResourceLocation(terrainName));
-		TitleLandType title = LandTypes.TITLE_REGISTRY.get().getValue(new ResourceLocation(titleName));
+		TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.get(new ResourceLocation(terrainName));
+		TitleLandType title = LandTypes.TITLE_REGISTRY.get(new ResourceLocation(titleName));
 		Objects.requireNonNull(terrain, "Could not find terrain land aspect by name " + terrainName);
 		Objects.requireNonNull(title, "Could not find title land aspect by name " + titleName);
 		

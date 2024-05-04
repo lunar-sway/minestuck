@@ -1,8 +1,10 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,6 +14,8 @@ import java.util.Optional;
 
 public class RemoteObserverPacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("remote_observer");
+	
 	private final RemoteObserverBlockEntity.ActiveType activeType;
 	private final BlockPos beBlockPos;
 	private final EntityType<?> entityType;
@@ -26,7 +30,13 @@ public class RemoteObserverPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(activeType);
 		buffer.writeInt(observingRange);
@@ -39,7 +49,7 @@ public class RemoteObserverPacket implements MSPacket.PlayToServer
 		
 	}
 	
-	public static RemoteObserverPacket decode(FriendlyByteBuf buffer)
+	public static RemoteObserverPacket read(FriendlyByteBuf buffer)
 	{
 		RemoteObserverBlockEntity.ActiveType activeType = buffer.readEnum(RemoteObserverBlockEntity.ActiveType.class);
 		int observingRange = buffer.readInt();

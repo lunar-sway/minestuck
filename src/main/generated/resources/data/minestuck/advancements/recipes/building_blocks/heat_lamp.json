@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_polished_igneous_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_polished_igneous_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:heat_lamp"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

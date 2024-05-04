@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.blockentity.machine.IOwnable;
 import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
+import com.mraof.minestuck.player.IdentifierHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class SmallMachineBlock<T extends MachineProcessBlockEntity> extends Mach
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if(!level.isClientSide)
+		if(player instanceof ServerPlayer serverPlayer)
 		{
 			BlockEntity blockEntity = level.getBlockEntity(pos);
 			if(blockEntity != null && blockEntity.getType() == this.entityType.get())
@@ -57,7 +56,7 @@ public class SmallMachineBlock<T extends MachineProcessBlockEntity> extends Mach
 				if(blockEntity instanceof IOwnable ownable)
 					ownable.setOwner(IdentifierHandler.encode(player));
 				if(blockEntity instanceof MenuProvider menuProvider)
-					NetworkHooks.openScreen((ServerPlayer) player, menuProvider, pos);
+					serverPlayer.openMenu(menuProvider, pos);
 			}
 		}
 		return InteractionResult.sidedSuccess(level.isClientSide);

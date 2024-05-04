@@ -2,7 +2,6 @@
   "parent": "minestuck:minestuck/entry",
   "criteria": {
     "talk_to_consort": {
-      "conditions": {},
       "trigger": "minestuck:consort_talk"
     },
     "visit_village": {
@@ -23,16 +22,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.commune.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:stone_tablet"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.commune.title"
     }

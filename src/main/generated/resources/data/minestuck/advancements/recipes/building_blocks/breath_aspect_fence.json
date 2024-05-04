@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_breath_aspect_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_breath_aspect_planks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:breath_aspect_fence"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_cast_iron_tile",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cast_iron_tile"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:cast_iron_tile_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -2,12 +2,12 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.computer.editmode.DeployList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.*;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.*;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class MinestuckConfig
 		
 		public final IntValue entryDelay;
 		
-		private Common(ForgeConfigSpec.Builder builder)
+		private Common(ModConfigSpec.Builder builder)
 		{
 			builder.comment("If you're looking for a config option that isn't here, try looking in the world-specific config").push("logging");
 			logIngredientItemsWithoutCosts = builder.comment("Makes the recipe-generated grist cost process log any items that are used as recipe ingredients, but is neither the output of a different recipe, or has a grist cost. Useful for finding items that probably need manual grist costs.")
@@ -229,30 +229,30 @@ public class MinestuckConfig
 		}
 	}
 	
-	static final ForgeConfigSpec commonSpec;
+	static final ModConfigSpec commonSpec;
 	public static final Common COMMON;
 	static
 	{
-		Pair<Common, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Common::new);
+		Pair<Common, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Common::new);
 		COMMON = pair.getLeft();
 		commonSpec = pair.getRight();
 	}
 	
-	static final ForgeConfigSpec clientSpec;
+	static final ModConfigSpec clientSpec;
 	public static final Client CLIENT;
 	static
 	{
-		Pair<Client, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Client::new);
+		Pair<Client, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Client::new);
 		CLIENT = pair.getLeft();
 		clientSpec = pair.getRight();
 	}
 	
 	
-	static final ForgeConfigSpec serverSpec;
+	static final ModConfigSpec serverSpec;
 	public static final Server SERVER;
 	static
 	{
-		Pair<Server, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Server::new);
+		Pair<Server, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Server::new);
 		SERVER = pair.getLeft();
 		serverSpec = pair.getRight();
 	}

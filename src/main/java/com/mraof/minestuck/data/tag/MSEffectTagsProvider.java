@@ -4,14 +4,14 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -30,7 +30,7 @@ public class MSEffectTagsProvider extends IntrinsicHolderTagsProvider<MobEffect>
 	
 	private static ResourceKey<MobEffect> keyForMobEffects(MobEffect landType)
 	{
-		return ForgeRegistries.MOB_EFFECTS.getResourceKey(landType).orElseThrow();
+		return BuiltInRegistries.MOB_EFFECT.getResourceKey(landType).orElseThrow();
 	}
 	
 	@SuppressWarnings("DataFlowIssue")
@@ -46,9 +46,9 @@ public class MSEffectTagsProvider extends IntrinsicHolderTagsProvider<MobEffect>
 		ignoredEffects.add(MobEffects.UNLUCK);
 		
 		//includes all Vanilla potion effects except ones in list above
-		ForgeRegistries.MOB_EFFECTS.forEach(mobEffect ->
+		BuiltInRegistries.MOB_EFFECT.forEach(mobEffect ->
 		{
-			if(ForgeRegistries.MOB_EFFECTS.getKey(mobEffect).getNamespace().equals("minecraft") && !ignoredEffects.contains(mobEffect))
+			if(BuiltInRegistries.MOB_EFFECT.getKey(mobEffect).getNamespace().equals("minecraft") && !ignoredEffects.contains(mobEffect))
 				this.tag(MSTags.Effects.SOPOR_SICKNESS_WHITELIST).add(mobEffect);
 		});
 	}

@@ -3,8 +3,8 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.blockentity.machine.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.machine.IntellibeamLaserstationBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -65,14 +65,14 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 	}
 	
 	@Override
-	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
 		if(!level.isClientSide && level.getBlockEntity(pos) instanceof IntellibeamLaserstationBlockEntity intellibeamEntity)
 		{
 			intellibeamEntity.dropCard(true, level, pos, intellibeamEntity.getAnalyzedCard());
 		}
 		
-		super.playerWillDestroy(level, pos, state, player);
+		return super.playerWillDestroy(level, pos, state, player);
 	}
 	
 	@Override

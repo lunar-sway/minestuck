@@ -26,16 +26,11 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
-import net.minecraftforge.registries.ForgeRegistry;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
@@ -51,13 +46,13 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		@Override
 		public int get()
 		{
-			return ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getID(getWildcardGrist());
+			return GristTypes.REGISTRY.getId(getWildcardGrist());
 		}
 		
 		@Override
 		public void set(int id)
 		{
-			GristType type = ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getValue(id);
+			GristType type = GristTypes.REGISTRY.byId(id);
 			if(type == null)
 				type = GristTypes.BUILD.get();
 			setWildcardGrist(type);
@@ -117,7 +112,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		if(GristCache.get(level, owner).tryTake(cost, GristHelper.EnumSource.CLIENT))
 		{
 			AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
-			MinecraftForge.EVENT_BUS.post(event);
+			NeoForge.EVENT_BUS.post(event);
 			newItem = event.getItemResult();
 			ItemStack existing = itemHandler.getStackInSlot(OUTPUT);
 			if(!existing.isEmpty())
@@ -175,18 +170,14 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		return Component.translatable(TITLE);
 	}
 	
-	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, INPUT, INPUT + 1));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, OUTPUT, OUTPUT + 1));
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			return side == Direction.DOWN ? downHandler.cast() : sideHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.DOWN)
+			return new RangedWrapper(this.itemHandler, OUTPUT, OUTPUT + 1);
+		return new RangedWrapper(this.itemHandler, INPUT, INPUT + 1);
 	}
 	
 	public int comparatorValue()

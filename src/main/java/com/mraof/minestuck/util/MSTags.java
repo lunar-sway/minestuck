@@ -4,6 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -17,10 +20,8 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -232,11 +233,11 @@ public class MSTags
 	
 	public static Set<Block> getBlocksFromTag(TagKey<Block> blockTag)
 	{
-		return Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(blockTag).stream().collect(Collectors.toSet());
+		return BuiltInRegistries.BLOCK.getTag(blockTag).stream().flatMap(HolderSet.ListBacked::stream).map(Holder::value).collect(Collectors.toSet());
 	}
 	
 	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)
 	{
-		return ForgeRegistries.ITEMS.tags().getTag(itemTag).stream().map(ItemStack::new).toList();
+		return BuiltInRegistries.ITEM.getTag(itemTag).stream().flatMap(HolderSet.ListBacked::stream).map(ItemStack::new).toList();
 	}
 }

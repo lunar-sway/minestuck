@@ -4,18 +4,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristWildcardPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GristSelectorScreen extends MinestuckScreen
 {
@@ -50,23 +47,29 @@ public class GristSelectorScreen extends MinestuckScreen
 		this.nextButton = addRenderableWidget(new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, Component.literal(">"), button -> nextPage()));
 		
 		previousButton.visible = false;
-		nextButton.visible = GristTypes.getRegistry().getValues().size() > rows * columns;
+		nextButton.visible = GristTypes.REGISTRY.size() > rows * columns;
+	}
+	
+	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		int xOffset = (width - guiWidth) / 2;
+		int yOffset = (height - guiHeight) / 2;
+		guiGraphics.blit(guiGristcache, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
 
-		this.renderBackground(guiGraphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiGristcache, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
-
 		String cacheMessage = I18n.get(SELECT_GRIST);
 		guiGraphics.drawString(font, cacheMessage, (this.width / 2F) - minecraft.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.disableDepthTest();
@@ -88,10 +91,8 @@ public class GristSelectorScreen extends MinestuckScreen
 		{
 			int xOffset = (width - guiWidth) / 2;
 			int yOffset = (height - guiHeight) / 2;
-
-			List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
-			Collections.sort(types);
-			types = types.stream().skip(page * rows * columns).limit(rows * columns).collect(Collectors.toList());
+			
+			List<GristType> types = GristTypes.REGISTRY.stream().sorted().skip(page * rows * columns).limit(rows * columns).toList();
 
 			int offset = 0;
 			for (GristType type : types)
@@ -103,7 +104,7 @@ public class GristSelectorScreen extends MinestuckScreen
 				if (isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
 					this.onClose();
-					MSPacketHandler.INSTANCE.sendToServer(new GristWildcardPacket(gristHolderPos, type));
+					PacketDistributor.SERVER.noArg().send(new GristWildcardPacket(gristHolderPos, type));
 					return true;
 				}
 				offset++;
@@ -131,7 +132,7 @@ public class GristSelectorScreen extends MinestuckScreen
 	
 	private void nextPage()
 	{
-		int maxPage = (GristTypes.getRegistry().getValues().size() - 1) / (rows * columns);
+		int maxPage = (GristTypes.REGISTRY.size() - 1) / (rows * columns);
 		if(page < maxPage)
 		{
 			page++;

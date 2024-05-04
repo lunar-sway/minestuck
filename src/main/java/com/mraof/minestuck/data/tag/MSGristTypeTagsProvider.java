@@ -9,7 +9,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -28,7 +28,7 @@ public final class MSGristTypeTagsProvider extends IntrinsicHolderTagsProvider<G
 	
 	private static ResourceKey<GristType> keyForGristType(GristType gristType)
 	{
-		return GristTypes.getRegistry().getResourceKey(gristType).orElseThrow();
+		return GristTypes.REGISTRY.getResourceKey(gristType).orElseThrow();
 	}
 	
 	@Override

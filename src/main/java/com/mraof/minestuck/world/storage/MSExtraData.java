@@ -122,7 +122,7 @@ public class MSExtraData extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(MSExtraData::load, MSExtraData::new, DATA_NAME);
+		return storage.computeIfAbsent(new Factory<>(MSExtraData::new, MSExtraData::load), DATA_NAME);
 	}
 	
 	public EditData findEditData(Predicate<EditData> condition)

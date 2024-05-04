@@ -4,15 +4,19 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.mraof.minestuck.blockentity.GateBlockEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
+@MethodsReturnNonnullByDefault
 public class GateRenderer implements BlockEntityRenderer<GateBlockEntity>
 {
 	private static final ResourceLocation TEXTURE = ReturnNodeRenderer.INNER_NODE;
@@ -53,5 +57,12 @@ public class GateRenderer implements BlockEntityRenderer<GateBlockEntity>
 	public int getViewDistance()
 	{
 		return 256;
+	}
+	
+	@Override
+	public AABB getRenderBoundingBox(GateBlockEntity blockEntity)
+	{
+		Vec3 corner = Vec3.atLowerCornerOf(blockEntity.getBlockPos().offset(-1, 0, -1));
+		return new AABB(corner, corner.add(3, 1, 3));
 	}
 }

@@ -1,13 +1,13 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Objects;
 
@@ -84,7 +84,7 @@ public abstract class Modus
 	{
 		if(needResend)
 		{
-			MSPacketHandler.sendToPlayer(ModusDataPacket.create(this), player);
+			PacketDistributor.PLAYER.with(player).send(ModusDataPacket.create(this));
 			needResend = false;
 		}
 	}

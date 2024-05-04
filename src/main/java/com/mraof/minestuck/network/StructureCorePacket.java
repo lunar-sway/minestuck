@@ -1,15 +1,19 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.redstone.StructureCoreBlock;
 import com.mraof.minestuck.blockentity.redstone.StructureCoreBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class StructureCorePacket implements MSPacket.PlayToServer
 {
+	public static final ResourceLocation ID = Minestuck.id("structure_core");
+	
 	private final StructureCoreBlockEntity.ActionType actionType;
 	private final int shutdownRange;
 	private final BlockPos beBlockPos;
@@ -22,14 +26,20 @@ public class StructureCorePacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(actionType);
 		buffer.writeInt(shutdownRange);
 		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static StructureCorePacket decode(FriendlyByteBuf buffer)
+	public static StructureCorePacket read(FriendlyByteBuf buffer)
 	{
 		StructureCoreBlockEntity.ActionType actionType = buffer.readEnum(StructureCoreBlockEntity.ActionType.class);
 		int summonRange = buffer.readInt();

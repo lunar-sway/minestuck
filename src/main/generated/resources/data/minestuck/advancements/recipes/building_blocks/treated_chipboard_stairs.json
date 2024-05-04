@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_treated_chipboard",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_treated_chipboard"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:treated_chipboard_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

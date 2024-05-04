@@ -14,7 +14,7 @@ public interface ImmutableGristSet extends GristSet
 	 * Codec for serializing a grist set in a map format. Currently used for json serialization.
 	 * Perhaps we should prefer this format for nbt-serialization as well? Something worth considering for the future.
 	 */
-	Codec<ImmutableGristSet> MAP_CODEC = Codec.unboundedMap(GristTypes.getRegistry().getCodec(), Codec.LONG).xmap(DefaultImmutableGristSet::new, ImmutableGristSet::asMap);
+	Codec<ImmutableGristSet> MAP_CODEC = Codec.unboundedMap(GristTypes.REGISTRY.byNameCodec(), Codec.LONG).xmap(DefaultImmutableGristSet::new, ImmutableGristSet::asMap);
 	Codec<ImmutableGristSet> LIST_CODEC = GristAmount.LIST_CODEC.xmap(DefaultImmutableGristSet::create, ImmutableGristSet::asAmounts);
 	
 	@Override

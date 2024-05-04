@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_clock",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_clock"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:redstone_clock"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

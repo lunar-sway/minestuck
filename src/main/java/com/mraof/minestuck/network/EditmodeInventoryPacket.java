@@ -1,9 +1,11 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 public class EditmodeInventoryPacket implements MSPacket.PlayToBoth
 {
+	public static final ResourceLocation ID = Minestuck.id("editmode_inventory");
 	
 	private final boolean b1, b2;
 	private final List<ItemStack> inventory;
@@ -34,7 +37,13 @@ public class EditmodeInventoryPacket implements MSPacket.PlayToBoth
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(b1);
 		if(inventory != null)
@@ -45,7 +54,7 @@ public class EditmodeInventoryPacket implements MSPacket.PlayToBoth
 		}
 	}
 	
-	public static EditmodeInventoryPacket decode(FriendlyByteBuf buffer)
+	public static EditmodeInventoryPacket read(FriendlyByteBuf buffer)
 	{
 		boolean b1 = buffer.readBoolean();
 		if(buffer.readableBytes() > 0)

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_mossy_chalk_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mossy_chalk_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:mossy_chalk_brick_wall"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

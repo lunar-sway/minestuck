@@ -10,6 +10,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +25,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
@@ -88,7 +88,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 				waitTimer = 10;
 			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
 			{
-				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.trigger((ServerPlayer) player, AlchemyHelper.getDecodedItem(analyzedCard));
+				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player, AlchemyHelper.getDecodedItem(analyzedCard));
 				applyReadableNBT(analyzedCard);
 				takeCard(player);
 				
@@ -207,7 +207,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			ResourceLocation itemId = ResourceLocation.tryParse(itemName);
 			if(itemId == null)
 				continue;
-			Item item = ForgeRegistries.ITEMS.getValue(itemId);
+			Item item = BuiltInRegistries.ITEM.get(itemId);
 			if(item == null)
 				continue;
 			decodingProgress.put(item, progressData.getInt(itemName));
@@ -223,7 +223,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		CompoundTag progressData = new CompoundTag();
 		for(Map.Entry<Item, Integer> entry : decodingProgress.entrySet())
 		{
-			String itemName = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(entry.getKey())).toString();
+			String itemName = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(entry.getKey())).toString();
 			progressData.putInt(itemName, entry.getValue());
 		}
 		compound.put("decoding_progress", progressData);

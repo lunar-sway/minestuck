@@ -5,7 +5,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import commoble.infiniverse.api.InfiniverseAPI;
+import net.commoble.infiniverse.api.InfiniverseAPI;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;

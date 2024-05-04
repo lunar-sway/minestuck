@@ -23,7 +23,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -126,7 +126,7 @@ public final class SburbHandler
 				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), terrainLandType, skaianetData);
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
-					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType));
+					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.getKey(terrainLandType));
 					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), null, skaianetData);
 				}
 			}
@@ -179,7 +179,7 @@ public final class SburbHandler
 		
 		SessionHandler.get(server).getOrCreateSession(playerData.playerId()).checkIfCompleted();
 		
-		MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
+		MSCriteriaTriggers.CRUXITE_ARTIFACT.get().trigger(player);
 		
 		EditmodeLocations.onEntry(server, playerData.playerId());
 		
@@ -193,7 +193,7 @@ public final class SburbHandler
 		player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
 		player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponentWithLandFont()));
 		
-		MinecraftForge.EVENT_BUS.post(new OnEntryEvent(server, playerId));
+		NeoForge.EVENT_BUS.post(new OnEntryEvent(server, playerId));
 	}
 	
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)

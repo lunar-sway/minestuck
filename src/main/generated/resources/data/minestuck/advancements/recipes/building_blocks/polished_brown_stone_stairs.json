@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_polished_brown_stone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_polished_brown_stone"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:polished_brown_stone_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

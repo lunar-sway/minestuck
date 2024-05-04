@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_end_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_end_planks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:end_pressure_plate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

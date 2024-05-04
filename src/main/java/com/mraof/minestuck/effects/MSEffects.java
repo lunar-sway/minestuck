@@ -1,21 +1,22 @@
 package com.mraof.minestuck.effects;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 /**
  * This is an adapted version of Cibernet's code in Minestuck Universe, credit goes to him!
  */
 public class MSEffects
 {
-	public static final DeferredRegister<MobEffect> REGISTER = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Minestuck.MOD_ID);
+	public static final DeferredRegister<MobEffect> REGISTER = DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, Minestuck.MOD_ID);
 	
-	public static final RegistryObject<CreativeShockEffect> CREATIVE_SHOCK = REGISTER.register("creative_shock", CreativeShockEffect::new);
+	public static final Supplier<CreativeShockEffect> CREATIVE_SHOCK = REGISTER.register("creative_shock", CreativeShockEffect::new);
 	
-	public static final RegistryObject<SuspicionEffect> SUSPICION = REGISTER.register("suspicion", SuspicionEffect::new);
+	public static final Supplier<SuspicionEffect> SUSPICION = REGISTER.register("suspicion", SuspicionEffect::new);
 	
-	public static final RegistryObject<SoporSicknessEffect> SOPOR_SICKNESS = REGISTER.register("sopor_sickness", SoporSicknessEffect::new);
+	public static final Supplier<SoporSicknessEffect> SOPOR_SICKNESS = REGISTER.register("sopor_sickness", SoporSicknessEffect::new);
 }

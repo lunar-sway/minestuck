@@ -1,8 +1,7 @@
 package com.mraof.minestuck.event;
 
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.eventbus.api.Event;
-
+import net.neoforged.bus.api.Event;
 import java.util.List;
 
 public class UnderlingSpawnListEvent extends Event

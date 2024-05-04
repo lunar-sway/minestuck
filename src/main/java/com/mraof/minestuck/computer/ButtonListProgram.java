@@ -3,7 +3,6 @@ package com.mraof.minestuck.computer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -11,7 +10,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -52,7 +52,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		if(data != null)
 		{
 			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
-				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
+				PacketDistributor.SERVER.noArg().send(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
 			onButtonPressed(screen.be, data.string, data.formatData);
 		}
 		screen.updateGui();

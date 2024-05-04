@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_brown_stone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_brown_stone"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:brown_stone_wall"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

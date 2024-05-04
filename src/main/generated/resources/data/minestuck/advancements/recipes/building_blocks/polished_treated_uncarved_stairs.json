@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_polished_treated_carved_wood",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_polished_treated_carved_wood"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:polished_treated_uncarved_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

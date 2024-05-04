@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_card",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_card"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:stack_modus_card"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

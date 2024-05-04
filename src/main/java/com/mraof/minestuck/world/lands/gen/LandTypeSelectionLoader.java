@@ -14,16 +14,16 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,7 +54,7 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 	
 	private record GroupData(Either<List<ResourceLocation>, ExtraCodecs.TagOrElementLocation> value)
 	{
-		private <A> Optional<LandTypeSelection.Group<A>> lookup(IForgeRegistry<A> registry)
+		private <A> Optional<LandTypeSelection.Group<A>> lookup(Registry<A> registry)
 		{
 			return this.value.map(list -> {
 				List<A> elements = new ArrayList<>();
@@ -68,7 +68,7 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 			}, location -> {
 				if(location.tag())
 				{
-					TagKey<A> tag = TagKey.create(registry.getRegistryKey(), location.id());
+					TagKey<A> tag = TagKey.create(registry.key(), location.id());
 					return Optional.of(LandTypeSelection.Group.of(tag));
 				}
 				else
@@ -76,11 +76,11 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 			});
 		}
 		
-		private static <A> Optional<A> getOrLog(IForgeRegistry<A> registry, ResourceLocation id)
+		private static <A> Optional<A> getOrLog(Registry<A> registry, ResourceLocation id)
 		{
-			A element = registry.getValue(id);
+			A element = registry.get(id);
 			if(element == null)
-				LOGGER.error("Could not find land type for id in registry {}: {}", registry.getRegistryKey(), id);
+				LOGGER.error("Could not find land type for id in registry {}: {}", registry.key(), id);
 			return Optional.ofNullable(element);
 		}
 	}
@@ -153,7 +153,7 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 		ImmutableList.Builder<LandTypeSelection.Group<TerrainLandType>> terrainGroupsBuilder = ImmutableList.builder();
 		
 		for(GroupData terrainGroup : data.terrainTypeData())
-			terrainGroup.lookup(LandTypes.TERRAIN_REGISTRY.get()).ifPresent(terrainGroupsBuilder::add);
+			terrainGroup.lookup(LandTypes.TERRAIN_REGISTRY).ifPresent(terrainGroupsBuilder::add);
 		
 		
 		ImmutableMap.Builder<EnumAspect, List<LandTypeSelection.Group<TitleLandType>>> titleMapBuilder = ImmutableMap.builder();
@@ -163,7 +163,7 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 			ImmutableList.Builder<LandTypeSelection.Group<TitleLandType>> titleGroupsBuilder = ImmutableList.builder();
 			
 			for(GroupData titleGroup : data.titleTypeData().get(aspect))
-				titleGroup.lookup(LandTypes.TITLE_REGISTRY.get()).ifPresent(titleGroupsBuilder::add);
+				titleGroup.lookup(LandTypes.TITLE_REGISTRY).ifPresent(titleGroupsBuilder::add);
 			
 			titleMapBuilder.put(aspect, titleGroupsBuilder.build());
 		}

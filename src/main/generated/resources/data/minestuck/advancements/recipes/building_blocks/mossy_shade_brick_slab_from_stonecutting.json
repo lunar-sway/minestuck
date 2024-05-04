@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_mossy_shade_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mossy_shade_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:mossy_shade_brick_slab_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

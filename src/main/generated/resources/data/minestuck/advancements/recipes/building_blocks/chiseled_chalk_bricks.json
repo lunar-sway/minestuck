@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_chalk_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_chalk_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:chiseled_chalk_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

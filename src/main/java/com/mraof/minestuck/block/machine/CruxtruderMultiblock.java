@@ -7,8 +7,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Optional;
 
@@ -16,17 +16,17 @@ import static com.mraof.minestuck.block.MSBlockShapes.*;
 
 public class CruxtruderMultiblock extends MachineMultiblock
 {
-	public final RegistryObject<Block> CORNER = register("cruxtruder_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(1, 2, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> SIDE = register("cruxtruder_side", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(0, 2, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> CENTER = register("cruxtruder_center", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(0, 2, 0), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> TOP_CORNER = register("cruxtruder_top_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_CORNER, false, new BlockPos(1, 1, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> TOP_SIDE = register("cruxtruder_top_side", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_SIDE, false, new BlockPos(0, 1, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> TOP_CENTER = register("cruxtruder_top_center", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_CENTER, false, new BlockPos(0, 1, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> TUBE = register("cruxtruder_tube", () -> new CruxtruderBlock(this, CRUXTRUDER_TUBE, true, new BlockPos(0, 0, 0), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final DeferredBlock<Block> CORNER = register("cruxtruder_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(1, 2, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final DeferredBlock<Block> SIDE = register("cruxtruder_side", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(0, 2, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final DeferredBlock<Block> CENTER = register("cruxtruder_center", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(0, 2, 0), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final DeferredBlock<Block> TOP_CORNER = register("cruxtruder_top_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_CORNER, false, new BlockPos(1, 1, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final DeferredBlock<Block> TOP_SIDE = register("cruxtruder_top_side", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_SIDE, false, new BlockPos(0, 1, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final DeferredBlock<Block> TOP_CENTER = register("cruxtruder_top_center", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_CENTER, false, new BlockPos(0, 1, 1), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final DeferredBlock<Block> TUBE = register("cruxtruder_tube", () -> new CruxtruderBlock(this, CRUXTRUDER_TUBE, true, new BlockPos(0, 0, 0), Block.Properties.of().mapColor(MapColor.METAL).strength(3.0F, 4.5F).noLootTable()));
 	
 	private final PlacementEntry tubePlacement;
 	
-	public CruxtruderMultiblock(DeferredRegister<Block> register)
+	public CruxtruderMultiblock(DeferredRegister.Blocks register)
 	{
 		super(register);
 		addDirectionPlacement(0, 0, 0, CORNER, Direction.NORTH);
@@ -50,7 +50,7 @@ public class CruxtruderMultiblock extends MachineMultiblock
 		addDirectionPlacement(1, 1, 1, TOP_CENTER, Direction.NORTH);
 
 		tubePlacement = addDirectionPlacement(1, 2, 1, TUBE, Direction.NORTH);
-		addPlacement(1, 3, 1, MSBlocks.CRUXTRUDER_LID.lazyMap(Block::defaultBlockState), false);
+		addPlacement(1, 3, 1, () -> MSBlocks.CRUXTRUDER_LID.get().defaultBlockState(), false);
 	}
 	
 	public BlockPos getBEPos(BlockPos placementPos, Rotation rotation)

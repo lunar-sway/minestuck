@@ -4,6 +4,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.BoondollarPriceManager;
 import com.mraof.minestuck.util.BoondollarPricing;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -13,7 +14,6 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
@@ -239,13 +239,13 @@ public class BoondollarPricingProvider implements DataProvider
 	protected void add(ItemLike item, int value)
 	{
 		//Just set the name manually if this throws an exception
-		add(Ingredient.of(item), ConstantInt.of(value), Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath());
+		add(Ingredient.of(item), ConstantInt.of(value), Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath());
 	}
 	
 	protected void add(ItemLike item, int min, int max)
 	{
 		//Just set the name manually if this throws an exception
-		add(Ingredient.of(item), UniformInt.of(min, max), Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath());
+		add(Ingredient.of(item), UniformInt.of(min, max), Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath());
 	}
 	
 	protected void add(Ingredient ingredient, IntProvider range, String name)

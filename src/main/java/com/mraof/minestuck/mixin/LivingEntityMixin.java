@@ -17,7 +17,7 @@ public abstract class LivingEntityMixin
 	 * this function is injected immediately after to be able to use these updated fluid heights ourselves.
 	 * This mixin will not be needed once a fix to fall distance resetting exists in forge/neoforge.
 	 */
-	@Inject(method = "checkFallDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;updateInWaterStateAndDoWaterCurrentPushing()V", ordinal = 0, shift = At.Shift.AFTER))
+	@Inject(method = "checkFallDamage", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;updateInWaterStateAndDoWaterCurrentPushing()V", ordinal = 0, shift = At.Shift.AFTER))
 	protected void onCheckFallDamage(CallbackInfo ci)
 	{
 		MSFluidType.handleExtraFallReset((LivingEntity) (Object) this);

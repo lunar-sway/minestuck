@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,6 +35,12 @@ public class PushableBlock extends FallingBlock
 	{
 		super(properties);
 		this.maneuverability = maneuverability;
+	}
+	
+	@Override
+	protected MapCodec<PushableBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

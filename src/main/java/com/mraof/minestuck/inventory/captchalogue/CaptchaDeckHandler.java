@@ -7,7 +7,6 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerData;
@@ -23,11 +22,12 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,13 +52,13 @@ public final class CaptchaDeckHandler
 	
 	public static Modus createClientModus(ResourceLocation name)
 	{
-		ModusType<?> type = ModusTypes.REGISTRY.get().getValue(name);
+		ModusType<?> type = ModusTypes.REGISTRY.get(name);
 		return type != null ? type.createClientSide() : null;
 	}
 	
 	public static Modus createServerModus(ResourceLocation name)
 	{
-		ModusType<?> type = ModusTypes.REGISTRY.get().getValue(name);
+		ModusType<?> type = ModusTypes.REGISTRY.get(name);
 		return type != null ? type.createServerSide() : null;
 	}
 	
@@ -132,7 +132,7 @@ public final class CaptchaDeckHandler
 		
 		PlayerSavedData.getData(player).setModus(newModus);
 		
-		MSCriteriaTriggers.CHANGE_MODUS.trigger(player, newModus);
+		MSCriteriaTriggers.CHANGE_MODUS.get().trigger(player, newModus);
 		
 		return oldModus == null ? ItemStack.EMPTY : oldModus.getModusItem();
 	}
@@ -240,7 +240,7 @@ public final class CaptchaDeckHandler
 		boolean result = modus.putItemStack(player, stack.copy());
 		if(result)
 		{
-			MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+			MSCriteriaTriggers.CAPTCHALOGUE.get().trigger(player, modus, stack);
 			stack.setCount(0);
 		}
 		return result;
@@ -325,7 +325,7 @@ public final class CaptchaDeckHandler
 		} else
 		{
 			modus.initModus(null, player, null, size);
-			MSPacketHandler.sendToPlayer(ModusDataPacket.create(modus), player);
+			PacketDistributor.PLAYER.with(player).send(ModusDataPacket.create(modus));
 		}
 	}
 	
@@ -335,7 +335,7 @@ public final class CaptchaDeckHandler
 		if(modus == null)
 			return null;
 		
-		ResourceLocation name = ModusTypes.REGISTRY.get().getKey(modus.getType());
+		ResourceLocation name = ModusTypes.REGISTRY.getKey(modus.getType());
 		if(name != null)
 		{
 			CompoundTag nbt = modus.writeToNBT(new CompoundTag());
@@ -351,7 +351,7 @@ public final class CaptchaDeckHandler
 		Modus modus;
 		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
 		
-		if(side.isClient() && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.get().getKey(ClientPlayerData.getModus().getType())))
+		if(side.isClient() && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.getKey(ClientPlayerData.getModus().getType())))
 			modus = ClientPlayerData.getModus();
 		else
 		{

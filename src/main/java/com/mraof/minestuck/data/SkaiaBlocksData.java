@@ -9,14 +9,12 @@ import com.mraof.minestuck.data.loot_table.MSBlockLootTables;
 import com.mraof.minestuck.data.recipe.CommonRecipes;
 import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.Tags;
-
-import java.util.function.Consumer;
+import net.neoforged.neoforge.common.Tags;
 
 import static com.mraof.minestuck.block.SkaiaBlocks.*;
 import static com.mraof.minestuck.data.MSBlockStateProvider.itemTexture;
@@ -316,7 +314,7 @@ public final class SkaiaBlocksData
 		
 	}
 	
-	public static void addRecipes(Consumer<FinishedRecipe> recipeSaver)
+	public static void addRecipes(RecipeOutput recipeSaver)
 	{
 		CommonRecipes.stairsRecipe(BLACK_CHESS_BRICK_STAIRS, BLACK_CHESS_BRICKS).save(recipeSaver);
 		CommonRecipes.slabRecipe(BLACK_CHESS_BRICK_SLAB, BLACK_CHESS_BRICKS).save(recipeSaver);
@@ -413,7 +411,7 @@ public final class SkaiaBlocksData
 		addCombinations(recipeSaver);
 	}
 	
-	private static void addGristCosts(Consumer<FinishedRecipe> recipeSaver)
+	private static void addGristCosts(RecipeOutput recipeSaver)
 	{
 		GristCostRecipeBuilder.of(BLACK_CHESS_DIRT).grist(GristTypes.BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(WHITE_CHESS_DIRT).grist(GristTypes.BUILD, 1).build(recipeSaver);
@@ -445,7 +443,7 @@ public final class SkaiaBlocksData
 		
 	}
 	
-	private static void addCombinations(Consumer<FinishedRecipe> recipeSaver)
+	private static void addCombinations(RecipeOutput recipeSaver)
 	{
 		CombinationRecipeBuilder.of(BLACK_CHESS_DIRT).input(Items.DIRT).and().input(Items.BLACK_DYE).build(recipeSaver);
 		CombinationRecipeBuilder.of(WHITE_CHESS_DIRT).input(Items.DIRT).and().input(Items.WHITE_DYE).build(recipeSaver);

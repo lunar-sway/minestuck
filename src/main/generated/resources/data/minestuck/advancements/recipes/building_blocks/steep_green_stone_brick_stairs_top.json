@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_green_stone_brick_stairs",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_green_stone_brick_stairs"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:steep_green_stone_brick_stairs_top"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

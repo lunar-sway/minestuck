@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_mossy_mycelium_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_mossy_mycelium_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:mossy_mycelium_brick_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_ancient_thumb_drive",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_ancient_thumb_drive"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:gutter_thumb_drive"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

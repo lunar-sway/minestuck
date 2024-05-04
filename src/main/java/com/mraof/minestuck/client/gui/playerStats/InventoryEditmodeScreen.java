@@ -6,7 +6,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -14,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -107,7 +107,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 			}
 			if(packet != null)
 			{
-				MSPacketHandler.INSTANCE.sendToServer(packet);
+				PacketDistributor.SERVER.noArg().send(packet);
 				return true;
 			}
 		}

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -28,9 +28,9 @@ public class ObsidianBucketItem extends Item
 			@Override
 			protected ItemStack execute(BlockSource source, ItemStack stack)
 			{
-				Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-				BlockPos blockpos = source.getPos().relative(direction);
-				this.setSuccess(((BlockItem)Items.OBSIDIAN).place(new DirectionalPlaceContext(source.getLevel(), blockpos, direction, Items.OBSIDIAN.getDefaultInstance(), Direction.UP)).consumesAction());
+				Direction direction = source.state().getValue(DispenserBlock.FACING);
+				BlockPos blockpos = source.pos().relative(direction);
+				this.setSuccess(((BlockItem)Items.OBSIDIAN).place(new DirectionalPlaceContext(source.level(), blockpos, direction, Items.OBSIDIAN.getDefaultInstance(), Direction.UP)).consumesAction());
 				if (this.isSuccess()) return Items.BUCKET.getDefaultInstance();
 				return super.execute(source, stack);
 			}

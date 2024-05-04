@@ -1,10 +1,11 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSCapabilities;
@@ -12,6 +13,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -27,15 +29,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.function.Consumer;
 
 public final class EditmodeDragPacket
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	private static boolean editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
 		if(!player.level().getBlockState(pos).canBeReplaced())
@@ -74,8 +72,16 @@ public final class EditmodeDragPacket
 	
 	public record Fill(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements MSPacket.PlayToServer
 	{
+		public static final ResourceLocation ID = Minestuck.id("editmode_drag/fill");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeBoolean(isDown);
 			buffer.writeBlockPos(positionStart);
@@ -86,7 +92,7 @@ public final class EditmodeDragPacket
 			buffer.writeEnum(side);
 		}
 		
-		public static Fill decode(FriendlyByteBuf buffer)
+		public static Fill read(FriendlyByteBuf buffer)
 		{
 			boolean isDragging = buffer.readBoolean();
 			BlockPos positionStart = buffer.readBlockPos();
@@ -105,7 +111,7 @@ public final class EditmodeDragPacket
 			if(data == null)
 				return;
 			
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
+			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 			
 			cap.setEditPos1(positionStart);
 			cap.setEditPos2(positionEnd);
@@ -156,8 +162,16 @@ public final class EditmodeDragPacket
 	
 	public record Destroy(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements MSPacket.PlayToServer
 	{
+		public static final ResourceLocation ID = Minestuck.id("editmode_drag/destroy");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeBoolean(isDown);
 			buffer.writeBlockPos(positionStart);
@@ -168,7 +182,7 @@ public final class EditmodeDragPacket
 			buffer.writeEnum(side);
 		}
 		
-		public static Destroy decode(FriendlyByteBuf buffer)
+		public static Destroy read(FriendlyByteBuf buffer)
 		{
 			boolean isDragging = buffer.readBoolean();
 			BlockPos positionStart = buffer.readBlockPos();
@@ -187,7 +201,7 @@ public final class EditmodeDragPacket
 			if(data == null)
 				return;
 			
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
+			EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 			
 			cap.setEditPos1(positionStart);
 			cap.setEditPos2(positionEnd);
@@ -228,15 +242,23 @@ public final class EditmodeDragPacket
 	
 	public record Cursor(boolean isDown, BlockPos positionStart, BlockPos positionEnd) implements MSPacket.PlayToServer
 	{
+		public static final ResourceLocation ID = Minestuck.id("editmode_drag/cursor");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeBoolean(isDown);
 			buffer.writeBlockPos(positionStart);
 			buffer.writeBlockPos(positionEnd);
 		}
 		
-		public static Cursor decode(FriendlyByteBuf buffer)
+		public static Cursor read(FriendlyByteBuf buffer)
 		{
 			boolean isDragging = buffer.readBoolean();
 			BlockPos positionStart = buffer.readBlockPos();
@@ -249,7 +271,7 @@ public final class EditmodeDragPacket
 		{
 			if(!player.level().isClientSide() && ServerEditHandler.getData(player) != null)
 			{
-				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
+				EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 				
 				cap.setEditPos1(positionStart);
 				cap.setEditPos2(positionEnd);
@@ -261,12 +283,20 @@ public final class EditmodeDragPacket
 	
 	public record Reset() implements MSPacket.PlayToServer
 	{
+		public static final ResourceLocation ID = Minestuck.id("editmode_drag/reset");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 		}
 		
-		public static Reset decode(FriendlyByteBuf buffer)
+		public static Reset read(FriendlyByteBuf buffer)
 		{
 			return new Reset();
 		}
@@ -276,7 +306,7 @@ public final class EditmodeDragPacket
 		{
 			if(!player.level().isClientSide())
 			{
-				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
+				EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 				
 				ServerEditHandler.removeCursorEntity(player, true);
 				cap.resetDragTools();

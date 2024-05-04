@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_vine",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_vine"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:mossy_decrepit_stone_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

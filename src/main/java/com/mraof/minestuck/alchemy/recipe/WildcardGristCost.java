@@ -1,17 +1,17 @@
 package com.mraof.minestuck.alchemy.recipe;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
-import com.mraof.minestuck.api.alchemy.GristAmount;
-import com.mraof.minestuck.api.alchemy.GristType;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,29 +24,23 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class WildcardGristCost implements GristCostRecipe
 {
-	private final ResourceLocation id;
 	private final Ingredient ingredient;
 	private final Integer priority;
 	private final long wildcardCost;
 	
-	public WildcardGristCost(ResourceLocation id, Ingredient ingredient, long wildcardCost, @Nullable Integer priority)
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	public WildcardGristCost(Ingredient ingredient, long wildcardCost, Optional<Integer> priority)
 	{
-		this.id = id;
 		this.ingredient = ingredient;
-		this.priority = priority;
+		this.priority = priority.orElse(null);
 		this.wildcardCost = wildcardCost;
-	}
-	
-	@Override
-	public ResourceLocation getId()
-	{
-		return this.id;
 	}
 	
 	@Override
@@ -74,7 +68,7 @@ public final class WildcardGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId)
 	{
 		GristCostRecipe.addSimpleCostProvider(consumer, this, this.ingredient);
 	}
@@ -93,15 +87,17 @@ public final class WildcardGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<WildcardGristCost>
 	{
+		private static final Codec<WildcardGristCost> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(
+						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+						Codec.LONG.fieldOf("grist_cost").forGetter(recipe -> recipe.wildcardCost),
+						ExtraCodecs.strictOptionalField(Codec.INT, "priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+				).apply(instance, WildcardGristCost::new));
+		
 		@Override
-		public WildcardGristCost fromJson(ResourceLocation recipeId, JsonObject json)
+		public Codec<WildcardGristCost> codec()
 		{
-			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
-			Integer priority = json.has("priority") ? GsonHelper.getAsInt(json, "priority") : null;
-			
-			long wildcardCost1 = GsonHelper.getAsLong(json, "grist_cost");
-			
-			return new WildcardGristCost(recipeId, ingredient, wildcardCost1, priority);
+			return CODEC;
 		}
 		
 		@Override
@@ -112,15 +108,14 @@ public final class WildcardGristCost implements GristCostRecipe
 			buffer.writeLong(recipe.wildcardCost);
 		}
 		
-		@Nullable
 		@Override
-		public WildcardGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		public WildcardGristCost fromNetwork(FriendlyByteBuf buffer)
 		{
 			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 			int priority = buffer.readInt();
 			long wildcardCost = buffer.readLong();
 			
-			return new WildcardGristCost(recipeId, ingredient, wildcardCost, priority);
+			return new WildcardGristCost(ingredient, wildcardCost, Optional.of(priority));
 		}
 	}
 }

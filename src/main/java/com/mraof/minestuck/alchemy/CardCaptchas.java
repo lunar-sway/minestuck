@@ -2,16 +2,14 @@ package com.mraof.minestuck.alchemy;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +23,6 @@ import java.util.Objects;
  * The captcha is arrived at by hashing the registry name string, which gets some additional randomization via world seed.
  * Two worlds with the same seed will produce the same captcha for a given registered item, expect in some rare instances where there was hash collision.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class CardCaptchas
 {
 	//TODO use of the character "#" not canonically accurate and suggests there are more punch holes in a captchalogue card then there actually are
@@ -71,7 +68,7 @@ public final class CardCaptchas
 		CompoundTag tag = new CompoundTag();
 		for(Map.Entry<Item, String> entry : captchasMap.entrySet())
 		{
-			String itemName = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(entry.getKey())).toString();
+			String itemName = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(entry.getKey())).toString();
 			tag.putString(itemName, entry.getValue());
 		}
 		return tag;
@@ -85,7 +82,7 @@ public final class CardCaptchas
 			ResourceLocation itemId = ResourceLocation.tryParse(itemName);
 			if(itemId == null)
 				continue;
-			Item item = ForgeRegistries.ITEMS.getValue(itemId);
+			Item item = BuiltInRegistries.ITEM.get(itemId);
 			if(item == null)
 				continue;
 			captchasMap.put(item, tag.getString(itemName));
@@ -106,7 +103,7 @@ public final class CardCaptchas
 	 */
 	private String createCaptchaForItem(Item item, long seed)
 	{
-		ResourceLocation itemId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
+		ResourceLocation itemId = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item));
 		
 		RandomSource itemRandom = RandomSource.create(seed)
 				.forkPositional().fromHashOf("minestuck:item_captchas")

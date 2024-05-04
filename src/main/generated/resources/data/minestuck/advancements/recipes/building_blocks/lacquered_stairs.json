@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_lacquered_planks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lacquered_planks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:lacquered_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

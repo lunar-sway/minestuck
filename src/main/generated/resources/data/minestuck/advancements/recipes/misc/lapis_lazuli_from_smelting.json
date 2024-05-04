@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_lapis_ore",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_lapis_ore"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:lapis_lazuli_from_smelting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

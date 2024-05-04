@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.client.util.MagicEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MagicAOEEffectPacket;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -19,8 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -119,8 +118,8 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 			Vec3 minAOEBound = new Vec3(aabb.minX, aabb.minY, aabb.minZ);
 			Vec3 maxAOEBound = new Vec3(aabb.maxX, aabb.maxY, aabb.maxZ);
 			
-			MSPacketHandler.sendToNear(new MagicAOEEffectPacket(type, minAOEBound, maxAOEBound),
-					new PacketDistributor.TargetPoint(centerPos.x, centerPos.y, centerPos.z, 64, level.dimension()));
+			PacketDistributor.NEAR.with(new PacketDistributor.TargetPoint(centerPos.x, centerPos.y, centerPos.z, 64, level.dimension()))
+					.send(new MagicAOEEffectPacket(type, minAOEBound, maxAOEBound));
 		}
 	}
 	

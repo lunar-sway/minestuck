@@ -1,26 +1,26 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
@@ -37,30 +38,22 @@ public final class ContainerGristCost implements GristCostRecipe
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final ResourceLocation id;
 	private final Ingredient ingredient;
+	private final ImmutableGristSet addedCost;
 	@Nullable
 	private final Integer priority;
-	private final GeneratedGristCostCache cache;
+	private final GeneratedGristCostCache cache = new GeneratedGristCostCache();
 	
-	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, ImmutableGristSet addedCost, @Nullable Integer priority)
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	public ContainerGristCost(Ingredient ingredient, ImmutableGristSet addedCost, Optional<Integer> priority)
 	{
-		this.id = id;
 		this.ingredient = ingredient;
-		this.priority = priority;
-		this.cache = new GeneratedGristCostCache(callback -> this.generateCost(callback, addedCost));
-	}
-	
-	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
-	{
-		this.id = id;
-		this.ingredient = ingredient;
-		this.priority = priority;
-		this.cache = cache;
+		this.addedCost = addedCost;
+		this.priority = priority.orElse(null);
 	}
 	
 	@Nullable
-	private GristSet generateCost(GeneratorCallback callback, ImmutableGristSet addedCost)
+	private GristSet generateCost(GeneratorCallback callback, ImmutableGristSet addedCost, ResourceLocation recipeId)
 	{
 		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getCraftingRemainingItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
@@ -72,22 +65,16 @@ public final class ContainerGristCost implements GristCostRecipe
 			} else
 			{
 				if(callback.shouldSaveResult())
-					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", ForgeRegistries.ITEMS.getKey(container.getItem()), id);
+					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", BuiltInRegistries.ITEM.getKey(container.getItem()), recipeId);
 			}
 		} else
 		{
 			if(callback.shouldSaveResult())
-				LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", id);
+				LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", recipeId);
 			return addedCost;
 		}
 		
 		return null;
-	}
-	
-	@Override
-	public ResourceLocation getId()
-	{
-		return this.id;
 	}
 	
 	@Override
@@ -109,9 +96,10 @@ public final class ContainerGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId)
 	{
-		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient, this.cache);
+		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient,
+				this.cache.generatedProvider(callback -> this.generateCost(callback, addedCost, recipeId)));
 	}
 	
 	@Override
@@ -130,16 +118,17 @@ public final class ContainerGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<ContainerGristCost>
 	{
+		private static final Codec<ContainerGristCost> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(
+						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+						ImmutableGristSet.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
+						ExtraCodecs.strictOptionalField(Codec.INT, "priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+				).apply(instance, ContainerGristCost::new));
+		
 		@Override
-		public ContainerGristCost fromJson(ResourceLocation recipeId, JsonObject json)
+		public Codec<ContainerGristCost> codec()
 		{
-			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
-			Integer priority = json.has("priority") ? GsonHelper.getAsInt(json, "priority") : null;
-			
-			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
-					.getOrThrow(false, LOGGER::error);
-			
-			return new ContainerGristCost(recipeId, ingredient, cost, priority);
+			return CODEC;
 		}
 		
 		@Override
@@ -150,15 +139,15 @@ public final class ContainerGristCost implements GristCostRecipe
 			recipe.cache.toNetwork(buffer);
 		}
 		
-		@Nullable
 		@Override
-		public ContainerGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		public ContainerGristCost fromNetwork(FriendlyByteBuf buffer)
 		{
 			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 			int priority = buffer.readInt();
-			GeneratedGristCostCache cache = GeneratedGristCostCache.fromNetwork(buffer);
 			
-			return new ContainerGristCost(recipeId, ingredient, priority, cache);
+			var recipe = new ContainerGristCost(ingredient, GristSet.EMPTY, Optional.of(priority));
+			recipe.cache.fromNetwork(buffer);
+			return recipe;
 		}
 	}
 }

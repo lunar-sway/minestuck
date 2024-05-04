@@ -9,15 +9,15 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class MSFluidType extends FluidType
 {
@@ -48,7 +48,7 @@ public class MSFluidType extends FluidType
 			public ResourceLocation getStillTexture()
 			{
 				if(stillTexture == null)
-					stillTexture = Objects.requireNonNull(ForgeRegistries.FLUID_TYPES.get().getKey(MSFluidType.this))
+					stillTexture = Objects.requireNonNull(NeoForgeRegistries.FLUID_TYPES.getKey(MSFluidType.this))
 							.withPrefix("block/still_");
 				return stillTexture;
 			}
@@ -57,7 +57,7 @@ public class MSFluidType extends FluidType
 			public ResourceLocation getFlowingTexture()
 			{
 				if(flowingTexture == null)
-					flowingTexture = Objects.requireNonNull(ForgeRegistries.FLUID_TYPES.get().getKey(MSFluidType.this))
+					flowingTexture = Objects.requireNonNull(NeoForgeRegistries.FLUID_TYPES.getKey(MSFluidType.this))
 							.withPrefix("block/flowing_");
 				return flowingTexture;
 			}
@@ -86,7 +86,7 @@ public class MSFluidType extends FluidType
 		Vec3 fallAdjustedMoveVec = entity.getFluidFallingAdjustedMovement(gravity, isSinking, entity.getDeltaMovement());
 		entity.setDeltaMovement(fallAdjustedMoveVec);
 		
-		LastFluidTickData data = entity.getCapability(MSCapabilities.LAST_FLUID_TICK).orElseThrow(IllegalStateException::new);
+		LastFluidTickData data = entity.getData(MSCapabilities.LAST_FLUID_TICK_ATTACHMENT.get());
 		long tick = entity.level().getGameTime();
 		long lastTick = Objects.requireNonNullElse(data.lastTickMap.get(fluidType), 0L);
 		
@@ -150,7 +150,7 @@ public class MSFluidType extends FluidType
 		if(entity.fallDistance <= 0 || !entity.isInFluidType())
 			return;
 		
-		entity.fallDistance *= MSFluids.TYPE_REGISTER.getEntries().stream().map(RegistryObject::get)
+		entity.fallDistance *= MSFluids.TYPE_REGISTER.getEntries().stream().map(Supplier::get)
 				.filter(entity::isInFluidType)
 				.map(entity::getFluidFallDistanceModifier)
 				.min(Float::compare).orElse(1F);

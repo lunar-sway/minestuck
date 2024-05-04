@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_uranium_ore",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_uranium_ore"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:raw_uranium_from_smelting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

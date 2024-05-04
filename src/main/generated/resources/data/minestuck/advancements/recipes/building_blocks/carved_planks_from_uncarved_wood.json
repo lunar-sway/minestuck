@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_uncarved_wood",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_uncarved_wood"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:carved_planks_from_uncarved_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

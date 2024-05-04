@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_cake_mix",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cake_mix"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:cake_from_mix"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

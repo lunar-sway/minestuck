@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_stripped_dead_log",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_stripped_dead_log"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:dead_hanging_sign"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

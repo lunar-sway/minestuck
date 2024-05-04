@@ -1,9 +1,8 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.spongepowered.mixin' version '0.7.+'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.80'
+    id 'net.neoforged.gradle.mixin' version '7.0.80'
 }
 
 repositories {
@@ -39,7 +38,7 @@ repositories {
     }
     maven {
         // maven that contains infiniverse
-        url "https://cubicinterpolation.net/maven/"
+        url "https://commoble.net/maven/"
     }
 }
 
@@ -52,63 +51,51 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = "UTF-8"
 
-minecraft {
-    mappings channel: project.getProperty('mc_mappings_channel'), version: project.getProperty('mc_mappings_version')
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+runs {
+    configureEach {
+        workingDirectory project.file('run')
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
-    runs {
-        configureEach {
-            workingDirectory project.file('run')
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
 
-            property 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
 
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                minestuck {
-                    source sourceSets.main
-                }
-            }
+        modSource project.sourceSets.main
+    }
+    client {
+        // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
+        if (project.hasProperty('mc_uuid')) {
+            programArguments.addAll '--uuid', project.getProperty('mc_uuid')
         }
-        client {
-            // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
-            if (project.hasProperty('mc_uuid')) {
-                args '--uuid', project.getProperty('mc_uuid')
-            }
 
-            // Add an username arg if you have specified it in a relevant gradle.properties file. Note that specifying a uuid and a non-matching username (or no username specified) may cause single-player worlds to freeze up when exiting the world.
-            if (project.hasProperty('mc_username')) {
-                args '--username', project.getProperty('mc_username')
-            }
+        // Add an username arg if you have specified it in a relevant gradle.properties file. Note that specifying a uuid and a non-matching username (or no username specified) may cause single-player worlds to freeze up when exiting the world.
+        if (project.hasProperty('mc_username')) {
+            programArguments.addAll '--username', project.getProperty('mc_username')
         }
-        server {
-        }
-        gameTestServer {
-        }
-        data {
-            args '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
-        }
+    }
+    server {
+    }
+    gameTestServer {
+    }
+    data {
+        programArguments.addAll '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_forge_version}"
+    implementation "net.neoforged:neoforge:${neo_version}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	// http://dvs1.progwml6.com/files/maven
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${mc_jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${mc_jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${mc_jei_version}")
-    compileOnly fg.deobf("com.refinedmods:refinedstorage:${mc_refined_storage_version}") {
-        transitive false
-    }
+    compileOnly "mezz.jei:jei-${mc_version}-common-api:${mc_jei_version}"
+    compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${mc_jei_version}"
+    runtimeOnly "mezz.jei:jei-${mc_version}-neoforge:${mc_jei_version}"
+    compileOnly "com.refinedmods:refinedstorage:${mc_refined_storage_version}"
 
-    implementation fg.deobf("software.bernie.geckolib:geckolib-${mc_gecko_version}")
-    implementation fg.deobf("commoble.infiniverse:${infiniverse_branch}:${infiniverse_version}")
+    implementation "software.bernie.geckolib:geckolib-${mc_gecko_version}"
+    implementation "net.commoble.infiniverse:${infiniverse_branch}:${infiniverse_version}"
 }
 
 sourceSets.main.resources {
@@ -116,11 +103,7 @@ sourceSets.main.resources {
 }
 
 mixin {
-    add sourceSets.main, 'mixins.minestuck.refmap.json'
     config 'mixins.minestuck.json'
-
-    debug.verbose = true
-    debug.export = true
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

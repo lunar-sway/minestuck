@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_spikes",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_spikes"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:retractable_spikes"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

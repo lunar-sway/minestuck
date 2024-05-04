@@ -9,7 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -24,7 +24,6 @@ public class MSStructureTagsProvider extends TagsProvider<Structure>
 		super(output, Registries.STRUCTURE, lookupProvider, Minestuck.MOD_ID, existingFileHelper);
 	}
 	
-	@SuppressWarnings("DataFlowIssue")
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{

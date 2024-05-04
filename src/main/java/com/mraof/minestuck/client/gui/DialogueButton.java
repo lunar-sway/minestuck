@@ -59,15 +59,6 @@ public class DialogueButton extends Button
 	}
 	
 	@Override
-	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
-	{
-		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-		
-		//occurs after renderWidget where the value is checked
-		wasHoveredOrFocused = isMouseOver(pMouseX, pMouseY) || isFocused();
-	}
-	
-	@Override
 	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 	{
 		//overrides setting of boolean from AbstractWidget which uses normal height value
@@ -79,7 +70,7 @@ public class DialogueButton extends Button
 		int hoverFocusShift = isResponse ? (hoveredOrFocused ? 7 : 0) : 0;
 		
 		if(hoveredOrFocused && !wasHoveredOrFocused && this.active)
-			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.2F, 2.0F);
+			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.2F, 2.0F);
 		
 		guiGraphics.blitWithBorder(gui, this.getX() + hoverFocusShift, this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
 		
@@ -101,5 +92,7 @@ public class DialogueButton extends Button
 			guiGraphics.drawString(mc.font, messageLines.get(i), textX , pY, getFGColor(), false);
 			pY += TEXT_SPACING;
 		}
+		
+		wasHoveredOrFocused = isMouseOver(mouseX, mouseY) || isFocused();
 	}
 }

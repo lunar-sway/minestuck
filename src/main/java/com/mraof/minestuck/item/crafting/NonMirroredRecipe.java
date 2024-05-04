@@ -1,22 +1,30 @@
 package com.mraof.minestuck.item.crafting;
 
-import com.google.gson.JsonObject;
-import net.minecraft.core.NonNullList;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class NonMirroredRecipe extends ShapedRecipe
 {
-    public NonMirroredRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+    public NonMirroredRecipe(ShapedRecipe recipe)
     {
-        super(id, group, category, width, height, ingredients, result);
+        this(recipe.getGroup(), recipe.category(), getPattern(recipe), recipe.getResultItem(null), recipe.showNotification());
+    }
+    
+    public NonMirroredRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification)
+    {
+        super(group, category, pattern, result, showNotification);
     }
     public RecipeSerializer<?> getSerializer() {
         return MSRecipeTypes.NON_MIRRORED.get();
@@ -52,19 +60,30 @@ public class NonMirroredRecipe extends ShapedRecipe
         }
         return true;
     }
-
+    
+    private static ShapedRecipePattern getPattern(ShapedRecipe recipe)
+    {
+        ShapedRecipePattern pattern = ObfuscationReflectionHelper.getPrivateValue(ShapedRecipe.class, recipe, "pattern");
+        return Objects.requireNonNull(pattern);
+    }
+    
+    @SuppressWarnings("DataFlowIssue")
     public static class Serializer implements RecipeSerializer<NonMirroredRecipe>
     {
+        private static final Codec<NonMirroredRecipe> CODEC = ((MapCodec.MapCodecCodec<ShapedRecipe>) ShapedRecipe.Serializer.CODEC).codec().xmap(
+				NonMirroredRecipe::new,
+                recipe -> new ShapedRecipe(recipe.getGroup(), recipe.category(), getPattern(recipe), recipe.getResultItem(null), recipe.showNotification())).codec();
+        
         @Override
-        public NonMirroredRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            ShapedRecipe recipe = RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
-            
-            return new NonMirroredRecipe(recipe.getId(), recipe.getGroup(), recipe.category(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem(null));
+        public Codec<NonMirroredRecipe> codec()
+        {
+            return CODEC;
         }
+        
         @Override
-        public NonMirroredRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            ShapedRecipe recipe = RecipeSerializer.SHAPED_RECIPE.fromNetwork(recipeId, buffer);
-            return new NonMirroredRecipe(recipe.getId() , recipe.getGroup(), recipe.category(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem(null));
+        public NonMirroredRecipe fromNetwork(FriendlyByteBuf buffer) {
+            ShapedRecipe recipe = RecipeSerializer.SHAPED_RECIPE.fromNetwork(buffer);
+            return new NonMirroredRecipe(recipe);
         }
         @Override
         public void toNetwork(FriendlyByteBuf buffer, NonMirroredRecipe recipe) {

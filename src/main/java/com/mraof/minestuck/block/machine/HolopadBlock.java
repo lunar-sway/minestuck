@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.HolopadBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -26,12 +27,16 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class HolopadBlock extends MachineBlock implements EntityBlock
 {
 	public static final Map<Direction, VoxelShape> SHAPE = createRotatedShapes(2, 0, 1, 14, 6, 13);
 	public static final Map<Direction, VoxelShape> COLLISION_SHAPE;
+	//todo these are unused?
 	protected static final AABB HOLOPAD_TOP_AABB = new AABB(3/16F, 6/16F, 2.6/16F, 13/16F, 7/16F, 12.6/16F);
 	protected static final AABB HOLOPAD_CARDSLOT_AABB = new AABB(4/16F, 0F, 13.8/16F, 12/16F, 10.1/16F, 15.94/16F);
 	
@@ -78,7 +83,7 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 	}
 	
 	@Override
-	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
 		HolopadBlockEntity be = (HolopadBlockEntity) level.getBlockEntity(pos);
 		
@@ -87,7 +92,7 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 			be.dropItem(true, level, pos, be.getCard());
 		}
 		
-		super.playerWillDestroy(level, pos, state, player);
+		return super.playerWillDestroy(level, pos, state, player);
 	}
 	
 	@Override

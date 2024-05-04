@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.mraof.minestuck.blockentity.ReturnNodeBlockEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -11,9 +12,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
+@MethodsReturnNonnullByDefault
 public class ReturnNodeRenderer implements BlockEntityRenderer<ReturnNodeBlockEntity>
 {
 	public static final ResourceLocation INNER_NODE = new ResourceLocation("minestuck","textures/block/node_spiro_inner.png");
@@ -71,5 +75,12 @@ public class ReturnNodeRenderer implements BlockEntityRenderer<ReturnNodeBlockEn
 	public int getViewDistance()
 	{
 		return 256;
+	}
+	
+	@Override
+	public AABB getRenderBoundingBox(ReturnNodeBlockEntity blockEntity)
+	{
+		Vec3 corner = Vec3.atLowerCornerOf(blockEntity.getBlockPos().offset(-1, 0, -1));
+		return new AABB(corner, corner.add(2, 1, 2));
 	}
 }

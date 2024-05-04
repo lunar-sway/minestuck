@@ -1,8 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PunchDesignixPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -10,7 +8,8 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.regex.Pattern;
 
@@ -58,17 +57,13 @@ public class PunchDesignixScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(graphics);
+		super.renderBackground(graphics, mouseX, mouseY, partialTicks);
 		
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		int xOffset = (this.width / 2) - (guiWidth / 2);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
 		graphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
-		
-		super.render(graphics, mouseX, mouseY, partialTicks);
 	}
 	
 	private void finish()
@@ -78,7 +73,7 @@ public class PunchDesignixScreen extends Screen
 			String captcha = captchaTextField.getValue();
 			be.setCaptcha(captcha);
 			PunchDesignixPacket packet = new PunchDesignixPacket(be.getBlockPos(), captcha);
-			MSPacketHandler.sendToServer(packet);
+			PacketDistributor.SERVER.noArg().send(packet);
 			this.minecraft.setScreen(null);
 		}
 	}

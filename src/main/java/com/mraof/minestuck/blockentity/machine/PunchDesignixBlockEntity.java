@@ -1,7 +1,9 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.block.MSBlocks;
@@ -9,8 +11,6 @@ import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -182,7 +182,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			
 			if(!output.isEmpty())
 			{
-				MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, captchaItemStack, storedStackInCard, output);
+				MSCriteriaTriggers.PUNCH_DESIGNIX.get().trigger(player, captchaItemStack, storedStackInCard, output);
 				setCard(AlchemyHelper.createPunchedCard(output));
 				effects(true);
 			}

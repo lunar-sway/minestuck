@@ -1,9 +1,11 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.ClientDeployList;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 
@@ -11,11 +13,19 @@ public final class ServerEditPacket
 {
 	public record Activate() implements MSPacket.PlayToClient
 	{
+		public static final ResourceLocation ID = Minestuck.id("server_edit/activate");
+		
 		@Override
-		public void encode(FriendlyByteBuf ignored)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf ignored)
 		{}
 		
-		public static Activate decode(FriendlyByteBuf ignored)
+		public static Activate read(FriendlyByteBuf ignored)
 		{
 			return new Activate();
 		}
@@ -29,13 +39,21 @@ public final class ServerEditPacket
 	
 	public record UpdateDeployList(CompoundTag data) implements MSPacket.PlayToClient
 	{
+		public static final ResourceLocation ID = Minestuck.id("server_edit/update_deploy_list");
+		
 		@Override
-		public void encode(FriendlyByteBuf buffer)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeNbt(this.data);
 		}
 		
-		public static UpdateDeployList decode(FriendlyByteBuf buffer)
+		public static UpdateDeployList read(FriendlyByteBuf buffer)
 		{
 			CompoundTag data = Objects.requireNonNull(buffer.readNbt());
 			return new UpdateDeployList(data);
@@ -50,11 +68,19 @@ public final class ServerEditPacket
 	
 	public record Exit() implements MSPacket.PlayToClient
 	{
+		public static final ResourceLocation ID = Minestuck.id("server_edit/exit");
+		
 		@Override
-		public void encode(FriendlyByteBuf ignored)
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf ignored)
 		{}
 		
-		public static Exit decode(FriendlyByteBuf ignored)
+		public static Exit read(FriendlyByteBuf ignored)
 		{
 			return new Exit();
 		}

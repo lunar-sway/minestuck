@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.entity.DecoyEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -15,10 +16,14 @@ import net.minecraft.client.renderer.entity.layers.ArrowLayer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class DecoyRenderer extends MobRenderer<DecoyEntity, PlayerModel<DecoyEntity>>
 {
 	private final PlayerModel<DecoyEntity> DEFAULT_MODEL;
@@ -40,8 +45,8 @@ public class DecoyRenderer extends MobRenderer<DecoyEntity, PlayerModel<DecoyEnt
 	@Override
 	public void render(DecoyEntity entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn)
 	{
-		PlayerInfo info = getPlayerInfo(entityIn.getPlayerID());
-		model = getModelForType(info != null ? info.getModelName() : DefaultPlayerSkin.getSkinModelName(entityIn.getPlayerID()));
+		PlayerSkin skin = getSkin(entityIn.getPlayerID());
+		model = skin.model() == PlayerSkin.Model.SLIM ? SLIM_MODEL : DEFAULT_MODEL;
 		
 		super.render(entityIn, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
 	}
@@ -49,18 +54,13 @@ public class DecoyRenderer extends MobRenderer<DecoyEntity, PlayerModel<DecoyEnt
 	@Override
 	public ResourceLocation getTextureLocation(DecoyEntity entity)
 	{
-		PlayerInfo info = getPlayerInfo(entity.getPlayerID());
-		return info != null ? info.getSkinLocation() : DefaultPlayerSkin.getDefaultSkin(entity.getPlayerID());
+		return getSkin(entity.getPlayerID()).texture();
 	}
 	
-	private PlayerModel<DecoyEntity> getModelForType(String type)
-	{
-		return type.equals("slim") ? SLIM_MODEL : DEFAULT_MODEL;
-	}
-	
-	private static PlayerInfo getPlayerInfo(UUID id)
+	private static PlayerSkin getSkin(UUID playerID)
 	{
 		ClientPacketListener packetListener = Minecraft.getInstance().getConnection();
-		return packetListener != null ? packetListener.getPlayerInfo(id) : null;
+		PlayerInfo info = packetListener != null ? packetListener.getPlayerInfo(playerID) : null;
+		return info != null ? info.getSkin() : DefaultPlayerSkin.get(playerID);
 	}
 }

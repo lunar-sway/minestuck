@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_gold_ore",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_gold_ore"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:gold_ingot_from_blasting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_flowery_mossy_cobblestone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_flowery_mossy_cobblestone"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:flowery_mossy_cobblestone_stairs_from_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

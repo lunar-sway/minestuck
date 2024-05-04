@@ -5,7 +5,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -21,9 +20,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -134,7 +134,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MSCriteriaTriggers.ECHELADDER.trigger(player, rung);
+				MSCriteriaTriggers.ECHELADDER.get().trigger(player, rung);
 				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE.get(), SoundSource.AMBIENT, 1F, 1F);
 			}
 		}
@@ -193,7 +193,7 @@ public class Echeladder
 	public void updateAttribute(AttributeInstance attribute, AttributeModifier modifier)
 	{
 		if(attribute.hasModifier(modifier))
-			attribute.removeModifier(attribute.getModifier(modifier.getId()));
+			attribute.removeModifier(modifier.getId());
 		attribute.addPermanentModifier(modifier);
 	}
 	
@@ -282,13 +282,13 @@ public class Echeladder
 	public void sendInitialPacket(ServerPlayer player)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F);
-		MSPacketHandler.sendToPlayer(packet, player);
+		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	
 	public void sendDataPacket(ServerPlayer player, boolean sendMessage)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
-		MSPacketHandler.sendToPlayer(packet, player);
+		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	
 	public static String translationKey(int rung)

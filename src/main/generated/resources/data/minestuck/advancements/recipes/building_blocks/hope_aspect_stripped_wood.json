@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_hope_aspect_stripped_log",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_hope_aspect_stripped_log"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:hope_aspect_stripped_wood"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

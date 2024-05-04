@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_generic_object",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_generic_object"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:perfectly_generic_pressure_plate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

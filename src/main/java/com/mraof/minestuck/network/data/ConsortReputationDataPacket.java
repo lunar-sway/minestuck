@@ -1,11 +1,15 @@
 package com.mraof.minestuck.network.data;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 public class ConsortReputationDataPacket implements MSPacket.PlayToClient
 {
+    public static final ResourceLocation ID = Minestuck.id("consort_reputation_data");
+    
     private final int count;
     
     private ConsortReputationDataPacket(int count)
@@ -19,12 +23,18 @@ public class ConsortReputationDataPacket implements MSPacket.PlayToClient
     }
     
     @Override
-    public void encode(FriendlyByteBuf buffer)
+    public ResourceLocation id()
+    {
+        return ID;
+    }
+    
+    @Override
+    public void write(FriendlyByteBuf buffer)
     {
         buffer.writeInt(count);
     }
     
-    public static ConsortReputationDataPacket decode(FriendlyByteBuf buffer)
+    public static ConsortReputationDataPacket read(FriendlyByteBuf buffer)
     {
         int count = buffer.readInt();
         return create(count);

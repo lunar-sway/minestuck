@@ -1,11 +1,11 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.inventory.slot.InputSlot;
-import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
+import com.mraof.minestuck.inventory.slot.InputSlot;
+import com.mraof.minestuck.inventory.slot.OutputSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,9 +13,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.ForgeRegistry;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
@@ -96,7 +95,7 @@ public class MiniAlchemiterMenu extends MachineContainerMenu
 	
 	public GristType getWildcardType()
 	{
-		GristType type = ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getValue(wildcardHolder.get());
+		GristType type = GristTypes.REGISTRY.byId(wildcardHolder.get());
 		if(type == null)
 			type = GristTypes.BUILD.get();
 		return type;

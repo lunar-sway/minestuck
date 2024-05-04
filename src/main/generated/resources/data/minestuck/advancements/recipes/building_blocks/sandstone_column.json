@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_sandstone",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_sandstone"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:sandstone_column"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

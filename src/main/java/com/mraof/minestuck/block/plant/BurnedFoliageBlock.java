@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -19,6 +20,12 @@ public class BurnedFoliageBlock extends BushBlock
 	public BurnedFoliageBlock(BlockBehaviour.Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Override
+	protected MapCodec<BurnedFoliageBlock> codec()
+	{
+		return null; //todo
 	}
 	
 	@Override

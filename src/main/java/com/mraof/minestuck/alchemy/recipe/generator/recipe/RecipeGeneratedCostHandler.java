@@ -22,12 +22,12 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -158,11 +158,11 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		
 		this.process = new RecipeGeneratedCostProcess(prepareRecipeMap(sources, recipeManager));
 		
-		for(Recipe<?> recipe : recipeManager.getRecipes())
+		for(RecipeHolder<?> holder : recipeManager.getRecipes())
 		{
-			if(recipe instanceof RecipeGeneratedGristCost)
+			if(holder.value() instanceof RecipeGeneratedGristCost recipe)
 			{
-				((RecipeGeneratedGristCost) recipe).setHandler(this);
+				recipe.setHandler(this);
 				return;
 			}
 		}
@@ -216,30 +216,30 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	 * The dominant source should be the most specific source (fewest recipes provided by that source).
 	 * If there are equally dominant sources, we won't bother to make a distinction and will instead pick whichever is more convenient implementation-wise.
 	 */
-	private Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
+	private Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
 	{
 		//Step 1: sort recipe interpreters paired with their recipes in the order depending on the number of recipes in the list
-		List<Pair<Collection<Recipe<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
+		List<Pair<Collection<RecipeHolder<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
 		for(SourceEntry entry : sources)
 		{
-			Collection<Recipe<?>> recipes = entry.source.findRecipes(recipeManager);
+			Collection<RecipeHolder<?>> recipes = entry.source.findRecipes(recipeManager);
 			recipeLists.add(Pair.of(recipes, entry.interpreter));
 		}
 		recipeLists.sort(Comparator.comparingInt(pair -> -pair.getLeft().size()));
 		
 		//Step 2: Map recipes to interpreters such that each recipe only has one interpreter
-		Map<Recipe<?>, RecipeInterpreter> recipeMap = new HashMap<>();
-		for(Pair<Collection<Recipe<?>>, RecipeInterpreter> pair : recipeLists)
+		Map<RecipeHolder<?>, RecipeInterpreter> recipeMap = new HashMap<>();
+		for(Pair<Collection<RecipeHolder<?>>, RecipeInterpreter> pair : recipeLists)
 		{
-			for(Recipe<?> recipe : pair.getLeft())
+			for(RecipeHolder<?> recipe : pair.getLeft())
 				recipeMap.put(recipe, pair.getRight());
 		}
 		
 		//Step 3: Take items from interpreter.getOutputItems() and map item -> recipe interpreter pair
-		Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> itemLookupMap = new HashMap<>();
-		for(Map.Entry<Recipe<?>, RecipeInterpreter> entry : recipeMap.entrySet())
+		Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> itemLookupMap = new HashMap<>();
+		for(Map.Entry<RecipeHolder<?>, RecipeInterpreter> entry : recipeMap.entrySet())
 		{
-			for(Item item : entry.getValue().getOutputItems(entry.getKey()))
+			for(Item item : entry.getValue().getOutputItems(entry.getKey().value()))
 			{
 				itemLookupMap.computeIfAbsent(item, item1 -> new ArrayList<>()).add(Pair.of(entry.getKey(), entry.getValue()));
 			}

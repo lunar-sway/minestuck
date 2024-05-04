@@ -9,7 +9,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.network.EditmodeDragPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -33,12 +32,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 
 /** Class for handling the click-and-drag editmode tools (Revise and Recycle) on the client-side.
@@ -62,7 +62,7 @@ public class ClientEditToolDrag
 		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
 			return;
 		
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
+		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 		
 		ClientEditToolDrag.doRecycleCode(mc, player, cap);
 		ClientEditToolDrag.doReviseCode(mc, player, cap);
@@ -80,7 +80,7 @@ public class ClientEditToolDrag
 	 */
 	private static void cancelDrag(IEditTools cap)
 	{
-		MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
+		PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Reset());
 		cap.resetDragTools();
 	}
 	
@@ -115,7 +115,7 @@ public class ClientEditToolDrag
 	private static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
 	{
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
-		MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
+		PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
 	}
 	
 	/**
@@ -128,9 +128,9 @@ public class ClientEditToolDrag
 	private static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
 		if(targetTool == IEditTools.ToolMode.REVISE)
-			MSPacketHandler.sendToServer(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		else
-			MSPacketHandler.sendToServer(new EditmodeDragPacket.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		playSoundAndSetParticles(player, targetTool == IEditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
 	
 		cap.resetDragTools();
@@ -348,7 +348,7 @@ public class ClientEditToolDrag
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = player.getAttribute(ForgeMod.BLOCK_REACH.get()).getValue();
+		double reachDistance = player.getAttribute(NeoForgeMod.BLOCK_REACH.value()).getValue();
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 	}
@@ -369,7 +369,7 @@ public class ClientEditToolDrag
 			Player player = mc.player;
 			Camera info = event.getCamera();
 			
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on client-side!"));
+			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
 			
 			double d1 = info.getPosition().x;
 			double d2 = info.getPosition().y;

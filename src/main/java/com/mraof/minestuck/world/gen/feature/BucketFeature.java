@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class BucketFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -71,7 +71,7 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		
 		SimpleWeightedRandomList.Builder<BlockState> list = SimpleWeightedRandomList.builder();
 		list.add(Blocks.AIR.defaultBlockState(), 50);
-		for(Fluid fluid : ForgeRegistries.FLUIDS)
+		for(Fluid fluid : BuiltInRegistries.FLUID)
 		{
 			FluidState fluidState = fluid.defaultFluidState();
 			if(!fluidState.isSource())

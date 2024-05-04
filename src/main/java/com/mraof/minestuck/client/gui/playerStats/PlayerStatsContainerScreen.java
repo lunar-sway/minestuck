@@ -2,10 +2,11 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
-import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -77,7 +78,6 @@ public abstract class PlayerStatsContainerScreen<T extends AbstractContainerMenu
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		drawTabTooltip(guiGraphics, mouseX, mouseY);

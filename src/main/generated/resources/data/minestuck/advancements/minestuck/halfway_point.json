@@ -11,17 +11,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.halfway_point.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minestuck:boondollars",
       "nbt": "{value:1000}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.minestuck.halfway_point.title"
     }

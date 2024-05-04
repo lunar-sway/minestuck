@@ -2,14 +2,16 @@ package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import java.util.function.Supplier;
 
 @SuppressWarnings("UnusedReturnValue")
 public class MinestuckItemModelProvider extends ItemModelProvider
@@ -649,26 +651,26 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.PROSPITIAN_ROOK_SPAWN_EGG);
 	}
 	
-	ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
+	ItemModelBuilder simpleItem(Supplier<? extends Item> item)
 	{
-		return simpleItem(item, item.getId().getPath());
+		return simpleItem(item, id(item).getPath());
 	}
 	
-	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item, String textureName)
+	private ItemModelBuilder simpleItem(Supplier<? extends Item> item, String textureName)
 	{
-		return withExistingParent(item.getId().getPath(),
+		return withExistingParent(id(item).getPath(),
 				new ResourceLocation("item/generated"))
 				.texture("layer0", texture(textureName));
 	}
 	
-	private ItemModelBuilder handheldItem(RegistryObject<? extends Item> item)
+	private ItemModelBuilder handheldItem(Supplier<? extends Item> item)
 	{
-		return handheldItem(item, item.getId().getPath());
+		return handheldItem(item, id(item).getPath());
 	}
 	
-	private ItemModelBuilder handheldItem(RegistryObject<? extends Item> item, String textureName)
+	private ItemModelBuilder handheldItem(Supplier<? extends Item> item, String textureName)
 	{
-		return withExistingParent(item.getId().getPath(),
+		return withExistingParent(id(item).getPath(),
 				new ResourceLocation("item/handheld"))
 				.texture("layer0", texture(textureName));
 	}
@@ -676,42 +678,46 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	/**
 	 * Generates a model that in third person places the weapon flat on top of the hand.
 	 */
-	private ItemModelBuilder clawWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder clawWeapon(Supplier<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
+		String name = id(item).getPath();
+		return withExistingParent(name,
 				id("item/claw_weapon"))
-				.texture("layer0", texture(item.getId().getPath()));
+				.texture("layer0", texture(name));
 	}
 	
 	/**
 	 * Generates a model positioned for weapons with the handle in the top right corner of the texture.
 	 */
-	private ItemModelBuilder knifeWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder knifeWeapon(Supplier<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
+		String name = id(item).getPath();
+		return withExistingParent(name,
 				id("item/knife_weapon"))
-				.texture("layer0", texture(item.getId().getPath()));
+				.texture("layer0", texture(name));
 	}
 	
 	/**
 	 * Generated a model that is larger than other weapons when in hand.
 	 * This variant moves the weapon forward a little bit, suitable for weapons with a short handle or otherwise should be held closer to the bottom left corner.
 	 */
-	private ItemModelBuilder largeLongWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder largeLongWeapon(Supplier<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
+		String name = id(item).getPath();
+		return withExistingParent(name,
 				id("item/large_long_weapon"))
-				.texture("layer0", texture(item.getId().getPath()));
+				.texture("layer0", texture(name));
 	}
 	
 	/**
 	 * Generated a model that is larger than other weapons when in hand.
 	 */
-	private ItemModelBuilder largeWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder largeWeapon(Supplier<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
+		String name = id(item).getPath();
+		return withExistingParent(name,
 				id("item/large_weapon"))
-				.texture("layer0", texture(item.getId().getPath()));
+				.texture("layer0", texture(name));
 	}
 	
 	private static ResourceLocation texture(String path)
@@ -722,5 +728,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private static ResourceLocation id(String path)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, path);
+	}
+	
+	private static ResourceLocation id(Supplier<? extends Item> item)
+	{
+		return BuiltInRegistries.ITEM.getKey(item.get());
 	}
 }

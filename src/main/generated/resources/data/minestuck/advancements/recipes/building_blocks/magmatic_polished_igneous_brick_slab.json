@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_magmatic_polished_igneous_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_magmatic_polished_igneous_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:magmatic_polished_igneous_brick_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

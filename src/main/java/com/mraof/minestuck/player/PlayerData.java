@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.inventory.captchalogue.*;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.ColorHandler;
@@ -18,10 +17,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -192,7 +192,7 @@ public final class PlayerData
 				setGivenModus();
 			ServerPlayer player = this.getPlayer();
 			if(player != null)
-				MSPacketHandler.sendToPlayer(ModusDataPacket.create(modus), player);
+				PacketDistributor.PLAYER.with(player).send(ModusDataPacket.create(modus));
 		}
 	}
 	
@@ -335,7 +335,7 @@ public final class PlayerData
 		{
 			modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
 			setModus(modus);
-		} else LOGGER.warn("Couldn't create a starting modus type {}.", ModusTypes.REGISTRY.get().getKey(type));
+		} else LOGGER.warn("Couldn't create a starting modus type {}.", ModusTypes.REGISTRY.getKey(type));
 	}
 	
 	public void onPlayerLoggedIn(ServerPlayer player)
@@ -343,7 +343,7 @@ public final class PlayerData
 		getEcheladder().updateEcheladderBonuses(player);
 		
 		if(getModus() != null)
-			MSPacketHandler.sendToPlayer(ModusDataPacket.create(getModus()), player);
+			PacketDistributor.PLAYER.with(player).send(ModusDataPacket.create(getModus()));
 		
 		if(getModus() == null && !hasGivenModus())
 			tryGiveStartingModus(player);
@@ -362,11 +362,11 @@ public final class PlayerData
 		if(player == null)
 			return;
 		if(firstTime && !player.isSpectator())
-			MSPacketHandler.sendToPlayer(ColorDataPacket.selector(), player);
+			PacketDistributor.PLAYER.with(player).send(ColorDataPacket.selector());
 		else
 		{
 			ColorDataPacket packet = ColorDataPacket.data(getColor());
-			MSPacketHandler.sendToPlayer(packet, player);
+			PacketDistributor.PLAYER.with(player).send(packet);
 		}
 	}
 	
@@ -375,7 +375,7 @@ public final class PlayerData
 		if(player == null)
 			return;
 		BoondollarDataPacket packet = BoondollarDataPacket.create(getBoondollars());
-		MSPacketHandler.sendToPlayer(packet, player);
+		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	
 	private void sendConsortReputation(ServerPlayer player)
@@ -392,7 +392,7 @@ public final class PlayerData
 		if(newTitle == null || player == null)
 			return;
 		TitleDataPacket packet = TitleDataPacket.create(newTitle);
-		MSPacketHandler.sendToPlayer(packet, player);
+		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	
 	@Nullable

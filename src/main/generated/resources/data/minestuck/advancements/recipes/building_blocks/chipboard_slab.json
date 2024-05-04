@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_chipboard",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_chipboard"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:chipboard_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

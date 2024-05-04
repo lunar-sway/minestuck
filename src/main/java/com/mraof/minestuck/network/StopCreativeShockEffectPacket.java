@@ -1,11 +1,15 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientProxy;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
 public class StopCreativeShockEffectPacket implements MSPacket.PlayToClient
 {
+	public static final ResourceLocation ID = Minestuck.id("stop_creative_shock_effect");
+	
 	private final boolean mayBuild;
 	
 	public StopCreativeShockEffectPacket(boolean mayBuildIn)
@@ -14,12 +18,18 @@ public class StopCreativeShockEffectPacket implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(mayBuild);
 	}
 	
-	public static StopCreativeShockEffectPacket decode(FriendlyByteBuf buffer)
+	public static StopCreativeShockEffectPacket read(FriendlyByteBuf buffer)
 	{
 		boolean mayBuild = buffer.readBoolean();
 		

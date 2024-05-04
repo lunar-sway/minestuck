@@ -1,24 +1,26 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
+import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -37,8 +39,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
@@ -48,10 +49,15 @@ import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * Stores a cruxite dowel and through use of interface can take a players grist and create new copies of the item the dowel encodes.
  * When a new dowel is placed, animation plays where the arm "scans" the dowels code. Core Editmode deployable
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder, GeoBlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -135,7 +141,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			}
 		}
 	
-	public void dropItem(Direction direction)
+	public void dropItem(@Nullable Direction direction)
 	{
 		if(level == null)
 		{
@@ -293,7 +299,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		if(GristCache.get(player).tryTake(cost, GristHelper.EnumSource.CLIENT))
 		{
 			AlchemyEvent event = new AlchemyEvent(IdentifierHandler.encode(player), this, getDowel(), newItem, cost);
-			MinecraftForge.EVENT_BUS.post(event);
+			NeoForge.EVENT_BUS.post(event);
 			newItem = event.getItemResult();
 			
 			while(quantity > 0)
@@ -313,6 +319,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		}
 	}
 	
+	@Nullable
 	public GristSet getGristCost(int quantity)
 	{
 		ItemStack dowel = getDowel();
@@ -340,12 +347,6 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			if(level != null && !level.isClientSide)
 				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 0);
 		}
-	}
-	
-	@Override
-	public AABB getRenderBoundingBox()
-	{
-		return INFINITE_EXTENT_AABB;
 	}
 	
 	@Override

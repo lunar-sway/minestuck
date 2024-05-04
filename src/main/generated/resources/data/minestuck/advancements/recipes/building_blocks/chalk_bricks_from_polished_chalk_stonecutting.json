@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_polished_chalk",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_polished_chalk"
     ]
   ],
   "rewards": {
     "recipes": [
       "minestuck:chalk_bricks_from_polished_chalk_stonecutting"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
