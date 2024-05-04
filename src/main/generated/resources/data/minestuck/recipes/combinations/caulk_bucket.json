@@ -4,7 +4,7 @@
     "item": "minecraft:water_bucket"
   },
   "input2": {
-    "item": "minecraft:amethyst_shard"
+    "item": "minecraft:quartz"
   },
   "mode": "and",
   "output": {
