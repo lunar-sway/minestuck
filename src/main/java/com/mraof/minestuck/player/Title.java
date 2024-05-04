@@ -17,6 +17,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,6 +69,16 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 				player.connection.send(TitleDataPacket.create(title)));
 	}
 	
+	@SubscribeEvent
+	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	{
+		if(event.player instanceof ServerPlayer player)
+		{
+			Title.getTitle(player)
+					.ifPresent(value -> value.handleAspectEffects(player));
+		}
+	}
+	
 	public static boolean isPlayerOfAspect(ServerPlayer player, EnumAspect aspect)
 	{
 		return getTitle(player)
@@ -102,7 +113,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 			player.connection.send(TitleDataPacket.create(newTitle));
 	}
 	
-	public void handleAspectEffects(ServerPlayer player)
+	private void handleAspectEffects(ServerPlayer player)
 	{
 		if(!MinestuckConfig.SERVER.aspectEffects.get() || !player.getData(MSAttachments.EFFECT_TOGGLE))
 			return;

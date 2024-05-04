@@ -235,16 +235,6 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
-	{
-		if(event.player instanceof ServerPlayer player)
-		{
-			Title.getTitle(player)
-					.ifPresent(value -> value.handleAspectEffects(player));
-		}
-	}
-	
-	@SubscribeEvent
 	public static void onEffectRemove(MobEffectEvent.Remove event)
 	{
 		onEffectEnd(event.getEntity(), event.getEffect());
