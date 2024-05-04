@@ -72,7 +72,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	@SubscribeEvent
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(event.player instanceof ServerPlayer player)
+		if(event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer player)
 		{
 			Title.getTitle(player)
 					.ifPresent(value -> value.handleAspectEffects(player));
