@@ -14,14 +14,17 @@ import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public abstract class ButtonListProgram extends ComputerProgram
 {
 	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
-	private final LinkedHashMap<Button, UnlocalizedString> buttonMap = new LinkedHashMap<>();
+	private final Map<Button, UnlocalizedString> buttonMap = new HashMap<>();
+	private final List<Button> buttons = new ArrayList<>(4);
 	private Button upButton, downButton;
 	private String message;
 	
@@ -71,10 +74,16 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		var xOffset = (gui.width - ComputerScreen.xSize) / 2;
 		var yOffset = (gui.height - ComputerScreen.ySize) / 2;
+		
 		buttonMap.clear();
+		buttons.clear();
 		for(int i = 0; i < 4; i++)
-			buttonMap.put(gui.addRenderableWidget(
-					new ExtendedButton(xOffset + 14, yOffset + 60 + i * 24, 120, 20, Component.empty(), button -> onButtonPressed(gui, button))), new UnlocalizedString(""));
+		{
+			ExtendedButton button = new ExtendedButton(xOffset + 14, yOffset + 60 + i * 24, 120, 20, Component.empty(), clieckedButton -> onButtonPressed(gui, clieckedButton));
+			gui.addRenderableWidget(button);
+			buttonMap.put(button, new UnlocalizedString(""));
+			buttons.add(button);
+		}
 		
 		upButton = gui.addRenderableWidget(new ArrowButton(true, gui));
 		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
@@ -107,7 +116,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 					downButton.active = true;
 					break;
 				}
-				buttonMap.put((Button) buttonMap.keySet().toArray()[pos - index], s);
+				buttonMap.put(buttons.get(pos - index), s);
 			}
 			pos++;
 		}
@@ -116,7 +125,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 			for(; pos < 4; pos++)
 			{
 				if(pos >= 0) //can still be -1 in some instances, causing a crash
-					buttonMap.put((Button) buttonMap.keySet().toArray()[pos - index], new UnlocalizedString(""));
+					buttonMap.put(buttons.get(pos - index), new UnlocalizedString(""));
 			}
 		
 		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet())
