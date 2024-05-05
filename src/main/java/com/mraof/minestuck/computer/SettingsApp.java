@@ -15,14 +15,14 @@ public class SettingsApp extends ButtonListProgram
 	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
 	
 	@Override
-	protected ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
+	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
 		var list = new ArrayList<UnlocalizedString>();
 		
-		list.add(new UnlocalizedString(TITLE));
+		UnlocalizedString message = new UnlocalizedString(TITLE);
 		list.add(new UnlocalizedString(THEME));
 		
-		return list;
+		return new InterfaceData(message, list);
 	}
 	
 	@Override

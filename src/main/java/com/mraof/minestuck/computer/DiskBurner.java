@@ -19,22 +19,19 @@ public class DiskBurner extends ButtonListProgram
 	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/disk_burner.png");
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
+	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
-		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		
 		if(!be.hasAllCode())
-			list.add(new UnlocalizedString(NEED_CODE));
-		else if (be.blankDisksStored == 0)
-			list.add(new UnlocalizedString(NO_DISKS));
-		else
-		{
-			list.add(new UnlocalizedString(CHOOSE));
-			
-			list.add(new UnlocalizedString(BURN_SERVER_DISK));
-			list.add(new UnlocalizedString(BURN_CLIENT_DISK));
-		}
-		return list;
+			return new InterfaceData(new UnlocalizedString(NEED_CODE), new ArrayList<>());
+		
+		if(be.blankDisksStored == 0)
+			return new InterfaceData(new UnlocalizedString(NO_DISKS), new ArrayList<>());
+		
+		ArrayList<UnlocalizedString> buttonTexts = new ArrayList<>();
+		UnlocalizedString message = new UnlocalizedString(CHOOSE);
+		buttonTexts.add(new UnlocalizedString(BURN_SERVER_DISK));
+		buttonTexts.add(new UnlocalizedString(BURN_CLIENT_DISK));
+		return new InterfaceData(message, buttonTexts);
 	}
 	
 	@Override

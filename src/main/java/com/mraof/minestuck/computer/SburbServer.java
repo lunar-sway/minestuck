@@ -31,36 +31,37 @@ public class SburbServer extends ButtonListProgram
 	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_server.png");
 	
 	@Override
-	protected ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
+	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
 		OptionalInt clientId = be.getSburbServerData().getConnectedClientId();
 		ReducedConnection connection = clientId.isPresent() ? SkaiaClient.getClientConnection(clientId.getAsInt()) : null;
 		if(connection != null && connection.server().id() != be.ownerId)
 			connection = null;
 		
+		UnlocalizedString message;
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
 		String displayPlayer = connection == null ? "UNDEFINED" : connection.client().name();
 		if(connection != null)
 		{
-			list.add(new UnlocalizedString(CONNECT, displayPlayer));
+			message = new UnlocalizedString(CONNECT, displayPlayer);
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
 			list.add(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
 		} else if (be.getSburbServerData().isOpen())
 		{
-			list.add(new UnlocalizedString(RESUME_SERVER));
+			message = new UnlocalizedString(RESUME_SERVER);
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
 		} else if(SkaiaClient.isActive(be.ownerId, false))
-			list.add(new UnlocalizedString(SERVER_ACTIVE));
+			message = new UnlocalizedString(SERVER_ACTIVE);
 		else
 		{
-			list.add(new UnlocalizedString(OFFLINE));
+			message = new UnlocalizedString(OFFLINE);
 			if(MinestuckConfig.SERVER.allowSecondaryConnections.get()
 					|| !SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
 				list.add(new UnlocalizedString(OPEN_BUTTON));
 			if(SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
 				list.add(new UnlocalizedString(RESUME_BUTTON));
 		}
-		return list;
+		return new InterfaceData(message, list);
 	}
 	
 	@Override

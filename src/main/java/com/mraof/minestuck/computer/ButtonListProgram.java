@@ -37,7 +37,10 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 *
 	 * @param be The {@link ComputerBlockEntity} this program is associated with, for access to related data.
 	 */
-	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be);
+	protected abstract InterfaceData getInterfaceData(ComputerBlockEntity be);
+	
+	protected record InterfaceData(UnlocalizedString message, ArrayList<UnlocalizedString> buttonTexts)
+	{}
 	
 	/**
 	 * Performs the action caused by pressing a button.
@@ -94,45 +97,39 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		downButton.active = false;
 		upButton.active = index > 0;
-		ArrayList<UnlocalizedString> list = getStringList(gui.be);
+		InterfaceData data = getInterfaceData(gui.be);
 		if(!gui.be.latestmessage.get(this.getId()).isEmpty())
-			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
+			data.buttonTexts.add(0, new UnlocalizedString(CLEAR_BUTTON));
 		
-		int pos = -1;
-		for(UnlocalizedString s : list)
+		message = data.message.translate();
+		int pos = 0;
+		for(UnlocalizedString s : data.buttonTexts)
 		{
-			if(pos == -1)
+			if(index > pos)
 			{
-				message = s.translate();
-			} else
-			{
-				if(index > pos)
-				{
-					pos++;
-					continue;
-				}
-				if(pos == index + 4)
-				{
-					downButton.active = true;
-					break;
-				}
-				buttonMap.put(buttons.get(pos - index), s);
+				pos++;
+				continue;
 			}
+			if(pos == index + 4)
+			{
+				downButton.active = true;
+				break;
+			}
+			buttonMap.put(buttons.get(pos - index), s);
 			pos++;
 		}
 		
 		if(index == 0 && pos != 4)
 			for(; pos < 4; pos++)
 			{
-				if(pos >= 0) //can still be -1 in some instances, causing a crash
-					buttonMap.put(buttons.get(pos - index), new UnlocalizedString(""));
+				buttonMap.put(buttons.get(pos - index), new UnlocalizedString(""));
 			}
 		
 		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet())
 		{
-			UnlocalizedString data = entry.getValue();
-			entry.getKey().active = !data.string.isEmpty();
-			entry.getKey().setMessage(data.asTextComponent());
+			UnlocalizedString buttonText = entry.getValue();
+			entry.getKey().active = !buttonText.string.isEmpty();
+			entry.getKey().setMessage(buttonText.asTextComponent());
 		}
 	}
 	
@@ -153,7 +150,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * Represents an unlocalized string and the possible format parameters.
 	 * Is used to represent the value on the buttons, but also the message shown above the buttons.
 	 *
-	 * @see ButtonListProgram#getStringList
+	 * @see ButtonListProgram#getInterfaceData
 	 */
 	protected static class UnlocalizedString
 	{
