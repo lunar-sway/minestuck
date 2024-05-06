@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public abstract class ButtonListProgram extends ComputerProgram
 {
@@ -95,39 +94,28 @@ public abstract class ButtonListProgram extends ComputerProgram
 	@Override
 	public final void onUpdateGui(ComputerScreen gui)
 	{
-		downButton.active = false;
-		upButton.active = index > 0;
 		InterfaceData data = getInterfaceData(gui.be);
 		
 		message = data.message.translate();
-		int pos = 0;
-		for(UnlocalizedString s : data.buttonTexts)
-		{
-			if(index > pos)
-			{
-				pos++;
-				continue;
-			}
-			if(pos == index + 4)
-			{
-				downButton.active = true;
-				break;
-			}
-			buttonMap.put(buttons.get(pos - index), s);
-			pos++;
-		}
 		
-		if(index == 0 && pos != 4)
-			for(; pos < 4; pos++)
-			{
-				buttonMap.put(buttons.get(pos - index), new UnlocalizedString(""));
-			}
+		downButton.active = data.buttonTexts.size() >= index + 4;
+		upButton.active = index > 0;
 		
-		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet())
+		for(int i = 0; i < 4; i++)
 		{
-			UnlocalizedString buttonText = entry.getValue();
-			entry.getKey().active = !buttonText.string.isEmpty();
-			entry.getKey().setMessage(buttonText.asTextComponent());
+			Button button = buttons.get(i);
+			if(index + i < data.buttonTexts.size())
+			{
+				UnlocalizedString buttonText = data.buttonTexts.get(index + i);
+				button.active = true;
+				button.setMessage(buttonText.asTextComponent());
+				buttonMap.put(button, buttonText);
+			} else
+			{
+				button.active = false;
+				button.setMessage(Component.empty());
+				buttonMap.put(button, new UnlocalizedString(""));
+			}
 		}
 	}
 	
