@@ -17,23 +17,14 @@ public class SettingsApp extends ButtonListProgram
 	@Override
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
-		return new InterfaceData(new UnlocalizedString(TITLE), List.of(new UnlocalizedString(THEME)));
+		return new InterfaceData(new UnlocalizedString(TITLE),
+				List.of(new ButtonData(new UnlocalizedString(THEME), () -> openThemeScreen(be))));
 	}
 	
-	@Override
-	protected void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
+	private static void openThemeScreen(ComputerBlockEntity computer)
 	{
-		if(be.getLevel() == null)
-			return;
-		
-		//TODO ADD MORE SETTINGS
-		switch(buttonName)
-		{
-			case THEME -> {
-				be.gui.getMinecraft().setScreen(null);
-				be.gui.getMinecraft().setScreen(new ComputerThemeScreen(be));
-			}
-		}
+		computer.gui.getMinecraft().setScreen(null);
+		computer.gui.getMinecraft().setScreen(new ComputerThemeScreen(computer));
 	}
 	
 	@Override

@@ -27,20 +27,11 @@ public class DiskBurner extends ButtonListProgram
 		if(be.blankDisksStored == 0)
 			return new InterfaceData(new UnlocalizedString(NO_DISKS), List.of());
 		
-		return new InterfaceData(new UnlocalizedString(CHOOSE),
-				List.of(new UnlocalizedString(BURN_SERVER_DISK), new UnlocalizedString(BURN_CLIENT_DISK)));
-	}
-	
-	@Override
-	public void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
-	{
-		if(buttonName.equals(BURN_CLIENT_DISK))
-		{
-			PacketDistributor.sendToServer(BurnDiskPacket.create(be, 0));
-		} else if(buttonName.equals(BURN_SERVER_DISK))
-		{
-			PacketDistributor.sendToServer(BurnDiskPacket.create(be, 1));
-		}
+		return new InterfaceData(new UnlocalizedString(CHOOSE), List.of(
+				new ButtonData(new UnlocalizedString(BURN_SERVER_DISK),
+						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, 1))),
+				new ButtonData(new UnlocalizedString(BURN_CLIENT_DISK),
+						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, 0)))));
 	}
 	
 	@Override

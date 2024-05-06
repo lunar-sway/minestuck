@@ -22,7 +22,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 {
 	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
-	private final Map<Button, UnlocalizedString> buttonMap = new HashMap<>();
+	private final Map<Button, Runnable> buttonMap = new HashMap<>();
 	private final List<Button> buttons = new ArrayList<>(4);
 	private Button upButton, downButton;
 	private String message;
@@ -38,27 +38,23 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 */
 	protected abstract InterfaceData getInterfaceData(ComputerBlockEntity be);
 	
-	protected record InterfaceData(UnlocalizedString message, List<UnlocalizedString> buttonTexts)
-	{}
+	protected record InterfaceData(UnlocalizedString message, List<ButtonData> buttonData)
+	{
+	}
 	
-	/**
-	 * Performs the action caused by pressing a button.
-	 *
-	 * @param be         The computer, if needed.
-	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
-	 * @param data       Format data provided by getStringList().
-	 */
-	protected abstract void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data);
+	protected record ButtonData(UnlocalizedString message, Runnable onClick)
+	{
+	}
 	
 	public final void onButtonPressed(ComputerScreen screen, Button button)
 	{
-		UnlocalizedString data = buttonMap.get(button);
+		Runnable runnable = buttonMap.get(button);
 		
-		if(data != null)
+		if(runnable != null)
 		{
 			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
 				PacketDistributor.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
-			onButtonPressed(screen.be, data.string, data.formatData);
+			runnable.run();
 		}
 		screen.updateGui();
 	}
@@ -83,7 +79,6 @@ public abstract class ButtonListProgram extends ComputerProgram
 		{
 			ExtendedButton button = new ExtendedButton(xOffset + 14, yOffset + 60 + i * 24, 120, 20, Component.empty(), clieckedButton -> onButtonPressed(gui, clieckedButton));
 			gui.addRenderableWidget(button);
-			buttonMap.put(button, new UnlocalizedString(""));
 			buttons.add(button);
 		}
 		
@@ -98,23 +93,23 @@ public abstract class ButtonListProgram extends ComputerProgram
 		
 		message = data.message.translate();
 		
-		downButton.active = data.buttonTexts.size() >= index + 4;
+		downButton.active = data.buttonData.size() >= index + 4;
 		upButton.active = index > 0;
 		
 		for(int i = 0; i < 4; i++)
 		{
 			Button button = buttons.get(i);
-			if(index + i < data.buttonTexts.size())
+			if(index + i < data.buttonData.size())
 			{
-				UnlocalizedString buttonText = data.buttonTexts.get(index + i);
+				ButtonData buttonData = data.buttonData.get(index + i);
 				button.active = true;
-				button.setMessage(buttonText.asTextComponent());
-				buttonMap.put(button, buttonText);
+				button.setMessage(buttonData.message.asTextComponent());
+				buttonMap.put(button, buttonData.onClick);
 			} else
 			{
 				button.active = false;
 				button.setMessage(Component.empty());
-				buttonMap.put(button, new UnlocalizedString(""));
+				buttonMap.remove(button);
 			}
 		}
 	}

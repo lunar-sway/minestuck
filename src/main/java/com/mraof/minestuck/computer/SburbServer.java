@@ -40,21 +40,22 @@ public class SburbServer extends ButtonListProgram
 			connection = null;
 		
 		UnlocalizedString message;
-		List<UnlocalizedString> list = new ArrayList<>();
+		List<ButtonData> list = new ArrayList<>();
 		
 		if(!be.latestmessage.get(this.getId()).isEmpty())
-			list.add(new UnlocalizedString(CLEAR_BUTTON));
+			list.add(new ButtonData(new UnlocalizedString(CLEAR_BUTTON), () -> {}));
 		
 		String displayPlayer = connection == null ? "UNDEFINED" : connection.client().name();
 		if(connection != null)
 		{
 			message = new UnlocalizedString(CONNECT, displayPlayer);
-			list.add(new UnlocalizedString(CLOSE_BUTTON));
-			list.add(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
+			list.add(new ButtonData(new UnlocalizedString(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
+			list.add(new ButtonData(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON),
+					() -> sendActivateEditmodePacket(be)));
 		} else if (be.getSburbServerData().isOpen())
 		{
 			message = new UnlocalizedString(RESUME_SERVER);
-			list.add(new UnlocalizedString(CLOSE_BUTTON));
+			list.add(new ButtonData(new UnlocalizedString(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		} else if(SkaiaClient.isActive(be.ownerId, false))
 			message = new UnlocalizedString(SERVER_ACTIVE);
 		else
@@ -62,27 +63,28 @@ public class SburbServer extends ButtonListProgram
 			message = new UnlocalizedString(OFFLINE);
 			if(MinestuckConfig.SERVER.allowSecondaryConnections.get()
 					|| !SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
-				list.add(new UnlocalizedString(OPEN_BUTTON));
+			{
+				list.add(new ButtonData(new UnlocalizedString(OPEN_BUTTON),
+						() -> PacketDistributor.sendToServer(OpenSburbServerPacket.create(be))));
+			}
 			if(SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
-				list.add(new UnlocalizedString(RESUME_BUTTON));
+			{
+				list.add(new ButtonData(new UnlocalizedString(RESUME_BUTTON),
+						() -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(be))));
+			}
 		}
 		return new InterfaceData(message, list);
 	}
 	
-	@Override
-	public void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
+	private static void sendCloseConnectionPacket(ComputerBlockEntity computer)
 	{
-		switch(buttonName)
-		{
-			case EDIT_BUTTON, GIVE_BUTTON ->
-			{
-				CustomPacketPayload packet = new ClientEditPackets.Activate(be.ownerId, be.getSburbServerData().getConnectedClientId().orElseThrow());
-				PacketDistributor.sendToServer(packet);
-			}
-			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(be));
-			case OPEN_BUTTON -> PacketDistributor.sendToServer(OpenSburbServerPacket.create(be));
-			case CLOSE_BUTTON -> PacketDistributor.sendToServer(CloseSburbConnectionPackets.asServer(be));
-		}
+		PacketDistributor.sendToServer(CloseSburbConnectionPackets.asServer(computer));
+	}
+	
+	private static void sendActivateEditmodePacket(ComputerBlockEntity computer)
+	{
+		CustomPacketPayload packet = new ClientEditPackets.Activate(computer.ownerId, computer.getSburbServerData().getConnectedClientId().orElseThrow());
+		PacketDistributor.sendToServer(packet);
 	}
 	
 	@Override

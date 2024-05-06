@@ -34,57 +34,56 @@ public class SburbClient extends ButtonListProgram
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
 		UnlocalizedString message;
-		List<UnlocalizedString> list = new ArrayList<>();
+		List<ButtonData> list = new ArrayList<>();
 		SburbClientData data = be.getSburbClientData();
 		
 		if(!be.latestmessage.get(this.getId()).isEmpty())
-			list.add(new UnlocalizedString(CLEAR_BUTTON));
+			list.add(new ButtonData(new UnlocalizedString(CLEAR_BUTTON), () -> {}));
 		
 		ReducedConnection c = SkaiaClient.getClientConnection(be.ownerId);
 		if(data.isConnectedToServer() && c != null) //If it is connected to someone.
 		{
 			String displayPlayer = c.server().name();
 			message = new UnlocalizedString(CONNECT, displayPlayer);
-			list.add(new UnlocalizedString(CLOSE_BUTTON));
+			list.add(new ButtonData(new UnlocalizedString(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		} else if(data.isResuming())
 		{
 			message = new UnlocalizedString(RESUME_CLIENT);
-			list.add(new UnlocalizedString(CLOSE_BUTTON));
+			list.add(new ButtonData(new UnlocalizedString(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		} else if(!SkaiaClient.isActive(be.ownerId, true)) //If the player doesn't have an other active client
 		{
 			message = new UnlocalizedString(SELECT);
 			if(SkaiaClient.hasPrimaryConnectionAsClient(be.ownerId))
-				list.add(new UnlocalizedString(RESUME_BUTTON));
-			for (Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(be.ownerId).entrySet())
-				list.add(new UnlocalizedString(CONNECT_BUTTON, entry.getValue(), entry.getKey()));
+			{
+				list.add(new ButtonData(new UnlocalizedString(RESUME_BUTTON),
+						() -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(be))));
+			}
+			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(be.ownerId).entrySet())
+			{
+				list.add(new ButtonData(new UnlocalizedString(CONNECT_BUTTON, entry.getValue()),
+						() -> PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(be, entry.getKey()))));
+			}
 		} else
 		{
 			message = new UnlocalizedString(CLIENT_ACTIVE);
-			list.add(new UnlocalizedString(CLOSE_BUTTON));
+			list.add(new ButtonData(new UnlocalizedString(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		}
 		if(SkaiaClient.canSelect(be.ownerId))
-			list.add(new UnlocalizedString(SELECT_COLOR));
+		{
+			list.add(new ButtonData(new UnlocalizedString(SELECT_COLOR),
+					() -> Minecraft.getInstance().setScreen(new ColorSelectorScreen(be))));
+		}
 		
 		return new InterfaceData(message, list);
 	}
 	
-	@Override
-	public void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] buttonData)
+	private static void sendCloseConnectionPacket(ComputerBlockEntity computer)
 	{
-		switch(buttonName)
-		{
-			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(be));
-			case CONNECT_BUTTON -> PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(be, (Integer) buttonData[1]));
-			case CLOSE_BUTTON ->
-			{
-				SburbClientData data = be.getSburbClientData();
-				if(!data.isResuming() && !data.isConnectedToServer())
-					PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(be));
-				else
-					PacketDistributor.sendToServer(CloseSburbConnectionPackets.asClient(be));
-			}
-			case SELECT_COLOR -> Minecraft.getInstance().setScreen(new ColorSelectorScreen(be));
-		}
+		SburbClientData data = computer.getSburbClientData();
+		if(!data.isResuming() && !data.isConnectedToServer())
+			PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(computer));
+		else
+			PacketDistributor.sendToServer(CloseSburbConnectionPackets.asClient(computer));
 	}
 	
 	@Override
