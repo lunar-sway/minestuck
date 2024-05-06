@@ -40,7 +40,7 @@ public class SburbServer extends ButtonListProgram
 		if(connection != null && connection.server().id() != be.ownerId)
 			connection = null;
 		
-		UnlocalizedString message;
+		Component message;
 		List<ButtonData> list = new ArrayList<>();
 		
 		if(!be.latestmessage.get(this.getId()).isEmpty())
@@ -49,19 +49,19 @@ public class SburbServer extends ButtonListProgram
 		String displayPlayer = connection == null ? "UNDEFINED" : connection.client().name();
 		if(connection != null)
 		{
-			message = new UnlocalizedString(CONNECT, displayPlayer);
+			message = Component.translatable(CONNECT, displayPlayer);
 			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 			list.add(new ButtonData(Component.translatable(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON),
 					() -> sendActivateEditmodePacket(be)));
 		} else if (be.getSburbServerData().isOpen())
 		{
-			message = new UnlocalizedString(RESUME_SERVER);
+			message = Component.translatable(RESUME_SERVER);
 			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		} else if(SkaiaClient.isActive(be.ownerId, false))
-			message = new UnlocalizedString(SERVER_ACTIVE);
+			message = Component.translatable(SERVER_ACTIVE);
 		else
 		{
-			message = new UnlocalizedString(OFFLINE);
+			message = Component.translatable(OFFLINE);
 			if(MinestuckConfig.SERVER.allowSecondaryConnections.get()
 					|| !SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
 			{

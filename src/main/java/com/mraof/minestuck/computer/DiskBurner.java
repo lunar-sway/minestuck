@@ -23,12 +23,12 @@ public class DiskBurner extends ButtonListProgram
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
 		if(!be.hasAllCode())
-			return new InterfaceData(new UnlocalizedString(NEED_CODE), List.of());
+			return new InterfaceData(Component.translatable(NEED_CODE), List.of());
 		
 		if(be.blankDisksStored == 0)
-			return new InterfaceData(new UnlocalizedString(NO_DISKS), List.of());
+			return new InterfaceData(Component.translatable(NO_DISKS), List.of());
 		
-		return new InterfaceData(new UnlocalizedString(CHOOSE), List.of(
+		return new InterfaceData(Component.translatable(CHOOSE), List.of(
 				new ButtonData(Component.translatable(BURN_SERVER_DISK),
 						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, 1))),
 				new ButtonData(Component.translatable(BURN_CLIENT_DISK),

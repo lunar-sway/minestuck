@@ -18,7 +18,7 @@ public class SettingsApp extends ButtonListProgram
 	@Override
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
-		return new InterfaceData(new UnlocalizedString(TITLE),
+		return new InterfaceData(Component.translatable(TITLE),
 				List.of(new ButtonData(Component.translatable(THEME), () -> openThemeScreen(be))));
 	}
 	

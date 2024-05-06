@@ -33,7 +33,7 @@ public class SburbClient extends ButtonListProgram
 	@Override
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
-		UnlocalizedString message;
+		Component message;
 		List<ButtonData> list = new ArrayList<>();
 		SburbClientData data = be.getSburbClientData();
 		
@@ -44,15 +44,15 @@ public class SburbClient extends ButtonListProgram
 		if(data.isConnectedToServer() && c != null) //If it is connected to someone.
 		{
 			String displayPlayer = c.server().name();
-			message = new UnlocalizedString(CONNECT, displayPlayer);
+			message = Component.translatable(CONNECT, displayPlayer);
 			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		} else if(data.isResuming())
 		{
-			message = new UnlocalizedString(RESUME_CLIENT);
+			message = Component.translatable(RESUME_CLIENT);
 			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		} else if(!SkaiaClient.isActive(be.ownerId, true)) //If the player doesn't have an other active client
 		{
-			message = new UnlocalizedString(SELECT);
+			message = Component.translatable(SELECT);
 			if(SkaiaClient.hasPrimaryConnectionAsClient(be.ownerId))
 			{
 				list.add(new ButtonData(Component.translatable(RESUME_BUTTON),
@@ -65,7 +65,7 @@ public class SburbClient extends ButtonListProgram
 			}
 		} else
 		{
-			message = new UnlocalizedString(CLIENT_ACTIVE);
+			message = Component.translatable(CLIENT_ACTIVE);
 			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		}
 		if(SkaiaClient.canSelect(be.ownerId))

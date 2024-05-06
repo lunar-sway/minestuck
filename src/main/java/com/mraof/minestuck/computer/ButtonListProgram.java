@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -25,7 +24,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	private final Map<Button, Runnable> buttonMap = new HashMap<>();
 	private final List<Button> buttons = new ArrayList<>(4);
 	private Button upButton, downButton;
-	private String message;
+	private Component message;
 	
 	private int index = 0;
 	
@@ -38,7 +37,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 */
 	protected abstract InterfaceData getInterfaceData(ComputerBlockEntity be);
 	
-	protected record InterfaceData(UnlocalizedString message, List<ButtonData> buttonData)
+	protected record InterfaceData(Component message, List<ButtonData> buttonData)
 	{
 	}
 	
@@ -91,7 +90,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		InterfaceData data = getInterfaceData(gui.be);
 		
-		message = data.message.translate();
+		message = data.message;
 		
 		downButton.active = data.buttonData.size() >= index + 4;
 		upButton.active = index > 0;
@@ -118,41 +117,19 @@ public abstract class ButtonListProgram extends ComputerProgram
 	public final void paintGui(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be)
 	{
 		Font font = Minecraft.getInstance().font;
-		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
-		{
-			guiGraphics.drawString(font, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
-		} else
-		{
-			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
-		}
+		
+		guiGraphics.drawString(font, getDisplayedMessage(be),
+				(gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45,
+				gui.getTheme().data().textColor(), false);
 	}
 	
-	/**
-	 * Represents an unlocalized string and the possible format parameters.
-	 * Is used to represent the value on the buttons, but also the message shown above the buttons.
-	 *
-	 * @see ButtonListProgram#getInterfaceData
-	 */
-	protected static class UnlocalizedString
+	private Component getDisplayedMessage(ComputerBlockEntity computer)
 	{
-		String string;
-		Object[] formatData;
+		String storedMessage = computer.latestmessage.get(computer.programSelected);
+		if(storedMessage != null && !storedMessage.isEmpty())
+			return Component.translatable(storedMessage);
 		
-		public UnlocalizedString(String str, Object... obj)
-		{
-			string = str;
-			formatData = obj;
-		}
-		
-		public String translate()
-		{
-			return I18n.get(string, formatData);
-		}
-		
-		public Component asTextComponent()
-		{
-			return Component.translatable(string, formatData);
-		}
+		return message;
 	}
 	
 	protected class ArrowButton extends ExtendedButton
