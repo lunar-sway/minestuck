@@ -2360,9 +2360,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SummonerScreen.TRIGGERABLE_MESSAGE, "TRIGGERABLE");
 		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
+		
 		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");
 		add(SburbClient.CLOSE_BUTTON, "Disconnect");
-		add(SburbClient.CONNECT_BUTTON, "%s");
 		add(SburbServer.EDIT_BUTTON, "Activate edit mode");
 		add(SburbServer.GIVE_BUTTON, "Give items");
 		add(SburbServer.OPEN_BUTTON, "Open to clients");
@@ -2384,6 +2384,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
 		add(SettingsApp.THEME, "Choose Theme");
 		add(SettingsApp.TITLE, "Sburb Settings");
+		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
 		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console");

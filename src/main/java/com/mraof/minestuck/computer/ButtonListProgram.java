@@ -42,7 +42,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 	}
 	
-	protected record ButtonData(UnlocalizedString message, Runnable onClick)
+	protected record ButtonData(Component message, Runnable onClick)
 	{
 	}
 	
@@ -103,7 +103,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 			{
 				ButtonData buttonData = data.buttonData.get(index + i);
 				button.active = true;
-				button.setMessage(buttonData.message.asTextComponent());
+				button.setMessage(buttonData.message);
 				buttonMap.put(button, buttonData.onClick);
 			} else
 			{

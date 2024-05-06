@@ -9,6 +9,7 @@ import com.mraof.minestuck.network.computer.ResumeSburbConnectionPackets;
 import com.mraof.minestuck.network.editmode.ClientEditPackets;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -43,19 +44,19 @@ public class SburbServer extends ButtonListProgram
 		List<ButtonData> list = new ArrayList<>();
 		
 		if(!be.latestmessage.get(this.getId()).isEmpty())
-			list.add(new ButtonData(new UnlocalizedString(CLEAR_BUTTON), () -> {}));
+			list.add(new ButtonData(Component.translatable(CLEAR_BUTTON), () -> {}));
 		
 		String displayPlayer = connection == null ? "UNDEFINED" : connection.client().name();
 		if(connection != null)
 		{
 			message = new UnlocalizedString(CONNECT, displayPlayer);
-			list.add(new ButtonData(new UnlocalizedString(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
-			list.add(new ButtonData(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON),
+			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
+			list.add(new ButtonData(Component.translatable(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON),
 					() -> sendActivateEditmodePacket(be)));
 		} else if (be.getSburbServerData().isOpen())
 		{
 			message = new UnlocalizedString(RESUME_SERVER);
-			list.add(new ButtonData(new UnlocalizedString(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
+			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
 		} else if(SkaiaClient.isActive(be.ownerId, false))
 			message = new UnlocalizedString(SERVER_ACTIVE);
 		else
@@ -64,12 +65,12 @@ public class SburbServer extends ButtonListProgram
 			if(MinestuckConfig.SERVER.allowSecondaryConnections.get()
 					|| !SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
 			{
-				list.add(new ButtonData(new UnlocalizedString(OPEN_BUTTON),
+				list.add(new ButtonData(Component.translatable(OPEN_BUTTON),
 						() -> PacketDistributor.sendToServer(OpenSburbServerPacket.create(be))));
 			}
 			if(SkaiaClient.hasPrimaryConnectionAsServer(be.ownerId))
 			{
-				list.add(new ButtonData(new UnlocalizedString(RESUME_BUTTON),
+				list.add(new ButtonData(Component.translatable(RESUME_BUTTON),
 						() -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(be))));
 			}
 		}

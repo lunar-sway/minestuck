@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerThemeScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class SettingsApp extends ButtonListProgram
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
 		return new InterfaceData(new UnlocalizedString(TITLE),
-				List.of(new ButtonData(new UnlocalizedString(THEME), () -> openThemeScreen(be))));
+				List.of(new ButtonData(Component.translatable(THEME), () -> openThemeScreen(be))));
 	}
 	
 	private static void openThemeScreen(ComputerBlockEntity computer)
