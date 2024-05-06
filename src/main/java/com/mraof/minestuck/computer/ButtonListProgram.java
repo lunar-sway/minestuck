@@ -39,7 +39,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 */
 	protected abstract InterfaceData getInterfaceData(ComputerBlockEntity be);
 	
-	protected record InterfaceData(UnlocalizedString message, ArrayList<UnlocalizedString> buttonTexts)
+	protected record InterfaceData(UnlocalizedString message, List<UnlocalizedString> buttonTexts)
 	{}
 	
 	/**
@@ -98,8 +98,6 @@ public abstract class ButtonListProgram extends ComputerProgram
 		downButton.active = false;
 		upButton.active = index > 0;
 		InterfaceData data = getInterfaceData(gui.be);
-		if(!gui.be.latestmessage.get(this.getId()).isEmpty())
-			data.buttonTexts.add(0, new UnlocalizedString(CLEAR_BUTTON));
 		
 		message = data.message.translate();
 		int pos = 0;

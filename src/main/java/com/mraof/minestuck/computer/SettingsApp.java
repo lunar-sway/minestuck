@@ -5,7 +5,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerThemeScreen;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsApp extends ButtonListProgram
 {
@@ -17,12 +17,7 @@ public class SettingsApp extends ButtonListProgram
 	@Override
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
-		var list = new ArrayList<UnlocalizedString>();
-		
-		UnlocalizedString message = new UnlocalizedString(TITLE);
-		list.add(new UnlocalizedString(THEME));
-		
-		return new InterfaceData(message, list);
+		return new InterfaceData(new UnlocalizedString(TITLE), List.of(new UnlocalizedString(THEME)));
 	}
 	
 	@Override

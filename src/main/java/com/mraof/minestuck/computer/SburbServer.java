@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalInt;
 
 public class SburbServer extends ButtonListProgram
@@ -39,7 +40,11 @@ public class SburbServer extends ButtonListProgram
 			connection = null;
 		
 		UnlocalizedString message;
-		ArrayList<UnlocalizedString> list = new ArrayList<>();
+		List<UnlocalizedString> list = new ArrayList<>();
+		
+		if(!be.latestmessage.get(this.getId()).isEmpty())
+			list.add(new UnlocalizedString(CLEAR_BUTTON));
+		
 		String displayPlayer = connection == null ? "UNDEFINED" : connection.client().name();
 		if(connection != null)
 		{

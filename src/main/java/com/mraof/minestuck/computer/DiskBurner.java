@@ -6,7 +6,7 @@ import com.mraof.minestuck.network.computer.BurnDiskPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DiskBurner extends ButtonListProgram
 {
@@ -22,16 +22,13 @@ public class DiskBurner extends ButtonListProgram
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
 		if(!be.hasAllCode())
-			return new InterfaceData(new UnlocalizedString(NEED_CODE), new ArrayList<>());
+			return new InterfaceData(new UnlocalizedString(NEED_CODE), List.of());
 		
 		if(be.blankDisksStored == 0)
-			return new InterfaceData(new UnlocalizedString(NO_DISKS), new ArrayList<>());
+			return new InterfaceData(new UnlocalizedString(NO_DISKS), List.of());
 		
-		ArrayList<UnlocalizedString> buttonTexts = new ArrayList<>();
-		UnlocalizedString message = new UnlocalizedString(CHOOSE);
-		buttonTexts.add(new UnlocalizedString(BURN_SERVER_DISK));
-		buttonTexts.add(new UnlocalizedString(BURN_CLIENT_DISK));
-		return new InterfaceData(message, buttonTexts);
+		return new InterfaceData(new UnlocalizedString(CHOOSE),
+				List.of(new UnlocalizedString(BURN_SERVER_DISK), new UnlocalizedString(BURN_CLIENT_DISK)));
 	}
 	
 	@Override
