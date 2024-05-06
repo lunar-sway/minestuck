@@ -17,7 +17,6 @@ public final class MSPayloads
 	{
 		event.registrar(Minestuck.MOD_ID)
 				.versioned("1")
-				.play(DataCheckerPermissionPacket.ID, DataCheckerPermissionPacket::read, MSPacket.PlayToClient::handler)
 				.play(EcheladderDataPacket.ID, EcheladderDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(ModusDataPacket.ID, ModusDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(BoondollarDataPacket.ID, BoondollarDataPacket::read, MSPacket.PlayToClient::handler)
@@ -62,6 +61,7 @@ public final class MSPayloads
 				.play(ThemeSelectPacket.ID, ThemeSelectPacket::read, MSPacket.PlayToServer::handler)
 				.play(DataCheckerPacket.Request.ID, DataCheckerPacket.Request::read, MSPacket.PlayToServer::handler)
 				.play(DataCheckerPacket.Data.ID, DataCheckerPacket.Data::read, MSPacket.PlayToClient::handler)
+				.play(DataCheckerPacket.Permission.ID, DataCheckerPacket.Permission::read, MSPacket.PlayToClient::handler)
 				
 				.play(MiscContainerPacket.ID, MiscContainerPacket::read, MSPacket.PlayToServer::handler)
 				

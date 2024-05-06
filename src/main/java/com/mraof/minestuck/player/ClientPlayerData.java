@@ -5,6 +5,7 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.util.ColorHandler;
@@ -180,8 +181,9 @@ public final class ClientPlayerData
 		ClientPlayerData.playerColor = packet.color();
 	}
 	
-	public static void handleDataPacket(DataCheckerPermissionPacket packet)
+	public static void handleDataPacket(DataCheckerPacket.Permission packet)
 	{
 		dataCheckerAccess = packet.isAvailable();
 	}
 }
+
