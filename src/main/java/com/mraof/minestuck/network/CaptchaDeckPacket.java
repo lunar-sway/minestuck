@@ -5,13 +5,57 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 
+import javax.annotation.Nullable;
+
 public final class CaptchaDeckPacket
 {
+	public record ModusData(@Nullable CompoundTag nbt) implements MSPacket.PlayToClient
+	{
+		public static final ResourceLocation ID = Minestuck.id("captcha_deck/modus_data");
+		
+		public static ModusData create(@Nullable Modus modus)
+		{
+			return new ModusData(CaptchaDeckHandler.writeToNBT(modus));
+		}
+		
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+			if(nbt != null)
+			{
+				buffer.writeNbt(nbt);
+			}
+		}
+		
+		public static ModusData read(FriendlyByteBuf buffer)
+		{
+			if(buffer.readableBytes() > 0)
+			{
+				CompoundTag nbt = buffer.readNbt();
+				return new ModusData(nbt);
+			} else return new ModusData(null);
+		}
+		
+		@Override
+		public void execute()
+		{
+			ClientPlayerData.handleDataPacket(this);
+		}
+	}
+	
 	public record TriggerModusButton() implements MSPacket.PlayToServer
 	{
 		public static final ResourceLocation ID = Minestuck.id("captcha_deck/trigger_modus_button");

@@ -18,7 +18,6 @@ public final class MSPayloads
 		event.registrar(Minestuck.MOD_ID)
 				.versioned("1")
 				.play(EcheladderDataPacket.ID, EcheladderDataPacket::read, MSPacket.PlayToClient::handler)
-				.play(ModusDataPacket.ID, ModusDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(BoondollarDataPacket.ID, BoondollarDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(GristCachePacket.ID, GristCachePacket::read, MSPacket.PlayToClient::handler)
 				.play(EditmodeCacheLimitPacket.ID, EditmodeCacheLimitPacket::read, MSPacket.PlayToClient::handler)
@@ -30,6 +29,7 @@ public final class MSPayloads
 				.play(PlayerColorPacket.SelectIndex.ID, PlayerColorPacket.SelectIndex::read, MSPacket.PlayToServer::handler)
 				.play(PlayerColorPacket.SelectRGB.ID, PlayerColorPacket.SelectRGB::read, MSPacket.PlayToServer::handler)
 				
+				.play(CaptchaDeckPacket.ModusData.ID, CaptchaDeckPacket.ModusData::read, MSPacket.PlayToClient::handler)
 				.play(CaptchaDeckPacket.TriggerModusButton.ID, CaptchaDeckPacket.TriggerModusButton::read, MSPacket.PlayToServer::handler)
 				.play(CaptchaDeckPacket.CaptchalogueHeldItem.ID, CaptchaDeckPacket.CaptchalogueHeldItem::read, MSPacket.PlayToServer::handler)
 				.play(CaptchaDeckPacket.CaptchalogueInventorySlot.ID, CaptchaDeckPacket.CaptchalogueInventorySlot::read, MSPacket.PlayToServer::handler)

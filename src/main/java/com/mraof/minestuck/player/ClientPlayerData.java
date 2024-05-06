@@ -5,6 +5,7 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
@@ -133,7 +134,7 @@ public final class ClientPlayerData
 		return dataCheckerAccess;
 	}
 	
-	public static void handleDataPacket(ModusDataPacket packet)
+	public static void handleDataPacket(CaptchaDeckPacket.ModusData packet)
 	{
 		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT);
 		if(modus != null)
