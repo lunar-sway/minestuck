@@ -23,11 +23,11 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSCreativeTabs;
+import com.mraof.minestuck.item.MSDispenserBehaviours;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.KindAbstratusList;
-import com.mraof.minestuck.util.DispenserBehaviourUtil;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -137,7 +137,7 @@ public class Minestuck
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
-		DispenserBehaviourUtil.registerBehaviours();
+		MSDispenserBehaviours.registerBehaviours();
 		
 		ProgramData.init();
 		
@@ -147,3 +147,4 @@ public class Minestuck
 			BlockCopier.addStep(new RSEntryBlockProcess());
 	}
 }
+
