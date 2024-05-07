@@ -77,29 +77,27 @@ public class PostEntryTask
 		}
 		
 		int preIndex = index;
-		main:
+		
+		long time = System.currentTimeMillis() + MIN_TIME;
+		int i = 0;
+		for(BlockPos pos : EntryBlockIterator.get(x, y, z, entrySize))
 		{
-			long time = System.currentTimeMillis() + MIN_TIME;
-			int i = 0;
-			for(BlockPos pos : EntryBlockIterator.get(x, y, z, entrySize))
+			if(i >= index)
 			{
-				if(i >= index)
+				updateBlock(pos.immutable(), world);
+				index++;
+				if(time <= System.currentTimeMillis())
 				{
-					updateBlock(pos.immutable(), world);
-					index++;
-					if(time <= System.currentTimeMillis())
-						break main;
+					LOGGER.debug("Updated {} blocks this tick.", index - preIndex);
+					return index != preIndex;
 				}
-				i++;
 			}
-			
-			LOGGER.info("Completed entry block updates for dimension {}.", dimension.location());
-			setDone();
-			return true;
+			i++;
 		}
 		
-		LOGGER.debug("Updated {} blocks this tick.", index - preIndex);
-		return index != preIndex;
+		LOGGER.info("Completed entry block updates for dimension {}.", dimension.location());
+		setDone();
+		return true;
 	}
 	
 	public boolean isDone()
