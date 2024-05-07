@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -29,31 +28,6 @@ import java.util.stream.Stream;
 public class MSNBTUtil
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	/**
-	 * Reads a resource location or throws an exception if it is invalid.
-	 */
-	@Nonnull
-	public static ResourceLocation readResourceLocation(CompoundTag nbt, String key)
-	{
-		return ResourceLocation.CODEC.parse(NbtOps.INSTANCE, nbt.get(key)).getOrThrow(false, LOGGER::error);
-	}
-	
-	/**
-	 * Reads a resource location or returns null if it is invalid.
-	 */
-	@Nullable
-	public static ResourceLocation tryReadResourceLocation(CompoundTag nbt, String key)
-	{
-		return ResourceLocation.CODEC.parse(NbtOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElse(null);
-	}
-	
-	public static CompoundTag writeResourceLocation(CompoundTag nbt, String key, ResourceLocation resourceLocation)
-	{
-		Objects.requireNonNull(resourceLocation);
-		nbt.put(key, ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, resourceLocation).getOrThrow(false, LOGGER::error));
-		return nbt;
-	}
 	
 	/**
 	 * Reads a dimension type or throws an exception if it is unable to do so.
@@ -137,10 +111,7 @@ public class MSNBTUtil
 	
 	public static void writeGristType(CompoundTag nbt, String key, GristType gristType)
 	{
-		ResourceLocation id = gristType.getId();
-		if(id == null)
-			LOGGER.error("Trying to save grist type {} that is lacking a registry id!", gristType);
-		else writeResourceLocation(nbt, key, id);
+		nbt.put(key, GristTypes.REGISTRY.byNameCodec().encodeStart(NbtOps.INSTANCE, gristType).getOrThrow(false, LOGGER::error));
 	}
 	
 	public static GristType readGristType(CompoundTag nbt, String key)
@@ -150,15 +121,6 @@ public class MSNBTUtil
 	
 	public static GristType readGristType(CompoundTag nbt, String key, Supplier<GristType> fallback)
 	{
-		ResourceLocation name = tryReadResourceLocation(nbt, key);
-		if(name != null)
-		{
-			GristType type = GristTypes.REGISTRY.get(name);
-			if(type != null)
-				return type;
-			else
-				LOGGER.warn("Couldn't find grist type by name {}  while reading from nbt. Will fall back to {} instead.", name, fallback);
-		}
-		return fallback.get();
+		return GristTypes.REGISTRY.byNameCodec().parse(NbtOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElseGet(fallback);
 	}
 }
