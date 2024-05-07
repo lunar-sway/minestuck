@@ -29,23 +29,21 @@ public class PostEntryTask
 	private final ResourceKey<Level> dimension;
 	private final int x, y, z;
 	private final int entrySize;
-	private final byte entryType;	//Used if we add more ways for entry to happen
 	private int index;
 	
-	public PostEntryTask(ResourceKey<Level> dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
+	public PostEntryTask(ResourceKey<Level> dimension, int xCoord, int yCoord, int zCoord, int entrySize)
 	{
 		this.dimension = dimension;
 		this.x = xCoord;
 		this.y = yCoord;
 		this.z = zCoord;
 		this.entrySize = entrySize;
-		this.entryType = entryType;
 		this.index = 0;
 	}
 	
 	public PostEntryTask(CompoundTag nbt)
 	{
-		this(MSNBTUtil.tryReadDimensionType(nbt, "dimension"), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
+		this(MSNBTUtil.tryReadDimensionType(nbt, "dimension"), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"));
 		this.index = nbt.getInt("index");
 		if(dimension == null)
 			LOGGER.warn("Unable to load dimension type by name {}!", nbt.getString("dimension"));
@@ -59,7 +57,6 @@ public class PostEntryTask
 		nbt.putInt("y", y);
 		nbt.putInt("z", z);
 		nbt.putInt("entrySize", entrySize);
-		nbt.putByte("entryType", entryType);
 		nbt.putInt("index", index);
 		
 		return nbt;
@@ -82,21 +79,18 @@ public class PostEntryTask
 		int preIndex = index;
 		main:
 		{
-			if(entryType == 0)
+			long time = System.currentTimeMillis() + MIN_TIME;
+			int i = 0;
+			for(BlockPos pos : EntryBlockIterator.get(x, y, z, entrySize))
 			{
-				long time = System.currentTimeMillis() + MIN_TIME;
-				int i = 0;
-				for(BlockPos pos : EntryBlockIterator.get(x, y, z, entrySize))
+				if(i >= index)
 				{
-					if(i >= index)
-					{
-						updateBlock(pos.immutable(), world);
-						index++;
-						if(time <= System.currentTimeMillis())
-							break main;
-					}
-					i++;
+					updateBlock(pos.immutable(), world);
+					index++;
+					if(time <= System.currentTimeMillis())
+						break main;
 				}
+				i++;
 			}
 			
 			LOGGER.info("Completed entry block updates for dimension {}.", dimension.location());
