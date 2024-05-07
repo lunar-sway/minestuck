@@ -2,7 +2,7 @@ package com.mraof.minestuck.block.machine;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.block.CustomVoxelShape;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;

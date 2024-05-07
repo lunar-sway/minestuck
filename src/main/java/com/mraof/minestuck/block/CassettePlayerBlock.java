@@ -1,8 +1,7 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.blockentity.CassettePlayerBlockEntity;
-import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.item.CassetteItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
