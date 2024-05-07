@@ -12,7 +12,6 @@ import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
@@ -512,7 +511,7 @@ public interface Condition
 	{
 		static final Codec<PlayerHasItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(PlayerHasItem::item),
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasItem::amount)
+				ExtraCodecs.strictOptionalField(Codec.INT, "amount", 1).forGetter(PlayerHasItem::amount)
 		).apply(instance, PlayerHasItem::new));
 		
 		@Override
@@ -717,8 +716,8 @@ public interface Condition
 	record PlayerHasReputation(int amount, boolean greaterThan) implements Condition
 	{
 		static final Codec<PlayerHasReputation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasReputation::amount),
-				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "greater_than", true).forGetter(PlayerHasReputation::greaterThan)
+				ExtraCodecs.strictOptionalField(Codec.INT, "amount", 1).forGetter(PlayerHasReputation::amount),
+				ExtraCodecs.strictOptionalField(Codec.BOOL, "greater_than", true).forGetter(PlayerHasReputation::greaterThan)
 		).apply(instance, PlayerHasReputation::new));
 		
 		@Override
@@ -754,7 +753,7 @@ public interface Condition
 	record PlayerHasBoondollars(int amount) implements Condition
 	{
 		static final Codec<PlayerHasBoondollars> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasBoondollars::amount)
+				ExtraCodecs.strictOptionalField(Codec.INT, "amount", 1).forGetter(PlayerHasBoondollars::amount)
 		).apply(instance, PlayerHasBoondollars::new));
 		
 		@Override
@@ -814,7 +813,7 @@ public interface Condition
 	record CustomHasScore(int value, String ownerName, String objectiveName) implements Condition
 	{
 		static final Codec<CustomHasScore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "value", 0).forGetter(CustomHasScore::value),
+				ExtraCodecs.strictOptionalField(Codec.INT, "value", 0).forGetter(CustomHasScore::value),
 				Codec.STRING.fieldOf("owner_name").forGetter(CustomHasScore::ownerName),
 				Codec.STRING.fieldOf("objective_name").forGetter(CustomHasScore::objectiveName)
 		).apply(instance, CustomHasScore::new));
