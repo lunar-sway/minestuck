@@ -13,7 +13,6 @@ import com.mraof.minestuck.network.GristRejectAnimationPacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -290,7 +289,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 		compound.putShort("Health", (short) this.gristHealth);
 		compound.putShort("Age", (short) this.gristAge);
 		compound.putLong("Value", (short) this.gristValue);
-		compound.put("Type", MSNBTUtil.encodeGristType(gristType));
+		compound.put("Type", GristHelper.encodeGristType(gristType));
 	}
 	
 	@Override
@@ -301,7 +300,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 		if(compound.contains("Value", Tag.TAG_ANY_NUMERIC))
 			this.gristValue = compound.getLong("Value");
 		if(compound.contains("Type", Tag.TAG_STRING))
-			this.gristType = MSNBTUtil.parseGristType(compound.get("Type")).orElseGet(GristTypes.BUILD);
+			this.gristType = GristHelper.parseGristType(compound.get("Type")).orElseGet(GristTypes.BUILD);
 	}
 	
 	/**

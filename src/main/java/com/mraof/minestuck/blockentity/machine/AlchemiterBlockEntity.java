@@ -17,7 +17,6 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -186,7 +185,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		super.load(nbt);
 		
-		wildcardGrist = MSNBTUtil.parseGristType(nbt.get("gristType")).orElseGet(GristTypes.BUILD);
+		wildcardGrist = GristHelper.parseGristType(nbt.get("gristType")).orElseGet(GristTypes.BUILD);
 		
 		/*
 		this.upgraded = compound.getBoolean("upgraded");
@@ -216,7 +215,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		super.saveAdditional(compound);
 		
-		compound.put("gristType", MSNBTUtil.encodeGristType(wildcardGrist));
+		compound.put("gristType", GristHelper.encodeGristType(wildcardGrist));
 		compound.putBoolean("broken", isBroken());
 		
 		if(dowel!= null)

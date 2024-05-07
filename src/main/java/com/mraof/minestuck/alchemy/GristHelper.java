@@ -8,16 +8,32 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.neoforged.neoforge.common.NeoForge;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-public class GristHelper
+public final class GristHelper
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static Tag encodeGristType(GristType gristType)
+	{
+		return GristTypes.REGISTRY.byNameCodec().encodeStart(NbtOps.INSTANCE, gristType).getOrThrow(false, LOGGER::error);
+	}
+	
+	public static Optional<GristType> parseGristType(Tag tag)
+	{
+		return GristTypes.REGISTRY.byNameCodec().parse(NbtOps.INSTANCE, tag).resultOrPartial(LOGGER::error);
+	}
 	
 	/**
 	 * An enum for indicating where the grist notifications comes from.

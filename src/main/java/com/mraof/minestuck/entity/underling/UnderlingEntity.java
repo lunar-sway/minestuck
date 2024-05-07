@@ -15,7 +15,6 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -283,7 +282,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		super.addAdditionalSaveData(compound);
 		GristType gristType = getGristType();
-		compound.put("Type", MSNBTUtil.encodeGristType(gristType));
+		compound.put("Type", GristHelper.encodeGristType(gristType));
 		compound.putBoolean("Spawned", fromSpawner);
 		if(hasRestriction())
 		{
@@ -302,7 +301,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		//Note: grist type should be read and applied before reading health due to the modifiers to max health
 		if(compound.contains("Type", Tag.TAG_STRING))
-			applyGristType(MSNBTUtil.parseGristType(compound.get("Type")).orElseGet(GristTypes.ARTIFACT));
+			applyGristType(GristHelper.parseGristType(compound.get("Type")).orElseGet(GristTypes.ARTIFACT));
 		else applyGristType(GristHelper.getPrimaryGrist(this.getRandom()));
 		
 		super.readAdditionalSaveData(compound);
