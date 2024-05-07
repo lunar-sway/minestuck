@@ -3,7 +3,6 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.util.DataCheckerPermission;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
