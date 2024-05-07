@@ -9,7 +9,6 @@ import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -22,10 +21,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.entity.PartEntity;
 import org.joml.Vector3d;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -226,10 +222,10 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, BasiliskEntity::idleAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, BasiliskEntity::deathAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 1, BasiliskEntity::attackAnimation));
+		controllers.add(new AnimationController<>(this, "idleAnimation", BasiliskEntity::idleAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", BasiliskEntity::walkAnimation).setAnimationSpeed(0.5));
+		controllers.add(new AnimationController<>(this, "deathAnimation", BasiliskEntity::deathAnimation));
+		controllers.add(new AnimationController<>(this, "attackAnimation", BasiliskEntity::attackAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<BasiliskEntity> state)
