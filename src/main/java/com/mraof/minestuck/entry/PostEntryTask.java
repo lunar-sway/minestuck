@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entry;
 
-import com.mraof.minestuck.util.MSNBTUtil;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -16,9 +16,23 @@ import org.apache.logging.log4j.Logger;
  * To reduce time, and still reduce lightning and "floating" liquids,
  * this was created to handle such tasks during the ticks right after entry instead of during entry.
  */
-public class PostEntryTask
+public final class PostEntryTask
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static final Codec<PostEntryTask> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Level.RESOURCE_KEY_CODEC.fieldOf("dimension").forGetter(task -> task.dimension),
+			Codec.INT.fieldOf("x").forGetter(task -> task.x),
+			Codec.INT.fieldOf("y").forGetter(task -> task.y),
+			Codec.INT.fieldOf("z").forGetter(task -> task.z),
+			Codec.INT.fieldOf("entrySize").forGetter(task -> task.entrySize),
+			Codec.INT.fieldOf("index").forGetter(task -> task.index)
+	).apply(instance, (dimension, x, y, z, entrySize, index) -> {
+		PostEntryTask task = new PostEntryTask(dimension, x, y, z, entrySize);
+		task.index = index;
+		return task;
+	}));
+	
 	/**
 	 * The minimum amount of time (in milliseconds) to spend each game tick
 	 * updating blocks post-entry.
@@ -39,27 +53,6 @@ public class PostEntryTask
 		this.z = zCoord;
 		this.entrySize = entrySize;
 		this.index = 0;
-	}
-	
-	public PostEntryTask(CompoundTag nbt)
-	{
-		this(MSNBTUtil.tryReadDimensionType(nbt, "dimension"), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"));
-		this.index = nbt.getInt("index");
-		if(dimension == null)
-			LOGGER.warn("Unable to load dimension type by name {}!", nbt.getString("dimension"));
-	}
-	
-	public CompoundTag write()
-	{
-		CompoundTag nbt = new CompoundTag();
-		MSNBTUtil.tryWriteDimensionType(nbt, "dimension", dimension);
-		nbt.putInt("x", x);
-		nbt.putInt("y", y);
-		nbt.putInt("z", z);
-		nbt.putInt("entrySize", entrySize);
-		nbt.putInt("index", index);
-		
-		return nbt;
 	}
 	
 	public boolean onTick(MinecraftServer server)
