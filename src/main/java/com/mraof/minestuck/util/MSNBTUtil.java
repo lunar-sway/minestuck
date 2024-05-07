@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -109,18 +108,13 @@ public class MSNBTUtil
 		}
 	}
 	
-	public static void writeGristType(CompoundTag nbt, String key, GristType gristType)
+	public static Tag encodeGristType(GristType gristType)
 	{
-		nbt.put(key, GristTypes.REGISTRY.byNameCodec().encodeStart(NbtOps.INSTANCE, gristType).getOrThrow(false, LOGGER::error));
+		return GristTypes.REGISTRY.byNameCodec().encodeStart(NbtOps.INSTANCE, gristType).getOrThrow(false, LOGGER::error);
 	}
 	
-	public static GristType readGristType(CompoundTag nbt, String key)
+	public static Optional<GristType> parseGristType(Tag tag)
 	{
-		return readGristType(nbt, key, GristTypes.BUILD);
-	}
-	
-	public static GristType readGristType(CompoundTag nbt, String key, Supplier<GristType> fallback)
-	{
-		return GristTypes.REGISTRY.byNameCodec().parse(NbtOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElseGet(fallback);
+		return GristTypes.REGISTRY.byNameCodec().parse(NbtOps.INSTANCE, tag).resultOrPartial(LOGGER::error);
 	}
 }

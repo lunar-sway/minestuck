@@ -73,7 +73,8 @@ public final class SburbPlayerData
 		}
 		
 		this.artifactType = ArtifactType.fromInt(tag.getInt("artifact"));
-		this.baseGrist = MSNBTUtil.readGristType(tag, "base_grist", () -> SburbHandler.generateGristType(new Random()));
+		this.baseGrist = MSNBTUtil.parseGristType(tag.get("base_grist"))
+				.orElseGet(() -> SburbHandler.generateGristType(new Random()));
 	}
 	
 	void write(CompoundTag tag)
@@ -94,7 +95,7 @@ public final class SburbPlayerData
 		}
 		
 		tag.putInt("artifact", this.artifactType.ordinal());
-		MSNBTUtil.writeGristType(tag, "base_grist", this.baseGrist);
+		tag.put("base_grist", MSNBTUtil.encodeGristType(this.baseGrist));
 	}
 	
 	void readOldData(CompoundTag tag)
@@ -116,7 +117,8 @@ public final class SburbPlayerData
 		}
 		
 		artifactType = ArtifactType.fromInt(tag.getInt("artifact"));
-		baseGrist = MSNBTUtil.readGristType(tag, "base_grist", () -> SburbHandler.generateGristType(new Random()));
+		baseGrist = MSNBTUtil.parseGristType(tag.get("base_grist"))
+				.orElseGet(() -> SburbHandler.generateGristType(new Random()));
 	}
 	
 	public PlayerIdentifier playerId()

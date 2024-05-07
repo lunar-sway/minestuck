@@ -146,7 +146,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		this.progressTracker.load(nbt);
 		
-		this.wildcardGrist = MSNBTUtil.readGristType(nbt, "gristType");
+		this.wildcardGrist = MSNBTUtil.parseGristType(nbt.get("gristType")).orElseGet(GristTypes.BUILD);
 		
 		owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
 	}
@@ -158,7 +158,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		this.progressTracker.save(compound);
 		
-		MSNBTUtil.writeGristType(compound, "gristType", wildcardGrist);
+		compound.put("gristType", MSNBTUtil.encodeGristType(wildcardGrist));
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");

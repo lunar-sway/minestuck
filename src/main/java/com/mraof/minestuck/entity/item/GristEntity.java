@@ -290,7 +290,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 		compound.putShort("Health", (short) this.gristHealth);
 		compound.putShort("Age", (short) this.gristAge);
 		compound.putLong("Value", (short) this.gristValue);
-		MSNBTUtil.writeGristType(compound, "Type", gristType);
+		compound.put("Type", MSNBTUtil.encodeGristType(gristType));
 	}
 	
 	@Override
@@ -301,7 +301,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 		if(compound.contains("Value", Tag.TAG_ANY_NUMERIC))
 			this.gristValue = compound.getLong("Value");
 		if(compound.contains("Type", Tag.TAG_STRING))
-			this.gristType = MSNBTUtil.readGristType(compound, "Type");
+			this.gristType = MSNBTUtil.parseGristType(compound.get("Type")).orElseGet(GristTypes.BUILD);
 	}
 	
 	/**

@@ -186,7 +186,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		super.load(nbt);
 		
-		wildcardGrist = MSNBTUtil.readGristType(nbt, "gristType");
+		wildcardGrist = MSNBTUtil.parseGristType(nbt.get("gristType")).orElseGet(GristTypes.BUILD);
 		
 		/*
 		this.upgraded = compound.getBoolean("upgraded");
@@ -215,8 +215,8 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-
-		MSNBTUtil.writeGristType(compound, "gristType", wildcardGrist);
+		
+		compound.put("gristType", MSNBTUtil.encodeGristType(wildcardGrist));
 		compound.putBoolean("broken", isBroken());
 		
 		if(dowel!= null)
