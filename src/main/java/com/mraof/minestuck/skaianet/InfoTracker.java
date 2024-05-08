@@ -116,47 +116,41 @@ public final class InfoTracker
 		return new SkaianetInfoPacket.LandChains(createLandChains());
 	}
 	
-	private List<List<ResourceKey<Level>>> createLandChains()
+	private List<LandChain> createLandChains()
 	{
-		List<List<ResourceKey<Level>>> landChains = new ArrayList<>();
+		List<LandChain> landChains = new ArrayList<>();
 		
 		Set<ResourceKey<Level>> checked = new HashSet<>();
-		skaianet.players().forEach(player -> populateLandChain(landChains, checked, player));
+		skaianet.players().forEach(player -> makeLandChain(checked, player).ifPresent(landChains::add));
 		
 		return landChains;
 	}
 	
-	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, PlayerIdentifier player)
+	private Optional<LandChain> makeLandChain(Set<ResourceKey<Level>> checked, PlayerIdentifier player)
 	{
 		ResourceKey<Level> dimensionType = skaianet.getOrCreateData(player).getLandDimensionIfEntered();
-		if(dimensionType == null || checked.contains(dimensionType))
-			return;
+		if(dimensionType == null || !checked.add(dimensionType))
+			return Optional.empty();
 		
 		LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
 		chain.add(dimensionType);
-		checked.add(dimensionType);
 		
 		PlayerIdentifier lastPlayer = player;
 		while(true)
 		{
 			Optional<PlayerIdentifier> client = skaianet.connections.primaryPartnerForServer(lastPlayer);
 			if(client.isEmpty())
-			{
-				chain.addLast(null);
 				break;
-			}
+			
 			PlayerIdentifier nextPlayer = client.get();
 			ResourceKey<Level> nextLand = skaianet.getOrCreateData(nextPlayer).getLandDimensionIfEntered();
 			if(nextLand == null)
-			{
-				chain.addLast(null);
-				break;
-			}
-			if(checked.contains(nextLand))
 				break;
 			
+			if(!checked.add(nextLand))
+				return Optional.of(new LandChain(chain, true));
+			
 			chain.addLast(nextLand);
-			checked.add(nextLand);
 			lastPlayer = nextPlayer;
 		}
 		
@@ -169,14 +163,14 @@ public final class InfoTracker
 			PlayerIdentifier nextPlayer = server.get();
 			
 			ResourceKey<Level> nextLand = skaianet.getOrCreateData(nextPlayer).getLandDimensionIfEntered();
-			if(nextLand == null || checked.contains(nextLand))
+			if(nextLand == null || !checked.add(nextLand))
 				break;
 			
 			chain.addFirst(nextLand);
-			checked.add(nextLand);
 			lastPlayer = nextPlayer;
 		}
-		landChains.add(chain);
+		
+		return Optional.of(new LandChain(chain, false));
 	}
 	
 	void markLandChainDirty()
