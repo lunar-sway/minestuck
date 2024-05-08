@@ -10,10 +10,10 @@ import net.neoforged.neoforge.network.registration.IDirectionAwarePayloadHandler
 
 import java.util.Optional;
 
-public interface MSPacket
+public final class MSPacket
 {
 	@SuppressWarnings("resource")
-	static <T> Optional<T> getAccessibleBlockEntity(ServerPlayer player, BlockPos pos, Class<T> castClass)
+	public static <T> Optional<T> getAccessibleBlockEntity(ServerPlayer player, BlockPos pos, Class<T> castClass)
 	{
 		if(!player.level().isAreaLoaded(pos, 0) || player.distanceToSqr(Vec3.atCenterOf(pos)) > 8 * 8)
 			return Optional.empty();
@@ -25,7 +25,7 @@ public interface MSPacket
 		return Optional.of(castClass.cast(blockEntity));
 	}
 	
-	interface PlayToClient extends CustomPacketPayload
+	public interface PlayToClient extends CustomPacketPayload
 	{
 		void execute();
 		
@@ -35,7 +35,7 @@ public interface MSPacket
 		}
 	}
 	
-	interface PlayToServer extends CustomPacketPayload
+	public interface PlayToServer extends CustomPacketPayload
 	{
 		void execute(ServerPlayer player);
 		
