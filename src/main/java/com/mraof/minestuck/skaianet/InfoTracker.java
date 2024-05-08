@@ -135,14 +135,8 @@ public final class InfoTracker
 		LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
 		chain.add(dimensionType);
 		
-		PlayerIdentifier lastPlayer = player;
-		while(true)
+		for(PlayerIdentifier nextPlayer : skaianet.connections.iterateServerPartners(player))
 		{
-			Optional<PlayerIdentifier> client = skaianet.connections.primaryPartnerForServer(lastPlayer);
-			if(client.isEmpty())
-				break;
-			
-			PlayerIdentifier nextPlayer = client.get();
 			ResourceKey<Level> nextLand = skaianet.getOrCreateData(nextPlayer).getLandDimensionIfEntered();
 			if(nextLand == null)
 				break;
@@ -151,23 +145,15 @@ public final class InfoTracker
 				return Optional.of(new LandChain(chain, true));
 			
 			chain.addLast(nextLand);
-			lastPlayer = nextPlayer;
 		}
 		
-		lastPlayer = player;
-		while(true)
+		for(PlayerIdentifier nextPlayer : skaianet.connections.iterateClientPartners(player))
 		{
-			Optional<PlayerIdentifier> server = skaianet.connections.primaryPartnerForClient(lastPlayer);
-			if(server.isEmpty())
-				break;
-			PlayerIdentifier nextPlayer = server.get();
-			
 			ResourceKey<Level> nextLand = skaianet.getOrCreateData(nextPlayer).getLandDimensionIfEntered();
 			if(nextLand == null || !checked.add(nextLand))
 				break;
 			
 			chain.addFirst(nextLand);
-			lastPlayer = nextPlayer;
 		}
 		
 		return Optional.of(new LandChain(chain, false));
