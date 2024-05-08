@@ -87,9 +87,7 @@ public final class EditmodeDragPacket
 			buffer.writeBoolean(isDown);
 			buffer.writeBlockPos(positionStart);
 			buffer.writeBlockPos(positionEnd);
-			buffer.writeDouble(hitVector.x);
-			buffer.writeDouble(hitVector.y);
-			buffer.writeDouble(hitVector.z);
+			buffer.writeVec3(hitVector);
 			buffer.writeEnum(side);
 		}
 		
@@ -98,7 +96,7 @@ public final class EditmodeDragPacket
 			boolean isDragging = buffer.readBoolean();
 			BlockPos positionStart = buffer.readBlockPos();
 			BlockPos positionEnd = buffer.readBlockPos();
-			Vec3 hitVector = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+			Vec3 hitVector = buffer.readVec3();
 			Direction side = buffer.readEnum(Direction.class);
 			
 			return new Fill(isDragging, positionStart, positionEnd, hitVector, side);
@@ -177,9 +175,7 @@ public final class EditmodeDragPacket
 			buffer.writeBoolean(isDown);
 			buffer.writeBlockPos(positionStart);
 			buffer.writeBlockPos(positionEnd);
-			buffer.writeDouble(hitVector.x);
-			buffer.writeDouble(hitVector.y);
-			buffer.writeDouble(hitVector.z);
+			buffer.writeVec3(hitVector);
 			buffer.writeEnum(side);
 		}
 		
@@ -188,7 +184,7 @@ public final class EditmodeDragPacket
 			boolean isDragging = buffer.readBoolean();
 			BlockPos positionStart = buffer.readBlockPos();
 			BlockPos positionEnd = buffer.readBlockPos();
-			Vec3 hitVector = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+			Vec3 hitVector = buffer.readVec3();
 			Direction side = buffer.readEnum(Direction.class);
 			
 			return new Destroy(isDragging, positionStart, positionEnd, hitVector, side);

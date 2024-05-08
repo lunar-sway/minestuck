@@ -10,13 +10,13 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Used for when the player needs to be moved but only server side access is available
  */
-public record ClientMovementPacket(double moveX, double moveY, double moveZ) implements MSPacket.PlayToClient
+public record ClientMovementPacket(Vec3 moveVec) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("client_movement");
 	
 	public static ClientMovementPacket createPacket(Vec3 moveVec)
 	{
-		return new ClientMovementPacket(moveVec.x, moveVec.y, moveVec.z);
+		return new ClientMovementPacket(moveVec);
 	}
 	
 	@Override
@@ -28,18 +28,13 @@ public record ClientMovementPacket(double moveX, double moveY, double moveZ) imp
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeDouble(moveX);
-		buffer.writeDouble(moveY);
-		buffer.writeDouble(moveZ);
+		buffer.writeVec3(moveVec);
 	}
 	
 	public static ClientMovementPacket read(FriendlyByteBuf buffer)
 	{
-		double moveX = buffer.readDouble();
-		double moveY = buffer.readDouble();
-		double moveZ = buffer.readDouble();
-		
-		return new ClientMovementPacket(moveX, moveY, moveZ);
+		Vec3 moveVec = buffer.readVec3();
+		return new ClientMovementPacket(moveVec);
 	}
 	
 	@Override
@@ -48,7 +43,7 @@ public record ClientMovementPacket(double moveX, double moveY, double moveZ) imp
 		LocalPlayer player = Minecraft.getInstance().player;
 		if(player != null)
 		{
-			player.push(moveX, moveY, moveZ);
+			player.push(moveVec.x, moveVec.y, moveVec.z);
 		}
 	}
 }
