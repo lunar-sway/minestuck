@@ -74,13 +74,13 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
-		buffer.writeInt(animationType.ordinal());
+		buffer.writeEnum(animationType);
 	}
 	
 	@Override
 	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
-		animationType = AnimationType.values()[additionalData.readInt()];
+		animationType = additionalData.readEnum(AnimationType.class);
 	}
 	
 	@Override

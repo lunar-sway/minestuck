@@ -23,12 +23,12 @@ public record StoneTabletPacket(String text, InteractionHand hand) implements MS
 	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeUtf(text);
-		buffer.writeInt(hand.ordinal());
+		buffer.writeEnum(hand);
 	}
 	
 	public static StoneTabletPacket read(FriendlyByteBuf buffer)
 	{
-		return new StoneTabletPacket(buffer.readUtf(), InteractionHand.values()[buffer.readInt()]);
+		return new StoneTabletPacket(buffer.readUtf(), buffer.readEnum(InteractionHand.class));
 	}
 	
 	@Override

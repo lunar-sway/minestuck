@@ -39,7 +39,7 @@ public record MusicPlayerPacket(int entityID, EnumCassetteType cassetteType, flo
 		buffer.writeInt(entityID);
 		buffer.writeFloat(volume);
 		buffer.writeFloat(pitch);
-		buffer.writeInt(cassetteType.ordinal());
+		buffer.writeEnum(cassetteType);
 	}
 	
 	public static MusicPlayerPacket read(FriendlyByteBuf buffer)
@@ -47,7 +47,7 @@ public record MusicPlayerPacket(int entityID, EnumCassetteType cassetteType, flo
 		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
 		float volume = buffer.readFloat();
 		float pitch = buffer.readFloat();
-		EnumCassetteType cassetteType = EnumCassetteType.values()[buffer.readInt()];
+		EnumCassetteType cassetteType = buffer.readEnum(EnumCassetteType.class);
 		
 		return new MusicPlayerPacket(entityID, cassetteType, volume, pitch);
 	}

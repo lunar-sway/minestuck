@@ -26,13 +26,13 @@ public record ServerCursorPacket(int entityID, ServerCursorEntity.AnimationType 
 	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(entityID);
-		buffer.writeInt(animation.ordinal());
+		buffer.writeEnum(animation);
 	}
 	
 	public static ServerCursorPacket read(FriendlyByteBuf buffer)
 	{
-		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
-		ServerCursorEntity.AnimationType animation = ServerCursorEntity.AnimationType.values()[buffer.readInt()];
+		int entityID = buffer.readInt();
+		ServerCursorEntity.AnimationType animation = buffer.readEnum(ServerCursorEntity.AnimationType.class);
 		
 		return new ServerCursorPacket(entityID, animation);
 	}

@@ -26,13 +26,13 @@ public record LotusFlowerPacket(int entityID, LotusFlowerEntity.Animation animat
 	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(entityID);
-		buffer.writeInt(animation.ordinal());
+		buffer.writeEnum(animation);
 	}
 	
 	public static LotusFlowerPacket read(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
-		LotusFlowerEntity.Animation animation = LotusFlowerEntity.Animation.values()[buffer.readInt()];
+		LotusFlowerEntity.Animation animation = buffer.readEnum(LotusFlowerEntity.Animation.class);
 		
 		return new LotusFlowerPacket(entityID, animation);
 	}
@@ -41,9 +41,7 @@ public record LotusFlowerPacket(int entityID, LotusFlowerEntity.Animation animat
 	public void execute()
 	{
 		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
-		if(entity instanceof LotusFlowerEntity)
-		{
-			((LotusFlowerEntity) entity).setAnimationFromPacket(animation);
-		}
+		if(entity instanceof LotusFlowerEntity lotusFlower)
+			lotusFlower.setAnimationFromPacket(animation);
 	}
 }

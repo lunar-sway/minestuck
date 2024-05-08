@@ -247,13 +247,13 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
-		buffer.writeInt(animationType.ordinal());
+		buffer.writeEnum(animationType);
 	}
 	
 	@Override
 	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
-		animationType = Animation.values()[additionalData.readInt()];
+		animationType = additionalData.readEnum(Animation.class);
 	}
 	
 	public void setAnimationFromPacket(Animation newAnimation)
