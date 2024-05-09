@@ -31,10 +31,10 @@ import java.util.function.Supplier;
 
 public final class MSChestLootTables implements LootTableSubProvider
 {
-	//Pools in basic medium chest
-	public static final String MISC_POOL = "misc", RARE_POOL = "rare", ITEM_POOL = "item";
+	public static final String ITEM_POOL = "item";
 	public static final ResourceLocation WEAPON_ITEM_TABLE = Minestuck.id("chests/weapon_item");
 	public static final ResourceLocation SUPPLY_ITEM_TABLE = Minestuck.id("chests/supply_item");
+	public static final ResourceLocation MISC_ITEM_TABLE = Minestuck.id("chests/misc_item");
 	
 	@Override
 	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
@@ -490,30 +490,328 @@ public final class MSChestLootTables implements LootTableSubProvider
 				));
 		
 		
+		lootProcessor.accept(MISC_ITEM_TABLE, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LandTableLootEntry.builder(MISC_ITEM_TABLE).setPool(ITEM_POOL))
+						.add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(15).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(10).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.REDSTONE).setWeight(8).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.ENDER_PEARL).setWeight(2).setQuality(2))
+						.add(LootItem.lootTableItem(MSItems.FLARP_MANUAL).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.SASSACRE_TEXT).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.WISEGUY).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.TABLESTUCK_MANUAL).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.TILLDEATH_HANDBOOK).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.BINARY_CODE).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.NONBINARY_CODE).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.INK_SQUID_PRO_QUO).setWeight(8).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.BARBASOL).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(MSBlocks.GENERIC_OBJECT).setWeight(10).setQuality(-1))
+						.add(LootItem.lootTableItem(MSItems.RAW_CRUXITE).setWeight(15).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(MSItems.RAW_URANIUM).setWeight(12).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.FOREST, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.OAK_SAPLING).setWeight(5).setQuality(-1))
+						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(5).setQuality(-1))
+						.add(LootItem.lootTableItem(Items.BIRCH_SAPLING).setWeight(5).setQuality(-1))
+						.add(LootItem.lootTableItem(Items.OAK_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.SPRUCE_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.BIRCH_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.JUNGLE_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.ACACIA_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.DARK_OAK_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.OAK_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.SPRUCE_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.BIRCH_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.OAK_LEAVES).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 15))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.TAIGA, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.OAK_SAPLING).setWeight(5).setQuality(-1))
+						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(5).setQuality(-1))
+						.add(LootItem.lootTableItem(Items.BIRCH_SAPLING).setWeight(5).setQuality(-1))
+						.add(LootItem.lootTableItem(Items.OAK_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.SPRUCE_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.BIRCH_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.JUNGLE_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.ACACIA_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.DARK_OAK_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.OAK_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.SPRUCE_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.BIRCH_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.OAK_LEAVES).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 15))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.FROST, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.SNOWBALL).setWeight(20).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 10))))
+						.add(LootItem.lootTableItem(Items.SNOW).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.SNOW_BLOCK).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(15).setQuality(-1))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.FUNGI, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.BROWN_MUSHROOM).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 8))))
+						.add(LootItem.lootTableItem(Items.RED_MUSHROOM).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 7))))
+						.add(LootItem.lootTableItem(Items.SLIME_BALL).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(MSItems.FUNGAL_SPORE).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 11))))
+						.add(LootItem.lootTableItem(MSItems.SUSHROOM).setWeight(1).setQuality(0))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.HEAT, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.MAGMA_CREAM).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.BRICK).setWeight(10).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(Items.NETHERRACK).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.OBSIDIAN).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(MSBlocks.CAST_IRON).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(MSBlocks.NATIVE_SULFUR).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
+						.add(LootItem.lootTableItem(MSBlocks.CHISELED_CAST_IRON).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.ROCK, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.STONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
+						.add(LootItem.lootTableItem(Items.COBBLESTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.GRAVEL).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
+						.add(LootItem.lootTableItem(Items.BRICK).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
+						.add(LootItem.lootTableItem(Items.BRICKS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.PETRIFICATION, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.STONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
+						.add(LootItem.lootTableItem(Items.COBBLESTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.GRAVEL).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
+						.add(LootItem.lootTableItem(Items.BRICK).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
+						.add(LootItem.lootTableItem(Items.BRICKS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.SAND, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 12))))
+						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.LUSH_DESERTS, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 12))))
+						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.RED_SAND, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 12))))
+						.add(LootItem.lootTableItem(Items.SMOOTH_RED_SANDSTONE).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.SANDSTONE, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(Items.CHISELED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.SAND).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.RED_SANDSTONE, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.SMOOTH_RED_SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(Items.CHISELED_RED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.SHADE, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(MSBlocks.BLUE_DIRT).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG).setWeight(6).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM).setWeight(12).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM_VINES).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.WOOD, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.DARK_OAK_PLANKS).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(Items.JUNGLE_PLANKS).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.OAK_PLANKS).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
+						.add(LootItem.lootTableItem(Items.DARK_OAK_LOG).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.JUNGLE_LOG).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(Items.OAK_LOG).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.DARK_OAK_SAPLING).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.JUNGLE_SAPLING).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.OAK_SAPLING).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.COCOA_BEANS).setWeight(3).setQuality(0))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.RAINBOW, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(TagEntry.expandTag(Tags.Items.DYES).setWeight(1).setQuality(-3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(Items.WHITE_WOOL).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))
+						.add(LootItem.lootTableItem(Items.GLASS).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))
+						.add(LootItem.lootTableItem(Items.TERRACOTTA).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.FLORA, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.DANDELION).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.POPPY).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.BLUE_ORCHID).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.ALLIUM).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.AZURE_BLUET).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.RED_TULIP).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.ORANGE_TULIP).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.WHITE_TULIP).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.PINK_TULIP).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.OXEYE_DAISY).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.SUNFLOWER).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.LILAC).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.ROSE_BUSH).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.PEONY).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.FERN).setWeight(11).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE).setWeight(9).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 24))))
+						.add(LootItem.lootTableItem(Items.MOSSY_COBBLESTONE).setWeight(9).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 24))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.END, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.DRAGON_BREATH).setWeight(1).setQuality(1))
+						.add(LootItem.lootTableItem(Items.SHULKER_SHELL).setWeight(1).setQuality(1))
+						.add(LootItem.lootTableItem(Items.END_STONE).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 16))))
+						.add(LootItem.lootTableItem(Items.END_ROD).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(MSBlocks.END_GRASS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 16))))
+						.add(LootItem.lootTableItem(MSBlocks.COARSE_END_STONE).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.RAIN, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.BEACON).setWeight(1).setQuality(-2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.FROGS, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.LILY_PAD).setWeight(9).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 9))))
+						.add(LootItem.lootTableItem(MSBlocks.MINI_FROG_STATUE).setWeight(5).setQuality(3))
+						.add(LootItem.lootTableItem(MSItems.THRESH_DVD).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.WIND, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(MSItems.CREW_POSTER).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.LIGHT, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.GLOWSTONE).setWeight(8).setQuality(-1))
+						.add(LootItem.lootTableItem(MSItems.DICE).setWeight(8).setQuality(2))
+						.add(LootItem.lootTableItem(Items.GLOWSTONE_DUST).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
+						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.CLOCKWORK, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.REPEATER).setWeight(4).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.SILENCE, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.PUMPKIN).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.CREW_POSTER).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.THUNDER, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(MSItems.CREW_POSTER).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.PULSE, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.REPEATER).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.RAZOR_BLADE).setWeight(4).setQuality(-1))
+						.add(LootItem.lootTableItem(MSItems.THRESH_DVD).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.THOUGHT, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(MSBlocks.THOUGHT_DIRT).setWeight(15).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 10))))
+						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.BUCKETS, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.BUCKET).setWeight(10).setQuality(0))
+						.add(LootItem.lootTableItem(Items.WATER_BUCKET).setWeight(8).setQuality(0))
+						.add(LootItem.lootTableItem(Items.LAVA_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.OIL_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.BLOOD_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.BRAIN_JUICE_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.WATER_COLORS_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.ENDER_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.OBSIDIAN_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.THRESH_DVD).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.CAKE, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.SUGAR).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.MILK_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(Items.COCOA_BEANS).setWeight(3).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.THRESH_DVD).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.RABBITS, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.RABBIT_HIDE).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.RABBIT_FOOT).setWeight(2).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.GOLD_SEEDS).setWeight(3).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.MONSTERS, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.ROTTEN_FLESH).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.BONE).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.GUNPOWDER).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.STRING).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(MSItems.CREW_POSTER).setWeight(4).setQuality(2))
+				));
+		lootProcessor.accept(locationForTitle(LandTypes.UNDEAD, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.ROTTEN_FLESH).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.BONE).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.GUNPOWDER).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.STRING).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(MSItems.CREW_POSTER).setWeight(4).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.TOWERS, MISC_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(MSItems.THRESH_DVD).setWeight(4).setQuality(2))
+				));
+		
+		
 		lootProcessor.accept(MSLootTables.BASIC_MEDIUM_CHEST, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("weapons").setRolls(ConstantValue.exactly(1))
 						.add(LootTableReference.lootTableReference(WEAPON_ITEM_TABLE)))
 				.withPool(LootPool.lootPool().name("supplies").setRolls(ConstantValue.exactly(3))
 						.add(LootTableReference.lootTableReference(SUPPLY_ITEM_TABLE)))
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(UniformGenerator.between(2, 4))
-						.add(LandTableLootEntry.builder(MSLootTables.BASIC_MEDIUM_CHEST).setPool(MISC_POOL))
-						.add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(15).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(10).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.REDSTONE).setWeight(8).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.ENDER_PEARL).setWeight(2).setQuality(2))
-						.add(LootItem.lootTableItem(MSItems.FLARP_MANUAL.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.SASSACRE_TEXT.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.WISEGUY.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.TABLESTUCK_MANUAL.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.TILLDEATH_HANDBOOK.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.BINARY_CODE.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.NONBINARY_CODE.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.INK_SQUID_PRO_QUO.get()).setWeight(8).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.BARBASOL.get()).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
-						.add(LootItem.lootTableItem(MSBlocks.GENERIC_OBJECT.get()).setWeight(10).setQuality(-1))
-						.add(LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).setWeight(15).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(MSItems.RAW_URANIUM.get()).setWeight(12).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4)))))
-				.withPool(LootPool.lootPool().name(RARE_POOL).setRolls(UniformGenerator.between(0, 1))
+				.withPool(LootPool.lootPool().name("misc").setRolls(UniformGenerator.between(2, 4))
+						.add(LootTableReference.lootTableReference(MISC_ITEM_TABLE)))
+				.withPool(LootPool.lootPool().name("rare").setRolls(UniformGenerator.between(0, 1))
 						.add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(20).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 5))))
 						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(15).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 4))))
 						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(15).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2))))
@@ -541,266 +839,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(10).setQuality(-1).apply(SetBoondollarCount.builder(UniformGenerator.between(5, 50))))
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(5).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(50, 250))))
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(2).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(250, 1000))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.FOREST, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.OAK_SAPLING).setWeight(5).setQuality(-1))
-						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(5).setQuality(-1))
-						.add(LootItem.lootTableItem(Items.BIRCH_SAPLING).setWeight(5).setQuality(-1))
-						.add(LootItem.lootTableItem(Items.OAK_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.SPRUCE_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.BIRCH_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.JUNGLE_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.ACACIA_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.DARK_OAK_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.OAK_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.SPRUCE_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.BIRCH_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.OAK_LEAVES).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 15))))));
-		lootProcessor.accept(locationForTerrain(LandTypes.TAIGA, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.OAK_SAPLING).setWeight(5).setQuality(-1))
-						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(5).setQuality(-1))
-						.add(LootItem.lootTableItem(Items.BIRCH_SAPLING).setWeight(5).setQuality(-1))
-						.add(LootItem.lootTableItem(Items.OAK_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.SPRUCE_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.BIRCH_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.JUNGLE_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.ACACIA_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.DARK_OAK_LOG).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.OAK_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.SPRUCE_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.BIRCH_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.OAK_LEAVES).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 15))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.FROST, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.SNOWBALL).setWeight(20).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 10))))
-						.add(LootItem.lootTableItem(Items.SNOW).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.SNOW_BLOCK).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(15).setQuality(-1))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.FUNGI, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.BROWN_MUSHROOM).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 8))))
-						.add(LootItem.lootTableItem(Items.RED_MUSHROOM).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 7))))
-						.add(LootItem.lootTableItem(Items.SLIME_BALL).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(MSItems.FUNGAL_SPORE.get()).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 11))))
-						.add(LootItem.lootTableItem(MSItems.SUSHROOM.get()).setWeight(1).setQuality(0))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.HEAT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.MAGMA_CREAM).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.BRICK).setWeight(10).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
-						.add(LootItem.lootTableItem(Items.NETHERRACK).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.OBSIDIAN).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(MSBlocks.CAST_IRON.get()).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
-						.add(LootItem.lootTableItem(MSBlocks.NATIVE_SULFUR.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
-						.add(LootItem.lootTableItem(MSBlocks.CHISELED_CAST_IRON.get()).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.ROCK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.STONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
-						.add(LootItem.lootTableItem(Items.COBBLESTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.GRAVEL).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
-						.add(LootItem.lootTableItem(Items.BRICK).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
-						.add(LootItem.lootTableItem(Items.BRICKS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))));
-		lootProcessor.accept(locationForTerrain(LandTypes.PETRIFICATION, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.STONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
-						.add(LootItem.lootTableItem(Items.COBBLESTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.GRAVEL).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
-						.add(LootItem.lootTableItem(Items.BRICK).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
-						.add(LootItem.lootTableItem(Items.BRICKS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.SAND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 12))))
-						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
-		lootProcessor.accept(locationForTerrain(LandTypes.LUSH_DESERTS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 12))))
-						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
-		lootProcessor.accept(locationForTerrain(LandTypes.RED_SAND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 12))))
-						.add(LootItem.lootTableItem(Items.SMOOTH_RED_SANDSTONE).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.SANDSTONE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
-						.add(LootItem.lootTableItem(Items.CHISELED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.SAND).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
-		lootProcessor.accept(locationForTerrain(LandTypes.RED_SANDSTONE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.SMOOTH_RED_SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
-						.add(LootItem.lootTableItem(Items.CHISELED_RED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.SHADE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSBlocks.BLUE_DIRT.get()).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG.get()).setWeight(6).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM.get()).setWeight(12).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM_VINES.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.WOOD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.DARK_OAK_PLANKS).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
-						.add(LootItem.lootTableItem(Items.JUNGLE_PLANKS).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.OAK_PLANKS).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
-						.add(LootItem.lootTableItem(Items.DARK_OAK_LOG).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.JUNGLE_LOG).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
-						.add(LootItem.lootTableItem(Items.OAK_LOG).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.DARK_OAK_SAPLING).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.JUNGLE_SAPLING).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.OAK_SAPLING).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG.get()).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.COCOA_BEANS).setWeight(3).setQuality(0))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.RAINBOW, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(TagEntry.expandTag(Tags.Items.DYES).setWeight(1).setQuality(-3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
-						.add(LootItem.lootTableItem(Items.WHITE_WOOL).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))
-						.add(LootItem.lootTableItem(Items.GLASS).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))
-						.add(LootItem.lootTableItem(Items.TERRACOTTA).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.FLORA, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.DANDELION).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.POPPY).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.BLUE_ORCHID).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.ALLIUM).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.AZURE_BLUET).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.RED_TULIP).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.ORANGE_TULIP).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.WHITE_TULIP).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.PINK_TULIP).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.OXEYE_DAISY).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.SUNFLOWER).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.LILAC).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.ROSE_BUSH).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.PEONY).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.FERN).setWeight(11).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get()).setWeight(9).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 24))))
-						.add(LootItem.lootTableItem(Items.MOSSY_COBBLESTONE).setWeight(9).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 24))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.END, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.DRAGON_BREATH).setWeight(1).setQuality(1))
-						.add(LootItem.lootTableItem(Items.SHULKER_SHELL).setWeight(1).setQuality(1))
-						.add(LootItem.lootTableItem(Items.END_STONE).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 16))))
-						.add(LootItem.lootTableItem(Items.END_ROD).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(MSBlocks.END_GRASS.get()).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 16))))
-						.add(LootItem.lootTableItem(MSBlocks.COARSE_END_STONE.get()).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))));
-		
-		lootProcessor.accept(locationForTerrain(LandTypes.RAIN, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.BEACON).setWeight(1).setQuality(-2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.FROGS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.LILY_PAD).setWeight(9).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 9))))
-						.add(LootItem.lootTableItem(MSBlocks.MINI_FROG_STATUE.get()).setWeight(5).setQuality(3))
-						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.WIND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.LIGHT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.GLOWSTONE).setWeight(8).setQuality(-1))
-						.add(LootItem.lootTableItem(MSItems.DICE.get()).setWeight(8).setQuality(2))
-						.add(LootItem.lootTableItem(Items.GLOWSTONE_DUST).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
-						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.CLOCKWORK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.REPEATER).setWeight(4).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.SILENCE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.PUMPKIN).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.THUNDER, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.PULSE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.REPEATER).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.RAZOR_BLADE.get()).setWeight(4).setQuality(-1))
-						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.THOUGHT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSBlocks.THOUGHT_DIRT.get()).setWeight(15).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 10))))
-						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.BUCKETS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.BUCKET).setWeight(10).setQuality(0))
-						.add(LootItem.lootTableItem(Items.WATER_BUCKET).setWeight(8).setQuality(0))
-						.add(LootItem.lootTableItem(Items.LAVA_BUCKET).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.OIL_BUCKET.get()).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.BLOOD_BUCKET.get()).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.BRAIN_JUICE_BUCKET.get()).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.WATER_COLORS_BUCKET.get()).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.ENDER_BUCKET.get()).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.OBSIDIAN_BUCKET.get()).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.CAKE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.SUGAR).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.MILK_BUCKET).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(Items.COCOA_BEANS).setWeight(3).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.RABBITS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.RABBIT_HIDE).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.RABBIT_FOOT).setWeight(2).setQuality(1))
-						.add(LootItem.lootTableItem(MSBlocks.GOLD_SEEDS.get()).setWeight(3).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.MONSTERS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.ROTTEN_FLESH).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.BONE).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.GUNPOWDER).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.STRING).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
-		lootProcessor.accept(locationForTitle(LandTypes.UNDEAD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.ROTTEN_FLESH).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.BONE).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.GUNPOWDER).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.STRING).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
-		
-		lootProcessor.accept(locationForTitle(LandTypes.TOWERS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
 		
 	}
