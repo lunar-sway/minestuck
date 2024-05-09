@@ -35,6 +35,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 	public static final ResourceLocation WEAPON_ITEM_TABLE = Minestuck.id("chests/weapon_item");
 	public static final ResourceLocation SUPPLY_ITEM_TABLE = Minestuck.id("chests/supply_item");
 	public static final ResourceLocation MISC_ITEM_TABLE = Minestuck.id("chests/misc_item");
+	public static final ResourceLocation RARE_ITEM_TABLE = Minestuck.id("chests/rare_item");
 	
 	@Override
 	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
@@ -804,6 +805,33 @@ public final class MSChestLootTables implements LootTableSubProvider
 				));
 		
 		
+		lootProcessor.accept(RARE_ITEM_TABLE, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(20).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 5))))
+						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(15).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 4))))
+						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(15).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2))))
+						.add(LootItem.lootTableItem(MSItems.GRIMOIRE).setWeight(3).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.MINI_WIZARD_STATUE).setWeight(5).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.CASSETTE_PLAYER).setWeight(1).setQuality(3))
+						.add(LootItem.lootTableItem(MSBlocks.SENDIFICATOR).setWeight(1).setQuality(3))
+						.add(LootItem.lootTableItem(MSBlocks.TRANSPORTALIZER).setWeight(2).setQuality(2))
+						.add(LootItem.lootTableItem(MSItems.DICE).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.CUEBALL).setWeight(1).setQuality(4))
+						.add(LootItem.lootTableItem(MSItems.CRYPTID_PHOTO).setWeight(1).setQuality(4))
+						.add(LootItem.lootTableItem(MSBlocks.COMPUTER).setWeight(1).setQuality(0))
+						.add(LootItem.lootTableItem(MSBlocks.LAPTOP).setWeight(1).setQuality(0))
+						.add(LootItem.lootTableItem(MSBlocks.CHESSBOARD).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.CIGARETTE_LANCE).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.ACE_OF_CLUBS).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.ACE_OF_DIAMONDS).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.ACE_OF_HEARTS).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.ACE_OF_SPADES).setWeight(2).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.ENERGY_CORE).setWeight(10).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.GUTTER_BALL).setWeight(1).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.PLUSH_MUTATED_CAT).setWeight(2).setQuality(1))
+				));
+		
+		
 		lootProcessor.accept(MSLootTables.BASIC_MEDIUM_CHEST, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("weapons").setRolls(ConstantValue.exactly(1))
 						.add(LootTableReference.lootTableReference(WEAPON_ITEM_TABLE)))
@@ -812,33 +840,13 @@ public final class MSChestLootTables implements LootTableSubProvider
 				.withPool(LootPool.lootPool().name("misc").setRolls(UniformGenerator.between(2, 4))
 						.add(LootTableReference.lootTableReference(MISC_ITEM_TABLE)))
 				.withPool(LootPool.lootPool().name("rare").setRolls(UniformGenerator.between(0, 1))
-						.add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(20).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 5))))
-						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(15).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 4))))
-						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(15).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2))))
-						.add(LootItem.lootTableItem(MSItems.GRIMOIRE.get()).setWeight(3).setQuality(1))
-						.add(LootItem.lootTableItem(MSBlocks.MINI_WIZARD_STATUE.get()).setWeight(5).setQuality(1))
-						.add(LootItem.lootTableItem(MSBlocks.CASSETTE_PLAYER.get()).setWeight(1).setQuality(3))
-						.add(LootItem.lootTableItem(MSBlocks.SENDIFICATOR.get()).setWeight(1).setQuality(3))
-						.add(LootItem.lootTableItem(MSBlocks.TRANSPORTALIZER.get()).setWeight(2).setQuality(2))
-						.add(LootItem.lootTableItem(MSItems.DICE.get()).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.CUEBALL.get()).setWeight(1).setQuality(4))
-						.add(LootItem.lootTableItem(MSItems.CRYPTID_PHOTO.get()).setWeight(1).setQuality(4))
-						.add(LootItem.lootTableItem(MSBlocks.COMPUTER.get()).setWeight(1).setQuality(0))
-						.add(LootItem.lootTableItem(MSBlocks.LAPTOP.get()).setWeight(1).setQuality(0))
-						.add(LootItem.lootTableItem(MSBlocks.CHESSBOARD.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.CIGARETTE_LANCE.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.ACE_OF_CLUBS.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.ACE_OF_DIAMONDS.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.ACE_OF_HEARTS.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.ACE_OF_SPADES.get()).setWeight(2).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.ENERGY_CORE.get()).setWeight(10).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.GUTTER_BALL.get()).setWeight(1).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.PLUSH_MUTATED_CAT.get()).setWeight(2).setQuality(1)))
+						.add(LootTableReference.lootTableReference(RARE_ITEM_TABLE)))
 				.withPool(LootPool.lootPool().name("boondollars").setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.SORROW_GUSHERS.get()).setWeight(7).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 7))))
-						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(10).setQuality(-1).apply(SetBoondollarCount.builder(UniformGenerator.between(5, 50))))
-						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(5).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(50, 250))))
-						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(2).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(250, 1000))))));
+						.add(LootItem.lootTableItem(MSItems.SORROW_GUSHERS).setWeight(7).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 7))))
+						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS).setWeight(10).setQuality(-1).apply(SetBoondollarCount.builder(UniformGenerator.between(5, 50))))
+						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS).setWeight(5).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(50, 250))))
+						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS).setWeight(2).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(250, 1000))))
+				));
 		
 		
 	}
