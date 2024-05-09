@@ -6,18 +6,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:bisickle",
-          "weight": 5
-        }
-      ],
-      "name": "weapons",
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
             {
               "add": false,

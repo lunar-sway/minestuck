@@ -4,12 +4,6 @@
     {
       "bonus_rolls": 0.0,
       "entries": [],
-      "name": "weapons",
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "entries": [],
       "name": "supplies",
       "rolls": 1.0
     },

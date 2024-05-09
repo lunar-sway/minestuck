@@ -17,47 +17,6 @@
               "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:cane",
-          "quality": -1,
-          "weight": 10
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "damage": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.75
-              },
-              "function": "minecraft:set_damage"
-            }
-          ],
-          "name": "minestuck:deuce_club",
-          "quality": -1,
-          "weight": 10
-        }
-      ],
-      "name": "weapons",
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "damage": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.75
-              },
-              "function": "minecraft:set_damage"
-            }
-          ],
           "name": "minecraft:stone_axe",
           "weight": 10
         },

@@ -9,30 +9,6 @@
           "functions": [
             {
               "add": false,
-              "damage": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.75
-              },
-              "function": "minecraft:set_damage"
-            }
-          ],
-          "name": "minestuck:iron_cane",
-          "quality": 1,
-          "weight": 5
-        }
-      ],
-      "name": "weapons",
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
               "count": {
                 "type": "minecraft:uniform",
                 "max": 10.0,

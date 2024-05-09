@@ -17,29 +17,6 @@
               "function": "minecraft:set_damage"
             }
           ],
-          "name": "minecraft:stone_hoe",
-          "weight": 5
-        }
-      ],
-      "name": "weapons",
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "damage": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.75
-              },
-              "function": "minecraft:set_damage"
-            }
-          ],
           "name": "minecraft:elytra",
           "quality": 2
         },
