@@ -13,9 +13,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Saplings are now pottable
 - Aspect slabs can now be used in crafting recipes
 
+### Fixed
+
+- Fix player gutter multiplier, which wasn't being saved
+
 ### Contributors for this release
 
-- Akisephila
+- Akisephila, kirderf1
 
 ## [1.20.1-1.12.0.1] - 2024-04-15
 

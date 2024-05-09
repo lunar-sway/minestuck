@@ -110,6 +110,8 @@ public final class PlayerData
 		gristCache = new GristCache(this, mcServer);
 		gristCache.read(nbt);
 		
+		gutterMultiplier = nbt.getDouble("gutter_multiplier");
+		
 		ListTag list = nbt.getList("consort_reputation", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 		{
@@ -138,6 +140,8 @@ public final class PlayerData
 		else nbt.putBoolean("given_modus", givenModus);
 		nbt.putLong("boondollars", boondollars);
 		gristCache.write(nbt);
+		
+		nbt.putDouble("gutter_multiplier", gutterMultiplier);
 		
 		ListTag list = new ListTag();
 		for(Map.Entry<ResourceLocation, Integer> entry : consortReputation.entrySet())
