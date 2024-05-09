@@ -32,8 +32,9 @@ import java.util.function.Supplier;
 public final class MSChestLootTables implements LootTableSubProvider
 {
 	//Pools in basic medium chest
-	public static final String SUPPLIES_POOL = "supplies", MISC_POOL = "misc", RARE_POOL = "rare", ITEM_POOL = "item";
+	public static final String MISC_POOL = "misc", RARE_POOL = "rare", ITEM_POOL = "item";
 	public static final ResourceLocation WEAPON_ITEM_TABLE = Minestuck.id("chests/weapon_item");
+	public static final ResourceLocation SUPPLY_ITEM_TABLE = Minestuck.id("chests/supply_item");
 	
 	@Override
 	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
@@ -65,7 +66,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.FAN.get()).setWeight(4).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(MSItems.LUCERNE_HAMMER.get()).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(MSItems.FORK.get()).setWeight(4).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(UniformGenerator.between(2, 6))
+				.withPool(LootPool.lootPool().name("supplies").setRolls(UniformGenerator.between(2, 6))
 						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(2).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
 						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.PUMPKIN).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
@@ -266,12 +267,10 @@ public final class MSChestLootTables implements LootTableSubProvider
 				));
 		
 		
-		lootProcessor.accept(MSLootTables.BASIC_MEDIUM_CHEST, LootTable.lootTable()
-				.withPool(LootPool.lootPool().name("weapons").setRolls(ConstantValue.exactly(1))
-						.add(LootTableReference.lootTableReference(WEAPON_ITEM_TABLE)))
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(3))
-						.add(LandTableLootEntry.builder(MSLootTables.BASIC_MEDIUM_CHEST).setPool(SUPPLIES_POOL))
-						.add(LootItem.lootTableItem(MSItems.CAPTCHA_CARD.get()).setWeight(20).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+		lootProcessor.accept(SUPPLY_ITEM_TABLE, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LandTableLootEntry.builder(SUPPLY_ITEM_TABLE).setPool(ITEM_POOL))
+						.add(LootItem.lootTableItem(MSItems.CAPTCHA_CARD).setWeight(20).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.ARROW).setWeight(15).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 16))))
 						.add(LootItem.lootTableItem(Items.BREAD).setWeight(20).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.WHEAT).setWeight(15).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
@@ -280,7 +279,222 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.GOLDEN_APPLE).setWeight(1).setQuality(2))
 						.add(LootItem.lootTableItem(Items.ROTTEN_FLESH).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.BONE).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(MSItems.PHLEGM_GUSHERS.get()).setWeight(7).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 7)))))
+						.add(LootItem.lootTableItem(MSItems.PHLEGM_GUSHERS).setWeight(7).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 7))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.FOREST, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.STONE_AXE).setWeight(10).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.IRON_AXE).setWeight(5).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.DIAMOND_AXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.TAIGA, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.STONE_AXE).setWeight(10).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.IRON_AXE).setWeight(5).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.DIAMOND_AXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.FROST, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.FLINT_AND_STEEL).setWeight(10).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.0F, 0.25F))))
+						.add(LootItem.lootTableItem(Items.COAL).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.FUNGI, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(MSItems.SPOREO).setWeight(6).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(MSItems.MOREL_MUSHROOM).setWeight(1).setQuality(1))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.HEAT, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.COAL).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.BLAZE_POWDER).setWeight(5).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.BLAZE_ROD).setWeight(3).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.LAVA_BUCKET).setWeight(6).setQuality(0))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.ROCK, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(15).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(7).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.DIAMOND_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.PETRIFICATION, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(15).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(7).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.DIAMOND_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.SAND, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(6).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_SHOVEL).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_HOE).setWeight(2).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.LUSH_DESERTS, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(6).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_SHOVEL).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_HOE).setWeight(2).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.RED_SAND, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(6).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_SHOVEL).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.GOLDEN_HOE).setWeight(2).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.SANDSTONE, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(2).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.REDSTONE).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
+						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(8).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(3).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		lootProcessor.accept(locationForTerrain(LandTypes.RED_SANDSTONE, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(2).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.REDSTONE).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
+						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(8).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(3).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.SHADE, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.RED_MUSHROOM).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.BROWN_MUSHROOM).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.MUSHROOM_STEW).setWeight(5).setQuality(1))
+						.add(LootItem.lootTableItem(MSItems.OIL_BUCKET).setWeight(5).setQuality(0))
+						.add(LootItem.lootTableItem(Items.TORCH).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.WOOD, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(4).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+						.add(LootItem.lootTableItem(Items.REDSTONE).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
+						.add(LootItem.lootTableItem(Items.IRON_AXE).setWeight(3).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.RAINBOW, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.LEATHER_CHESTPLATE).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.LEATHER_HELMET).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.LEATHER_LEGGINGS).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.LEATHER_BOOTS).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(TagEntry.expandTag(MSTags.Items.FAYGO).setWeight(1).setQuality(0))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.FLORA, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.SHEARS).setWeight(10).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.END, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.ELYTRA).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(Items.ENDER_PEARL).setWeight(10).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+						.add(LootItem.lootTableItem(Items.CHORUS_FRUIT).setWeight(10).setQuality(-5).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
+				));
+		
+		lootProcessor.accept(locationForTerrain(LandTypes.RAIN, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.FROGS, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(MSItems.BUG_NET).setWeight(6).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
+						.add(LootItem.lootTableItem(MSItems.GRASSHOPPER).setWeight(11).setQuality(-3).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 8))))
+						.add(LootItem.lootTableItem(MSItems.GOLDEN_GRASSHOPPER).setWeight(1).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.WIND, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.LIGHT, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.TORCH).setWeight(10).setQuality(-1))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.CLOCKWORK, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.CLOCK).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(Items.COMPASS).setWeight(5).setQuality(0))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.SILENCE, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.THUNDER, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.PULSE, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.BEEF).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.THOUGHT, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(MSItems.BRAIN_JUICE_BUCKET).setWeight(8).setQuality(-1))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.BUCKETS, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.CAKE, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.CAKE).setWeight(8).setQuality(-1))
+						.add(LootItem.lootTableItem(MSBlocks.REVERSE_CAKE).setWeight(1).setQuality(0))
+						.add(LootItem.lootTableItem(MSBlocks.APPLE_CAKE).setWeight(7).setQuality(-1))
+						.add(LootItem.lootTableItem(MSBlocks.COLD_CAKE).setWeight(5).setQuality(-2))
+						.add(LootItem.lootTableItem(MSBlocks.HOT_CAKE).setWeight(5).setQuality(-2))
+						.add(LootItem.lootTableItem(MSBlocks.BLUE_CAKE).setWeight(3).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.RED_CAKE).setWeight(3).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.NEGATIVE_CAKE).setWeight(2).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.CARROT_CAKE).setWeight(3).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.CHOCOLATEY_CAKE).setWeight(4).setQuality(1))
+						.add(LootItem.lootTableItem(Items.COOKIE).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
+						.add(LootItem.lootTableItem(MSItems.CANDY_CORN).setWeight(3).setQuality(0))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.RABBITS, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.RABBIT).setWeight(10).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.COOKED_RABBIT).setWeight(7).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(Items.RABBIT_STEW).setWeight(4).setQuality(1))
+						.add(LootItem.lootTableItem(Items.CARROT).setWeight(12).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.MONSTERS, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.ENDER_PEARL).setWeight(5).setQuality(2))
+				));
+		lootProcessor.accept(locationForTitle(LandTypes.UNDEAD, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.ENDER_PEARL).setWeight(5).setQuality(2))
+				));
+		
+		lootProcessor.accept(locationForTitle(LandTypes.TOWERS, SUPPLY_ITEM_TABLE), LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(ITEM_POOL)
+						.add(LootItem.lootTableItem(Items.LADDER).setWeight(10).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
+				));
+		
+		
+		lootProcessor.accept(MSLootTables.BASIC_MEDIUM_CHEST, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("weapons").setRolls(ConstantValue.exactly(1))
+						.add(LootTableReference.lootTableReference(WEAPON_ITEM_TABLE)))
+				.withPool(LootPool.lootPool().name("supplies").setRolls(ConstantValue.exactly(3))
+						.add(LootTableReference.lootTableReference(SUPPLY_ITEM_TABLE)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(UniformGenerator.between(2, 4))
 						.add(LandTableLootEntry.builder(MSLootTables.BASIC_MEDIUM_CHEST).setPool(MISC_POOL))
 						.add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(15).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
@@ -329,10 +543,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(2).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(250, 1000))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.FOREST, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.STONE_AXE).setWeight(10).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.IRON_AXE).setWeight(5).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.DIAMOND_AXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.OAK_SAPLING).setWeight(5).setQuality(-1))
 						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(5).setQuality(-1))
@@ -348,10 +558,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.BIRCH_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.OAK_LEAVES).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 15))))));
 		lootProcessor.accept(locationForTerrain(LandTypes.TAIGA, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.STONE_AXE).setWeight(10).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.IRON_AXE).setWeight(5).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.DIAMOND_AXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.OAK_SAPLING).setWeight(5).setQuality(-1))
 						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(5).setQuality(-1))
@@ -368,10 +574,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.OAK_LEAVES).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 15))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.FROST, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.FLINT_AND_STEEL).setWeight(10).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.0F, 0.25F))))
-						.add(LootItem.lootTableItem(Items.COAL).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.SNOWBALL).setWeight(20).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 10))))
 						.add(LootItem.lootTableItem(Items.SNOW).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
@@ -379,9 +581,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(15).setQuality(-1))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.FUNGI, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.SPOREO.get()).setWeight(6).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(MSItems.MOREL_MUSHROOM.get()).setWeight(1).setQuality(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.BROWN_MUSHROOM).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 8))))
 						.add(LootItem.lootTableItem(Items.RED_MUSHROOM).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 7))))
@@ -390,11 +589,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.SUSHROOM.get()).setWeight(1).setQuality(0))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.HEAT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.COAL).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.BLAZE_POWDER).setWeight(5).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.BLAZE_ROD).setWeight(3).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.LAVA_BUCKET).setWeight(6).setQuality(0)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.MAGMA_CREAM).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(Items.BRICK).setWeight(10).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
@@ -405,10 +599,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSBlocks.CHISELED_CAST_IRON.get()).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.ROCK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(15).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(7).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.DIAMOND_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.STONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
 						.add(LootItem.lootTableItem(Items.COBBLESTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
@@ -416,10 +606,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.BRICK).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
 						.add(LootItem.lootTableItem(Items.BRICKS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))));
 		lootProcessor.accept(locationForTerrain(LandTypes.PETRIFICATION, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(15).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(7).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.DIAMOND_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.STONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
 						.add(LootItem.lootTableItem(Items.COBBLESTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
@@ -428,11 +614,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.BRICKS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.SAND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(6).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_SHOVEL).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_HOE).setWeight(2).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
@@ -441,11 +622,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
 		lootProcessor.accept(locationForTerrain(LandTypes.LUSH_DESERTS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(6).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_SHOVEL).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_HOE).setWeight(2).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
@@ -454,11 +630,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
 		lootProcessor.accept(locationForTerrain(LandTypes.RED_SAND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(6).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_PICKAXE).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_SHOVEL).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.GOLDEN_HOE).setWeight(2).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(Items.SAND).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
@@ -468,11 +639,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.SANDSTONE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(2).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.REDSTONE).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
-						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(8).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(3).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
@@ -480,11 +646,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.SAND).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
 		lootProcessor.accept(locationForTerrain(LandTypes.RED_SANDSTONE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(2).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.REDSTONE).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
-						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(8).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(3).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(Items.SMOOTH_RED_SANDSTONE).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
@@ -493,12 +654,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.SHADE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.RED_MUSHROOM).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.BROWN_MUSHROOM).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.MUSHROOM_STEW).setWeight(5).setQuality(1))
-						.add(LootItem.lootTableItem(MSItems.OIL_BUCKET.get()).setWeight(5).setQuality(0))
-						.add(LootItem.lootTableItem(Items.TORCH).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSBlocks.BLUE_DIRT.get()).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG.get()).setWeight(6).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
@@ -506,10 +661,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM_VINES.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.WOOD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(4).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(Items.REDSTONE).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
-						.add(LootItem.lootTableItem(Items.IRON_AXE).setWeight(3).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.DARK_OAK_PLANKS).setWeight(5).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
 						.add(LootItem.lootTableItem(Items.JUNGLE_PLANKS).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
@@ -524,12 +675,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.COCOA_BEANS).setWeight(3).setQuality(0))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.RAINBOW, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.LEATHER_CHESTPLATE).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.LEATHER_HELMET).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.LEATHER_LEGGINGS).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.LEATHER_BOOTS).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(TagEntry.expandTag(MSTags.Items.FAYGO).setWeight(1).setQuality(0)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(TagEntry.expandTag(Tags.Items.DYES).setWeight(1).setQuality(-3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
 						.add(LootItem.lootTableItem(Items.WHITE_WOOL).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))
@@ -537,8 +682,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.TERRACOTTA).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.FLORA, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.SHEARS).setWeight(10).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.DANDELION).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.POPPY).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
@@ -559,10 +702,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.MOSSY_COBBLESTONE).setWeight(9).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 24))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.END, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.ELYTRA).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(Items.ENDER_PEARL).setWeight(10).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
-						.add(LootItem.lootTableItem(Items.CHORUS_FRUIT).setWeight(10).setQuality(-5).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.DRAGON_BREATH).setWeight(1).setQuality(1))
 						.add(LootItem.lootTableItem(Items.SHULKER_SHELL).setWeight(1).setQuality(1))
@@ -572,28 +711,20 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSBlocks.COARSE_END_STONE.get()).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.RAIN, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.BEACON).setWeight(1).setQuality(-2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.FROGS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.BUG_NET.get()).setWeight(6).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
-						.add(LootItem.lootTableItem(MSItems.GRASSHOPPER.get()).setWeight(11).setQuality(-3).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 8))))
-						.add(LootItem.lootTableItem(MSItems.GOLDEN_GRASSHOPPER.get()).setWeight(1).setQuality(2)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.LILY_PAD).setWeight(9).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 9))))
 						.add(LootItem.lootTableItem(MSBlocks.MINI_FROG_STATUE.get()).setWeight(5).setQuality(3))
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.WIND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.LIGHT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.TORCH).setWeight(10).setQuality(-1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.GLOWSTONE).setWeight(8).setQuality(-1))
 						.add(LootItem.lootTableItem(MSItems.DICE.get()).setWeight(8).setQuality(2))
@@ -601,41 +732,31 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.CLOCKWORK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.CLOCK).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
-						.add(LootItem.lootTableItem(Items.COMPASS).setWeight(5).setQuality(0)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.REPEATER).setWeight(4).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.SILENCE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.PUMPKIN).setWeight(5).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.THUNDER, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.PULSE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.BEEF).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.REPEATER).setWeight(2).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.RAZOR_BLADE.get()).setWeight(4).setQuality(-1))
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.THOUGHT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.BRAIN_JUICE_BUCKET.get()).setWeight(8).setQuality(-1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSBlocks.THOUGHT_DIRT.get()).setWeight(15).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 10))))
 						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.BUCKETS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.BUCKET).setWeight(10).setQuality(0))
 						.add(LootItem.lootTableItem(Items.WATER_BUCKET).setWeight(8).setQuality(0))
@@ -649,19 +770,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.CAKE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.CAKE).setWeight(8).setQuality(-1))
-						.add(LootItem.lootTableItem(MSBlocks.REVERSE_CAKE.get()).setWeight(1).setQuality(0))
-						.add(LootItem.lootTableItem(MSBlocks.APPLE_CAKE.get()).setWeight(7).setQuality(-1))
-						.add(LootItem.lootTableItem(MSBlocks.COLD_CAKE.get()).setWeight(5).setQuality(-2))
-						.add(LootItem.lootTableItem(MSBlocks.HOT_CAKE.get()).setWeight(5).setQuality(-2))
-						.add(LootItem.lootTableItem(MSBlocks.BLUE_CAKE.get()).setWeight(3).setQuality(1))
-						.add(LootItem.lootTableItem(MSBlocks.RED_CAKE.get()).setWeight(3).setQuality(1))
-						.add(LootItem.lootTableItem(MSBlocks.NEGATIVE_CAKE.get()).setWeight(2).setQuality(1))
-						.add(LootItem.lootTableItem(MSBlocks.CARROT_CAKE.get()).setWeight(3).setQuality(1))
-						.add(LootItem.lootTableItem(MSBlocks.CHOCOLATEY_CAKE.get()).setWeight(4).setQuality(1))
-						.add(LootItem.lootTableItem(Items.COOKIE).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
-						.add(LootItem.lootTableItem(MSItems.CANDY_CORN.get()).setWeight(3).setQuality(0)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.SUGAR).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.MILK_BUCKET).setWeight(5).setQuality(0))
@@ -669,11 +777,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.RABBITS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.RABBIT).setWeight(10).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.COOKED_RABBIT).setWeight(7).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(Items.RABBIT_STEW).setWeight(4).setQuality(1))
-						.add(LootItem.lootTableItem(Items.CARROT).setWeight(12).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.RABBIT_HIDE).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.RABBIT_FOOT).setWeight(2).setQuality(1))
@@ -681,8 +784,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.MONSTERS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.ENDER_PEARL).setWeight(5).setQuality(2)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.ROTTEN_FLESH).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.BONE).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
@@ -690,8 +791,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.STRING).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		lootProcessor.accept(locationForTitle(LandTypes.UNDEAD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.ENDER_PEARL).setWeight(5).setQuality(2)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.ROTTEN_FLESH).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.BONE).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
@@ -700,8 +799,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		
 		lootProcessor.accept(locationForTitle(LandTypes.TOWERS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
-				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(Items.LADDER).setWeight(10).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10)))))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
