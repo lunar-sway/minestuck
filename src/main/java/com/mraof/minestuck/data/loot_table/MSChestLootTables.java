@@ -854,12 +854,12 @@ public final class MSChestLootTables implements LootTableSubProvider
 	public static ResourceLocation locationForTerrain(Supplier<TerrainLandType> landType, ResourceLocation baseLoot)
 	{
 		ResourceLocation landName = Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.getKey(landType.get()));
-		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/terrain/" + landName.toString().replace(':', '/'));
+		return baseLoot.withSuffix("/terrain/" + landName.getNamespace() + "/" + landName.getPath());
 	}
 	
 	public static ResourceLocation locationForTitle(Supplier<TitleLandType> landType, ResourceLocation baseLoot)
 	{
 		ResourceLocation landName = Objects.requireNonNull(LandTypes.TITLE_REGISTRY.getKey(landType.get()));
-		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/title/" + landName.toString().replace(':', '/'));
+		return baseLoot.withSuffix("/title/" + landName.getNamespace() + "/" + landName.getPath());
 	}
 }
