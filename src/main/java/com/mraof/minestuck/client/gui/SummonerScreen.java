@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
-import com.mraof.minestuck.network.block.SummonerPacket;
+import com.mraof.minestuck.network.block.SummonerSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -116,7 +116,7 @@ public class SummonerScreen extends Screen
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
 		if(attemptedEntityType.isPresent())
 		{
-			PacketDistributor.SERVER.noArg().send(new SummonerPacket(isUntriggerable, summonRange, be.getBlockPos(), attemptedEntityType.get()));
+			PacketDistributor.SERVER.noArg().send(new SummonerSettingsPacket(isUntriggerable, summonRange, attemptedEntityType.get(), be.getBlockPos()));
 			onClose();
 		} else
 		{

@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public record SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos beBlockPos, @Nullable EntityType<?> entityType) implements MSPacket.PlayToServer
+public record SummonerSettingsPacket(boolean isUntriggerable, int summonRange, @Nullable EntityType<?> entityType, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("summoner");
+	public static final ResourceLocation ID = Minestuck.id("summoner_settings");
 	
 	@Override
 	public ResourceLocation id()
@@ -40,14 +40,14 @@ public record SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos 
 		
 	}
 	
-	public static SummonerPacket read(FriendlyByteBuf buffer)
+	public static SummonerSettingsPacket read(FriendlyByteBuf buffer)
 	{
 		boolean isUntriggerable = buffer.readBoolean();
 		int summonRange = buffer.readInt();
 		BlockPos beBlockPos = buffer.readBlockPos();
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(buffer.readUtf());
 		
-		return new SummonerPacket(isUntriggerable, summonRange, beBlockPos, attemptedEntityType.orElse(null));
+		return new SummonerSettingsPacket(isUntriggerable, summonRange, attemptedEntityType.orElse(null), beBlockPos);
 	}
 	
 	@Override

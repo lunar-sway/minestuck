@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.BlockTeleporterBlockEntity;
-import com.mraof.minestuck.network.block.BlockTeleporterPacket;
+import com.mraof.minestuck.network.block.BlockTeleporterSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -79,7 +79,7 @@ public class BlockTeleporterScreen extends Screen
 		
 		if(validInput)
 		{
-			PacketDistributor.SERVER.noArg().send(new BlockTeleporterPacket(offsetPos, be.getBlockPos()));
+			PacketDistributor.SERVER.noArg().send(new BlockTeleporterSettingsPacket(offsetPos, be.getBlockPos()));
 			onClose();
 		}
 		

@@ -14,9 +14,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public record RemoteObserverPacket(RemoteObserverBlockEntity.ActiveType activeType, int observingRange, BlockPos beBlockPos, @Nullable EntityType<?> entityType) implements MSPacket.PlayToServer
+public record RemoteObserverSettingsPacket(RemoteObserverBlockEntity.ActiveType activeType, int observingRange, BlockPos beBlockPos, @Nullable EntityType<?> entityType) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("remote_observer");
+	public static final ResourceLocation ID = Minestuck.id("remote_observer_settings");
 	
 	@Override
 	public ResourceLocation id()
@@ -38,14 +38,14 @@ public record RemoteObserverPacket(RemoteObserverBlockEntity.ActiveType activeTy
 		
 	}
 	
-	public static RemoteObserverPacket read(FriendlyByteBuf buffer)
+	public static RemoteObserverSettingsPacket read(FriendlyByteBuf buffer)
 	{
 		RemoteObserverBlockEntity.ActiveType activeType = buffer.readEnum(RemoteObserverBlockEntity.ActiveType.class);
 		int observingRange = buffer.readInt();
 		BlockPos beBlockPos = buffer.readBlockPos();
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(buffer.readUtf());
 		
-		return new RemoteObserverPacket(activeType, observingRange, beBlockPos, attemptedEntityType.orElse(null));
+		return new RemoteObserverSettingsPacket(activeType, observingRange, beBlockPos, attemptedEntityType.orElse(null));
 	}
 	
 	@Override

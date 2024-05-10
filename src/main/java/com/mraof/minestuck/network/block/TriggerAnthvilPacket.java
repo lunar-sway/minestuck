@@ -9,9 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
-public record AnthvilPacket() implements MSPacket.PlayToServer
+public record TriggerAnthvilPacket() implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("anthvil");
+	public static final ResourceLocation ID = Minestuck.id("trigger_anthvil");
 	
 	@Override
 	public ResourceLocation id()
@@ -24,9 +24,9 @@ public record AnthvilPacket() implements MSPacket.PlayToServer
 	{
 	}
 	
-	public static AnthvilPacket read(FriendlyByteBuf ignored)
+	public static TriggerAnthvilPacket read(FriendlyByteBuf ignored)
 	{
-		return new AnthvilPacket();
+		return new TriggerAnthvilPacket();
 	}
 	
 	@Override

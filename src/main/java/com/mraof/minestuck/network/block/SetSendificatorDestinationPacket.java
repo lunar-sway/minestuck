@@ -11,9 +11,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
-public record SendificatorPacket(BlockPos destinationBlockPos) implements MSPacket.PlayToServer
+public record SetSendificatorDestinationPacket(BlockPos destinationBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("sendificator");
+	public static final ResourceLocation ID = Minestuck.id("set_sendificator_destination");
 	
 	@Override
 	public ResourceLocation id()
@@ -27,11 +27,11 @@ public record SendificatorPacket(BlockPos destinationBlockPos) implements MSPack
 		buffer.writeBlockPos(destinationBlockPos);
 	}
 	
-	public static SendificatorPacket read(FriendlyByteBuf buffer)
+	public static SetSendificatorDestinationPacket read(FriendlyByteBuf buffer)
 	{
 		BlockPos destinationBlockPos = buffer.readBlockPos();
 		
-		return new SendificatorPacket(destinationBlockPos);
+		return new SetSendificatorDestinationPacket(destinationBlockPos);
 	}
 	
 	@Override

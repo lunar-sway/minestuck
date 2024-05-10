@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.StructureCoreBlockEntity;
-import com.mraof.minestuck.network.block.StructureCorePacket;
+import com.mraof.minestuck.network.block.StructureCoreSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -97,7 +97,7 @@ public class StructureCoreScreen extends Screen
 	
 	private void finish()
 	{
-		PacketDistributor.SERVER.noArg().send(new StructureCorePacket(actionType, shutdownRange, be.getBlockPos()));
+		PacketDistributor.SERVER.noArg().send(new StructureCoreSettingsPacket(actionType, shutdownRange, be.getBlockPos()));
 		onClose();
 	}
 }

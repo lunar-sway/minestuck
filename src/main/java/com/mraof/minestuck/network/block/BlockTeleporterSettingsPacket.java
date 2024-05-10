@@ -10,9 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 
-public record BlockTeleporterPacket(BlockPos offsetPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
+public record BlockTeleporterSettingsPacket(BlockPos offsetPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("block_teleporter");
+	public static final ResourceLocation ID = Minestuck.id("block_teleporter_settings");
 	
 	@Override
 	public ResourceLocation id()
@@ -27,12 +27,12 @@ public record BlockTeleporterPacket(BlockPos offsetPos, BlockPos beBlockPos) imp
 		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static BlockTeleporterPacket read(FriendlyByteBuf buffer)
+	public static BlockTeleporterSettingsPacket read(FriendlyByteBuf buffer)
 	{
 		BlockPos offsetPos = buffer.readBlockPos();
 		BlockPos beBlockPos = buffer.readBlockPos();
 		
-		return new BlockTeleporterPacket(offsetPos, beBlockPos);
+		return new BlockTeleporterSettingsPacket(offsetPos, beBlockPos);
 	}
 	
 	@SuppressWarnings("resource")

@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
 
-public record AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMobs, BlockPos minEffectPos, BlockPos maxEffectPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
+public record AreaEffectSettingsPacket(MobEffect effect, int effectAmp, boolean isAllMobs, BlockPos minEffectPos, BlockPos maxEffectPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("area_effect");
+	public static final ResourceLocation ID = Minestuck.id("area_effect_settings");
 	
 	@Override
 	public ResourceLocation id()
@@ -37,7 +37,7 @@ public record AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMob
 		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static AreaEffectPacket read(FriendlyByteBuf buffer)
+	public static AreaEffectSettingsPacket read(FriendlyByteBuf buffer)
 	{
 		MobEffect effect = Objects.requireNonNullElse(buffer.readById(BuiltInRegistries.MOB_EFFECT), MSEffects.CREATIVE_SHOCK.get());
 		
@@ -48,7 +48,7 @@ public record AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMob
 		BlockPos maxEffectPos = buffer.readBlockPos();
 		BlockPos beBlockPos = buffer.readBlockPos();
 		
-		return new AreaEffectPacket(effect, effectAmp, isAllMobs, minEffectPos, maxEffectPos, beBlockPos);
+		return new AreaEffectSettingsPacket(effect, effectAmp, isAllMobs, minEffectPos, maxEffectPos, beBlockPos);
 	}
 	
 	@SuppressWarnings("resource")

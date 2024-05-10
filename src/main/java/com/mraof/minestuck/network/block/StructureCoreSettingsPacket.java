@@ -11,9 +11,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public record StructureCorePacket(StructureCoreBlockEntity.ActionType actionType, int shutdownRange, BlockPos beBlockPos) implements MSPacket.PlayToServer
+public record StructureCoreSettingsPacket(StructureCoreBlockEntity.ActionType actionType, int shutdownRange, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("structure_core");
+	public static final ResourceLocation ID = Minestuck.id("structure_core_settings");
 	
 	@Override
 	public ResourceLocation id()
@@ -29,13 +29,13 @@ public record StructureCorePacket(StructureCoreBlockEntity.ActionType actionType
 		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static StructureCorePacket read(FriendlyByteBuf buffer)
+	public static StructureCoreSettingsPacket read(FriendlyByteBuf buffer)
 	{
 		StructureCoreBlockEntity.ActionType actionType = buffer.readEnum(StructureCoreBlockEntity.ActionType.class);
 		int summonRange = buffer.readInt();
 		BlockPos beBlockPos = buffer.readBlockPos();
 		
-		return new StructureCorePacket(actionType, summonRange, beBlockPos);
+		return new StructureCoreSettingsPacket(actionType, summonRange, beBlockPos);
 	}
 	
 	@SuppressWarnings("resource")

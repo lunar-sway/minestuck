@@ -9,9 +9,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public record WirelessRedstoneTransmitterPacket(BlockPos destinationBlockPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
+public record WirelessRedstoneTransmitterSettingsPacket(BlockPos destinationBlockPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("wireless_redstone_transmitter");
+	public static final ResourceLocation ID = Minestuck.id("wireless_redstone_transmitter_settings");
 	
 	@Override
 	public ResourceLocation id()
@@ -26,12 +26,12 @@ public record WirelessRedstoneTransmitterPacket(BlockPos destinationBlockPos, Bl
 		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static WirelessRedstoneTransmitterPacket read(FriendlyByteBuf buffer)
+	public static WirelessRedstoneTransmitterSettingsPacket read(FriendlyByteBuf buffer)
 	{
 		BlockPos destinationBlockPos = buffer.readBlockPos();
 		BlockPos beBlockPos = buffer.readBlockPos();
 		
-		return new WirelessRedstoneTransmitterPacket(destinationBlockPos, beBlockPos);
+		return new WirelessRedstoneTransmitterSettingsPacket(destinationBlockPos, beBlockPos);
 	}
 	
 	@Override

@@ -10,9 +10,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public record GristWildcardPacket(BlockPos pos, GristType gristType) implements MSPacket.PlayToServer
+public record SetWildcardGristPacket(BlockPos pos, GristType gristType) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("grist_wildcard");
+	public static final ResourceLocation ID = Minestuck.id("set_wildcard_grist");
 	
 	@Override
 	public ResourceLocation id()
@@ -27,12 +27,12 @@ public record GristWildcardPacket(BlockPos pos, GristType gristType) implements 
 		buffer.writeBlockPos(pos);
 	}
 	
-	public static GristWildcardPacket read(FriendlyByteBuf buffer)
+	public static SetWildcardGristPacket read(FriendlyByteBuf buffer)
 	{
 		GristType gristType = buffer.readById(GristTypes.REGISTRY);
 		BlockPos pos = buffer.readBlockPos();
 		
-		return new GristWildcardPacket(pos, gristType);
+		return new SetWildcardGristPacket(pos, gristType);
 	}
 	
 	@Override

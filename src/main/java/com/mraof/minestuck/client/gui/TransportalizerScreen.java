@@ -81,11 +81,11 @@ public class TransportalizerScreen extends Screen
 		
 		if(be.hasId()) {
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
-			TransportalizerPackets.DestId packet = new TransportalizerPackets.DestId(be.getBlockPos(), text);
+			TransportalizerPackets.SetDestId packet = new TransportalizerPackets.SetDestId(be.getBlockPos(), text);
 			PacketDistributor.SERVER.noArg().send(packet);
 			minecraft.setScreen(null);
 		} else {
-			TransportalizerPackets.Id packet = new TransportalizerPackets.Id(be.getBlockPos(), text);
+			TransportalizerPackets.SetId packet = new TransportalizerPackets.SetId(be.getBlockPos(), text);
 			PacketDistributor.SERVER.noArg().send(packet);
 			minecraft.setScreen(null);
 		}

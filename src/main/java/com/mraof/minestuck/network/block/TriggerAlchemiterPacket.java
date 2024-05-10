@@ -8,9 +8,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public record AlchemiterPacket(BlockPos pos, int quantity) implements MSPacket.PlayToServer
+public record TriggerAlchemiterPacket(int quantity, BlockPos pos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("alchemiter");
+	public static final ResourceLocation ID = Minestuck.id("trigger_alchemiter");
 	
 	@Override
 	public ResourceLocation id()
@@ -25,12 +25,12 @@ public record AlchemiterPacket(BlockPos pos, int quantity) implements MSPacket.P
 		buffer.writeInt(quantity);
 	}
 	
-	public static AlchemiterPacket read(FriendlyByteBuf buffer)
+	public static TriggerAlchemiterPacket read(FriendlyByteBuf buffer)
 	{
 		BlockPos pos = buffer.readBlockPos();
 		int quantity = buffer.readInt();
 		
-		return new AlchemiterPacket(pos, quantity);
+		return new TriggerAlchemiterPacket(quantity, pos);
 	}
 	
 	@Override

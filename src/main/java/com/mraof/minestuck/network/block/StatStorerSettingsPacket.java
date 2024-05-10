@@ -9,9 +9,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public record StatStorerPacket(StatStorerBlockEntity.ActiveType activeType, BlockPos beBlockPos, int divideValueBy) implements MSPacket.PlayToServer
+public record StatStorerSettingsPacket(StatStorerBlockEntity.ActiveType activeType, int divideValueBy, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("stat_storer");
+	public static final ResourceLocation ID = Minestuck.id("stat_storer_settings");
 	
 	@Override
 	public ResourceLocation id()
@@ -23,17 +23,17 @@ public record StatStorerPacket(StatStorerBlockEntity.ActiveType activeType, Bloc
 	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(activeType);
-		buffer.writeBlockPos(beBlockPos);
 		buffer.writeInt(divideValueBy);
+		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static StatStorerPacket read(FriendlyByteBuf buffer)
+	public static StatStorerSettingsPacket read(FriendlyByteBuf buffer)
 	{
 		StatStorerBlockEntity.ActiveType activeType = buffer.readEnum(StatStorerBlockEntity.ActiveType.class);
-		BlockPos beBlockPos = buffer.readBlockPos();
 		int divideValueBy = buffer.readInt();
+		BlockPos beBlockPos = buffer.readBlockPos();
 		
-		return new StatStorerPacket(activeType, beBlockPos, divideValueBy);
+		return new StatStorerSettingsPacket(activeType, divideValueBy, beBlockPos);
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
-import com.mraof.minestuck.network.block.RemoteObserverPacket;
+import com.mraof.minestuck.network.block.RemoteObserverSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -118,7 +118,7 @@ public class RemoteObserverScreen extends Screen
 			if(isValidAndObservableEntityType)
 				entityType = attemptedEntityType.get();
 			
-			PacketDistributor.SERVER.noArg().send(new RemoteObserverPacket(activeType, observingRange, be.getBlockPos(), entityType));
+			PacketDistributor.SERVER.noArg().send(new RemoteObserverSettingsPacket(activeType, observingRange, be.getBlockPos(), entityType));
 			onClose();
 		} else
 		{

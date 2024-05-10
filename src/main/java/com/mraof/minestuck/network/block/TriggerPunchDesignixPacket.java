@@ -8,9 +8,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public record PunchDesignixPacket(BlockPos pos, String captcha) implements MSPacket.PlayToServer
+public record TriggerPunchDesignixPacket(String captcha, BlockPos pos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("punch_designix");
+	public static final ResourceLocation ID = Minestuck.id("trigger_punch_designix");
 	
 	@Override
 	public ResourceLocation id()
@@ -25,12 +25,12 @@ public record PunchDesignixPacket(BlockPos pos, String captcha) implements MSPac
 		buffer.writeUtf(captcha, 8);
 	}
 	
-	public static PunchDesignixPacket read(FriendlyByteBuf buffer)
+	public static TriggerPunchDesignixPacket read(FriendlyByteBuf buffer)
 	{
 		BlockPos pos = buffer.readBlockPos();
 		String captcha = buffer.readUtf(8);
 		
-		return new PunchDesignixPacket(pos, captcha);
+		return new TriggerPunchDesignixPacket(captcha, pos);
 	}
 	
 	@Override
