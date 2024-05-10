@@ -4,7 +4,7 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.editmode.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.editmode.EditmodeInventoryPackets;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -137,11 +137,11 @@ public class EditmodeMenu extends AbstractContainerMenu
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		
-		CustomPacketPayload packet = new EditmodeInventoryPacket.Update(itemList, scroll > 0, scroll*2 + 14 < items.size());
+		CustomPacketPayload packet = new EditmodeInventoryPackets.Update(itemList, scroll > 0, scroll*2 + 14 < items.size());
 		PacketDistributor.PLAYER.with(serverPlayer).send(packet);
 	}
 	
-	public void receiveUpdatePacket(EditmodeInventoryPacket.Update packet)
+	public void receiveUpdatePacket(EditmodeInventoryPackets.Update packet)
 	{
 		if(!player.level().isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side menu");

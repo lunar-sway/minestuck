@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 
-public final class ServerEditPacket
+public final class ServerEditPackets
 {
 	public record Activate() implements MSPacket.PlayToClient
 	{

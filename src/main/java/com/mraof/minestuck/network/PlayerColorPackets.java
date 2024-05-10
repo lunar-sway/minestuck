@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 @MethodsReturnNonnullByDefault
-public final class PlayerColorPacket
+public final class PlayerColorPackets
 {
 	public record OpenSelection() implements MSPacket.PlayToClient
 	{

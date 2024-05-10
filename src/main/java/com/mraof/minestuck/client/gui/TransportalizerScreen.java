@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
-import com.mraof.minestuck.network.block.TransportalizerPacket;
+import com.mraof.minestuck.network.block.TransportalizerPackets;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -81,11 +81,11 @@ public class TransportalizerScreen extends Screen
 		
 		if(be.hasId()) {
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
-			TransportalizerPacket.DestId packet = new TransportalizerPacket.DestId(be.getBlockPos(), text);
+			TransportalizerPackets.DestId packet = new TransportalizerPackets.DestId(be.getBlockPos(), text);
 			PacketDistributor.SERVER.noArg().send(packet);
 			minecraft.setScreen(null);
 		} else {
-			TransportalizerPacket.Id packet = new TransportalizerPacket.Id(be.getBlockPos(), text);
+			TransportalizerPackets.Id packet = new TransportalizerPackets.Id(be.getBlockPos(), text);
 			PacketDistributor.SERVER.noArg().send(packet);
 			minecraft.setScreen(null);
 		}

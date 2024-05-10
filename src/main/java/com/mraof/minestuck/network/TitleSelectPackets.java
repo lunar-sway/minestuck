@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
-public final class TitleSelectPacket
+public final class TitleSelectPackets
 {
 	public record OpenScreen(Optional<Title> rejectedTitle) implements MSPacket.PlayToClient
 	{

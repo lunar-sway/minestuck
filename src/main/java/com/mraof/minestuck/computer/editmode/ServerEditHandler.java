@@ -15,7 +15,7 @@ import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.editmode.EditmodeLocationsPacket;
-import com.mraof.minestuck.network.editmode.ServerEditPacket;
+import com.mraof.minestuck.network.editmode.ServerEditPackets;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.ActiveConnection;
@@ -178,7 +178,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		editData.recover();    //TODO handle exception from failed recovery
 		
-		PacketDistributor.PLAYER.with(player).send(new ServerEditPacket.Exit());
+		PacketDistributor.PLAYER.with(player).send(new ServerEditPackets.Exit());
 		
 		editData.getDecoy().markedForDespawn = true;
 		
@@ -218,7 +218,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			data.locations().validateClosestSource(player, targetData);
 			
-			PacketDistributor.PLAYER.with(player).send(new ServerEditPacket.Activate());
+			PacketDistributor.PLAYER.with(player).send(new ServerEditPackets.Activate());
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
@@ -273,7 +273,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			PacketDistributor.PLAYER.with(editor).send(new ServerEditPacket.Activate());
+			PacketDistributor.PLAYER.with(editor).send(new ServerEditPackets.Activate());
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
@@ -281,7 +281,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			data.sendCacheLimitToEditor();
 		} else
 		{
-			PacketDistributor.PLAYER.with(editor).send(new ServerEditPacket.Exit());
+			PacketDistributor.PLAYER.with(editor).send(new ServerEditPackets.Exit());
 		}
 	}
 	

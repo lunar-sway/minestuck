@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.Optional;
 
-public final class SkaianetInfoPacket
+public final class SkaianetInfoPackets
 {
 	public record Data(int playerId, ReducedPlayerState playerState, List<ReducedConnection> connections) implements MSPacket.PlayToClient
 	{

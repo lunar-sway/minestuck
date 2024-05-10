@@ -33,7 +33,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
-public final class EditmodeDragPacket
+public final class EditmodeDragPackets
 {
 	private static boolean editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{

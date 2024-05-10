@@ -105,7 +105,7 @@ public final class ClientPlayerData
 	
 	public static void selectColor(int colorIndex)
 	{
-		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectIndex(colorIndex));
+		PacketDistributor.SERVER.noArg().send(new PlayerColorPackets.SelectIndex(colorIndex));
 		playerColor = ColorHandler.BuiltinColors.getColor(colorIndex);
 	}
 	
@@ -113,7 +113,7 @@ public final class ClientPlayerData
 	{
 		if (color < 0 || color > 256*256*256) return;
 		
-		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectRGB(color));
+		PacketDistributor.SERVER.noArg().send(new PlayerColorPackets.SelectRGB(color));
 		playerColor = color;
 	}
 	
@@ -132,7 +132,7 @@ public final class ClientPlayerData
 		return dataCheckerAccess;
 	}
 	
-	public static void handleDataPacket(CaptchaDeckPacket.ModusData packet)
+	public static void handleDataPacket(CaptchaDeckPackets.ModusData packet)
 	{
 		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT);
 		if(modus != null)
@@ -169,18 +169,18 @@ public final class ClientPlayerData
 		targetCacheLimit = packet.limit();
 	}
 	
-	public static void handleDataPacket(PlayerColorPacket.OpenSelection packet)
+	public static void handleDataPacket(PlayerColorPackets.OpenSelection packet)
 	{
 		ClientPlayerData.playerColor = ColorHandler.BuiltinColors.DEFAULT_COLOR;
 		ClientPlayerData.displaySelectionGui = true;
 	}
 	
-	public static void handleDataPacket(PlayerColorPacket.Data packet)
+	public static void handleDataPacket(PlayerColorPackets.Data packet)
 	{
 		ClientPlayerData.playerColor = packet.color();
 	}
 	
-	public static void handleDataPacket(DataCheckerPacket.Permission packet)
+	public static void handleDataPacket(DataCheckerPackets.Permission packet)
 	{
 		dataCheckerAccess = packet.isAvailable();
 	}

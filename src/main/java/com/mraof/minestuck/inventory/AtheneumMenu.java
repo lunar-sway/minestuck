@@ -5,7 +5,7 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.editmode.AtheneumPacket;
+import com.mraof.minestuck.network.editmode.AtheneumPackets;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -142,11 +142,11 @@ public class AtheneumMenu extends AbstractContainerMenu
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		
-		AtheneumPacket.Update packet = new AtheneumPacket.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
+		AtheneumPackets.Update packet = new AtheneumPackets.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
 		PacketDistributor.PLAYER.with(serverPlayer).send(packet);
 	}
 	
-	public void receiveUpdatePacket(AtheneumPacket.Update packet)
+	public void receiveUpdatePacket(AtheneumPackets.Update packet)
 	{
 		if(!player.level().isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side menu");

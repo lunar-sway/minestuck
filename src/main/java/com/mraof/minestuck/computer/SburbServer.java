@@ -3,10 +3,10 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.network.computer.CloseSburbConnectionPacket;
+import com.mraof.minestuck.network.computer.CloseSburbConnectionPackets;
 import com.mraof.minestuck.network.computer.OpenSburbServerPacket;
-import com.mraof.minestuck.network.computer.ResumeSburbConnectionPacket;
-import com.mraof.minestuck.network.editmode.ClientEditPacket;
+import com.mraof.minestuck.network.computer.ResumeSburbConnectionPackets;
+import com.mraof.minestuck.network.editmode.ClientEditPackets;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -69,12 +69,12 @@ public class SburbServer extends ButtonListProgram
 		{
 			case EDIT_BUTTON, GIVE_BUTTON ->
 			{
-				CustomPacketPayload packet = new ClientEditPacket.Activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
+				CustomPacketPayload packet = new ClientEditPackets.Activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
 				PacketDistributor.SERVER.noArg().send(packet);
 			}
-			case RESUME_BUTTON -> PacketDistributor.SERVER.noArg().send(ResumeSburbConnectionPacket.asServer(be));
+			case RESUME_BUTTON -> PacketDistributor.SERVER.noArg().send(ResumeSburbConnectionPackets.asServer(be));
 			case OPEN_BUTTON -> PacketDistributor.SERVER.noArg().send(OpenSburbServerPacket.create(be));
-			case CLOSE_BUTTON -> PacketDistributor.SERVER.noArg().send(CloseSburbConnectionPacket.asServer(be));
+			case CLOSE_BUTTON -> PacketDistributor.SERVER.noArg().send(CloseSburbConnectionPackets.asServer(be));
 		}
 	}
 	

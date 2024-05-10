@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entry.EntryProcess;
-import com.mraof.minestuck.network.TitleSelectPacket;
+import com.mraof.minestuck.network.TitleSelectPackets;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -53,7 +53,7 @@ public class TitleSelectionHook
 			return true;
 		
 		playersInTitleSelection.put(player, new Pair<>(new Vec3(player.getX(), player.getY(), player.getZ()), savedPos));
-		PacketDistributor.PLAYER.with(player).send(new TitleSelectPacket.OpenScreen(Optional.empty()));
+		PacketDistributor.PLAYER.with(player).send(new TitleSelectPackets.OpenScreen(Optional.empty()));
 		return false;
 	}
 	

@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class AtheneumPacket
+public final class AtheneumPackets
 {
 	
 	public record Scroll(boolean scrollUp) implements MSPacket.PlayToServer

@@ -8,7 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public final class TransportalizerPacket
+public final class TransportalizerPackets
 {
 	public record Id(BlockPos pos, String selfId) implements MSPacket.PlayToServer
 	{
@@ -27,12 +27,12 @@ public final class TransportalizerPacket
 			buffer.writeUtf(selfId, 4);
 		}
 		
-		public static TransportalizerPacket.Id read(FriendlyByteBuf buffer)
+		public static TransportalizerPackets.Id read(FriendlyByteBuf buffer)
 		{
 			BlockPos pos = buffer.readBlockPos();
 			String id = buffer.readUtf(4);
 			
-			return new TransportalizerPacket.Id(pos, id);
+			return new TransportalizerPackets.Id(pos, id);
 		}
 		
 		@Override
@@ -63,12 +63,12 @@ public final class TransportalizerPacket
 			buffer.writeUtf(destId, 4);
 		}
 		
-		public static TransportalizerPacket.DestId read(FriendlyByteBuf buffer)
+		public static TransportalizerPackets.DestId read(FriendlyByteBuf buffer)
 		{
 			BlockPos pos = buffer.readBlockPos();
 			String destId = buffer.readUtf(4);
 			
-			return new TransportalizerPacket.DestId(pos, destId);
+			return new TransportalizerPackets.DestId(pos, destId);
 		}
 		
 		@Override

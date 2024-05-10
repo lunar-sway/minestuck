@@ -10,21 +10,21 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public final class CloseSburbConnectionPacket
+public final class ResumeSburbConnectionPackets
 {
 	public static CustomPacketPayload asClient(ComputerBlockEntity be)
 	{
-		return new AsClient(be.getBlockPos());
+		return new ResumeSburbConnectionPackets.AsClient(be.getBlockPos());
 	}
 	
 	public static CustomPacketPayload asServer(ComputerBlockEntity be)
 	{
-		return new AsServer(be.getBlockPos());
+		return new ResumeSburbConnectionPackets.AsServer(be.getBlockPos());
 	}
 	
 	public record AsClient(BlockPos pos) implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("close_sburb_connection/as_client");
+		public static final ResourceLocation ID = Minestuck.id("resume_sburb_connection/as_client");
 		
 		@Override
 		public ResourceLocation id()
@@ -40,21 +40,21 @@ public final class CloseSburbConnectionPacket
 		
 		public static AsClient read(FriendlyByteBuf buffer)
 		{
-			BlockPos pos = buffer.readBlockPos();
-			return new AsClient(pos);
+			BlockPos computer = buffer.readBlockPos();
+			return new AsClient(computer);
 		}
 		
 		@Override
 		public void execute(ServerPlayer player)
 		{
 			ComputerBlockEntity.getAccessibleComputer(player, this.pos).ifPresent(computer ->
-					ComputerInteractions.get(player.server).closeClientConnection(computer));
+					ComputerInteractions.get(player.server).resumeClientConnection(computer));
 		}
 	}
 	
 	public record AsServer(BlockPos pos) implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("close_sburb_connection/as_server");
+		public static final ResourceLocation ID = Minestuck.id("resume_sburb_connection/as_server");
 		
 		@Override
 		public ResourceLocation id()
@@ -70,15 +70,15 @@ public final class CloseSburbConnectionPacket
 		
 		public static AsServer read(FriendlyByteBuf buffer)
 		{
-			BlockPos pos = buffer.readBlockPos();
-			return new AsServer(pos);
+			BlockPos computer = buffer.readBlockPos();
+			return new AsServer(computer);
 		}
 		
 		@Override
 		public void execute(ServerPlayer player)
 		{
 			ComputerBlockEntity.getAccessibleComputer(player, this.pos).ifPresent(computer ->
-						ComputerInteractions.get(player.server).closeServerConnection(computer));
+					ComputerInteractions.get(player.server).resumeServerConnection(computer));
 		}
 	}
 }

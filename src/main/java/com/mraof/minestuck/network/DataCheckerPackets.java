@@ -9,7 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public final class DataCheckerPacket
+public final class DataCheckerPackets
 {
 	private static int index = 0;
 	
@@ -19,8 +19,8 @@ public final class DataCheckerPacket
 		
 		public static Request create()
 		{
-			DataCheckerPacket.index = (DataCheckerPacket.index + 1) % 100;
-			return new Request(DataCheckerPacket.index);
+			DataCheckerPackets.index = (DataCheckerPackets.index + 1) % 100;
+			return new Request(DataCheckerPackets.index);
 		}
 		
 		@Override
@@ -75,7 +75,7 @@ public final class DataCheckerPacket
 		@Override
 		public void execute()
 		{
-			if(packetIndex == DataCheckerPacket.index)
+			if(packetIndex == DataCheckerPackets.index)
 				DataCheckerScreen.activeComponent = new DataCheckerScreen.MainComponent(nbtData);
 		}
 	}

@@ -5,7 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
 import com.mraof.minestuck.inventory.EditmodeMenu;
-import com.mraof.minestuck.network.editmode.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.editmode.EditmodeInventoryPackets;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -100,11 +100,11 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 			if(clickedInLeftArrowXRange)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = new EditmodeInventoryPacket.Scroll(false);
+				packet = new EditmodeInventoryPackets.Scroll(false);
 			} else if(clickedInRightArrowXRange)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = new EditmodeInventoryPacket.Scroll(true);
+				packet = new EditmodeInventoryPackets.Scroll(true);
 			}
 			if(packet != null)
 			{

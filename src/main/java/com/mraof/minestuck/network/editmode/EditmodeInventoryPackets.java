@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public final class EditmodeInventoryPacket
+public final class EditmodeInventoryPackets
 {
 	public record Update(List<ItemStack> inventory, boolean canScrollLeft, boolean canScrollRight) implements MSPacket.PlayToClient
 	{

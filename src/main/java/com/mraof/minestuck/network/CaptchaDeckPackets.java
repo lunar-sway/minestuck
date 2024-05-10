@@ -14,7 +14,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 
 import javax.annotation.Nullable;
 
-public final class CaptchaDeckPacket
+public final class CaptchaDeckPackets
 {
 	public record ModusData(@Nullable CompoundTag nbt) implements MSPacket.PlayToClient
 	{

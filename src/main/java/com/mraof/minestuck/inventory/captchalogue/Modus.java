@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -84,7 +84,7 @@ public abstract class Modus
 	{
 		if(needResend)
 		{
-			PacketDistributor.PLAYER.with(player).send(CaptchaDeckPacket.ModusData.create(this));
+			PacketDistributor.PLAYER.with(player).send(CaptchaDeckPackets.ModusData.create(this));
 			needResend = false;
 		}
 	}

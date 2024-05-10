@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.network.DataCheckerPacket;
+import com.mraof.minestuck.network.DataCheckerPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
@@ -72,7 +72,7 @@ public class DataCheckerScreen extends Screen
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
 		
 		if(activeComponent == null)
-			PacketDistributor.SERVER.noArg().send(DataCheckerPacket.Request.create());
+			PacketDistributor.SERVER.noArg().send(DataCheckerPackets.Request.create());
 		
 		componentChanged();
 	}
@@ -220,7 +220,7 @@ public class DataCheckerScreen extends Screen
 	
 	private void refresh()
 	{
-		PacketDistributor.SERVER.noArg().send(DataCheckerPacket.Request.create());
+		PacketDistributor.SERVER.noArg().send(DataCheckerPackets.Request.create());
 		activeComponent = null;
 		componentChanged();
 	}

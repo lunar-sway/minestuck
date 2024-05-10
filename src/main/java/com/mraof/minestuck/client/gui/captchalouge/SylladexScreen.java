@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -253,7 +253,7 @@ public abstract class SylladexScreen extends Screen
 	public void onEmptyConfirm(boolean result)
 	{
 		if(result)
-			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPacket.GetItem(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
+			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.GetItem(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
 		minecraft.screen = this;
 	}
 	
@@ -334,7 +334,7 @@ public abstract class SylladexScreen extends Screen
 			
 			if(toSend != -1)
 			{
-				PacketDistributor.SERVER.noArg().send(new CaptchaDeckPacket.GetItem(toSend, mouseButton != 0));
+				PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.GetItem(toSend, mouseButton != 0));
 			}
 		}
 

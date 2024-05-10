@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
-public final class ClientEditPacket
+public final class ClientEditPackets
 {
 	public record Exit() implements MSPacket.PlayToServer
 	{
