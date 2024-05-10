@@ -7,10 +7,14 @@ import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.server.MinecraftServer;
@@ -25,7 +29,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
@@ -90,7 +93,7 @@ public class ServerEventHandler
 					exp = Math.min(((Slime) event.getEntity()).getSize() - 1, 9);
 				
 				if(exp > 0)
-					Echeladder.increaseProgress(player, exp);
+					Echeladder.get(player).increaseProgress(exp);
 			}
 		}
 		if(event.getEntity() instanceof ServerPlayer)
@@ -131,12 +134,12 @@ public class ServerEventHandler
 				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 				{
 					//Increase damage to underling
-					double modifier = PlayerSavedData.getData((ServerPlayer) attacker).getEcheladder().getUnderlingDamageModifier();
+					double modifier = Echeladder.get((ServerPlayer) attacker).getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
 				{
 					//Decrease damage to player
-					double modifier = PlayerSavedData.getData((ServerPlayer) injured).getEcheladder().getUnderlingProtectionModifier();
+					double modifier = Echeladder.get((ServerPlayer) injured).getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 			}
@@ -155,10 +158,9 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
 	public static void onPlayerInjured(LivingHurtEvent event)
 	{
-		if(event.getEntity() instanceof Player injuredPlayer && !(injuredPlayer instanceof FakePlayer))
+		if(event.getEntity() instanceof ServerPlayer injuredPlayer && !(injuredPlayer instanceof FakePlayer))
 		{
-			Title title = PlayerSavedData.getData((ServerPlayer) injuredPlayer).getTitle();
-			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
+			boolean isDoom = Title.isPlayerOfAspect(injuredPlayer, EnumAspect.DOOM);
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			
@@ -220,13 +222,9 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public static void onServerChat(ServerChatEvent event)
 	{
-		ServerPlayer player = event.getPlayer();
-		if(!(player instanceof FakePlayer))
-		{
-			Modus modus = PlayerSavedData.getData(player).getModus();
-			if(modus instanceof HashMapModus)
-				((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage().getString());
-		}
+		Modus modus = CaptchaDeckHandler.getModus(event.getPlayer());
+		if(modus instanceof HashMapModus hashMapModus)
+			hashMapModus.onChatMessage(event.getPlayer(), event.getMessage().getString());
 	}
 	
 	@SubscribeEvent
@@ -234,17 +232,6 @@ public class ServerEventHandler
 	{
 		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.get().asItem())
 			event.setBurnTime(50);	//Do not set this number to 0.
-	}
-	
-	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
-	{
-		if(!event.player.level().isClientSide && !(event.player instanceof FakePlayer))
-		{
-			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
-			if(data.getTitle() != null)
-				data.getTitle().handleAspectEffects((ServerPlayer) event.player);
-		}
 	}
 	
 	@SubscribeEvent

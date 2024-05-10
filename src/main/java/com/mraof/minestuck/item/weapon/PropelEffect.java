@@ -3,7 +3,6 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -48,18 +47,19 @@ public class PropelEffect implements ItemRightClickEffect
 		if(player instanceof FakePlayer)
 			return;
 		
-		Title title = null;
+		boolean hasAspect = false;
 		if(player.level().isClientSide)
 		{
-			title = ClientPlayerData.getTitle();
-		} else if(player instanceof ServerPlayer)
+			Title title = ClientPlayerData.getTitle();
+			hasAspect = title != null && title.heroAspect() == aspect;
+		} else if(player instanceof ServerPlayer serverPlayer)
 		{
-			title = PlayerSavedData.getData((ServerPlayer) player).getTitle();
-			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && ((title != null && title.getHeroAspect() == aspect) || player.isCreative()))
+			hasAspect = Title.isPlayerOfAspect(serverPlayer, aspect);
+			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && (hasAspect || player.isCreative()))
 				propelActionSound(player.level(), player);
 		}
 		
-		if((title != null && title.getHeroAspect() == aspect) || player.isCreative())
+		if(hasAspect || player.isCreative())
 		{
 			Vec3 lookVec = player.getLookAngle().scale(velocity);
 			if(player.isFallFlying())

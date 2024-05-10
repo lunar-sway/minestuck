@@ -1,5 +1,6 @@
 package com.mraof.minestuck.player;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.*;
@@ -8,13 +9,17 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.data.GristCachePacket;
-import net.minecraft.nbt.CompoundTag;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +33,8 @@ import java.util.Objects;
  *
  * @author kirderf1
  */
-public final class GristCache
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public final class GristCache implements INBTSerializable<Tag>
 {
 	public static final String MISSING_MESSAGE = "grist.missing";
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -37,26 +43,32 @@ public final class GristCache
 	private final MinecraftServer mcServer;
 	private ImmutableGristSet gristSet;
 	
-	GristCache(PlayerData data, MinecraftServer mcServer)
+	public GristCache(PlayerData data)
 	{
 		this.data = data;
-		this.mcServer = mcServer;
+		this.mcServer = data.getMinecraftServer();
 		this.gristSet = GristTypes.BUILD.get().amount(20);
 	}
 	
 	public static GristCache get(ServerPlayer player)
 	{
-		return PlayerSavedData.getData(player).getGristCache();
+		PlayerData data = PlayerData.get(player).orElseThrow();
+		return get(data);
 	}
 	
 	public static GristCache get(Level level, PlayerIdentifier player)
 	{
-		return PlayerSavedData.getData(player, level).getGristCache();
+		return get(PlayerData.get(player, level));
 	}
 	
 	public static GristCache get(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		return PlayerSavedData.getData(player, mcServer).getGristCache();
+		return get(PlayerData.get(player, mcServer));
+	}
+	
+	public static GristCache get(PlayerData playerData)
+	{
+		return playerData.getData(MSAttachments.GRIST_CACHE);
 	}
 	
 	public static Component createMissingMessage(GristSet gristSet)
@@ -64,12 +76,20 @@ public final class GristCache
 		return Component.translatable(MISSING_MESSAGE, gristSet.asTextComponent());
 	}
 	
+	@SubscribeEvent
+	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		
+		get(player).sendPacket(player);
+	}
+	
 	/**
 	 * Returns a grist set of how much space for each type that this grist cache has.
 	 */
 	public NonNegativeGristSet getCapacitySet()
 	{
-		long capacity = data.getEcheladder().getGristCapacity();
+		long capacity = Echeladder.get(data).getGristCapacity();
 		NonNegativeGristSet capacitySet = new NonNegativeGristSet();
 		for(GristType type : GristTypes.REGISTRY)
 		{
@@ -80,16 +100,19 @@ public final class GristCache
 		return capacitySet;
 	}
 	
-	void read(CompoundTag nbt)
+	@Override
+	public void deserializeNBT(Tag tag)
 	{
-		gristSet = ImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, nbt.get("grist_cache"))
+		gristSet = ImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, tag)
 				.resultOrPartial(LOGGER::error).orElse(GristSet.EMPTY);
 	}
 	
-	void write(CompoundTag nbt)
+	@Nullable
+	@Override
+	public Tag serializeNBT()
 	{
-		ImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
-				.resultOrPartial(LOGGER::error).ifPresent(tag -> nbt.put("grist_cache", tag));
+		return ImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
+				.resultOrPartial(LOGGER::error).orElse(null);
 	}
 	
 	public ImmutableGristSet getGristSet()
@@ -99,7 +122,7 @@ public final class GristCache
 	
 	public long getRemainingCapacity(GristType type)
 	{
-		return Math.max(0, data.getEcheladder().getGristCapacity() - gristSet.getGrist(type));
+		return Math.max(0, Echeladder.get(data).getGristCapacity() - gristSet.getGrist(type));
 	}
 	
 	public boolean canAfford(GristSet cost)
@@ -109,7 +132,7 @@ public final class GristCache
 	
 	public boolean canAdd(GristSet addition)
 	{
-		return addWithinCapacity(this.gristSet.mutableCopy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
+		return addWithinCapacity(this.gristSet.mutableCopy(), addition, Echeladder.get(data).getGristCapacity()).isEmpty();
 	}
 	
 	public static boolean canAfford(GristSet source, GristSet cost, long limit)
@@ -130,7 +153,7 @@ public final class GristCache
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		GristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
+		GristSet excessGrist = addWithinCapacity(newCache, change, Echeladder.get(data).getGristCapacity());
 		
 		if(excessGrist.isEmpty())
 		{
@@ -184,7 +207,7 @@ public final class GristCache
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		MutableGristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
+		MutableGristSet excessGrist = addWithinCapacity(newCache, set, Echeladder.get(data).getGristCapacity());
 		
 		if(!excessGrist.equalContent(set))
 		{
@@ -203,7 +226,7 @@ public final class GristCache
 	public void set(NonNegativeGristSet cache)
 	{
 		gristSet = cache.asImmutable();
-		data.gristCache.sendPacket(data.getPlayer());
+		this.sendPacket(data.getPlayer());
 	}
 	
 	void sendPacket(ServerPlayer player)
@@ -213,7 +236,7 @@ public final class GristCache
 		if(player != null)
 		{
 			GristCachePacket packet = new GristCachePacket(this.getGristSet(), false);
-			PacketDistributor.PLAYER.with(player).send(packet);
+			player.connection.send(packet);
 		}
 		
 		//Also send to the editing player, if there is any

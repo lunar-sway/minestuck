@@ -28,7 +28,7 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.AUTOMATIC, MAX_PROGRESS, this::setChanged, this::contentsValid);
-	public int color = ColorHandler.DEFAULT_COLOR;
+	public int color = ColorHandler.BuiltinColors.DEFAULT_COLOR;
 	
 	public MiniCruxtruderBlockEntity(BlockPos pos, BlockState state)
 	{

@@ -2,13 +2,11 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.nbt.EndTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -98,7 +96,7 @@ public class GristGutter
 		PlayerSavedData playerSavedData = PlayerSavedData.get(mcServer);
 		
 		return this.gutterPlayers()
-				.map(player -> playerSavedData.getData(player).getGutterMultipler())
+				.map(player -> playerSavedData.getOrCreateData(player).getData(MSAttachments.GUTTER_MULTIPLIER))
 				.reduce(0D, Double::sum);
 	}
 	
@@ -188,13 +186,14 @@ public class GristGutter
 	
 	private void tickDistributionToPlayer(PlayerIdentifier player, RandomSource rand)
 	{
-		PlayerData data = PlayerSavedData.getData(player, mcServer);
+		PlayerData data = PlayerData.get(player, mcServer);
 		
-		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
+		long spliceAmount = (long) (Echeladder.get(data).getGristCapacity() * getDistributionRateModifier());
 		
-		NonNegativeGristSet capacity = data.getGristCache().getCapacitySet();
+		GristCache gristCache = GristCache.get(data);
+		NonNegativeGristSet capacity = gristCache.getCapacitySet();
 		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
-		GristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
+		GristSet remainder = gristCache.addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
 	}

@@ -9,10 +9,15 @@ import com.mraof.minestuck.blockentity.redstone.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MSBlockEntityTypes
 {
 	public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Minestuck.MOD_ID);
@@ -113,4 +118,18 @@ public class MSBlockEntityTypes
 									AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_HANGING_SIGN.get(),
 									AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_HANGING_SIGN.get())
 							.build(null));
+	
+	
+	@SubscribeEvent
+	public static void registerCapabilities(RegisterCapabilitiesEvent event)
+	{
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.MINI_CRUXTRUDER.get(), MiniCruxtruderBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.MINI_TOTEM_LATHE.get(), MiniTotemLatheBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.MINI_ALCHEMITER.get(), MiniAlchemiterBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.MINI_PUNCH_DESIGNIX.get(), MiniPunchDesignixBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.SENDIFICATOR.get(), SendificatorBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.GRIST_WIDGET.get(), GristWidgetBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.URANIUM_COOKER.get(), UraniumCookerBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.ANTHVIL.get(), AnthvilBlockEntity::getItemHandler);
+	}
 }

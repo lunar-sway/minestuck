@@ -1,14 +1,14 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class EffectTogglePacket implements MSPacket.PlayToServer
+public record EffectTogglePacket() implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("effect_toggle");
 	
@@ -34,14 +34,12 @@ public class EffectTogglePacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		PlayerData data = PlayerSavedData.getData(player);
-		data.effectToggle(!data.effectToggle());
-		if(data.effectToggle())
-		{
-			player.displayClientMessage(Component.translatable(ON), true);
-		} else
-		{
-			player.displayClientMessage(Component.translatable(OFF), true);
-		}
+		boolean newToggle = !player.getData(MSAttachments.EFFECT_TOGGLE);
+		player.setData(MSAttachments.EFFECT_TOGGLE, newToggle);
+		
+		MutableComponent message = newToggle
+				? Component.translatable(ON)
+				: Component.translatable(OFF);
+		player.displayClientMessage(message, true);
 	}
 }

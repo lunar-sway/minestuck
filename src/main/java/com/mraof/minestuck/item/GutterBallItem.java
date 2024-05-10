@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,7 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.FakePlayer;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -39,9 +39,12 @@ public class GutterBallItem extends Item
 		itemStack.shrink(1);
 		player.displayClientMessage(Component.translatable(MINOR_INCREASE).withStyle(ChatFormatting.BOLD), true);
 		
-		if(player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer))
+		if(player instanceof ServerPlayer serverPlayer)
 		{
-			PlayerSavedData.getData(serverPlayer).addGutterMultiplier(0.2);
+			PlayerData.get(serverPlayer).ifPresent(playerData -> {
+				double newMultiplier = playerData.getData(MSAttachments.GUTTER_MULTIPLIER) + 0.2;
+				playerData.setData(MSAttachments.GUTTER_MULTIPLIER, newMultiplier);
+			});
 		}
 		
 		return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());

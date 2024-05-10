@@ -7,14 +7,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,46 +79,18 @@ public final class PlayerSavedData extends SavedData
 		for (int i = 0; i < list.size(); i++)
 		{
 			CompoundTag dataCompound = list.getCompound(i);
-			try
-			{
-				PlayerData data = new PlayerData(server, dataCompound);
-				savedData.dataMap.put(data.identifier, data);
-			} catch(Exception e)
-			{
-				LOGGER.error("Got exception when loading minestuck player data instance:", e);
-			}
+			PlayerData.load(server, dataCompound)
+					.resultOrPartial(message -> LOGGER.error("Problem while loading player data: {}", message))
+					.ifPresent(data -> savedData.dataMap.put(data.identifier, data));
 		}
 		return savedData;
 	}
 	
-	@Nullable
-	public static PlayerData getData(ServerPlayer player)
-	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		if(identifier == null)
-			return null;
-		return get(player.server).getData(identifier);
-	}
-	
-	public static PlayerData getData(PlayerIdentifier player, Level level)
-	{
-		return get(level).getData(player);
-	}
-	
-	public static PlayerData getData(PlayerIdentifier player, MinecraftServer server)
-	{
-		return get(server).getData(player);
-	}
-	
-	public PlayerData getData(PlayerIdentifier player)
+	public PlayerData getOrCreateData(PlayerIdentifier player)
 	{
 		Objects.requireNonNull(player);
-		if(!dataMap.containsKey(player))
-		{
-			PlayerData data = new PlayerData(this.mcServer, player);
-			dataMap.put(player, data);
-		}
-		return dataMap.get(player);
+		
+		return this.dataMap.computeIfAbsent(player, ignored -> new PlayerData(this.mcServer, player));
 	}
 	
 	@Override

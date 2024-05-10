@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
@@ -672,11 +673,10 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null && data.getTitle() != null)
-				return data.getTitle().getHeroClass().equals(enumClass);
+			return Title.getTitle(player)
+					.map(value -> value.heroClass().equals(enumClass))
+					.orElse(false);
 			
-			return false;
 		}
 		
 		@Override
@@ -704,11 +704,7 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null && data.getTitle() != null)
-				return data.getTitle().getHeroAspect().equals(enumAspect);
-			
-			return false;
+			return Title.isPlayerOfAspect(player, this.enumAspect);
 		}
 		
 		@Override
@@ -739,11 +735,13 @@ public interface Condition
 			
 			Level level = player.level();
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
-				return greaterThan ? data.getConsortReputation(level.dimension()) > amount : data.getConsortReputation(level.dimension()) < amount;
+			Optional<ConsortReputation> reputation = PlayerData.get(player).map(ConsortReputation::get);
+			if(reputation.isEmpty())
+				return false;
 			
-			return false;
+			return greaterThan
+					? reputation.get().getConsortReputation(level.dimension()) > amount
+					: reputation.get().getConsortReputation(level.dimension()) < amount;
 		}
 		
 		@Override
@@ -771,9 +769,9 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
-				return data.getBoondollars() >= amount;
+			Optional<PlayerData> data = PlayerData.get(player);
+			if(data.isPresent())
+				return PlayerBoondollars.getBoondollars(data.get()) >= amount;
 			
 			return false;
 		}

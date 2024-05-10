@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -98,7 +98,7 @@ public final class DialoguePackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get())
+			player.getData(MSAttachments.CURRENT_DIALOGUE)
 					.validateAndGetComponent(player.level(), this.dialogueId)
 					.ifPresent(component -> component.clearOngoingDialogue(player));
 		}
@@ -132,7 +132,7 @@ public final class DialoguePackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get())
+			player.getData(MSAttachments.CURRENT_DIALOGUE)
 					.validateAndGetComponent(player.level(), this.dialogueId)
 					.ifPresent(component -> findAndTriggerResponse(player, component));
 		}

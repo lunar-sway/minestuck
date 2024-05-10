@@ -134,7 +134,7 @@ public class ColorSelectorScreen extends Screen
 		
 		if(tab==Tab.RGB && selectedIndex!=-1)
 		{
-			var color = ColorHandler.getColor(selectedIndex);
+			var color = ColorHandler.BuiltinColors.getColor(selectedIndex);
 			redSlider.setValue((color >> 16) & 0xFF);
 			greenSlider.setValue((color >> 8) & 0xFF);
 			blueSlider.setValue(color & 0xFF);
@@ -272,9 +272,9 @@ public class ColorSelectorScreen extends Screen
 		{
 			minecraft.player.sendSystemMessage(
 					Component.literal("[Minestuck] ").append(
-							ClientPlayerData.getPlayerColor()==ColorHandler.DEFAULT_COLOR?
-									Component.translatable(DEFAULT_COLOR_SELECTED):
-									Component.translatable(COLOR_SELECTED))
+							ClientPlayerData.getPlayerColor()==ColorHandler.BuiltinColors.DEFAULT_COLOR
+									? Component.translatable(DEFAULT_COLOR_SELECTED)
+									: Component.translatable(COLOR_SELECTED))
 			);
 		}
 	}
@@ -308,11 +308,12 @@ public class ColorSelectorScreen extends Screen
 	private record ColorSelector (int x, int y, int id)
 	{
 		public static final int WIDTH = 32, HEIGHT = 16;
-		public Component getName() { return ColorHandler.getName(id); }
-		public int getColor() { return ColorHandler.getColor(id); }
+		public Component getName() { return ColorHandler.BuiltinColors.getName(id); }
+		public int getColor() { return ColorHandler.BuiltinColors.getColor(id); }
 		public void draw(GuiGraphics guiGraphics)
 		{
-			guiGraphics.fill(xOffset+x, yOffset+y, xOffset+x+WIDTH, yOffset+y+HEIGHT, ColorHandler.getColor(id)|0xFF000000);
+			guiGraphics.fill(xOffset+x, yOffset+y, xOffset+x+WIDTH, yOffset+y+HEIGHT,
+					ColorHandler.BuiltinColors.getColor(id)|0xFF000000);
 		}
 		public boolean pointWithin(double mouseX, double mouseY)
 		{

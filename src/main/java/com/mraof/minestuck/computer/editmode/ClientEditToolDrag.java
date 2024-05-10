@@ -10,7 +10,7 @@ import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.network.EditmodeDragPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.Camera;
@@ -62,7 +62,7 @@ public class ClientEditToolDrag
 		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
 			return;
 		
-		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		ClientEditToolDrag.doRecycleCode(mc, player, cap);
 		ClientEditToolDrag.doReviseCode(mc, player, cap);
@@ -369,7 +369,7 @@ public class ClientEditToolDrag
 			Player player = mc.player;
 			Camera info = event.getCamera();
 			
-			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			double d1 = info.getPosition().x;
 			double d2 = info.getPosition().y;

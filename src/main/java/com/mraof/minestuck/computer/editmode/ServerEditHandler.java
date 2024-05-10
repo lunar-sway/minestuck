@@ -22,7 +22,7 @@ import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -380,7 +380,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	{
 		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
-			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
@@ -433,7 +433,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	{
 		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
-			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
@@ -570,7 +570,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			throw LOGGER.throwing(new IllegalStateException("Server Level is clientside in updateEditToolsServer()!"));
 		
 		
-		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();
@@ -639,7 +639,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	 */
 	public static void removeCursorEntity(ServerPlayer player, boolean rejected)
 	{
-		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		if(cap.getEditCursorID() != null)
 		{

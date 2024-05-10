@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -12,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.FakePlayer;
 
 import java.util.function.Supplier;
 
@@ -40,11 +38,10 @@ public interface InventoryTickEffect
 	static InventoryTickEffect passiveAspectEffect(EnumAspect aspect, Supplier<MobEffectInstance> effect)
 	{
 		return (stack, worldIn, entityIn, itemSlot, isSelected) -> {
-			if(isSelected && entityIn instanceof ServerPlayer player && !(entityIn instanceof FakePlayer))
+			if(isSelected && entityIn instanceof ServerPlayer player
+					&& Title.isPlayerOfAspect(player, aspect))
 			{
-				Title title = PlayerSavedData.getData(player).getTitle();
-				if(title != null && title.getHeroAspect() == aspect)
-					player.addEffect(effect.get());
+				player.addEffect(effect.get());
 			}
 		};
 	}

@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.client.util.MagicEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.network.MagicRangedEffectPacket;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -145,7 +145,7 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 	{
 		if(!(player instanceof FakePlayer))
 		{
-			int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
+			int playerRung = Echeladder.get(player).getRung();
 			
 			//damage increase from rung is higher against underlings
 			return damage + (target instanceof UnderlingEntity ? playerRung / 5F : playerRung / 10F);

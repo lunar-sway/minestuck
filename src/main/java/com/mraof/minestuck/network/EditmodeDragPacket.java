@@ -8,7 +8,7 @@ import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -111,7 +111,7 @@ public final class EditmodeDragPacket
 			if(data == null)
 				return;
 			
-			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			cap.setEditPos1(positionStart);
 			cap.setEditPos2(positionEnd);
@@ -201,7 +201,7 @@ public final class EditmodeDragPacket
 			if(data == null)
 				return;
 			
-			EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			cap.setEditPos1(positionStart);
 			cap.setEditPos2(positionEnd);
@@ -271,7 +271,7 @@ public final class EditmodeDragPacket
 		{
 			if(!player.level().isClientSide() && ServerEditHandler.getData(player) != null)
 			{
-				EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+				EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 				
 				cap.setEditPos1(positionStart);
 				cap.setEditPos2(positionEnd);
@@ -306,7 +306,7 @@ public final class EditmodeDragPacket
 		{
 			if(!player.level().isClientSide())
 			{
-				EditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+				EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 				
 				ServerEditHandler.removeCursorEntity(player, true);
 				cap.resetDragTools();

@@ -7,8 +7,8 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.ClientMovementPacket;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.util.MSTags;
@@ -253,20 +253,20 @@ public interface OnHitEffect
 			
 			if(attacker instanceof ServerPlayer serverPlayer && !(attacker instanceof FakePlayer))
 			{
-				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
+				boolean isMissingAspectBonus = !Title.isPlayerOfAspect(serverPlayer, aspect);
 				
 				if(target instanceof UnderlingEntity)
 				{
-					float modifier = (float) (PlayerSavedData.getData(serverPlayer).getEcheladder().getUnderlingDamageModifier());
+					float modifier = (float) (Echeladder.get(serverPlayer).getUnderlingDamageModifier());
 					
-					if(title == null || title.getHeroAspect() != aspect)
-						modifier = modifier / 1.2F;
+					if(isMissingAspectBonus)
+						modifier /= 1.2F;
 					
-					damage = damage * modifier;
+					damage *= modifier;
 				} else
 				{
-					if(title == null || title.getHeroAspect() != aspect)
-						damage = damage / 1.2F;
+					if(isMissingAspectBonus)
+						damage /= 1.2F;
 				}
 			}
 			
@@ -428,12 +428,10 @@ public interface OnHitEffect
 	static OnHitEffect requireAspect(EnumAspect aspect, OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
-			if(attacker instanceof ServerPlayer player && !(attacker instanceof FakePlayer))
+			if(attacker instanceof ServerPlayer player
+					&& (player.isCreative() || Title.isPlayerOfAspect(player, aspect)))
 			{
-				Title title = PlayerSavedData.getData(player).getTitle();
-				
-				if((title != null && title.getHeroAspect() == aspect) || player.isCreative())
-					effect.onHit(stack, target, attacker);
+				effect.onHit(stack, target, attacker);
 			}
 		};
 	}

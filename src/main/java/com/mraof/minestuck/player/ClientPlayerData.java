@@ -5,8 +5,6 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.network.ColorSelectPacket;
-import com.mraof.minestuck.network.RGBColorSelectPacket;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.util.ColorHandler;
 import net.neoforged.api.distmarker.Dist;
@@ -32,7 +30,6 @@ public final class ClientPlayerData
 	private static int rung;
 	private static float rungProgress;
 	private static long boondollars;
-	private static int consortReputation;
 	private static GristSet playerGrist, targetGrist;
 	private static long targetCacheLimit;
 	private static int playerColor;
@@ -77,11 +74,6 @@ public final class ClientPlayerData
 		return boondollars;
 	}
 	
-	public static int getConsortReputation()
-	{
-		return consortReputation;
-	}
-	
 	public static ClientCache getGristCache(CacheSource cacheSource)
 	{
 		return switch(cacheSource)
@@ -112,15 +104,15 @@ public final class ClientPlayerData
 	
 	public static void selectColor(int colorIndex)
 	{
-		PacketDistributor.SERVER.noArg().send(new ColorSelectPacket(colorIndex));
-		playerColor = ColorHandler.getColor(colorIndex);
+		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectIndex(colorIndex));
+		playerColor = ColorHandler.BuiltinColors.getColor(colorIndex);
 	}
 	
 	public static void selectColorRGB(int color)
 	{
 		if (color < 0 || color > 256*256*256) return;
 		
-		PacketDistributor.SERVER.noArg().send(new RGBColorSelectPacket(color));
+		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectRGB(color));
 		playerColor = color;
 	}
 	
@@ -163,11 +155,6 @@ public final class ClientPlayerData
 		boondollars = packet.getBoondollars();
 	}
 	
-	public static void handleDataPacket(ConsortReputationDataPacket packet)
-	{
-		consortReputation = packet.getCount();
-	}
-	
 	public static void handleDataPacket(GristCachePacket packet)
 	{
 		if(packet.isEditmode())
@@ -181,13 +168,15 @@ public final class ClientPlayerData
 		targetCacheLimit = packet.limit();
 	}
 	
-	public static void handleDataPacket(ColorDataPacket packet)
+	public static void handleDataPacket(PlayerColorPacket.OpenSelection packet)
 	{
-		if(packet.hasNoColor())
-		{
-			ClientPlayerData.playerColor = ColorHandler.DEFAULT_COLOR;
-			ClientPlayerData.displaySelectionGui = true;
-		} else ClientPlayerData.playerColor = packet.getColor();
+		ClientPlayerData.playerColor = ColorHandler.BuiltinColors.DEFAULT_COLOR;
+		ClientPlayerData.displaySelectionGui = true;
+	}
+	
+	public static void handleDataPacket(PlayerColorPacket.Data packet)
+	{
+		ClientPlayerData.playerColor = packet.color();
 	}
 	
 	public static void handleDataPacket(DataCheckerPermissionPacket packet)

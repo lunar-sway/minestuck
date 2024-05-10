@@ -7,8 +7,8 @@ import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.server.level.ServerPlayer;
@@ -115,9 +115,9 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	protected boolean isAppropriateTarget(LivingEntity entity)
 	{
 		//imps will not attack players above rung 15 unless an underling is attacked in their presence
-		if(entity instanceof ServerPlayer && !(entity instanceof FakePlayer))
+		if(entity instanceof ServerPlayer player && !(entity instanceof FakePlayer))
 		{
-			return PlayerSavedData.getData((ServerPlayer) entity).getEcheladder().getRung() < 16;
+			return Echeladder.get(player).getRung() < 16;
 		}
 		return super.isAppropriateTarget(entity);
 	}

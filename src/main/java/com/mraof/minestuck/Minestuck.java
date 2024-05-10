@@ -28,7 +28,7 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.DispenserBehaviourUtil;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
@@ -112,7 +112,7 @@ public class Minestuck
 		
 		MSCreativeTabs.REGISTER.register(eventBus);
 		
-		MSCapabilities.ATTACHMENT_REGISTER.register(eventBus);
+		MSAttachments.REGISTER.register(eventBus);
 		
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();

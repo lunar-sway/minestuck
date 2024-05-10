@@ -5,11 +5,12 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
@@ -367,9 +368,9 @@ public sealed interface Trigger
 			if(!(entity instanceof ConsortEntity consortEntity))
 				return;
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
-				data.addConsortReputation(this.reputation, consortEntity.getHomeDimension());
+			PlayerData.get(player).ifPresent(playerData ->
+					ConsortReputation.get(playerData).addConsortReputation(this.reputation, consortEntity.getHomeDimension())
+			);
 		}
 	}
 	
@@ -388,13 +389,13 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null && boondollars != 0)
+			Optional<PlayerData> data = PlayerData.get(player);
+			if(data.isPresent() && boondollars != 0)
 			{
 				if(boondollars > 0)
-					data.addBoondollars(boondollars);
+					PlayerBoondollars.addBoondollars(data.get(), boondollars);
 				else
-					data.takeBoondollars(-boondollars);
+					PlayerBoondollars.takeBoondollars(data.get(), -boondollars);
 			}
 		}
 	}
