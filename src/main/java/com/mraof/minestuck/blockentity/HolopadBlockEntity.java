@@ -21,9 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class HolopadBlockEntity extends BlockEntity
 {
-	
 	public int innerRotation = 0;
-	protected ItemStack card = ItemStack.EMPTY;
+	private ItemStack card = ItemStack.EMPTY;
 	
 	public HolopadBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -33,25 +32,30 @@ public class HolopadBlockEntity extends BlockEntity
 	public void onRightClick(Player player)
 	{
 		if(!card.isEmpty())
-		{
-			if (player.getMainHandItem().isEmpty())
-				player.setItemInHand(InteractionHand.MAIN_HAND, card);
-			else if (!player.getInventory().add(card))
-				dropItem(false, level, worldPosition, card);
-			else player.inventoryMenu.broadcastChanges();
-			
-			setCard(ItemStack.EMPTY);
-		}
+			takeItem(player);
 		else
+			insertHeldItem(player);
+	}
+	
+	private void takeItem(Player player)
+	{
+		if(player.getMainHandItem().isEmpty())
+			player.setItemInHand(InteractionHand.MAIN_HAND, card);
+		else if(!player.getInventory().add(card))
+			dropItem(false, level, worldPosition, card);
+		else player.inventoryMenu.broadcastChanges();
+		
+		this.card = ItemStack.EMPTY;
+		updateState();
+	}
+	
+	private void insertHeldItem(Player player)
+	{
+		ItemStack heldStack = player.getMainHandItem();
+		if(card.isEmpty() && !heldStack.isEmpty() && heldStack.is(MSItems.CAPTCHA_CARD))
 		{
-			ItemStack heldStack = player.getMainHandItem();
-			if (card.isEmpty())
-			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD.get())
-				{
-					setCard(heldStack.split(1));    //Insert card into the card slot
-				}
-			}
+			this.card = heldStack.split(1);
+			updateState();
 		}
 	}
 	
@@ -65,24 +69,11 @@ public class HolopadBlockEntity extends BlockEntity
 		else dropPos = pos;
 		
 		Containers.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), item);
-		
 	}
 	
 	public boolean hasCard()
 	{
 		return !this.getCard().isEmpty();
-	}
-	
-	public void setCard(ItemStack card)
-	{
-		if (card.getItem() == MSItems.CAPTCHA_CARD.get() || card.isEmpty())
-		{
-			this.card = card;
-			if(level != null)
-			{
-				updateState();
-			}
-		}
 	}
 	
 	public ItemStack getCard()
@@ -92,11 +83,10 @@ public class HolopadBlockEntity extends BlockEntity
 	
 	public ItemStack getHoloItem()
 	{
-		ItemStack in = getCard();
-		ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
+		ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT);
 		
-		if (in.hasTag() && in.getTag().contains("contentID"))
-			item = AlchemyHelper.getDecodedItem(in);
+		if(AlchemyHelper.hasDecodedItem(this.card))
+			item = AlchemyHelper.getDecodedItem(this.card);
 		
 		return item;
 	}
@@ -105,7 +95,7 @@ public class HolopadBlockEntity extends BlockEntity
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
-		setCard(ItemStack.of(nbt.getCompound("card")));
+		this.card = ItemStack.of(nbt.getCompound("card"));
 	}
 	
 	@Override
