@@ -11,8 +11,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
 
@@ -51,22 +49,13 @@ public record AreaEffectSettingsPacket(MobEffect effect, int effectAmp, boolean 
 		return new AreaEffectSettingsPacket(effect, effectAmp, isAllMobs, minEffectPos, maxEffectPos, beBlockPos);
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public void execute(ServerPlayer player)
 	{
 		if(!AreaEffectBlock.canInteract(player))
 			return;
 		
-		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, AreaEffectBlockEntity.class).ifPresent(areaEffect ->
-		{
-			areaEffect.setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);
-			areaEffect.setEffect(effect, effectAmp);
-			//Imitates the structure block to ensure that changes are sent client-side
-			areaEffect.setChanged();
-			player.level().setBlock(beBlockPos, areaEffect.getBlockState().setValue(AreaEffectBlock.ALL_MOBS, isAllMobs), Block.UPDATE_ALL);
-			BlockState state = player.level().getBlockState(beBlockPos);
-			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-		});
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, AreaEffectBlockEntity.class)
+				.ifPresent(areaEffect -> areaEffect.handleSettingsPacket(this));
 	}
 }

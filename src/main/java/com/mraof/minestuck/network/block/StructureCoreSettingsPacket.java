@@ -8,8 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 
 public record StructureCoreSettingsPacket(StructureCoreBlockEntity.ActionType actionType, int shutdownRange, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
@@ -38,23 +36,13 @@ public record StructureCoreSettingsPacket(StructureCoreBlockEntity.ActionType ac
 		return new StructureCoreSettingsPacket(actionType, summonRange, beBlockPos);
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public void execute(ServerPlayer player)
 	{
 		if(!StructureCoreBlock.canInteract(player))
 			return;
 		
-		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, StructureCoreBlockEntity.class).ifPresent(structureCore ->
-		{
-			structureCore.setActionType(actionType);
-			structureCore.setShutdownRange(shutdownRange);
-			structureCore.setHasWiped(false);
-			//Imitates the structure block to ensure that changes are sent client-side
-			structureCore.setChanged();
-			player.level().setBlock(beBlockPos, structureCore.getBlockState().setValue(StructureCoreBlock.POWERED, false), Block.UPDATE_ALL);
-			BlockState state = player.level().getBlockState(beBlockPos);
-			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-		});
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, StructureCoreBlockEntity.class)
+				.ifPresent(structureCore -> structureCore.handleSettingsPacket(this));
 	}
 }

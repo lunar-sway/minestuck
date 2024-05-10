@@ -42,10 +42,7 @@ public record StatStorerSettingsPacket(StatStorerBlockEntity.ActiveType activeTy
 		if(!StatStorerBlock.canInteract(player))
 			return;
 		
-		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, StatStorerBlockEntity.class).ifPresent(statStorer ->
-		{
-			int largestDivideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
-			statStorer.setActiveTypeAndDivideValue(activeType, largestDivideValueBy);
-		});
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, StatStorerBlockEntity.class)
+				.ifPresent(statStorer -> statStorer.handleSettingsPacket(this));
 	}
 }

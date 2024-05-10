@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.state.BlockState;
 
 public record BlockTeleporterSettingsPacket(BlockPos offsetPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
@@ -35,20 +34,13 @@ public record BlockTeleporterSettingsPacket(BlockPos offsetPos, BlockPos beBlock
 		return new BlockTeleporterSettingsPacket(offsetPos, beBlockPos);
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public void execute(ServerPlayer player)
 	{
 		if(!BlockTeleporterBlock.canInteract(player))
 			return;
 		
-		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, BlockTeleporterBlockEntity.class).ifPresent(blockTeleporter ->
-		{
-			blockTeleporter.setTeleportOffset(offsetPos);
-			//Imitates the structure block to ensure that changes are sent client-side
-			blockTeleporter.setChanged();
-			BlockState state = player.level().getBlockState(beBlockPos);
-			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-		});
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, BlockTeleporterBlockEntity.class)
+				.ifPresent(blockTeleporter -> blockTeleporter.handleSettingsPacket(this));
 	}
 }

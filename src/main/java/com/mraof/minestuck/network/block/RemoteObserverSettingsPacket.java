@@ -9,7 +9,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -54,16 +53,7 @@ public record RemoteObserverSettingsPacket(RemoteObserverBlockEntity.ActiveType 
 		if(!RemoteObserverBlock.canInteract(player))
 			return;
 		
-		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, RemoteObserverBlockEntity.class).ifPresent(observerBE ->
-		{
-			observerBE.setActiveType(activeType);
-			if(entityType != null)
-				observerBE.setCurrentEntityType(entityType);
-			observerBE.setObservingRange(observingRange);
-			//Imitates the structure block to ensure that changes are sent client-side
-			observerBE.setChanged();
-			BlockState state = player.level().getBlockState(beBlockPos);
-			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-		});
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, RemoteObserverBlockEntity.class)
+				.ifPresent(observerBE -> observerBE.handleSettingsPacket(this));
 	}
 }

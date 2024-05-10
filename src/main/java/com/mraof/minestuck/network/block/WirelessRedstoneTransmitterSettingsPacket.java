@@ -41,6 +41,6 @@ public record WirelessRedstoneTransmitterSettingsPacket(BlockPos destinationBloc
 			return;
 		
 		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, WirelessRedstoneTransmitterBlockEntity.class)
-				.ifPresent(transmitter -> transmitter.setOffsetFromDestinationBlockPos(destinationBlockPos));
+				.ifPresent(transmitter -> transmitter.handleSettingsPacket(this));
 	}
 }

@@ -10,8 +10,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -56,16 +54,7 @@ public record SummonerSettingsPacket(boolean isUntriggerable, int summonRange, @
 		if(!SummonerBlock.canInteract(player))
 			return;
 		
-		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, SummonerBlockEntity.class).ifPresent(summoner ->
-		{
-			if(entityType != null)
-				summoner.setSummonedEntity(entityType);
-			summoner.setSummonRange(summonRange);
-			//Imitates the structure block to ensure that changes are sent client-side
-			summoner.setChanged();
-			player.level().setBlock(beBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
-			BlockState state = player.level().getBlockState(beBlockPos);
-			player.level().sendBlockUpdated(beBlockPos, state, state, 3);
-		});
+		MSPacket.getAccessibleBlockEntity(player, this.beBlockPos, SummonerBlockEntity.class)
+				.ifPresent(summoner -> summoner.handleSettingsPacket(this));
 	}
 }
