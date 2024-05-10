@@ -8,9 +8,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public record EffectTogglePacket() implements MSPacket.PlayToServer
+public record ToggleAspectEffectsPacket() implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("effect_toggle");
+	public static final ResourceLocation ID = Minestuck.id("toggle_aspect_effects");
 	
 	public static final String ON = "minestuck.aspect_effects.on";
 	public static final String OFF = "minestuck.aspect_effects.off";
@@ -26,9 +26,9 @@ public record EffectTogglePacket() implements MSPacket.PlayToServer
 	{
 	}
 	
-	public static EffectTogglePacket read(FriendlyByteBuf ignored)
+	public static ToggleAspectEffectsPacket read(FriendlyByteBuf ignored)
 	{
-		return new EffectTogglePacket();
+		return new ToggleAspectEffectsPacket();
 	}
 	
 	@Override

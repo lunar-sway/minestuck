@@ -7,13 +7,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public record ServerCursorPacket(int entityID, ServerCursorEntity.AnimationType animation) implements MSPacket.PlayToClient
+public record ServerCursorAnimationPacket(int entityID, ServerCursorEntity.AnimationType animation) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("server_cursor");
+	public static final ResourceLocation ID = Minestuck.id("server_cursor_animation");
 	
-	public static ServerCursorPacket createPacket(ServerCursorEntity entity, ServerCursorEntity.AnimationType animation)
+	public static ServerCursorAnimationPacket createPacket(ServerCursorEntity entity, ServerCursorEntity.AnimationType animation)
 	{
-		return new ServerCursorPacket(entity.getId(), animation);
+		return new ServerCursorAnimationPacket(entity.getId(), animation);
 	}
 	
 	@Override
@@ -29,12 +29,12 @@ public record ServerCursorPacket(int entityID, ServerCursorEntity.AnimationType 
 		buffer.writeEnum(animation);
 	}
 	
-	public static ServerCursorPacket read(FriendlyByteBuf buffer)
+	public static ServerCursorAnimationPacket read(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt();
 		ServerCursorEntity.AnimationType animation = buffer.readEnum(ServerCursorEntity.AnimationType.class);
 		
-		return new ServerCursorPacket(entityID, animation);
+		return new ServerCursorAnimationPacket(entityID, animation);
 	}
 	
 	@Override

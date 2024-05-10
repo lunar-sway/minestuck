@@ -7,13 +7,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public record LotusFlowerPacket(int entityID, LotusFlowerEntity.Animation animation) implements MSPacket.PlayToClient
+public record LotusFlowerAnimationPacket(int entityID, LotusFlowerEntity.Animation animation) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("lotus_flower");
+	public static final ResourceLocation ID = Minestuck.id("lotus_flower_animation");
 	
-	public static LotusFlowerPacket createPacket(LotusFlowerEntity entity, LotusFlowerEntity.Animation animation)
+	public static LotusFlowerAnimationPacket createPacket(LotusFlowerEntity entity, LotusFlowerEntity.Animation animation)
 	{
-		return new LotusFlowerPacket(entity.getId(), animation);
+		return new LotusFlowerAnimationPacket(entity.getId(), animation);
 	}
 	
 	@Override
@@ -29,12 +29,12 @@ public record LotusFlowerPacket(int entityID, LotusFlowerEntity.Animation animat
 		buffer.writeEnum(animation);
 	}
 	
-	public static LotusFlowerPacket read(FriendlyByteBuf buffer)
+	public static LotusFlowerAnimationPacket read(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
 		LotusFlowerEntity.Animation animation = buffer.readEnum(LotusFlowerEntity.Animation.class);
 		
-		return new LotusFlowerPacket(entityID, animation);
+		return new LotusFlowerAnimationPacket(entityID, animation);
 	}
 	
 	@Override

@@ -99,20 +99,20 @@ public final class MSPayloads
 				.play(StructureCoreSettingsPacket.ID, StructureCoreSettingsPacket::read, MSPacket.PlayToServer::handler)
 				.play(BlockTeleporterSettingsPacket.ID, BlockTeleporterSettingsPacket::read, MSPacket.PlayToServer::handler)
 				
-				.play(EffectTogglePacket.ID, EffectTogglePacket::read, MSPacket.PlayToServer::handler)
-				.play(StoneTabletPacket.ID, StoneTabletPacket::read, MSPacket.PlayToServer::handler)
+				.play(ToggleAspectEffectsPacket.ID, ToggleAspectEffectsPacket::read, MSPacket.PlayToServer::handler)
+				.play(CarveStoneTabletPacket.ID, CarveStoneTabletPacket::read, MSPacket.PlayToServer::handler)
 				.play(TriggerAnthvilPacket.ID, TriggerAnthvilPacket::read, MSPacket.PlayToServer::handler)
 				
 				.play(MagicRangedEffectPacket.ID, MagicRangedEffectPacket::read, MSPacket.PlayToClient::handler)
 				.play(MagicAOEEffectPacket.ID, MagicAOEEffectPacket::read, MSPacket.PlayToClient::handler)
 				
-				.play(LotusFlowerPacket.ID, LotusFlowerPacket::read, MSPacket.PlayToClient::handler)
-				.play(ServerCursorPacket.ID, ServerCursorPacket::read, MSPacket.PlayToClient::handler)
+				.play(LotusFlowerAnimationPacket.ID, LotusFlowerAnimationPacket::read, MSPacket.PlayToClient::handler)
+				.play(ServerCursorAnimationPacket.ID, ServerCursorAnimationPacket::read, MSPacket.PlayToClient::handler)
 				.play(MusicPlayerPacket.ID, MusicPlayerPacket::read, MSPacket.PlayToClient::handler)
 				.play(GristRejectAnimationPacket.ID, GristRejectAnimationPacket::read, MSPacket.PlayToClient::handler)
 				
 				.play(StopCreativeShockEffectPacket.ID, StopCreativeShockEffectPacket::read, MSPacket.PlayToClient::handler)
-				.play(ClientMovementPacket.ID, ClientMovementPacket::read, MSPacket.PlayToClient::handler)
+				.play(PushPlayerPacket.ID, PushPlayerPacket::read, MSPacket.PlayToClient::handler)
 				.play(GristToastPacket.ID, GristToastPacket::read, MSPacket.PlayToClient::handler)
 				
 				.play(AtheneumPackets.Scroll.ID, AtheneumPackets.Scroll::read, MSPacket.PlayToServer::handler)

@@ -6,7 +6,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
-import com.mraof.minestuck.network.EffectTogglePacket;
+import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -90,7 +90,7 @@ public class MSKeyHandler
 				captchalogueInGame();
 			
 			if(effectToggleKey.isActiveAndMatches(input))
-				PacketDistributor.SERVER.noArg().send(new EffectTogglePacket());
+				PacketDistributor.SERVER.noArg().send(new ToggleAspectEffectsPacket());
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());

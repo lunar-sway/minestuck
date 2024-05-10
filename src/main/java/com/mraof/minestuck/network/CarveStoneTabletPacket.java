@@ -9,9 +9,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
-public record StoneTabletPacket(String text, InteractionHand hand) implements MSPacket.PlayToServer
+public record CarveStoneTabletPacket(String text, InteractionHand hand) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("stone_tablet");
+	public static final ResourceLocation ID = Minestuck.id("carve_stone_tablet");
 	
 	@Override
 	public ResourceLocation id()
@@ -26,9 +26,9 @@ public record StoneTabletPacket(String text, InteractionHand hand) implements MS
 		buffer.writeEnum(hand);
 	}
 	
-	public static StoneTabletPacket read(FriendlyByteBuf buffer)
+	public static CarveStoneTabletPacket read(FriendlyByteBuf buffer)
 	{
-		return new StoneTabletPacket(buffer.readUtf(), buffer.readEnum(InteractionHand.class));
+		return new CarveStoneTabletPacket(buffer.readUtf(), buffer.readEnum(InteractionHand.class));
 	}
 	
 	@Override

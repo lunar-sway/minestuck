@@ -10,13 +10,13 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Used for when the player needs to be moved but only server side access is available
  */
-public record ClientMovementPacket(Vec3 moveVec) implements MSPacket.PlayToClient
+public record PushPlayerPacket(Vec3 moveVec) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("client_movement");
+	public static final ResourceLocation ID = Minestuck.id("push_player");
 	
-	public static ClientMovementPacket createPacket(Vec3 moveVec)
+	public static PushPlayerPacket createPacket(Vec3 moveVec)
 	{
-		return new ClientMovementPacket(moveVec);
+		return new PushPlayerPacket(moveVec);
 	}
 	
 	@Override
@@ -31,10 +31,10 @@ public record ClientMovementPacket(Vec3 moveVec) implements MSPacket.PlayToClien
 		buffer.writeVec3(moveVec);
 	}
 	
-	public static ClientMovementPacket read(FriendlyByteBuf buffer)
+	public static PushPlayerPacket read(FriendlyByteBuf buffer)
 	{
 		Vec3 moveVec = buffer.readVec3();
-		return new ClientMovementPacket(moveVec);
+		return new PushPlayerPacket(moveVec);
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity;
 
-import com.mraof.minestuck.network.ServerCursorPacket;
+import com.mraof.minestuck.network.ServerCursorAnimationPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.EntityType;
@@ -162,7 +162,7 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 			this.animationType = animation;
 			if(!removalFlag)
 				this.despawnTimer = 0;
-			ServerCursorPacket packet = ServerCursorPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
+			ServerCursorAnimationPacket packet = ServerCursorAnimationPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
 			PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
 		} else
 			setAnimationFromPacket(animation);
