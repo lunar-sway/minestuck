@@ -9,6 +9,7 @@ import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,7 +45,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	public static final Map<Direction, VoxelShape> COMPUTER_SHAPE = MSBlockShapes.COMPUTER.createRotatedShapes();
 	public static final Map<Direction, VoxelShape> LAPTOP_CLOSED_SHAPE = MSBlockShapes.LAPTOP_CLOSED.createRotatedShapes();
 	public static final Map<Direction, VoxelShape> LAPTOP_OPEN_SHAPE = MSBlockShapes.LAPTOP_OPEN.createRotatedShapes();
-	public static final Map<Direction, VoxelShape> LUNCHTOP_CLOSED_SHAPE = createRotatedShapes(4, 0, 1.5, 12, 5, 8.5);
+	public static final Map<Direction, VoxelShape> LUNCHTOP_CLOSED_SHAPE = new CustomVoxelShape(new double[]{4, 0, 1.5, 12, 5, 8.5}).createRotatedShapes();
 	public static final Map<Direction, VoxelShape> LUNCHTOP_OPEN_SHAPE = MSBlockShapes.LUNCHTOP_OPEN.createRotatedShapes();
 	public static final Map<Direction, VoxelShape> OLD_COMPUTER_SHAPE = MSBlockShapes.OLD_COMPUTER.createRotatedShapes();
 	

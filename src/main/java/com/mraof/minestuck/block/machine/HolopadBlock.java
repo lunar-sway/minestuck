@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.HolopadBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +23,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
@@ -33,17 +33,10 @@ import java.util.Map;
 @MethodsReturnNonnullByDefault
 public class HolopadBlock extends MachineBlock implements EntityBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = createRotatedShapes(2, 0, 1, 14, 6, 13);
-	public static final Map<Direction, VoxelShape> COLLISION_SHAPE;
+	public static final Map<Direction, VoxelShape> SHAPE = new CustomVoxelShape(new double[]{2, 0, 1, 14, 6, 13}).createRotatedShapes();
+	public static final Map<Direction, VoxelShape> COLLISION_SHAPE = new CustomVoxelShape(new double[]{4, 0, 14, 12, 10, 16}, new double[]{3, 6, 3, 13, 7, 13}).createRotatedShapes();
 	
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
-	
-	static
-	{
-		VoxelShape topShape = Block.box(3, 6, 3, 13, 7, 13);
-		COLLISION_SHAPE = createRotatedShapes(4, 0, 14, 12, 10, 16);
-		COLLISION_SHAPE.replaceAll((enumFacing, shape) -> Shapes.or(shape, topShape));
-	}
 	
 	public HolopadBlock(Properties builder)
 	{
