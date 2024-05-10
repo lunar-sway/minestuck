@@ -48,7 +48,7 @@ public final class MSAttachments
 	public static final Supplier<AttachmentType<Boolean>> EFFECT_TOGGLE = REGISTER.register("effect_toggle",
 			() -> AttachmentType.builder(restricted(() -> false, ServerPlayer.class)).serialize(Codec.BOOL).build());
 	public static final Supplier<AttachmentType<EditmodeLocations>> EDITMODE_LOCATIONS = REGISTER.register("editmode_locations",
-			() -> AttachmentType.serializable(EditmodeLocations::new).build());
+			() -> AttachmentType.serializable(restricted(EditmodeLocations::new, PlayerData.class)).build());
 	public static final Supplier<AttachmentType<ConsortReputation>> CONSORT_REPUTATION = REGISTER.register("consort_reputation",
 			() -> AttachmentType.serializable(restricted(ConsortReputation::new, PlayerData.class)).build());
 	
