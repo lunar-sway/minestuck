@@ -1,9 +1,9 @@
 package com.mraof.minestuck.blockentity;
 
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.HolopadBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -41,7 +41,6 @@ public class HolopadBlockEntity extends BlockEntity
 			else player.inventoryMenu.broadcastChanges();
 			
 			setCard(ItemStack.EMPTY);
-			return;
 		}
 		else
 		{
@@ -51,14 +50,7 @@ public class HolopadBlockEntity extends BlockEntity
 				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD.get())
 				{
 					setCard(heldStack.split(1));    //Insert card into the card slot
-					ItemStack in = getCard();
-					ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-					
-					if (in.hasTag() && in.getTag().contains("contentID"))
-						item = AlchemyHelper.getDecodedItem(in);
 				}
-					
-				
 			}
 		}
 	}
@@ -113,7 +105,6 @@ public class HolopadBlockEntity extends BlockEntity
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
-		//broken = tagCompound.getBoolean("broken");
 		setCard(ItemStack.of(nbt.getCompound("card")));
 	}
 	
@@ -121,7 +112,6 @@ public class HolopadBlockEntity extends BlockEntity
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		//tagCompound.setBoolean("broken", this.broken);
 		compound.put("card", card.save(new CompoundTag()));
 	}
 	
