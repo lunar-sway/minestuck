@@ -1,7 +1,6 @@
-package com.mraof.minestuck.network.data;
+package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

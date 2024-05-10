@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.network.data.PlayerColorPacket;
+import com.mraof.minestuck.network.PlayerColorPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;

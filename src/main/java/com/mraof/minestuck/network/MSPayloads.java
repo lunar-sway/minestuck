@@ -3,7 +3,6 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.block.*;
 import com.mraof.minestuck.network.computer.*;
-import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.network.editmode.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;

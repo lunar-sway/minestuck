@@ -1,8 +1,7 @@
-package com.mraof.minestuck.network.data;
+package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.playerStats.EcheladderScreen;
-import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Echeladder;
 import net.minecraft.client.Minecraft;

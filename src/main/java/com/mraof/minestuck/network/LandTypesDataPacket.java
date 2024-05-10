@@ -1,9 +1,8 @@
-package com.mraof.minestuck.network.data;
+package com.mraof.minestuck.network;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientDimensionData;
-import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;

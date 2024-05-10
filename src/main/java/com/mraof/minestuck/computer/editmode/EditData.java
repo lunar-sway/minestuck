@@ -1,7 +1,7 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.network.data.GristCachePacket;
+import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.network.editmode.ServerEditPacket;
 import com.mraof.minestuck.player.*;
