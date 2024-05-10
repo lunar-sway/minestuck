@@ -47,22 +47,24 @@ public final class MSAttachments
 			() -> AttachmentType.<Title>builder(noDefault()).serialize(Title.CODEC).build());
 	public static final Supplier<AttachmentType<Boolean>> EFFECT_TOGGLE = REGISTER.register("effect_toggle",
 			() -> AttachmentType.builder(restricted(() -> false, ServerPlayer.class)).serialize(Codec.BOOL).build());
+	
 	public static final Supplier<AttachmentType<EditmodeLocations>> EDITMODE_LOCATIONS = REGISTER.register("editmode_locations",
 			() -> AttachmentType.serializable(restricted(EditmodeLocations::new, PlayerData.class)).build());
+	public static final Supplier<AttachmentType<EditTools>> EDIT_TOOLS = REGISTER.register("edit_tools",
+			() -> AttachmentType.builder(restricted(EditTools::new, Player.class)).build());
+	
 	public static final Supplier<AttachmentType<ConsortReputation>> CONSORT_REPUTATION = REGISTER.register("consort_reputation",
 			() -> AttachmentType.serializable(restricted(ConsortReputation::new, PlayerData.class)).build());
+	public static final Supplier<AttachmentType<DialogueComponent.CurrentDialogue>> CURRENT_DIALOGUE = REGISTER.register("current_dialogue",
+			() -> AttachmentType.builder(restricted(DialogueComponent.CurrentDialogue::new, ServerPlayer.class)).build());
 	
 	public static final Supplier<AttachmentType<ItemStackHandler>> MUSIC_PLAYER_INVENTORY = REGISTER.register("music_player_inventory",
 			() -> AttachmentType.serializable(restricted(() -> new ItemStackHandler(1), ItemStack.class)).build());
 	public static final Supplier<AttachmentType<MusicPlaying>> MUSIC_PLAYING = REGISTER.register("music_playing",
 			() -> AttachmentType.builder(restricted(MusicPlaying::new, LivingEntity.class)).build());
 	
-	public static final Supplier<AttachmentType<EditTools>> EDIT_TOOLS = REGISTER.register("edit_tools",
-			() -> AttachmentType.builder(restricted(EditTools::new, Player.class)).build());
 	public static final Supplier<AttachmentType<MSFluidType.LastFluidTickData>> LAST_FLUID_TICK = REGISTER.register("last_fluid_tick",
 			() -> AttachmentType.builder(restricted(MSFluidType.LastFluidTickData::new, LivingEntity.class)).build());
-	public static final Supplier<AttachmentType<DialogueComponent.CurrentDialogue>> CURRENT_DIALOGUE = REGISTER.register("current_dialogue",
-			() -> AttachmentType.builder(restricted(DialogueComponent.CurrentDialogue::new, ServerPlayer.class)).build());
 	
 	private static <T> Supplier<T> noDefault()
 	{
