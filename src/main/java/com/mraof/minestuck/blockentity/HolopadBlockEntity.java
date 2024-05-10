@@ -87,7 +87,6 @@ public class HolopadBlockEntity extends BlockEntity
 			return new ItemStack(MSBlocks.GENERIC_OBJECT);
 		
 		return AlchemyHelper.getDecodedItem(this.card);
-		
 	}
 	
 	@Override
