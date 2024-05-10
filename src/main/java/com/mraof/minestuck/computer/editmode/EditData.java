@@ -90,7 +90,7 @@ public class EditData
 	
 	public void sendGristCacheToEditor()
 	{
-		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), true);
+		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), ClientPlayerData.CacheSource.EDITMODE);
 		PacketDistributor.PLAYER.with(this.getEditor()).send(packet);
 	}
 	

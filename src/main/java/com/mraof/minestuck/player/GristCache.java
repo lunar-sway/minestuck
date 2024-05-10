@@ -235,7 +235,7 @@ public final class GristCache implements INBTSerializable<Tag>
 		//Send to the player
 		if(player != null)
 		{
-			GristCachePacket packet = new GristCachePacket(this.getGristSet(), false);
+			GristCachePacket packet = new GristCachePacket(this.getGristSet(), ClientPlayerData.CacheSource.PLAYER);
 			player.connection.send(packet);
 		}
 		

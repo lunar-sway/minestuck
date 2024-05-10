@@ -7,7 +7,7 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record GristCachePacket(ImmutableGristSet gristCache, boolean isEditmode) implements MSPacket.PlayToClient
+public record GristCachePacket(ImmutableGristSet gristCache, ClientPlayerData.CacheSource cacheSource) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("grist_cache");
 	
@@ -21,14 +21,14 @@ public record GristCachePacket(ImmutableGristSet gristCache, boolean isEditmode)
 	public void write(FriendlyByteBuf buffer)
 	{
 		GristSet.write(gristCache, buffer);
-		buffer.writeBoolean(isEditmode);
+		buffer.writeEnum(cacheSource);
 	}
 	
 	public static GristCachePacket read(FriendlyByteBuf buffer)
 	{
 		ImmutableGristSet gristCache = GristSet.read(buffer);
-		boolean isEditmode = buffer.readBoolean();
-		return new GristCachePacket(gristCache, isEditmode);
+		ClientPlayerData.CacheSource cacheSource = buffer.readEnum(ClientPlayerData.CacheSource.class);
+		return new GristCachePacket(gristCache, cacheSource);
 	}
 	
 	@Override
