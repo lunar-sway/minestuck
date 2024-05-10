@@ -83,12 +83,11 @@ public class HolopadBlockEntity extends BlockEntity
 	
 	public ItemStack getHoloItem()
 	{
-		ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT);
+		if(!AlchemyHelper.isPunchedCard(this.card))
+			return new ItemStack(MSBlocks.GENERIC_OBJECT);
 		
-		if(AlchemyHelper.hasDecodedItem(this.card))
-			item = AlchemyHelper.getDecodedItem(this.card);
+		return AlchemyHelper.getDecodedItem(this.card);
 		
-		return item;
 	}
 	
 	@Override
