@@ -32,7 +32,7 @@ public class BoondollarPriceProvider implements DataProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final Map<ResourceLocation, BoondollarPriceRecipe> pricings = new HashMap<>();
+	private final Map<ResourceLocation, BoondollarPriceRecipe> recipes = new HashMap<>();
 	private final PackOutput output;
 	private final String modid;
 	
@@ -260,7 +260,7 @@ public class BoondollarPriceProvider implements DataProvider
 	
 	protected void add(BoondollarPriceRecipe pricing, ResourceLocation name)
 	{
-		pricings.put(name, pricing);
+		recipes.put(name, pricing);
 	}
 	
 	@Override
@@ -269,9 +269,9 @@ public class BoondollarPriceProvider implements DataProvider
 		registerPrices();
 		
 		Path outputPath = output.getOutputFolder();
-		List<CompletableFuture<?>> futures = new ArrayList<>(pricings.size());
+		List<CompletableFuture<?>> futures = new ArrayList<>(recipes.size());
 		
-		for(Map.Entry<ResourceLocation, BoondollarPriceRecipe> entry : pricings.entrySet())
+		for(Map.Entry<ResourceLocation, BoondollarPriceRecipe> entry : recipes.entrySet())
 		{
 			Path pricingPath = getPath(outputPath, entry.getKey());
 			JsonElement jsonData = BoondollarPriceRecipe.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue())
