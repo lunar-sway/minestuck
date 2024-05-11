@@ -12,18 +12,9 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.Type;
 
-public class BoondollarPricing
+public record BoondollarPricing(Ingredient ingredient, IntProvider priceRange)
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
-	
-	private final Ingredient ingredient;
-	private final IntProvider priceRange;
-	
-	public BoondollarPricing(Ingredient ingredient, IntProvider priceRange)
-	{
-		this.ingredient = ingredient;
-		this.priceRange = priceRange;
-	}
 	
 	public int generatePrice(RandomSource random)
 	{
