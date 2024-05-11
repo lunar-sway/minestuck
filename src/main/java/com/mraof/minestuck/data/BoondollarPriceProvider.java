@@ -3,7 +3,7 @@ package com.mraof.minestuck.data;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.BoondollarPricing;
+import com.mraof.minestuck.util.BoondollarPriceRecipe;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
@@ -28,21 +28,21 @@ import static net.minecraft.world.item.Items.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BoondollarPricingProvider implements DataProvider
+public class BoondollarPriceProvider implements DataProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final Map<ResourceLocation, BoondollarPricing> pricings = new HashMap<>();
+	private final Map<ResourceLocation, BoondollarPriceRecipe> pricings = new HashMap<>();
 	private final PackOutput output;
 	private final String modid;
 	
-	public BoondollarPricingProvider(PackOutput output, String modid)
+	public BoondollarPriceProvider(PackOutput output, String modid)
 	{
 		this.output = output;
 		this.modid = modid;
 	}
 	
-	protected void registerPricings()
+	protected void registerPrices()
 	{
 		add(ONION.get(), 9, 15);
 		add(JAR_OF_BUGS.get(), 12, 18);
@@ -255,10 +255,10 @@ public class BoondollarPricingProvider implements DataProvider
 	
 	protected void add(Ingredient ingredient, IntProvider range, String name)
 	{
-		add(new BoondollarPricing(ingredient, range), new ResourceLocation(modid, name));
+		add(new BoondollarPriceRecipe(ingredient, range), new ResourceLocation(modid, name));
 	}
 	
-	protected void add(BoondollarPricing pricing, ResourceLocation name)
+	protected void add(BoondollarPriceRecipe pricing, ResourceLocation name)
 	{
 		pricings.put(name, pricing);
 	}
@@ -266,15 +266,15 @@ public class BoondollarPricingProvider implements DataProvider
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache)
 	{
-		registerPricings();
+		registerPrices();
 		
 		Path outputPath = output.getOutputFolder();
 		List<CompletableFuture<?>> futures = new ArrayList<>(pricings.size());
 		
-		for(Map.Entry<ResourceLocation, BoondollarPricing> entry : pricings.entrySet())
+		for(Map.Entry<ResourceLocation, BoondollarPriceRecipe> entry : pricings.entrySet())
 		{
 			Path pricingPath = getPath(outputPath, entry.getKey());
-			JsonElement jsonData = BoondollarPricing.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue())
+			JsonElement jsonData = BoondollarPriceRecipe.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue())
 					.getOrThrow(false, message -> LOGGER.error("Problem encoding boondollar price {}: {}", entry.getKey(), message));
 			futures.add(DataProvider.saveStable(cache, jsonData, pricingPath));
 		}

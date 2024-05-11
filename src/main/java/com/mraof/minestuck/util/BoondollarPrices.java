@@ -26,9 +26,9 @@ import java.util.Optional;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class BoondollarPrices
 {
-	private final List<BoondollarPricing> prices;
+	private final List<BoondollarPriceRecipe> prices;
 	
-	private BoondollarPrices(List<BoondollarPricing> prices)
+	private BoondollarPrices(List<BoondollarPriceRecipe> prices)
 	{
 		this.prices = prices;
 	}
@@ -69,10 +69,10 @@ public final class BoondollarPrices
 		@Override
 		protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
 		{
-			ImmutableList.Builder<BoondollarPricing> prices = ImmutableList.builder();
+			ImmutableList.Builder<BoondollarPriceRecipe> prices = ImmutableList.builder();
 			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 			{
-				BoondollarPricing.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
+				BoondollarPriceRecipe.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
 						.resultOrPartial(message -> LOGGER.error("Couldn't parse boondollar pricing {}: {}", entry.getKey(), message))
 						.ifPresent(prices::add);
 			}

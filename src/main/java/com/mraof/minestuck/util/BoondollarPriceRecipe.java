@@ -7,12 +7,12 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
-public record BoondollarPricing(Ingredient ingredient, IntProvider priceRange)
+public record BoondollarPriceRecipe(Ingredient ingredient, IntProvider priceRange)
 {
-	public static final Codec<BoondollarPricing> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(BoondollarPricing::ingredient),
-			IntProvider.CODEC.fieldOf("range").forGetter(BoondollarPricing::priceRange)
-	).apply(instance, BoondollarPricing::new));
+	public static final Codec<BoondollarPriceRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(BoondollarPriceRecipe::ingredient),
+			IntProvider.CODEC.fieldOf("range").forGetter(BoondollarPriceRecipe::priceRange)
+	).apply(instance, BoondollarPriceRecipe::new));
 	
 	public int generatePrice(RandomSource random)
 	{
