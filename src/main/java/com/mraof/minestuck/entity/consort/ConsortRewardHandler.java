@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.util.BoondollarPrices;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;

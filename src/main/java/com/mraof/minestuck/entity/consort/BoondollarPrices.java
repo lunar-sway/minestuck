@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.entity.consort;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.GsonBuilder;

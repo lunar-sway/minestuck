@@ -2,8 +2,8 @@ package com.mraof.minestuck.data;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
+import com.mraof.minestuck.entity.consort.BoondollarPriceRecipe;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.BoondollarPriceRecipe;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
