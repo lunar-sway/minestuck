@@ -1,9 +1,9 @@
 package com.mraof.minestuck.util;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -23,16 +23,15 @@ import java.util.Optional;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class BoondollarPriceManager extends SimpleJsonResourceReloadListener
+public final class BoondollarPriceManager extends SimpleJsonResourceReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(BoondollarPricing.class, new BoondollarPricing.Serializer()).create();
 	
 	private List<BoondollarPricing> pricings;
 	
 	public BoondollarPriceManager()
 	{
-		super(GSON, "minestuck/boondollar_prices");
+		super(new GsonBuilder().create(), "minestuck/boondollar_prices");
 	}
 	
 	private static BoondollarPriceManager INSTANCE;
@@ -48,14 +47,9 @@ public class BoondollarPriceManager extends SimpleJsonResourceReloadListener
 		ImmutableList.Builder<BoondollarPricing> pricings = ImmutableList.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
-			try
-			{
-				BoondollarPricing pricing = GSON.fromJson(entry.getValue(), BoondollarPricing.class);
-				pricings.add(pricing);
-			} catch(Exception e)
-			{
-				LOGGER.error("Couldn't parse boondollar pricing {}", entry.getKey(), e);
-			}
+			BoondollarPricing.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
+					.resultOrPartial(message -> LOGGER.error("Couldn't parse boondollar pricing {}: {}", entry.getKey(), message))
+					.ifPresent(pricings::add);
 		}
 		
 		this.pricings = pricings.build();
@@ -65,11 +59,6 @@ public class BoondollarPriceManager extends SimpleJsonResourceReloadListener
 	public Optional<Integer> findPrice(ItemStack stack, RandomSource rand)
 	{
 		return pricings.stream().filter(pricing -> pricing.appliesTo(stack)).findAny().map(pricing -> pricing.generatePrice(rand));
-	}
-	
-	public static JsonElement parsePrice(BoondollarPricing pricing)
-	{
-		return GSON.toJsonTree(pricing);
 	}
 	
 	@SubscribeEvent

@@ -1,7 +1,8 @@
 package com.mraof.minestuck.data;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.BoondollarPriceManager;
 import com.mraof.minestuck.util.BoondollarPricing;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,6 +15,8 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
@@ -27,6 +30,8 @@ import static net.minecraft.world.item.Items.*;
 @MethodsReturnNonnullByDefault
 public class BoondollarPricingProvider implements DataProvider
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final Map<ResourceLocation, BoondollarPricing> pricings = new HashMap<>();
 	private final PackOutput output;
 	private final String modid;
@@ -269,7 +274,9 @@ public class BoondollarPricingProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, BoondollarPricing> entry : pricings.entrySet())
 		{
 			Path pricingPath = getPath(outputPath, entry.getKey());
-			futures.add(DataProvider.saveStable(cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath));
+			JsonElement jsonData = BoondollarPricing.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue())
+					.getOrThrow(false, message -> LOGGER.error("Problem encoding boondollar price {}: {}", entry.getKey(), message));
+			futures.add(DataProvider.saveStable(cache, jsonData, pricingPath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}
