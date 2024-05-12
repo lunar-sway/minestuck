@@ -16,10 +16,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fix player gutter multiplier, which wasn't being saved
+- Space sapling baseline lowered and sides trimmed
 
 ### Contributors for this release
 
-- Akisephila, kirderf1
+- Akisephila, kirderf1, glubtier
 
 ## [1.20.1-1.12.0.1] - 2024-04-15
 
