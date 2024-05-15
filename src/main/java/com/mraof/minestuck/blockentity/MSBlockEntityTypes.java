@@ -42,6 +42,7 @@ public class MSBlockEntityTypes
 	public static final Supplier<BlockEntityType<HolopadBlockEntity>> HOLOPAD = REGISTER.register("holopad", () -> BlockEntityType.Builder.of(HolopadBlockEntity::new, MSBlocks.HOLOPAD.get()).build(null));
 	public static final Supplier<BlockEntityType<IntellibeamLaserstationBlockEntity>> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", () -> BlockEntityType.Builder.of(IntellibeamLaserstationBlockEntity::new, MSBlocks.INTELLIBEAM_LASERSTATION.get()).build(null));
 	public static final Supplier<BlockEntityType<PowerHubBlockEntity>> POWER_HUB = REGISTER.register("power_hub", () -> BlockEntityType.Builder.of(PowerHubBlockEntity::new, MSBlocks.POWER_HUB.get()).build(null));
+	public static final Supplier<BlockEntityType<ParticleAcceleratorBlockEntity>> PARTICLE_ACCELERATOR = REGISTER.register("particle_accelerator", () -> BlockEntityType.Builder.of(ParticleAcceleratorBlockEntity::new, MSBlocks.PARTICLE_ACCELERATOR.get()).build(null));
 	
 	public static final Supplier<BlockEntityType<SkaiaPortalBlockEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalBlockEntity::new, SkaiaBlocks.SKAIA_PORTAL.asBlock()).build(null));
 	public static final Supplier<BlockEntityType<GateBlockEntity>> GATE = REGISTER.register("gate", () -> BlockEntityType.Builder.of(GateBlockEntity::new, MSBlocks.GATE_MAIN.get()).build(null));

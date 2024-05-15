@@ -951,6 +951,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(NOR_GATE_BLOCK.get());
 		dropSelf(XNOR_GATE_BLOCK.get());
 		
+		dropSelf(PARTICLE_ACCELERATOR.get());
 		dropSelf(HOLOPAD.get());
 		dropSelf(INTELLIBEAM_LASERSTATION.get());
 		dropSelf(CRUXTRUDER_LID.get());
