@@ -48,6 +48,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> BLOOD_ASPECT_SAPLING = MSBlocks.REGISTER.register("blood_aspect_sapling",
 			() -> new AspectSaplingBlock(new BloodAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> BLOOD_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_BLOOD_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_blood_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BLOOD_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> BLOOD_ASPECT_PLANKS = MSBlocks.REGISTER.register("blood_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -138,6 +139,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> BREATH_ASPECT_SAPLING = MSBlocks.REGISTER.register("breath_aspect_sapling",
 			() -> new AspectSaplingBlock(new BreathAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> BREATH_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_BREATH_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_breath_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BREATH_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> BREATH_ASPECT_PLANKS = MSBlocks.REGISTER.register("breath_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -228,6 +230,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> DOOM_ASPECT_SAPLING = MSBlocks.REGISTER.register("doom_aspect_sapling",
 			() -> new AspectSaplingBlock(new DoomAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> DOOM_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_DOOM_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_doom_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, DOOM_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> DOOM_ASPECT_PLANKS = MSBlocks.REGISTER.register("doom_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -318,6 +321,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> HEART_ASPECT_SAPLING = MSBlocks.REGISTER.register("heart_aspect_sapling",
 			() -> new AspectSaplingBlock(new HeartAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> HEART_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_HEART_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_heart_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, HEART_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> HEART_ASPECT_PLANKS = MSBlocks.REGISTER.register("heart_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -408,6 +412,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> HOPE_ASPECT_SAPLING = MSBlocks.REGISTER.register("hope_aspect_sapling",
 			() -> new AspectSaplingBlock(new HopeAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> HOPE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_HOPE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_hope_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, HOPE_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> HOPE_ASPECT_PLANKS = MSBlocks.REGISTER.register("hope_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -498,6 +503,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> LIFE_ASPECT_SAPLING = MSBlocks.REGISTER.register("life_aspect_sapling",
 			() -> new AspectSaplingBlock(new LifeAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> LIFE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_LIFE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_life_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, LIFE_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> LIFE_ASPECT_PLANKS = MSBlocks.REGISTER.register("life_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -588,6 +594,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> LIGHT_ASPECT_SAPLING = MSBlocks.REGISTER.register("light_aspect_sapling",
 			() -> new AspectSaplingBlock(new LightAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> LIGHT_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_LIGHT_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_light_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, LIGHT_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> LIGHT_ASPECT_PLANKS = MSBlocks.REGISTER.register("light_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -678,6 +685,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> MIND_ASPECT_SAPLING = MSBlocks.REGISTER.register("mind_aspect_sapling",
 			() -> new AspectSaplingBlock(new MindAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> MIND_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_MIND_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_mind_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, MIND_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> MIND_ASPECT_PLANKS = MSBlocks.REGISTER.register("mind_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -768,6 +776,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> RAGE_ASPECT_SAPLING = MSBlocks.REGISTER.register("rage_aspect_sapling",
 			() -> new AspectSaplingBlock(new RageAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> RAGE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_RAGE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_rage_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, RAGE_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> RAGE_ASPECT_PLANKS = MSBlocks.REGISTER.register("rage_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -858,6 +867,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> SPACE_ASPECT_SAPLING = MSBlocks.REGISTER.register("space_aspect_sapling",
 			() -> new AspectSaplingBlock(new SpaceAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_SPACE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_space_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, SPACE_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> SPACE_ASPECT_PLANKS = MSBlocks.REGISTER.register("space_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -948,6 +958,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> TIME_ASPECT_SAPLING = MSBlocks.REGISTER.register("time_aspect_sapling",
 			() -> new AspectSaplingBlock(new TimeAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_TIME_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_time_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, TIME_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> TIME_ASPECT_PLANKS = MSBlocks.REGISTER.register("time_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -1038,6 +1049,7 @@ public final class AspectTreeBlocks
 	public static final RegistryObject<Block> VOID_ASPECT_SAPLING = MSBlocks.REGISTER.register("void_aspect_sapling",
 			() -> new AspectSaplingBlock(new VoidAspectTree(), Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final RegistryObject<Block> POTTED_VOID_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_void_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, VOID_ASPECT_SAPLING, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final RegistryObject<Block> VOID_ASPECT_PLANKS = MSBlocks.REGISTER.register("void_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));

@@ -9,14 +9,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Silicone Caulk Bucket alchemy recipe was changed from Water Bucket && Quartz to Water Bucket && Amethyst Shard, to avoid conflict with Prismarine Shard alchemy recipe
+- Frost Trees will now drop saplings
+- Saplings are now pottable
+- Aspect slabs can now be used in crafting recipes
 
 ### Fixed
 
 - Fix player gutter multiplier, which wasn't being saved
+- Space sapling texture baseline lowered, space and frost sapling sides trimmed
 
 ### Contributors for this release
 
-- Akisephila, kirderf1
+- Akisephila, kirderf1, glubtier
 
 ## [1.20.1-1.12.0.1] - 2024-04-15
 
