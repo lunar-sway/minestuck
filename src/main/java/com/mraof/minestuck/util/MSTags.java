@@ -49,6 +49,7 @@ public class MSTags
 		public static final TagKey<Block> ASPECT_SAPLINGS = tag("saplings/aspect");
 		public static final TagKey<Block> ASPECT_BOOKSHELVES = tag("bookshelves/aspect");
 		public static final TagKey<Block> ASPECT_LADDERS = tag("ladders/aspect");
+		public static final TagKey<Block> ASPECT_POTTED_SAPLINGS = tag("flower_pots/aspect");
 		public static final TagKey<Block> SHADEWOOD_LOGS = tag("logs/shadewood");
 		public static final TagKey<Block> SHADEWOOD_LEAVES = tag("leaves/shadewood");
 		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");

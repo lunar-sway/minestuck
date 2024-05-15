@@ -1320,7 +1320,10 @@ public final class AspectTreeBlocksData
 		provider.tag(MSTags.Blocks.ASPECT_LADDERS).add(BLOOD_ASPECT_LADDER.get(), BREATH_ASPECT_LADDER.get(), DOOM_ASPECT_LADDER.get(), HEART_ASPECT_LADDER.get(),
 				HOPE_ASPECT_LADDER.get(), LIFE_ASPECT_LADDER.get(), LIGHT_ASPECT_LADDER.get(), MIND_ASPECT_LADDER.get(),
 				RAGE_ASPECT_LADDER.get(), SPACE_ASPECT_LADDER.get(), TIME_ASPECT_LADDER.get(), VOID_ASPECT_LADDER.get());
-		
+		provider.tag(MSTags.Blocks.ASPECT_POTTED_SAPLINGS).add(POTTED_BLOOD_ASPECT_SAPLING.get(), POTTED_BREATH_ASPECT_SAPLING.get(), POTTED_DOOM_ASPECT_SAPLING.get(), POTTED_HEART_ASPECT_SAPLING.get(),
+				POTTED_HOPE_ASPECT_SAPLING.get(), LIFE_ASPECT_SAPLING.get(), POTTED_LIGHT_ASPECT_SAPLING.get(), POTTED_MIND_ASPECT_SAPLING.get(),
+				POTTED_RAGE_ASPECT_SAPLING.get(), POTTED_SPACE_ASPECT_SAPLING.get(), POTTED_TIME_ASPECT_SAPLING.get(), POTTED_VOID_ASPECT_SAPLING.get());
+				
 		provider.tag(BlockTags.LOGS).addTag(MSTags.Blocks.ASPECT_LOGS).addTag(MSTags.Blocks.ASPECT_WOOD);
 		provider.tag(BlockTags.LEAVES).addTag(MSTags.Blocks.ASPECT_LEAVES);
 		provider.tag(BlockTags.SAPLINGS).addTag(MSTags.Blocks.ASPECT_SAPLINGS);
@@ -1340,6 +1343,7 @@ public final class AspectTreeBlocksData
 				RAGE_ASPECT_PRESSURE_PLATE.get(), SPACE_ASPECT_PRESSURE_PLATE.get(), TIME_ASPECT_PRESSURE_PLATE.get(), VOID_ASPECT_PRESSURE_PLATE.get());
 		provider.tag(Tags.Blocks.BOOKSHELVES).addTag(MSTags.Blocks.ASPECT_BOOKSHELVES);
 		provider.tag(BlockTags.CLIMBABLE).addTag(MSTags.Blocks.ASPECT_LADDERS);
+		provider.tag(BlockTags.FLOWER_POTS).addTag(MSTags.Blocks.ASPECT_POTTED_SAPLINGS);
 	}
 	
 	public static void addRecipes(Consumer<FinishedRecipe> recipeSaver)
