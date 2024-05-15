@@ -4,18 +4,15 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.ComputerInteractions;
+import com.mraof.minestuck.skaianet.LandChain;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.ReducedPlayerState;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.Optional;
 
 public final class SkaianetInfoPackets
 {
@@ -113,7 +110,7 @@ public final class SkaianetInfoPackets
 		}
 	}
 	
-	public record LandChains(List<List<ResourceKey<Level>>> landChains) implements MSPacket.PlayToClient
+	public record LandChains(List<LandChain> landChains) implements MSPacket.PlayToClient
 	{
 		public static final ResourceLocation ID = Minestuck.id("skaianet_info/land_chains");
 		
@@ -126,29 +123,14 @@ public final class SkaianetInfoPackets
 		@Override
 		public void write(FriendlyByteBuf buffer)
 		{
-			buffer.writeCollection(landChains, LandChains::writeLandChain);
+			buffer.writeCollection(landChains, (buffer1, landChain) -> landChain.write(buffer1));
 		}
 		
 		public static LandChains read(FriendlyByteBuf buffer)
 		{
-			List<List<ResourceKey<Level>>> landChains = buffer.readList(LandChains::readLandChain);
+			List<LandChain> landChains = buffer.readList(LandChain::read);
 			
 			return new LandChains(landChains);
-		}
-		
-		private static void writeLandChain(FriendlyByteBuf buffer, List<ResourceKey<Level>> landChain)
-		{
-			buffer.writeCollection(landChain, (buffer1, land) ->
-					buffer1.writeOptional(Optional.ofNullable(land),
-							FriendlyByteBuf::writeResourceKey));
-		}
-		
-		private static List<ResourceKey<Level>> readLandChain(FriendlyByteBuf buffer)
-		{
-			return buffer.readList(buffer1 ->
-					buffer1.readOptional(buffer2 ->
-							buffer2.readResourceKey(Registries.DIMENSION)
-					).orElse(null));
 		}
 		
 		@Override

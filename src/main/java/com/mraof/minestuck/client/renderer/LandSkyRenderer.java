@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import com.mraof.minestuck.client.ClientDimensionData;
+import com.mraof.minestuck.skaianet.LandChain;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -22,7 +23,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
 
-import java.util.List;
 import java.util.Random;
 
 public final class LandSkyRenderer
@@ -187,32 +187,30 @@ public final class LandSkyRenderer
 	
 	private static void drawLands(Minecraft mc, PoseStack poseStack, ResourceKey<Level> dim)
 	{
-		List<ResourceKey<Level>> list = SkaiaClient.getLandChain(dim);
-		if(list == null)
+		LandChain landChain = SkaiaClient.getLandChain(dim);
+		if(landChain == null)
 			return;
-		int index = list.indexOf(dim);
-		for(int i = 1; i < list.size(); i++)
-		{
-			ResourceKey<Level> landName = list.get((index + i)%list.size());
-			if(landName != null)
-			{
-				Random random = new Random(/*31*mc.world.getSeed() + TODO?*/ landName.hashCode());
-				LandTypePair landTypes = ClientDimensionData.getLandTypes(landName);
-				if(landTypes == null)
-					LOGGER.warn("Missing land types for dimension {}!", landName);
-				else drawLand(poseStack, landTypes, (i / (float) list.size()), random);
-			}
-		}
+		
+		landChain.relativeAngledLands(dim).forEach(angledLand -> {
+			if(angledLand.isZeroAngle() || angledLand.isOppositeAngle())
+				return;
+			
+			drawLand(poseStack, angledLand);
+		});
 	}
 	
-	private static void drawLand(PoseStack poseStack, LandTypePair aspects, float pos, Random random)
+	private static void drawLand(PoseStack poseStack, LandChain.AngledLand angledLand)
 	{
-		if(pos == 0.5F || aspects == null)
+		Random random = new Random(/*31*mc.world.getSeed() + TODO?*/ angledLand.landId().hashCode());
+		LandTypePair landTypes = ClientDimensionData.getLandTypes(angledLand.landId());
+		if(landTypes == null)
+		{
+			LOGGER.warn("Missing land types for dimension {}!", angledLand.landId());
 			return;
-		
+		}
 		int index = random.nextInt(LandSkySpriteUploader.VARIANT_COUNT);
 		
-		float v = (float) Math.PI*(0.5F - pos);
+		float v = angledLand.skaiaToLandAngle();
 		float scale = 1/Mth.cos(v);
 		
 		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
@@ -222,8 +220,8 @@ public final class LandSkyRenderer
 		Matrix4f matrix = poseStack.last().pose();
 		
 		float planetSize = 4.0F*scale;
-		drawSprite(buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getPlanetSprite(aspects.getTerrain(), index));
-		drawSprite(buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(aspects.getTitle(), index));
+		drawSprite(buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getPlanetSprite(landTypes.getTerrain(), index));
+		drawSprite(buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(landTypes.getTitle(), index));
 		
 		poseStack.popPose();
 	}

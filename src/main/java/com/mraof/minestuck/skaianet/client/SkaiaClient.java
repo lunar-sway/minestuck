@@ -5,6 +5,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.network.computer.SkaianetInfoPackets;
+import com.mraof.minestuck.skaianet.LandChain;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceKey;
@@ -15,20 +16,21 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class SkaiaClient
+public final class SkaiaClient
 {
 	private static final Map<Integer, ReducedPlayerState> playerStateMap = new HashMap<>();
 	private static final List<ReducedConnection> connections = new ArrayList<>();
 	/**
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
-	private static final Map<ResourceKey<Level>, List<ResourceKey<Level>>> landChainMap = new HashMap<>();
+	private static final Map<ResourceKey<Level>, LandChain> landChainMap = new HashMap<>();
 	private static ComputerBlockEntity be = null;
 	public static int playerId;	//The id that this player is expected to have.
 	private static boolean hasEntered;
@@ -82,7 +84,8 @@ public class SkaiaClient
 		return hasEntered;
 	}
 	
-	public static List<ResourceKey<Level>> getLandChain(ResourceKey<Level> id)
+	@Nullable
+	public static LandChain getLandChain(ResourceKey<Level> id)
 	{
 		return landChainMap.get(id);
 	}
@@ -141,13 +144,9 @@ public class SkaiaClient
 	public static void handlePacket(SkaianetInfoPackets.LandChains packet)
 	{
 		landChainMap.clear();
-		for(List<ResourceKey<Level>> list : packet.landChains())
+		for(LandChain landChain : packet.landChains())
 		{
-			for(ResourceKey<Level> land : list)
-			{
-				if(land != null)
-					landChainMap.put(land, list);
-			}
+			landChain.lands().forEach(land -> landChainMap.put(land, landChain));
 		}
 	}
 	
