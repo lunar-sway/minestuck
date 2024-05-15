@@ -1,5 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
+import com.google.common.collect.AbstractIterator;
 import com.mojang.serialization.DataResult;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.ComputerReference;
@@ -397,5 +398,43 @@ public final class SburbConnections
 			primaryClientToServerMap.put(player, Optional.empty());
 			skaianetData.infoTracker.markDirty(player);
 		}
+	}
+	
+	public Iterable<PlayerIdentifier> iterateClientPartners(PlayerIdentifier player)
+	{
+		return () -> new AbstractIterator<>()
+		{
+			private PlayerIdentifier serverPlayer = player;
+			@Nullable
+			@Override
+			protected PlayerIdentifier computeNext()
+			{
+				Optional<PlayerIdentifier> clientPlayer = SburbConnections.this.primaryPartnerForServer(serverPlayer);
+				if(clientPlayer.isEmpty())
+					return endOfData();
+				
+				serverPlayer = clientPlayer.get();
+				return clientPlayer.get();
+			}
+		};
+	}
+	
+	public Iterable<PlayerIdentifier> iterateServerPartners(PlayerIdentifier player)
+	{
+		return () -> new AbstractIterator<>()
+		{
+			private PlayerIdentifier clientPlayer = player;
+			@Nullable
+			@Override
+			protected PlayerIdentifier computeNext()
+			{
+				Optional<PlayerIdentifier> serverPlayer = SburbConnections.this.primaryPartnerForClient(clientPlayer);
+				if(serverPlayer.isEmpty())
+					return endOfData();
+				
+				clientPlayer = serverPlayer.get();
+				return serverPlayer.get();
+			}
+		};
 	}
 }
