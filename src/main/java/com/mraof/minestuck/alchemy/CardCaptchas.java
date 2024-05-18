@@ -11,6 +11,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,6 +34,7 @@ public final class CardCaptchas
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
 	private final BiMap<Item, String> captchasMap = HashBiMap.create();
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public CardCaptchas()
 	{
@@ -47,27 +50,19 @@ public final class CardCaptchas
 		MSExtraData data = MSExtraData.get(server);
 		CardCaptchas captchas = data.getCardCaptchas();
 		
-		if(PredeterminedCardCaptchas.GetData().containsKey(item))
+		if(PredeterminedCardCaptchas.getData().containsKey(item))
 		{
 			if(captchas.captchasMap.containsKey(item))
 			{
+				LOGGER.warn("Conflict: Item {} already has Code '{}', removing generated Code '{}' from data.", item, PredeterminedCardCaptchas.getData().get(item), captchas.captchasMap.get(item));
 				captchas.captchasMap.remove(item);
 				data.setDirty();
 			}
-			return PredeterminedCardCaptchas.GetData().get(item);
+			return PredeterminedCardCaptchas.getData().get(item);
 		}
 		else if(captchas.captchasMap.containsKey(item))
 		{
-			if(PredeterminedCardCaptchas.GetData().containsKey(item))
-			{
-				captchas.captchasMap.remove(item);
-				data.setDirty();
-				return PredeterminedCardCaptchas.GetData().get(item);
-			}
-			else
-			{
-				return captchas.captchasMap.get(item);
-			}
+			return captchas.captchasMap.get(item);
 		}
 		else
 		{
@@ -84,27 +79,19 @@ public final class CardCaptchas
 		MSExtraData data = MSExtraData.get(server);
 		CardCaptchas captchas = data.getCardCaptchas();
 		
-		if(PredeterminedCardCaptchas.GetData().inverse().containsKey(captcha))
+		if(PredeterminedCardCaptchas.getData().inverse().containsKey(captcha))
 		{
 			if(captchas.captchasMap.inverse().containsKey(captcha))
 			{
+				LOGGER.warn("Conflict: Code '{}' already has assigned to Item {}, removing code '{}' reference to Item {}.", captcha, PredeterminedCardCaptchas.getData().inverse().get(captcha), captcha, captchas.captchasMap.inverse().get(captcha));
 				captchas.captchasMap.inverse().remove(captcha);
 				data.setDirty();
 			}
-			return PredeterminedCardCaptchas.GetData().inverse().get(captcha);
+			return PredeterminedCardCaptchas.getData().inverse().get(captcha);
 		}
 		else
 		{
-			if(PredeterminedCardCaptchas.GetData().inverse().containsKey(captcha))
-			{
-				captchas.captchasMap.inverse().remove(captcha);
-				data.setDirty();
-				return PredeterminedCardCaptchas.GetData().inverse().get(captcha);
-			}
-			else
-			{
-				return captchas.captchasMap.inverse().get(captcha);
-			}
+			return captchas.captchasMap.inverse().get(captcha);
 		}
 	}
 	
@@ -152,7 +139,7 @@ public final class CardCaptchas
 		String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
 		String captcha = captchaFromHash(cutHash);
 		
-		if(captchasMap.containsValue(captcha) || PredeterminedCardCaptchas.GetData().containsValue(captcha))
+		if(captchasMap.containsValue(captcha) || PredeterminedCardCaptchas.getData().containsValue(captcha))
 			return generateBackupCaptcha(itemRandom);
 		
 		return captcha;
@@ -246,7 +233,7 @@ public final class CardCaptchas
 			String captchaString = captcha.toString();
 			
 			//checks to make sure the captcha has not been created before
-			if(!captchasMap.containsValue(captchaString))
+			if(!captchasMap.containsValue(captchaString) || !PredeterminedCardCaptchas.getData().containsValue(captchaString))
 			{
 				return captchaString;
 			}
