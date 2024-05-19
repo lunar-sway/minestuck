@@ -10,6 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- New rook themed towers on the Battlefield
+
+### Contributors for this release
+
+- Dweblenod, shadowLink
+
 ## [1.20.1-1.12.0.1] - 2024-04-15
 
 ### Fixed

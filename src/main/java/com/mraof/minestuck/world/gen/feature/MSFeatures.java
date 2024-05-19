@@ -21,6 +21,8 @@ public final class MSFeatures
 	
 	public static final Supplier<Feature<NoneFeatureConfiguration>> RETURN_NODE = REGISTER.register("return_node", () -> new ReturnNodeFeature(NoneFeatureConfiguration.CODEC));
 	
+	public static final Supplier<Feature<NoneFeatureConfiguration>> ROOK_OUTPOST = REGISTER.register("rook_outpost", () -> new RookOutpostFeature(NoneFeatureConfiguration.CODEC));
+	
 	public static final Supplier<Feature<SimpleTemplateFeature.Config>> SIMPLE_TEMPLATE = REGISTER.register("simple_template", () -> new SimpleTemplateFeature(SimpleTemplateFeature.Config.CODEC));
 	
 	public static final Supplier<Feature<NoneFeatureConfiguration>> FLOOR_COG = REGISTER.register("floor_cog", () -> new FloorCogFeature(NoneFeatureConfiguration.CODEC));
