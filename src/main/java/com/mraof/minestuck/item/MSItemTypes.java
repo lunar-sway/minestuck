@@ -59,12 +59,22 @@ public class MSItemTypes
 	
 	//Base Tools
 	public static final MSToolType SICKLE_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType SCYTHE_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SHEARS_DIG).addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType CLAWS_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType PICKAXE_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_PICKAXE, ToolActions.PICKAXE_DIG).addEnchantments(EnchantmentCategory.DIGGER);
 	public static final MSToolType HAMMER_TOOL = new MSToolType(PICKAXE_TOOL).addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType AXE_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_AXE, ToolActions.AXE_DIG).addEnchantments(EnchantmentCategory.DIGGER, EnchantmentCategory.WEAPON);
 	public static final MSToolType SHOVEL_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_SHOVEL, ToolActions.SHOVEL_DIG).addEnchantments(EnchantmentCategory.DIGGER);
 	public static final MSToolType SWORD_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType LANCE_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType CLUB_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType KNIFE_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType KEY_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType FAN_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType BATON_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType STAFF_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType FORK_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType WAND_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType MISC_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
 	
 	//Combo Tools

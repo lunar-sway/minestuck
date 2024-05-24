@@ -72,20 +72,60 @@ public class BetterCombatProvider implements DataProvider
 	{
 		if(toolType == SICKLE_TOOL)
 			return "bettercombat:sickle";
+		else if(toolType == SCYTHE_TOOL)
+			return "bettercombat:scythe";
 		else if(toolType == CLAWS_TOOL)
 			return "bettercombat:claw";
+		else if(toolType == PICKAXE_TOOL)
+			return "bettercombat:pickaxe";
 		else if(toolType == HAMMER_TOOL)
 			return "bettercombat:hammer";
 		else if(toolType == AXE_TOOL)
 			return "bettercombat:heavy_axe";
-		else if(toolType == SHOVEL_TOOL)
+		else if(toolType == CLUB_TOOL || toolType == SHOVEL_TOOL)
 			return "bettercombat:mace";
-		else if(toolType == SWORD_TOOL)
+		else if(toolType == SWORD_TOOL || toolType == KEY_TOOL || toolType == BATON_TOOL)
 			return "bettercombat:sword";
+		else if(toolType == KNIFE_TOOL || toolType == FAN_TOOL)
+			return "bettercombat:dagger";
+		else if(toolType == LANCE_TOOL)
+			return "bettercombat:lance";
+		else if(toolType == STAFF_TOOL)
+			return "bettercombat:battlestaff";
+		else if(toolType == WAND_TOOL)
+			return "bettercombat:wand";
 		else if(toolType == AXE_HAMMER_TOOL)
 			return "bettercombat:double_axe";
 		return "";
 	}
+	
+	//TODO custom weapons
+	//prospecting pickscythe
+	//mailbox
+	//estrogen powered
+	//swonge
+	//pumord
+	//chainsaw katana
+	//nife
+	//cactaceae
+	//macuahitutl ALL
+	//katana ALL
+	//fire poker (rapier)
+	//too hot (cutlass)
+	//claymore
+	//cutlass
+	//scarlet (cutlass)
+	//angel (rapier)
+	//lucern hammers (halberd)
+	//axe knife
+	//CHAINSAWS
+	//cuestick
+	//tv ant
+	//spear cane
+	//music weapons
+	
+	//TODO for canes use mace as base but change sounds
+	//TODO for forks use existing file
 	
 	@Override
 	public String getName()
