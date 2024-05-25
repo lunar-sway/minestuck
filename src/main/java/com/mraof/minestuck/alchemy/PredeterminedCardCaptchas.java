@@ -15,16 +15,19 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @ParametersAreNonnullByDefault
@@ -41,9 +44,14 @@ public class PredeterminedCardCaptchas
 	
 	public static BiMap<Item, String> getData()
 	{
-		return PredeterminedCardCaptchas.predefinedCardMap;
+		return Objects.requireNonNull(PredeterminedCardCaptchas.predefinedCardMap, "Tried to get an instance of Predetermined Captchas too early.");
 	}
 	
+	@SubscribeEvent
+	public static void onServerStopped(ServerStoppedEvent event)
+	{
+		predefinedCardMap = null;
+	}
 	private final static class Loader extends SimplePreparableReloadListener<Map<String, Item>>
 	{
 		private static final Logger LOGGER = LogManager.getLogger();
