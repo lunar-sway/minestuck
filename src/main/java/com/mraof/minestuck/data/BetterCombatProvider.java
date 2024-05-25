@@ -9,6 +9,8 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
@@ -22,6 +24,8 @@ import static com.mraof.minestuck.item.MSItemTypes.*;
 public class BetterCombatProvider implements DataProvider
 {
 	private final PackOutput output;
+	
+	Map<String, String> weaponWithParent = new HashMap<>();
 	
 	public BetterCombatProvider(PackOutput output)
 	{
@@ -38,23 +42,21 @@ public class BetterCombatProvider implements DataProvider
 		List<CompletableFuture<?>> futures = new ArrayList<>();
 		Path basePath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(Minestuck.MOD_ID).resolve("weapon_attributes");
 		
-		Map<String, String> weaponWithParent = new HashMap<>();
-		
-		MSItems.REGISTER.getEntries().stream().filter(itemHolder ->
+		MSItems.REGISTER.getEntries().forEach(weaponHolder ->
 		{
-			if(itemHolder.asOptional().isEmpty())
-				return false;
+			if(weaponHolder.asOptional().isEmpty())
+				return;
 			
-			return itemHolder.get() instanceof WeaponItem weaponItem && weaponItem.getToolType() != null;
-		}).forEach(weaponHolder ->
-		{
-			String parent = getWeaponParent(((WeaponItem) weaponHolder.get().asItem()).getToolType());
-			
-			if(!parent.isEmpty())
-				weaponWithParent.put(weaponHolder.getKey().location().getPath(), parent);
+			if(weaponHolder.get() instanceof WeaponItem weaponItem && weaponItem.getToolType() != null)
+			{
+				String parent = getWeaponParent(weaponItem.getToolType());
+				
+				if(!parent.isEmpty())
+					weaponWithParent.put(weaponHolder.getKey().location().getPath(), parent);
+			}
 		});
 		
-		//TODO custom defined weapons method call here
+		customWeapons();
 		
 		for(Map.Entry<String, String> entry : weaponWithParent.entrySet())
 		{
@@ -99,31 +101,56 @@ public class BetterCombatProvider implements DataProvider
 		return "";
 	}
 	
-	//TODO custom weapons
-	//prospecting pickscythe
-	//mailbox
-	//estrogen powered
-	//swonge
-	//pumord
-	//chainsaw katana
-	//nife
-	//cactaceae
-	//macuahitutl ALL
-	//katana ALL
-	//fire poker (rapier)
-	//too hot (cutlass)
-	//claymore
-	//cutlass
-	//scarlet (cutlass)
-	//angel (rapier)
-	//lucern hammers (halberd)
-	//axe knife
-	//CHAINSAWS
-	//cuestick
-	//tv ant
-	//spear cane
-	//music weapons
+	public void customWeapons()
+	{
+		addWeapon(MSItems.MAILBOX, "bettercombat:hammer");
+		addWeapon(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR, "bettercombat:hammer");
+		addWeapon(MSItems.BOOMBOX_BEATER, "bettercombat:hammer");
+		
+		addWeapon(MSItems.SWONGE, "bettercombat:sword");
+		addWeapon(MSItems.WET_SWONGE, "bettercombat:sword");
+		addWeapon(MSItems.PUMORD, "bettercombat:sword");
+		addWeapon(MSItems.WET_PUMORD, "bettercombat:sword");
+		addWeapon(MSItems.MUSIC_SWORD, "bettercombat:sword");
+		
+		addWeapon(MSItems.CHAINSAW_KATANA, "bettercombat:katana");
+		addWeapon(MSItems.KATANA, "bettercombat:katana");
+		addWeapon(MSItems.UNBREAKABLE_KATANA, "bettercombat:katana");
+		
+		addWeapon(MSItems.CACTACEAE_CUTLASS, "bettercombat:cutlass");
+		addWeapon(MSItems.CUTLASS_OF_ZILLYWAIR, "bettercombat:cutlass");
+		addWeapon(MSItems.SCARLET_RIBBITAR, "bettercombat:cutlass");
+		addWeapon(MSItems.SCARLET_ZILLYHOO, "bettercombat:cutlass");
+		addWeapon(MSItems.TOO_HOT_TO_HANDLE, "bettercombat:cutlass");
+		
+		addWeapon(MSItems.CLAYMORE, "bettercombat:claymore");
+		addWeapon(MSItems.MACUAHUITL, "bettercombat:cutlass");
+		addWeapon(MSItems.FROSTY_MACUAHUITL, "bettercombat:cutlass");
+		
+		addWeapon(MSItems.ANGEL_APOCALYPSE, "bettercombat:rapier");
+		addWeapon(MSItems.FIRE_POKER, "bettercombat:rapier");
+		
+		addWeapon(MSItems.NIFE, "bettercombat:dagger");
+		
+		addWeapon(MSItems.LUCERNE_HAMMER, "bettercombat:halberd");
+		addWeapon(MSItems.LUCERNE_HAMMER_OF_UNDYING, "bettercombat:halberd");
+		
+		addWeapon(MSItems.OBSIDIAN_AXE_KNIFE, "bettercombat:claw");
+		
+		addWeapon(MSItems.PROSPECTING_PICKSCYTHE, "bettercombat:scythe");
+		
+		addWeapon(MSItems.CUESTICK, "bettercombat:lance");
+		addWeapon(MSItems.TV_ANTENNA, "bettercombat:sword");
+		
+		addWeapon(MSItems.SPEAR_CANE, "bettercombat:spear");
+	}
 	
+	public void addWeapon(DeferredItem<Item> weapon, String parent)
+	{
+		weaponWithParent.put(weapon.getKey().location().getPath(), parent);
+	}
+	
+	//TODO chainsaws
 	//TODO for canes use mace as base but change sounds
 	//TODO for forks use existing file
 	
