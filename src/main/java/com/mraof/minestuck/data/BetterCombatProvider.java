@@ -83,7 +83,9 @@ public class BetterCombatProvider implements DataProvider
 		else if(toolType == HAMMER_TOOL)
 			return "bettercombat:hammer";
 		else if(toolType == AXE_TOOL)
-			return "bettercombat:heavy_axe";
+			return "bettercombat:axe";
+		else if(toolType == CHAINSAW_TOOL)
+			return "minestuck:chainsaw_base";
 		else if(toolType == CLUB_TOOL || toolType == SHOVEL_TOOL)
 			return "bettercombat:mace";
 		else if(toolType == SWORD_TOOL || toolType == KEY_TOOL || toolType == BATON_TOOL)
@@ -94,6 +96,10 @@ public class BetterCombatProvider implements DataProvider
 			return "bettercombat:lance";
 		else if(toolType == STAFF_TOOL)
 			return "bettercombat:battlestaff";
+		else if(toolType == CANE_TOOL)
+			return "minestuck:cane_base";
+		else if(toolType == FORK_TOOL)
+			return "minestuck:fork_base";
 		else if(toolType == WAND_TOOL)
 			return "bettercombat:wand";
 		return "";
@@ -104,6 +110,9 @@ public class BetterCombatProvider implements DataProvider
 		addWeapon(MSItems.MAILBOX, "bettercombat:hammer");
 		addWeapon(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR, "bettercombat:hammer");
 		addWeapon(MSItems.BOOMBOX_BEATER, "bettercombat:hammer");
+		
+		addWeapon(MSItems.CLAW_HAMMER, "bettercombat:mace");
+		addWeapon(MSItems.BLACKSMITH_HAMMER, "bettercombat:mace");
 		
 		addWeapon(MSItems.SWONGE, "bettercombat:sword");
 		addWeapon(MSItems.WET_SWONGE, "bettercombat:sword");
@@ -118,26 +127,28 @@ public class BetterCombatProvider implements DataProvider
 		addWeapon(MSItems.CACTACEAE_CUTLASS, "bettercombat:cutlass");
 		addWeapon(MSItems.CUTLASS_OF_ZILLYWAIR, "bettercombat:cutlass");
 		addWeapon(MSItems.SCARLET_RIBBITAR, "bettercombat:cutlass");
-		addWeapon(MSItems.SCARLET_ZILLYHOO, "bettercombat:cutlass");
 		addWeapon(MSItems.TOO_HOT_TO_HANDLE, "bettercombat:cutlass");
+		addWeapon(MSItems.COBALT_SABRE, "bettercombat:cutlass");
 		
 		addWeapon(MSItems.CLAYMORE, "bettercombat:claymore");
-		addWeapon(MSItems.MACUAHUITL, "bettercombat:cutlass");
-		addWeapon(MSItems.FROSTY_MACUAHUITL, "bettercombat:cutlass");
+		addWeapon(MSItems.MACUAHUITL, "bettercombat:claymore");
+		addWeapon(MSItems.FROSTY_MACUAHUITL, "bettercombat:claymore");
+		addWeapon(MSItems.CRUEL_FATE_CRUCIBLE, "bettercombat:claymore");
+		addWeapon(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "bettercombat:claymore");
 		
 		addWeapon(MSItems.ANGEL_APOCALYPSE, "bettercombat:rapier");
 		addWeapon(MSItems.FIRE_POKER, "bettercombat:rapier");
 		
 		addWeapon(MSItems.NIFE, "bettercombat:dagger");
 		
-		addWeapon(MSItems.BATTLEAXE, "bettercombat:double_axe");
-		addWeapon(MSItems.CANDY_BATTLEAXE, "bettercombat:double_axe");
-		addWeapon(MSItems.CHOCO_LOCO_WOODSPLITTER, "bettercombat:double_axe");
-		addWeapon(MSItems.STEEL_EDGE_CANDYCUTTER, "bettercombat:double_axe");
-		addWeapon(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "bettercombat:double_axe");
-		addWeapon(MSItems.FISSION_FOCUSED_FAULT_FELLER, "bettercombat:double_axe");
-		addWeapon(MSItems.BISECTOR, "bettercombat:double_axe");
-		addWeapon(MSItems.FINE_CHINA_AXE, "bettercombat:double_axe");
+		addWeapon(MSItems.BATTLEAXE, "bettercombat:heavy_axe");
+		addWeapon(MSItems.CANDY_BATTLEAXE, "bettercombat:heavy_axe");
+		addWeapon(MSItems.CHOCO_LOCO_WOODSPLITTER, "bettercombat:heavy_axe");
+		addWeapon(MSItems.STEEL_EDGE_CANDYCUTTER, "bettercombat:heavy_axe");
+		addWeapon(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "bettercombat:heavy_axe");
+		addWeapon(MSItems.FISSION_FOCUSED_FAULT_FELLER, "bettercombat:heavy_axe");
+		addWeapon(MSItems.BISECTOR, "bettercombat:heavy_axe");
+		addWeapon(MSItems.FINE_CHINA_AXE, "bettercombat:heavy_axe");
 		
 		addWeapon(MSItems.LUCERNE_HAMMER, "bettercombat:halberd");
 		addWeapon(MSItems.LUCERNE_HAMMER_OF_UNDYING, "bettercombat:halberd");
@@ -149,17 +160,20 @@ public class BetterCombatProvider implements DataProvider
 		addWeapon(MSItems.CUESTICK, "bettercombat:lance");
 		addWeapon(MSItems.TV_ANTENNA, "bettercombat:sword");
 		
+		addWeapon(MSItems.CROWBAR, "bettercombat:heavy_axe");
+		addWeapon(MSItems.UMBRELLA, "minestuck:fork_base");
+		addWeapon(MSItems.BARBERS_BEST_FRIEND, "minestuck:fork_base");
 		addWeapon(MSItems.SPEAR_CANE, "bettercombat:spear");
+		
+		addWeapon(MSItems.MEATFORK, "bettercombat:trident");
+		addWeapon(MSItems.BIDENT, "bettercombat:trident");
+		addWeapon(MSItems.DOUBLE_ENDED_TRIDENT, "bettercombat:trident");
 	}
 	
 	public void addWeapon(DeferredItem<Item> weapon, String parent)
 	{
 		weaponWithParent.put(weapon.getKey().location().getPath(), parent);
 	}
-	
-	//TODO chainsaws
-	//TODO for canes use mace as base but change sounds
-	//TODO for forks use existing file
 	
 	@Override
 	public String getName()
