@@ -96,8 +96,6 @@ public class BetterCombatProvider implements DataProvider
 			return "bettercombat:battlestaff";
 		else if(toolType == WAND_TOOL)
 			return "bettercombat:wand";
-		else if(toolType == AXE_HAMMER_TOOL)
-			return "bettercombat:double_axe";
 		return "";
 	}
 	
@@ -131,6 +129,15 @@ public class BetterCombatProvider implements DataProvider
 		addWeapon(MSItems.FIRE_POKER, "bettercombat:rapier");
 		
 		addWeapon(MSItems.NIFE, "bettercombat:dagger");
+		
+		addWeapon(MSItems.BATTLEAXE, "bettercombat:double_axe");
+		addWeapon(MSItems.CANDY_BATTLEAXE, "bettercombat:double_axe");
+		addWeapon(MSItems.CHOCO_LOCO_WOODSPLITTER, "bettercombat:double_axe");
+		addWeapon(MSItems.STEEL_EDGE_CANDYCUTTER, "bettercombat:double_axe");
+		addWeapon(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "bettercombat:double_axe");
+		addWeapon(MSItems.FISSION_FOCUSED_FAULT_FELLER, "bettercombat:double_axe");
+		addWeapon(MSItems.BISECTOR, "bettercombat:double_axe");
+		addWeapon(MSItems.FINE_CHINA_AXE, "bettercombat:double_axe");
 		
 		addWeapon(MSItems.LUCERNE_HAMMER, "bettercombat:halberd");
 		addWeapon(MSItems.LUCERNE_HAMMER_OF_UNDYING, "bettercombat:halberd");
