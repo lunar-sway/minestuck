@@ -10,6 +10,9 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
+/**
+ * Model made by Mraof.
+ */
 public class RookModel<T extends RookEntity> extends HierarchicalModel<T>
 {
 	private final ModelPart root;
