@@ -20,6 +20,11 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.item.MSItemTypes.*;
 
+/**
+ * Generates json files for compatibility with the Better Combat mod, using our weapons tool types to determine what parent weapon file to use.
+ * Weapons without a tool type or a tool type of misc are not automatically assigned a parent weapon.
+ * Custom entries have been included for weapons whose style does not conform to their default parent (or had no parent).
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BetterCombatProvider implements DataProvider
@@ -57,28 +62,13 @@ public class BetterCombatProvider implements DataProvider
 		this.output = output;
 	}
 	
-	/**
-	 * First gets all the weapons from MSItems and adds it to a Map where the key is the registry name and the value is the data.
-	 * Then it checks for custom defined weapons to use either in addition to the existing entries or to replace
-	 */
 	@Override
 	public final CompletableFuture<?> run(CachedOutput cache)
 	{
 		List<CompletableFuture<?>> futures = new ArrayList<>();
 		Path basePath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(Minestuck.MOD_ID).resolve("weapon_attributes");
 		
-		MSItems.REGISTER.getEntries().forEach(weaponHolder ->
-		{
-			if(weaponHolder.get() instanceof WeaponItem weaponItem && weaponItem.getToolType() != null)
-			{
-				String parent = getWeaponParent(weaponItem.getToolType());
-				
-				if(!parent.isEmpty())
-					weaponWithParent.put(weaponHolder.getKey(), parent);
-			}
-		});
-		
-		customWeapons();
+		addAllWeapons();
 		
 		for(Map.Entry<ResourceKey<Item>, String> entry : weaponWithParent.entrySet())
 		{
@@ -92,43 +82,10 @@ public class BetterCombatProvider implements DataProvider
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}
 	
-	public String getWeaponParent(MSToolType toolType)
+	public void addAllWeapons()
 	{
-		if(toolType == SICKLE_TOOL)
-			return SICKLE;
-		else if(toolType == SCYTHE_TOOL)
-			return SCYTHE;
-		else if(toolType == CLAWS_TOOL)
-			return CLAW;
-		else if(toolType == PICKAXE_TOOL)
-			return PICKAXE;
-		else if(toolType == HAMMER_TOOL)
-			return HAMMER;
-		else if(toolType == AXE_TOOL)
-			return AXE;
-		else if(toolType == CHAINSAW_TOOL)
-			return CHAINSAW;
-		else if(toolType == CLUB_TOOL || toolType == SHOVEL_TOOL)
-			return MACE;
-		else if(toolType == SWORD_TOOL || toolType == KEY_TOOL || toolType == BATON_TOOL)
-			return SWORD;
-		else if(toolType == KNIFE_TOOL || toolType == FAN_TOOL)
-			return DAGGER;
-		else if(toolType == LANCE_TOOL)
-			return LANCE;
-		else if(toolType == STAFF_TOOL)
-			return STAFF;
-		else if(toolType == CANE_TOOL)
-			return CANE;
-		else if(toolType == FORK_TOOL)
-			return FORK;
-		else if(toolType == WAND_TOOL)
-			return WAND;
-		return "";
-	}
-	
-	public void customWeapons()
-	{
+		addWeaponDefaults();
+		
 		addWeapon(MSItems.MAILBOX, HAMMER);
 		addWeapon(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR, HAMMER);
 		addWeapon(MSItems.BOOMBOX_BEATER, HAMMER);
@@ -190,6 +147,55 @@ public class BetterCombatProvider implements DataProvider
 		addWeapon(MSItems.MEATFORK, TRIDENT);
 		addWeapon(MSItems.BIDENT, TRIDENT);
 		addWeapon(MSItems.DOUBLE_ENDED_TRIDENT, TRIDENT);
+	}
+	
+	private void addWeaponDefaults()
+	{
+		MSItems.REGISTER.getEntries().forEach(weaponHolder ->
+		{
+			if(weaponHolder.get() instanceof WeaponItem weaponItem && weaponItem.getToolType() != null)
+			{
+				String parent = getWeaponParent(weaponItem.getToolType());
+				
+				if(!parent.isEmpty())
+					weaponWithParent.put(weaponHolder.getKey(), parent);
+			}
+		});
+	}
+	
+	public String getWeaponParent(MSToolType toolType)
+	{
+		if(toolType == SICKLE_TOOL)
+			return SICKLE;
+		else if(toolType == SCYTHE_TOOL)
+			return SCYTHE;
+		else if(toolType == CLAWS_TOOL)
+			return CLAW;
+		else if(toolType == PICKAXE_TOOL)
+			return PICKAXE;
+		else if(toolType == HAMMER_TOOL)
+			return HAMMER;
+		else if(toolType == AXE_TOOL)
+			return AXE;
+		else if(toolType == CHAINSAW_TOOL)
+			return CHAINSAW;
+		else if(toolType == CLUB_TOOL || toolType == SHOVEL_TOOL)
+			return MACE;
+		else if(toolType == SWORD_TOOL || toolType == KEY_TOOL || toolType == BATON_TOOL)
+			return SWORD;
+		else if(toolType == KNIFE_TOOL || toolType == FAN_TOOL)
+			return DAGGER;
+		else if(toolType == LANCE_TOOL)
+			return LANCE;
+		else if(toolType == STAFF_TOOL)
+			return STAFF;
+		else if(toolType == CANE_TOOL)
+			return CANE;
+		else if(toolType == FORK_TOOL)
+			return FORK;
+		else if(toolType == WAND_TOOL)
+			return WAND;
+		return "";
 	}
 	
 	public void addWeapon(DeferredItem<Item> weapon, String parent)
