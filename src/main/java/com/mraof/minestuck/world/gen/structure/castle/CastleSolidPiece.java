@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
 import com.mraof.minestuck.block.SkaiaBlocks;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -16,12 +16,12 @@ public class CastleSolidPiece extends CastlePiece
 {
 	protected CastleSolidPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_SOLID.get(), 0, boundingBox, isBlack);
+		super(MSStructures.SkaiaCastle.SOLID_PIECE.get(), 0, boundingBox, isBlack);
 	}
 	
 	public CastleSolidPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_SOLID.get(), nbt);
+		super(MSStructures.SkaiaCastle.SOLID_PIECE.get(), nbt);
 	}
 	
 	public static CastleSolidPiece findValidPlacement(boolean isBlack, int x, int y, int z)

@@ -27,7 +27,7 @@ public class SmallRuinStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructureTypes.SMALL_RUIN.get();
+		return MSStructures.SMALL_RUIN_TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

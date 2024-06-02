@@ -27,7 +27,7 @@ public class FrogTempleStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructureTypes.FROG_TEMPLE.get();
+		return MSStructures.FROG_TEMPLE_TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
