@@ -8,7 +8,7 @@ import com.mraof.minestuck.entity.underling.UnderlingSpawnSettings;
 import com.mraof.minestuck.world.biome.LandBiomeSource;
 import com.mraof.minestuck.world.biome.LandCustomBiomeSettings;
 import com.mraof.minestuck.world.biome.RegistryBackedBiomeSet;
-import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.lands.LandTypeExtensions;
@@ -143,7 +143,7 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	
 	private static boolean hasGatePlacement(ChunkGeneratorStructureState state, Holder<Structure> structure)
 	{
-		return state.getPlacementsForStructure(structure).stream().anyMatch(placement -> placement.type() == MSStructurePlacements.LAND_GATE.get());
+		return state.getPlacementsForStructure(structure).stream().anyMatch(placement -> placement.type() == MSStructures.LAND_GATE_PLACEMENT.get());
 	}
 	
 	public boolean tryInit(LandTypeExtensions extensions)

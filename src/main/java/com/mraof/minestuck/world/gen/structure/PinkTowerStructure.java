@@ -36,7 +36,7 @@ public class PinkTowerStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructureTypes.PINK_TOWER.get();
+		return MSStructures.PINK_TOWER_TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
