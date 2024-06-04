@@ -68,6 +68,8 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider));
+		
+		gen.addProvider(event.includeServer(), new BetterCombatProvider(output));
 	}
 	
 	private static RegistrySetBuilder registrySetBuilder()
