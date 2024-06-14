@@ -52,6 +52,13 @@ public class PredeterminedCardCaptchas
 	{
 		predefinedCardMap = null;
 	}
+	
+	@SubscribeEvent
+	public static void onResourceReload(AddReloadListenerEvent event)
+	{
+		event.addListener(new Loader());
+	}
+	
 	private final static class Loader extends SimplePreparableReloadListener<Map<String, Item>>
 	{
 		private static final Logger LOGGER = LogManager.getLogger();
@@ -79,12 +86,6 @@ public class PredeterminedCardCaptchas
 			}
 			
 			PredeterminedCardCaptchas.setData(predefinedCards.build());
-		}
-		
-		@SubscribeEvent
-		public static void onResourceReload(AddReloadListenerEvent event)
-		{
-			event.addListener(new Loader());
 		}
 		
 		private static final Codec<Map<String, Item>> PREDEFINED_CAPTCHAS_CODEC = Codec.unboundedMap(Codec.STRING, ForgeRegistries.ITEMS.getCodec());
