@@ -15,7 +15,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class StructureBlockRegistryProcessor extends StructureProcessor
+public final class StructureBlockRegistryProcessor extends StructureProcessor
 {
 	public static final Codec<StructureBlockRegistryProcessor> CODEC = Codec.unit(() -> StructureBlockRegistryProcessor.INSTANCE);
 	public static final StructureBlockRegistryProcessor INSTANCE = new StructureBlockRegistryProcessor();
