@@ -5,10 +5,7 @@ import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
@@ -89,25 +86,53 @@ public final class StructureBlockRegistry
 		registerBlock("ocean_surface", "upper", Blocks.GRAVEL);
 		registerBlock("river", "ocean", Blocks.BLUE_WOOL);
 		registerBlock("sand", Blocks.SAND.defaultBlockState());
+		
 		registerBlock("structure_primary", Blocks.STONE_BRICKS.defaultBlockState());
 		registerBlock("structure_primary_decorative", "structure_primary", Blocks.CHISELED_STONE_BRICKS);
 		registerBlock("structure_primary_cracked", "structure_primary", Blocks.CRACKED_STONE_BRICKS);
-		registerBlock("structure_primary_mossy", "structure_primary", Blocks.MOSSY_STONE_BRICKS);
-		registerBlock("structure_primary_column", "structure_primary", MSBlocks.COARSE_STONE_COLUMN.get());
+		registerBlock("structure_primary_column", "structure_primary", MSBlocks.COARSE_STONE_COLUMN.get()); //TODO change to quartz column, determine if used anywhere currently
 		registerBlock("structure_primary_stairs", "structure_primary", Blocks.STONE_BRICK_STAIRS);
+		registerBlock("structure_primary_slab", "structure_primary", Blocks.STONE_BRICK_SLAB, SlabBlock.class);
+		registerBlock("structure_primary_wall", "structure_primary", Blocks.STONE_BRICK_WALL, WallBlock.class);
+		
+		registerBlock("structure_primary_mossy", "structure_primary", Blocks.MOSSY_STONE_BRICKS);
+		registerBlock("structure_primary_mossy_stairs", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_STAIRS);
+		registerBlock("structure_primary_mossy_slab", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_SLAB, SlabBlock.class);
+		registerBlock("structure_primary_mossy_wall", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_WALL, WallBlock.class);
+		
 		registerBlock("structure_secondary", "structure_primary", Blocks.NETHER_BRICKS);
-		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.RED_NETHER_BRICKS);
+		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.RED_NETHER_BRICKS); //TODO consider cracked variant
 		registerBlock("structure_secondary_stairs", "structure_secondary", Blocks.NETHER_BRICK_STAIRS);
+		registerBlock("structure_secondary_slab", "structure_secondary", Blocks.NETHER_BRICK_SLAB, SlabBlock.class);
+		registerBlock("structure_secondary_wall", "structure_secondary", Blocks.NETHER_BRICK_WALL, WallBlock.class);
+		
+		registerBlock("structure_wood", Blocks.OAK_WOOD.defaultBlockState());
+		registerBlock("structure_log", Blocks.OAK_LOG.defaultBlockState());
+		registerBlock("structure_stripped_wood", Blocks.STRIPPED_OAK_WOOD.defaultBlockState());
+		registerBlock("structure_stripped_log", Blocks.STRIPPED_OAK_LOG.defaultBlockState());
 		registerBlock("structure_planks", Blocks.OAK_PLANKS.defaultBlockState());
+		registerBlock("structure_bookshelf", Blocks.BOOKSHELF.defaultBlockState());
+		registerBlock("structure_planks_stairs", Blocks.OAK_STAIRS.defaultBlockState());
 		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.defaultBlockState(), SlabBlock.class);
+		registerBlock("structure_planks_fence", Blocks.OAK_FENCE.defaultBlockState(), FenceBlock.class);
+		registerBlock("structure_planks_fence_gate", Blocks.OAK_FENCE_GATE.defaultBlockState(), FenceGateBlock.class);
+		registerBlock("structure_planks_door", Blocks.OAK_DOOR.defaultBlockState(), DoorBlock.class);
+		registerBlock("structure_planks_trapdoor", Blocks.OAK_TRAPDOOR.defaultBlockState(), TrapDoorBlock.class);
+		
 		registerBlock("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
 		registerBlock("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
 		registerBlock("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
 		registerBlock("carpet", Blocks.WHITE_CARPET.defaultBlockState());
-		registerBlock("village_door", Blocks.OAK_DOOR.defaultBlockState(), DoorBlock.class);
-		registerBlock("salamander_floor", "upper", Blocks.COARSE_DIRT);
+		
+		registerBlock("structure_ground_cover", Blocks.MOSS_CARPET.defaultBlockState());
+		registerBlock("structure_roof_cover", Blocks.HANGING_ROOTS.defaultBlockState());
+		
+		//TODO reconcile overlap in "village" entries with "structure_planks" entries
+		registerBlock("village_door", Blocks.DARK_OAK_DOOR.defaultBlockState(), DoorBlock.class);
 		registerBlock("village_path", "structure_secondary", Blocks.COBBLESTONE);
-		registerBlock("village_fence", Blocks.OAK_FENCE.defaultBlockState());
+		registerBlock("village_fence", Blocks.DARK_OAK_FENCE.defaultBlockState());
+		registerBlock("salamander_floor", "upper", Blocks.COARSE_DIRT);
+		
 		registerBlock("fall_fluid", "ocean", Blocks.LIGHT_BLUE_WOOL);
 		registerBlock("light_block", Blocks.GLOWSTONE.defaultBlockState());
 		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.defaultBlockState());
