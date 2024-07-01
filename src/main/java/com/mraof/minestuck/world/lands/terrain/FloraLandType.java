@@ -43,18 +43,41 @@ public class FloraLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
+		registry.setBlock("upper", Blocks.DIRT);
 		registry.setBlock("surface", Blocks.GRASS_BLOCK);
 		registry.setBlock("surface_rough", Blocks.MUD);
-		registry.setBlock("upper", Blocks.DIRT);
 		registry.setBlock("ocean", MSBlocks.BLOOD);
 		registry.setBlock("ocean_surface", Blocks.MUD);
-		registry.setBlock("structure_primary", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
+		
+		registry.setBlock("structure_primary", MSBlocks.DECREPIT_STONE_BRICKS);
+		registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
+		registry.setBlock("structure_primary_stairs", MSBlocks.DECREPIT_STONE_BRICK_STAIRS);
+		registry.setBlock("structure_primary_slab", MSBlocks.DECREPIT_STONE_BRICK_SLAB);
+		registry.setBlock("structure_primary_wall", MSBlocks.DECREPIT_STONE_BRICK_WALL);
+		
 		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
-		registry.setBlock("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS);
-		registry.setBlock("structure_secondary", Blocks.MOSSY_COBBLESTONE);
+		registry.setBlock("structure_primary_mossy_stairs", MSBlocks.MOSSY_DECREPIT_STONE_BRICK_STAIRS);
+		registry.setBlock("structure_primary_mossy_slab", MSBlocks.MOSSY_DECREPIT_STONE_BRICK_SLAB);
+		registry.setBlock("structure_primary_mossy_wall", MSBlocks.MOSSY_DECREPIT_STONE_BRICK_WALL);
+		
+		registry.setBlock("structure_secondary", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
 		registry.setBlock("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
-		registry.setBlock("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS);
+		registry.setBlock("structure_secondary_stairs", MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS);
+		registry.setBlock("structure_secondary_slab", MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB);
+		registry.setBlock("structure_secondary_wall", MSBlocks.FLOWERY_MOSSY_STONE_BRICK_WALL);
+		
+		registry.setBlock("structure_wood", MSBlocks.FLOWERY_VINE_WOOD);
+		registry.setBlock("structure_log", MSBlocks.FLOWERY_VINE_LOG);
+		registry.setBlock("structure_stripped_wood", Blocks.STRIPPED_DARK_OAK_WOOD);
+		registry.setBlock("structure_stripped_log", Blocks.STRIPPED_DARK_OAK_WOOD);
+		registry.setBlock("structure_planks", Blocks.DARK_OAK_PLANKS);
+		registry.setBlock("structure_planks_stairs", Blocks.DARK_OAK_STAIRS);
+		registry.setBlock("structure_planks_slab", Blocks.DARK_OAK_SLAB);
+		registry.setBlock("structure_planks_fence", Blocks.DARK_OAK_FENCE);
+		registry.setBlock("structure_planks_fence_gate", Blocks.DARK_OAK_FENCE_GATE);
+		registry.setBlock("structure_planks_door", Blocks.DARK_OAK_DOOR);
+		registry.setBlock("structure_planks_trapdoor", Blocks.DARK_OAK_TRAPDOOR);
+		
 		registry.setBlock("village_path", Blocks.DIRT_PATH);
 		registry.setBlock("bush", Blocks.FERN);
 		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);

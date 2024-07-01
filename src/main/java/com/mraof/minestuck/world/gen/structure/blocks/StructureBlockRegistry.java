@@ -40,9 +40,9 @@ public final class StructureBlockRegistry
 		if(defaultBlock == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
 		if(staticRegistry.containsKey(name))
-			throw new IllegalStateException("\""+name+"\" has already been registered!");
+			throw new IllegalStateException("\"" + name + "\" has already been registered!");
 		if(!extention.isInstance(defaultBlock.getBlock()))
-			throw new IllegalArgumentException("The default block \""+defaultBlock.getBlock()+"\" has to extend the minimum class \""+extention+"\"!");
+			throw new IllegalArgumentException("The default block \"" + defaultBlock.getBlock() + "\" has to extend the minimum class \"" + extention + "\"!");
 		if(templateBlockMap.containsKey(defaultBlock.getBlock()))
 			throw new IllegalStateException("Can't have two identical template blocks!");
 		
@@ -60,13 +60,13 @@ public final class StructureBlockRegistry
 		if(parent == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
 		if(staticRegistry.containsKey(name))
-			throw new IllegalStateException("\""+name+"\" has already been registered!");
+			throw new IllegalStateException("\"" + name + "\" has already been registered!");
 		
 		if(!staticRegistry.containsKey(parent))
-			throw new IllegalStateException("The parent entry \""+parent+"\" isn't registered! Make sure to register the parent first.");
+			throw new IllegalStateException("The parent entry \"" + parent + "\" isn't registered! Make sure to register the parent first.");
 		
 		if(!extention.isAssignableFrom(staticRegistry.get(parent).extention))
-			throw new IllegalArgumentException("The class specified must be the same or a superclass to the class used by the parent \""+parent+"\".");
+			throw new IllegalArgumentException("The class specified must be the same or a superclass to the class used by the parent \"" + parent + "\".");
 		if(templateBlockMap.containsKey(templateState))
 			throw new IllegalStateException("Can't have two identical template blocks!");
 		
@@ -74,7 +74,7 @@ public final class StructureBlockRegistry
 		templateBlockMap.put(templateState, name);
 	}
 	
-	static	//TODO Use public static final Strings as a standard for names to reduce risk of typos
+	static    //TODO Use public static final Strings as a standard for names to reduce risk of typos
 	{
 		registerBlock("cruxite_ore", MSBlocks.STONE_CRUXITE_ORE.get().defaultBlockState());
 		registerBlock("uranium_ore", MSBlocks.STONE_URANIUM_ORE.get().defaultBlockState());
@@ -95,6 +95,7 @@ public final class StructureBlockRegistry
 		registerBlock("structure_primary_slab", "structure_primary", Blocks.STONE_BRICK_SLAB, SlabBlock.class);
 		registerBlock("structure_primary_wall", "structure_primary", Blocks.STONE_BRICK_WALL, WallBlock.class);
 		
+		//TODO consider renaming mossy to something more neutral like contaminated or overgrown
 		registerBlock("structure_primary_mossy", "structure_primary", Blocks.MOSSY_STONE_BRICKS);
 		registerBlock("structure_primary_mossy_stairs", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_STAIRS);
 		registerBlock("structure_primary_mossy_slab", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_SLAB, SlabBlock.class);
@@ -106,6 +107,7 @@ public final class StructureBlockRegistry
 		registerBlock("structure_secondary_slab", "structure_secondary", Blocks.NETHER_BRICK_SLAB, SlabBlock.class);
 		registerBlock("structure_secondary_wall", "structure_secondary", Blocks.NETHER_BRICK_WALL, WallBlock.class);
 		
+		//TODO add button/ladder/pressure plate/sign
 		registerBlock("structure_wood", Blocks.OAK_WOOD.defaultBlockState());
 		registerBlock("structure_log", Blocks.OAK_LOG.defaultBlockState());
 		registerBlock("structure_stripped_wood", Blocks.STRIPPED_OAK_WOOD.defaultBlockState());
@@ -180,11 +182,13 @@ public final class StructureBlockRegistry
 		Class<? extends Block> extention;
 		BlockState defaultBlock;
 		String parentEntry;
+		
 		BlockEntry(BlockState state, Class<? extends Block> clazz)
 		{
 			defaultBlock = state;
 			extention = clazz;
 		}
+		
 		BlockEntry(String str, Class<? extends Block> clazz)
 		{
 			parentEntry = str;
@@ -218,9 +222,9 @@ public final class StructureBlockRegistry
 		if(state == null || name == null)
 			throw new NullPointerException("Null parameters not allowed.");
 		if(!staticRegistry.containsKey(name))
-			throw new IllegalStateException("Structure block \""+name+"\" isn't registered, and can therefore not be set.");
+			throw new IllegalStateException("Structure block \"" + name + "\" isn't registered, and can therefore not be set.");
 		if(!staticRegistry.get(name).extention.isInstance(state.getBlock()))
-			throw new IllegalArgumentException("The provided block must extend \""+staticRegistry.get(name).extention+"\".");
+			throw new IllegalArgumentException("The provided block must extend \"" + staticRegistry.get(name).extention + "\".");
 		
 		blockRegistry.put(name, state);
 		
@@ -233,7 +237,7 @@ public final class StructureBlockRegistry
 		if(name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
 		if(!staticRegistry.containsKey(name))
-			throw new IllegalStateException("Structure block \""+name+"\" isn't registered, and can therefore not be obtained.");
+			throw new IllegalStateException("Structure block \"" + name + "\" isn't registered, and can therefore not be obtained.");
 		
 		if(blockRegistry.containsKey(name))
 			return blockRegistry.get(name);

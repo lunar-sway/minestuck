@@ -39,24 +39,44 @@ public class EndLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
+		registry.setBlock("cruxite_ore", MSBlocks.END_STONE_CRUXITE_ORE);
+		registry.setBlock("uranium_ore", MSBlocks.END_STONE_URANIUM_ORE);
 		registry.setBlock("ground", MSBlocks.COARSE_END_STONE);
+		registry.setBlock("upper", Blocks.END_STONE);
 		registry.setBlock("surface", Blocks.END_STONE);
 		registry.setBlock("surface_rough", MSBlocks.END_GRASS);
-		registry.setBlock("upper", Blocks.END_STONE);
 		registry.setBlock("ocean", MSBlocks.ENDER);
+		
 		registry.setBlock("structure_primary", Blocks.END_STONE_BRICKS);
 		registry.setBlockState("structure_primary_decorative", Blocks.PURPUR_PILLAR.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
-		registry.setBlock("structure_primary_stairs", Blocks.END_STONE_BRICKS);
+		registry.setBlock("structure_primary_stairs", Blocks.END_STONE_BRICKS); //TODO was this intentional?
+		registry.setBlock("structure_primary_slab", Blocks.END_STONE_BRICK_SLAB);
+		registry.setBlock("structure_primary_wall", Blocks.END_STONE_BRICK_WALL);
+		
 		registry.setBlock("structure_secondary", Blocks.PURPUR_BLOCK);
 		registry.setBlock("structure_secondary_stairs", Blocks.PURPUR_STAIRS);
-		registry.setBlock("structure_planks", Blocks.BRICKS);
-		registry.setBlock("structure_planks_slab", Blocks.BRICK_SLAB);
+		registry.setBlock("structure_secondary_slab", Blocks.PURPUR_SLAB);
+		
+		registry.setBlock("structure_wood", MSBlocks.END_WOOD);
+		registry.setBlock("structure_log", MSBlocks.END_LOG);
+		registry.setBlock("structure_stripped_wood", MSBlocks.STRIPPED_END_WOOD);
+		registry.setBlock("structure_stripped_log", MSBlocks.STRIPPED_END_LOG);
+		registry.setBlock("structure_planks", MSBlocks.END_PLANKS);
+		registry.setBlock("structure_bookshelf", MSBlocks.END_BOOKSHELF);
+		registry.setBlock("structure_planks_stairs", MSBlocks.END_STAIRS);
+		registry.setBlock("structure_planks_slab", MSBlocks.END_SLAB);
+		registry.setBlock("structure_planks_fence", MSBlocks.END_FENCE);
+		registry.setBlock("structure_planks_fence_gate", MSBlocks.END_FENCE_GATE);
+		registry.setBlock("structure_planks_door", MSBlocks.END_DOOR);
+		registry.setBlock("structure_planks_trapdoor", MSBlocks.END_TRAPDOOR);
+		
 		registry.setBlock("village_path", MSBlocks.COARSE_END_STONE);
 		registry.setBlock("village_fence", Blocks.NETHER_BRICK_FENCE);
 		registry.setBlock("structure_wool_1", Blocks.GREEN_WOOL);
 		registry.setBlock("structure_wool_3", Blocks.PURPLE_WOOL);
-		registry.setBlock("cruxite_ore", MSBlocks.END_STONE_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.END_STONE_URANIUM_ORE);
+		
+		registry.setBlock("structure_ground_cover", MSBlocks.TALL_END_GRASS);
+		registry.setBlock("structure_roof_cover", MSBlocks.END_LEAVES);
 	}
 	
 	@Override
