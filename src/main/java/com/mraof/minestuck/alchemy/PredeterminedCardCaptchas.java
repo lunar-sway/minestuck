@@ -35,7 +35,8 @@ import java.util.Optional;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PredeterminedCardCaptchas
 {
-	private static BiMap<Item, String> predefinedCardMap = HashBiMap.create();
+	@Nullable
+	private static BiMap<Item, String> predefinedCardMap;
 	
 	private static void setData(BiMap<Item, String> predefinedCards)
 	{
