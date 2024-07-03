@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.block.CustomVoxelShape;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.HolopadBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
