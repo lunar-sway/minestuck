@@ -9,7 +9,6 @@ import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -40,10 +39,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -343,11 +340,11 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "talkAnimation", 1, PawnEntity::talkAnimation));
+		controllers.add(new AnimationController<>(this, "walkArmsAnimation", PawnEntity::walkArmsAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", PawnEntity::walkAnimation));
+		controllers.add(new AnimationController<>(this, "deathAnimation", PawnEntity::deathAnimation));
+		controllers.add(new AnimationController<>(this, "swingAnimation", PawnEntity::swingAnimation).setAnimationSpeed(2));
+		controllers.add(new AnimationController<>(this, "talkAnimation", PawnEntity::talkAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationState<PawnEntity> state)

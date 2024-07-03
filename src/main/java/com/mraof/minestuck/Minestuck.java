@@ -23,11 +23,11 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSCreativeTabs;
+import com.mraof.minestuck.item.MSDispenserBehaviours;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.KindAbstratusList;
-import com.mraof.minestuck.util.DispenserBehaviourUtil;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -35,9 +35,7 @@ import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
-import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
-import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -100,9 +98,9 @@ public class Minestuck
 		
 		MSFeatures.REGISTER.register(eventBus);
 		
-		MSStructurePieces.REGISTER.register(eventBus);
-		MSStructureTypes.REGISTER.register(eventBus);
-		MSStructurePlacements.REGISTER.register(eventBus);
+		MSStructures.PIECE_REGISTER.register(eventBus);
+		MSStructures.TYPE_REGISTER.register(eventBus);
+		MSStructures.PLACEMENT_REGISTER.register(eventBus);
 		
 		MSStructureProcessorTypes.REGISTER.register(eventBus);
 		MSSurfaceRules.REGISTER.register(eventBus);
@@ -137,7 +135,7 @@ public class Minestuck
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
-		DispenserBehaviourUtil.registerBehaviours();
+		MSDispenserBehaviours.registerBehaviours();
 		
 		ProgramData.init();
 		

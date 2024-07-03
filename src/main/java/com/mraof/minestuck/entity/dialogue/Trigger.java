@@ -11,7 +11,6 @@ import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
@@ -21,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -166,7 +166,7 @@ public sealed interface Trigger
 	{
 		static final Codec<TakeItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(TakeItem::item),
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(TakeItem::amount)
+				ExtraCodecs.strictOptionalField(Codec.INT, "amount", 1).forGetter(TakeItem::amount)
 		).apply(instance, TakeItem::new));
 		
 		public TakeItem(Item item)
@@ -239,7 +239,7 @@ public sealed interface Trigger
 	{
 		static final Codec<SetNPCItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(SetNPCItem::item),
-				PreservingOptionalFieldCodec.withDefault(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCItem::slot)
+				ExtraCodecs.strictOptionalField(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCItem::slot)
 		).apply(instance, SetNPCItem::new));
 		
 		@Override
@@ -261,7 +261,7 @@ public sealed interface Trigger
 	record SetNPCMatchedItem(EquipmentSlot slot) implements Trigger
 	{
 		static final Codec<SetNPCMatchedItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCMatchedItem::slot)
+				ExtraCodecs.strictOptionalField(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCMatchedItem::slot)
 		).apply(instance, SetNPCMatchedItem::new));
 		
 		@Override
@@ -290,7 +290,7 @@ public sealed interface Trigger
 	{
 		static final Codec<GiveItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(GiveItem::item),
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(GiveItem::amount)
+				ExtraCodecs.strictOptionalField(Codec.INT, "amount", 1).forGetter(GiveItem::amount)
 		).apply(instance, GiveItem::new));
 		
 		public GiveItem(Item item)

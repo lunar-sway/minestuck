@@ -9,10 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Block Teleporter
+- Built in compatability for Better Combat mod
+
+### Changed
+- Structure Block Registry Processor can now be used for data generated structures through a processor_list
 
 ### Contributors for this release
 
-- Dweblenod, sipherNil
+- Dweblenod, sipherNil, gtzc
 
 ## [Unreleased]
 

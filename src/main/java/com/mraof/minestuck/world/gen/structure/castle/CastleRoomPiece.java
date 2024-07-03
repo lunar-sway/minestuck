@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
 import com.mraof.minestuck.block.SkaiaBlocks;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -20,12 +20,12 @@ public class CastleRoomPiece extends CastlePiece
 {
 	protected CastleRoomPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_ROOM.get(), 2, boundingBox, isBlack);
+		super(MSStructures.SkaiaCastle.ROOM_PIECE.get(), 2, boundingBox, isBlack);
 	}
 	
 	public CastleRoomPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_ROOM.get(), nbt);
+		super(MSStructures.SkaiaCastle.ROOM_PIECE.get(), nbt);
 	}
 	
 	protected CastleRoomPiece(StructurePieceType pieceType, boolean isBlack, BoundingBox boundingBox)

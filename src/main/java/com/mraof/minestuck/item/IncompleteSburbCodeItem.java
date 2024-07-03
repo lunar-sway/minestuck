@@ -1,11 +1,12 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -87,12 +89,12 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	 */
 	public static boolean addRecordedInfo(ItemStack stack, Block block)
 	{
-		return MSNBTUtil.tryAddBlockToSet(stack.getOrCreateTag(), "recordedHieroglyphs", block);
+		return tryAddBlockToSet(stack.getOrCreateTag(), "recordedHieroglyphs", block);
 	}
 	
 	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
 	{
-		MSNBTUtil.writeBlockSet(stack.getOrCreateTag(), "recordedHieroglyphs", blockList);
+		writeBlockSet(stack.getOrCreateTag(), "recordedHieroglyphs", blockList);
 		
 		return stack;
 	}
@@ -186,5 +188,48 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 			tooltip.add(Component.translatable("item.minestuck.sburb_code.additional_info"));
 		} else
 			tooltip.add(Component.translatable("message.shift_for_more_info"));
+	}
+	
+	public static Set<Block> readBlockSet(CompoundTag nbt, String key)
+	{
+		return nbt.getList(key, Tag.TAG_STRING).stream().map(Tag::getAsString)
+				//Turn the Strings into ResourceLocations
+				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
+				//Turn the ResourceLocations into Blocks
+				.flatMap(blockId -> Stream.ofNullable(BuiltInRegistries.BLOCK.get(blockId)))
+				//Gather the blocks into a set
+				.collect(Collectors.toSet());
+	}
+	
+	public static void writeBlockSet(CompoundTag nbt, String key, @Nonnull Set<Block> blocks)
+	{
+		ListTag listTag = new ListTag();
+		for(Block blockIterate : blocks)
+		{
+			String blockName = String.valueOf(BuiltInRegistries.BLOCK.getKey(blockIterate));
+			listTag.add(StringTag.valueOf(blockName));
+		}
+		
+		nbt.put(key, listTag);
+	}
+	
+	public static boolean tryAddBlockToSet(CompoundTag nbt, String key, Block block)
+	{
+		StringTag blockIdTag = StringTag.valueOf(String.valueOf(BuiltInRegistries.BLOCK.getKey(block)));
+		
+		if(!nbt.contains(key, Tag.TAG_LIST))
+		{
+			writeBlockSet(nbt, key, Collections.singleton(block));
+			return true;
+		} else
+		{
+			ListTag listTag = nbt.getList(key, Tag.TAG_STRING);
+			if(!listTag.contains(blockIdTag))
+			{
+				listTag.add(blockIdTag);
+				return true;
+			} else
+				return false;
+		}
 	}
 }

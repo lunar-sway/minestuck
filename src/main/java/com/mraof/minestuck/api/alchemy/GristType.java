@@ -1,7 +1,7 @@
 package com.mraof.minestuck.api.alchemy;
 
+import com.google.common.base.Suppliers;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.Util;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
@@ -33,8 +33,8 @@ public final class GristType implements Comparable<GristType>
 	@Nullable
 	private final ResourceLocation textureOverrideId;
 	
-	private final LazyInstance<String> translationKey = new LazyInstance<>(() -> Util.makeDescriptionId("grist", GristType.this.getId()));
-	private final LazyInstance<ResourceLocation> icon = new LazyInstance<>(() -> makeIconPath(GristType.this.getTextureId()));
+	private final Supplier<String> translationKey = Suppliers.memoize(() -> Util.makeDescriptionId("grist", GristType.this.getId()));
+	private final Supplier<ResourceLocation> icon = Suppliers.memoize(() -> makeIconPath(GristType.this.getTextureId()));
 	
 	public GristType(Properties properties)
 	{

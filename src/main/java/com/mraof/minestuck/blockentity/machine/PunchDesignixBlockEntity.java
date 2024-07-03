@@ -11,7 +11,6 @@ import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -26,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
@@ -191,7 +191,16 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	
 	private void effects(boolean success)
 	{
-		WorldEventUtil.dispenserEffect(getLevel(), getBlockPos(), getBlockState().getValue(FACING), success);
+		if(this.level == null)
+			return;
+		
+		this.level.levelEvent(success ? LevelEvent.SOUND_DISPENSER_DISPENSE : LevelEvent.SOUND_DISPENSER_FAIL, this.worldPosition, 0);
+		if(success)
+		{
+			Direction direction = getBlockState().getValue(FACING);
+			int i = direction.getStepX() + 1 + (direction.getStepZ() + 1) * 3;
+			this.level.levelEvent(LevelEvent.PARTICLES_SHOOT_SMOKE, this.worldPosition, i);
+		}
 	}
 	
 	private boolean isUsable(BlockState state)

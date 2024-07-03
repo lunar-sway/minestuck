@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.util.BoondollarPriceManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -40,7 +39,7 @@ public class ConsortRewardHandler
 				}
 			}
 			
-			Optional<Integer> price = BoondollarPriceManager.getInstance().findPrice(stack, rand);
+			Optional<Integer> price = BoondollarPrices.getInstance().findPrice(stack, rand);
 			if (price.isPresent() && itemPriceList.size() < 9)
 				itemPriceList.add(Pair.of(stack, price.get()));
 			if (!price.isPresent())

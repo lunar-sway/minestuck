@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-public class MSSoundEvents
+public final class MSSoundEvents
 {
 	public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Minestuck.MOD_ID);
 	
@@ -114,6 +114,6 @@ public class MSSoundEvents
 	
 	private static Supplier<SoundEvent> register(String name)
 	{
-		return REGISTER.register(name.replace(".","_"), () -> SoundEvent.createVariableRangeEvent(Minestuck.id(name)));
+		return REGISTER.register(name, () -> SoundEvent.createVariableRangeEvent(Minestuck.id(name)));
 	}
 }
