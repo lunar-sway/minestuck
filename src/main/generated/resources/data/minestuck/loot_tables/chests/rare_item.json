@@ -1,0 +1,160 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5.0,
+                "min": 0.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:iron_ingot",
+          "quality": 1,
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4.0,
+                "min": 0.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:gold_ingot",
+          "quality": 1,
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 0.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:diamond",
+          "quality": 2,
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:grimoire",
+          "quality": 1,
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:mini_wizard_statue",
+          "quality": 1,
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:cassette_player",
+          "quality": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:sendificator",
+          "quality": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:transportalizer",
+          "quality": 2,
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:dice",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:cueball",
+          "quality": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:cryptid_photo",
+          "quality": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:computer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:laptop"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:chessboard",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:cigarette_lance",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:ace_of_clubs",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:ace_of_diamonds",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:ace_of_hearts",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:ace_of_spades",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:energy_core",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gutter_ball"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:plush_mutated_cat",
+          "quality": 1,
+          "weight": 2
+        }
+      ],
+      "name": "item",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minestuck:chests/rare_item"
+}

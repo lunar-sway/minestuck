@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:repeater",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:razor_blade",
+          "quality": -1,
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:thresh_dvd",
+          "quality": 2,
+          "weight": 4
+        }
+      ],
+      "name": "item",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minestuck:chests/misc_item/title/minestuck/pulse"
+}
