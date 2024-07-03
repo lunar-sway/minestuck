@@ -6,11 +6,13 @@ import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.event.GristDropsEvent;
+import com.mraof.minestuck.network.block.StatStorerSettingsPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -96,6 +98,16 @@ public class StatStorerBlockEntity extends BlockEntity
 				blockEntity.tickCycle = 0;
 		}
 		blockEntity.tickCycle++;
+	}
+	
+	public void handleSettingsPacket(StatStorerSettingsPacket packet)
+	{
+		activeType = packet.activeType();
+		this.divideValueBy = Math.max(1, packet.divideValueBy());
+		
+		this.setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
 	}
 	
 	@Override
@@ -217,16 +229,6 @@ public class StatStorerBlockEntity extends BlockEntity
 		if(this.divideValueBy <= 0)
 			divideValueBy = 1;
 		return this.divideValueBy;
-	}
-	
-	public void setActiveTypeAndDivideValue(ActiveType activeTypeIn, int divideValueBy)
-	{
-		activeType = activeTypeIn;
-		if(divideValueBy <= 0)
-			divideValueBy = 1;
-		this.divideValueBy = divideValueBy;
-		this.setChanged();
-		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 	}
 	
 	public void setActiveStoredStatValue(float storedStatIn)

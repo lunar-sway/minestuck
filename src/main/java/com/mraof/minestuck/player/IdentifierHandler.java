@@ -88,6 +88,7 @@ public class IdentifierHandler
 		return DataResult.success(Optional.of(identifier));
 	}
 	
+	@Nullable
 	public static PlayerIdentifier getById(int id)
 	{
 		for(PlayerIdentifier identifier : identifierList)

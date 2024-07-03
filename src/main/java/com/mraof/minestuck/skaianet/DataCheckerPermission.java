@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.data.DataCheckerPermissionPacket;
+import com.mraof.minestuck.network.DataCheckerPackets;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
@@ -62,12 +62,12 @@ public final class DataCheckerPermission
 	
 	private static void sendPacket(ServerPlayer player)
 	{
-		DataCheckerPermissionPacket packet;
+		DataCheckerPackets.Permission packet;
 		boolean permission = hasPermission(player);
 		if(permission)
 			dataCheckerPermission.add(player.getGameProfile().getId());
 		else dataCheckerPermission.remove(player.getGameProfile().getId());
-		packet = new DataCheckerPermissionPacket(permission);
+		packet = new DataCheckerPackets.Permission(permission);
 		PacketDistributor.PLAYER.with(player).send(packet);
 	}
 	

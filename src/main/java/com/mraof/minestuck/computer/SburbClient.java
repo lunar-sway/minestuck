@@ -4,9 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.network.computer.CloseRemoteSburbConnectionPacket;
-import com.mraof.minestuck.network.computer.CloseSburbConnectionPacket;
+import com.mraof.minestuck.network.computer.CloseSburbConnectionPackets;
 import com.mraof.minestuck.network.computer.ConnectToSburbServerPacket;
-import com.mraof.minestuck.network.computer.ResumeSburbConnectionPacket;
+import com.mraof.minestuck.network.computer.ResumeSburbConnectionPackets;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.Minecraft;
@@ -68,7 +68,7 @@ public class SburbClient extends ButtonListProgram
 	{
 		switch(buttonName)
 		{
-			case RESUME_BUTTON -> PacketDistributor.SERVER.noArg().send(ResumeSburbConnectionPacket.asClient(be));
+			case RESUME_BUTTON -> PacketDistributor.SERVER.noArg().send(ResumeSburbConnectionPackets.asClient(be));
 			case CONNECT_BUTTON -> PacketDistributor.SERVER.noArg().send(ConnectToSburbServerPacket.create(be, (Integer) data[1]));
 			case CLOSE_BUTTON ->
 			{
@@ -76,7 +76,7 @@ public class SburbClient extends ButtonListProgram
 				if(!nbt.getBoolean("isResuming") && !nbt.getBoolean("connectedToServer"))
 					PacketDistributor.SERVER.noArg().send(CloseRemoteSburbConnectionPacket.asClient(be));
 				else
-					PacketDistributor.SERVER.noArg().send(CloseSburbConnectionPacket.asClient(be));
+					PacketDistributor.SERVER.noArg().send(CloseSburbConnectionPackets.asClient(be));
 			}
 			case SELECT_COLOR -> Minecraft.getInstance().setScreen(new ColorSelectorScreen(be));
 		}

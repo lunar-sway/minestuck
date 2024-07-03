@@ -1,27 +1,31 @@
 package com.mraof.minestuck.network;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPlayPayloadHandler;
 import net.neoforged.neoforge.network.registration.IDirectionAwarePayloadHandlerBuilder;
 
-public interface MSPacket
+import java.util.Optional;
+
+public final class MSPacket
 {
-	@Deprecated	// Generally bad design to write multi-purpose packets. Such a packet should *generally* be written as several types of packets instead.
-	interface PlayToBoth extends PlayToClient, PlayToServer
+	@SuppressWarnings("resource")
+	public static <T> Optional<T> getAccessibleBlockEntity(ServerPlayer player, BlockPos pos, Class<T> castClass)
 	{
-		void execute();
+		if(!player.level().isAreaLoaded(pos, 0) || player.distanceToSqr(Vec3.atCenterOf(pos)) > 8 * 8)
+			return Optional.empty();
 		
-		void execute(ServerPlayer player);
+		BlockEntity blockEntity = player.level().getBlockEntity(pos);
+		if(!castClass.isInstance(blockEntity))
+			return Optional.empty();
 		
-		static <P extends PlayToBoth> void handlerBoth(IDirectionAwarePayloadHandlerBuilder<P, IPlayPayloadHandler<P>> builder)
-		{
-			PlayToClient.handler(builder);
-			PlayToServer.handler(builder);
-		}
+		return Optional.of(castClass.cast(blockEntity));
 	}
 	
-	interface PlayToClient extends CustomPacketPayload
+	public interface PlayToClient extends CustomPacketPayload
 	{
 		void execute();
 		
@@ -31,7 +35,7 @@ public interface MSPacket
 		}
 	}
 	
-	interface PlayToServer extends CustomPacketPayload
+	public interface PlayToServer extends CustomPacketPayload
 	{
 		void execute(ServerPlayer player);
 		

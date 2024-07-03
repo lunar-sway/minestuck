@@ -57,35 +57,37 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof StructureCoreBlockEntity structureCore))
+			return InteractionResult.FAIL;
+		
+		if(player.isCrouching())
 		{
-			if(level.getBlockEntity(pos) instanceof StructureCoreBlockEntity structureCore)
+			structureCore.prepForUpdate(); //sets tickCycle to 600 so next tick an update will occur
+			
+			boolean startedOffActive = state.getValue(ACTIVE);
+			
+			if(startedOffActive)
 			{
-				if(player.isCrouching())
-				{
-					structureCore.prepForUpdate(); //sets tickCycle to 600 so next tick an update will occur
-					
-					boolean startedOffActive = state.getValue(ACTIVE);
-					
-					if(startedOffActive)
-					{
-						level.setBlockAndUpdate(pos, state.cycle(ACTIVE).setValue(POWERED, false));
-						level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
-					} else
-					{
-						level.setBlockAndUpdate(pos, state.cycle(ACTIVE));
-						level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
-					}
-				} else if(level.isClientSide && !player.isCrouching())
-				{
-					MSScreenFactories.displayStructureCoreScreen(structureCore);
-				}
-				
-				return InteractionResult.sidedSuccess(level.isClientSide);
+				level.setBlockAndUpdate(pos, state.cycle(ACTIVE).setValue(POWERED, false));
+				level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
+			} else
+			{
+				level.setBlockAndUpdate(pos, state.cycle(ACTIVE));
+				level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
 			}
 		}
 		
-		return InteractionResult.FAIL;
+		if(!player.isCrouching() && level.isClientSide)
+		{
+			MSScreenFactories.displayStructureCoreScreen(structureCore);
+		}
+		
+		return InteractionResult.sidedSuccess(level.isClientSide);
+	}
+	
+	public static boolean canInteract(Player player)
+	{
+		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
 	@SuppressWarnings("deprecation")

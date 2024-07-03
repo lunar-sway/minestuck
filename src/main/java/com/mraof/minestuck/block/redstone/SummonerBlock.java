@@ -50,35 +50,31 @@ public class SummonerBlock extends Block implements EntityBlock
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof SummonerBlockEntity summoner))
+			return InteractionResult.PASS;
+		
+		ItemStack stackIn = player.getItemInHand(handIn);
+		
+		if(stackIn.getItem() instanceof SpawnEggItem eggItem)
 		{
-			ItemStack stackIn = player.getItemInHand(handIn);
-			
-			if(stackIn.getItem() instanceof SpawnEggItem eggItem)
+			if(!level.isClientSide)
 			{
-				if(level.getBlockEntity(pos) instanceof SummonerBlockEntity summonerTE)
-				{
-					
-					if(!level.isClientSide)
-					{
-						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()));
-						player.displayClientMessage(Component.translatable(SUMMON_TYPE_CHANGE, BuiltInRegistries.ENTITY_TYPE.getKey(eggItem.getType(stackIn.getTag()))), true);
-					}
-					
-					level.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
-				}
-			} else if(level.isClientSide)
-			{
-				if(level.getBlockEntity(pos) instanceof SummonerBlockEntity be)
-				{
-					MSScreenFactories.displaySummonerScreen(be);
-				}
+				summoner.setSummonedEntity(eggItem.getType(stackIn.getTag()));
+				player.displayClientMessage(Component.translatable(SUMMON_TYPE_CHANGE, BuiltInRegistries.ENTITY_TYPE.getKey(eggItem.getType(stackIn.getTag()))), true);
 			}
 			
-			return InteractionResult.SUCCESS;
+			level.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
+		} else if(level.isClientSide)
+		{
+			MSScreenFactories.displaySummonerScreen(summoner);
 		}
 		
-		return InteractionResult.PASS;
+		return InteractionResult.SUCCESS;
+	}
+	
+	public static boolean canInteract(Player player)
+	{
+		return player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
 	@SuppressWarnings("deprecation")

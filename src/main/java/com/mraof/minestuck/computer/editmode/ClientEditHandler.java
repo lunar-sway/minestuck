@@ -7,7 +7,7 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.network.ClientEditPacket;
+import com.mraof.minestuck.network.editmode.ClientEditPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSTags;
@@ -51,8 +51,7 @@ public final class ClientEditHandler
 	
 	public static void onKeyPressed()
 	{
-		ClientEditPacket packet = ClientEditPacket.exit();
-		PacketDistributor.SERVER.noArg().send(packet);
+		PacketDistributor.SERVER.noArg().send(new ClientEditPackets.Exit());
 	}
 	
 	@SubscribeEvent

@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
-import com.mraof.minestuck.network.AreaEffectPacket;
+import com.mraof.minestuck.network.block.AreaEffectSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -161,7 +161,7 @@ public class AreaEffectScreen extends Screen
 		
 		if(validInput)
 		{
-			PacketDistributor.SERVER.noArg().send(new AreaEffectPacket(getEffect(effectTextField.getValue()), Mth.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, be.getBlockPos()));
+			PacketDistributor.SERVER.noArg().send(new AreaEffectSettingsPacket(getEffect(effectTextField.getValue()), Mth.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, be.getBlockPos()));
 			onClose();
 		}
 		

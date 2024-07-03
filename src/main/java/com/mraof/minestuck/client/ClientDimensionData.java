@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.data.LandTypesDataPacket;
+import com.mraof.minestuck.network.LandTypesDataPacket;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -61,6 +61,6 @@ public class ClientDimensionData
 	public static void receivePacket(LandTypesDataPacket packet)
 	{
 		landTypes.clear();
-		landTypes.putAll(packet.getTypes());
+		landTypes.putAll(packet.types());
 	}
 }

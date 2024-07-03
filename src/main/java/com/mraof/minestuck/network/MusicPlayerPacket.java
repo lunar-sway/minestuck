@@ -7,14 +7,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
-public class MusicPlayerPacket implements MSPacket.PlayToClient
+public record MusicPlayerPacket(int entityID, EnumCassetteType cassetteType, float volume, float pitch) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("music_player");
-	
-	private final int entityID;
-	private final EnumCassetteType cassetteType;
-	private final float volume;
-	private final float pitch;
 	
 	/**
 	 * Creates a packet to the client for starting a cassette music track played by a specified player, and stopping the previous music track played by that player if there was any.
@@ -32,14 +27,6 @@ public class MusicPlayerPacket implements MSPacket.PlayToClient
 		return new MusicPlayerPacket(entity.getId(), cassetteType, volume, pitch);
 	}
 	
-	public MusicPlayerPacket(int entityID, EnumCassetteType cassetteType, float volume, float pitch)
-	{
-		this.entityID = entityID;
-		this.cassetteType = cassetteType;
-		this.volume = volume;
-		this.pitch = pitch;
-	}
-	
 	@Override
 	public ResourceLocation id()
 	{
@@ -52,7 +39,7 @@ public class MusicPlayerPacket implements MSPacket.PlayToClient
 		buffer.writeInt(entityID);
 		buffer.writeFloat(volume);
 		buffer.writeFloat(pitch);
-		buffer.writeInt(cassetteType.ordinal());
+		buffer.writeEnum(cassetteType);
 	}
 	
 	public static MusicPlayerPacket read(FriendlyByteBuf buffer)
@@ -60,7 +47,7 @@ public class MusicPlayerPacket implements MSPacket.PlayToClient
 		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
 		float volume = buffer.readFloat();
 		float pitch = buffer.readFloat();
-		EnumCassetteType cassetteType = EnumCassetteType.values()[buffer.readInt()];
+		EnumCassetteType cassetteType = buffer.readEnum(EnumCassetteType.class);
 		
 		return new MusicPlayerPacket(entityID, cassetteType, volume, pitch);
 	}

@@ -6,7 +6,7 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
+import com.mraof.minestuck.network.computer.SkaianetInfoPackets;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.*;
@@ -180,7 +180,7 @@ public final class SburbPlayerData
 	{
 		ServerPlayer player = this.playerId.getPlayer(this.mcServer);
 		if(player != null)
-			PacketDistributor.PLAYER.with(player).send(new SkaianetInfoPacket.HasEntered(this.hasEntered));
+			PacketDistributor.PLAYER.with(player).send(new SkaianetInfoPackets.HasEntered(this.hasEntered));
 	}
 	
 	public boolean hasGivenItem(DeployEntry item)

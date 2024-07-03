@@ -9,21 +9,13 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.Objects;
 
-public class GristRejectAnimationPacket implements MSPacket.PlayToClient
+public record GristRejectAnimationPacket(int entityID) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("grist_reject_animation");
-	
-	private final int entityID;
 	
 	public static GristRejectAnimationPacket createPacket(GristEntity entity)
 	{
 		return new GristRejectAnimationPacket(entity.getId());
-	}
-	
-	private GristRejectAnimationPacket(int entityID)
-	{
-		this.entityID = entityID;
-		
 	}
 	
 	@Override
@@ -54,5 +46,4 @@ public class GristRejectAnimationPacket implements MSPacket.PlayToClient
 			gristEntity.setAnimationFromPacket();
 		}
 	}
-	
 }

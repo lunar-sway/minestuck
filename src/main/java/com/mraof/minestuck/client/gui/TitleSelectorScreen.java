@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.network.TitleSelectPacket;
+import com.mraof.minestuck.network.TitleSelectPackets;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
@@ -116,13 +116,13 @@ public class TitleSelectorScreen extends Screen
 	
 	private void select()
 	{
-		PacketDistributor.SERVER.noArg().send(new TitleSelectPacket(new Title(currentClass, currentAspect)));
+		PacketDistributor.SERVER.noArg().send(TitleSelectPackets.PickTitle.pick(new Title(currentClass, currentAspect)));
 		onClose();
 	}
 	
 	private void random()
 	{
-		PacketDistributor.SERVER.noArg().send(new TitleSelectPacket());
+		PacketDistributor.SERVER.noArg().send(TitleSelectPackets.PickTitle.random());
 		onClose();
 	}
 	

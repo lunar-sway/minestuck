@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.AtheneumMenu;
-import com.mraof.minestuck.network.AtheneumPacket;
+import com.mraof.minestuck.network.editmode.AtheneumPackets;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -66,16 +66,16 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 	{
 		if(xcor >= xOffset + ARROW_X && xcor < xOffset + ARROW_X + 18)
 		{
-			AtheneumPacket.Scroll packet = null;
+			AtheneumPackets.Scroll packet = null;
 			if(less && ycor >= yOffset + UP_ARROW_Y && ycor < yOffset + UP_ARROW_Y + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = new AtheneumPacket.Scroll(true);
+				packet = new AtheneumPackets.Scroll(true);
 			}
 			else if(more && ycor >= yOffset + DOWN_ARROW_Y && ycor < yOffset + DOWN_ARROW_Y + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = new AtheneumPacket.Scroll(false);
+				packet = new AtheneumPackets.Scroll(false);
 			}
 			if(packet != null)
 			{
@@ -93,11 +93,11 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 		{
 			if(mouseY >= yOffset && mouseY < yOffset + guiHeight)
 			{
-				AtheneumPacket.Scroll packet = null;
+				AtheneumPackets.Scroll packet = null;
 				if(less && scrollY > 0)
-					packet = new AtheneumPacket.Scroll(true);
+					packet = new AtheneumPackets.Scroll(true);
 				else if(more && scrollY < 0)
-					packet = new AtheneumPacket.Scroll(false);
+					packet = new AtheneumPackets.Scroll(false);
 				
 				if(packet != null)
 				{

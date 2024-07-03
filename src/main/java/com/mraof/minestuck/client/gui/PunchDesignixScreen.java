@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
-import com.mraof.minestuck.network.PunchDesignixPacket;
+import com.mraof.minestuck.network.block.TriggerPunchDesignixPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -72,8 +72,7 @@ public class PunchDesignixScreen extends Screen
 		{
 			String captcha = captchaTextField.getValue();
 			be.setCaptcha(captcha);
-			PunchDesignixPacket packet = new PunchDesignixPacket(be.getBlockPos(), captcha);
-			PacketDistributor.SERVER.noArg().send(packet);
+			PacketDistributor.SERVER.noArg().send(new TriggerPunchDesignixPacket(captcha, be.getBlockPos()));
 			this.minecraft.setScreen(null);
 		}
 	}

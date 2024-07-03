@@ -79,27 +79,26 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof AreaEffectBlockEntity be))
+			return InteractionResult.PASS;
+		
+		ItemStack heldItemStack = player.getItemInHand(hand);
+		
+		if(heldItemStack.getItem() instanceof PotionItem)
 		{
-			if(level.getBlockEntity(pos) instanceof AreaEffectBlockEntity be)
-			{
-				
-				ItemStack heldItemStack = player.getItemInHand(hand);
-				
-				if(heldItemStack.getItem() instanceof PotionItem)
-				{
-					clickWithPotion(level, pos, player, be, heldItemStack);
-				} else
-				{
-					if(level.isClientSide)
-						MSScreenFactories.displayAreaEffectScreen(be);
-				}
-				
-				return InteractionResult.sidedSuccess(level.isClientSide);
-			}
+			clickWithPotion(level, pos, player, be, heldItemStack);
+		} else
+		{
+			if(level.isClientSide)
+				MSScreenFactories.displayAreaEffectScreen(be);
 		}
 		
-		return InteractionResult.PASS;
+		return InteractionResult.sidedSuccess(level.isClientSide);
+	}
+	
+	public static boolean canInteract(Player player)
+	{
+		return player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
 	private void clickWithPotion(Level level, BlockPos pos, Player player, AreaEffectBlockEntity be, ItemStack potionStack)

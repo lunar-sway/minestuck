@@ -9,16 +9,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public class CloseRemoteSburbConnectionPacket implements MSPacket.PlayToServer
+public record CloseRemoteSburbConnectionPacket(BlockPos computerPos) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("close_remote_sburb_connection");
-	
-	private final BlockPos pos;
-	
-	private CloseRemoteSburbConnectionPacket(BlockPos pos)
-	{
-		this.pos = pos;
-	}
 	
 	public static CloseRemoteSburbConnectionPacket asClient(ComputerBlockEntity be)
 	{
@@ -34,7 +27,7 @@ public class CloseRemoteSburbConnectionPacket implements MSPacket.PlayToServer
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeBlockPos(pos);
+		buffer.writeBlockPos(computerPos);
 	}
 	
 	public static CloseRemoteSburbConnectionPacket read(FriendlyByteBuf buffer)
@@ -46,7 +39,7 @@ public class CloseRemoteSburbConnectionPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> ComputerInteractions.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
+				.ifPresent(computer -> ComputerInteractions.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
 	}
 }

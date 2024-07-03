@@ -2,7 +2,7 @@ package com.mraof.minestuck.world;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.data.LandTypesDataPacket;
+import com.mraof.minestuck.network.LandTypesDataPacket;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;

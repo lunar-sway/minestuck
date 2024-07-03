@@ -1,6 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.network.DataCheckerPacket;
+import com.mraof.minestuck.network.DataCheckerPackets;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -29,7 +29,7 @@ public class DataCheckerManager
 		if(DataCheckerPermission.hasPermission(player))
 		{
 			CompoundTag data = createDataTag(player.server, SessionHandler.get(player.server));
-			PacketDistributor.PLAYER.with(player).send(DataCheckerPacket.data(index, data));
+			PacketDistributor.PLAYER.with(player).send(new DataCheckerPackets.Data(index, data));
 		}
 	}
 	/**

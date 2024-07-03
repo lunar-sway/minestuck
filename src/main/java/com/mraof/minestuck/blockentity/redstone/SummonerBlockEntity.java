@@ -1,8 +1,9 @@
 package com.mraof.minestuck.blockentity.redstone;
 
 import com.mraof.minestuck.block.redstone.SummonerBlock;
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.network.block.SummonerSettingsPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -92,6 +94,9 @@ public class SummonerBlockEntity extends BlockEntity
 	public void setSummonedEntity(EntityType<?> entityTypeIn)
 	{
 		this.summonType = entityTypeIn;
+		setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
 	}
 	
 	public EntityType<?> getSummonedEntity()
@@ -109,6 +114,17 @@ public class SummonerBlockEntity extends BlockEntity
 	public int getSummonRange()
 	{
 		return summonRange;
+	}
+	
+	public void handleSettingsPacket(SummonerSettingsPacket packet)
+	{
+		if(packet.entityType() != null)
+			setSummonedEntity(packet.entityType());
+		
+		setSummonRange(packet.summonRange());
+		setChanged();
+		
+		getLevel().setBlock(getBlockPos(), getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, packet.isUntriggerable()), Block.UPDATE_ALL);
 	}
 	
 	@Override

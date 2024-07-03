@@ -2,6 +2,7 @@ package com.mraof.minestuck.blockentity.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.network.block.BlockTeleporterSettingsPacket;
 import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
@@ -75,9 +77,13 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 		return this.teleportOffset;
 	}
 	
-	public void setTeleportOffset(BlockPos teleportOffset)
+	public void handleSettingsPacket(BlockTeleporterSettingsPacket packet)
 	{
-		this.teleportOffset = teleportOffset;
+		this.teleportOffset = packet.offsetPos();
+		
+		setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
 	}
 	
 	@Override

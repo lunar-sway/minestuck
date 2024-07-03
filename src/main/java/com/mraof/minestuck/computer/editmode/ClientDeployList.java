@@ -2,7 +2,7 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.network.ServerEditPacket;
+import com.mraof.minestuck.network.editmode.ServerEditPackets;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -18,7 +18,7 @@ public final class ClientDeployList
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static void load(ServerEditPacket.UpdateDeployList packet)
+	public static void load(ServerEditPackets.UpdateDeployList packet)
 	{
 		if(entryList == null)
 			entryList = new ArrayList<>();
