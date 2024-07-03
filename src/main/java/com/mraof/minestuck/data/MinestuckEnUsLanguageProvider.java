@@ -1995,7 +1995,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntityType(MSEntityTypes.MIDNIGHT_CREW_POSTER, "Midnight Crew Poster");
 		addEntityType(MSEntityTypes.SBAHJ_POSTER, "SBAHJ Poster");
 		addEntityType(MSEntityTypes.SHOP_POSTER, "Shop Sign");
-		addEntityType(MSEntityTypes.HOLOGRAM, "Hologram");
 		addEntityType(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
 		
 		addGristType(GristTypes.BUILD, "Build");
