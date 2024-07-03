@@ -17,11 +17,11 @@ public class SimpleTemplatePiece extends TemplateStructurePiece
 {
 	public SimpleTemplatePiece(StructureTemplateManager pStructureManager, ResourceLocation pLocation, BlockPos pPos, Rotation pRotation)
 	{
-		super(MSStructurePieces.SIMPLE_TEMPLATE.get(), 0, pStructureManager, pLocation, pLocation.toString(), makeSettings(pRotation), pPos);
+		super(MSStructures.SIMPLE_TEMPLATE_PIECE.get(), 0, pStructureManager, pLocation, pLocation.toString(), makeSettings(pRotation), pPos);
 	}
 	
 	public SimpleTemplatePiece(StructureTemplateManager pStructureManager, CompoundTag pTag) {
-		super(MSStructurePieces.SIMPLE_TEMPLATE.get(), pTag, pStructureManager, id -> makeSettings(Rotation.valueOf(pTag.getString("Rot"))));
+		super(MSStructures.SIMPLE_TEMPLATE_PIECE.get(), pTag, pStructureManager, id -> makeSettings(Rotation.valueOf(pTag.getString("Rot"))));
 	}
 	
 	private static StructurePlaceSettings makeSettings(Rotation pRotation) {

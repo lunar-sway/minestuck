@@ -37,7 +37,7 @@ public final class MinestuckGristCostsProvider
 		SourceGristCostBuilder.of(Items.SUSPICIOUS_SAND).source(Items.SAND).grist(DIAMOND, 10).buildFor(recipeSaver, Minestuck.MOD_ID);
 		SourceGristCostBuilder.of(Items.SUSPICIOUS_GRAVEL).source(Items.GRAVEL).grist(DIAMOND, 10).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.GLASS).grist(BUILD, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.TERRACOTTA).source(Items.CLAY).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ItemTags.TERRACOTTA).source(Items.CLAY).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.CLAY_BALL).grist(SHALE, 1).grist(BUILD, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.FLINT).grist(BUILD, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.POINTED_DRIPSTONE).grist(BUILD, 4).grist(AMBER, 3).buildFor(recipeSaver, Minestuck.MOD_ID);

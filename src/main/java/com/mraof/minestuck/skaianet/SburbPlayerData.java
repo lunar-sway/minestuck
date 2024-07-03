@@ -1,5 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
@@ -8,7 +9,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -73,7 +73,8 @@ public final class SburbPlayerData
 		}
 		
 		this.artifactType = ArtifactType.fromInt(tag.getInt("artifact"));
-		this.baseGrist = MSNBTUtil.readGristType(tag, "base_grist", () -> SburbHandler.generateGristType(new Random()));
+		this.baseGrist = GristHelper.parseGristType(tag.get("base_grist"))
+				.orElseGet(() -> SburbHandler.generateGristType(new Random()));
 	}
 	
 	void write(CompoundTag tag)
@@ -94,7 +95,7 @@ public final class SburbPlayerData
 		}
 		
 		tag.putInt("artifact", this.artifactType.ordinal());
-		MSNBTUtil.writeGristType(tag, "base_grist", this.baseGrist);
+		tag.put("base_grist", GristHelper.encodeGristType(this.baseGrist));
 	}
 	
 	void readOldData(CompoundTag tag)
@@ -116,7 +117,8 @@ public final class SburbPlayerData
 		}
 		
 		artifactType = ArtifactType.fromInt(tag.getInt("artifact"));
-		baseGrist = MSNBTUtil.readGristType(tag, "base_grist", () -> SburbHandler.generateGristType(new Random()));
+		baseGrist = GristHelper.parseGristType(tag.get("base_grist"))
+				.orElseGet(() -> SburbHandler.generateGristType(new Random()));
 	}
 	
 	public PlayerIdentifier playerId()

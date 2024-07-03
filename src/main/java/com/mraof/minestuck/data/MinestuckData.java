@@ -52,7 +52,7 @@ public final class MinestuckData
 		
 		gen.addProvider(event.includeServer(), new ComputerThemeProvider(output));
 		
-		gen.addProvider(event.includeServer(), new BoondollarPricingProvider(output, Minestuck.MOD_ID));
+		gen.addProvider(event.includeServer(), new BoondollarPriceProvider(output, Minestuck.MOD_ID));
 		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output));
 		gen.addProvider(event.includeServer(), new MSLootModifiers(output));
 		gen.addProvider(event.includeServer(), MSAdvancementProvider.create(output, lookupProvider, fileHelper));
@@ -68,6 +68,8 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider));
+		
+		gen.addProvider(event.includeServer(), new BetterCombatProvider(output));
 	}
 	
 	private static RegistrySetBuilder registrySetBuilder()
@@ -78,8 +80,8 @@ public final class MinestuckData
 				.add(Registries.CONFIGURED_FEATURE, MSConfiguredFeatureProvider::register)
 				.add(Registries.PLACED_FEATURE, MSPlacedFeatureProvider::register)
 				.add(Registries.BIOME, MSBiomeProvider::register)
-				.add(Registries.STRUCTURE, MSStructureProvider::register)
-				.add(Registries.STRUCTURE_SET, MSStructureSetProvider::register)
+				.add(Registries.STRUCTURE, MSStructureProvider::registerStructures)
+				.add(Registries.STRUCTURE_SET, MSStructureProvider::registerStructureSets)
 				.add(Registries.DAMAGE_TYPE, MSDamageTypeProvider::register)
 				.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifierProvider::register);
 	}

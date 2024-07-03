@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.world.gen.LandStructureState;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
-import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
@@ -42,7 +41,7 @@ public final class LandGatePlacement extends StructurePlacement
 	@Override
 	public StructurePlacementType<LandGatePlacement> type()
 	{
-		return MSStructurePlacements.LAND_GATE.get();
+		return MSStructures.LAND_GATE_PLACEMENT.get();
 	}
 	
 	@Override

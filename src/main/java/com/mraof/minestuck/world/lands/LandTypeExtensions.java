@@ -9,7 +9,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -23,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -238,9 +238,9 @@ public final class LandTypeExtensions
 	{
 		public static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(
-						PreservingOptionalFieldCodec.forList(FeatureExtension.CODEC.listOf(), "features").forGetter(ParsedExtension::features),
-						PreservingOptionalFieldCodec.forList(CarverExtension.CODEC.listOf(), "carvers").forGetter(ParsedExtension::carvers),
-						PreservingOptionalFieldCodec.forList(MobSpawnExtension.CODEC.listOf(), "mob_spawns").forGetter(ParsedExtension::mobSpawns)
+						ExtraCodecs.strictOptionalField(FeatureExtension.CODEC.listOf(), "features", Collections.emptyList()).forGetter(ParsedExtension::features),
+						ExtraCodecs.strictOptionalField(CarverExtension.CODEC.listOf(), "carvers", Collections.emptyList()).forGetter(ParsedExtension::carvers),
+						ExtraCodecs.strictOptionalField(MobSpawnExtension.CODEC.listOf(), "mob_spawns", Collections.emptyList()).forGetter(ParsedExtension::mobSpawns)
 				).apply(instance, ParsedExtension::new));
 		
 		void addAllTo(ImmutableList.Builder<Extension> builder)

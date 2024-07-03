@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
+import com.mraof.minestuck.block.CustomVoxelShape;
 import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;

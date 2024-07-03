@@ -19,11 +19,11 @@ public final class PinkTowerPiece extends TemplateStructurePiece implements Piec
 {
 	public PinkTowerPiece(StructureTemplateManager pStructureManager, ResourceLocation pLocation, BlockPos pPos, Rotation pRotation)
 	{
-		super(MSStructurePieces.PINK_TOWER.get(), 0, pStructureManager, pLocation, pLocation.toString(), makeSettings(pRotation), pPos);
+		super(MSStructures.PINK_TOWER_PIECE.get(), 0, pStructureManager, pLocation, pLocation.toString(), makeSettings(pRotation), pPos);
 	}
 	
 	public PinkTowerPiece(StructureTemplateManager pStructureManager, CompoundTag pTag) {
-		super(MSStructurePieces.PINK_TOWER.get(), pTag, pStructureManager, id -> makeSettings(Rotation.valueOf(pTag.getString("Rot"))));
+		super(MSStructures.PINK_TOWER_PIECE.get(), pTag, pStructureManager, id -> makeSettings(Rotation.valueOf(pTag.getString("Rot"))));
 	}
 	
 	private static StructurePlaceSettings makeSettings(Rotation pRotation) {

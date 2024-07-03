@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.structure.village;
 
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import net.minecraft.core.BlockPos;
@@ -45,14 +45,14 @@ public class IguanaVillagePieces
 		
 		SmallTent1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.SMALL_VILLAGE_TENT_1.get(), 0, boundingBox, 1);
+			super(MSStructures.ConsortVillage.SMALL_VILLAGE_TENT_1_PIECE.get(), 0, boundingBox, 1);
 			setOrientation(facing);
 			woolType = 1 + rand.nextInt(3);
 		}
 		
 		public SmallTent1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.SMALL_VILLAGE_TENT_1.get(), nbt, 1);
+			super(MSStructures.ConsortVillage.SMALL_VILLAGE_TENT_1_PIECE.get(), nbt, 1);
 			this.woolType = nbt.getInt("Wool");
 		}
 		
@@ -124,14 +124,14 @@ public class IguanaVillagePieces
 		
 		LargeTent1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.LARGE_VILLAGE_TENT_1.get(), 0, boundingBox, 4);
+			super(MSStructures.ConsortVillage.LARGE_VILLAGE_TENT_1_PIECE.get(), 0, boundingBox, 4);
 			setOrientation(facing);
 			woolType = 1 + rand.nextInt(3);
 		}
 		
 		public LargeTent1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.LARGE_VILLAGE_TENT_1.get(), nbt, 4);
+			super(MSStructures.ConsortVillage.LARGE_VILLAGE_TENT_1_PIECE.get(), nbt, 4);
 			this.woolType = nbt.getInt("Wool");
 		}
 		
@@ -247,14 +247,14 @@ public class IguanaVillagePieces
 		
 		SmallTentStore(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.SMALL_TENT_STORE.get(), 0, boundingBox, 1);
+			super(MSStructures.ConsortVillage.SMALL_TENT_STORE_PIECE.get(), 0, boundingBox, 1);
 			setOrientation(facing);
 			woolType = 1 + rand.nextInt(3);
 		}
 		
 		public SmallTentStore(CompoundTag nbt)
 		{
-			super(MSStructurePieces.SMALL_TENT_STORE.get(), nbt, 1);
+			super(MSStructures.ConsortVillage.SMALL_TENT_STORE_PIECE.get(), nbt, 1);
 			this.woolType = nbt.getInt("Wool");
 		}
 		

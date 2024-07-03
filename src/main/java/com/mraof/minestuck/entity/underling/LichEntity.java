@@ -8,7 +8,6 @@ import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -21,10 +20,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -133,10 +129,10 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controller)
 	{
-		controller.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, LichEntity::idleAnimation));
-		controller.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
-		controller.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
-		controller.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2.25, LichEntity::attackAnimation));
+		controller.add(new AnimationController<>(this, "idleAnimation", LichEntity::idleAnimation));
+		controller.add(new AnimationController<>(this, "walkAnimation", LichEntity::walkAnimation));
+		controller.add(new AnimationController<>(this, "deathAnimation", LichEntity::deathAnimation));
+		controller.add(new AnimationController<>(this, "attackAnimation", LichEntity::attackAnimation).setAnimationSpeed(2.25));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<LichEntity> state)

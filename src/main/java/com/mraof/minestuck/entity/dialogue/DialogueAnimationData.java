@@ -3,12 +3,12 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 
 public record DialogueAnimationData(String emotion, int spriteHeight, int spriteWidth, int xOffset, int yOffset, float scale)
 {
@@ -23,12 +23,12 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 	public static final DialogueAnimationData DEFAULT_ANIMATION = new DialogueAnimationData(GENERIC_EMOTION, DEFAULT_SPRITE_HEIGHT, DEFAULT_SPRITE_WIDTH, 0, 0, 1.0F);
 	
 	public static Codec<DialogueAnimationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", GENERIC_EMOTION).forGetter(DialogueAnimationData::emotion),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "height", DEFAULT_SPRITE_HEIGHT).forGetter(DialogueAnimationData::spriteHeight),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "width", DEFAULT_SPRITE_WIDTH).forGetter(DialogueAnimationData::spriteWidth),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "x_offset", 0).forGetter(DialogueAnimationData::xOffset),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "y_offset", 0).forGetter(DialogueAnimationData::yOffset),
-			PreservingOptionalFieldCodec.withDefault(Codec.FLOAT, "scale", 1.0F).forGetter(DialogueAnimationData::scale)
+			ExtraCodecs.strictOptionalField(Codec.STRING, "emotion", GENERIC_EMOTION).forGetter(DialogueAnimationData::emotion),
+			ExtraCodecs.strictOptionalField(Codec.INT, "height", DEFAULT_SPRITE_HEIGHT).forGetter(DialogueAnimationData::spriteHeight),
+			ExtraCodecs.strictOptionalField(Codec.INT, "width", DEFAULT_SPRITE_WIDTH).forGetter(DialogueAnimationData::spriteWidth),
+			ExtraCodecs.strictOptionalField(Codec.INT, "x_offset", 0).forGetter(DialogueAnimationData::xOffset),
+			ExtraCodecs.strictOptionalField(Codec.INT, "y_offset", 0).forGetter(DialogueAnimationData::yOffset),
+			ExtraCodecs.strictOptionalField(Codec.FLOAT, "scale", 1.0F).forGetter(DialogueAnimationData::scale)
 	).apply(instance, DialogueAnimationData::new));
 	
 	public static DialogueAnimationData read(FriendlyByteBuf buffer)

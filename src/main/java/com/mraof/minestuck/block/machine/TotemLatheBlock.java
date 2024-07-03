@@ -1,13 +1,13 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.block.CustomVoxelShape;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;

@@ -2,14 +2,13 @@ package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -23,10 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -172,10 +168,10 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, GiclopsEntity::idleAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, GiclopsEntity::walkAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 1, GiclopsEntity::attackAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, GiclopsEntity::deathAnimation));
+		controllers.add(new AnimationController<>(this, "idleAnimation", GiclopsEntity::idleAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", GiclopsEntity::walkAnimation));
+		controllers.add(new AnimationController<>(this, "attackAnimation", GiclopsEntity::attackAnimation));
+		controllers.add(new AnimationController<>(this, "deathAnimation", GiclopsEntity::deathAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<GiclopsEntity> state)
