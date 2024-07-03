@@ -2,7 +2,7 @@
   "type": "minestuck:source_grist_cost",
   "grist_cost": {},
   "ingredient": {
-    "tag": "forge:terracotta"
+    "tag": "minecraft:terracotta"
   },
   "sources": [
     "minecraft:clay"

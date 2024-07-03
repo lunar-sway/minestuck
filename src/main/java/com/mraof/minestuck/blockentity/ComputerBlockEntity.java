@@ -8,10 +8,10 @@ import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
+import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnections;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -104,7 +104,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		else if(nbt.contains("theme", Tag.TAG_INT))
 			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(nbt.getInt("theme"));
 		
-		hieroglyphsStored = MSNBTUtil.readBlockSet(nbt, "hieroglyphsStored");
+		hieroglyphsStored = IncompleteSburbCodeItem.readBlockSet(nbt, "hieroglyphsStored");
 		if(nbt.contains("hasParadoxInfoStored"))
 			hasParadoxInfoStored = nbt.getBoolean("hasParadoxInfoStored");
 		if(nbt.contains("blankDisksStored"))
@@ -134,7 +134,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		
-		MSNBTUtil.writeBlockSet(compound, "hieroglyphsStored", hieroglyphsStored);
+		IncompleteSburbCodeItem.writeBlockSet(compound, "hieroglyphsStored", hieroglyphsStored);
 		compound.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
 		
 		compound.putInt("blankDisksStored", blankDisksStored);

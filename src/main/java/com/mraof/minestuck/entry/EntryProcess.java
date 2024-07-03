@@ -317,7 +317,7 @@ public class EntryProcess
 		
 		placeGates(level1);
 		
-		MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), origin.getX() + xDiff, origin.getY() + yDiff, origin.getZ() + zDiff, artifactRange, (byte) 0));
+		MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), origin.getX() + xDiff, origin.getY() + yDiff, origin.getZ() + zDiff, artifactRange));
 	}
 	
 	private static void removeDroppedEntities(ServerPlayer player, ServerLevel level0, AABB entityTeleportBB, List<Entity> entities)

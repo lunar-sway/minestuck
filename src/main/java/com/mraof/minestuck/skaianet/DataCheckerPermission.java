@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -22,24 +22,24 @@ import java.util.Set;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class DataCheckerPermission
+public final class DataCheckerPermission
 {
-	private static Set<UUID> dataCheckerPermission = new HashSet<>();
+	private static final Set<UUID> dataCheckerPermission = new HashSet<>();
 	
 	@SubscribeEvent
-	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+	private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		sendPacket((ServerPlayer) event.getEntity());
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
+	private static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
 	{
 		dataCheckerPermission.remove(event.getEntity().getGameProfile().getId());
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTick(TickEvent.PlayerTickEvent event)
+	private static void onPlayerTick(TickEvent.PlayerTickEvent event)
 	{
 		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer player)
 		{
@@ -49,7 +49,7 @@ public class DataCheckerPermission
 	}
 	
 	@SubscribeEvent
-	public static void serverStopped(ServerStoppedEvent event)
+	private static void serverStopped(ServerStoppedEvent event)
 	{
 		dataCheckerPermission.clear();
 	}
@@ -73,14 +73,14 @@ public class DataCheckerPermission
 	
 	public static boolean hasPermission(ServerPlayer player)
 	{
-		switch(MinestuckConfig.SERVER.dataCheckerPermission.get())
+		return switch(MinestuckConfig.SERVER.dataCheckerPermission.get())
 		{
-			case ANYONE: return true;
-			case OPS: return hasOp(player);
-			case GAMEMODE: return hasGamemodePermission(player);
-			case OPS_OR_GAMEMODE: return hasOp(player) || hasGamemodePermission(player);
-			case NONE: default: return false;
-		}
+			case ANYONE -> true;
+			case OPS -> hasOp(player);
+			case GAMEMODE -> hasGamemodePermission(player);
+			case OPS_OR_GAMEMODE -> hasOp(player) || hasGamemodePermission(player);
+			case NONE -> false;
+		};
 	}
 	
 	private static boolean hasGamemodePermission(ServerPlayer player)

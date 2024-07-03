@@ -1,12 +1,12 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.block.CustomVoxelShape;
 import com.mraof.minestuck.block.DirectionalCustomShapeBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.redstone.ItemMagnetBlockEntity;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;

@@ -1,18 +1,17 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.TotemLatheBlock;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
-import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -428,12 +427,6 @@ public class TotemLatheBlockEntity extends BlockEntity
 	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
-	}
-	
-	private void effects(boolean success)
-	{
-		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
-		WorldEventUtil.dispenserEffect(getLevel(), pos, getFacing(), success);
 	}
 	
 	public boolean isProcessing()

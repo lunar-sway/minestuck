@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;

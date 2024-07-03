@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;

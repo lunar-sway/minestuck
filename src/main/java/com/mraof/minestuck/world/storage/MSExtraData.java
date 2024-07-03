@@ -6,6 +6,7 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -65,8 +66,8 @@ public class MSExtraData extends SavedData
 		ListTag entryTaskList = nbt.getList("entry_tasks", Tag.TAG_COMPOUND);
 		for(int i = 0; i < entryTaskList.size(); i++)
 		{
-			CompoundTag tag = entryTaskList.getCompound(i);
-			data.postEntryTasks.add(new PostEntryTask(tag));
+			PostEntryTask.CODEC.parse(NbtOps.INSTANCE, entryTaskList.getCompound(i))
+					.resultOrPartial(LOGGER::error).ifPresent(data.postEntryTasks::add);
 		}
 		
 		if(nbt.contains("card_captchas", Tag.TAG_COMPOUND))
@@ -85,7 +86,9 @@ public class MSExtraData extends SavedData
 		compound.put("editmode_recovery", editRecoveryList);
 		
 		ListTag entryTaskList = new ListTag();
-		entryTaskList.addAll(postEntryTasks.stream().map(PostEntryTask::write).toList());
+		postEntryTasks.stream()
+				.flatMap(task -> PostEntryTask.CODEC.encodeStart(NbtOps.INSTANCE, task).resultOrPartial(LOGGER::error).stream())
+				.forEach(entryTaskList::add);
 		
 		compound.put("entry_tasks", entryTaskList);
 		

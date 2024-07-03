@@ -1,6 +1,5 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
@@ -10,7 +9,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
-public class DispenserBehaviourUtil
+public final class MSDispenserBehaviours
 {
 	// Add dispenser behaviour for items with classes we do not own
 	public static void registerBehaviours() {
