@@ -92,20 +92,20 @@ public final class StructureBlockRegistry
 		registerBlock("structure_primary_cracked", "structure_primary", Blocks.CRACKED_STONE_BRICKS);
 		registerBlock("structure_primary_column", "structure_primary", MSBlocks.COARSE_STONE_COLUMN.get()); //TODO change to quartz column, determine if used anywhere currently
 		registerBlock("structure_primary_stairs", "structure_primary", Blocks.STONE_BRICK_STAIRS);
-		registerBlock("structure_primary_slab", "structure_primary", Blocks.STONE_BRICK_SLAB, SlabBlock.class);
-		registerBlock("structure_primary_wall", "structure_primary", Blocks.STONE_BRICK_WALL, WallBlock.class);
+		registerBlock("structure_primary_slab", "structure_primary", Blocks.STONE_BRICK_SLAB); //TODO when using SlabBlock class param "The class specified must be the same or a superclass to the class used by the parent "structure_primary""
+		registerBlock("structure_primary_wall", "structure_primary", Blocks.STONE_BRICK_WALL);
 		
 		//TODO consider renaming mossy to something more neutral like contaminated or overgrown
 		registerBlock("structure_primary_mossy", "structure_primary", Blocks.MOSSY_STONE_BRICKS);
 		registerBlock("structure_primary_mossy_stairs", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_STAIRS);
-		registerBlock("structure_primary_mossy_slab", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_SLAB, SlabBlock.class);
-		registerBlock("structure_primary_mossy_wall", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_WALL, WallBlock.class);
+		registerBlock("structure_primary_mossy_slab", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_SLAB);
+		registerBlock("structure_primary_mossy_wall", "structure_primary_mossy", Blocks.MOSSY_STONE_BRICK_WALL);
 		
 		registerBlock("structure_secondary", "structure_primary", Blocks.NETHER_BRICKS);
 		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.RED_NETHER_BRICKS); //TODO consider cracked variant
 		registerBlock("structure_secondary_stairs", "structure_secondary", Blocks.NETHER_BRICK_STAIRS);
-		registerBlock("structure_secondary_slab", "structure_secondary", Blocks.NETHER_BRICK_SLAB, SlabBlock.class);
-		registerBlock("structure_secondary_wall", "structure_secondary", Blocks.NETHER_BRICK_WALL, WallBlock.class);
+		registerBlock("structure_secondary_slab", "structure_secondary", Blocks.NETHER_BRICK_SLAB);
+		registerBlock("structure_secondary_wall", "structure_secondary", Blocks.NETHER_BRICK_WALL);
 		
 		//TODO add button/ladder/pressure plate/sign
 		registerBlock("structure_wood", Blocks.OAK_WOOD.defaultBlockState());
@@ -115,11 +115,11 @@ public final class StructureBlockRegistry
 		registerBlock("structure_planks", Blocks.OAK_PLANKS.defaultBlockState());
 		registerBlock("structure_bookshelf", Blocks.BOOKSHELF.defaultBlockState());
 		registerBlock("structure_planks_stairs", Blocks.OAK_STAIRS.defaultBlockState());
-		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.defaultBlockState(), SlabBlock.class);
-		registerBlock("structure_planks_fence", Blocks.OAK_FENCE.defaultBlockState(), FenceBlock.class);
-		registerBlock("structure_planks_fence_gate", Blocks.OAK_FENCE_GATE.defaultBlockState(), FenceGateBlock.class);
-		registerBlock("structure_planks_door", Blocks.OAK_DOOR.defaultBlockState(), DoorBlock.class);
-		registerBlock("structure_planks_trapdoor", Blocks.OAK_TRAPDOOR.defaultBlockState(), TrapDoorBlock.class);
+		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.defaultBlockState());
+		registerBlock("structure_planks_fence", Blocks.OAK_FENCE.defaultBlockState());
+		registerBlock("structure_planks_fence_gate", Blocks.OAK_FENCE_GATE.defaultBlockState());
+		registerBlock("structure_planks_door", Blocks.OAK_DOOR.defaultBlockState());
+		registerBlock("structure_planks_trapdoor", Blocks.OAK_TRAPDOOR.defaultBlockState());
 		
 		registerBlock("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
 		registerBlock("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.defaultBlockState());

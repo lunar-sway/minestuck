@@ -39,30 +39,53 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
+		registry.setBlock("cruxite_ore", MSBlocks.BLACK_STONE_CRUXITE_ORE);
+		registry.setBlock("uranium_ore", MSBlocks.BLACK_STONE_URANIUM_ORE);
 		registry.setBlock("ground", MSBlocks.BLACK_STONE);
 		registry.setBlock("surface", MSBlocks.IGNEOUS_STONE);
 		registry.setBlock("upper", MSBlocks.PUMICE_STONE);
 		registry.setBlock("ocean", MSBlocks.MOLTEN_AMBER);
+		
 		registry.setBlock("structure_primary", MSBlocks.BLACK_STONE_BRICKS);
 		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_BLACK_STONE_BRICKS);
 		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_BLACK_STONE_BRICKS);
-		registry.setBlock("structure_primary_mossy", MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
 		registry.setBlock("structure_primary_column", MSBlocks.BLACK_STONE_COLUMN);
 		registry.setBlock("structure_primary_stairs", MSBlocks.BLACK_STONE_BRICK_STAIRS);
+		registry.setBlock("structure_primary_slab", MSBlocks.BLACK_STONE_BRICK_SLAB);
+		registry.setBlock("structure_primary_wall", MSBlocks.BLACK_STONE_BRICK_WALL);
+		
+		registry.setBlock("structure_primary_mossy", MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		registry.setBlock("structure_primary_mossy_stairs", MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS);
+		registry.setBlock("structure_primary_mossy_slab", MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB);
+		registry.setBlock("structure_primary_mossy_wall", MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL);
+		
 		registry.setBlock("structure_secondary", MSBlocks.POLISHED_IGNEOUS_BRICKS);
 		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_IGNEOUS_STONE);
 		registry.setBlock("structure_secondary_stairs", MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS);
-		registry.setBlock("light_block", MSBlocks.HEAT_LAMP);
-		registry.setBlock("fall_fluid", Blocks.WATER);
+		registry.setBlock("structure_secondary_slab", MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB);
+		registry.setBlock("structure_secondary_wall", MSBlocks.POLISHED_IGNEOUS_BRICK_WALL);
+		
+		registry.setBlock("structure_wood", MSBlocks.CINDERED_WOOD);
+		registry.setBlock("structure_log", MSBlocks.CINDERED_LOG);
+		registry.setBlock("structure_stripped_wood", MSBlocks.STRIPPED_CINDERED_WOOD);
+		registry.setBlock("structure_stripped_log", MSBlocks.STRIPPED_CINDERED_LOG);
 		registry.setBlock("structure_planks", MSBlocks.CINDERED_PLANKS);
+		registry.setBlock("structure_planks_stairs", MSBlocks.CINDERED_STAIRS);
 		registry.setBlock("structure_planks_slab", MSBlocks.CINDERED_SLAB);
+		registry.setBlock("structure_planks_fence", MSBlocks.CINDERED_FENCE);
+		registry.setBlock("structure_planks_fence_gate", MSBlocks.CINDERED_FENCE_GATE);
+		registry.setBlock("structure_planks_door", MSBlocks.CINDERED_DOOR);
+		registry.setBlock("structure_planks_trapdoor", MSBlocks.CINDERED_TRAPDOOR);
+		
+		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.PURPLE_WOOL);
+		
 		registry.setBlock("village_path", MSBlocks.BLACK_SAND);
 		registry.setBlock("village_fence", MSBlocks.POLISHED_IGNEOUS_BRICK_WALL);
 		registry.setBlock("village_door", MSBlocks.CINDERED_DOOR);
-		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.PURPLE_WOOL);
-		registry.setBlock("cruxite_ore", MSBlocks.BLACK_STONE_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.BLACK_STONE_URANIUM_ORE);
+		
+		registry.setBlock("fall_fluid", Blocks.WATER);
+		registry.setBlock("light_block", MSBlocks.HEAT_LAMP);
 	}
 	
 	@Override

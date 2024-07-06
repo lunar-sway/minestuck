@@ -43,30 +43,43 @@ public class FungiLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
+		registry.setBlock("cruxite_ore", MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
+		registry.setBlock("uranium_ore", MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
 		registry.setBlock("ground", MSBlocks.MYCELIUM_STONE);
-		registry.setBlock("surface", Blocks.MYCELIUM);
 		registry.setBlock("upper", Blocks.DIRT);
+		registry.setBlock("surface", Blocks.MYCELIUM);
 		registry.setBlock("ocean", Blocks.WATER);
+		
 		registry.setBlock("structure_primary", MSBlocks.MYCELIUM_BRICKS);
 		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_MYCELIUM_BRICKS);
 		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_MYCELIUM_BRICKS);
-		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS);
 		registry.setBlock("structure_primary_column", MSBlocks.MYCELIUM_COLUMN);
 		registry.setBlock("structure_primary_stairs", MSBlocks.MYCELIUM_BRICK_STAIRS);
+		registry.setBlock("structure_primary_slab", MSBlocks.MYCELIUM_BRICK_SLAB);
+		registry.setBlock("structure_primary_wall", MSBlocks.MYCELIUM_BRICK_WALL);
+		
+		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_mossy_stairs", MSBlocks.MOSSY_MYCELIUM_BRICK_STAIRS);
+		registry.setBlock("structure_primary_mossy_slab", MSBlocks.MOSSY_MYCELIUM_BRICK_SLAB);
+		registry.setBlock("structure_primary_mossy_wall", MSBlocks.MOSSY_MYCELIUM_BRICK_WALL);
+		
 		registry.setBlock("structure_secondary", MSBlocks.POLISHED_MYCELIUM_STONE);
 		registry.setBlock("structure_secondary_decorative", MSBlocks.MYCELIUM_COBBLESTONE);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.MYCELIUM_STAIRS);
+		registry.setBlock("structure_secondary_stairs", MSBlocks.POLISHED_MYCELIUM_STONE_STAIRS);
+		registry.setBlock("structure_secondary_slab", MSBlocks.POLISHED_MYCELIUM_STONE_SLAB);
+		registry.setBlock("structure_secondary_wall", MSBlocks.POLISHED_MYCELIUM_STONE_WALL);
+		
+		registry.setBlock("structure_wool_1", Blocks.LIME_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
+		
 		registry.setBlock("village_path", Blocks.DIRT_PATH);
+		
 		registry.setBlock("light_block", MSBlocks.GLOWY_GOOP);
 		registry.setBlock("torch", Blocks.REDSTONE_TORCH);
 		registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
 		registry.setBlock("mushroom_1", Blocks.RED_MUSHROOM);
 		registry.setBlock("mushroom_2", Blocks.BROWN_MUSHROOM);
 		registry.setBlock("bush", Blocks.BROWN_MUSHROOM);
-		registry.setBlock("structure_wool_1", Blocks.LIME_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
-		registry.setBlock("cruxite_ore", MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
 	}
 	
 	@Override
