@@ -65,11 +65,11 @@ public class ImpDungeonEntryPiece extends StructurePiece
 		
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 		
-		BlockState wallBlock = blocks.getBlockState("structure_primary");
-		BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-		BlockState floorBlock = blocks.getBlockState("structure_secondary");
-		BlockState floorStairs = blocks.getBlockState("structure_secondary_stairs").rotate(Rotation.CLOCKWISE_180);
-		BlockState torch = blocks.getBlockState("wall_torch");
+		BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+		BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+		BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+		BlockState floorStairs = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY_STAIRS).rotate(Rotation.CLOCKWISE_180);
+		BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 		
 		for(int x = 1; x < 5; x++)
 			buildFloorTile(floorBlock, x, 0, level, randomIn, box);

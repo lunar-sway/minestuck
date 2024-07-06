@@ -30,8 +30,8 @@ public class ClockworkLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("structure_wool_2", Blocks.LIGHT_GRAY_WOOL);
-		registry.setBlock("carpet", Blocks.RED_CARPET);
+		registry.setBlock(StructureBlockRegistry.STRUCTURE_WOOL_2, Blocks.LIGHT_GRAY_WOOL);
+		registry.setBlock(StructureBlockRegistry.CARPET, Blocks.RED_CARPET);
 	}
 	
 	@Override

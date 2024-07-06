@@ -23,6 +23,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class HeatLandType extends TerrainLandType
 {
 	public static final String HEAT = "minestuck.heat";
@@ -39,53 +41,53 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("cruxite_ore", MSBlocks.BLACK_STONE_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.BLACK_STONE_URANIUM_ORE);
-		registry.setBlock("ground", MSBlocks.BLACK_STONE);
-		registry.setBlock("surface", MSBlocks.IGNEOUS_STONE);
-		registry.setBlock("upper", MSBlocks.PUMICE_STONE);
-		registry.setBlock("ocean", MSBlocks.MOLTEN_AMBER);
+		registry.setBlock(CRUXITE_ORE, MSBlocks.BLACK_STONE_CRUXITE_ORE);
+		registry.setBlock(URANIUM_ORE, MSBlocks.BLACK_STONE_URANIUM_ORE);
+		registry.setBlock(GROUND, MSBlocks.BLACK_STONE);
+		registry.setBlock(SURFACE, MSBlocks.IGNEOUS_STONE);
+		registry.setBlock(UPPER, MSBlocks.PUMICE_STONE);
+		registry.setBlock(OCEAN, MSBlocks.MOLTEN_AMBER);
 		
-		registry.setBlock("structure_primary", MSBlocks.BLACK_STONE_BRICKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_BLACK_STONE_BRICKS);
-		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_BLACK_STONE_BRICKS);
-		registry.setBlock("structure_primary_column", MSBlocks.BLACK_STONE_COLUMN);
-		registry.setBlock("structure_primary_stairs", MSBlocks.BLACK_STONE_BRICK_STAIRS);
-		registry.setBlock("structure_primary_slab", MSBlocks.BLACK_STONE_BRICK_SLAB);
-		registry.setBlock("structure_primary_wall", MSBlocks.BLACK_STONE_BRICK_WALL);
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.BLACK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.CHISELED_BLACK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_CRACKED, MSBlocks.CRACKED_BLACK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_COLUMN, MSBlocks.BLACK_STONE_COLUMN);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.BLACK_STONE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.BLACK_STONE_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.BLACK_STONE_BRICK_WALL);
 		
-		registry.setBlock("structure_primary_mossy", MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
-		registry.setBlock("structure_primary_mossy_stairs", MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS);
-		registry.setBlock("structure_primary_mossy_slab", MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB);
-		registry.setBlock("structure_primary_mossy_wall", MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.MAGMATIC_BLACK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_STAIRS, MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_SLAB, MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_WALL, MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL);
 		
-		registry.setBlock("structure_secondary", MSBlocks.POLISHED_IGNEOUS_BRICKS);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_IGNEOUS_STONE);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS);
-		registry.setBlock("structure_secondary_slab", MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB);
-		registry.setBlock("structure_secondary_wall", MSBlocks.POLISHED_IGNEOUS_BRICK_WALL);
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.POLISHED_IGNEOUS_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.CHISELED_IGNEOUS_STONE);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.POLISHED_IGNEOUS_BRICK_WALL);
 		
-		registry.setBlock("structure_wood", MSBlocks.CINDERED_WOOD);
-		registry.setBlock("structure_log", MSBlocks.CINDERED_LOG);
-		registry.setBlock("structure_stripped_wood", MSBlocks.STRIPPED_CINDERED_WOOD);
-		registry.setBlock("structure_stripped_log", MSBlocks.STRIPPED_CINDERED_LOG);
-		registry.setBlock("structure_planks", MSBlocks.CINDERED_PLANKS);
-		registry.setBlock("structure_planks_stairs", MSBlocks.CINDERED_STAIRS);
-		registry.setBlock("structure_planks_slab", MSBlocks.CINDERED_SLAB);
-		registry.setBlock("structure_planks_fence", MSBlocks.CINDERED_FENCE);
-		registry.setBlock("structure_planks_fence_gate", MSBlocks.CINDERED_FENCE_GATE);
-		registry.setBlock("structure_planks_door", MSBlocks.CINDERED_DOOR);
-		registry.setBlock("structure_planks_trapdoor", MSBlocks.CINDERED_TRAPDOOR);
+		registry.setBlock(STRUCTURE_WOOD, MSBlocks.CINDERED_WOOD);
+		registry.setBlock(STRUCTURE_LOG, MSBlocks.CINDERED_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, MSBlocks.STRIPPED_CINDERED_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, MSBlocks.STRIPPED_CINDERED_LOG);
+		registry.setBlock(STRUCTURE_PLANKS, MSBlocks.CINDERED_PLANKS);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, MSBlocks.CINDERED_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, MSBlocks.CINDERED_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, MSBlocks.CINDERED_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, MSBlocks.CINDERED_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, MSBlocks.CINDERED_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, MSBlocks.CINDERED_TRAPDOOR);
 		
-		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.PURPLE_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.YELLOW_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.PURPLE_WOOL);
 		
-		registry.setBlock("village_path", MSBlocks.BLACK_SAND);
-		registry.setBlock("village_fence", MSBlocks.POLISHED_IGNEOUS_BRICK_WALL);
-		registry.setBlock("village_door", MSBlocks.CINDERED_DOOR);
+		registry.setBlock(VILLAGE_PATH, MSBlocks.BLACK_SAND);
+		registry.setBlock(VILLAGE_FENCE, MSBlocks.POLISHED_IGNEOUS_BRICK_WALL);
+		registry.setBlock(VILLAGE_DOOR, MSBlocks.CINDERED_DOOR);
 		
-		registry.setBlock("fall_fluid", Blocks.WATER);
-		registry.setBlock("light_block", MSBlocks.HEAT_LAMP);
+		registry.setBlock(FALL_FLUID, Blocks.WATER);
+		registry.setBlock(LIGHT_BLOCK, MSBlocks.HEAT_LAMP);
 	}
 	
 	@Override
@@ -105,11 +107,11 @@ public class HeatLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.FLUID_SPRINGS, MSPlacedFeatures.OCEAN_RUNDOWN, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.MAGMATIC_IGNEOUS_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.any());
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.BLACK_SAND_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.any());
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.PUMICE_STONE_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.any());
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.any());
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.FIRE_FIELD, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.EXTRA_FIRE_FIELD, LandBiomeType.ROUGH);

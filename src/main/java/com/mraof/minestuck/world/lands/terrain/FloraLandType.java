@@ -27,6 +27,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class FloraLandType extends TerrainLandType
 {
 	public static final String FLORA = "minestuck.flora";
@@ -43,45 +45,45 @@ public class FloraLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("upper", Blocks.DIRT);
-		registry.setBlock("surface", Blocks.GRASS_BLOCK);
-		registry.setBlock("surface_rough", Blocks.MUD);
-		registry.setBlock("ocean", MSBlocks.BLOOD);
-		registry.setBlock("ocean_surface", Blocks.MUD);
+		registry.setBlock(UPPER, Blocks.DIRT);
+		registry.setBlock(SURFACE, Blocks.GRASS_BLOCK);
+		registry.setBlock(SURFACE_ROUGH, Blocks.MUD);
+		registry.setBlock(OCEAN, MSBlocks.BLOOD);
+		registry.setBlock(OCEAN_SURFACE, Blocks.MUD);
 		
-		registry.setBlock("structure_primary", MSBlocks.DECREPIT_STONE_BRICKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
-		registry.setBlock("structure_primary_stairs", MSBlocks.DECREPIT_STONE_BRICK_STAIRS);
-		registry.setBlock("structure_primary_slab", MSBlocks.DECREPIT_STONE_BRICK_SLAB);
-		registry.setBlock("structure_primary_wall", MSBlocks.DECREPIT_STONE_BRICK_WALL);
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.DECREPIT_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.DECREPIT_STONE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.DECREPIT_STONE_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.DECREPIT_STONE_BRICK_WALL);
 		
-		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
-		registry.setBlock("structure_primary_mossy_stairs", MSBlocks.MOSSY_DECREPIT_STONE_BRICK_STAIRS);
-		registry.setBlock("structure_primary_mossy_slab", MSBlocks.MOSSY_DECREPIT_STONE_BRICK_SLAB);
-		registry.setBlock("structure_primary_mossy_wall", MSBlocks.MOSSY_DECREPIT_STONE_BRICK_WALL);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_STAIRS, MSBlocks.MOSSY_DECREPIT_STONE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_SLAB, MSBlocks.MOSSY_DECREPIT_STONE_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_WALL, MSBlocks.MOSSY_DECREPIT_STONE_BRICK_WALL);
 		
-		registry.setBlock("structure_secondary", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS);
-		registry.setBlock("structure_secondary_slab", MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB);
-		registry.setBlock("structure_secondary_wall", MSBlocks.FLOWERY_MOSSY_STONE_BRICK_WALL);
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.FLOWERY_MOSSY_STONE_BRICK_WALL);
 		
-		registry.setBlock("structure_wood", MSBlocks.FLOWERY_VINE_WOOD);
-		registry.setBlock("structure_log", MSBlocks.FLOWERY_VINE_LOG);
-		registry.setBlock("structure_stripped_wood", Blocks.STRIPPED_DARK_OAK_WOOD);
-		registry.setBlock("structure_stripped_log", Blocks.STRIPPED_DARK_OAK_WOOD);
-		registry.setBlock("structure_planks", Blocks.DARK_OAK_PLANKS);
-		registry.setBlock("structure_planks_stairs", Blocks.DARK_OAK_STAIRS);
-		registry.setBlock("structure_planks_slab", Blocks.DARK_OAK_SLAB);
-		registry.setBlock("structure_planks_fence", Blocks.DARK_OAK_FENCE);
-		registry.setBlock("structure_planks_fence_gate", Blocks.DARK_OAK_FENCE_GATE);
-		registry.setBlock("structure_planks_door", Blocks.DARK_OAK_DOOR);
-		registry.setBlock("structure_planks_trapdoor", Blocks.DARK_OAK_TRAPDOOR);
+		registry.setBlock(STRUCTURE_WOOD, MSBlocks.FLOWERY_VINE_WOOD);
+		registry.setBlock(STRUCTURE_LOG, MSBlocks.FLOWERY_VINE_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, Blocks.STRIPPED_DARK_OAK_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, Blocks.STRIPPED_DARK_OAK_WOOD);
+		registry.setBlock(STRUCTURE_PLANKS, Blocks.DARK_OAK_PLANKS);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, Blocks.DARK_OAK_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.DARK_OAK_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, Blocks.DARK_OAK_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, Blocks.DARK_OAK_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR);
 		
-		registry.setBlock("village_path", Blocks.DIRT_PATH);
-		registry.setBlock("bush", Blocks.FERN);
-		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.CYAN_WOOL);
+		registry.setBlock(VILLAGE_PATH, Blocks.DIRT_PATH);
+		registry.setBlock(BUSH, Blocks.FERN);
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.YELLOW_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.CYAN_WOOL);
 	}
 	
 	@Override
@@ -106,7 +108,7 @@ public class FloraLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, CavePlacements.SPORE_BLOSSOM, LandBiomeType.NORMAL);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.DISK,
-				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.CLAY), BlockPredicate.matchesBlocks(blocks.getBlockState("ocean_surface").getBlock(), Blocks.CLAY), UniformInt.of(2, 3), 1),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.CLAY), BlockPredicate.matchesBlocks(blocks.getBlockState(OCEAN_SURFACE).getBlock(), Blocks.CLAY), UniformInt.of(2, 3), 1),
 				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()), LandBiomeType.OCEAN);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,

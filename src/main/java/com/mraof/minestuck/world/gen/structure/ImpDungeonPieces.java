@@ -100,11 +100,11 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
-			BlockState fluid = blocks.getBlockState("fall_fluid");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState floorDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY_DECORATIVE);
+			BlockState fluid = blocks.getBlockState(StructureBlockRegistry.FALL_FLUID);
 			
 			generateBox(level, structureBoundingBoxIn, 1, 0, 4, 4, 0, 6, floorBlock, floorBlock, false);
 			generateAirBox(level, structureBoundingBoxIn, 1, 1, 4, 4, 4, 6);
@@ -319,8 +319,8 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
 			
 			generateBox(level, structureBoundingBoxIn, 1, 0, 0, 2, 0, 9, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 4, 0, 2, 4, 9, wallBlock, wallBlock, false);
@@ -333,7 +333,7 @@ public final class ImpDungeonPieces
 			
 			if(light)
 			{
-				BlockState torch = blocks.getBlockState("wall_torch");
+				BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 				if(lightPos / 2 == 0)
 					placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 2, 2, 4 + lightPos % 2, structureBoundingBoxIn);
 				else
@@ -415,9 +415,9 @@ public final class ImpDungeonPieces
 			
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
 			
 			generateBox(level, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
@@ -457,7 +457,7 @@ public final class ImpDungeonPieces
 			
 			if(light)
 			{
-				BlockState lightBlock = blocks.getBlockState("light_block");
+				BlockState lightBlock = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
 				generateBox(level, structureBoundingBoxIn, 4, 5, 4, 5, 5, 5, lightBlock, lightBlock, false);
 			}
 		}
@@ -531,8 +531,8 @@ public final class ImpDungeonPieces
 			
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
 			
 			generateBox(level, structureBoundingBoxIn, 4, 0, 0, 5, 0, 5, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
@@ -552,7 +552,7 @@ public final class ImpDungeonPieces
 			
 			if(light)
 			{
-				BlockState torch = blocks.getBlockState("wall_torch");
+				BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 				placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 3, structureBoundingBoxIn);
 				placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 3, 2, 5, structureBoundingBoxIn);
 			}
@@ -588,11 +588,11 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
-			BlockState light = blocks.getBlockState("light_block");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState floorDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY_DECORATIVE);
+			BlockState light = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
 			
 			generateBox(level, structureBoundingBoxIn, 2, 0, 0, 3, 0, 2, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 0, 3, 4, 0, 6, floorBlock, floorBlock, false);
@@ -651,12 +651,12 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState floorStairsFront = blocks.getStairs("structure_secondary_stairs", Direction.SOUTH, false);
-			BlockState floorStairsBack = blocks.getStairs("structure_secondary_stairs", Direction.NORTH, false);
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
-			BlockState light = blocks.getBlockState("light_block");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState floorStairsFront = blocks.getStairs(StructureBlockRegistry.STRUCTURE_SECONDARY_STAIRS, Direction.SOUTH, false);
+			BlockState floorStairsBack = blocks.getStairs(StructureBlockRegistry.STRUCTURE_SECONDARY_STAIRS, Direction.NORTH, false);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState floorDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY_DECORATIVE);
+			BlockState light = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
 			
 			generateBox(level, structureBoundingBoxIn, 3, 1, 0, 4, 1, 1, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 1, 2, 7, 1, 2, floorBlock, floorBlock, false);
@@ -735,10 +735,10 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState floorDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY_DECORATIVE);
 			
 			generateBox(level, structureBoundingBoxIn, 3, 0, 0, 4, 0, 2, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 0, 3, 6, 0, 5, floorBlock, floorBlock, false);
@@ -820,10 +820,10 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState floorDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY_DECORATIVE);
 			
 			generateBox(level, structureBoundingBoxIn, 3, 0, 0, 4, 0, 0, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 0, 1, 6, 0, 1, floorBlock, floorBlock, false);
@@ -861,7 +861,7 @@ public final class ImpDungeonPieces
 			
 			if(light)
 			{
-				BlockState torch = blocks.getBlockState("torch");
+				BlockState torch = blocks.getBlockState(StructureBlockRegistry.TORCH);
 				if(randomIn.nextBoolean())
 					placeBlock(level, torch, 2, 1, 2, structureBoundingBoxIn);
 				if(randomIn.nextBoolean())
@@ -953,9 +953,9 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
 			
 			generateBox(level, structureBoundingBoxIn, 2, 0, 0, 3, 0, 9, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 0, 3, 1, 0, 6, floorBlock, floorBlock, false);
@@ -1051,11 +1051,11 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
-			BlockState light = blocks.getBlockState("light_block");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState floorDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY_DECORATIVE);
+			BlockState light = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
 			
 			generateBox(level, structureBoundingBoxIn, 3, 0, 0, 4, 0, 9, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 2, 0, 2, 2, 0, 7, floorDecor, floorDecor, false);
@@ -1192,9 +1192,9 @@ public final class ImpDungeonPieces
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
 			
 			generateBox(level, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
 			generateBox(level, structureBoundingBoxIn, 1, 0, 2, 3, 0, 7, floorBlock, floorBlock, false);

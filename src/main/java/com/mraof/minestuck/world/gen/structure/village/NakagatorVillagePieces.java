@@ -81,9 +81,9 @@ public class NakagatorVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState secondary = blocks.getBlockState("structure_secondary");
-			BlockState secondaryDecor = blocks.getBlockState("structure_secondary_decorative");
-			BlockState fence = blocks.getBlockState("village_fence");
+			BlockState secondary = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState secondaryDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY_DECORATIVE);
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
 			BlockState topBlock = Blocks.QUARTZ_BLOCK.defaultBlockState();
 			BlockState topSlab0 = Blocks.QUARTZ_SLAB.defaultBlockState();
 			BlockState topSlab1 = Blocks.QUARTZ_SLAB.defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP);
@@ -231,13 +231,13 @@ public class NakagatorVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState buildBlock = blocks.getBlockState("structure_primary");
-			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
-			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
-			BlockState doorBlock = blocks.getBlockState("village_door");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState torch = blocks.getBlockState("torch");
-			BlockState wallTorch = blocks.getBlockState("wall_torch");
+			BlockState buildBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState stairs1 = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.SOUTH, false);
+			BlockState stairs2 = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.NORTH, false);
+			BlockState doorBlock = blocks.getBlockState(StructureBlockRegistry.VILLAGE_DOOR);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.TORCH);
+			BlockState wallTorch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			//Floor
 			generateBox(level, structureBoundingBoxIn, 0, -1, 1, 7, 0, 8, floorBlock, floorBlock, false);
@@ -353,13 +353,13 @@ public class NakagatorVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState buildBlock = blocks.getBlockState("structure_primary");
-			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
-			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
-			BlockState doorBlock = blocks.getBlockState("village_door");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState fence = blocks.getBlockState("village_fence");
-			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState buildBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState stairs1 = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.NORTH, false);
+			BlockState stairs2 = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.SOUTH, false);
+			BlockState doorBlock = blocks.getBlockState(StructureBlockRegistry.VILLAGE_DOOR);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			//Floor
 			generateBox(level, structureBoundingBoxIn, 3, -1, 1, 8, 0, 6, floorBlock, floorBlock, false);
@@ -479,16 +479,16 @@ public class NakagatorVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState buildBlock = blocks.getBlockState("structure_primary");
-			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
-			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
-			BlockState stairs3 = blocks.getStairs("structure_primary_stairs", Direction.WEST, false);
-			BlockState stairs = blocks.getStairs("structure_secondary_stairs", Direction.SOUTH, false);
-			BlockState doorBlock = blocks.getBlockState("village_door");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState fence = blocks.getBlockState("village_fence");
-			BlockState torch = blocks.getBlockState("wall_torch");
-			BlockState carpet = blocks.getBlockState("carpet");
+			BlockState buildBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState stairs1 = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.NORTH, false);
+			BlockState stairs2 = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.SOUTH, false);
+			BlockState stairs3 = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.WEST, false);
+			BlockState stairs = blocks.getStairs(StructureBlockRegistry.STRUCTURE_SECONDARY_STAIRS, Direction.SOUTH, false);
+			BlockState doorBlock = blocks.getBlockState(StructureBlockRegistry.VILLAGE_DOOR);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
+			BlockState carpet = blocks.getBlockState(StructureBlockRegistry.CARPET);
 
 			//Floor
 			generateBox(level, structureBoundingBoxIn, 3, -1, 3, 8, 2, 7, floorBlock, floorBlock, false);

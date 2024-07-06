@@ -30,6 +30,8 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 import java.util.stream.Stream;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class RainbowLandType extends TerrainLandType
 {
 	public static final String RAINBOW = "minestuck.rainbow";
@@ -45,45 +47,45 @@ public class RainbowLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("upper", Blocks.WHITE_TERRACOTTA);
-		registry.setBlock("surface", Blocks.WHITE_WOOL);
-		registry.setBlock("ocean", MSBlocks.WATER_COLORS);
+		registry.setBlock(UPPER, Blocks.WHITE_TERRACOTTA);
+		registry.setBlock(SURFACE, Blocks.WHITE_WOOL);
+		registry.setBlock(OCEAN, MSBlocks.WATER_COLORS);
 		
-		registry.setBlock("structure_primary", MSBlocks.RAINBOW_PLANKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.RAINBOW_WOOD);
-		registry.setBlock("structure_primary_stairs", MSBlocks.RAINBOW_STAIRS);
-		registry.setBlock("structure_primary_slab", MSBlocks.RAINBOW_SLAB);
-		registry.setBlock("structure_primary_wall", MSBlocks.RAINBOW_FENCE);
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.RAINBOW_PLANKS);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.RAINBOW_WOOD);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.RAINBOW_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.RAINBOW_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.RAINBOW_FENCE);
 		
-		registry.setBlock("structure_secondary", MSBlocks.GLOWING_PLANKS);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.GLOWING_WOOD);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.GLOWING_STAIRS);
-		registry.setBlock("structure_secondary_slab", MSBlocks.GLOWING_SLAB);
-		registry.setBlock("structure_secondary_wall", MSBlocks.GLOWING_FENCE);
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.GLOWING_PLANKS);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.GLOWING_WOOD);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.GLOWING_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.GLOWING_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.GLOWING_FENCE);
 		
-		registry.setBlock("structure_wood", MSBlocks.RAINBOW_WOOD);
-		registry.setBlock("structure_log", MSBlocks.RAINBOW_LOG);
-		registry.setBlock("structure_stripped_wood", MSBlocks.STRIPPED_RAINBOW_WOOD);
-		registry.setBlock("structure_stripped_log", MSBlocks.STRIPPED_RAINBOW_LOG);
-		registry.setBlock("structure_planks", MSBlocks.RAINBOW_PLANKS);
-		registry.setBlock("structure_bookshelf", MSBlocks.RAINBOW_BOOKSHELF);
-		registry.setBlock("structure_planks_stairs", MSBlocks.RAINBOW_STAIRS);
-		registry.setBlock("structure_planks_slab", MSBlocks.RAINBOW_SLAB);
-		registry.setBlock("structure_planks_fence", MSBlocks.RAINBOW_FENCE);
-		registry.setBlock("structure_planks_fence_gate", MSBlocks.RAINBOW_FENCE_GATE);
-		registry.setBlock("structure_planks_door", MSBlocks.RAINBOW_DOOR);
-		registry.setBlock("structure_planks_trapdoor", MSBlocks.RAINBOW_TRAPDOOR);
+		registry.setBlock(STRUCTURE_WOOD, MSBlocks.RAINBOW_WOOD);
+		registry.setBlock(STRUCTURE_LOG, MSBlocks.RAINBOW_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, MSBlocks.STRIPPED_RAINBOW_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, MSBlocks.STRIPPED_RAINBOW_LOG);
+		registry.setBlock(STRUCTURE_PLANKS, MSBlocks.RAINBOW_PLANKS);
+		registry.setBlock(STRUCTURE_BOOKSHELF, MSBlocks.RAINBOW_BOOKSHELF);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, MSBlocks.RAINBOW_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, MSBlocks.RAINBOW_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, MSBlocks.RAINBOW_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, MSBlocks.RAINBOW_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, MSBlocks.RAINBOW_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, MSBlocks.RAINBOW_TRAPDOOR);
 		
-		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.GREEN_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.YELLOW_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.GREEN_WOOL);
 		
-		registry.setBlock("salamander_floor", Blocks.STONE_BRICKS);
+		registry.setBlock(SALAMANDER_FLOOR, Blocks.STONE_BRICKS);
 		
-		registry.setBlock("light_block", MSBlocks.GLOWING_WOOD);
+		registry.setBlock(LIGHT_BLOCK, MSBlocks.GLOWING_WOOD);
 		BlockState rainbow_leaves = MSBlocks.RAINBOW_LEAVES.get().defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
-		registry.setBlockState("bush", rainbow_leaves);
-		registry.setBlockState("mushroom_1", rainbow_leaves);
-		registry.setBlockState("mushroom_2", rainbow_leaves);
+		registry.setBlockState(BUSH, rainbow_leaves);
+		registry.setBlockState(MUSHROOM_1, rainbow_leaves);
+		registry.setBlockState(MUSHROOM_2, rainbow_leaves);
 	}
 	
 	@Override
