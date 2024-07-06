@@ -73,7 +73,6 @@ public class EndLandType extends TerrainLandType
 		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, MSBlocks.END_TRAPDOOR);
 		
 		registry.setBlock(VILLAGE_PATH, MSBlocks.COARSE_END_STONE);
-		registry.setBlock(VILLAGE_FENCE, Blocks.NETHER_BRICK_FENCE);
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.GREEN_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.PURPLE_WOOL);
 		

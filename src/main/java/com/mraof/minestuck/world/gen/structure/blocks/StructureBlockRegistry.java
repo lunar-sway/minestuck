@@ -199,10 +199,9 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_GROUND_COVER, Blocks.MOSS_CARPET.defaultBlockState());
 		registerBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS.defaultBlockState());
 		
-		//TODO reconcile overlap in "village" entries with "structure_planks" entries
-		registerBlock(VILLAGE_DOOR, Blocks.DARK_OAK_DOOR.defaultBlockState(), DoorBlock.class);
+		registerBlock(VILLAGE_DOOR, STRUCTURE_PLANKS_DOOR, Blocks.DARK_OAK_DOOR, DoorBlock.class);
 		registerBlock(VILLAGE_PATH, STRUCTURE_SECONDARY, Blocks.COBBLESTONE);
-		registerBlock(VILLAGE_FENCE, Blocks.DARK_OAK_FENCE.defaultBlockState());
+		registerBlock(VILLAGE_FENCE, STRUCTURE_PLANKS_FENCE, Blocks.DARK_OAK_FENCE);
 		registerBlock(SALAMANDER_FLOOR, UPPER, Blocks.COARSE_DIRT);
 		
 		registerBlock(FALL_FLUID, OCEAN, Blocks.LIGHT_BLUE_WOOL);

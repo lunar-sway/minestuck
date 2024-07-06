@@ -84,7 +84,6 @@ public class HeatLandType extends TerrainLandType
 		
 		registry.setBlock(VILLAGE_PATH, MSBlocks.BLACK_SAND);
 		registry.setBlock(VILLAGE_FENCE, MSBlocks.POLISHED_IGNEOUS_BRICK_WALL);
-		registry.setBlock(VILLAGE_DOOR, MSBlocks.CINDERED_DOOR);
 		
 		registry.setBlock(FALL_FLUID, Blocks.WATER);
 		registry.setBlock(LIGHT_BLOCK, MSBlocks.HEAT_LAMP);
