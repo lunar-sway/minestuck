@@ -85,8 +85,8 @@ public class IguanaVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState fence = blocks.getBlockState("village_fence");
-			BlockState surface = blocks.getBlockState("surface");
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
+			BlockState surface = blocks.getBlockState(StructureBlockRegistry.SURFACE);
 			BlockState dirt = Blocks.COARSE_DIRT.defaultBlockState();
 			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
 
@@ -164,12 +164,12 @@ public class IguanaVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState fence = blocks.getBlockState("village_fence");
-			BlockState planks = blocks.getBlockState("structure_planks");
-			BlockState surface = blocks.getBlockState("surface");
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
+			BlockState planks = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS);
+			BlockState surface = blocks.getBlockState(StructureBlockRegistry.SURFACE);
 			BlockState dirt = Blocks.COARSE_DIRT.defaultBlockState();
 			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
-			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			//Floor
 			this.generateAirBox(level, boundingBox, 1, 1, 1, 10, 6, 15);
@@ -287,13 +287,13 @@ public class IguanaVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState fence = blocks.getBlockState("village_fence");
-			BlockState planks = blocks.getBlockState("structure_planks");
-			BlockState plankSlab = blocks.getBlockState("structure_planks_slab");
-			BlockState surface = blocks.getBlockState("surface");
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
+			BlockState planks = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS);
+			BlockState plankSlab = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS_SLAB);
+			BlockState surface = blocks.getBlockState(StructureBlockRegistry.SURFACE);
 			BlockState dirt = Blocks.COARSE_DIRT.defaultBlockState();
 			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
-			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			//Floor
 			this.generateAirBox(level, structureBoundingBoxIn, 1, 1, 1, 5, 5, 5);

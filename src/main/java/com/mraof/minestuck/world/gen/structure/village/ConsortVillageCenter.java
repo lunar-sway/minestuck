@@ -147,11 +147,11 @@ public class ConsortVillageCenter
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState plankBlock = blocks.getBlockState("structure_planks");
-			BlockState plankSlab0 = blocks.getBlockState("structure_planks_slab");
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState plankBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS);
+			BlockState plankSlab0 = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS_SLAB);
 			BlockState plankSlab1 = plankSlab0.setValue(SlabBlock.TYPE, SlabType.TOP);
-			BlockState torch = blocks.getBlockState("torch");
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.TORCH);
 
 
 			this.generateBox(level, box, 2, -1, 0, 5, 0, 0, floorBlock, floorBlock, false);
@@ -272,8 +272,8 @@ public class ConsortVillageCenter
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState road = blocks.getBlockState("village_path");
-			BlockState rock = blocks.getBlockState("ground");
+			BlockState road = blocks.getBlockState(StructureBlockRegistry.VILLAGE_PATH);
+			BlockState rock = blocks.getBlockState(StructureBlockRegistry.GROUND);
 
 			for(int x = 0; x < 7; x++)
 			{
@@ -344,8 +344,8 @@ public class ConsortVillageCenter
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState road = blocks.getBlockState("village_path");
-			BlockState surface = blocks.getBlockState("surface");
+			BlockState road = blocks.getBlockState(StructureBlockRegistry.VILLAGE_PATH);
+			BlockState surface = blocks.getBlockState(StructureBlockRegistry.SURFACE);
 			BlockState cactus = Blocks.CACTUS.defaultBlockState(); //todo: replace with land-specific cactus block
 
 			for(int x = 1; x < 15; x++)

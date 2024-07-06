@@ -35,6 +35,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class RockLandType extends TerrainLandType
 {
 	public static final String ROCK = "minestuck.rock";
@@ -69,24 +71,24 @@ public class RockLandType extends TerrainLandType
 	{
 		if(type == Variant.PETRIFICATION)
 		{
-			registry.setBlock("surface", Blocks.STONE);
+			registry.setBlock(SURFACE, Blocks.STONE);
 		} else
 		{
-			registry.setBlock("surface", Blocks.GRAVEL);
+			registry.setBlock(SURFACE, Blocks.GRAVEL);
 		}
 		
-		registry.setBlock("upper", Blocks.COBBLESTONE);
-		registry.setBlock("structure_primary", MSBlocks.COARSE_STONE_BRICKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_COARSE_STONE_BRICKS);
-		registry.setBlock("structure_primary_stairs", MSBlocks.COARSE_STONE_BRICK_STAIRS);
-		registry.setBlock("structure_secondary", MSBlocks.COARSE_STONE);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_COARSE_STONE);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.COARSE_STONE_STAIRS);
-		registry.setBlock("structure_planks_slab", Blocks.BRICK_SLAB);
-		registry.setBlock("village_path", Blocks.MOSSY_COBBLESTONE);
-		registry.setBlock("village_fence", Blocks.COBBLESTONE_WALL);
-		registry.setBlock("structure_wool_1", Blocks.BROWN_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
+		registry.setBlock(UPPER, Blocks.COBBLESTONE);
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.COARSE_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.CHISELED_COARSE_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.COARSE_STONE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.COARSE_STONE);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.CHISELED_COARSE_STONE);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.COARSE_STONE_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.BRICK_SLAB);
+		registry.setBlock(VILLAGE_PATH, Blocks.MOSSY_COBBLESTONE);
+		registry.setBlock(VILLAGE_FENCE, Blocks.COBBLESTONE_WALL);
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.BROWN_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.GRAY_WOOL);
 	}
 	
 	@Override
@@ -100,7 +102,7 @@ public class RockLandType extends TerrainLandType
 	{
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.DISK,
-				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.CLAY), BlockPredicate.matchesBlocks(blocks.getBlockState("ocean_surface").getBlock(), Blocks.CLAY), UniformInt.of(2, 5), 2),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.CLAY), BlockPredicate.matchesBlocks(blocks.getBlockState(OCEAN_SURFACE).getBlock(), Blocks.CLAY), UniformInt.of(2, 5), 2),
 				CountPlacement.of(25), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID), LandBiomeType.OCEAN);
 		
 		if(this.type == Variant.ROCK)

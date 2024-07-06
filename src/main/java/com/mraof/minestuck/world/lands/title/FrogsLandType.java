@@ -32,8 +32,8 @@ public class FrogsLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("structure_wool_2", Blocks.GREEN_WOOL);
-		registry.setBlock("carpet", Blocks.LIME_CARPET);
+		registry.setBlock(StructureBlockRegistry.STRUCTURE_WOOL_2, Blocks.GREEN_WOOL);
+		registry.setBlock(StructureBlockRegistry.CARPET, Blocks.LIME_CARPET);
 	}
 	
 	@Override

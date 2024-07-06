@@ -54,7 +54,7 @@ public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 		pos2 = oceanPos.remove(rand.nextInt(oceanPos.size()));
 		pos3 = oceanPos.get(rand.nextInt(oceanPos.size()));
 		
-		BlockState fluid = StructureBlockRegistry.getOrDefault(generator).getBlockState("ocean");
+		BlockState fluid = StructureBlockRegistry.getOrDefault(generator).getBlockState(StructureBlockRegistry.OCEAN);
 		int minX = Math.min(pos.getX(), Math.min(pos2.getX(), pos3.getX()));
 		int maxX = Math.max(pos.getX(), Math.max(pos2.getX(), pos3.getX()));
 		for(int posX = minX; posX <= maxX; posX++)

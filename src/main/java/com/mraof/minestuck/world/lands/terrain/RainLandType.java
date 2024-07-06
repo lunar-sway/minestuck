@@ -29,6 +29,8 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 
 import java.util.function.Consumer;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class RainLandType extends TerrainLandType
 {
 	public static final String RAIN = "minestuck.rain";
@@ -53,26 +55,26 @@ public class RainLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("ground", MSBlocks.PINK_STONE);
-		registry.setBlock("surface", MSBlocks.CHALK);
-		registry.setBlock("upper", MSBlocks.CHALK);
-		registry.setBlock("ocean", Blocks.WATER);
-		registry.setBlock("structure_primary", MSBlocks.PINK_STONE_BRICKS);
-		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_PINK_STONE_BRICKS);
-		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_PINK_STONE_BRICKS);
-		registry.setBlock("structure_primary_column", MSBlocks.PINK_STONE_COLUMN);
-		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS);
-		registry.setBlock("structure_primary_stairs",MSBlocks.PINK_STONE_BRICK_STAIRS);
-		registry.setBlock("structure_secondary", MSBlocks.POLISHED_PINK_STONE);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.CHALK_BRICK_STAIRS);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS);
-		registry.setBlock("structure_planks", MSBlocks.DEAD_PLANKS);
-		registry.setBlock("structure_planks_slab", MSBlocks.DEAD_SLAB);
-		registry.setBlock("bush", Blocks.DEAD_BUSH);
-		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.MAGENTA_WOOL);
-		registry.setBlock("cruxite_ore", MSBlocks.PINK_STONE_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.PINK_STONE_URANIUM_ORE);
+		registry.setBlock(GROUND, MSBlocks.PINK_STONE);
+		registry.setBlock(SURFACE, MSBlocks.CHALK);
+		registry.setBlock(UPPER, MSBlocks.CHALK);
+		registry.setBlock(OCEAN, Blocks.WATER);
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.PINK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_CRACKED, MSBlocks.CRACKED_PINK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.MOSSY_PINK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_COLUMN, MSBlocks.PINK_STONE_COLUMN);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.CHISELED_PINK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS,MSBlocks.PINK_STONE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.POLISHED_PINK_STONE);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.CHALK_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.CHISELED_PINK_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PLANKS, MSBlocks.DEAD_PLANKS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, MSBlocks.DEAD_SLAB);
+		registry.setBlock(BUSH, Blocks.DEAD_BUSH);
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.YELLOW_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.MAGENTA_WOOL);
+		registry.setBlock(CRUXITE_ORE, MSBlocks.PINK_STONE_CRUXITE_ORE);
+		registry.setBlock(URANIUM_ORE, MSBlocks.PINK_STONE_URANIUM_ORE);
 
 	}
 	
