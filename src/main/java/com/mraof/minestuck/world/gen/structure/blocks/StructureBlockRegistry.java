@@ -27,7 +27,7 @@ public final class StructureBlockRegistry
 	
 	private static final Map<String, BlockEntry> staticRegistry = new HashMap<>();
 	private static final Map<Block, String> templateBlockMap = new HashMap<>();
-	private static final StructureBlockRegistry defaultRegistry = new StructureBlockRegistry();
+	private static final StructureBlockRegistry fallbackRegistry = new StructureBlockRegistry(); //fallback for when getting a registry from non-land dimension or if exception is thrown
 	
 	public static void registerBlock(String name, BlockState defaultBlock)
 	{
@@ -35,18 +35,18 @@ public final class StructureBlockRegistry
 	}
 	
 	//TODO With async modloading, perhaps we should synchronize this in some way?
-	public static void registerBlock(String name, BlockState defaultBlock, Class<? extends Block> extention)
+	public static void registerBlock(String name, BlockState defaultBlock, Class<? extends Block> extension)
 	{
 		if(defaultBlock == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
 		if(staticRegistry.containsKey(name))
 			throw new IllegalStateException("\"" + name + "\" has already been registered!");
-		if(!extention.isInstance(defaultBlock.getBlock()))
-			throw new IllegalArgumentException("The default block \"" + defaultBlock.getBlock() + "\" has to extend the minimum class \"" + extention + "\"!");
+		if(!extension.isInstance(defaultBlock.getBlock()))
+			throw new IllegalArgumentException("The default block \"" + defaultBlock.getBlock() + "\" has to extend the minimum class \"" + extension + "\"!");
 		if(templateBlockMap.containsKey(defaultBlock.getBlock()))
 			throw new IllegalStateException("Can't have two identical template blocks!");
 		
-		staticRegistry.put(name, new BlockEntry(defaultBlock, extention));
+		staticRegistry.put(name, new BlockEntry(defaultBlock, extension));
 		templateBlockMap.put(defaultBlock.getBlock(), name);
 	}
 	
@@ -55,7 +55,7 @@ public final class StructureBlockRegistry
 		registerBlock(name, parent, templateState, Block.class);
 	}
 	
-	public static void registerBlock(String name, String parent, Block templateState, Class<? extends Block> extention)
+	public static void registerBlock(String name, String parent, Block templateState, Class<? extends Block> extension)
 	{
 		if(parent == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
@@ -65,13 +65,29 @@ public final class StructureBlockRegistry
 		if(!staticRegistry.containsKey(parent))
 			throw new IllegalStateException("The parent entry \"" + parent + "\" isn't registered! Make sure to register the parent first.");
 		
-		if(!extention.isAssignableFrom(staticRegistry.get(parent).extention))
+		if(!extension.isAssignableFrom(staticRegistry.get(parent).extension))
 			throw new IllegalArgumentException("The class specified must be the same or a superclass to the class used by the parent \"" + parent + "\".");
 		if(templateBlockMap.containsKey(templateState))
 			throw new IllegalStateException("Can't have two identical template blocks!");
 		
-		staticRegistry.put(name, new BlockEntry(parent, extention));
+		staticRegistry.put(name, new BlockEntry(parent, extension));
 		templateBlockMap.put(templateState, name);
+	}
+	
+	public static void registerEmptyFallbackBlock(String name, Block defaultBlock)
+	{
+		registerEmptyFallbackBlock(name, defaultBlock, Block.class);
+	}
+	
+	public static void registerEmptyFallbackBlock(String name, Block defaultBlock, Class<? extends Block> extension)
+	{
+		if(defaultBlock == null || name == null)
+			throw new IllegalArgumentException("Null parameters not allowed.");
+		if(staticRegistry.containsKey(name))
+			throw new IllegalStateException("\"" + name + "\" has already been registered!");
+		
+		staticRegistry.put(name, new BlockEntry("air", extension));
+		templateBlockMap.put(defaultBlock, name);
 	}
 	
 	public static final String CRUXITE_ORE = "cruxite_ore";
@@ -146,6 +162,8 @@ public final class StructureBlockRegistry
 	
 	static
 	{
+		staticRegistry.put("air", new BlockEntry(Blocks.AIR.defaultBlockState(), Block.class));
+		
 		registerBlock(CRUXITE_ORE, MSBlocks.STONE_CRUXITE_ORE.get().defaultBlockState());
 		registerBlock(URANIUM_ORE, MSBlocks.STONE_URANIUM_ORE.get().defaultBlockState());
 		registerBlock(GROUND, Blocks.STONE.defaultBlockState());
@@ -180,16 +198,16 @@ public final class StructureBlockRegistry
 		//TODO add button/ladder/pressure plate/sign
 		registerBlock(STRUCTURE_WOOD, Blocks.OAK_WOOD.defaultBlockState());
 		registerBlock(STRUCTURE_LOG, Blocks.OAK_LOG.defaultBlockState());
-		registerBlock(STRUCTURE_STRIPPED_WOOD, Blocks.STRIPPED_OAK_WOOD.defaultBlockState());
-		registerBlock(STRUCTURE_STRIPPED_LOG, Blocks.STRIPPED_OAK_LOG.defaultBlockState());
+		registerBlock(STRUCTURE_STRIPPED_WOOD, STRUCTURE_WOOD, Blocks.STRIPPED_OAK_WOOD);
+		registerBlock(STRUCTURE_STRIPPED_LOG, STRUCTURE_LOG, Blocks.STRIPPED_OAK_LOG);
 		registerBlock(STRUCTURE_PLANKS, Blocks.OAK_PLANKS.defaultBlockState());
 		registerBlock(STRUCTURE_BOOKSHELF, Blocks.BOOKSHELF.defaultBlockState());
-		registerBlock(STRUCTURE_PLANKS_STAIRS, Blocks.OAK_STAIRS.defaultBlockState());
-		registerBlock(STRUCTURE_PLANKS_SLAB, Blocks.OAK_SLAB.defaultBlockState());
-		registerBlock(STRUCTURE_PLANKS_FENCE, Blocks.OAK_FENCE.defaultBlockState());
-		registerBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.OAK_FENCE_GATE.defaultBlockState());
-		registerBlock(STRUCTURE_PLANKS_DOOR, Blocks.OAK_DOOR.defaultBlockState());
-		registerBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.OAK_TRAPDOOR.defaultBlockState());
+		registerBlock(STRUCTURE_PLANKS_STAIRS, STRUCTURE_PLANKS, Blocks.OAK_STAIRS);
+		registerBlock(STRUCTURE_PLANKS_SLAB, STRUCTURE_PLANKS, Blocks.OAK_SLAB);
+		registerBlock(STRUCTURE_PLANKS_FENCE, STRUCTURE_PLANKS, Blocks.OAK_FENCE);
+		registerEmptyFallbackBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.OAK_FENCE_GATE);
+		registerEmptyFallbackBlock(STRUCTURE_PLANKS_DOOR, Blocks.OAK_DOOR, DoorBlock.class);
+		registerEmptyFallbackBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.OAK_TRAPDOOR);
 		
 		registerBlock(STRUCTURE_WOOL_1, Blocks.WHITE_WOOL.defaultBlockState());
 		registerBlock(STRUCTURE_WOOL_2, Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
@@ -218,16 +236,16 @@ public final class StructureBlockRegistry
 		registerBlock(STAINED_GLASS_2, Blocks.LIGHT_GRAY_STAINED_GLASS.defaultBlockState());
 		registerBlock(SLIME, Blocks.SLIME_BLOCK.defaultBlockState());
 		
-		defaultRegistry.setBlock(StructureBlockRegistry.SURFACE, Blocks.GRASS_BLOCK);
-		defaultRegistry.setBlock(StructureBlockRegistry.UPPER, Blocks.DIRT);
-		defaultRegistry.setBlock(StructureBlockRegistry.OCEAN_SURFACE, Blocks.GRAVEL);
+		fallbackRegistry.setBlock(SURFACE, Blocks.GRASS_BLOCK);
+		fallbackRegistry.setBlock(UPPER, Blocks.DIRT);
+		fallbackRegistry.setBlock(OCEAN_SURFACE, Blocks.GRAVEL);
 	}
 	
 	public static StructureBlockRegistry getOrDefault(ChunkGenerator generator)
 	{
 		if(generator instanceof LandChunkGenerator)
 			return ((LandChunkGenerator) generator).blockRegistry;
-		else return defaultRegistry;
+		else return fallbackRegistry;
 	}
 	
 	public static StructureBlockRegistry init(LandTypePair landTypes)
@@ -241,34 +259,38 @@ public final class StructureBlockRegistry
 		} catch(RuntimeException e)
 		{
 			LOGGER.error("Caught exception while setting up StructureBlockRegistry.", e);
-			return defaultRegistry;
+			return fallbackRegistry;
 		}
 	}
 	
 	private static class BlockEntry
 	{
 		//TODO define restriction with a set of block state properties instead of base class
-		Class<? extends Block> extention;
+		Class<? extends Block> extension;
 		BlockState defaultBlock;
 		String parentEntry;
 		
 		BlockEntry(BlockState state, Class<? extends Block> clazz)
 		{
 			defaultBlock = state;
-			extention = clazz;
+			extension = clazz;
 		}
 		
 		BlockEntry(String str, Class<? extends Block> clazz)
 		{
 			parentEntry = str;
-			extention = clazz;
+			extension = clazz;
 		}
 		
 		BlockState getBlockState(StructureBlockRegistry registry)
 		{
-			if(parentEntry != null)
-				return registry.getBlockState(parentEntry);
-			else return defaultBlock;
+			if(parentEntry == null)
+				return defaultBlock;
+			
+			if(parentEntry.equals("air"))
+				return Blocks.AIR.defaultBlockState();
+			
+			return registry.getBlockState(parentEntry);
 		}
 	}
 	
@@ -292,8 +314,8 @@ public final class StructureBlockRegistry
 			throw new NullPointerException("Null parameters not allowed.");
 		if(!staticRegistry.containsKey(name))
 			throw new IllegalStateException("Structure block \"" + name + "\" isn't registered, and can therefore not be set.");
-		if(!staticRegistry.get(name).extention.isInstance(state.getBlock()))
-			throw new IllegalArgumentException("The provided block must extend \"" + staticRegistry.get(name).extention + "\".");
+		if(!staticRegistry.get(name).extension.isInstance(state.getBlock()))
+			throw new IllegalArgumentException("The provided block must extend \"" + staticRegistry.get(name).extension + "\".");
 		
 		blockRegistry.put(name, state);
 		
