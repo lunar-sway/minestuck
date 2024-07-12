@@ -233,7 +233,7 @@ public final class CardCaptchas
 			String captchaString = captcha.toString();
 			
 			//checks to make sure the captcha has not been created before
-			if(!captchasMap.containsValue(captchaString) || !PredeterminedCardCaptchas.getData().containsValue(captchaString))
+			if(!captchasMap.containsValue(captchaString) && !PredeterminedCardCaptchas.getData().containsValue(captchaString))
 			{
 				return captchaString;
 			}
