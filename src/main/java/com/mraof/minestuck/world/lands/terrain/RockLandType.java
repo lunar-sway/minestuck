@@ -69,24 +69,32 @@ public class RockLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		if(type == Variant.PETRIFICATION)
-		{
-			registry.setBlock(SURFACE, Blocks.STONE);
-		} else
-		{
-			registry.setBlock(SURFACE, Blocks.GRAVEL);
-		}
-		
+		registry.setBlock(SURFACE, type == Variant.PETRIFICATION ? Blocks.STONE : Blocks.GRAVEL);
 		registry.setBlock(UPPER, Blocks.COBBLESTONE);
+		
 		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.COARSE_STONE_BRICKS);
 		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.CHISELED_COARSE_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_CRACKED, MSBlocks.CRACKED_COARSE_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_COLUMN, MSBlocks.COARSE_STONE_COLUMN);
 		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.COARSE_STONE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.COARSE_STONE_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.COARSE_STONE_BRICK_WALL);
+		
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.MOSSY_COARSE_STONE_BRICKS);
+		
 		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.COARSE_STONE);
 		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.CHISELED_COARSE_STONE);
 		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.COARSE_STONE_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.COARSE_STONE_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.COARSE_STONE_WALL);
+		
+		registry.setBlock(STRUCTURE_WOOD, MSBlocks.PETRIFIED_WOOD);
+		registry.setBlock(STRUCTURE_LOG, MSBlocks.PETRIFIED_LOG);
 		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.BRICK_SLAB);
+		
 		registry.setBlock(VILLAGE_PATH, Blocks.MOSSY_COBBLESTONE);
 		registry.setBlock(VILLAGE_FENCE, Blocks.COBBLESTONE_WALL);
+		
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.BROWN_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.GRAY_WOOL);
 	}
