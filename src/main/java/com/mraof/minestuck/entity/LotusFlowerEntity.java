@@ -87,6 +87,12 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 		setInvulnerable(true);
 	}
 	
+	@Override
+	public boolean isCustomNameVisible()
+	{
+		return false;
+	}
+	
 	private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> state)
 	{
 		state.getController().setAnimation(animationType.animation);

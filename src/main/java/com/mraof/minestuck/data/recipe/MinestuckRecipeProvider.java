@@ -470,7 +470,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.stairsRecipe(MSBlocks.URANIUM_STAIRS, MSBlocks.URANIUM_BLOCK).group("wooden_stairs").save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.URANIUM_SLAB, MSBlocks.URANIUM_BLOCK).group("wooden_slab").save(recipeBuilder);
 		CommonRecipes.wallRecipe(MSBlocks.URANIUM_WALL, MSBlocks.URANIUM_BLOCK).group("stone_wall").save(recipeBuilder);
-		CommonRecipes.buttonRecipe(MSBlocks.URANIUM_BUTTON, MSBlocks.URANIUM_BLOCK).save(recipeBuilder);
+		CommonRecipes.buttonRecipe(MSBlocks.URANIUM_BUTTON, MSItems.RAW_URANIUM).save(recipeBuilder);
 		CommonRecipes.pressurePlateRecipe(MSBlocks.URANIUM_PRESSURE_PLATE, MSBlocks.URANIUM_BLOCK).group("stone_pressure_plate").save(recipeBuilder);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.URANIUM_BLOCK.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.URANIUM_STAIRS.get()).unlockedBy("has_uranium_block", has(MSBlocks.URANIUM_BLOCK.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "uranium_stairs_from_stonecutting"));
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.URANIUM_BLOCK.get()), RecipeCategory.BUILDING_BLOCKS, MSBlocks.URANIUM_SLAB.get(), 2).unlockedBy("has_uranium_block", has(MSBlocks.URANIUM_BLOCK.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "uranium_slab_from_stonecutting"));
