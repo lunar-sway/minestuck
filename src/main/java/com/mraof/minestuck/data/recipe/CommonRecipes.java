@@ -126,16 +126,16 @@ public final class CommonRecipes
 	}
 	
 	
-	public static RecipeBuilder bookshelfRecipe(Supplier<? extends ItemLike> bookshelfBlock, Supplier<? extends ItemLike> sourceBlock)
+	public static RecipeBuilder bookshelfRecipe(Supplier<? extends ItemLike> bookshelfBlock, Supplier<? extends ItemLike> sourceBlock, Supplier<? extends ItemLike> sourceBlockSlab)
 	{
-		return bookshelfRecipe(bookshelfBlock.get(), sourceBlock.get());
+		return bookshelfRecipe(bookshelfBlock.get(), sourceBlock.get(), sourceBlockSlab.get());
 	}
 	
-	public static RecipeBuilder bookshelfRecipe(ItemLike bookshelfBlock, ItemLike sourceBlock)
+	public static RecipeBuilder bookshelfRecipe(ItemLike bookshelfBlock, ItemLike sourceBlock, ItemLike sourceBlockSlab)
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bookshelfBlock)
-				.define('b', Items.BOOK).define('p',sourceBlock)
-				.pattern("ppp").pattern("bpb").pattern("ppp")
+				.define('b', Items.BOOK).define('p',sourceBlock).define('s',sourceBlockSlab)
+				.pattern("psp").pattern("bpb").pattern("psp")
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	

@@ -8,12 +8,15 @@
     },
     "p": {
       "item": "minestuck:life_aspect_planks"
+    },
+    "s": {
+      "item": "minestuck:life_aspect_slab"
     }
   },
   "pattern": [
-    "ppp",
+    "psp",
     "bpb",
-    "ppp"
+    "psp"
   ],
   "result": {
     "item": "minestuck:life_aspect_bookshelf"

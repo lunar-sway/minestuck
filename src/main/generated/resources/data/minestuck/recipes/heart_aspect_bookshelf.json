@@ -8,12 +8,15 @@
     },
     "p": {
       "item": "minestuck:heart_aspect_planks"
+    },
+    "s": {
+      "item": "minestuck:heart_aspect_slab"
     }
   },
   "pattern": [
-    "ppp",
+    "psp",
     "bpb",
-    "ppp"
+    "psp"
   ],
   "result": {
     "item": "minestuck:heart_aspect_bookshelf"

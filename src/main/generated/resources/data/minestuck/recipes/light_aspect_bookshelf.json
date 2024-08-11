@@ -8,12 +8,15 @@
     },
     "p": {
       "item": "minestuck:light_aspect_planks"
+    },
+    "s": {
+      "item": "minestuck:light_aspect_slab"
     }
   },
   "pattern": [
-    "ppp",
+    "psp",
     "bpb",
-    "ppp"
+    "psp"
   ],
   "result": {
     "item": "minestuck:light_aspect_bookshelf"
