@@ -299,7 +299,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.FROST, SUPPLY_ITEM_TABLE), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(ITEM_POOL)
-						.add(LootItem.lootTableItem(Items.FLINT_AND_STEEL).setWeight(10).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.0F, 0.25F))))
+						.add(LootItem.lootTableItem(Items.FLINT_AND_STEEL).setWeight(10).setQuality(0).apply(damageRange(0.0F, 0.25F)))
 						.add(LootItem.lootTableItem(Items.COAL).setWeight(8).setQuality(0).apply(countRange(1, 5)))
 						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(2).apply(countRange(1, 2)))
 				));
