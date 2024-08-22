@@ -44,6 +44,7 @@ public class HeatLandType extends TerrainLandType
 		registry.setBlock(CRUXITE_ORE, MSBlocks.BLACK_STONE_CRUXITE_ORE);
 		registry.setBlock(URANIUM_ORE, MSBlocks.BLACK_STONE_URANIUM_ORE);
 		registry.setBlock(GROUND, MSBlocks.BLACK_STONE);
+		registry.setBlock(GROUND_SLAB, MSBlocks.BLACK_STONE_SLAB);
 		registry.setBlock(SURFACE, MSBlocks.IGNEOUS_STONE);
 		registry.setBlock(UPPER, MSBlocks.PUMICE_STONE);
 		registry.setBlock(OCEAN, MSBlocks.MOLTEN_AMBER);

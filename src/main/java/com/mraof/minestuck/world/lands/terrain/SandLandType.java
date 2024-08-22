@@ -69,6 +69,7 @@ public class SandLandType extends TerrainLandType
 		if(type == Variant.SAND || type == Variant.LUSH_DESERTS)
 		{
 			registry.setBlock(GROUND, Blocks.SANDSTONE);
+			registry.setBlock(GROUND_SLAB, Blocks.SANDSTONE_SLAB);
 			registry.setBlock(UPPER, Blocks.SAND);
 			registry.setBlock(STRUCTURE_PRIMARY, Blocks.SMOOTH_SANDSTONE);
 			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, Blocks.CHISELED_SANDSTONE);
@@ -79,6 +80,7 @@ public class SandLandType extends TerrainLandType
 		} else
 		{
 			registry.setBlock(GROUND, Blocks.RED_SANDSTONE);
+			registry.setBlock(GROUND_SLAB, Blocks.RED_SANDSTONE_SLAB);
 			registry.setBlock(UPPER, Blocks.RED_SAND);
 			registry.setBlock(STRUCTURE_PRIMARY, Blocks.SMOOTH_RED_SANDSTONE);
 			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, Blocks.CHISELED_RED_SANDSTONE);
@@ -87,12 +89,25 @@ public class SandLandType extends TerrainLandType
 			registry.setBlock(CRUXITE_ORE, MSBlocks.RED_SANDSTONE_CRUXITE_ORE);
 			registry.setBlock(URANIUM_ORE, MSBlocks.RED_SANDSTONE_URANIUM_ORE);
 		}
+		
+		registry.setBlockState(RIVER, registry.getBlockState(UPPER));
+		
 		registry.setBlock(STRUCTURE_SECONDARY, Blocks.STONE_BRICKS);
 		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, Blocks.CHISELED_STONE_BRICKS);
 		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, Blocks.STONE_BRICK_STAIRS);
+		
+		registry.setBlock(STRUCTURE_WOOD, Blocks.ACACIA_WOOD);
+		registry.setBlock(STRUCTURE_LOG, Blocks.ACACIA_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, Blocks.STRIPPED_ACACIA_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, Blocks.STRIPPED_ACACIA_LOG);
 		registry.setBlock(STRUCTURE_PLANKS, Blocks.ACACIA_PLANKS);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, Blocks.ACACIA_STAIRS);
 		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.ACACIA_SLAB);
-		registry.setBlockState(RIVER, registry.getBlockState(UPPER));
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, Blocks.ACACIA_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.ACACIA_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, Blocks.ACACIA_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.ACACIA_TRAPDOOR);
+		
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.YELLOW_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.MAGENTA_WOOL);
 	}

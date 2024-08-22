@@ -56,6 +56,7 @@ public class RainLandType extends TerrainLandType
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setBlock(GROUND, MSBlocks.PINK_STONE);
+		registry.setBlock(GROUND_SLAB, MSBlocks.PINK_STONE_SLAB);
 		registry.setBlock(SURFACE, MSBlocks.CHALK);
 		registry.setBlock(UPPER, MSBlocks.CHALK);
 		registry.setBlock(OCEAN, Blocks.WATER);

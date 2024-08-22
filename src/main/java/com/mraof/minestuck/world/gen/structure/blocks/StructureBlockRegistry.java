@@ -93,6 +93,7 @@ public final class StructureBlockRegistry
 	public static final String CRUXITE_ORE = "cruxite_ore";
 	public static final String URANIUM_ORE = "uranium_ore";
 	public static final String GROUND = "ground";
+	public static final String GROUND_SLAB = "ground_slab";
 	public static final String UPPER = "upper";
 	public static final String SURFACE = "surface";
 	public static final String SURFACE_ROUGH = "surface_rough";
@@ -167,6 +168,7 @@ public final class StructureBlockRegistry
 		registerBlock(CRUXITE_ORE, MSBlocks.STONE_CRUXITE_ORE.get().defaultBlockState());
 		registerBlock(URANIUM_ORE, MSBlocks.STONE_URANIUM_ORE.get().defaultBlockState());
 		registerBlock(GROUND, Blocks.STONE.defaultBlockState());
+		registerBlock(GROUND_SLAB, GROUND, Blocks.STONE_SLAB);
 		registerBlock(UPPER, GROUND, Blocks.DIRT);
 		registerBlock(SURFACE, UPPER, Blocks.GRASS_BLOCK);
 		registerBlock(SURFACE_ROUGH, SURFACE, Blocks.PODZOL);

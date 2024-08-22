@@ -48,6 +48,7 @@ public class FungiLandType extends TerrainLandType
 		registry.setBlock(CRUXITE_ORE, MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
 		registry.setBlock(URANIUM_ORE, MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
 		registry.setBlock(GROUND, MSBlocks.MYCELIUM_STONE);
+		registry.setBlock(GROUND_SLAB, MSBlocks.MYCELIUM_SLAB);
 		registry.setBlock(UPPER, Blocks.DIRT);
 		registry.setBlock(SURFACE, Blocks.MYCELIUM);
 		registry.setBlock(OCEAN, Blocks.WATER);

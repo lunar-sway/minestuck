@@ -76,12 +76,24 @@ public class SandstoneLandType extends TerrainLandType
 		registry.setBlock(STRUCTURE_SECONDARY, Blocks.STONE_BRICKS);
 		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, Blocks.CHISELED_STONE_BRICKS);
 		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, Blocks.STONE_BRICK_STAIRS);
+		
+		registry.setBlock(STRUCTURE_WOOD, Blocks.ACACIA_WOOD);
+		registry.setBlock(STRUCTURE_LOG, Blocks.ACACIA_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, Blocks.STRIPPED_ACACIA_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, Blocks.STRIPPED_ACACIA_LOG);
 		registry.setBlock(STRUCTURE_PLANKS, Blocks.ACACIA_PLANKS);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, Blocks.ACACIA_STAIRS);
 		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.ACACIA_SLAB);
-		registry.setBlock(TORCH, Blocks.REDSTONE_TORCH);
-		registry.setBlock(WALL_TORCH, Blocks.REDSTONE_WALL_TORCH);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, Blocks.ACACIA_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.ACACIA_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, Blocks.ACACIA_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.ACACIA_TRAPDOOR);
+		
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.WHITE_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.MAGENTA_WOOL);
+		
+		registry.setBlock(TORCH, Blocks.REDSTONE_TORCH);
+		registry.setBlock(WALL_TORCH, Blocks.REDSTONE_WALL_TORCH);
 	}
 	
 	@Override
