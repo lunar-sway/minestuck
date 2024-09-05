@@ -111,8 +111,6 @@ public final class MSEntityTypes
 		event.put(PROSPITIAN_ROOK.get(), RookEntity.rookAttributes().build());
 		
 		event.put(PLAYER_DECOY.get(), Mob.createMobAttributes().build());
-		
-		event.put(LOTUS_FLOWER.get(), LivingEntity.createLivingAttributes().build());
 		event.put(SERVER_CURSOR.get(), LivingEntity.createLivingAttributes().build());
 	}
 }

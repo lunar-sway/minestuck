@@ -5,6 +5,7 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -44,7 +45,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntityWithComplexSpawn
+public class LotusFlowerEntity extends Entity implements GeoEntity, IEntityWithComplexSpawn
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -104,6 +105,12 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	}
 	
 	@Override
+	public boolean isPickable()
+	{
+		return true;
+	}
+	
+	@Override
 	public InteractionResult interact(Player player, InteractionHand hand)
 	{
 		if(isAlive() && !player.isShiftKeyDown() && animationType == Animation.IDLE)
@@ -129,9 +136,9 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	}
 	
 	@Override
-	public void aiStep()
+	public void tick()
 	{
-		super.aiStep();
+		super.tick();
 		
 		if(!level().isClientSide)
 		{
@@ -227,16 +234,12 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound)
 	{
-		super.addAdditionalSaveData(compound);
-		
 		compound.putInt("EventTimer", eventTimer);
 	}
 	
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound)
 	{
-		super.readAdditionalSaveData(compound);
-		
 		if(compound.contains("EventTimer", Tag.TAG_ANY_NUMERIC))
 		{
 			eventTimer = compound.getInt("EventTimer");
@@ -289,31 +292,14 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	}
 	
 	@Override
+	protected void defineSynchedData()
+	{
+	
+	}
+	
+	@Override
 	public void move(MoverType typeIn, Vec3 pos)
 	{
-	}
-	
-	@Override
-	public Iterable<ItemStack> getArmorSlots()
-	{
-		return Collections.emptyList();
-	}
-	
-	@Override
-	public ItemStack getItemBySlot(EquipmentSlot slotIn)
-	{
-		return ItemStack.EMPTY;
-	}
-	
-	@Override
-	public void setItemSlot(EquipmentSlot slotIn, ItemStack stack)
-	{
-	}
-	
-	@Override
-	public HumanoidArm getMainArm()
-	{
-		return HumanoidArm.RIGHT;
 	}
 	
 	public enum Animation //animationName set in assets/minestuck/animations/lotus_flower.animation.json. Animated blocks/entities also need a section in assets/minestuck/geo
