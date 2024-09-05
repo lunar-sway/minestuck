@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - Structure Block Registry Processor can now be used for data generated structures through a processor_list
+- Adjusted the hitbox size for Lotus Flowers
 
 ### Fixed
 - The Umbral Infiltrator no longer jitters when thrown by a void player
