@@ -14,10 +14,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 - Structure Block Registry Processor can now be used for data generated structures through a processor_list
 - Adjusted the hitbox size for Lotus Flowers
+- The Lotus Time Capsule now spawns a Lotus Flower when placed
 
 ### Fixed
 - The Umbral Infiltrator no longer jitters when thrown by a void player
-- Lotus Flowers can no longer be hurt or killed by any damage source
+- Manually-spawned Lotus Flowers can no longer be hurt or killed by any damage source
 - Lotus Flowers no longer push entities inside of them away
 
 ### Contributors for this release
