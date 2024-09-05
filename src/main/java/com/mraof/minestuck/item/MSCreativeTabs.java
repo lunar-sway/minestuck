@@ -352,6 +352,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.ITEM_MAGNET.get());
 		output.accept(MSItems.REDSTONE_CLOCK.get());
 		output.accept(MSItems.ROTATOR.get());
+		output.accept(MSItems.BLOCK_TELEPORTER.get());
 		output.accept(MSItems.TOGGLER.get());
 		output.accept(MSItems.FALL_PAD.get());
 		output.accept(MSItems.FRAGILE_STONE.get());
