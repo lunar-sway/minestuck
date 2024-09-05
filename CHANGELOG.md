@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 - The Umbral Infiltrator no longer jitters when thrown by a void player
-- Lotus Flowers can no longer be hurt or "killed"
+- Lotus Flowers can no longer be hurt or killed by any damage source
 - Lotus Flowers no longer push entities inside of them away
 
 ### Contributors for this release
