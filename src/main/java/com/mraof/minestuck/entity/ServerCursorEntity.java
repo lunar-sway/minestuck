@@ -2,12 +2,10 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.network.ServerCursorPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
@@ -21,11 +19,10 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collections;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEntityWithComplexSpawn
+public class ServerCursorEntity extends Entity implements GeoEntity, IEntityWithComplexSpawn
 {
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -84,9 +81,9 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 	}
 	
 	@Override
-	public void aiStep()
+	public void tick()
 	{
-		super.aiStep();
+		super.tick();
 		
 		if(!level().isClientSide)
 		{
@@ -105,6 +102,7 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 		}
 	}
 	
+	/*
 	//Ensures that the head and body always face the same way as the root Y rotation.
 	@Override
 	protected float tickHeadTurn(float pYRot, float pAnimStep)
@@ -125,6 +123,13 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 		this.yBodyRot = this.getYRot();
 		this.yHeadRot = this.getYRot();
 	}
+	*/
+	
+	@Override
+	protected void defineSynchedData()
+	{
+	
+	}
 	
 	@Override
 	protected MovementEmission getMovementEmission()
@@ -133,26 +138,15 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 	}
 	
 	@Override
-	public Iterable<ItemStack> getArmorSlots()
+	protected void readAdditionalSaveData(CompoundTag pCompound)
 	{
-		return Collections.emptyList();
+	
 	}
 	
 	@Override
-	public ItemStack getItemBySlot(EquipmentSlot pSlot)
+	protected void addAdditionalSaveData(CompoundTag pCompound)
 	{
-		return ItemStack.EMPTY;
-	}
 	
-	@Override
-	public void setItemSlot(EquipmentSlot pSlot, ItemStack pStack)
-	{
-	}
-	
-	@Override
-	public HumanoidArm getMainArm()
-	{
-		return HumanoidArm.RIGHT;
 	}
 	
 	public void setAnimation(AnimationType animation)
