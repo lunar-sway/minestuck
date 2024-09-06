@@ -187,7 +187,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	
 	private static PlayState walkAnimation(AnimationState<GiclopsEntity> state)
 	{
-		if(state.isMoving())
+		if(state.getAnimatable().isMovingHorizontally())
 		{
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;

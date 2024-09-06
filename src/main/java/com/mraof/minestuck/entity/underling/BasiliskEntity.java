@@ -235,7 +235,7 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 	
 	private static PlayState walkAnimation(AnimationState<BasiliskEntity> state)
 	{
-		if(!state.isMoving())
+		if(!state.getAnimatable().isMovingHorizontally())
 		{
 			return PlayState.STOP;
 		}

@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The Umbral Infiltrator no longer jitters when thrown by a void player
 - Manually-spawned Lotus Flowers can no longer be hurt or killed by any damage source
 - Lotus Flowers no longer push entities inside of them away
+- Ogres and Basilisks no longer slide around when idling
 
 ### Contributors for this release
 
