@@ -135,7 +135,7 @@ public final class CommonRecipes
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bookshelfBlock)
 				.define('b', Items.BOOK).define('p',sourceBlock).define('s',sourceBlockSlab)
-				.pattern("psp").pattern("bpb").pattern("psp")
+				.pattern("psp").pattern("bbb").pattern("psp")
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
