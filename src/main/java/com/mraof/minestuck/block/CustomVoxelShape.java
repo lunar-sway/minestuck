@@ -91,4 +91,12 @@ public class CustomVoxelShape
 	{
 		return ImmutableMap.<Direction, VoxelShape>builder().put(Direction.UP, this.create(Direction.UP)).put(Direction.DOWN, this.create(Direction.DOWN)).put(Direction.NORTH, this.create(Direction.NORTH)).put(Direction.SOUTH, this.create(Direction.SOUTH)).put(Direction.WEST, this.create(Direction.WEST)).put(Direction.EAST, this.create(Direction.EAST)).build();
 	}
+	
+	public double getMaxY()
+	{
+		double result = 0;
+		for(double[] part : parts)
+			result = Math.max(result, Math.max(part[1], part[4]));
+		return result / 16d;
+	}
 }
