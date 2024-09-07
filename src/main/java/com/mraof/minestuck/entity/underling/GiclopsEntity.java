@@ -30,7 +30,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation KICK_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.KICK, 40, true, true), 18, 20, 22);
+	public static final PhasedMobAnimation KICK_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.KICK, 40, true, true), 18, 20, 22, 1);
 	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
 	private static final RawAnimation KICK_ANIMATION = RawAnimation.begin().then("kick", Animation.LoopType.PLAY_ONCE);
@@ -46,7 +46,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 210)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.MOVEMENT_SPEED, 0.20)
-				.add(Attributes.ATTACK_DAMAGE, 18);
+				.add(Attributes.ATTACK_DAMAGE, 18).add(Attributes.ATTACK_SPEED, 1);
 	}
 	
 	@Override
@@ -189,6 +189,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	{
 		if(state.getAnimatable().isMovingHorizontally())
 		{
+			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 1);
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
@@ -206,6 +207,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 		}
 		
 		state.getController().forceAnimationReset();
+		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.ATTACK_SPEED, 1); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	

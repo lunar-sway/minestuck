@@ -51,7 +51,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	@Override
 	public boolean canContinueToUse()
 	{
-		return phasedAnimation.getCurrentPhase(time) != PhasedMobAnimation.Phases.NEUTRAL;
+		return phasedAnimation.getCurrentPhase(entity, time) != PhasedMobAnimation.Phases.NEUTRAL;
 	}
 	
 	@Override
@@ -66,7 +66,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 		MobAnimation animation = phasedAnimation.getAnimation();
 		
 		if(entity instanceof AnimatedPathfinderMob animatedMob)
-			animatedMob.setCurrentAnimation(animation);
+			animatedMob.setCurrentAnimation(animation, phasedAnimation.getAnimationSpeed(entity));
 		
 		if(animation.freezeSight())
 		{

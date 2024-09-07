@@ -1,6 +1,13 @@
 package com.mraof.minestuck.entity.animation;
 
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+
+import javax.annotation.Nullable;
 
 /**
  * A supplement to MobAnimation that allows for certain code to be performed at the point where one phase of an animation ends and the other begins.
@@ -13,47 +20,61 @@ public class PhasedMobAnimation
 	private final int contactStart;
 	private final int recoveryStart;
 	private final int recoveryEnd;
+	private final double baseAnimationSpeed;
+	@Nullable
+	private final Attribute speedModifyingAttribute;
+	
+	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, double baseAnimationSpeed)
+	{
+		this(animation, initiationStart, contactStart, recoveryStart, baseAnimationSpeed, Attributes.ATTACK_SPEED);
+	}
+	
 	
 	/**
 	 * @param initiationStart not the first frame of animation
 	 * @param contactStart the apex of animations, when attacks connect
+	 * @param baseAnimationSpeed how fast the animation is played normally
+	 * @param speedModifyingAttribute the entity attribute responsible for affecting the animation's speed
 	 */
-	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart)
+	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, double baseAnimationSpeed, @Nullable Attribute speedModifyingAttribute)
 	{
 		this.animation = animation;
-		this.initiationStart = initiationStart;
-		this.contactStart = contactStart;
-		this.recoveryStart = recoveryStart;
-		this.recoveryEnd = animation.animationLength(); //recoveryEnd is identical to animationLength in MobAnimation
+		this.initiationStart = (int) Math.round(initiationStart * baseAnimationSpeed);
+		this.contactStart =  (int) Math.round(contactStart * baseAnimationSpeed);
+		this.recoveryStart =  (int) Math.round(recoveryStart * baseAnimationSpeed);
+		this.recoveryEnd =  (int) Math.round(animation.animationLength() * baseAnimationSpeed); //recoveryEnd is identical to animationLength in MobAnimation
+		this.baseAnimationSpeed = baseAnimationSpeed;
+		this.speedModifyingAttribute = speedModifyingAttribute;
 	}
 	
-	public Phases getCurrentPhase(int time)
+	public Phases getCurrentPhase(PathfinderMob entity, int time)
 	{
-		if(time < initiationStart)
+		double speed = getAnimationSpeed(entity);
+		if(time < getInitiationStartTime(speed))
 			return Phases.ANTICIPATION;
-		else if(time < contactStart)
+		else if(time < getContactStartTime(speed))
 			return Phases.INITIATION;
-		else if(time < recoveryStart)
+		else if(time < getRecoveryStartTime(speed))
 			return Phases.CONTACT;
-		else if(time < recoveryEnd)
+		else if(time < getTotalAnimationLength(speed))
 			return Phases.RECOVERY;
 		else
 			return Phases.NEUTRAL;
 	}
 	
-	public int getInitiationStartTime()
+	public int getInitiationStartTime(double speed)
 	{
-		return initiationStart;
+		return (int) Math.round(initiationStart / speed);
 	}
 	
-	public int getContactStartTime()
+	public int getContactStartTime(double speed)
 	{
-		return contactStart;
+		return (int) Math.round(contactStart / speed);
 	}
 	
-	public int getRecoveryStartTime()
+	public int getRecoveryStartTime(double speed)
 	{
-		return recoveryStart;
+		return (int) Math.round(recoveryStart / speed);
 	}
 	
 	public MobAnimation getAnimation()
@@ -64,9 +85,9 @@ public class PhasedMobAnimation
 	/**
 	 * Equivalent to getting recoveryEnd value
 	 */
-	public int getTotalAnimationLength()
+	public int getTotalAnimationLength(double speed)
 	{
-		return recoveryEnd;
+		return (int) Math.round(recoveryEnd / speed);
 	}
 	
 	/**
@@ -74,14 +95,24 @@ public class PhasedMobAnimation
 	 */
 	public <T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> void attemptPhaseChange(int time, T entity)
 	{
-		if(time == getInitiationStartTime())
+		double speed = getAnimationSpeed(entity);
+		if(time == getInitiationStartTime(speed))
 			entity.setAnimationPhase(Phases.INITIATION, animation.action());
-		else if(time == getContactStartTime())
+		else if(time == getContactStartTime(speed))
 			entity.setAnimationPhase(Phases.CONTACT, animation.action());
-		else if(time == getRecoveryStartTime())
+		else if(time == getRecoveryStartTime(speed))
 			entity.setAnimationPhase(Phases.RECOVERY, animation.action());
-		else if(time >= getTotalAnimationLength())
+		else if(time >= getTotalAnimationLength(speed))
 			entity.setAnimationPhase(Phases.NEUTRAL, animation.action());
+	}
+	
+	public double getAnimationSpeed(PathfinderMob entity)
+	{
+		if(speedModifyingAttribute == null)
+			return baseAnimationSpeed;
+		
+		AttributeInstance attributeInstance = entity.getAttribute(speedModifyingAttribute);
+		return (attributeInstance != null ? attributeInstance.getValue() : 1) * baseAnimationSpeed;
 	}
 	
 	/**

@@ -30,7 +30,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class ImpEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 4, 5);
+	private static final double ATTACK_ANIMATION_SPEED = 2;
+	
+	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 4, 5, ATTACK_ANIMATION_SPEED);
 	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.idle");
 	private static final RawAnimation RUN_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.run");
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.walk");
@@ -47,7 +49,7 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	public static AttributeSupplier.Builder impAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
-				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 2);
+				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 2).add(Attributes.ATTACK_SPEED, 1);
 	}
 	
 	@Override
@@ -132,7 +134,7 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 		controllers.add(new AnimationController<>(this, "walkArmsAnimation", ImpEntity::walkArmsAnimation));
 		controllers.add(new AnimationController<>(this, "walkAnimation", ImpEntity::walkAnimation).setAnimationSpeed(0.5));
 		controllers.add(new AnimationController<>(this, "deathAnimation", ImpEntity::deathAnimation).setAnimationSpeed(0.7));
-		controllers.add(new AnimationController<>(this, "attackAnimation", ImpEntity::attackAnimation).setAnimationSpeed(2));
+		controllers.add(new AnimationController<>(this, "attackAnimation", ImpEntity::attackAnimation).setAnimationSpeed(ATTACK_ANIMATION_SPEED));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<ImpEntity> state)
@@ -170,6 +172,8 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 			return PlayState.STOP;
 		}
 		
+		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 0.5);
+		
 		if(state.getAnimatable().isAggressive())
 		{
 			state.getController().setAnimation(RUNARMS_ANIMATION);
@@ -199,6 +203,7 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 			return PlayState.CONTINUE;
 		}
 		state.getController().forceAnimationReset();
+		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 }

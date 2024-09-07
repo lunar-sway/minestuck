@@ -1,15 +1,19 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animation.AnimationController;
 
 import java.util.UUID;
 
@@ -87,12 +91,18 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 			instance.removeModifier(STATIONARY_MOB_MODIFIER.getId());
 	}
 	
+	public void setCurrentAnimation(MobAnimation animation)
+	{
+		setCurrentAnimation(animation, 1);
+	}
+	
+	
 	/**
 	 * Used to set the entity's animation and action
 	 *
 	 * @param animation The animation to set, also contains the action to set entityData from
 	 */
-	public void setCurrentAnimation(MobAnimation animation)
+	public void setCurrentAnimation(MobAnimation animation, double animationSpeed)
 	{
 		if(animation.freezeMovement())
 			freezeMob();
@@ -100,6 +110,12 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 			unfreezeMob();
 		
 		this.entityData.set(CURRENT_ACTION, animation.action().ordinal());
-		this.remainingAnimationTicks = animation.animationLength();
+		this.remainingAnimationTicks = (int) Math.round(animation.animationLength() / animationSpeed);
+	}
+	
+	public <T extends AnimatedPathfinderMob & GeoAnimatable> void adjustAnimationSpeed(AnimationController<T> controller, Attribute attribute, double baseValue)
+	{
+		AttributeInstance speedAttribute = getAttribute(attribute);
+		controller.setAnimationSpeed(speedAttribute == null ? baseValue : (float) (speedAttribute.getValue() / speedAttribute.getBaseValue()) * baseValue);
 	}
 }

@@ -10,10 +10,12 @@ import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.client.renderer.entity.SkeletonRenderer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,9 +29,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class OgreEntity extends UnderlingEntity
 {
-	public static final PhasedMobAnimation RIGHT_PUNCH_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.RIGHT_PUNCH, 22, true, true), 7, 10, 13);
-	public static final PhasedMobAnimation LEFT_PUNCH_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.LEFT_PUNCH, 22, true, true), 7, 10, 13);
-	public static final PhasedMobAnimation SLAM_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SLAM, 30, true, true), 12, 15, 19);
+	public static final double ATTACK_ANIMATION_SPEED = 0.5;
+	
+	public static final PhasedMobAnimation RIGHT_PUNCH_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.RIGHT_PUNCH, 22, true, true), 7, 10, 13, ATTACK_ANIMATION_SPEED);
+	public static final PhasedMobAnimation LEFT_PUNCH_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.LEFT_PUNCH, 22, true, true), 7, 10, 13, ATTACK_ANIMATION_SPEED);
+	public static final PhasedMobAnimation SLAM_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SLAM, 30, true, true), 12, 15, 19, ATTACK_ANIMATION_SPEED);
 	public static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
 	public static final RawAnimation WALKARMS_ANIMATION = RawAnimation.begin().thenLoop("walkarms");
 	public static final RawAnimation RIGHT_PUNCH_ANIMATION = RawAnimation.begin().then("right_punch", Animation.LoopType.PLAY_ONCE);
@@ -47,7 +51,8 @@ public class OgreEntity extends UnderlingEntity
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 50)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
-				.add(Attributes.ATTACK_DAMAGE, 6).add(Attributes.ATTACK_KNOCKBACK, 12);
+				.add(Attributes.ATTACK_DAMAGE, 6).add(Attributes.ATTACK_KNOCKBACK, 12)
+				.add(Attributes.ATTACK_SPEED, 1);
 	}
 	
 	@Override
@@ -122,9 +127,9 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(new AnimationController<>(this, "walkArmsAnimation", OgreEntity::walkArmsAnimation).setAnimationSpeed(0.3));
-		controllers.add(new AnimationController<>(this, "walkAnimation", OgreEntity::walkAnimation).setAnimationSpeed(0.3));
-		controllers.add(new AnimationController<>(this, "attackAnimation", OgreEntity::attackAnimation).setAnimationSpeed(0.5));
+		controllers.add(new AnimationController<>(this, "walkArmsAnimation", OgreEntity::walkArmsAnimation).setAnimationSpeed(0.5));
+		controllers.add(new AnimationController<>(this, "walkAnimation", OgreEntity::walkAnimation).setAnimationSpeed(0.5));
+		controllers.add(new AnimationController<>(this, "attackAnimation", OgreEntity::attackAnimation).setAnimationSpeed(ATTACK_ANIMATION_SPEED));
 		controllers.add(new AnimationController<>(this, "deathAnimation", OgreEntity::deathAnimation).setAnimationSpeed(0.85));
 	}
 	
@@ -132,6 +137,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(state.getAnimatable().isMovingHorizontally())
 		{
+			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 0.5);
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
@@ -142,6 +148,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(state.getAnimatable().isMovingHorizontally() && !state.getAnimatable().isActive())
 		{
+			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 0.5);
 			state.getController().setAnimation(WALKARMS_ANIMATION);
 			return PlayState.CONTINUE;
 		}
@@ -167,6 +174,7 @@ public class OgreEntity extends UnderlingEntity
 		}
 		
 		state.getController().forceAnimationReset();
+		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	

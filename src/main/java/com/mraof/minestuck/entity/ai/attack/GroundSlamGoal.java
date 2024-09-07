@@ -49,7 +49,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 			{
 				if(iteratedEntity != this.entity && iteratedEntity.getType() == this.entity.getType() && !iteratedEntity.existingCooldownIsLonger(GROUP_SLAM_COOLDOWN))
 				{
-					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent simultaneous goal use by other mobs of the same type
+					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength(phasedAnimation.getAnimationSpeed(entity))); //plays at beginning to prevent simultaneous goal use by other mobs of the same type
 				}
 			}
 		}

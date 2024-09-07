@@ -29,7 +29,9 @@ import java.util.UUID;
 @ParametersAreNonnullByDefault
 public class LichEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, false, false), 5, 6, 7);
+	public static final double ATTACK_ANIMATION_SPEED = 2.25;
+	
+	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, false, false), 5, 6, 7, ATTACK_ANIMATION_SPEED);
 	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
 	private static final RawAnimation CLAW_LEGS_ANIMATION = RawAnimation.begin().then("claw_legs", Animation.LoopType.PLAY_ONCE);
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
@@ -45,7 +47,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 175)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.3).add(Attributes.MOVEMENT_SPEED, 0.25)
-				.add(Attributes.ATTACK_DAMAGE, 8);
+				.add(Attributes.ATTACK_DAMAGE, 8).add(Attributes.ATTACK_SPEED, 1);
 	}
 	
 	@Override
@@ -132,7 +134,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		controller.add(new AnimationController<>(this, "idleAnimation", LichEntity::idleAnimation));
 		controller.add(new AnimationController<>(this, "walkAnimation", LichEntity::walkAnimation));
 		controller.add(new AnimationController<>(this, "deathAnimation", LichEntity::deathAnimation));
-		controller.add(new AnimationController<>(this, "attackAnimation", LichEntity::attackAnimation).setAnimationSpeed(2.25));
+		controller.add(new AnimationController<>(this, "attackAnimation", LichEntity::attackAnimation).setAnimationSpeed(ATTACK_ANIMATION_SPEED));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<LichEntity> state)
@@ -149,6 +151,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	private static PlayState walkAnimation(AnimationState<LichEntity> state)
 	{
 		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
+		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 1);
 		
 		if(action == MobAnimation.Action.CLAW)
 		{
@@ -182,6 +185,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 			return PlayState.CONTINUE;
 		}
 		state.getController().forceAnimationReset();
+		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	
