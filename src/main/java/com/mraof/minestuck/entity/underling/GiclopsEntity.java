@@ -169,7 +169,8 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		controllers.add(new AnimationController<>(this, "idleAnimation", GiclopsEntity::idleAnimation));
-		controllers.add(new AnimationController<>(this, "walkAnimation", GiclopsEntity::walkAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", GiclopsEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 5)));
 		controllers.add(new AnimationController<>(this, "attackAnimation", GiclopsEntity::attackAnimation));
 		controllers.add(new AnimationController<>(this, "deathAnimation", GiclopsEntity::deathAnimation));
 	}
@@ -189,7 +190,6 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	{
 		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
-			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 1);
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}

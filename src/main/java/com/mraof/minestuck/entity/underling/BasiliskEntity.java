@@ -225,7 +225,8 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		controllers.add(new AnimationController<>(this, "idleAnimation", BasiliskEntity::idleAnimation));
-		controllers.add(new AnimationController<>(this, "walkAnimation", BasiliskEntity::walkAnimation).setAnimationSpeed(ATTACK_ANIMATION_SPEED));
+		controllers.add(new AnimationController<>(this, "walkAnimation", BasiliskEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 3.5)));
 		controllers.add(new AnimationController<>(this, "deathAnimation", BasiliskEntity::deathAnimation));
 		controllers.add(new AnimationController<>(this, "attackAnimation", BasiliskEntity::attackAnimation));
 	}
@@ -245,12 +246,11 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 		if(state.getAnimatable().isAggressive())
 		{
 			state.getController().setAnimation(RUN_ANIMATION);
-			return PlayState.CONTINUE;
 		} else
 		{
 			state.getController().setAnimation(WALK_ANIMATION);
-			return PlayState.CONTINUE;
 		}
+		return PlayState.CONTINUE;
 	}
 	
 	private static PlayState deathAnimation(AnimationState<BasiliskEntity> state)

@@ -132,9 +132,10 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	public void registerControllers(AnimatableManager.ControllerRegistrar controller)
 	{
 		controller.add(new AnimationController<>(this, "idleAnimation", LichEntity::idleAnimation));
-		controller.add(new AnimationController<>(this, "walkAnimation", LichEntity::walkAnimation));
+		controller.add(new AnimationController<>(this, "walkAnimation", LichEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 4)));
 		controller.add(new AnimationController<>(this, "deathAnimation", LichEntity::deathAnimation));
-		controller.add(new AnimationController<>(this, "attackAnimation", LichEntity::attackAnimation).setAnimationSpeed(ATTACK_ANIMATION_SPEED));
+		controller.add(new AnimationController<>(this, "attackAnimation", LichEntity::attackAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<LichEntity> state)
@@ -151,7 +152,6 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	private static PlayState walkAnimation(AnimationState<LichEntity> state)
 	{
 		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
-		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 1);
 		
 		if(action == MobAnimation.Action.CLAW)
 		{

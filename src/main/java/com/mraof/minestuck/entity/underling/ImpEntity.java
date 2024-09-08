@@ -131,10 +131,12 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		controllers.add(new AnimationController<>(this, "idleAnimation", ImpEntity::idleAnimation));
-		controllers.add(new AnimationController<>(this, "walkArmsAnimation", ImpEntity::walkArmsAnimation));
-		controllers.add(new AnimationController<>(this, "walkAnimation", ImpEntity::walkAnimation).setAnimationSpeed(0.5));
+		controllers.add(new AnimationController<>(this, "walkArmsAnimation", ImpEntity::walkArmsAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 1.785)));
+		controllers.add(new AnimationController<>(this, "walkAnimation", ImpEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 1.785)));
 		controllers.add(new AnimationController<>(this, "deathAnimation", ImpEntity::deathAnimation).setAnimationSpeed(0.7));
-		controllers.add(new AnimationController<>(this, "attackAnimation", ImpEntity::attackAnimation).setAnimationSpeed(ATTACK_ANIMATION_SPEED));
+		controllers.add(new AnimationController<>(this, "attackAnimation", ImpEntity::attackAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<ImpEntity> state)
@@ -157,12 +159,11 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 		if(state.getAnimatable().isAggressive())
 		{
 			state.getController().setAnimation(RUN_ANIMATION);
-			return PlayState.CONTINUE;
 		} else
 		{
 			state.getController().setAnimation(WALK_ANIMATION);
-			return PlayState.CONTINUE;
 		}
+		return PlayState.CONTINUE;
 	}
 	
 	private static PlayState walkArmsAnimation(AnimationState<ImpEntity> state)
@@ -172,17 +173,14 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 			return PlayState.STOP;
 		}
 		
-		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 0.5);
-		
 		if(state.getAnimatable().isAggressive())
 		{
 			state.getController().setAnimation(RUNARMS_ANIMATION);
-			return PlayState.CONTINUE;
 		} else
 		{
 			state.getController().setAnimation(WALKARMS_ANIMATION);
-			return PlayState.CONTINUE;
 		}
+		return PlayState.CONTINUE;
 	}
 	
 	private static PlayState deathAnimation(AnimationState<ImpEntity> state)

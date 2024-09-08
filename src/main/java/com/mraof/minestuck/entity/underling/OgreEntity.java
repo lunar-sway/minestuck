@@ -127,9 +127,11 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(new AnimationController<>(this, "walkArmsAnimation", OgreEntity::walkArmsAnimation).setAnimationSpeed(0.5));
-		controllers.add(new AnimationController<>(this, "walkAnimation", OgreEntity::walkAnimation).setAnimationSpeed(0.5));
-		controllers.add(new AnimationController<>(this, "attackAnimation", OgreEntity::attackAnimation).setAnimationSpeed(ATTACK_ANIMATION_SPEED));
+		controllers.add(new AnimationController<>(this, "walkArmsAnimation", OgreEntity::walkArmsAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 2.27)));
+		controllers.add(new AnimationController<>(this, "walkAnimation", OgreEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 2.27)));
+		controllers.add(new AnimationController<>(this, "attackAnimation", OgreEntity::attackAnimation));
 		controllers.add(new AnimationController<>(this, "deathAnimation", OgreEntity::deathAnimation).setAnimationSpeed(0.85));
 	}
 	
@@ -137,7 +139,6 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
-			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 0.5);
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
@@ -148,7 +149,6 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()) && !state.getAnimatable().isActive())
 		{
-			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 0.5);
 			state.getController().setAnimation(WALKARMS_ANIMATION);
 			return PlayState.CONTINUE;
 		}
