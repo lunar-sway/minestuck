@@ -39,7 +39,7 @@ repositories {
     }
     maven {
         // maven that contains infiniverse
-        url "https://cubicinterpolation.net/maven/"
+        url "https://commoble.net/maven/"
     }
 }
 

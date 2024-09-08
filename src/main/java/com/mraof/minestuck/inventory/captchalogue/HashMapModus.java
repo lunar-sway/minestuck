@@ -268,7 +268,7 @@ public class HashMapModus extends Modus
 			player.getInventory().setItem(player.getInventory().selected, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		player.sendSystemMessage(Component.translatable("message.hash_map", i, getSize(), index, stack.getDisplayName()));
+		player.sendSystemMessage(Component.translatable(MESSAGE, i, getSize(), index, stack.getDisplayName()));
 	}
 	
 }

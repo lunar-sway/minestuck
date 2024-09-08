@@ -8,12 +8,15 @@
     },
     "p": {
       "item": "minestuck:space_aspect_planks"
+    },
+    "s": {
+      "item": "minestuck:space_aspect_slab"
     }
   },
   "pattern": [
-    "ppp",
-    "bpb",
-    "ppp"
+    "psp",
+    "bbb",
+    "psp"
   ],
   "result": {
     "item": "minestuck:space_aspect_bookshelf"

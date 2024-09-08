@@ -8,12 +8,15 @@
     },
     "p": {
       "item": "minestuck:rage_aspect_planks"
+    },
+    "s": {
+      "item": "minestuck:rage_aspect_slab"
     }
   },
   "pattern": [
-    "ppp",
-    "bpb",
-    "ppp"
+    "psp",
+    "bbb",
+    "psp"
   ],
   "result": {
     "item": "minestuck:rage_aspect_bookshelf"

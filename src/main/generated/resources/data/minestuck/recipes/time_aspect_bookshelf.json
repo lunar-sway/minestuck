@@ -8,12 +8,15 @@
     },
     "p": {
       "item": "minestuck:time_aspect_planks"
+    },
+    "s": {
+      "item": "minestuck:time_aspect_slab"
     }
   },
   "pattern": [
-    "ppp",
-    "bpb",
-    "ppp"
+    "psp",
+    "bbb",
+    "psp"
   ],
   "result": {
     "item": "minestuck:time_aspect_bookshelf"

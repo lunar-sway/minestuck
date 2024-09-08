@@ -8,12 +8,15 @@
     },
     "p": {
       "item": "minestuck:doom_aspect_planks"
+    },
+    "s": {
+      "item": "minestuck:doom_aspect_slab"
     }
   },
   "pattern": [
-    "ppp",
-    "bpb",
-    "ppp"
+    "psp",
+    "bbb",
+    "psp"
   ],
   "result": {
     "item": "minestuck:doom_aspect_bookshelf"
