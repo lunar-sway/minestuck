@@ -47,6 +47,8 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new TitleLandTypeTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MSDamageTypeProvider.Tags(output, lookupProvider, fileHelper));
 		
+		gen.addProvider(event.includeServer(), new DataMapGenerator(output, event.getLookupProvider()));
+		
 		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output));
 		gen.addProvider(event.includeServer(), new GeneratedGristCostConfigProvider(output, Minestuck.MOD_ID));
 		
