@@ -78,7 +78,7 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 	{
 		super.tick();
 		
-		if(time == Math.floor(phasedAnimation.getContactStartTime(phasedAnimation.getAnimationSpeed(entity))))
+		if(time == phasedAnimation.getContactStartTime(phasedAnimation.getAnimationSpeed(entity)))
 		{
 			LivingEntity target = this.entity.getTarget();
 			attemptToLandAttack(this.entity, target);
