@@ -380,15 +380,15 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 		return PlayState.STOP;
 	}
 	
-	private static PlayState swingAnimation(AnimationState<PawnEntity> state)
+	private static PlayState swingAnimation(AnimationState<PawnEntity> event)
 	{
-		if(state.getAnimatable().isActive())
+		if(event.getAnimatable().isActive())
 		{
-			state.getController().setAnimation(PUNCH_ANIMATION_1);
+			event.getController().setAnimation(PUNCH_ANIMATION_1);
 			return PlayState.CONTINUE;
 		}
-		state.getController().forceAnimationReset();
-		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
+		event.getController().forceAnimationReset();
+		event.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(event.getAnimatable(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	
