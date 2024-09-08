@@ -1453,12 +1453,16 @@ public class MSItems
 	public static final DeferredItem<BlockItem> END_BOOKSHELF = registerBlockItem(MSBlocks.END_BOOKSHELF);
 	public static final DeferredItem<BlockItem> DEAD_BOOKSHELF = registerBlockItem(MSBlocks.DEAD_BOOKSHELF);
 	public static final DeferredItem<BlockItem> TREATED_BOOKSHELF = registerBlockItem(MSBlocks.TREATED_BOOKSHELF);
+	public static final DeferredItem<BlockItem> SHADEWOOD_BOOKSHELF = registerBlockItem(MSBlocks.SHADEWOOD_BOOKSHELF);
+	public static final DeferredItem<BlockItem> CINDERED_BOOKSHELF = registerBlockItem(MSBlocks.CINDERED_BOOKSHELF);
 	public static final DeferredItem<BlockItem> GLOWING_LADDER = registerBlockItem(MSBlocks.GLOWING_LADDER);
 	public static final DeferredItem<BlockItem> FROST_LADDER = registerBlockItem(MSBlocks.FROST_LADDER);
 	public static final DeferredItem<BlockItem> RAINBOW_LADDER = registerBlockItem(MSBlocks.RAINBOW_LADDER);
 	public static final DeferredItem<BlockItem> END_LADDER = registerBlockItem(MSBlocks.END_LADDER);
 	public static final DeferredItem<BlockItem> DEAD_LADDER = registerBlockItem(MSBlocks.DEAD_LADDER);
 	public static final DeferredItem<BlockItem> TREATED_LADDER = registerBlockItem(MSBlocks.TREATED_LADDER);
+	public static final DeferredItem<BlockItem> SHADEWOOD_LADDER = registerBlockItem(MSBlocks.SHADEWOOD_LADDER);
+	public static final DeferredItem<BlockItem> CINDERED_LADDER = registerBlockItem(MSBlocks.CINDERED_LADDER);
 	
 	//Land Plant Blocks
 	public static final DeferredItem<BlockItem> GLOWING_MUSHROOM = registerBlockItem(MSBlocks.GLOWING_MUSHROOM);

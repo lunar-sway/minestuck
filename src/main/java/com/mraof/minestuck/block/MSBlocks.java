@@ -839,6 +839,8 @@ public final class MSBlocks
 	public static final DeferredBlock<FenceGateBlock> CINDERED_FENCE_GATE = REGISTER.register("cindered_fence_gate", () -> new FenceGateBlock(ofFullCopy(CINDERED_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	public static final DeferredBlock<DoorBlock> CINDERED_DOOR = REGISTER.register("cindered_door", () -> new DoorBlock(MSBlockSetType.CINDERED, ofFullCopy(Blocks.OAK_TRAPDOOR)));
 	public static final DeferredBlock<TrapDoorBlock> CINDERED_TRAPDOOR = REGISTER.register("cindered_trapdoor", () -> new TrapDoorBlock(MSBlockSetType.CINDERED, ofFullCopy(Blocks.OAK_TRAPDOOR)));
+	public static final DeferredBlock<Block> CINDERED_BOOKSHELF = REGISTER.register("cindered_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> CINDERED_LADDER = REGISTER.register("cindered_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	public static final DeferredBlock<StandingSignBlock> CINDERED_SIGN = REGISTER.register("cindered_sign", () -> new MSStandingSignBlock(MSWoodTypes.CINDERED, ofFullCopy(Blocks.OAK_SIGN)));
 	public static final DeferredBlock<WallSignBlock> CINDERED_WALL_SIGN = REGISTER.register("cindered_wall_sign", () -> new MSWallSignBlock(MSWoodTypes.CINDERED, ofFullCopy(Blocks.OAK_WALL_SIGN)));
@@ -857,6 +859,8 @@ public final class MSBlocks
 	public static final DeferredBlock<FenceGateBlock> SHADEWOOD_FENCE_GATE = REGISTER.register("shadewood_fence_gate", () -> new FenceGateBlock(ofFullCopy(SHADEWOOD_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	public static final DeferredBlock<DoorBlock> SHADEWOOD_DOOR = REGISTER.register("shadewood_door", () -> new DoorBlock(MSBlockSetType.SHADEWOOD, ofFullCopy(Blocks.OAK_TRAPDOOR)));
 	public static final DeferredBlock<TrapDoorBlock> SHADEWOOD_TRAPDOOR = REGISTER.register("shadewood_trapdoor", () -> new TrapDoorBlock(MSBlockSetType.SHADEWOOD, ofFullCopy(Blocks.OAK_TRAPDOOR)));
+	public static final DeferredBlock<Block> SHADEWOOD_BOOKSHELF = REGISTER.register("shadewood_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> SHADEWOOD_LADDER = REGISTER.register("shadewood_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	public static final DeferredBlock<StandingSignBlock> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign", () -> new MSStandingSignBlock(MSWoodTypes.SHADEWOOD, ofFullCopy(Blocks.OAK_SIGN)));
 	public static final DeferredBlock<WallSignBlock> SHADEWOOD_WALL_SIGN = REGISTER.register("shadewood_wall_sign", () -> new MSWallSignBlock(MSWoodTypes.SHADEWOOD, ofFullCopy(Blocks.OAK_WALL_SIGN)));
