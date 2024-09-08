@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.entity.animation.MobAnimation;
-import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
