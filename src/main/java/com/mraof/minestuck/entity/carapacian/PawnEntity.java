@@ -351,7 +351,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	private static PlayState walkAnimation(AnimationState<PawnEntity> state)
 	{
-		if(state.isMoving())
+		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
@@ -361,7 +361,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	private static PlayState walkArmsAnimation(AnimationState<PawnEntity> state)
 	{
-		if(state.isMoving() && !state.getAnimatable().isActive())
+		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()) && !state.getAnimatable().isActive())
 		{
 			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 1);
 			state.getController().setAnimation(ARMS_WALKING_ANIMATION);
@@ -370,25 +370,25 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 		return PlayState.STOP;
 	}
 	
-	private static PlayState deathAnimation(AnimationState<PawnEntity> event)
+	private static PlayState deathAnimation(AnimationState<PawnEntity> state)
 	{
-		if(event.getAnimatable().dead)
+		if(state.getAnimatable().dead)
 		{
-			event.getController().setAnimation(DIE_ANIMATION);
+			state.getController().setAnimation(DIE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState swingAnimation(AnimationState<PawnEntity> event)
+	private static PlayState swingAnimation(AnimationState<PawnEntity> state)
 	{
-		if(event.getAnimatable().isActive())
+		if(state.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(PUNCH_ANIMATION_1);
+			state.getController().setAnimation(PUNCH_ANIMATION_1);
 			return PlayState.CONTINUE;
 		}
-		event.getController().forceAnimationReset();
-		event.getAnimatable().adjustAnimationSpeed(event.getController(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
+		state.getController().forceAnimationReset();
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	
