@@ -135,7 +135,7 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState walkAnimation(AnimationState<OgreEntity> state)
 	{
-		if(state.getAnimatable().isMovingHorizontally())
+		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 0.5);
 			state.getController().setAnimation(WALK_ANIMATION);
@@ -146,7 +146,7 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState walkArmsAnimation(AnimationState<OgreEntity> state)
 	{
-		if(state.getAnimatable().isMovingHorizontally() && !state.getAnimatable().isActive())
+		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()) && !state.getAnimatable().isActive())
 		{
 			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 0.5);
 			state.getController().setAnimation(WALKARMS_ANIMATION);
@@ -174,7 +174,7 @@ public class OgreEntity extends UnderlingEntity
 		}
 		
 		state.getController().forceAnimationReset();
-		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	

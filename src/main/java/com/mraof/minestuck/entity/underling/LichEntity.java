@@ -185,7 +185,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 			return PlayState.CONTINUE;
 		}
 		state.getController().forceAnimationReset();
-		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	

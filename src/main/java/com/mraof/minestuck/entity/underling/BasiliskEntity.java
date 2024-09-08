@@ -237,7 +237,7 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 	
 	private static PlayState walkAnimation(AnimationState<BasiliskEntity> state)
 	{
-		if(!state.getAnimatable().isMovingHorizontally())
+		if(!MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			return PlayState.STOP;
 		}
@@ -282,7 +282,7 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 		}
 		
 		state.getController().forceAnimationReset();
-		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 }

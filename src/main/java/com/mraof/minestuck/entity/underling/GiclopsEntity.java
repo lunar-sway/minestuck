@@ -187,7 +187,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	
 	private static PlayState walkAnimation(AnimationState<GiclopsEntity> state)
 	{
-		if(state.getAnimatable().isMovingHorizontally())
+		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.MOVEMENT_SPEED, 1);
 			state.getController().setAnimation(WALK_ANIMATION);
@@ -207,7 +207,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 		}
 		
 		state.getController().forceAnimationReset();
-		state.getAnimatable().adjustAnimationSpeed(state.getController(), Attributes.ATTACK_SPEED, 1); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED, 1)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	

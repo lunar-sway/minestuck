@@ -399,11 +399,6 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		}
 	}
 	
-	public boolean isMovingHorizontally()
-	{
-		return getDeltaMovement().horizontalDistanceSqr() > 0;
-	}
-	
 	protected static class UnderlingData implements SpawnGroupData
 	{
 		public final GristType type;
