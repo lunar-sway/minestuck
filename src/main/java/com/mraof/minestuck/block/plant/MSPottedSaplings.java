@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class MSPottedSaplings
 {
@@ -35,7 +35,7 @@ public class MSPottedSaplings
 		addSapling(AspectTreeBlocks.VOID_ASPECT_SAPLING, AspectTreeBlocks.POTTED_VOID_ASPECT_SAPLING);
 	}
 	
-	public static void addSapling(RegistryObject<? extends Block> sapling, RegistryObject<Block> pottedSapling) {
+	public static void addSapling(DeferredBlock<? extends Block> sapling, DeferredBlock<Block> pottedSapling) {
 		((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(sapling.getId(), pottedSapling);
 	}
 	
