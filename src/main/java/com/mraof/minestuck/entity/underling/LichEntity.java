@@ -157,7 +157,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		{
 			state.getController().setAnimation(CLAW_LEGS_ANIMATION);
 			return PlayState.CONTINUE;
-		} else if(!state.isMoving())
+		} else if(!MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			return PlayState.STOP;
 		} else

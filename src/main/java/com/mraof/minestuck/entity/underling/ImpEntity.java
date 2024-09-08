@@ -149,7 +149,7 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	
 	private static PlayState walkAnimation(AnimationState<ImpEntity> state)
 	{
-		if(!state.isMoving())
+		if(!MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			return PlayState.STOP;
 		}
@@ -167,7 +167,7 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	
 	private static PlayState walkArmsAnimation(AnimationState<ImpEntity> state)
 	{
-		if(!state.isMoving() || state.getAnimatable().isActive())
+		if(!MobAnimation.isEntityMovingHorizontally(state.getAnimatable()) || state.getAnimatable().isActive())
 		{
 			return PlayState.STOP;
 		}
