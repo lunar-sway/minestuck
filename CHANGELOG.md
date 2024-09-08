@@ -13,7 +13,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Saplings are now pottable
 - Aspect slabs can now be used in crafting recipes
 - Uranium button now made with 1 raw uranium instead of 1 uranium block
-- Removed default name visibility of Lotus Flower
 
 ### Fixed
 
