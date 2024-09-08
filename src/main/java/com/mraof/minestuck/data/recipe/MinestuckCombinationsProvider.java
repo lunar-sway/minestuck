@@ -909,7 +909,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.WATER_COLORS_BUCKET).input(Items.WATER_BUCKET).and().input(Tags.Items.DYES).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ENDER_BUCKET).input(Items.LAVA_BUCKET).and().input(Items.ENDER_PEARL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LIGHT_WATER_BUCKET).input(Items.WATER_BUCKET).and().input(Items.GLOWSTONE_DUST).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.CAULK_BUCKET).input(Items.WATER_BUCKET).and().input(Items.QUARTZ).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CAULK_BUCKET).input(Items.WATER_BUCKET).and().input(Items.AMETHYST_SHARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MOLTEN_AMBER_BUCKET).input(Items.LAVA_BUCKET).and().input(Items.HONEY_BOTTLE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.UNKNOWABLE_EGG).input(MSItems.SURPRISE_EMBRYO).or().input(MSItems.GRIMOIRE).build(consumer);

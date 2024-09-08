@@ -1006,8 +1006,6 @@ public class MSBlockStateProvider extends BlockStateProvider
 		hangingSignBlock(MSBlocks.SHADEWOOD_HANGING_SIGN.get(), MSBlocks.SHADEWOOD_WALL_HANGING_SIGN.get(),
 				blockTexture(MSBlocks.SHADEWOOD_PLANKS.get()));
 		
-		//weightedVariantsWithItem(MSBlocks.FROST_LEAVES, new int[]{12, 1},
-		//		i -> models().cubeAll("frost_leaves" + i, texture("frost_leaves" + i)));
 		simpleBlockWithItem(MSBlocks.FROST_LEAVES);
 		simpleBlockWithItem(MSBlocks.FROST_LEAVES_FLOWERING);
 		simpleBlockWithItem(MSBlocks.RAINBOW_LEAVES,
@@ -1028,6 +1026,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlock(MSBlocks.FROST_SAPLING,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.FROST_SAPLING, MSBlockStateProvider::texture);
+		
+		pottedSaplingBlock(MSBlocks.POTTED_FROST_SAPLING, MSBlocks.FROST_SAPLING);
+		pottedSaplingBlock(MSBlocks.POTTED_RAINBOW_SAPLING, MSBlocks.RAINBOW_SAPLING);
+		pottedSaplingBlock(MSBlocks.POTTED_END_SAPLING, MSBlocks.END_SAPLING);
+		pottedSaplingBlock(MSBlocks.POTTED_SHADEWOOD_SAPLING, MSBlocks.SHADEWOOD_SAPLING);
 		
 		simpleBlockWithItem(MSBlocks.GLOWING_BOOKSHELF,
 				id -> models().cubeColumn(id.getPath(),
@@ -2008,6 +2011,12 @@ public class MSBlockStateProvider extends BlockStateProvider
 	private void customLampWithItem(DeferredBlock<?> block)
 	{
 		customLampWithItem(block, block.getId().getPath(), texture(block));
+	}
+	
+	public void pottedSaplingBlock(RegistryObject<Block> block, RegistryObject<? extends Block> saplingBlock) {
+		simpleBlock(block.get(),
+				models().withExistingParent(block.getId().getPath(), "block/flower_pot_cross")
+						.renderType("cutout").texture("plant", blockTexture(saplingBlock.get())));
 	}
 	
 	private void customLampWithItem(Supplier<? extends Block> block, String baseName, ResourceLocation texture)

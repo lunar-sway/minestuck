@@ -81,6 +81,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.ASPECT_LOGS, ASPECT_LOGS);
 		copy(MSTags.Blocks.ASPECT_WOOD, ASPECT_WOOD);
 		copy(MSTags.Blocks.ASPECT_PLANKS, ASPECT_PLANKS);
+		copy(MSTags.Blocks.ASPECT_SLABS, ASPECT_SLABS);
 		copy(MSTags.Blocks.ASPECT_LEAVES, ASPECT_LEAVES);
 		copy(MSTags.Blocks.ASPECT_SAPLINGS, ASPECT_SAPLINGS);
 		copy(MSTags.Blocks.SHADEWOOD_LOGS, SHADEWOOD_LOGS);

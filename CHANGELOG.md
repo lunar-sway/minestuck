@@ -29,6 +29,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.20.1-1.12.1.0] - 2024-09-08
+
+### Added
+
+- Predetermined captcha codes can now be set through a data file (`data/<namespace>/minestuck/captcha_codes.json`)
+
+### Changed
+
+- Silicone Caulk Bucket alchemy recipe was changed from Water Bucket && Quartz to Water Bucket && Amethyst Shard, to avoid conflict with Prismarine Shard alchemy recipe
+- Frost Trees will now drop saplings
+- Saplings are now pottable
+- Aspect slabs can now be used in crafting recipes
+- Uranium button now made with 1 raw uranium instead of 1 uranium block
+
+### Fixed
+
+- Fix player gutter multiplier, which wasn't being saved
+- Space sapling texture baseline lowered, space and frost sapling sides trimmed
+- Fixed crash involving null targets with animated attacks
+- Changed bookshelf recipes to match their book drop rate
+- Added missing pressure plates to tag
+- Activating the hashmap modus from chat now gives the correct message
+
+### Contributors for this release
+
+- Akisephila, kirderf1, glubtier, ThalliumSulfate, Dweblenod
+
 ## [1.20.1-1.12.0.1] - 2024-04-15
 
 ### Fixed

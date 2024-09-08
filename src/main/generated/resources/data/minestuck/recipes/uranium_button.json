@@ -3,7 +3,7 @@
   "category": "building",
   "ingredients": [
     {
-      "item": "minestuck:uranium_block"
+      "item": "minestuck:raw_uranium"
     }
   ],
   "result": {

@@ -68,10 +68,10 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 		if(entity instanceof AnimatedPathfinderMob animatedMob)
 			animatedMob.setCurrentAnimation(animation);
 		
-		if(animation.freezeSight())
+		LivingEntity target = this.entity.getTarget();
+		
+		if(animation.freezeSight() && target != null)
 		{
-			//the target should be guaranteed to be non-null because canUse() requires it to be non-null.
-			LivingEntity target = Objects.requireNonNull(this.entity.getTarget());
 			this.lookTarget = new Vector3d(target.getX(), target.getEyeY(), target.getZ());
 		}
 		
@@ -91,7 +91,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	{
 		//make sure the super function is ran in goals that extend this
 		
-		if(phasedAnimation.getAnimation().freezeSight())
+		if(phasedAnimation.getAnimation().freezeSight() && lookTarget != null)
 			this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z);
 		
 		this.time++;
