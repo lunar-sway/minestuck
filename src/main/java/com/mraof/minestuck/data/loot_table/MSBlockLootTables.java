@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
@@ -172,8 +173,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(STRIPPED_CINDERED_WOOD.get());
 		
 		dropSelf(FROST_SAPLING.get());
-		
-		
 		
 		add(STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(COBBLESTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
@@ -831,6 +830,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(RAINBOW_SAPLING.get());
 		dropSelf(END_SAPLING.get());
 		dropSelf(SHADEWOOD_SAPLING.get());
+	
+		dropPottedContents(POTTED_FROST_SAPLING.get());
+		dropPottedContents(POTTED_END_SAPLING.get());
+		dropPottedContents(POTTED_RAINBOW_SAPLING.get());
+		dropPottedContents(POTTED_SHADEWOOD_SAPLING.get());
 		
 		add(GLOWING_BOOKSHELF.get(), this::bookshelfDrop);
 		add(FROST_BOOKSHELF.get(), this::bookshelfDrop);
@@ -1045,6 +1049,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		super.add(block, factory);
 	}
 	
+	@Override
+	public void dropPottedContents(Block pFlowerPot)
+	{
+		super.dropPottedContents(pFlowerPot);
+	}
+	
 	private LootTable.Builder cruxiteOreDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
@@ -1099,12 +1109,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	
 	private LootTable.Builder frostLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
+		return createLeavesDrops(block, FROST_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder floweringFrostLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
+		return createLeavesDrops(block, FROST_SAPLING.get(), SAPLING_CHANCES);
 	}
 	
 	private LootTable.Builder rainbowLeavesDrop(Block block)
@@ -1141,6 +1151,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	{
 		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackBlockEntity.ITEM_DYNAMIC))));
 	}
+
 	
 	private LootTable.Builder droppingWithIds(Block block)
 	{

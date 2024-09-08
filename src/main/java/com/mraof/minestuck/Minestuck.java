@@ -6,6 +6,7 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
+import com.mraof.minestuck.block.plant.MSPottedSaplings;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.command.MSSuggestionProviders;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
@@ -38,6 +39,8 @@ import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -136,6 +139,8 @@ public class Minestuck
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		MSDispenserBehaviours.registerBehaviours();
+		
+		MSPottedSaplings.addSaplingsToPot();
 		
 		ProgramData.init();
 		
