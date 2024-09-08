@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.animation;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -47,9 +48,19 @@ public class PhasedMobAnimation
 		this.speedModifyingAttribute = speedModifyingAttribute;
 	}
 	
-	public Phases getCurrentPhase(PathfinderMob entity, int time)
+	@Nullable
+	public Attribute getSpeedModifyingAttribute()
 	{
-		double speed = getAnimationSpeed(entity);
+		return speedModifyingAttribute;
+	}
+	
+	public double getBaseAnimationSpeed()
+	{
+		return baseAnimationSpeed;
+	}
+	
+	public Phases getCurrentPhase(PathfinderMob entity, int time, double speed)
+	{
 		if(time < getInitiationStartTime(speed))
 			return Phases.ANTICIPATION;
 		else if(time < getContactStartTime(speed))
@@ -77,6 +88,7 @@ public class PhasedMobAnimation
 		return (int) Math.round(recoveryStart / speed);
 	}
 	
+	
 	public MobAnimation getAnimation()
 	{
 		return animation;
@@ -93,9 +105,8 @@ public class PhasedMobAnimation
 	/**
 	 * Is called every tick to check whether its time to transition to a new phase
 	 */
-	public <T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> void attemptPhaseChange(int time, T entity)
+	public <T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> void attemptPhaseChange(int time, T entity, double speed)
 	{
-		double speed = getAnimationSpeed(entity);
 		if(time == getInitiationStartTime(speed))
 			entity.setAnimationPhase(Phases.INITIATION, animation.action());
 		else if(time == getContactStartTime(speed))
@@ -104,15 +115,6 @@ public class PhasedMobAnimation
 			entity.setAnimationPhase(Phases.RECOVERY, animation.action());
 		else if(time >= getTotalAnimationLength(speed))
 			entity.setAnimationPhase(Phases.NEUTRAL, animation.action());
-	}
-	
-	public double getAnimationSpeed(PathfinderMob entity)
-	{
-		if(speedModifyingAttribute == null)
-			return baseAnimationSpeed;
-		
-		AttributeInstance attributeInstance = entity.getAttribute(speedModifyingAttribute);
-		return (attributeInstance != null ? attributeInstance.getValue() : 1) * baseAnimationSpeed;
 	}
 	
 	/**

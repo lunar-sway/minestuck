@@ -100,6 +100,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 * Used to set the entity's animation and action
 	 *
 	 * @param animation The animation to set, also contains the action to set entityData from
+	 * @param animationSpeed Used to adjust the length of the animation. The higher the number, the shorter the animation plays for
 	 */
 	public void setCurrentAnimation(MobAnimation animation, double animationSpeed)
 	{
@@ -110,11 +111,5 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 		
 		this.entityData.set(CURRENT_ACTION, animation.action().ordinal());
 		this.remainingAnimationTicks = (int) Math.round(animation.animationLength() / animationSpeed);
-	}
-	
-	public <T extends AnimatedPathfinderMob & GeoAnimatable> void adjustAnimationSpeed(AnimationController<T> controller, Attribute attribute, double baseValue)
-	{
-		AttributeInstance speedAttribute = getAttribute(attribute);
-		controller.setAnimationSpeed(speedAttribute == null ? baseValue : (float) (speedAttribute.getValue() / speedAttribute.getBaseValue()) * baseValue);
 	}
 }
