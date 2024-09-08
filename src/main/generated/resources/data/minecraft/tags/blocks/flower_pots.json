@@ -1,9 +1,5 @@
 {
   "values": [
-    "#minestuck:flower_pots/aspect",
-    "minestuck:potted_frost_sapling",
-    "minestuck:potted_rainbow_sapling",
-    "minestuck:potted_end_sapling",
-    "minestuck:potted_shadewood_sapling"
+    "#minestuck:flower_pots/aspect"
   ]
 }

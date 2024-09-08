@@ -8,8 +8,6 @@
     "minestuck:rainbow_ladder",
     "minestuck:end_ladder",
     "minestuck:dead_ladder",
-    "minestuck:treated_ladder",
-    "minestuck:shadewood_ladder",
-    "minestuck:cindered_ladder"
+    "minestuck:treated_ladder"
   ]
 }
