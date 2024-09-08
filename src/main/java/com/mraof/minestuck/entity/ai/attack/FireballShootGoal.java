@@ -59,7 +59,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 			{
 				if(iteratedEntity != this.entity && iteratedEntity.getType() == this.entity.getType() && !iteratedEntity.existingCooldownIsLonger(GROUP_SHOOT_COOLDOWN))
 				{
-					iteratedEntity.setCooldown(GROUP_SHOOT_COOLDOWN + phasedAnimation.getTotalAnimationLength(phasedAnimation.getAnimationSpeed(entity))); //plays at beginning to prevent overlapping
+					iteratedEntity.setCooldown(GROUP_SHOOT_COOLDOWN + phasedAnimation.getTotalAnimationLength(speed)); //plays at beginning to prevent overlapping
 				}
 			}
 		}

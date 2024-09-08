@@ -25,6 +25,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	protected int time = 0;
 	
 	protected Vector3d lookTarget;
+	protected double speed;
 	
 	public MobAnimationPhaseGoal(T entity, PhasedMobAnimation phasedAnimation)
 	{
@@ -51,7 +52,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	@Override
 	public boolean canContinueToUse()
 	{
-		return phasedAnimation.getCurrentPhase(entity, time) != PhasedMobAnimation.Phases.NEUTRAL;
+		return phasedAnimation.getCurrentPhase(entity, time, speed) != PhasedMobAnimation.Phases.NEUTRAL;
 	}
 	
 	@Override
@@ -64,9 +65,10 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	public void start()
 	{
 		MobAnimation animation = phasedAnimation.getAnimation();
+		this.speed = MobAnimation.getAttributeAffectedSpeed(entity, phasedAnimation.getSpeedModifyingAttribute(), phasedAnimation.getBaseAnimationSpeed());
 		
 		if(entity instanceof AnimatedPathfinderMob animatedMob)
-			animatedMob.setCurrentAnimation(animation, phasedAnimation.getAnimationSpeed(entity));
+			animatedMob.setCurrentAnimation(animation, speed);
 		
 		if(animation.freezeSight())
 		{
@@ -95,6 +97,6 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 			this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z);
 		
 		this.time++;
-		phasedAnimation.attemptPhaseChange(time, entity);
+		phasedAnimation.attemptPhaseChange(time, entity, speed);
 	}
 }
