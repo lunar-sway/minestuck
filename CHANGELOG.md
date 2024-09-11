@@ -25,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix player gutter multiplier, which wasn't being saved
 - Space sapling texture baseline lowered, space and frost sapling sides trimmed
 - Fixed crash involving null targets with animated attacks
-- Changed bookshelf recipes to match their book drop rate
+- Changed aspect-wood bookshelf recipes to match their book drop rate
 - Added missing pressure plates to tag
 - Activating the hashmap modus from chat now gives the correct message
 
