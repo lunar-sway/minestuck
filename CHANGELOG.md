@@ -20,7 +20,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The Lotus Time Capsule now spawns a Lotus Flower when placed
 - Lotus Time Capsule blocks now remove any Lotus Flowers above them when destroyed
 - Cruxite button now uses raw cruxite instead of cruxite block
-- Uranium button now uses raw uranium, instead of uranium block
 - Many organic blocks are now compostable
 - Many wood-based blocks can now be used as fuel
 - Cruxite ore textures tweaked
