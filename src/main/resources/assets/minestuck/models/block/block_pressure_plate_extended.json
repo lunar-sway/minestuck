@@ -1,5 +1,5 @@
 {
-	"credit": "Made with Blockbench by Dweblenod",
+	"credit": "Model made with Blockbench by Dweblenod",
 	"parent": "block/block",
 	"textures": {
 		"body": "minestuck:block/block_pressure_plate/body_extended",

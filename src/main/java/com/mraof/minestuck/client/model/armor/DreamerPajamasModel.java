@@ -5,7 +5,10 @@ import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
-public class DreamerPajamasModel
+/**
+ * Model made by DORO and edited by Dweblenod.
+ */
+public final class DreamerPajamasModel
 {
 	public static LayerDefinition createBodyLayer()
 	{

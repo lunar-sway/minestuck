@@ -11,8 +11,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
 /**
- * FrogModel - Cibernet
- * Created using Tabula 7.0.0
+ * Model created by Cibernet using Tabula 7.0.0.
  */
 public class FrogModel<T extends FrogEntity> extends HierarchicalModel<T>
 {
