@@ -29,8 +29,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Manually-spawned Lotus Flowers can no longer be hurt or killed by any damage source
 - Lotus Flowers no longer push entities inside of them away
 - Ogres and Basilisks no longer slide around when idling
-- Cruxite block now functions properly as a storage block
-- Uranium block now functions properly as a storage block
 
 
 ### Contributors for this release
