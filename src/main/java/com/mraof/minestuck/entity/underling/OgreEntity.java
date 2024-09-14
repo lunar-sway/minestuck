@@ -130,7 +130,7 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState walkAnimation(AnimationState<OgreEntity> state)
 	{
-		if(state.isMoving())
+		if(state.getAnimatable().isMovingHorizontally())
 		{
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
@@ -140,7 +140,7 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState walkArmsAnimation(AnimationState<OgreEntity> state)
 	{
-		if(state.isMoving() && !state.getAnimatable().isActive())
+		if(state.getAnimatable().isMovingHorizontally() && !state.getAnimatable().isActive())
 		{
 			state.getController().setAnimation(WALKARMS_ANIMATION);
 			return PlayState.CONTINUE;

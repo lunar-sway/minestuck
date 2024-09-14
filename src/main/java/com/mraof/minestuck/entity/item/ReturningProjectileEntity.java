@@ -7,6 +7,9 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,9 +28,10 @@ import net.minecraft.world.phys.Vec3;
 public class ReturningProjectileEntity extends ThrowableItemProjectile
 {
 	private int bounce;
-	public int maxTick = 0;
 	private int inBlockTicks = 0;
-	private boolean noBlockCollision;
+	
+	private static final EntityDataAccessor<Integer> LIFESPAN = SynchedEntityData.defineId(ReturningProjectileEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> NOCLIP = SynchedEntityData.defineId(ReturningProjectileEntity.class, EntityDataSerializers.BOOLEAN);
 	
 	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, Level level)
 	{
@@ -42,8 +46,16 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, LivingEntity livingEntityIn, Level level, int maxTick, boolean noBlockCollision)
 	{
 		super(type, livingEntityIn, level);
-		this.maxTick = maxTick;
-		this.noBlockCollision = noBlockCollision;
+		setLifespan(maxTick);
+		setNoclip(noBlockCollision);
+	}
+	
+	@Override
+	protected void defineSynchedData()
+	{
+		super.defineSynchedData();
+		entityData.define(LIFESPAN, 200);
+		entityData.define(NOCLIP, false);
 	}
 	
 	@Override
@@ -68,7 +80,7 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 					resetThrower();
 				}
 			}
-		} else if(result.getType() == HitResult.Type.BLOCK && !noBlockCollision)
+		} else if(result.getType() == HitResult.Type.BLOCK && !isNoclip())
 		{
 			BlockHitResult blockResult = (BlockHitResult) result;
 			Direction blockFace = blockResult.getDirection();
@@ -116,7 +128,7 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 		else
 			this.setDeltaMovement(getDeltaMovement().scale(1.005));
 		
-		if(this.tickCount >= maxTick || inBlockTicks >= 2)
+		if(this.tickCount >= getLifespan() || inBlockTicks >= 2)
 		{
 			resetThrower();
 		}
@@ -129,10 +141,9 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	{
 		super.readAdditionalSaveData(compound);
 		bounce = compound.getInt("bounce");
-		maxTick = compound.getInt("maxTick");
+		setLifespan(compound.getInt("maxTick"));
 		inBlockTicks = compound.getInt("inBlockTicks");
-		;
-		noBlockCollision = compound.getBoolean("noBlockCollision");
+		setNoclip(compound.getBoolean("noBlockCollision"));
 	}
 	
 	@Override
@@ -140,9 +151,9 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putInt("bounce", bounce);
-		compound.putInt("maxTick", maxTick);
+		compound.putInt("maxTick", getLifespan());
 		compound.putInt("inBlockTicks", inBlockTicks);
-		compound.putBoolean("noBlockCollision", noBlockCollision);
+		compound.putBoolean("noBlockCollision", isNoclip());
 	}
 	
 	@Override
@@ -155,5 +166,25 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	{
 		ItemStack itemstack = this.getItemRaw();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
+	}
+	
+	public int getLifespan()
+	{
+		return entityData.get(LIFESPAN);
+	}
+	
+	public void setLifespan(int v)
+	{
+		entityData.set(LIFESPAN, v);
+	}
+	
+	public boolean isNoclip()
+	{
+		return entityData.get(NOCLIP);
+	}
+	
+	public void setNoclip(boolean v)
+	{
+		entityData.set(NOCLIP, v);
 	}
 }

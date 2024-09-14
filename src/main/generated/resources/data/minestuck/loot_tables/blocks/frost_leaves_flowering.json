@@ -56,7 +56,7 @@
                   "enchantment": "minecraft:fortune"
                 }
               ],
-              "name": "minecraft:air"
+              "name": "minestuck:frost_sapling"
             }
           ]
         }

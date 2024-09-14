@@ -57,7 +57,7 @@ public final class MSEntityTypes
 	public static final Supplier<EntityType<CrewPosterEntity>> MIDNIGHT_CREW_POSTER = REGISTER.register("midnight_crew_poster", () -> EntityType.Builder.<CrewPosterEntity>of(CrewPosterEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE).build(new ResourceLocation(Minestuck.MOD_ID, "midnight_crew_poster").toString()));
 	public static final Supplier<EntityType<SbahjPosterEntity>> SBAHJ_POSTER = REGISTER.register("sbahj_poster", () -> EntityType.Builder.<SbahjPosterEntity>of(SbahjPosterEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE).build(new ResourceLocation(Minestuck.MOD_ID, "sbahj_poster").toString()));
 	public static final Supplier<EntityType<ShopPosterEntity>> SHOP_POSTER = REGISTER.register("shop_poster", () -> EntityType.Builder.<ShopPosterEntity>of(ShopPosterEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE).build(new ResourceLocation(Minestuck.MOD_ID, "shop_poster").toString()));
-	public static final Supplier<EntityType<LotusFlowerEntity>> LOTUS_FLOWER = REGISTER.register("lotus_flower", () -> EntityType.Builder.of(LotusFlowerEntity::new, MobCategory.MISC).sized(2F, 2F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "lotus_flower").toString()));
+	public static final Supplier<EntityType<LotusFlowerEntity>> LOTUS_FLOWER = REGISTER.register("lotus_flower", () -> EntityType.Builder.of(LotusFlowerEntity::new, MobCategory.MISC).sized(1.25F, 1.6F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "lotus_flower").toString()));
 	
 	public static final Supplier<EntityType<ConsumableProjectileEntity>> CONSUMABLE_PROJECTILE = REGISTER.register("consumable_projectile", () -> EntityType.Builder.<ConsumableProjectileEntity>of(ConsumableProjectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "consumable_projectile").toString()));
 	public static final Supplier<EntityType<ReturningProjectileEntity>> RETURNING_PROJECTILE = REGISTER.register("returning_projectile", () -> EntityType.Builder.<ReturningProjectileEntity>of(ReturningProjectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "returning_projectile").toString())); //TODO smaller update interval value is temporary solution to improve client rendering
@@ -110,8 +110,5 @@ public final class MSEntityTypes
 		event.put(PROSPITIAN_ROOK.get(), RookEntity.rookAttributes().build());
 		
 		event.put(PLAYER_DECOY.get(), Mob.createMobAttributes().build());
-		
-		event.put(LOTUS_FLOWER.get(), LivingEntity.createLivingAttributes().build());
-		event.put(SERVER_CURSOR.get(), LivingEntity.createLivingAttributes().build());
 	}
 }
