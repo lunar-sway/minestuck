@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class HolopadBlockEntity extends BlockEntity
 {
-	public int innerRotation = 0;
+	private int rotationTicks = 0;
 	private ItemStack card = ItemStack.EMPTY;
 	
 	public HolopadBlockEntity(BlockPos pos, BlockState state)
@@ -117,9 +117,14 @@ public class HolopadBlockEntity extends BlockEntity
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
+	public int getRotationTickForRender()
+	{
+		return this.rotationTicks;
+	}
+	
 	public static void clientTick(Level level, BlockPos pos, BlockState state, HolopadBlockEntity blockEntity)
 	{
-		blockEntity.innerRotation++;
+		blockEntity.rotationTicks++;
 	}
 	
 	private void updateState()

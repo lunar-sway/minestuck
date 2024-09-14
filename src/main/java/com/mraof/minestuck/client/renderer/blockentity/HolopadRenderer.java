@@ -25,7 +25,7 @@ public class HolopadRenderer implements BlockEntityRenderer<HolopadBlockEntity>
 			ItemStack item = blockEntityIn.getHoloItem();
 			poseStack.pushPose();
 			poseStack.translate(0.5F, 0.6F, 0.5F);
-			poseStack.mulPose(Axis.YP.rotation(((float) blockEntityIn.innerRotation + partialTicks) / 20.0F));
+			poseStack.mulPose(Axis.YP.rotation(((float) blockEntityIn.getRotationTickForRender() + partialTicks) / 20.0F));
 			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.GROUND, combinedLightIn, combinedOverlayIn, poseStack, bufferIn, blockEntityIn.getLevel(), (int)blockEntityIn.getBlockPos().asLong());
 			poseStack.popPose();
 		}
