@@ -432,6 +432,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.BLANK_DISK);
 		simpleItem(MSItems.CLIENT_DISK);
 		simpleItem(MSItems.SERVER_DISK);
+		simpleItem(MSItems.TORRENT_DISK);
 		
 		simpleItem(MSItems.STACK_MODUS_CARD);
 		simpleItem(MSItems.QUEUE_MODUS_CARD);

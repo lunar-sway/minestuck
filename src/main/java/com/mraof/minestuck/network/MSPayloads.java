@@ -157,6 +157,8 @@ public final class MSPayloads
 		registerPlayToServer(registrar, MiscContainerPacket.ID, MiscContainerPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, StopCreativeShockEffectPacket.ID, StopCreativeShockEffectPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, PushPlayerPacket.ID, PushPlayerPacket.STREAM_CODEC);
+		registerPlayToClient(GutterUpdatePacket.ID, GutterUpdatePacket.STREAM_CODEC);
+		
 	}
 	
 	private static <T extends MSPacket.PlayToServer> void registerPlayToServer(PayloadRegistrar registrar, CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> codec)
