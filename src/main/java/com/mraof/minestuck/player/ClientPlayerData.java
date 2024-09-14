@@ -33,6 +33,8 @@ public final class ClientPlayerData
 	private static float rungProgress;
 	private static long boondollars;
 	private static GristSet playerGrist, targetGrist;
+	private static GristSet gutterGrist;
+	private static long gutterRemainingCapacity;
 	private static long targetCacheLimit;
 	private static int playerColor;
 	private static boolean displaySelectionGui;
@@ -97,6 +99,16 @@ public final class ClientPlayerData
 	{
 		PLAYER,
 		EDITMODE,
+	}
+	
+	public static GristSet getGutterSet()
+	{
+		return gutterGrist;
+	}
+	
+	public static long getGutterRemainingCapacity()
+	{
+		return gutterRemainingCapacity;
 	}
 	
 	public static int getPlayerColor()
@@ -164,6 +176,12 @@ public final class ClientPlayerData
 			case PLAYER -> playerGrist = packet.gristCache();
 			case EDITMODE -> targetGrist = packet.gristCache();
 		}
+	}
+	
+	public static void handleDataPacket(GutterUpdatePacket packet)
+	{
+		gutterGrist = packet.gristValue();
+		gutterRemainingCapacity = packet.remainingCapacity();
 	}
 	
 	public static void handleDataPacket(EditmodeCacheLimitPacket packet)
