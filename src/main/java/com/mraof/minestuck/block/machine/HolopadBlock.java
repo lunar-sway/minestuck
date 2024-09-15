@@ -33,8 +33,10 @@ import java.util.Map;
 @MethodsReturnNonnullByDefault
 public class HolopadBlock extends MachineBlock implements EntityBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = new CustomVoxelShape(new double[]{2, 0, 1, 14, 6, 13}).createRotatedShapes();
-	public static final Map<Direction, VoxelShape> COLLISION_SHAPE = new CustomVoxelShape(new double[]{4, 0, 14, 12, 10, 16}, new double[]{3, 6, 3, 13, 7, 13}).createRotatedShapes();
+	public static final Map<Direction, VoxelShape> SHAPE = new CustomVoxelShape(
+			new double[]{2, 0, 1, 14, 7, 13},
+			new double[]{4, 0, 13, 12, 10, 16}
+	).createRotatedShapes();
 	
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
@@ -96,12 +98,5 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE.get(state.getValue(FACING));
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-	{
-		return COLLISION_SHAPE.get(state.getValue(FACING));
 	}
 }
