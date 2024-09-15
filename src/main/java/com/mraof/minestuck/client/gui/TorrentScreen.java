@@ -8,6 +8,9 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +27,8 @@ public class TorrentScreen extends Screen
 	
 	private static final int GUI_WIDTH = 176;
 	private static final int GUI_HEIGHT = 166;
+	
+	private static final int LIGHT_BLUE = 0xFF19B3EF;
 	
 	private final ComputerBlockEntity computer;
 	
@@ -72,35 +77,33 @@ public class TorrentScreen extends Screen
 	private void renderGutter(GuiGraphics guiGraphics)
 	{
 		if(gutterGrist == null)
-			return; //TODO consider adding text that says "loading"
+			return; //TODO consider adding text that says "loading" if this early return is triggered
 		
 		double totalVolume = gutterRemainingCapacity;
+		long filledVolume = 0;
 		
 		for(GristAmount amount : gutterGrist.asAmounts())
-			totalVolume += amount.amount();
+			filledVolume += amount.amount();
 		
-		int initialX = xOffset + 10;
-		int y = yOffset + 60;
+		totalVolume += filledVolume;
+		
+		int initialX = xOffset + 55;
+		int y = yOffset + 147;
 		
 		for(GristAmount gristAmount : gutterGrist.asAmounts())
 		{
 			int length = (int) ((gristAmount.amount() / totalVolume) * 100);
 			
-			GristType gristType = gristAmount.type();
-			int gristColor = gristType.getUnderlingColor();
-			
-			if(gristType == GristTypes.BUILD.get())
-				gristColor = 0xFF19B3EF;
-			
-			int ARGBColor = 0xFF000000 | gristColor; //OR operation converts RGB integer to ARGB with full opacity
-			
-			guiGraphics.fill(initialX, y, initialX + length, y + 5, ARGBColor);
+			addRenderableWidget(new GutterBarWidget(initialX, y, length, gristAmount));
 			
 			initialX += length;
 		}
 		
 		int remainingVolume = (int) ((gutterRemainingCapacity / totalVolume) * 100);
-		guiGraphics.fill(initialX, y, initialX + remainingVolume, y + 5, 0XFF1111FF);
+		addRenderableWidget(new GutterBarWidget(initialX, y, remainingVolume, gutterRemainingCapacity));
+		
+		String remainingText = String.valueOf(filledVolume);
+		guiGraphics.drawString(font, remainingText, (xOffset + 105) - font.width(remainingText) / 2, y + 5, LIGHT_BLUE, false);
 	}
 	
 	private void clientDataUpdates()
@@ -139,5 +142,62 @@ public class TorrentScreen extends Screen
 		}
 		
 		return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+	}
+	
+	public static class GutterBarWidget extends AbstractWidget
+	{
+		final int x;
+		final int y;
+		final int color;
+		
+		public GutterBarWidget(int pX, int pY, int pWidth, GristAmount gristAmount)
+		{
+			super(pX, pY, pWidth, 3, Component.empty());
+			x = pX;
+			y = pY;
+			
+			GristType gristType = gristAmount.type();
+			
+			if(gristType == GristTypes.BUILD.get() || gristType == GristTypes.DIAMOND.get())
+				color = LIGHT_BLUE;
+			else if(gristType == GristTypes.MARBLE.get())
+				color = 0xFFFFC0CB; //pink
+			else
+				color = gristType.getUnderlingColor();
+			
+			setTooltip(Tooltip.create(gristAmount.type().getDisplayName().append(Component.literal(": " + gristAmount.amount()))));
+		}
+		
+		public GutterBarWidget(int pX, int pY, int pWidth, long remainingCapacity)
+		{
+			super(pX, pY, pWidth, 3, Component.empty());
+			x = pX;
+			y = pY;
+			color = 0xFFFFFFFF;
+			
+			setTooltip(Tooltip.create(Component.literal("Remaining capacity: " + remainingCapacity)));
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v)
+		{
+			guiGraphics.fill(x, y, x + width, y + height, getColor());
+		}
+		
+		private int getColor()
+		{
+			return 0xFF000000 | color; //OR operation converts RGB integer to ARGB with full opacity
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+		}
+		
+		@Override
+		protected boolean isValidClickButton(int pButton)
+		{
+			return false;
+		}
 	}
 }
