@@ -65,7 +65,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	public void start()
 	{
 		MobAnimation animation = phasedAnimation.getAnimation();
-		this.speed = MobAnimation.getAttributeAffectedSpeed(entity, phasedAnimation.getSpeedModifyingAttribute(), phasedAnimation.getBaseAnimationSpeed());
+		this.speed = MobAnimation.getAttributeAffectedSpeed(entity, phasedAnimation.getSpeedModifyingAttribute());
 		
 		if(entity instanceof AnimatedPathfinderMob animatedMob)
 			animatedMob.setCurrentAnimation(animation, speed);

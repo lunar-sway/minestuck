@@ -170,7 +170,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	{
 		controllers.add(new AnimationController<>(this, "idleAnimation", GiclopsEntity::idleAnimation));
 		controllers.add(new AnimationController<>(this, "walkAnimation", GiclopsEntity::walkAnimation)
-				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 5)));
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED) * 5));
 		controllers.add(new AnimationController<>(this, "attackAnimation", GiclopsEntity::attackAnimation));
 		controllers.add(new AnimationController<>(this, "deathAnimation", GiclopsEntity::deathAnimation));
 	}
@@ -207,7 +207,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 		}
 		
 		state.getController().forceAnimationReset();
-		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED, 1)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	

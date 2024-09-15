@@ -1,11 +1,7 @@
 package com.mraof.minestuck.entity.animation;
 
-import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import javax.annotation.Nullable;
@@ -21,30 +17,27 @@ public class PhasedMobAnimation
 	private final int contactStart;
 	private final int recoveryStart;
 	private final int recoveryEnd;
-	private final double baseAnimationSpeed;
 	@Nullable
 	private final Attribute speedModifyingAttribute;
 	
-	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, double baseAnimationSpeed)
+	public 	PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, int recoveryEnd)
 	{
-		this(animation, initiationStart, contactStart, recoveryStart, baseAnimationSpeed, Attributes.ATTACK_SPEED);
+		this(animation, initiationStart, contactStart, recoveryStart, recoveryEnd, Attributes.ATTACK_SPEED);
 	}
 	
 	
 	/**
 	 * @param initiationStart not the first frame of animation
 	 * @param contactStart the apex of animations, when attacks connect
-	 * @param baseAnimationSpeed how fast the animation is played normally
 	 * @param speedModifyingAttribute the entity attribute responsible for affecting the animation's speed
 	 */
-	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, double baseAnimationSpeed, @Nullable Attribute speedModifyingAttribute)
+	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, int recoveryEnd, @Nullable Attribute speedModifyingAttribute)
 	{
 		this.animation = animation;
-		this.initiationStart = (int) Math.round(initiationStart * baseAnimationSpeed);
-		this.contactStart =  (int) Math.round(contactStart * baseAnimationSpeed);
-		this.recoveryStart =  (int) Math.round(recoveryStart * baseAnimationSpeed);
-		this.recoveryEnd =  (int) Math.round(animation.animationLength() * baseAnimationSpeed); //recoveryEnd is identical to animationLength in MobAnimation
-		this.baseAnimationSpeed = baseAnimationSpeed;
+		this.initiationStart = initiationStart;
+		this.contactStart =  contactStart;
+		this.recoveryStart =  recoveryStart;
+		this.recoveryEnd =  recoveryEnd;
 		this.speedModifyingAttribute = speedModifyingAttribute;
 	}
 	
@@ -52,11 +45,6 @@ public class PhasedMobAnimation
 	public Attribute getSpeedModifyingAttribute()
 	{
 		return speedModifyingAttribute;
-	}
-	
-	public double getBaseAnimationSpeed()
-	{
-		return baseAnimationSpeed;
 	}
 	
 	public Phases getCurrentPhase(PathfinderMob entity, int time, double speed)

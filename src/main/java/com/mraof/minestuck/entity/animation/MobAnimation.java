@@ -26,15 +26,14 @@ public record MobAnimation(Action action, int animationLength, boolean freezeMov
 	 * Util function to determine how fast an animation should go
 	 * @param entity The entity playing the animation
 	 * @param speedModifyingAttribute The attribute used to determine the animation's speed
-	 * @param baseSpeed The speed at which the animation goes if the attribute is set to 1 or doesn't exist within the entity
 	 * @return The speed at which the animation should play
 	 */
-	public static double getAttributeAffectedSpeed(LivingEntity entity, @Nullable Attribute speedModifyingAttribute, double baseSpeed)
+	public static double getAttributeAffectedSpeed(LivingEntity entity, @Nullable Attribute speedModifyingAttribute)
 	{
 		if(speedModifyingAttribute == null)
-			return baseSpeed;
+			return 1;
 		AttributeInstance attributeInstance = entity.getAttribute(speedModifyingAttribute);
-		return attributeInstance == null ? baseSpeed : attributeInstance.getValue() * baseSpeed;
+		return attributeInstance == null ? 1 : attributeInstance.getValue();
 	}
 	
 	/**

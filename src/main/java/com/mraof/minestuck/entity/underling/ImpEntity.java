@@ -30,9 +30,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class ImpEntity extends UnderlingEntity implements GeoEntity
 {
-	private static final double ATTACK_ANIMATION_SPEED = 2;
-	
-	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 4, 5, ATTACK_ANIMATION_SPEED);
+	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 5, 10, 16);
 	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.idle");
 	private static final RawAnimation RUN_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.run");
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.walk");
@@ -49,7 +47,7 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	public static AttributeSupplier.Builder impAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
-				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 2).add(Attributes.ATTACK_SPEED, 1);
+				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 2).add(Attributes.ATTACK_SPEED, 2);
 	}
 	
 	@Override
@@ -132,9 +130,9 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	{
 		controllers.add(new AnimationController<>(this, "idleAnimation", ImpEntity::idleAnimation));
 		controllers.add(new AnimationController<>(this, "walkArmsAnimation", ImpEntity::walkArmsAnimation)
-				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 1.785)));
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED) * 1.785));
 		controllers.add(new AnimationController<>(this, "walkAnimation", ImpEntity::walkAnimation)
-				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED, 1.785)));
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED) * 1.785));
 		controllers.add(new AnimationController<>(this, "deathAnimation", ImpEntity::deathAnimation).setAnimationSpeed(0.7));
 		controllers.add(new AnimationController<>(this, "attackAnimation", ImpEntity::attackAnimation));
 	}
@@ -201,7 +199,7 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 			return PlayState.CONTINUE;
 		}
 		state.getController().forceAnimationReset();
-		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED, ATTACK_ANIMATION_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 }
