@@ -1,8 +1,8 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.80'
-    id 'net.neoforged.gradle.mixin' version '7.0.80'
+    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'net.neoforged.gradle.mixin' version '7.0.142'
 }
 
 repositories {
@@ -46,7 +46,7 @@ version = project.getProperty('mc_ms_version')
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = "UTF-8"
