@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -17,6 +18,8 @@ import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class TorrentScreen extends Screen
@@ -37,6 +40,8 @@ public class TorrentScreen extends Screen
 	
 	private GristSet gutterGrist;
 	private long gutterRemainingCapacity;
+	private static List<TorrentSession> visibleTorrentSessions = new ArrayList<>();
+	
 	private int updateTick = 0;
 	
 	
@@ -54,6 +59,7 @@ public class TorrentScreen extends Screen
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
 		
 		gutterGrist = ClientPlayerData.getGutterSet();
+		visibleTorrentSessions = ClientPlayerData.getVisibleTorrentSessions();
 	}
 	
 	@Override
@@ -93,9 +99,7 @@ public class TorrentScreen extends Screen
 		for(GristAmount gristAmount : gutterGrist.asAmounts())
 		{
 			int length = (int) ((gristAmount.amount() / totalVolume) * 100);
-			
 			addRenderableWidget(new GutterBarWidget(initialX, y, length, gristAmount));
-			
 			initialX += length;
 		}
 		
@@ -112,6 +116,7 @@ public class TorrentScreen extends Screen
 		{
 			gutterGrist = ClientPlayerData.getGutterSet();
 			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
+			visibleTorrentSessions = ClientPlayerData.getVisibleTorrentSessions();
 		}
 		
 		updateTick++;

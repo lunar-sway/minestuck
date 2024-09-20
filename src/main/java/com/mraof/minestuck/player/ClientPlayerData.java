@@ -2,6 +2,7 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
@@ -22,6 +23,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Contains static field for any {@link PlayerData} fields that also need client access.
  * @author kirderf1
@@ -40,6 +44,7 @@ public final class ClientPlayerData
 	private static GristSet gutterGrist;
 	private static long gutterRemainingCapacity;
 	private static long targetCacheLimit;
+	private static List<TorrentSession> visibleTorrentSessions = new ArrayList<>();
 	private static int playerColor;
 	private static boolean displaySelectionGui;
 	private static boolean dataCheckerAccess;
@@ -115,6 +120,11 @@ public final class ClientPlayerData
 		return gutterRemainingCapacity;
 	}
 	
+	public static List<TorrentSession> getVisibleTorrentSessions()
+	{
+		return visibleTorrentSessions;
+	}
+	
 	public static int getPlayerColor()
 	{
 		return playerColor;
@@ -176,6 +186,11 @@ public final class ClientPlayerData
 	{
 		gutterGrist = packet.gristValue();
 		gutterRemainingCapacity = packet.remainingCapacity();
+	}
+	
+	public static void handleDataPacket(TorrentUpdatePacket packet)
+	{
+		visibleTorrentSessions = packet.availableSessions();
 	}
 	
 	public static void handleDataPacket(EditmodeCacheLimitPacket packet)
