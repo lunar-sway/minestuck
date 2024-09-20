@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.TorrentUpdatePacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -80,6 +81,14 @@ public class TorrentSession
 			{
 				handleTorrent(torrentSession, sessions, server);
 			}
+			
+			//TODO placeholders
+			for(ServerPlayer player : server.getPlayerList().getPlayers())
+				if(player.isHolding(MSItems.ALLWEDDOL.get()))
+					MSExtraData.get(server).removesSessions();
+			for(ServerPlayer player : server.getPlayerList().getPlayers())
+				if(player.isHolding(MSItems.MWRTHWL.get()))
+					MSExtraData.get(server).addTorrentSession(TorrentSession.createPlayerTorrentSession(player, true));
 		}
 	}
 	

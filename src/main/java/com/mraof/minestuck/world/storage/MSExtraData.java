@@ -241,6 +241,12 @@ public class MSExtraData extends SavedData
 		}
 	}
 	
+	//TODO might not be necessary
+	public void removesSessions()
+	{
+		torrentSessions.clear();
+	}
+	
 	@Override
 	public boolean isDirty()
 	{

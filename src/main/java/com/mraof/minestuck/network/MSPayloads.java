@@ -157,7 +157,8 @@ public final class MSPayloads
 		registerPlayToServer(registrar, MiscContainerPacket.ID, MiscContainerPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, StopCreativeShockEffectPacket.ID, StopCreativeShockEffectPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, PushPlayerPacket.ID, PushPlayerPacket.STREAM_CODEC);
-		registerPlayToClient(GutterUpdatePacket.ID, GutterUpdatePacket.STREAM_CODEC);
+		registerPlayToClient(registrar, GutterUpdatePacket.ID, GutterUpdatePacket.STREAM_CODEC);
+		registerPlayToClient(registrar, TorrentUpdatePacket.ID, TorrentUpdatePacket.STREAM_CODEC);
 		
 	}
 	
