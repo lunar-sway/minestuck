@@ -199,7 +199,9 @@ public class GristGutter
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
 		
-		PacketDistributor.PLAYER.with(player.getPlayer(mcServer)).send(new GutterUpdatePacket(this.gristSet, this.getRemainingCapacity()));
+		ServerPlayer serverPlayer = player.getPlayer(mcServer);
+		if(serverPlayer != null)
+			PacketDistributor.PLAYER.with(serverPlayer).send(new GutterUpdatePacket(this.gristSet, this.getRemainingCapacity()));
 	}
 	
 	private double getDistributionRateModifier()
