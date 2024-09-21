@@ -1,5 +1,10 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
@@ -7,12 +12,15 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
@@ -75,9 +83,14 @@ public class TorrentScreen extends Screen
 	{
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
+		//TODO not clearing renderables causes performance to drop with time, but clearing them prevents tooltips from showing up
+		//renderables.clear();
+		
 		clientDataUpdates();
 		
 		renderGutter(guiGraphics);
+		
+		renderTorrentSessions(guiGraphics, xOffset, yOffset);
 	}
 	
 	private void renderGutter(GuiGraphics guiGraphics)
@@ -108,6 +121,33 @@ public class TorrentScreen extends Screen
 		
 		String remainingText = String.valueOf(filledVolume);
 		guiGraphics.drawString(font, remainingText, (xOffset + 105) - font.width(remainingText) / 2, y + 5, LIGHT_BLUE, false);
+	}
+	
+	private void renderTorrentSessions(GuiGraphics guiGraphics, int xOffset, int yOffset)
+	{
+		if(minecraft == null || minecraft.player == null)
+			return;
+		
+		TorrentSession userSession = visibleTorrentSessions.stream().filter(session -> session.getSeeder().getUUID().equals(minecraft.player.getUUID())).findFirst().orElse(null);
+		
+		if(userSession == null)
+			return;
+		
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
+		GristSet clientGrist = cache.set();
+		long cacheLimit = cache.limit();
+		
+		List<GristType> types = GristTypes.REGISTRY.stream().limit(6).toList();
+		
+		int offset = 0;
+		for(GristType type : types)
+		{
+			GristAmount gristAmount = new GristAmount(type, clientGrist.getGrist(type));
+			
+			addRenderableWidget(new GristEntry(xOffset + 5, yOffset + 32 + (GristEntry.HEIGHT * offset), gristAmount, cacheLimit, font));
+			
+			offset++;
+		}
 	}
 	
 	private void clientDataUpdates()
@@ -147,6 +187,102 @@ public class TorrentScreen extends Screen
 		}
 		
 		return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+	}
+	
+	public static class GristEntry extends AbstractWidget
+	{
+		public static final int WIDTH = 40;
+		public static final int HEIGHT = 14;
+		public static final int GRIST_ICON_X = 2, GRIST_ICON_Y = 2;
+		public static final int GRIST_COUNT_X = GRIST_ICON_X + 14, GRIST_COUNT_Y = GRIST_ICON_Y + 1;
+		
+		int x;
+		int y;
+		GristAmount gristAmount;
+		Font font;
+		long cacheLimit;
+		
+		int color;
+		
+		public GristEntry(int pX, int pY, GristAmount gristAmount, long cacheLimit, Font font)
+		{
+			super(pX, pY, WIDTH, HEIGHT, Component.empty());
+			
+			x = pX;
+			y = pY;
+			this.gristAmount = gristAmount;
+			this.font = font;
+			this.cacheLimit = cacheLimit;
+			
+			setTooltip(Tooltip.create(gristAmount.type().getDisplayName()));
+			
+			//TODO replace grist color background with different graphics
+			GristType gristType = gristAmount.type();
+			if(gristType == GristTypes.BUILD.get() || gristType == GristTypes.DIAMOND.get())
+				color = 0x99000000 | LIGHT_BLUE;
+			else if(gristType == GristTypes.MARBLE.get())
+				color = 0x99FFC0CB; //pink
+			else
+				color = 0x99000000 | gristType.getUnderlingColor();
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v)
+		{
+			float scale = 0.5F;
+			int scaleMod = (int) (1 / scale);
+			
+			guiGraphics.pose().pushPose();
+			guiGraphics.pose().scale(scale, scale, scale);
+			
+			guiGraphics.fill(x * scaleMod, y * scaleMod, (x + width) * scaleMod, (y + height) * scaleMod, color);
+			
+			TorrentScreen.drawIcon(x + GRIST_ICON_X, y + GRIST_ICON_Y, gristAmount.type().getIcon());
+			
+			//renders amount of grist
+			String amount = GuiUtil.addSuffix(gristAmount.amount());
+			guiGraphics.drawString(font, amount, (x + GRIST_COUNT_X - 2) * scaleMod, (y + GRIST_COUNT_Y + 6) * scaleMod, 0x19b3ef, false);
+			
+			//renders bars
+			double gristFraction = Math.min(1, (double) gristAmount.amount() / cacheLimit);
+			guiGraphics.fill((x + GRIST_COUNT_X - 1) * scaleMod, (y + GRIST_COUNT_Y + 1) * scaleMod, (int) (x + GRIST_COUNT_X + (20.0 * gristFraction)) * scaleMod, (y + (GRIST_COUNT_Y + 5)) * scaleMod, 0xff19B3EF); //0xE64C10
+			guiGraphics.fill((x + GRIST_COUNT_X - 1) * scaleMod, (y + GRIST_COUNT_Y + 1) * scaleMod, (int) (x + GRIST_COUNT_X + (20.0 * gristFraction)) * scaleMod, (y + (GRIST_COUNT_Y)) * scaleMod, 0xff7ED8E5); //0xE64C10
+			
+			guiGraphics.pose().popPose();
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+		}
+	}
+	
+	protected static void drawIcon(int x, int y, ResourceLocation icon)
+	{
+		//TODO does not have the null checks present in MinestuckScreen
+		
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, icon);
+		
+		float scale = (float) 1 / 16;
+		
+		int iconX = 16;
+		int iconY = 16;
+		int iconU = 0;
+		int iconV = 0;
+		
+		float scaledIconX = (float) iconX * 0.65F;
+		float scaledIconY = (float) iconY * 0.65F;
+		
+		BufferBuilder render = Tesselator.getInstance().getBuilder();
+		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		
+		render.vertex(x, y + scaledIconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(x + scaledIconX, y + scaledIconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(x + scaledIconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
+		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
+		
+		Tesselator.getInstance().end();
 	}
 	
 	public static class GutterBarWidget extends AbstractWidget
