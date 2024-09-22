@@ -188,7 +188,7 @@ public final class ClientPlayerData
 		gutterRemainingCapacity = packet.remainingCapacity();
 	}
 	
-	public static void handleDataPacket(TorrentUpdatePacket packet)
+	public static void handleDataPacket(TorrentPackets.UpdateClient packet)
 	{
 		visibleTorrentSessions = packet.availableSessions();
 	}
