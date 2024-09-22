@@ -6,6 +6,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.TorrentPackets;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
@@ -18,9 +19,7 @@ import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class TorrentSession
@@ -91,6 +90,30 @@ public class TorrentSession
 		leeching.add(leech);
 	}
 	
+	public void setLeeching(List<Leech> newLeeching)
+	{
+		leeching.clear();
+		leeching.addAll(newLeeching);
+	}
+	
+	/**
+	 * @return whether the input PlayerIdentifier is trying to leech the given grist type from this TorrentSession
+	 */
+	public boolean isLeechForGristType(IdentifierHandler.UUIDIdentifier identifier, GristType gristType)
+	{
+		return leeching.stream().anyMatch(leech -> leech.UUIDMatches(identifier) && leech.gristTypes.contains(gristType));
+	}
+	
+	public boolean sameOwner(TorrentSession otherSession)
+	{
+		return sameOwner(otherSession.seeder);
+	}
+	
+	public boolean sameOwner(IdentifierHandler.UUIDIdentifier identifier)
+	{
+		return this.seeder.getUUID().equals(identifier.getUUID());
+	}
+	
 	@SubscribeEvent
 	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
 	{
@@ -106,39 +129,43 @@ public class TorrentSession
 			}
 			
 			//TODO placeholders
-			for(ServerPlayer player : server.getPlayerList().getPlayers())
-				if(player.isHolding(MSItems.ALLWEDDOL.get()))
-					data.removesSessions();
-			for(ServerPlayer player : server.getPlayerList().getPlayers())
-				if(player.isHolding(MSItems.MWRTHWL.get()))
-				{
-					TorrentSession playerSession = TorrentSession.createPlayerTorrentSession(player, true);
-					List<IdentifierHandler.UUIDIdentifier> testIDs = new ArrayList<>();
-					
-					if(data.getTorrentSessions().stream().anyMatch(session -> session.seeder.getId() == 99))
-						return;
-					
-					for(int i = 99; i < 102; i++)
-					{
-						TorrentSession iterateSession = TorrentSession.createTestTorrentSession(i, true);
-						data.addTorrentSession(iterateSession);
-						
-						IdentifierHandler.UUIDIdentifier testID = iterateSession.seeder;
-						testIDs.add(testID);
-						
-						//PlayerData.get(iterateSession.seeder, server).
-						List<GristAmount> gristAmounts = new ArrayList<>();
-						gristAmounts.add(new GristAmount(GristTypes.AMETHYST, 100));
-						
-						GristCache.get(server, testID).set(new NonNegativeGristSet(gristAmounts));
-					}
-					
-					List<GristType> leechGrist = new ArrayList<>();
-					leechGrist.add(GristTypes.BUILD.get());
-					playerSession.addLeech(new Leech(testIDs.get(0), leechGrist));
-					MSExtraData.get(server).addTorrentSession(playerSession);
-				}
+			debugStuff(server, data);
 		}
+	}
+	
+	private static void debugStuff(MinecraftServer server, MSExtraData data)
+	{
+		for(ServerPlayer player : server.getPlayerList().getPlayers())
+			if(player.isHolding(MSItems.ALLWEDDOL.get()))
+				data.removesSessions();
+		for(ServerPlayer player : server.getPlayerList().getPlayers())
+			if(player.isHolding(MSItems.MWRTHWL.get()))
+			{
+				TorrentSession playerSession = TorrentSession.createPlayerTorrentSession(player, true);
+				List<IdentifierHandler.UUIDIdentifier> testIDs = new ArrayList<>();
+				
+				if(data.getTorrentSessions().stream().anyMatch(session -> session.seeder.getId() == 99))
+					return;
+				
+				for(int i = 99; i < 102; i++)
+				{
+					TorrentSession iterateSession = TorrentSession.createTestTorrentSession(i, true);
+					data.addTorrentSession(iterateSession);
+					
+					IdentifierHandler.UUIDIdentifier testID = iterateSession.seeder;
+					testIDs.add(testID);
+					
+					List<GristAmount> gristAmounts = new ArrayList<>();
+					gristAmounts.add(new GristAmount(GristTypes.SHALE, 100));
+					
+					GristCache.get(server, testID).set(new NonNegativeGristSet(gristAmounts));
+				}
+				
+				List<GristType> leechGrist = new ArrayList<>();
+				leechGrist.add(GristTypes.BUILD.get());
+				playerSession.addLeech(new Leech(testIDs.get(0), leechGrist));
+				MSExtraData.get(server).addTorrentSession(playerSession);
+			}
 	}
 	
 	private static void handleTorrent(TorrentSession torrentSession, List<TorrentSession> sessions, MinecraftServer server)
@@ -165,10 +192,21 @@ public class TorrentSession
 			handleGristSeed(grist, leeching, seedRateMod, seederCache, server);
 		}
 		
-		//TODO handle visibility limitation
+		//TODO handle visibility limitation, consider holding on to torrent data that may be sent to multiple players
 		ServerPlayer seederPlayer = seeder.getPlayer(server);
 		if(seederPlayer != null)
-			PacketDistributor.PLAYER.with(seederPlayer).send(new TorrentPackets.UpdateClient(sessions));
+		{
+			Map<TorrentSession, TorrentSession.LimitedCache> visibleTorrentData = new HashMap<>();
+			sessions.forEach(session -> {
+				PlayerData leechData = PlayerData.get(session.seeder, server);
+				GristCache leechCache = GristCache.get(leechData);
+				LimitedCache leechLimitedCache = new LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
+				
+				visibleTorrentData.put(session, leechLimitedCache);
+			});
+			
+			PacketDistributor.PLAYER.with(seederPlayer).send(new TorrentPackets.UpdateClient(visibleTorrentData));
+		}
 	}
 	
 	private static void handleGristSeed(GristType grist, List<Leech> leeching, int seedRateMod, GristCache seederCache, MinecraftServer server)
@@ -210,6 +248,22 @@ public class TorrentSession
 				GRISTS_CODEC.fieldOf("grist_types").forGetter(Leech::gristTypes)
 		).apply(instance, Leech::new));
 		
+		public boolean UUIDMatches(IdentifierHandler.UUIDIdentifier identifierIn)
+		{
+			return id.getUUID().equals(identifierIn.getUUID());
+		}
+		
 		//TODO find a way to express the share ratio, for potential leech banning
 	}
+	
+	//TODO This overlaps heavily with ClientCache, however that uses GristSet which does not have a CODEC
+	public record LimitedCache(ImmutableGristSet set, long limit)
+	{
+		public static final Codec<LimitedCache> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ImmutableGristSet.NON_NEGATIVE_CODEC.fieldOf("grist_set").forGetter(LimitedCache::set),
+				Codec.LONG.fieldOf("limit").forGetter(LimitedCache::limit)
+		).apply(instance, LimitedCache::new));
+	}
+	
+	public static final Codec<Map<TorrentSession, LimitedCache>> TORRENT_DATA_CODEC = Codec.unboundedMap(TorrentSession.CODEC, LimitedCache.CODEC);
 }

@@ -12,11 +12,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.List;
+import java.util.Map;
 
 public class TorrentPackets
 {
-	public record UpdateClient(List<TorrentSession> availableSessions) implements MSPacket.PlayToClient
+	public record UpdateClient(Map<TorrentSession, TorrentSession.LimitedCache> data) implements MSPacket.PlayToClient
 	{
 		public static final ResourceLocation ID = Minestuck.id("torrent_update_client");
 		
@@ -29,14 +29,14 @@ public class TorrentPackets
 		@Override
 		public void write(FriendlyByteBuf buffer)
 		{
-			buffer.writeJsonWithCodec(TorrentSession.LIST_CODEC, availableSessions);
+			buffer.writeJsonWithCodec(TorrentSession.TORRENT_DATA_CODEC, data);
 		}
 		
 		public static UpdateClient read(FriendlyByteBuf buffer)
 		{
-			List<TorrentSession> availableSessions = buffer.readJsonWithCodec(TorrentSession.LIST_CODEC);
+			Map<TorrentSession, TorrentSession.LimitedCache> data = buffer.readJsonWithCodec(TorrentSession.TORRENT_DATA_CODEC);
 			
-			return new UpdateClient(availableSessions);
+			return new UpdateClient(data);
 		}
 		
 		@Override
@@ -78,6 +78,43 @@ public class TorrentPackets
 			MSExtraData data = MSExtraData.get(server);
 			
 			data.updateTorrentSeeding((IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), gristType, isSeeding);
+		}
+	}
+	
+	public record ModifyLeeching(TorrentSession torrentSession, GristType gristType, boolean isLeeching) implements MSPacket.PlayToServer
+	{
+		public static final ResourceLocation ID = Minestuck.id("torrent_modify_leeching");
+		
+		@Override
+		public ResourceLocation id()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void write(FriendlyByteBuf buffer)
+		{
+			buffer.writeJsonWithCodec(TorrentSession.CODEC, torrentSession);
+			buffer.writeId(GristTypes.REGISTRY, gristType);
+			buffer.writeBoolean(isLeeching);
+		}
+		
+		public static ModifyLeeching read(FriendlyByteBuf buffer)
+		{
+			TorrentSession torrentSession = buffer.readJsonWithCodec(TorrentSession.CODEC);
+			GristType gristType = buffer.readById(GristTypes.REGISTRY);
+			boolean isLeeching  = buffer.readBoolean();
+			
+			return new ModifyLeeching(torrentSession, gristType, isLeeching);
+		}
+		
+		@Override
+		public void execute(ServerPlayer player)
+		{
+			MinecraftServer server = player.server;
+			MSExtraData data = MSExtraData.get(server);
+			
+			data.updateTorrentLeeching(torrentSession, (IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), gristType, isLeeching);
 		}
 	}
 }
