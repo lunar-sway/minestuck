@@ -164,7 +164,8 @@ public class IdentifierHandler
 		
 		private final UUID uuid;
 		
-		private UUIDIdentifier(int id, UUID uuid)
+		//TODO make this constructor private again. Exposed for testing
+		public UUIDIdentifier(int id, UUID uuid)
 		{
 			super(id);
 			this.uuid = uuid;

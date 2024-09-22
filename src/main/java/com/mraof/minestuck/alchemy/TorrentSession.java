@@ -20,6 +20,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class TorrentSession
@@ -54,6 +55,16 @@ public class TorrentSession
 		return new TorrentSession((IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), seeding, new ArrayList<>());
 	}
 	
+	public static TorrentSession createTestTorrentSession(int id, boolean seedAll)
+	{
+		List<GristType> seeding = new ArrayList<>();
+		
+		if(seedAll)
+			seeding.addAll(GristTypes.REGISTRY.stream().toList());
+		
+		return new TorrentSession(new IdentifierHandler.UUIDIdentifier(id, UUID.randomUUID()), seeding, new ArrayList<>());
+	}
+	
 	public IdentifierHandler.UUIDIdentifier getSeeder()
 	{
 		return seeder;
@@ -67,6 +78,11 @@ public class TorrentSession
 	public List<Leech> getLeeching()
 	{
 		return leeching;
+	}
+	
+	public void addLeech(Leech leech)
+	{
+		leeching.add(leech);
 	}
 	
 	@SubscribeEvent
@@ -88,7 +104,30 @@ public class TorrentSession
 					MSExtraData.get(server).removesSessions();
 			for(ServerPlayer player : server.getPlayerList().getPlayers())
 				if(player.isHolding(MSItems.MWRTHWL.get()))
-					MSExtraData.get(server).addTorrentSession(TorrentSession.createPlayerTorrentSession(player, true));
+				{
+					TorrentSession playerSession = TorrentSession.createPlayerTorrentSession(player, true);
+					List<IdentifierHandler.UUIDIdentifier> testIDs = new ArrayList<>();
+					
+					for(int i = 99; i < 102; i++)
+					{
+						TorrentSession iterateSession = TorrentSession.createTestTorrentSession(i, true);
+						MSExtraData.get(server).addTorrentSession(iterateSession);
+						
+						IdentifierHandler.UUIDIdentifier testID = iterateSession.seeder;
+						testIDs.add(testID);
+						
+						//PlayerData.get(iterateSession.seeder, server).
+						List<GristAmount> gristAmounts = new ArrayList<>();
+						gristAmounts.add(new GristAmount(GristTypes.AMETHYST, 100));
+						
+						GristCache.get(server, testID).set(new NonNegativeGristSet(gristAmounts));
+					}
+					
+					List<GristType> leechGrist = new ArrayList<>();
+					leechGrist.add(GristTypes.BUILD.get());
+					playerSession.addLeech(new Leech(testIDs.get(0), leechGrist));
+					MSExtraData.get(server).addTorrentSession(playerSession);
+				}
 		}
 	}
 	
@@ -127,7 +166,7 @@ public class TorrentSession
 		List<Leech> eligibleLeeches = leeching.stream().filter(leech -> leech.gristTypes.contains(grist)).toList();
 		int leechCount = eligibleLeeches.size();
 		
-		int combinedRate = leechCount / seedRateMod;
+		int combinedRate = Math.max(1, leechCount / seedRateMod);
 		GristAmount gristAmount = new GristAmount(grist, combinedRate);
 		
 		//TODO ensure that grist cannot enter the leeches gutter
