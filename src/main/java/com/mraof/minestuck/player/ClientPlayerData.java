@@ -23,8 +23,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Contains static field for any {@link PlayerData} fields that also need client access.
@@ -44,7 +44,7 @@ public final class ClientPlayerData
 	private static GristSet gutterGrist;
 	private static long gutterRemainingCapacity;
 	private static long targetCacheLimit;
-	private static List<TorrentSession> visibleTorrentSessions = new ArrayList<>();
+	private static Map<TorrentSession, TorrentSession.LimitedCache> visibleTorrentData = new HashMap<>();
 	private static int playerColor;
 	private static boolean displaySelectionGui;
 	private static boolean dataCheckerAccess;
@@ -120,9 +120,9 @@ public final class ClientPlayerData
 		return gutterRemainingCapacity;
 	}
 	
-	public static List<TorrentSession> getVisibleTorrentSessions()
+	public static Map<TorrentSession, TorrentSession.LimitedCache> getVisibleTorrentData()
 	{
-		return visibleTorrentSessions;
+		return visibleTorrentData;
 	}
 	
 	public static int getPlayerColor()
@@ -190,7 +190,7 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(TorrentPackets.UpdateClient packet)
 	{
-		visibleTorrentSessions = packet.availableSessions();
+		visibleTorrentData = packet.data();
 	}
 	
 	public static void handleDataPacket(EditmodeCacheLimitPacket packet)

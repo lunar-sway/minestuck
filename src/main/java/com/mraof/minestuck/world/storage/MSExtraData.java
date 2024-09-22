@@ -240,7 +240,7 @@ public class MSExtraData extends SavedData
 		{
 			TorrentSession torrentSession = torrentSessions.get(i);
 			
-			if(torrentSession.getSeeder().getUUID().equals(playerID.getUUID()))
+			if(torrentSession.sameOwner(playerID))
 			{
 				List<GristType> gristTypes = new ArrayList<>(torrentSession.getSeeding());
 				
@@ -256,13 +256,51 @@ public class MSExtraData extends SavedData
 			}
 		}
 		
+		setDirty(); //TODO should this be set to dirty even if no information is changed?
+	}
+	
+	public void updateTorrentLeeching(TorrentSession torrentSessionIn, IdentifierHandler.UUIDIdentifier playerID, GristType gristType, boolean isLeeching)
+	{
+		for(int i = 0; i < torrentSessions.size(); i++)
+		{
+			TorrentSession torrentSession = torrentSessions.get(i);
+			
+			if(torrentSession.sameOwner(torrentSessionIn))
+			{
+				List<TorrentSession.Leech> leeching = new ArrayList<>(torrentSession.getLeeching());
+				
+				TorrentSession.Leech existingLeech = leeching.stream().filter(leech -> leech.UUIDMatches(playerID)).findFirst().orElse(null);
+				
+				List<GristType> leechGrists = new ArrayList<>();
+				
+				if(isLeeching)
+					leechGrists.add(gristType);
+				
+				if(existingLeech != null)
+				{
+					List<GristType> existingGrists = new ArrayList<>(existingLeech.gristTypes());
+					
+					existingGrists.remove(gristType); //remove gristType regardless of isLeeching state in order to prevent duplicate entries for the same type
+					
+					leechGrists.addAll(existingGrists);
+					leeching.remove(existingLeech);
+				}
+				
+				leeching.add(new TorrentSession.Leech(playerID, leechGrists));
+				
+				torrentSession.setLeeching(leeching);
+				torrentSessions.set(i, torrentSession);
+				
+				break;
+			}
+		}
+		
 		setDirty();
 	}
 	
 	public void addTorrentSession(TorrentSession newSession)
 	{
-		//TODO does this check actually confirm whether a given UUIDIdentifier is present
-		if(torrentSessions.stream().noneMatch(existingSession -> existingSession.getSeeder().getUUID().equals(newSession.getSeeder().getUUID())))
+		if(torrentSessions.stream().noneMatch(existingSession -> existingSession.sameOwner(newSession)))
 		{
 			torrentSessions.add(newSession);
 			setDirty();
