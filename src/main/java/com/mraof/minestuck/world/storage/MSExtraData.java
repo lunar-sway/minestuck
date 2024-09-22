@@ -3,9 +3,11 @@ package com.mraof.minestuck.world.storage;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.alchemy.TorrentSession;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
 import net.minecraft.core.HolderLookup;
+import com.mraof.minestuck.player.IdentifierHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -25,13 +27,14 @@ import java.util.function.Predicate;
 
 /**
  * Stores any extra data that's not worth putting in their own data file. (Such as editmode recovery data and post entry tasks, which most of the time will be empty)
+ *
  * @author kirderf1
  */
 public class MSExtraData extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final String DATA_NAME = Minestuck.MOD_ID+"_extra";
+	private static final String DATA_NAME = Minestuck.MOD_ID + "_extra";
 	
 	private final List<EditData> activeEditData = new ArrayList<>();
 	
@@ -229,6 +232,31 @@ public class MSExtraData extends SavedData
 	public List<TorrentSession> getTorrentSessions()
 	{
 		return torrentSessions;
+	}
+	
+	public void updateTorrentSeeding(IdentifierHandler.UUIDIdentifier playerID, GristType gristType, boolean isSeeding)
+	{
+		for(int i = 0; i < torrentSessions.size(); i++)
+		{
+			TorrentSession torrentSession = torrentSessions.get(i);
+			
+			if(torrentSession.getSeeder().getUUID().equals(playerID.getUUID()))
+			{
+				List<GristType> gristTypes = new ArrayList<>(torrentSession.getSeeding());
+				
+				if(isSeeding)
+				{
+					if(!gristTypes.contains(gristType))
+						gristTypes.add(gristType);
+				} else
+					gristTypes.remove(gristType);
+				
+				torrentSession.setSeeding(gristTypes);
+				torrentSessions.set(i, torrentSession);
+			}
+		}
+		
+		setDirty();
 	}
 	
 	public void addTorrentSession(TorrentSession newSession)

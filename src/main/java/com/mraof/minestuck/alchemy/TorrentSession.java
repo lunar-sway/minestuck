@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.TorrentUpdatePacket;
+import com.mraof.minestuck.network.TorrentPackets;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
@@ -75,6 +75,12 @@ public class TorrentSession
 		return seeding;
 	}
 	
+	public void setSeeding(List<GristType> newSeeding)
+	{
+		seeding.clear();
+		seeding.addAll(newSeeding);
+	}
+	
 	public List<Leech> getLeeching()
 	{
 		return leeching;
@@ -92,7 +98,8 @@ public class TorrentSession
 		
 		if(event.phase == TickEvent.Phase.START && server.overworld().getGameTime() % 20 == 0)
 		{
-			List<TorrentSession> sessions = MSExtraData.get(server).getTorrentSessions();
+			MSExtraData data = MSExtraData.get(server);
+			List<TorrentSession> sessions = data.getTorrentSessions();
 			for(TorrentSession torrentSession : sessions)
 			{
 				handleTorrent(torrentSession, sessions, server);
@@ -101,17 +108,20 @@ public class TorrentSession
 			//TODO placeholders
 			for(ServerPlayer player : server.getPlayerList().getPlayers())
 				if(player.isHolding(MSItems.ALLWEDDOL.get()))
-					MSExtraData.get(server).removesSessions();
+					data.removesSessions();
 			for(ServerPlayer player : server.getPlayerList().getPlayers())
 				if(player.isHolding(MSItems.MWRTHWL.get()))
 				{
 					TorrentSession playerSession = TorrentSession.createPlayerTorrentSession(player, true);
 					List<IdentifierHandler.UUIDIdentifier> testIDs = new ArrayList<>();
 					
+					if(data.getTorrentSessions().stream().anyMatch(session -> session.seeder.getId() == 99))
+						return;
+					
 					for(int i = 99; i < 102; i++)
 					{
 						TorrentSession iterateSession = TorrentSession.createTestTorrentSession(i, true);
-						MSExtraData.get(server).addTorrentSession(iterateSession);
+						data.addTorrentSession(iterateSession);
 						
 						IdentifierHandler.UUIDIdentifier testID = iterateSession.seeder;
 						testIDs.add(testID);
@@ -158,7 +168,7 @@ public class TorrentSession
 		//TODO handle visibility limitation
 		ServerPlayer seederPlayer = seeder.getPlayer(server);
 		if(seederPlayer != null)
-			PacketDistributor.PLAYER.with(seederPlayer).send(new TorrentUpdatePacket(sessions));
+			PacketDistributor.PLAYER.with(seederPlayer).send(new TorrentPackets.UpdateClient(sessions));
 	}
 	
 	private static void handleGristSeed(GristType grist, List<Leech> leeching, int seedRateMod, GristCache seederCache, MinecraftServer server)
