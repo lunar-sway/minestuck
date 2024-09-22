@@ -29,6 +29,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +50,14 @@ public class TorrentScreen extends Screen
 	
 	private int xOffset;
 	private int yOffset;
+	private int gristWidgetsYOffset;
 	
 	private GristSet gutterGrist;
 	private long gutterRemainingCapacity;
 	private static Map<TorrentSession, TorrentSession.LimitedCache> visibleTorrentData = new HashMap<>();
 	private static TorrentSession userSession;
+	
+	private List<GristType> allGristTypes;
 	
 	private int updateTick = 0;
 	
@@ -70,9 +74,12 @@ public class TorrentScreen extends Screen
 	{
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
+		gristWidgetsYOffset = yOffset + 36;
 		
 		gutterGrist = ClientPlayerData.getGutterSet();
 		visibleTorrentData = ClientPlayerData.getVisibleTorrentData();
+		
+		this.allGristTypes = GristTypes.REGISTRY.stream().toList();
 		
 		if(minecraft == null || minecraft.player == null)
 			return;
@@ -94,6 +101,7 @@ public class TorrentScreen extends Screen
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
+		//TODO keeping the screen open over time causes framerate to drop, assumedly from gutter renderer
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		clientDataUpdates();
@@ -138,12 +146,10 @@ public class TorrentScreen extends Screen
 		if(userSession == null)
 			return; //if the users own session isnt visible, there is no point in looking at any
 		
-		List<GristType> types = GristTypes.REGISTRY.stream().limit(6).toList();
-		
 		int torrentXOffset = 0;
 		
 		ClientPlayerData.ClientCache clientCache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
-		createTorrentWidgets(types, userSession, new TorrentSession.LimitedCache(clientCache.set().asImmutable(), clientCache.limit()), torrentXOffset);
+		createTorrentWidgets(userSession, new TorrentSession.LimitedCache(clientCache.set().asImmutable(), clientCache.limit()), torrentXOffset);
 		torrentXOffset++;
 		
 		for(Map.Entry<TorrentSession, TorrentSession.LimitedCache> entry : visibleTorrentData.entrySet())
@@ -154,20 +160,29 @@ public class TorrentScreen extends Screen
 			if(entrySession.sameOwner(userSession))
 				continue;
 			
-			createTorrentWidgets(types, entrySession, entryCache, torrentXOffset);
+			createTorrentWidgets(entrySession, entryCache, torrentXOffset);
 			torrentXOffset++;
 		}
 	}
 	
-	private void createTorrentWidgets(List<GristType> types, TorrentSession torrentSession, TorrentSession.LimitedCache cache, int torrentXOffset)
+	private void createTorrentWidgets(TorrentSession torrentSession, TorrentSession.LimitedCache cache, int torrentXOffset)
 	{
-		int yOffset = 0;
-		for(GristType type : types)
+		int combinedXOffset = xOffset + 5 + ((GristEntry.WIDTH + 2) * torrentXOffset);
+		
+		List<GristEntry> gristEntries = new ArrayList<>();
+		
+		int yOffset = 1; //this is 1 because there needs to be room to render the name of the torrent's seeder
+		for(GristType type : allGristTypes)
 		{
-			addRenderableWidget(new GristEntry(xOffset + 5 + ((GristEntry.WIDTH + 2) * torrentXOffset), this.yOffset + 36 + ((GristEntry.HEIGHT + 1) * yOffset), torrentSession, cache, type, font));
+			GristEntry gristEntry = new GristEntry(combinedXOffset, gristWidgetsYOffset + ((GristEntry.HEIGHT + 1) * yOffset), type);
+			
+			gristEntries.add(addRenderableWidget(gristEntry));
 			
 			yOffset++;
 		}
+		
+		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, torrentSession, cache, font, gristEntries, allGristTypes);
+		addRenderableWidget(torrentContainer);
 	}
 	
 	private void clientDataUpdates()
@@ -180,18 +195,23 @@ public class TorrentScreen extends Screen
 			
 			for(Renderable renderable : renderables)
 			{
-				if(renderable instanceof GristEntry gristEntry)
+				if(renderable instanceof TorrentContainer torrentContainer)
 				{
-					TorrentSession entrySession = gristEntry.torrentSession;
+					TorrentSession entrySession = torrentContainer.torrentSession;
 					if(!visibleTorrentData.containsKey(entrySession))
 					{
 						addTorrentSessions();
 						break;
 					}
 					
-					gristEntry.cache = visibleTorrentData.get(entrySession);
-					gristEntry.cacheLimit = visibleTorrentData.get(entrySession).limit();
-					gristEntry.gristAmount = visibleTorrentData.get(entrySession).set().getGrist(gristEntry.gristType);
+					TorrentSession.LimitedCache cache = visibleTorrentData.get(entrySession);
+					
+					torrentContainer.gristEntries.forEach(gristEntry ->
+					{
+						gristEntry.cache = cache;
+						gristEntry.cacheLimit = cache.limit();
+						gristEntry.gristAmount = visibleTorrentData.get(entrySession).set().getGrist(gristEntry.gristType);
+					});
 				}
 				
 				//TODO update gutter bar data
@@ -228,7 +248,7 @@ public class TorrentScreen extends Screen
 		return super.keyPressed(pKeyCode, pScanCode, pModifiers);
 	}
 	
-	public static class GristEntry extends AbstractWidget
+	protected static class GristEntry extends AbstractWidget
 	{
 		public static final int WIDTH = 40;
 		public static final int HEIGHT = 14;
@@ -237,30 +257,24 @@ public class TorrentScreen extends Screen
 		
 		public int x;
 		public int y;
-		public final TorrentSession torrentSession;
+		public TorrentSession torrentSession;
 		public TorrentSession.LimitedCache cache;
 		public final GristType gristType;
 		public long gristAmount;
 		public long cacheLimit;
-		public final boolean isOwner;
+		public boolean isOwner;
 		private boolean isActive;
-		private final Font font;
+		private Font font;
 		
-		public GristEntry(int pX, int pY, TorrentSession torrentSession, TorrentSession.LimitedCache cache, GristType gristType, Font font)
+		public GristEntry(int pX, int pY, GristType gristType)
 		{
 			super(pX, pY, WIDTH, HEIGHT, Component.empty());
 			
 			x = pX;
 			y = pY;
-			this.torrentSession = torrentSession;
 			this.gristType = gristType;
-			this.isOwner = userSession.sameOwner(torrentSession);
-			this.isActive = isOwner ? torrentSession.getSeeding().contains(gristType) : torrentSession.isLeechForGristType(userSession.getSeeder(), gristType);
-			this.font = font;
 			
-			this.cache = cache;
-			this.gristAmount = cache.set().getGrist(gristType);
-			this.cacheLimit = cache.limit();
+			visible = false;
 			
 			setTooltip(Tooltip.create(gristType.getDisplayName()));
 		}
@@ -294,11 +308,6 @@ public class TorrentScreen extends Screen
 			guiGraphics.pose().popPose();
 		}
 		
-		private static int scale(int input)
-		{
-			return input * 2;
-		}
-		
 		private int getColor()
 		{
 			//is gray unless active, at which point color is determined by whether it is owned by the user
@@ -308,6 +317,13 @@ public class TorrentScreen extends Screen
 				color = isOwner ? 0xFF00FF00 : 0xFFFF0000;
 			
 			return color;
+		}
+		
+		@Override
+		public boolean mouseScrolled(double pMouseX, double pMouseY, double pScrollX, double pScrollY)
+		{
+			//TODO doesnt change things
+			return false; //when true this stops the TorrentContainer from scrolling
 		}
 		
 		@Override
@@ -326,6 +342,11 @@ public class TorrentScreen extends Screen
 		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
 		{
 		}
+	}
+	
+	private static int scale(int input)
+	{
+		return input * 2;
 	}
 	
 	protected static void drawIcon(int x, int y, ResourceLocation icon)
@@ -354,6 +375,104 @@ public class TorrentScreen extends Screen
 		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
 		
 		Tesselator.getInstance().end();
+	}
+	
+	protected static class TorrentContainer extends AbstractWidget
+	{
+		public static final int WIDTH = GristEntry.WIDTH + 2;
+		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
+		
+		public final TorrentSession torrentSession;
+		private final Font font;
+		public List<GristEntry> gristEntries;
+		
+		private final List<GristType> allGristTypes;
+		
+		private final int gristWidgetsYOffset;
+		private int scroll = 0;
+		
+		public TorrentContainer(int pX, int pY, TorrentSession torrentSession, TorrentSession.LimitedCache cache, Font font, List<GristEntry> gristEntries, List<GristType> allGristTypes)
+		{
+			super(pX, pY, WIDTH, HEIGHT, Component.empty());
+			
+			this.torrentSession = torrentSession;
+			this.font = font;
+			this.gristEntries = gristEntries;
+			this.allGristTypes = allGristTypes;
+			
+			gristWidgetsYOffset = pY;
+			
+			completeGristEntryInit(torrentSession, cache, font, gristEntries);
+		}
+		
+		private static void completeGristEntryInit(TorrentSession torrentSession, TorrentSession.LimitedCache cache, Font font, List<GristEntry> gristEntries)
+		{
+			for(int i = 0; i < gristEntries.size(); i++)
+			{
+				if(i < 5)
+					gristEntries.get(i).visible = true;
+				
+				GristType entryGristType = gristEntries.get(i).gristType;
+				
+				gristEntries.get(i).torrentSession = torrentSession;
+				gristEntries.get(i).isOwner = userSession.sameOwner(torrentSession);
+				gristEntries.get(i).isActive = gristEntries.get(i).isOwner ? torrentSession.getSeeding().contains(entryGristType) : torrentSession.isLeechForGristType(userSession.getSeeder(), entryGristType);
+				gristEntries.get(i).font = font;
+				gristEntries.get(i).cache = cache;
+				gristEntries.get(i).gristAmount = cache.set().getGrist(entryGristType);
+				gristEntries.get(i).cacheLimit = cache.limit();
+			}
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v)
+		{
+			String text = torrentSession.getSeeder().getUsername();
+			guiGraphics.pose().pushPose();
+			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
+			guiGraphics.drawString(font, text, scale((getX() + WIDTH / 2) - font.width(text) / 2), scale(getY() + 2), 0xFF000000, false);
+			guiGraphics.pose().popPose();
+		}
+		
+		@Override
+		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
+		{
+			int maxScroll = Math.max(0, allGristTypes.size() - 6);
+			
+			if(scrollY > 0)
+				scroll = Math.min(maxScroll, scroll + 1);
+			else if(scrollY < 0)
+				scroll = Math.max(0, scroll - 1);
+			
+			//update visibility and positions
+			for(int i = 0; i < gristEntries.size(); i++)
+			{
+				GristEntry gristEntry = gristEntries.get(i);
+				
+				if(i >= scroll && i < scroll + 5)
+				{
+					gristEntry.visible = true;
+					
+					gristEntry.y = gristWidgetsYOffset + (i + 1 - scroll) * (GristEntry.HEIGHT + 1); // Adjust position relative to the visible area
+				} else
+				{
+					gristEntry.visible = false;
+				}
+			}
+			
+			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+		}
+		
+		@Override
+		protected boolean isValidClickButton(int pButton)
+		{
+			return false;
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+		}
 	}
 	
 	public static class GutterBarWidget extends AbstractWidget
