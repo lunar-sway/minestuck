@@ -24,6 +24,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
@@ -254,9 +255,8 @@ public class TorrentScreen extends Screen
 		public static final int HEIGHT = 14;
 		public static final int GRIST_ICON_X = 2, GRIST_ICON_Y = 2;
 		public static final int GRIST_COUNT_X = GRIST_ICON_X + 13;
+		public static final float BAR_WIDTH = 20F;
 		
-		public int x;
-		public int y;
 		public TorrentSession torrentSession;
 		public TorrentSession.LimitedCache cache;
 		public final GristType gristType;
@@ -270,18 +270,33 @@ public class TorrentScreen extends Screen
 		{
 			super(pX, pY, WIDTH, HEIGHT, Component.empty());
 			
-			x = pX;
-			y = pY;
 			this.gristType = gristType;
 			
 			visible = false;
+		}
+		
+		//TODO may be called unnecessarily
+		public void setTooltip()
+		{
+			MutableComponent tooltip = gristType.getDisplayName();
 			
-			setTooltip(Tooltip.create(gristType.getDisplayName()));
+			if(torrentSession != null && torrentSession.getSeeding().contains(gristType))
+			{
+				if(gristAmount > 0)
+					tooltip.append("\n(Is being seeded)");
+				else
+					tooltip.append("\n(Will be seeded)");
+			}
+			
+			setTooltip(Tooltip.create(tooltip));
 		}
 		
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
+			int x = getX();
+			int y = getY();
+			
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
 			
@@ -297,12 +312,12 @@ public class TorrentScreen extends Screen
 			guiGraphics.drawString(font, amount, scale(gristCountXMod), scale(gristIconYMod + 7), 0x19b3ef, false);
 			
 			//renders bars
-			//guiGraphics.renderOutline(scale(gristCountXMod - 1), scale(gristIconYMod + 1), scale(22), scale(7), getColor());
+			guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 1), scale((int) (gristCountXMod + BAR_WIDTH)), scale(gristIconYMod + 6), 0xFF444444);
 			if(cacheLimit > 0)
 			{
 				double gristFraction = Math.min(1D, (double) gristAmount / cacheLimit);
-				guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 2), scale((int) (gristCountXMod + (20.0 * gristFraction))), scale(gristIconYMod + 6), 0xff19B3EF);
-				guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 2), scale((int) (gristCountXMod + (20.0 * gristFraction))), scale(gristIconYMod + 1), 0xff7ED8E5);
+				guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 2), scale((int) (gristCountXMod + (BAR_WIDTH * gristFraction))), scale(gristIconYMod + 6), 0xFF19B3EF);
+				guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 1), scale((int) (gristCountXMod + (BAR_WIDTH * gristFraction))), scale(gristIconYMod + 2), 0xFF7ED8E5);
 			}
 			
 			guiGraphics.pose().popPose();
@@ -314,7 +329,7 @@ public class TorrentScreen extends Screen
 			int color = 0xFF333333;
 			
 			if(isActive)
-				color = isOwner ? 0xFF00FF00 : 0xFFFF0000;
+				color = isOwner ? 0xFFFF0000 : 0xFF00FF00;
 			
 			return color;
 		}
@@ -409,18 +424,21 @@ public class TorrentScreen extends Screen
 		{
 			for(int i = 0; i < gristEntries.size(); i++)
 			{
+				GristEntry gristEntry = gristEntries.get(i);
 				if(i < 5)
-					gristEntries.get(i).visible = true;
+					gristEntry.visible = true;
 				
-				GristType entryGristType = gristEntries.get(i).gristType;
+				GristType entryGristType = gristEntry.gristType;
 				
-				gristEntries.get(i).torrentSession = torrentSession;
-				gristEntries.get(i).isOwner = userSession.sameOwner(torrentSession);
-				gristEntries.get(i).isActive = gristEntries.get(i).isOwner ? torrentSession.getSeeding().contains(entryGristType) : torrentSession.isLeechForGristType(userSession.getSeeder(), entryGristType);
-				gristEntries.get(i).font = font;
-				gristEntries.get(i).cache = cache;
-				gristEntries.get(i).gristAmount = cache.set().getGrist(entryGristType);
-				gristEntries.get(i).cacheLimit = cache.limit();
+				gristEntry.torrentSession = torrentSession;
+				gristEntry.isOwner = userSession.sameOwner(torrentSession);
+				gristEntry.isActive = gristEntry.isOwner ? torrentSession.getSeeding().contains(entryGristType) : torrentSession.isLeechForGristType(userSession.getSeeder(), entryGristType);
+				gristEntry.font = font;
+				gristEntry.cache = cache;
+				gristEntry.gristAmount = cache.set().getGrist(entryGristType);
+				gristEntry.cacheLimit = cache.limit();
+				
+				gristEntry.setTooltip();
 			}
 		}
 		
@@ -437,7 +455,8 @@ public class TorrentScreen extends Screen
 		@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 		{
-			int maxScroll = Math.max(0, allGristTypes.size() - 6);
+			//TODO consider inverting scroll direction
+			int maxScroll = Math.max(0, allGristTypes.size() - 5);
 			
 			if(scrollY > 0)
 				scroll = Math.min(maxScroll, scroll + 1);
@@ -449,11 +468,12 @@ public class TorrentScreen extends Screen
 			{
 				GristEntry gristEntry = gristEntries.get(i);
 				
+				gristEntry.setY(gristWidgetsYOffset + (i + 1 - scroll) * (GristEntry.HEIGHT + 1)); // Adjust position relative to the visible area
+				
 				if(i >= scroll && i < scroll + 5)
 				{
 					gristEntry.visible = true;
-					
-					gristEntry.y = gristWidgetsYOffset + (i + 1 - scroll) * (GristEntry.HEIGHT + 1); // Adjust position relative to the visible area
+					gristEntry.setTooltip();
 				} else
 				{
 					gristEntry.visible = false;
