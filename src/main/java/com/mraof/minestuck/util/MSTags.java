@@ -191,6 +191,7 @@ public class MSTags
 		
 		// Skaia
 		public static final TagKey<Biome> HAS_SKAIA_CASTLE = tag("has_structure/skaia_castle");
+		public static final TagKey<Biome> SKAIA = tag("skaia");
 		
 		private static TagKey<Biome> tag(String name)
 		{
