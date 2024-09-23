@@ -298,7 +298,11 @@ public class MSExtraData extends SavedData
 		setDirty();
 	}
 	
-	public void addTorrentSession(TorrentSession newSession)
+	/**
+	 * Attempts to add a new TorrentSession to the List.
+	 * It will only do so if there is not already an existing TorrentSession assigned to the given player.
+	 */
+	public void tryAddTorrentSession(TorrentSession newSession)
 	{
 		if(torrentSessions.stream().noneMatch(existingSession -> existingSession.sameOwner(newSession)))
 		{

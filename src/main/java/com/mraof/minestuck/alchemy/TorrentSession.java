@@ -3,6 +3,7 @@ package com.mraof.minestuck.alchemy;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.TorrentPackets;
@@ -10,6 +11,7 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,14 +46,23 @@ public class TorrentSession
 		this.leeching.addAll(leeching);
 	}
 	
-	public static TorrentSession createPlayerTorrentSession(ServerPlayer player, boolean seedAll)
+	public static TorrentSession createPlayerTorrentSession(ServerPlayer player, MinecraftServer server)
+	{
+		return createPlayerTorrentSession((IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), server);
+	}
+	
+	public static TorrentSession createPlayerTorrentSession(IdentifierHandler.UUIDIdentifier player, MinecraftServer server)
 	{
 		List<GristType> seeding = new ArrayList<>();
 		
-		if(seedAll)
+		if(MinestuckConfig.SERVER.gristTorrentSeedAll.get())
 			seeding.addAll(GristTypes.REGISTRY.stream().toList());
 		
-		return new TorrentSession((IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), seeding, new ArrayList<>());
+		TorrentSession torrentSession = new TorrentSession(player, seeding, new ArrayList<>());
+		
+		MSExtraData.get(server).tryAddTorrentSession(torrentSession);
+		
+		return torrentSession;
 	}
 	
 	public static TorrentSession createTestTorrentSession(int id, boolean seedAll)
@@ -121,6 +132,9 @@ public class TorrentSession
 		
 		if(event.phase == TickEvent.Phase.START && server.overworld().getGameTime() % 20 == 0)
 		{
+			if(MinestuckConfig.SERVER.gristTorrentVisibility.get().equals(MinestuckConfig.TorrentVisibility.NONE))
+				return; //no need to update if nothing is visible
+			
 			MSExtraData data = MSExtraData.get(server);
 			List<TorrentSession> sessions = data.getTorrentSessions();
 			for(TorrentSession torrentSession : sessions)
@@ -141,7 +155,7 @@ public class TorrentSession
 		for(ServerPlayer player : server.getPlayerList().getPlayers())
 			if(player.isHolding(MSItems.MWRTHWL.get()))
 			{
-				TorrentSession playerSession = TorrentSession.createPlayerTorrentSession(player, true);
+				TorrentSession playerSession = TorrentSession.createPlayerTorrentSession(player, server);
 				List<IdentifierHandler.UUIDIdentifier> testIDs = new ArrayList<>();
 				
 				if(data.getTorrentSessions().stream().anyMatch(session -> session.seeder.getId() == 99))
@@ -150,7 +164,7 @@ public class TorrentSession
 				for(int i = 99; i < 102; i++)
 				{
 					TorrentSession iterateSession = TorrentSession.createTestTorrentSession(i, true);
-					data.addTorrentSession(iterateSession);
+					data.tryAddTorrentSession(iterateSession);
 					
 					IdentifierHandler.UUIDIdentifier testID = iterateSession.seeder;
 					testIDs.add(testID);
@@ -164,7 +178,7 @@ public class TorrentSession
 				List<GristType> leechGrist = new ArrayList<>();
 				leechGrist.add(GristTypes.BUILD.get());
 				playerSession.addLeech(new Leech(testIDs.get(0), leechGrist));
-				MSExtraData.get(server).addTorrentSession(playerSession);
+				MSExtraData.get(server).tryAddTorrentSession(playerSession);
 			}
 	}
 	
@@ -192,17 +206,32 @@ public class TorrentSession
 			handleGristSeed(grist, leeching, seedRateMod, seederCache, server);
 		}
 		
-		//TODO handle visibility limitation, consider holding on to torrent data that may be sent to multiple players
+		//TODO consider holding on to torrent data that may be sent to multiple players
 		ServerPlayer seederPlayer = seeder.getPlayer(server);
 		if(seederPlayer != null)
 		{
+			MinestuckConfig.TorrentVisibility visibilityConfig = MinestuckConfig.SERVER.gristTorrentVisibility.get();
+			boolean sessionOnly = visibilityConfig.equals(MinestuckConfig.TorrentVisibility.SESSION);
+			boolean globalVisibility = visibilityConfig.equals(MinestuckConfig.TorrentVisibility.GLOBAL);
+			
 			Map<TorrentSession, TorrentSession.LimitedCache> visibleTorrentData = new HashMap<>();
 			sessions.forEach(session -> {
-				PlayerData leechData = PlayerData.get(session.seeder, server);
-				GristCache leechCache = GristCache.get(leechData);
-				LimitedCache leechLimitedCache = new LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
+				IdentifierHandler.UUIDIdentifier sessionPlayerID = session.seeder;
 				
-				visibleTorrentData.put(session, leechLimitedCache);
+				//TODO add Land config option functionality
+				//SkaianetData.get(server).getOrCreatePredefineData(sessionPlayerID);
+				
+				boolean inSameSession = SessionHandler.get(server).isInSameSession(seeder, sessionPlayerID);
+				boolean isVisible = globalVisibility || (sessionOnly && inSameSession);
+				
+				if(isVisible)
+				{
+					PlayerData leechData = PlayerData.get(sessionPlayerID, server);
+					GristCache leechCache = GristCache.get(leechData);
+					LimitedCache leechLimitedCache = new LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
+					
+					visibleTorrentData.put(session, leechLimitedCache);
+				}
 			});
 			
 			PacketDistributor.PLAYER.with(seederPlayer).send(new TorrentPackets.UpdateClient(visibleTorrentData));
@@ -236,9 +265,7 @@ public class TorrentSession
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
-		//TODO add config determining default seeding
-		TorrentSession session = TorrentSession.createPlayerTorrentSession(player, true);
-		MSExtraData.get(player.server).addTorrentSession(session);
+		TorrentSession.createPlayerTorrentSession(player, player.server);
 	}
 	
 	public record Leech(IdentifierHandler.UUIDIdentifier id, List<GristType> gristTypes)
