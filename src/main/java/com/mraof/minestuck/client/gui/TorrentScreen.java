@@ -5,7 +5,9 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.TorrentHelper;
 import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -18,7 +20,6 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ParametersAreNonnullByDefault
 public class TorrentScreen extends Screen
@@ -42,8 +44,8 @@ public class TorrentScreen extends Screen
 	
 	public static final ResourceLocation GUI_MAIN = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/torrent.png");
 	
-	private static final int GUI_WIDTH = 176;
-	private static final int GUI_HEIGHT = 166;
+	private static final int GUI_WIDTH = 190;
+	private static final int GUI_HEIGHT = 200;
 	
 	private static final int LIGHT_BLUE = 0xFF19B3EF;
 	
@@ -57,6 +59,10 @@ public class TorrentScreen extends Screen
 	private long gutterRemainingCapacity;
 	private static Map<TorrentSession, TorrentSession.LimitedCache> visibleTorrentData = new HashMap<>();
 	private static TorrentSession userSession;
+	
+	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
+	private final List<GristStat> gristStats = new ArrayList<>();
+	private final List<GutterBarWidget> gutterBars = new ArrayList<>();
 	
 	private List<GristType> allGristTypes;
 	
@@ -102,18 +108,75 @@ public class TorrentScreen extends Screen
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		//TODO keeping the screen open over time causes framerate to drop, assumedly from gutter renderer
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		clientDataUpdates();
-		
+		renderGristStats();
 		renderGutter(guiGraphics);
+	}
+	
+	private void clientDataUpdates()
+	{
+		if(updateTick % 20 == 0)
+		{
+			gutterGrist = ClientPlayerData.getGutterSet();
+			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
+			visibleTorrentData = ClientPlayerData.getVisibleTorrentData();
+			
+			//TODO update gutter bar data
+			renderTorrentSessions();
+		}
+		
+		updateTick++;
+	}
+	
+	private void renderTorrentSessions()
+	{
+		for(TorrentContainer torrentContainer : torrentContainers)
+		{
+			TorrentSession entrySession = torrentContainer.torrentSession;
+			if(!visibleTorrentData.containsKey(entrySession))
+			{
+				addTorrentSessions();
+				break;
+			}
+			
+			TorrentSession.LimitedCache cache = visibleTorrentData.get(entrySession);
+			
+			torrentContainer.gristEntries.forEach(gristEntry ->
+			{
+				gristEntry.cache = cache;
+				gristEntry.cacheLimit = cache.limit();
+				gristEntry.gristAmount = visibleTorrentData.get(entrySession).set().getGrist(gristEntry.gristType);
+			});
+		}
+	}
+	
+	private void renderGristStats()
+	{
+		gristStats.forEach(this::removeWidget);
+		
+		int i = 0;
+		for(GristType gristType : allGristTypes)
+		{
+			GristStat gristStat = new GristStat(xOffset + GristStat.X_OFFSET_FROM_EDGE, yOffset + GristStat.Y_OFFSET_FROM_EDGE + ((GristStat.HEIGHT + 1) * i), font, gristType);
+			
+			if(gristStat.typeIsActive())
+			{
+				gristStats.add(gristStat);
+				addRenderableWidget(gristStat);
+				
+				i++;
+			}
+		}
 	}
 	
 	private void renderGutter(GuiGraphics guiGraphics)
 	{
 		if(gutterGrist == null)
 			return; //TODO consider adding text that says "loading" if this early return is triggered
+		
+		gutterBars.forEach(this::removeWidget);
 		
 		double totalVolume = gutterRemainingCapacity;
 		long filledVolume = 0;
@@ -124,17 +187,22 @@ public class TorrentScreen extends Screen
 		totalVolume += filledVolume;
 		
 		int initialX = xOffset + 55;
-		int y = yOffset + 147;
+		int y = yOffset + 181;
 		
 		for(GristAmount gristAmount : gutterGrist.asAmounts())
 		{
 			int length = (int) ((gristAmount.amount() / totalVolume) * 100);
-			addRenderableWidget(new GutterBarWidget(initialX, y, length, gristAmount));
+			GutterBarWidget bar = new GutterBarWidget(initialX, y, length, gristAmount);
+			gutterBars.add(bar);
+			addRenderableWidget(bar);
 			initialX += length;
 		}
 		
 		int remainingVolume = (int) ((gutterRemainingCapacity / totalVolume) * 100);
-		addRenderableWidget(new GutterBarWidget(initialX, y, remainingVolume, gutterRemainingCapacity));
+		
+		GutterBarWidget remainingBar = new GutterBarWidget(initialX, y, remainingVolume, gutterRemainingCapacity);
+		gutterBars.add(remainingBar);
+		addRenderableWidget(remainingBar);
 		
 		String remainingText = String.valueOf(filledVolume);
 		guiGraphics.drawString(font, remainingText, (xOffset + 105) - font.width(remainingText) / 2, y + 5, LIGHT_BLUE, false);
@@ -142,10 +210,11 @@ public class TorrentScreen extends Screen
 	
 	private void addTorrentSessions()
 	{
-		renderables.clear();
-		
 		if(userSession == null)
 			return; //if the users own session isnt visible, there is no point in looking at any
+		
+		torrentContainers.forEach(container -> container.gristEntries.forEach(this::removeWidget));
+		torrentContainers.forEach(this::removeWidget);
 		
 		int torrentXOffset = 0;
 		
@@ -166,7 +235,7 @@ public class TorrentScreen extends Screen
 		}
 	}
 	
-	private void createTorrentWidgets(TorrentSession torrentSession, TorrentSession.LimitedCache cache, int torrentXOffset)
+	public void createTorrentWidgets(TorrentSession torrentSession, TorrentSession.LimitedCache cache, int torrentXOffset)
 	{
 		int combinedXOffset = xOffset + 5 + ((GristEntry.WIDTH + 2) * torrentXOffset);
 		
@@ -183,43 +252,8 @@ public class TorrentScreen extends Screen
 		}
 		
 		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, torrentSession, cache, font, gristEntries, allGristTypes);
+		torrentContainers.add(torrentContainer);
 		addRenderableWidget(torrentContainer);
-	}
-	
-	private void clientDataUpdates()
-	{
-		if(updateTick % 20 == 0)
-		{
-			gutterGrist = ClientPlayerData.getGutterSet();
-			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
-			visibleTorrentData = ClientPlayerData.getVisibleTorrentData();
-			
-			for(Renderable renderable : renderables)
-			{
-				if(renderable instanceof TorrentContainer torrentContainer)
-				{
-					TorrentSession entrySession = torrentContainer.torrentSession;
-					if(!visibleTorrentData.containsKey(entrySession))
-					{
-						addTorrentSessions();
-						break;
-					}
-					
-					TorrentSession.LimitedCache cache = visibleTorrentData.get(entrySession);
-					
-					torrentContainer.gristEntries.forEach(gristEntry ->
-					{
-						gristEntry.cache = cache;
-						gristEntry.cacheLimit = cache.limit();
-						gristEntry.gristAmount = visibleTorrentData.get(entrySession).set().getGrist(gristEntry.gristType);
-					});
-				}
-				
-				//TODO update gutter bar data
-			}
-		}
-		
-		updateTick++;
 	}
 	
 	@Override
@@ -359,39 +393,6 @@ public class TorrentScreen extends Screen
 		}
 	}
 	
-	private static int scale(int input)
-	{
-		return input * 2;
-	}
-	
-	protected static void drawIcon(int x, int y, ResourceLocation icon)
-	{
-		//TODO does not have the null checks present in MinestuckScreen
-		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, icon);
-		
-		float scale = (float) 1 / 16;
-		
-		int iconX = 16;
-		int iconY = 16;
-		int iconU = 0;
-		int iconV = 0;
-		
-		float scaledIconX = (float) iconX * 0.65F;
-		float scaledIconY = (float) iconY * 0.65F;
-		
-		BufferBuilder render = Tesselator.getInstance().getBuilder();
-		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		
-		render.vertex(x, y + scaledIconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + scaledIconX, y + scaledIconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + scaledIconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
-		
-		Tesselator.getInstance().end();
-	}
-	
 	protected static class TorrentContainer extends AbstractWidget
 	{
 		public static final int WIDTH = GristEntry.WIDTH + 2;
@@ -448,7 +449,7 @@ public class TorrentScreen extends Screen
 			String text = torrentSession.getSeeder().getUsername();
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
-			guiGraphics.drawString(font, text, scale((getX() + WIDTH / 2) - font.width(text) / 2), scale(getY() + 2), 0xFF000000, false);
+			guiGraphics.drawString(font, text, scale((getX() + WIDTH / 2)) - scale(font.width(text) / 2), scale(getY() + 4), 0xFF000000, false);
 			guiGraphics.pose().popPose();
 		}
 		
@@ -487,6 +488,116 @@ public class TorrentScreen extends Screen
 		protected boolean isValidClickButton(int pButton)
 		{
 			return false;
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+		}
+	}
+	
+	protected static class GristStat extends AbstractWidget
+	{
+		public static final int X_OFFSET_FROM_EDGE = 40;
+		public static final int Y_OFFSET_FROM_EDGE = 130;
+		public static final int WIDTH = GUI_WIDTH - X_OFFSET_FROM_EDGE;
+		public static final int HEIGHT = 12;
+		public static final int TEXT_Y_OFFSET = 5;
+		
+		private final Font font;
+		private final GristType gristType;
+		
+		private Pair<Integer, Integer> seedsData = Pair.of(0, 0); //first is seeds being utilized and second is total seeds available
+		private Pair<Integer, Integer> typeDownSpeedRange = Pair.of(0, 0); //first is minimum speed and second is maximum
+		private int typeUpSpeed = 0;
+		
+		public GristStat(int pX, int pY, Font font, GristType gristType)
+		{
+			super(pX, pY, WIDTH, HEIGHT, Component.empty());
+			
+			this.font = font;
+			this.gristType = gristType;
+			
+			updateStats();
+		}
+		
+		public void updateStats()
+		{
+			TorrentSession.LimitedCache userCache = visibleTorrentData.get(userSession);
+			
+			int minDownSpeed = Integer.MAX_VALUE;
+			int maxDownSpeed = 1;
+			AtomicInteger totalSeeds = new AtomicInteger(); //TODO is this appropriate?
+			
+			Map<TorrentSession, TorrentSession.LimitedCache> filteredData = new HashMap<>();
+			visibleTorrentData.forEach((key, value) -> {
+				boolean couldSeed = value.set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
+				boolean tryingToSeed = key.getSeeding().stream().anyMatch(iterateType -> iterateType.equals(gristType));
+				boolean userTryingToLeech = key.isLeechForGristType(userSession.getSeeder(), gristType);
+				
+				if(tryingToSeed)
+				{
+					if(couldSeed)
+						totalSeeds.addAndGet(1);
+					
+					if(userTryingToLeech)
+						filteredData.put(key, value);
+				}
+			}); //only include data if the user is trying to leech the grist
+			
+			if(filteredData.isEmpty())
+				return; //widget will render due to how min/max speeds are obtained without this early return
+			
+			List<GristType> userSeeding = userSession.getViableSeeding(userCache);
+			typeUpSpeed = TorrentHelper.getSeedRateMod(userSeeding);
+			
+			for(Map.Entry<TorrentSession, TorrentSession.LimitedCache> dataEntry : filteredData.entrySet())
+			{
+				TorrentSession entrySession = dataEntry.getKey();
+				TorrentSession.LimitedCache entryCache = dataEntry.getValue();
+				List<GristType> entrySeeding = entrySession.getViableSeeding(entryCache);
+				
+				int entrySeedRate = TorrentHelper.getSeedRateMod(entrySeeding);
+				
+				minDownSpeed = Math.min(minDownSpeed, entrySeedRate);
+				maxDownSpeed = Math.max(maxDownSpeed, entrySeedRate);
+			}
+			
+			seedsData = Pair.of(filteredData.size(), totalSeeds.get());
+			
+			//TODO downSpeed includes userSession, making the GristStat visible even if the user is the only one capable of seeding
+			typeDownSpeedRange = Pair.of(minDownSpeed, maxDownSpeed);
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v)
+		{
+			guiGraphics.pose().pushPose();
+			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
+			
+			TorrentScreen.drawIcon(getX() + 1, getY() + 1, gristType.getIcon());
+			
+			//down
+			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst()).append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()));
+			guiGraphics.drawString(font, downText, scale(getX() + 15), scale(getY() + TEXT_Y_OFFSET), LIGHT_BLUE, false);
+			
+			//up
+			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 70), scale(getY() + TEXT_Y_OFFSET), LIGHT_BLUE, false);
+			
+			//seeds
+			guiGraphics.drawString(font, Component.literal(seedsData.getFirst() + "(" + seedsData.getSecond() + ")"), scale(getX() + 110), scale(getY() + TEXT_Y_OFFSET), LIGHT_BLUE, false);
+			
+			guiGraphics.pose().popPose();
+		}
+		
+		public boolean typeIsActive()
+		{
+			return typeDownSpeedRange.getSecond() > 0 || typeUpSpeed > 0;
+		}
+		
+		public static MutableComponent speedAppend(int value)
+		{
+			return Component.literal(GuiUtil.addSuffix(value) + " g/s");
 		}
 		
 		@Override
@@ -550,5 +661,38 @@ public class TorrentScreen extends Screen
 		{
 			return false;
 		}
+	}
+	
+	private static int scale(int input)
+	{
+		return input * 2;
+	}
+	
+	protected static void drawIcon(int x, int y, ResourceLocation icon)
+	{
+		//TODO does not have the null checks present in MinestuckScreen
+		
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, icon);
+		
+		float scale = (float) 1 / 16;
+		
+		int iconX = 16;
+		int iconY = 16;
+		int iconU = 0;
+		int iconV = 0;
+		
+		float scaledIconX = (float) iconX * 0.65F;
+		float scaledIconY = (float) iconY * 0.65F;
+		
+		BufferBuilder render = Tesselator.getInstance().getBuilder();
+		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		
+		render.vertex(x, y + scaledIconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(x + scaledIconX, y + scaledIconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(x + scaledIconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
+		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
+		
+		Tesselator.getInstance().end();
 	}
 }
