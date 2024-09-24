@@ -58,6 +58,6 @@ public class FrogBellyLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity
 		if(id <= 0) id = 1;
 		else if(id > 3) id = 3;
 
-		return new ResourceLocation("minestuck:textures/entity/frog/belly_" + id + ".png");
+		return ResourceLocation.fromNamespaceAndPath("minestuck:textures/entity/frog/belly_" + id + ".png");
 	}
 }

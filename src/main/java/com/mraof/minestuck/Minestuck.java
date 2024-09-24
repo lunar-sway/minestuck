@@ -42,6 +42,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
@@ -58,19 +59,19 @@ public class Minestuck
 	
 	public static ResourceLocation id(String path)
 	{
-		return new ResourceLocation(MOD_ID, path);
+		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
 	}
 	
-	public Minestuck(IEventBus eventBus)
+	public Minestuck(IEventBus eventBus, ModContainer modContainer)
 	{
 		
 		eventBus.addListener(this::setup);
 		
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonSpec);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
+		modContainer.registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonSpec);
+		modContainer.registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
+		modContainer.registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		GeckoLib.initialize(eventBus);
+		//GeckoLib.initialize(eventBus);
 		
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);

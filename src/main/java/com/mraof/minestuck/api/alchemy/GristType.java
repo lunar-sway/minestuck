@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 public final class GristType implements Comparable<GristType>
 {
-	public static final ResourceLocation DUMMY_ID = new ResourceLocation(Minestuck.MOD_ID, "dummy");
+	public static final ResourceLocation DUMMY_ID = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "dummy");
 	public static final ResourceLocation DUMMY_ICON_LOCATION = makeIconPath(DUMMY_ID);
 	
 	public static final String FORMAT = "grist.format";

@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 public final class Dialogue
 {
 	public static final String DIALOGUE_FORMAT = "minestuck.dialogue.format";
-	public static final ResourceLocation DEFAULT_GUI = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/dialogue.png");
+	public static final ResourceLocation DEFAULT_GUI = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/dialogue/dialogue.png");
 	
 	public record NodeSelector(List<Pair<Condition, Node>> conditionedNodes, Node defaultNode)
 	{

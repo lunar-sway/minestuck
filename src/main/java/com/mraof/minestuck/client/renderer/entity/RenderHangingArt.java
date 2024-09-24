@@ -23,7 +23,7 @@ public class RenderHangingArt<T extends HangingArtEntity<?>> extends EntityRende
 	public RenderHangingArt(EntityRendererProvider.Context context, ResourceLocation artPath)
 	{
 		super(context);
-		ART_TEXTURE = new ResourceLocation(artPath.getNamespace(), "textures/painting/" + artPath.getPath() + ".png");
+		ART_TEXTURE = ResourceLocation.fromNamespaceAndPath(artPath.getNamespace(), "textures/painting/" + artPath.getPath() + ".png");
 	}
 
 	public void render(T entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {

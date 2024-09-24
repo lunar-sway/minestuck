@@ -31,7 +31,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class StoneTabletScreen extends Screen
 {
-	public static final ResourceLocation TABLET_TEXTURES = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/stone_tablet.png");
+	public static final ResourceLocation TABLET_TEXTURES = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/stone_tablet.png");
 	
 	//GUI sizes
 	public static final int GUI_WIDTH = 192;

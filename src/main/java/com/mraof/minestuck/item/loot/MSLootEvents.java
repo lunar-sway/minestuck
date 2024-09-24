@@ -34,7 +34,7 @@ import net.neoforged.neoforge.event.village.WandererTradesEvent;
 import java.util.List;
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MSLootEvents
 {
 	private static final Set<ResourceLocation> BLANK_DISK_DUNGEON_LOOT_INJECT = Sets.newHashSet(BuiltInLootTables.SIMPLE_DUNGEON, BuiltInLootTables.ABANDONED_MINESHAFT, BuiltInLootTables.DESERT_PYRAMID, BuiltInLootTables.JUNGLE_TEMPLE, BuiltInLootTables.WOODLAND_MANSION, BuiltInLootTables.UNDERWATER_RUIN_BIG, BuiltInLootTables.SPAWN_BONUS_CHEST);

@@ -18,7 +18,7 @@ public class GristSelectorScreen extends MinestuckScreen
 {
 	public static final String TITLE = "minestuck.grist_selector";
 	public static final String SELECT_GRIST = "minestuck.select_grist";
-	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/grist_cache.png");
+	private static final ResourceLocation guiGristcache = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/grist_cache.png");
 
 	private static final int guiWidth = 226, guiHeight = 190;
 

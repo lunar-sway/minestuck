@@ -48,7 +48,7 @@ public class QueueModus extends StackModus
 		{
 			size--;
 			markDirty();
-			return AlchemyHelper.createCard(item, player.server);
+			return AlchemyHelper.createCard(item);
 		}
 		else return item;
 	}

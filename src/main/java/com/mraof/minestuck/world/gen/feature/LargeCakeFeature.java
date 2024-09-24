@@ -27,13 +27,13 @@ public class LargeCakeFeature extends Feature<NoneFeatureConfiguration>
 	{
 		List<WeightedEntry.Wrapper<ResourceLocation>> weightedStructureList = Lists.newArrayList();
 		
-		weightedStructureList.add(WeightedEntry.wrap(new ResourceLocation(Minestuck.MOD_ID, "large_cake_round"), 5));
-		weightedStructureList.add(WeightedEntry.wrap(new ResourceLocation(Minestuck.MOD_ID, "large_cake_round_extra_large"), 2));
-		weightedStructureList.add(WeightedEntry.wrap(new ResourceLocation(Minestuck.MOD_ID, "large_cake_double_layer_round"), 1));
-		weightedStructureList.add(WeightedEntry.wrap(new ResourceLocation(Minestuck.MOD_ID, "large_cake_eaten"), 1));
-		weightedStructureList.add(WeightedEntry.wrap(new ResourceLocation(Minestuck.MOD_ID, "large_cake_birthday0"), 1));
-		weightedStructureList.add(WeightedEntry.wrap(new ResourceLocation(Minestuck.MOD_ID, "large_cake_birthday1"), 1));
-		weightedStructureList.add(WeightedEntry.wrap(new ResourceLocation(Minestuck.MOD_ID, "large_cake_birthday2"), 1));
+		weightedStructureList.add(WeightedEntry.wrap(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_cake_round"), 5));
+		weightedStructureList.add(WeightedEntry.wrap(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_cake_round_extra_large"), 2));
+		weightedStructureList.add(WeightedEntry.wrap(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_cake_double_layer_round"), 1));
+		weightedStructureList.add(WeightedEntry.wrap(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_cake_eaten"), 1));
+		weightedStructureList.add(WeightedEntry.wrap(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_cake_birthday0"), 1));
+		weightedStructureList.add(WeightedEntry.wrap(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_cake_birthday1"), 1));
+		weightedStructureList.add(WeightedEntry.wrap(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_cake_birthday2"), 1));
 		
 		return weightedStructureList;
 	}

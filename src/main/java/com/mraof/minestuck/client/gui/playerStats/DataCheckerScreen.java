@@ -34,8 +34,8 @@ public class DataCheckerScreen extends Screen
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/data_check.png");
+	private static final ResourceLocation icons = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/data_check.png");
 	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
 	private static final int LIST_Y = 25;
 	

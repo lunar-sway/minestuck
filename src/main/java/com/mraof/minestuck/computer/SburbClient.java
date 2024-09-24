@@ -28,7 +28,7 @@ public class SburbClient extends ButtonListProgram
 	public static final String SELECT = "minestuck.program.client.select_message";
 	public static final String RESUME_CLIENT = "minestuck.program.client.resume_client_message";
 	
-	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_client.png");
+	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_client.png");
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)

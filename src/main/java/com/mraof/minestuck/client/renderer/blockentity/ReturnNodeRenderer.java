@@ -20,8 +20,8 @@ import org.joml.Matrix4f;
 @MethodsReturnNonnullByDefault
 public class ReturnNodeRenderer implements BlockEntityRenderer<ReturnNodeBlockEntity>
 {
-	public static final ResourceLocation INNER_NODE = new ResourceLocation("minestuck","textures/block/node_spiro_inner.png");
-	public static final ResourceLocation OUTER_NODE = new ResourceLocation("minestuck","textures/block/node_spiro_outer.png");
+	public static final ResourceLocation INNER_NODE = ResourceLocation.fromNamespaceAndPath("minestuck","textures/block/node_spiro_inner.png");
+	public static final ResourceLocation OUTER_NODE = ResourceLocation.fromNamespaceAndPath("minestuck","textures/block/node_spiro_outer.png");
 	
 	public ReturnNodeRenderer(BlockEntityRendererProvider.Context context)
 	{}

@@ -34,8 +34,8 @@ import static com.mraof.minestuck.data.loot_table.MSChestLootTables.locationForT
 
 public class MSGiftLootTables implements LootTableSubProvider
 {
-	private static final ResourceLocation COLD_CAKE = new ResourceLocation("minestuck", "gameplay/special/cold_cake");
-	private static final ResourceLocation HOT_CAKE = new ResourceLocation("minestuck", "gameplay/special/hot_cake");
+	private static final ResourceLocation COLD_CAKE = ResourceLocation.fromNamespaceAndPath("minestuck", "gameplay/special/cold_cake");
+	private static final ResourceLocation HOT_CAKE = ResourceLocation.fromNamespaceAndPath("minestuck", "gameplay/special/hot_cake");
 	
 	//Pools in consort general stock
 	public static final String ITEM_POOL = "item", BLOCK_POOL = "block";

@@ -13,8 +13,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("minestuck:textures/gui/designix.png");
-	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation("minestuck:textures/gui/progress/designix.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/designix.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/progress/designix.png");
 	private static final int PROGRESS_BAR_X = 63;
 	private static final int PROGRESS_BAR_Y = 38;
 	private static final int PROGRESS_BAR_WIDTH = 43;

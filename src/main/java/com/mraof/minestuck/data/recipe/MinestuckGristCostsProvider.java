@@ -25,7 +25,7 @@ public final class MinestuckGristCostsProvider
 {
 	public static void buildRecipes(RecipeOutput recipeSaver)
 	{
-		GeneratedGristCostBuilder.create().build(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "generated"));
+		GeneratedGristCostBuilder.create().build(recipeSaver, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "generated"));
 		
 		//Stone
 		GristCostRecipeBuilder.of(Tags.Items.STONE).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);

@@ -30,7 +30,7 @@ public final class LandTypePair
 	/**
 	 * Custom font made by Riotmode. Similar to Carima used for "Land of _ and _" in comic. Font size of 4 is smaller than default of 11
 	 */
-	public static final Style LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE = Style.EMPTY.withFont(new ResourceLocation("minestuck", "land_of_copyleft_and_freedom"));
+	public static final Style LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE = Style.EMPTY.withFont(ResourceLocation.fromNamespaceAndPath("minestuck", "land_of_copyleft_and_freedom"));
 	public static final String FORMAT = "land.format";
 	
 	public LandTypePair(TerrainLandType terrainType, TitleLandType titleType)
@@ -67,8 +67,8 @@ public final class LandTypePair
 	{
 		String terrainName = nbt.getString("terrain_aspect");
 		String titleName = nbt.getString("title_aspect");
-		TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.get(new ResourceLocation(terrainName));
-		TitleLandType title = LandTypes.TITLE_REGISTRY.get(new ResourceLocation(titleName));
+		TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.get(ResourceLocation.fromNamespaceAndPath(terrainName));
+		TitleLandType title = LandTypes.TITLE_REGISTRY.get(ResourceLocation.fromNamespaceAndPath(titleName));
 		Objects.requireNonNull(terrain, "Could not find terrain land aspect by name " + terrainName);
 		Objects.requireNonNull(title, "Could not find title land aspect by name " + titleName);
 		

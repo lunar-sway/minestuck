@@ -182,7 +182,7 @@ public class HashMapModus extends Modus
 			markDirty();
 			if(item.isEmpty())
 				return new ItemStack(MSItems.CAPTCHA_CARD.get());
-			else return AlchemyHelper.createCard(item, player.server);
+			else return AlchemyHelper.createCard(item);
 		} else
 		{
 			list.set(id, ItemStack.EMPTY);

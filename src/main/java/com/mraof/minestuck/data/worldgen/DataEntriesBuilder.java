@@ -44,7 +44,7 @@ public final class DataEntriesBuilder<T>
 	
 	public BiConsumer<String, T> consumerForNamespace(String namespace)
 	{
-		return (name, entry) -> add(new ResourceLocation(namespace, name), entry);
+		return (name, entry) -> add(ResourceLocation.fromNamespaceAndPath(namespace, name), entry);
 	}
 	
 	public Map<ResourceLocation, T> getMap()

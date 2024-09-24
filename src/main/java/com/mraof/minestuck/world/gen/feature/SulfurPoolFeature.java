@@ -14,8 +14,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class SulfurPoolFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation SULFUR_POOL = new ResourceLocation(Minestuck.MOD_ID, "sulfur_pool");
-	private static final ResourceLocation LARGE_SULFUR_POOL = new ResourceLocation(Minestuck.MOD_ID, "large_sulfur_pool");
+	private static final ResourceLocation SULFUR_POOL = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "sulfur_pool");
+	private static final ResourceLocation LARGE_SULFUR_POOL = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_sulfur_pool");
 	
 	public SulfurPoolFeature(Codec<NoneFeatureConfiguration> codec)
 	{

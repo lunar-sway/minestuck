@@ -156,7 +156,7 @@ public class AreaEffectBlockEntity extends BlockEntity
 	{
 		super.load(compound);
 		
-		MobEffect effectRead = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(compound.getString("effect")));
+		MobEffect effectRead = BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.fromNamespaceAndPath(compound.getString("effect")));
 		if(effectRead != null)
 			effect = effectRead;
 		

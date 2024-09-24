@@ -29,7 +29,7 @@ public abstract class MinestuckScreen extends Screen
 	protected static final int gristCountX = 44, gristCountY = 36;
 	protected static final int rows = 7;
 	protected static final int columns = 3;
-	private static final ResourceLocation barCovers = new ResourceLocation("minestuck", "textures/gui/bar_covers.png");
+	private static final ResourceLocation barCovers = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/bar_covers.png");
 	
 	protected MinestuckScreen(Component titleIn)
 	{

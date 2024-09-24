@@ -9,8 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class SkaiaPortalRenderer implements BlockEntityRenderer<SkaiaPortalBlockEntity>
 {
-	private static final ResourceLocation tunnel = new ResourceLocation("minestuck","textures/tunnel.png");
-    private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
+	private static final ResourceLocation tunnel = ResourceLocation.fromNamespaceAndPath("minestuck","textures/tunnel.png");
+    private static final ResourceLocation particlefield = ResourceLocation.fromNamespaceAndPath("minestuck","textures/particlefield.png");
     
     //FloatBuffer floatBuffer = GLAllocation.createFloatBuffer(16);
 

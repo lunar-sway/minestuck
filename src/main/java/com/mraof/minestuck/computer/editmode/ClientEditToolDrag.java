@@ -47,7 +47,7 @@ import org.joml.Matrix4f;
  * @see ServerEditHandler for server-sided code that handles the sburb-cursor.
  * @author Caldw3ll, Cibernet
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEditToolDrag
 {
 	

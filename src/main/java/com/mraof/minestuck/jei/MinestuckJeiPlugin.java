@@ -36,7 +36,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public ResourceLocation getPluginUid()
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "minestuck");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "minestuck");
 	}
 	
 	@Override

@@ -29,8 +29,8 @@ public abstract class SylladexScreen extends Screen
 	public static final String EMPTY_SYLLADEX_2 = "minestuck.empty_sylladex.2";
 	public static final String EMPTY_SYLLADEX_BUTTON = "minestuck.empty_sylladex.button";
 	
-	protected static final ResourceLocation sylladexFrame = new ResourceLocation("minestuck", "textures/gui/sylladex_frame.png");
-	protected static final ResourceLocation cardTexture = new ResourceLocation("minestuck", "textures/gui/icons.png");
+	protected static final ResourceLocation sylladexFrame = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/sylladex_frame.png");
+	protected static final ResourceLocation cardTexture = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
 	protected static final int GUI_WIDTH = 256, GUI_HEIGHT= 202;
 	protected static final int MAP_WIDTH = 224, MAP_HEIGHT = 153;
 	protected static final int X_OFFSET = 16, Y_OFFSET = 17;

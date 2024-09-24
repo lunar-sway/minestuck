@@ -26,7 +26,6 @@ import net.minecraft.world.level.GameRules;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -38,7 +37,7 @@ import java.util.List;
 import java.util.Optional;
 
 //todo this class could use some spring cleaning
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class CaptchaDeckHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -329,7 +328,7 @@ public final class CaptchaDeckHandler
 			if(!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack))
 				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
-					ItemStack card = AlchemyHelper.createCard(stack, player.server);
+					ItemStack card = AlchemyHelper.createCard(stack);
 					player.drop(card, true, false);
 					size--;
 				} else player.drop(stack, true, false);
@@ -369,7 +368,7 @@ public final class CaptchaDeckHandler
 		if(nbt == null)
 			return null;
 		Modus modus;
-		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
+		ResourceLocation name = ResourceLocation.fromNamespaceAndPath(nbt.getString("type"));
 		
 		if(side.isClient() && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.getKey(ClientPlayerData.getModus().getType())))
 			modus = ClientPlayerData.getModus();

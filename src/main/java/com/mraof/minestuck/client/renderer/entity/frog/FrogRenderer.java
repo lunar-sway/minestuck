@@ -30,7 +30,7 @@ public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 	@Override
 	public ResourceLocation getTextureLocation(FrogEntity entity)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/frog/base.png");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/entity/frog/base.png");
 	}
 	
 	protected boolean shouldShowName(FrogEntity entity)

@@ -164,6 +164,6 @@ public final class MSCFeatures
 	
 	private static ResourceKey<ConfiguredFeature<?, ?>> key(String name)
 	{
-		return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, name));
 	}
 }

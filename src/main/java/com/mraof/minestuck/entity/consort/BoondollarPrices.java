@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public final class BoondollarPrices
 {
 	private final List<BoondollarPriceRecipe> prices;

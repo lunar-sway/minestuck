@@ -27,7 +27,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 	public static final String SYLLADEX = SylladexScreen.TITLE;
 	public static final String USE_ITEM = "minestuck.captcha_deck.use_item";
 	
-	private static final ResourceLocation guiCaptchaDeck = new ResourceLocation("minestuck", "textures/gui/captcha_deck.png");
+	private static final ResourceLocation guiCaptchaDeck = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/captcha_deck.png");
 	
 	private Button modusButton, sylladexMap;
 	

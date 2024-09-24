@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
  * A class responsible for fixing invalid states in connection or session data,
  * which might happen if a world is saved incorrectly after a crash.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class SessionPostFixer
 {
 	private static final Logger LOGGER = LogManager.getLogger();

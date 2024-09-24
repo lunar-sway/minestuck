@@ -3,19 +3,40 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.network.data.*;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.projectile.Snowball;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handlers.ClientPayloadHandler;
+import net.neoforged.neoforge.network.handlers.ServerPayloadHandler;
+import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MSPayloads
 {
 	@SubscribeEvent
-	private static void regsiter(RegisterPayloadHandlerEvent event)
+	private static void regsiter(RegisterPayloadHandlersEvent event)
 	{
+		
+		CustomPacketPayload.Type<DataCheckerPermissionPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("mymod", "my_data"));
+		StreamCodec<RegistryFriendlyByteBuf, DataCheckerPermissionPacket> STREAM =  StreamCodec.of((buffer, encode) -> encode.write(buffer), DataCheckerPermissionPacket::read);
+		
+		Snowball
+		
 		event.registrar(Minestuck.MOD_ID)
 				.versioned("1")
-				.play(DataCheckerPermissionPacket.ID, DataCheckerPermissionPacket::read, MSPacket.PlayToClient::handler)
+				.playToClient(TYPE, STREAM, new DirectionalPayloadHandler<>(
+						ClientPayloadHandler::handleDataOnMain,
+						ServerPayloadHandler::handleDataOnMain
+				))
+				
+				
 				.play(EcheladderDataPacket.ID, EcheladderDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(ModusDataPacket.ID, ModusDataPacket::read, MSPacket.PlayToClient::handler)
 				.play(BoondollarDataPacket.ID, BoondollarDataPacket::read, MSPacket.PlayToClient::handler)

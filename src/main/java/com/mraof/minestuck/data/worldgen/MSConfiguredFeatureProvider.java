@@ -10,7 +10,7 @@ import com.mraof.minestuck.world.gen.feature.SimpleTemplateFeature;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.TreePlacements;
@@ -46,7 +46,7 @@ import static com.mraof.minestuck.world.gen.feature.MSCFeatures.*;
 
 public final class MSConfiguredFeatureProvider
 {
-	public static void register(BootstapContext<ConfiguredFeature<?, ?>> context)
+	public static void register(BootstrapContext<ConfiguredFeature<?, ?>> context)
 	{
 		HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 		

@@ -75,6 +75,6 @@ public class FrogSkinLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>
 			path = "minestuck:textures/entity/frog/susan.png";
 			break;
 		}
-		return new ResourceLocation(path);
+		return ResourceLocation.fromNamespaceAndPath(path);
 	}
 }

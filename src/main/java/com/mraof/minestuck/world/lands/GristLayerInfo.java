@@ -27,7 +27,7 @@ import java.util.Optional;
 /**
  * Container for grist layers.
  */
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class GristLayerInfo
 {
 	public static final String INFO = "grist_layer.info";

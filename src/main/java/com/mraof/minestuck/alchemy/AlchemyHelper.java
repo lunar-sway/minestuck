@@ -3,27 +3,22 @@ package com.mraof.minestuck.alchemy;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.event.AlchemyEvent;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.util.MSTags;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.mraof.minestuck.block.MSBlocks.CRUXITE_DOWEL;
 import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class AlchemyHelper
 {
 	@SubscribeEvent
@@ -59,56 +54,40 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack getDecodedItem(ItemStack card, boolean ignoreGhost)
 	{
-		if (!hasDecodedItem(card))
-		{
-			return ItemStack.EMPTY;
-		}
-		CompoundTag tag = card.getTag();
+		return card.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY).storedStack();
 		
-		Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString(("contentID"))));
-		if (item == null) {return ItemStack.EMPTY;}
-		
-		int count = 1;
-		if(ignoreGhost && tag.contains("contentSize") && tag.getInt("contentSize") <= 0)
-			count = 0;
-		else if(tag.contains("contentSize") && tag.getInt("contentSize") >= 1)
-			count = tag.getInt("contentSize");
-		
-		CompoundTag capabilityData = null;
-		if(tag.contains("contentCaps", Tag.TAG_COMPOUND))
-			capabilityData = tag.getCompound("contentCaps");
-		
-		ItemStack newItem = new ItemStack(item, count, capabilityData);
-		
-		if(tag.contains("contentTags"))
-			newItem.setTag(tag.getCompound("contentTags"));
-		
-		return newItem;
-		
+	}
+	
+	public static EncodedItemComponent.EncodeType getEncodeType(ItemStack card)
+	{
+		return card.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY).type();
 	}
 	
 	public static boolean isReadableCard(ItemStack card)
 	{
-		if(!card.is(MSItems.CAPTCHA_CARD.get()) || !hasDecodedItem(card))
-			return false;
-		
-		//either has an existing captcha code or isnt in UNREADABLE item tag to begin with
-		return (card.hasTag() && card.getTag().contains("captcha_code", Tag.TAG_STRING)) || !getDecodedItem(card).is(MSTags.Items.UNREADABLE);
+		return getCode(card) != null;
+	}
+	
+	@Nullable
+	public static String getCode(ItemStack card)
+	{
+		return card.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY).code();
 	}
 	
 	public static boolean isPunchedCard(ItemStack item)
 	{
-		return item.getItem() == MSItems.CAPTCHA_CARD.get() && item.hasTag() && item.getTag().getBoolean("punched");
+		return getEncodeType(item) == EncodedItemComponent.EncodeType.PUNCHED;
 	}
 	
 	public static boolean isGhostCard(ItemStack item)
 	{
-		return item.getItem() == MSItems.CAPTCHA_CARD.get() && hasDecodedItem(item) && item.getTag().getInt("contentSize") <= 0;
+		return getEncodeType(item) == EncodedItemComponent.EncodeType.GHOST;
 	}
+	
 	
 	public static boolean hasDecodedItem(ItemStack item)
 	{
-		return item.hasTag() && item.getTag().contains("contentID", Tag.TAG_STRING);
+		return item.has(MSItemComponents.ENCODED_ITEM) && !item.get(MSItemComponents.ENCODED_ITEM).storedStack().isEmpty();
 	}
 	
 	/**
@@ -121,7 +100,7 @@ public class AlchemyHelper
 		
 		if (card.isEmpty()) {return ItemStack.EMPTY;}
 		
-		if (card.getItem().equals(CAPTCHA_CARD.get()) && card.hasTag() && card.getTag().contains("contentID"))
+		if (card.getItem().equals(CAPTCHA_CARD.get()) && hasDecodedItem(card))
 		{
 			return getDecodedItem(card);
 		}
@@ -140,60 +119,44 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack createEncodedItem(ItemStack itemIn, ItemStack itemOut)
 	{
-		CompoundTag nbt = null;
-		if(!itemIn.isEmpty())
-		{
-			nbt = new CompoundTag();
-			nbt.putString("contentID", BuiltInRegistries.ITEM.getKey(itemIn.getItem()).toString());
-		}
-		
-		itemOut.setTag(nbt);
+		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.STORE, false));
 		return itemOut;
 	}
 	
 	@Nonnull
-	public static ItemStack createPunchedCard(ItemStack heldStack)
+	public static ItemStack createPunchedCard(ItemStack itemIn)
 	{
-		ItemStack card = createEncodedItem(heldStack, true);
-		card.getOrCreateTag().putBoolean("punched", true);
-		
-		return card;
+		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.PUNCHED, true));
+		return itemOut;
 	}
 	
 	@Nonnull
-	public static ItemStack createCard(ItemStack heldStack, MinecraftServer server)
+	public static ItemStack createCard(ItemStack itemIn)
 	{
-		ItemStack card = createEncodedItem(heldStack, true);
-		card.getOrCreateTag().putBoolean("punched", false);
-		if(heldStack.hasTag())
-			card.getOrCreateTag().put("contentTags", heldStack.getTag());
-		CompoundTag capsData = heldStack.save(new CompoundTag()).getCompound("ForgeCaps");	//TODO serialize the stack in full instead, so that this hack isn't needed
-		if(!capsData.isEmpty())
-			card.getOrCreateTag().put("contentCaps", capsData);
-		card.getOrCreateTag().putInt("contentSize", heldStack.getCount());
-		
-		if(!heldStack.is(MSTags.Items.UNREADABLE))
-			card.getOrCreateTag().putString("captcha_code", CardCaptchas.getCaptcha(heldStack.getItem(), server));
-		
-		return card;
+		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.STORE, false));
+		return itemOut;
 	}
 	
 	@Nonnull
-	public static ItemStack createGhostCard(ItemStack item)
+	public static ItemStack createDiscoveredCard(ItemStack itemIn)
 	{
-		ItemStack stack = createEncodedItem(item, true);
-		stack.getOrCreateTag().putBoolean("punched", false);
-		stack.getOrCreateTag().putInt("contentSize", 0);
-		return stack;
+		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.STORE, true));
+		return itemOut;
+	}
+	
+	@Nonnull
+	public static ItemStack createGhostCard(ItemStack itemIn)
+	{
+		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.GHOST, false));
+		return itemOut;
 	}
 	
 	public static void removeItemFromCard(ItemStack card)
 	{
-		card.removeTagKey("contentID");
-		card.removeTagKey("punched");
-		card.removeTagKey("contentTags");
-		card.removeTagKey("contentCaps");
-		card.removeTagKey("contentSize");
-		card.removeTagKey("captcha_code");
+		card.remove(MSItemComponents.ENCODED_ITEM);
 	}
 }

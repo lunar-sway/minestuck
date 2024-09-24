@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class CassetteContainerScreen extends AbstractContainerScreen<CassetteContainerMenu>
 {
-	private final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/cassette_container.png");
+	private final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/cassette_container.png");
 	
 	public CassetteContainerScreen(CassetteContainerMenu container, Inventory pPlayerInventory, Component pTitle)
 	{

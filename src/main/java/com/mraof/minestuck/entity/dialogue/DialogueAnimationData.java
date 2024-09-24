@@ -58,7 +58,7 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 	 */
 	public ResourceLocation getRenderPath(String spriteType)
 	{
-		ResourceLocation spritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + emotion + ".png");
+		ResourceLocation spritePath = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + emotion + ".png");
 		
 		//TODO the first time this is run using an invalid path, an error message is printed in chat before fallback system activates. The Minecraft missing texture sprite may show briefly
 		AbstractTexture abstractTexture = Minecraft.getInstance().getTextureManager().getTexture(spritePath);
@@ -66,7 +66,7 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 		//if the sprite for the given emotion cannot be found, it will try to render the generic sprite instead. If the generic sprite cannot be found, the invalid texture is allowed to proceed
 		if(abstractTexture == MissingTextureAtlasSprite.getTexture())
 		{
-			return new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + GENERIC_EMOTION + ".png");
+			return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + GENERIC_EMOTION + ".png");
 		}
 		
 		return spritePath;

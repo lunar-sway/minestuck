@@ -73,13 +73,13 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 	
 	private ResourceLocation getTerrainTableName(TerrainLandType terrainType)
 	{
-		return new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/"
+		return ResourceLocation.fromNamespaceAndPath(table.getNamespace(), table.getPath() + "/terrain/"
 				+ Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.getKey(terrainType)).toString().replace(':', '/'));
 	}
 	
 	private ResourceLocation getTitleTableName(TitleLandType titleType)
 	{
-		return new ResourceLocation(table.getNamespace(), table.getPath() + "/title/"
+		return ResourceLocation.fromNamespaceAndPath(table.getNamespace(), table.getPath() + "/title/"
 				+ Objects.requireNonNull(LandTypes.TITLE_REGISTRY.getKey(titleType)).toString().replace(':', '/'));
 	}
 	

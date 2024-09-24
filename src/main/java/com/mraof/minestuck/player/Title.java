@@ -16,23 +16,23 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public record Title(EnumClass heroClass, EnumAspect heroAspect)
 {
 	public static final String FORMAT = "title.format";
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private record AspectEffect(MobEffect effect, float strength)
+	private record AspectEffect(net.minecraft.core.Holder<MobEffect> effect, float strength)
 	{
 	}
 	
@@ -70,9 +70,9 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void onPlayerTickEvent(PlayerTickEvent.Pre event)
 	{
-		if(event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer player)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			Title.getTitle(player)
 					.ifPresent(value -> value.handleAspectEffects(player));

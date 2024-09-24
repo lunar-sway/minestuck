@@ -177,7 +177,7 @@ public class SetModus extends Modus
 		{
 			size--;
 			markDirty();
-			item = AlchemyHelper.createCard(item, player.server);
+			item = AlchemyHelper.createCard(item);
 		}
 		
 		return item;

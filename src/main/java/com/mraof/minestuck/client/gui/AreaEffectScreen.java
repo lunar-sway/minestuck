@@ -35,7 +35,7 @@ public class AreaEffectScreen extends Screen
 	public static final String DONE_MESSAGE = "minestuck.area_effect.done";
 	public static final String ALL_MOBS_MESSAGE = "minestuck.area_effect.all_mobs";
 	public static final String JUST_PLAYERS_MESSAGE = "minestuck.area_effect.just_players";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_large.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_large.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 132;

@@ -2,6 +2,8 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -29,7 +31,7 @@ public class CaptchaCardItem extends Item
 	@Override
 	public int getMaxStackSize(ItemStack stack)
 	{
-		if(stack.hasTag())
+		if(AlchemyHelper.hasDecodedItem(stack))
 			return 16;
 		else return 64;
 	}
@@ -40,15 +42,16 @@ public class CaptchaCardItem extends Item
 		
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		
-		if(playerIn.isShiftKeyDown() && stack.hasTag() && ((AlchemyHelper.isGhostCard(stack) && !AlchemyHelper.isPunchedCard(stack)) || !AlchemyHelper.hasDecodedItem(stack)))
+		if(playerIn.isShiftKeyDown() && AlchemyHelper.isGhostCard(stack))
 		{
 			AlchemyHelper.removeItemFromCard(stack);
 			return InteractionResultHolder.success(new ItemStack(playerIn.getItemInHand(handIn).getItem(), playerIn.getItemInHand(handIn).getCount()));
 		} else return InteractionResultHolder.pass(playerIn.getItemInHand(handIn));
 	}
 	
+	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag)
 	{
 		if(AlchemyHelper.hasDecodedItem(stack))
 		{
@@ -56,40 +59,38 @@ public class CaptchaCardItem extends Item
 			if(!content.isEmpty())
 			{
 				Component contentName = content.getHoverName();
-				tooltip.add(makeTooltipInfo((AlchemyHelper.isPunchedCard(stack) || AlchemyHelper.isGhostCard(stack))
+				tooltipComponents.add(makeTooltipInfo((AlchemyHelper.isPunchedCard(stack) || AlchemyHelper.isGhostCard(stack))
 						? contentName : Component.literal(content.getCount() + "x").append(contentName)));
 				
 				if(AlchemyHelper.isPunchedCard(stack))
-					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
+					tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
 				else if(AlchemyHelper.isGhostCard(stack))
 				{
-					String captcha = getCaptcha(stack);
+					Component captcha = getCaptcha(stack);
 					if(captcha != null)
-						tooltip.add(Component.literal(captcha));
+						tooltipComponents.add(captcha);
 					
-					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
+					tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
 				} else
 				{
-					String captcha = getCaptcha(stack);
+					Component captcha = getCaptcha(stack);
 					if(captcha != null)
-						tooltip.add(Component.literal(captcha));
+						tooltipComponents.add(captcha);
 				}
-			} else tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
+			} else tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
 		} else
 		{
-			tooltip.add(Component.literal(CardCaptchas.EMPTY_CARD_CAPTCHA));
-			tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".empty")));
+			tooltipComponents.add(Component.literal(CardCaptchas.EMPTY_CARD_CAPTCHA));
+			tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".empty")));
 		}
 	}
 	
 	//TODO consider obfuscated characters for unreadable unpunched card
-	private String getCaptcha(ItemStack stack)
+	@Nullable
+	private Component getCaptcha(ItemStack stack)
 	{
-		CompoundTag tag = stack.getTag();
-		if(tag != null && tag.contains("captcha_code", Tag.TAG_STRING))
-			return tag.getString("captcha_code");
-		
-		return null;
+		EncodedItemComponent dataComponent = stack.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY);
+		return dataComponent.code().isEmpty() ? null : Component.literal(dataComponent.code()).withStyle(style -> style.withObfuscated(!dataComponent.canReadCode()));
 	}
 	
 	private Component makeTooltipInfo(Component info)

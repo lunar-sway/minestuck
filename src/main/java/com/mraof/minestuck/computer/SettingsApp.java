@@ -12,7 +12,7 @@ public class SettingsApp extends ButtonListProgram
 	public static final String THEME = "minestuck.program.settings.theme";
 	public static final String TITLE = "minestuck.program.settings.title";
 	
-	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
+	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
 	
 	@Override
 	protected ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)

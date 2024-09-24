@@ -32,7 +32,7 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class PredeterminedCardCaptchas
 {
 	@Nullable
@@ -93,7 +93,7 @@ public class PredeterminedCardCaptchas
 		
 		private static Optional<Map<String, Item>> parseCaptchaCodesFromNamespace(ResourceManager resourceManager, String namespace)
 		{
-			ResourceLocation rs = new ResourceLocation(namespace, PATH);
+			ResourceLocation rs = ResourceLocation.fromNamespaceAndPath(namespace, PATH);
 			
 			return resourceManager.getResource(rs).flatMap(resource -> {
 				try(Reader reader = resource.openAsReader())

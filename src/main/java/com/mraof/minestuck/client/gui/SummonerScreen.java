@@ -25,7 +25,7 @@ public class SummonerScreen extends Screen
 	public static final String DONE_MESSAGE = "minestuck.summoner.done";
 	public static final String UNTRIGGERABLE_MESSAGE = "minestuck.summoner.untriggerable";
 	public static final String TRIGGERABLE_MESSAGE = "minestuck.summoner.triggerable";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;

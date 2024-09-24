@@ -11,17 +11,17 @@ public class ServerCursorModel extends GeoModel<ServerCursorEntity>
 {
 	@Override
 	public ResourceLocation getAnimationResource(ServerCursorEntity entity) {
-		return new ResourceLocation("minestuck", "animations/server_cursor.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("minestuck", "animations/server_cursor.animation.json");
 	}
 	
 	@Override
 	public ResourceLocation getModelResource(ServerCursorEntity entity) {
-		return new ResourceLocation("minestuck", "geo/server_cursor.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("minestuck", "geo/server_cursor.geo.json");
 	}
 	
 	@Override
 	public ResourceLocation getTextureResource(ServerCursorEntity entity) {
-		return new ResourceLocation("minestuck", "textures/entity/server_cursor.png");
+		return ResourceLocation.fromNamespaceAndPath("minestuck", "textures/entity/server_cursor.png");
 	}
 	
 	@Override

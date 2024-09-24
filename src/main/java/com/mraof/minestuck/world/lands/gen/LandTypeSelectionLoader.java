@@ -41,7 +41,7 @@ import java.util.*;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class LandTypeSelectionLoader extends SimplePreparableReloadListener<LandTypeSelectionLoader.RawData>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -123,12 +123,12 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 	
 	private static Optional<List<GroupData>> parseTerrainGroupsFromNamespace(ResourceManager resourceManager, String namespace)
 	{
-		return parseCodecDataFromLocation(resourceManager, new ResourceLocation(namespace, TERRAIN_PATH), TERRAIN_DATA_CODEC);
+		return parseCodecDataFromLocation(resourceManager, ResourceLocation.fromNamespaceAndPath(namespace, TERRAIN_PATH), TERRAIN_DATA_CODEC);
 	}
 	
 	private static Optional<Map<EnumAspect, List<GroupData>>> parseTitleGroupsFromNamespace(ResourceManager resourceManager, String namespace)
 	{
-		return parseCodecDataFromLocation(resourceManager, new ResourceLocation(namespace, TITLE_PATH), TITLE_DATA_CODEC);
+		return parseCodecDataFromLocation(resourceManager, ResourceLocation.fromNamespaceAndPath(namespace, TITLE_PATH), TITLE_DATA_CODEC);
 	}
 	
 	private static <T> Optional<T> parseCodecDataFromLocation(ResourceManager resourceManager, ResourceLocation location, Codec<T> codec)

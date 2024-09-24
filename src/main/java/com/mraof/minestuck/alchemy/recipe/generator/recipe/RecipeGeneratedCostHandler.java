@@ -45,7 +45,7 @@ import java.util.function.BiConsumer;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<List<RecipeGeneratedCostHandler.SourceEntry>> implements GeneratedCostProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -126,7 +126,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		List<SourceEntry> sources = new ArrayList<>();
 		for(String namespace : resourceManagerIn.getNamespaces())
 		{
-			resourceManagerIn.getResource(new ResourceLocation(namespace, PATH)).ifPresent(resource -> {
+			resourceManagerIn.getResource(ResourceLocation.fromNamespaceAndPath(namespace, PATH)).ifPresent(resource -> {
 				try(
 						Reader reader = resource.openAsReader()
 				)

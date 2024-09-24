@@ -34,7 +34,7 @@ import java.util.EnumSet;
 import java.util.UUID;
 
 @MethodsReturnNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class Echeladder implements INBTSerializable<CompoundTag>
 {
 	private static final Logger LOGGER = LogManager.getLogger();

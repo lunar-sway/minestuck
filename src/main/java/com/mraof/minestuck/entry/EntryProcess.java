@@ -49,7 +49,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
 {
 	public static final String WRONG_DIMENSION = "minestuck.entry.wrong_dimension";

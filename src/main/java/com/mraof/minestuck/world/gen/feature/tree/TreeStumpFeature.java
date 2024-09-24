@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  */
 public class TreeStumpFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation TREE_STUMP = new ResourceLocation(Minestuck.MOD_ID, "tree_stump");
+	private static final ResourceLocation TREE_STUMP = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "tree_stump");
 	
 	public TreeStumpFeature(Codec<NoneFeatureConfiguration> codec)
 	{

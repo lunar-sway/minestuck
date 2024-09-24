@@ -7,7 +7,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class MSWoodTypes
 {
 	public static final WoodType CARVED = new WoodType(Minestuck.MOD_ID + ":carved", MSBlockSetType.CARVED);

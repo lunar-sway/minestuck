@@ -153,8 +153,8 @@ public final class SourceGristCost implements GristCostRecipe
 		//todo handle resource location parse errors
 		Codec<Source> CODEC = Codec.STRING.xmap(
 				name -> name.startsWith("#")
-						? new TagSource(new ResourceLocation(name.substring(1)))
-						: new ItemSource(new ResourceLocation(name)),
+						? new TagSource(ResourceLocation.fromNamespaceAndPath(name.substring(1)))
+						: new ItemSource(ResourceLocation.fromNamespaceAndPath(name)),
 				Object::toString
 				);
 		

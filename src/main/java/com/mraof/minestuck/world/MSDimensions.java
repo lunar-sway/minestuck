@@ -15,12 +15,12 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MSDimensions
 {
 	
-	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
-	public static final ResourceLocation LAND_EFFECTS = new ResourceLocation(Minestuck.MOD_ID, "land");
+	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "skaia"));
+	public static final ResourceLocation LAND_EFFECTS = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "land");
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
 	{

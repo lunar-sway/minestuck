@@ -185,7 +185,7 @@ public final class MSStructures
 	
 	private static ResourceKey<Structure> key(String name)
 	{
-		return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, name));
 	}
 	
 	private static StructurePieceType contextless(StructurePieceType.ContextlessType type)

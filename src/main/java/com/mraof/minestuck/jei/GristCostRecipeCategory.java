@@ -40,7 +40,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 
 	GristCostRecipeCategory(IGuiHelper guiHelper)
 	{
-		ResourceLocation alchemiterBackground = new ResourceLocation("minestuck:textures/gui/alchemiter.png");
+		ResourceLocation alchemiterBackground = ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/alchemiter.png");
 		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
 		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.ALCHEMITER));
 	}

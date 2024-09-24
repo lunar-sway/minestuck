@@ -39,7 +39,7 @@ public final class DialogueLangHelper
 	
 	public MessageProducer msg(String key, String text, DialogueMessage.Argument... arguments)
 	{
-		return msg(registerAndBuild(languageKeyBase(new ResourceLocation(modid, key)), text, arguments));
+		return msg(registerAndBuild(languageKeyBase(ResourceLocation.fromNamespaceAndPath(modid, key)), text, arguments));
 	}
 	
 	public static MessageProducer msg(DialogueMessage message)

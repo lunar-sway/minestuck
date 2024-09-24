@@ -8,7 +8,7 @@ import com.mraof.minestuck.world.gen.feature.OreGeneration;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.CaveFeatures;
 import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
 import net.minecraft.data.worldgen.features.TreeFeatures;
@@ -30,7 +30,7 @@ import static com.mraof.minestuck.world.gen.feature.MSPlacedFeatures.*;
 
 public final class MSPlacedFeatureProvider
 {
-	public static void register(BootstapContext<PlacedFeature> context)
+	public static void register(BootstrapContext<PlacedFeature> context)
 	{
 		HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
 		

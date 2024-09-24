@@ -8,16 +8,16 @@ public class LotusFlowerModel extends GeoModel<LotusFlowerEntity>
 {
 	@Override
 	public ResourceLocation getAnimationResource(LotusFlowerEntity entity) {
-		return new ResourceLocation("minestuck", "animations/lotus_flower.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("minestuck", "animations/lotus_flower.animation.json");
 	}
 	
 	@Override
 	public ResourceLocation getModelResource(LotusFlowerEntity entity) {
-		return new ResourceLocation("minestuck", "geo/lotus_flower.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("minestuck", "geo/lotus_flower.geo.json");
 	}
 	
 	@Override
 	public ResourceLocation getTextureResource(LotusFlowerEntity entity) {
-		return new ResourceLocation("minestuck", "textures/entity/lotus_flower.png");
+		return ResourceLocation.fromNamespaceAndPath("minestuck", "textures/entity/lotus_flower.png");
 	}
 }

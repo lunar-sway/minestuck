@@ -26,7 +26,7 @@ public class SburbServer extends ButtonListProgram
 	public static final String SERVER_ACTIVE = "minestuck.program.server.server_active_message";
 	public static final String RESUME_SERVER = "minestuck.program.server.resume_server_message";
 	
-	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_server.png");
+	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_server.png");
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)

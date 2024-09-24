@@ -34,7 +34,7 @@ public class ColorSelectorScreen extends Screen
 	public static final String COLOR_SELECTED = "minestuck.color_selector.color_selected";
 	public static final String DEFAULT_COLOR_SELECTED = "minestuck.color_selector.default_color_selected";
 	
-	private static final ResourceLocation guiBackground = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/color_selector.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/color_selector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
 	private static final List<ColorSelector> canonColors;
 	private static int xOffset, yOffset;

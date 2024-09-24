@@ -255,7 +255,7 @@ public class BoondollarPriceProvider implements DataProvider
 	
 	protected void add(Ingredient ingredient, IntProvider range, String name)
 	{
-		add(new BoondollarPriceRecipe(ingredient, range), new ResourceLocation(modid, name));
+		add(new BoondollarPriceRecipe(ingredient, range), ResourceLocation.fromNamespaceAndPath(modid, name));
 	}
 	
 	protected void add(BoondollarPriceRecipe pricing, ResourceLocation name)

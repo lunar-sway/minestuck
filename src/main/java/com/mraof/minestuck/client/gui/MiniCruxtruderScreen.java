@@ -14,8 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MiniCruxtruderScreen extends AbstractContainerScreen<MiniCruxtruderMenu>
 {
-	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/cruxtruder.png");
-	private static final ResourceLocation PROGRESS_BAR = new ResourceLocation("minestuck:textures/gui/progress/cruxtruder.png");
+	private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/cruxtruder.png");
+	private static final ResourceLocation PROGRESS_BAR = ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/progress/cruxtruder.png");
 	
 	public static final int PROGRESS_BAR_X = 82;
 	public static final int PROGRESS_BAR_Y = 42;

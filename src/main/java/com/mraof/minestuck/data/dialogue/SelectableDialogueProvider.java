@@ -60,7 +60,7 @@ public final class SelectableDialogueProvider implements DataProvider
 	
 	public void addRandomlySelectable(String path, SelectableBuilder selectable, ResourceLocation dialogueId)
 	{
-		this.selectableDialogueMap.put(new ResourceLocation(this.modId, path), selectable.build(dialogueId));
+		this.selectableDialogueMap.put(ResourceLocation.fromNamespaceAndPath(this.modId, path), selectable.build(dialogueId));
 	}
 	
 	public DialogueProvider dialogue()

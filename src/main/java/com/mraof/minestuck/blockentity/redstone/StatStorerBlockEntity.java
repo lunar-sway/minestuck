@@ -28,7 +28,7 @@ import net.neoforged.neoforge.event.level.SaplingGrowTreeEvent;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class StatStorerBlockEntity extends BlockEntity
 {
 	private float damageStored;

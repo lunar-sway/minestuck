@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 public class ItemStackBlockEntity extends BlockEntity implements IColored
 {
-	public static final ResourceLocation ITEM_DYNAMIC = new ResourceLocation(Minestuck.MOD_ID, "item");
+	public static final ResourceLocation ITEM_DYNAMIC = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "item");
 	
 	public ItemStackBlockEntity(BlockPos pos, BlockState state)
 	{

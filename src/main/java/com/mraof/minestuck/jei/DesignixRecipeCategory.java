@@ -29,7 +29,7 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 
     DesignixRecipeCategory(IGuiHelper guiHelper)
     {
-        ResourceLocation punchDesignixBackground = new ResourceLocation("minestuck:textures/gui/designix.png");
+        ResourceLocation punchDesignixBackground = ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/designix.png");
         background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
 		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.PUNCH_DESIGNIX));
     }

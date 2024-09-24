@@ -76,7 +76,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper)
 	{
 		AdvancementHolder root = Advancement.Builder.advancement()
-				.display(MSItems.RAW_CRUXITE.get(), Component.translatable(title(ROOT)), Component.translatable(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), AdvancementType.TASK, false, false, false)
+				.display(MSItems.RAW_CRUXITE.get(), Component.translatable(title(ROOT)), Component.translatable(desc(ROOT)), ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/advancement_bg.png"), AdvancementType.TASK, false, false, false)
 				.addCriterion("raw_cruxite", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.RAW_CRUXITE.get())).save(saver, save_loc(ROOT));
 		AdvancementHolder searching = Advancement.Builder.advancement().parent(root)
 				.display(Items.COMPASS, Component.translatable(title(SEARCHING)), Component.translatable(desc(SEARCHING)), null, AdvancementType.TASK, true, true, false)

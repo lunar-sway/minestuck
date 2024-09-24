@@ -20,7 +20,7 @@ public class StatStorerScreen extends Screen
 	public static final String DIVIDE_VALUE_MESSAGE = "minestuck.stat_storer.divide_value";
 	public static final String DIVIDE_COMPARATOR_MESSAGE = "minestuck.stat_storer.divide_comparator";
 	public static final String DONE_MESSAGE = "minestuck.stat_storer.done";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;

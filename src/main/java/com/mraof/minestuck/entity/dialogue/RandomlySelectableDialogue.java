@@ -13,6 +13,7 @@ import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -23,7 +24,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
 @ParametersAreNonnullByDefault
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public final class RandomlySelectableDialogue
 {
 	private final List<Dialogue.SelectableDialogue> selectableDialogueList;
@@ -49,7 +50,7 @@ public final class RandomlySelectableDialogue
 		});
 		
 		return WeightedRandom.getRandomItem(entity.getRandom(), weightedFilteredDialogue)
-				.map(WeightedEntry.Wrapper::getData);
+				.map(WeightedEntry.Wrapper::data);
 	}
 	
 	public Collection<Dialogue.SelectableDialogue> getAll()

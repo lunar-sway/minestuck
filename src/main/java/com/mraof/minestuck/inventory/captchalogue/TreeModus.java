@@ -157,7 +157,7 @@ public class TreeModus extends Modus
 		{
 			size--;
 			markDirty();
-			stack = AlchemyHelper.createCard(stack, player.server);
+			stack = AlchemyHelper.createCard(stack);
 		}
 		if(id == 0)
 			node = null;

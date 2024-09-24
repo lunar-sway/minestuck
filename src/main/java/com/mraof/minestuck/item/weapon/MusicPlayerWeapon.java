@@ -51,7 +51,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * {@link #hasCassette(ItemStack)}
  */
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class MusicPlayerWeapon extends WeaponItem
 {
 	public static final String TITLE = "minestuck.music_player";

@@ -84,11 +84,11 @@ public class FrogEyesLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>
 	{
 		int id = frog.getEyeType();
 
-		if(frog.getFrogType() == 6) return new ResourceLocation("minestuck:textures/entity/frog/susan_eyes.png");
+		if(frog.getFrogType() == 6) return ResourceLocation.fromNamespaceAndPath("minestuck:textures/entity/frog/susan_eyes.png");
 		else if(id < 0) id = 0;
 		else if(id > 3) id = 3;
 
-		return new ResourceLocation("minestuck:textures/entity/frog/eyes_" + id + ".png");
+		return ResourceLocation.fromNamespaceAndPath("minestuck:textures/entity/frog/eyes_" + id + ".png");
 	}
 
 }

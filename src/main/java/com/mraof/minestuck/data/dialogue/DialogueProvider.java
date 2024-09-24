@@ -46,7 +46,7 @@ public final class DialogueProvider implements DataProvider
 	
 	public ResourceLocation dialogueId(String path)
 	{
-		return new ResourceLocation(this.modId, this.subFolder + "/" + path);
+		return ResourceLocation.fromNamespaceAndPath(this.modId, this.subFolder + "/" + path);
 	}
 	
 	public ResourceLocation add(String path, DialogueProducer builder)

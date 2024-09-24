@@ -81,7 +81,7 @@ public class VitalityGelRenderer extends EntityRenderer<VitalityGelEntity>
 	@Override
 	public ResourceLocation getTextureLocation(VitalityGelEntity entity)
 	{
-		return new ResourceLocation("minestuck", "textures/entity/vitality_gel.png");
+		return ResourceLocation.fromNamespaceAndPath("minestuck", "textures/entity/vitality_gel.png");
 	}
 
 }

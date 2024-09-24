@@ -19,7 +19,7 @@ import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public final class EntryEffect
 {
 	public static final DustParticleOptions PARTICLE = new DustParticleOptions(new Vector3f(0.5f, 0.5f, 1.0f), 1.0f);

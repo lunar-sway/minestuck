@@ -20,7 +20,7 @@ import java.util.Optional;
  * While active it slowly injures the entity who has it. The frequency with which it damages the player depends on the amplifier value.
  * All vanilla potion effects are included in the whitelist.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class SoporSicknessEffect extends MobEffect
 {
 	protected SoporSicknessEffect()
