@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.block.CustomVoxelShape;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.HolopadBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -20,10 +21,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
@@ -34,20 +33,12 @@ import java.util.Map;
 @MethodsReturnNonnullByDefault
 public class HolopadBlock extends MachineBlock implements EntityBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = createRotatedShapes(2, 0, 1, 14, 6, 13);
-	public static final Map<Direction, VoxelShape> COLLISION_SHAPE;
-	//todo these are unused?
-	protected static final AABB HOLOPAD_TOP_AABB = new AABB(3/16F, 6/16F, 2.6/16F, 13/16F, 7/16F, 12.6/16F);
-	protected static final AABB HOLOPAD_CARDSLOT_AABB = new AABB(4/16F, 0F, 13.8/16F, 12/16F, 10.1/16F, 15.94/16F);
+	public static final Map<Direction, VoxelShape> SHAPE = new CustomVoxelShape(
+			new double[]{2, 0, 1, 14, 7, 13},
+			new double[]{4, 0, 13, 12, 10, 16}
+	).createRotatedShapes();
 	
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
-	
-	static
-	{
-		VoxelShape topShape = Block.box(3, 6, 3, 13, 7, 13);
-		COLLISION_SHAPE = createRotatedShapes(4, 0, 14, 12, 10, 16);
-		COLLISION_SHAPE.replaceAll((enumFacing, shape) -> Shapes.or(shape, topShape));
-	}
 	
 	public HolopadBlock(Properties builder)
 	{
@@ -108,13 +99,4 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 	{
 		return SHAPE.get(state.getValue(FACING));
 	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-	{
-		return COLLISION_SHAPE.get(state.getValue(FACING));
-	}
-	
-	
 }
