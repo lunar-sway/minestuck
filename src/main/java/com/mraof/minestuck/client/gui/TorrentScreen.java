@@ -163,6 +163,7 @@ public class TorrentScreen extends Screen
 		}
 		
 		statsContainer.widgets = gristStats;
+		statsContainer.updateVisibilityAndPosition();
 	}
 	
 	private void renderGutter(GuiGraphics guiGraphics)
