@@ -274,7 +274,7 @@ public class TorrentWidgets
 			this.font = font;
 			this.gristType = gristType;
 			
-			//visible = false;
+			visible = false;
 			
 			updateStats();
 		}
@@ -337,7 +337,7 @@ public class TorrentWidgets
 			
 			//down
 			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst()).append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()));
-			guiGraphics.drawString(font, downText, scale(getX() + 15), scale(getY() + TEXT_Y_OFFSET), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, downText, scale(getX() + 25), scale(getY() + TEXT_Y_OFFSET), TorrentScreen.LIGHT_BLUE, false);
 			
 			//up
 			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 70), scale(getY() + TEXT_Y_OFFSET), TorrentScreen.LIGHT_BLUE, false);
@@ -381,12 +381,6 @@ public class TorrentWidgets
 		{
 			super(pX, pY, WIDTH, HEIGHT, gristStats);
 			
-			for(int i = 0; i < widgets.size(); i++)
-			{
-				if(i < visibleEntryCount())
-					widgets.get(i).visible = true;
-			}
-			
 			this.font = font;
 		}
 		
@@ -396,16 +390,16 @@ public class TorrentWidgets
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
 			
-			guiGraphics.drawString(font, Component.literal("Grist"), scale(getX() + 2), scale(getY()), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Grist"), scale(getX() + 2), scale(getY() + 2), TorrentScreen.LIGHT_BLUE, false);
 			
 			//down
-			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 15), scale(getY()), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 25), scale(getY() + 2), TorrentScreen.LIGHT_BLUE, false);
 			
 			//up
-			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 70), scale(getY()), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 70), scale(getY() + 2), TorrentScreen.LIGHT_BLUE, false);
 			
 			//seeds
-			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 110), scale(getY()), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 110), scale(getY() + 2), TorrentScreen.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
 		}
@@ -519,7 +513,13 @@ public class TorrentWidgets
 			else if(scrollY < 0)
 				scroll = Math.max(0, scroll - 1);
 			
-			//update visibility and positions
+			updateVisibilityAndPosition();
+			
+			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+		}
+		
+		public void updateVisibilityAndPosition()
+		{
 			for(int i = 0; i < widgets.size(); i++)
 			{
 				T widget = widgets.get(i);
@@ -529,8 +529,6 @@ public class TorrentWidgets
 				
 				widget.visible = i >= scroll && i < scroll + visibleEntryCount();
 			}
-			
-			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 		}
 		
 		private void adjustYValue(T widget, int i)
