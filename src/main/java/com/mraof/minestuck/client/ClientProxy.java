@@ -94,6 +94,7 @@ public class ClientProxy
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
 		ComputerProgram.registerProgramClass(2, DiskBurner.class);
 		ComputerProgram.registerProgramClass(3, SettingsApp.class);
+		ComputerProgram.registerProgramClass(4, GristTorrent.class);
 		
 		registerArmorModels();
 

@@ -2,8 +2,11 @@ package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.alchemy.TorrentSession;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
+import com.mraof.minestuck.player.IdentifierHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -22,13 +25,14 @@ import java.util.function.Predicate;
 
 /**
  * Stores any extra data that's not worth putting in their own data file. (Such as editmode recovery data and post entry tasks, which most of the time will be empty)
+ *
  * @author kirderf1
  */
 public class MSExtraData extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final String DATA_NAME = Minestuck.MOD_ID+"_extra";
+	private static final String DATA_NAME = Minestuck.MOD_ID + "_extra";
 	
 	private final List<EditData> activeEditData = new ArrayList<>();
 	
@@ -36,6 +40,7 @@ public class MSExtraData extends SavedData
 	private final List<EditData.ConnectionRecovery> editConnectionRecovery = new ArrayList<>();
 	
 	private final CardCaptchas cardCaptchas = new CardCaptchas();
+	private final List<TorrentSession> torrentSessions = new ArrayList<>();
 	private final List<PostEntryTask> postEntryTasks = new ArrayList<>();
 	
 	private MSExtraData()
@@ -73,6 +78,13 @@ public class MSExtraData extends SavedData
 		if(nbt.contains("card_captchas", Tag.TAG_COMPOUND))
 			data.cardCaptchas.deserialize(nbt.getCompound("card_captchas"));
 		
+		ListTag torrentSessionList = nbt.getList("torrent_sessions", Tag.TAG_COMPOUND);
+		for(int i = 0; i < torrentSessionList.size(); i++)
+		{
+			TorrentSession.CODEC.parse(NbtOps.INSTANCE, torrentSessionList.getCompound(i))
+					.resultOrPartial(LOGGER::error).ifPresent(data.torrentSessions::add);
+		}
+		
 		return data;
 	}
 	
@@ -93,6 +105,13 @@ public class MSExtraData extends SavedData
 		compound.put("entry_tasks", entryTaskList);
 		
 		compound.put("card_captchas", cardCaptchas.serialize());
+		
+		ListTag torrentSessionList = new ListTag();
+		torrentSessions.stream()
+				.flatMap(session -> TorrentSession.CODEC.encodeStart(NbtOps.INSTANCE, session).resultOrPartial(LOGGER::error).stream())
+				.forEach(torrentSessionList::add);
+		
+		compound.put("torrent_sessions", torrentSessionList);
 		
 		return compound;
 	}
@@ -205,6 +224,94 @@ public class MSExtraData extends SavedData
 	public CardCaptchas getCardCaptchas()
 	{
 		return cardCaptchas;
+	}
+	
+	public List<TorrentSession> getTorrentSessions()
+	{
+		return torrentSessions;
+	}
+	
+	public void updateTorrentSeeding(IdentifierHandler.UUIDIdentifier playerID, GristType gristType, boolean isSeeding)
+	{
+		for(int i = 0; i < torrentSessions.size(); i++)
+		{
+			TorrentSession torrentSession = torrentSessions.get(i);
+			
+			if(torrentSession.sameOwner(playerID))
+			{
+				List<GristType> gristTypes = new ArrayList<>(torrentSession.getSeeding());
+				
+				if(isSeeding)
+				{
+					if(!gristTypes.contains(gristType))
+						gristTypes.add(gristType);
+				} else
+					gristTypes.remove(gristType);
+				
+				torrentSession.setSeeding(gristTypes);
+				torrentSessions.set(i, torrentSession);
+			}
+		}
+		
+		setDirty(); //TODO should this be set to dirty even if no information is changed?
+	}
+	
+	public void updateTorrentLeeching(TorrentSession torrentSessionIn, IdentifierHandler.UUIDIdentifier playerID, GristType gristType, boolean isLeeching)
+	{
+		for(int i = 0; i < torrentSessions.size(); i++)
+		{
+			TorrentSession torrentSession = torrentSessions.get(i);
+			
+			if(torrentSession.sameOwner(torrentSessionIn))
+			{
+				List<TorrentSession.Leech> leeching = new ArrayList<>(torrentSession.getLeeching());
+				
+				TorrentSession.Leech existingLeech = leeching.stream().filter(leech -> leech.UUIDMatches(playerID)).findFirst().orElse(null);
+				
+				List<GristType> leechGrists = new ArrayList<>();
+				
+				if(isLeeching)
+					leechGrists.add(gristType);
+				
+				if(existingLeech != null)
+				{
+					List<GristType> existingGrists = new ArrayList<>(existingLeech.gristTypes());
+					
+					existingGrists.remove(gristType); //remove gristType regardless of isLeeching state in order to prevent duplicate entries for the same type
+					
+					leechGrists.addAll(existingGrists);
+					leeching.remove(existingLeech);
+				}
+				
+				leeching.add(new TorrentSession.Leech(playerID, leechGrists));
+				
+				torrentSession.setLeeching(leeching);
+				torrentSessions.set(i, torrentSession);
+				
+				break;
+			}
+		}
+		
+		setDirty();
+	}
+	
+	/**
+	 * Attempts to add a new TorrentSession to the List.
+	 * It will only do so if there is not already an existing TorrentSession assigned to the given player.
+	 */
+	public void tryAddTorrentSession(TorrentSession newSession)
+	{
+		if(torrentSessions.stream().noneMatch(existingSession -> existingSession.sameOwner(newSession)))
+		{
+			torrentSessions.add(newSession);
+			setDirty();
+		}
+	}
+	
+	//TODO might not be necessary
+	public void removesSessions()
+	{
+		torrentSessions.clear();
 	}
 	
 	@Override

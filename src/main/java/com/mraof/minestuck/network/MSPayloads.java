@@ -53,6 +53,11 @@ public class MSPayloads
 				.play(ThemeSelectPacket.ID, ThemeSelectPacket::read, MSPacket.PlayToServer::handler)
 				.play(DataCheckerPacket.ID, DataCheckerPacket::read, MSPacket.PlayToBoth::handlerBoth)
 				
+				.play(GutterUpdatePacket.ID, GutterUpdatePacket::read, MSPacket.PlayToClient::handler)
+				.play(TorrentPackets.UpdateClient.ID, TorrentPackets.UpdateClient::read, MSPacket.PlayToClient::handler)
+				.play(TorrentPackets.ModifySeeding.ID, TorrentPackets.ModifySeeding::read, MSPacket.PlayToServer::handler)
+				.play(TorrentPackets.ModifyLeeching.ID, TorrentPackets.ModifyLeeching::read, MSPacket.PlayToServer::handler)
+				
 				.play(MiscContainerPacket.ID, MiscContainerPacket::read, MSPacket.PlayToServer::handler)
 				
 				.play(ClientEditPacket.ID, ClientEditPacket::read, MSPacket.PlayToServer::handler)

@@ -28,17 +28,16 @@ public final class ProgramData
 	{
 		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), CLIENT_HANDLER);
 		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), SERVER_HANDLER);
+		ProgramData.registerProgram(4, new ItemStack(MSItems.TORRENT_DISK.get()), TORRENT_HANDLER);
 	}
 	
 	/**
 	 * Registers a program class to the list.
 	 *
-	 * @param id
-	 *            The program id. If it is already used, the method will throw
-	 *            an IllegalArgumentException.
-	 * @param disk
-	 *            The item that will serve as the disk that installs the
-	 *            program.
+	 * @param id   The program id. If it is already used, the method will throw
+	 *             an IllegalArgumentException.
+	 * @param disk The item that will serve as the disk that installs the
+	 *             program.
 	 */
 	public static void registerProgram(int id, ItemStack disk, ProgramHandler programHandler)
 	{
@@ -71,7 +70,7 @@ public final class ProgramData
 	@Nonnull
 	public static ItemStack getItem(int id)
 	{
-		if(id == 2 || id==3)
+		if(id == 2 || id == 3)
 			return ItemStack.EMPTY;
 		return disks.get(id).copy();
 	}
@@ -79,13 +78,16 @@ public final class ProgramData
 	public interface ProgramHandler
 	{
 		default void onDiskInserted(ComputerBlockEntity computer)
-		{}
+		{
+		}
 		
 		default void onLoad(ComputerBlockEntity computer)
-		{}
+		{
+		}
 		
 		default void onClosed(ComputerBlockEntity computer)
-		{}
+		{
+		}
 	}
 	
 	private static final ProgramHandler CLIENT_HANDLER = new ProgramHandler()
@@ -107,7 +109,7 @@ public final class ProgramData
 		{
 			if(computer.getLevel() instanceof ServerLevel level && computer.getOwner() != null)
 			{
-				ComputerInteractions.get(level.getServer()).closeClientConnection(computer);	//Can safely be done even if this computer isn't in a connection
+				ComputerInteractions.get(level.getServer()).closeClientConnection(computer);    //Can safely be done even if this computer isn't in a connection
 				
 				EditmodeLocations.removeBlockSource(level.getServer(), computer.getOwner(), level.dimension(), computer.getBlockPos());
 			}
@@ -123,5 +125,9 @@ public final class ProgramData
 			MinecraftServer mcServer = Objects.requireNonNull(computer.getLevel().getServer());
 			ComputerInteractions.get(mcServer).closeServerConnection(computer);
 		}
+	};
+	
+	private static final ProgramHandler TORRENT_HANDLER = new ProgramHandler()
+	{
 	};
 }

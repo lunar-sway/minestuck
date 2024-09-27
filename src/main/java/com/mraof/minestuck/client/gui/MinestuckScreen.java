@@ -49,9 +49,9 @@ public abstract class MinestuckScreen extends Screen
 		long cacheLimit = cache.limit();
 		
 		List<GristType> types = GristTypes.REGISTRY.stream().sorted().skip((long) page * rows * columns).limit(rows * columns).toList();
-
+		
 		int offset = 0;
-		for (GristType type : types)
+		for(GristType type : types)
 		{
 			int column = offset % columns;
 			int row = offset / columns;
@@ -59,13 +59,13 @@ public abstract class MinestuckScreen extends Screen
 			int gristYOffset = yOffset + (gristDisplayYOffset * row - row);
 			String amount = GuiUtil.addSuffix(clientGrist.getGrist(type));
 			
-			if (this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
+			if(this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{
 				guiGraphics.fillGradient(gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, 0x80ffffff, 0x80ffffff);
 				tooltipType = type;
 				showName = true;
 			}
-			if (!String.valueOf(clientGrist.getGrist(type)).equals(amount)
+			if(!String.valueOf(clientGrist.getGrist(type)).equals(amount)
 					&& this.isPointInRegion(gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, 35, 10, xcor, ycor))
 			{
 				tooltipType = type;
@@ -80,14 +80,15 @@ public abstract class MinestuckScreen extends Screen
 			guiGraphics.fill(gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 2), 0xff7ED8E5); //0xE64C10
 			offset++;
 		}
-		if (tooltipType != null)
+		if(tooltipType != null)
 		{
-			if (showName)
+			if(showName)
 				guiGraphics.renderTooltip(font, tooltipType.getNameWithSuffix(), xcor, ycor);
 			else
 				guiGraphics.renderTooltip(font, Component.literal(String.valueOf(clientGrist.getGrist(tooltipType))), xcor, ycor);
 		}
 	}
+	
 	private void drawCovers(int x, int y, ResourceLocation barCovers)//this can go fuck itself
 	{
 		if(barCovers == null || minecraft == null)
@@ -111,6 +112,7 @@ public abstract class MinestuckScreen extends Screen
 		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
 		Tesselator.getInstance().end();
 	}
+	
 	private void drawIcon(int x, int y, ResourceLocation icon)
 	{
 		if(icon == null || minecraft == null)
@@ -118,14 +120,14 @@ public abstract class MinestuckScreen extends Screen
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, icon);
-
+		
 		float scale = (float) 1 / 16;
-
+		
 		int iconX = 16;
 		int iconY = 16;
 		int iconU = 0;
 		int iconV = 0;
-
+		
 		BufferBuilder render = Tesselator.getInstance().getBuilder();
 		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		render.vertex(x, y + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
@@ -134,7 +136,7 @@ public abstract class MinestuckScreen extends Screen
 		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
 		Tesselator.getInstance().end();
 	}
-
+	
 	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY)
 	{
 		return pointX >= regionX && pointX < regionX + regionWidth && pointY >= regionY && pointY < regionY + regionHeight;

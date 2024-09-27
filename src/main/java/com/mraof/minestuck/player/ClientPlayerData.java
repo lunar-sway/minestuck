@@ -1,10 +1,13 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.network.GutterUpdatePacket;
+import com.mraof.minestuck.network.TorrentPackets;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.util.ColorHandler;
 import net.neoforged.api.distmarker.Dist;
@@ -15,6 +18,9 @@ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Contains static field for any {@link PlayerData} fields that also need client access.
@@ -31,7 +37,10 @@ public final class ClientPlayerData
 	private static float rungProgress;
 	private static long boondollars;
 	private static GristSet playerGrist, targetGrist;
+	private static GristSet gutterGrist;
+	private static long gutterRemainingCapacity;
 	private static long targetCacheLimit;
+	private static Map<TorrentSession, TorrentSession.LimitedCache> visibleTorrentData = new HashMap<>();
 	private static int playerColor;
 	private static boolean displaySelectionGui;
 	private static boolean dataCheckerAccess;
@@ -95,6 +104,21 @@ public final class ClientPlayerData
 	{
 		PLAYER,
 		EDITMODE,
+	}
+	
+	public static GristSet getGutterSet()
+	{
+		return gutterGrist;
+	}
+	
+	public static long getGutterRemainingCapacity()
+	{
+		return gutterRemainingCapacity;
+	}
+	
+	public static Map<TorrentSession, TorrentSession.LimitedCache> getVisibleTorrentData()
+	{
+		return visibleTorrentData;
 	}
 	
 	public static int getPlayerColor()
@@ -161,6 +185,17 @@ public final class ClientPlayerData
 			targetGrist = packet.gristCache();
 		else
 			playerGrist = packet.gristCache();
+	}
+	
+	public static void handleDataPacket(GutterUpdatePacket packet)
+	{
+		gutterGrist = packet.gristValue();
+		gutterRemainingCapacity = packet.remainingCapacity();
+	}
+	
+	public static void handleDataPacket(TorrentPackets.UpdateClient packet)
+	{
+		visibleTorrentData = packet.data();
 	}
 	
 	public static void handleDataPacket(EditmodeCacheLimitPacket packet)
