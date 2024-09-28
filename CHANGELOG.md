@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Built in compatability for Better Combat mod
 
 ### Changed
+- Gave Underlings and Carapacian Pawns the Attack Speed attribute. This influences how fast their attack animations play
+- Underlings, Carapacian Pawns, and Consorts now adjust their walk animation speed according to their Movement Speed attribute
 - Structure Block Registry Processor can now be used for data generated structures through a processor_list
 - Adjusted the hitbox size for Lotus Flowers
 - The Lotus Time Capsule now spawns a Lotus Flower when placed
