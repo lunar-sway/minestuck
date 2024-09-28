@@ -1308,6 +1308,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CINDERED_BUTTON.get());
 		output.accept(MSItems.CINDERED_SIGN.get());
 		output.accept(MSItems.CINDERED_HANGING_SIGN.get());
+		output.accept(MSItems.CINDERED_BOOKSHELF.get());
+		output.accept(MSItems.CINDERED_LADDER.get());
 		
 		output.accept(MSItems.SHADEWOOD.get());
 		output.accept(MSItems.SHADEWOOD_LOG.get());
@@ -1327,6 +1329,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SHADEWOOD_LEAVES.get());
 		output.accept(MSItems.SHROOMY_SHADEWOOD_LEAVES.get());
 		output.accept(MSItems.SHADEWOOD_SAPLING.get());
+		output.accept(MSItems.SHADEWOOD_BOOKSHELF.get());
+		output.accept(MSItems.SHADEWOOD_LADDER.get());
 		
 		output.accept(MSItems.ROTTED_SHADEWOOD.get());
 		output.accept(MSItems.ROTTED_SHADEWOOD_LOG.get());
