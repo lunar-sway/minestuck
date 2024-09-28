@@ -13,14 +13,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cindered ladder and bookshelf
 - Shadewood ladder and bookshelf
 - Parrots will mimic imps, ogres, basilisks, and liches
-- 
 ### Changed
 - Structure Block Registry Processor can now be used for data generated structures through a processor_list
 - Adjusted the hitbox size for Lotus Flowers
 - The Lotus Time Capsule now spawns a Lotus Flower when placed
 - Lotus Time Capsule blocks now remove any Lotus Flowers above them when destroyed
-- Cruxite button now uses raw cruxite instead of cruxite block
-- Uranium button now uses raw uranium, instead of uranium block
 - Many organic blocks are now compostable
 - Many wood-based blocks can now be used as fuel
 - Cruxite ore textures tweaked
@@ -30,8 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Manually-spawned Lotus Flowers can no longer be hurt or killed by any damage source
 - Lotus Flowers no longer push entities inside of them away
 - Ogres and Basilisks no longer slide around when idling
-- Cruxite block now functions properly as a storage block
-- Uranium block now functions properly as a storage block
+- Cruxite button now uses raw cruxite instead of cruxite block, which resolves a conflict with storage block breakdown
 
 
 ### Contributors for this release
