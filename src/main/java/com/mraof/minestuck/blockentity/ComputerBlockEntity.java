@@ -15,6 +15,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -24,7 +25,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -340,7 +340,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(ServerEditHandler.getData(player) != null)
 			return false;
 		
-		ServerOpListEntry opsEntry = player.server.getPlayerList().getOps().get(player.getGameProfile());
-		return !MinestuckConfig.SERVER.privateComputers.get() || this.owner != null && this.owner.appliesTo(player) || opsEntry != null && opsEntry.getLevel() >= 2;
+		return !MinestuckConfig.SERVER.privateComputers.get() || this.owner != null && this.owner.appliesTo(player) || player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
 	}
 }

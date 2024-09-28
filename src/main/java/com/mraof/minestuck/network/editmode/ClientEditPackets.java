@@ -12,10 +12,10 @@ import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import net.minecraft.commands.Commands;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
@@ -93,8 +93,7 @@ public final class ClientEditPackets
 		
 		private static boolean isMissingPermission(ServerPlayer player, PlayerIdentifier user)
 		{
-			ServerOpListEntry opsEntry = player.getServer().getPlayerList().getOps().get(player.getGameProfile());
-			return MinestuckConfig.SERVER.privateComputers.get() && !user.appliesTo(player) && (opsEntry == null || opsEntry.getLevel() < 2);
+			return MinestuckConfig.SERVER.privateComputers.get() && !user.appliesTo(player) && !player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
 		}
 		
 		private void runGiveItems(ServerPlayer player, PlayerIdentifier user, PlayerIdentifier target)
