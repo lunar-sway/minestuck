@@ -340,6 +340,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(ServerEditHandler.getData(player) != null)
 			return false;
 		
-		return !MinestuckConfig.SERVER.privateComputers.get() || this.owner != null && this.owner.appliesTo(player) || player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
+		if(MinestuckConfig.SERVER.privateComputers.get())
+		{
+			return (this.owner != null && this.owner.appliesTo(player))
+					|| player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
+		} else
+			return true;
 	}
 }
