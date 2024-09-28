@@ -6,7 +6,7 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.network.ClientMovementPacket;
+import com.mraof.minestuck.network.PushPlayerPacket;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
@@ -356,7 +356,7 @@ public interface OnHitEffect
 			
 			if(attacker instanceof ServerPlayer player)
 			{
-				ClientMovementPacket packet = ClientMovementPacket.createPacket(attackerVec);
+				PushPlayerPacket packet = PushPlayerPacket.createPacket(attackerVec);
 				PacketDistributor.PLAYER.with(player).send(packet);
 			}
 		};

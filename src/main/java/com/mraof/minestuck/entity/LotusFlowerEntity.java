@@ -2,7 +2,7 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.network.LotusFlowerPacket;
+import com.mraof.minestuck.network.LotusFlowerAnimationPacket;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -206,7 +206,7 @@ public class LotusFlowerEntity extends Entity implements GeoEntity, IEntityWithC
 	protected void updateAndSendAnimation(Animation animation)
 	{
 		this.animationType = animation;
-		LotusFlowerPacket packet = LotusFlowerPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
+		LotusFlowerAnimationPacket packet = LotusFlowerAnimationPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
 		PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
 	}
 	
@@ -250,13 +250,13 @@ public class LotusFlowerEntity extends Entity implements GeoEntity, IEntityWithC
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
-		buffer.writeInt(animationType.ordinal());
+		buffer.writeEnum(animationType);
 	}
 	
 	@Override
 	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
-		animationType = Animation.values()[additionalData.readInt()];
+		animationType = additionalData.readEnum(Animation.class);
 	}
 	
 	public void setAnimationFromPacket(Animation newAnimation)

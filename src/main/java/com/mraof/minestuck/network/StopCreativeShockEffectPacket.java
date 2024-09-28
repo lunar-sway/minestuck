@@ -6,16 +6,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
-public class StopCreativeShockEffectPacket implements MSPacket.PlayToClient
+public record StopCreativeShockEffectPacket(boolean mayBuild) implements MSPacket.PlayToClient
 {
 	public static final ResourceLocation ID = Minestuck.id("stop_creative_shock_effect");
-	
-	private final boolean mayBuild;
-	
-	public StopCreativeShockEffectPacket(boolean mayBuildIn)
-	{
-		this.mayBuild = mayBuildIn;
-	}
 	
 	@Override
 	public ResourceLocation id()

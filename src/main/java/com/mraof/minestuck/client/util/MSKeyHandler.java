@@ -5,8 +5,8 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.EffectTogglePacket;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
+import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -90,7 +90,7 @@ public class MSKeyHandler
 				captchalogueInGame();
 			
 			if(effectToggleKey.isActiveAndMatches(input))
-				PacketDistributor.SERVER.noArg().send(new EffectTogglePacket());
+				PacketDistributor.SERVER.noArg().send(new ToggleAspectEffectsPacket());
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
@@ -101,7 +101,7 @@ public class MSKeyHandler
 	private static void captchalogueInGame()
 	{
 		if(!Minecraft.getInstance().player.getMainHandItem().isEmpty())
-			PacketDistributor.SERVER.noArg().send(CaptchaDeckPacket.captchalogue());
+			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.CaptchalogueHeldItem());
 	}
 	
 	private static void captchalogueInGui(AbstractContainerScreen<?> screen)
@@ -110,7 +110,7 @@ public class MSKeyHandler
 		{
 			Slot slot = screen.getSlotUnderMouse();
 			if(slot != null && slot.hasItem())
-				PacketDistributor.SERVER.noArg().send(CaptchaDeckPacket.captchalogueInv(slot.index, screen.getMenu().containerId));
+				PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.CaptchalogueInventorySlot(slot.index, screen.getMenu().containerId));
 		}
 	}
 }

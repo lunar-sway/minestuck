@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.block.redstone.StructureCoreBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.network.block.StructureCoreSettingsPacket;
 import com.mraof.minestuck.world.gen.structure.CoreCompatibleScatteredStructurePiece;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -172,19 +173,9 @@ public class StructureCoreBlockEntity extends BlockEntity
 		}
 	}
 	
-	public void setShutdownRange(int shutdownRange)
-	{
-		this.shutdownRange = shutdownRange;
-	}
-	
 	public int getShutdownRange()
 	{
 		return shutdownRange;
-	}
-	
-	public void setHasWiped(boolean hasWiped)
-	{
-		this.hasWiped = hasWiped;
 	}
 	
 	public boolean getHasWiped()
@@ -197,14 +188,19 @@ public class StructureCoreBlockEntity extends BlockEntity
 		return this.actionType;
 	}
 	
-	public void setActionType(ActionType actionTypeIn)
-	{
-		actionType = Objects.requireNonNull(actionTypeIn);
-	}
-	
 	public void prepForUpdate()
 	{
 		this.tickCycle = 600;
+	}
+	
+	public void handleSettingsPacket(StructureCoreSettingsPacket packet)
+	{
+		actionType = Objects.requireNonNull(packet.actionType());
+		this.shutdownRange = packet.shutdownRange();
+		this.hasWiped = false;
+		
+		setChanged();
+		this.level.setBlock(packet.beBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, false), Block.UPDATE_ALL);
 	}
 	
 	@Override

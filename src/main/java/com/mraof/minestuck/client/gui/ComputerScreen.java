@@ -22,6 +22,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO continually check that player is in reach of the computer
 @ParametersAreNonnullByDefault
 public class ComputerScreen extends Screen
 {

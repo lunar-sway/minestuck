@@ -29,9 +29,11 @@ import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@ParametersAreNonnullByDefault
 public class GristEntity extends Entity implements IEntityWithComplexSpawn
 {
 	//TODO Perhaps use a data manager for grist type in the same way as the underling entity?
@@ -309,16 +311,16 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 	@Override
 	public void playerTouch(Player player)
 	{
-		if(this.level().isClientSide || player instanceof FakePlayer)
+		if(!(player instanceof ServerPlayer serverPlayer) || player instanceof FakePlayer)
 			return;
 		
-		if(ServerEditHandler.getData(player) != null)
+		if(ServerEditHandler.isInEditmode(serverPlayer))
 			return;
 		
-		long canPickUp = getPlayerCacheRoom(player);
+		long canPickUp = getPlayerCacheRoom(serverPlayer);
 		
 		if(canPickUp >= gristValue)
-			consumeGrist(IdentifierHandler.encode(player), true);
+			consumeGrist(IdentifierHandler.encode(serverPlayer), true);
 		else
 		{
 			GristRejectAnimationPacket packet = GristRejectAnimationPacket.createPacket(this);

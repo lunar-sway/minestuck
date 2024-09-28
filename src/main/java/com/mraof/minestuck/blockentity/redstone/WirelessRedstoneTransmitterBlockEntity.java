@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneTransmitterBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.network.block.WirelessRedstoneTransmitterSettingsPacket;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -47,11 +49,15 @@ public class WirelessRedstoneTransmitterBlockEntity extends BlockEntity
 		return this.getBlockPos().offset(offsetPos.rotate(MSRotationUtil.rotationBetween(Direction.NORTH, stateFacing))); //changes from  north facing to the facing direction
 	}
 	
-	public void setOffsetFromDestinationBlockPos(BlockPos destinationPosIn)
+	public void handleSettingsPacket(WirelessRedstoneTransmitterSettingsPacket packet)
 	{
 		Direction facing = this.getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
+		//changes from the facing direction to north facing
+		this.offsetPos = packet.destinationBlockPos().subtract(worldPosition).rotate(MSRotationUtil.rotationBetween(facing, Direction.NORTH));
 		
-		this.offsetPos = destinationPosIn.subtract(worldPosition).rotate(MSRotationUtil.rotationBetween(facing, Direction.NORTH)); //changes from the facing direction to north facing
+		setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
 	}
 	
 	private void sendUpdateToPosition() //for internal use
@@ -118,19 +124,10 @@ public class WirelessRedstoneTransmitterBlockEntity extends BlockEntity
 		
 		tickCycle = compound.getInt("tickCycle");
 		
-		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ")) //backwards-portability to the destination based method first utilized
-		{
-			int destX = compound.getInt("destX");
-			int destY = compound.getInt("destY");
-			int destZ = compound.getInt("destZ");
-			setOffsetFromDestinationBlockPos(new BlockPos(destX, destY, destZ));
-		} else
-		{
-			int offsetX = compound.getInt("offsetX");
-			int offsetY = compound.getInt("offsetY");
-			int offsetZ = compound.getInt("offsetZ");
-			this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
-		}
+		int offsetX = compound.getInt("offsetX");
+		int offsetY = compound.getInt("offsetY");
+		int offsetZ = compound.getInt("offsetZ");
+		this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
 	}
 	
 	@Override

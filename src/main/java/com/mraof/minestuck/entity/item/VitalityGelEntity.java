@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,6 +16,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class VitalityGelEntity extends Entity implements IEntityWithComplexSpawn
 {
 	public int cycle;
@@ -206,7 +210,9 @@ public class VitalityGelEntity extends Entity implements IEntityWithComplexSpawn
 	@Override
 	public void playerTouch(Player player)
 	{
-		if(this.level().isClientSide ? ClientEditmodeData.isInEditmode() : ServerEditHandler.getData(player) != null)
+		if(this.level().isClientSide && ClientEditmodeData.isInEditmode())
+			return;
+		if(player instanceof ServerPlayer serverPlayer && ServerEditHandler.isInEditmode(serverPlayer))
 			return;
 		
 		if(!this.level().isClientSide)

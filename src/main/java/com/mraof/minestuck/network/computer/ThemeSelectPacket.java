@@ -41,6 +41,6 @@ public record ThemeSelectPacket(BlockPos pos, ResourceLocation themeId) implemen
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> computer.setTheme(themeId));
+		ComputerBlockEntity.getAccessibleComputer(player, pos).ifPresent(computer -> computer.setTheme(themeId));
 	}
 }

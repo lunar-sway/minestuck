@@ -1,7 +1,7 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.data.BoondollarDataPacket;
+import com.mraof.minestuck.network.BoondollarDataPacket;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
