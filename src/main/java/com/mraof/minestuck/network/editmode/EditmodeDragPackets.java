@@ -266,7 +266,7 @@ public final class EditmodeDragPackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(!player.level().isClientSide() && ServerEditHandler.getData(player) != null)
+			if(ServerEditHandler.isInEditmode(player))
 			{
 				EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 				

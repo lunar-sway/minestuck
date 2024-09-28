@@ -337,7 +337,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		if(this.isBroken())
 			return false;
-		if(ServerEditHandler.getData(player) != null)
+		if(ServerEditHandler.isInEditmode(player))
 			return false;
 		
 		if(MinestuckConfig.SERVER.privateComputers.get())

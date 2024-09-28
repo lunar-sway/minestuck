@@ -74,6 +74,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -130,14 +131,14 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent
 	public static void onLivingDamage(LivingDamageEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayer player && getData(player) != null)
+		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayer player && getData(player) != null)
+		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
 			event.setCanceled(true);
 	}
 	
@@ -198,7 +199,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			return;
 		ActiveConnection connection = connectionOptional.get();
 		
-		if(connection.server().equals(computerOwner) && getData(player.server, connection) == null && getData(player) == null)
+		if(connection.server().equals(computerOwner) && getData(player.server, connection) == null && !isInEditmode(player))
 		{
 			LOGGER.info("Activating edit mode on player \"{}\", target player: \"{}\".", player.getName().getString(), computerTarget);
 			
@@ -285,21 +286,30 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		}
 	}
 	
+	public static boolean isInEditmode(ServerPlayer player)
+	{
+		return getData(player) != null;
+	}
+	
+	@Nullable
 	public static EditData getData(Player editor)
 	{
 		return MSExtraData.get(editor.level()).findEditData(editData -> editData.getEditor() == editor);
 	}
 	
+	@Nullable
 	public static EditData getData(MinecraftServer server, ActiveConnection connection)
 	{
 		return getData(server, connection.client());
 	}
 	
+	@Nullable
 	public static EditData getData(MinecraftServer server, PlayerIdentifier client)
 	{
 		return MSExtraData.get(server).findEditData(editData -> editData.getTarget().equals(client));
 	}
 	
+	@Nullable
 	public static EditData getData(DecoyEntity decoy)
 	{
 		return MSExtraData.get(decoy.getCommandSenderWorld()).findEditData(editData -> editData.getDecoy() == decoy);
@@ -334,9 +344,11 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	public static void onTossEvent(ItemTossEvent event)
 	{
 		Inventory inventory = event.getPlayer().getInventory();
-		if(!event.getEntity().level().isClientSide && getData(event.getPlayer()) != null)
+		if(event.getPlayer() instanceof ServerPlayer player)
 		{
-			EditData data = getData(event.getPlayer());
+			EditData data = getData(player);
+			if(data == null)
+				return;
 			ItemStack stack = event.getEntity().getItem();
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), event.getEntity().level(), DeployList.EntryLists.DEPLOY);
 			if(entry != null && !isBlockItem(stack.getItem()))
@@ -345,11 +357,11 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
 					data.sburbData().setHasGivenItem(entry);
-					SburbHandler.onEntryItemsDeployed(event.getPlayer().getServer(), data.getTarget());
+					SburbHandler.onEntryItemsDeployed(player.getServer(), data.getTarget());
 				} else event.setCanceled(true);
 			} else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.sburbData(), event.getEntity().level(), DeployList.EntryLists.ATHENEUM))
 			{
-				GristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, event.getPlayer().level());
+				GristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, player.level());
 				if(cost == null || !data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 					event.setCanceled(true);
 			} else
@@ -359,7 +371,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			if(event.isCanceled())
 			{
 				event.getEntity().discard();
-				AbstractContainerMenu menu = event.getPlayer().containerMenu;
+				AbstractContainerMenu menu = player.containerMenu;
 				if(!menu.getCarried().isEmpty())
 					menu.setCarried(ItemStack.EMPTY);
 				else inventory.setItem(inventory.selected, ItemStack.EMPTY);
@@ -370,7 +382,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent
 	public static void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(!event.getEntity().level().isClientSide && getData(event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
 			event.setCanceled(true);
 	}
 	
@@ -378,16 +390,19 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
-			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+			EditData data = getData(event.getEntity());
+			if (data == null)
+				return;
+			
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
 				return;
 			}
 			
-			EditData data = getData(event.getEntity());
 			Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntity().getMainHandItem();
 			event.setUseBlock(stack.isEmpty() && (block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
@@ -431,16 +446,19 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
-			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+			EditData data = getData(event.getEntity());
+			if(data == null)
+				return;
+			
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
 				return;
 			}
 			
-			EditData data = getData(event.getEntity());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), event.getLevel());
@@ -460,7 +478,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onItemUseControl(PlayerInteractEvent.RightClickItem event)
 	{
-		if(!event.getLevel().isClientSide && getData(event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
 		{
 			event.setCanceled(true);
 		}
@@ -470,10 +488,12 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	public static void onBlockBreak(BlockEvent.BreakEvent event)
 	{
 		//BlockEvent.BreakEvent for some reason still uses the old naming scheme of getPlayer(), instead of the new scheme of getEntity()
-		if(!event.getPlayer().level().isClientSide && getData(event.getPlayer()) != null)
+		if(!event.getPlayer().level().isClientSide)
 		{
-			
 			EditData data = getData(event.getPlayer());
+			if(data == null)
+				return;
+			
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getPlayer());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), event.getPlayer().level(), DeployList.EntryLists.ATHENEUM);
@@ -502,11 +522,12 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event)
 	{
-		//Probably only need the ServerPlayer instanceof check, but we want to be ABSOLUTELY SURE that this isn't run client-side, so we check the level too.
-		if(!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player && getData(player) != null)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
-			
 			EditData data = getData(player);
+			if(data == null)
+				return;
+			
 			if(event.isCanceled())    //If the event was cancelled server side and not client side, notify the client.
 			{
 				data.sendGivenItemsToEditor();
@@ -544,21 +565,21 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onAttackEvent(AttackEntityEvent event)
 	{
-		if(!event.getEntity().level().isClientSide && getData(event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
 	{
-		if(!event.getEntity().level().isClientSide && getData(event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
 	{
-		if(!event.getEntity().level().isClientSide && getData(event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
 			event.setCanceled(true);
 	}
 	

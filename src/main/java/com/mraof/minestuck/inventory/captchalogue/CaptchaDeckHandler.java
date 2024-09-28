@@ -408,7 +408,7 @@ public final class CaptchaDeckHandler
 	
 	private static boolean canPlayerUseModus(ServerPlayer player)
 	{
-		return !player.isSpectator() && ServerEditHandler.getData(player) == null;
+		return !player.isSpectator() && !ServerEditHandler.isInEditmode(player);
 	}
 	
 	private static void setModus(ModusHolder modusHolder, ServerPlayer player, @Nullable Modus modus)

@@ -16,6 +16,7 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -128,6 +129,7 @@ public class MSExtraData extends SavedData
 		return storage.computeIfAbsent(new Factory<>(MSExtraData::new, MSExtraData::load), DATA_NAME);
 	}
 	
+	@Nullable
 	public EditData findEditData(Predicate<EditData> condition)
 	{
 		for(EditData data : activeEditData)

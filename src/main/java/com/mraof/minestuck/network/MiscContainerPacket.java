@@ -45,7 +45,7 @@ public record MiscContainerPacket(int index, boolean editmode) implements MSPack
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		boolean isInEditmode = ServerEditHandler.getData(player) != null;
+		boolean isInEditmode = ServerEditHandler.isInEditmode(player);
 		
 		if(editmode != isInEditmode)
 		{

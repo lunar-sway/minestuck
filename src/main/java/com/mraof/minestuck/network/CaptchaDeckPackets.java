@@ -79,7 +79,7 @@ public final class CaptchaDeckPackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(ServerEditHandler.getData(player) != null)
+			if(ServerEditHandler.isInEditmode(player))
 				return;
 			
 			if(player.containerMenu instanceof CaptchaDeckMenu)
@@ -110,7 +110,7 @@ public final class CaptchaDeckPackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(ServerEditHandler.getData(player) != null)
+			if(ServerEditHandler.isInEditmode(player))
 				return;
 			
 			if(!player.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty())
@@ -145,7 +145,7 @@ public final class CaptchaDeckPackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(ServerEditHandler.getData(player) != null)
+			if(ServerEditHandler.isInEditmode(player))
 				return;
 			
 			CaptchaDeckHandler.captchalogueItemInSlot(player, slotIndex, windowId);
@@ -179,7 +179,7 @@ public final class CaptchaDeckPackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(ServerEditHandler.getData(player) != null)
+			if(ServerEditHandler.isInEditmode(player))
 				return;
 			
 			CaptchaDeckHandler.getItem(player, itemIndex, asCard);
@@ -213,7 +213,7 @@ public final class CaptchaDeckPackets
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(ServerEditHandler.getData(player) != null)
+			if(ServerEditHandler.isInEditmode(player))
 				return;
 			
 			Modus modus = CaptchaDeckHandler.getModus(player);
