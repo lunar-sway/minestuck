@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "bookshelf",
+  "key": {
+    "b": {
+      "item": "minecraft:book"
+    },
+    "p": {
+      "item": "minestuck:cindered_planks"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "bpb",
+    "ppp"
+  ],
+  "result": {
+    "item": "minestuck:cindered_bookshelf"
+  }
+}

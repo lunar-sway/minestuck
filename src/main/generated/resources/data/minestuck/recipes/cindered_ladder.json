@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "ladder",
+  "key": {
+    "p": {
+      "item": "minestuck:cindered_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "s s",
+    "sps",
+    "s s"
+  ],
+  "result": {
+    "count": 4,
+    "item": "minestuck:cindered_ladder"
+  }
+}

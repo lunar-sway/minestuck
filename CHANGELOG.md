@@ -10,7 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Block Teleporter
 - Built in compatability for Better Combat mod
-
+- Cindered ladder and bookshelf
+- Shadewood ladder and bookshelf
+- Parrots will mimic imps, ogres, basilisks, and liches
 ### Changed
 - Gave Underlings and Carapacian Pawns the Attack Speed attribute. This influences how fast their attack animations play
 - Underlings, Carapacian Pawns, and Consorts now adjust their walk animation speed according to their Movement Speed attribute
@@ -18,16 +20,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Adjusted the hitbox size for Lotus Flowers
 - The Lotus Time Capsule now spawns a Lotus Flower when placed
 - Lotus Time Capsule blocks now remove any Lotus Flowers above them when destroyed
+- Many organic blocks are now compostable
+- Many wood-based blocks can now be used as fuel
+- Cruxite ore textures tweaked
 
 ### Fixed
 - The Umbral Infiltrator no longer jitters when thrown by a void player
 - Manually-spawned Lotus Flowers can no longer be hurt or killed by any damage source
 - Lotus Flowers no longer push entities inside of them away
 - Ogres and Basilisks no longer slide around when idling
+- Cruxite button now uses raw cruxite instead of cruxite block, which resolves a conflict with storage block breakdown
+
 
 ### Contributors for this release
 
-- Dweblenod, sipherNil, gtzc, Cibernet
+- Dweblenod, sipherNil, gtzc, Cibernet, glubtier, rose_bushes_
 
 ## [Unreleased]
 

@@ -842,6 +842,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(END_BOOKSHELF.get(), this::bookshelfDrop);
 		add(DEAD_BOOKSHELF.get(), this::bookshelfDrop);
 		add(TREATED_BOOKSHELF.get(), this::bookshelfDrop);
+		add(SHADEWOOD_BOOKSHELF.get(), this::bookshelfDrop);
+		add(CINDERED_BOOKSHELF.get(), this::bookshelfDrop);
 		
 		dropSelf(GLOWING_LADDER.get());
 		dropSelf(FROST_LADDER.get());
@@ -849,6 +851,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(END_LADDER.get());
 		dropSelf(DEAD_LADDER.get());
 		dropSelf(TREATED_LADDER.get());
+		dropSelf(SHADEWOOD_LADDER.get());
+		dropSelf(CINDERED_LADDER.get());
 		
 		dropSelf(GLOWING_MUSHROOM.get());
 		add(DESERT_BUSH.get(), this::desertBushDrop);

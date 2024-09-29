@@ -759,12 +759,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.END_BOOKSHELF, "End Bookshelf");
 		addBlock(MSBlocks.DEAD_BOOKSHELF, "Dead Bookshelf");
 		addBlock(MSBlocks.TREATED_BOOKSHELF, "Treated Bookshelf");
+		addBlock(MSBlocks.SHADEWOOD_BOOKSHELF, "Shadewood Bookshelf");
+		addBlock(MSBlocks.CINDERED_BOOKSHELF, "Cindered Bookshelf");
 		addBlock(MSBlocks.GLOWING_LADDER, "Glowing Ladder");
 		addBlock(MSBlocks.FROST_LADDER, "Frost Ladder");
 		addBlock(MSBlocks.RAINBOW_LADDER, "Rainbow Ladder");
 		addBlock(MSBlocks.END_LADDER, "End Ladder");
 		addBlock(MSBlocks.DEAD_LADDER, "Dead Ladder");
 		addBlock(MSBlocks.TREATED_LADDER, "Treated Ladder");
+		addBlock(MSBlocks.SHADEWOOD_LADDER, "Shadewood Ladder");
+		addBlock(MSBlocks.CINDERED_LADDER, "Cindered Ladder");
 		addBlock(MSBlocks.GLOWING_MUSHROOM, "Glowing Mushroom");
 		addBlockStoreTooltip(MSBlocks.GLOWING_MUSHROOM, "This mushroom tastes a bit better than any other around here, according to myself!");
 		addBlock(MSBlocks.DESERT_BUSH, "Desert Bush");
