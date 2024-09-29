@@ -51,7 +51,7 @@ public class EndLandType extends TerrainLandType
 		
 		registry.setBlock(STRUCTURE_PRIMARY, Blocks.END_STONE_BRICKS);
 		registry.setBlockState(STRUCTURE_PRIMARY_DECORATIVE, Blocks.PURPUR_PILLAR.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
-		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, Blocks.END_STONE_BRICKS); //TODO was this intentional?
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, Blocks.END_STONE_BRICK_STAIRS);
 		registry.setBlock(STRUCTURE_PRIMARY_SLAB, Blocks.END_STONE_BRICK_SLAB);
 		registry.setBlock(STRUCTURE_PRIMARY_WALL, Blocks.END_STONE_BRICK_WALL);
 		

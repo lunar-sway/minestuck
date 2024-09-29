@@ -47,27 +47,53 @@ public class WoodLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
+		registry.setBlock(CRUXITE_ORE, MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
+		registry.setBlock(URANIUM_ORE, MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
 		registry.setBlock(GROUND, MSBlocks.UNCARVED_WOOD);
 		registry.setBlock(UPPER, MSBlocks.UNCARVED_WOOD);
 		registry.setBlock(SURFACE, MSBlocks.UNCARVED_WOOD);
 		registry.setBlock(OCEAN, MSBlocks.CAULK);
-		registry.setBlock(VILLAGE_PATH, MSBlocks.WOOD_SHAVINGS);
+		
 		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.TREATED_HEAVY_PLANKS);
 		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
 		registry.setBlock(STRUCTURE_PRIMARY_CRACKED, MSBlocks.TREATED_CHIPBOARD);
-		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.TREATED_WOOD_SHAVINGS);
 		registry.setBlock(STRUCTURE_PRIMARY_COLUMN, MSBlocks.CARVED_LOG);
 		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.TREATED_HEAVY_PLANK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.TREATED_HEAVY_PLANK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.TREATED_UNCARVED_WOOD_FENCE);
+		
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.TREATED_WOOD_SHAVINGS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_STAIRS, MSBlocks.TREATED_CHIPBOARD_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_SLAB, MSBlocks.TREATED_CHIPBOARD_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_WALL, MSBlocks.TREATED_CHIPBOARD_FENCE);
+		
 		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
 		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.TREATED_PLANKS);
 		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS);
-		registry.setBlock(LIGHT_BLOCK, MSBlocks.WOODEN_LAMP);
-		registry.setBlock(BUSH, MSBlocks.CARVED_BUSH);
-		registry.setBlock(VILLAGE_DOOR, MSBlocks.CARVED_DOOR);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.LACQUERED_CHIPBOARD_FENCE);
+		
+		registry.setBlock(STRUCTURE_WOOD, MSBlocks.UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_LOG, MSBlocks.UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, MSBlocks.POLISHED_UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, MSBlocks.POLISHED_UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_PLANKS, MSBlocks.CARVED_PLANKS);
+		registry.setBlock(STRUCTURE_BOOKSHELF, MSBlocks.TREATED_BOOKSHELF);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, MSBlocks.CARVED_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, MSBlocks.CARVED_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, MSBlocks.CARVED_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, MSBlocks.CARVED_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, MSBlocks.CARVED_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, MSBlocks.CARVED_TRAPDOOR);
+		
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.PURPLE_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.GREEN_WOOL);
-		registry.setBlock(CRUXITE_ORE, MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
-		registry.setBlock(URANIUM_ORE, MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+		
+		registry.setBlock(VILLAGE_DOOR, MSBlocks.CARVED_DOOR);
+		registry.setBlock(VILLAGE_PATH, MSBlocks.WOOD_SHAVINGS);
+		
+		registry.setBlock(LIGHT_BLOCK, MSBlocks.WOODEN_LAMP);
+		registry.setBlock(BUSH, MSBlocks.CARVED_BUSH);
 	}
 	
 	@Override
