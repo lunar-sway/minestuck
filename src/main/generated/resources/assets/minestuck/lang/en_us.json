@@ -71,7 +71,7 @@
   "block.minestuck.apple_cake": "Apple Cake",
   "block.minestuck.area_effect_block": "Area Effect Block",
   "block.minestuck.area_effect_block.additional_info": "- Can be toggled to apply the effect only to players\n- Can be permanently disabled\n- Area of effect changes when rotated\n- UI only accessible in creative mode\n- Right clicking with a potion bottle in creative mode sets it to that potion effect",
-  "block.minestuck.area_effect_block.effect_change_message": "Effect type changed to %s with the amplification strength %s.",
+  "block.minestuck.area_effect_block.effect_change_message": "Effect type changed to %s",
   "block.minestuck.area_effect_block.tooltip": "Applies a potion effect to entities within a specified area when powered.",
   "block.minestuck.attached_strawberry_stem": "Strawberry Stem",
   "block.minestuck.black_chess_brick_slab": "Black Chess Brick Slab",

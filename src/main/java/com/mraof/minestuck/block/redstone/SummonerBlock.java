@@ -59,8 +59,7 @@ public class SummonerBlock extends Block implements EntityBlock
 		{
 			if(!level.isClientSide)
 			{
-				summoner.setSummonedEntity(eggItem.getType(stackIn.getTag()));
-				player.displayClientMessage(Component.translatable(SUMMON_TYPE_CHANGE, BuiltInRegistries.ENTITY_TYPE.getKey(eggItem.getType(stackIn.getTag()))), true);
+				summoner.setSummonedEntity(eggItem.getType(stackIn.getTag()));player.displayClientMessage(Component.translatable(SUMMON_TYPE_CHANGE, eggItem.getType(stackIn.getTag()).getDescription()), true);
 			}
 			
 			level.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
