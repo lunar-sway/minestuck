@@ -30,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Lotus Flowers no longer push entities inside of them away
 - Ogres and Basilisks no longer slide around when idling
 - Cruxite button now uses raw cruxite instead of cruxite block, which resolves a conflict with storage block breakdown
-
+- Bookshelves for terrain woods can now be crafted, resolving a conflict with the vanilla bookshelf recipe
 
 ### Contributors for this release
 

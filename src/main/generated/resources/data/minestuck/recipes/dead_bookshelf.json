@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
-  "group": "bookshelf",
   "key": {
     "b": {
       "item": "minecraft:book"
     },
     "p": {
       "item": "minestuck:dead_planks"
+    },
+    "s": {
+      "item": "minestuck:dead_planks_slab"
     }
   },
   "pattern": [
-    "ppp",
-    "bpb",
-    "ppp"
+    "psp",
+    "bbb",
+    "psp"
   ],
   "result": {
     "item": "minestuck:dead_bookshelf"

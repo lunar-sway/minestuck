@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
-  "group": "bookshelf",
   "key": {
     "b": {
       "item": "minecraft:book"
     },
     "p": {
       "item": "minestuck:treated_planks"
+    },
+    "s": {
+      "item": "minestuck:treated_planks_slab"
     }
   },
   "pattern": [
-    "ppp",
-    "bpb",
-    "ppp"
+    "psp",
+    "bbb",
+    "psp"
   ],
   "result": {
     "item": "minestuck:treated_bookshelf"
