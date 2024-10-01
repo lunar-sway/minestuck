@@ -69,7 +69,6 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(Tags.Blocks.STORAGE_BLOCKS, STORAGE_BLOCKS);
 		copy(ExtraForgeTags.Blocks.URANIUM_ORES, ExtraForgeTags.Items.URANIUM_ORES);
 		copy(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS, ExtraForgeTags.Items.URANIUM_STORAGE_BLOCKS);
-		copy(ExtraForgeTags.Blocks.TERRACOTTA, ExtraForgeTags.Items.TERRACOTTA);
 		copy(MSTags.Blocks.GLOWING_LOGS, GLOWING_LOGS);
 		copy(MSTags.Blocks.FROST_LOGS, FROST_LOGS);
 		copy(MSTags.Blocks.RAINBOW_LOGS, RAINBOW_LOGS);

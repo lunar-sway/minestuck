@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;

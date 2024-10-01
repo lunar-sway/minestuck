@@ -14,7 +14,6 @@ import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -49,10 +48,8 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import org.slf4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -444,11 +441,11 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
+		controllers.add(new AnimationController<>(this, "idleAnimation", ConsortEntity::idleAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", ConsortEntity::walkAnimation));
+		controllers.add(new AnimationController<>(this, "armsAnimation", ConsortEntity::armsAnimation));
+		controllers.add(new AnimationController<>(this, "deathAnimation", ConsortEntity::deathAnimation));
+		controllers.add(new AnimationController<>(this, "actionAnimation", ConsortEntity::actionAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<ConsortEntity> state)
@@ -523,3 +520,4 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		return PlayState.STOP;
 	}
 }
+

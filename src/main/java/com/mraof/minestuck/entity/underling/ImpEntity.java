@@ -9,7 +9,6 @@ import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -23,10 +22,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -132,11 +128,11 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ImpEntity::idleAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2, ImpEntity::attackAnimation));
+		controllers.add(new AnimationController<>(this, "idleAnimation", ImpEntity::idleAnimation));
+		controllers.add(new AnimationController<>(this, "walkArmsAnimation", ImpEntity::walkArmsAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", ImpEntity::walkAnimation).setAnimationSpeed(0.5));
+		controllers.add(new AnimationController<>(this, "deathAnimation", ImpEntity::deathAnimation).setAnimationSpeed(0.7));
+		controllers.add(new AnimationController<>(this, "attackAnimation", ImpEntity::attackAnimation).setAnimationSpeed(2));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<ImpEntity> state)
@@ -206,3 +202,4 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 		return PlayState.STOP;
 	}
 }
+

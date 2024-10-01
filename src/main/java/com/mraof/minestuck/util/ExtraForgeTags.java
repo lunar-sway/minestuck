@@ -10,13 +10,12 @@ import net.minecraft.world.level.block.Block;
 /**
  * A place to put tags that forge doesn't add themselves, but which are generally expected to be filled by other mods.
  */
-public class ExtraForgeTags
+public final class ExtraForgeTags
 {
-	public static class Blocks
+	public static final class Blocks
 	{
 		public static final TagKey<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Block> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
-		public static final TagKey<Block> TERRACOTTA = tag("terracotta");
 		
 		private static TagKey<Block> tag(String name)
 		{
@@ -24,7 +23,7 @@ public class ExtraForgeTags
 		}
 	}
 	
-	public static class Items
+	public static final class Items
 	{
 		public static final TagKey<Item> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Item> TIN_ORES = tag("ores/tin");
@@ -51,7 +50,6 @@ public class ExtraForgeTags
 		
 		public static final TagKey<Item> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
 		public static final TagKey<Item> URANIUM_CHUNKS = tag("chunks/uranium");
-		public static final TagKey<Item> TERRACOTTA = tag("terracotta");
 		
 		public static final TagKey<Item> URANIUM_INGOTS = tag("ingots/uranium");
 		public static final TagKey<Item> TIN_INGOTS = tag("ingots/tin");
