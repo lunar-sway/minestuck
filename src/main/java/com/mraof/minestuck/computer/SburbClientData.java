@@ -1,11 +1,17 @@
 package com.mraof.minestuck.computer;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 public final class SburbClientData
 {
 	private final Runnable markDirty;
 	
+	@Nullable
+	private String eventMessage = null;
 	private boolean isResuming = false;
 	private boolean isConnectedToServer = false;
 	
@@ -16,6 +22,9 @@ public final class SburbClientData
 	
 	public void read(CompoundTag tag)
 	{
+		if(tag.contains("message", Tag.TAG_STRING))
+			this.eventMessage = tag.getString("message");
+		else this.eventMessage = null;
 		this.isResuming = tag.getBoolean("isResuming");
 		this.isConnectedToServer = tag.getBoolean("connectedToServer");
 	}
@@ -23,9 +32,28 @@ public final class SburbClientData
 	public CompoundTag write()
 	{
 		CompoundTag tag = new CompoundTag();
+		if(this.eventMessage != null)
+			tag.putString("message", this.eventMessage);
 		tag.putBoolean("isResuming", this.isResuming);
 		tag.putBoolean("connectedToServer", this.isConnectedToServer);
 		return tag;
+	}
+	
+	public Optional<String> getEventMessage()
+	{
+		return Optional.ofNullable(this.eventMessage);
+	}
+	
+	public void setEventMessage(String message)
+	{
+		this.eventMessage = message;
+		this.markDirty.run();
+	}
+	
+	public void clearEventMessage()
+	{
+		this.eventMessage = null;
+		this.markDirty.run();
 	}
 	
 	public boolean isResuming()

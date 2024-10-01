@@ -299,12 +299,12 @@ public final class SburbConnections
 		if(clientComputer != null)
 		{
 			clientComputer.getSburbClientData().setIsConnectedToServer(false);
-			clientComputer.putClientMessage(CLOSED);
+			clientComputer.getSburbClientData().setEventMessage(CLOSED);
 		}
 		if(serverComputer != null)
 		{
 			serverComputer.getSburbServerData().setIsConnected();
-			serverComputer.putServerMessage(CLOSED);
+			serverComputer.getSburbServerData().setEventMessage(CLOSED);
 		}
 		
 		NeoForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(skaianetData.mcServer, connection));

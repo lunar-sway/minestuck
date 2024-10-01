@@ -43,8 +43,10 @@ public record ClearMessagePacket(BlockPos computerPos, int program) implements M
 	public void execute(IPayloadContext context, ServerPlayer player)
 	{
 		ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
-			computer.latestmessage.put(program, "");
-			computer.markDirtyAndResend();
+			if(program == 0)
+				computer.getSburbClientData().clearEventMessage();
+			if(program == 1)
+				computer.getSburbServerData().clearEventMessage();
 		});
 	}
 }

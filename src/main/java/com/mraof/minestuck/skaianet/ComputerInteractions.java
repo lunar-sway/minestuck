@@ -163,7 +163,7 @@ public final class ComputerInteractions
 		{
 			resumingClients.useComputerAndRemoveOnSuccess(player, computer -> {
 				computer.getSburbClientData().setIsResuming(false);
-				computer.putClientMessage(STOP_RESUME);
+				computer.getSburbClientData().setEventMessage(STOP_RESUME);
 				return true;
 			});
 		} else
@@ -180,7 +180,7 @@ public final class ComputerInteractions
 		{
 			resumingClients.remove(owner);
 			computer.getSburbClientData().setIsResuming(false);
-			computer.putClientMessage(STOP_RESUME);
+			computer.getSburbClientData().setEventMessage(STOP_RESUME);
 		} else
 		{
 			skaianetData.connections.getClientConnection(computer).ifPresent(connection ->
@@ -204,7 +204,7 @@ public final class ComputerInteractions
 		{
 			map.remove(owner);
 			computer.getSburbServerData().setIsOpen(false);
-			computer.putServerMessage(STOP_RESUME);
+			computer.getSburbServerData().setEventMessage(STOP_RESUME);
 		}
 	}
 	

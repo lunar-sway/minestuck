@@ -3,14 +3,12 @@ package com.mraof.minestuck.computer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.network.computer.ClearMessagePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,11 +48,8 @@ public abstract class ButtonListProgram extends ComputerProgram
 		Runnable runnable = buttonMap.get(button);
 		
 		if(runnable != null)
-		{
-			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
-				PacketDistributor.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
 			runnable.run();
-		}
+		
 		screen.updateGui();
 	}
 	
@@ -118,18 +113,9 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		Font font = Minecraft.getInstance().font;
 		
-		guiGraphics.drawString(font, getDisplayedMessage(be),
+		guiGraphics.drawString(font, this.message,
 				(gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45,
 				gui.getTheme().data().textColor(), false);
-	}
-	
-	private Component getDisplayedMessage(ComputerBlockEntity computer)
-	{
-		String storedMessage = computer.latestmessage.get(computer.programSelected);
-		if(storedMessage != null && !storedMessage.isEmpty())
-			return Component.translatable(storedMessage);
-		
-		return message;
 	}
 	
 	protected class ArrowButton extends ExtendedButton

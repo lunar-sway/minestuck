@@ -3,10 +3,7 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
-import com.mraof.minestuck.network.computer.CloseRemoteSburbConnectionPacket;
-import com.mraof.minestuck.network.computer.CloseSburbConnectionPackets;
-import com.mraof.minestuck.network.computer.ConnectToSburbServerPacket;
-import com.mraof.minestuck.network.computer.ResumeSburbConnectionPackets;
+import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.Minecraft;
@@ -17,8 +14,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-public class SburbClient extends ButtonListProgram
+public final class SburbClient extends ButtonListProgram
 {
 	public static final String CLOSE_BUTTON = "minestuck.program.close_button"; //also used in SburbServer
 	public static final String RESUME_BUTTON = "minestuck.program.resume_button"; //also used in SburbServer
@@ -31,50 +29,72 @@ public class SburbClient extends ButtonListProgram
 	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_client.png");
 	
 	@Override
-	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
+	protected InterfaceData getInterfaceData(ComputerBlockEntity computer)
 	{
 		Component message;
 		List<ButtonData> list = new ArrayList<>();
-		SburbClientData data = be.getSburbClientData();
+		SburbClientData data = computer.getSburbClientData();
+		Optional<String> eventMessage = data.getEventMessage();
 		
-		if(!be.latestmessage.get(this.getId()).isEmpty())
-			list.add(new ButtonData(Component.translatable(CLEAR_BUTTON), () -> {}));
+		if(eventMessage.isPresent())
+			list.add(new ButtonData(Component.translatable(CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
 		
-		ReducedConnection c = SkaiaClient.getClientConnection(be.ownerId);
+		ReducedConnection c = SkaiaClient.getClientConnection(computer.ownerId);
 		if(data.isConnectedToServer() && c != null) //If it is connected to someone.
 		{
 			String displayPlayer = c.server().name();
 			message = Component.translatable(CONNECT, displayPlayer);
-			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
+			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+				sendClearMessagePacketIfRelevant(computer);
+				sendCloseConnectionPacket(computer);
+			}));
 		} else if(data.isResuming())
 		{
 			message = Component.translatable(RESUME_CLIENT);
-			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
-		} else if(!SkaiaClient.isActive(be.ownerId, true)) //If the player doesn't have an other active client
+			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+				sendClearMessagePacketIfRelevant(computer);
+				sendCloseConnectionPacket(computer);
+			}));
+		} else if(!SkaiaClient.isActive(computer.ownerId, true)) //If the player doesn't have an other active client
 		{
 			message = Component.translatable(SELECT);
-			if(SkaiaClient.hasPrimaryConnectionAsClient(be.ownerId))
+			if(SkaiaClient.hasPrimaryConnectionAsClient(computer.ownerId))
 			{
-				list.add(new ButtonData(Component.translatable(RESUME_BUTTON),
-						() -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(be))));
+				list.add(new ButtonData(Component.translatable(RESUME_BUTTON), () -> {
+					sendClearMessagePacketIfRelevant(computer);
+					PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(computer));
+				}));
 			}
-			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(be.ownerId).entrySet())
+			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(computer.ownerId).entrySet())
 			{
-				list.add(new ButtonData(Component.literal(entry.getValue()),
-						() -> PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(be, entry.getKey()))));
+				list.add(new ButtonData(Component.literal(entry.getValue()), () -> {
+					sendClearMessagePacketIfRelevant(computer);
+					PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(computer, entry.getKey()));
+				}));
 			}
 		} else
 		{
 			message = Component.translatable(CLIENT_ACTIVE);
-			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> sendCloseConnectionPacket(be)));
+			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+				sendClearMessagePacketIfRelevant(computer);
+				sendCloseConnectionPacket(computer);
+			}));
 		}
-		if(SkaiaClient.canSelect(be.ownerId))
+		if(SkaiaClient.canSelect(computer.ownerId))
 		{
-			list.add(new ButtonData(Component.translatable(SELECT_COLOR),
-					() -> Minecraft.getInstance().setScreen(new ColorSelectorScreen(be))));
+			list.add(new ButtonData(Component.translatable(SELECT_COLOR), () -> {
+				sendClearMessagePacketIfRelevant(computer);
+				Minecraft.getInstance().setScreen(new ColorSelectorScreen(computer));
+			}));
 		}
 		
-		return new InterfaceData(message, list);
+		return new InterfaceData(eventMessage.<Component>map(Component::translatable).orElse(message), list);
+	}
+	
+	private static void sendClearMessagePacketIfRelevant(ComputerBlockEntity computer)
+	{
+		if(computer.getSburbServerData().getEventMessage().isPresent())
+			PacketDistributor.sendToServer(new ClearMessagePacket(computer.getBlockPos(), 0));
 	}
 	
 	private static void sendCloseConnectionPacket(ComputerBlockEntity computer)

@@ -34,8 +34,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -60,7 +62,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public PlayerIdentifier owner;
 	//client side only
 	public int ownerId;
-	public Hashtable<Integer, String> latestmessage = new Hashtable<>();
 	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
 	private SburbServerData sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	public int programSelected = -1;
@@ -77,22 +78,17 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		if(nbt.contains("programs"))
 		{
-			if (nbt.contains("programs", Tag.TAG_INT_ARRAY))
+			if(nbt.contains("programs", Tag.TAG_INT_ARRAY))
 			{
 				for(int id : nbt.getIntArray("programs"))
 					installedPrograms.add(id);
-			}
-			else
+			} else
 			{
 				CompoundTag programs = nbt.getCompound("programs");
 				for(String name : programs.getAllKeys())
 					installedPrograms.add(programs.getInt(name));
 			}
 		}
-		
-		latestmessage.clear();
-		for(int id : installedPrograms)
-			latestmessage.put(id, nbt.getString("text" + id));
 		
 		sburbClientProgramData.read(nbt.getCompound("sburb_client_data"));
 		sburbServerProgramData.read(nbt.getCompound("sburb_server_data"));
@@ -152,9 +148,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	private void writeSharedData(CompoundTag compoundtag)
 	{
-		for(Entry<Integer, String> e : latestmessage.entrySet())
-			compoundtag.putString("text" + e.getKey(), e.getValue());
-		
 		compoundtag.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
 		
 		IncompleteSburbCodeItem.writeBlockSet(compoundtag, "hieroglyphsStored", hieroglyphsStored);
@@ -225,20 +218,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public ComputerReference createReference()
 	{
 		return ComputerReference.of(this);
-	}
-	
-	@Override
-	public void putClientMessage(String message)
-	{
-		latestmessage.put(0, message);
-		markDirtyAndResend();
-	}
-	
-	@Override
-	public void putServerMessage(String message)
-	{
-		latestmessage.put(1, message);
-		markDirtyAndResend();
 	}
 	
 	public ResourceLocation getTheme()

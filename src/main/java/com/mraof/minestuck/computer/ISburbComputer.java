@@ -9,8 +9,5 @@ public interface ISburbComputer
 	SburbClientData getSburbClientData();
 	SburbServerData getSburbServerData();
 	
-	void putClientMessage(String message);
-	void putServerMessage(String message);
-	
 	ComputerReference createReference();
 }
