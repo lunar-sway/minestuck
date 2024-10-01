@@ -335,9 +335,9 @@ public final class ImpDungeonPieces
 			{
 				BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 				if(lightPos / 2 == 0)
-					placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 2, 2, 4 + lightPos % 2, structureBoundingBoxIn);
+					placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 2, 2, 4 + lightPos % 2, structureBoundingBoxIn);
 				else
-					placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 4 + lightPos % 2, structureBoundingBoxIn);
+					placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 2, 4 + lightPos % 2, structureBoundingBoxIn);
 			}
 		}
 		
@@ -553,8 +553,8 @@ public final class ImpDungeonPieces
 			if(light)
 			{
 				BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
-				placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 3, structureBoundingBoxIn);
-				placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 3, 2, 5, structureBoundingBoxIn);
+				placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 5, 2, 3, structureBoundingBoxIn);
+				placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 3, 2, 5, structureBoundingBoxIn);
 			}
 		}
 	}

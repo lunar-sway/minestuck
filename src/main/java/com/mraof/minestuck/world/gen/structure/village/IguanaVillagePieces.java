@@ -225,10 +225,10 @@ public class IguanaVillagePieces
 			this.generateBox(level, boundingBox, 1, 1, 3, 1, 1, 13, planks, planks, false);
 			this.generateBox(level, boundingBox, 10, 1, 3, 10, 1, 13, planks, planks, false);
 
-			this.placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 3, 5, boundingBox);
-			this.placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 3, 11, boundingBox);
-			this.placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 10, 3, 5, boundingBox);
-			this.placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 10, 3, 11, boundingBox);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 3, 5, boundingBox);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 3, 11, boundingBox);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 10, 3, 5, boundingBox);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 10, 3, 11, boundingBox);
 
 			if(!spawns[0])
 				spawns[0] = spawnConsort(2, 1, 5, boundingBox, level, chunkGeneratorIn);
@@ -329,8 +329,8 @@ public class IguanaVillagePieces
 			placeBlock(level, wool, 3, 6, 3, structureBoundingBoxIn);
 			placeBlock(level, wool, 3, 5, 4, structureBoundingBoxIn);
 
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 4, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 4, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 2, 4, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 5, 2, 4, structureBoundingBoxIn);
 
 			if(!spawns[0])
 				spawns[0] = spawnConsort(3, 2, 2, structureBoundingBoxIn, level, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);

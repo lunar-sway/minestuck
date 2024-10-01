@@ -354,6 +354,13 @@ public final class StructureBlockRegistry
 		return state;
 	}
 	
+	public static BlockState getModifiedTorch(BlockState state, Direction facing)
+	{
+		state = withOptionally(state, WallTorchBlock.FACING, facing);
+		
+		return state;
+	}
+	
 	public RuleTest getGroundType()
 	{
 		return groundType;

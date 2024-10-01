@@ -150,7 +150,7 @@ public class ConsortVillageCenter
 			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
 			BlockState plankBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS);
 			BlockState plankSlab0 = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS_SLAB);
-			BlockState plankSlab1 = plankSlab0.setValue(SlabBlock.TYPE, SlabType.TOP);
+			BlockState plankSlab1 = StructureBlockRegistry.withOptionally(plankSlab0, SlabBlock.TYPE, SlabType.TOP);
 			BlockState torch = blocks.getBlockState(StructureBlockRegistry.TORCH);
 
 

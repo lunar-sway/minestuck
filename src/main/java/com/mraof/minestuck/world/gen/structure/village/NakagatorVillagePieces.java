@@ -303,9 +303,9 @@ public class NakagatorVillagePieces
 			placeBlock(level, Blocks.AIR.defaultBlockState(), 7, 10, 6, structureBoundingBoxIn);
 
 			//Torches
-			placeBlock(level, wallTorch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 4, structureBoundingBoxIn);
-			placeBlock(level, wallTorch.setValue(WallTorchBlock.FACING, Direction.NORTH), 4, 2, 7, structureBoundingBoxIn);
-			placeBlock(level, wallTorch.setValue(WallTorchBlock.FACING, Direction.EAST), 2, 6, 4, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(wallTorch, Direction.EAST), 1, 2, 4, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(wallTorch, Direction.NORTH), 4, 2, 7, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(wallTorch, Direction.EAST), 2, 6, 4, structureBoundingBoxIn);
 			placeBlock(level, torch, 4, 9, 5, structureBoundingBoxIn);
 
 			//Consorts
@@ -428,12 +428,12 @@ public class NakagatorVillagePieces
 			placeBlock(level, fence, 10, 9, 1, structureBoundingBoxIn);
 
 			//Torches
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 3, 2, 3, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 8, 2, 3, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 3, 6, 3, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 8, 6, 3, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 3, 10, 3, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 8, 10, 3, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 3, 2, 3, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 8, 2, 3, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 3, 6, 3, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 8, 6, 3, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 3, 10, 3, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 8, 10, 3, structureBoundingBoxIn);
 
 			if(!spawns[0])
 				spawns[0] = spawnConsort(5, 1, 5, structureBoundingBoxIn, level, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
@@ -618,18 +618,18 @@ public class NakagatorVillagePieces
 			generateBed(level, structureBoundingBoxIn, randomIn, 3, 15, 6, Direction.SOUTH, Blocks.RED_BED.defaultBlockState());
 
 			//Torches
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 3, 4, 2, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 8, 4, 2, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 3, 8, 3, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 8, 8, 3, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 3, 13, 7, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 8, 13, 7, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.SOUTH), 3, 13, 2, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.SOUTH), 8, 13, 2, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 3, 17, 7, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 8, 17, 7, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.SOUTH), 3, 17, 4, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.SOUTH), 8, 17, 4, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 3, 4, 2, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 8, 4, 2, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 3, 8, 3, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 8, 8, 3, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 3, 13, 7, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 8, 13, 7, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.SOUTH), 3, 13, 2, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.SOUTH), 8, 13, 2, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 3, 17, 7, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 8, 17, 7, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.SOUTH), 3, 17, 4, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.SOUTH), 8, 17, 4, structureBoundingBoxIn);
 
 			if(!spawns[0])
 				spawns[0] = spawnConsort(5, 3, 5, structureBoundingBoxIn, level, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);

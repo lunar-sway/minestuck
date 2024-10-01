@@ -255,7 +255,7 @@ public class SalamanderVillagePieces
 			this.generateBox(worldIn, structureBoundingBoxIn, 5,3,2,5,5, 5, wallBlock, wallBlock, false);
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 
-			placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 3, 4, structureBoundingBoxIn);
+			placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 3, 4, structureBoundingBoxIn);
 
 			if(!spawns[0])
 				spawns[0] = spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
@@ -351,8 +351,8 @@ public class SalamanderVillagePieces
 			this.generateAirBox(worldIn, structureBoundingBoxIn, 6, 2, 3, 6, 2, 5);
 
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
-			this.placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 3, 3, 6, structureBoundingBoxIn);
-			this.placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.SOUTH), 3, 7, 2, structureBoundingBoxIn);
+			this.placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 3, 3, 6, structureBoundingBoxIn);
+			this.placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.SOUTH), 3, 7, 2, structureBoundingBoxIn);
 
 			if(!spawns[0])
 				spawns[0] = this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn, chunkGeneratorIn);
@@ -455,8 +455,8 @@ public class SalamanderVillagePieces
 			this.placeBlock(worldIn, floorBlock, 0, 6, 3, structureBoundingBoxIn);
 			this.placeBlock(worldIn, floorBlock, 1, 7, 2, structureBoundingBoxIn);
 
-			this.placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 1, 3, 5, structureBoundingBoxIn);
-			this.placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 5, 3, 5, structureBoundingBoxIn);
+			this.placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 1, 3, 5, structureBoundingBoxIn);
+			this.placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 5, 3, 5, structureBoundingBoxIn);
 
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 
