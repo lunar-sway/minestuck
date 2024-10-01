@@ -100,7 +100,7 @@ public class SummonerScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		guiGraphics.blit(GUI_BACKGROUND, (this.width - GUI_WIDTH / 2), (this.height - GUI_HEIGHT) / 2, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(GUI_BACKGROUND, (this.width - GUI_WIDTH) / 2, (this.height - GUI_HEIGHT) / 2, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 	}
 	
 	@Override
