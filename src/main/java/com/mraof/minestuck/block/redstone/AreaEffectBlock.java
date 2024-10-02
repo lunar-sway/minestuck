@@ -108,8 +108,9 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 		{
 			be.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
 			
-			player.displayClientMessage(Component.translatable(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE,
-					BuiltInRegistries.MOB_EFFECT.getKey(firstEffect.getEffect()), firstEffect.getAmplifier()), true);
+			player.displayClientMessage(Component.translatable(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, Component.translatable(
+					"potion.withAmplifier", firstEffect.getEffect().getDisplayName(),
+					Component.translatable("potion.potency." + firstEffect.getAmplifier()))), true);
 			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
 		}
 	}
