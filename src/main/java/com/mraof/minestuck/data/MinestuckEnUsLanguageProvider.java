@@ -865,7 +865,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
 		addBlockTooltip(MSBlocks.AREA_EFFECT_BLOCK, "Applies a potion effect to entities within a specified area when powered.");
 		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, "additional_info", "- Can be toggled to apply the effect only to players\n- Can be permanently disabled\n- Area of effect changes when rotated\n- UI only accessible in creative mode\n- Right clicking with a potion bottle in creative mode sets it to that potion effect");
-		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
+		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s");
 		addBlock(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
 		addBlockTooltip(MSBlocks.PLATFORM_GENERATOR, "Creates a temporary platform when powered.");
 		addBlockExtra(MSBlocks.PLATFORM_GENERATOR, "additional_info", "- Length of area where platforms generate is proportional to power\n- Can be toggled to alternate visibility\n- Platform can be blocked by platform receptacles as well as hard or impossible to break blocks");
