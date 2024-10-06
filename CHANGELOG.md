@@ -45,7 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod, sipherNil, gtzc, Cibernet, glubtier, rose_bushes_
+- Dweblenod, sipherNil, gtzc, Cibernet, glubtier, rose_bushes_, kirderf1
 
 ## [Unreleased]
 
