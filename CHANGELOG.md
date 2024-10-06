@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased 1.20.4]
+## [Unreleased]
+
+## [1.20.4-1.12.2.0] - 2024-10-06
+
+- Updated to run with Minecraft 1.20.4 / Neoforge 20.4
 
 ### Added
 
@@ -13,7 +17,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cindered ladder and bookshelf
 - Shadewood ladder and bookshelf
 - Parrots will mimic imps, ogres, basilisks, and liches
+
 ### Changed
+
 - Gave Underlings and Carapacian Pawns the Attack Speed attribute. This influences how fast their attack animations play
 - Underlings, Carapacian Pawns, and Consorts now adjust their walk animation speed according to their Movement Speed attribute
 - Structure Block Registry Processor can now be used for data generated structures through a processor_list
@@ -27,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Localized entity type for the status message that appears when right-clicking a Summoner Block with a Spawn Egg
 
 ### Fixed
+
 - The Umbral Infiltrator no longer jitters when thrown by a void player
 - Manually-spawned Lotus Flowers can no longer be hurt or killed by any damage source
 - Lotus Flowers no longer push entities inside of them away
