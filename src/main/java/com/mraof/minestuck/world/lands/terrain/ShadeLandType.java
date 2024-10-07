@@ -21,6 +21,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class ShadeLandType extends TerrainLandType
 {
 	public static final String SHADE = "minestuck.shade";
@@ -35,29 +37,59 @@ public class ShadeLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("ground", MSBlocks.SHADE_STONE);
-		registry.setBlock("upper", MSBlocks.BLUE_DIRT);
-		registry.setBlock("ocean", MSBlocks.OIL);
-		registry.setBlock("structure_primary", MSBlocks.SHADE_BRICKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_SHADE_BRICKS);
-		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_SHADE_BRICKS);
-		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_SHADE_BRICKS);
-		registry.setBlock("structure_primary_column", MSBlocks.SHADE_COLUMN);
-		registry.setBlock("structure_primary_stairs", MSBlocks.SHADE_STAIRS);
-		registry.setBlock("structure_secondary", MSBlocks.SMOOTH_SHADE_STONE);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.TAR_SHADE_BRICKS);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.SHADE_BRICK_STAIRS);
-		registry.setBlock("village_path", Blocks.GRAVEL);
-		registry.setBlock("light_block", MSBlocks.GLOWING_WOOD);
-		registry.setBlock("torch", Blocks.REDSTONE_TORCH);
-		registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
-		registry.setBlock("mushroom_1", MSBlocks.GLOWING_MUSHROOM);
-		registry.setBlock("mushroom_2", MSBlocks.GLOWING_MUSHROOM);
-		registry.setBlock("bush", MSBlocks.GLOWING_MUSHROOM);
-		registry.setBlock("structure_wool_1", Blocks.CYAN_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
-		registry.setBlock("cruxite_ore", MSBlocks.SHADE_STONE_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.SHADE_STONE_URANIUM_ORE);
+		registry.setBlock(CRUXITE_ORE, MSBlocks.SHADE_STONE_CRUXITE_ORE);
+		registry.setBlock(URANIUM_ORE, MSBlocks.SHADE_STONE_URANIUM_ORE);
+		registry.setBlock(GROUND, MSBlocks.SHADE_STONE);
+		registry.setBlock(UPPER, MSBlocks.BLUE_DIRT);
+		registry.setBlock(OCEAN, MSBlocks.OIL);
+		
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.SHADE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.CHISELED_SHADE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_CRACKED, MSBlocks.CRACKED_SHADE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_COLUMN, MSBlocks.SHADE_COLUMN);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.SHADE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.SHADE_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.SHADE_BRICK_WALL);
+		
+		//TODO was originally mossy shade brick, but chose tar for lore relevance. Was this a good trade?
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.TAR_SHADE_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_STAIRS, MSBlocks.TAR_SHADE_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_SLAB, MSBlocks.TAR_SHADE_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_WALL, MSBlocks.TAR_SHADE_BRICK_WALL);
+		
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.SMOOTH_SHADE_STONE);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.MOSSY_SHADE_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.SMOOTH_SHADE_STONE_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.SMOOTH_SHADE_STONE_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.SMOOTH_SHADE_STONE_WALL);
+		
+		registry.setBlock(STRUCTURE_WOOD, MSBlocks.SHADEWOOD);
+		registry.setBlock(STRUCTURE_LOG, MSBlocks.SHADEWOOD_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, MSBlocks.STRIPPED_SHADEWOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, MSBlocks.STRIPPED_SHADEWOOD_LOG);
+		registry.setBlock(STRUCTURE_PLANKS, MSBlocks.SHADEWOOD_PLANKS);
+		//TODO registry.setBlock(STRUCTURE_BOOKSHELF, MSBlocks.SHADEWOOD_BOOKSHELF);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, MSBlocks.SHADEWOOD_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, MSBlocks.SHADEWOOD_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, MSBlocks.SHADEWOOD_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, MSBlocks.SHADEWOOD_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, MSBlocks.SHADEWOOD_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, MSBlocks.SHADEWOOD_TRAPDOOR);
+		
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.CYAN_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.GRAY_WOOL);
+		
+		registry.setBlock(STRUCTURE_GROUND_COVER, MSBlocks.GLOWING_MUSHROOM);
+		registry.setBlock(STRUCTURE_ROOF_COVER, MSBlocks.GLOWING_MUSHROOM_VINES);
+		
+		registry.setBlock(VILLAGE_PATH, Blocks.GRAVEL);
+		
+		registry.setBlock(LIGHT_BLOCK, MSBlocks.GLOWING_WOOD);
+		registry.setBlock(TORCH, Blocks.REDSTONE_TORCH);
+		registry.setBlock(WALL_TORCH, Blocks.REDSTONE_WALL_TORCH);
+		registry.setBlock(MUSHROOM_1, MSBlocks.GLOWING_MUSHROOM);
+		registry.setBlock(MUSHROOM_2, MSBlocks.GLOWING_MUSHROOM);
+		registry.setBlock(BUSH, MSBlocks.GLOWING_MUSHROOM);
 	}
 	
 	@Override
