@@ -4,7 +4,7 @@ import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
-import com.mraof.minestuck.network.EditmodeTeleportPacket;
+import com.mraof.minestuck.network.editmode.EditmodeTeleportPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;

@@ -7,8 +7,8 @@ import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.item.GristEntity;
+import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.GristToastPacket;
-import com.mraof.minestuck.network.data.GristCachePacket;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -235,7 +235,7 @@ public final class GristCache implements INBTSerializable<Tag>
 		//Send to the player
 		if(player != null)
 		{
-			GristCachePacket packet = new GristCachePacket(this.getGristSet(), false);
+			GristCachePacket packet = new GristCachePacket(this.getGristSet(), ClientPlayerData.CacheSource.PLAYER);
 			player.connection.send(packet);
 		}
 		

@@ -61,7 +61,6 @@ public class ClientProxy
 	public static void init(final FMLClientSetupEvent event)
 	{
 		EntityRenderers.register(MSEntityTypes.FROG.get(), FrogRenderer::new);
-		EntityRenderers.register(MSEntityTypes.HOLOGRAM.get(), HologramRenderer::new);
 		EntityRenderers.register(MSEntityTypes.LOTUS_FLOWER.get(), LotusFlowerRenderer::new);
 		EntityRenderers.register(MSEntityTypes.SERVER_CURSOR.get(), ServerCursorRenderer::new);
 		EntityRenderers.register(MSEntityTypes.NAKAGATOR.get(), context -> new ConsortRenderer<>(context, EnumConsort.NAKAGATOR));

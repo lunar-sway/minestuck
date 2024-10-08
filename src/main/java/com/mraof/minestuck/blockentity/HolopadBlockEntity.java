@@ -1,9 +1,9 @@
 package com.mraof.minestuck.blockentity;
 
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.HolopadBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,9 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class HolopadBlockEntity extends BlockEntity
 {
-	
-	public int innerRotation = 0;
-	protected ItemStack card = ItemStack.EMPTY;
+	private int rotationTicks = 0;
+	private ItemStack card = ItemStack.EMPTY;
 	
 	public HolopadBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -33,33 +32,30 @@ public class HolopadBlockEntity extends BlockEntity
 	public void onRightClick(Player player)
 	{
 		if(!card.isEmpty())
-		{
-			if (player.getMainHandItem().isEmpty())
-				player.setItemInHand(InteractionHand.MAIN_HAND, card);
-			else if (!player.getInventory().add(card))
-				dropItem(false, level, worldPosition, card);
-			else player.inventoryMenu.broadcastChanges();
-			
-			setCard(ItemStack.EMPTY);
-			return;
-		}
+			takeItem(player);
 		else
+			insertHeldItem(player);
+	}
+	
+	private void takeItem(Player player)
+	{
+		if(player.getMainHandItem().isEmpty())
+			player.setItemInHand(InteractionHand.MAIN_HAND, card);
+		else if(!player.getInventory().add(card))
+			dropItem(false, level, worldPosition, card);
+		else player.inventoryMenu.broadcastChanges();
+		
+		this.card = ItemStack.EMPTY;
+		updateState();
+	}
+	
+	private void insertHeldItem(Player player)
+	{
+		ItemStack heldStack = player.getMainHandItem();
+		if(card.isEmpty() && !heldStack.isEmpty() && heldStack.is(MSItems.CAPTCHA_CARD))
 		{
-			ItemStack heldStack = player.getMainHandItem();
-			if (card.isEmpty())
-			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD.get())
-				{
-					setCard(heldStack.split(1));    //Insert card into the card slot
-					ItemStack in = getCard();
-					ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-					
-					if (in.hasTag() && in.getTag().contains("contentID"))
-						item = AlchemyHelper.getDecodedItem(in);
-				}
-					
-				
-			}
+			this.card = heldStack.split(1);
+			updateState();
 		}
 	}
 	
@@ -73,24 +69,11 @@ public class HolopadBlockEntity extends BlockEntity
 		else dropPos = pos;
 		
 		Containers.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), item);
-		
 	}
 	
 	public boolean hasCard()
 	{
 		return !this.getCard().isEmpty();
-	}
-	
-	public void setCard(ItemStack card)
-	{
-		if (card.getItem() == MSItems.CAPTCHA_CARD.get() || card.isEmpty())
-		{
-			this.card = card;
-			if(level != null)
-			{
-				updateState();
-			}
-		}
 	}
 	
 	public ItemStack getCard()
@@ -100,28 +83,23 @@ public class HolopadBlockEntity extends BlockEntity
 	
 	public ItemStack getHoloItem()
 	{
-		ItemStack in = getCard();
-		ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
+		if(!AlchemyHelper.isPunchedCard(this.card))
+			return new ItemStack(MSBlocks.GENERIC_OBJECT);
 		
-		if (in.hasTag() && in.getTag().contains("contentID"))
-			item = AlchemyHelper.getDecodedItem(in);
-		
-		return item;
+		return AlchemyHelper.getDecodedItem(this.card);
 	}
 	
 	@Override
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
-		//broken = tagCompound.getBoolean("broken");
-		setCard(ItemStack.of(nbt.getCompound("card")));
+		this.card = ItemStack.of(nbt.getCompound("card"));
 	}
 	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		//tagCompound.setBoolean("broken", this.broken);
 		compound.put("card", card.save(new CompoundTag()));
 	}
 	
@@ -139,9 +117,14 @@ public class HolopadBlockEntity extends BlockEntity
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
+	public int getRotationTickForRender()
+	{
+		return this.rotationTicks;
+	}
+	
 	public static void clientTick(Level level, BlockPos pos, BlockState state, HolopadBlockEntity blockEntity)
 	{
-		blockEntity.innerRotation++;
+		blockEntity.rotationTicks++;
 	}
 	
 	private void updateState()

@@ -3,7 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
+import com.mraof.minestuck.network.computer.SkaianetInfoPackets;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
@@ -14,9 +14,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
@@ -25,9 +25,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 /**
- * Works with the info that will be sent to players through {@link SkaianetInfoPacket}
+ * Works with the info that will be sent to players through {@link SkaianetInfoPackets}
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class InfoTracker
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -69,9 +69,12 @@ public final class InfoTracker
 	}
 	
 	@SubscribeEvent
-	public static void onServerTick(ServerTickEvent.Post event)
+	public static void onServerTick(TickEvent.ServerTickEvent event)
 	{
-		SkaianetData.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
+		if(event.phase == TickEvent.Phase.END)
+		{
+			SkaianetData.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
+		}
 	}
 	
 	private void onPlayerLoggedIn(ServerPlayer player)
@@ -79,8 +82,8 @@ public final class InfoTracker
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		getSet(identifier).add(identifier);
 		sendConnectionInfo(identifier);
-		PacketDistributor.sendToPlayer(player, createLandChainPacket(),
-				new SkaianetInfoPacket.HasEntered(SburbPlayerData.get(player).hasEntered()));
+		PacketDistributor.PLAYER.with(player).send(createLandChainPacket(),
+				new SkaianetInfoPackets.HasEntered(SburbPlayerData.get(player).hasEntered()));
 	}
 	
 	private Set<PlayerIdentifier> getSet(PlayerIdentifier identifier)
@@ -104,13 +107,13 @@ public final class InfoTracker
 			LOGGER.warn("[Skaianet] Player {} already got the requested data.", player.getName());
 		}
 		
-		PacketDistributor.sendToPlayer(player, generateClientInfoPacket(p1));
+		PacketDistributor.PLAYER.with(player).send(generateClientInfoPacket(p1));
 	}
 	
 	
-	private SkaianetInfoPacket.LandChains createLandChainPacket()
+	private SkaianetInfoPackets.LandChains createLandChainPacket()
 	{
-		return new SkaianetInfoPacket.LandChains(createLandChains());
+		return new SkaianetInfoPackets.LandChains(createLandChains());
 	}
 	
 	private List<LandChain> createLandChains()
@@ -190,14 +193,14 @@ public final class InfoTracker
 		
 		if(resendLandChains)
 		{
-			PacketDistributor.sendToAllPlayers(createLandChainPacket());
+			PacketDistributor.ALL.noArg().send(createLandChainPacket());
 			resendLandChains = false;
 		}
 	}
 	
 	private void sendConnectionInfo(PlayerIdentifier player)
 	{
-		SkaianetInfoPacket.Data packet = generateClientInfoPacket(player);
+		SkaianetInfoPackets.Data packet = generateClientInfoPacket(player);
 		
 		for(PlayerIdentifier listener : getSet(player))
 		{
@@ -211,12 +214,12 @@ public final class InfoTracker
 						MSCriteriaTriggers.SBURB_CONNECTION.get().trigger(playerListener);
 				}
 				
-				PacketDistributor.sendToPlayer(playerListener, packet);
+				PacketDistributor.PLAYER.with(playerListener).send(packet);
 			}
 		}
 	}
 	
-	private SkaianetInfoPacket.Data generateClientInfoPacket(PlayerIdentifier player)
+	private SkaianetInfoPackets.Data generateClientInfoPacket(PlayerIdentifier player)
 	{
 		boolean clientResuming = skaianet.computerInteractions.hasResumingClient(player);
 		boolean serverResuming = skaianet.computerInteractions.hasResumingServer(player);
@@ -233,7 +236,7 @@ public final class InfoTracker
 		// create list with all connections that the player is in
 		List<ReducedConnection> list = skaianet.connections.activeConnections().filter(c -> c.hasPlayer(player)).map(ReducedConnection::new).toList();
 		
-		return new SkaianetInfoPacket.Data(player.getId(), playerState, list);
+		return new SkaianetInfoPackets.Data(player.getId(), playerState, list);
 	}
 	
 	private void checkListeners()

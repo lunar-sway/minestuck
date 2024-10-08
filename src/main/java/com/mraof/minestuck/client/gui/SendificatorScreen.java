@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorMenu;
-import com.mraof.minestuck.network.SendificatorPacket;
+import com.mraof.minestuck.network.block.SetSendificatorDestinationPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -133,7 +133,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	{
 		if(parsedPos != null)
 		{
-			PacketDistributor.SERVER.noArg().send(new SendificatorPacket(parsedPos));
+			PacketDistributor.SERVER.noArg().send(new SetSendificatorDestinationPacket(parsedPos));
 		}
 	}
 	

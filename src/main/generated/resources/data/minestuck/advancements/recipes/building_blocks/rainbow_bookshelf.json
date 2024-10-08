@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_planks": {
+    "has_rainbow_planks": {
       "conditions": {
         "items": [
           {
@@ -23,7 +23,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_planks"
+      "has_rainbow_planks"
     ]
   ],
   "rewards": {

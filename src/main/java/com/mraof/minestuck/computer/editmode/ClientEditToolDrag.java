@@ -8,7 +8,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
-import com.mraof.minestuck.network.EditmodeDragPacket;
+import com.mraof.minestuck.network.editmode.EditmodeDragPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -43,7 +43,7 @@ import org.joml.Matrix4f;
 
 /** Class for handling the click-and-drag editmode tools (Revise and Recycle) on the client-side.
  * (Based on code from the Minestuck Universe addon, with Cibernet's permission.)
- * @see EditmodeDragPacket for the tool's server-sided block-placing code.
+ * @see EditmodeDragPackets for the tool's server-sided block-placing code.
  * @see ServerEditHandler for server-sided code that handles the sburb-cursor.
  * @author Caldw3ll, Cibernet
  */
@@ -80,7 +80,7 @@ public class ClientEditToolDrag
 	 */
 	private static void cancelDrag(IEditTools cap)
 	{
-		PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Reset());
+		PacketDistributor.SERVER.noArg().send(new EditmodeDragPackets.Reset());
 		cap.resetDragTools();
 	}
 	
@@ -115,7 +115,7 @@ public class ClientEditToolDrag
 	private static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
 	{
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
-		PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
+		PacketDistributor.SERVER.noArg().send(new EditmodeDragPackets.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
 	}
 	
 	/**
@@ -128,9 +128,9 @@ public class ClientEditToolDrag
 	private static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
 		if(targetTool == IEditTools.ToolMode.REVISE)
-			PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			PacketDistributor.SERVER.noArg().send(new EditmodeDragPackets.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		else
-			PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			PacketDistributor.SERVER.noArg().send(new EditmodeDragPackets.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		playSoundAndSetParticles(player, targetTool == IEditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
 	
 		cap.resetDragTools();

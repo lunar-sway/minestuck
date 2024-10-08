@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.network.data.TitleDataPacket;
+import com.mraof.minestuck.network.TitleDataPacket;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;

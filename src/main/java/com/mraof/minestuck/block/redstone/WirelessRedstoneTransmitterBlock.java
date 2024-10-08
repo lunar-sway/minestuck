@@ -69,20 +69,18 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
-		{
-			if(level.getBlockEntity(pos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter)
-			{
-				if(level.isClientSide)
-				{
-					MSScreenFactories.displayWirelessRedstoneTransmitterScreen(transmitter);
-				}
-				
-				return InteractionResult.SUCCESS;
-			}
-		}
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter))
+			return InteractionResult.PASS;
 		
-		return InteractionResult.PASS;
+		if(level.isClientSide)
+			MSScreenFactories.displayWirelessRedstoneTransmitterScreen(transmitter);
+		
+		return InteractionResult.SUCCESS;
+	}
+	
+	public static boolean canInteract(Player player)
+	{
+		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
 	@Nullable

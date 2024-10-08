@@ -4,12 +4,14 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.RemoteObserverBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.network.block.RemoteObserverSettingsPacket;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -111,11 +113,6 @@ public class RemoteObserverBlockEntity extends BlockEntity
 		else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
 	}
 	
-	public void setCurrentEntityType(EntityType<?> currentEntityType)
-	{
-		this.currentEntityType = currentEntityType;
-	}
-	
 	public EntityType<?> getCurrentEntityType()
 	{
 		if(currentEntityType != null)
@@ -132,14 +129,21 @@ public class RemoteObserverBlockEntity extends BlockEntity
 		return !currentEntityType.is(MSTags.EntityTypes.REMOTE_OBSERVER_BLACKLIST);
 	}
 	
-	public void setObservingRange(int rangeIn)
-	{
-		this.observingRange = rangeIn;
-	}
-	
 	public int getObservingRange()
 	{
 		return this.observingRange;
+	}
+	
+	public void handleSettingsPacket(RemoteObserverSettingsPacket packet)
+	{
+		activeType = Objects.requireNonNull(packet.activeType());
+		if(packet.entityType() != null)
+			this.currentEntityType = packet.entityType();
+		this.observingRange = packet.observingRange();
+		
+		setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
 	}
 	
 	@Override
@@ -171,11 +175,6 @@ public class RemoteObserverBlockEntity extends BlockEntity
 	public ActiveType getActiveType()
 	{
 		return this.activeType;
-	}
-	
-	public void setActiveType(ActiveType activeTypeIn)
-	{
-		activeType = Objects.requireNonNull(activeTypeIn);
 	}
 	
 	@Override

@@ -40,7 +40,7 @@ import com.mraof.minestuck.item.StructureScannerItem;
 import com.mraof.minestuck.item.loot.MSLootEvents;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
-import com.mraof.minestuck.network.EffectTogglePacket;
+import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
 import com.mraof.minestuck.world.GateHandler;
@@ -759,12 +759,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.END_BOOKSHELF, "End Bookshelf");
 		addBlock(MSBlocks.DEAD_BOOKSHELF, "Dead Bookshelf");
 		addBlock(MSBlocks.TREATED_BOOKSHELF, "Treated Bookshelf");
+		addBlock(MSBlocks.SHADEWOOD_BOOKSHELF, "Shadewood Bookshelf");
+		addBlock(MSBlocks.CINDERED_BOOKSHELF, "Cindered Bookshelf");
 		addBlock(MSBlocks.GLOWING_LADDER, "Glowing Ladder");
 		addBlock(MSBlocks.FROST_LADDER, "Frost Ladder");
 		addBlock(MSBlocks.RAINBOW_LADDER, "Rainbow Ladder");
 		addBlock(MSBlocks.END_LADDER, "End Ladder");
 		addBlock(MSBlocks.DEAD_LADDER, "Dead Ladder");
 		addBlock(MSBlocks.TREATED_LADDER, "Treated Ladder");
+		addBlock(MSBlocks.SHADEWOOD_LADDER, "Shadewood Ladder");
+		addBlock(MSBlocks.CINDERED_LADDER, "Cindered Ladder");
 		addBlock(MSBlocks.GLOWING_MUSHROOM, "Glowing Mushroom");
 		addBlockStoreTooltip(MSBlocks.GLOWING_MUSHROOM, "This mushroom tastes a bit better than any other around here, according to myself!");
 		addBlock(MSBlocks.DESERT_BUSH, "Desert Bush");
@@ -861,7 +865,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
 		addBlockTooltip(MSBlocks.AREA_EFFECT_BLOCK, "Applies a potion effect to entities within a specified area when powered.");
 		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, "additional_info", "- Can be toggled to apply the effect only to players\n- Can be permanently disabled\n- Area of effect changes when rotated\n- UI only accessible in creative mode\n- Right clicking with a potion bottle in creative mode sets it to that potion effect");
-		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
+		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s");
 		addBlock(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
 		addBlockTooltip(MSBlocks.PLATFORM_GENERATOR, "Creates a temporary platform when powered.");
 		addBlockExtra(MSBlocks.PLATFORM_GENERATOR, "additional_info", "- Length of area where platforms generate is proportional to power\n- Can be toggled to alternate visibility\n- Platform can be blocked by platform receptacles as well as hard or impossible to break blocks");
@@ -1995,7 +1999,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntityType(MSEntityTypes.MIDNIGHT_CREW_POSTER, "Midnight Crew Poster");
 		addEntityType(MSEntityTypes.SBAHJ_POSTER, "SBAHJ Poster");
 		addEntityType(MSEntityTypes.SHOP_POSTER, "Shop Sign");
-		addEntityType(MSEntityTypes.HOLOGRAM, "Hologram");
 		addEntityType(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
 		
 		addGristType(GristTypes.BUILD, "Build");
@@ -2340,8 +2343,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleSelectorScreen.USED_TITLE, "%s is already used");
 		add(TitleSelectorScreen.SELECT, "Select");
 		add(TitleSelectorScreen.RANDOMIZE, "Randomize");
-		add(EffectTogglePacket.ON, "Aspect Effects have been toggled on");
-		add(EffectTogglePacket.OFF, "Aspect Effects have been toggled off");
+		add(ToggleAspectEffectsPacket.ON, "Aspect Effects have been toggled on");
+		add(ToggleAspectEffectsPacket.OFF, "Aspect Effects have been toggled off");
 		add(InfoTracker.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
 		add(TransportalizerBlockEntity.DISABLED, "This transportalizer is currently disabled with a redstone signal.");
 		add(TransportalizerBlockEntity.BLOCKED, "The transportalizer appears to need more space above it to function.");

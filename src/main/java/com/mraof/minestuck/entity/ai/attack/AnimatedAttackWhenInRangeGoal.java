@@ -6,6 +6,9 @@ import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
@@ -75,7 +78,7 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 	{
 		super.tick();
 		
-		if(time == phasedAnimation.getContactStartTime())
+		if(time == phasedAnimation.getContactStartTime(speed))
 		{
 			LivingEntity target = this.entity.getTarget();
 			attemptToLandAttack(this.entity, target);

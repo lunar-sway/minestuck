@@ -7,7 +7,7 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.data.ModusDataPacket;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
@@ -61,7 +61,7 @@ public final class CaptchaDeckHandler
 		
 		ModusHolder modusHolder = getHolder(player);
 		if(modusHolder.modus != null)
-			player.connection.send(ModusDataPacket.create(modusHolder.modus));
+			player.connection.send(CaptchaDeckPackets.ModusData.create(modusHolder.modus));
 		
 		if(modusHolder.modus == null && !modusHolder.givenModus)
 			CaptchaDeckHandler.tryGiveStartingModus(modusHolder, player);
@@ -344,7 +344,7 @@ public final class CaptchaDeckHandler
 		} else
 		{
 			modus.initModus(null, player, null, size);
-			player.connection.send(ModusDataPacket.create(modus));
+			player.connection.send(CaptchaDeckPackets.ModusData.create(modus));
 		}
 	}
 	
@@ -407,7 +407,7 @@ public final class CaptchaDeckHandler
 	
 	private static boolean canPlayerUseModus(ServerPlayer player)
 	{
-		return !player.isSpectator() && ServerEditHandler.getData(player) == null;
+		return !player.isSpectator() && !ServerEditHandler.isInEditmode(player);
 	}
 	
 	private static void setModus(ModusHolder modusHolder, ServerPlayer player, @Nullable Modus modus)
@@ -418,7 +418,7 @@ public final class CaptchaDeckHandler
 		modusHolder.modus = modus;
 		if(modus != null)
 			modusHolder.givenModus = true;
-		player.connection.send(ModusDataPacket.create(modus));
+		player.connection.send(CaptchaDeckPackets.ModusData.create(modus));
 	}
 	
 	private static void tryGiveStartingModus(ModusHolder modusHolder, ServerPlayer player)
@@ -485,3 +485,4 @@ public final class CaptchaDeckHandler
 		}
 	}
 }
+

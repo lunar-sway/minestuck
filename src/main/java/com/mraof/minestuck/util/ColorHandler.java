@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.network.data.PlayerColorPacket;
+import com.mraof.minestuck.network.PlayerColorPackets;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -129,7 +129,7 @@ public final class ColorHandler
 		Integer prevColor = playerData.setData(MSAttachments.PLAYER_COLOR, color);
 		
 		if(!Objects.equals(prevColor, color))
-			player.connection.send(new PlayerColorPacket.Data(color));
+			player.connection.send(new PlayerColorPackets.Data(color));
 	}
 	
 	@SubscribeEvent
@@ -143,8 +143,8 @@ public final class ColorHandler
 		if(firstTime && !player.isSpectator())
 		{
 			playerData.setData(MSAttachments.PLAYER_COLOR, BuiltinColors.DEFAULT_COLOR);
-			player.connection.send(new PlayerColorPacket.OpenSelection());
+			player.connection.send(new PlayerColorPackets.OpenSelection());
 		} else
-			player.connection.send(new PlayerColorPacket.Data(playerData.getData(MSAttachments.PLAYER_COLOR)));
+			player.connection.send(new PlayerColorPackets.Data(playerData.getData(MSAttachments.PLAYER_COLOR)));
 	}
 }

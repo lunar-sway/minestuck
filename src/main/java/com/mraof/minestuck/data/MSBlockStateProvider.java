@@ -1056,6 +1056,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeColumn(id.getPath(),
 						texture(id),
 						texture("treated_planks")));
+		simpleBlockWithItem(MSBlocks.SHADEWOOD_BOOKSHELF,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture("shadewood_planks")));
+		simpleBlockWithItem(MSBlocks.CINDERED_BOOKSHELF,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture("cindered_planks")));
 		
 		//Ladders
 		simpleHorizontal(MSBlocks.GLOWING_LADDER, this::ladder);
@@ -1070,6 +1078,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.DEAD_LADDER, MSBlockStateProvider::texture);
 		simpleHorizontal(MSBlocks.TREATED_LADDER, this::ladder);
 		flatItem(MSItems.TREATED_LADDER, MSBlockStateProvider::texture);
+		simpleHorizontal(MSBlocks.SHADEWOOD_LADDER, this::ladder);
+		flatItem(MSItems.SHADEWOOD_LADDER, MSBlockStateProvider::texture);
+		simpleHorizontal(MSBlocks.CINDERED_LADDER, this::ladder);
+		flatItem(MSItems.CINDERED_LADDER, MSBlockStateProvider::texture);
 		
 		//Land Plant Blocks
 		getVariantBuilder(MSBlocks.GLOWING_MUSHROOM.get()).partialState().setModels(weightedVariantModels(new int[]{2, 3, 2, 1, 2, 2, 1, 1},

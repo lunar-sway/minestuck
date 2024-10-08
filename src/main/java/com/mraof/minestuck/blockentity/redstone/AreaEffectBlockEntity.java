@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.network.block.AreaEffectSettingsPacket;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -14,11 +15,13 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -101,7 +104,9 @@ public class AreaEffectBlockEntity extends BlockEntity
 	{
 		this.effect = Objects.requireNonNull(effectIn);
 		this.effectAmplifier = effectAmplifierIn;
-		this.setChanged();
+		setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
 	}
 	
 	public MobEffect getEffect()
@@ -114,25 +119,27 @@ public class AreaEffectBlockEntity extends BlockEntity
 		return this.effectAmplifier;
 	}
 	
-	public void setMinAndMaxEffectPosOffset(BlockPos minAreaOffsetIn, BlockPos maxAreaOffsetIn)
-	{
-		Objects.requireNonNull(this.level);
-		minAreaOffset = clampMinPos(minAreaOffsetIn.getX(), minAreaOffsetIn.getY(), minAreaOffsetIn.getZ());
-		maxAreaOffset = clampMaxPos(maxAreaOffsetIn.getX(), maxAreaOffsetIn.getY(), maxAreaOffsetIn.getZ());
-		this.setChanged();
-		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
-	}
-	
-	@Nonnull
 	public BlockPos getMinAreaOffset()
 	{
 		return this.minAreaOffset;
 	}
 	
-	@Nonnull
 	public BlockPos getMaxAreaOffset()
 	{
 		return this.maxAreaOffset;
+	}
+	
+	public void handleSettingsPacket(AreaEffectSettingsPacket packet)
+	{
+		Objects.requireNonNull(this.level);
+		
+		this.minAreaOffset = clampMinPos(packet.minEffectPos().getX(), packet.minEffectPos().getY(), packet.minEffectPos().getZ());
+		this.maxAreaOffset = clampMaxPos(packet.maxEffectPos().getX(), packet.maxEffectPos().getY(), packet.maxEffectPos().getZ());
+		setChanged();
+		
+		this.setEffect(packet.effect(), packet.effectAmp());
+		
+		this.level.setBlock(this.worldPosition, getBlockState().setValue(AreaEffectBlock.ALL_MOBS, packet.isAllMobs()), Block.UPDATE_ALL);
 	}
 	
 	/**
