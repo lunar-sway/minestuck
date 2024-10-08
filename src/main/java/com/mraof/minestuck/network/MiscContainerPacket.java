@@ -15,20 +15,11 @@ import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MiscContainerPacket implements MSPacket.PlayToServer
+public record MiscContainerPacket(int index, boolean editmode) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("misc_container");
 	
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	private final int index;
-	private final boolean editmode;
-	
-	public MiscContainerPacket(int index, boolean editmode)
-	{
-		this.index = index;
-		this.editmode = editmode;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -54,7 +45,7 @@ public class MiscContainerPacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		boolean isInEditmode = ServerEditHandler.getData(player) != null;
+		boolean isInEditmode = ServerEditHandler.isInEditmode(player);
 		
 		if(editmode != isInEditmode)
 		{

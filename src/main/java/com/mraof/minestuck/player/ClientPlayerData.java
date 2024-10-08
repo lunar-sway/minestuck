@@ -5,7 +5,8 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.network.data.*;
+import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.util.ColorHandler;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -104,7 +105,7 @@ public final class ClientPlayerData
 	
 	public static void selectColor(int colorIndex)
 	{
-		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectIndex(colorIndex));
+		PacketDistributor.SERVER.noArg().send(new PlayerColorPackets.SelectIndex(colorIndex));
 		playerColor = ColorHandler.BuiltinColors.getColor(colorIndex);
 	}
 	
@@ -112,7 +113,7 @@ public final class ClientPlayerData
 	{
 		if (color < 0 || color > 256*256*256) return;
 		
-		PacketDistributor.SERVER.noArg().send(new PlayerColorPacket.SelectRGB(color));
+		PacketDistributor.SERVER.noArg().send(new PlayerColorPackets.SelectRGB(color));
 		playerColor = color;
 	}
 	
@@ -131,7 +132,7 @@ public final class ClientPlayerData
 		return dataCheckerAccess;
 	}
 	
-	public static void handleDataPacket(ModusDataPacket packet)
+	public static void handleDataPacket(CaptchaDeckPackets.ModusData packet)
 	{
 		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT);
 		if(modus != null)
@@ -152,15 +153,16 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(BoondollarDataPacket packet)
 	{
-		boondollars = packet.getBoondollars();
+		boondollars = packet.amount();
 	}
 	
 	public static void handleDataPacket(GristCachePacket packet)
 	{
-		if(packet.isEditmode())
-			targetGrist = packet.gristCache();
-		else
-			playerGrist = packet.gristCache();
+		switch(packet.cacheSource())
+		{
+			case PLAYER -> playerGrist = packet.gristCache();
+			case EDITMODE -> targetGrist = packet.gristCache();
+		}
 	}
 	
 	public static void handleDataPacket(EditmodeCacheLimitPacket packet)
@@ -168,19 +170,20 @@ public final class ClientPlayerData
 		targetCacheLimit = packet.limit();
 	}
 	
-	public static void handleDataPacket(PlayerColorPacket.OpenSelection packet)
+	public static void handleDataPacket(PlayerColorPackets.OpenSelection packet)
 	{
 		ClientPlayerData.playerColor = ColorHandler.BuiltinColors.DEFAULT_COLOR;
 		ClientPlayerData.displaySelectionGui = true;
 	}
 	
-	public static void handleDataPacket(PlayerColorPacket.Data packet)
+	public static void handleDataPacket(PlayerColorPackets.Data packet)
 	{
 		ClientPlayerData.playerColor = packet.color();
 	}
 	
-	public static void handleDataPacket(DataCheckerPermissionPacket packet)
+	public static void handleDataPacket(DataCheckerPackets.Permission packet)
 	{
-		dataCheckerAccess = packet.isDataCheckerAvailable();
+		dataCheckerAccess = packet.isAvailable();
 	}
 }
+

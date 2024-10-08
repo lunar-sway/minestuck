@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
-  "group": "bookshelf",
   "key": {
     "b": {
       "item": "minecraft:book"
     },
     "p": {
       "item": "minestuck:glowing_planks"
+    },
+    "s": {
+      "item": "minestuck:glowing_slab"
     }
   },
   "pattern": [
-    "ppp",
-    "bpb",
-    "ppp"
+    "psp",
+    "bbb",
+    "psp"
   ],
   "result": {
     "item": "minestuck:glowing_bookshelf"

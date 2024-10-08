@@ -16,18 +16,9 @@ import net.minecraft.server.level.ServerPlayer;
  * @author kirderf1
  *
  */
-public class ClearMessagePacket implements MSPacket.PlayToServer
+public record ClearMessagePacket(BlockPos computerPos, int program) implements MSPacket.PlayToServer
 {
 	public static final ResourceLocation ID = Minestuck.id("clear_message");
-	
-	private final BlockPos pos;
-	private final int program;
-	
-	public ClearMessagePacket(BlockPos pos, int program)
-	{
-		this.pos = pos;
-		this.program = program;
-	}
 	
 	@Override
 	public ResourceLocation id()
@@ -38,7 +29,7 @@ public class ClearMessagePacket implements MSPacket.PlayToServer
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeBlockPos(pos);
+		buffer.writeBlockPos(computerPos);
 		buffer.writeInt(program);
 	}
 	
@@ -53,7 +44,7 @@ public class ClearMessagePacket implements MSPacket.PlayToServer
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> {
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
 			computer.latestmessage.put(program, "");
 			computer.markBlockForUpdate();
 		});

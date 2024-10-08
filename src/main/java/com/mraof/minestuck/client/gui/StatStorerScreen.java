@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
-import com.mraof.minestuck.network.StatStorerPacket;
+import com.mraof.minestuck.network.block.StatStorerSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -83,7 +83,7 @@ public class StatStorerScreen extends Screen
 	
 	private void finish()
 	{
-		PacketDistributor.SERVER.noArg().send(new StatStorerPacket(activeType, be.getBlockPos(), textToInt()));
+		PacketDistributor.SERVER.noArg().send(new StatStorerSettingsPacket(activeType, textToInt(), be.getBlockPos()));
 		onClose();
 	}
 	

@@ -54,7 +54,9 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	private static final MobAnimation TALK_PROPERTIES = new MobAnimation(MobAnimation.Action.TALK, 80, true, false);
 	
-	public static final PhasedMobAnimation MELEE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.MELEE, 18, true, false), 3, 6, 7);
+	private static final double ATTACK_ANIMATION_SPEED = 2;
+	
+	public static final PhasedMobAnimation MELEE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.MELEE, 18, true, false), 3, 5, 7, 13);
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
 	private static final RawAnimation ARMS_WALKING_ANIMATION = RawAnimation.begin().thenLoop("walkarms");
 	private static final RawAnimation PUNCH_ANIMATION_1 = RawAnimation.begin().then("punch1", Animation.LoopType.PLAY_ONCE);
@@ -87,7 +89,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	public static AttributeSupplier.Builder pawnAttributes()
 	{
-		return CarapacianEntity.carapacianAttributes().add(Attributes.ATTACK_DAMAGE)
+		return CarapacianEntity.carapacianAttributes().add(Attributes.ATTACK_DAMAGE).add(Attributes.ATTACK_SPEED, 4)
 				.add(Attributes.MOVEMENT_SPEED, 0.2);
 	}
 	
@@ -341,15 +343,16 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		controllers.add(new AnimationController<>(this, "walkArmsAnimation", PawnEntity::walkArmsAnimation));
-		controllers.add(new AnimationController<>(this, "walkAnimation", PawnEntity::walkAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", PawnEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED) * 5));
 		controllers.add(new AnimationController<>(this, "deathAnimation", PawnEntity::deathAnimation));
-		controllers.add(new AnimationController<>(this, "swingAnimation", PawnEntity::swingAnimation).setAnimationSpeed(2));
+		controllers.add(new AnimationController<>(this, "swingAnimation", PawnEntity::swingAnimation));
 		controllers.add(new AnimationController<>(this, "talkAnimation", PawnEntity::talkAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationState<PawnEntity> state)
 	{
-		if(state.isMoving())
+		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
@@ -359,7 +362,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	private static PlayState walkArmsAnimation(AnimationState<PawnEntity> state)
 	{
-		if(state.isMoving() && !state.getAnimatable().isActive())
+		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()) && !state.getAnimatable().isActive())
 		{
 			state.getController().setAnimation(ARMS_WALKING_ANIMATION);
 			return PlayState.CONTINUE;
@@ -367,11 +370,11 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 		return PlayState.STOP;
 	}
 	
-	private static PlayState deathAnimation(AnimationState<PawnEntity> event)
+	private static PlayState deathAnimation(AnimationState<PawnEntity> state)
 	{
-		if(event.getAnimatable().dead)
+		if(state.getAnimatable().dead)
 		{
-			event.getController().setAnimation(DIE_ANIMATION);
+			state.getController().setAnimation(DIE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -385,6 +388,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 			return PlayState.CONTINUE;
 		}
 		event.getController().forceAnimationReset();
+		event.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(event.getAnimatable(), Attributes.ATTACK_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	

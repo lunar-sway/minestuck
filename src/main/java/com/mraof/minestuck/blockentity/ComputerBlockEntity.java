@@ -9,11 +9,13 @@ import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.IncompleteSburbCodeItem;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -22,9 +24,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -35,12 +35,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -61,6 +57,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	 */
 	public HashSet<Integer> installedPrograms = new HashSet<>();
 	public ComputerScreen gui;
+	@Nullable
 	public PlayerIdentifier owner;
 	//client side only
 	public int ownerId;
@@ -330,17 +327,24 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		this.level.sendBlockUpdated(worldPosition, state, state, 3);
 	}
 	
-	public static void forNetworkIfPresent(ServerPlayer player, BlockPos pos, Consumer<ComputerBlockEntity> consumer)
+	public static Optional<ComputerBlockEntity> getAccessibleComputer(ServerPlayer player, BlockPos pos)
 	{
-		if(player.level().isAreaLoaded(pos, 0))    //TODO also check distance to the computer pos (together with a continual check clientside)
+		return MSPacket.getAccessibleBlockEntity(player, pos, ComputerBlockEntity.class)
+				.filter(computer -> computer.canAccessComputer(player));
+	}
+	
+	public boolean canAccessComputer(ServerPlayer player)
+	{
+		if(this.isBroken())
+			return false;
+		if(ServerEditHandler.isInEditmode(player))
+			return false;
+		
+		if(MinestuckConfig.SERVER.privateComputers.get())
 		{
-			if(player.level().getBlockEntity(pos) instanceof ComputerBlockEntity computer && !computer.isBroken())
-			{
-				MinecraftServer mcServer = Objects.requireNonNull(player.getServer());
-				ServerOpListEntry opsEntry = mcServer.getPlayerList().getOps().get(player.getGameProfile());
-				if((!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getLevel() >= 2) && ServerEditHandler.getData(player) == null)
-					consumer.accept(computer);
-			}
-		}
+			return (this.owner != null && this.owner.appliesTo(player))
+					|| player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
+		} else
+			return true;
 	}
 }

@@ -281,6 +281,9 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	
 	public void processContents(int quantity, ServerPlayer player)
 	{
+		if(this.isBroken())
+			return;
+		
 		ItemStack newItem = getOutput();
 		//Clamp quantity
 		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.SERVER.alchemiterMaxStacks.get(), Math.max(1, quantity));

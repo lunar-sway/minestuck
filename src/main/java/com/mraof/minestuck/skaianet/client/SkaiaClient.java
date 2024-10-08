@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
+import com.mraof.minestuck.network.computer.SkaianetInfoPackets;
 import com.mraof.minestuck.skaianet.LandChain;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -56,7 +56,7 @@ public final class SkaiaClient
 		boolean b = playerStateMap.get(computer.ownerId) != null;
 		if(!b)
 		{
-			PacketDistributor.SERVER.noArg().send(new SkaianetInfoPacket.Request(computer.ownerId));
+			PacketDistributor.SERVER.noArg().send(new SkaianetInfoPackets.Request(computer.ownerId));
 			be = computer;
 		}
 		return b;
@@ -120,7 +120,7 @@ public final class SkaiaClient
 		return null;
 	}
 	
-	public static void handlePacket(SkaianetInfoPacket.Data data)
+	public static void handlePacket(SkaianetInfoPackets.Data data)
 	{
 		if(playerId == -1)
 			playerId = data.playerId();	//The first info packet is expected to be regarding the receiving player.
@@ -141,7 +141,7 @@ public final class SkaiaClient
 		}
 	}
 	
-	public static void handlePacket(SkaianetInfoPacket.LandChains packet)
+	public static void handlePacket(SkaianetInfoPackets.LandChains packet)
 	{
 		landChainMap.clear();
 		for(LandChain landChain : packet.landChains())
@@ -150,7 +150,7 @@ public final class SkaiaClient
 		}
 	}
 	
-	public static void handlePacket(SkaianetInfoPacket.HasEntered packet)
+	public static void handlePacket(SkaianetInfoPackets.HasEntered packet)
 	{
 		hasEntered = packet.hasEntered();
 	}

@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.captchalouge;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.NonNullList;
@@ -63,10 +63,9 @@ public class HashMapSylladexScreen extends SylladexScreen
 				public void onClick(int mouseButton)
 				{
 					if(this.item != null && mouseButton == 1)
-					{
-						CaptchaDeckPacket packet = CaptchaDeckPacket.get(this.index, true);
-						PacketDistributor.SERVER.noArg().send(packet);
-					} else super.onClick(mouseButton);
+						PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.GetItem(this.index, true));
+					else
+						super.onClick(mouseButton);
 				}
 			});
 	}
@@ -107,7 +106,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 		if(MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
 		{
 			modus.ejectByChat = !modus.ejectByChat;
-			PacketDistributor.SERVER.noArg().send(CaptchaDeckPacket.modusParam((byte) 0, modus.ejectByChat ? 1 : 0));
+			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.SetModusParameter((byte) 0, modus.ejectByChat ? 1 : 0));
 		}
 	}
 }

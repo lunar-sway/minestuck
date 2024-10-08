@@ -161,18 +161,22 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CommonRecipes.slabRecipe(MSBlocks.RAINBOW_SLAB, MSBlocks.RAINBOW_PLANKS, "has_planks").group("wooden_slab").save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.END_SLAB, MSBlocks.END_PLANKS, "has_planks").group("wooden_slab").save(recipeBuilder);
 		CommonRecipes.slabRecipe(MSBlocks.DEAD_SLAB, MSBlocks.DEAD_PLANKS, "has_planks").group("wooden_slab").save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.GLOWING_BOOKSHELF.get()).define('b', Items.BOOK).define('p', MSBlocks.GLOWING_PLANKS.get()).pattern("ppp").pattern("bpb").pattern("ppp").group("bookshelf").unlockedBy("has_planks", has(MSBlocks.GLOWING_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.FROST_BOOKSHELF.get()).define('b', Items.BOOK).define('p', MSBlocks.FROST_PLANKS.get()).pattern("ppp").pattern("bpb").pattern("ppp").group("bookshelf").unlockedBy("has_planks", has(MSBlocks.FROST_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.RAINBOW_BOOKSHELF.get()).define('b', Items.BOOK).define('p', MSBlocks.RAINBOW_PLANKS.get()).pattern("ppp").pattern("bpb").pattern("ppp").group("bookshelf").unlockedBy("has_planks", has(MSBlocks.RAINBOW_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.END_BOOKSHELF.get()).define('b', Items.BOOK).define('p', MSBlocks.END_PLANKS.get()).pattern("ppp").pattern("bpb").pattern("ppp").group("bookshelf").unlockedBy("has_planks", has(MSBlocks.END_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.DEAD_BOOKSHELF.get()).define('b', Items.BOOK).define('p', MSBlocks.DEAD_PLANKS.get()).pattern("ppp").pattern("bpb").pattern("ppp").group("bookshelf").unlockedBy("has_planks", has(MSBlocks.DEAD_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.TREATED_BOOKSHELF.get()).define('b', Items.BOOK).define('p', MSBlocks.TREATED_PLANKS.get()).pattern("ppp").pattern("bpb").pattern("ppp").group("bookshelf").unlockedBy("has_planks", has(MSBlocks.TREATED_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.GLOWING_LADDER.get(), 4).define('s', Items.STICK).define('p', MSBlocks.GLOWING_PLANKS.get()).pattern("s s").pattern("sps").pattern("s s").group("ladder").unlockedBy("has_planks", has(MSBlocks.GLOWING_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.FROST_LADDER.get(), 4).define('s', Items.STICK).define('p', MSBlocks.FROST_PLANKS.get()).pattern("s s").pattern("sps").pattern("s s").group("ladder").unlockedBy("has_planks", has(MSBlocks.FROST_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.RAINBOW_LADDER.get(), 4).define('s', Items.STICK).define('p', MSBlocks.RAINBOW_PLANKS.get()).pattern("s s").pattern("sps").pattern("s s").group("ladder").unlockedBy("has_planks", has(MSBlocks.RAINBOW_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.END_LADDER.get(), 4).define('s', Items.STICK).define('p', MSBlocks.END_PLANKS.get()).pattern("s s").pattern("sps").pattern("s s").group("ladder").unlockedBy("has_planks", has(MSBlocks.END_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.DEAD_LADDER.get(), 4).define('s', Items.STICK).define('p', MSBlocks.DEAD_PLANKS.get()).pattern("s s").pattern("sps").pattern("s s").group("ladder").unlockedBy("has_planks", has(MSBlocks.DEAD_PLANKS.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.TREATED_LADDER.get(), 4).define('s', Items.STICK).define('p', MSBlocks.TREATED_PLANKS.get()).pattern("s s").pattern("sps").pattern("s s").group("ladder").unlockedBy("has_planks", has(MSBlocks.TREATED_PLANKS.get())).save(recipeBuilder);
+		CommonRecipes.bookshelfRecipe(MSBlocks.GLOWING_BOOKSHELF, MSBlocks.GLOWING_PLANKS, MSBlocks.GLOWING_SLAB).save(recipeBuilder);
+		CommonRecipes.bookshelfRecipe(MSBlocks.FROST_BOOKSHELF, MSBlocks.FROST_PLANKS, MSBlocks.FROST_SLAB).save(recipeBuilder);
+		CommonRecipes.bookshelfRecipe(MSBlocks.RAINBOW_BOOKSHELF, MSBlocks.RAINBOW_PLANKS, MSBlocks.RAINBOW_SLAB).save(recipeBuilder);
+		CommonRecipes.bookshelfRecipe(MSBlocks.END_BOOKSHELF, MSBlocks.END_PLANKS, MSBlocks.END_SLAB).save(recipeBuilder);
+		CommonRecipes.bookshelfRecipe(MSBlocks.DEAD_BOOKSHELF, MSBlocks.DEAD_PLANKS, MSBlocks.DEAD_SLAB).save(recipeBuilder);
+		CommonRecipes.bookshelfRecipe(MSBlocks.TREATED_BOOKSHELF, MSBlocks.TREATED_PLANKS, MSBlocks.TREATED_PLANKS_SLAB).save(recipeBuilder);
+		CommonRecipes.bookshelfRecipe(MSBlocks.SHADEWOOD_BOOKSHELF, MSBlocks.SHADEWOOD_PLANKS, MSBlocks.SHADEWOOD_SLAB).save(recipeBuilder);
+		CommonRecipes.bookshelfRecipe(MSBlocks.CINDERED_BOOKSHELF, MSBlocks.CINDERED_PLANKS, MSBlocks.CINDERED_SLAB).save(recipeBuilder);
+		CommonRecipes.ladderRecipe(MSBlocks.GLOWING_LADDER, MSBlocks.GLOWING_PLANKS).group("terrain_ladder").save(recipeBuilder);
+		CommonRecipes.ladderRecipe(MSBlocks.FROST_LADDER, MSBlocks.FROST_PLANKS).group("terrain_ladder").save(recipeBuilder);
+		CommonRecipes.ladderRecipe(MSBlocks.RAINBOW_LADDER, MSBlocks.RAINBOW_PLANKS).group("terrain_ladder").save(recipeBuilder);
+		CommonRecipes.ladderRecipe(MSBlocks.END_LADDER, MSBlocks.END_PLANKS).group("terrain_ladder").save(recipeBuilder);
+		CommonRecipes.ladderRecipe(MSBlocks.DEAD_LADDER, MSBlocks.DEAD_PLANKS).group("terrain_ladder").save(recipeBuilder);
+		CommonRecipes.ladderRecipe(MSBlocks.TREATED_LADDER, MSBlocks.TREATED_PLANKS).group("terrain_ladder").save(recipeBuilder);
+		CommonRecipes.ladderRecipe(MSBlocks.SHADEWOOD_LADDER, MSBlocks.SHADEWOOD_PLANKS).group("terrain_ladder").save(recipeBuilder);
+		CommonRecipes.ladderRecipe(MSBlocks.CINDERED_LADDER, MSBlocks.CINDERED_PLANKS).group("terrain_ladder").save(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, MSBlocks.COMPUTER.get()).requires(MSItems.ENERGY_CORE.get()).requires(MSItems.COMPUTER_PARTS.get()).unlockedBy("has_computer_parts", has(MSItems.COMPUTER_PARTS.get())).requires(Items.QUARTZ).requires(Items.REDSTONE).requires(MSItems.RAW_CRUXITE.get()).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.URANIUM_COOKER.get()).define('e', MSItems.ENERGY_CORE.get()).define('i', Tags.Items.INGOTS_IRON).define('F', Items.FURNACE).pattern("iii").pattern("iFi").pattern("iei").unlockedBy("has_energy_core", has(MSItems.ENERGY_CORE.get())).save(recipeBuilder);
@@ -265,7 +269,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		CommonRecipes.wallRecipe(MSBlocks.CRUXITE_WALL, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
-		CommonRecipes.buttonRecipe(MSBlocks.CRUXITE_BUTTON, MSBlocks.CRUXITE_BLOCK)
+		CommonRecipes.buttonRecipe(MSBlocks.CRUXITE_BUTTON, MSItems.RAW_CRUXITE)
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		CommonRecipes.pressurePlateRecipe(MSBlocks.CRUXITE_PRESSURE_PLATE, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
