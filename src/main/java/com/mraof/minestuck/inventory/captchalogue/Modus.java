@@ -84,7 +84,7 @@ public abstract class Modus
 	{
 		if(needResend)
 		{
-			PacketDistributor.PLAYER.with(player).send(CaptchaDeckPackets.ModusData.create(this));
+			PacketDistributor.sendToPlayer(player, CaptchaDeckPackets.ModusData.create(this));
 			needResend = false;
 		}
 	}

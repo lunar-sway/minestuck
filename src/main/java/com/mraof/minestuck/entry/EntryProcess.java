@@ -148,7 +148,7 @@ public class EntryProcess
 		
 		waitingProcess = process;
 		startTime = player.level().getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
-		PacketDistributor.ALL.noArg().send(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
+		PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
@@ -191,7 +191,7 @@ public class EntryProcess
 				waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
 				waitingProcess.runEntry();
 				waitingProcess = null;
-				PacketDistributor.ALL.noArg().send(new EntryEffectPackets.Clear());
+				PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Clear());
 			}
 		}
 	}

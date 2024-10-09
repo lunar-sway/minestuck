@@ -4,35 +4,37 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record CarveStoneTabletPacket(String text, InteractionHand hand) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("carve_stone_tablet");
+	
+	public static final Type<CarveStoneTabletPacket> ID = new Type<>(Minestuck.id("carve_stone_tablet"));
+	public static final StreamCodec<FriendlyByteBuf, CarveStoneTabletPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.STRING_UTF8,
+			CarveStoneTabletPacket::text,
+			NeoForgeStreamCodecs.enumCodec(InteractionHand.class),
+			CarveStoneTabletPacket::hand,
+			CarveStoneTabletPacket::new
+	);
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeUtf(text);
-		buffer.writeEnum(hand);
-	}
-	
-	public static CarveStoneTabletPacket read(FriendlyByteBuf buffer)
-	{
-		return new CarveStoneTabletPacket(buffer.readUtf(), buffer.readEnum(InteractionHand.class));
-	}
 	
 	@Override
-	public void execute(ServerPlayer player)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
 		ItemStack tablet = player.getItemInHand(hand);
 		ItemStack tool = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);

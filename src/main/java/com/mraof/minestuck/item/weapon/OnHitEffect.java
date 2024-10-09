@@ -357,7 +357,7 @@ public interface OnHitEffect
 			if(attacker instanceof ServerPlayer player)
 			{
 				PushPlayerPacket packet = PushPlayerPacket.createPacket(attackerVec);
-				PacketDistributor.PLAYER.with(player).send(packet);
+				PacketDistributor.sendToPlayer(player, packet);
 			}
 		};
 	}

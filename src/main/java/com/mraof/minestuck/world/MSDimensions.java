@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -42,14 +43,14 @@ public class MSDimensions
 	
 	public static void sendLandTypesToAll(MinecraftServer server)
 	{
-		PacketDistributor.ALL.noArg().send(createLandTypesPacket(server));
+		PacketDistributor.sendToAllPlayers(createLandTypesPacket(server));
 	}
 	
 	@SubscribeEvent
 	private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
-		PacketDistributor.PLAYER.with(player).send(createLandTypesPacket(player.server));
+		PacketDistributor.sendToPlayer(player, createLandTypesPacket(player.server));
 	}
 	
 	private static LandTypesDataPacket createLandTypesPacket(MinecraftServer server)

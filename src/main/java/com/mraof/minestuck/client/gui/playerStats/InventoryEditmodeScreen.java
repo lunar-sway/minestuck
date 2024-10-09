@@ -108,7 +108,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 			}
 			if(packet != null)
 			{
-				PacketDistributor.SERVER.noArg().send(packet);
+				PacketDistributor.sendToServer(packet);
 				return true;
 			}
 		}

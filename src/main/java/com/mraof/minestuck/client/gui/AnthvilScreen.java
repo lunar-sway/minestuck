@@ -54,7 +54,7 @@ public class AnthvilScreen extends AbstractContainerScreen<AnthvilMenu>
 	private void mend()
 	{
 		//sends a request to mend and refuel uranium
-		PacketDistributor.SERVER.noArg().send(new TriggerAnthvilPacket());
+		PacketDistributor.sendToServer(new TriggerAnthvilPacket());
 	}
 	
 	private void finish()

@@ -9,15 +9,28 @@ import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource source,
+public record GristToastPacket(ImmutableGristSet gristValue, GristHelper.EnumSource source,
 							   boolean isCacheOwner) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("grist_toast");
+	public static final Type<GristToastPacket> ID = new Type<>(Minestuck.id("grist_toast"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, GristToastPacket> STREAM_CODEC = StreamCodec.composite(
+			GristSet.IMMUTABLE_STREAM_CODEC,
+			GristToastPacket::gristValue,
+			NeoForgeStreamCodecs.enumCodec(GristHelper.EnumSource.class),
+			GristToastPacket::source,
+			ByteBufCodecs.BOOL,
+			GristToastPacket::isCacheOwner,
+			GristToastPacket::new
+	);
 	
 	/**
 	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
@@ -32,7 +45,7 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			if(player.getPlayer(server) != null)
-				PacketDistributor.PLAYER.with(player.getPlayer(server)).send(new GristToastPacket(set, source, true));
+				PacketDistributor.sendToPlayer(player.getPlayer(server), new GristToastPacket(set.asImmutable(), source, true));
 			
 			if(source == GristHelper.EnumSource.SERVER)
 			{
@@ -41,36 +54,20 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 					return;
 				
 				if(!player.appliesTo(ed.getEditor()))
-					PacketDistributor.PLAYER.with(ed.getEditor()).send(new GristToastPacket(set, source, false));
+					PacketDistributor.sendToPlayer(ed.getEditor(), new GristToastPacket(set.asImmutable(), source, false));
 				
 			}
 		}
 	}
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		GristSet.write(gristValue, buffer);
-		buffer.writeEnum(source);
-		buffer.writeBoolean(isCacheOwner);
-	}
-	
-	public static GristToastPacket read(FriendlyByteBuf buffer)
-	{
-		ImmutableGristSet gristValue = GristSet.read(buffer);
-		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
-		boolean isCacheOwner = buffer.readBoolean();
-		return new GristToastPacket(gristValue, source, isCacheOwner);
-	}
-	
-	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		GristToast.handlePacket(this);
 	}

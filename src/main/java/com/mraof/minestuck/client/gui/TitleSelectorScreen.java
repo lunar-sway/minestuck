@@ -116,13 +116,13 @@ public class TitleSelectorScreen extends Screen
 	
 	private void select()
 	{
-		PacketDistributor.SERVER.noArg().send(TitleSelectPackets.PickTitle.pick(new Title(currentClass, currentAspect)));
+		PacketDistributor.sendToServer(TitleSelectPackets.PickTitle.pick(new Title(currentClass, currentAspect)));
 		onClose();
 	}
 	
 	private void random()
 	{
-		PacketDistributor.SERVER.noArg().send(TitleSelectPackets.PickTitle.random());
+		PacketDistributor.sendToServer(TitleSelectPackets.PickTitle.random());
 		onClose();
 	}
 	

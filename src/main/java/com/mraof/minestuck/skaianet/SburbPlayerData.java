@@ -180,7 +180,7 @@ public final class SburbPlayerData
 	{
 		ServerPlayer player = this.playerId.getPlayer(this.mcServer);
 		if(player != null)
-			PacketDistributor.PLAYER.with(player).send(new SkaianetInfoPackets.HasEntered(this.hasEntered));
+			PacketDistributor.sendToPlayer(player, new SkaianetInfoPackets.HasEntered(this.hasEntered));
 	}
 	
 	public boolean hasGivenItem(DeployEntry item)

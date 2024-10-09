@@ -4,11 +4,14 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.skaianet.ComputerInteractions;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public final class CloseSburbConnectionPackets
 {
@@ -24,28 +27,17 @@ public final class CloseSburbConnectionPackets
 	
 	public record AsClient(BlockPos pos) implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("close_sburb_connection/as_client");
+		public static final Type<AsClient> ID = new Type<>(Minestuck.id("close_sburb_connection/as_client"));
+		public static final StreamCodec<ByteBuf, AsClient> STREAM_CODEC = BlockPos.STREAM_CODEC.map(AsClient::new, AsClient::pos);
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeBlockPos(this.pos);
-		}
-		
-		public static AsClient read(FriendlyByteBuf buffer)
-		{
-			BlockPos pos = buffer.readBlockPos();
-			return new AsClient(pos);
-		}
-		
-		@Override
-		public void execute(ServerPlayer player)
+		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			ComputerBlockEntity.getAccessibleComputer(player, this.pos).ifPresent(computer ->
 					ComputerInteractions.get(player.server).closeClientConnection(computer));
@@ -54,28 +46,17 @@ public final class CloseSburbConnectionPackets
 	
 	public record AsServer(BlockPos pos) implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("close_sburb_connection/as_server");
+		public static final Type<AsServer> ID = new Type<>(Minestuck.id("close_sburb_connection/as_server"));
+		public static final StreamCodec<ByteBuf, AsServer> STREAM_CODEC = BlockPos.STREAM_CODEC.map(AsServer::new, AsServer::pos);
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeBlockPos(this.pos);
-		}
-		
-		public static AsServer read(FriendlyByteBuf buffer)
-		{
-			BlockPos pos = buffer.readBlockPos();
-			return new AsServer(pos);
-		}
-		
-		@Override
-		public void execute(ServerPlayer player)
+		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			ComputerBlockEntity.getAccessibleComputer(player, this.pos).ifPresent(computer ->
 						ComputerInteractions.get(player.server).closeServerConnection(computer));

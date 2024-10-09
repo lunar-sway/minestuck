@@ -51,7 +51,7 @@ public final class ClientEditHandler
 	
 	public static void onKeyPressed()
 	{
-		PacketDistributor.SERVER.noArg().send(new ClientEditPackets.Exit());
+		PacketDistributor.sendToServer(new ClientEditPackets.Exit());
 	}
 	
 	@SubscribeEvent

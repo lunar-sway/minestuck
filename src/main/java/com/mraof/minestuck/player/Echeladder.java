@@ -303,13 +303,13 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	public void sendInitialPacket(ServerPlayer player)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public void sendDataPacket(ServerPlayer player, boolean sendMessage)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public static String translationKey(int rung)

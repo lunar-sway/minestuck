@@ -118,7 +118,7 @@ public class RemoteObserverScreen extends Screen
 			if(isValidAndObservableEntityType)
 				entityType = attemptedEntityType.get();
 			
-			PacketDistributor.SERVER.noArg().send(new RemoteObserverSettingsPacket(activeType, observingRange, be.getBlockPos(), entityType));
+			PacketDistributor.sendToServer(new RemoteObserverSettingsPacket(activeType, observingRange, be.getBlockPos(), Optional.ofNullable(entityType)));
 			onClose();
 		} else
 		{

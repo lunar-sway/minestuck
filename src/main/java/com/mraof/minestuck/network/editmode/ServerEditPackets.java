@@ -4,35 +4,29 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.ClientDeployList;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.network.MSPacket;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-
-import java.util.Objects;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public final class ServerEditPackets
 {
 	public record Activate() implements MSPacket.PlayToClient
 	{
-		public static final ResourceLocation ID = Minestuck.id("server_edit/activate");
+		public static final Type<Activate> ID = new Type<>(Minestuck.id("server_edit/activate"));
+		public static final StreamCodec<FriendlyByteBuf, Activate> STREAM_CODEC = StreamCodec.unit(new Activate());
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf ignored)
-		{}
-		
-		public static Activate read(FriendlyByteBuf ignored)
-		{
-			return new Activate();
-		}
-		
-		@Override
-		public void execute()
+		public void execute(IPayloadContext context)
 		{
 			ClientEditmodeData.onActivatePacket();
 		}
@@ -40,28 +34,17 @@ public final class ServerEditPackets
 	
 	public record UpdateDeployList(CompoundTag data) implements MSPacket.PlayToClient
 	{
-		public static final ResourceLocation ID = Minestuck.id("server_edit/update_deploy_list");
+		public static final Type<UpdateDeployList> ID = new Type<>(Minestuck.id("server_edit/update_deploy_list"));
+		public static final StreamCodec<ByteBuf, UpdateDeployList> STREAM_CODEC = ByteBufCodecs.COMPOUND_TAG.map(UpdateDeployList::new, UpdateDeployList::data);
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeNbt(this.data);
-		}
-		
-		public static UpdateDeployList read(FriendlyByteBuf buffer)
-		{
-			CompoundTag data = Objects.requireNonNull(buffer.readNbt());
-			return new UpdateDeployList(data);
-		}
-		
-		@Override
-		public void execute()
+		public void execute(IPayloadContext context)
 		{
 			ClientDeployList.load(this);
 		}
@@ -69,25 +52,18 @@ public final class ServerEditPackets
 	
 	public record Exit() implements MSPacket.PlayToClient
 	{
-		public static final ResourceLocation ID = Minestuck.id("server_edit/exit");
+		public static final Type<Exit> ID = new Type<>(Minestuck.id("server_edit/exit"));
+		public static final StreamCodec<FriendlyByteBuf, Exit> STREAM_CODEC = StreamCodec.unit(new Exit());
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
-		@Override
-		public void write(FriendlyByteBuf ignored)
-		{}
-		
-		public static Exit read(FriendlyByteBuf ignored)
-		{
-			return new Exit();
-		}
 		
 		@Override
-		public void execute()
+		public void execute(IPayloadContext context)
 		{
 			ClientEditmodeData.onExitPacket(this);
 		}

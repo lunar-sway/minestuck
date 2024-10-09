@@ -137,8 +137,8 @@ public class RemoteObserverBlockEntity extends BlockEntity
 	public void handleSettingsPacket(RemoteObserverSettingsPacket packet)
 	{
 		activeType = Objects.requireNonNull(packet.activeType());
-		if(packet.entityType() != null)
-			this.currentEntityType = packet.entityType();
+		if(packet.entityType().isPresent())
+			this.currentEntityType = packet.entityType().get();
 		this.observingRange = packet.observingRange();
 		
 		setChanged();

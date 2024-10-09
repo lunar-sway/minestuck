@@ -105,7 +105,7 @@ public final class ClientPlayerData
 	
 	public static void selectColor(int colorIndex)
 	{
-		PacketDistributor.SERVER.noArg().send(new PlayerColorPackets.SelectIndex(colorIndex));
+		PacketDistributor.sendToServer(new PlayerColorPackets.SelectIndex(colorIndex));
 		playerColor = ColorHandler.BuiltinColors.getColor(colorIndex);
 	}
 	
@@ -113,7 +113,7 @@ public final class ClientPlayerData
 	{
 		if (color < 0 || color > 256*256*256) return;
 		
-		PacketDistributor.SERVER.noArg().send(new PlayerColorPackets.SelectRGB(color));
+		PacketDistributor.sendToServer(new PlayerColorPackets.SelectRGB(color));
 		playerColor = color;
 	}
 	

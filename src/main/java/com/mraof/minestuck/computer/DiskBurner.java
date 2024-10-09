@@ -42,10 +42,10 @@ public class DiskBurner extends ButtonListProgram
 	{
 		if(buttonName.equals(BURN_CLIENT_DISK))
 		{
-			PacketDistributor.SERVER.noArg().send(BurnDiskPacket.create(be, 0));
+			PacketDistributor.sendToServer(BurnDiskPacket.create(be, 0));
 		} else if(buttonName.equals(BURN_SERVER_DISK))
 		{
-			PacketDistributor.SERVER.noArg().send(BurnDiskPacket.create(be, 1));
+			PacketDistributor.sendToServer(BurnDiskPacket.create(be, 1));
 		}
 	}
 	

@@ -4,7 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.Collections;
 import java.util.List;
@@ -82,16 +85,11 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
 	}
 	
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeId(GristTypes.REGISTRY, type());
-		buffer.writeLong(amount());
-	}
-	
-	public static GristAmount read(FriendlyByteBuf buffer)
-	{
-		GristType type = buffer.readById(GristTypes.REGISTRY);
-		long amount = buffer.readLong();
-		return new GristAmount(type, amount);
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, GristAmount> STREAM_CODEC = StreamCodec.composite(
+			GristType.STREAM_CODEC,
+			GristAmount::type,
+			ByteBufCodecs.VAR_LONG,
+			GristAmount::amount,
+			GristAmount::new
+	);
 }

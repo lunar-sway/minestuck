@@ -9,6 +9,7 @@ import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -35,7 +36,7 @@ import java.util.Objects;
 public class AreaEffectBlockEntity extends BlockEntity
 {
 	@Nonnull
-	private MobEffect effect = MSEffects.CREATIVE_SHOCK.get();
+	private Holder<MobEffect> effect = MSEffects.CREATIVE_SHOCK;
 	private int effectAmplifier;
 	@Nonnull
 	private BlockPos minAreaOffset = new BlockPos(-16, -16, -16);
@@ -93,14 +94,14 @@ public class AreaEffectBlockEntity extends BlockEntity
 			entityIterate.addEffect(new MobEffectInstance(effect, 120, effectAmplifier, false, false));
 		} else
 		{
-			boolean ignoreEntity = entityIterate instanceof Player player && player.isCreative() && !effect.isBeneficial(); //if not a player, or it is a player but they are in creative and the effect is not beneficial, ignore
+			boolean ignoreEntity = entityIterate instanceof Player player && player.isCreative() && !effect.value().isBeneficial(); //if not a player, or it is a player but they are in creative and the effect is not beneficial, ignore
 			
 			if(!ignoreEntity)
-				entityIterate.addEffect(new MobEffectInstance(effect, effect.isInstantenous() ? 1 : 120, effectAmplifier, false, false));
+				entityIterate.addEffect(new MobEffectInstance(effect, effect.value().isInstantenous() ? 1 : 120, effectAmplifier, false, false));
 		}
 	}
 	
-	public void setEffect(MobEffect effectIn, int effectAmplifierIn)
+	public void setEffect(Holder<MobEffect> effectIn, int effectAmplifierIn)
 	{
 		this.effect = Objects.requireNonNull(effectIn);
 		this.effectAmplifier = effectAmplifierIn;
@@ -111,7 +112,7 @@ public class AreaEffectBlockEntity extends BlockEntity
 	
 	public MobEffect getEffect()
 	{
-		return this.effect;
+		return this.effect.value();
 	}
 	
 	public int getEffectAmplifier()

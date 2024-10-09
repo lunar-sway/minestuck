@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * Works with the info that will be sent to players through {@link SkaianetInfoPackets}
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class InfoTracker
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -82,7 +82,7 @@ public final class InfoTracker
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		getSet(identifier).add(identifier);
 		sendConnectionInfo(identifier);
-		PacketDistributor.PLAYER.with(player).send(createLandChainPacket(),
+		PacketDistributor.sendToPlayer(player, createLandChainPacket(),
 				new SkaianetInfoPackets.HasEntered(SburbPlayerData.get(player).hasEntered()));
 	}
 	
@@ -107,7 +107,7 @@ public final class InfoTracker
 			LOGGER.warn("[Skaianet] Player {} already got the requested data.", player.getName());
 		}
 		
-		PacketDistributor.PLAYER.with(player).send(generateClientInfoPacket(p1));
+		PacketDistributor.sendToPlayer(player, generateClientInfoPacket(p1));
 	}
 	
 	
@@ -193,7 +193,7 @@ public final class InfoTracker
 		
 		if(resendLandChains)
 		{
-			PacketDistributor.ALL.noArg().send(createLandChainPacket());
+			PacketDistributor.sendToAllPlayers(createLandChainPacket());
 			resendLandChains = false;
 		}
 	}

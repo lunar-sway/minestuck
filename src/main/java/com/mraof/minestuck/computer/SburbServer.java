@@ -70,11 +70,11 @@ public class SburbServer extends ButtonListProgram
 			case EDIT_BUTTON, GIVE_BUTTON ->
 			{
 				CustomPacketPayload packet = new ClientEditPackets.Activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
-				PacketDistributor.SERVER.noArg().send(packet);
+				PacketDistributor.sendToServer(packet);
 			}
-			case RESUME_BUTTON -> PacketDistributor.SERVER.noArg().send(ResumeSburbConnectionPackets.asServer(be));
-			case OPEN_BUTTON -> PacketDistributor.SERVER.noArg().send(OpenSburbServerPacket.create(be));
-			case CLOSE_BUTTON -> PacketDistributor.SERVER.noArg().send(CloseSburbConnectionPackets.asServer(be));
+			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(be));
+			case OPEN_BUTTON -> PacketDistributor.sendToServer(OpenSburbServerPacket.create(be));
+			case CLOSE_BUTTON -> PacketDistributor.sendToServer(CloseSburbConnectionPackets.asServer(be));
 		}
 	}
 	

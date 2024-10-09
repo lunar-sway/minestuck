@@ -79,7 +79,7 @@ public class BlockTeleporterScreen extends Screen
 		
 		if(validInput)
 		{
-			PacketDistributor.SERVER.noArg().send(new BlockTeleporterSettingsPacket(offsetPos, be.getBlockPos()));
+			PacketDistributor.sendToServer(new BlockTeleporterSettingsPacket(offsetPos, be.getBlockPos()));
 			onClose();
 		}
 		

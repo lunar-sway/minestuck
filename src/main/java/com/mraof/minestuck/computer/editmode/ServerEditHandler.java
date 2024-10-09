@@ -179,7 +179,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		editData.recover();    //TODO handle exception from failed recovery
 		
-		PacketDistributor.PLAYER.with(player).send(new ServerEditPackets.Exit());
+		PacketDistributor.sendToPlayer(player, new ServerEditPackets.Exit());
 		
 		editData.getDecoy().markedForDespawn = true;
 		
@@ -219,7 +219,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			data.locations().validateClosestSource(player, targetData);
 			
-			PacketDistributor.PLAYER.with(player).send(new ServerEditPackets.Activate());
+			PacketDistributor.sendToPlayer(player, new ServerEditPackets.Activate());
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			

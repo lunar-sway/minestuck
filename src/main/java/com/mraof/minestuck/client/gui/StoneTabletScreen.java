@@ -230,7 +230,7 @@ public class StoneTabletScreen extends Screen
 	private void sendTabletToServer()
 	{
 		if(isModified && text != null)
-			PacketDistributor.SERVER.noArg().send(new CarveStoneTabletPacket(text, hand));
+			PacketDistributor.sendToServer(new CarveStoneTabletPacket(text, hand));
 	}
 	
 	private void setText(String text)

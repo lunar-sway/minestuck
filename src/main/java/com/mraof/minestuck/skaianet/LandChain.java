@@ -2,6 +2,9 @@ package com.mraof.minestuck.skaianet;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -12,6 +15,14 @@ import java.util.stream.Stream;
 
 public record LandChain(List<ResourceKey<Level>> lands, boolean isLoop)
 {
+	public static final StreamCodec<RegistryFriendlyByteBuf, LandChain> STREAM_CODEC = StreamCodec.composite(
+			ResourceKey.streamCodec(Registries.DIMENSION).apply(ByteBufCodecs.list()),
+			LandChain::lands,
+			ByteBufCodecs.BOOL,
+			LandChain::isLoop,
+			LandChain::new
+	);
+	
 	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(this.isLoop);

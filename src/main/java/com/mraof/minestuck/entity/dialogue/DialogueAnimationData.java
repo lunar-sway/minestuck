@@ -7,6 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 
@@ -31,27 +34,21 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 			ExtraCodecs.strictOptionalField(Codec.FLOAT, "scale", 1.0F).forGetter(DialogueAnimationData::scale)
 	).apply(instance, DialogueAnimationData::new));
 	
-	public static DialogueAnimationData read(FriendlyByteBuf buffer)
-	{
-		String emotion = buffer.readUtf(25);
-		int height = buffer.readInt();
-		int width = buffer.readInt();
-		int xOffset = buffer.readInt();
-		int yOffset = buffer.readInt();
-		float scale = buffer.readFloat();
-		
-		return new DialogueAnimationData(emotion, height, width, xOffset, yOffset, scale);
-	}
-	
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeUtf(this.emotion, 25);
-		buffer.writeInt(this.spriteHeight);
-		buffer.writeInt(this.spriteWidth);
-		buffer.writeInt(this.xOffset);
-		buffer.writeInt(this.yOffset);
-		buffer.writeFloat(this.scale);
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, DialogueAnimationData> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.STRING_UTF8,
+			DialogueAnimationData::emotion,
+			ByteBufCodecs.INT,
+			DialogueAnimationData::spriteHeight,
+			ByteBufCodecs.INT,
+			DialogueAnimationData::spriteWidth,
+			ByteBufCodecs.INT,
+			DialogueAnimationData::xOffset,
+			ByteBufCodecs.INT,
+			DialogueAnimationData::yOffset,
+			ByteBufCodecs.FLOAT,
+			DialogueAnimationData::scale,
+			DialogueAnimationData::new
+	);
 	
 	/**
 	 * Returns the animatable sprite corresponding to the entities sprite type

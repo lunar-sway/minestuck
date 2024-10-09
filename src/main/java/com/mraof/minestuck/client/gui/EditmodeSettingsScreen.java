@@ -161,7 +161,7 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 	private void teleport(BlockPos pos)
 	{
 		EditmodeTeleportPacket packet = new EditmodeTeleportPacket(pos);
-		PacketDistributor.SERVER.noArg().send(packet);
+		PacketDistributor.sendToServer(packet);
 	}
 	
 	private void prevPage()

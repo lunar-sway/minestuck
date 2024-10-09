@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -274,7 +275,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				
 				mc.setScreen(containerScreen);
 				if(mc.screen == containerScreen)
-					PacketDistributor.SERVER.noArg().send(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
+					PacketDistributor.sendToServer(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
 			}
 			else mc.setScreen(ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}

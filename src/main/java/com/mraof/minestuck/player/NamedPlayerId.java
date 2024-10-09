@@ -1,6 +1,8 @@
 package com.mraof.minestuck.player;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 /**
  * References a {@link PlayerIdentifier} by number id paired with the username of the related player.
@@ -9,21 +11,16 @@ import net.minecraft.network.FriendlyByteBuf;
  */
 public record NamedPlayerId(int id, String name)
 {
+	public static final StreamCodec<FriendlyByteBuf, NamedPlayerId> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.INT,
+			NamedPlayerId::id,
+			ByteBufCodecs.STRING_UTF8,
+			NamedPlayerId::name,
+			NamedPlayerId::new
+	);
+	
 	public static NamedPlayerId of(PlayerIdentifier player)
 	{
 		return new NamedPlayerId(player.getId(), player.getUsername());
-	}
-	
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeInt(this.id);
-		buffer.writeUtf(this.name, 16);
-	}
-	
-	public static NamedPlayerId read(FriendlyByteBuf buffer)
-	{
-		int id = buffer.readInt();
-		String name = buffer.readUtf(16);
-		return new NamedPlayerId(id, name);
 	}
 }

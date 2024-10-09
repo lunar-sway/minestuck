@@ -107,7 +107,7 @@ public class AlchemiterScreen extends Screen
 	
 	private void alchemize()
 	{
-		PacketDistributor.SERVER.noArg().send(new TriggerAlchemiterPacket(itemQuantity, alchemiter.getBlockPos()));
+		PacketDistributor.sendToServer(new TriggerAlchemiterPacket(itemQuantity, alchemiter.getBlockPos()));
 		this.minecraft.setScreen(null);
 	}
 	

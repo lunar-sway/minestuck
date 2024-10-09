@@ -1,8 +1,10 @@
 package com.mraof.minestuck.api.alchemy;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.*;
 
@@ -104,20 +106,9 @@ public interface GristSet
 		return new DefaultImmutableGristSet(builder);
 	}
 	
-	static void write(GristSet gristSet, FriendlyByteBuf buffer)
-	{
-		Collection<GristAmount> amounts = gristSet.asAmounts();
-		buffer.writeInt(amounts.size());
-		amounts.forEach(gristAmount -> gristAmount.write(buffer));
-	}
-	
-	static ImmutableGristSet read(FriendlyByteBuf buffer)
-	{
-		int size = buffer.readInt();
-		List<GristAmount> list = new ArrayList<>(size);
-		for(int i = 0; i < size; i++)
-			list.add(GristAmount.read(buffer));
-		
-		return DefaultImmutableGristSet.create(list);
-	}
+	StreamCodec<RegistryFriendlyByteBuf, ImmutableGristSet> IMMUTABLE_STREAM_CODEC = StreamCodec.composite(
+			GristAmount.STREAM_CODEC.apply(ByteBufCodecs.list()),
+			GristSet::asAmounts,
+			DefaultImmutableGristSet::create
+	);
 }

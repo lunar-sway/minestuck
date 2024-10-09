@@ -8,10 +8,14 @@ import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -19,39 +23,29 @@ import java.util.Optional;
 
 public record EditmodeLocationsPacket(@Nullable ResourceKey<Level> land, EditmodeLocations locations) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("editmode_locations");
+	
+		public static final Type<EditmodeLocationsPacket> ID = new Type<>(Minestuck.id("editmode_locations"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, EditmodeLocationsPacket> STREAM_CODEC = StreamCodec.composite(
+			ResourceKey.streamCodec(Registries.DIMENSION),
+			EditmodeLocationsPacket::land,
+			EditmodeLocations.STREAM_CODEC,
+			EditmodeLocationsPacket::locations,
+			EditmodeLocationsPacket::new
+	);
 	
 	public static void send(EditData data)
 	{
-		PacketDistributor.PLAYER.with(data.getEditor())
-				.send(new EditmodeLocationsPacket(data.sburbData().getLandDimensionIfEntered(), data.locations()));
+		PacketDistributor.sendToPlayer(data.getEditor(), new EditmodeLocationsPacket(data.sburbData().getLandDimensionIfEntered(), data.locations()));
 	}
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeOptional(Optional.ofNullable(this.land), FriendlyByteBuf::writeResourceKey);
-		
-		buffer.writeNbt(this.locations.serializeNBT());
-	}
-	
-	public static EditmodeLocationsPacket read(FriendlyByteBuf buffer)
-	{
-		ResourceKey<Level> land = buffer.readOptional(buffer_ -> buffer_.readResourceKey(Registries.DIMENSION)).orElse(null);
-		
-		CompoundTag tag = Objects.requireNonNull(buffer.readNbt());
-		EditmodeLocations locations = EditmodeLocations.read(tag);
-		return new EditmodeLocationsPacket(land, locations);
-	}
-	
-	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		ClientEditmodeData.onLocationsPacket(this);
 	}

@@ -118,8 +118,8 @@ public class SummonerBlockEntity extends BlockEntity
 	
 	public void handleSettingsPacket(SummonerSettingsPacket packet)
 	{
-		if(packet.entityType() != null)
-			setSummonedEntity(packet.entityType());
+		if(packet.entityType().isPresent())
+			setSummonedEntity(packet.entityType().get());
 		
 		setSummonRange(packet.summonRange());
 		setChanged();

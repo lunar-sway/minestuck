@@ -80,7 +80,7 @@ public class ClientEditToolDrag
 	 */
 	private static void cancelDrag(IEditTools cap)
 	{
-		PacketDistributor.SERVER.noArg().send(new EditmodeDragPackets.Reset());
+		PacketDistributor.sendToServer(new EditmodeDragPackets.Reset());
 		cap.resetDragTools();
 	}
 	
@@ -115,7 +115,7 @@ public class ClientEditToolDrag
 	private static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
 	{
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
-		PacketDistributor.SERVER.noArg().send(new EditmodeDragPackets.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
+		PacketDistributor.sendToServer(new EditmodeDragPackets.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
 	}
 	
 	/**
@@ -128,9 +128,9 @@ public class ClientEditToolDrag
 	private static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
 		if(targetTool == IEditTools.ToolMode.REVISE)
-			PacketDistributor.SERVER.noArg().send(new EditmodeDragPackets.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			PacketDistributor.sendToServer(new EditmodeDragPackets.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		else
-			PacketDistributor.SERVER.noArg().send(new EditmodeDragPackets.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			PacketDistributor.sendToServer(new EditmodeDragPackets.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		playSoundAndSetParticles(player, targetTool == IEditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
 	
 		cap.resetDragTools();

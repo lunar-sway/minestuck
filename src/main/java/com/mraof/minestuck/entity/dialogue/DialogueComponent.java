@@ -253,7 +253,7 @@ public final class DialogueComponent
 			return;
 		
 		if(player.getData(MSAttachments.CURRENT_DIALOGUE).lastTalkedTo(this.entity))
-			PacketDistributor.PLAYER.with(player).send(new DialoguePackets.CloseScreen());
+			PacketDistributor.sendToPlayer(player, new DialoguePackets.CloseScreen());
 	}
 	
 	public void tryStartDialogue(ServerPlayer player)
@@ -291,7 +291,7 @@ public final class DialogueComponent
 		
 		this.ongoingDialogue.put(player.getUUID(), new OngoingDialogue(nodeReference, player.position()));
 		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(dialogueData.newDialogue(this.entity), data);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public Optional<Dialogue.Node> validateAndGetCurrentNode(ServerPlayer player)

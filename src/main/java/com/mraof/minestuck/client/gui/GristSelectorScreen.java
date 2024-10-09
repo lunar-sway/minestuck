@@ -104,7 +104,7 @@ public class GristSelectorScreen extends MinestuckScreen
 				if (isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
 					this.onClose();
-					PacketDistributor.SERVER.noArg().send(new SetWildcardGristPacket(gristHolderPos, type));
+					PacketDistributor.sendToServer(new SetWildcardGristPacket(gristHolderPos, type));
 					return true;
 				}
 				offset++;

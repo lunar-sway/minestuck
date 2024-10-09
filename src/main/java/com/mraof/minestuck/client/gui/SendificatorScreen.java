@@ -133,7 +133,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	{
 		if(parsedPos != null)
 		{
-			PacketDistributor.SERVER.noArg().send(new SetSendificatorDestinationPacket(parsedPos));
+			PacketDistributor.sendToServer(new SetSendificatorDestinationPacket(parsedPos));
 		}
 	}
 	

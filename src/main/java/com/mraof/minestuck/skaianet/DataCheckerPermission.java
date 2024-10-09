@@ -68,7 +68,7 @@ public final class DataCheckerPermission
 			dataCheckerPermission.add(player.getGameProfile().getId());
 		else dataCheckerPermission.remove(player.getGameProfile().getId());
 		packet = new DataCheckerPackets.Permission(permission);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public static boolean hasPermission(ServerPlayer player)

@@ -95,7 +95,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 					return;
 				}
 			}
-			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.TriggerModusButton());
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.TriggerModusButton());
 		}
 	}
 	
@@ -112,7 +112,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 	private void onConfirm(boolean result)
 	{
 		if(result && !menu.getMenuItem().isEmpty())
-			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.TriggerModusButton());
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.TriggerModusButton());
 		minecraft.screen = this;
 	}
 	

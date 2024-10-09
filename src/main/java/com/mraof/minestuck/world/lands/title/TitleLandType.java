@@ -8,6 +8,9 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.core.HolderSet;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.tags.TagKey;
 
 /**
@@ -17,6 +20,7 @@ import net.minecraft.tags.TagKey;
 public abstract class TitleLandType implements ILandType
 {
 	public static final Codec<TitleLandType> CODEC = LandTypes.TITLE_REGISTRY.byNameCodec();
+	public static final StreamCodec<RegistryFriendlyByteBuf, TitleLandType> STREAM_CODEC = ByteBufCodecs.registry(LandTypes.TITLE_KEY);
 	
 	/**
 	 * Returns true if the given land type may be randomly chosen together with this land type.

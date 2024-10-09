@@ -77,7 +77,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	private void finish()
 	{
-		PacketDistributor.SERVER.noArg().send(new WirelessRedstoneTransmitterSettingsPacket(parseBlockPos(), be.getBlockPos()));
+		PacketDistributor.sendToServer(new WirelessRedstoneTransmitterSettingsPacket(parseBlockPos(), be.getBlockPos()));
 		onClose();
 	}
 	

@@ -53,7 +53,7 @@ public class TitleSelectionHook
 			return true;
 		
 		playersInTitleSelection.put(player, new Pair<>(new Vec3(player.getX(), player.getY(), player.getZ()), savedPos));
-		PacketDistributor.PLAYER.with(player).send(new TitleSelectPackets.OpenScreen(Optional.empty()));
+		PacketDistributor.sendToPlayer(player, new TitleSelectPackets.OpenScreen(Optional.empty()));
 		return false;
 	}
 	

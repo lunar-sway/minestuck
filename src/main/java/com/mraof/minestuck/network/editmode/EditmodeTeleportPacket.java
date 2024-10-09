@@ -5,36 +5,29 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record EditmodeTeleportPacket(BlockPos pos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("editmode_teleport");
+	
+	public static final Type<EditmodeTeleportPacket> ID = new Type<>(Minestuck.id("editmode_teleport"));
+	public static final StreamCodec<ByteBuf, EditmodeTeleportPacket> STREAM_CODEC = BlockPos.STREAM_CODEC.map(EditmodeTeleportPacket::new, EditmodeTeleportPacket::pos);
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeBlockPos(pos);
-	}
-	
-	public static EditmodeTeleportPacket read(FriendlyByteBuf buffer)
-	{
-		BlockPos pos = buffer.readBlockPos();
-		return new EditmodeTeleportPacket(pos);
-	}
-	
 	@SuppressWarnings("resource")
 	@Override
-	public void execute(ServerPlayer player)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
 		EditData editData = MSExtraData.get(player.serverLevel()).findEditData(data -> data.getEditor() == player);
 		

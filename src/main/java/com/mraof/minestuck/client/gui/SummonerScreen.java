@@ -116,7 +116,7 @@ public class SummonerScreen extends Screen
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
 		if(attemptedEntityType.isPresent())
 		{
-			PacketDistributor.SERVER.noArg().send(new SummonerSettingsPacket(isUntriggerable, summonRange, attemptedEntityType.get(), be.getBlockPos()));
+			PacketDistributor.sendToServer(new SummonerSettingsPacket(isUntriggerable, summonRange, attemptedEntityType.get(), be.getBlockPos()));
 			onClose();
 		} else
 		{

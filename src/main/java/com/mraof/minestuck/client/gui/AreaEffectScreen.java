@@ -161,7 +161,7 @@ public class AreaEffectScreen extends Screen
 		
 		if(validInput)
 		{
-			PacketDistributor.SERVER.noArg().send(new AreaEffectSettingsPacket(getEffect(effectTextField.getValue()), Mth.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, be.getBlockPos()));
+			PacketDistributor.sendToServer(new AreaEffectSettingsPacket(getEffect(effectTextField.getValue()), Mth.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, be.getBlockPos()));
 			onClose();
 		}
 		

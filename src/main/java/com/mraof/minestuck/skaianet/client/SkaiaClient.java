@@ -56,7 +56,7 @@ public final class SkaiaClient
 		boolean b = playerStateMap.get(computer.ownerId) != null;
 		if(!b)
 		{
-			PacketDistributor.SERVER.noArg().send(new SkaianetInfoPackets.Request(computer.ownerId));
+			PacketDistributor.sendToServer(new SkaianetInfoPackets.Request(computer.ownerId));
 			be = computer;
 		}
 		return b;

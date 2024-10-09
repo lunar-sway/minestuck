@@ -94,11 +94,11 @@ public class GoButton extends ExtendedButton
 	
 	private void onRegularClick()
 	{
-		PacketDistributor.SERVER.noArg().send(new MachinePackets.SetRunning(!this.menu.isRunning()));
+		PacketDistributor.sendToServer(new MachinePackets.SetRunning(!this.menu.isRunning()));
 	}
 	
 	private void onLoopClick()
 	{
-		PacketDistributor.SERVER.noArg().send(new MachinePackets.SetLooping(!this.menu.isLooping()));
+		PacketDistributor.sendToServer(new MachinePackets.SetLooping(!this.menu.isLooping()));
 	}
 }

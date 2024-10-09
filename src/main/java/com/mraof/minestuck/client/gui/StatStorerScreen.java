@@ -83,7 +83,7 @@ public class StatStorerScreen extends Screen
 	
 	private void finish()
 	{
-		PacketDistributor.SERVER.noArg().send(new StatStorerSettingsPacket(activeType, textToInt(), be.getBlockPos()));
+		PacketDistributor.sendToServer(new StatStorerSettingsPacket(activeType, textToInt(), be.getBlockPos()));
 		onClose();
 	}
 	

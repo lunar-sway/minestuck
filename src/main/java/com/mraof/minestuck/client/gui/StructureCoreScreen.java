@@ -97,7 +97,7 @@ public class StructureCoreScreen extends Screen
 	
 	private void finish()
 	{
-		PacketDistributor.SERVER.noArg().send(new StructureCoreSettingsPacket(actionType, shutdownRange, be.getBlockPos()));
+		PacketDistributor.sendToServer(new StructureCoreSettingsPacket(actionType, shutdownRange, be.getBlockPos()));
 		onClose();
 	}
 }

@@ -4,11 +4,14 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record TitleDataPacket(Title title) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("title_data");
+	public static final Type<TitleDataPacket> ID = new Type<>(Minestuck.id("title_data"));
+	public static final StreamCodec<FriendlyByteBuf, TitleDataPacket> STREAM_CODEC = Title.STREAM_CODEC.map(TitleDataPacket::new, TitleDataPacket::title);
 	
 	public static TitleDataPacket create(Title title)
 	{
@@ -16,26 +19,13 @@ public record TitleDataPacket(Title title) implements MSPacket.PlayToClient
 	}
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		title.write(buffer);
-	}
-	
-	public static TitleDataPacket read(FriendlyByteBuf buffer)
-	{
-		Title title = Title.read(buffer);
-		
-		return new TitleDataPacket(title);
-	}
-	
-	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		ClientPlayerData.handleDataPacket(this);
 	}

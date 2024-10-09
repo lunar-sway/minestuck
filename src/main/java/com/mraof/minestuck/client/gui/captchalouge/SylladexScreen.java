@@ -253,7 +253,7 @@ public abstract class SylladexScreen extends Screen
 	public void onEmptyConfirm(boolean result)
 	{
 		if(result)
-			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.GetItem(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.GetItem(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
 		minecraft.screen = this;
 	}
 	
@@ -334,7 +334,7 @@ public abstract class SylladexScreen extends Screen
 			
 			if(toSend != -1)
 			{
-				PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.GetItem(toSend, mouseButton != 0));
+				PacketDistributor.sendToServer(new CaptchaDeckPackets.GetItem(toSend, mouseButton != 0));
 			}
 		}
 

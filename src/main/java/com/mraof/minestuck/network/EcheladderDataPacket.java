@@ -6,12 +6,26 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Echeladder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record EcheladderDataPacket(int rung, float progress, boolean sendMessage) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("echeladder_data");
+	public static final Type<EcheladderDataPacket> ID = new Type<>(Minestuck.id("echeladder_data"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, EcheladderDataPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.INT,
+			EcheladderDataPacket::rung,
+			ByteBufCodecs.FLOAT,
+			EcheladderDataPacket::progress,
+			ByteBufCodecs.BOOL,
+			EcheladderDataPacket::sendMessage,
+			EcheladderDataPacket::new
+	);
 	
 	public static EcheladderDataPacket create(int rung, float progress, boolean sendMessage)
 	{
@@ -24,30 +38,7 @@ public record EcheladderDataPacket(int rung, float progress, boolean sendMessage
 	}
 	
 	@Override
-	public ResourceLocation id()
-	{
-		return ID;
-	}
-	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeInt(rung);
-		buffer.writeFloat(progress);
-		buffer.writeBoolean(sendMessage);
-	}
-	
-	public static EcheladderDataPacket read(FriendlyByteBuf buffer)
-	{
-		int rung = buffer.readInt();
-		float progress = buffer.readFloat();
-		boolean sendMessage = buffer.readBoolean();
-		
-		return create(rung, progress, sendMessage);
-	}
-	
-	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		int prev = ClientPlayerData.getRung();
 		ClientPlayerData.handleDataPacket(this);
@@ -70,4 +61,9 @@ public record EcheladderDataPacket(int rung, float progress, boolean sendMessage
 		return progress;
 	}
 	
+	@Override
+	public Type<? extends CustomPacketPayload> type()
+	{
+		return ID;
+	}
 }

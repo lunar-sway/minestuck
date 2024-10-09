@@ -90,7 +90,7 @@ public class MSKeyHandler
 				captchalogueInGame();
 			
 			if(effectToggleKey.isActiveAndMatches(input))
-				PacketDistributor.SERVER.noArg().send(new ToggleAspectEffectsPacket());
+				PacketDistributor.sendToServer(new ToggleAspectEffectsPacket());
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
@@ -101,7 +101,7 @@ public class MSKeyHandler
 	private static void captchalogueInGame()
 	{
 		if(!Minecraft.getInstance().player.getMainHandItem().isEmpty())
-			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.CaptchalogueHeldItem());
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueHeldItem());
 	}
 	
 	private static void captchalogueInGui(AbstractContainerScreen<?> screen)
@@ -110,7 +110,7 @@ public class MSKeyHandler
 		{
 			Slot slot = screen.getSlotUnderMouse();
 			if(slot != null && slot.hasItem())
-				PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.CaptchalogueInventorySlot(slot.index, screen.getMenu().containerId));
+				PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueInventorySlot(slot.index, screen.getMenu().containerId));
 		}
 	}
 }

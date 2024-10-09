@@ -79,7 +79,7 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 			}
 			if(packet != null)
 			{
-				PacketDistributor.SERVER.noArg().send(packet);
+				PacketDistributor.sendToServer(packet);
 				return true;
 			}
 		}
@@ -101,7 +101,7 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 				
 				if(packet != null)
 				{
-					PacketDistributor.SERVER.noArg().send(packet);
+					PacketDistributor.sendToServer(packet);
 					return true;
 				}
 			}
