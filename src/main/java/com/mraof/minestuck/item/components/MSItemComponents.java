@@ -14,6 +14,11 @@ public class MSItemComponents
 					.persistent(EncodedItemComponent.CODEC)
 					.networkSynchronized(EncodedItemComponent.STREAM_CODEC)
 					.build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<FrogTraitsComponent>> FROG_TRAITS = REGISTRY.register("frog_traits", () ->
+			new DataComponentType.Builder<FrogTraitsComponent>()
+					.persistent(FrogTraitsComponent.CODEC)
+					.networkSynchronized(FrogTraitsComponent.STREAM_CODEC)
+					.build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<StoneTabletTextComponent>> STONE_TABLET_TEXT = REGISTRY.register("stone_tablet_text", () ->
 			new DataComponentType.Builder<StoneTabletTextComponent>()
 					.persistent(StoneTabletTextComponent.CODEC)

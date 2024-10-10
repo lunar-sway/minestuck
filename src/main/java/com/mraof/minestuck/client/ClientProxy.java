@@ -15,6 +15,7 @@ import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.*;
+import com.mraof.minestuck.entity.FrogEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -23,6 +24,8 @@ import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StructureScannerItem;
 import com.mraof.minestuck.item.block.StoneTabletItem;
+import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.item.components.StoneTabletTextComponent;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
@@ -41,6 +44,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -119,8 +123,8 @@ public class ClientProxy
 		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
 		
 		ItemProperties.register(MSItems.BOONDOLLARS.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
-		ItemProperties.register(MSItems.FROG.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
-		ItemProperties.register(MSItems.STONE_TABLET.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.FROG.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> stack.has(MSItemComponents.FROG_TRAITS) ? stack.get(MSItemComponents.FROG_TRAITS).variant().orElse(FrogEntity.FrogVariants.DEFAULT).ordinal() : FrogEntity.FrogVariants.DEFAULT.ordinal());
+		ItemProperties.register(MSItems.STONE_TABLET.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletTextComponent.hasText(stack) ? 1 : 0);
 		ItemProperties.register(MSItems.MUSIC_SWORD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		
