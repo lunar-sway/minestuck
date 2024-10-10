@@ -9,9 +9,14 @@ public class MSItemComponents
 {
 	public static final DeferredRegister.DataComponents REGISTRY = DeferredRegister.createDataComponents(Minestuck.MOD_ID);
 	
-	public static final DeferredHolder<DataComponentType<?>, DataComponentType<EncodedItemComponent>> ENCODED_ITEM = REGISTRY.register("", () ->
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<EncodedItemComponent>> ENCODED_ITEM = REGISTRY.register("encoded_item", () ->
 			new DataComponentType.Builder<EncodedItemComponent>()
 					.persistent(EncodedItemComponent.CODEC)
 					.networkSynchronized(EncodedItemComponent.STREAM_CODEC)
+					.build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<StoneTabletTextComponent>> STONE_TABLET_TEXT = REGISTRY.register("stone_tablet_text", () ->
+			new DataComponentType.Builder<StoneTabletTextComponent>()
+					.persistent(StoneTabletTextComponent.CODEC)
+					.networkSynchronized(StoneTabletTextComponent.STREAM_CODEC)
 					.build());
 }

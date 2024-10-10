@@ -2,6 +2,8 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.item.components.StoneTabletTextComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -39,12 +41,7 @@ public record CarveStoneTabletPacket(String text, InteractionHand hand) implemen
 		ItemStack tablet = player.getItemInHand(hand);
 		ItemStack tool = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
 		
-		if(tablet.is(MSItems.STONE_TABLET) &&
-				tool.is(MSItems.CARVING_TOOL))
-		{
-			CompoundTag nbt = tablet.getOrCreateTag();
-			nbt.putString("text", text);
-			tablet.setTag(nbt);
-		}
+		if(tablet.is(MSItems.STONE_TABLET) && tool.is(MSItems.CARVING_TOOL))
+			StoneTabletTextComponent.setText(tablet, text);
 	}
 }
