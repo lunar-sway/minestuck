@@ -114,7 +114,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 	}
 	

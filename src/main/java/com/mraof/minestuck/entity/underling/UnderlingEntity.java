@@ -48,7 +48,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
@@ -127,10 +127,10 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.REGISTRY.getKey(GristTypes.ARTIFACT.get())));
+		super.defineSynchedData(builder);
+		builder.define(GRIST_TYPE, String.valueOf(GristTypes.REGISTRY.getKey(GristTypes.ARTIFACT.get())));
 	}
 	
 	protected void applyGristType(GristType type)

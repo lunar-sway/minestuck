@@ -26,7 +26,7 @@ public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 	}
 	

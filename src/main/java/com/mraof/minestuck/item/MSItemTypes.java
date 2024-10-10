@@ -13,8 +13,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.common.ToolAction;
-import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbility;
+import net.neoforged.neoforge.common.ItemAbilities;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 
 public class MSItemTypes
 {
-	public static final ToolAction GRIST_HARVEST = ToolAction.get("grist_harvest");
+	public static final ItemAbility GRIST_HARVEST = ItemAbility.get("grist_harvest");
 	
 	public static final Tier SBAHJ_TIER = new ModItemTier(0, 59, 0.0F, -1.0F, 0, () -> Ingredient.EMPTY);
 	public static final Tier PAPER_TIER = new ModItemTier(0, 65, 0.0F, 0.0F, 20, () -> Ingredient.of(Items.PAPER));
@@ -45,28 +45,28 @@ public class MSItemTypes
 	
 	public static final ArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20,
 			Map.of(ArmorItem.Type.BOOTS, 3, ArmorItem.Type.LEGGINGS, 6, ArmorItem.Type.CHESTPLATE, 7, ArmorItem.Type.HELMET, 2),
-			15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.of(Items.PRISMARINE_SHARD));
+			15, SoundEvents.ARMOR_EQUIP_IRON.value(), 0.0F, 0F, () -> Ingredient.of(Items.PRISMARINE_SHARD));
 	public static final ArmorMaterial IRON_LASS_ARMOR = new ModArmorMaterial("minestuck:iron_lass", 50,
 			Map.of(ArmorItem.Type.BOOTS, 4, ArmorItem.Type.LEGGINGS, 7, ArmorItem.Type.CHESTPLATE, 8, ArmorItem.Type.HELMET, 3),
-			15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.EMPTY);
+			15, SoundEvents.ARMOR_EQUIP_IRON.value(), 0.0F, 0F, () -> Ingredient.EMPTY);
 	public static final ArmorMaterial CLOTH_ARMOR = new ModArmorMaterial("minestuck:cloth", -1,
 			Map.of(ArmorItem.Type.BOOTS, 0, ArmorItem.Type.LEGGINGS, 0, ArmorItem.Type.CHESTPLATE, 0, ArmorItem.Type.HELMET, 0),
-			5, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
+			5, SoundEvents.ARMOR_EQUIP_LEATHER.value(), 0.0F, 0F, () -> Ingredient.EMPTY);
 	
 	public static final ArmorMaterial DREAM_PAJAMAS = new ModArmorMaterial("minestuck:dream_pajamas", 10,
 			Map.of(ArmorItem.Type.BOOTS, 1, ArmorItem.Type.LEGGINGS, 2, ArmorItem.Type.CHESTPLATE, 3, ArmorItem.Type.HELMET, 1),
-			0, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
+			0, SoundEvents.ARMOR_EQUIP_LEATHER.value(), 0.0F, 0F, () -> Ingredient.EMPTY);
 	
 	//Base Tools
-	public static final MSToolType SICKLE_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
-	public static final MSToolType SCYTHE_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SHEARS_DIG).addEnchantments(EnchantmentCategory.WEAPON);
-	public static final MSToolType CLAWS_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
-	public static final MSToolType PICKAXE_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_PICKAXE, ToolActions.PICKAXE_DIG).addEnchantments(EnchantmentCategory.DIGGER);
+	public static final MSToolType SICKLE_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ItemAbilities.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType SCYTHE_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ItemAbilities.SHEARS_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType CLAWS_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ItemAbilities.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType PICKAXE_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_PICKAXE, ItemAbilities.PICKAXE_DIG).addEnchantments(EnchantmentCategory.DIGGER);
 	public static final MSToolType HAMMER_TOOL = new MSToolType(PICKAXE_TOOL).addEnchantments(EnchantmentCategory.WEAPON);
-	public static final MSToolType AXE_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_AXE, ToolActions.AXE_DIG).addEnchantments(EnchantmentCategory.DIGGER, EnchantmentCategory.WEAPON);
+	public static final MSToolType AXE_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_AXE, ItemAbilities.AXE_DIG).addEnchantments(EnchantmentCategory.DIGGER, EnchantmentCategory.WEAPON);
 	public static final MSToolType CHAINSAW_TOOL = new MSToolType(AXE_TOOL).addEnchantments(EnchantmentCategory.WEAPON);
-	public static final MSToolType SHOVEL_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_SHOVEL, ToolActions.SHOVEL_DIG).addEnchantments(EnchantmentCategory.DIGGER);
-	public static final MSToolType SWORD_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType SHOVEL_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_SHOVEL, ItemAbilities.SHOVEL_DIG).addEnchantments(EnchantmentCategory.DIGGER);
+	public static final MSToolType SWORD_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ItemAbilities.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType LANCE_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType CLUB_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType KNIFE_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);

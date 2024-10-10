@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.PlantType;
 
 public class GlowingMushroomBlock extends BushBlock
 {
@@ -64,12 +63,6 @@ public class GlowingMushroomBlock extends BushBlock
 				}
 			}
 		}
-	}
-	
-	@Override
-	public PlantType getPlantType(BlockGetter level, BlockPos pos)
-	{
-		return PlantType.CAVE;
 	}
 	
 	public boolean canSpread(Level level, BlockPos pos, BlockState state)

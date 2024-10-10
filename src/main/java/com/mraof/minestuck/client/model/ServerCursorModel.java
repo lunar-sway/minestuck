@@ -3,8 +3,8 @@ package com.mraof.minestuck.client.model;
 import com.mraof.minestuck.entity.ServerCursorEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
-import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 
 public class ServerCursorModel extends GeoModel<ServerCursorEntity>

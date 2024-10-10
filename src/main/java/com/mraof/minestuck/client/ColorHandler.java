@@ -3,8 +3,10 @@ package com.mraof.minestuck.client;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.renderer.BlockColorCruxite;
+import com.mraof.minestuck.entity.FrogEntity;
 import com.mraof.minestuck.item.FrogItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.color.item.ItemColors;
@@ -49,18 +51,17 @@ public class ColorHandler
     {
         public int getColor(ItemStack stack, int tintIndex)
         {
-            int color = -1;
-            int type = !stack.hasTag() ? 0 : stack.getTag().getInt("Type");
-            if(type == 0)
+            if(stack.has(MSItemComponents.FROG_TRAITS) && stack.get(MSItemComponents.FROG_TRAITS).variant().orElse(FrogEntity.FrogVariants.DEFAULT) == FrogEntity.FrogVariants.DEFAULT)
             {
-                switch(tintIndex)
-                {
-                    case 0: color = FrogItem.getSkinColor(stack); break;
-                    case 1: color = FrogItem.getEyeColor(stack); break;
-                    case 2: color = FrogItem.getBellyColor(stack); break;
-                }
+				return switch(tintIndex)
+				{
+					case 0 -> FrogItem.getSkinColor(stack);
+					case 1 -> FrogItem.getEyeColor(stack);
+					case 2 -> FrogItem.getBellyColor(stack);
+					default -> -1;
+				};
             }
-            return color;
+            return -1;
         }
     }
 }

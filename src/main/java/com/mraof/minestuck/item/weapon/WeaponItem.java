@@ -24,7 +24,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.TierSortingRegistry;
-import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -36,7 +36,7 @@ public class WeaponItem extends TieredItem
 	
 	@Nullable
 	private final MSToolType toolType;
-	private final Set<ToolAction> toolActions;
+	private final Set<ItemAbility> toolActions;
 	private final List<OnHitEffect> onHitEffects;
 	@Nullable
 	private final DestroyBlockEffect destroyBlockEffect;
@@ -126,7 +126,7 @@ public class WeaponItem extends TieredItem
 	}
 	
 	@Override
-	public boolean canPerformAction(ItemStack stack, ToolAction toolAction)
+	public boolean canPerformAction(ItemStack stack, ItemAbility toolAction)
 	{
 		return this.toolActions.contains(toolAction) || this.toolType != null && this.toolType.hasAction(toolAction);
 	}
@@ -234,7 +234,7 @@ public class WeaponItem extends TieredItem
 		private final float attackSpeed;
 		@Nullable
 		private MSToolType toolType;
-		private final Set<ToolAction> toolActions = new HashSet<>();
+		private final Set<ItemAbility> toolActions = new HashSet<>();
 		private float efficiency;
 		private boolean disableShield;
 		private final List<OnHitEffect> onHitEffects = new ArrayList<>();
@@ -311,7 +311,7 @@ public class WeaponItem extends TieredItem
 			return this;
 		}
 		
-		public Builder add(ToolAction... actions)
+		public Builder add(ItemAbility... actions)
 		{
 			toolActions.addAll(List.of(actions));
 			return this;

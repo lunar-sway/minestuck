@@ -14,9 +14,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
@@ -69,12 +69,9 @@ public final class InfoTracker
 	}
 	
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Post event)
 	{
-		if(event.phase == TickEvent.Phase.END)
-		{
-			SkaianetData.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
-		}
+		SkaianetData.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
 	}
 	
 	private void onPlayerLoggedIn(ServerPlayer player)
@@ -214,7 +211,7 @@ public final class InfoTracker
 						MSCriteriaTriggers.SBURB_CONNECTION.get().trigger(playerListener);
 				}
 				
-				PacketDistributor.PLAYER.with(playerListener).send(packet);
+				PacketDistributor.sendToPlayer(playerListener, packet);
 			}
 		}
 	}

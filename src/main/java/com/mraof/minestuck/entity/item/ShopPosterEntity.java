@@ -33,10 +33,10 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		this.entityData.define(TYPE, 0);
+		super.defineSynchedData(builder);
+		this.builder.define(TYPE, 0);
 		
 	}
 	

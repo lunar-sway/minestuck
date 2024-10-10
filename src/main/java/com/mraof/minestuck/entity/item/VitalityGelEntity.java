@@ -7,6 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -85,7 +87,7 @@ public class VitalityGelEntity extends Entity implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 	}
 
@@ -126,7 +128,7 @@ public class VitalityGelEntity extends Entity implements IEntityWithComplexSpawn
 			this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
 		}
 		
-		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
+		double d0 = this.getDimensions(Pose.STANDING).width() * 2.0D;
 		
 		if(this.targetCycle < this.cycle - 20 + this.getId() % 100)
 		{
@@ -144,7 +146,7 @@ public class VitalityGelEntity extends Entity implements IEntityWithComplexSpawn
 			double d2 = (this.closestPlayer.getY() + (double) this.closestPlayer.getEyeHeight() - this.getY()) / d0;
 			double d3 = (this.closestPlayer.getZ() - this.getZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-			double d5 = this.getDimensions(Pose.STANDING).width * 2.0D - d4;
+			double d5 = this.getDimensions(Pose.STANDING).width() * 2.0D - d4;
 			
 			if(d5 > 0.0D)
 			{
@@ -241,13 +243,13 @@ public class VitalityGelEntity extends Entity implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeInt(this.healAmount);
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf data)
+	public void readSpawnData(RegistryFriendlyByteBuf data)
 	{
 		this.healAmount = data.readInt();
 	}

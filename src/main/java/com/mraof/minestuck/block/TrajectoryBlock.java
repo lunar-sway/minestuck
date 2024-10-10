@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 
 import javax.annotation.Nullable;
 
@@ -114,12 +114,12 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	 */
 	@Nullable
 	@Override
-	public BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
+	public PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
 	{
 		if((state.getValue(POWER) >= UPWARDS_POWER_MIN && state.getValue(FACING) == Direction.UP) || (state.getValue(POWER) > 0 && state.getValue(FACING) != Direction.UP))
-			return BlockPathTypes.DANGER_OTHER;
+			return PathType.DANGER_OTHER;
 		else
-			return BlockPathTypes.WALKABLE;
+			return PathType.WALKABLE;
 	}
 	
 	@Override

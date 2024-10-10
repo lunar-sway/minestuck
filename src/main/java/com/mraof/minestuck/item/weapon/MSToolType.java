@@ -6,7 +6,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class MSToolType
 {
 	private final Set<Enchantment> enchantments = new HashSet<>();
 	private final Set<TagKey<Block>> miningEfficiencyTags = new HashSet<>();
-	private final Set<ToolAction> miningActions = new HashSet<>();
+	private final Set<ItemAbility> miningActions = new HashSet<>();
 	
 	public MSToolType()
 	{
@@ -41,19 +41,19 @@ public class MSToolType
 		return false;
 	}
 	
-	public MSToolType addAction(ToolAction action)
+	public MSToolType addAction(ItemAbility action)
 	{
 		this.miningActions.add(action);
 		return this;
 	}
 	
-	public MSToolType addMining(TagKey<Block> tag, ToolAction action)
+	public MSToolType addMining(TagKey<Block> tag, ItemAbility action)
 	{
 		this.miningEfficiencyTags.add(tag);
 		return this.addAction(action);
 	}
 	
-	public boolean hasAction(ToolAction toolAction)
+	public boolean hasAction(ItemAbility toolAction)
 	{
 		return miningActions.contains(toolAction);
 	}

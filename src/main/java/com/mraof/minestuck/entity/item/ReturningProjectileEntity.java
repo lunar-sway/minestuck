@@ -51,11 +51,11 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		entityData.define(LIFESPAN, 200);
-		entityData.define(NOCLIP, false);
+		super.defineSynchedData(builder);
+		builder.define(LIFESPAN, 200);
+		builder.define(NOCLIP, false);
 	}
 	
 	@Override
