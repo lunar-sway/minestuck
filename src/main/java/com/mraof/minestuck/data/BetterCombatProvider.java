@@ -153,12 +153,15 @@ public class BetterCombatProvider implements DataProvider
 	{
 		MSItems.REGISTER.getEntries().forEach(weaponHolder ->
 		{
-			if(weaponHolder.get() instanceof WeaponItem weaponItem && weaponItem.getToolType() != null)
+			if(weaponHolder.get() instanceof WeaponItem weaponItem && weaponItem.getToolTypes() != null)
 			{
-				String parent = getWeaponParent(weaponItem.getToolType());
-				
-				if(!parent.isEmpty())
-					weaponWithParent.put(weaponHolder.getKey(), parent);
+				for(MSToolType toolType : weaponItem.getToolTypes())
+				{
+					String parent = getWeaponParent(toolType);
+					
+					if(!parent.isEmpty())
+						weaponWithParent.put(weaponHolder.getKey(), parent);
+				}
 			}
 		});
 	}

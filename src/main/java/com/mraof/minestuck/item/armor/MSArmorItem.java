@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.armor;
 
 import com.mraof.minestuck.client.model.armor.ArmorModels;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -20,12 +21,12 @@ public class MSArmorItem extends ArmorItem
 {
     private final String texture;
     
-    public MSArmorItem(ArmorMaterial material, Type type, Properties properties)
+    public MSArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties)
     {
         this("", material, type, properties);
     }
 
-    public MSArmorItem(String texture, ArmorMaterial material, Type type, Properties properties)
+    public MSArmorItem(String texture, Holder<ArmorMaterial> material, Type type, Properties properties)
     {
         super(material, type, properties);
         this.texture = texture;
