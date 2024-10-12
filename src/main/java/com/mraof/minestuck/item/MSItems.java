@@ -25,6 +25,9 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -187,10 +190,8 @@ public class MSItems
 	public static final DeferredItem<Item> BISECTOR = REGISTER.register("bisector", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 9, -3.2F).efficiency(5.0F).disableShield().set(MSItemTypes.AXE_TOOL), new Item.Properties().durability(600)));
 	public static final DeferredItem<Item> FINE_CHINA_AXE = REGISTER.register("fine_china_axe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 9, -3.2F).efficiency(1.0F).disableShield().set(MSItemTypes.AXE_TOOL), new Item.Properties().durability(8)));
 	
-	
 	//Dice
 	public static final DeferredItem<Item> FLUORITE_OCTET = REGISTER.register("fluorite_octet", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 4, -3.0F).efficiency(1.0F).add(OnHitEffect.RANDOM_DAMAGE), new Item.Properties().durability(4096).rarity(Rarity.EPIC)));
-	
 	
 	//Claws
 	public static final DeferredItem<Item> MAKESHIFT_CLAWS_DRAWN = REGISTER.register("makeshift_claws_drawn", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 1, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(MSItems.MAKESHIFT_CLAWS_SHEATHED)), new Item.Properties().durability(200)));
@@ -510,7 +511,7 @@ public class MSItems
 	public static final DeferredItem<Item> JAR_OF_BUGS = REGISTER.register("jar_of_bugs", () -> new Item(new Item.Properties().food(MSFoods.JAR_OF_BUGS)));
 	public static final DeferredItem<Item> BUG_MAC = REGISTER.register("bug_mac", () -> new Item(new Item.Properties().food(MSFoods.BUG_MAC)));
 	public static final DeferredItem<Item> ONION = REGISTER.register("onion", () -> new Item(new Item.Properties().food(MSFoods.ONION)));
-	public static final DeferredItem<Item> SALAD = REGISTER.register("salad", () -> new BowlFoodItem(new Item.Properties().food(MSFoods.SALAD).stacksTo(1)));
+	public static final DeferredItem<Item> SALAD = REGISTER.register("salad", () -> new Item(new Item.Properties().food(MSFoods.SALAD).stacksTo(1)));
 	public static final DeferredItem<Item> SOPOR_SLIME_PIE = REGISTER.register("sopor_slime_pie", () -> new SoporSlimeItem(new Item.Properties().stacksTo(3).food(MSFoods.SOPOR_SLIME_PIE), 1500));
 	public static final DeferredItem<Item> DESERT_FRUIT = REGISTER.register("desert_fruit", () -> new Item(new Item.Properties().food(MSFoods.DESERT_FRUIT)));
 	public static final DeferredItem<Item> ROCK_COOKIE = REGISTER.register("rock_cookie", () -> new Item(new Item.Properties())); //Not actually food, but let's pretend it is
@@ -579,15 +580,15 @@ public class MSItems
 	
 	
 	//Buckets
-	public static final DeferredItem<Item> OIL_BUCKET = REGISTER.register("oil_bucket", () -> new BucketItem(MSFluids.OIL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> BLOOD_BUCKET = REGISTER.register("blood_bucket", () -> new BucketItem(MSFluids.BLOOD, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> BRAIN_JUICE_BUCKET = REGISTER.register("brain_juice_bucket", () -> new BucketItem(MSFluids.BRAIN_JUICE, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> WATER_COLORS_BUCKET = REGISTER.register("water_colors_bucket", () -> new BucketItem(MSFluids.WATER_COLORS, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> ENDER_BUCKET = REGISTER.register("ender_bucket", () -> new BucketItem(MSFluids.ENDER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> LIGHT_WATER_BUCKET = REGISTER.register("light_water_bucket", () -> new BucketItem(MSFluids.LIGHT_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> OIL_BUCKET = REGISTER.register("oil_bucket", () -> new BucketItem(MSFluids.OIL.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> BLOOD_BUCKET = REGISTER.register("blood_bucket", () -> new BucketItem(MSFluids.BLOOD.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> BRAIN_JUICE_BUCKET = REGISTER.register("brain_juice_bucket", () -> new BucketItem(MSFluids.BRAIN_JUICE.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> WATER_COLORS_BUCKET = REGISTER.register("water_colors_bucket", () -> new BucketItem(MSFluids.WATER_COLORS.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> ENDER_BUCKET = REGISTER.register("ender_bucket", () -> new BucketItem(MSFluids.ENDER.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> LIGHT_WATER_BUCKET = REGISTER.register("light_water_bucket", () -> new BucketItem(MSFluids.LIGHT_WATER.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final DeferredItem<Item> OBSIDIAN_BUCKET = REGISTER.register("obsidian_bucket", () -> new ObsidianBucketItem(new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
-	public static final DeferredItem<Item> CAULK_BUCKET = REGISTER.register("caulk_bucket", () -> new BucketItem(MSFluids.CAULK, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> MOLTEN_AMBER_BUCKET = REGISTER.register("molten_amber_bucket", () -> new BucketItem(MSFluids.MOLTEN_AMBER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> CAULK_BUCKET = REGISTER.register("caulk_bucket", () -> new BucketItem(MSFluids.CAULK.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> MOLTEN_AMBER_BUCKET = REGISTER.register("molten_amber_bucket", () -> new BucketItem(MSFluids.MOLTEN_AMBER.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	
 	
 	//Alchemy Items
@@ -665,11 +666,10 @@ public class MSItems
 	public static final DeferredItem<Item> COCOA_WART = REGISTER.register("cocoa_wart", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<MultiblockItem> HORSE_CLOCK = REGISTER.register("horse_clock", () -> new MultiblockItem(MSBlocks.HORSE_CLOCK, new Item.Properties()));
 	
-	
 	//Music Discs/Cassettes
-	public static final DeferredItem<Item> MUSIC_DISC_EMISSARY_OF_DANCE = REGISTER.register("music_disc_emissary_of_dance", () -> new RecordItem(1, MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 11040));
-	public static final DeferredItem<Item> MUSIC_DISC_DANCE_STAB_DANCE = REGISTER.register("music_disc_dance_stab_dance", () -> new RecordItem(2, MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 13440));
-	public static final DeferredItem<Item> MUSIC_DISC_RETRO_BATTLE = REGISTER.register("music_disc_retro_battle", () -> new RecordItem(3, MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 2760));
+	public static final DeferredItem<Item> MUSIC_DISC_EMISSARY_OF_DANCE = REGISTER.register("music_disc_emissary_of_dance", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("emissary_of_dance")))));
+	public static final DeferredItem<Item> MUSIC_DISC_DANCE_STAB_DANCE = REGISTER.register("music_disc_dance_stab_dance", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("dance_stab_dance")))));
+	public static final DeferredItem<Item> MUSIC_DISC_RETRO_BATTLE = REGISTER.register("music_disc_retro_battle", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("retro_battle")))));
 	
 	public static final DeferredItem<Item> CASSETTE_13 = REGISTER.register("cassette_13", () -> new CassetteItem(1, EnumCassetteType.THIRTEEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3560));
 	public static final DeferredItem<Item> CASSETTE_CAT = REGISTER.register("cassette_cat", () -> new CassetteItem(2, EnumCassetteType.CAT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3700));

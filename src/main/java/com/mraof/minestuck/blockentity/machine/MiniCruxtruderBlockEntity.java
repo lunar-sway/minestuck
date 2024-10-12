@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -64,19 +65,19 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		this.progressTracker.load(nbt);
 		this.color = nbt.getInt("color");
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
 		this.progressTracker.save(compound);
 		compound.putInt("color", color);
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 	}
 	
 	@Override

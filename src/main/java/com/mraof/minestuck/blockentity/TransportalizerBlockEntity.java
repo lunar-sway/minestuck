@@ -321,7 +321,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
 		super.load(nbt);
 		this.destId = nbt.getString(DEST_ID);
@@ -332,9 +332,9 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		if (!id.isEmpty())
 			compound.putString(ID, id);
@@ -345,7 +345,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
 		return this.saveWithoutMetadata();
 	}

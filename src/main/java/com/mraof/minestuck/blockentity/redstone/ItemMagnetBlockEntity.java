@@ -118,7 +118,7 @@ public class ItemMagnetBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
 		super.load(nbt);
 		gatherLength = nbt.getInt("gatherLength");
@@ -133,7 +133,7 @@ public class ItemMagnetBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
 		return this.saveWithoutMetadata();
 	}

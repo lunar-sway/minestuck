@@ -39,7 +39,7 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
 		super.load(nbt);
 		if(nbt.contains("dest", Tag.TAG_COMPOUND))
@@ -47,9 +47,9 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, destination).resultOrPartial(LOGGER::error)
 				.ifPresent(tag -> compound.put("dest", tag));
 	}

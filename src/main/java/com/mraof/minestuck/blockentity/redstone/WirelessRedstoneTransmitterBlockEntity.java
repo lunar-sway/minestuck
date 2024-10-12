@@ -118,9 +118,9 @@ public class WirelessRedstoneTransmitterBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		tickCycle = compound.getInt("tickCycle");
 		
@@ -131,9 +131,9 @@ public class WirelessRedstoneTransmitterBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("tickCycle", tickCycle);
 		
@@ -143,7 +143,7 @@ public class WirelessRedstoneTransmitterBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
 		return this.saveWithoutMetadata();
 	}

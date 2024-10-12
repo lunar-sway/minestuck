@@ -111,9 +111,9 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		if(compound.contains("damageStored"))
 			this.damageStored = compound.getFloat("damageStored");
@@ -170,9 +170,9 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putFloat("damageStored", damageStored);
 		compound.putInt("deathsStored", deathsStored);
@@ -357,9 +357,9 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag tagCompound = super.getUpdateTag();
+		CompoundTag tagCompound = super.getUpdateTag(provider);
 		tagCompound.putInt("activeTypeOrdinal", getActiveType().ordinal());
 		tagCompound.putInt("divideValueBy", getDivideValueBy());
 		

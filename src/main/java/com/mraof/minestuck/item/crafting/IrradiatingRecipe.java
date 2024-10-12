@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.crafting;
 
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +35,7 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 	}
 	
 	@Override
-	public ItemStack getResultItem(RegistryAccess registryAccess)
+	public ItemStack getResultItem(HolderLookup.Provider pRegistries)
 	{
 		return ItemStack.EMPTY;
 	}

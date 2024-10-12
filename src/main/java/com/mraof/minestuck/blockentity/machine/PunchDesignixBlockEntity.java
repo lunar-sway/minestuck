@@ -13,6 +13,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -240,29 +241,29 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		broken = nbt.getBoolean("broken");
-		setCard(ItemStack.of(nbt.getCompound("card")));
+		setCard(ItemStack.parseOptional(pRegistries, nbt.getCompound("card")));
 		
 		if(nbt.contains("captcha"))
 			this.captcha = nbt.getString("captcha");
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		compound.putBoolean("broken", this.broken);
-		compound.put("card", getCard().save(new CompoundTag()));
+		compound.put("card", getCard().save(provider, new CompoundTag()));
 		compound.putString("captcha", this.captcha);
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

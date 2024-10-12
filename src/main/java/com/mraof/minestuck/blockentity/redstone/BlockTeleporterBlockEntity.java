@@ -87,9 +87,9 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		int offsetX = compound.getInt("offsetX");
 		int offsetY = compound.getInt("offsetY");
@@ -98,9 +98,9 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("offsetX", teleportOffset.getX());
 		compound.putInt("offsetY", teleportOffset.getY());
@@ -113,7 +113,7 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
 		return this.saveWithoutMetadata();
 	}

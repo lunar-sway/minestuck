@@ -1,0 +1,8 @@
+{
+  "comparator_output": 3,
+  "description": {
+    "translate": "item.minestuck.music_disc_retro_battle.desc"
+  },
+  "length_in_seconds": 138.0,
+  "sound_event": "music_disc.retro_battle_theme"
+}

@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

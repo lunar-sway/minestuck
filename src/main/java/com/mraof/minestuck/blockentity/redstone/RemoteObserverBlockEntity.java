@@ -147,9 +147,9 @@ public class RemoteObserverBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		this.tickCycle = compound.getInt("tickCycle");
 		this.activeType = ActiveType.fromInt(compound.getInt("activeTypeOrdinal"));
@@ -162,9 +162,9 @@ public class RemoteObserverBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
@@ -178,7 +178,7 @@ public class RemoteObserverBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
 		return this.saveWithoutMetadata();
 	}

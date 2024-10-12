@@ -54,9 +54,9 @@ public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<Serv
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag nbt = super.getUpdateTag();
+		CompoundTag nbt = super.getUpdateTag(provider);
 		nbt.putInt("color", ColorHandler.getColorForDimension((ServerLevel) level));
 		return nbt;
 	}
@@ -66,9 +66,8 @@ public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<Serv
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
-	
 	@Override
-	public void handleUpdateTag(CompoundTag tag)
+	public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider)
 	{
 		this.color = tag.getInt("color");
 	}

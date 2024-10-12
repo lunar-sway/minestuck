@@ -14,6 +14,7 @@ import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -355,12 +356,12 @@ public class TotemLatheBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		broken = nbt.getBoolean("broken");
-		card1 = ItemStack.of(nbt.getCompound("card1"));
-		card2 = ItemStack.of(nbt.getCompound("card2"));
+		card1 = ItemStack.parseOptional(pRegistries, nbt.getCompound("card1"));
+		card2 = ItemStack.parseOptional(pRegistries, nbt.getCompound("card2"));
 		isProcessing = nbt.getBoolean("isProcessing");
 		if(card1.isEmpty() && !card2.isEmpty())
 		{
@@ -370,12 +371,12 @@ public class TotemLatheBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		compound.putBoolean("broken",broken);
-		compound.put("card1", card1.save(new CompoundTag()));
-		compound.put("card2", card2.save(new CompoundTag()));
+		compound.put("card1", card1.save(provider, new CompoundTag()));
+		compound.put("card2", card2.save(provider, new CompoundTag()));
 		compound.putBoolean("isProcessing", isProcessing);
 	}
 	
@@ -418,9 +419,9 @@ public class TotemLatheBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

@@ -128,9 +128,9 @@ public class SummonerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		cooldownTimer = compound.getInt("cooldownTimer");
 		if(compound.contains("summonRange", Tag.TAG_ANY_NUMERIC))
@@ -141,9 +141,9 @@ public class SummonerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("cooldownTimer", cooldownTimer);
 		compound.putInt("summonRange", summonRange);
@@ -151,7 +151,7 @@ public class SummonerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
 		return this.saveWithoutMetadata();
 	}
