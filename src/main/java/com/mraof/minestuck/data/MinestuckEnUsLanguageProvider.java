@@ -1995,9 +1995,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntityType(MSEntityTypes.PLAYER_DECOY, "Player Decoy");
 		addEntityType(MSEntityTypes.SERVER_CURSOR, "Server Cursor");
 		addEntityType(MSEntityTypes.METAL_BOAT, "Metal Boat");
-		addEntityType(MSEntityTypes.MIDNIGHT_CREW_POSTER, "Midnight Crew Poster");
-		addEntityType(MSEntityTypes.SBAHJ_POSTER, "SBAHJ Poster");
-		addEntityType(MSEntityTypes.SHOP_POSTER, "Shop Sign");
+		addEntityType(MSEntityTypes.POSTER, "Poster");
 		addEntityType(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
 		
 		addGristType(GristTypes.BUILD, "Build");

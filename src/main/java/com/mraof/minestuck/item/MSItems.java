@@ -5,10 +5,7 @@ import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
-import com.mraof.minestuck.entity.item.SbahjPosterEntity;
-import com.mraof.minestuck.entity.item.ShopPosterEntity;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.armor.IronLassArmorItem;
 import com.mraof.minestuck.item.armor.MSArmorItem;
@@ -16,6 +13,7 @@ import com.mraof.minestuck.item.armor.PrismarineArmorItem;
 import com.mraof.minestuck.item.artifact.CruxiteAppleItem;
 import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
+import com.mraof.minestuck.item.components.PosterComponent;
 import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.item.weapon.projectiles.BouncingProjectileWeaponItem;
@@ -27,7 +25,6 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -573,7 +570,7 @@ public class MSItems
 	public static final DeferredItem<MSArmorItem> CRUMPLY_HAT = REGISTER.register("crumply_hat", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> STONE_EYEBALLS = REGISTER.register("stone_eyeballs", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> STONE_TABLET = REGISTER.register("stone_tablet", () -> new StoneTabletItem(MSBlocks.STONE_TABLET.get(), new Item.Properties()));
-	public static final DeferredItem<Item> SHOP_POSTER = REGISTER.register("shop_poster", () -> new HangingItem(ShopPosterEntity::new, new Item.Properties().stacksTo(1))); //not used
+	public static final DeferredItem<Item> SHOP_POSTER = REGISTER.register("shop_poster", () -> new PosterItem(PosterComponent.withDefaultBack(MSTags.PaintingVariants.SHOP_POSTERS), new Item.Properties().stacksTo(1))); //not used
 	public static final DeferredItem<Item> GUTTER_THUMB_DRIVE = REGISTER.register("gutter_thumb_drive", () -> new GutterThumbDriveItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> ANCIENT_THUMB_DRIVE = REGISTER.register("ancient_thumb_drive", () -> new AncientThumbDrive(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GUTTER_BALL = REGISTER.register("gutter_ball", () -> new GutterBallItem(new Item.Properties().stacksTo(5).rarity(Rarity.UNCOMMON)));
@@ -611,8 +608,8 @@ public class MSItems
 	public static final DeferredItem<Item> THRESH_DVD = REGISTER.register("thresh_dvd", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GAMEBRO_MAGAZINE = REGISTER.register("gamebro_magazine", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GAMEGRL_MAGAZINE = REGISTER.register("gamegrl_magazine", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CREW_POSTER = REGISTER.register("crew_poster", () -> new HangingItem((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SBAHJ_POSTER = REGISTER.register("sbahj_poster", () -> new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CREW_POSTER = REGISTER.register("crew_poster", () -> new PosterItem(PosterComponent.withDefaultBack(MSTags.PaintingVariants.MIDNIGHT_CREW_POSTERS), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SBAHJ_POSTER = REGISTER.register("sbahj_poster", () -> new PosterItem(new PosterComponent(MSTags.PaintingVariants.SBAHJ_POSTERS, Minestuck.id("textures/painting/back/sbahj_poster.png")), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> BI_DYE = REGISTER.register("bi_dye", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> LIP_BALM = REGISTER.register("lip_balm", () -> new RightClickMessageItem(new Item.Properties(), RightClickMessageItem.Type.DEFAULT));
 	public static final DeferredItem<Item> ELECTRIC_AUTOHARP = REGISTER.register("electric_autoharp", () -> new RightClickMusicItem(new Item.Properties(), RightClickMusicItem.Type.ELECTRIC_AUTOHARP));

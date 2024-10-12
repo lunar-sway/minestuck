@@ -14,6 +14,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
@@ -261,6 +262,17 @@ public class MSTags
 		}
 	}
 	
+	public static class PaintingVariants
+	{
+		public static final TagKey<PaintingVariant> SBAHJ_POSTERS = tag("sbahj_posters");
+		public static final TagKey<PaintingVariant> MIDNIGHT_CREW_POSTERS = tag("midnight_crew_posters");
+		public static final TagKey<PaintingVariant> SHOP_POSTERS = tag("shop_posters");
+		
+		private static TagKey<PaintingVariant> tag(String name)
+		{
+			return TagKey.create(Registries.PAINTING_VARIANT, Minestuck.id(name));
+		}
+	}
 	
 	public static class TitleLandTypes
 	{
