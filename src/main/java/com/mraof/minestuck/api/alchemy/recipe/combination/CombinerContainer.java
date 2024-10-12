@@ -4,6 +4,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
@@ -11,9 +12,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public interface CombinerContainer extends Container
+public interface CombinerContainer extends RecipeInput
 {
 	CombinationMode getMode();
+	
+	@Override
+	default boolean isEmpty()
+	{
+		return RecipeInput.super.isEmpty();
+	}
 	
 	final class ItemHandlerWrapper extends RecipeWrapper implements CombinerContainer
 	{
@@ -51,12 +58,6 @@ public interface CombinerContainer extends Container
 		}
 		
 		@Override
-		public int getContainerSize()
-		{
-			return 2;
-		}
-		
-		@Override
 		public boolean isEmpty()
 		{
 			return item1.isEmpty() && item2.isEmpty();
@@ -72,6 +73,13 @@ public interface CombinerContainer extends Container
 			else throw new IndexOutOfBoundsException(String.valueOf(index));
 		}
 		
+		@Override
+		public int size()
+		{
+			return 2;
+		}
+		
+		/*
 		@Override
 		public ItemStack removeItem(int index, int count)
 		{
@@ -107,5 +115,6 @@ public interface CombinerContainer extends Container
 		{
 			throw new UnsupportedOperationException();
 		}
+		*/
 	}
 }

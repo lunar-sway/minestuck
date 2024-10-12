@@ -5,11 +5,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -101,6 +103,8 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		this.setDirection(Direction.from2DDataValue(compound.getByte("Facing")));
 	}
 	
+	Painting
+	
 	@Override
 	public int getWidth()
 	{
@@ -148,7 +152,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeByte(this.direction.ordinal());
 		
@@ -163,7 +167,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf data)
+	public void readSpawnData(RegistryFriendlyByteBuf data)
 	{
 		Direction facing = Direction.values()[data.readByte() % Direction.values().length];
 		

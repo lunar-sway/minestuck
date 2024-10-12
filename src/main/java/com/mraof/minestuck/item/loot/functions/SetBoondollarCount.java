@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.loot.functions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.loot.MSLootTables;
@@ -20,7 +20,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class SetBoondollarCount extends LootItemConditionalFunction
 {
-	public static final Codec<SetBoondollarCount> CODEC = RecordCodecBuilder.create(instance ->
+	public static final MapCodec<SetBoondollarCount> CODEC = RecordCodecBuilder.mapCodec(instance ->
 			commonFields(instance)
 					.and(NumberProviders.CODEC.fieldOf("count").forGetter(function -> function.countRange))
 					.apply(instance, SetBoondollarCount::new));

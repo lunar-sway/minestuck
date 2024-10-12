@@ -8,25 +8,27 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.network.block.StatStorerSettingsPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
-import net.neoforged.neoforge.event.level.SaplingGrowTreeEvent;
 
 import javax.annotation.Nullable;
 
@@ -307,9 +309,10 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public static void onSaplingGrow(SaplingGrowTreeEvent event)
+	public static void onSaplingGrow(BlockGrowFeatureEvent event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getLevel());
+		if(event.getLevel().getBlockState(event.getPos()).is(BlockTags.SAPLINGS))
+			attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -345,9 +348,9 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public static void onEntityDamage(LivingHurtEvent event)
+	public static void onEntityDamage(LivingDamageEvent.Post event)
 	{
-		attemptStatUpdate(event.getAmount(), StatStorerBlockEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level());
+		attemptStatUpdate(event.getNewDamage(), StatStorerBlockEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)

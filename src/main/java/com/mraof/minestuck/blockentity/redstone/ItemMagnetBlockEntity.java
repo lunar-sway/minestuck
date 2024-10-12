@@ -6,6 +6,7 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -120,14 +121,14 @@ public class ItemMagnetBlockEntity extends BlockEntity
 	@Override
 	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		gatherLength = nbt.getInt("gatherLength");
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compoundNBT)
+	public void saveAdditional(CompoundTag compoundNBT, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compoundNBT);
+		super.saveAdditional(compoundNBT, provider);
 		
 		compoundNBT.putInt("gatherLength", gatherLength);
 	}
@@ -135,7 +136,7 @@ public class ItemMagnetBlockEntity extends BlockEntity
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

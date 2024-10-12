@@ -3,6 +3,7 @@ package com.mraof.minestuck.blockentity.redstone;
 import com.mraof.minestuck.block.redstone.RedstoneClockBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -111,7 +112,7 @@ public class RedstoneClockBlockEntity extends BlockEntity
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

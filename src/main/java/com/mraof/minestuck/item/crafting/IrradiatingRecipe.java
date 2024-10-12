@@ -6,10 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.CookingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 import java.util.Optional;
@@ -46,7 +43,7 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 		return MSRecipeTypes.IRRADIATING.get();
 	}
 	
-	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(Container container, Level level)
+	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(RecipeInput container, Level level)
 	{
 		return Optional.of(this);
 	}

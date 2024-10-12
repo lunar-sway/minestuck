@@ -7,6 +7,7 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.network.block.StructureCoreSettingsPacket;
 import com.mraof.minestuck.world.gen.structure.CoreCompatibleScatteredStructurePiece;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -227,7 +228,7 @@ public class StructureCoreBlockEntity extends BlockEntity
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

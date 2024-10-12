@@ -56,7 +56,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new ComputerThemeProvider(output));
 		
 		gen.addProvider(event.includeServer(), new BoondollarPriceProvider(output, Minestuck.MOD_ID));
-		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output));
+		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), new MSLootModifiers(output));
 		gen.addProvider(event.includeServer(), MSAdvancementProvider.create(output, lookupProvider, fileHelper));
 		

@@ -5,6 +5,7 @@ import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -73,9 +74,9 @@ public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<Serv
 	}
 	
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider)
 	{
-		handleUpdateTag(pkt.getTag());
+		handleUpdateTag(pkt.getTag(), provider);
 	}
 	
 }

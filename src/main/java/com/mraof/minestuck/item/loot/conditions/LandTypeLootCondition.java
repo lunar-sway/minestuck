@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.loot.conditions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -22,11 +23,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public record LandTypeLootCondition(HolderSet<TerrainLandType> terrainTypes, HolderSet<TitleLandType> titleTypes, boolean inverted) implements LootItemCondition
 {
-	public static final Codec<LandTypeLootCondition> CODEC = RecordCodecBuilder.create(instance ->
+	public static final MapCodec<LandTypeLootCondition> CODEC = RecordCodecBuilder.mapCodec(instance ->
 			instance.group(
 					RegistryCodecs.homogeneousList(LandTypes.TERRAIN_KEY).fieldOf("terrain_type").forGetter(LandTypeLootCondition::terrainTypes),
 					RegistryCodecs.homogeneousList(LandTypes.TITLE_KEY).fieldOf("title_type").forGetter(LandTypeLootCondition::titleTypes),
-					ExtraCodecs.strictOptionalField(Codec.BOOL, "inverted", false).forGetter(LandTypeLootCondition::inverted)
+					Codec.BOOL.fieldOf("inverted").orElse(false).forGetter(LandTypeLootCondition::inverted)
 			).apply(instance, LandTypeLootCondition::new));
 	
 	@Override

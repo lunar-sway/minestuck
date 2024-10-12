@@ -16,7 +16,8 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -212,7 +213,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 		}
 		
 		//this.setPosition(this.getPosX(), (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.getPosZ());
-		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
+		double d0 = this.getDimensions(Pose.STANDING).width() * 2.0D;
 		
 		// Periodically re-evaluate whether the grist should be following this particular player
 		if(this.targetCycle < this.cycle - 20 + this.getId() % 100) //Why should I care about the entityId
@@ -235,7 +236,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 			double d2 = (this.closestPlayer.getY() + (double) this.closestPlayer.getEyeHeight() - this.getY()) / d0;
 			double d3 = (this.closestPlayer.getZ() - this.getZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-			double d5 = this.getDimensions(Pose.STANDING).width * 2.0D - d4;
+			double d5 = this.getDimensions(Pose.STANDING).width() * 2.0D - d4;
 			
 			if(d5 > 0.0D)
 			{
@@ -324,7 +325,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 		else
 		{
 			GristRejectAnimationPacket packet = GristRejectAnimationPacket.createPacket(this);
-			PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
+			PacketDistributor.sendToPlayersTrackingEntity(this, packet);
 		}
 	}
 	
@@ -367,16 +368,16 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
-		buffer.writeId(GristTypes.REGISTRY, gristType);
+		GristType.STREAM_CODEC.encode(buffer, gristType);
 		buffer.writeLong(gristValue);
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf data)
+	public void readSpawnData(RegistryFriendlyByteBuf data)
 	{
-		gristType = data.readById(GristTypes.REGISTRY);
+		gristType = GristType.STREAM_CODEC.decode(data);
 		gristValue = data.readLong();
 	}
 }
