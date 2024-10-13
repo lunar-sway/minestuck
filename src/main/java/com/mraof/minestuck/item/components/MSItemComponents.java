@@ -24,4 +24,9 @@ public class MSItemComponents
 					.persistent(StoneTabletTextComponent.CODEC)
 					.networkSynchronized(StoneTabletTextComponent.STREAM_CODEC)
 					.build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SburbCodeComponent>> SBURB_CODE = REGISTRY.register("sburb_code", () ->
+			new DataComponentType.Builder<SburbCodeComponent>()
+					.persistent(SburbCodeComponent.CODEC)
+					.networkSynchronized(SburbCodeComponent.STREAM_CODEC)
+					.build());
 }
