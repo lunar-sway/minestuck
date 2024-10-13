@@ -12,9 +12,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
@@ -47,11 +47,8 @@ public final class EntryEffect
 	}
 	
 	@SubscribeEvent
-	public static void clientTick(TickEvent.ClientTickEvent event)
+	public static void clientTick(ClientTickEvent.Pre event)
 	{
-		if(event.phase != TickEvent.Phase.START)
-			return;
-		
 		Player player = Minecraft.getInstance().player;
 		if(player == null || location == null || player.level().dimension() != location.level())
 			return;

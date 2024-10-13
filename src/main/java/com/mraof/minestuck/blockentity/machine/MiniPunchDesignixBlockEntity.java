@@ -9,6 +9,7 @@ import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -55,16 +56,16 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		this.progressTracker.load(nbt);
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag compound)
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		this.progressTracker.save(compound);
 	}
 	
@@ -80,7 +81,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 				return false;
 			
 			ItemStack currentOutput = itemHandler.getStackInSlot(2);
-			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.isSameItemSameTags(currentOutput, output));
+			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.isSameItemSameComponents(currentOutput, output));
 		} else
 		{
 			return false;

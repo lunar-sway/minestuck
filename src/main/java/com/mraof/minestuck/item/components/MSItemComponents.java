@@ -29,4 +29,13 @@ public class MSItemComponents
 					.persistent(SburbCodeComponent.CODEC)
 					.networkSynchronized(SburbCodeComponent.STREAM_CODEC)
 					.build());
+	
+	
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<PosterComponent>> POSTER = REGISTRY.register("poster", () ->
+			new DataComponentType.Builder<PosterComponent>()
+					.persistent(PosterComponent.CODEC)
+					.networkSynchronized(PosterComponent.STREAM_CODEC)
+					.build());
+	
+	
 }

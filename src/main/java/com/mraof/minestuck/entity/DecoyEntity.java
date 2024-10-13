@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -78,7 +79,7 @@ public class DecoyEntity extends Mob implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	public EntityDimensions getDimensions(Pose poseIn)
+	protected EntityDimensions getDefaultDimensions(Pose pPose)
 	{
 		return EntityType.PLAYER.getDimensions();
 	}
@@ -128,7 +129,7 @@ public class DecoyEntity extends Mob implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeUtf(username, 16);
 		buffer.writeUUID(playerId);
@@ -136,7 +137,7 @@ public class DecoyEntity extends Mob implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
 		username = additionalData.readUtf(16);
 		playerId = additionalData.readUUID();

@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -19,6 +20,10 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -35,7 +40,6 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
-	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
 	private final DataSlot fuelHolder = new DataSlot()
 	{
@@ -67,16 +71,16 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		compound.putShort("fuel", fuel);
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		fuel = nbt.getShort("fuel");
 	}
 	
@@ -103,6 +107,8 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	{
 		if(level == null)
 			return ItemStack.EMPTY;
+		
+		SingleRecipeInput recipeInventory = new SingleRecipeInput(itemHandler.getStackInSlot(0));
 		
 		//List of all recipes that match to the current input
 		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE.get(), recipeInventory, level).stream().map(RecipeHolder::value);

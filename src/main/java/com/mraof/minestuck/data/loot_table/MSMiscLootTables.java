@@ -5,7 +5,7 @@ import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.components.SburbCodeComponent;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.data.loot.LootTableSubProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -18,7 +18,7 @@ import java.util.function.BiConsumer;
 public class MSMiscLootTables implements LootTableSubProvider
 {
 	@Override
-	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
+	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> lootProcessor)
 	{
 		lootProcessor.accept(MSLootTables.KUNDLER_SUPRISES, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantValue.exactly(1)) //has only one item generate, with equal chance for each

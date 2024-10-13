@@ -5,6 +5,7 @@ import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -39,17 +40,17 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		if(nbt.contains("dest", Tag.TAG_COMPOUND))
 			destination = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("dest")).resultOrPartial(LOGGER::error).orElse(destination);
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, destination).resultOrPartial(LOGGER::error)
 				.ifPresent(tag -> compound.put("dest", tag));
 	}

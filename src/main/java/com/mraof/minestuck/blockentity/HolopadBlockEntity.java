@@ -6,6 +6,7 @@ import com.mraof.minestuck.block.machine.HolopadBlock;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -90,24 +91,24 @@ public class HolopadBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
-		this.card = ItemStack.of(nbt.getCompound("card"));
+		super.loadAdditional(nbt, pRegistries);
+		this.card = ItemStack.parseOptional(pRegistries, nbt.getCompound("card"));
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
-		compound.put("card", card.save(new CompoundTag()));
+		super.saveAdditional(compound, provider);
+		compound.put("card", card.save(provider, new CompoundTag()));
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag nbt = super.getUpdateTag();
-		nbt.put("card", card.save(new CompoundTag()));
+		CompoundTag nbt = super.getUpdateTag(provider);
+		nbt.put("card", card.save(provider, new CompoundTag()));
 		return nbt;
 	}
 	

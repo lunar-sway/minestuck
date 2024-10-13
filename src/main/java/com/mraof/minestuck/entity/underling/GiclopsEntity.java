@@ -23,7 +23,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

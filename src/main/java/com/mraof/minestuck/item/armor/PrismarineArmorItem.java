@@ -2,12 +2,14 @@ package com.mraof.minestuck.item.armor;
 
 import com.mraof.minestuck.client.model.armor.PrismarineArmorModel;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.constant.DefaultAnimations;
@@ -24,7 +26,7 @@ public class PrismarineArmorItem extends ArmorItem implements GeoItem
 {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	
-	public PrismarineArmorItem(ArmorMaterial pMaterial, Type pType, Properties pProperties)
+	public PrismarineArmorItem(Holder<ArmorMaterial> pMaterial, Type pType, Properties pProperties)
 	{
 		super(pMaterial, pType, pProperties);
 	}

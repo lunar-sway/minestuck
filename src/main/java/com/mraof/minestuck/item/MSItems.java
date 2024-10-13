@@ -5,10 +5,7 @@ import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
-import com.mraof.minestuck.entity.item.SbahjPosterEntity;
-import com.mraof.minestuck.entity.item.ShopPosterEntity;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.armor.IronLassArmorItem;
 import com.mraof.minestuck.item.armor.MSArmorItem;
@@ -16,6 +13,7 @@ import com.mraof.minestuck.item.armor.PrismarineArmorItem;
 import com.mraof.minestuck.item.artifact.CruxiteAppleItem;
 import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
+import com.mraof.minestuck.item.components.PosterComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.components.SburbCodeComponent;
 import com.mraof.minestuck.item.foods.*;
@@ -27,6 +25,8 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -61,7 +61,7 @@ public class MSItems
 	public static final DeferredItem<Item> REGI_HAMMER = REGISTER.register("regi_hammer", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 7, -3.2F).efficiency(8.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));
 	public static final DeferredItem<Item> FEAR_NO_ANVIL = REGISTER.register("fear_no_anvil", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 7, -3.2F).efficiency(7.0F).set(MSItemTypes.HAMMER_TOOL).add(OnHitEffect.TIME_SLOWNESS_AOE).add(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1))), new Item.Properties().rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> MELT_MASHER = REGISTER.register("melt_masher", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 8, -3.2F).efficiency(12.0F).set(MSItemTypes.HAMMER_TOOL).add(OnHitEffect.setOnFire(25)), new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR = REGISTER.register("estrogen_empowered_everything_eradicator", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 7, -3.2F).efficiency(9.0F).set(MSItemTypes.MULTI_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 200)).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07), new Item.Properties().durability(6114)));
+	public static final DeferredItem<Item> ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR = REGISTER.register("estrogen_empowered_everything_eradicator", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 7, -3.2F).efficiency(9.0F).set(MSItemTypes.HAMMER_TOOL, MSItemTypes.AXE_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 200)).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07), new Item.Properties().durability(6114)));
 	public static final DeferredItem<Item> EEEEEEEEEEEE = REGISTER.register("eeeeeeeeeeee", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 9, -3.2F).efficiency(9.1F).set(MSItemTypes.HAMMER_TOOL).set(PogoEffect.EFFECT_02).add(PogoEffect.EFFECT_02, OnHitEffect.playSound(MSSoundEvents.ITEM_EEEEEEEEEEEE_HIT, 1.5F, 1.0F)), new Item.Properties().durability(6114)));
 	public static final DeferredItem<Item> ZILLYHOO_HAMMER = REGISTER.register("zillyhoo_hammer", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 8, -3.2F).efficiency(15.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties().rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> POPAMATIC_VRILLYHOO = REGISTER.register("popamatic_vrillyhoo", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 6, -3.2F).efficiency(15.0F).set(MSItemTypes.HAMMER_TOOL).add(OnHitEffect.RANDOM_DAMAGE), new Item.Properties().rarity(Rarity.RARE)));
@@ -105,7 +105,7 @@ public class MSItems
 	public static final DeferredItem<Item> PILLOW_TALK = REGISTER.register("pillow_talk", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 6, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(10)), new Item.Properties().durability(2031).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> KRAKENS_EYE = REGISTER.register("krakens_eye", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 5, -2.6F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).set(ItemRightClickEffect.playerPotionEffect(() -> new MobEffectInstance(MobEffects.CONDUIT_POWER, 120, 0), 1, 120)), new Item.Properties().durability(650)));
 	public static final DeferredItem<Item> CINNAMON_SWORD = REGISTER.register("cinnamon_sword", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 4, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties()));
-	public static final DeferredItem<Item> UNION_BUSTER = REGISTER.register("union_buster", () -> new WeaponItem(new WeaponItem.Builder(Tiers.GOLD, 9, -3.5F).efficiency(1.0f).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.sweepMultiEffect(OnHitEffect.SPREADING_KNOCKBACK, OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MSEffects.SUSPICION.get(), 1200, 3, false, false)))), new Item.Properties().durability(505).rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> UNION_BUSTER = REGISTER.register("union_buster", () -> new WeaponItem(new WeaponItem.Builder(Tiers.GOLD, 9, -3.5F).efficiency(1.0f).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.sweepMultiEffect(OnHitEffect.SPREADING_KNOCKBACK, OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MSEffects.SUSPICION, 1200, 3, false, false)))), new Item.Properties().durability(505).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> CHAINSAW_KATANA = REGISTER.register("chainsaw_katana", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -2.4F).efficiency(3.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().durability(700)));
 	public static final DeferredItem<Item> THORN_IN_YOUR_SIDE = REGISTER.register("thorn_in_your_side", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties()));
 	public static final DeferredItem<Item> ROSE_PROTOCOL = REGISTER.register("rose_protocol", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(6)), new Item.Properties().rarity(Rarity.UNCOMMON)));
@@ -178,21 +178,19 @@ public class MSItems
 	public static final DeferredItem<Item> REGIAXE = REGISTER.register("regiaxe", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 6, -3.0F).disableShield().efficiency(6.0F).set(MSItemTypes.AXE_TOOL), new Item.Properties()));
 	public static final DeferredItem<Item> GOTHY_AXE = REGISTER.register("gothy_axe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 8, -3.0F).efficiency(6.0F).disableShield().set(MSItemTypes.AXE_TOOL), new Item.Properties()));
 	public static final DeferredItem<Item> SURPRISE_AXE = REGISTER.register("surprise_axe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -3.0F).efficiency(6.0F).disableShield().set(MSItemTypes.AXE_TOOL).add(OnHitEffect.KUNDLER_SURPRISE), new Item.Properties().durability(600)));
-	public static final DeferredItem<Item> SHOCK_AXE = REGISTER.register("shock_axe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 8, -3.0F).efficiency(6.0F).disableShield().set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.SHOCK_AXE_UNPOWERED)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER).add(OnHitEffect.playSound(MSSoundEvents.EVENT_ELECTRIC_SHOCK, 0.6F, 1.0F)), new Item.Properties().durability(800)));
-	public static final DeferredItem<Item> SHOCK_AXE_UNPOWERED = REGISTER.register("shock_axe_unpowered", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 8, -3.0F).efficiency(6.0F).disableShield().set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.SHOCK_AXE)), new Item.Properties().durability(800)));
+	public static final DeferredItem<Item> SHOCK_AXE = REGISTER.register("shock_axe", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.BATTERY_TIER, 8, -3.0F).efficiency(6.0F).disableShield().set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.SHOCK_AXE_UNPOWERED)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER).add(OnHitEffect.playSound(MSSoundEvents.EVENT_ELECTRIC_SHOCK, 0.6F, 1.0F)), new Item.Properties().durability(800)));
+	public static final DeferredItem<Item> SHOCK_AXE_UNPOWERED = REGISTER.register("shock_axe_unpowered", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.BATTERY_TIER, 6, -3.0F).efficiency(6.0F).disableShield().set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.SHOCK_AXE)), new Item.Properties().durability(800)));
 	public static final DeferredItem<Item> SCRAXE = REGISTER.register("scraxe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 8, -3.0F).efficiency(7.0F).disableShield().set(MSItemTypes.AXE_TOOL), new Item.Properties().durability(500)));
 	public static final DeferredItem<Item> LORENTZ_DISTRANSFORMATIONER = REGISTER.register("lorentz_distransformationer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 6, -3.0F).efficiency(7.0F).disableShield().set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SPACE_TELEPORT), new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> PISTON_POWERED_POGO_AXEHAMMER = REGISTER.register("piston_powered_pogo_axehammer", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.POGO_TIER, 6, -3.0F).efficiency(2.0F).disableShield().set(MSItemTypes.AXE_HAMMER_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)).set(PogoEffect.EFFECT_06).add(PogoEffect.EFFECT_06), new Item.Properties().durability(800)));
+	public static final DeferredItem<Item> PISTON_POWERED_POGO_AXEHAMMER = REGISTER.register("piston_powered_pogo_axehammer", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.POGO_TIER, 6, -3.0F).efficiency(2.0F).disableShield().set(MSItemTypes.AXE_TOOL, MSItemTypes.HAMMER_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)).set(PogoEffect.EFFECT_06).add(PogoEffect.EFFECT_06), new Item.Properties().durability(800)));
 	public static final DeferredItem<Item> RUBY_CROAK = REGISTER.register("ruby_croak", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 8, -3.0F).efficiency(8.0F).disableShield().set(MSItemTypes.AXE_TOOL), new Item.Properties().rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> HEPHAESTUS_LUMBERJACK = REGISTER.register("hephaestus_lumberjack", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 7, -3.0F).efficiency(9.0F).disableShield().set(MSItemTypes.AXE_TOOL).add(OnHitEffect.setOnFire(30)), new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> FISSION_FOCUSED_FAULT_FELLER = REGISTER.register("fission_focused_fault_feller", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -3.0F).efficiency(5.0F).disableShield().set(MSItemTypes.AXE_HAMMER_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 100)).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07), new Item.Properties().durability(2048).rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> FISSION_FOCUSED_FAULT_FELLER = REGISTER.register("fission_focused_fault_feller", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -3.0F).efficiency(5.0F).disableShield().set(MSItemTypes.AXE_TOOL, MSItemTypes.HAMMER_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 100)).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07), new Item.Properties().durability(2048).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> BISECTOR = REGISTER.register("bisector", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 9, -3.2F).efficiency(5.0F).disableShield().set(MSItemTypes.AXE_TOOL), new Item.Properties().durability(600)));
 	public static final DeferredItem<Item> FINE_CHINA_AXE = REGISTER.register("fine_china_axe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 9, -3.2F).efficiency(1.0F).disableShield().set(MSItemTypes.AXE_TOOL), new Item.Properties().durability(8)));
 	
-	
 	//Dice
 	public static final DeferredItem<Item> FLUORITE_OCTET = REGISTER.register("fluorite_octet", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 4, -3.0F).efficiency(1.0F).add(OnHitEffect.RANDOM_DAMAGE), new Item.Properties().durability(4096).rarity(Rarity.EPIC)));
-	
 	
 	//Claws
 	public static final DeferredItem<Item> MAKESHIFT_CLAWS_DRAWN = REGISTER.register("makeshift_claws_drawn", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 1, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(MSItems.MAKESHIFT_CLAWS_SHEATHED)), new Item.Properties().durability(200)));
@@ -383,18 +381,18 @@ public class MSItems
 	
 	
 	//Spoons/Forks
-	public static final DeferredItem<Item> WOODEN_SPOON = REGISTER.register("wooden_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties()));
-	public static final DeferredItem<Item> SILVER_SPOON = REGISTER.register("silver_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties()));
-	public static final DeferredItem<Item> MELONBALLER = REGISTER.register("melonballer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).set(RightClickBlockEffect.scoopBlock(() -> Blocks.MELON)), new Item.Properties().durability(500)));
+	public static final DeferredItem<Item> WOODEN_SPOON = REGISTER.register("wooden_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL), new Item.Properties()));
+	public static final DeferredItem<Item> SILVER_SPOON = REGISTER.register("silver_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL), new Item.Properties()));
+	public static final DeferredItem<Item> MELONBALLER = REGISTER.register("melonballer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL).set(RightClickBlockEffect.scoopBlock(() -> Blocks.MELON)), new Item.Properties().durability(500)));
 	public static final DeferredItem<Item> SIGHTSEEKER = REGISTER.register("sightseeker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 6, -2.4F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new Item.Properties()));
-	public static final DeferredItem<Item> TERRAIN_FLATENATOR = REGISTER.register("terrain_flatenator", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SHOVEL_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)), new Item.Properties().durability(1024))); //TODO fix inability to use for terrain flattenation
-	public static final DeferredItem<Item> NOSFERATU_SPOON = REGISTER.register("nosferatu_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).add(OnHitEffect.LIFE_SATURATION), new Item.Properties().durability(2048).rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> THRONGLER = REGISTER.register("throngler", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().durability(3200).rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> TERRAIN_FLATENATOR = REGISTER.register("terrain_flatenator", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SPOON_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)), new Item.Properties().durability(1024))); //TODO fix inability to use for terrain flattenation
+	public static final DeferredItem<Item> NOSFERATU_SPOON = REGISTER.register("nosferatu_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL).add(OnHitEffect.LIFE_SATURATION), new Item.Properties().durability(2048).rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> THRONGLER = REGISTER.register("throngler", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL), new Item.Properties().durability(3200).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> WET_MEAT_SHIT_THRONGLER = REGISTER.register("wet_meat_shit_throngler", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 10, -2.9F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new Item.Properties().durability(3500).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> CROCKER_SPOON = REGISTER.register("crocker_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).set(ItemRightClickEffect.switchTo(MSItems.CROCKER_FORK)), new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> CROCKER_FORK = REGISTER.register("crocker_fork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 6, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL).set(ItemRightClickEffect.switchTo(MSItems.CROCKER_SPOON)), new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> EDISONS_FURY = REGISTER.register("edisons_fury", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL).set(ItemRightClickEffect.switchTo(MSItems.EDISONS_SERENITY)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER).add(OnHitEffect.playSound(MSSoundEvents.EVENT_ELECTRIC_SHOCK, 0.6F, 1.0F)), new Item.Properties()));
-	public static final DeferredItem<Item> EDISONS_SERENITY = REGISTER.register("edisons_serenity", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL).set(ItemRightClickEffect.switchTo(MSItems.EDISONS_FURY)), new Item.Properties()));
+	public static final DeferredItem<Item> EDISONS_FURY = REGISTER.register("edisons_fury", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.BATTERY_TIER, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL).set(ItemRightClickEffect.switchTo(MSItems.EDISONS_SERENITY)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER).add(OnHitEffect.playSound(MSSoundEvents.EVENT_ELECTRIC_SHOCK, 0.6F, 1.0F)), new Item.Properties()));
+	public static final DeferredItem<Item> EDISONS_SERENITY = REGISTER.register("edisons_serenity", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.BATTERY_TIER, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL).set(ItemRightClickEffect.switchTo(MSItems.EDISONS_FURY)), new Item.Properties()));
 	public static final DeferredItem<Item> SKAIA_FORK = REGISTER.register("skaia_fork", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 9, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new Item.Properties().rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> SKAIAN_CROCKER_ROCKER = REGISTER.register("skaian_crocker_rocker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 10, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new Item.Properties().durability(2048).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> FORK = REGISTER.register("fork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new Item.Properties()));
@@ -404,8 +402,8 @@ public class MSItems
 	public static final DeferredItem<Item> EATING_FORK_GEM = REGISTER.register("eating_fork_gem", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new Item.Properties()));
 	public static final DeferredItem<Item> DEVIL_FORK = REGISTER.register("devil_fork", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 6, -2.6F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL).add(OnHitEffect.setOnFire(35)), new Item.Properties()));
 	
-	public static final DeferredItem<Item> SPORK = REGISTER.register("spork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 4, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties()));
-	public static final DeferredItem<Item> GOLDEN_SPORK = REGISTER.register("golden_spork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.GOLD, 5, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties()));
+	public static final DeferredItem<Item> SPORK = REGISTER.register("spork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 4, -2.5F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL, MSItemTypes.FORK_TOOL), new Item.Properties()));
+	public static final DeferredItem<Item> GOLDEN_SPORK = REGISTER.register("golden_spork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.GOLD, 5, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL, MSItemTypes.FORK_TOOL), new Item.Properties()));
 	
 	public static final DeferredItem<Item> MEATFORK = REGISTER.register("meatfork", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 7, -2.9F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL).setEating(FinishUseItemEffect.foodEffect(3, 0.8F, 75)), new Item.Properties()));
 	public static final DeferredItem<Item> BIDENT = REGISTER.register("bident", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.9F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new Item.Properties()));
@@ -441,11 +439,11 @@ public class MSItems
 	
 	
 	//Material Tools
-	public static final DeferredItem<Item> EMERALD_SWORD = REGISTER.register("emerald_sword", () -> new SwordItem(MSItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties()));
-	public static final DeferredItem<Item> EMERALD_AXE = REGISTER.register("emerald_axe", () -> new AxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties()));
-	public static final DeferredItem<Item> EMERALD_PICKAXE = REGISTER.register("emerald_pickaxe", () -> new PickaxeItem(MSItemTypes.EMERALD_TIER, 1, -2.8F, new Item.Properties()));
-	public static final DeferredItem<Item> EMERALD_SHOVEL = REGISTER.register("emerald_shovel", () -> new ShovelItem(MSItemTypes.EMERALD_TIER, 1.5F, -3.0F, new Item.Properties()));
-	public static final DeferredItem<Item> EMERALD_HOE = REGISTER.register("emerald_hoe", () -> new HoeItem(MSItemTypes.EMERALD_TIER, -3, 0.0F, new Item.Properties()));
+	public static final DeferredItem<Item> EMERALD_SWORD = REGISTER.register("emerald_sword", () -> new SwordItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
+	public static final DeferredItem<Item> EMERALD_AXE = REGISTER.register("emerald_axe", () -> new AxeItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
+	public static final DeferredItem<Item> EMERALD_PICKAXE = REGISTER.register("emerald_pickaxe", () -> new PickaxeItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
+	public static final DeferredItem<Item> EMERALD_SHOVEL = REGISTER.register("emerald_shovel", () -> new ShovelItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
+	public static final DeferredItem<Item> EMERALD_HOE = REGISTER.register("emerald_hoe", () -> new HoeItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
 	public static final DeferredItem<Item> MINE_AND_GRIST = REGISTER.register("mine_and_grist", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -2.8F).efficiency(10.0F).set(MSItemTypes.PICKAXE_TOOL).add(MSItemTypes.GRIST_HARVEST), new Item.Properties()));
 	
 	
@@ -512,7 +510,7 @@ public class MSItems
 	public static final DeferredItem<Item> JAR_OF_BUGS = REGISTER.register("jar_of_bugs", () -> new Item(new Item.Properties().food(MSFoods.JAR_OF_BUGS)));
 	public static final DeferredItem<Item> BUG_MAC = REGISTER.register("bug_mac", () -> new Item(new Item.Properties().food(MSFoods.BUG_MAC)));
 	public static final DeferredItem<Item> ONION = REGISTER.register("onion", () -> new Item(new Item.Properties().food(MSFoods.ONION)));
-	public static final DeferredItem<Item> SALAD = REGISTER.register("salad", () -> new BowlFoodItem(new Item.Properties().food(MSFoods.SALAD).stacksTo(1)));
+	public static final DeferredItem<Item> SALAD = REGISTER.register("salad", () -> new Item(new Item.Properties().food(MSFoods.SALAD).stacksTo(1)));
 	public static final DeferredItem<Item> SOPOR_SLIME_PIE = REGISTER.register("sopor_slime_pie", () -> new SoporSlimeItem(new Item.Properties().stacksTo(3).food(MSFoods.SOPOR_SLIME_PIE), 1500));
 	public static final DeferredItem<Item> DESERT_FRUIT = REGISTER.register("desert_fruit", () -> new Item(new Item.Properties().food(MSFoods.DESERT_FRUIT)));
 	public static final DeferredItem<Item> ROCK_COOKIE = REGISTER.register("rock_cookie", () -> new Item(new Item.Properties())); //Not actually food, but let's pretend it is
@@ -574,22 +572,22 @@ public class MSItems
 	public static final DeferredItem<MSArmorItem> CRUMPLY_HAT = REGISTER.register("crumply_hat", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> STONE_EYEBALLS = REGISTER.register("stone_eyeballs", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> STONE_TABLET = REGISTER.register("stone_tablet", () -> new StoneTabletItem(MSBlocks.STONE_TABLET.get(), new Item.Properties()));
-	public static final DeferredItem<Item> SHOP_POSTER = REGISTER.register("shop_poster", () -> new HangingItem(ShopPosterEntity::new, new Item.Properties().stacksTo(1))); //not used
+	public static final DeferredItem<Item> SHOP_POSTER = REGISTER.register("shop_poster", () -> new PosterItem(PosterComponent.withDefaultBack(MSTags.PaintingVariants.SHOP_POSTERS), new Item.Properties().stacksTo(1))); //not used
 	public static final DeferredItem<Item> GUTTER_THUMB_DRIVE = REGISTER.register("gutter_thumb_drive", () -> new GutterThumbDriveItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> ANCIENT_THUMB_DRIVE = REGISTER.register("ancient_thumb_drive", () -> new AncientThumbDrive(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GUTTER_BALL = REGISTER.register("gutter_ball", () -> new GutterBallItem(new Item.Properties().stacksTo(5).rarity(Rarity.UNCOMMON)));
 	
 	
 	//Buckets
-	public static final DeferredItem<Item> OIL_BUCKET = REGISTER.register("oil_bucket", () -> new BucketItem(MSFluids.OIL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> BLOOD_BUCKET = REGISTER.register("blood_bucket", () -> new BucketItem(MSFluids.BLOOD, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> BRAIN_JUICE_BUCKET = REGISTER.register("brain_juice_bucket", () -> new BucketItem(MSFluids.BRAIN_JUICE, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> WATER_COLORS_BUCKET = REGISTER.register("water_colors_bucket", () -> new BucketItem(MSFluids.WATER_COLORS, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> ENDER_BUCKET = REGISTER.register("ender_bucket", () -> new BucketItem(MSFluids.ENDER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> LIGHT_WATER_BUCKET = REGISTER.register("light_water_bucket", () -> new BucketItem(MSFluids.LIGHT_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> OIL_BUCKET = REGISTER.register("oil_bucket", () -> new BucketItem(MSFluids.OIL.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> BLOOD_BUCKET = REGISTER.register("blood_bucket", () -> new BucketItem(MSFluids.BLOOD.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> BRAIN_JUICE_BUCKET = REGISTER.register("brain_juice_bucket", () -> new BucketItem(MSFluids.BRAIN_JUICE.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> WATER_COLORS_BUCKET = REGISTER.register("water_colors_bucket", () -> new BucketItem(MSFluids.WATER_COLORS.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> ENDER_BUCKET = REGISTER.register("ender_bucket", () -> new BucketItem(MSFluids.ENDER.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> LIGHT_WATER_BUCKET = REGISTER.register("light_water_bucket", () -> new BucketItem(MSFluids.LIGHT_WATER.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	public static final DeferredItem<Item> OBSIDIAN_BUCKET = REGISTER.register("obsidian_bucket", () -> new ObsidianBucketItem(new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
-	public static final DeferredItem<Item> CAULK_BUCKET = REGISTER.register("caulk_bucket", () -> new BucketItem(MSFluids.CAULK, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-	public static final DeferredItem<Item> MOLTEN_AMBER_BUCKET = REGISTER.register("molten_amber_bucket", () -> new BucketItem(MSFluids.MOLTEN_AMBER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> CAULK_BUCKET = REGISTER.register("caulk_bucket", () -> new BucketItem(MSFluids.CAULK.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+	public static final DeferredItem<Item> MOLTEN_AMBER_BUCKET = REGISTER.register("molten_amber_bucket", () -> new BucketItem(MSFluids.MOLTEN_AMBER.value(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 	
 	
 	//Alchemy Items
@@ -612,8 +610,8 @@ public class MSItems
 	public static final DeferredItem<Item> THRESH_DVD = REGISTER.register("thresh_dvd", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GAMEBRO_MAGAZINE = REGISTER.register("gamebro_magazine", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GAMEGRL_MAGAZINE = REGISTER.register("gamegrl_magazine", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CREW_POSTER = REGISTER.register("crew_poster", () -> new HangingItem((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SBAHJ_POSTER = REGISTER.register("sbahj_poster", () -> new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CREW_POSTER = REGISTER.register("crew_poster", () -> new PosterItem(PosterComponent.withDefaultBack(MSTags.PaintingVariants.MIDNIGHT_CREW_POSTERS), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SBAHJ_POSTER = REGISTER.register("sbahj_poster", () -> new PosterItem(new PosterComponent(MSTags.PaintingVariants.SBAHJ_POSTERS, Minestuck.id("textures/painting/back/sbahj_poster.png")), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> BI_DYE = REGISTER.register("bi_dye", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> LIP_BALM = REGISTER.register("lip_balm", () -> new RightClickMessageItem(new Item.Properties(), RightClickMessageItem.Type.DEFAULT));
 	public static final DeferredItem<Item> ELECTRIC_AUTOHARP = REGISTER.register("electric_autoharp", () -> new RightClickMusicItem(new Item.Properties(), RightClickMusicItem.Type.ELECTRIC_AUTOHARP));
@@ -667,11 +665,10 @@ public class MSItems
 	public static final DeferredItem<Item> COCOA_WART = REGISTER.register("cocoa_wart", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<MultiblockItem> HORSE_CLOCK = REGISTER.register("horse_clock", () -> new MultiblockItem(MSBlocks.HORSE_CLOCK, new Item.Properties()));
 	
-	
 	//Music Discs/Cassettes
-	public static final DeferredItem<Item> MUSIC_DISC_EMISSARY_OF_DANCE = REGISTER.register("music_disc_emissary_of_dance", () -> new RecordItem(1, MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 11040));
-	public static final DeferredItem<Item> MUSIC_DISC_DANCE_STAB_DANCE = REGISTER.register("music_disc_dance_stab_dance", () -> new RecordItem(2, MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 13440));
-	public static final DeferredItem<Item> MUSIC_DISC_RETRO_BATTLE = REGISTER.register("music_disc_retro_battle", () -> new RecordItem(3, MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 2760));
+	public static final DeferredItem<Item> MUSIC_DISC_EMISSARY_OF_DANCE = REGISTER.register("music_disc_emissary_of_dance", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("emissary_of_dance")))));
+	public static final DeferredItem<Item> MUSIC_DISC_DANCE_STAB_DANCE = REGISTER.register("music_disc_dance_stab_dance", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("dance_stab_dance")))));
+	public static final DeferredItem<Item> MUSIC_DISC_RETRO_BATTLE = REGISTER.register("music_disc_retro_battle", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("retro_battle")))));
 	
 	public static final DeferredItem<Item> CASSETTE_13 = REGISTER.register("cassette_13", () -> new CassetteItem(1, EnumCassetteType.THIRTEEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3560));
 	public static final DeferredItem<Item> CASSETTE_CAT = REGISTER.register("cassette_cat", () -> new CassetteItem(2, EnumCassetteType.CAT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3700));

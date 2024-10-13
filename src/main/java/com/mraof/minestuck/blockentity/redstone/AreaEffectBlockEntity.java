@@ -10,6 +10,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -30,6 +31,7 @@ import net.minecraft.world.phys.AABB;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -160,13 +162,12 @@ public class AreaEffectBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
-		MobEffect effectRead = BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.fromNamespaceAndPath(compound.getString("effect")));
-		if(effectRead != null)
-			effect = effectRead;
+		Optional<Holder.Reference<MobEffect>> effectRead = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse(compound.getString("effect")));
+		effectRead.ifPresent(mobEffectReference -> effect = mobEffectReference);
 		
 		effectAmplifier = compound.getInt("effectAmplifier");
 		
@@ -182,11 +183,11 @@ public class AreaEffectBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
-		compound.putString("effect", String.valueOf(BuiltInRegistries.MOB_EFFECT.getKey(this.effect)));
+		compound.putString("effect", String.valueOf(BuiltInRegistries.MOB_EFFECT.getKey(this.effect.value())));
 		compound.putInt("effectAmplifier", effectAmplifier);
 		
 		compound.putInt("minAreaOffsetX", minAreaOffset.getX());
@@ -199,9 +200,9 @@ public class AreaEffectBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.block.SummonerSettingsPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
@@ -14,7 +15,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -61,11 +64,11 @@ public class SummonerBlockEntity extends BlockEntity
 				double newPosX = summonerBlockPos.getX() + (level.random.nextDouble() - 0.5D) * summonRange;
 				double newPosY = summonerBlockPos.getY() + (level.random.nextDouble() - 0.5D) * summonRange;
 				double newPosZ = summonerBlockPos.getZ() + (level.random.nextDouble() - 0.5D) * summonRange;
-				if(level.noCollision(type.getAABB(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
-						SpawnPlacements.Type.ON_GROUND.canSpawnAt(level, BlockPos.containing(newPosX, newPosY, newPosZ), type)) //helps spawn entity on a valid floor
+				if(level.noCollision(type.getDimensions().makeBoundingBox(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
+						SpawnPlacementTypes.ON_GROUND.isSpawnPositionOk(level, BlockPos.containing(newPosX, newPosY, newPosZ), type)) //helps spawn entity on a valid floor
 				{
 					BlockPos newBlockPos = BlockPos.containing(newPosX, newPosY, newPosZ);
-					type.spawn(level, (CompoundTag) null, null, newBlockPos, MobSpawnType.MOB_SUMMONED, true, true);
+					type.spawn(level, ItemStack.EMPTY, null, newBlockPos, MobSpawnType.MOB_SUMMONED, true, true);
 					
 					if(playParticles)
 					{
@@ -128,9 +131,9 @@ public class SummonerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		cooldownTimer = compound.getInt("cooldownTimer");
 		if(compound.contains("summonRange", Tag.TAG_ANY_NUMERIC))
@@ -141,9 +144,9 @@ public class SummonerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("cooldownTimer", cooldownTimer);
 		compound.putInt("summonRange", summonRange);
@@ -151,9 +154,9 @@ public class SummonerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

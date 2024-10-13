@@ -15,6 +15,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -80,10 +81,9 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		{
 			//Check owner's cache: Do they have everything they need?
 			ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
+			
 			if(newItem.isEmpty())
-				if(!itemHandler.getStackInSlot(INPUT).hasTag() || !itemHandler.getStackInSlot(INPUT).getTag().contains("contentID"))
-					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-				else return false;
+				return false;
 			if(!itemHandler.getStackInSlot(OUTPUT).isEmpty() && (itemHandler.getStackInSlot(OUTPUT).getItem() != newItem.getItem() || itemHandler.getStackInSlot(OUTPUT).getMaxStackSize() <= itemHandler.getStackInSlot(OUTPUT).getCount()))
 			{
 				return false;
@@ -139,9 +139,9 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		
 		this.progressTracker.load(nbt);
 		
@@ -151,9 +151,9 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		this.progressTracker.save(compound);
 		

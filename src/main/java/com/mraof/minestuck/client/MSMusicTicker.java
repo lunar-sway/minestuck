@@ -11,9 +11,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,9 +23,9 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	@SubscribeEvent
-	public static void clientTick(TickEvent.ClientTickEvent event)
+	public static void clientTick(ClientTickEvent.Post event)
 	{
-		if(event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isPaused())
+		if( !Minecraft.getInstance().isPaused())
 		{
 			tick(Minecraft.getInstance());
 		}

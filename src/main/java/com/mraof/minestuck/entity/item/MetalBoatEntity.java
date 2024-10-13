@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -128,13 +129,13 @@ public class MetalBoatEntity extends Boat implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeUtf(type.asString());
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
 		this.type = Type.fromString(additionalData.readUtf(16));
 	}

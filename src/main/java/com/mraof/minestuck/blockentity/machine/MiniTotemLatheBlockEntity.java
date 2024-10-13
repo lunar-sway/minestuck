@@ -11,6 +11,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -59,16 +60,16 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		this.progressTracker.load(nbt);
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag compound)
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		this.progressTracker.save(compound);
 	}
 	
@@ -84,7 +85,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 		
 		ItemStack currentOutput = itemHandler.getStackInSlot(3);
 		if(!output.isEmpty())
-			return currentOutput.isEmpty() || ItemStack.isSameItemSameTags(output, currentOutput);
+			return currentOutput.isEmpty() || ItemStack.isSameItemSameComponents(output, currentOutput);
 		else return false;
 	}
 	

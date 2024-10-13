@@ -147,6 +147,17 @@ public class AlchemyHelper
 		return itemOut;
 	}
 	
+	public static ItemStack discoverCard(ItemStack card)
+	{
+		if(card.has(MSItemComponents.ENCODED_ITEM))
+		{
+			EncodedItemComponent encodedItem = card.get(MSItemComponents.ENCODED_ITEM);
+			card.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(encodedItem.storedStack(), encodedItem.type(), true));
+		}
+		
+		return card;
+	}
+	
 	@Nonnull
 	public static ItemStack createGhostCard(ItemStack itemIn)
 	{
