@@ -7,21 +7,7 @@
     "water_color": 4159204,
     "water_fog_color": 329011
   },
-  "features": [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [
-      "minecraft:patch_grass_plain"
-    ],
-    []
-  ],
+  "features": [],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {
