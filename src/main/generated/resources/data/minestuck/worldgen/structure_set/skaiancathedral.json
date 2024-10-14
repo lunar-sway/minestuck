@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "minestuck:skaiancathedral",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1481098009,
+    "frequency": 0.5,
+    "spacing": 20,
+    "separation": 10
+  }
+}
