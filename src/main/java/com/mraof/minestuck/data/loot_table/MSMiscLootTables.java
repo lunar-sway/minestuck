@@ -1,6 +1,8 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.item.components.SburbCodeComponent;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceKey;
@@ -8,6 +10,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.function.BiConsumer;
@@ -37,7 +40,7 @@ public class MSMiscLootTables implements LootTableSubProvider
 				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.COMPUTER_PARTS.get()).setWeight(10).setQuality(3)))
 				.withPool(LootPool.lootPool().name("code").setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3))/*.apply(SetNbtFunction.setTag(IncompleteSburbCodeItem.giveParadoxInfo())) TODO for when dweb is done with componentizing sburb code*/)
+						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3)).apply(SetComponentsFunction.setComponent(MSItemComponents.SBURB_CODE.get(), SburbCodeComponent.DEFAULT_COMPONENT)))
 		);
 	}
 }
