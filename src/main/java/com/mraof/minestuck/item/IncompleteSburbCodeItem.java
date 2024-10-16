@@ -25,10 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,7 +48,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	
 	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
 	{
-		List<ResourceLocation> recordedHieroglyphs = new ArrayList<>();
+		List<Block> recordedHieroglyphs = new ArrayList<>();
 		
 		if(stack.has(MSItemComponents.SBURB_CODE))
 			recordedHieroglyphs = stack.get(MSItemComponents.SBURB_CODE).hieroglyphs();
@@ -67,7 +64,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	public Set<Block> getRecordedBlocks(ItemStack stack)
 	{
 		if(stack.has(MSItemComponents.SBURB_CODE))
-			return registriesToBlocks(stack.get(MSItemComponents.SBURB_CODE).hieroglyphs());
+			return new HashSet<>(stack.get(MSItemComponents.SBURB_CODE).hieroglyphs());
 		else
 			return Collections.emptySet();
 	}
@@ -205,19 +202,11 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		if(!stack.has(MSItemComponents.SBURB_CODE))
 			return false;
 		
-		List<ResourceLocation> recordedHieroglyphRegistries = stack.get(MSItemComponents.SBURB_CODE).hieroglyphs();
+		List<Block> recordedHieroglyphs = stack.get(MSItemComponents.SBURB_CODE).hieroglyphs();
 		
-		if(registriesToBlocks(recordedHieroglyphRegistries).contains(block))
-			return false;
-		
-		recordedHieroglyphRegistries.add(BuiltInRegistries.BLOCK.getKey(block));
-		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(stack.get(MSItemComponents.SBURB_CODE).paradoxCode(), recordedHieroglyphRegistries));
+		recordedHieroglyphs.add(block);
+		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(stack.get(MSItemComponents.SBURB_CODE).paradoxCode(), recordedHieroglyphs));
 		
 		return true;
-	}
-	
-	public static Set<Block> registriesToBlocks(List<ResourceLocation> registries)
-	{
-		return registries.stream().map(BuiltInRegistries.BLOCK::get).collect(Collectors.toSet());
 	}
 }
