@@ -28,6 +28,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean
 
+### Added
+
+- Added 2 tracks(made by triagegremlin) to multiple land types
+
+### Contributed
+  
+- ThalliumSulfate
+
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
 - Updated to run with Minecraft 1.20.4 / Neoforge 20.4
