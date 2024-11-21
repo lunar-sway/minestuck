@@ -56,7 +56,7 @@ enumExtensions="META-INF/enumextensions.json"
     # Does this dependency have to exist - if not, ordering below must be specified
     type="required"
     # The version range of the dependency
-    versionRange="[20.4,)" #mandatory
+    versionRange="[21,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -65,7 +65,7 @@ enumExtensions="META-INF/enumextensions.json"
 [[dependencies.minestuck]]
     modId="geckolib"
     type="required"
-    versionRange="[4.4,)"
+    versionRange="[4.5,)"
     ordering="NONE"
     side="BOTH"
 
@@ -80,6 +80,6 @@ enumExtensions="META-INF/enumextensions.json"
 [[dependencies.minestuck]]
     modId="minecraft"
     type="required"
-    versionRange="[1.20.4]"
+    versionRange="[1.21]"
     ordering="NONE"
     side="BOTH"
