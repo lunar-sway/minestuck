@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.components;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.block.TransportalizerItem;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -47,6 +48,7 @@ public final class MSItemComponents
 					.persistent(PosterComponent.CODEC)
 					.networkSynchronized(PosterComponent.STREAM_CODEC)
 					.build());
-	
+	public static final Supplier<DataComponentType<TransportalizerItem.TransportalizerData>> TRANSPORTALIZER_DATA = REGISTRY.registerComponentType("transportalizer_data",
+			builder -> builder.persistent(TransportalizerItem.TransportalizerData.CODEC).networkSynchronized(TransportalizerItem.TransportalizerData.STREAM_CODEC));
 	
 }

@@ -1,6 +1,8 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.item.block.TransportalizerItem;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.Teleport;
@@ -8,6 +10,7 @@ import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -343,6 +346,26 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 			compound.putString(DEST_ID, destId);
 		compound.putBoolean(ACTIVE, active);
 		compound.putBoolean(LOCKED, locked);
+	}
+	
+	@Override
+	protected void applyImplicitComponents(DataComponentInput componentInput)
+	{
+		TransportalizerItem.TransportalizerData data = componentInput.get(MSItemComponents.TRANSPORTALIZER_DATA);
+		if (data != null)
+		{
+			this.id = data.id().orElse("");
+			this.destId = data.destinationId().orElse("");
+			this.locked = data.locked();
+		}
+	}
+	
+	@Override
+	protected void collectImplicitComponents(DataComponentMap.Builder components)
+	{
+		components.set(MSItemComponents.TRANSPORTALIZER_DATA, new TransportalizerItem.TransportalizerData(
+				this.id.isEmpty() ? Optional.empty() : Optional.of(this.id),
+				this.destId.isEmpty() ? Optional.empty() : Optional.of(this.destId), this.locked));
 	}
 	
 	@Override
