@@ -8,14 +8,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
@@ -50,6 +47,8 @@ public class MSItemTypes
 	public static final Tier ZILLY_TIER = new SimpleTier(MSTags.Blocks.INCORRECT_FOR_ZILLY_TOOL, 5120, 12.0F, 5.0F, 30, () -> Ingredient.EMPTY);
 	public static final Tier WELSH_TIER = new SimpleTier(MSTags.Blocks.INCORRECT_FOR_WELSH_TOOL, 5120, 15.0F, 5.0F, 25, () -> Ingredient.of(MSItems.CUEBALL.get()));
 	
+	public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIAL_REGISTRY = DeferredRegister.create(Registries.ARMOR_MATERIAL, Minestuck.MOD_ID);
+	
 	public static final Holder<ArmorMaterial> PRISMARINE_ARMOR = registerArmorMaterial("prismarine",
 			Map.of(ArmorItem.Type.BOOTS, 3, ArmorItem.Type.LEGGINGS, 6, ArmorItem.Type.CHESTPLATE, 7, ArmorItem.Type.HELMET, 2),
 			15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.of(Items.PRISMARINE_SHARD));
@@ -63,8 +62,6 @@ public class MSItemTypes
 	public static final Holder<ArmorMaterial> DREAM_PAJAMAS = registerArmorMaterial("dream_pajamas",
 			Map.of(ArmorItem.Type.BOOTS, 1, ArmorItem.Type.LEGGINGS, 2, ArmorItem.Type.CHESTPLATE, 3, ArmorItem.Type.HELMET, 1),
 			0, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
-	
-	public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIAL_REGISTRY = DeferredRegister.create(Registries.ARMOR_MATERIAL, Minestuck.MOD_ID);
 	
 	public static Holder<ArmorMaterial> registerArmorMaterial(String name, Map<ArmorItem.Type, Integer> damageReductionByType, int enchantability, Holder<SoundEvent> soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial)
 	{
