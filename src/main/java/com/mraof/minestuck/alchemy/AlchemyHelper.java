@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import static com.mraof.minestuck.block.MSBlocks.CRUXITE_DOWEL;
 import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class AlchemyHelper
 {
 	@SubscribeEvent

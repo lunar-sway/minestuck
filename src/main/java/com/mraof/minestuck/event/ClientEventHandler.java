@@ -31,7 +31,7 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 /**
  * Used to track mixed client sided events.
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientEventHandler
 {
 	@SubscribeEvent

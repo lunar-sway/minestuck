@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @see #onMount(net.neoforged.neoforge.event.entity.EntityMountEvent) Cancels out attempts to ride affected entities
  * @see #summonAttempt(ZombieEvent.SummonAidEvent) Cancels out attempts to spawn reinforcements
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class SuspicionEffect extends MobEffect
 {
 	/**

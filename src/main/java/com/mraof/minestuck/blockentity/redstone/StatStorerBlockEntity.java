@@ -32,7 +32,7 @@ import net.neoforged.neoforge.event.level.ExplosionEvent;
 
 import javax.annotation.Nullable;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class StatStorerBlockEntity extends BlockEntity
 {
 	private float damageStored;

@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  * Contains static field for any {@link PlayerData} fields that also need client access.
  * @author kirderf1
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientPlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();

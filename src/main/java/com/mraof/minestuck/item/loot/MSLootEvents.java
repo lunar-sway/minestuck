@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class MSLootEvents
 {
 	private static final Set<ResourceLocation> BLANK_DISK_DUNGEON_LOOT_INJECT = Sets.newHashSet(BuiltInLootTables.SIMPLE_DUNGEON.location(), BuiltInLootTables.ABANDONED_MINESHAFT.location(), BuiltInLootTables.DESERT_PYRAMID.location(),

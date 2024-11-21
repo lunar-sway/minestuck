@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * A class that handles Grist overflow whenever you acquire too much grist.
  * @author Doro
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus=EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class GristGutter
 {
 	private static final Logger LOGGER = LogManager.getLogger();

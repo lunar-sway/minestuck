@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public final class StartingModusManager extends SimplePreparableReloadListener<List<String>>
 {
 	private static final Logger LOGGER = LogManager.getLogger();

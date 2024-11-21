@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class DataCheckerPermission
 {
 	private static final Set<UUID> dataCheckerPermission = new HashSet<>();

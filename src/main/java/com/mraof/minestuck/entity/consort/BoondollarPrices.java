@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public final class BoondollarPrices
 {
 	private final List<BoondollarPriceRecipe> prices;

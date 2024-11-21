@@ -51,7 +51,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.List;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus=EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
 {
 	@SubscribeEvent

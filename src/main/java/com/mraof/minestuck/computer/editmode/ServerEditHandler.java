@@ -84,7 +84,7 @@ import java.util.*;
  * @author kirderf1
  */
 @SuppressWarnings("resource")
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class ServerEditHandler    //TODO Consider splitting this class into two
 {
 	private static final Logger LOGGER = LogManager.getLogger();

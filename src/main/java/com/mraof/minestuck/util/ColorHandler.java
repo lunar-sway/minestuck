@@ -26,7 +26,7 @@ import java.util.Objects;
 /**
  * Stores the array with colors that the player picks from, and provides utility function to handle colors.
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class ColorHandler
 {
 	public static final class BuiltinColors

@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("resource")
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientEditHandler
 {
 	

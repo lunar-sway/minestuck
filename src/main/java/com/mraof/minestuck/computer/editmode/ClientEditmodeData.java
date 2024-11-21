@@ -15,7 +15,7 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 
 import javax.annotation.Nullable;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientEditmodeData
 {
 	private static boolean activated;

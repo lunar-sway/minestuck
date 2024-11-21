@@ -29,7 +29,7 @@ import java.util.Optional;
  * A class that determines when to stop entry and tell the player to pick a title,
  * and to then handle the selection once it's been sent back.
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus= EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus= EventBusSubscriber.Bus.GAME)
 public class TitleSelectionHook
 {
 	private static final Logger LOGGER = LogManager.getLogger();

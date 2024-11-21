@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Optional;
 
 //todo this class could use some spring cleaning
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class CaptchaDeckHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();

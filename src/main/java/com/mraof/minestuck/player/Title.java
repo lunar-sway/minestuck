@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public record Title(EnumClass heroClass, EnumAspect heroAspect)
 {
 	public static final StreamCodec<FriendlyByteBuf, Title> STREAM_CODEC = StreamCodec.composite(
