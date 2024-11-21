@@ -26,6 +26,7 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSDispenserBehaviours;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.KindAbstratusList;
@@ -67,8 +68,9 @@ public class Minestuck
 		modContainer.registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
 		modContainer.registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		//GeckoLib.initialize(eventBus);
+		//GeckoLib.initialize(eventBus); FIXME
 		
+		MSItemComponents.REGISTRY.register(eventBus);
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
