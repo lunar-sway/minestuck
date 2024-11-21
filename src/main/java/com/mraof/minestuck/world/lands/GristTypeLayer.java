@@ -53,6 +53,6 @@ public class GristTypeLayer
 		if(baseType != null && x * x + z * z <= 1)
 			return baseType;
 		
-		return WeightedRandom.getWeightedItem(gristTypes, selectionRandom.at(x, 0, z).nextInt(weightSum)).orElseThrow().getData();
+		return WeightedRandom.getWeightedItem(gristTypes, selectionRandom.at(x, 0, z).nextInt(weightSum)).orElseThrow().data();
 	}
 }

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
@@ -19,7 +19,7 @@ public enum SmithingInterpreter implements RecipeInterpreter
 {
 	INSTANCE;
 	
-	public static final Codec<SmithingInterpreter> CODEC = Codec.unit(INSTANCE);
+	public static final MapCodec<SmithingInterpreter> CODEC = MapCodec.unit(INSTANCE);
 	
 	private static final Field templateField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "template");
 	private static final Field baseField = ObfuscationReflectionHelper.findField(SmithingTransformRecipe.class, "base");
@@ -68,7 +68,7 @@ public enum SmithingInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public Codec<? extends RecipeInterpreter> codec()
+	public MapCodec<? extends RecipeInterpreter> codec()
 	{
 		return CODEC;
 	}

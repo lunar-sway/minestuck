@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -70,7 +71,7 @@ public class PropelEffect implements ItemRightClickEffect
 			
 			player.swing(hand, true);
 			player.getCooldowns().addCooldown(stack.getItem(), 100);
-			stack.hurtAndBreak(4, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+			stack.hurtAndBreak(4, player, EquipmentSlot.MAINHAND);
 		}
 	}
 	

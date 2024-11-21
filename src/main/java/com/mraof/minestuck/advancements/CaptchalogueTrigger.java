@@ -8,7 +8,6 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -33,16 +32,16 @@ public class CaptchalogueTrigger extends SimpleCriterionTrigger<CaptchalogueTrig
 						   Optional<ItemPredicate> item, MinMaxBounds.Ints count) implements SimpleCriterionTrigger.SimpleInstance
 	{
 		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
-				ExtraCodecs.strictOptionalField(ModusTypes.REGISTRY.byNameCodec(), "modus").forGetter(Instance::modus),
-				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "item").forGetter(Instance::item),
+				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+				ModusTypes.REGISTRY.byNameCodec().optionalFieldOf("modus").forGetter(Instance::modus),
+				ItemPredicate.CODEC.optionalFieldOf("item").forGetter(Instance::item),
 				MinMaxBounds.Ints.CODEC.fieldOf("count").forGetter(Instance::count)
 		).apply(instance, Instance::new));
 		
 		public boolean test(ModusType<?> modus, ItemStack item, int count)
 		{
 			return (this.modus.isEmpty() || this.modus.get().equals(modus))
-					&& (this.item.isEmpty() || this.item.get().matches(item))
+					&& (this.item.isEmpty() || this.item.get().test(item))
 					&& this.count.matches(count);
 		}
 	}

@@ -39,8 +39,8 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -181,18 +181,15 @@ public class EntryProcess
 	private static long startTime;
 	
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Pre event)
 	{
-		if(event.phase == TickEvent.Phase.START)
+		//noinspection resource
+		if(waitingProcess != null && startTime <= event.getServer().overworld().getGameTime())
 		{
-			//noinspection resource
-			if(waitingProcess != null && startTime <= event.getServer().overworld().getGameTime())
-			{
-				waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
-				waitingProcess.runEntry();
-				waitingProcess = null;
-				PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Clear());
-			}
+			waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
+			waitingProcess.runEntry();
+			waitingProcess = null;
+			PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Clear());
 		}
 	}
 	

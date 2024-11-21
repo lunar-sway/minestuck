@@ -14,10 +14,12 @@ import net.minecraft.world.level.block.state.BlockState;
 public class CassetteItem extends Item
 {
 	public final EnumCassetteType cassetteID;
+	private final int comparatorValue;
 	
-	public CassetteItem(int comparatorValueIn, EnumCassetteType cassetteName, Properties builder, int lengthInTicks)
+	public CassetteItem(int comparatorValue, EnumCassetteType cassetteName, Properties builder, int lengthInTicks)
 	{
 		super(builder);
+		this.comparatorValue = comparatorValue;
 		this.cassetteID = cassetteName;
 	}
 	
@@ -41,5 +43,10 @@ public class CassetteItem extends Item
 		{
 			return InteractionResult.PASS;
 		}
+	}
+	
+	public int getComparatorValue()
+	{
+		return this.comparatorValue;
 	}
 }

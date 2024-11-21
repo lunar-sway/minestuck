@@ -345,7 +345,7 @@ public final class DialogueProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, Dialogue.NodeSelector> entry : dialogues.entrySet())
 		{
 			Path dialoguePath = getPath(outputPath, entry.getKey());
-			JsonElement dialogueJson = Dialogue.NodeSelector.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			JsonElement dialogueJson = Dialogue.NodeSelector.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
 			futures.add(DataProvider.saveStable(cache, dialogueJson, dialoguePath));
 		}
 		

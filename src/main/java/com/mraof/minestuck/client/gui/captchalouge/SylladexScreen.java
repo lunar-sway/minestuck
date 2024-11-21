@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
@@ -17,6 +16,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.joml.Matrix4fStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -99,8 +99,8 @@ public abstract class SylladexScreen extends Screen
 		
 		super.render(guiGraphics, xcor, ycor, f);
 		
-		PoseStack modelPoseStack = RenderSystem.getModelViewStack();
-		modelPoseStack.pushPose();
+		Matrix4fStack modelPoseStack = RenderSystem.getModelViewStack();
+		modelPoseStack.pushMatrix();
 		modelPoseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
 		modelPoseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
 		RenderSystem.applyModelViewMatrix();
@@ -119,7 +119,7 @@ public abstract class SylladexScreen extends Screen
 		for(GuiCard card : visibleCards)
 			card.drawItem(guiGraphics);
 		
-		modelPoseStack.popPose();
+		modelPoseStack.popMatrix();
 		RenderSystem.applyModelViewMatrix();
 		RenderSystem.disableDepthTest();
 		

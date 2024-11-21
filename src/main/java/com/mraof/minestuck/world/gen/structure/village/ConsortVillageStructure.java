@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure.village;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.util.RandomSource;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class ConsortVillageStructure extends Structure
 {
-	public static final Codec<ConsortVillageStructure> CODEC = simpleCodec(ConsortVillageStructure::new);
+	public static final MapCodec<ConsortVillageStructure> CODEC = simpleCodec(ConsortVillageStructure::new);
 	
 	public ConsortVillageStructure(StructureSettings pSettings)
 	{

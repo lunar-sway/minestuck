@@ -1,6 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.network.CaptchaDeckPackets;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,9 +30,9 @@ public abstract class Modus
 	 */
 	public abstract void initModus(ItemStack modusItem, ServerPlayer player, NonNullList<ItemStack> prev, int size);
 	
-	public abstract void readFromNBT(CompoundTag nbt);
+	public abstract void readFromNBT(CompoundTag nbt, HolderLookup.Provider provider);
 	
-	public abstract CompoundTag writeToNBT(CompoundTag nbt);
+	public abstract CompoundTag writeToNBT(CompoundTag nbt, HolderLookup.Provider provider);
 	
 	public abstract boolean putItemStack(ServerPlayer player, ItemStack item);
 	
@@ -84,7 +85,7 @@ public abstract class Modus
 	{
 		if(needResend)
 		{
-			PacketDistributor.sendToPlayer(player, CaptchaDeckPackets.ModusData.create(this));
+			PacketDistributor.sendToPlayer(player, CaptchaDeckPackets.ModusData.create(this, player.registryAccess()));
 			needResend = false;
 		}
 	}

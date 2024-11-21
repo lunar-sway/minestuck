@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -78,7 +79,7 @@ public class MSExtraData extends SavedData
 	}
 	
 	@Override
-	public CompoundTag save(CompoundTag compound)
+	public CompoundTag save(CompoundTag compound, HolderLookup.Provider registries)
 	{
 		ListTag editRecoveryList = new ListTag();
 		editRecoveryList.addAll(editPlayerRecovery.entrySet().stream().map(MSExtraData::writeRecovery).toList());
@@ -126,7 +127,7 @@ public class MSExtraData extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(new Factory<>(MSExtraData::new, MSExtraData::load), DATA_NAME);
+		return storage.computeIfAbsent(new Factory<>(MSExtraData::new, (tag, provider) -> MSExtraData.load(tag)), DATA_NAME);
 	}
 	
 	@Nullable

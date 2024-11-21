@@ -6,28 +6,26 @@ import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
 import com.mraof.minestuck.data.SkaiaBlocksData;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -43,15 +41,11 @@ import static com.mraof.minestuck.block.MSBlocks.*;
 @MethodsReturnNonnullByDefault
 public final class MSBlockLootTables extends BlockLootSubProvider
 {
-	private static final LootItemCondition.Builder SILK_TOUCH_CONDITION = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
-	private static final LootItemCondition.Builder SHEAR_CONDITION = MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS));
-	private static final LootItemCondition.Builder SILK_AND_SHEAR_CONDITION = SHEAR_CONDITION.or(SILK_TOUCH_CONDITION);
-	private static final LootItemCondition.Builder NO_SILK_OR_SHEAR_CONDITION = SILK_AND_SHEAR_CONDITION.invert();
 	public static final float[] SAPLING_CHANCES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
 	
-	MSBlockLootTables()
+	MSBlockLootTables(HolderLookup.Provider registries)
 	{
-		super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+		super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
 	}
 	
 	@Override
@@ -1057,7 +1051,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	
 	private LootTable.Builder cruxiteOreDrop(Block block)
 	{
-		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
+		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block,
+				LootItem.lootTableItem(MSItems.RAW_CRUXITE.get())
+						.apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
+						.apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))));
 	}
 	
 	private LootTable.Builder uraniumOreDrop(Block block)
@@ -1082,7 +1080,10 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	
 	private LootTable.Builder redstoneOreDrop(Block block)
 	{
-		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(Items.REDSTONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 5.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
+		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(Items.REDSTONE)
+				.apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 5.0F)))
+				.apply(ApplyBonusCount.addUniformBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))));
 	}
 	
 	private LootTable.Builder quartzOreDrop(Block block)
@@ -1092,7 +1093,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	
 	private LootTable.Builder lapisOreDrop(Block block)
 	{
-		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(Items.LAPIS_LAZULI).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 9.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
+		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block,
+				LootItem.lootTableItem(Items.LAPIS_LAZULI)
+						.apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 9.0F)))
+						.apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))));
 	}
 	
 	private LootTable.Builder diamondOreDrop(Block block)
@@ -1124,7 +1129,11 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	
 	private LootTable.Builder endLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(NO_SILK_OR_SHEAR_CONDITION).add(applyExplosionCondition(block, LootItem.lootTableItem(Items.CHORUS_FRUIT)).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
+		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES)
+				.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(HAS_SHEARS.or(this.hasSilkTouch()).invert())
+						.add(applyExplosionCondition(block, LootItem.lootTableItem(Items.CHORUS_FRUIT))
+								.when(BonusLevelTableCondition.bonusLevelFlatChance(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
 	}
 	
 	private LootTable.Builder shadewoodLeavesDrop(Block block)
@@ -1139,12 +1148,18 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	
 	private LootTable.Builder desertBushDrop(Block block)
 	{
-		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
+		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block,
+				LootItem.lootTableItem(MSItems.DESERT_FRUIT.get())
+						.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F)))
+						.apply(ApplyBonusCount.addUniformBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))));
 	}
 	
 	private LootTable.Builder droppingWithColor(Block block)
 	{
-		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("color", "color")))));
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+				.add(LootItem.lootTableItem(block).apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+						.include(MSItemComponents.COLOR.get())))));
 	}
 	
 	private LootTable.Builder droppingWithTEItem(Block block)

@@ -13,12 +13,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnderpearlItem;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.EffectCure;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Set;
@@ -52,9 +52,9 @@ public class CreativeShockEffect extends MobEffect
 	
 	public static boolean doesCreativeShockLimit(Player player, int survivalAmplifierThreshold, int creativeAmplifierThreshold)
 	{
-		if(player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
+		if(player.hasEffect(MSEffects.CREATIVE_SHOCK))
 		{
-			return player.getEffect(MSEffects.CREATIVE_SHOCK.get()).getAmplifier() >= (player.isCreative() ? creativeAmplifierThreshold : survivalAmplifierThreshold);
+			return player.getEffect(MSEffects.CREATIVE_SHOCK).getAmplifier() >= (player.isCreative() ? creativeAmplifierThreshold : survivalAmplifierThreshold);
 		}
 		
 		return false;
@@ -73,17 +73,15 @@ public class CreativeShockEffect extends MobEffect
 	}
 	
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	public boolean applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
-		super.applyEffectTick(entityLivingBaseIn, amplifier);
-		
 		if(!(entityLivingBaseIn instanceof Player player))
-			return;
+			return false;
 		
 		if(doesCreativeShockLimit(player, LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
-		{
 			player.getAbilities().mayBuild = false; //this property is restored when the effect ends, in StopCreativeShockEffectPacket
-		}
+		
+		return true;
 	}
 	
 	@Override
@@ -93,21 +91,21 @@ public class CreativeShockEffect extends MobEffect
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void onPlayerTickEvent(PlayerTickEvent.Pre event)
 	{
-		if(event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
+		if(event.getEntity().hasEffect(MSEffects.CREATIVE_SHOCK))
 		{
-			int duration = event.player.getEffect(MSEffects.CREATIVE_SHOCK.get()).getDuration();
+			int duration = event.getEntity().getEffect(MSEffects.CREATIVE_SHOCK).getDuration();
 			if(duration >= 5)
 			{
-				if(CreativeShockEffect.doesCreativeShockLimit(event.player, LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
-					event.player.getAbilities().mayBuild = false;
-				CreativeShockEffect.stopElytraFlying(event.player, LIMIT_MOBILITY_ITEMS);
+				if(CreativeShockEffect.doesCreativeShockLimit(event.getEntity(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
+					event.getEntity().getAbilities().mayBuild = false;
+				CreativeShockEffect.stopElytraFlying(event.getEntity(), LIMIT_MOBILITY_ITEMS);
 			} else
 			{
-				if(!event.player.level().isClientSide)
+				if(event.getEntity() instanceof ServerPlayer player)
 				{
-					event.player.getAbilities().mayBuild = ((ServerPlayer) event.player).gameMode.getGameModeForPlayer().isBlockPlacingRestricted();
+					event.getEntity().getAbilities().mayBuild = player.gameMode.getGameModeForPlayer().isBlockPlacingRestricted();
 				}
 			}
 		}
@@ -162,6 +160,6 @@ public class CreativeShockEffect extends MobEffect
 		serverPlayerEntity.getAbilities().mayBuild = !serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted(); //block placing restricted was hasLimitedInteractions(), mayBuild was allowEdit
 		
 		StopCreativeShockEffectPacket packet = new StopCreativeShockEffectPacket(serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted());
-		PacketDistributor.PLAYER.with(serverPlayerEntity).send(packet);
+		PacketDistributor.sendToPlayer(serverPlayerEntity, packet);
 	}
 }

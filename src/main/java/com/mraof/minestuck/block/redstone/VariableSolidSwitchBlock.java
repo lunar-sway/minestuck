@@ -7,7 +7,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -36,8 +35,7 @@ public class VariableSolidSwitchBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(!player.isCrouching())
 		{
@@ -52,7 +50,7 @@ public class VariableSolidSwitchBlock extends Block
 			}
 			
 			return InteractionResult.SUCCESS;
-		} else if(player.isCrouching() && player.getItemInHand(hand).isEmpty())
+		} else if(player.isCrouching())
 		{
 			if(state.getValue(POWER) != 0)
 			{
@@ -70,16 +68,14 @@ public class VariableSolidSwitchBlock extends Block
 		return InteractionResult.PASS;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWER) > 0;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWER);
 	}

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public record CookingCostInterpreter(ImmutableGristSet fuelCost) implements RecipeInterpreter
 {
-	public static final Codec<CookingCostInterpreter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<CookingCostInterpreter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			ImmutableGristSet.MAP_CODEC.fieldOf("added_cost").forGetter(CookingCostInterpreter::fuelCost)
 	).apply(instance, CookingCostInterpreter::new));
 	
@@ -47,7 +47,7 @@ public record CookingCostInterpreter(ImmutableGristSet fuelCost) implements Reci
 	}
 	
 	@Override
-	public Codec<? extends RecipeInterpreter> codec()
+	public MapCodec<? extends RecipeInterpreter> codec()
 	{
 		return CODEC;
 	}

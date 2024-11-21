@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -10,7 +11,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.item.Item;
@@ -24,7 +27,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForgeMod;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -46,14 +48,13 @@ public interface ItemRightClickEffect
 		return InteractionResultHolder.success(player.getItemInHand(hand));
 	};
 	
-	static ItemRightClickEffect switchTo(Supplier<Item> otherItem)
+	static ItemRightClickEffect switchTo(Holder<Item> otherItem)
 	{
 		return (world, player, hand) -> {
 			ItemStack itemStackIn = player.getItemInHand(hand);
 			if(player.isShiftKeyDown())
 			{
-				ItemStack newItem = new ItemStack(otherItem.get(), itemStackIn.getCount());
-				newItem.setTag(itemStackIn.getTag());
+				ItemStack newItem = new ItemStack(otherItem, itemStackIn.getCount(), itemStackIn.getComponentsPatch());
 				
 				return InteractionResultHolder.success(newItem);
 			}
@@ -74,18 +75,18 @@ public interface ItemRightClickEffect
 			{
 				for(LivingEntity livingentity : list)
 				{
-					LargeFireball fireball = new LargeFireball(world, player, 0, -8.0, 0, 1);
+					LargeFireball fireball = new LargeFireball(world, player, new Vec3(0, -8.0, 0), 1);
 					fireball.setPos(livingentity.getX() + (player.getRandom().nextInt(6) - 3), livingentity.getY() + 40, livingentity.getZ() + (player.getRandom().nextInt(6) - 3));
 					player.getCooldowns().addCooldown(itemStackIn.getItem(), 20);
-					itemStackIn.hurtAndBreak(2, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+					itemStackIn.hurtAndBreak(2, player, EquipmentSlot.MAINHAND);
 					world.addFreshEntity(fireball);
 				}
 			} else if(!world.isClientSide)
 			{
-				LargeFireball fireball = new LargeFireball(world, player, 0, -8.0, 0, 1);
+				LargeFireball fireball = new LargeFireball(world, player, new Vec3(0, -8.0, 0), 1);
 				fireball.setPos(player.getX() + (player.getRandom().nextInt(20) - 10), player.getY() + 40, player.getZ() + (player.getRandom().nextInt(20) - 10));
 				player.getCooldowns().addCooldown(itemStackIn.getItem(), 20);
-				itemStackIn.hurtAndBreak(2, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+				itemStackIn.hurtAndBreak(2, player, EquipmentSlot.MAINHAND);
 				world.addFreshEntity(fireball);
 			}
 			return InteractionResultHolder.pass(itemStackIn);
@@ -124,13 +125,13 @@ public interface ItemRightClickEffect
 				
 				player.swing(hand, true);
 				player.getCooldowns().addCooldown(itemStackIn.getItem(), 15);
-				itemStackIn.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+				itemStackIn.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
 			}
 			return InteractionResultHolder.pass(itemStackIn);
 		});
 	}
 	
-	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
+	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Holder<Item> otherItem)
 	{
 		return withoutCreativeShock((world, player, hand) -> {
 			ItemStack itemStack = player.getItemInHand(hand);
@@ -141,10 +142,9 @@ public interface ItemRightClickEffect
 			if(blockraytraceresult.getType() == HitResult.Type.BLOCK && world.getBlockState(rayTracedPos).getBlock() == fluidBlock.get())
 			{
 				world.setBlockAndUpdate(rayTracedPos, Blocks.AIR.defaultBlockState());
-				ItemStack newItem = new ItemStack(otherItem.get(), itemStack.getCount());
-				newItem.setTag(itemStack.getTag()); //It is important that the item it is switching to has the same durability
+				ItemStack newItem = new ItemStack(otherItem, itemStack.getCount(), itemStack.getComponentsPatch());
 				world.playSound(null, rayTracedPos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1F, 2F);
-				player.getCooldowns().addCooldown(otherItem.get(), 5);
+				player.getCooldowns().addCooldown(otherItem.value(), 5);
 				return InteractionResultHolder.success(newItem);
 			}
 			
@@ -164,7 +164,7 @@ public interface ItemRightClickEffect
 			
 			player.swing(hand, true);
 			player.getCooldowns().addCooldown(itemStack.getItem(), cooldownTickDuration);
-			itemStack.hurtAndBreak(durabilityCost, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+			itemStack.hurtAndBreak(durabilityCost, player, EquipmentSlot.MAINHAND);
 			
 			return InteractionResultHolder.pass(itemStack);
 		};
@@ -182,7 +182,7 @@ public interface ItemRightClickEffect
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = playerEntity.getAttribute(NeoForgeMod.BLOCK_REACH.value()).getValue();
+		double reachDistance = playerEntity.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.OUTLINE, ClipContext.Fluid.SOURCE_ONLY, playerEntity));
 	}

@@ -46,7 +46,7 @@ public final class ServerEditPackets
 		@Override
 		public void execute(IPayloadContext context)
 		{
-			ClientDeployList.load(this);
+			ClientDeployList.load(this, context.player().registryAccess());
 		}
 	}
 	

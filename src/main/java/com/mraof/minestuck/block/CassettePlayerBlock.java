@@ -4,7 +4,6 @@ import com.mraof.minestuck.blockentity.CassettePlayerBlockEntity;
 import com.mraof.minestuck.item.CassetteItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +23,9 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
@@ -37,8 +38,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(player.isShiftKeyDown())
 		{
@@ -107,8 +107,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
@@ -125,22 +124,20 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean hasAnalogOutputSignal(BlockState state)
+	protected boolean hasAnalogOutputSignal(BlockState state)
 	{
 		return true;
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos)
+	protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos)
 	{
 		if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer)
 		{
 			Item item = cassettePlayer.getCassette().getItem();
 			if(item instanceof CassetteItem cassette)
 			{
-				return cassette.getAnalogOutput();
+				return cassette.getComparatorValue();
 			}
 		}
 		

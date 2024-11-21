@@ -16,10 +16,8 @@ import com.mraof.minestuck.player.Title;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
@@ -58,8 +56,6 @@ public final class MSAttachments
 	public static final Supplier<AttachmentType<DialogueComponent.CurrentDialogue>> CURRENT_DIALOGUE = REGISTER.register("current_dialogue",
 			() -> AttachmentType.builder(restricted(DialogueComponent.CurrentDialogue::new, ServerPlayer.class)).build());
 	
-	public static final Supplier<AttachmentType<ItemStackHandler>> MUSIC_PLAYER_INVENTORY = REGISTER.register("music_player_inventory",
-			() -> AttachmentType.serializable(restricted(() -> new ItemStackHandler(1), ItemStack.class)).build());
 	public static final Supplier<AttachmentType<MusicPlaying>> MUSIC_PLAYING = REGISTER.register("music_playing",
 			() -> AttachmentType.builder(restricted(MusicPlaying::new, LivingEntity.class)).build());
 	

@@ -4,20 +4,20 @@ import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.AlchemizedColored;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.PlayerColorPackets;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.List;
@@ -91,15 +91,13 @@ public final class ColorHandler
 	
 	public static ItemStack setColor(ItemStack stack, int color)
 	{
-		stack.getOrCreateTag().putInt("color", color);
+		stack.set(MSItemComponents.COLOR, color);
 		return stack;
 	}
 	
 	public static int getColorFromStack(ItemStack stack)
 	{
-		if(stack.hasTag() && stack.getTag().contains("color", Tag.TAG_ANY_NUMERIC))
-			return stack.getTag().getInt("color");
-		else return BuiltinColors.DEFAULT_COLOR;
+		return stack.getOrDefault(MSItemComponents.COLOR, BuiltinColors.DEFAULT_COLOR);
 	}
 	
 	public static int getColorForDimension(ServerLevel level)

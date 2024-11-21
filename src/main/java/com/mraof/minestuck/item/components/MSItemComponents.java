@@ -1,11 +1,16 @@
 package com.mraof.minestuck.item.components;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class MSItemComponents
+import java.util.function.Supplier;
+
+public final class MSItemComponents
 {
 	public static final DeferredRegister.DataComponents REGISTRY = DeferredRegister.createDataComponents(Minestuck.MOD_ID);
 	
@@ -29,8 +34,14 @@ public class MSItemComponents
 					.persistent(SburbCodeComponent.CODEC)
 					.networkSynchronized(SburbCodeComponent.STREAM_CODEC)
 					.build());
-	
-	
+	public static final Supplier<DataComponentType<Long>> VALUE = REGISTRY.registerComponentType("value",
+			builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG));
+	public static final Supplier<DataComponentType<Integer>> COLOR = REGISTRY.registerComponentType("color",
+			builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
+	public static final Supplier<DataComponentType<Integer>> POWER = REGISTRY.registerComponentType("power",
+			builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
+	public static final Supplier<DataComponentType<GlobalPos>> TARGET_LOCATION = REGISTRY.registerComponentType("target_location",
+			builder -> builder.persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC));
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<PosterComponent>> POSTER = REGISTRY.register("poster", () ->
 			new DataComponentType.Builder<PosterComponent>()
 					.persistent(PosterComponent.CODEC)

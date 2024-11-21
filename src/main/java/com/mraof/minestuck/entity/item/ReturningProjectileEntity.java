@@ -111,7 +111,7 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	{
 		if(getOwner() instanceof Player player)
 		{
-			player.getCooldowns().addCooldown(getItemRaw().getItem(), 5);
+			player.getCooldowns().addCooldown(getItem().getItem(), 5);
 			this.discard(); //TODO find a better set of conditions to remove entity(ticksExisted?)
 		}
 	}
@@ -164,7 +164,7 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	
 	public ItemStack getItemFromItemStack()
 	{
-		ItemStack itemstack = this.getItemRaw();
+		ItemStack itemstack = this.getItem();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
 	

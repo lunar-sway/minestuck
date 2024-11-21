@@ -140,7 +140,7 @@ public class FrogEntity extends PathfinderMob
 		return 3;
 	}
 	
-	public enum FrogVariants  implements StringRepresentable, net.neoforged.fml.common.asm.enumextension.IExtensibleEnum
+	public enum FrogVariants implements StringRepresentable
 	{
 		DEFAULT("default"),
 		TOTALLY_NORMAL("totally_normal"),
@@ -164,7 +164,7 @@ public class FrogEntity extends PathfinderMob
 		}
 	}
 	
-	public enum EyeTypes implements StringRepresentable, net.neoforged.fml.common.asm.enumextension.IExtensibleEnum
+	public enum EyeTypes implements StringRepresentable
 	{
 		LIGHT("light"),
 		DARK("dark"),
@@ -184,7 +184,7 @@ public class FrogEntity extends PathfinderMob
 		}
 	}
 	
-	public enum BellyTypes implements StringRepresentable, net.neoforged.fml.common.asm.enumextension.IExtensibleEnum
+	public enum BellyTypes implements StringRepresentable
 	{
 		NONE("none"),
 		SOLID("solid"),

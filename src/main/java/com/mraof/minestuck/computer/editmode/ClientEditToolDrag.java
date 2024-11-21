@@ -1,9 +1,8 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
@@ -21,6 +20,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -34,10 +34,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 
@@ -52,11 +51,8 @@ public class ClientEditToolDrag
 {
 	
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event)
+	public static void onClientTick(ClientTickEvent.Pre event)
 	{
-		if(event.phase != TickEvent.Phase.START)
-			return;
-		
 		Minecraft mc = Minecraft.getInstance();
 		Player player = mc.player;
 		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
@@ -348,7 +344,7 @@ public class ClientEditToolDrag
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = player.getAttribute(NeoForgeMod.BLOCK_REACH.value()).getValue();
+		double reachDistance = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 	}
@@ -392,9 +388,7 @@ public class ClientEditToolDrag
 					RenderSystem.depthMask(false);    //GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 					
 					//Create new MultiBufferSource because RenderLevelStageEvent doesn't come with one.
-					Tesselator tesselator = Tesselator.getInstance();
-					BufferBuilder bufferBuilder = tesselator.getBuilder();
-					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(bufferBuilder);
+					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(1536));
 					
 					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox), 0, 0, 0, cap.getToolMode() == IEditTools.ToolMode.RECYCLE ? 1 : 0, cap.getToolMode() == IEditTools.ToolMode.REVISE ? 1 : 0, 0, 1);
 					renderTypeBuffer.endBatch();
@@ -418,8 +412,12 @@ public class ClientEditToolDrag
 			dX /= length;
 			dY /= length;
 			dZ /= length;
-			bufferIn.vertex(matrix4f, (float)(startX + xIn), (float)(startY + yIn), (float)(startZ + zIn)).color(red, green, blue, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
-			bufferIn.vertex(matrix4f, (float)(endX + xIn), (float)(endY + yIn), (float)(endZ + zIn)).color(red, green, blue, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
+			bufferIn.addVertex(matrix4f, (float)(startX + xIn), (float)(startY + yIn), (float)(startZ + zIn))
+					.setColor(red, green, blue, alpha)
+					.setNormal(pose, dX, dY, dZ);
+			bufferIn.addVertex(matrix4f, (float)(endX + xIn), (float)(endY + yIn), (float)(endZ + zIn))
+					.setColor(red, green, blue, alpha)
+					.setNormal(pose, dX, dY, dZ);
 		});
 	}
 }

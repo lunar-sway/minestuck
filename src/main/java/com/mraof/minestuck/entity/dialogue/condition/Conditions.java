@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.dialogue.condition;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -19,8 +19,8 @@ import java.util.function.Supplier;
 
 public final class Conditions
 {
-	public static final DeferredRegister<Codec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
-	public static final Registry<Codec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
+	public static final DeferredRegister<MapCodec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
+	public static final Registry<MapCodec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
 	
 	static {
 		REGISTER.register("always_true", () -> Condition.AlwaysTrue.CODEC);

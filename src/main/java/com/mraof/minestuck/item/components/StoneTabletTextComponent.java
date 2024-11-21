@@ -8,6 +8,8 @@ import net.minecraft.world.item.ItemStack;
 
 public record StoneTabletTextComponent(String text)
 {
+	private static final StoneTabletTextComponent DEFAULT = new StoneTabletTextComponent("");
+	
 	public static final Codec<StoneTabletTextComponent> CODEC = Codec.STRING.xmap(StoneTabletTextComponent::new, StoneTabletTextComponent::text);
 	
 	public static final StreamCodec<ByteBuf, StoneTabletTextComponent> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(StoneTabletTextComponent::new, StoneTabletTextComponent::text);
@@ -19,7 +21,7 @@ public record StoneTabletTextComponent(String text)
 	
 	public static String getText(ItemStack tablet)
 	{
-		return tablet.get(MSItemComponents.STONE_TABLET_TEXT).text;
+		return tablet.getOrDefault(MSItemComponents.STONE_TABLET_TEXT, DEFAULT).text;
 	}
 	
 	public static void setText(ItemStack tablet, String text)

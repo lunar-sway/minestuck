@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -35,45 +36,45 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public void readFromNBT(CompoundTag nbt)
+	public void readFromNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
 		size = nbt.getInt("size");
 		autoBalance = nbt.getBoolean("auto_balance");
-		node = readNode(nbt, 0, 0);
+		node = readNode(nbt, 0, 0, provider);
 		if(side == LogicalSide.SERVER)
 			autoBalance();
 	}
 	
-	private static TreeNode readNode(CompoundTag nbt, int currentIndex, int level)
+	private static TreeNode readNode(CompoundTag nbt, int currentIndex, int level, HolderLookup.Provider provider)
 	{
 		if(nbt.contains("node"+currentIndex))
 		{
-			ItemStack stack = ItemStack.of(nbt.getCompound("node"+currentIndex));
+			ItemStack stack = ItemStack.parse(provider, nbt.getCompound("node"+currentIndex)).orElseThrow();
 			if(stack.isEmpty()) return null;	//Should not happen
 			TreeNode node = new TreeNode(stack);
-			node.node1 = readNode(nbt, currentIndex + (int) Math.pow(2, level), level + 1);
-			node.node2 = readNode(nbt, currentIndex + (int) Math.pow(2, level + 1), level + 1);
+			node.node1 = readNode(nbt, currentIndex + (int) Math.pow(2, level), level + 1, provider);
+			node.node2 = readNode(nbt, currentIndex + (int) Math.pow(2, level + 1), level + 1, provider);
 			
 			return node;
 		} else return null;
 	}
 	
-	private static void saveNode(CompoundTag nbt, TreeNode node, int currentIndex, int level)
+	private static void saveNode(CompoundTag nbt, TreeNode node, int currentIndex, int level, HolderLookup.Provider provider)
 	{
-		nbt.put("node"+currentIndex, node.stack.save(new CompoundTag()));
+		nbt.put("node"+currentIndex, node.stack.save(provider));
 		if(node.node1 != null)
-			saveNode(nbt, node.node1, currentIndex + (int) Math.pow(2, level), level + 1);
+			saveNode(nbt, node.node1, currentIndex + (int) Math.pow(2, level), level + 1, provider);
 		if(node.node2 != null)
-			saveNode(nbt, node.node2, currentIndex + (int) Math.pow(2, level + 1), level + 1);
+			saveNode(nbt, node.node2, currentIndex + (int) Math.pow(2, level + 1), level + 1, provider);
 	}
 	
 	@Override
-	public CompoundTag writeToNBT(CompoundTag nbt)
+	public CompoundTag writeToNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
 		nbt.putInt("size", size);
 		nbt.putBoolean("auto_balance", autoBalance);
 		if(node != null)
-			saveNode(nbt, node, 0, 0);
+			saveNode(nbt, node, 0, 0, provider);
 		
 		return nbt;
 	}
@@ -249,7 +250,7 @@ public class TreeModus extends Modus
 		
 		public void addNode(TreeNode node)
 		{
-			if(ItemStack.isSameItemSameTags(this.stack, node.stack)
+			if(ItemStack.isSameItemSameComponents(this.stack, node.stack)
 				&& this.stack.getCount() + node.stack.getCount() <= this.stack.getMaxStackSize())
 			{
 				this.stack.grow(node.stack.getCount());

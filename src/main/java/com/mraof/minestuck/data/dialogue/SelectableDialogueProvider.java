@@ -83,7 +83,7 @@ public final class SelectableDialogueProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
 		{
 			Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/" + this.category.folderNameForSelectable() + "/" + entry.getKey().getPath() + ".json");
-			JsonElement selectableJson = Dialogue.SelectableDialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			JsonElement selectableJson = Dialogue.SelectableDialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
 			futures.add(DataProvider.saveStable(cache, selectableJson, selectablePath));
 		}
 		

@@ -16,7 +16,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -121,8 +120,7 @@ public class SummonerBlockEntity extends BlockEntity
 	
 	public void handleSettingsPacket(SummonerSettingsPacket packet)
 	{
-		if(packet.entityType().isPresent())
-			setSummonedEntity(packet.entityType().get());
+		setSummonedEntity(packet.entityType());
 		
 		setSummonRange(packet.summonRange());
 		setChanged();

@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/entity/MobCategory",
+      "name": "MINESTUCK_UNDERLING",
+      "constructor": "(Ljava/lang/String;IZZI)V",
+      "parameters": [ "underling", 28, false, false, 128 ]
+    },
+    {
+      "enum": "net/minecraft/world/entity/MobCategory",
+      "name": "MINESTUCK_CONSORT",
+      "constructor": "(Ljava/lang/String;IZZI)V",
+      "parameters": [ "consort", 8, true, false, 128 ]
+    }
+  ]
+}

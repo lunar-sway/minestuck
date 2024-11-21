@@ -47,6 +47,8 @@ description='''
 Adds Homestuck to your Minecraft!
 '''
 
+enumExtensions="META-INF/enumextensions.json"
+
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.minestuck]] #optional
     # the modid of the dependency

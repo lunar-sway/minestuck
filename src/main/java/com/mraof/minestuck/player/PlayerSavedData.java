@@ -2,6 +2,7 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -31,6 +32,7 @@ public final class PlayerSavedData extends SavedData
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_player_data";
 	
 	private final Map<PlayerIdentifier, PlayerData> dataMap = new HashMap<>();
+	@Deprecated
 	public final MinecraftServer mcServer;
 	
 	private PlayerSavedData(MinecraftServer server)
@@ -57,15 +59,15 @@ public final class PlayerSavedData extends SavedData
 	
 	private static Factory<PlayerSavedData> factory(MinecraftServer mcServer)
 	{
-		return new Factory<>(() -> new PlayerSavedData(mcServer), nbt -> load(mcServer, nbt));
+		return new Factory<>(() -> new PlayerSavedData(mcServer), (nbt, registries) -> load(mcServer, nbt));
 	}
 	
 	@Override
-	public CompoundTag save(CompoundTag compound)
+	public CompoundTag save(CompoundTag compound, HolderLookup.Provider registries)
 	{
 		ListTag list = new ListTag();
 		for (PlayerData data : dataMap.values())
-			list.add(data.writeToNBT());
+			list.add(data.writeToNBT(registries));
 		
 		compound.put("playerData", list);
 		return compound;

@@ -10,6 +10,7 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -23,14 +24,15 @@ import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class MinestuckRecipeProvider extends RecipeProvider
 {
-	public MinestuckRecipeProvider(PackOutput output)
+	public MinestuckRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
 	{
-		super(output);
+		super(output, registries);
 	}
 	
 	@Override
@@ -187,13 +189,13 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(RecipeCategory.FOOD, MSBlocks.APPLE_CAKE.get()).define('m', Items.MILK_BUCKET).define('a', Items.APPLE).define('w', Items.WHEAT).define('e', Items.EGG).pattern("mmm").pattern("aea").pattern("www").unlockedBy("has_egg", has(Items.EGG)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.CHESSBOARD.get()).define('W', Items.WHITE_TERRACOTTA).define('B', Items.BLACK_TERRACOTTA).pattern("WBW").pattern("BWB").pattern("WBW").group("chessboard").unlockedBy("has_white_terracotta", has(Items.WHITE_TERRACOTTA)).unlockedBy("has_black_terracotta", has(Items.BLACK_TERRACOTTA)).save(recipeBuilder, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "chessboard_white"));
 		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, MSBlocks.CHESSBOARD.get()).define('W', Items.WHITE_TERRACOTTA).define('B', Items.BLACK_TERRACOTTA).pattern("BWB").pattern("WBW").pattern("BWB").group("chessboard").unlockedBy("has_white_terracotta", has(Items.WHITE_TERRACOTTA)).unlockedBy("has_black_terracotta", has(Items.BLACK_TERRACOTTA)).save(recipeBuilder, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "chessboard_black"));
-		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.CLOTHES_IRON.get()).define('s', Tags.Items.STONE).define('i', Tags.Items.INGOTS_IRON).define('r', Tags.Items.RODS_WOODEN).pattern(" rr").pattern("sss").pattern("iii").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.CLOTHES_IRON.get()).define('s', Tags.Items.STONES).define('i', Tags.Items.INGOTS_IRON).define('r', Tags.Items.RODS_WOODEN).pattern(" rr").pattern("sss").pattern("iii").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.HORN.get()).define('w', Items.WHITE_WOOL).define('i', Tags.Items.INGOTS_IRON).define('r', Tags.Items.RODS_WOODEN).pattern("  i").pattern(" r ").pattern("w  ").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).unlockedBy("has_white_wool", has(Items.WHITE_WOOL)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MSItems.BI_DYE.get(), 2).requires(Items.BLUE_DYE).unlockedBy("has_blue_dye", has(Items.BLUE_DYE)).requires(Items.PINK_DYE).unlockedBy("has_pink_dye", has(Items.PINK_DYE)).requires(Items.PURPLE_DYE).unlockedBy("has_purple_dye", has(Items.PURPLE_DYE)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.LIP_BALM.get()).define('n', Items.IRON_NUGGET).define('w', Items.HONEYCOMB).pattern("nwn").pattern(" n ").unlockedBy("has_honeycomb", has(Items.HONEYCOMB)).unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET)).save(recipeBuilder);
 		
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.CLAW_HAMMER.get()).define('i', Tags.Items.INGOTS_IRON).define('s', Tags.Items.RODS_WOODEN).pattern(" ii").pattern("is ").pattern(" s ").unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.SLEDGE_HAMMER.get()).define('i', Tags.Items.INGOTS_IRON).define('s', Tags.Items.RODS_WOODEN).define('S', Tags.Items.STONE).pattern("iSi").pattern(" s ").pattern(" s ").unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.SLEDGE_HAMMER.get()).define('i', Tags.Items.INGOTS_IRON).define('s', Tags.Items.RODS_WOODEN).define('S', Tags.Items.STONES).pattern("iSi").pattern(" s ").pattern(" s ").unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.KATANA.get()).define('i', Tags.Items.INGOTS_IRON).define('s', Tags.Items.RODS_WOODEN).pattern("  i").pattern(" i ").pattern("s  ").unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.DAGGER.get()).define('i', Tags.Items.INGOTS_IRON).define('s', Tags.Items.RODS_WOODEN).pattern("s").pattern("i").pattern("i").unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.HOUSE_KEY.get()).define('n', Tags.Items.NUGGETS_IRON).define('i', Tags.Items.INGOTS_IRON).pattern(" in").pattern(" in").pattern(" i ").unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
@@ -202,13 +204,13 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.SICKLE.get()).define('i', Tags.Items.INGOTS_IRON).define('s', Tags.Items.RODS_WOODEN).pattern("ii ").pattern("  i").pattern(" s ").unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.DEUCE_CLUB.get()).define('P', ItemTags.PLANKS).define('s', Tags.Items.RODS_WOODEN).pattern("  P").pattern(" s ").pattern("s  ").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.CANE.get()).define('s', Tags.Items.RODS_WOODEN).pattern("  s").pattern(" s ").pattern("s  ").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.BEAR_POKING_STICK.get()).define('s', Tags.Items.RODS_WOODEN).define('l', Tags.Items.LEATHER).pattern("  s").pattern(" s ").pattern("l  ").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.BEAR_POKING_STICK.get()).define('s', Tags.Items.RODS_WOODEN).define('l', Tags.Items.LEATHERS).pattern("  s").pattern(" s ").pattern("l  ").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.UMBRELLA.get()).define('s', Tags.Items.RODS_WOODEN).define('w', Items.BLACK_WOOL).pattern(" w ").pattern("wsw").pattern(" s ").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.WOODEN_LANCE.get()).define('s', Tags.Items.RODS_WOODEN).define('P', ItemTags.PLANKS).define('w', Items.WOODEN_SWORD).pattern("wP ").pattern("PP ").pattern("  s").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.FAN.get()).define('s', Tags.Items.RODS_WOODEN).define('p', Items.PAPER).pattern("  p").pattern(" pp").pattern("pps").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.IRON_CANE.get()).define('i', Tags.Items.INGOTS_IRON).define('c', MSItems.CANE.get()).pattern("  i").pattern(" c ").pattern("i  ").unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.WOODEN_SPOON.get()).define('s', Tags.Items.RODS_WOODEN).define('b', Items.BOWL).pattern("b").pattern("s").pattern("s").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.FORK.get()).define('S', Tags.Items.STONE).pattern("S S").pattern(" S ").pattern(" S ").unlockedBy("has_stone", has(Tags.Items.STONE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.FORK.get()).define('S', Tags.Items.STONES).pattern("S S").pattern(" S ").pattern(" S ").unlockedBy("has_stone", has(Tags.Items.STONES)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.POINTY_STICK.get(), 1).define('s', Tags.Items.RODS_WOODEN).pattern("s").pattern("s").pattern("s").unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.KNITTING_NEEDLE.get(), 2).define('i', Items.IRON_INGOT).define('n', Items.IRON_NUGGET).pattern("  n").pattern(" i ").pattern("i  ").unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MSItems.SHURIKEN.get(), 2).define('i', Items.IRON_INGOT).define('n', Items.IRON_NUGGET).pattern(" i ").pattern("ini").pattern(" i ").unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeBuilder);
@@ -231,7 +233,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, MSBlocks.TRANS_PORTALIZER.get()).requires(MSBlocks.TRANSPORTALIZER.get()).requires(Items.PINK_DYE).requires(Items.LIGHT_BLUE_DYE).unlockedBy("has_transportalizer", has(MSBlocks.TRANSPORTALIZER.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get()).define('e', MSItems.PLUTONIUM_CORE.get()).define('i', Items.IRON_INGOT).define('c', Items.COMPARATOR).define('q', MSItems.COMPUTER_PARTS.get()).pattern("cqc").pattern("iei").pattern("iii").unlockedBy("has_plutonium_core", has(MSItems.PLUTONIUM_CORE.get())).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, MSBlocks.WIRELESS_REDSTONE_RECEIVER.get()).define('c', Items.COMPARATOR).define('i', Items.IRON_INGOT).define('r', Items.REDSTONE).define('q', Items.QUARTZ).define('s', Tags.Items.STONE).pattern("rqr").pattern("scs").pattern("ici").unlockedBy("has_plutonium_core", has(MSItems.PLUTONIUM_CORE.get())).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, MSBlocks.WIRELESS_REDSTONE_RECEIVER.get()).define('c', Items.COMPARATOR).define('i', Items.IRON_INGOT).define('r', Items.REDSTONE).define('q', Items.QUARTZ).define('s', Tags.Items.STONES).pattern("rqr").pattern("scs").pattern("ici").unlockedBy("has_plutonium_core", has(MSItems.PLUTONIUM_CORE.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, MSBlocks.SOLID_SWITCH.get(), 2).define('g', Items.GLOWSTONE).define('i', Items.IRON_INGOT).define('r', Items.REDSTONE).pattern("iri").pattern("rgr").pattern("iri").unlockedBy("has_glowstone", has(Items.GLOWSTONE)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, MSBlocks.VARIABLE_SOLID_SWITCH.get()).requires(MSBlocks.SOLID_SWITCH.get()).requires(Items.COMPARATOR).unlockedBy("has_solid_switch", has(MSBlocks.SOLID_SWITCH.get())).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH.get()).requires(MSBlocks.SOLID_SWITCH.get()).requires(Items.CLOCK).requires(Items.REPEATER).unlockedBy("has_solid_switch", has(MSBlocks.SOLID_SWITCH.get())).save(recipeBuilder);

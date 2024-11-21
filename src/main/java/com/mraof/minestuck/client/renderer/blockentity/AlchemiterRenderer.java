@@ -21,6 +21,6 @@ public class AlchemiterRenderer extends GeoBlockRenderer<AlchemiterBlockEntity>
 	@Override
 	public AABB getRenderBoundingBox(AlchemiterBlockEntity blockEntity)
 	{
-		return INFINITE_EXTENT_AABB;
+		return AABB.INFINITE;
 	}
 }

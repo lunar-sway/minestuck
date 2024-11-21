@@ -14,7 +14,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -34,7 +33,9 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class GristCollectorBlock extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -52,8 +53,7 @@ public class GristCollectorBlock extends HorizontalDirectionalBlock implements E
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		//when right-clicked by a player, all the grist collected by the block entity is transferred
 		if(player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer) && level.getBlockEntity(pos) instanceof GristCollectorBlockEntity collector)

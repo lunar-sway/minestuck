@@ -44,7 +44,7 @@ public class LargeCakeFeature extends Feature<NoneFeatureConfiguration>
 		WorldGenLevel level = context.level();
 		RandomSource rand = context.random();
 		
-		ResourceLocation templateId = WeightedRandom.getRandomItem(rand, buildWeightedList()).orElseThrow().getData();
+		ResourceLocation templateId = WeightedRandom.getRandomItem(rand, buildWeightedList()).orElseThrow().data();
 		StructureTemplate template = level.getLevel().getStructureManager().getOrCreate(templateId);
 		TemplatePlacement placement = TemplatePlacement.centeredWithRandomRotation(template, context.origin(), rand);
 		

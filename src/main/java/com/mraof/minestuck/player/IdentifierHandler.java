@@ -43,7 +43,7 @@ public class IdentifierHandler
 	@Nonnull
 	public static PlayerIdentifier loadOrThrow(CompoundTag tag, String key) throws RuntimeException
 	{
-		return load(tag, key).getOrThrow(false, message -> {});
+		return load(tag, key).getOrThrow();
 	}
 	
 	public static DataResult<Optional<PlayerIdentifier>> loadOptional(CompoundTag tag, String key)

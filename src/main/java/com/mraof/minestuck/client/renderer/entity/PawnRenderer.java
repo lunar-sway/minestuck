@@ -32,7 +32,7 @@ public class PawnRenderer extends GeoEntityRenderer<PawnEntity>
 	}
 	
 	@Override
-	public void renderRecursively(PoseStack poseStack, PawnEntity animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderRecursively(PoseStack poseStack, PawnEntity animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour)
 	{
 		if(bone.getName().equals("right_hand"))
 		{
@@ -43,6 +43,6 @@ public class PawnRenderer extends GeoEntityRenderer<PawnEntity>
 			poseStack.popPose();
 			buffer = bufferSource.getBuffer(RenderType.entitySolid(getTextureLocation(animatable)));
 		}
-		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
 	}
 }

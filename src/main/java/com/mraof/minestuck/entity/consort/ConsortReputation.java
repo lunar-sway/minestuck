@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.util.MSAttachments;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceKey;
@@ -11,9 +12,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
 public final class ConsortReputation implements INBTSerializable<ListTag>
 {
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
@@ -33,7 +36,7 @@ public final class ConsortReputation implements INBTSerializable<ListTag>
 	}
 	
 	@Override
-	public ListTag serializeNBT()
+	public ListTag serializeNBT(HolderLookup.Provider provider)
 	{
 		ListTag list = new ListTag();
 		for(Map.Entry<ResourceLocation, Integer> entry : consortReputation.entrySet())
@@ -47,7 +50,7 @@ public final class ConsortReputation implements INBTSerializable<ListTag>
 	}
 	
 	@Override
-	public void deserializeNBT(ListTag list)
+	public void deserializeNBT(HolderLookup.Provider provider, ListTag list)
 	{
 		for(int i = 0; i < list.size(); i++)
 		{

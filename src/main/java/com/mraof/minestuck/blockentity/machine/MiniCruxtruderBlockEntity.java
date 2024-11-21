@@ -4,10 +4,12 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniCruxtruderMenu;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -78,6 +80,18 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 		this.progressTracker.save(compound);
 		compound.putInt("color", color);
 		super.saveAdditional(compound, provider);
+	}
+	
+	@Override
+	protected void applyImplicitComponents(DataComponentInput componentInput)
+	{
+		this.color = componentInput.getOrDefault(MSItemComponents.COLOR, this.color);
+	}
+	
+	@Override
+	protected void collectImplicitComponents(DataComponentMap.Builder components)
+	{
+		components.set(MSItemComponents.COLOR, this.color);
 	}
 	
 	@Override

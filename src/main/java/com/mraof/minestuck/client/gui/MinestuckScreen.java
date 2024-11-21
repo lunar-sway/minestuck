@@ -1,10 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
@@ -103,13 +100,12 @@ public abstract class MinestuckScreen extends Screen
 		int iconU = 0;
 		int iconV = 0;
 		
-		BufferBuilder render = Tesselator.getInstance().getBuilder();
-		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		render.vertex(x, y + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
-		Tesselator.getInstance().end();
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.addVertex(x, y + iconY, 0).setUv((iconU) * scale, (iconV + iconY) * scale);
+		buffer.addVertex(x + iconX, y + iconY, 0).setUv((iconU + iconX) * scale, (iconV + iconY) * scale);
+		buffer.addVertex(x + iconX, y, 0).setUv((iconU + iconX) * scale, (iconV) * scale);
+		buffer.addVertex(x, y, 0).setUv((iconU) * scale, (iconV) * scale);
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 	private void drawIcon(int x, int y, ResourceLocation icon)
 	{
@@ -126,13 +122,12 @@ public abstract class MinestuckScreen extends Screen
 		int iconU = 0;
 		int iconV = 0;
 
-		BufferBuilder render = Tesselator.getInstance().getBuilder();
-		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		render.vertex(x, y + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
-		Tesselator.getInstance().end();
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.addVertex(x, y + iconY, 0).setUv((iconU) * scale, (iconV + iconY) * scale);
+		buffer.addVertex(x + iconX, y + iconY, 0).setUv((iconU + iconX) * scale, (iconV + iconY) * scale);
+		buffer.addVertex(x + iconX, y, 0).setUv((iconU + iconX) * scale, (iconV) * scale);
+		buffer.addVertex(x, y, 0).setUv((iconU) * scale, (iconV) * scale);
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 
 	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY)

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.block.MSBlocks;
@@ -40,7 +40,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 
 	GristCostRecipeCategory(IGuiHelper guiHelper)
 	{
-		ResourceLocation alchemiterBackground = ResourceLocation.fromNamespaceAndPath("minestuck:textures/gui/alchemiter.png");
+		ResourceLocation alchemiterBackground = Minestuck.id("textures/gui/alchemiter.png");
 		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
 		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.ALCHEMITER));
 	}

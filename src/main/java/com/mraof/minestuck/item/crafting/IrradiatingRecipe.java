@@ -3,8 +3,6 @@ package com.mraof.minestuck.item.crafting;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -43,7 +41,7 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 		return MSRecipeTypes.IRRADIATING.get();
 	}
 	
-	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(RecipeInput container, Level level)
+	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(SingleRecipeInput input, Level level)
 	{
 		return Optional.of(this);
 	}

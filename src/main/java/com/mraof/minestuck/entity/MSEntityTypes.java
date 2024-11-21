@@ -9,7 +9,10 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -24,8 +27,8 @@ public final class MSEntityTypes
 {
 	public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Minestuck.MOD_ID);
 	
-	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 28, false, false, 128);
-	public static MobCategory CONSORT = MobCategory.create("CONSORT", "consort", 8, true, false, 128);
+	public static final MobCategory UNDERLING = MobCategory.valueOf("MINESTUCK_UNDERLING");
+	public static final MobCategory CONSORT = MobCategory.valueOf("MINESTUCK_CONSORT");
 	
 	public static final Supplier<EntityType<FrogEntity>> FROG = REGISTER.register("frog", () -> EntityType.Builder.<FrogEntity>of(FrogEntity::new, MobCategory.CREATURE).sized(0.51F, 0.51F).build(Minestuck.id("frog").toString()));
 	public static final Supplier<EntityType<ConsortEntity>> SALAMANDER = REGISTER.register("salamander", () -> EntityType.Builder.of(EnumConsort.SALAMANDER::create, CONSORT).sized(0.52F, 1.2F).build(Minestuck.id("salamander").toString()));

@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.TagKey;
@@ -21,9 +22,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbility;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.stream.Stream;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class WeaponItem extends TieredItem
 {
 	private final float efficiency;
@@ -44,12 +48,6 @@ public class WeaponItem extends TieredItem
 	private final UseAnim useAction;
 	private final List<FinishUseItemEffect> itemUsageEffects;
 	private final List<InventoryTickEffect> tickEffects;
-	
-	@Deprecated
-	public WeaponItem(Tier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable List<MSToolType> toolType, Properties properties)
-	{
-		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).set(toolType), properties);
-	}
 	
 	public WeaponItem(Builder builder, Properties properties)
 	{

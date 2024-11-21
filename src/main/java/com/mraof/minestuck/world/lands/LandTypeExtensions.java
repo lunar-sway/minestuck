@@ -22,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -31,7 +30,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -238,9 +237,9 @@ public final class LandTypeExtensions
 	{
 		public static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(
-						ExtraCodecs.strictOptionalField(FeatureExtension.CODEC.listOf(), "features", Collections.emptyList()).forGetter(ParsedExtension::features),
-						ExtraCodecs.strictOptionalField(CarverExtension.CODEC.listOf(), "carvers", Collections.emptyList()).forGetter(ParsedExtension::carvers),
-						ExtraCodecs.strictOptionalField(MobSpawnExtension.CODEC.listOf(), "mob_spawns", Collections.emptyList()).forGetter(ParsedExtension::mobSpawns)
+						FeatureExtension.CODEC.listOf().optionalFieldOf("features", Collections.emptyList()).forGetter(ParsedExtension::features),
+						CarverExtension.CODEC.listOf().optionalFieldOf("carvers", Collections.emptyList()).forGetter(ParsedExtension::carvers),
+						MobSpawnExtension.CODEC.listOf().optionalFieldOf("mob_spawns", Collections.emptyList()).forGetter(ParsedExtension::mobSpawns)
 				).apply(instance, ParsedExtension::new));
 		
 		void addAllTo(ImmutableList.Builder<Extension> builder)

@@ -7,7 +7,6 @@ import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue.DialogueCa
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
@@ -27,9 +26,9 @@ public enum EnumConsort implements StringRepresentable	//TODO Could ideally be c
 	IGUANA(MSEntityTypes.IGUANA, "iguana", ChatFormatting.AQUA, MSSoundEvents.ENTITY_IGUANA_AMBIENT, MSSoundEvents.ENTITY_IGUANA_HURT, MSSoundEvents.ENTITY_IGUANA_DEATH);
 	
 	public static final Codec<EnumConsort> CODEC = StringRepresentable.fromEnum(EnumConsort::values);
-	public static final Codec<List<EnumConsort>> SINGLE_OR_LIST_CODEC = ExtraCodecs.either(CODEC, CODEC.listOf())
+	public static final Codec<List<EnumConsort>> SINGLE_OR_LIST_CODEC = Codec.either(CODEC, CODEC.listOf())
 			.xmap(either -> either.map(List::of, Function.identity()),
-					list -> list.size() == 1 ? Either.left(list.get(0)) : Either.right(list));
+					list -> list.size() == 1 ? Either.left(list.getFirst()) : Either.right(list));
 	
 	private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
 	private final String name;

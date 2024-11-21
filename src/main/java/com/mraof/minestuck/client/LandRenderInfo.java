@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.renderer.LandSkyRenderer;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -24,9 +23,9 @@ public class LandRenderInfo extends DimensionSpecialEffects
 	}
 	
 	@Override
-	public boolean renderSky(ClientLevel level, int ticks, float partialTick, PoseStack poseStack, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog)
+	public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog)
 	{
-		LandSkyRenderer.render(ticks, partialTick, poseStack, level, Minecraft.getInstance());
+		LandSkyRenderer.render(ticks, partialTick, modelViewMatrix, level, Minecraft.getInstance());
 		return true;
 	}
 	

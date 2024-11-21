@@ -8,10 +8,11 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.*;
 import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.util.ColorHandler;
+import net.minecraft.core.HolderLookup;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
@@ -132,9 +133,9 @@ public final class ClientPlayerData
 		return dataCheckerAccess;
 	}
 	
-	public static void handleDataPacket(CaptchaDeckPackets.ModusData packet)
+	public static void handleDataPacket(CaptchaDeckPackets.ModusData packet, HolderLookup.Provider provider)
 	{
-		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT);
+		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT, provider);
 		if(modus != null)
 			MSScreenFactories.updateSylladexScreen();
 		else LOGGER.debug("Player lost their modus after update packet");

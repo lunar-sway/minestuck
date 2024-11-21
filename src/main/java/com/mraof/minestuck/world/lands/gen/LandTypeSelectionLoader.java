@@ -22,7 +22,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,7 +85,9 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 		}
 	}
 	
-	private static final Codec<GroupData> GROUP_DATA_CODEC = RecordCodecBuilder.create(instance -> instance.group(new ExtraCodecs.EitherCodec<>(ResourceLocation.CODEC.listOf(), ExtraCodecs.TAG_OR_ELEMENT_ID).fieldOf("value").forGetter(GroupData::value)).apply(instance, GroupData::new));
+	private static final Codec<GroupData> GROUP_DATA_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.either(ResourceLocation.CODEC.listOf(), ExtraCodecs.TAG_OR_ELEMENT_ID).fieldOf("value").forGetter(GroupData::value)
+	).apply(instance, GroupData::new));
 	private static final Codec<List<GroupData>> TERRAIN_DATA_CODEC = GROUP_DATA_CODEC.listOf();
 	private static final Codec<Map<EnumAspect, List<GroupData>>> TITLE_DATA_CODEC = Codec.unboundedMap(EnumAspect.CODEC, GROUP_DATA_CODEC.listOf());
 	

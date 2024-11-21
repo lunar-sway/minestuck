@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.commands.CommandSourceStack;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus=EventBusSubscriber.Bus.MOD)

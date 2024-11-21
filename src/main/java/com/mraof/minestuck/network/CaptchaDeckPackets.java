@@ -6,16 +6,15 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import javax.annotation.Nullable;
@@ -32,15 +31,15 @@ public final class CaptchaDeckPackets
 				ModusData::new
 		);
 		
-		public static ModusData create(@Nullable Modus modus)
+		public static ModusData create(@Nullable Modus modus, HolderLookup.Provider provider)
 		{
-			return new ModusData(CaptchaDeckHandler.writeToNBT(modus));
+			return new ModusData(CaptchaDeckHandler.writeToNBT(modus, provider));
 		}
 		
 		@Override
 		public void execute(IPayloadContext context)
 		{
-			ClientPlayerData.handleDataPacket(this);
+			ClientPlayerData.handleDataPacket(this, context.player().registryAccess());
 		}
 		
 		@Override

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.blockentity.machine.MiniCruxtruderBlockEntity;
+import com.mraof.minestuck.item.AlchemizedColored;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -26,11 +26,11 @@ public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 	@Override
 	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
 	{
-		if(stack.hasTag() && stack.getTag().contains("color"))
+		if(stack.has(MSItemComponents.COLOR))
 		{
 			BlockEntity be = level.getBlockEntity(pos);
 			if(be instanceof MiniCruxtruderBlockEntity blockEntity)
-				blockEntity.color = stack.getTag().getInt("color");
+				blockEntity.color = stack.get(MSItemComponents.COLOR);
 			else LogManager.getLogger().warn("Placed miniature cruxtruder, but no appropriate block entity was created. Instead found {}.", be);
 		}
 		return true;
@@ -39,8 +39,7 @@ public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 	public static ItemStack getCruxtruderWithColor(int color)
 	{
 		ItemStack stack = new ItemStack(MSBlocks.MINI_CRUXTRUDER.get());
-		stack.setTag(new CompoundTag());
-		stack.getTag().putInt("color", color);
+		stack.set(MSItemComponents.COLOR, color);
 		return stack;
 	}
 }

@@ -10,11 +10,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashSet;
@@ -39,9 +38,9 @@ public final class DataCheckerPermission
 	}
 	
 	@SubscribeEvent
-	private static void onPlayerTick(TickEvent.PlayerTickEvent event)
+	private static void onPlayerTick(PlayerTickEvent.Post event)
 	{
-		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer player)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			if(shouldUpdateConfigurations(player))
 				sendPacket(player);

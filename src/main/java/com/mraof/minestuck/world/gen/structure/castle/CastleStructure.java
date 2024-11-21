@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 public class CastleStructure extends Structure
 {
-	public static final Codec<CastleStructure> CODEC = simpleCodec(CastleStructure::new);
+	public static final MapCodec<CastleStructure> CODEC = simpleCodec(CastleStructure::new);
 	
 	public CastleStructure(StructureSettings pSettings)
 	{

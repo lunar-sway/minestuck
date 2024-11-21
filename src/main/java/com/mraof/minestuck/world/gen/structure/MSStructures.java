@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.castle.*;
 import com.mraof.minestuck.world.gen.structure.gate.GateMushroomPiece;
@@ -178,7 +178,7 @@ public final class MSStructures
 	}
 	
 	
-	private static <S extends Structure> StructureType<S> asType(Codec<S> codec)
+	private static <S extends Structure> StructureType<S> asType(MapCodec<S> codec)
 	{
 		return () -> codec;
 	}

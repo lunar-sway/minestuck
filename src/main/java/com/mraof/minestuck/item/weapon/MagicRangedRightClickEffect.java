@@ -7,6 +7,7 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -15,6 +16,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -65,7 +67,7 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 		ItemStack itemStackIn = player.getItemInHand(hand);
 		
 		if(player instanceof ServerPlayer serverPlayer)
-			magicAttack(level, serverPlayer);
+			magicAttack(serverPlayer);
 		
 		if(player.isCreative())
 			player.getCooldowns().addCooldown(itemStackIn.getItem(), 10);
@@ -73,14 +75,15 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 			player.getCooldowns().addCooldown(itemStackIn.getItem(), 50);
 		
 		player.swing(hand, true);
-		itemStackIn.hurtAndBreak(6, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+		itemStackIn.hurtAndBreak(6, player, EquipmentSlot.MAINHAND);
 		player.awardStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
 		
 		return InteractionResultHolder.success(itemStackIn);
 	}
 	
-	private void magicAttack(Level level, ServerPlayer player)
+	private void magicAttack(ServerPlayer player)
 	{
+		ServerLevel level = player.serverLevel();
 		if(sound != null && player.getRandom().nextFloat() < .1F) //optional sound effect adding
 			level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.get(), SoundSource.PLAYERS, 0.7F, pitch);
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_MAGIC_CAST.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
@@ -106,11 +109,11 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 	}
 	
 	// If you're an addon that want to use this class with your own effect, override this to use your own network packet
-	protected void sendEffectPacket(Level level, Vec3 pos, Vec3 lookVec, int length, boolean collides)
+	protected void sendEffectPacket(ServerLevel level, Vec3 pos, Vec3 lookVec, int length, boolean collides)
 	{
 		if(type != null)
-			PacketDistributor.NEAR.with(new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, level.dimension()))
-					.send(new MagicRangedEffectPacket(type, pos, lookVec, length, collides));
+			PacketDistributor.sendToPlayersNear(level, null, pos.x, pos.y, pos.z, 64,
+					new MagicRangedEffectPacket(type, pos, lookVec, length, collides));
 	}
 	
 	protected void targetEffect(ServerPlayer player)
@@ -121,7 +124,7 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 	{
 		BlockPos blockPos = BlockPos.containing(vecPos);
 		
-		if(!level.getBlockState(blockPos).isPathfindable(level, blockPos, PathComputationType.LAND))
+		if(!level.getBlockState(blockPos).isPathfindable(PathComputationType.LAND))
 		{
 			return true;
 		}

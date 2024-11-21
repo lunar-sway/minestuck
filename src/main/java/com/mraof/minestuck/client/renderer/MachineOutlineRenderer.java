@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import org.joml.Matrix4f;
 
@@ -120,8 +120,12 @@ public class MachineOutlineRenderer
 			dX /= length;
 			dY /= length;
 			dZ /= length;
-			bufferIn.vertex(matrix4f, (float)(startX + xIn), (float)(startY + yIn), (float)(startZ + zIn)).color(red, green, blue, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
-			bufferIn.vertex(matrix4f, (float)(endX + xIn), (float)(endY + yIn), (float)(endZ + zIn)).color(red, green, blue, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
+			bufferIn.addVertex(matrix4f, (float)(startX + xIn), (float)(startY + yIn), (float)(startZ + zIn))
+					.setColor(red, green, blue, alpha)
+					.setNormal(pose, dX, dY, dZ);
+			bufferIn.addVertex(matrix4f, (float)(endX + xIn), (float)(endY + yIn), (float)(endZ + zIn))
+					.setColor(red, green, blue, alpha)
+					.setNormal(pose, dX, dY, dZ);
 		});
 	}
 }

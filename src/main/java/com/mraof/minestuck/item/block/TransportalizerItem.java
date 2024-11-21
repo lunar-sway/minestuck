@@ -39,7 +39,7 @@ public class TransportalizerItem extends BlockItem
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		if (!stack.hasTag())
 			return;

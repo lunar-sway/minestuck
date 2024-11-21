@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
@@ -17,13 +18,13 @@ import java.util.stream.Stream;
 @MethodsReturnNonnullByDefault
 public record ListCondition(List<Condition> conditions, ListType type) implements Condition
 {
-	static final Codec<ListCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	static final MapCodec<ListCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Condition.CODEC.listOf().fieldOf("conditions").forGetter(ListCondition::conditions),
 			ListType.CODEC.fieldOf("list_type").forGetter(ListCondition::type)
 	).apply(instance, ListCondition::new));
 	
 	@Override
-	public Codec<ListCondition> codec()
+	public MapCodec<ListCondition> codec()
 	{
 		return CODEC;
 	}

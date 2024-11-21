@@ -286,7 +286,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		public void next(RandomSource rand, int x, int y, int z, boolean wall)
 		{
 			WeightedEntry.Wrapper<Block> wrappedBlock = WeightedRandom.getRandomItem(rand, weightedBlockList, totalWeight).orElseThrow();
-			this.next = wrappedBlock.getData().defaultBlockState(); //sets the next blockstate to an element of the weighted list as long as the optional is present
+			this.next = wrappedBlock.data().defaultBlockState(); //sets the next blockstate to an element of the weighted list as long as the optional is present
 		}
 	}
 }

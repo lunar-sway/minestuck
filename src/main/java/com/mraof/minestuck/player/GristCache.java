@@ -10,6 +10,7 @@ import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.util.MSAttachments;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -17,7 +18,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
@@ -101,7 +102,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	}
 	
 	@Override
-	public void deserializeNBT(Tag tag)
+	public void deserializeNBT(HolderLookup.Provider provider, Tag tag)
 	{
 		gristSet = ImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, tag)
 				.resultOrPartial(LOGGER::error).orElse(GristSet.EMPTY);
@@ -109,7 +110,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	
 	@Nullable
 	@Override
-	public Tag serializeNBT()
+	public Tag serializeNBT(HolderLookup.Provider provider)
 	{
 		return ImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
 				.resultOrPartial(LOGGER::error).orElse(null);

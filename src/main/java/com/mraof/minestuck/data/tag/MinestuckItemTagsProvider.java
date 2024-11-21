@@ -15,7 +15,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -55,7 +54,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(BlockTags.SLABS, SLABS);
 		copy(BlockTags.LOGS, LOGS);
 		copy(BlockTags.LEAVES, LEAVES);
-		copy(Tags.Blocks.COBBLESTONE, COBBLESTONE);
+		copy(Tags.Blocks.COBBLESTONES, COBBLESTONES);
 		copy(Tags.Blocks.ORES, ORES);
 		copy(BlockTags.COAL_ORES, ORES_COAL);
 		copy(BlockTags.DIAMOND_ORES, ORES_DIAMOND);
@@ -65,7 +64,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(Tags.Blocks.ORES_QUARTZ, ORES_QUARTZ);
 		copy(BlockTags.REDSTONE_ORES, ORES_REDSTONE);
 		copy(BlockTags.EMERALD_ORES, ORES_EMERALD);
-		copy(Tags.Blocks.STONE, STONE);
+		copy(Tags.Blocks.STONES, STONES);
 		copy(Tags.Blocks.STORAGE_BLOCKS, STORAGE_BLOCKS);
 		copy(ExtraForgeTags.Blocks.URANIUM_ORES, ExtraForgeTags.Items.URANIUM_ORES);
 		copy(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS, ExtraForgeTags.Items.URANIUM_STORAGE_BLOCKS);
@@ -104,13 +103,13 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(PICKAXES).add(EMERALD_PICKAXE.get(), MINE_AND_GRIST.get(), PROSPECTING_PICKSCYTHE.get());
 		tag(SHOVELS).add(EMERALD_SHOVEL.get(), WOODEN_SPOON.get(), SILVER_SPOON.get(), MELONBALLER.get(), TERRAIN_FLATENATOR.get(), NOSFERATU_SPOON.get(), THRONGLER.get(), CROCKER_SPOON.get());
 		tag(HOES).add(EMERALD_HOE.get(), HELLBRINGERS_HOE_INACTIVE.get(), HELLBRINGERS_HOE_ACTIVE.get());
-		tag(Tags.Items.TOOLS_TRIDENTS).add(BIDENT.get(), MEATFORK.get(), DOUBLE_ENDED_TRIDENT.get());
-		tag(Tags.Items.ARMORS_HELMETS).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get());
-		tag(Tags.Items.ARMORS_CHESTPLATES).add(PRISMARINE_CHESTPLATE.get(), IRON_LASS_CHESTPLATE.get());
-		tag(Tags.Items.ARMORS_LEGGINGS).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get());
-		tag(Tags.Items.ARMORS_BOOTS).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get());
+		tag(TRIDENT_ENCHANTABLE).add(BIDENT.get(), MEATFORK.get(), DOUBLE_ENDED_TRIDENT.get());
+		tag(HEAD_ARMOR).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get());
+		tag(CHEST_ARMOR).add(PRISMARINE_CHESTPLATE.get(), IRON_LASS_CHESTPLATE.get());
+		tag(LEG_ARMOR).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get());
+		tag(FOOT_ARMOR).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get());
 
-		tag(ItemTags.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE.get(), MUSIC_DISC_EMISSARY_OF_DANCE.get(), MUSIC_DISC_RETRO_BATTLE.get());
+		tag(Tags.Items.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE.get(), MUSIC_DISC_EMISSARY_OF_DANCE.get(), MUSIC_DISC_RETRO_BATTLE.get());
 		tag(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.get().asItem());
 		tag(RODS).add(URANIUM_POWERED_STICK.get());
 		tag(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM.get());

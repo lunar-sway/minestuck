@@ -18,6 +18,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -77,55 +78,64 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+	{
+		if(player.isShiftKeyDown())
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		
+		ItemStack heldItem = player.getItemInHand(hand);
+		if(state.getValue(STATE) == State.OFF)
+		{
+			if(ProgramData.getProgramID(heldItem).isEmpty())
+				return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+			
+			turnOn(state, level, pos, player);
+		}
+		
+		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity))
+			return ItemInteractionResult.FAIL;
+		
+		if(insertDisk(blockEntity, state, level, pos, player, hand))
+			return ItemInteractionResult.SUCCESS;
+		//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
+		
+		if(level.isClientSide && SkaiaClient.requestData(blockEntity))
+			MSScreenFactories.displayComputerScreen(blockEntity);
+		
+		return ItemInteractionResult.SUCCESS;
+	}
+	
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
 	{
 		if(player.isShiftKeyDown())
 			return InteractionResult.PASS;
 		
-		ItemStack heldItem = player.getItemInHand(handIn);
 		if(state.getValue(STATE) == State.OFF)
-		{
-			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem).isEmpty())
-				return InteractionResult.PASS;
-			
-			turnOn(state, level, pos, player, handIn, hit);
-			
-			return InteractionResult.SUCCESS;
-		} else
-		{
-			ComputerBlockEntity blockEntity = (ComputerBlockEntity) level.getBlockEntity(pos);
-			
-			
-			if(blockEntity == null)
-				return InteractionResult.FAIL;
-			
-			if(insertDisk(blockEntity, state, level, pos, player, handIn))
-				return InteractionResult.SUCCESS;
-			//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
-			
-			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
-				MSScreenFactories.displayComputerScreen(blockEntity);
-			
-			return InteractionResult.SUCCESS;
-		}
+			turnOn(state, level, pos, player);
+		
+		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity))
+			return InteractionResult.FAIL;
+		
+		if(level.isClientSide && SkaiaClient.requestData(blockEntity))
+			MSScreenFactories.displayComputerScreen(blockEntity);
+		
+		return InteractionResult.SUCCESS;
 	}
 	
-	private void turnOn(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	private void turnOn(BlockState state, Level level, BlockPos pos, Player player)
 	{
-		if(!level.isClientSide)
+		if(level.isClientSide)
+			return;
+		
+		BlockState newState = state.setValue(STATE, State.ON);
+		level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
+		
+		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			BlockState newState = state.setValue(STATE, State.ON);
-			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
+			computer.owner = IdentifierHandler.encode(player);
 			
-			if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
-			{
-				computer.owner = IdentifierHandler.encode(player);
-				
-				computer.setTheme(defaultTheme);
-			}
-			
-			newState.use(level, player, handIn, hit);
+			computer.setTheme(defaultTheme);
 		}
 	}
 	

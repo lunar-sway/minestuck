@@ -42,8 +42,10 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry)
 	{
+		/* FIXME
 		subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD.get());
 		subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.get().asItem());
+		 */
 	}
 	
 	@Override

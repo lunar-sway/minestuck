@@ -27,7 +27,7 @@ public final class GristHelper
 	
 	public static Tag encodeGristType(GristType gristType)
 	{
-		return GristTypes.REGISTRY.byNameCodec().encodeStart(NbtOps.INSTANCE, gristType).getOrThrow(false, LOGGER::error);
+		return GristTypes.REGISTRY.byNameCodec().encodeStart(NbtOps.INSTANCE, gristType).getOrThrow();
 	}
 	
 	public static Optional<GristType> parseGristType(Tag tag)
@@ -54,7 +54,7 @@ public final class GristHelper
 		List<WeightedEntry.Wrapper<GristType>> typeList = GristTypeSpawnCategory.ANY.gristTypes()
 				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).toList();
 		
-		return WeightedRandom.getRandomItem(random, typeList).orElseThrow().getData();
+		return WeightedRandom.getRandomItem(random, typeList).orElseThrow().data();
 	}
 	
 	/**

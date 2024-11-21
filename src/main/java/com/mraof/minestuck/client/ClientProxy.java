@@ -124,7 +124,7 @@ public class ClientProxy
 		ItemProperties.register(MSItems.MUSIC_SWORD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		
-		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "angle"), new CompassItemPropertyFunction((level, stack, entity) -> StructureScannerItem.getTargetFromNbt(stack)));
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "angle"), new CompassItemPropertyFunction((level, stack, entity) -> stack.get(MSItemComponents.TARGET_LOCATION)));
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "powered"), (stack, level, entity, seed) -> StructureScannerItem.isPowered(stack) ? 1 : 0);
 	}
 	

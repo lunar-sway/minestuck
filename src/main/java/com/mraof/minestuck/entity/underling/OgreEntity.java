@@ -19,7 +19,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -41,7 +40,6 @@ public class OgreEntity extends UnderlingEntity
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
 		super(type, level, 3);
-		this.setMaxUpStep(1.0F);
 	}
 	
 	public static AttributeSupplier.Builder ogreAttributes()
@@ -49,7 +47,7 @@ public class OgreEntity extends UnderlingEntity
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 50)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
 				.add(Attributes.ATTACK_DAMAGE, 6).add(Attributes.ATTACK_KNOCKBACK, 12)
-				.add(Attributes.ATTACK_SPEED, 0.5);
+				.add(Attributes.ATTACK_SPEED, 0.5).add(Attributes.STEP_HEIGHT, 1);
 	}
 	
 	@Override
@@ -97,8 +95,8 @@ public class OgreEntity extends UnderlingEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(Attributes.MAX_HEALTH, 13 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.1 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 13 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.1 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
 		this.xpReward = (int) (5 * type.getPower() + 4);
 	}
 	

@@ -15,8 +15,10 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
 
+@ParametersAreNonnullByDefault
 public class MSArmorItem extends ArmorItem
 {
     private final String texture;
@@ -74,9 +76,9 @@ public class MSArmorItem extends ArmorItem
 	
 	@Nullable
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type)
+	public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel)
 	{
 		ResourceLocation name = BuiltInRegistries.ITEM.getKey(this);
-        return name.getNamespace() + ":textures/models/armor/" + (texture.isEmpty() ? name.getPath() : texture) + ".png";
+        return name.withPath("textures/models/armor/" + (texture.isEmpty() ? name.getPath() : texture) + ".png");
     }
 }

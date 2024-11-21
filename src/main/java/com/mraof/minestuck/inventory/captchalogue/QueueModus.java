@@ -44,7 +44,7 @@ public class QueueModus extends StackModus
 		
 		ItemStack item = list.removeLast();
 		markDirty();
-		if(asCard && !(item.getItem() == MSItems.CAPTCHA_CARD.get() && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().contains("id")))
+		if(asCard && !(item.is(MSItems.CAPTCHA_CARD.get()) && AlchemyHelper.hasDecodedItem(item) && !AlchemyHelper.isPunchedCard(item)))
 		{
 			size--;
 			markDirty();

@@ -15,7 +15,7 @@ public final class MinestuckLootTableProvider
 	{
 		return new LootTableProvider(output, Set.of(), List.of(
 				new LootTableProvider.SubProviderEntry((provider) -> new MSChestLootTables(), LootContextParamSets.CHEST),
-				new LootTableProvider.SubProviderEntry((provider) -> new MSBlockLootTables(), LootContextParamSets.BLOCK),
+				new LootTableProvider.SubProviderEntry(MSBlockLootTables::new, LootContextParamSets.BLOCK),
 				new LootTableProvider.SubProviderEntry((provider) -> new MSGiftLootTables(), LootContextParamSets.GIFT),
 				new LootTableProvider.SubProviderEntry((provider) -> new MSMiscLootTables(), LootContextParamSets.EMPTY)),
 				lookup);

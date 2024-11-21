@@ -28,8 +28,8 @@ public final class MinestuckGristCostsProvider
 		GeneratedGristCostBuilder.create().build(recipeSaver, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "generated"));
 		
 		//Stone
-		GristCostRecipeBuilder.of(Tags.Items.STONE).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Tags.Items.COBBLESTONE).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Tags.Items.STONES).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Tags.Items.COBBLESTONES).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.STONE_BRICKS).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.CRACKED_STONE_BRICKS).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.GRAVEL).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
@@ -106,7 +106,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(Items.PRISMARINE_SHARD).grist(COBALT, 1).grist(BUILD, 3).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.HEART_OF_THE_SEA).grist(COBALT, 120).grist(DIAMOND, 55).grist(AMETHYST, 20).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.NAUTILUS_SHELL).grist(COBALT, 10).grist(QUARTZ, 1).grist(SHALE, 5).grist(IODINE, 12).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.SCUTE).grist(COBALT, 5).grist(SHALE, 5).grist(IODINE, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.TURTLE_SCUTE).grist(COBALT, 5).grist(SHALE, 5).grist(IODINE, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.TURTLE_EGG).grist(AMBER, 10).grist(COBALT, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.SNIFFER_EGG).grist(AMBER, 2).grist(RUST, 40).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.SEAGRASS).grist(BUILD, 2).grist(COBALT, 1).buildFor(recipeSaver, Minestuck.MOD_ID);

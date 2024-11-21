@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -61,7 +62,7 @@ public class LongForgottenWarhornItem extends Item
 			{
 				playerIn.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, 1));
 			}
-			item.hurtAndBreak(durability, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+			item.hurtAndBreak(durability, playerIn, EquipmentSlot.MAINHAND);
 		}
 		
 		return InteractionResultHolder.success(item);

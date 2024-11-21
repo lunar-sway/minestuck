@@ -3,8 +3,8 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -48,7 +48,7 @@ public class CaptcharoidCameraItem extends Item
 				if(item.isEmpty()) item = new ItemStack(Items.ITEM_FRAME);
 				
 				player.getInventory().add(AlchemyHelper.createGhostCard(item));
-				context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+				context.getItemInHand().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
 			}
 			else
 			{
@@ -56,7 +56,7 @@ public class CaptcharoidCameraItem extends Item
 				ItemStack block = state.getCloneItemStack(new BlockHitResult(context.getClickLocation(), facing, pos, inside), level, pos, player);
 				
 				player.getInventory().add(AlchemyHelper.createGhostCard(block));
-				context.getItemInHand().hurtAndBreak(1, player,  (playerEntity) -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+				context.getItemInHand().hurtAndBreak(1, player,  EquipmentSlot.MAINHAND);
 			}
 			return InteractionResult.PASS;
 		}
