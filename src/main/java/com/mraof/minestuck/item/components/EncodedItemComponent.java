@@ -2,15 +2,12 @@ package com.mraof.minestuck.item.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.alchemy.CardCaptchas;
-import com.mraof.minestuck.util.MSTags;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -41,7 +38,9 @@ public record EncodedItemComponent(ItemStack storedStack, EncodeType type, @Null
 	
 	public static EncodedItemComponent create(ItemStack storedStack, EncodeType type, boolean codeDiscovered)
 	{
-		return new EncodedItemComponent(storedStack, type, !codeDiscovered && storedStack.is(MSTags.Items.UNREADABLE) ? null : CardCaptchas.getCaptcha(storedStack.getItem(), ServerLifecycleHooks.getCurrentServer()));
+		// FIXME ServerLifecycleHooks should not be used in a potentially client-side context. Pass it as a parameter instead
+		//return new EncodedItemComponent(storedStack, type, !codeDiscovered && storedStack.is(MSTags.Items.UNREADABLE) ? null : CardCaptchas.getCaptcha(storedStack.getItem(), ServerLifecycleHooks.getCurrentServer()));
+		return new EncodedItemComponent(storedStack, type, null);
 	}
 	
 	public String code()
