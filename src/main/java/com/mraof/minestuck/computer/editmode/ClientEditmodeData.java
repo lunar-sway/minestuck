@@ -64,7 +64,7 @@ public final class ClientEditmodeData
 	public static void onLocationsPacket(EditmodeLocationsPacket packet)
 	{
 		locations = packet.locations();
-		clientLand = packet.land();
+		clientLand = packet.land().orElse(null);
 		if(Minecraft.getInstance().screen instanceof EditmodeSettingsScreen screen)
 			screen.recreateTeleportButtons();
 	}
