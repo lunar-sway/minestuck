@@ -25,6 +25,7 @@ import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSDispenserBehaviours;
+import com.mraof.minestuck.item.MSItemTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
@@ -71,6 +72,7 @@ public class Minestuck
 		//GeckoLib.initialize(eventBus); FIXME
 		
 		MSItemComponents.REGISTRY.register(eventBus);
+		MSItemTypes.ARMOR_MATERIAL_REGISTRY.register(eventBus);
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
