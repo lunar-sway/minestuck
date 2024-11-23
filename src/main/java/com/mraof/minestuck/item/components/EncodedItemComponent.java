@@ -30,7 +30,7 @@ public record EncodedItemComponent(ItemStack storedStack, EncodeType type, @Null
 			EncodeType.STREAM_CODEC,
 			EncodedItemComponent::type,
 			ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8),
-			encodedItemComponent -> Optional.of(encodedItemComponent.code()),
+			encodedItemComponent -> Optional.ofNullable(encodedItemComponent.code()),
 			(stack, type, optionalCode) -> new EncodedItemComponent(stack, type, optionalCode.orElse(null))
 	);
 	
