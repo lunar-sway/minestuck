@@ -37,7 +37,7 @@ public class GatePillarPiece extends GatePiece
 	{
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGenerator);
 		
-		BlockState ground = blocks.getBlockState("ground");
+		BlockState ground = blocks.getBlockState(StructureBlockRegistry.GROUND);
 		
 		generateBox(level, box, 0, 0, 1, 2, 20, 1, ground, ground, false);
 		generateBox(level, box, 1, 0, 0, 1, 20, 0, ground, ground, false);

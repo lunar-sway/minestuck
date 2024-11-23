@@ -80,15 +80,15 @@ public class SalamanderVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState primary = blocks.getBlockState("structure_primary");
-			BlockState stairsN = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
-			BlockState stairsE = blocks.getStairs("structure_primary_stairs", Direction.EAST, false);
-			BlockState stairsS = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
-			BlockState stairsW = blocks.getStairs("structure_primary_stairs", Direction.WEST, false);
-			BlockState secondary = blocks.getBlockState("structure_secondary");
-			BlockState ground = blocks.getBlockState("surface");
-			BlockState mushroom1 = blocks.getBlockState("mushroom_1");
-			BlockState mushroom2 = blocks.getBlockState("mushroom_2");
+			BlockState primary = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState stairsN = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.NORTH, false);
+			BlockState stairsE = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.EAST, false);
+			BlockState stairsS = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.SOUTH, false);
+			BlockState stairsW = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.WEST, false);
+			BlockState secondary = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState ground = blocks.getBlockState(StructureBlockRegistry.SURFACE);
+			BlockState mushroom1 = blocks.getBlockState(StructureBlockRegistry.MUSHROOM_1);
+			BlockState mushroom2 = blocks.getBlockState(StructureBlockRegistry.MUSHROOM_2);
 
 			this.generateAirBox(level, structureBoundingBoxIn, 3, 1, 2, 5, 7, 6);
 			this.generateAirBox(level, structureBoundingBoxIn, 2, 1, 3, 2, 7, 5);
@@ -234,10 +234,10 @@ public class SalamanderVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState floorBlock = blocks.getBlockState("salamander_floor");
-			BlockState doorBlock = blocks.getBlockState("village_door");
-			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.SALAMANDER_FLOOR);
+			BlockState doorBlock = blocks.getBlockState(StructureBlockRegistry.VILLAGE_DOOR);
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			this.generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 2, 4, 5, 5);
 			this.clearFront(worldIn, structureBoundingBoxIn, 1, 4, 1, 0);
@@ -255,7 +255,7 @@ public class SalamanderVillagePieces
 			this.generateBox(worldIn, structureBoundingBoxIn, 5,3,2,5,5, 5, wallBlock, wallBlock, false);
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 
-			placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 3, 4, structureBoundingBoxIn);
+			placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 3, 4, structureBoundingBoxIn);
 
 			if(!spawns[0])
 				spawns[0] = spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
@@ -299,10 +299,10 @@ public class SalamanderVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState floorBlock = blocks.getBlockState("salamander_floor");
-			BlockState doorBlock = blocks.getBlockState("village_door");
-			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.SALAMANDER_FLOOR);
+			BlockState doorBlock = blocks.getBlockState(StructureBlockRegistry.VILLAGE_DOOR);
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			this.generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 2, 5, 13, 6);
 			this.clearFront(worldIn, structureBoundingBoxIn, 1, 5, 1, 0);
@@ -351,8 +351,8 @@ public class SalamanderVillagePieces
 			this.generateAirBox(worldIn, structureBoundingBoxIn, 6, 2, 3, 6, 2, 5);
 
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
-			this.placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 3, 3, 6, structureBoundingBoxIn);
-			this.placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.SOUTH), 3, 7, 2, structureBoundingBoxIn);
+			this.placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 3, 3, 6, structureBoundingBoxIn);
+			this.placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.SOUTH), 3, 7, 2, structureBoundingBoxIn);
 
 			if(!spawns[0])
 				spawns[0] = this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn, chunkGeneratorIn);
@@ -398,10 +398,10 @@ public class SalamanderVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			BlockState doorBlock = blocks.getBlockState("village_door");
-			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState doorBlock = blocks.getBlockState(StructureBlockRegistry.VILLAGE_DOOR);
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			this.generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 2, 5, 9, 6);
 			this.clearFront(worldIn, structureBoundingBoxIn, 1, 5, 1, 0);
@@ -455,8 +455,8 @@ public class SalamanderVillagePieces
 			this.placeBlock(worldIn, floorBlock, 0, 6, 3, structureBoundingBoxIn);
 			this.placeBlock(worldIn, floorBlock, 1, 7, 2, structureBoundingBoxIn);
 
-			this.placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 1, 3, 5, structureBoundingBoxIn);
-			this.placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 5, 3, 5, structureBoundingBoxIn);
+			this.placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 1, 3, 5, structureBoundingBoxIn);
+			this.placeBlock(worldIn, StructureBlockRegistry.getModifiedTorch(torch, Direction.NORTH), 5, 3, 5, structureBoundingBoxIn);
 
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 
