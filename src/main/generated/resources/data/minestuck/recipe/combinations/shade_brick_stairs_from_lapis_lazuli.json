@@ -7,7 +7,5 @@
     "item": "minecraft:lapis_lazuli"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:shade_brick_stairs"
-  }
+  "output": "minestuck:shade_brick_stairs"
 }

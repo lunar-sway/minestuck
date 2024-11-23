@@ -7,7 +7,5 @@
     "item": "minecraft:lantern"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:light_of_my_knife"
-  }
+  "output": "minestuck:light_of_my_knife"
 }

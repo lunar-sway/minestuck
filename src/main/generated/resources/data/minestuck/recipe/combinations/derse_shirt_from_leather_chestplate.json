@@ -7,7 +7,5 @@
     "item": "minestuck:black_crown_stained_glass"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:derse_shirt"
-  }
+  "output": "minestuck:derse_shirt"
 }

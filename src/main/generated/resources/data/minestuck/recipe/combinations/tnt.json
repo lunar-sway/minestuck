@@ -7,7 +7,5 @@
     "item": "minecraft:gunpowder"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:tnt"
-  }
+  "output": "minecraft:tnt"
 }

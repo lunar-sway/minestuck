@@ -7,7 +7,5 @@
     "item": "minecraft:amethyst_shard"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:caulk_bucket"
-  }
+  "output": "minestuck:caulk_bucket"
 }

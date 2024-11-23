@@ -7,7 +7,5 @@
     "item": "minecraft:stone_sword"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:paper_sword"
-  }
+  "output": "minestuck:paper_sword"
 }

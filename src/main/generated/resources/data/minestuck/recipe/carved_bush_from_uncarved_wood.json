@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 4,
   "ingredient": {
     "item": "minestuck:uncarved_wood"
   },
-  "result": "minestuck:carved_bush"
+  "result": {
+    "count": 4,
+    "id": "minestuck:carved_bush"
+  }
 }

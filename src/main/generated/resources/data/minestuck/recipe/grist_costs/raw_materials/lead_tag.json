@@ -6,6 +6,6 @@
     "minestuck:shale": 4
   },
   "ingredient": {
-    "tag": "forge:raw_materials/lead"
+    "tag": "c:raw_materials/lead"
   }
 }

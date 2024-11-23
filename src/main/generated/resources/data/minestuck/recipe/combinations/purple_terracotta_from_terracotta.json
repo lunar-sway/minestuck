@@ -4,10 +4,8 @@
     "item": "minecraft:terracotta"
   },
   "input2": {
-    "tag": "forge:dyes/purple"
+    "tag": "c:dyes/purple"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:purple_terracotta"
-  }
+  "output": "minecraft:purple_terracotta"
 }

@@ -18,6 +18,7 @@
     "psp"
   ],
   "result": {
-    "item": "minestuck:dead_bookshelf"
+    "count": 1,
+    "id": "minestuck:dead_bookshelf"
   }
 }

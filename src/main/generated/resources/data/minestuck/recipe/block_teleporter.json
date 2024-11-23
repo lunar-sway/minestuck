@@ -21,6 +21,7 @@
     "iri"
   ],
   "result": {
-    "item": "minestuck:block_teleporter"
+    "count": 1,
+    "id": "minestuck:block_teleporter"
   }
 }

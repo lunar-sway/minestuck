@@ -7,7 +7,5 @@
     "item": "minecraft:experience_bottle"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:enchanting_table"
-  }
+  "output": "minecraft:enchanting_table"
 }

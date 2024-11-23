@@ -7,7 +7,5 @@
     "item": "minestuck:igneous_stone"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:polished_igneous_bricks"
-  }
+  "output": "minestuck:polished_igneous_bricks"
 }

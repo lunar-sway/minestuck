@@ -7,7 +7,5 @@
     "item": "minecraft:deepslate_tile_wall"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:polished_deepslate_wall"
-  }
+  "output": "minecraft:polished_deepslate_wall"
 }

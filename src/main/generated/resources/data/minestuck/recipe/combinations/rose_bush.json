@@ -7,7 +7,5 @@
     "item": "minecraft:poppy"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:rose_bush"
-  }
+  "output": "minecraft:rose_bush"
 }

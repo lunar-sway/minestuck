@@ -7,7 +7,5 @@
     "item": "minecraft:dragon_breath"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:scalemate_cinnamonwhiff"
-  }
+  "output": "minestuck:scalemate_cinnamonwhiff"
 }

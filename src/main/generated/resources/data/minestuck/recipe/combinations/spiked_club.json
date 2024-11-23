@@ -7,7 +7,5 @@
     "tag": "minecraft:logs"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:spiked_club"
-  }
+  "output": "minestuck:spiked_club"
 }

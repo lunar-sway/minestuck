@@ -7,7 +7,5 @@
     "item": "minestuck:sunray_harvester"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:star_ray"
-  }
+  "output": "minestuck:star_ray"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:rail"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:minecart"
-  }
+  "output": "minecraft:minecart"
 }

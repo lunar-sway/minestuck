@@ -26,6 +26,12 @@
     "minecraft:glowing",
     "minecraft:levitation",
     "minecraft:slow_falling",
-    "minecraft:darkness"
+    "minecraft:darkness",
+    "minecraft:trial_omen",
+    "minecraft:raid_omen",
+    "minecraft:wind_charged",
+    "minecraft:weaving",
+    "minecraft:oozing",
+    "minecraft:infested"
   ]
 }

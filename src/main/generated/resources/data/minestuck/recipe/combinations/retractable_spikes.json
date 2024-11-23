@@ -7,7 +7,5 @@
     "item": "minecraft:sticky_piston"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:retractable_spikes"
-  }
+  "output": "minestuck:retractable_spikes"
 }

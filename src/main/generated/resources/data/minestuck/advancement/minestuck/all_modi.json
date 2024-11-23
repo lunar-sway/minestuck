@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:hashmap_modus_card"
-            ]
+            "items": "minestuck:hashmap_modus_card"
           }
         ]
       },
@@ -17,9 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:queue_modus_card"
-            ]
+            "items": "minestuck:queue_modus_card"
           }
         ]
       },
@@ -29,9 +25,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:queuestack_modus_card"
-            ]
+            "items": "minestuck:queuestack_modus_card"
           }
         ]
       },
@@ -41,9 +35,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:set_modus_card"
-            ]
+            "items": "minestuck:set_modus_card"
           }
         ]
       },
@@ -53,9 +45,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:stack_modus_card"
-            ]
+            "items": "minestuck:stack_modus_card"
           }
         ]
       },
@@ -65,9 +55,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:tree_modus_card"
-            ]
+            "items": "minestuck:tree_modus_card"
           }
         ]
       },
@@ -80,7 +68,8 @@
     },
     "frame": "goal",
     "icon": {
-      "item": "minestuck:queuestack_modus_card"
+      "count": 1,
+      "id": "minestuck:queuestack_modus_card"
     },
     "title": {
       "translate": "advancements.minestuck.all_modi.title"

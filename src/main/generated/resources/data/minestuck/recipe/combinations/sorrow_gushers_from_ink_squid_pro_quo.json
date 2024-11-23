@@ -7,7 +7,5 @@
     "item": "minestuck:ink_squid_pro_quo"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:sorrow_gushers"
-  }
+  "output": "minestuck:sorrow_gushers"
 }

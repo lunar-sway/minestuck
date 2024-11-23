@@ -7,7 +7,5 @@
     "item": "minecraft:iron_axe"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:bisector"
-  }
+  "output": "minestuck:bisector"
 }

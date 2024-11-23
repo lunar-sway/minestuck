@@ -21,8 +21,8 @@
       "translate": "advancements.minestuck.kill_ogre.description"
     },
     "icon": {
-      "item": "minestuck:pogo_hammer",
-      "nbt": "{Damage:0}"
+      "count": 1,
+      "id": "minestuck:pogo_hammer"
     },
     "title": {
       "translate": "advancements.minestuck.kill_ogre.title"

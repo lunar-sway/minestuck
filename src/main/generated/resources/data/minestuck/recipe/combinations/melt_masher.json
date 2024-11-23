@@ -7,7 +7,5 @@
     "item": "minecraft:lava_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:melt_masher"
-  }
+  "output": "minestuck:melt_masher"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:iron_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:anvil"
-  }
+  "output": "minecraft:anvil"
 }

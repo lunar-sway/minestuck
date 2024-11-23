@@ -7,7 +7,5 @@
     "item": "minestuck:mirror"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:double_ended_trident"
-  }
+  "output": "minestuck:double_ended_trident"
 }

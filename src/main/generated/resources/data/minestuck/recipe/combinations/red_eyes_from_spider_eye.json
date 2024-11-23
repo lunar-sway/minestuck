@@ -7,7 +7,5 @@
     "item": "minecraft:spider_eye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:red_eyes"
-  }
+  "output": "minestuck:red_eyes"
 }

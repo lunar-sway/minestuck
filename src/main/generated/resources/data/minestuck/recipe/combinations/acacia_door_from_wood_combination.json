@@ -7,7 +7,5 @@
     "item": "minecraft:jungle_door"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:acacia_door"
-  }
+  "output": "minecraft:acacia_door"
 }

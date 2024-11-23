@@ -7,7 +7,5 @@
     "item": "minestuck:cassette_player"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:cassette_blocks"
-  }
+  "output": "minestuck:cassette_blocks"
 }

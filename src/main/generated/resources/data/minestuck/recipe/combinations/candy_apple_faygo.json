@@ -7,7 +7,5 @@
     "item": "minecraft:apple"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:candy_apple_faygo"
-  }
+  "output": "minestuck:candy_apple_faygo"
 }

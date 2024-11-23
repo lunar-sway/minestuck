@@ -7,7 +7,5 @@
     "item": "minecraft:redstone"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:glowstone_dust"
-  }
+  "output": "minecraft:glowstone_dust"
 }

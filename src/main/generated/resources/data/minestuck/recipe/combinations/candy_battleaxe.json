@@ -7,7 +7,5 @@
     "item": "minestuck:candy_corn"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:candy_battleaxe"
-  }
+  "output": "minestuck:candy_battleaxe"
 }

@@ -7,7 +7,5 @@
     "tag": "minecraft:small_flowers"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:flowery_vine_log"
-  }
+  "output": "minestuck:flowery_vine_log"
 }

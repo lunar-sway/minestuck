@@ -10,7 +10,8 @@
       "translate": "advancements.minestuck.buy_out_shop.description"
     },
     "icon": {
-      "item": "minestuck:cone_of_flies"
+      "count": 1,
+      "id": "minestuck:cone_of_flies"
     },
     "title": {
       "translate": "advancements.minestuck.buy_out_shop.title"

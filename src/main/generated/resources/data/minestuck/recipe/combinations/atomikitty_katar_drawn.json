@@ -7,7 +7,5 @@
     "item": "minestuck:raw_uranium"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:atomikitty_katar_drawn"
-  }
+  "output": "minestuck:atomikitty_katar_drawn"
 }

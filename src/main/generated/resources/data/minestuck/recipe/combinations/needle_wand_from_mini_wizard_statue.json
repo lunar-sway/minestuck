@@ -7,7 +7,5 @@
     "item": "minestuck:mini_wizard_statue"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:needle_wand"
-  }
+  "output": "minestuck:needle_wand"
 }

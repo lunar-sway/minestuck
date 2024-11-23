@@ -6,7 +6,7 @@
       "item": "minestuck:cane"
     },
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   },
   "pattern": [
@@ -15,6 +15,7 @@
     "i  "
   ],
   "result": {
-    "item": "minestuck:iron_cane"
+    "count": 1,
+    "id": "minestuck:iron_cane"
   }
 }

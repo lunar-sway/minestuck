@@ -7,7 +7,5 @@
     "item": "minecraft:lime_dye"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:moon_mist_faygo"
-  }
+  "output": "minestuck:moon_mist_faygo"
 }

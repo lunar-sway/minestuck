@@ -7,7 +7,5 @@
     "item": "minecraft:bamboo"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:pipe"
-  }
+  "output": "minestuck:pipe"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:wizard_staff"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:barbers_magic_touch"
-  }
+  "output": "minestuck:barbers_magic_touch"
 }

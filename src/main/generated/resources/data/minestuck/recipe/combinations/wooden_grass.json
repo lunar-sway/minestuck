@@ -7,7 +7,5 @@
     "item": "minecraft:short_grass"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:wooden_grass"
-  }
+  "output": "minestuck:wooden_grass"
 }

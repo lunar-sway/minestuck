@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:frost_bricks"
   },
-  "result": "minestuck:frost_brick_stairs"
+  "result": {
+    "count": 1,
+    "id": "minestuck:frost_brick_stairs"
+  }
 }

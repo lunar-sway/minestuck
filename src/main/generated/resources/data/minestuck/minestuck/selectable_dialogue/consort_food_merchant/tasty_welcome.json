@@ -4,5 +4,6 @@
     "entity_type": "minestuck:turtle"
   },
   "dialogue": "minestuck:consort_food_merchant/tasty_welcome",
+  "dialogue_weight": 10,
   "keep_on_reset": true
 }

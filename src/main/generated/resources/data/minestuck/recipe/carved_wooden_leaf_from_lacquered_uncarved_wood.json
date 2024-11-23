@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 4,
   "ingredient": {
     "item": "minestuck:lacquered_uncarved_wood"
   },
-  "result": "minestuck:carved_wooden_leaf"
+  "result": {
+    "count": 4,
+    "id": "minestuck:carved_wooden_leaf"
+  }
 }

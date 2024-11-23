@@ -21,6 +21,7 @@
     "nin"
   ],
   "result": {
-    "item": "minestuck:plutonium_core"
+    "count": 1,
+    "id": "minestuck:plutonium_core"
   }
 }

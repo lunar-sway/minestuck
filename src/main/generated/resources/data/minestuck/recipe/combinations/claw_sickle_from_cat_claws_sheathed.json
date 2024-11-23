@@ -7,7 +7,5 @@
     "item": "minestuck:hemeoreaper"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:claw_sickle"
-  }
+  "output": "minestuck:claw_sickle"
 }

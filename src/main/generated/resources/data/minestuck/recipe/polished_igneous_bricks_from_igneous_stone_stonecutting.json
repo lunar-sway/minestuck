@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:igneous_stone"
   },
-  "result": "minestuck:polished_igneous_bricks"
+  "result": {
+    "count": 1,
+    "id": "minestuck:polished_igneous_bricks"
+  }
 }

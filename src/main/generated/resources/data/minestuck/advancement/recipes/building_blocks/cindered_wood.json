@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:cindered_log"
-            ]
+            "items": "minestuck:cindered_log"
           }
         ]
       },

@@ -2,9 +2,9 @@
   "type": "minestuck:source_grist_cost",
   "grist_cost": {},
   "ingredient": {
-    "tag": "forge:raw_materials/aluminium"
+    "tag": "c:raw_materials/aluminium"
   },
   "sources": [
-    "#forge:raw_materials/aluminum"
+    "#c:raw_materials/aluminum"
   ]
 }

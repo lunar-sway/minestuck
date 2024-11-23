@@ -7,7 +7,5 @@
     "item": "minecraft:salmon"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:glub_club"
-  }
+  "output": "minestuck:glub_club"
 }

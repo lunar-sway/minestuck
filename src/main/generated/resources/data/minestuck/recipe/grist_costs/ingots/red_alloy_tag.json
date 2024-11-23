@@ -5,6 +5,6 @@
     "minestuck:rust": 18
   },
   "ingredient": {
-    "tag": "forge:ingots/red_alloy"
+    "tag": "c:ingots/red_alloy"
   }
 }

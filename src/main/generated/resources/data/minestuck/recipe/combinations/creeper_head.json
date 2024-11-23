@@ -7,7 +7,5 @@
     "item": "minecraft:gunpowder"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:creeper_head"
-  }
+  "output": "minecraft:creeper_head"
 }

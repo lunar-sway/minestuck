@@ -7,7 +7,5 @@
     "item": "minecraft:anvil"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:blacksmith_bane"
-  }
+  "output": "minestuck:blacksmith_bane"
 }

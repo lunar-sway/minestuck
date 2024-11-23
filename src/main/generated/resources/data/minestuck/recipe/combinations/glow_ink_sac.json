@@ -7,7 +7,5 @@
     "item": "minecraft:glowstone"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:glow_ink_sac"
-  }
+  "output": "minecraft:glow_ink_sac"
 }

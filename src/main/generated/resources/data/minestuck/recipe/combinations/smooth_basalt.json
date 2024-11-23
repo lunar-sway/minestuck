@@ -7,7 +7,5 @@
     "item": "minecraft:basalt"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:smooth_basalt"
-  }
+  "output": "minecraft:smooth_basalt"
 }

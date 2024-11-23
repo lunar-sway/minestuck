@@ -7,7 +7,5 @@
     "item": "minestuck:katana"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:paper_sword"
-  }
+  "output": "minestuck:paper_sword"
 }

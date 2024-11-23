@@ -7,7 +7,5 @@
     "tag": "minecraft:planks"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:bookshelf"
-  }
+  "output": "minecraft:bookshelf"
 }

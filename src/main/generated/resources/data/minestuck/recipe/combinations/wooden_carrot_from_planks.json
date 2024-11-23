@@ -7,7 +7,5 @@
     "tag": "minecraft:planks"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:wooden_carrot"
-  }
+  "output": "minestuck:wooden_carrot"
 }

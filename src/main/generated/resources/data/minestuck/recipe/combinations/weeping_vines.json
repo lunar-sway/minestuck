@@ -7,7 +7,5 @@
     "item": "minecraft:crimson_roots"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:weeping_vines"
-  }
+  "output": "minecraft:weeping_vines"
 }

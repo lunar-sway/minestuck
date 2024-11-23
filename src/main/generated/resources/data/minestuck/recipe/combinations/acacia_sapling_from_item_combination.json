@@ -7,7 +7,5 @@
     "item": "minecraft:acacia_leaves"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:acacia_sapling"
-  }
+  "output": "minecraft:acacia_sapling"
 }

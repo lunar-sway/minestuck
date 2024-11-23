@@ -7,7 +7,5 @@
     "item": "minecraft:blaze_powder"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:magma_cream"
-  }
+  "output": "minecraft:magma_cream"
 }

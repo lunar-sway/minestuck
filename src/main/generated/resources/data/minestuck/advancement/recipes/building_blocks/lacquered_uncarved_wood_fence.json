@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:lacquered_uncarved_wood"
-            ]
+            "items": "minestuck:lacquered_uncarved_wood"
           }
         ]
       },

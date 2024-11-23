@@ -7,7 +7,5 @@
     "item": "minecraft:oak_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:oak_trapdoor"
-  }
+  "output": "minecraft:oak_trapdoor"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:deepslate_bricks"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cracked_deepslate_bricks"
-  }
+  "output": "minecraft:cracked_deepslate_bricks"
 }

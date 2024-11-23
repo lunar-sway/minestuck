@@ -7,7 +7,5 @@
     "item": "minestuck:battery"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:electric_fork"
-  }
+  "output": "minestuck:electric_fork"
 }

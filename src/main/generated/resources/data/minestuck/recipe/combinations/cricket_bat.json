@@ -7,7 +7,5 @@
     "item": "minestuck:grasshopper"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:cricket_bat"
-  }
+  "output": "minestuck:cricket_bat"
 }

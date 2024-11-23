@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:void_aspect_stripped_log"
-            ]
+            "items": "minestuck:void_aspect_stripped_log"
           }
         ]
       },

@@ -7,7 +7,5 @@
     "item": "minecraft:leather"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:saddle"
-  }
+  "output": "minecraft:saddle"
 }

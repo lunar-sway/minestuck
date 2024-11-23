@@ -7,7 +7,5 @@
     "item": "minestuck:estrogen_empowered_everything_eradicator"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:home_by_midnight"
-  }
+  "output": "minestuck:home_by_midnight"
 }

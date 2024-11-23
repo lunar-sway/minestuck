@@ -7,7 +7,5 @@
     "item": "minecraft:heart_of_the_sea"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:inksquidder_depthkey"
-  }
+  "output": "minestuck:inksquidder_depthkey"
 }

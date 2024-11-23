@@ -7,7 +7,5 @@
     "item": "minestuck:claymore"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:krakens_eye"
-  }
+  "output": "minestuck:krakens_eye"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:house_key"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:latchmelter"
-  }
+  "output": "minestuck:latchmelter"
 }

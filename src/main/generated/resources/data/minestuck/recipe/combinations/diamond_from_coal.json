@@ -7,7 +7,5 @@
     "item": "minecraft:coal"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:diamond"
-  }
+  "output": "minecraft:diamond"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:wither_skeleton_skull"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:destiny_decimator"
-  }
+  "output": "minestuck:destiny_decimator"
 }

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:solid_switch"
-            ]
+            "items": "minestuck:solid_switch"
           }
         ]
       },

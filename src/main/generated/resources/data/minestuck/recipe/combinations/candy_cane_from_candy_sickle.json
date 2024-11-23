@@ -7,7 +7,5 @@
     "item": "minestuck:candy_sickle"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:candy_cane"
-  }
+  "output": "minestuck:candy_cane"
 }

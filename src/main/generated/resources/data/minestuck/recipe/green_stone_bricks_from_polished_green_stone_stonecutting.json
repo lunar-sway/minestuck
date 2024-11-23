@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:polished_green_stone"
   },
-  "result": "minestuck:green_stone_bricks"
+  "result": {
+    "count": 1,
+    "id": "minestuck:green_stone_bricks"
+  }
 }

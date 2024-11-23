@@ -7,7 +7,5 @@
     "item": "minestuck:cryptid_photo"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:carnie_club"
-  }
+  "output": "minestuck:carnie_club"
 }

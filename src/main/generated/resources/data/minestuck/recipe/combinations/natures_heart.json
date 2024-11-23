@@ -7,7 +7,5 @@
     "item": "minestuck:keyblade"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:natures_heart"
-  }
+  "output": "minestuck:natures_heart"
 }

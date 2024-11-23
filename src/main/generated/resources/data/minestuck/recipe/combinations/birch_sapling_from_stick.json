@@ -7,7 +7,5 @@
     "item": "minecraft:birch_leaves"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:birch_sapling"
-  }
+  "output": "minecraft:birch_sapling"
 }

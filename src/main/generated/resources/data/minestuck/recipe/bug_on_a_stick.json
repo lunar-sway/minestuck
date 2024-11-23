@@ -3,13 +3,13 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     {
       "item": "minestuck:jar_of_bugs"
@@ -17,6 +17,6 @@
   ],
   "result": {
     "count": 3,
-    "item": "minestuck:bug_on_a_stick"
+    "id": "minestuck:bug_on_a_stick"
   }
 }

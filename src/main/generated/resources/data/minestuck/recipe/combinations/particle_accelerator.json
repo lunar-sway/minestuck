@@ -7,7 +7,5 @@
     "item": "minestuck:energy_core"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:particle_accelerator"
-  }
+  "output": "minestuck:particle_accelerator"
 }

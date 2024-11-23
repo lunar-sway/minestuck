@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:cake_mix"
   },
-  "result": "minecraft:cake"
+  "result": {
+    "count": 1,
+    "id": "minecraft:cake"
+  }
 }

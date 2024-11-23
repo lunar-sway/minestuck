@@ -7,7 +7,5 @@
     "item": "minecraft:big_dripleaf"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:dripstone_block"
-  }
+  "output": "minecraft:dripstone_block"
 }

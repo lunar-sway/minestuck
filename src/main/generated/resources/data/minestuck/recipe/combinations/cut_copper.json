@@ -7,7 +7,5 @@
     "item": "minecraft:stone_bricks"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cut_copper"
-  }
+  "output": "minecraft:cut_copper"
 }

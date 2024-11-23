@@ -10,7 +10,8 @@
       "translate": "advancements.minestuck.alchemy.description"
     },
     "icon": {
-      "item": "minestuck:captcha_card"
+      "count": 1,
+      "id": "minestuck:captcha_card"
     },
     "title": {
       "translate": "advancements.minestuck.alchemy.title"

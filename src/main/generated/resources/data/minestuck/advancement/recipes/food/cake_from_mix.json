@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:cake_mix"
-            ]
+            "items": "minestuck:cake_mix"
           }
         ]
       },

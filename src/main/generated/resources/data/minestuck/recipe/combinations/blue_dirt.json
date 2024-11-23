@@ -7,7 +7,5 @@
     "item": "minecraft:blue_dye"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:blue_dirt"
-  }
+  "output": "minestuck:blue_dirt"
 }

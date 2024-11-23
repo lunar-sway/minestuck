@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/cobalt"
+    "tag": "c:ores/cobalt"
   },
   "sources": [
-    "#forge:raw_materials/cobalt"
+    "#c:raw_materials/cobalt"
   ]
 }

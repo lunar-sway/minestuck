@@ -10,8 +10,11 @@
       "translate": "advancements.minestuck.entry.description"
     },
     "icon": {
-      "item": "minestuck:cruxite_apple",
-      "nbt": "{color:10542335}"
+      "components": {
+        "minestuck:color": 10542335
+      },
+      "count": 1,
+      "id": "minestuck:cruxite_apple"
     },
     "title": {
       "translate": "advancements.minestuck.entry.title"

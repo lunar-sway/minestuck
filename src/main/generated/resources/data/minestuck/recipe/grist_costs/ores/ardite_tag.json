@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/ardite"
+    "tag": "c:ores/ardite"
   },
   "sources": [
-    "#forge:raw_materials/ardite"
+    "#c:raw_materials/ardite"
   ]
 }

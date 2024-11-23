@@ -7,7 +7,5 @@
     "item": "minestuck:black_chess_bricks"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:black_chess_brick_trim"
-  }
+  "output": "minestuck:black_chess_brick_trim"
 }

@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 2,
   "ingredient": {
     "item": "minestuck:polished_brown_stone"
   },
-  "result": "minestuck:polished_brown_stone_wall"
+  "result": {
+    "count": 2,
+    "id": "minestuck:polished_brown_stone_wall"
+  }
 }

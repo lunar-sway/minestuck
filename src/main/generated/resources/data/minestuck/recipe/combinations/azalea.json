@@ -7,7 +7,5 @@
     "item": "minecraft:oak_sapling"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:azalea"
-  }
+  "output": "minecraft:azalea"
 }

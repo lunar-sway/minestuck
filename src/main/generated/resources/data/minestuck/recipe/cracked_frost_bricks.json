@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:frost_bricks"
   },
-  "result": "minestuck:cracked_frost_bricks"
+  "result": {
+    "count": 1,
+    "id": "minestuck:cracked_frost_bricks"
+  }
 }

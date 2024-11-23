@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:frost_tile_slab"
-            ]
+            "items": "minestuck:frost_tile_slab"
           }
         ]
       },

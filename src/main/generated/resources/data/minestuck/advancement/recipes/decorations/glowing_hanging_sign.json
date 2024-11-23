@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:stripped_glowing_log"
-            ]
+            "items": "minestuck:stripped_glowing_log"
           }
         ]
       },

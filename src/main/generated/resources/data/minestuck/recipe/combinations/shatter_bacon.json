@@ -7,7 +7,5 @@
     "item": "minestuck:shatter_beacon"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:shatter_bacon"
-  }
+  "output": "minestuck:shatter_bacon"
 }

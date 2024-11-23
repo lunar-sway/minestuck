@@ -7,7 +7,5 @@
     "item": "minecraft:cactus"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:cactaceae_cutlass"
-  }
+  "output": "minestuck:cactaceae_cutlass"
 }

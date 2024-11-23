@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:brown_stone"
   },
-  "result": "minestuck:polished_brown_stone"
+  "result": {
+    "count": 1,
+    "id": "minestuck:polished_brown_stone"
+  }
 }

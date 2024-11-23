@@ -7,7 +7,5 @@
     "item": "minecraft:stone"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:lapis_ore"
-  }
+  "output": "minecraft:lapis_ore"
 }

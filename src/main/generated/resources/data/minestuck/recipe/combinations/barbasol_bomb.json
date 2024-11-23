@@ -7,7 +7,5 @@
     "item": "minestuck:barbasol"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:barbasol_bomb"
-  }
+  "output": "minestuck:barbasol_bomb"
 }

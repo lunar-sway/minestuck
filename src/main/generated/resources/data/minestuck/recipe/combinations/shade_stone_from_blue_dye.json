@@ -7,7 +7,5 @@
     "item": "minecraft:blue_dye"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:shade_stone"
-  }
+  "output": "minestuck:shade_stone"
 }

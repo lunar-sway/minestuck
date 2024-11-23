@@ -7,7 +7,5 @@
     "item": "minecraft:prismarine_crystals"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:sea_lantern"
-  }
+  "output": "minecraft:sea_lantern"
 }

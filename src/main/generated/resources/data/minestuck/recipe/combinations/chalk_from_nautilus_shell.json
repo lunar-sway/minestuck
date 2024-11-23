@@ -1,13 +1,11 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:stone"
+    "tag": "c:stones"
   },
   "input2": {
     "item": "minecraft:nautilus_shell"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:chalk"
-  }
+  "output": "minestuck:chalk"
 }

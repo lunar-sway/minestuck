@@ -7,7 +7,5 @@
     "item": "minecraft:jungle_sapling"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:acacia_sapling"
-  }
+  "output": "minecraft:acacia_sapling"
 }

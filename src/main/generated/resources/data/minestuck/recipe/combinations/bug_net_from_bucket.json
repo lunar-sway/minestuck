@@ -7,7 +7,5 @@
     "item": "minecraft:bucket"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:bug_net"
-  }
+  "output": "minestuck:bug_net"
 }

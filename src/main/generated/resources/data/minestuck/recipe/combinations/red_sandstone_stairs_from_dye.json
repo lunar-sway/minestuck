@@ -7,7 +7,5 @@
     "item": "minecraft:red_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:red_sandstone_stairs"
-  }
+  "output": "minecraft:red_sandstone_stairs"
 }

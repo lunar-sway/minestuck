@@ -7,7 +7,5 @@
     "item": "minecraft:stone"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:magma_block"
-  }
+  "output": "minecraft:magma_block"
 }

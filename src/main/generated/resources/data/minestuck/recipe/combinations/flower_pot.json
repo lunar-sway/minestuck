@@ -7,7 +7,5 @@
     "item": "minecraft:brick"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:flower_pot"
-  }
+  "output": "minecraft:flower_pot"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:arrow"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:pointed_dripstone"
-  }
+  "output": "minecraft:pointed_dripstone"
 }

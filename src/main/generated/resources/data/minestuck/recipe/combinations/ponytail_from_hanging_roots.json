@@ -7,7 +7,5 @@
     "item": "minecraft:saddle"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:ponytail"
-  }
+  "output": "minestuck:ponytail"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:charcoal"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:cobbled_deepslate"
-  }
+  "output": "minecraft:cobbled_deepslate"
 }

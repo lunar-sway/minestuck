@@ -7,7 +7,5 @@
     "item": "minecraft:sugar"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:tab"
-  }
+  "output": "minestuck:tab"
 }

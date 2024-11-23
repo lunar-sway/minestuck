@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:treated_uncarved_wood"
   },
-  "result": "minestuck:treated_heavy_planks"
+  "result": {
+    "count": 1,
+    "id": "minestuck:treated_heavy_planks"
+  }
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:chorus_fruit"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:grape_faygo"
-  }
+  "output": "minestuck:grape_faygo"
 }

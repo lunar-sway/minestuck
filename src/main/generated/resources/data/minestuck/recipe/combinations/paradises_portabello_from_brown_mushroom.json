@@ -7,7 +7,5 @@
     "item": "minecraft:brown_mushroom"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:paradises_portabello"
-  }
+  "output": "minestuck:paradises_portabello"
 }

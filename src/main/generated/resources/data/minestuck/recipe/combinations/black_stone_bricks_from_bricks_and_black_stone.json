@@ -7,7 +7,5 @@
     "item": "minestuck:black_stone"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:black_stone_bricks"
-  }
+  "output": "minestuck:black_stone_bricks"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:leather"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:bear_poking_stick"
-  }
+  "output": "minestuck:bear_poking_stick"
 }

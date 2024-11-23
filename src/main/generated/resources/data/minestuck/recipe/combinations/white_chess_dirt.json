@@ -7,7 +7,5 @@
     "item": "minecraft:white_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:white_chess_dirt"
-  }
+  "output": "minestuck:white_chess_dirt"
 }

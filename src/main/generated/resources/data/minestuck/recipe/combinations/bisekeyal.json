@@ -7,7 +7,5 @@
     "item": "minestuck:bi_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:bisekeyal"
-  }
+  "output": "minestuck:bisekeyal"
 }

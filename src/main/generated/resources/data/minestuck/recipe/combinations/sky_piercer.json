@@ -7,7 +7,5 @@
     "item": "minestuck:star_ray"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:sky_piercer"
-  }
+  "output": "minestuck:sky_piercer"
 }

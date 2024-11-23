@@ -7,7 +7,5 @@
     "item": "minestuck:barbasol"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:shaving_fan"
-  }
+  "output": "minestuck:shaving_fan"
 }

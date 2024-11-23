@@ -7,7 +7,5 @@
     "item": "minecraft:gray_dye"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:raw_iron"
-  }
+  "output": "minecraft:raw_iron"
 }

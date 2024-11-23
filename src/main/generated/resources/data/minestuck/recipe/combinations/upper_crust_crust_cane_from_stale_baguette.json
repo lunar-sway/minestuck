@@ -7,7 +7,5 @@
     "item": "minestuck:stale_baguette"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:upper_crust_crust_cane"
-  }
+  "output": "minestuck:upper_crust_crust_cane"
 }

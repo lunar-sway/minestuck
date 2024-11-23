@@ -7,7 +7,5 @@
     "item": "minecraft:rotten_flesh"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:toothripper"
-  }
+  "output": "minestuck:toothripper"
 }

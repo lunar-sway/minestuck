@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:coarse_stone"
   },
-  "result": "minestuck:chiseled_coarse_stone"
+  "result": {
+    "count": 1,
+    "id": "minestuck:chiseled_coarse_stone"
+  }
 }

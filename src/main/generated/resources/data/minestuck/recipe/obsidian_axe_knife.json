@@ -6,7 +6,7 @@
       "item": "minecraft:obsidian"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [
@@ -15,6 +15,7 @@
     "Os "
   ],
   "result": {
-    "item": "minestuck:obsidian_axe_knife"
+    "count": 1,
+    "id": "minestuck:obsidian_axe_knife"
   }
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:redstone_clock"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:horse_clock"
-  }
+  "output": "minestuck:horse_clock"
 }

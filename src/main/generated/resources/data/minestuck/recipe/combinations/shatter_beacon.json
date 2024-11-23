@@ -7,7 +7,5 @@
     "item": "minecraft:diamond_sword"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:shatter_beacon"
-  }
+  "output": "minestuck:shatter_beacon"
 }

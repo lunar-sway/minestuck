@@ -7,7 +7,5 @@
     "item": "minecraft:small_dripleaf"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:big_dripleaf"
-  }
+  "output": "minecraft:big_dripleaf"
 }

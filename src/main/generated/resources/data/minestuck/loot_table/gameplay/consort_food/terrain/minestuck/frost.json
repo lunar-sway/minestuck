@@ -102,7 +102,7 @@
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minestuck:gameplay/special/cold_cake",
+          "value": "minestuck:gameplay/special/cold_cake",
           "weight": 2
         }
       ],

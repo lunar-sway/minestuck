@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minecraft:mushroom_stew"
   },
-  "result": "minecraft:slime_ball"
+  "result": {
+    "count": 1,
+    "id": "minecraft:slime_ball"
+  }
 }

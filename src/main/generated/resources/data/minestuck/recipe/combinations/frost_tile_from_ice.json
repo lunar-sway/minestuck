@@ -1,13 +1,11 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:stone"
+    "tag": "c:stones"
   },
   "input2": {
     "item": "minecraft:ice"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:frost_tile"
-  }
+  "output": "minestuck:frost_tile"
 }

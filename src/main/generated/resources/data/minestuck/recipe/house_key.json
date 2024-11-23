@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "n": {
-      "tag": "forge:nuggets/iron"
+      "tag": "c:nuggets/iron"
     }
   },
   "pattern": [
@@ -15,6 +15,7 @@
     " i "
   ],
   "result": {
-    "item": "minestuck:house_key"
+    "count": 1,
+    "id": "minestuck:house_key"
   }
 }

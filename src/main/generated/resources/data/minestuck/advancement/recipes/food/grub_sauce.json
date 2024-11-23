@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minestuck:bugs"
+            "items": "#minestuck:bugs"
           }
         ]
       },

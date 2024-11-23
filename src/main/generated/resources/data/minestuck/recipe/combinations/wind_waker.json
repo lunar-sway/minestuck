@@ -7,7 +7,5 @@
     "item": "minestuck:conductors_baton"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:wind_waker"
-  }
+  "output": "minestuck:wind_waker"
 }

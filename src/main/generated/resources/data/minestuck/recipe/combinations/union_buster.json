@@ -7,7 +7,5 @@
     "item": "minestuck:nightstick"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:union_buster"
-  }
+  "output": "minestuck:union_buster"
 }

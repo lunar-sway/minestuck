@@ -7,7 +7,5 @@
     "item": "minecraft:bone"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:skeletonizer_drawn"
-  }
+  "output": "minestuck:skeletonizer_drawn"
 }

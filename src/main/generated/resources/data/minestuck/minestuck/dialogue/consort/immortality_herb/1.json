@@ -3,11 +3,17 @@
     "animation": {
       "emotion": "happy"
     },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.immortality_herb.1",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/immortality_herb/2"
+        "next_dialogue": "minestuck:consort/immortality_herb/2",
+        "triggers": []
       }
     ]
   }

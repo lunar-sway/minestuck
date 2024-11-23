@@ -7,7 +7,5 @@
     "item": "minestuck:crew_poster"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:night_club"
-  }
+  "output": "minestuck:night_club"
 }

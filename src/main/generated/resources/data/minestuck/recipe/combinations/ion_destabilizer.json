@@ -7,7 +7,5 @@
     "item": "minestuck:bo_staff"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:ion_destabilizer"
-  }
+  "output": "minestuck:ion_destabilizer"
 }

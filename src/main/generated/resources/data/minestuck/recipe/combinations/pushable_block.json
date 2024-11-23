@@ -1,13 +1,11 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:stone"
+    "tag": "c:stones"
   },
   "input2": {
     "item": "minecraft:gravel"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:pushable_block"
-  }
+  "output": "minestuck:pushable_block"
 }

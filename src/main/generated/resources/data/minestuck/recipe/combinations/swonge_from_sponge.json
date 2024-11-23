@@ -7,7 +7,5 @@
     "item": "minecraft:sponge"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:swonge"
-  }
+  "output": "minestuck:swonge"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:bell"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:sculk_shrieker"
-  }
+  "output": "minecraft:sculk_shrieker"
 }

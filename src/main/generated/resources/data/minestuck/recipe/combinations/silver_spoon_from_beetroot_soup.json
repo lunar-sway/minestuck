@@ -7,7 +7,5 @@
     "item": "minecraft:beetroot_soup"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:silver_spoon"
-  }
+  "output": "minestuck:silver_spoon"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:barbasol"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:barber_basher"
-  }
+  "output": "minestuck:barber_basher"
 }

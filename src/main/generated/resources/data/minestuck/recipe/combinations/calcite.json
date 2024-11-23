@@ -7,7 +7,5 @@
     "item": "minecraft:stone"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:calcite"
-  }
+  "output": "minecraft:calcite"
 }

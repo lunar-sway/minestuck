@@ -7,7 +7,5 @@
     "item": "minecraft:stone"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:stone_quartz_ore"
-  }
+  "output": "minestuck:stone_quartz_ore"
 }

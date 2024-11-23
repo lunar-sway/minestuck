@@ -7,7 +7,5 @@
     "item": "minestuck:battery"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:laptop"
-  }
+  "output": "minestuck:laptop"
 }

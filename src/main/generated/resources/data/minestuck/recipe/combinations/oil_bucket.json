@@ -7,7 +7,5 @@
     "item": "minecraft:bone"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:oil_bucket"
-  }
+  "output": "minestuck:oil_bucket"
 }

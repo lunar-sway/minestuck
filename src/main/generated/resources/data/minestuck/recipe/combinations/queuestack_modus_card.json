@@ -7,7 +7,5 @@
     "item": "minestuck:queue_modus_card"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:queuestack_modus_card"
-  }
+  "output": "minestuck:queuestack_modus_card"
 }

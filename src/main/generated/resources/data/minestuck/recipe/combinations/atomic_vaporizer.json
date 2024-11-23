@@ -7,7 +7,5 @@
     "item": "minestuck:quantum_sabre"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:atomic_vaporizer"
-  }
+  "output": "minestuck:atomic_vaporizer"
 }

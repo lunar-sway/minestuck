@@ -7,7 +7,5 @@
     "item": "minecraft:stone_brick_stairs"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:red_sandstone_stairs"
-  }
+  "output": "minecraft:red_sandstone_stairs"
 }

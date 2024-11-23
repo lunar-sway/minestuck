@@ -7,7 +7,5 @@
     "item": "minestuck:crocker_fork"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:crockertop"
-  }
+  "output": "minestuck:crockertop"
 }

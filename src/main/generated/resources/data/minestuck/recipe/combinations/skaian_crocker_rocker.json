@@ -7,7 +7,5 @@
     "item": "minestuck:crocker_fork"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:skaian_crocker_rocker"
-  }
+  "output": "minestuck:skaian_crocker_rocker"
 }

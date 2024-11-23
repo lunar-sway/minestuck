@@ -7,7 +7,5 @@
     "item": "minecraft:quartz_pillar"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:basalt"
-  }
+  "output": "minecraft:basalt"
 }

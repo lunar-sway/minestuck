@@ -7,7 +7,5 @@
     "item": "minecraft:lead"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:name_tag"
-  }
+  "output": "minecraft:name_tag"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:cueball"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:caledfwlch"
-  }
+  "output": "minestuck:caledfwlch"
 }

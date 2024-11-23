@@ -7,7 +7,5 @@
     "item": "minecraft:iron_block"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:iron_boat"
-  }
+  "output": "minestuck:iron_boat"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:redstone_lamp"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:edisons_fury"
-  }
+  "output": "minestuck:edisons_fury"
 }

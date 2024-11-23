@@ -7,7 +7,5 @@
     "item": "minecraft:spawner"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:sculk_catalyst"
-  }
+  "output": "minecraft:sculk_catalyst"
 }

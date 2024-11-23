@@ -7,7 +7,5 @@
     "item": "minestuck:rainbow_log"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:rainbow_sapling"
-  }
+  "output": "minestuck:rainbow_sapling"
 }

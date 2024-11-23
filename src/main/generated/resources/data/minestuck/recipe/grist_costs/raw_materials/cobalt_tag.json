@@ -4,6 +4,6 @@
     "minestuck:cobalt": 18
   },
   "ingredient": {
-    "tag": "forge:raw_materials/cobalt"
+    "tag": "c:raw_materials/cobalt"
   }
 }

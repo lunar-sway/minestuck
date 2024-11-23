@@ -7,7 +7,5 @@
     "item": "minecraft:fishing_rod"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:vaudeville_hook"
-  }
+  "output": "minestuck:vaudeville_hook"
 }

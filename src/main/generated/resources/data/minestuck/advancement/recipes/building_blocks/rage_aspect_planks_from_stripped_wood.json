@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:rage_aspect_stripped_wood"
-            ]
+            "items": "minestuck:rage_aspect_stripped_wood"
           }
         ]
       },

@@ -7,7 +7,5 @@
     "item": "minecraft:bowl"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:wooden_spoon"
-  }
+  "output": "minestuck:wooden_spoon"
 }

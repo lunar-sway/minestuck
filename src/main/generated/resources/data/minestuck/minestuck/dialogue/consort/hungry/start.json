@@ -6,6 +6,8 @@
         "tag": "minestuck:consort_snacks"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "message": {
           "arguments": [
             "matched_item"
@@ -17,6 +19,7 @@
             "condition": {
               "type": "minestuck:has_matched_item"
             },
+            "hide_if_failed": true,
             "message": "minestuck.dialogue.yes",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/thanks",
@@ -47,6 +50,7 @@
               "type": "minestuck:entity_type",
               "entity_type": "minestuck:nakagator"
             },
+            "hide_if_failed": true,
             "message": "minestuck.dialogue.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/first_no",
@@ -66,6 +70,7 @@
               "type": "minestuck:entity_type",
               "entity_type": "minestuck:iguana"
             },
+            "hide_if_failed": true,
             "message": "minestuck.dialogue.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/first_no",
@@ -85,6 +90,7 @@
               "type": "minestuck:entity_type",
               "entity_type": "minestuck:salamander"
             },
+            "hide_if_failed": true,
             "message": "minestuck.dialogue.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/first_no",
@@ -107,6 +113,9 @@
     }
   ],
   "default_node": {
-    "message": "minestuck.dialogue.consort.hungry.start"
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.hungry.start",
+    "responses": []
   }
 }

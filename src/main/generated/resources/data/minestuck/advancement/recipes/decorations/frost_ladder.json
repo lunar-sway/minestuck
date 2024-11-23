@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:frost_planks"
-            ]
+            "items": "minestuck:frost_planks"
           }
         ]
       },

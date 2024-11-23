@@ -7,7 +7,5 @@
     "item": "minecraft:lapis_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:cobalt_sabre"
-  }
+  "output": "minestuck:cobalt_sabre"
 }

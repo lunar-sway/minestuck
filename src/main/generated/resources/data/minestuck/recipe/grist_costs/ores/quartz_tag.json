@@ -4,7 +4,7 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/quartz"
+    "tag": "c:ores/quartz"
   },
   "multiplier": 2.0,
   "sources": [

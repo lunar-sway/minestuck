@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:stripped_frost_log"
-            ]
+            "items": "minestuck:stripped_frost_log"
           }
         ]
       },

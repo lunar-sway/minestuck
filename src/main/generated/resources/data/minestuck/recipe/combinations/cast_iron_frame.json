@@ -7,7 +7,5 @@
     "item": "minecraft:scaffolding"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:cast_iron_frame"
-  }
+  "output": "minestuck:cast_iron_frame"
 }

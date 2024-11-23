@@ -7,7 +7,5 @@
     "item": "minecraft:wooden_sword"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:wooden_cactus"
-  }
+  "output": "minestuck:wooden_cactus"
 }

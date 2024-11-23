@@ -7,7 +7,5 @@
     "item": "minestuck:clothes_iron"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:wrinklefucker"
-  }
+  "output": "minestuck:wrinklefucker"
 }

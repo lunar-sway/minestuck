@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:temple_scanner"
-            ]
+            "items": "minestuck:temple_scanner"
           }
         ]
       },
@@ -19,7 +17,8 @@
       "translate": "advancements.minestuck.searching.description"
     },
     "icon": {
-      "item": "minecraft:compass"
+      "count": 1,
+      "id": "minecraft:compass"
     },
     "title": {
       "translate": "advancements.minestuck.searching.title"

@@ -7,7 +7,5 @@
     "item": "minecraft:redstone"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:sugar"
-  }
+  "output": "minecraft:sugar"
 }

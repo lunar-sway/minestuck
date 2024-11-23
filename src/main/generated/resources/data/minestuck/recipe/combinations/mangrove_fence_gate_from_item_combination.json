@@ -7,7 +7,5 @@
     "item": "minecraft:mangrove_fence"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:mangrove_fence_gate"
-  }
+  "output": "minecraft:mangrove_fence_gate"
 }

@@ -4,6 +4,6 @@
     "minestuck:uranium": 8
   },
   "ingredient": {
-    "tag": "forge:ingots/uranium"
+    "tag": "c:ingots/uranium"
   }
 }

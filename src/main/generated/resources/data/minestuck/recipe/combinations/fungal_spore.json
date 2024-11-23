@@ -4,10 +4,8 @@
     "item": "minecraft:wheat_seeds"
   },
   "input2": {
-    "tag": "forge:mushrooms"
+    "tag": "c:mushrooms"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:fungal_spore"
-  }
+  "output": "minestuck:fungal_spore"
 }

@@ -7,7 +7,5 @@
     "tag": "minecraft:logs"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:petrified_log"
-  }
+  "output": "minestuck:petrified_log"
 }

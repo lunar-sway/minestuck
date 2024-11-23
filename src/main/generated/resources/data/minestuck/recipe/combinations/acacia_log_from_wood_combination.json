@@ -7,7 +7,5 @@
     "item": "minecraft:jungle_log"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:acacia_log"
-  }
+  "output": "minecraft:acacia_log"
 }

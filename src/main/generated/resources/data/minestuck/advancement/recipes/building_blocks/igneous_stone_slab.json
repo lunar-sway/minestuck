@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:igneous_stone"
-            ]
+            "items": "minestuck:igneous_stone"
           }
         ]
       },

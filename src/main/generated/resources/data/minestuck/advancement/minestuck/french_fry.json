@@ -4,9 +4,7 @@
     "has_french_fry": {
       "conditions": {
         "item": {
-          "items": [
-            "minestuck:french_fry"
-          ]
+          "items": "minestuck:french_fry"
         }
       },
       "trigger": "minecraft:consume_item"
@@ -17,7 +15,8 @@
       "translate": "advancements.minestuck.french_fry.description"
     },
     "icon": {
-      "item": "minestuck:french_fry"
+      "count": 1,
+      "id": "minestuck:french_fry"
     },
     "title": {
       "translate": "advancements.minestuck.french_fry.title"

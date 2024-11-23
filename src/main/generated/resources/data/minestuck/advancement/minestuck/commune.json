@@ -12,7 +12,7 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "structure": "minestuck:consort_village"
+                "structures": "minestuck:consort_village"
               }
             }
           }
@@ -26,7 +26,8 @@
       "translate": "advancements.minestuck.commune.description"
     },
     "icon": {
-      "item": "minestuck:stone_tablet"
+      "count": 1,
+      "id": "minestuck:stone_tablet"
     },
     "title": {
       "translate": "advancements.minestuck.commune.title"

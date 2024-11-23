@@ -7,7 +7,5 @@
     "item": "minestuck:cryptid_photo"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:hellbringers_hoe_inactive"
-  }
+  "output": "minestuck:hellbringers_hoe_inactive"
 }

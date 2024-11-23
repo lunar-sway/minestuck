@@ -7,7 +7,5 @@
     "item": "minecraft:sponge"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:wet_sponge"
-  }
+  "output": "minecraft:wet_sponge"
 }

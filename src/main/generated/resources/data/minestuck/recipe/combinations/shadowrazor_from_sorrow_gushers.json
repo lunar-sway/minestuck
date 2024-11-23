@@ -7,7 +7,5 @@
     "item": "minestuck:sorrow_gushers"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:shadowrazor"
-  }
+  "output": "minestuck:shadowrazor"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:piston"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:terrain_flatenator"
-  }
+  "output": "minestuck:terrain_flatenator"
 }

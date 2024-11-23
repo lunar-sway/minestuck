@@ -7,7 +7,5 @@
     "item": "minestuck:transportalizer"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:lorentz_distransformationer"
-  }
+  "output": "minestuck:lorentz_distransformationer"
 }

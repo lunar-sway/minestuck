@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:polished_cruxite_block"
   },
-  "result": "minestuck:polished_cruxite_stairs"
+  "result": {
+    "count": 1,
+    "id": "minestuck:polished_cruxite_stairs"
+  }
 }

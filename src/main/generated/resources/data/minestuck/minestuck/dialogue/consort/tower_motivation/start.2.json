@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": {
       "arguments": [
         "entity_type"
@@ -8,8 +10,13 @@
     },
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/tower_motivation/start.3"
+        "next_dialogue": "minestuck:consort/tower_motivation/start.3",
+        "triggers": []
       }
     ]
   }

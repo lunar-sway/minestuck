@@ -7,7 +7,5 @@
     "item": "minecraft:iron_ingot"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:bo_staff"
-  }
+  "output": "minestuck:bo_staff"
 }

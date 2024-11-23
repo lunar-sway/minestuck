@@ -7,7 +7,5 @@
     "item": "minecraft:warped_fungus"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:warped_nylium"
-  }
+  "output": "minecraft:warped_nylium"
 }

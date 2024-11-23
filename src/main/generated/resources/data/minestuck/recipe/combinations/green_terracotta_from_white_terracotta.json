@@ -1,13 +1,11 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:dyes/green"
+    "tag": "c:dyes/green"
   },
   "input2": {
     "item": "minecraft:white_terracotta"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:green_terracotta"
-  }
+  "output": "minecraft:green_terracotta"
 }

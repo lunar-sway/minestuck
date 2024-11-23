@@ -14,5 +14,6 @@
     "list_type": "any"
   },
   "dialogue": "minestuck:consort_food_merchant/thyme",
+  "dialogue_weight": 10,
   "keep_on_reset": true
 }

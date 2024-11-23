@@ -7,7 +7,5 @@
     "item": "minestuck:cuestick"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:pool_cue_wand"
-  }
+  "output": "minestuck:pool_cue_wand"
 }

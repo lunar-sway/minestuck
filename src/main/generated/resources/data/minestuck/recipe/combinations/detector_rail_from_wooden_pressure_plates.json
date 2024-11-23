@@ -7,7 +7,5 @@
     "tag": "minecraft:wooden_pressure_plates"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:detector_rail"
-  }
+  "output": "minecraft:detector_rail"
 }

@@ -1,13 +1,11 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:dyes/red"
+    "tag": "c:dyes/red"
   },
   "input2": {
     "item": "minecraft:light_gray_concrete_powder"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:red_concrete_powder"
-  }
+  "output": "minecraft:red_concrete_powder"
 }

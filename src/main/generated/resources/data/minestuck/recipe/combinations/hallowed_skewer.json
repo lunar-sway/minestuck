@@ -7,7 +7,5 @@
     "item": "minecraft:totem_of_undying"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:hallowed_skewer"
-  }
+  "output": "minestuck:hallowed_skewer"
 }

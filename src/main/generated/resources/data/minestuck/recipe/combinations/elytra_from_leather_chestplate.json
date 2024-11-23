@@ -7,7 +7,5 @@
     "item": "minecraft:phantom_membrane"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:elytra"
-  }
+  "output": "minecraft:elytra"
 }

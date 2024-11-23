@@ -1,16 +1,24 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.cult.after_invitation",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.cult.after_invitation.no",
-        "next_dialogue": "minestuck:consort/cult/later"
+        "next_dialogue": "minestuck:consort/cult/later",
+        "triggers": []
       },
       {
         "condition": {
           "type": "minestuck:player_item",
           "item": "minestuck:native_sulfur"
         },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.cult.after_invitation.start",
         "next_dialogue": "minestuck:consort/cult/disappointment",
         "triggers": [
@@ -22,8 +30,13 @@
         ]
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.cult.after_invitation.candy_question",
-        "next_dialogue": "minestuck:consort/cult/disappointment"
+        "next_dialogue": "minestuck:consort/cult/disappointment",
+        "triggers": []
       }
     ]
   }

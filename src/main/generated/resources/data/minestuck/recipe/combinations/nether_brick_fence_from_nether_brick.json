@@ -7,7 +7,5 @@
     "item": "minecraft:nether_brick"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:nether_brick_fence"
-  }
+  "output": "minecraft:nether_brick_fence"
 }

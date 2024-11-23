@@ -7,7 +7,5 @@
     "item": "minecraft:iron_block"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:blacksmith_hammer"
-  }
+  "output": "minestuck:blacksmith_hammer"
 }

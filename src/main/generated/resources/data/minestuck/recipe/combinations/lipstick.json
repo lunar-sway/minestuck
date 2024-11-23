@@ -7,7 +7,5 @@
     "item": "minecraft:green_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:lipstick"
-  }
+  "output": "minestuck:lipstick"
 }

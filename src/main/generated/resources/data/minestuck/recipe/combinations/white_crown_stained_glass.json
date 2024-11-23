@@ -7,7 +7,5 @@
     "item": "minestuck:prim_and_proper_walking_pole"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:white_crown_stained_glass"
-  }
+  "output": "minestuck:white_crown_stained_glass"
 }

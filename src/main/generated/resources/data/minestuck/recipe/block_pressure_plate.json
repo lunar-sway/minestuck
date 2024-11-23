@@ -21,6 +21,7 @@
     "srs"
   ],
   "result": {
-    "item": "minestuck:block_pressure_plate"
+    "count": 1,
+    "id": "minestuck:block_pressure_plate"
   }
 }

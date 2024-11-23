@@ -7,7 +7,5 @@
     "item": "minecraft:stone_brick_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cut_copper_slab"
-  }
+  "output": "minecraft:cut_copper_slab"
 }

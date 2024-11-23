@@ -7,7 +7,5 @@
     "item": "minecraft:cherry_leaves"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cherry_sapling"
-  }
+  "output": "minecraft:cherry_sapling"
 }

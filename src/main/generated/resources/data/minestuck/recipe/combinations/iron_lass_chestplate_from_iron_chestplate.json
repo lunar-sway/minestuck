@@ -7,7 +7,5 @@
     "item": "minestuck:particle_accelerator"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:iron_lass_chestplate"
-  }
+  "output": "minestuck:iron_lass_chestplate"
 }

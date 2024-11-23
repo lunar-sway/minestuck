@@ -7,7 +7,5 @@
     "item": "minecraft:paper"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:cardboard_tube"
-  }
+  "output": "minestuck:cardboard_tube"
 }

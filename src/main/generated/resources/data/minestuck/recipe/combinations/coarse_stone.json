@@ -7,7 +7,5 @@
     "item": "minecraft:basalt"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:coarse_stone"
-  }
+  "output": "minestuck:coarse_stone"
 }

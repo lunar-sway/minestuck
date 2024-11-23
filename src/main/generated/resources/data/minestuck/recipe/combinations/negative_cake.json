@@ -7,7 +7,5 @@
     "item": "minestuck:fuchsia_cake"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:negative_cake"
-  }
+  "output": "minestuck:negative_cake"
 }

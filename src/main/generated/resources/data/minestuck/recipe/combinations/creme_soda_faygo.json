@@ -7,7 +7,5 @@
     "item": "minecraft:milk_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:creme_soda_faygo"
-  }
+  "output": "minestuck:creme_soda_faygo"
 }

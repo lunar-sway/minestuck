@@ -7,7 +7,5 @@
     "item": "minestuck:raw_uranium"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:energy_core"
-  }
+  "output": "minestuck:energy_core"
 }

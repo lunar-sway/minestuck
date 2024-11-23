@@ -7,7 +7,5 @@
     "item": "minecraft:iron_ingot"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:rail"
-  }
+  "output": "minecraft:rail"
 }

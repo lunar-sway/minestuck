@@ -7,7 +7,5 @@
     "item": "minestuck:horn"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:sopor_slime_pie"
-  }
+  "output": "minestuck:sopor_slime_pie"
 }

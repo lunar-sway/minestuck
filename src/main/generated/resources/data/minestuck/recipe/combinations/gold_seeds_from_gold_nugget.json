@@ -7,7 +7,5 @@
     "item": "minecraft:gold_nugget"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:gold_seeds"
-  }
+  "output": "minestuck:gold_seeds"
 }

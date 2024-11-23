@@ -7,7 +7,5 @@
     "item": "minecraft:obsidian"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:rockefellers_walking_bladecane"
-  }
+  "output": "minestuck:rockefellers_walking_bladecane"
 }

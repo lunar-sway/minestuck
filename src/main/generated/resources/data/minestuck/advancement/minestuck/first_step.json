@@ -15,8 +15,11 @@
       "translate": "advancements.minestuck.first_step.description"
     },
     "icon": {
-      "item": "minestuck:boondollars",
-      "nbt": "{value:1}"
+      "components": {
+        "minestuck:value": 1
+      },
+      "count": 1,
+      "id": "minestuck:boondollars"
     },
     "title": {
       "translate": "advancements.minestuck.first_step.title"

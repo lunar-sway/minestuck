@@ -7,7 +7,5 @@
     "item": "minecraft:nether_wart"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:soul_sand"
-  }
+  "output": "minecraft:soul_sand"
 }

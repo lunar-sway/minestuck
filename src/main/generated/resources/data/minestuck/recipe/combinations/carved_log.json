@@ -7,7 +7,5 @@
     "item": "minecraft:honey_bottle"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:carved_log"
-  }
+  "output": "minestuck:carved_log"
 }

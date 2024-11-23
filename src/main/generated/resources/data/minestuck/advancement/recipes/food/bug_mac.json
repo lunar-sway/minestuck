@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:grub_sauce"
-            ]
+            "items": "minestuck:grub_sauce"
           }
         ]
       },

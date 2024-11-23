@@ -7,7 +7,5 @@
     "item": "minecraft:lilac"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:magenta_mauler"
-  }
+  "output": "minestuck:magenta_mauler"
 }

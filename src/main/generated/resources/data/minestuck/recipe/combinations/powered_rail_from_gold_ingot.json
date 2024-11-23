@@ -7,7 +7,5 @@
     "item": "minecraft:gold_ingot"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:powered_rail"
-  }
+  "output": "minecraft:powered_rail"
 }

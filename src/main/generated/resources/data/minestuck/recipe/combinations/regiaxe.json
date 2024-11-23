@@ -7,7 +7,5 @@
     "item": "minestuck:chessboard"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:regiaxe"
-  }
+  "output": "minestuck:regiaxe"
 }

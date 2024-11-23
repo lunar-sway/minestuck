@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:life_aspect_planks"
-            ]
+            "items": "minestuck:life_aspect_planks"
           }
         ]
       },

@@ -4,10 +4,8 @@
     "item": "minecraft:pink_wool"
   },
   "input2": {
-    "item": "minecraft:scute"
+    "item": "minecraft:turtle_scute"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:plush_turtle"
-  }
+  "output": "minestuck:plush_turtle"
 }

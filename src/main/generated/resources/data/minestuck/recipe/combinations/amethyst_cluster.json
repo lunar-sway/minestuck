@@ -7,7 +7,5 @@
     "item": "minecraft:amethyst_shard"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:amethyst_cluster"
-  }
+  "output": "minecraft:amethyst_cluster"
 }

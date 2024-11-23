@@ -7,7 +7,5 @@
     "item": "minecraft:nether_wart"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:cocoa_wart"
-  }
+  "output": "minestuck:cocoa_wart"
 }

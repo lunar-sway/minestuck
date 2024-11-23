@@ -7,7 +7,5 @@
     "item": "minecraft:iron_ingot"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:metal_bat"
-  }
+  "output": "minestuck:metal_bat"
 }

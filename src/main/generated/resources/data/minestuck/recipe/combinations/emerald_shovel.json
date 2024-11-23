@@ -7,7 +7,5 @@
     "item": "minecraft:emerald"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:emerald_shovel"
-  }
+  "output": "minestuck:emerald_shovel"
 }

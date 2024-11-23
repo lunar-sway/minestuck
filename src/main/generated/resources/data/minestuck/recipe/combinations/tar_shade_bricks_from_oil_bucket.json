@@ -7,7 +7,5 @@
     "item": "minestuck:oil_bucket"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:tar_shade_bricks"
-  }
+  "output": "minestuck:tar_shade_bricks"
 }

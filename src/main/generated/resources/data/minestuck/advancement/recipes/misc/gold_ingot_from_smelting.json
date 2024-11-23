@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minestuck:ores/gold"
+            "items": "#minestuck:ores/gold"
           }
         ]
       },

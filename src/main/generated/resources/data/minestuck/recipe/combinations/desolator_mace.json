@@ -7,7 +7,5 @@
     "item": "minecraft:flint"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:desolator_mace"
-  }
+  "output": "minestuck:desolator_mace"
 }

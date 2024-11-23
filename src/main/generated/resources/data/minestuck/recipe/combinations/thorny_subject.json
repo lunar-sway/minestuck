@@ -7,7 +7,5 @@
     "item": "minecraft:rose_bush"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:thorny_subject"
-  }
+  "output": "minestuck:thorny_subject"
 }

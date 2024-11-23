@@ -7,7 +7,5 @@
     "item": "minestuck:clothes_iron"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:locksoftener"
-  }
+  "output": "minestuck:locksoftener"
 }

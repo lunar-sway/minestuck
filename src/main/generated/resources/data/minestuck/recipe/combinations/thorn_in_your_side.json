@@ -7,7 +7,5 @@
     "item": "minecraft:rose_bush"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:thorn_in_your_side"
-  }
+  "output": "minestuck:thorn_in_your_side"
 }

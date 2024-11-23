@@ -21,6 +21,7 @@
     "iii"
   ],
   "result": {
-    "item": "minestuck:wireless_redstone_transmitter"
+    "count": 1,
+    "id": "minestuck:wireless_redstone_transmitter"
   }
 }

@@ -2,9 +2,9 @@
   "type": "minestuck:source_grist_cost",
   "grist_cost": {},
   "ingredient": {
-    "tag": "forge:ingots/zinc"
+    "tag": "c:ingots/zinc"
   },
   "sources": [
-    "#forge:raw_materials/zinc"
+    "#c:raw_materials/zinc"
   ]
 }

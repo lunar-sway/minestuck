@@ -7,7 +7,5 @@
     "item": "minestuck:frog"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:genesis_godstabber"
-  }
+  "output": "minestuck:genesis_godstabber"
 }

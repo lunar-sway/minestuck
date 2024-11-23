@@ -7,7 +7,5 @@
     "item": "minecraft:chorus_fruit"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:elytra"
-  }
+  "output": "minecraft:elytra"
 }

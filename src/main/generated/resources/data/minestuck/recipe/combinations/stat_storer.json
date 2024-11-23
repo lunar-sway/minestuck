@@ -7,7 +7,5 @@
     "item": "minestuck:remote_observer"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:stat_storer"
-  }
+  "output": "minestuck:stat_storer"
 }

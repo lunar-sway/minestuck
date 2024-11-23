@@ -5,6 +5,6 @@
     "minestuck:sulfur": 5
   },
   "ingredient": {
-    "tag": "forge:ingots/invar"
+    "tag": "c:ingots/invar"
   }
 }

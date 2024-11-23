@@ -7,7 +7,5 @@
     "item": "minecraft:lily_pad"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:small_dripleaf"
-  }
+  "output": "minecraft:small_dripleaf"
 }

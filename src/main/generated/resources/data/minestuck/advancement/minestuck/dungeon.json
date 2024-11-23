@@ -9,7 +9,7 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "structure": "minestuck:imp_dungeon"
+                "structures": "minestuck:imp_dungeon"
               }
             }
           }
@@ -23,7 +23,8 @@
       "translate": "advancements.minestuck.dungeon.description"
     },
     "icon": {
-      "item": "minestuck:frost_bricks"
+      "count": 1,
+      "id": "minestuck:frost_bricks"
     },
     "title": {
       "translate": "advancements.minestuck.dungeon.title"

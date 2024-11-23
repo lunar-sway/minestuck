@@ -5,6 +5,6 @@
     "minestuck:rust": 12
   },
   "ingredient": {
-    "tag": "forge:ingots/brass"
+    "tag": "c:ingots/brass"
   }
 }

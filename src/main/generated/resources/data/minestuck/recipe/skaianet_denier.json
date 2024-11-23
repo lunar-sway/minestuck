@@ -6,7 +6,7 @@
       "item": "minestuck:energy_core"
     },
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "p": {
       "item": "minestuck:computer_parts"
@@ -21,6 +21,7 @@
     "iei"
   ],
   "result": {
-    "item": "minestuck:skaianet_denier"
+    "count": 1,
+    "id": "minestuck:skaianet_denier"
   }
 }

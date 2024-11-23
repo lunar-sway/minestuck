@@ -7,7 +7,5 @@
     "item": "minestuck:razor_blade"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:razor_fan"
-  }
+  "output": "minestuck:razor_fan"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:raw_uranium"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:ancient_debris"
-  }
+  "output": "minecraft:ancient_debris"
 }

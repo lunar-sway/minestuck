@@ -7,7 +7,5 @@
     "item": "minecraft:acacia_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:acacia_trapdoor"
-  }
+  "output": "minecraft:acacia_trapdoor"
 }

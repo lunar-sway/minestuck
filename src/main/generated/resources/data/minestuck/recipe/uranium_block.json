@@ -12,6 +12,7 @@
     "###"
   ],
   "result": {
-    "item": "minestuck:uranium_block"
+    "count": 1,
+    "id": "minestuck:uranium_block"
   }
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:chessboard"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:regisickle"
-  }
+  "output": "minestuck:regisickle"
 }

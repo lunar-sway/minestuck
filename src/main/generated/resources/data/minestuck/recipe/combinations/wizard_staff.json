@@ -7,7 +7,5 @@
     "item": "minestuck:cane"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:wizard_staff"
-  }
+  "output": "minestuck:wizard_staff"
 }

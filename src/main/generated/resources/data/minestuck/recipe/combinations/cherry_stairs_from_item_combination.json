@@ -7,7 +7,5 @@
     "item": "minecraft:cherry_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cherry_stairs"
-  }
+  "output": "minecraft:cherry_stairs"
 }

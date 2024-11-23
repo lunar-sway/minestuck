@@ -7,7 +7,5 @@
     "item": "minestuck:sushroom"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:suspicious_chiseled_mycelium_bricks"
-  }
+  "output": "minestuck:suspicious_chiseled_mycelium_bricks"
 }

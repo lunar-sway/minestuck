@@ -7,7 +7,5 @@
     "item": "minecraft:blaze_rod"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:french_fry"
-  }
+  "output": "minestuck:french_fry"
 }

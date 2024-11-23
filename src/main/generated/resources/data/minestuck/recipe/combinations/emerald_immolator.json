@@ -7,7 +7,5 @@
     "item": "minestuck:emerald_sword"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:emerald_immolator"
-  }
+  "output": "minestuck:emerald_immolator"
 }

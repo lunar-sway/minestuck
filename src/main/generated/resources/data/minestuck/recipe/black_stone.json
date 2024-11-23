@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:black_cobblestone"
   },
-  "result": "minestuck:black_stone"
+  "result": {
+    "count": 1,
+    "id": "minestuck:black_stone"
+  }
 }

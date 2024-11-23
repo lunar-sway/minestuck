@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": {
       "arguments": [
         "player_title"
@@ -8,6 +10,10 @@
     },
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": {
           "arguments": [
             "player_title"
@@ -23,15 +29,21 @@
             "key": "minestuck.dialogue.consort.title_presence.start.i_am.reply"
           },
           "set_as_entrypoint": false
-        }
+        },
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.title_presence.start.agree",
         "next_dialogue": {
           "id": "minestuck:consort/thanks",
           "player_message": "minestuck.dialogue.consort.title_presence.start.agree.reply",
           "set_as_entrypoint": false
-        }
+        },
+        "triggers": []
       }
     ]
   }

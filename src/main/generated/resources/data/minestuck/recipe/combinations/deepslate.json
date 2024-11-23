@@ -7,7 +7,5 @@
     "item": "minecraft:ink_sac"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:deepslate"
-  }
+  "output": "minecraft:deepslate"
 }

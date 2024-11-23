@@ -7,7 +7,5 @@
     "item": "minecraft:stonecutter"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:wood_shavings"
-  }
+  "output": "minestuck:wood_shavings"
 }

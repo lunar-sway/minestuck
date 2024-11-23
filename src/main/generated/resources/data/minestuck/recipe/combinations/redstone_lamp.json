@@ -7,7 +7,5 @@
     "item": "minecraft:redstone_torch"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:redstone_lamp"
-  }
+  "output": "minecraft:redstone_lamp"
 }

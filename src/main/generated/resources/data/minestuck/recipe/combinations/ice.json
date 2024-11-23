@@ -7,7 +7,5 @@
     "item": "minecraft:snow_block"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:ice"
-  }
+  "output": "minecraft:ice"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:plutonium_core"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:remote_observer"
-  }
+  "output": "minestuck:remote_observer"
 }

@@ -15,6 +15,7 @@
     "$#$"
   ],
   "result": {
-    "item": "minestuck:dead_fence_gate"
+    "count": 1,
+    "id": "minestuck:dead_fence_gate"
   }
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:cobblestone_wall"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cobbled_deepslate_wall"
-  }
+  "output": "minecraft:cobbled_deepslate_wall"
 }

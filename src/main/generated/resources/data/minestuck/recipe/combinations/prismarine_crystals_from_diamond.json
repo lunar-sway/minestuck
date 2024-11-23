@@ -7,7 +7,5 @@
     "item": "minecraft:diamond"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:prismarine_crystals"
-  }
+  "output": "minecraft:prismarine_crystals"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:fungal_spore"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:sporeo"
-  }
+  "output": "minestuck:sporeo"
 }

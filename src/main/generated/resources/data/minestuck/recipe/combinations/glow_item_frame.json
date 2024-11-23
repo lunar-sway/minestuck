@@ -7,7 +7,5 @@
     "item": "minecraft:item_frame"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:glow_item_frame"
-  }
+  "output": "minecraft:glow_item_frame"
 }

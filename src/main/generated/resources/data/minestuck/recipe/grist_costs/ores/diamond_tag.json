@@ -4,7 +4,7 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/diamond"
+    "tag": "c:ores/diamond"
   },
   "multiplier": 3.0,
   "sources": [

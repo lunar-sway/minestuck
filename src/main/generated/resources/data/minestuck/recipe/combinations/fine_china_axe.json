@@ -7,7 +7,5 @@
     "item": "minecraft:diamond_axe"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:fine_china_axe"
-  }
+  "output": "minestuck:fine_china_axe"
 }

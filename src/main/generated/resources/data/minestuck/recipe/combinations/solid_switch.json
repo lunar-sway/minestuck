@@ -7,7 +7,5 @@
     "item": "minecraft:redstone_lamp"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:solid_switch"
-  }
+  "output": "minestuck:solid_switch"
 }

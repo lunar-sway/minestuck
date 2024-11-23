@@ -7,7 +7,5 @@
     "item": "minestuck:celestial_fulcrum"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:hymn_for_horrorterrors"
-  }
+  "output": "minestuck:hymn_for_horrorterrors"
 }

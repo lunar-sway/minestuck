@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minecraft:stick"
   },
-  "result": "minestuck:uranium_powered_stick"
+  "result": {
+    "count": 1,
+    "id": "minestuck:uranium_powered_stick"
+  }
 }

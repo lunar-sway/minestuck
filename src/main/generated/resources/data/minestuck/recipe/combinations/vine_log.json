@@ -7,7 +7,5 @@
     "item": "minecraft:vine"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:vine_log"
-  }
+  "output": "minestuck:vine_log"
 }

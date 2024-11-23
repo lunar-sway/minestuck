@@ -7,7 +7,5 @@
     "tag": "minecraft:wooden_buttons"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:wooden_explosive_button"
-  }
+  "output": "minestuck:wooden_explosive_button"
 }

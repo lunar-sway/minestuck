@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:mind_aspect_wood"
-            ]
+            "items": "minestuck:mind_aspect_wood"
           }
         ]
       },

@@ -7,7 +7,5 @@
     "item": "minecraft:gravel"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:rock_cookie"
-  }
+  "output": "minestuck:rock_cookie"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:rotten_flesh"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:blood_bucket"
-  }
+  "output": "minestuck:blood_bucket"
 }

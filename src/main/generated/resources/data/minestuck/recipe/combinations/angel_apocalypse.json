@@ -7,7 +7,5 @@
     "item": "minecraft:feather"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:angel_apocalypse"
-  }
+  "output": "minestuck:angel_apocalypse"
 }

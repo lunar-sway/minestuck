@@ -7,7 +7,5 @@
     "item": "minestuck:grimoire"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:thorn_of_oglogoth"
-  }
+  "output": "minestuck:thorn_of_oglogoth"
 }

@@ -7,5 +7,8 @@
   "ingredient": {
     "item": "minestuck:cruxite_block"
   },
-  "result": "minestuck:smooth_cruxite_block"
+  "result": {
+    "count": 1,
+    "id": "minestuck:smooth_cruxite_block"
+  }
 }

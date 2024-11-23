@@ -7,7 +7,5 @@
     "item": "minestuck:deuce_club"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:doctor_deterrent"
-  }
+  "output": "minestuck:doctor_deterrent"
 }

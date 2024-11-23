@@ -6,7 +6,7 @@
       "item": "minecraft:bowl"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [
@@ -15,6 +15,7 @@
     "s"
   ],
   "result": {
-    "item": "minestuck:wooden_spoon"
+    "count": 1,
+    "id": "minestuck:wooden_spoon"
   }
 }

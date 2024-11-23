@@ -7,7 +7,5 @@
     "item": "minecraft:crimson_fungus"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:crimson_stem"
-  }
+  "output": "minecraft:crimson_stem"
 }

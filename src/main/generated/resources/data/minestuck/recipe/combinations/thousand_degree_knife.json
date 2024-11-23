@@ -7,7 +7,5 @@
     "item": "minecraft:lava_bucket"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:thousand_degree_knife"
-  }
+  "output": "minestuck:thousand_degree_knife"
 }

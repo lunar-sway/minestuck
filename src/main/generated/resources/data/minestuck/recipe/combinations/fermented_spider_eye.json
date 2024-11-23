@@ -7,7 +7,5 @@
     "item": "minecraft:rotten_flesh"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:fermented_spider_eye"
-  }
+  "output": "minecraft:fermented_spider_eye"
 }

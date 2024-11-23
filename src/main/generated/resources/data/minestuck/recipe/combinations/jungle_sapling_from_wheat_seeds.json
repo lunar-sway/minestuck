@@ -7,7 +7,5 @@
     "item": "minecraft:jungle_leaves"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:jungle_sapling"
-  }
+  "output": "minecraft:jungle_sapling"
 }

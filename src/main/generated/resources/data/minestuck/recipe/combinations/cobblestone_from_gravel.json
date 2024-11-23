@@ -7,7 +7,5 @@
     "item": "minecraft:gravel"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cobblestone"
-  }
+  "output": "minecraft:cobblestone"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:cast_iron"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:chiseled_cast_iron"
-  }
+  "output": "minestuck:chiseled_cast_iron"
 }

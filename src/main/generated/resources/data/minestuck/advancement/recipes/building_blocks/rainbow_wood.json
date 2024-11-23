@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minestuck:logs/rainbow"
+            "items": "#minestuck:logs/rainbow"
           }
         ]
       },

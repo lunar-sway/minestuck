@@ -7,7 +7,5 @@
     "item": "minecraft:stick"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:mangrove_roots"
-  }
+  "output": "minecraft:mangrove_roots"
 }

@@ -5,6 +5,6 @@
     "minestuck:rust": 12
   },
   "ingredient": {
-    "tag": "forge:raw_materials/silver"
+    "tag": "c:raw_materials/silver"
   }
 }

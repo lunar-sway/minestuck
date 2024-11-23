@@ -7,7 +7,5 @@
     "item": "minecraft:dragon_head"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:dragon_breath"
-  }
+  "output": "minecraft:dragon_breath"
 }

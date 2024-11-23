@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:strawberry"
-            ]
+            "items": "minestuck:strawberry"
           }
         ]
       },
@@ -17,9 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:strawberry_chunk"
-            ]
+            "items": "minestuck:strawberry_chunk"
           }
         ]
       },

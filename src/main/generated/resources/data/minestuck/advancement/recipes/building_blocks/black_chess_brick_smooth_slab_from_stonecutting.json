@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:black_chess_brick_smooth"
-            ]
+            "items": "minestuck:black_chess_brick_smooth"
           }
         ]
       },

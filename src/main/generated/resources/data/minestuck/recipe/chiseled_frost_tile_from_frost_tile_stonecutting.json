@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:frost_tile"
   },
-  "result": "minestuck:chiseled_frost_tile"
+  "result": {
+    "count": 1,
+    "id": "minestuck:chiseled_frost_tile"
+  }
 }

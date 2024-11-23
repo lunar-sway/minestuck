@@ -7,7 +7,5 @@
     "item": "minecraft:jungle_stairs"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:acacia_stairs"
-  }
+  "output": "minecraft:acacia_stairs"
 }

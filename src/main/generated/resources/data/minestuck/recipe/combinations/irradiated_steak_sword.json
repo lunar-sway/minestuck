@@ -7,7 +7,5 @@
     "item": "minestuck:irradiated_steak"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:irradiated_steak_sword"
-  }
+  "output": "minestuck:irradiated_steak_sword"
 }

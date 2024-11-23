@@ -7,7 +7,5 @@
     "item": "minecraft:bedrock"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:unbreakable_katana"
-  }
+  "output": "minestuck:unbreakable_katana"
 }

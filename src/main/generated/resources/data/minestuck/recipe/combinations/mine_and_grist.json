@@ -7,7 +7,5 @@
     "item": "minestuck:grist_widget"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:mine_and_grist"
-  }
+  "output": "minestuck:mine_and_grist"
 }

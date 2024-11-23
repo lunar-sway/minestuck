@@ -7,7 +7,5 @@
     "item": "minecraft:dark_oak_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:dark_oak_trapdoor"
-  }
+  "output": "minecraft:dark_oak_trapdoor"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:tab"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:faygo_cola"
-  }
+  "output": "minestuck:faygo_cola"
 }

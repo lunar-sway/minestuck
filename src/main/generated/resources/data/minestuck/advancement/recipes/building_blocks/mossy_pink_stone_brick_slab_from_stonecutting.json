@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:mossy_pink_stone_bricks"
-            ]
+            "items": "minestuck:mossy_pink_stone_bricks"
           }
         ]
       },

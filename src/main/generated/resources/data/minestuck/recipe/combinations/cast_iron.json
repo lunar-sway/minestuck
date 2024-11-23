@@ -7,7 +7,5 @@
     "item": "minecraft:lava_bucket"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:cast_iron"
-  }
+  "output": "minestuck:cast_iron"
 }

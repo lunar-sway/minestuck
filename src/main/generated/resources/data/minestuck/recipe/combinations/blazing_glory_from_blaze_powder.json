@@ -7,7 +7,5 @@
     "item": "minecraft:blaze_powder"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:blazing_glory"
-  }
+  "output": "minestuck:blazing_glory"
 }

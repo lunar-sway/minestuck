@@ -7,7 +7,5 @@
     "item": "minecraft:melon_slice"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:melonsbane"
-  }
+  "output": "minestuck:melonsbane"
 }

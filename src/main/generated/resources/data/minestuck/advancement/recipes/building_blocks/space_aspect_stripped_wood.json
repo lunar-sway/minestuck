@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:space_aspect_stripped_log"
-            ]
+            "items": "minestuck:space_aspect_stripped_log"
           }
         ]
       },

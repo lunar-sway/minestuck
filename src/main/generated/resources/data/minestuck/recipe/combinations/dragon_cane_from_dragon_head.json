@@ -7,7 +7,5 @@
     "item": "minecraft:dragon_head"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:dragon_cane"
-  }
+  "output": "minestuck:dragon_cane"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:wheat_seeds"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:apple"
-  }
+  "output": "minecraft:apple"
 }

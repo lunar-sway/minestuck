@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minecraft:beef"
   },
-  "result": "minestuck:irradiated_steak"
+  "result": {
+    "count": 1,
+    "id": "minestuck:irradiated_steak"
+  }
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:blaze_powder"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:blaze_rod"
-  }
+  "output": "minecraft:blaze_rod"
 }

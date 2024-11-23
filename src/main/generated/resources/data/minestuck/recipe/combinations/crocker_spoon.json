@@ -7,7 +7,5 @@
     "item": "minecraft:cake"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:crocker_spoon"
-  }
+  "output": "minestuck:crocker_spoon"
 }

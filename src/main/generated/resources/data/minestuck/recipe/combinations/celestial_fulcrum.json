@@ -7,7 +7,5 @@
     "item": "minestuck:conductors_baton"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:celestial_fulcrum"
-  }
+  "output": "minestuck:celestial_fulcrum"
 }

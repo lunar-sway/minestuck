@@ -7,7 +7,5 @@
     "item": "minestuck:key_to_the_machine"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:key_to_the_city"
-  }
+  "output": "minestuck:key_to_the_city"
 }

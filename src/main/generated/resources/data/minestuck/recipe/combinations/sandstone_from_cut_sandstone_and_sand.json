@@ -7,7 +7,5 @@
     "item": "minecraft:sand"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:sandstone"
-  }
+  "output": "minecraft:sandstone"
 }

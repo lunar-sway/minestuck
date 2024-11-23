@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:doom_aspect_planks"
-            ]
+            "items": "minestuck:doom_aspect_planks"
           }
         ]
       },

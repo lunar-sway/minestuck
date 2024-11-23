@@ -7,7 +7,5 @@
     "item": "minecraft:comparator"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:redstone_clock"
-  }
+  "output": "minestuck:redstone_clock"
 }

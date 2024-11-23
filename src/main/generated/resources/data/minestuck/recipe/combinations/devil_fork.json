@@ -7,7 +7,5 @@
     "item": "minecraft:blaze_powder"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:devil_fork"
-  }
+  "output": "minestuck:devil_fork"
 }

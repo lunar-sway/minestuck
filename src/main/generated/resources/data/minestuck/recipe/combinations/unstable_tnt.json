@@ -7,7 +7,5 @@
     "item": "minecraft:redstone_torch"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:unstable_tnt"
-  }
+  "output": "minestuck:unstable_tnt"
 }

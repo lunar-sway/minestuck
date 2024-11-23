@@ -7,7 +7,5 @@
     "item": "minecraft:glowstone_dust"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:glowing_mushroom"
-  }
+  "output": "minestuck:glowing_mushroom"
 }

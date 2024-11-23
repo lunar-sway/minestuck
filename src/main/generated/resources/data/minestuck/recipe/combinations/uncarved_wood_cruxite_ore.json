@@ -7,7 +7,5 @@
     "item": "minestuck:uncarved_wood"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:uncarved_wood_cruxite_ore"
-  }
+  "output": "minestuck:uncarved_wood_cruxite_ore"
 }

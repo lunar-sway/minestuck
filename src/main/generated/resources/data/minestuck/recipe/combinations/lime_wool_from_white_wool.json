@@ -1,13 +1,11 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:dyes/lime"
+    "tag": "c:dyes/lime"
   },
   "input2": {
     "item": "minecraft:white_wool"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:lime_wool"
-  }
+  "output": "minecraft:lime_wool"
 }

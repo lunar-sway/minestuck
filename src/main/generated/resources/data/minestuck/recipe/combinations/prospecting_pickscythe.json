@@ -7,7 +7,5 @@
     "item": "minecraft:golden_pickaxe"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:prospecting_pickscythe"
-  }
+  "output": "minestuck:prospecting_pickscythe"
 }

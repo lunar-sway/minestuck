@@ -6,5 +6,8 @@
   "ingredient": {
     "tag": "minestuck:ores/redstone"
   },
-  "result": "minecraft:redstone"
+  "result": {
+    "count": 1,
+    "id": "minecraft:redstone"
+  }
 }

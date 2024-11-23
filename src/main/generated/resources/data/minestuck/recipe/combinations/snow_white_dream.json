@@ -7,7 +7,5 @@
     "item": "minecraft:apple"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:snow_white_dream"
-  }
+  "output": "minestuck:snow_white_dream"
 }

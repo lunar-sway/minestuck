@@ -1,13 +1,11 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:stone"
+    "tag": "c:stones"
   },
   "input2": {
     "item": "minecraft:pink_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:pink_stone"
-  }
+  "output": "minestuck:pink_stone"
 }

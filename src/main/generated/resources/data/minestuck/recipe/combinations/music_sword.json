@@ -7,7 +7,5 @@
     "item": "minestuck:claymore"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:music_sword"
-  }
+  "output": "minestuck:music_sword"
 }

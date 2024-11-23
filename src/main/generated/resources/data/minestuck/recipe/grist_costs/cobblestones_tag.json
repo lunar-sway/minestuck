@@ -4,6 +4,6 @@
     "minestuck:build": 2
   },
   "ingredient": {
-    "tag": "forge:stone"
+    "tag": "c:cobblestones"
   }
 }

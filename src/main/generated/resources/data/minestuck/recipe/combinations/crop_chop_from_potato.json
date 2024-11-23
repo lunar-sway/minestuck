@@ -7,7 +7,5 @@
     "item": "minecraft:potato"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:crop_chop"
-  }
+  "output": "minestuck:crop_chop"
 }

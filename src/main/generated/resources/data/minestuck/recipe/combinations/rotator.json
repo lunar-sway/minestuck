@@ -7,7 +7,5 @@
     "item": "minecraft:compass"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:rotator"
-  }
+  "output": "minestuck:rotator"
 }

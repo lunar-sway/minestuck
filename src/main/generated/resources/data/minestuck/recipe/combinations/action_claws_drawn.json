@@ -7,7 +7,5 @@
     "item": "minestuck:fluorite_octet"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:action_claws_drawn"
-  }
+  "output": "minestuck:action_claws_drawn"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:fork"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:trident"
-  }
+  "output": "minecraft:trident"
 }

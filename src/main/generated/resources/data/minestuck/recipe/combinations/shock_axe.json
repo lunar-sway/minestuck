@@ -7,7 +7,5 @@
     "item": "minestuck:battery"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:shock_axe"
-  }
+  "output": "minestuck:shock_axe"
 }

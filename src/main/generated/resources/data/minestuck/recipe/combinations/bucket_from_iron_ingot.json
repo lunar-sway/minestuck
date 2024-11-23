@@ -7,7 +7,5 @@
     "item": "minecraft:iron_ingot"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:bucket"
-  }
+  "output": "minecraft:bucket"
 }

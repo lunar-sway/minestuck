@@ -6,5 +6,8 @@
   "ingredient": {
     "tag": "minestuck:ores/cruxite"
   },
-  "result": "minestuck:raw_cruxite"
+  "result": {
+    "count": 1,
+    "id": "minestuck:raw_cruxite"
+  }
 }

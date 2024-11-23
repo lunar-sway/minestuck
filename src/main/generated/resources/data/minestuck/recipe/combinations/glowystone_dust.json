@@ -7,7 +7,5 @@
     "item": "minecraft:glowstone_dust"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:glowystone_dust"
-  }
+  "output": "minestuck:glowystone_dust"
 }

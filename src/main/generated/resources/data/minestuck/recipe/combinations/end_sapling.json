@@ -7,7 +7,5 @@
     "item": "minestuck:end_log"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:end_sapling"
-  }
+  "output": "minestuck:end_sapling"
 }

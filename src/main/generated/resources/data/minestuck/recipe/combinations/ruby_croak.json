@@ -7,7 +7,5 @@
     "item": "minestuck:frog"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:ruby_croak"
-  }
+  "output": "minestuck:ruby_croak"
 }

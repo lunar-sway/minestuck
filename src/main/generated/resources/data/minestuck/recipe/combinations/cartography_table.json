@@ -7,7 +7,5 @@
     "item": "minecraft:map"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cartography_table"
-  }
+  "output": "minecraft:cartography_table"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:lever"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:redstone"
-  }
+  "output": "minecraft:redstone"
 }

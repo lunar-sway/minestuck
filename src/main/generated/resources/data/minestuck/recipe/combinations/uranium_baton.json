@@ -7,7 +7,5 @@
     "item": "minestuck:conductors_baton"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:uranium_baton"
-  }
+  "output": "minestuck:uranium_baton"
 }

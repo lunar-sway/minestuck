@@ -7,7 +7,5 @@
     "item": "minecraft:cobblestone"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:cobblestone_cruxite_ore"
-  }
+  "output": "minestuck:cobblestone_cruxite_ore"
 }

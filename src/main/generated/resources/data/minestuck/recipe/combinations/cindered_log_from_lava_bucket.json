@@ -7,7 +7,5 @@
     "item": "minecraft:lava_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:cindered_log"
-  }
+  "output": "minestuck:cindered_log"
 }

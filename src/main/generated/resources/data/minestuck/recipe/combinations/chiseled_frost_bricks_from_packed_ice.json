@@ -7,7 +7,5 @@
     "item": "minecraft:packed_ice"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:chiseled_frost_bricks"
-  }
+  "output": "minestuck:chiseled_frost_bricks"
 }

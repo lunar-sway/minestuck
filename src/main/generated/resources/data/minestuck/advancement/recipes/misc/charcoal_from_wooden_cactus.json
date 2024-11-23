@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:wooden_cactus"
-            ]
+            "items": "minestuck:wooden_cactus"
           }
         ]
       },

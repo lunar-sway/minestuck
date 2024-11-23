@@ -7,7 +7,5 @@
     "item": "minecraft:mossy_cobblestone"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:mossy_cobblestone_wall"
-  }
+  "output": "minecraft:mossy_cobblestone_wall"
 }

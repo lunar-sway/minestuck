@@ -7,7 +7,5 @@
     "item": "minecraft:obsidian"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:obsidian_bucket"
-  }
+  "output": "minestuck:obsidian_bucket"
 }

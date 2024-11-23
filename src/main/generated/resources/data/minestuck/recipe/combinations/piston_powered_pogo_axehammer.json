@@ -7,7 +7,5 @@
     "item": "minestuck:pogo_hammer"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:piston_powered_pogo_axehammer"
-  }
+  "output": "minestuck:piston_powered_pogo_axehammer"
 }

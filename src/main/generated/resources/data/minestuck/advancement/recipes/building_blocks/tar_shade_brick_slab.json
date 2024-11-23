@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:tar_shade_bricks"
-            ]
+            "items": "minestuck:tar_shade_bricks"
           }
         ]
       },

@@ -7,7 +7,5 @@
     "item": "minecraft:light_weighted_pressure_plate"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:detector_rail"
-  }
+  "output": "minecraft:detector_rail"
 }

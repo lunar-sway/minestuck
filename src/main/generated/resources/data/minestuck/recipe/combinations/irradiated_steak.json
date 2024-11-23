@@ -7,7 +7,5 @@
     "item": "minecraft:cooked_beef"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:irradiated_steak"
-  }
+  "output": "minestuck:irradiated_steak"
 }

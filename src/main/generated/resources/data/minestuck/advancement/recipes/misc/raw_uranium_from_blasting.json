@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minestuck:ores/uranium"
+            "items": "#minestuck:ores/uranium"
           }
         ]
       },

@@ -7,7 +7,5 @@
     "item": "minecraft:dead_bush"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:hanging_roots"
-  }
+  "output": "minecraft:hanging_roots"
 }

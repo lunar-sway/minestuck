@@ -7,7 +7,5 @@
     "tag": "minecraft:planks"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:cast_iron_sheet"
-  }
+  "output": "minestuck:cast_iron_sheet"
 }

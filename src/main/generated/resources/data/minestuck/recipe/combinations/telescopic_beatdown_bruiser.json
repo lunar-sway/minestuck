@@ -7,7 +7,5 @@
     "item": "minecraft:spyglass"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:telescopic_beatdown_bruiser"
-  }
+  "output": "minestuck:telescopic_beatdown_bruiser"
 }

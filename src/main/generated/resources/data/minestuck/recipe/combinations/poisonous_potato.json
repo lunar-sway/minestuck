@@ -7,7 +7,5 @@
     "item": "minecraft:pufferfish"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:poisonous_potato"
-  }
+  "output": "minecraft:poisonous_potato"
 }

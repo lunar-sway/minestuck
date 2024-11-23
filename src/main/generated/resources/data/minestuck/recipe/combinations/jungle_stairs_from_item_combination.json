@@ -7,7 +7,5 @@
     "item": "minecraft:jungle_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:jungle_stairs"
-  }
+  "output": "minecraft:jungle_stairs"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:bamboo"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:home_grown_mace"
-  }
+  "output": "minestuck:home_grown_mace"
 }

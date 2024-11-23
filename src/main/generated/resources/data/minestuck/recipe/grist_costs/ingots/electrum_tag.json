@@ -6,6 +6,6 @@
     "minestuck:rust": 10
   },
   "ingredient": {
-    "tag": "forge:ingots/electrum"
+    "tag": "c:ingots/electrum"
   }
 }

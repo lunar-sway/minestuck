@@ -7,7 +7,5 @@
     "item": "minestuck:mailbox"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:parcel_pyxis"
-  }
+  "output": "minestuck:parcel_pyxis"
 }

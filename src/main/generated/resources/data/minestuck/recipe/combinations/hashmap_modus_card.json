@@ -7,7 +7,5 @@
     "item": "minestuck:computer"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:hashmap_modus_card"
-  }
+  "output": "minestuck:hashmap_modus_card"
 }

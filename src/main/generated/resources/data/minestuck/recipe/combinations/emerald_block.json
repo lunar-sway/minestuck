@@ -7,7 +7,5 @@
     "item": "minecraft:stone"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:emerald_block"
-  }
+  "output": "minecraft:emerald_block"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:skeleton_skull"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:bone"
-  }
+  "output": "minecraft:bone"
 }

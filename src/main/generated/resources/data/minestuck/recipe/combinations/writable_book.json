@@ -7,7 +7,5 @@
     "tag": "minecraft:signs"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:writable_book"
-  }
+  "output": "minecraft:writable_book"
 }

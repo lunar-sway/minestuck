@@ -7,7 +7,5 @@
     "item": "minecraft:stone"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:iron_block"
-  }
+  "output": "minecraft:iron_block"
 }

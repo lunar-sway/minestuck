@@ -7,7 +7,5 @@
     "item": "minecraft:deepslate_tile_stairs"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:polished_deepslate_stairs"
-  }
+  "output": "minecraft:polished_deepslate_stairs"
 }

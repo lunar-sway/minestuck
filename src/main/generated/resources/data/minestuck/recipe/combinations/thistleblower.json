@@ -7,7 +7,5 @@
     "item": "minecraft:rose_bush"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:thistleblower"
-  }
+  "output": "minestuck:thistleblower"
 }

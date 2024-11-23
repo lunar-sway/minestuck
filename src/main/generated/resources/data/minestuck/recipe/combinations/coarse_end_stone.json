@@ -7,7 +7,5 @@
     "item": "minecraft:end_stone"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:coarse_end_stone"
-  }
+  "output": "minestuck:coarse_end_stone"
 }

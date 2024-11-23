@@ -7,7 +7,5 @@
     "item": "minecraft:netherite_ingot"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:piglins_pride"
-  }
+  "output": "minestuck:piglins_pride"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:clock"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:fear_no_anvil"
-  }
+  "output": "minestuck:fear_no_anvil"
 }

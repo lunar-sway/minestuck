@@ -7,7 +7,5 @@
     "item": "minecraft:stone_bricks"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:cracked_stone_bricks"
-  }
+  "output": "minecraft:cracked_stone_bricks"
 }

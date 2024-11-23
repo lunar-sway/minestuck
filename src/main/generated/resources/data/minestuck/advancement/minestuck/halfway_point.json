@@ -15,8 +15,11 @@
       "translate": "advancements.minestuck.halfway_point.description"
     },
     "icon": {
-      "item": "minestuck:boondollars",
-      "nbt": "{value:1000}"
+      "components": {
+        "minestuck:value": 1000
+      },
+      "count": 1,
+      "id": "minestuck:boondollars"
     },
     "title": {
       "translate": "advancements.minestuck.halfway_point.title"

@@ -7,7 +7,5 @@
     "item": "minestuck:blood_bucket"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:coagulated_blood"
-  }
+  "output": "minestuck:coagulated_blood"
 }

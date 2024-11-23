@@ -7,7 +7,5 @@
     "item": "minestuck:grimoire"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:spines_of_fluthlu"
-  }
+  "output": "minestuck:spines_of_fluthlu"
 }

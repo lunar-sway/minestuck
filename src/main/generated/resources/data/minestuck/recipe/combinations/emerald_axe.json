@@ -7,7 +7,5 @@
     "item": "minecraft:emerald"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:emerald_axe"
-  }
+  "output": "minestuck:emerald_axe"
 }

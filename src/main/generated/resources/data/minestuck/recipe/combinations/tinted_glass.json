@@ -7,7 +7,5 @@
     "item": "minecraft:fermented_spider_eye"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:tinted_glass"
-  }
+  "output": "minecraft:tinted_glass"
 }

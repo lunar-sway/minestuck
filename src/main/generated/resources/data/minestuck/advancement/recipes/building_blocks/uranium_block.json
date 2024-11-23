@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:raw_uranium"
-            ]
+            "items": "minestuck:raw_uranium"
           }
         ]
       },

@@ -4,10 +4,8 @@
     "item": "minecraft:glass_pane"
   },
   "input2": {
-    "tag": "forge:dyes/magenta"
+    "tag": "c:dyes/magenta"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:magenta_stained_glass_pane"
-  }
+  "output": "minecraft:magenta_stained_glass_pane"
 }

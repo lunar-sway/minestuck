@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:magmatic_polished_igneous_bricks"
-            ]
+            "items": "minestuck:magmatic_polished_igneous_bricks"
           }
         ]
       },

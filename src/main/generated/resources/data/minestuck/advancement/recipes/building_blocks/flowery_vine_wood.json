@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minestuck:logs/flowery_vine"
+            "items": "#minestuck:logs/flowery_vine"
           }
         ]
       },

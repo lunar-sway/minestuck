@@ -7,7 +7,5 @@
     "item": "minestuck:ace_of_clubs"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:clubs_suitarang"
-  }
+  "output": "minestuck:clubs_suitarang"
 }

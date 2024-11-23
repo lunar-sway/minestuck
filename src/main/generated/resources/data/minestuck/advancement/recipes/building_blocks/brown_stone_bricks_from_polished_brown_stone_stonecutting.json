@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:polished_brown_stone"
-            ]
+            "items": "minestuck:polished_brown_stone"
           }
         ]
       },

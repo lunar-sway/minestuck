@@ -7,7 +7,5 @@
     "item": "minestuck:energy_core"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:quantum_sabre"
-  }
+  "output": "minestuck:quantum_sabre"
 }

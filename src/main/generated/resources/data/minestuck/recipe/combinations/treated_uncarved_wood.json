@@ -7,7 +7,5 @@
     "item": "minestuck:molten_amber_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:treated_uncarved_wood"
-  }
+  "output": "minestuck:treated_uncarved_wood"
 }

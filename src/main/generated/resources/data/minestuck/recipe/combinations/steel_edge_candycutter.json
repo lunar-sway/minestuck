@@ -7,7 +7,5 @@
     "item": "minecraft:iron_ingot"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:steel_edge_candycutter"
-  }
+  "output": "minestuck:steel_edge_candycutter"
 }

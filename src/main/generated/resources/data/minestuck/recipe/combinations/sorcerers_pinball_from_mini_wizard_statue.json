@@ -7,7 +7,5 @@
     "item": "minestuck:mini_wizard_statue"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:sorcerers_pinball"
-  }
+  "output": "minestuck:sorcerers_pinball"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:sandstone"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:sandstone_cruxite_ore"
-  }
+  "output": "minestuck:sandstone_cruxite_ore"
 }

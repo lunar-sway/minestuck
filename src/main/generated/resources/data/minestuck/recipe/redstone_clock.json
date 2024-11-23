@@ -24,6 +24,7 @@
     "PqP"
   ],
   "result": {
-    "item": "minestuck:redstone_clock"
+    "count": 1,
+    "id": "minestuck:redstone_clock"
   }
 }

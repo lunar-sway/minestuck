@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:beef_sword"
   },
-  "result": "minestuck:steak_sword"
+  "result": {
+    "count": 1,
+    "id": "minestuck:steak_sword"
+  }
 }

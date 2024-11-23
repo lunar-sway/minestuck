@@ -7,7 +7,5 @@
     "item": "minecraft:vine"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:glowing_mushroom_vines"
-  }
+  "output": "minestuck:glowing_mushroom_vines"
 }

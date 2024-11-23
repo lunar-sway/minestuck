@@ -7,7 +7,5 @@
     "item": "minecraft:chiseled_stone_bricks"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:pipe_intersection"
-  }
+  "output": "minestuck:pipe_intersection"
 }

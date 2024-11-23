@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:shade_stone"
   },
-  "result": "minestuck:smooth_shade_stone"
+  "result": {
+    "count": 1,
+    "id": "minestuck:smooth_shade_stone"
+  }
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:blaze_rod"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:too_hot_to_handle"
-  }
+  "output": "minestuck:too_hot_to_handle"
 }

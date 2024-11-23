@@ -7,7 +7,5 @@
     "item": "minecraft:deepslate"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:deepslate_uranium_ore"
-  }
+  "output": "minestuck:deepslate_uranium_ore"
 }

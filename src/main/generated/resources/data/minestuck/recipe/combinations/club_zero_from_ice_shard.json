@@ -7,7 +7,5 @@
     "item": "minestuck:ice_shard"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:club_zero"
-  }
+  "output": "minestuck:club_zero"
 }

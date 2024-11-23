@@ -7,7 +7,5 @@
     "item": "minecraft:magma_cream"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:fire_staff"
-  }
+  "output": "minestuck:fire_staff"
 }

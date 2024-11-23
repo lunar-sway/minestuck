@@ -7,7 +7,5 @@
     "tag": "minecraft:wooden_buttons"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:redstone_torch"
-  }
+  "output": "minecraft:redstone_torch"
 }

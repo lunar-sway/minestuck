@@ -7,7 +7,5 @@
     "item": "minecraft:deepslate_tiles"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cracked_deepslate_tiles"
-  }
+  "output": "minecraft:cracked_deepslate_tiles"
 }

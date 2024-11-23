@@ -7,7 +7,5 @@
     "item": "minecraft:lava_bucket"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:hephaestus_lumberjack"
-  }
+  "output": "minestuck:hephaestus_lumberjack"
 }

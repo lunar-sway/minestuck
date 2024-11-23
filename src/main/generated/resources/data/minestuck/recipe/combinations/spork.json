@@ -7,7 +7,5 @@
     "item": "minestuck:wooden_spoon"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:spork"
-  }
+  "output": "minestuck:spork"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:white_crown_stained_glass"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:prospit_shoes"
-  }
+  "output": "minestuck:prospit_shoes"
 }

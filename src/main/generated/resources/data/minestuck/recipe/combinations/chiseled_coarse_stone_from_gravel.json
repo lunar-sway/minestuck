@@ -7,7 +7,5 @@
     "item": "minecraft:gravel"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:chiseled_coarse_stone"
-  }
+  "output": "minestuck:chiseled_coarse_stone"
 }

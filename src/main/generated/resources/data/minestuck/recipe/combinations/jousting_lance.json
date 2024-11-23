@@ -4,10 +4,8 @@
     "item": "minestuck:wooden_lance"
   },
   "input2": {
-    "tag": "forge:ingots/iron"
+    "tag": "c:ingots/iron"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:jousting_lance"
-  }
+  "output": "minestuck:jousting_lance"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:item_frame"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:set_modus_card"
-  }
+  "output": "minestuck:set_modus_card"
 }

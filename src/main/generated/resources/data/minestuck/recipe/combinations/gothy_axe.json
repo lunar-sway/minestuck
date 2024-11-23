@@ -7,7 +7,5 @@
     "item": "minecraft:spider_eye"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:gothy_axe"
-  }
+  "output": "minestuck:gothy_axe"
 }

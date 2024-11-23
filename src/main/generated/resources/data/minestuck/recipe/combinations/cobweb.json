@@ -7,7 +7,5 @@
     "item": "minecraft:string"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cobweb"
-  }
+  "output": "minecraft:cobweb"
 }

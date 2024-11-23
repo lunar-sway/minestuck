@@ -7,7 +7,5 @@
     "item": "minecraft:feather"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:zephyr_cane"
-  }
+  "output": "minestuck:zephyr_cane"
 }

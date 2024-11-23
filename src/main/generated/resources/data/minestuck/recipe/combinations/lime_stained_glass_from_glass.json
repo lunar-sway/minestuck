@@ -4,10 +4,8 @@
     "item": "minecraft:glass"
   },
   "input2": {
-    "tag": "forge:dyes/lime"
+    "tag": "c:dyes/lime"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:lime_stained_glass"
-  }
+  "output": "minecraft:lime_stained_glass"
 }

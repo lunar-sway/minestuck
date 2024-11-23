@@ -7,7 +7,5 @@
     "item": "minecraft:blaze_powder"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:ender_eye"
-  }
+  "output": "minecraft:ender_eye"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:stone_button"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:stone_explosive_button"
-  }
+  "output": "minestuck:stone_explosive_button"
 }

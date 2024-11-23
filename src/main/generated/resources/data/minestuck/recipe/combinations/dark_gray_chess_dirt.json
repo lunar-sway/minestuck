@@ -7,7 +7,5 @@
     "item": "minecraft:gray_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:dark_gray_chess_dirt"
-  }
+  "output": "minestuck:dark_gray_chess_dirt"
 }

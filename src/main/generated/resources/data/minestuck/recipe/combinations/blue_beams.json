@@ -7,7 +7,5 @@
     "item": "minestuck:shatter_beacon"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:blue_beams"
-  }
+  "output": "minestuck:blue_beams"
 }

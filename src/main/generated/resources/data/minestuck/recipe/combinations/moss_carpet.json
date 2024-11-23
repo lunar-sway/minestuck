@@ -7,7 +7,5 @@
     "item": "minecraft:short_grass"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:moss_carpet"
-  }
+  "output": "minecraft:moss_carpet"
 }

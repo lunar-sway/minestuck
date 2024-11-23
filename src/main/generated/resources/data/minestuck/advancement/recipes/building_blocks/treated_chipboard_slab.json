@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:treated_chipboard"
-            ]
+            "items": "minestuck:treated_chipboard"
           }
         ]
       },

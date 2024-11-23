@@ -4,10 +4,8 @@
     "item": "minecraft:terracotta"
   },
   "input2": {
-    "tag": "forge:dyes/brown"
+    "tag": "c:dyes/brown"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:brown_terracotta"
-  }
+  "output": "minecraft:brown_terracotta"
 }

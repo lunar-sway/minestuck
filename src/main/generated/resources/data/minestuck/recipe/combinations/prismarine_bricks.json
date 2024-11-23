@@ -7,7 +7,5 @@
     "item": "minecraft:stone_bricks"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:prismarine_bricks"
-  }
+  "output": "minecraft:prismarine_bricks"
 }

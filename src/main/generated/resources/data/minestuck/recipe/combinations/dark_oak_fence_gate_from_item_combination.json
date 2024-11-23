@@ -7,7 +7,5 @@
     "item": "minecraft:dark_oak_fence"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:dark_oak_fence_gate"
-  }
+  "output": "minecraft:dark_oak_fence_gate"
 }

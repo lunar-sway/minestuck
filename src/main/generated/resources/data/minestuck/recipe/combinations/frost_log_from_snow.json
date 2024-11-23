@@ -7,7 +7,5 @@
     "item": "minecraft:snow"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:frost_log"
-  }
+  "output": "minestuck:frost_log"
 }

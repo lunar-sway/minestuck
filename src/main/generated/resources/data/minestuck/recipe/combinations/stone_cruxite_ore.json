@@ -7,7 +7,5 @@
     "item": "minecraft:stone"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:stone_cruxite_ore"
-  }
+  "output": "minestuck:stone_cruxite_ore"
 }

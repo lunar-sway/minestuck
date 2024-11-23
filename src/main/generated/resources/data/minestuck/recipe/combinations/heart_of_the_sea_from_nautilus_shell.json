@@ -7,7 +7,5 @@
     "item": "minecraft:diamond"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:heart_of_the_sea"
-  }
+  "output": "minecraft:heart_of_the_sea"
 }

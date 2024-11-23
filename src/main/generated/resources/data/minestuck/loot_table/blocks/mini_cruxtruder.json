@@ -13,13 +13,9 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:copy_nbt",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "color",
-                  "target": "color"
-                }
+              "function": "minecraft:copy_components",
+              "include": [
+                "minestuck:color"
               ],
               "source": "block_entity"
             }

@@ -7,7 +7,5 @@
     "item": "minecraft:tnt"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:tnt_minecart"
-  }
+  "output": "minecraft:tnt_minecart"
 }

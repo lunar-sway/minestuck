@@ -7,7 +7,5 @@
     "item": "minecraft:flint"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:prismarine_shard"
-  }
+  "output": "minecraft:prismarine_shard"
 }

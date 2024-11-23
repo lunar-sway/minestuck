@@ -7,7 +7,5 @@
     "item": "minestuck:wiseguy"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:vaudeville_hook"
-  }
+  "output": "minestuck:vaudeville_hook"
 }

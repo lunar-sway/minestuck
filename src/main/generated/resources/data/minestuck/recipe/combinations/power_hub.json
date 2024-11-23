@@ -7,7 +7,5 @@
     "item": "minestuck:battery"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:power_hub"
-  }
+  "output": "minestuck:power_hub"
 }

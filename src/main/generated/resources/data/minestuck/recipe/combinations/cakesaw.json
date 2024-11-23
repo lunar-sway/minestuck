@@ -7,7 +7,5 @@
     "item": "minecraft:cake"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:cakesaw"
-  }
+  "output": "minestuck:cakesaw"
 }

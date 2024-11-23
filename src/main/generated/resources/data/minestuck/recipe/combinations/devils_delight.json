@@ -7,7 +7,5 @@
     "item": "minestuck:cryptid_photo"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:devils_delight"
-  }
+  "output": "minestuck:devils_delight"
 }

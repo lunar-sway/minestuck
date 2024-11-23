@@ -7,7 +7,5 @@
     "item": "minecraft:repeater"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:key_to_the_machine"
-  }
+  "output": "minestuck:key_to_the_machine"
 }

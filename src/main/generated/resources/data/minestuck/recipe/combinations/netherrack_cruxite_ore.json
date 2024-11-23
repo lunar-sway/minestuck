@@ -7,7 +7,5 @@
     "item": "minecraft:netherrack"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:netherrack_cruxite_ore"
-  }
+  "output": "minestuck:netherrack_cruxite_ore"
 }

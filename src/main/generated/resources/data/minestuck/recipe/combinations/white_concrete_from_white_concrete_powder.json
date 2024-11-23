@@ -7,7 +7,5 @@
     "item": "minecraft:water_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:white_concrete"
-  }
+  "output": "minecraft:white_concrete"
 }

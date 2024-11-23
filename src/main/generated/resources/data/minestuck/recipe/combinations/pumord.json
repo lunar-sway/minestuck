@@ -7,7 +7,5 @@
     "item": "minestuck:pumice_stone"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:pumord"
-  }
+  "output": "minestuck:pumord"
 }

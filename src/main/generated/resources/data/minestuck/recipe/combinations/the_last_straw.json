@@ -7,7 +7,5 @@
     "item": "minecraft:hay_block"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:the_last_straw"
-  }
+  "output": "minestuck:the_last_straw"
 }

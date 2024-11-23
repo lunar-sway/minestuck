@@ -7,7 +7,5 @@
     "item": "minecraft:warped_roots"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:twisting_vines"
-  }
+  "output": "minecraft:twisting_vines"
 }

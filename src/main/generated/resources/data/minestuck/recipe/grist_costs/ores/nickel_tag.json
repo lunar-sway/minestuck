@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/nickel"
+    "tag": "c:ores/nickel"
   },
   "sources": [
-    "#forge:raw_materials/nickel"
+    "#c:raw_materials/nickel"
   ]
 }

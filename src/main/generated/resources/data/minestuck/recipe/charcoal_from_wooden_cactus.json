@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:wooden_cactus"
   },
-  "result": "minecraft:charcoal"
+  "result": {
+    "count": 1,
+    "id": "minecraft:charcoal"
+  }
 }

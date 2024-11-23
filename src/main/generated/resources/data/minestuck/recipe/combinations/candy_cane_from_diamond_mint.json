@@ -7,7 +7,5 @@
     "item": "minestuck:diamond_mint"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:candy_cane"
-  }
+  "output": "minestuck:candy_cane"
 }

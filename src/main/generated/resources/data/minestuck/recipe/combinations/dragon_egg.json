@@ -7,7 +7,5 @@
     "item": "minecraft:egg"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:dragon_egg"
-  }
+  "output": "minecraft:dragon_egg"
 }

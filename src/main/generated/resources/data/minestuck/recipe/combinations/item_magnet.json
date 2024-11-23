@@ -7,7 +7,5 @@
     "item": "minecraft:fishing_rod"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:item_magnet"
-  }
+  "output": "minestuck:item_magnet"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:obsidian"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:umbral_infiltrator"
-  }
+  "output": "minestuck:umbral_infiltrator"
 }

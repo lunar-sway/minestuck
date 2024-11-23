@@ -7,7 +7,5 @@
     "item": "minecraft:lever"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:toggler"
-  }
+  "output": "minestuck:toggler"
 }

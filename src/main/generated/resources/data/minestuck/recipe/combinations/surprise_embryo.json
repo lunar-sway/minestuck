@@ -7,7 +7,5 @@
     "item": "minecraft:pumpkin"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:surprise_embryo"
-  }
+  "output": "minestuck:surprise_embryo"
 }

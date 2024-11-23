@@ -7,7 +7,5 @@
     "item": "minecraft:cobweb"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:bug_net"
-  }
+  "output": "minestuck:bug_net"
 }

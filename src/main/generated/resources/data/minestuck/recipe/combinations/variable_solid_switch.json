@@ -7,7 +7,5 @@
     "item": "minecraft:comparator"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:variable_solid_switch"
-  }
+  "output": "minestuck:variable_solid_switch"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:club_zero"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:frosttooth"
-  }
+  "output": "minestuck:frosttooth"
 }

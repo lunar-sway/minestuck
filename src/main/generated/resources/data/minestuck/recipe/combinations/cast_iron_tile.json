@@ -7,7 +7,5 @@
     "item": "minecraft:copper_block"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:cast_iron_tile"
-  }
+  "output": "minestuck:cast_iron_tile"
 }

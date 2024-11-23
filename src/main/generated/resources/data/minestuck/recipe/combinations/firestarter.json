@@ -7,7 +7,5 @@
     "item": "minestuck:blazing_glory"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:firestarter"
-  }
+  "output": "minestuck:firestarter"
 }

@@ -4,7 +4,7 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/lapis"
+    "tag": "c:ores/lapis"
   },
   "multiplier": 20.0,
   "sources": [

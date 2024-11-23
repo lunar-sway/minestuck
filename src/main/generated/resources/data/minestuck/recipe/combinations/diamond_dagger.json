@@ -7,7 +7,5 @@
     "item": "minecraft:diamond"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:diamond_dagger"
-  }
+  "output": "minestuck:diamond_dagger"
 }

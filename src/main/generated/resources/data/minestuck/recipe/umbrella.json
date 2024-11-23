@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "w": {
       "item": "minecraft:black_wool"
@@ -15,6 +15,7 @@
     " s "
   ],
   "result": {
-    "item": "minestuck:umbrella"
+    "count": 1,
+    "id": "minestuck:umbrella"
   }
 }

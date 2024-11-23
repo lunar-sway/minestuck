@@ -7,7 +7,5 @@
     "item": "minecraft:netherrack"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:netherrack_coal_ore"
-  }
+  "output": "minestuck:netherrack_coal_ore"
 }

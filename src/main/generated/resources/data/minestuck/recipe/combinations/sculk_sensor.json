@@ -7,7 +7,5 @@
     "item": "minecraft:string"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:sculk_sensor"
-  }
+  "output": "minecraft:sculk_sensor"
 }

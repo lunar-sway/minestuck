@@ -7,7 +7,5 @@
     "item": "minestuck:horn"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:clown_club"
-  }
+  "output": "minestuck:clown_club"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:meatfork"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:wet_meat_shit_throngler"
-  }
+  "output": "minestuck:wet_meat_shit_throngler"
 }

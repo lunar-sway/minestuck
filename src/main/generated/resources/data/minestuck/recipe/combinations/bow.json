@@ -7,7 +7,5 @@
     "item": "minecraft:arrow"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:bow"
-  }
+  "output": "minecraft:bow"
 }

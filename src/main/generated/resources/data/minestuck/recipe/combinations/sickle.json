@@ -7,7 +7,5 @@
     "item": "minecraft:wheat"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:sickle"
-  }
+  "output": "minestuck:sickle"
 }

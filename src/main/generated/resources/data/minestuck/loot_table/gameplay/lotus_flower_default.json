@@ -26,8 +26,13 @@
       ],
       "functions": [
         {
-          "function": "minecraft:set_nbt",
-          "tag": "{hasParadoxInfo:1b}"
+          "components": {
+            "minestuck:sburb_code": {
+              "has_paradox_info": true,
+              "recorded_hieroglyphs": []
+            }
+          },
+          "function": "minecraft:set_components"
         }
       ],
       "name": "code",

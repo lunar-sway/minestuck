@@ -7,7 +7,5 @@
     "tag": "minecraft:small_flowers"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:glowflower"
-  }
+  "output": "minestuck:glowflower"
 }

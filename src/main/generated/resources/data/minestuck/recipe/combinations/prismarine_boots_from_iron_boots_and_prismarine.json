@@ -7,7 +7,5 @@
     "item": "minecraft:prismarine"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:prismarine_boots"
-  }
+  "output": "minestuck:prismarine_boots"
 }

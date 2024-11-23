@@ -7,7 +7,5 @@
     "item": "minestuck:ace_of_clubs"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:m_ace_of_clubs"
-  }
+  "output": "minestuck:m_ace_of_clubs"
 }

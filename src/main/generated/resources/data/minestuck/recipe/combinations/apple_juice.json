@@ -7,7 +7,5 @@
     "item": "minecraft:apple"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:apple_juice"
-  }
+  "output": "minestuck:apple_juice"
 }

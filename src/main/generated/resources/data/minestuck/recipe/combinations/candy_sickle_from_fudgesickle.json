@@ -7,7 +7,5 @@
     "item": "minecraft:sugar"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:candy_sickle"
-  }
+  "output": "minestuck:candy_sickle"
 }

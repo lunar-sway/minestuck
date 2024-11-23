@@ -7,7 +7,5 @@
     "item": "minecraft:cocoa_beans"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:chocolatey_cake"
-  }
+  "output": "minestuck:chocolatey_cake"
 }

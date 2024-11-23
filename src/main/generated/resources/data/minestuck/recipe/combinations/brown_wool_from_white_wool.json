@@ -1,13 +1,11 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:dyes/brown"
+    "tag": "c:dyes/brown"
   },
   "input2": {
     "item": "minecraft:white_wool"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:brown_wool"
-  }
+  "output": "minecraft:brown_wool"
 }

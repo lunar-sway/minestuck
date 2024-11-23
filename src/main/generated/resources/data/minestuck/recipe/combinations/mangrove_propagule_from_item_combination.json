@@ -7,7 +7,5 @@
     "item": "minecraft:mangrove_leaves"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:mangrove_propagule"
-  }
+  "output": "minecraft:mangrove_propagule"
 }

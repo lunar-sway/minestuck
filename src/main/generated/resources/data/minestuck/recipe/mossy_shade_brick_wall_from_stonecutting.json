@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 2,
   "ingredient": {
     "item": "minestuck:mossy_shade_bricks"
   },
-  "result": "minestuck:mossy_shade_brick_wall"
+  "result": {
+    "count": 2,
+    "id": "minestuck:mossy_shade_brick_wall"
+  }
 }

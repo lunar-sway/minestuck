@@ -7,7 +7,5 @@
     "item": "minestuck:ice_shard"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:frosty_macuahuitl"
-  }
+  "output": "minestuck:frosty_macuahuitl"
 }

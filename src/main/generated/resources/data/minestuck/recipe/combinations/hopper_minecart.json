@@ -7,7 +7,5 @@
     "item": "minecraft:hopper"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:hopper_minecart"
-  }
+  "output": "minecraft:hopper_minecart"
 }

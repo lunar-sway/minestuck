@@ -7,7 +7,5 @@
     "item": "minestuck:white_chess_dirt"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:white_chess_bricks"
-  }
+  "output": "minestuck:white_chess_bricks"
 }

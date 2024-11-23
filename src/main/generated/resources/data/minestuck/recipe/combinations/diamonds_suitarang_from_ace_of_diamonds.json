@@ -7,7 +7,5 @@
     "item": "minestuck:ace_of_diamonds"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:diamonds_suitarang"
-  }
+  "output": "minestuck:diamonds_suitarang"
 }

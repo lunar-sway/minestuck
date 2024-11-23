@@ -7,7 +7,5 @@
     "item": "minestuck:blue_dirt"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:shade_stone"
-  }
+  "output": "minestuck:shade_stone"
 }

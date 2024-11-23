@@ -7,7 +7,5 @@
     "tag": "minecraft:buttons"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:primed_tnt"
-  }
+  "output": "minestuck:primed_tnt"
 }

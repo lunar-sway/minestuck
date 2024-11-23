@@ -13,23 +13,9 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:copy_nbt",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "idString",
-                  "target": "idString"
-                },
-                {
-                  "op": "replace",
-                  "source": "destId",
-                  "target": "destId"
-                },
-                {
-                  "op": "replace",
-                  "source": "locked",
-                  "target": "locked"
-                }
+              "function": "minecraft:copy_components",
+              "include": [
+                "minestuck:transportalizer_data"
               ],
               "source": "block_entity"
             }

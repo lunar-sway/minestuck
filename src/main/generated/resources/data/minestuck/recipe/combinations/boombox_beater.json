@@ -7,7 +7,5 @@
     "item": "minestuck:sledge_hammer"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:boombox_beater"
-  }
+  "output": "minestuck:boombox_beater"
 }

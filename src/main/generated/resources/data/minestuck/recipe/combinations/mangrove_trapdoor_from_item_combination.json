@@ -7,7 +7,5 @@
     "item": "minecraft:mangrove_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:mangrove_trapdoor"
-  }
+  "output": "minecraft:mangrove_trapdoor"
 }

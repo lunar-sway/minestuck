@@ -7,7 +7,5 @@
     "item": "minestuck:nakagator_statue"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:plush_nakagator"
-  }
+  "output": "minestuck:plush_nakagator"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:cut_red_sandstone"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:stone"
-  }
+  "output": "minecraft:stone"
 }

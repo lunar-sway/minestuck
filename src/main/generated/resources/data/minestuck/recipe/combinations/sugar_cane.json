@@ -7,7 +7,5 @@
     "item": "minecraft:sugar"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:sugar_cane"
-  }
+  "output": "minecraft:sugar_cane"
 }

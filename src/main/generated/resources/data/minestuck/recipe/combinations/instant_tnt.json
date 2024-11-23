@@ -7,7 +7,5 @@
     "item": "minecraft:redstone"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:instant_tnt"
-  }
+  "output": "minestuck:instant_tnt"
 }

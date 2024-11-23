@@ -2,9 +2,9 @@
   "type": "minestuck:source_grist_cost",
   "grist_cost": {},
   "ingredient": {
-    "tag": "forge:ingots/nickel"
+    "tag": "c:ingots/nickel"
   },
   "sources": [
-    "#forge:raw_materials/nickel"
+    "#c:raw_materials/nickel"
   ]
 }

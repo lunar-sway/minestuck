@@ -7,7 +7,5 @@
     "item": "minecraft:slime_ball"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:pogo_lance"
-  }
+  "output": "minestuck:pogo_lance"
 }

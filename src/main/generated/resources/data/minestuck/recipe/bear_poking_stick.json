@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "l": {
-      "tag": "forge:leather"
+      "tag": "c:leathers"
     },
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [
@@ -15,6 +15,7 @@
     "l  "
   ],
   "result": {
-    "item": "minestuck:bear_poking_stick"
+    "count": 1,
+    "id": "minestuck:bear_poking_stick"
   }
 }

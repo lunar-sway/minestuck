@@ -7,7 +7,5 @@
     "item": "minestuck:lipstick_chainsaw"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:hand_cranked_vampire_eraser"
-  }
+  "output": "minestuck:hand_cranked_vampire_eraser"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:katana"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:less_proper_walking_stick"
-  }
+  "output": "minestuck:less_proper_walking_stick"
 }

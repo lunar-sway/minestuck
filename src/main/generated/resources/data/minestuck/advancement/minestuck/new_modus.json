@@ -10,7 +10,8 @@
       "translate": "advancements.minestuck.new_modus.description"
     },
     "icon": {
-      "item": "minestuck:hashmap_modus_card"
+      "count": 1,
+      "id": "minestuck:hashmap_modus_card"
     },
     "title": {
       "translate": "advancements.minestuck.new_modus.title"

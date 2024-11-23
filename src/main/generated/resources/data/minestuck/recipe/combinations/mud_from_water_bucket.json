@@ -7,7 +7,5 @@
     "item": "minecraft:water_bucket"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:mud"
-  }
+  "output": "minecraft:mud"
 }

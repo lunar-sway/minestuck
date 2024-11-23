@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:cruxite_dowel"
   },
-  "result": "minestuck:raw_cruxite"
+  "result": {
+    "count": 1,
+    "id": "minestuck:raw_cruxite"
+  }
 }

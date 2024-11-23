@@ -7,7 +7,5 @@
     "item": "minecraft:prismarine_bricks"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:prismarine_basher"
-  }
+  "output": "minestuck:prismarine_basher"
 }

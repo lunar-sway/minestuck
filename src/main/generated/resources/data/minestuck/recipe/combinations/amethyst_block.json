@@ -7,7 +7,5 @@
     "item": "minecraft:purple_dye"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:amethyst_block"
-  }
+  "output": "minecraft:amethyst_block"
 }

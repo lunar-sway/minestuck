@@ -7,7 +7,5 @@
     "item": "minecraft:pearlescent_froglight"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:wooden_lamp"
-  }
+  "output": "minestuck:wooden_lamp"
 }

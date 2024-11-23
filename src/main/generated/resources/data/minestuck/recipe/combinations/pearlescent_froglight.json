@@ -7,7 +7,5 @@
     "item": "minecraft:sand"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:pearlescent_froglight"
-  }
+  "output": "minecraft:pearlescent_froglight"
 }

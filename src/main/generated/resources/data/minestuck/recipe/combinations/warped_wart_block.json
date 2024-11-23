@@ -7,7 +7,5 @@
     "item": "minecraft:warped_fungus"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:warped_wart_block"
-  }
+  "output": "minecraft:warped_wart_block"
 }

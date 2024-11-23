@@ -7,7 +7,5 @@
     "item": "minecraft:bamboo"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:pillow_talk"
-  }
+  "output": "minestuck:pillow_talk"
 }

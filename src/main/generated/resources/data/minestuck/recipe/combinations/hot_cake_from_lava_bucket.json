@@ -7,7 +7,5 @@
     "item": "minecraft:lava_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:hot_cake"
-  }
+  "output": "minestuck:hot_cake"
 }

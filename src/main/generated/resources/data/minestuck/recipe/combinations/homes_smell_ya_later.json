@@ -7,7 +7,5 @@
     "item": "minestuck:thresh_dvd"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:homes_smell_ya_later"
-  }
+  "output": "minestuck:homes_smell_ya_later"
 }

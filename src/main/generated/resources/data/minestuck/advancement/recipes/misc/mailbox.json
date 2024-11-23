@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:chests"
+            "items": "#c:chests"
           }
         ]
       },

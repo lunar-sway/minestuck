@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:raw_cruxite"
-            ]
+            "items": "minestuck:raw_cruxite"
           }
         ]
       },

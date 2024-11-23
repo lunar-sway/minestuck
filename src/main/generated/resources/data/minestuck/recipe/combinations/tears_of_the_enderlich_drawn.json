@@ -7,7 +7,5 @@
     "item": "minecraft:ghast_tear"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:tears_of_the_enderlich_drawn"
-  }
+  "output": "minestuck:tears_of_the_enderlich_drawn"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:diamond"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:jukebox"
-  }
+  "output": "minecraft:jukebox"
 }

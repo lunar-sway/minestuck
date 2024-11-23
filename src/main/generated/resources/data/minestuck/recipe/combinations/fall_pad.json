@@ -7,7 +7,5 @@
     "item": "minecraft:hay_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:fall_pad"
-  }
+  "output": "minestuck:fall_pad"
 }

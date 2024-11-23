@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:blood_aspect_log"
-            ]
+            "items": "minestuck:blood_aspect_log"
           }
         ]
       },

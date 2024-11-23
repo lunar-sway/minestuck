@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:breath_aspect_stripped_wood"
-            ]
+            "items": "minestuck:breath_aspect_stripped_wood"
           }
         ]
       },

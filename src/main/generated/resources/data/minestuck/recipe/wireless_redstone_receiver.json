@@ -15,7 +15,7 @@
       "item": "minecraft:redstone"
     },
     "s": {
-      "tag": "forge:stone"
+      "tag": "c:stones"
     }
   },
   "pattern": [
@@ -24,6 +24,7 @@
     "ici"
   ],
   "result": {
-    "item": "minestuck:wireless_redstone_receiver"
+    "count": 1,
+    "id": "minestuck:wireless_redstone_receiver"
   }
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:tnt"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:redpop_faygo"
-  }
+  "output": "minestuck:redpop_faygo"
 }

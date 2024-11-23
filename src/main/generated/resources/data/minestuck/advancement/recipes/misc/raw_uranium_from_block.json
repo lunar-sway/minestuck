@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:raw_uranium"
-            ]
+            "items": "minestuck:raw_uranium"
           }
         ]
       },
@@ -23,9 +21,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:uranium_block"
-            ]
+            "items": "minestuck:uranium_block"
           }
         ]
       },

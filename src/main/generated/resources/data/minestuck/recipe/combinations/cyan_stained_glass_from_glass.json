@@ -4,10 +4,8 @@
     "item": "minecraft:glass"
   },
   "input2": {
-    "tag": "forge:dyes/cyan"
+    "tag": "c:dyes/cyan"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:cyan_stained_glass"
-  }
+  "output": "minecraft:cyan_stained_glass"
 }

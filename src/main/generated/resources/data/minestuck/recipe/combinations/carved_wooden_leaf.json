@@ -7,7 +7,5 @@
     "item": "minecraft:bowl"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:carved_wooden_leaf"
-  }
+  "output": "minestuck:carved_wooden_leaf"
 }

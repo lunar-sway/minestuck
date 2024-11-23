@@ -7,7 +7,5 @@
     "item": "minestuck:food_can"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:democratic_demolitioner"
-  }
+  "output": "minestuck:democratic_demolitioner"
 }

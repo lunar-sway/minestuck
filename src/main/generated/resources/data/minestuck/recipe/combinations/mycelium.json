@@ -4,10 +4,8 @@
     "item": "minecraft:grass_block"
   },
   "input2": {
-    "tag": "forge:mushrooms"
+    "tag": "c:mushrooms"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:mycelium"
-  }
+  "output": "minecraft:mycelium"
 }

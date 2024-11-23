@@ -7,7 +7,5 @@
     "item": "minecraft:writable_book"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:stone_tablet"
-  }
+  "output": "minestuck:stone_tablet"
 }

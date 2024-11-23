@@ -7,7 +7,5 @@
     "item": "minecraft:nether_brick_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:deepslate_tile_slab"
-  }
+  "output": "minecraft:deepslate_tile_slab"
 }

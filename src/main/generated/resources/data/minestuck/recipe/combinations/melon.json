@@ -7,7 +7,5 @@
     "item": "minestuck:strawberry"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:melon"
-  }
+  "output": "minecraft:melon"
 }

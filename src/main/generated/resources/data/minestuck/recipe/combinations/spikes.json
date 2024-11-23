@@ -7,7 +7,5 @@
     "item": "minecraft:iron_sword"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:spikes"
-  }
+  "output": "minestuck:spikes"
 }

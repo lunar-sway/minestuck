@@ -7,7 +7,5 @@
     "item": "minecraft:stone_bricks"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:carved_heavy_planks"
-  }
+  "output": "minestuck:carved_heavy_planks"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:orange_dye"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:orange_faygo"
-  }
+  "output": "minestuck:orange_faygo"
 }

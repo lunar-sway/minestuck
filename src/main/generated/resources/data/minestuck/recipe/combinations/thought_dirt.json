@@ -7,7 +7,5 @@
     "item": "minecraft:lime_dye"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:thought_dirt"
-  }
+  "output": "minestuck:thought_dirt"
 }

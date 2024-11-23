@@ -7,7 +7,5 @@
     "item": "minestuck:keyblade"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:inner_heart"
-  }
+  "output": "minestuck:inner_heart"
 }

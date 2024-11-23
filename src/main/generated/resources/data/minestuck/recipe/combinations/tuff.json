@@ -7,7 +7,5 @@
     "item": "minecraft:birch_wood"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:tuff"
-  }
+  "output": "minecraft:tuff"
 }

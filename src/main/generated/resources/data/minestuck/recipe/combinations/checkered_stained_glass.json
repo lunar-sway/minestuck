@@ -7,7 +7,5 @@
     "item": "minestuck:chessboard"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:checkered_stained_glass"
-  }
+  "output": "minestuck:checkered_stained_glass"
 }

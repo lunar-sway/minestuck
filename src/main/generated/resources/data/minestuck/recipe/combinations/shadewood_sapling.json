@@ -7,7 +7,5 @@
     "item": "minestuck:shadewood_log"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:shadewood_sapling"
-  }
+  "output": "minestuck:shadewood_sapling"
 }

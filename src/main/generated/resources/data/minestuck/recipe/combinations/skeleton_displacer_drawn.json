@@ -7,7 +7,5 @@
     "item": "minecraft:ender_eye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:skeleton_displacer_drawn"
-  }
+  "output": "minestuck:skeleton_displacer_drawn"
 }

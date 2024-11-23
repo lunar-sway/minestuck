@@ -7,7 +7,5 @@
     "item": "minecraft:birch_slab"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:birch_stairs"
-  }
+  "output": "minecraft:birch_stairs"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:paper"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:book"
-  }
+  "output": "minecraft:book"
 }

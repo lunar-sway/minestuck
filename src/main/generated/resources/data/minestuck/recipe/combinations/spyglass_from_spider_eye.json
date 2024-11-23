@@ -7,7 +7,5 @@
     "item": "minecraft:observer"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:spyglass"
-  }
+  "output": "minecraft:spyglass"
 }

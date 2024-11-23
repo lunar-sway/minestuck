@@ -7,7 +7,5 @@
     "item": "minecraft:sand"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:light_gray_concrete_powder"
-  }
+  "output": "minecraft:light_gray_concrete_powder"
 }

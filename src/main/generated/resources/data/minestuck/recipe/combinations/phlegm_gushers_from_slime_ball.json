@@ -7,7 +7,5 @@
     "item": "minecraft:slime_ball"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:phlegm_gushers"
-  }
+  "output": "minestuck:phlegm_gushers"
 }

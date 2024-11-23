@@ -10,7 +10,8 @@
       "translate": "advancements.minestuck.return_node.description"
     },
     "icon": {
-      "item": "minecraft:red_bed"
+      "count": 1,
+      "id": "minecraft:red_bed"
     },
     "title": {
       "translate": "advancements.minestuck.return_node.title"

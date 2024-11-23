@@ -16,11 +16,16 @@
         "list_type": "any"
       },
       "node": {
-        "message": "minestuck.dialogue.consort.rabbit_food.next.mushrooms"
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.rabbit_food.next.mushrooms",
+        "responses": []
       }
     }
   ],
   "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.rabbit_food.next.desolate",
     "responses": [
       {
@@ -28,8 +33,10 @@
           "type": "minestuck:terrain_land_type_tag",
           "land_type_tag": "minestuck:sand"
         },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/rabbit_food/cacti"
+        "next_dialogue": "minestuck:consort/rabbit_food/cacti",
+        "triggers": []
       }
     ]
   }

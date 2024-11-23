@@ -4,7 +4,7 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/copper"
+    "tag": "c:ores/copper"
   },
   "multiplier": 8.0,
   "sources": [

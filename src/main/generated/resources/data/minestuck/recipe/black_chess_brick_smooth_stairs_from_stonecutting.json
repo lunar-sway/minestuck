@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:black_chess_brick_smooth"
   },
-  "result": "minestuck:black_chess_brick_smooth_stairs"
+  "result": {
+    "count": 1,
+    "id": "minestuck:black_chess_brick_smooth_stairs"
+  }
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:shield"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:umbrella"
-  }
+  "output": "minestuck:umbrella"
 }

@@ -10,7 +10,8 @@
       "translate": "advancements.minestuck.connect.description"
     },
     "icon": {
-      "item": "minestuck:client_disk"
+      "count": 1,
+      "id": "minestuck:client_disk"
     },
     "title": {
       "translate": "advancements.minestuck.connect.title"

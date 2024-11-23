@@ -7,7 +7,5 @@
     "item": "minestuck:grimoire"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:unknowable_egg"
-  }
+  "output": "minestuck:unknowable_egg"
 }

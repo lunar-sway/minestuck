@@ -7,7 +7,5 @@
     "item": "minecraft:cobblestone"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:sledge_hammer"
-  }
+  "output": "minestuck:sledge_hammer"
 }

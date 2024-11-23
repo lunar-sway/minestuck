@@ -13,7 +13,8 @@
       "translate": "advancements.minestuck.shady_buyer.description"
     },
     "icon": {
-      "item": "minestuck:rock_cookie"
+      "count": 1,
+      "id": "minestuck:rock_cookie"
     },
     "title": {
       "translate": "advancements.minestuck.shady_buyer.title"

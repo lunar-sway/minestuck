@@ -7,7 +7,5 @@
     "item": "minecraft:brown_mushroom"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:lacquered_wooden_mushroom"
-  }
+  "output": "minestuck:lacquered_wooden_mushroom"
 }

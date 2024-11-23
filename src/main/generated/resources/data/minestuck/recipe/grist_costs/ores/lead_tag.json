@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/lead"
+    "tag": "c:ores/lead"
   },
   "sources": [
-    "#forge:raw_materials/lead"
+    "#c:raw_materials/lead"
   ]
 }

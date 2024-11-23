@@ -7,7 +7,5 @@
     "item": "minestuck:energy_core"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:fission_focused_fault_feller"
-  }
+  "output": "minestuck:fission_focused_fault_feller"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:jungle_trapdoor"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:acacia_trapdoor"
-  }
+  "output": "minecraft:acacia_trapdoor"
 }

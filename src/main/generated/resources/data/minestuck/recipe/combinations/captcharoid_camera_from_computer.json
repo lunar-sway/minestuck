@@ -7,7 +7,5 @@
     "item": "minestuck:computer"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:captcharoid_camera"
-  }
+  "output": "minestuck:captcharoid_camera"
 }

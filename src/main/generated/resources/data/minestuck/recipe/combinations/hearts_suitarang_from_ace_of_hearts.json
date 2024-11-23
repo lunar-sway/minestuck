@@ -7,7 +7,5 @@
     "item": "minestuck:ace_of_hearts"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:hearts_suitarang"
-  }
+  "output": "minestuck:hearts_suitarang"
 }

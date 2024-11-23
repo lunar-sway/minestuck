@@ -7,7 +7,5 @@
     "item": "minecraft:glass_pane"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:reverse_cake"
-  }
+  "output": "minestuck:reverse_cake"
 }

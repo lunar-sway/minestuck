@@ -7,7 +7,5 @@
     "item": "minestuck:celestial_fulcrum"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:yaldabaoths_keyton"
-  }
+  "output": "minestuck:yaldabaoths_keyton"
 }

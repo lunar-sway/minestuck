@@ -7,7 +7,5 @@
     "item": "minecraft:wooden_sword"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:scythe"
-  }
+  "output": "minestuck:scythe"
 }

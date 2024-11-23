@@ -7,7 +7,5 @@
     "item": "minecraft:slime_ball"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:brain_juice_bucket"
-  }
+  "output": "minestuck:brain_juice_bucket"
 }

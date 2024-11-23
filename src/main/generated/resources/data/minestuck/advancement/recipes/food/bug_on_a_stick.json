@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:jar_of_bugs"
-            ]
+            "items": "minestuck:jar_of_bugs"
           }
         ]
       },

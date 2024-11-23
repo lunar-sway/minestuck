@@ -7,7 +7,5 @@
     "item": "minecraft:wheat_seeds"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:candy_corn"
-  }
+  "output": "minestuck:candy_corn"
 }

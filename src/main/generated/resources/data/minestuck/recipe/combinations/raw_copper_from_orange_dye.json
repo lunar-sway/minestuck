@@ -7,7 +7,5 @@
     "item": "minecraft:orange_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:raw_copper"
-  }
+  "output": "minecraft:raw_copper"
 }

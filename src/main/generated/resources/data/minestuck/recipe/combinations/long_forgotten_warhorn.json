@@ -7,7 +7,5 @@
     "item": "minestuck:grimoire"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:long_forgotten_warhorn"
-  }
+  "output": "minestuck:long_forgotten_warhorn"
 }

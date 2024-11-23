@@ -21,6 +21,7 @@
     "iri"
   ],
   "result": {
-    "item": "minestuck:item_magnet"
+    "count": 1,
+    "id": "minestuck:item_magnet"
   }
 }

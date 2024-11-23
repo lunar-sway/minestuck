@@ -7,7 +7,5 @@
     "item": "minecraft:azalea"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:flowering_azalea"
-  }
+  "output": "minecraft:flowering_azalea"
 }

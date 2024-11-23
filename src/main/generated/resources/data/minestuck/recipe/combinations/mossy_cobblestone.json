@@ -7,7 +7,5 @@
     "item": "minecraft:wheat_seeds"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:mossy_cobblestone"
-  }
+  "output": "minecraft:mossy_cobblestone"
 }

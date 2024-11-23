@@ -7,7 +7,5 @@
     "item": "minestuck:nonbinary_code"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:m_ace"
-  }
+  "output": "minestuck:m_ace"
 }

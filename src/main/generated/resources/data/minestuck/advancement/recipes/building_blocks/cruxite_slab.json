@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:cruxite_block"
-            ]
+            "items": "minestuck:cruxite_block"
           }
         ]
       },
@@ -17,9 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:raw_cruxite"
-            ]
+            "items": "minestuck:raw_cruxite"
           }
         ]
       },

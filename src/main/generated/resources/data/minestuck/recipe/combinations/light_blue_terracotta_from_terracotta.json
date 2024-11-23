@@ -4,10 +4,8 @@
     "item": "minecraft:terracotta"
   },
   "input2": {
-    "tag": "forge:dyes/light_blue"
+    "tag": "c:dyes/light_blue"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:light_blue_terracotta"
-  }
+  "output": "minecraft:light_blue_terracotta"
 }

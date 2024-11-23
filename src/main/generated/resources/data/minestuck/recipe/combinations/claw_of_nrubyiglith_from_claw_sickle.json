@@ -7,7 +7,5 @@
     "item": "minestuck:grimoire"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:claw_of_nrubyiglith"
-  }
+  "output": "minestuck:claw_of_nrubyiglith"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:polished_andesite"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:polished_carved_wood"
-  }
+  "output": "minestuck:polished_carved_wood"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:honeycomb_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:lacquered_planks"
-  }
+  "output": "minestuck:lacquered_planks"
 }

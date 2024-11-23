@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 2,
   "ingredient": {
     "item": "minestuck:mycelium_cobblestone"
   },
-  "result": "minestuck:mycelium_cobblestone_slab"
+  "result": {
+    "count": 2,
+    "id": "minestuck:mycelium_cobblestone_slab"
+  }
 }

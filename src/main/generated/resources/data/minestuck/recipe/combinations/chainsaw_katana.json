@@ -7,7 +7,5 @@
     "item": "minestuck:katana"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:chainsaw_katana"
-  }
+  "output": "minestuck:chainsaw_katana"
 }

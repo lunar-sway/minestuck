@@ -7,7 +7,5 @@
     "item": "minecraft:short_grass"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:moss_block"
-  }
+  "output": "minecraft:moss_block"
 }

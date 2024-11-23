@@ -7,7 +7,5 @@
     "item": "minestuck:uranium_gummy_bear"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:fiduspawn_lance"
-  }
+  "output": "minestuck:fiduspawn_lance"
 }

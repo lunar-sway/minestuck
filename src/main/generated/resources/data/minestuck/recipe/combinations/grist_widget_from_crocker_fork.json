@@ -7,7 +7,5 @@
     "item": "minestuck:captcha_card"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:grist_widget"
-  }
+  "output": "minestuck:grist_widget"
 }

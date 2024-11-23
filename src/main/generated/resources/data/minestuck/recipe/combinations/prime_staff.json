@@ -7,7 +7,5 @@
     "item": "minestuck:sbahj_poster"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:prime_staff"
-  }
+  "output": "minestuck:prime_staff"
 }

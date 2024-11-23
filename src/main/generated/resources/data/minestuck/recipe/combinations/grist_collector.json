@@ -7,7 +7,5 @@
     "item": "minecraft:chest"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:grist_collector"
-  }
+  "output": "minestuck:grist_collector"
 }

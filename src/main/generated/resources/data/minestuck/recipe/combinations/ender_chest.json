@@ -7,7 +7,5 @@
     "item": "minecraft:chest"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:ender_chest"
-  }
+  "output": "minecraft:ender_chest"
 }

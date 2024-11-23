@@ -7,7 +7,5 @@
     "item": "minecraft:magma_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:hot_cake"
-  }
+  "output": "minestuck:hot_cake"
 }

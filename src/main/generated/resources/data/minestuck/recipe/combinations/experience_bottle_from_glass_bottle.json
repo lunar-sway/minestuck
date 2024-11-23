@@ -7,7 +7,5 @@
     "item": "minecraft:enchanted_book"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:experience_bottle"
-  }
+  "output": "minecraft:experience_bottle"
 }

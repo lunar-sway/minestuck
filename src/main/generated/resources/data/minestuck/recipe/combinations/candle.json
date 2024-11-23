@@ -7,7 +7,5 @@
     "item": "minecraft:torch"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:candle"
-  }
+  "output": "minecraft:candle"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:dragon_key"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:loch_pick"
-  }
+  "output": "minestuck:loch_pick"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:scalemate_applescab"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:dragon_lance"
-  }
+  "output": "minestuck:dragon_lance"
 }

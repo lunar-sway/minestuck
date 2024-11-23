@@ -7,7 +7,5 @@
     "item": "minestuck:claw_hammer"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:lucerne_hammer"
-  }
+  "output": "minestuck:lucerne_hammer"
 }

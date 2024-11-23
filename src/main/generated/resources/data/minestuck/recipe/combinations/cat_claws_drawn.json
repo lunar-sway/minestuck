@@ -4,10 +4,8 @@
     "item": "minestuck:makeshift_claws_drawn"
   },
   "input2": {
-    "tag": "forge:ingots/iron"
+    "tag": "c:ingots/iron"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:cat_claws_drawn"
-  }
+  "output": "minestuck:cat_claws_drawn"
 }

@@ -3,6 +3,8 @@
     "animation": {
       "emotion": "happy"
     },
-    "message": "minestuck.dialogue.consort.glimmering_snow"
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.glimmering_snow",
+    "responses": []
   }
 }

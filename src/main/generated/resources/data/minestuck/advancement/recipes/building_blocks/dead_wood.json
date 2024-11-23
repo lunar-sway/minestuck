@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minestuck:logs/dead"
+            "items": "#minestuck:logs/dead"
           }
         ]
       },

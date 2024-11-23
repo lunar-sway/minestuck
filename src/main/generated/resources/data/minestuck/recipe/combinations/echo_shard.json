@@ -7,7 +7,5 @@
     "item": "minecraft:diamond"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:echo_shard"
-  }
+  "output": "minecraft:echo_shard"
 }

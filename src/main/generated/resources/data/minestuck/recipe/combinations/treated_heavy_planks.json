@@ -7,7 +7,5 @@
     "item": "minestuck:molten_amber_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:treated_heavy_planks"
-  }
+  "output": "minestuck:treated_heavy_planks"
 }

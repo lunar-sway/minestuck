@@ -7,7 +7,5 @@
     "item": "minecraft:note_block"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:keytar"
-  }
+  "output": "minestuck:keytar"
 }

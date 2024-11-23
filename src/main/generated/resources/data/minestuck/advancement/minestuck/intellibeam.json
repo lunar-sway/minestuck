@@ -10,7 +10,8 @@
       "translate": "advancements.minestuck.intellibeam.description"
     },
     "icon": {
-      "item": "minestuck:intellibeam_laserstation"
+      "count": 1,
+      "id": "minestuck:intellibeam_laserstation"
     },
     "title": {
       "translate": "advancements.minestuck.intellibeam.title"

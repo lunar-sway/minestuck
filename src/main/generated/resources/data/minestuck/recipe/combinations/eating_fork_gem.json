@@ -7,7 +7,5 @@
     "item": "minecraft:prismarine_crystals"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:eating_fork_gem"
-  }
+  "output": "minestuck:eating_fork_gem"
 }

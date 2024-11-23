@@ -7,7 +7,5 @@
     "item": "minecraft:lava_bucket"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:sunray_harvester"
-  }
+  "output": "minestuck:sunray_harvester"
 }

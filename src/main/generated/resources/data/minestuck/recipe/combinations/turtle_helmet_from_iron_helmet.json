@@ -7,7 +7,5 @@
     "item": "minecraft:seagrass"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:turtle_helmet"
-  }
+  "output": "minecraft:turtle_helmet"
 }

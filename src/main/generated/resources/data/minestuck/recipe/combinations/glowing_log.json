@@ -7,7 +7,5 @@
     "item": "minestuck:glowing_mushroom"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:glowing_log"
-  }
+  "output": "minestuck:glowing_log"
 }

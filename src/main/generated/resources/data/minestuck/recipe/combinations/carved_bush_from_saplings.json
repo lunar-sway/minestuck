@@ -7,7 +7,5 @@
     "tag": "minecraft:saplings"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:carved_bush"
-  }
+  "output": "minestuck:carved_bush"
 }

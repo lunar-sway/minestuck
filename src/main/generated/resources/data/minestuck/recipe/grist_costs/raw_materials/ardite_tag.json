@@ -5,6 +5,6 @@
     "minestuck:sulfur": 8
   },
   "ingredient": {
-    "tag": "forge:raw_materials/ardite"
+    "tag": "c:raw_materials/ardite"
   }
 }

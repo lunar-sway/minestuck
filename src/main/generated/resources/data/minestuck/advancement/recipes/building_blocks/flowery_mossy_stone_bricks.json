@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:coagulated_blood"
-            ]
+            "items": "minestuck:coagulated_blood"
           }
         ]
       },

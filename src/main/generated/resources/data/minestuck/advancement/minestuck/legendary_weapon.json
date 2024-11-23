@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minestuck:legendary"
+            "items": "#minestuck:legendary"
           }
         ]
       },
@@ -17,8 +17,8 @@
       "translate": "advancements.minestuck.legendary_weapon.description"
     },
     "icon": {
-      "item": "minestuck:caledfwlch",
-      "nbt": "{Damage:0}"
+      "count": 1,
+      "id": "minestuck:caledfwlch"
     },
     "title": {
       "translate": "advancements.minestuck.legendary_weapon.title"

@@ -7,7 +7,5 @@
     "item": "minecraft:potato"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:chorus_fruit"
-  }
+  "output": "minecraft:chorus_fruit"
 }

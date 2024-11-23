@@ -7,7 +7,5 @@
     "item": "minecraft:wheat"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:beef"
-  }
+  "output": "minecraft:beef"
 }

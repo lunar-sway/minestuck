@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:ancient_thumb_drive"
-            ]
+            "items": "minestuck:ancient_thumb_drive"
           }
         ]
       },

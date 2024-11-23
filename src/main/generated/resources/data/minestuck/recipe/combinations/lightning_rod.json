@@ -7,7 +7,5 @@
     "item": "minecraft:copper_ingot"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:lightning_rod"
-  }
+  "output": "minecraft:lightning_rod"
 }

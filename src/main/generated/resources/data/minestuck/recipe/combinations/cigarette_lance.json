@@ -7,7 +7,5 @@
     "item": "minestuck:eightball"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:cigarette_lance"
-  }
+  "output": "minestuck:cigarette_lance"
 }

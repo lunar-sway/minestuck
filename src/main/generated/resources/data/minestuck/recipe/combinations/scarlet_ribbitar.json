@@ -7,7 +7,5 @@
     "item": "minestuck:frog"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:scarlet_ribbitar"
-  }
+  "output": "minestuck:scarlet_ribbitar"
 }

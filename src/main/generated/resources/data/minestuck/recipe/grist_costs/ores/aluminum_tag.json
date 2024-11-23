@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/aluminum"
+    "tag": "c:ores/aluminum"
   },
   "sources": [
-    "#forge:raw_materials/aluminum"
+    "#c:raw_materials/aluminum"
   ]
 }

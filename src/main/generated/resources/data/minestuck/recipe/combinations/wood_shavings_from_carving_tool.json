@@ -7,7 +7,5 @@
     "item": "minestuck:carving_tool"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:wood_shavings"
-  }
+  "output": "minestuck:wood_shavings"
 }

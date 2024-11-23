@@ -7,7 +7,5 @@
     "item": "minecraft:mushroom_stew"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:silver_spoon"
-  }
+  "output": "minestuck:silver_spoon"
 }

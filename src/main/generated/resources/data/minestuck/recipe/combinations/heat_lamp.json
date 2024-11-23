@@ -7,7 +7,5 @@
     "item": "minecraft:shroomlight"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:heat_lamp"
-  }
+  "output": "minestuck:heat_lamp"
 }

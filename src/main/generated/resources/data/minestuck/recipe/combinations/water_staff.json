@@ -7,7 +7,5 @@
     "item": "minecraft:heart_of_the_sea"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:water_staff"
-  }
+  "output": "minestuck:water_staff"
 }

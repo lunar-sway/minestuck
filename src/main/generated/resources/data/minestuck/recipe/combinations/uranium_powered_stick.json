@@ -7,7 +7,5 @@
     "item": "minestuck:raw_uranium"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:uranium_powered_stick"
-  }
+  "output": "minestuck:uranium_powered_stick"
 }

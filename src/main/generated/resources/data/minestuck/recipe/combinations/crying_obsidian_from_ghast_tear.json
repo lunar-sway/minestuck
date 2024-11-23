@@ -7,7 +7,5 @@
     "item": "minecraft:ghast_tear"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:crying_obsidian"
-  }
+  "output": "minecraft:crying_obsidian"
 }

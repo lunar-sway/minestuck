@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:polished_igneous_bricks"
   },
-  "result": "minestuck:cracked_polished_igneous_bricks"
+  "result": {
+    "count": 1,
+    "id": "minestuck:cracked_polished_igneous_bricks"
+  }
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:carrot"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:porkchop"
-  }
+  "output": "minecraft:porkchop"
 }

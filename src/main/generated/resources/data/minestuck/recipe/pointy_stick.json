@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [
@@ -12,6 +12,7 @@
     "s"
   ],
   "result": {
-    "item": "minestuck:pointy_stick"
+    "count": 1,
+    "id": "minestuck:pointy_stick"
   }
 }

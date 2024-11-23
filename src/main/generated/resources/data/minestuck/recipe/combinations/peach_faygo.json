@@ -7,7 +7,5 @@
     "item": "minecraft:pink_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:peach_faygo"
-  }
+  "output": "minestuck:peach_faygo"
 }

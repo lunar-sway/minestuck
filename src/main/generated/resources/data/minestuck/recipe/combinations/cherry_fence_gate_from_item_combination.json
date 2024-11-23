@@ -7,7 +7,5 @@
     "item": "minecraft:cherry_fence"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:cherry_fence_gate"
-  }
+  "output": "minecraft:cherry_fence_gate"
 }

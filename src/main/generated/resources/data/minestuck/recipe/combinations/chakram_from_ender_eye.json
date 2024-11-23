@@ -7,7 +7,5 @@
     "item": "minecraft:ender_eye"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:chakram"
-  }
+  "output": "minestuck:chakram"
 }

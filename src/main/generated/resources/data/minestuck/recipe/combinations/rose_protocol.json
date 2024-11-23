@@ -7,7 +7,5 @@
     "item": "minestuck:computer_parts"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:rose_protocol"
-  }
+  "output": "minestuck:rose_protocol"
 }

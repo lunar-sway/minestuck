@@ -7,7 +7,5 @@
     "item": "minecraft:furnace"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:furnace_minecart"
-  }
+  "output": "minecraft:furnace_minecart"
 }

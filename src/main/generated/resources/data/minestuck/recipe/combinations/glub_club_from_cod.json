@@ -7,7 +7,5 @@
     "item": "minecraft:cod"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:glub_club"
-  }
+  "output": "minestuck:glub_club"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:deuce_club"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:stale_baguette"
-  }
+  "output": "minestuck:stale_baguette"
 }

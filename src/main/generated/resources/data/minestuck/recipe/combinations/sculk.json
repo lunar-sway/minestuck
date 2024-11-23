@@ -7,7 +7,5 @@
     "item": "minecraft:soul_soil"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:sculk"
-  }
+  "output": "minecraft:sculk"
 }

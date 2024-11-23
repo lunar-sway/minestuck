@@ -3,5 +3,7 @@
     "type": "minestuck:title_land_type",
     "land_type": "minestuck:frogs"
   },
-  "dialogue": "minestuck:consort/frog_location"
+  "dialogue": "minestuck:consort/frog_location",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

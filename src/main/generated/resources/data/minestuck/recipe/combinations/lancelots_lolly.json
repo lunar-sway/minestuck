@@ -7,7 +7,5 @@
     "item": "minestuck:candy_corn"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:lancelots_lolly"
-  }
+  "output": "minestuck:lancelots_lolly"
 }

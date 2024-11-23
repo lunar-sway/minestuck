@@ -7,7 +7,5 @@
     "item": "minecraft:pointed_dripstone"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:igneous_spike"
-  }
+  "output": "minestuck:igneous_spike"
 }

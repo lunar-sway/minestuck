@@ -7,7 +7,5 @@
     "tag": "minecraft:wooden_buttons"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:two_second_interval_timed_solid_switch"
-  }
+  "output": "minestuck:two_second_interval_timed_solid_switch"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:raw_uranium"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:green_sun_rayreaper"
-  }
+  "output": "minestuck:green_sun_rayreaper"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:magma_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:black_stone"
-  }
+  "output": "minestuck:black_stone"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:pink_dye"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:pink_frosted_top_large_cake"
-  }
+  "output": "minestuck:pink_frosted_top_large_cake"
 }

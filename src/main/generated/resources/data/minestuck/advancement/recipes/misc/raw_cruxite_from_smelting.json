@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "minestuck:ores/cruxite"
+            "items": "#minestuck:ores/cruxite"
           }
         ]
       },

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:sburb_code"
-            ]
+            "items": "minestuck:sburb_code"
           }
         ]
       },
@@ -19,7 +17,8 @@
       "translate": "advancements.minestuck.long_time_coming.description"
     },
     "icon": {
-      "item": "minestuck:sburb_code"
+      "count": 1,
+      "id": "minestuck:sburb_code"
     },
     "title": {
       "translate": "advancements.minestuck.long_time_coming.title"

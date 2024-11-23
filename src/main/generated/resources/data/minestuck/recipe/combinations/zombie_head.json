@@ -7,7 +7,5 @@
     "item": "minecraft:rotten_flesh"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:zombie_head"
-  }
+  "output": "minecraft:zombie_head"
 }

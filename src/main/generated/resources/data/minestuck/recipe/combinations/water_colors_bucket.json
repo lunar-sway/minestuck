@@ -4,10 +4,8 @@
     "item": "minecraft:water_bucket"
   },
   "input2": {
-    "tag": "forge:dyes"
+    "tag": "c:dyes"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:water_colors_bucket"
-  }
+  "output": "minestuck:water_colors_bucket"
 }

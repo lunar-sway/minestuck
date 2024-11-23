@@ -7,7 +7,5 @@
     "item": "minestuck:crimson_leap"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:no_time_for_flies"
-  }
+  "output": "minestuck:no_time_for_flies"
 }

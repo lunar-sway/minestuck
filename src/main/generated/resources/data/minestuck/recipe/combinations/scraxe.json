@@ -4,10 +4,8 @@
     "item": "minecraft:iron_axe"
   },
   "input2": {
-    "tag": "minecraft:music_discs"
+    "tag": "c:music_discs"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:scraxe"
-  }
+  "output": "minestuck:scraxe"
 }

@@ -7,7 +7,5 @@
     "item": "minecraft:wheat_seeds"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:chicken"
-  }
+  "output": "minecraft:chicken"
 }

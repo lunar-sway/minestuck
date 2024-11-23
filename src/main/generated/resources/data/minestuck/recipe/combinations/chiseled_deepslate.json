@@ -7,7 +7,5 @@
     "item": "minecraft:chiseled_sandstone"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:chiseled_deepslate"
-  }
+  "output": "minecraft:chiseled_deepslate"
 }

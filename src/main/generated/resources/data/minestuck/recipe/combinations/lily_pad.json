@@ -7,7 +7,5 @@
     "item": "minecraft:water_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:lily_pad"
-  }
+  "output": "minecraft:lily_pad"
 }

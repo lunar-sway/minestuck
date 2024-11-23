@@ -7,7 +7,5 @@
     "item": "minecraft:iron_ingot"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:compass"
-  }
+  "output": "minecraft:compass"
 }

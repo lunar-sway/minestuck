@@ -7,7 +7,5 @@
     "item": "minecraft:iron_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:iron_trapdoor"
-  }
+  "output": "minecraft:iron_trapdoor"
 }

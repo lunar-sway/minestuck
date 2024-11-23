@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:loot_table",
-          "name": "minestuck:chests/weapon_item"
+          "value": "minestuck:chests/weapon_item"
         }
       ],
       "name": "weapons",
@@ -17,7 +17,7 @@
       "entries": [
         {
           "type": "minecraft:loot_table",
-          "name": "minestuck:chests/supply_item"
+          "value": "minestuck:chests/supply_item"
         }
       ],
       "name": "supplies",
@@ -28,7 +28,7 @@
       "entries": [
         {
           "type": "minecraft:loot_table",
-          "name": "minestuck:chests/misc_item"
+          "value": "minestuck:chests/misc_item"
         }
       ],
       "name": "misc",
@@ -43,7 +43,7 @@
       "entries": [
         {
           "type": "minecraft:loot_table",
-          "name": "minestuck:chests/rare_item"
+          "value": "minestuck:chests/rare_item"
         }
       ],
       "name": "rare",

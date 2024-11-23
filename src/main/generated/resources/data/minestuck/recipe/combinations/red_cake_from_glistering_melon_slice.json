@@ -7,7 +7,5 @@
     "item": "minecraft:glistering_melon_slice"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:red_cake"
-  }
+  "output": "minestuck:red_cake"
 }

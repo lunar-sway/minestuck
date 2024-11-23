@@ -2,9 +2,9 @@
   "type": "minestuck:source_grist_cost",
   "grist_cost": {},
   "ingredient": {
-    "tag": "forge:ingots/silver"
+    "tag": "c:ingots/silver"
   },
   "sources": [
-    "#forge:raw_materials/silver"
+    "#c:raw_materials/silver"
   ]
 }

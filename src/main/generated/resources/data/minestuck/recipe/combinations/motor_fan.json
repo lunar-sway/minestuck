@@ -7,7 +7,5 @@
     "item": "minestuck:battery"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:motor_fan"
-  }
+  "output": "minestuck:motor_fan"
 }

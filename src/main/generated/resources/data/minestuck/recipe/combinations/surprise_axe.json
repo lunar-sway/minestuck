@@ -7,7 +7,5 @@
     "item": "minestuck:surprise_embryo"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:surprise_axe"
-  }
+  "output": "minestuck:surprise_axe"
 }

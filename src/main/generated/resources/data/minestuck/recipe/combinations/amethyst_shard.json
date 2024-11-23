@@ -7,7 +7,5 @@
     "item": "minecraft:piston"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:amethyst_shard"
-  }
+  "output": "minecraft:amethyst_shard"
 }

@@ -7,7 +7,5 @@
     "tag": "minecraft:coals"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:torch"
-  }
+  "output": "minecraft:torch"
 }

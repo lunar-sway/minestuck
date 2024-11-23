@@ -7,7 +7,5 @@
     "item": "minestuck:eightball"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:eightball_scythe"
-  }
+  "output": "minestuck:eightball_scythe"
 }

@@ -6,5 +6,8 @@
   "ingredient": {
     "tag": "minestuck:ores/lapis"
   },
-  "result": "minecraft:lapis_lazuli"
+  "result": {
+    "count": 1,
+    "id": "minecraft:lapis_lazuli"
+  }
 }

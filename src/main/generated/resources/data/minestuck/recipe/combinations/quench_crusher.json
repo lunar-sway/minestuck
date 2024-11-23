@@ -7,7 +7,5 @@
     "item": "minestuck:desert_fruit"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:quench_crusher"
-  }
+  "output": "minestuck:quench_crusher"
 }

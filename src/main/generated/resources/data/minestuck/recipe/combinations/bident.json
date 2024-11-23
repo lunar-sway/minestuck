@@ -7,7 +7,5 @@
     "item": "minecraft:trident"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:bident"
-  }
+  "output": "minestuck:bident"
 }

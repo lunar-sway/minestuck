@@ -7,7 +7,5 @@
     "item": "minecraft:lava_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:blaze_powder"
-  }
+  "output": "minecraft:blaze_powder"
 }

@@ -13,5 +13,6 @@
     "list_type": "all"
   },
   "dialogue": "minestuck:consort/immortality_herb/1",
+  "dialogue_weight": 10,
   "keep_on_reset": true
 }

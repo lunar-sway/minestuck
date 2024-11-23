@@ -7,7 +7,5 @@
     "item": "minecraft:piston"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:copse_crusher"
-  }
+  "output": "minestuck:copse_crusher"
 }

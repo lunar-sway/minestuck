@@ -7,7 +7,5 @@
     "item": "minecraft:saddle"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:golden_horse_armor"
-  }
+  "output": "minecraft:golden_horse_armor"
 }

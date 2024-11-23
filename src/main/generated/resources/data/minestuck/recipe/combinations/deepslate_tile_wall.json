@@ -7,7 +7,5 @@
     "item": "minecraft:nether_brick_wall"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:deepslate_tile_wall"
-  }
+  "output": "minecraft:deepslate_tile_wall"
 }

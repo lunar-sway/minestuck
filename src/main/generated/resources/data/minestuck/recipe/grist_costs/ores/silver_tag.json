@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/silver"
+    "tag": "c:ores/silver"
   },
   "sources": [
-    "#forge:raw_materials/silver"
+    "#c:raw_materials/silver"
   ]
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:chessboard"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:regilance"
-  }
+  "output": "minestuck:regilance"
 }

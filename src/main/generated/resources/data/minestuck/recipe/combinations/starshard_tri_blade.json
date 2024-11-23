@@ -7,7 +7,5 @@
     "item": "minecraft:nether_star"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:starshard_tri_blade"
-  }
+  "output": "minestuck:starshard_tri_blade"
 }

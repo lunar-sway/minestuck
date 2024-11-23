@@ -7,7 +7,5 @@
     "item": "minecraft:bamboo"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:bamboo_beatstick"
-  }
+  "output": "minestuck:bamboo_beatstick"
 }

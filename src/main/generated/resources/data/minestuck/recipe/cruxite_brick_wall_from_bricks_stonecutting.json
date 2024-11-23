@@ -1,8 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 1,
   "ingredient": {
     "item": "minestuck:cruxite_bricks"
   },
-  "result": "minestuck:cruxite_brick_wall"
+  "result": {
+    "count": 1,
+    "id": "minestuck:cruxite_brick_wall"
+  }
 }

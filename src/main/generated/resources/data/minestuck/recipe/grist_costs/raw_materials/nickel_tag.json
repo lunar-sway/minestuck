@@ -5,6 +5,6 @@
     "minestuck:sulfur": 8
   },
   "ingredient": {
-    "tag": "forge:raw_materials/nickel"
+    "tag": "c:raw_materials/nickel"
   }
 }

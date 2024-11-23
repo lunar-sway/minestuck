@@ -7,7 +7,5 @@
     "item": "minecraft:clock"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:time_flayer"
-  }
+  "output": "minestuck:time_flayer"
 }

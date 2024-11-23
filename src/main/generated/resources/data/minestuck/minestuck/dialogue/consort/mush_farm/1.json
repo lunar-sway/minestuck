@@ -3,11 +3,17 @@
     "animation": {
       "emotion": "angry"
     },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.mush_farm.1",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/mush_farm/2"
+        "next_dialogue": "minestuck:consort/mush_farm/2",
+        "triggers": []
       }
     ]
   }

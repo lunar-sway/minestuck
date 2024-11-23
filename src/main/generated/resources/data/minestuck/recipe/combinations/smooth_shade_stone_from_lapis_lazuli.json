@@ -7,7 +7,5 @@
     "item": "minecraft:lapis_lazuli"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:smooth_shade_stone"
-  }
+  "output": "minestuck:smooth_shade_stone"
 }

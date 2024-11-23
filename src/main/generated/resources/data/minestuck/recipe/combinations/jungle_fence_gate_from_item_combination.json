@@ -7,7 +7,5 @@
     "item": "minecraft:jungle_fence"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:jungle_fence_gate"
-  }
+  "output": "minecraft:jungle_fence_gate"
 }

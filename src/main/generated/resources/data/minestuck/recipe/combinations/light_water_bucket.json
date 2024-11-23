@@ -7,7 +7,5 @@
     "item": "minecraft:glowstone_dust"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:light_water_bucket"
-  }
+  "output": "minestuck:light_water_bucket"
 }

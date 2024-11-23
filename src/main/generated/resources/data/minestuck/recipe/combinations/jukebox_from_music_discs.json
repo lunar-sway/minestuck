@@ -4,10 +4,8 @@
     "item": "minecraft:note_block"
   },
   "input2": {
-    "tag": "minecraft:music_discs"
+    "tag": "c:music_discs"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:jukebox"
-  }
+  "output": "minecraft:jukebox"
 }

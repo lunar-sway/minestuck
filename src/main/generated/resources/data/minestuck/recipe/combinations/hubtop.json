@@ -7,7 +7,5 @@
     "item": "minestuck:power_hub"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:hubtop"
-  }
+  "output": "minestuck:hubtop"
 }

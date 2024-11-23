@@ -7,7 +7,5 @@
     "item": "minecraft:end_stone"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:end_grass"
-  }
+  "output": "minestuck:end_grass"
 }

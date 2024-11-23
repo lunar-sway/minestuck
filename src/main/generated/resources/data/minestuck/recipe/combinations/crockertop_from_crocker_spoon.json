@@ -7,7 +7,5 @@
     "item": "minestuck:crocker_spoon"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:crockertop"
-  }
+  "output": "minestuck:crockertop"
 }

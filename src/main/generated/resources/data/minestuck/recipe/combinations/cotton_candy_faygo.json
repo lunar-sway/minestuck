@@ -7,7 +7,5 @@
     "item": "minecraft:light_blue_wool"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:cotton_candy_faygo"
-  }
+  "output": "minestuck:cotton_candy_faygo"
 }

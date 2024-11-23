@@ -7,7 +7,5 @@
     "item": "minecraft:gunpowder"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:ghast_tear"
-  }
+  "output": "minecraft:ghast_tear"
 }

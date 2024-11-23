@@ -7,7 +7,5 @@
     "item": "minecraft:brick"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:tuix_bar"
-  }
+  "output": "minestuck:tuix_bar"
 }

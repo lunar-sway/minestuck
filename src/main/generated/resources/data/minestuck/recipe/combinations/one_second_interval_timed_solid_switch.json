@@ -7,7 +7,5 @@
     "item": "minecraft:stone_button"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:one_second_interval_timed_solid_switch"
-  }
+  "output": "minestuck:one_second_interval_timed_solid_switch"
 }

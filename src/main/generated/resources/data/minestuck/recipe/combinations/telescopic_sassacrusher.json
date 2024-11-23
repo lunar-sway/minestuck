@@ -7,7 +7,5 @@
     "item": "minestuck:sassacre_text"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:telescopic_sassacrusher"
-  }
+  "output": "minestuck:telescopic_sassacrusher"
 }

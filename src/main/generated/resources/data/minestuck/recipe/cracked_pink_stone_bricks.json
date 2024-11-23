@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "minestuck:pink_stone_bricks"
   },
-  "result": "minestuck:cracked_pink_stone_bricks"
+  "result": {
+    "count": 1,
+    "id": "minestuck:cracked_pink_stone_bricks"
+  }
 }

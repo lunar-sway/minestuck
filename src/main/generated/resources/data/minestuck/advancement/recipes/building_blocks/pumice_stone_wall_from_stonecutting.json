@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:pumice_stone"
-            ]
+            "items": "minestuck:pumice_stone"
           }
         ]
       },

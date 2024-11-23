@@ -7,7 +7,5 @@
     "item": "minecraft:iron_block"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:battleaxe"
-  }
+  "output": "minestuck:battleaxe"
 }

@@ -7,7 +7,5 @@
     "item": "minestuck:conductors_baton"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:sharp_note"
-  }
+  "output": "minestuck:sharp_note"
 }

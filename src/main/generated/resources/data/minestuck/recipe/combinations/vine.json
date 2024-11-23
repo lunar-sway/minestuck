@@ -7,7 +7,5 @@
     "item": "minecraft:ladder"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:vine"
-  }
+  "output": "minecraft:vine"
 }

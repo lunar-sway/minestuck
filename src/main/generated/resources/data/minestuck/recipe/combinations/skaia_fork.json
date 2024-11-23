@@ -7,7 +7,5 @@
     "item": "minestuck:chessboard"
   },
   "mode": "and",
-  "output": {
-    "item": "minestuck:skaia_fork"
-  }
+  "output": "minestuck:skaia_fork"
 }

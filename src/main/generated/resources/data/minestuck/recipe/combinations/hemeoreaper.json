@@ -7,7 +7,5 @@
     "item": "minestuck:blood_bucket"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:hemeoreaper"
-  }
+  "output": "minestuck:hemeoreaper"
 }

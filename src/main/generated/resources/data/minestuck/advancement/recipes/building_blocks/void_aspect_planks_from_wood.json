@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:void_aspect_wood"
-            ]
+            "items": "minestuck:void_aspect_wood"
           }
         ]
       },

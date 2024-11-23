@@ -7,7 +7,5 @@
     "item": "minecraft:cobblestone"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:prismarine"
-  }
+  "output": "minecraft:prismarine"
 }

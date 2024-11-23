@@ -4,9 +4,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minestuck:raw_cruxite"
-            ]
+            "items": "minestuck:raw_cruxite"
           }
         ]
       },
@@ -20,7 +18,8 @@
       "translate": "advancements.minestuck.root.description"
     },
     "icon": {
-      "item": "minestuck:raw_cruxite"
+      "count": 1,
+      "id": "minestuck:raw_cruxite"
     },
     "show_toast": false,
     "title": {

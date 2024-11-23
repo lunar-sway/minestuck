@@ -7,7 +7,5 @@
     "item": "minecraft:honeycomb_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:lacquered_carved_knotted_wood"
-  }
+  "output": "minestuck:lacquered_carved_knotted_wood"
 }

@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/zinc"
+    "tag": "c:ores/zinc"
   },
   "sources": [
-    "#forge:raw_materials/zinc"
+    "#c:raw_materials/zinc"
   ]
 }

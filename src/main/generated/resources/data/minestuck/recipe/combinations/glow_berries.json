@@ -7,7 +7,5 @@
     "item": "minecraft:sweet_berries"
   },
   "mode": "and",
-  "output": {
-    "item": "minecraft:glow_berries"
-  }
+  "output": "minecraft:glow_berries"
 }

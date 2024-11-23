@@ -7,7 +7,5 @@
     "item": "minecraft:snow_block"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:frost_planks"
-  }
+  "output": "minestuck:frost_planks"
 }

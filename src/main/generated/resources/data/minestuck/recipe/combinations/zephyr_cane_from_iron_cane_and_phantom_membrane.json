@@ -7,7 +7,5 @@
     "item": "minecraft:phantom_membrane"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:zephyr_cane"
-  }
+  "output": "minestuck:zephyr_cane"
 }

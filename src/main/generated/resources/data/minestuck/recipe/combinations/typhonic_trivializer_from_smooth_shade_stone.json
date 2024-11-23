@@ -7,7 +7,5 @@
     "item": "minestuck:smooth_shade_stone"
   },
   "mode": "or",
-  "output": {
-    "item": "minestuck:typhonic_trivializer"
-  }
+  "output": "minestuck:typhonic_trivializer"
 }

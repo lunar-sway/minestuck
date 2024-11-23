@@ -7,7 +7,5 @@
     "item": "minecraft:gunpowder"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:fire_charge"
-  }
+  "output": "minecraft:fire_charge"
 }

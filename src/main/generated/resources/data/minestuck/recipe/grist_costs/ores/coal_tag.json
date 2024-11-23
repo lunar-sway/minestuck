@@ -4,7 +4,7 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/coal"
+    "tag": "c:ores/coal"
   },
   "multiplier": 3.0,
   "sources": [

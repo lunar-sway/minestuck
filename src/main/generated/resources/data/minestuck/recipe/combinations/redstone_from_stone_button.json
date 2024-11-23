@@ -7,7 +7,5 @@
     "item": "minecraft:stone_button"
   },
   "mode": "or",
-  "output": {
-    "item": "minecraft:redstone"
-  }
+  "output": "minecraft:redstone"
 }
