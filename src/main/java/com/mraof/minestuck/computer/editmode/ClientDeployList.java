@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class ClientDeployList
 {
@@ -25,7 +26,7 @@ public final class ClientDeployList
 		{
 			CompoundTag tag = list.getCompound(i);
 			Entry entry = new Entry();
-			entry.item = ItemStack.parse(provider, tag).orElseThrow();
+			entry.item = ItemStack.parse(provider, Objects.requireNonNull(tag.get("item"))).orElseThrow();
 			entry.index = tag.getInt("i");
 			
 			entry.cost = GristSet.Codecs.LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("cost")).getOrThrow();

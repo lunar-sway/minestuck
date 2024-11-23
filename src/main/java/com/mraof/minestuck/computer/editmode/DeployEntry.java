@@ -74,7 +74,7 @@ public class DeployEntry
 			ItemStack stack = getItemStack(playerData, level);
 			GristSet cost = getCurrentCost(playerData);
 			CompoundTag tag = new CompoundTag();
-			stack.save(level.registryAccess(), tag);
+			tag.put("item", stack.save(level.registryAccess()));
 			tag.putInt("i", i);
 			tag.put("cost", GristSet.Codecs.LIST_CODEC.encodeStart(NbtOps.INSTANCE, cost.asImmutable()).getOrThrow());
 			tag.putInt("cat", category.ordinal());
