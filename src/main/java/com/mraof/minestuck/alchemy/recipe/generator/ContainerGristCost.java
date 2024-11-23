@@ -122,7 +122,7 @@ public final class ContainerGristCost implements GristCostRecipe
 		private static final MapCodec<ContainerGristCost> CODEC = RecordCodecBuilder.mapCodec(instance ->
 				instance.group(
 						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
-						ImmutableGristSet.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
+						GristSet.Codecs.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
 						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
 				).apply(instance, ContainerGristCost::new));
 		private static final StreamCodec<RegistryFriendlyByteBuf, ContainerGristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);

@@ -104,7 +104,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	@Override
 	public void deserializeNBT(HolderLookup.Provider provider, Tag tag)
 	{
-		gristSet = ImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, tag)
+		gristSet = GristSet.Codecs.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, tag)
 				.resultOrPartial(LOGGER::error).orElse(GristSet.EMPTY);
 	}
 	
@@ -112,7 +112,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	@Override
 	public Tag serializeNBT(HolderLookup.Provider provider)
 	{
-		return ImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
+		return GristSet.Codecs.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
 				.resultOrPartial(LOGGER::error).orElse(null);
 	}
 	

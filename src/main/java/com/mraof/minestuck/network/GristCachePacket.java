@@ -15,7 +15,7 @@ public record GristCachePacket(ImmutableGristSet gristCache, ClientPlayerData.Ca
 	
 	public static final Type<GristCachePacket> ID = new Type<>(Minestuck.id("grist_cache"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, GristCachePacket> STREAM_CODEC = StreamCodec.composite(
-			GristSet.IMMUTABLE_STREAM_CODEC,
+			GristSet.Codecs.STREAM_CODEC,
 			GristCachePacket::gristCache,
 			NeoForgeStreamCodecs.enumCodec(ClientPlayerData.CacheSource.class),
 			GristCachePacket::cacheSource,

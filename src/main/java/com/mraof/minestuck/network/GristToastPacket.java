@@ -23,7 +23,7 @@ public record GristToastPacket(ImmutableGristSet gristValue, GristHelper.EnumSou
 {
 	public static final Type<GristToastPacket> ID = new Type<>(Minestuck.id("grist_toast"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, GristToastPacket> STREAM_CODEC = StreamCodec.composite(
-			GristSet.IMMUTABLE_STREAM_CODEC,
+			GristSet.Codecs.STREAM_CODEC,
 			GristToastPacket::gristValue,
 			NeoForgeStreamCodecs.enumCodec(GristHelper.EnumSource.class),
 			GristToastPacket::source,

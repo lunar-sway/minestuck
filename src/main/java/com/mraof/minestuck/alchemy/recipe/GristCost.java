@@ -87,7 +87,7 @@ public final class GristCost implements GristCostRecipe
 		private static final MapCodec<GristCost> CODEC = RecordCodecBuilder.mapCodec(instance ->
 				instance.group(
 						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
-						ImmutableGristSet.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.cost),
+						GristSet.Codecs.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.cost),
 						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
 				).apply(instance, GristCost::new));
 		private static final StreamCodec<RegistryFriendlyByteBuf, GristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
@@ -108,14 +108,14 @@ public final class GristCost implements GristCostRecipe
 		{
 			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 			buffer.writeInt(recipe.getPriority());
-			GristSet.IMMUTABLE_STREAM_CODEC.encode(buffer, recipe.cost);
+			GristSet.Codecs.STREAM_CODEC.encode(buffer, recipe.cost);
 		}
 		
 		private static GristCost fromNetwork(RegistryFriendlyByteBuf buffer)
 		{
 			Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 			int priority = buffer.readInt();
-			ImmutableGristSet cost = GristSet.IMMUTABLE_STREAM_CODEC.decode(buffer);
+			ImmutableGristSet cost = GristSet.Codecs.STREAM_CODEC.decode(buffer);
 			
 			return new GristCost(ingredient, cost, Optional.of(priority));
 		}

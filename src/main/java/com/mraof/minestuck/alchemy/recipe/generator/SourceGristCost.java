@@ -118,7 +118,7 @@ public final class SourceGristCost implements GristCostRecipe
 						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
 						Source.CODEC.listOf().fieldOf("sources").forGetter(recipe -> recipe.sources),
 						Codec.FLOAT.optionalFieldOf("multiplier", 1F).forGetter(recipe -> recipe.multiplier),
-						ImmutableGristSet.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
+						GristSet.Codecs.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
 						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
 				).apply(instance, SourceGristCost::new));
 		private static final StreamCodec<RegistryFriendlyByteBuf, SourceGristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);

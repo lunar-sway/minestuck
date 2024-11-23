@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
@@ -15,7 +16,7 @@ import java.util.List;
 public record CookingCostInterpreter(ImmutableGristSet fuelCost) implements RecipeInterpreter
 {
 	public static final MapCodec<CookingCostInterpreter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			ImmutableGristSet.MAP_CODEC.fieldOf("added_cost").forGetter(CookingCostInterpreter::fuelCost)
+			GristSet.Codecs.MAP_CODEC.fieldOf("added_cost").forGetter(CookingCostInterpreter::fuelCost)
 	).apply(instance, CookingCostInterpreter::new));
 	
 	private static final int STANDARD_COOKING_TIME = 200;

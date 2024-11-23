@@ -88,7 +88,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(Map.Entry<Item, ImmutableGristSet> entry : generatedCosts.entrySet())
 		{
 			buffer.writeVarInt(Item.getId(entry.getKey()));
-			GristSet.IMMUTABLE_STREAM_CODEC.encode(buffer, entry.getValue());
+			GristSet.Codecs.STREAM_CODEC.encode(buffer, entry.getValue());
 		}
 	}
 	
@@ -103,7 +103,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(int i = 0; i < size; i++)
 		{
 			Item item = Item.byId(buffer.readVarInt());
-			ImmutableGristSet cost = GristSet.IMMUTABLE_STREAM_CODEC.decode(buffer);
+			ImmutableGristSet cost = GristSet.Codecs.STREAM_CODEC.decode(buffer);
 			builder.put(item, cost);
 		}
 		return new RecipeGeneratedCostHandler(builder.build());

@@ -28,7 +28,7 @@ public final class ClientDeployList
 			entry.item = ItemStack.parse(provider, tag).orElseThrow();
 			entry.index = tag.getInt("i");
 			
-			entry.cost = ImmutableGristSet.LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("cost")).getOrThrow();
+			entry.cost = GristSet.Codecs.LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("cost")).getOrThrow();
 			entry.category = DeployList.EntryLists.values()[tag.getInt("cat")];
 			
 			entryList.add(entry);

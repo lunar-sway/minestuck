@@ -21,7 +21,7 @@ public final class GeneratedGristCostCache
 	{
 		this.hasGeneratedCost = true;
 		if(buffer.readBoolean())
-			this.cachedCost = GristSet.IMMUTABLE_STREAM_CODEC.decode(buffer);
+			this.cachedCost = GristSet.Codecs.STREAM_CODEC.decode(buffer);
 		else
 			this.cachedCost = null;
 	}
@@ -31,7 +31,7 @@ public final class GeneratedGristCostCache
 		if(this.cachedCost != null)
 		{
 			buffer.writeBoolean(true);
-			GristSet.IMMUTABLE_STREAM_CODEC.encode(buffer, this.cachedCost);
+			GristSet.Codecs.STREAM_CODEC.encode(buffer, this.cachedCost);
 		} else
 			buffer.writeBoolean(false);
 	}
