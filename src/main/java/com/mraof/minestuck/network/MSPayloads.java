@@ -166,6 +166,6 @@ public final class MSPayloads
 	
 	private static <T extends MSPacket.PlayToClient> void registerPlayToClient(PayloadRegistrar registrar, CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> codec)
 	{
-		registrar.playToServer(type, codec, MSPacket.PlayToClient::execute);
+		registrar.playToClient(type, codec, MSPacket.PlayToClient::execute);
 	}
 }
