@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
 import com.mraof.minestuck.data.SkaiaBlocksData;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
@@ -94,7 +94,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(NETHER_CARVER_REPLACEABLES).addTag(HEAT_TERRAIN_BLOCKS);
 		tag(Tags.Blocks.COBBLESTONES).add(FLOWERY_MOSSY_COBBLESTONE.get(), MYCELIUM_COBBLESTONE.get(), BLACK_COBBLESTONE.get());
 		tag(Tags.Blocks.END_STONES).add(COARSE_END_STONE.get());
-		tag(Tags.Blocks.ORES).addTags(CRUXITE_ORES, ExtraForgeTags.Blocks.URANIUM_ORES);
+		tag(Tags.Blocks.ORES).addTags(CRUXITE_ORES, ExtraModTags.Blocks.URANIUM_ORES);
 		tag(BlockTags.COAL_ORES).addTag(MSTags.Blocks.COAL_ORES);
 		tag(BlockTags.DIAMOND_ORES).addTag(MSTags.Blocks.DIAMOND_ORES);
 		tag(BlockTags.GOLD_ORES).addTag(MSTags.Blocks.GOLD_ORES);
@@ -105,7 +105,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(BlockTags.EMERALD_ORES).addTag(MSTags.Blocks.EMERALD_ORES);
 		tag(BlockTags.DAMPENS_VIBRATIONS).add(DENSE_CLOUD.get(), BRIGHT_DENSE_CLOUD.get());
 		tag(Tags.Blocks.STONES).add(COARSE_STONE.get(), SHADE_STONE.get(), MYCELIUM_STONE.get(), BLACK_STONE.get(), IGNEOUS_STONE.get(), PUMICE_STONE.get(), COARSE_END_STONE.get(), PINK_STONE.get(), BROWN_STONE.get(), GREEN_STONE.get(), UNCARVED_WOOD.get());
-		tag(Tags.Blocks.STORAGE_BLOCKS).addTags(CRUXITE_STORAGE_BLOCKS, ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS);
+		tag(Tags.Blocks.STORAGE_BLOCKS).addTags(CRUXITE_STORAGE_BLOCKS, ExtraModTags.Blocks.URANIUM_STORAGE_BLOCKS);
 		tag(Tags.Blocks.BOOKSHELVES).add(GLOWING_BOOKSHELF.get(), FROST_BOOKSHELF.get(), RAINBOW_BOOKSHELF.get(), END_BOOKSHELF.get(), DEAD_BOOKSHELF.get(), TREATED_BOOKSHELF.get(), SHADEWOOD_BOOKSHELF.get(), CINDERED_BOOKSHELF.get());
 		tag(FLOWER_POTS).add(POTTED_FROST_SAPLING.get(), POTTED_RAINBOW_SAPLING.get(), POTTED_END_SAPLING.get(), POTTED_SHADEWOOD_SAPLING.get());
 		
@@ -277,8 +277,8 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(CASSETTE_PLAYER.get());
 		needsWoodPickaxe(PARCEL_PYXIS.get(), PYXIS_LID.get());
 		
-		tag(ExtraForgeTags.Blocks.URANIUM_ORES).addTag(URANIUM_ORES);
-		tag(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK.get());
+		tag(ExtraModTags.Blocks.URANIUM_ORES).addTag(URANIUM_ORES);
+		tag(ExtraModTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK.get());
 		
 		tag(GREEN_HIEROGLYPHS).add(GREEN_STONE_BRICK_FROG.get(), GREEN_STONE_BRICK_LOTUS.get(), GREEN_STONE_BRICK_IGUANA_LEFT.get(), GREEN_STONE_BRICK_IGUANA_RIGHT.get(), GREEN_STONE_BRICK_NAK_LEFT.get(), GREEN_STONE_BRICK_NAK_RIGHT.get(), GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), GREEN_STONE_BRICK_SKAIA.get(), GREEN_STONE_BRICK_TURTLE.get());
 		tag(GLOWING_LOGS).add(GLOWING_LOG.get(), GLOWING_WOOD.get(), STRIPPED_GLOWING_LOG.get(), STRIPPED_GLOWING_WOOD.get());

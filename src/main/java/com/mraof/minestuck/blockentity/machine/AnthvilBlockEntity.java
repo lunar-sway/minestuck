@@ -6,7 +6,7 @@ import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -86,7 +86,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
+		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraModTags.Items.URANIUM_CHUNKS));
 	}
 	
 	@Override
@@ -104,7 +104,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		if(level == null || !isMendableItem(slotStack))
 			return;
 		
-		if(anthvil.canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
+		if(anthvil.canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
 		{
 			anthvil.addFuel((short) FUEL_INCREASE);
 			itemHandler.extractItem(1, 1, false);

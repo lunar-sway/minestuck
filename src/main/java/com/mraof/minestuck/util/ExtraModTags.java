@@ -8,9 +8,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 /**
- * A place to put tags that forge doesn't add themselves, but which are generally expected to be filled by other mods.
+ * A place to put tags that neoforge doesn't provide, but which are generally expected to be filled by other mods.
  */
-public final class ExtraForgeTags
+public final class ExtraModTags
 {
 	public static final class Blocks
 	{
@@ -19,7 +19,7 @@ public final class ExtraForgeTags
 		
 		private static TagKey<Block> tag(String name)
 		{
-			return BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
+			return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
 		}
 	}
 	
@@ -69,7 +69,7 @@ public final class ExtraForgeTags
 		
 		private static TagKey<Item> tag(String name)
 		{
-			return ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
+			return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
 		}
 	}
 }

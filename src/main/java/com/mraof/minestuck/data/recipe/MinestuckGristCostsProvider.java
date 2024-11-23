@@ -9,7 +9,7 @@ import com.mraof.minestuck.api.alchemy.recipe.SourceGristCostBuilder;
 import com.mraof.minestuck.api.alchemy.recipe.WildcardGristCostBuilder;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -933,42 +933,42 @@ public final class MinestuckGristCostsProvider
 		WildcardGristCostBuilder.of(MSItems.CAPTCHA_CARD.get()).cost(1).build(recipeSaver);
 		
 		
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.TIN_RAW_MATERIALS).grist(RUST, 12).grist(CAULK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.SILVER_RAW_MATERIALS).grist(RUST, 12).grist(MERCURY, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.LEAD_RAW_MATERIALS).grist(RUST, 12).grist(COBALT, 4).grist(SHALE, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.NICKEL_RAW_MATERIALS).grist(RUST, 12).grist(SULFUR, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.ZINC_RAW_MATERIALS).grist(RUST, 12).grist(SHALE, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.ALUMINUM_RAW_MATERIALS).grist(RUST, 12).grist(CHALK, 6).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.ALUMINIUM_RAW_MATERIALS).source(ExtraForgeTags.Items.ALUMINUM_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.COBALT_RAW_MATERIALS).grist(COBALT, 18).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.ARDITE_RAW_MATERIALS).grist(GARNET, 12).grist(SULFUR, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.TIN_RAW_MATERIALS).grist(RUST, 12).grist(CAULK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.SILVER_RAW_MATERIALS).grist(RUST, 12).grist(MERCURY, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.LEAD_RAW_MATERIALS).grist(RUST, 12).grist(COBALT, 4).grist(SHALE, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.NICKEL_RAW_MATERIALS).grist(RUST, 12).grist(SULFUR, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.ZINC_RAW_MATERIALS).grist(RUST, 12).grist(SHALE, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.ALUMINUM_RAW_MATERIALS).grist(RUST, 12).grist(CHALK, 6).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.ALUMINIUM_RAW_MATERIALS).source(ExtraModTags.Items.ALUMINUM_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.COBALT_RAW_MATERIALS).grist(COBALT, 18).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.ARDITE_RAW_MATERIALS).grist(GARNET, 12).grist(SULFUR, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.URANIUM_INGOTS).grist(URANIUM, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.TIN_INGOTS).source(ExtraForgeTags.Items.TIN_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.BRASS_INGOTS).grist(RUST, 12).grist(CAULK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.SILVER_INGOTS).source(ExtraForgeTags.Items.SILVER_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.ELECTRUM_INGOTS).grist(MERCURY, 6).grist(RUST, 10).grist(GOLD, 6).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.LEAD_INGOTS).source(ExtraForgeTags.Items.LEAD_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.NICKEL_INGOTS).source(ExtraForgeTags.Items.NICKEL_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.ZINC_INGOTS).source(ExtraForgeTags.Items.ZINC_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.INVAR_INGOTS).grist(RUST, 12).grist(SULFUR, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.ALUMINUM_INGOTS).source(ExtraForgeTags.Items.ALUMINUM_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.ALUMINIUM_INGOTS).source(ExtraForgeTags.Items.ALUMINUM_INGOTS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.COBALT_INGOTS).source(ExtraForgeTags.Items.COBALT_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		SourceGristCostBuilder.of(ExtraForgeTags.Items.ARDITE_INGOTS).source(ExtraForgeTags.Items.ARDITE_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.RED_ALLOY_INGOTS).grist(RUST, 18).grist(GARNET, 32).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.URANIUM_INGOTS).grist(URANIUM, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.TIN_INGOTS).source(ExtraModTags.Items.TIN_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.BRASS_INGOTS).grist(RUST, 12).grist(CAULK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.SILVER_INGOTS).source(ExtraModTags.Items.SILVER_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.ELECTRUM_INGOTS).grist(MERCURY, 6).grist(RUST, 10).grist(GOLD, 6).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.LEAD_INGOTS).source(ExtraModTags.Items.LEAD_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.NICKEL_INGOTS).source(ExtraModTags.Items.NICKEL_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.ZINC_INGOTS).source(ExtraModTags.Items.ZINC_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.INVAR_INGOTS).grist(RUST, 12).grist(SULFUR, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.ALUMINUM_INGOTS).source(ExtraModTags.Items.ALUMINUM_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.ALUMINIUM_INGOTS).source(ExtraModTags.Items.ALUMINUM_INGOTS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.COBALT_INGOTS).source(ExtraModTags.Items.COBALT_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(ExtraModTags.Items.ARDITE_INGOTS).source(ExtraModTags.Items.ARDITE_RAW_MATERIALS).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(ExtraModTags.Items.RED_ALLOY_INGOTS).grist(RUST, 18).grist(GARNET, 32).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//TODO consider factoring in the Forge "ore_rates" item tags
-		oreCost(ExtraForgeTags.Items.TIN_ORES, ExtraForgeTags.Items.TIN_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.SILVER_ORES, ExtraForgeTags.Items.SILVER_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.LEAD_ORES, ExtraForgeTags.Items.LEAD_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.GALENA_ORES, ExtraForgeTags.Items.LEAD_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.NICKEL_ORES, ExtraForgeTags.Items.NICKEL_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.ZINC_ORES, ExtraForgeTags.Items.ZINC_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.ALUMINIUM_ORES, ExtraForgeTags.Items.ALUMINUM_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.ALUMINUM_ORES, ExtraForgeTags.Items.ALUMINUM_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.COBALT_ORES, ExtraForgeTags.Items.COBALT_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(ExtraForgeTags.Items.ARDITE_ORES, ExtraForgeTags.Items.ARDITE_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.TIN_ORES, ExtraModTags.Items.TIN_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.SILVER_ORES, ExtraModTags.Items.SILVER_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.LEAD_ORES, ExtraModTags.Items.LEAD_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.GALENA_ORES, ExtraModTags.Items.LEAD_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.NICKEL_ORES, ExtraModTags.Items.NICKEL_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.ZINC_ORES, ExtraModTags.Items.ZINC_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.ALUMINIUM_ORES, ExtraModTags.Items.ALUMINUM_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.ALUMINUM_ORES, ExtraModTags.Items.ALUMINUM_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.COBALT_ORES, ExtraModTags.Items.COBALT_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(ExtraModTags.Items.ARDITE_ORES, ExtraModTags.Items.ARDITE_RAW_MATERIALS, 1, recipeSaver, Minestuck.MOD_ID);
 	}
 	
 	public static void oreCost(TagKey<Item> ores, TagKey<Item> material, float multiplier, RecipeOutput recipeOutput, String modId)
