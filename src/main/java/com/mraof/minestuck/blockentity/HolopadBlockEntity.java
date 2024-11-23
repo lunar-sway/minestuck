@@ -101,14 +101,14 @@ public class HolopadBlockEntity extends BlockEntity
 	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
 		super.saveAdditional(compound, provider);
-		compound.put("card", card.save(provider, new CompoundTag()));
+		compound.put("card", card.saveOptional(provider));
 	}
 	
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
 		CompoundTag nbt = super.getUpdateTag(provider);
-		nbt.put("card", card.save(provider, new CompoundTag()));
+		nbt.put("card", card.saveOptional(provider));
 		return nbt;
 	}
 	

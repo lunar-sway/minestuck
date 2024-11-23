@@ -6,17 +6,14 @@ import com.mraof.minestuck.inventory.AtheneumMenu;
 import com.mraof.minestuck.network.MSPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class AtheneumPackets
@@ -51,7 +48,7 @@ public final class AtheneumPackets
 				Update::less,
 				ByteBufCodecs.BOOL,
 				Update::more,
-				ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()),
+				ItemStack.OPTIONAL_LIST_STREAM_CODEC,
 				Update::inventory,
 				Update::new
 		);

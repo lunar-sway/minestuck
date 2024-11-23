@@ -256,7 +256,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound, provider);
 		compound.putBoolean("broken", this.broken);
-		compound.put("card", getCard().save(provider, new CompoundTag()));
+		compound.put("card", getCard().saveOptional(provider));
 		compound.putString("captcha", this.captcha);
 	}
 	

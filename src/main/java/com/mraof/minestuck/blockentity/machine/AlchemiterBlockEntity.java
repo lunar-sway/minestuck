@@ -202,8 +202,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		broken = nbt.getBoolean("broken");
 		
 		ItemStack oldDowel = dowel;
-		if(nbt.contains("dowel"))
-			dowel = ItemStack.parse(pRegistries, nbt.getCompound("dowel")).orElse(ItemStack.EMPTY);
+		dowel = ItemStack.parseOptional(pRegistries, nbt.getCompound("dowel"));
 		
 		//This a slight hack to force a rerender (since it at the time of writing normally happens before we get the update packet). This should not be done normally
 		if(level != null && level.isClientSide && !ItemStack.matches(oldDowel, dowel))
@@ -217,9 +216,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		
 		compound.put("gristType", GristHelper.encodeGristType(wildcardGrist));
 		compound.putBoolean("broken", isBroken());
-		
-		if(dowel!= null)
-			compound.put("dowel", dowel.save(provider));
+		compound.put("dowel", dowel.saveOptional(provider));
 	}
 	
 	@Override

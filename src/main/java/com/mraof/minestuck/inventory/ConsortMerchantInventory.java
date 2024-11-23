@@ -101,9 +101,8 @@ public class ConsortMerchantInventory implements Container
 		for (int i = 0; i < 9; i++)
 		{
 			CompoundTag nbt = new CompoundTag();
-			inv.get(i).save(this.consort.registryAccess(), nbt);
 			nbt.putInt("price", prices[i]);
-			list.add(nbt);
+			list.add(inv.get(i).save(this.consort.registryAccess(), nbt));
 		}
 		return list;
 	}

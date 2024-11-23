@@ -375,8 +375,8 @@ public class TotemLatheBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound, provider);
 		compound.putBoolean("broken",broken);
-		compound.put("card1", card1.save(provider, new CompoundTag()));
-		compound.put("card2", card2.save(provider, new CompoundTag()));
+		compound.put("card1", card1.saveOptional(provider));
+		compound.put("card2", card2.saveOptional(provider));
 		compound.putBoolean("isProcessing", isProcessing);
 	}
 	

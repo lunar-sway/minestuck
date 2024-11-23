@@ -33,7 +33,7 @@ public class CassettePlayerBlockEntity extends BlockEntity implements Clearable
 		super.saveAdditional(compound, provider);
 		if(!this.getCassette().isEmpty())
 		{
-			compound.put("CassetteItem", this.getCassette().save(provider, new CompoundTag()));
+			compound.put("CassetteItem", this.getCassette().save(provider));
 		}
 	}
 	

@@ -64,14 +64,14 @@ public class ItemStackBlockEntity extends BlockEntity implements IColored
 	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
 		super.saveAdditional(compound, provider);
-		compound.put("stack", stack.save(provider, new CompoundTag()));
+		compound.put("stack", stack.saveOptional(provider));
 	}
 	
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
 		CompoundTag nbt = super.getUpdateTag(provider);
-		nbt.put("stack", stack.save(provider, new CompoundTag()));
+		nbt.put("stack", stack.saveOptional(provider));
 		return nbt;
 	}
 	

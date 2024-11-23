@@ -2,7 +2,6 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
@@ -218,7 +217,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
 		super.saveAdditional(compound, provider);
-		compound.put("card", analyzedCard.save(provider, new CompoundTag()));
+		compound.put("card", analyzedCard.saveOptional(provider));
 		
 		CompoundTag progressData = new CompoundTag();
 		for(Map.Entry<Item, Integer> entry : decodingProgress.entrySet())

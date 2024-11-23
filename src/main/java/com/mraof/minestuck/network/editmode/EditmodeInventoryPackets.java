@@ -6,12 +6,10 @@ import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.network.MSPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -25,7 +23,7 @@ public final class EditmodeInventoryPackets
 		
 		public static final Type<Update> ID = new Type<>(Minestuck.id("editmode_inventory/update"));
 		public static final StreamCodec<? super RegistryFriendlyByteBuf, Update> STREAM_CODEC = StreamCodec.composite(
-				ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()),
+				ItemStack.OPTIONAL_LIST_STREAM_CODEC,
 				Update::inventory,
 				ByteBufCodecs.BOOL,
 				Update::canScrollLeft,
