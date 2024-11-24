@@ -3,7 +3,6 @@ package com.mraof.minestuck.api.alchemy;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -18,7 +17,7 @@ import java.util.function.Supplier;
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
  */
-public record GristAmount(GristType type, long amount) implements ImmutableGristSet
+public record GristAmount(GristType type, long amount) implements GristSet.Immutable
 {
 	public static final Codec<GristAmount> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(GristTypes.REGISTRY.byNameCodec().fieldOf("type").forGetter(GristAmount::type),

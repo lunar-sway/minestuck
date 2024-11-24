@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
@@ -42,13 +41,13 @@ public final class SourceGristCost implements GristCostRecipe
 	private final Ingredient ingredient;
 	private final List<Source> sources;
 	private final float multiplier;
-	private final ImmutableGristSet addedCost;
+	private final GristSet.Immutable addedCost;
 	@Nullable
 	private final Integer priority;
 	private final GeneratedGristCostCache cache = new GeneratedGristCostCache();
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public SourceGristCost(Ingredient ingredient, List<Source> sources, float multiplier, ImmutableGristSet addedCost, Optional<Integer> priority)
+	public SourceGristCost(Ingredient ingredient, List<Source> sources, float multiplier, GristSet.Immutable addedCost, Optional<Integer> priority)
 	{
 		this.ingredient = ingredient;
 		this.sources = sources;
@@ -70,7 +69,7 @@ public final class SourceGristCost implements GristCostRecipe
 	}
 	
 	@Nullable
-	private GristSet generateCost(GeneratorCallback callback, List<Source> sources, float multiplier, ImmutableGristSet addedCost)
+	private GristSet generateCost(GeneratorCallback callback, List<Source> sources, float multiplier, GristSet.Immutable addedCost)
 	{
 		MutableGristSet costSum = MutableGristSet.newDefault();
 		for(Source source : sources)

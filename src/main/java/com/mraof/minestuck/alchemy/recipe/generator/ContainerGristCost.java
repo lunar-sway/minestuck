@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
@@ -40,13 +39,13 @@ public final class ContainerGristCost implements GristCostRecipe
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final Ingredient ingredient;
-	private final ImmutableGristSet addedCost;
+	private final GristSet.Immutable addedCost;
 	@Nullable
 	private final Integer priority;
 	private final GeneratedGristCostCache cache = new GeneratedGristCostCache();
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public ContainerGristCost(Ingredient ingredient, ImmutableGristSet addedCost, Optional<Integer> priority)
+	public ContainerGristCost(Ingredient ingredient, GristSet.Immutable addedCost, Optional<Integer> priority)
 	{
 		this.ingredient = ingredient;
 		this.addedCost = addedCost;
@@ -54,7 +53,7 @@ public final class ContainerGristCost implements GristCostRecipe
 	}
 	
 	@Nullable
-	private GristSet generateCost(GeneratorCallback callback, ImmutableGristSet addedCost, ResourceLocation recipeId)
+	private GristSet generateCost(GeneratorCallback callback, GristSet.Immutable addedCost, ResourceLocation recipeId)
 	{
 		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getCraftingRemainingItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())

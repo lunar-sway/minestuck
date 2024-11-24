@@ -1,7 +1,10 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.AnthvilMenu;
@@ -139,7 +142,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	/**
 	 * Checks a mend-able item's grist type and returns the grist if its valid
 	 */
-	private static ImmutableGristSet mendingGrist(Level level, ItemStack slotStack)
+	private static GristSet.Immutable mendingGrist(Level level, ItemStack slotStack)
 	{
 		GristSet fullSet = GristCostRecipe.findCostForItem(slotStack, null, false, level);
 		

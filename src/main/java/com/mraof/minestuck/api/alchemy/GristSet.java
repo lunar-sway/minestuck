@@ -15,7 +15,7 @@ import java.util.Map;
  * An interface for anything that might contain grist.
  * There are several different implementations of this interface with different properties.
  * <p>
- * If you want to limit yourself to a set that doesn't change after creation, check out {@link ImmutableGristSet}.
+ * If you want to limit yourself to a set that doesn't change after creation, check out {@link GristSet.Immutable}.
  * You can create an immutable grist set using {@link GristSet#of(GristAmount...)},
  * or you can create an instance of {@link DefaultImmutableGristSet} directly.
  * You can convert any grist set into an immutable grist set using {@link GristSet#asImmutable()}.
@@ -68,7 +68,7 @@ public interface GristSet
 	 */
 	Map<GristType, Long> asMap();
 	
-	ImmutableGristSet asImmutable();
+	GristSet.Immutable asImmutable();
 	
 	default MutableGristSet mutableCopy()
 	{
@@ -94,9 +94,9 @@ public interface GristSet
 		else return Component.empty();
 	}
 	
-	ImmutableGristSet EMPTY = Collections::emptyMap;
+	GristSet.Immutable EMPTY = Collections::emptyMap;
 	
-	static ImmutableGristSet of(GristAmount... amounts)
+	static GristSet.Immutable of(GristAmount... amounts)
 	{
 		if(amounts.length == 0)
 			return GristSet.EMPTY;
@@ -110,20 +110,34 @@ public interface GristSet
 	}
 	
 	/**
+	 * A version of {@link GristSet}, but with the extra guarantee that this set cannot be changed.
+	 * Suitable for things like recipes, where the set should not be allowed to change after the recipe was loaded.
+	 * Can be obtained from any grist set by calling {@link GristSet#asImmutable()}.
+	 */
+	interface Immutable extends GristSet
+	{
+		@Override
+		default Immutable asImmutable()
+		{
+			return this;
+		}
+	}
+	
+	/**
 	 * Container for different codecs for grist sets.
 	 * Codecs are not placed directly in the grist set class to avoid cyclic class loading between grist set and grist amount.
 	 */
 	final class Codecs
 	{
-		public static final Codec<ImmutableGristSet> NON_NEGATIVE_CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(DefaultImmutableGristSet::create, ImmutableGristSet::asAmounts);
+		public static final Codec<GristSet.Immutable> NON_NEGATIVE_CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(DefaultImmutableGristSet::create, GristSet::asAmounts);
 		/**
 		 * Codec for serializing a grist set in a map format. Currently used for json serialization.
 		 * Perhaps we should prefer this format for nbt-serialization as well? Something worth considering for the future.
 		 */
-		public static final Codec<ImmutableGristSet> MAP_CODEC = Codec.unboundedMap(GristTypes.REGISTRY.byNameCodec(), Codec.LONG).xmap(DefaultImmutableGristSet::new, ImmutableGristSet::asMap);
-		public static final Codec<ImmutableGristSet> LIST_CODEC = GristAmount.LIST_CODEC.xmap(DefaultImmutableGristSet::create, ImmutableGristSet::asAmounts);
+		public static final Codec<GristSet.Immutable> MAP_CODEC = Codec.unboundedMap(GristTypes.REGISTRY.byNameCodec(), Codec.LONG).xmap(DefaultImmutableGristSet::new, GristSet::asMap);
+		public static final Codec<GristSet.Immutable> LIST_CODEC = GristAmount.LIST_CODEC.xmap(DefaultImmutableGristSet::create, GristSet::asAmounts);
 		
-		public static final StreamCodec<RegistryFriendlyByteBuf, ImmutableGristSet> STREAM_CODEC = StreamCodec.composite(
+		public static final StreamCodec<RegistryFriendlyByteBuf, GristSet.Immutable> STREAM_CODEC = StreamCodec.composite(
 				GristAmount.STREAM_CODEC.apply(ByteBufCodecs.list()),
 				GristSet::asAmounts,
 				DefaultImmutableGristSet::create

@@ -42,7 +42,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	
 	private final PlayerData data;
 	private final MinecraftServer mcServer;
-	private ImmutableGristSet gristSet;
+	private GristSet.Immutable gristSet;
 	
 	public GristCache(PlayerData data)
 	{
@@ -116,7 +116,7 @@ public final class GristCache implements INBTSerializable<Tag>
 				.resultOrPartial(LOGGER::error).orElse(null);
 	}
 	
-	public ImmutableGristSet getGristSet()
+	public GristSet.Immutable getGristSet()
 	{
 		return this.gristSet;
 	}
