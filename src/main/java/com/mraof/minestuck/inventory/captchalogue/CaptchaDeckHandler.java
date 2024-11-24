@@ -333,7 +333,7 @@ public final class CaptchaDeckHandler
 			{
 				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
-					ItemStack card = AlchemyHelper.createCard(stack);
+					ItemStack card = AlchemyHelper.createCard(stack, player.server);
 					player.drop(card, true, false);
 					size--;
 				} else player.drop(stack, true, false);

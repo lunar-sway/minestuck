@@ -43,7 +43,7 @@ public class QueueStackModus extends StackModus
 		{
 			size--;
 			markDirty();
-			return AlchemyHelper.createCard(id == 0 ? list.removeFirst() : list.removeLast());
+			return AlchemyHelper.createCard(id == 0 ? list.removeFirst() : list.removeLast(), player.server);
 		}
 		else
 		{

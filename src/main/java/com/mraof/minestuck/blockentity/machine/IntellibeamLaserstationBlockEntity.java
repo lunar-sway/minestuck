@@ -16,6 +16,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -65,7 +67,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void onRightClick(Player player)
 	{
-		if(level != null && !level.isClientSide)
+		if(level instanceof ServerLevel serverLevel)
 		{
 			ItemStack heldCard = player.getMainHandItem();
 			ItemStack itemInHeldCard = AlchemyHelper.getDecodedItem(heldCard);
@@ -91,7 +93,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
 			{
 				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player, AlchemyHelper.getDecodedItem(analyzedCard));
-				applyReadableNBT(analyzedCard);
+				setReadable(analyzedCard, serverLevel.getServer());
 				takeCard(player);
 				
 				waitTimer = 10;
@@ -162,11 +164,11 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 	}
 	
-	public void applyReadableNBT(ItemStack taggedCard)
+	public void setReadable(ItemStack taggedCard, MinecraftServer mcServer)
 	{
 		CardStoredItemComponent encodedItem = taggedCard.get(MSItemComponents.CARD_STORED_ITEM);
 		if(encodedItem != null)
-			taggedCard.set(MSItemComponents.CARD_STORED_ITEM, encodedItem.discovered());
+			taggedCard.set(MSItemComponents.CARD_STORED_ITEM, encodedItem.readable(mcServer));
 	}
 	
 	public void addExperience(Player player)

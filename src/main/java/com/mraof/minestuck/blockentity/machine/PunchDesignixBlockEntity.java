@@ -177,7 +177,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			
 			if(AlchemyHelper.isPunchedCard(getCard())) //|| combination. A temporary new captcha card containing captchaItemStack is made
 			{
-				output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(AlchemyHelper.createCard(captchaItemStack), getCard(), CombinationMode.OR), player.level());
+				output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(AlchemyHelper.createCard(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level());
 			} else
 				output = captchaItemStack;
 			

@@ -170,7 +170,7 @@ public class StackModus extends Modus
 		{
 			size--;
 			markDirty();
-			return AlchemyHelper.createCard(list.removeFirst());
+			return AlchemyHelper.createCard(list.removeFirst(), player.server);
 		}
 		else
 		{
