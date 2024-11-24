@@ -60,7 +60,7 @@ public class AlchemyHelper
 			return new ItemStack(card.get(MSItemComponents.ENCODED_ITEM).item());
 		
 		CardStoredItemComponent component = card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
-		return ignoreGhost && component.type() == CardStoredItemComponent.EncodeType.GHOST ? ItemStack.EMPTY : component.storedStack();
+		return ignoreGhost && component.isGhostItem() ? ItemStack.EMPTY : component.storedStack();
 	}
 	
 	public static boolean isReadableCard(ItemStack card)
@@ -81,7 +81,8 @@ public class AlchemyHelper
 	
 	public static boolean isGhostCard(ItemStack item)
 	{
-		return item.is(CAPTCHA_CARD) && item.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).isGhostType();
+		if(!item.is(CAPTCHA_CARD)) return false;
+		return item.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).isGhostItem();
 	}
 	
 	public static boolean hasDecodedItem(ItemStack item)
@@ -126,7 +127,7 @@ public class AlchemyHelper
 	public static ItemStack createCard(ItemStack itemIn, MinecraftServer mcServer)
 	{
 		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.createStoredItem(itemIn, mcServer));
+		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, false, mcServer));
 		return itemOut;
 	}
 	
@@ -134,7 +135,7 @@ public class AlchemyHelper
 	public static ItemStack createGhostCard(ItemStack itemIn, MinecraftServer mcServer)
 	{
 		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.createGhostItem(itemIn, mcServer));
+		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, true, mcServer));
 		return itemOut;
 	}
 	
