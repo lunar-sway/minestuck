@@ -7,6 +7,7 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
@@ -118,7 +119,7 @@ public final class CaptchaDeckHandler
 			ItemStack newItem = changeModus(player, stack, modus, type);
 			containerMenu.setMenuItem(newItem);
 		}
-		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isPunchedCard(stack)
+		else if(stack.is(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack)
 				&& modus != null)
 		{
 			consumeCards(player, stack, modus);
@@ -161,7 +162,7 @@ public final class CaptchaDeckHandler
 	
 	private static void consumeCards(ServerPlayer player, ItemStack cards, Modus modus)
 	{
-		ItemStack content = AlchemyHelper.getDecodedItem(cards, true);
+		ItemStack content = CardStoredItemComponent.getContainedRealItem(cards);
 		
 		int failed = 0;
 		for(int i = 0; i < cards.getCount(); i++)
@@ -235,7 +236,7 @@ public final class CaptchaDeckHandler
 	
 	private static void handleCardCaptchalogue(ServerPlayer player, Modus modus, ItemStack card)
 	{
-		ItemStack stackInCard = AlchemyHelper.getDecodedItem(card, true);
+		ItemStack stackInCard = CardStoredItemComponent.getContainedRealItem(card);
 		boolean spentCard = modus.increaseSize(player);
 		
 		if(spentCard)

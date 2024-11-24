@@ -33,7 +33,7 @@ public record CardStoredItemComponent(ItemStack storedStack, boolean isGhostItem
 			(stack, type, optionalCode) -> new CardStoredItemComponent(stack, type, optionalCode.orElse(null))
 	);
 	
-	public static final CardStoredItemComponent EMPTY = new CardStoredItemComponent(ItemStack.EMPTY, false, "");
+	public static final CardStoredItemComponent EMPTY = new CardStoredItemComponent(ItemStack.EMPTY, false, null);
 	
 	public static CardStoredItemComponent create(ItemStack storedStack, boolean isGhostItem, MinecraftServer mcServer)
 	{
@@ -48,5 +48,15 @@ public record CardStoredItemComponent(ItemStack storedStack, boolean isGhostItem
 	public boolean canReadCode()
 	{
 		return code() != null;
+	}
+	
+	/**
+	 * Returns a non-ghost item if contained in the card, or an empty stack otherwise.
+	 */
+	public static ItemStack getContainedRealItem(ItemStack card)
+	{
+		return Optional.ofNullable(card.get(MSItemComponents.CARD_STORED_ITEM))
+				.filter(component -> !component.isGhostItem())
+				.map(CardStoredItemComponent::storedStack).orElse(ItemStack.EMPTY);
 	}
 }

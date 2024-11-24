@@ -9,6 +9,8 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
@@ -101,12 +103,13 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	{
 		if(level == null)
 			return null;
-		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
-		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
-		if(stack.getItem() != MSItems.CAPTCHA_CARD.get() || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
+		if(!stack.is(MSItems.CAPTCHA_CARD) || stack.has(MSItemComponents.ENCODED_ITEM))
+			return null;
+		ItemStack containedItem = CardStoredItemComponent.getContainedRealItem(stack);
+		if(containedItem.isEmpty())
 			return null;
 		
-		return gristSet;
+		return GristCostRecipe.findCostForItem(containedItem, null, true, level);
 	}
 	
 	public int getGristWidgetBoondollarValue()

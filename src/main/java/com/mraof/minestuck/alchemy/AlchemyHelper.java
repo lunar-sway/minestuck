@@ -50,17 +50,10 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack getDecodedItem(ItemStack card)
 	{
-		return getDecodedItem(card, false);
-	}
-	
-	@Nonnull
-	public static ItemStack getDecodedItem(ItemStack card, boolean ignoreGhost)
-	{
 		if (card.has(MSItemComponents.ENCODED_ITEM))
 			return new ItemStack(card.get(MSItemComponents.ENCODED_ITEM).item());
 		
-		CardStoredItemComponent component = card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
-		return ignoreGhost && component.isGhostItem() ? ItemStack.EMPTY : component.storedStack();
+		return card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack();
 	}
 	
 	public static boolean isReadableCard(ItemStack card)
@@ -87,7 +80,7 @@ public class AlchemyHelper
 	
 	public static boolean hasDecodedItem(ItemStack item)
 	{
-		return item.has(MSItemComponents.CARD_STORED_ITEM);
+		return item.has(MSItemComponents.ENCODED_ITEM) || item.has(MSItemComponents.CARD_STORED_ITEM);
 	}
 	
 	/**
