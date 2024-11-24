@@ -20,6 +20,11 @@ public final class MSItemComponents
 					.persistent(EncodedItemComponent.CODEC)
 					.networkSynchronized(EncodedItemComponent.STREAM_CODEC)
 					.build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CardStoredItemComponent>> CARD_STORED_ITEM = REGISTRY.register("card_stored_item", () ->
+			new DataComponentType.Builder<CardStoredItemComponent>()
+					.persistent(CardStoredItemComponent.CODEC)
+					.networkSynchronized(CardStoredItemComponent.STREAM_CODEC)
+					.build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<FrogTraitsComponent>> FROG_TRAITS = REGISTRY.register("frog_traits", () ->
 			new DataComponentType.Builder<FrogTraitsComponent>()
 					.persistent(FrogTraitsComponent.CODEC)

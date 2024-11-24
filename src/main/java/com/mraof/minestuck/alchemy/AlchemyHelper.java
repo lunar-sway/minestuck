@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.Echeladder;
@@ -54,9 +55,11 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack getDecodedItem(ItemStack card, boolean ignoreGhost)
 	{
-		EncodedItemComponent component = card.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY);
-		return ignoreGhost && component.type() == EncodedItemComponent.EncodeType.GHOST ? ItemStack.EMPTY : component.storedStack();
+		if (card.has(MSItemComponents.ENCODED_ITEM))
+			return new ItemStack(card.get(MSItemComponents.ENCODED_ITEM).item());
 		
+		CardStoredItemComponent component = card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
+		return ignoreGhost && component.type() == CardStoredItemComponent.EncodeType.GHOST ? ItemStack.EMPTY : component.storedStack();
 	}
 	
 	public static boolean isReadableCard(ItemStack card)
@@ -67,23 +70,22 @@ public class AlchemyHelper
 	@Nullable
 	public static String getCode(ItemStack card)
 	{
-		return card.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY).code();
+		return card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).code();
 	}
 	
 	public static boolean isPunchedCard(ItemStack item)
 	{
-		return item.is(CAPTCHA_CARD) && item.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY).isEncoded();
+		return item.is(CAPTCHA_CARD) && item.has(MSItemComponents.ENCODED_ITEM);
 	}
 	
 	public static boolean isGhostCard(ItemStack item)
 	{
-		return item.is(CAPTCHA_CARD) && item.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY).isGhostType();
+		return item.is(CAPTCHA_CARD) && item.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).isGhostType();
 	}
-	
 	
 	public static boolean hasDecodedItem(ItemStack item)
 	{
-		return item.has(MSItemComponents.ENCODED_ITEM);
+		return item.has(MSItemComponents.CARD_STORED_ITEM);
 	}
 	
 	/**
@@ -109,7 +111,7 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack createEncodedItem(Item itemIn, ItemStack itemOut)
 	{
-		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.createEncodedItem(itemIn));
+		itemOut.set(MSItemComponents.ENCODED_ITEM, new EncodedItemComponent(itemIn));
 		return itemOut;
 	}
 	
@@ -123,7 +125,7 @@ public class AlchemyHelper
 	public static ItemStack createCard(ItemStack itemIn)
 	{
 		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.createStoredItem(itemIn));
+		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.createStoredItem(itemIn));
 		return itemOut;
 	}
 	
@@ -131,12 +133,12 @@ public class AlchemyHelper
 	public static ItemStack createGhostCard(ItemStack itemIn)
 	{
 		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.createGhostItem(itemIn));
+		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.createGhostItem(itemIn));
 		return itemOut;
 	}
 	
 	public static void removeItemFromCard(ItemStack card)
 	{
-		card.remove(MSItemComponents.ENCODED_ITEM);
+		card.remove(MSItemComponents.CARD_STORED_ITEM);
 	}
 }

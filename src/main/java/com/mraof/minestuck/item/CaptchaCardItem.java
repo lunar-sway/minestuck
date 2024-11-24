@@ -2,11 +2,9 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
-import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -89,7 +87,7 @@ public class CaptchaCardItem extends Item
 	@Nullable
 	private Component getCaptcha(ItemStack stack)
 	{
-		EncodedItemComponent dataComponent = stack.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY);
+		CardStoredItemComponent dataComponent = stack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
 		return dataComponent.code().isEmpty() ? null : Component.literal(dataComponent.code()).withStyle(style -> style.withObfuscated(!dataComponent.canReadCode()));
 	}
 	
