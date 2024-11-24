@@ -5,7 +5,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
@@ -245,7 +244,7 @@ public final class DeployList
 		
 	}
 	
-	public static void registerItem(String name, ItemStack stack, ImmutableGristSet cost, int tier, EntryLists entryList)
+	public static void registerItem(String name, ItemStack stack, GristSet.Immutable cost, int tier, EntryLists entryList)
 	{
 		registerItem(name, stack, cost, cost, tier, entryList);
 	}
@@ -263,7 +262,7 @@ public final class DeployList
 	 * @param entryList Enum defining which list the item is in. (I.E. Deployables or Atheneum).
 	 * You cannot directly register items to EntryLists.ALL, as it is simply a list of all entries, regardless of category.
 	 */
-	public static void registerItem(String name, ItemStack stack, ImmutableGristSet cost1, ImmutableGristSet cost2, int tier, EntryLists entryList)
+	public static void registerItem(String name, ItemStack stack, GristSet.Immutable cost1, GristSet.Immutable cost2, int tier, EntryLists entryList)
 	{
 		registerItem(name, cost1, cost2, tier, null, (connection, world) -> stack, entryList);
 	}
@@ -271,7 +270,7 @@ public final class DeployList
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, ImmutableGristSet cost, int tier, IAvailabilityCondition condition,
+	public static void registerItem(String name, GristSet.Immutable cost, int tier, IAvailabilityCondition condition,
 									BiFunction<SburbPlayerData, Level, ItemStack> item, EntryLists entryList)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, playerData) -> cost, entryList);
@@ -280,7 +279,7 @@ public final class DeployList
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, ImmutableGristSet cost1, ImmutableGristSet cost2, int tier, IAvailabilityCondition condition,
+	public static void registerItem(String name, GristSet.Immutable cost1, GristSet.Immutable cost2, int tier, IAvailabilityCondition condition,
 									BiFunction<SburbPlayerData, Level, ItemStack> item, EntryLists entryList)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, playerData) -> isPrimary ? cost1 : cost2, entryList);

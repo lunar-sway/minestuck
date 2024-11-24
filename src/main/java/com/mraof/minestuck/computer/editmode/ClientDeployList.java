@@ -1,7 +1,6 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.network.editmode.ServerEditPackets;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -50,7 +49,7 @@ public final class ClientDeployList
 	public static class Entry
 	{
 		private ItemStack item;
-		private ImmutableGristSet cost;
+		private GristSet.Immutable cost;
 		private int index;
 		private DeployList.EntryLists category;
 		

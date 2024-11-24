@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
@@ -18,7 +17,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record GristToastPacket(ImmutableGristSet gristValue, GristHelper.EnumSource source,
+public record GristToastPacket(GristSet.Immutable gristValue, GristHelper.EnumSource source,
 							   boolean isCacheOwner) implements MSPacket.PlayToClient
 {
 	public static final Type<GristToastPacket> ID = new Type<>(Minestuck.id("grist_toast"));
