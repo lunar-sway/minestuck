@@ -76,7 +76,7 @@ public class AlchemyHelper
 	
 	public static boolean isPunchedCard(ItemStack item)
 	{
-		return getEncodeType(item) == EncodedItemComponent.EncodeType.PUNCHED;
+		return getEncodeType(item) == EncodedItemComponent.EncodeType.ENCODED;
 	}
 	
 	public static boolean isGhostCard(ItemStack item)
@@ -119,7 +119,7 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack createEncodedItem(ItemStack itemIn, ItemStack itemOut)
 	{
-		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.STORE, false));
+		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.ENCODED, false));
 		return itemOut;
 	}
 	
@@ -127,7 +127,7 @@ public class AlchemyHelper
 	public static ItemStack createPunchedCard(ItemStack itemIn)
 	{
 		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.PUNCHED, true));
+		itemOut.set(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.create(new ItemStack(itemIn.getItem()), EncodedItemComponent.EncodeType.ENCODED, true));
 		return itemOut;
 	}
 	

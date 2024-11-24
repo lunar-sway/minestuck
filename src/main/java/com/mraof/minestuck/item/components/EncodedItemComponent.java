@@ -56,7 +56,7 @@ public record EncodedItemComponent(ItemStack storedStack, EncodeType type, @Null
 	public enum EncodeType implements StringRepresentable
 	{
 		STORE("stored"),
-		PUNCHED("punched"),
+		ENCODED("encoded"),
 		GHOST("ghost"),
 		;
 		public static final Codec<EncodeType> CODEC = StringRepresentable.fromEnum(EncodeType::values);
