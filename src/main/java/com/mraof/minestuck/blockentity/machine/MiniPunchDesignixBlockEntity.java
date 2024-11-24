@@ -122,7 +122,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		}
 		
 		if(!output.isEmpty())
-			return AlchemyHelper.createPunchedCard(output);
+			return AlchemyHelper.createPunchedCard(output.getItem());
 		else return ItemStack.EMPTY;
 	}
 	

@@ -74,7 +74,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	{
 		builder.addSlot(RecipeIngredientRole.CATALYST, 19, 5)
 				.addItemStacks(Arrays.stream(recipe.ingredient().getItems())
-						.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL.get())))
+						.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack.getItem(), new ItemStack(MSBlocks.CRUXITE_DOWEL.get())))
 						.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.getPlayerColor())).toList());
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 127, 5)
 				.addIngredients(recipe.ingredient());

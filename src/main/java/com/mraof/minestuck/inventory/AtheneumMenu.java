@@ -163,7 +163,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 		
 		if(pClickType == ClickType.PICKUP && pButton == 1 && pSlotId >= 0)
 		{
-			this.setCarried(AlchemyHelper.createPunchedCard(this.slots.get(pSlotId).getItem()));
+			this.setCarried(AlchemyHelper.createPunchedCard(this.slots.get(pSlotId).getItem().getItem()));
 		}
 		
 	}

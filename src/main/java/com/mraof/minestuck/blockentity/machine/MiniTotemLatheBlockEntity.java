@@ -127,8 +127,9 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 		if(output.isEmpty())
 			return ItemStack.EMPTY;
 		
-		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.get().asItem())
-				? new ItemStack(MSBlocks.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
+		ItemStack outputDowel = output.is(MSItems.GENERIC_OBJECT)
+				? new ItemStack(MSItems.CRUXITE_DOWEL.get())
+				: AlchemyHelper.createEncodedItem(output.getItem(), new ItemStack(MSItems.CRUXITE_DOWEL.get()));
 		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowelInput));	//Setting color
 		return outputDowel;
 	}

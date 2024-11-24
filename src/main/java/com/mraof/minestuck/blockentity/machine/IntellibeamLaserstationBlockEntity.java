@@ -5,6 +5,8 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
@@ -162,7 +164,9 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void applyReadableNBT(ItemStack taggedCard)
 	{
-		AlchemyHelper.discoverCard(taggedCard);
+		EncodedItemComponent encodedItem = taggedCard.get(MSItemComponents.ENCODED_ITEM);
+		if(encodedItem != null)
+			taggedCard.set(MSItemComponents.ENCODED_ITEM, encodedItem.discovered());
 	}
 	
 	public void addExperience(Player player)

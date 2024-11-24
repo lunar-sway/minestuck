@@ -200,7 +200,9 @@ public class TotemLatheBlockEntity extends BlockEntity
 		if(be instanceof ItemStackBlockEntity beItem)
 		{
 			ItemStack oldDowel = beItem.getStack();
-			ItemStack newDowel = output.is(MSItems.GENERIC_OBJECT.get()) ? new ItemStack(MSItems.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
+			ItemStack newDowel = output.is(MSItems.GENERIC_OBJECT)
+					? new ItemStack(MSItems.CRUXITE_DOWEL.get())
+					: AlchemyHelper.createEncodedItem(output.getItem(), new ItemStack(MSItems.CRUXITE_DOWEL.get()));
 			ColorHandler.setColor(newDowel, ColorHandler.getColorFromStack(oldDowel));
 			beItem.setStack(newDowel);
 			

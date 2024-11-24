@@ -184,7 +184,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			if(!output.isEmpty())
 			{
 				MSCriteriaTriggers.PUNCH_DESIGNIX.get().trigger(player, captchaItemStack, storedStackInCard, output);
-				setCard(AlchemyHelper.createPunchedCard(output));
+				setCard(AlchemyHelper.createPunchedCard(output.getItem()));
 				effects(true);
 			}
 		}
