@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:slime_block"
+  },
+  "input2": {
+    "item": "minestuck:glowing_mushroom"
+  },
+  "mode": "or",
+  "output": "minestuck:glowy_goop"
+}

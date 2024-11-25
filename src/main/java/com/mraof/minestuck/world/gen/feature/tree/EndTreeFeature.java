@@ -30,8 +30,7 @@ public class EndTreeFeature extends Feature<NoneFeatureConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos position = context.origin();
-		BlockPos soilPos = position.below();
-		if(level.getBlockState(soilPos).canSustainPlant(level, soilPos, Direction.UP, MSBlocks.END_SAPLING.get()))
+		if(MSBlocks.END_SAPLING.get().defaultBlockState().canSurvive(level, position))
 		{
 			if(subGenerate(level, context.random(), position, position, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, 4))
 			{

@@ -23,7 +23,7 @@ public class AlchemiterScreen extends Screen
 {
 	public static final String TITLE = "minestuck.alchemiter";
 	
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/large_alchemiter.png");
 	private static final int guiWidth = 159, guiHeight = 102;
 	private final AlchemiterBlockEntity alchemiter;
 	private int itemQuantity;
@@ -107,7 +107,7 @@ public class AlchemiterScreen extends Screen
 	
 	private void alchemize()
 	{
-		PacketDistributor.SERVER.noArg().send(new TriggerAlchemiterPacket(itemQuantity, alchemiter.getBlockPos()));
+		PacketDistributor.sendToServer(new TriggerAlchemiterPacket(itemQuantity, alchemiter.getBlockPos()));
 		this.minecraft.setScreen(null);
 	}
 	

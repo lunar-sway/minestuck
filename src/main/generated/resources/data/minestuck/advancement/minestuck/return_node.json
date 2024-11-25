@@ -1,0 +1,26 @@
+{
+  "parent": "minestuck:minestuck/entry",
+  "criteria": {
+    "touch_return_node": {
+      "trigger": "minestuck:return_node"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.return_node.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:red_bed"
+    },
+    "title": {
+      "translate": "advancements.minestuck.return_node.title"
+    }
+  },
+  "requirements": [
+    [
+      "touch_return_node"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

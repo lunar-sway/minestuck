@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:stone_bricks"
+  },
+  "input2": {
+    "item": "minecraft:lapis_lazuli"
+  },
+  "mode": "or",
+  "output": "minestuck:shade_bricks"
+}

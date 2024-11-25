@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_strawberry_chunks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:strawberry_chunk"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:strawberry"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_strawberry_chunks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:strawberry"
+    ]
+  }
+}

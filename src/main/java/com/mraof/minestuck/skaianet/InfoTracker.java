@@ -14,9 +14,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * Works with the info that will be sent to players through {@link SkaianetInfoPackets}
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class InfoTracker
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -69,12 +69,9 @@ public final class InfoTracker
 	}
 	
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Post event)
 	{
-		if(event.phase == TickEvent.Phase.END)
-		{
-			SkaianetData.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
-		}
+		SkaianetData.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
 	}
 	
 	private void onPlayerLoggedIn(ServerPlayer player)
@@ -82,7 +79,7 @@ public final class InfoTracker
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		getSet(identifier).add(identifier);
 		sendConnectionInfo(identifier);
-		PacketDistributor.PLAYER.with(player).send(createLandChainPacket(),
+		PacketDistributor.sendToPlayer(player, createLandChainPacket(),
 				new SkaianetInfoPackets.HasEntered(SburbPlayerData.get(player).hasEntered()));
 	}
 	
@@ -107,7 +104,7 @@ public final class InfoTracker
 			LOGGER.warn("[Skaianet] Player {} already got the requested data.", player.getName());
 		}
 		
-		PacketDistributor.PLAYER.with(player).send(generateClientInfoPacket(p1));
+		PacketDistributor.sendToPlayer(player, generateClientInfoPacket(p1));
 	}
 	
 	
@@ -193,7 +190,7 @@ public final class InfoTracker
 		
 		if(resendLandChains)
 		{
-			PacketDistributor.ALL.noArg().send(createLandChainPacket());
+			PacketDistributor.sendToAllPlayers(createLandChainPacket());
 			resendLandChains = false;
 		}
 	}
@@ -214,7 +211,7 @@ public final class InfoTracker
 						MSCriteriaTriggers.SBURB_CONNECTION.get().trigger(playerListener);
 				}
 				
-				PacketDistributor.PLAYER.with(playerListener).send(packet);
+				PacketDistributor.sendToPlayer(playerListener, packet);
 			}
 		}
 	}

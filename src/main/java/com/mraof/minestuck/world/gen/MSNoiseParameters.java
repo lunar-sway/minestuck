@@ -15,6 +15,6 @@ public final class MSNoiseParameters
 	
 	private static ResourceKey<NormalNoise.NoiseParameters> key(String name)
 	{
-		return ResourceKey.create(Registries.NOISE, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.NOISE, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, name));
 	}
 }

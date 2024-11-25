@@ -1,17 +1,29 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.frog_creation.start",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.frog_creation.start.who",
         "next_dialogue": {
           "id": "minestuck:consort/frog_creation/explain",
           "reply_messages": [],
           "set_as_entrypoint": true
-        }
+        },
+        "triggers": []
       },
       {
-        "message": "minestuck.dots"
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dots",
+        "triggers": []
       }
     ]
   }

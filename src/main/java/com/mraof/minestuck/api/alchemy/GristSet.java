@@ -1,10 +1,15 @@
 package com.mraof.minestuck.api.alchemy;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * An interface for anything that might contain grist.
@@ -104,20 +109,24 @@ public interface GristSet
 		return new DefaultImmutableGristSet(builder);
 	}
 	
-	static void write(GristSet gristSet, FriendlyByteBuf buffer)
+	/**
+	 * Container for different codecs for grist sets.
+	 * Codecs are not placed directly in the grist set class to avoid cyclic class loading between grist set and grist amount.
+	 */
+	final class Codecs
 	{
-		Collection<GristAmount> amounts = gristSet.asAmounts();
-		buffer.writeInt(amounts.size());
-		amounts.forEach(gristAmount -> gristAmount.write(buffer));
-	}
-	
-	static ImmutableGristSet read(FriendlyByteBuf buffer)
-	{
-		int size = buffer.readInt();
-		List<GristAmount> list = new ArrayList<>(size);
-		for(int i = 0; i < size; i++)
-			list.add(GristAmount.read(buffer));
+		public static final Codec<ImmutableGristSet> NON_NEGATIVE_CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(DefaultImmutableGristSet::create, ImmutableGristSet::asAmounts);
+		/**
+		 * Codec for serializing a grist set in a map format. Currently used for json serialization.
+		 * Perhaps we should prefer this format for nbt-serialization as well? Something worth considering for the future.
+		 */
+		public static final Codec<ImmutableGristSet> MAP_CODEC = Codec.unboundedMap(GristTypes.REGISTRY.byNameCodec(), Codec.LONG).xmap(DefaultImmutableGristSet::new, ImmutableGristSet::asMap);
+		public static final Codec<ImmutableGristSet> LIST_CODEC = GristAmount.LIST_CODEC.xmap(DefaultImmutableGristSet::create, ImmutableGristSet::asAmounts);
 		
-		return DefaultImmutableGristSet.create(list);
+		public static final StreamCodec<RegistryFriendlyByteBuf, ImmutableGristSet> STREAM_CODEC = StreamCodec.composite(
+				GristAmount.STREAM_CODEC.apply(ByteBufCodecs.list()),
+				GristSet::asAmounts,
+				DefaultImmutableGristSet::create
+		);
 	}
 }

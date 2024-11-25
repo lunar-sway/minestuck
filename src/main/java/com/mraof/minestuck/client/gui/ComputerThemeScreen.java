@@ -174,7 +174,7 @@ public class ComputerThemeScreen extends Screen
 	{
 		if(!selectedTheme.id().equals(computer.getTheme()))
 		{
-			PacketDistributor.SERVER.noArg().send(ThemeSelectPacket.create(computer, selectedTheme.id()));
+			PacketDistributor.sendToServer(ThemeSelectPacket.create(computer, selectedTheme.id()));
 		}
 		
 		onClose();

@@ -4,38 +4,28 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorMenu;
 import com.mraof.minestuck.network.MSPacket;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record SetSendificatorDestinationPacket(BlockPos destinationBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("set_sendificator_destination");
+	public static final Type<SetSendificatorDestinationPacket> ID = new Type<>(Minestuck.id("set_sendificator_destination"));
+	public static final StreamCodec<ByteBuf, SetSendificatorDestinationPacket> STREAM_CODEC = BlockPos.STREAM_CODEC.map(SetSendificatorDestinationPacket::new, SetSendificatorDestinationPacket::destinationBlockPos);
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeBlockPos(destinationBlockPos);
-	}
-	
-	public static SetSendificatorDestinationPacket read(FriendlyByteBuf buffer)
-	{
-		BlockPos destinationBlockPos = buffer.readBlockPos();
-		
-		return new SetSendificatorDestinationPacket(destinationBlockPos);
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
 		AbstractContainerMenu playerContainer = player.containerMenu;
 		if(!(playerContainer instanceof SendificatorMenu sendificatorMenu))

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:chalk"
+  },
+  "input2": {
+    "item": "minecraft:chiseled_stone_bricks"
+  },
+  "mode": "and",
+  "output": "minestuck:pipe_intersection"
+}

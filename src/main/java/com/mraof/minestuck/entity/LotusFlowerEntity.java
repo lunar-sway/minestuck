@@ -10,7 +10,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -20,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -29,13 +32,13 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
@@ -207,7 +210,7 @@ public class LotusFlowerEntity extends Entity implements GeoEntity, IEntityWithC
 	{
 		this.animationType = animation;
 		LotusFlowerAnimationPacket packet = LotusFlowerAnimationPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-		PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
+		PacketDistributor.sendToPlayersTrackingEntity(this, packet);
 	}
 	
 	/**
@@ -219,7 +222,7 @@ public class LotusFlowerEntity extends Entity implements GeoEntity, IEntityWithC
 		{
 			ServerLevel serverLevel = (ServerLevel) level();
 			
-			LootTable lootTable = serverLevel.getServer().getLootData().getLootTable(MSLootTables.LOTUS_FLOWER_DEFAULT);
+			LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(MSLootTables.LOTUS_FLOWER_DEFAULT);
 			List<ItemStack> loot = lootTable.getRandomItems(new LootParams.Builder(serverLevel).create(LootContextParamSets.EMPTY));
 			if(loot.isEmpty())
 				LOGGER.warn("Tried to generate loot for Lotus Flower, but no items were generated!");
@@ -248,16 +251,17 @@ public class LotusFlowerEntity extends Entity implements GeoEntity, IEntityWithC
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(animationType);
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
 		animationType = additionalData.readEnum(Animation.class);
 	}
+	
 	
 	public void setAnimationFromPacket(Animation newAnimation)
 	{
@@ -292,7 +296,7 @@ public class LotusFlowerEntity extends Entity implements GeoEntity, IEntityWithC
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 	
 	}

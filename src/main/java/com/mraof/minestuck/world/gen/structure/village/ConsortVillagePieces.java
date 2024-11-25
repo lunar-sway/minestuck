@@ -338,7 +338,7 @@ public class ConsortVillagePieces
 					consort.merchantType = type;
 					consort.restrictTo(pos, maxHomeDistance);
 					
-					consort.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null, null);
+					consort.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null);
 					
 					level.addFreshEntity(consort);
 					return true;

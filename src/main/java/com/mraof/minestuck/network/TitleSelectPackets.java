@@ -5,8 +5,11 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Optional;
 
@@ -14,28 +17,18 @@ public final class TitleSelectPackets
 {
 	public record OpenScreen(Optional<Title> rejectedTitle) implements MSPacket.PlayToClient
 	{
-		public static final ResourceLocation ID = Minestuck.id("title_select/open_screen");
+		
+		public static final Type<OpenScreen> ID = new Type<>(Minestuck.id("title_select/open_screen"));
+		public static final StreamCodec<FriendlyByteBuf, OpenScreen> STREAM_CODEC = ByteBufCodecs.optional(Title.STREAM_CODEC).map(OpenScreen::new, OpenScreen::rejectedTitle);
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeOptional(this.rejectedTitle, (buffer1, title) -> title.write(buffer));
-		}
-		
-		public static OpenScreen read(FriendlyByteBuf buffer)
-		{
-			Optional<Title> rejectedTitle = buffer.readOptional(Title::read);
-			return new OpenScreen(rejectedTitle);
-		}
-		
-		@Override
-		public void execute()
+		public void execute(IPayloadContext context)
 		{
 			MSScreenFactories.displayTitleSelectScreen(this.rejectedTitle.orElse(null));
 		}
@@ -43,7 +36,9 @@ public final class TitleSelectPackets
 	
 	public record PickTitle(Optional<Title> selectedTitle) implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("title_select/pick");
+		
+		public static final Type<PickTitle> ID = new Type<>(Minestuck.id("title_select/pick"));
+		public static final StreamCodec<FriendlyByteBuf, PickTitle> STREAM_CODEC = ByteBufCodecs.optional(Title.STREAM_CODEC).map(PickTitle::new, PickTitle::selectedTitle);
 		
 		public static PickTitle random()
 		{
@@ -56,25 +51,13 @@ public final class TitleSelectPackets
 		}
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeOptional(this.selectedTitle, (buffer1, title) -> title.write(buffer));
-		}
-		
-		public static PickTitle read(FriendlyByteBuf buffer)
-		{
-			Optional<Title> selectedTitle = buffer.readOptional(Title::read);
-			return new PickTitle(selectedTitle);
-		}
-		
-		@Override
-		public void execute(ServerPlayer player)
+		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			TitleSelectionHook.handleTitleSelection(player, this.selectedTitle.orElse(null));
 		}

@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [Unreleased 1.21]
+
+- Updated to run with Minecraft 1.21 / Neoforge 21.0
+
+### Changed
+
+- Knitting needle crafting recipe now produces one item instead of two
+
+### Contributors for this release
+
+- Cibernet, Dweblenod, kirderf1
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
@@ -46,8 +56,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - Dweblenod, sipherNil, gtzc, Cibernet, glubtier, rose_bushes_, kirderf1
-
-## [Unreleased]
 
 ## [1.20.1-1.12.1.0] - 2024-09-08
 

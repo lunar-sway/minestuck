@@ -46,7 +46,7 @@ public final class DialogueProvider implements DataProvider
 	
 	public ResourceLocation dialogueId(String path)
 	{
-		return new ResourceLocation(this.modId, this.subFolder + "/" + path);
+		return ResourceLocation.fromNamespaceAndPath(this.modId, this.subFolder + "/" + path);
 	}
 	
 	public ResourceLocation add(String path, DialogueProducer builder)
@@ -345,7 +345,7 @@ public final class DialogueProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, Dialogue.NodeSelector> entry : dialogues.entrySet())
 		{
 			Path dialoguePath = getPath(outputPath, entry.getKey());
-			JsonElement dialogueJson = Dialogue.NodeSelector.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			JsonElement dialogueJson = Dialogue.NodeSelector.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
 			futures.add(DataProvider.saveStable(cache, dialogueJson, dialoguePath));
 		}
 		

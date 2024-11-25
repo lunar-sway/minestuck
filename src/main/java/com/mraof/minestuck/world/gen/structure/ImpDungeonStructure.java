@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class ImpDungeonStructure extends Structure
 {
-	public static final Codec<ImpDungeonStructure> CODEC = simpleCodec(ImpDungeonStructure::new);
+	public static final MapCodec<ImpDungeonStructure> CODEC = simpleCodec(ImpDungeonStructure::new);
 	
 	public ImpDungeonStructure(StructureSettings settings)
 	{

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_wall",
+  "key": {
+    "#": {
+      "item": "minestuck:chalk_bricks"
+    }
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "minestuck:chalk_brick_wall"
+  }
+}

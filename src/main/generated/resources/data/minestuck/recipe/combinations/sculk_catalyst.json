@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:sculk"
+  },
+  "input2": {
+    "item": "minecraft:spawner"
+  },
+  "mode": "or",
+  "output": "minecraft:sculk_catalyst"
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:leather_boots"
+  },
+  "input2": {
+    "item": "minestuck:white_crown_stained_glass"
+  },
+  "mode": "and",
+  "output": "minestuck:prospit_shoes"
+}

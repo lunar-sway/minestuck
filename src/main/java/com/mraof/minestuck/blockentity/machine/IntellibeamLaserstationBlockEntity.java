@@ -2,7 +2,6 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
@@ -10,6 +9,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -162,8 +162,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void applyReadableNBT(ItemStack taggedCard)
 	{
-		taggedCard.getOrCreateTag().putString("captcha_code",
-				CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(taggedCard).getItem(), Objects.requireNonNull(level).getServer()));
+		AlchemyHelper.discoverCard(taggedCard);
 	}
 	
 	public void addExperience(Player player)
@@ -196,10 +195,10 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
-		setCard(ItemStack.of(nbt.getCompound("card")));
+		super.loadAdditional(nbt, pRegistries);
+		setCard(ItemStack.parseOptional(pRegistries, nbt.getCompound("card")));
 		
 		CompoundTag progressData = nbt.getCompound("decoding_progress");
 		for(String itemName : progressData.getAllKeys())
@@ -215,10 +214,10 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
-		compound.put("card", analyzedCard.save(new CompoundTag()));
+		super.saveAdditional(compound, provider);
+		compound.put("card", analyzedCard.saveOptional(provider));
 		
 		CompoundTag progressData = new CompoundTag();
 		for(Map.Entry<Item, Integer> entry : decodingProgress.entrySet())

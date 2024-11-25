@@ -28,13 +28,12 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		RenderSystem.setShaderTexture(0, ingredient.type().getIcon());
 		
 		Matrix4f pose = guiGraphics.pose().last().pose();
-		BufferBuilder render = Tesselator.getInstance().getBuilder();
-		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		render.vertex(pose, 0, 16, 0).uv(0, 1).endVertex();
-		render.vertex(pose, 16, 16, 0).uv(1, 1).endVertex();
-		render.vertex(pose, 16, 0, 0).uv(1, 0).endVertex();
-		render.vertex(pose, 0, 0, 0).uv(0, 0).endVertex();
-		Tesselator.getInstance().end();
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.addVertex(pose, 0, 16, 0).setUv(0, 1);
+		buffer.addVertex(pose, 16, 16, 0).setUv(1, 1);
+		buffer.addVertex(pose, 16, 0, 0).setUv(1, 0);
+		buffer.addVertex(pose, 0, 0, 0).setUv(0, 0);
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 		
 		RenderSystem.disableBlend();
 	}

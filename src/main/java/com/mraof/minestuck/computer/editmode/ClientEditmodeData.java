@@ -10,12 +10,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientEditmodeData
 {
 	private static boolean activated;
@@ -64,7 +64,7 @@ public final class ClientEditmodeData
 	public static void onLocationsPacket(EditmodeLocationsPacket packet)
 	{
 		locations = packet.locations();
-		clientLand = packet.land();
+		clientLand = packet.land().orElse(null);
 		if(Minecraft.getInstance().screen instanceof EditmodeSettingsScreen screen)
 			screen.recreateTeleportButtons();
 	}

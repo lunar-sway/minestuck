@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -23,11 +22,13 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Outputs a redstone signal proportional to the recorded value its block entity is currently set to, divided by the divide by value stored also stored in the block entity.
  * Stats are increased when the relevant event(in ServerEventHandler) occurs within 16 blocks of a stat storer. GUI is limited by creative shock
  */
+@ParametersAreNonnullByDefault
 public class StatStorerBlock extends Block implements EntityBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -39,8 +40,7 @@ public class StatStorerBlock extends Block implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof StatStorerBlockEntity statStorer))
 			return InteractionResult.PASS;
@@ -57,16 +57,14 @@ public class StatStorerBlock extends Block implements EntityBlock
 		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWER);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWER) > 0;
 	}

@@ -16,7 +16,7 @@ public class DiskBurner extends ButtonListProgram
 	public static final String BURN_CLIENT_DISK = "minestuck.program.disk_burner.burn_client_disk";
 	public static final String CHOOSE = "minestuck.program.disk_burner.choose";
 	
-	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/disk_burner.png");
+	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/disk_burner.png");
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
@@ -42,10 +42,10 @@ public class DiskBurner extends ButtonListProgram
 	{
 		if(buttonName.equals(BURN_CLIENT_DISK))
 		{
-			PacketDistributor.SERVER.noArg().send(BurnDiskPacket.create(be, 0));
+			PacketDistributor.sendToServer(BurnDiskPacket.create(be, 0));
 		} else if(buttonName.equals(BURN_SERVER_DISK))
 		{
-			PacketDistributor.SERVER.noArg().send(BurnDiskPacket.create(be, 1));
+			PacketDistributor.sendToServer(BurnDiskPacket.create(be, 1));
 		}
 	}
 	

@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class SkaiaClient
 {
 	private static final Map<Integer, ReducedPlayerState> playerStateMap = new HashMap<>();
@@ -56,7 +56,7 @@ public final class SkaiaClient
 		boolean b = playerStateMap.get(computer.ownerId) != null;
 		if(!b)
 		{
-			PacketDistributor.SERVER.noArg().send(new SkaianetInfoPackets.Request(computer.ownerId));
+			PacketDistributor.sendToServer(new SkaianetInfoPackets.Request(computer.ownerId));
 			be = computer;
 		}
 		return b;

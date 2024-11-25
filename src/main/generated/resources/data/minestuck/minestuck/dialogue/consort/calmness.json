@@ -3,6 +3,8 @@
     "animation": {
       "emotion": "anxious"
     },
-    "message": "minestuck.dialogue.consort.calmness"
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.calmness",
+    "responses": []
   }
 }

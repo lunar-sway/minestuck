@@ -28,7 +28,7 @@ public class SburbClient extends ButtonListProgram
 	public static final String SELECT = "minestuck.program.client.select_message";
 	public static final String RESUME_CLIENT = "minestuck.program.client.resume_client_message";
 	
-	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_client.png");
+	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_client.png");
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
@@ -68,15 +68,15 @@ public class SburbClient extends ButtonListProgram
 	{
 		switch(buttonName)
 		{
-			case RESUME_BUTTON -> PacketDistributor.SERVER.noArg().send(ResumeSburbConnectionPackets.asClient(be));
-			case CONNECT_BUTTON -> PacketDistributor.SERVER.noArg().send(ConnectToSburbServerPacket.create(be, (Integer) data[1]));
+			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(be));
+			case CONNECT_BUTTON -> PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(be, (Integer) data[1]));
 			case CLOSE_BUTTON ->
 			{
 				CompoundTag nbt = be.getData(getId());
 				if(!nbt.getBoolean("isResuming") && !nbt.getBoolean("connectedToServer"))
-					PacketDistributor.SERVER.noArg().send(CloseRemoteSburbConnectionPacket.asClient(be));
+					PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(be));
 				else
-					PacketDistributor.SERVER.noArg().send(CloseSburbConnectionPackets.asClient(be));
+					PacketDistributor.sendToServer(CloseSburbConnectionPackets.asClient(be));
 			}
 			case SELECT_COLOR -> Minecraft.getInstance().setScreen(new ColorSelectorScreen(be));
 		}

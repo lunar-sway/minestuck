@@ -11,11 +11,15 @@ import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -40,6 +44,10 @@ import java.util.stream.Stream;
  */
 public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 {
+	public static final StreamCodec<RegistryFriendlyByteBuf, EditmodeLocations> STREAM_CODEC = StreamCodec.of(
+			(encode, locations) -> encode.writeNbt(locations.serializeNBT(encode.registryAccess())),
+			(decode) -> new EditmodeLocations(decode.registryAccess(), decode.readNbt()));
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String REMOVED_LOCATION_MESSAGE = "minestuck.editmode.removed_location";
@@ -62,8 +70,15 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 	public record Area(BlockPos center, int range)
 	{}
 	
+	public EditmodeLocations(HolderLookup.Provider provider, CompoundTag tag)
+	{
+		deserializeNBT(provider, tag);
+	}
+	
+	public EditmodeLocations() {}
+	
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		CompoundTag compoundTag = new CompoundTag();
 		
@@ -90,7 +105,7 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 	}
 	
 	@Override
-	public void deserializeNBT(CompoundTag compoundTag)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
 		ListTag locationsTag = compoundTag.getList("computers", Tag.TAG_COMPOUND);
 		
@@ -106,13 +121,6 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 			
 			this.computers.put(dimension, new BlockPos(posX, posY, posZ));
 		}
-	}
-	
-	public static EditmodeLocations read(CompoundTag compoundTag)
-	{
-		EditmodeLocations locations = new EditmodeLocations();
-		locations.deserializeNBT(compoundTag);
-		return locations;
 	}
 	
 	public List<BlockPos> getSortedPositions(@Nonnull ResourceKey<Level> level, @Nullable ResourceKey<Level> land)

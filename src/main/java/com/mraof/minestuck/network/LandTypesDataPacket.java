@@ -7,52 +7,35 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public record LandTypesDataPacket(Map<ResourceKey<Level>, LandTypePair> types) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("land_types_data");
+	public static final Type<LandTypesDataPacket> ID = new Type<>(Minestuck.id("land_types_data"));
+	private static final StreamCodec<RegistryFriendlyByteBuf, Map<ResourceKey<Level>, LandTypePair>> MAP_STREAM_CODEC = ByteBufCodecs.map(HashMap::new, ResourceKey.streamCodec(Registries.DIMENSION), LandTypePair.STREAM_CODEC);
+	public static final StreamCodec<RegistryFriendlyByteBuf, LandTypesDataPacket> STREAM_CODEC = MAP_STREAM_CODEC.map(LandTypesDataPacket::new, LandTypesDataPacket::types);
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		for(Map.Entry<ResourceKey<Level>, LandTypePair> entry : types.entrySet())
-		{
-			buffer.writeResourceLocation(entry.getKey().location());
-			buffer.writeId(LandTypes.TERRAIN_REGISTRY, entry.getValue().getTerrain());
-			buffer.writeId(LandTypes.TITLE_REGISTRY, entry.getValue().getTitle());
-		}
-	}
-	
-	public static LandTypesDataPacket read(FriendlyByteBuf buffer)
-	{
-		ImmutableMap.Builder<ResourceKey<Level>, LandTypePair> builder = new ImmutableMap.Builder<>();
-		
-		while(buffer.isReadable())
-		{
-			ResourceKey<Level> world = ResourceKey.create(Registries.DIMENSION, buffer.readResourceLocation());
-			TerrainLandType terrain = buffer.readById(LandTypes.TERRAIN_REGISTRY);
-			TitleLandType title = buffer.readById(LandTypes.TITLE_REGISTRY);
-			builder.put(world, new LandTypePair(terrain, title));
-		}
-		
-		return new LandTypesDataPacket(builder.build());
-	}
-	
-	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		ClientDimensionData.receivePacket(this);
 	}

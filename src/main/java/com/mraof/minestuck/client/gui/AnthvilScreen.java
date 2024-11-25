@@ -23,8 +23,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class AnthvilScreen extends AbstractContainerScreen<AnthvilMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/anthvil.png");
-	private static final ResourceLocation FUEL_STATUS = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/anthvil.png");
+	private static final ResourceLocation FUEL_STATUS = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
 	
 	private static final int FUEL_STATUS_X = 133;
 	private static final int FUEL_STATUS_Y = 7;
@@ -54,7 +54,7 @@ public class AnthvilScreen extends AbstractContainerScreen<AnthvilMenu>
 	private void mend()
 	{
 		//sends a request to mend and refuel uranium
-		PacketDistributor.SERVER.noArg().send(new TriggerAnthvilPacket());
+		PacketDistributor.sendToServer(new TriggerAnthvilPacket());
 	}
 	
 	private void finish()

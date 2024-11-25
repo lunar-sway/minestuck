@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:latchmelter"
+  },
+  "input2": {
+    "item": "minestuck:celestial_fulcrum"
+  },
+  "mode": "or",
+  "output": "minestuck:yaldabaoths_keyton"
+}

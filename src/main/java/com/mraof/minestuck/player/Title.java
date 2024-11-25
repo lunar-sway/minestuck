@@ -10,29 +10,39 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public record Title(EnumClass heroClass, EnumAspect heroAspect)
 {
+	public static final StreamCodec<FriendlyByteBuf, Title> STREAM_CODEC = StreamCodec.composite(
+			NeoForgeStreamCodecs.enumCodec(EnumClass.class),
+			Title::heroClass,
+			NeoForgeStreamCodecs.enumCodec(EnumAspect.class),
+			Title::heroAspect,
+			Title::new
+	);
+	
 	public static final String FORMAT = "title.format";
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private record AspectEffect(MobEffect effect, float strength)
+	private record AspectEffect(net.minecraft.core.Holder<MobEffect> effect, float strength)
 	{
 	}
 	
@@ -70,9 +80,9 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void onPlayerTickEvent(PlayerTickEvent.Pre event)
 	{
-		if(event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer player)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			Title.getTitle(player)
 					.ifPresent(value -> value.handleAspectEffects(player));
@@ -161,19 +171,6 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	private static String makeNBTPrefix(String prefix)
 	{
 		return prefix != null && !prefix.isEmpty() ? prefix + "_" : "";
-	}
-	
-	public static Title read(FriendlyByteBuf buffer)
-	{
-		EnumClass c = EnumClass.getClassFromInt(buffer.readByte());
-		EnumAspect a = EnumAspect.getAspectFromInt(buffer.readByte());
-		return new Title(c, a);
-	}
-	
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeByte(EnumClass.getIntFromClass(heroClass));
-		buffer.writeByte(EnumAspect.getIntFromAspect(heroAspect));
 	}
 	
 	public static Title read(CompoundTag nbt, String keyPrefix)

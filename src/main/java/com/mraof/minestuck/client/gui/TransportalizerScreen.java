@@ -19,7 +19,7 @@ public class TransportalizerScreen extends Screen
 	public static final String TITLE = "minestuck.transportalizer";
 	public static final String DESTINATION_CODE_MESSAGE = "minestuck.transportalizer.destination_code";
 	public static final String DONE_MESSAGE = "minestuck.transportalizer.done";
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_small.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_small.png");
 
 	private static final int guiWidth = 126;
 	private static final int guiHeight = 98;
@@ -82,11 +82,11 @@ public class TransportalizerScreen extends Screen
 		if(be.hasId()) {
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
 			TransportalizerPackets.SetDestId packet = new TransportalizerPackets.SetDestId(be.getBlockPos(), text);
-			PacketDistributor.SERVER.noArg().send(packet);
+			PacketDistributor.sendToServer(packet);
 			minecraft.setScreen(null);
 		} else {
 			TransportalizerPackets.SetId packet = new TransportalizerPackets.SetId(be.getBlockPos(), text);
-			PacketDistributor.SERVER.noArg().send(packet);
+			PacketDistributor.sendToServer(packet);
 			minecraft.setScreen(null);
 		}
 	}

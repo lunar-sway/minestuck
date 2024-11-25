@@ -10,18 +10,18 @@ public class PrismarineArmorModel extends GeoModel<PrismarineArmorItem>
 	@Override
 	public ResourceLocation getModelResource(PrismarineArmorItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "geo/prismarine_armor.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "geo/prismarine_armor.geo.json");
 	}
 	
 	@Override
 	public ResourceLocation getTextureResource(PrismarineArmorItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/models/armor/prismarine_armor.png");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/models/armor/prismarine_armor.png");
 	}
 	
 	@Override
 	public ResourceLocation getAnimationResource(PrismarineArmorItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "animations/prismarine_armor.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "animations/prismarine_armor.animation.json");
 	}
 }

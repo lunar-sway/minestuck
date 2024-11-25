@@ -1,12 +1,13 @@
 package com.mraof.minestuck.item.crafting;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -29,17 +30,17 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	}
 	
 	@Override
-	public boolean matches(Container inventory, Level level)
+	public boolean matches(SingleRecipeInput input, Level level)
 	{
 		return true;	//Only need to do a recipe search once in the getCookingRecipe()
 	}
 	
 	@Override
-	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(Container container, Level level)
+	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(SingleRecipeInput input, Level level)
 	{
 		RecipeManager recipeManager = level.getRecipeManager();
 		return getFallbackRecipes(recipeManager)
-				.filter(recipe -> recipe.matches(container, level))
+				.filter(recipe -> recipe.matches(input, level))
 				.findFirst();
 	}
 	
@@ -76,19 +77,25 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	
 	public static class Serializer implements RecipeSerializer<IrradiatingFallbackRecipe>
 	{
-		private static final Codec<IrradiatingFallbackRecipe> CODEC = RecordCodecBuilder.create(instance ->
+		private static final MapCodec<IrradiatingFallbackRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
 				instance.group(
 						BuiltInRegistries.RECIPE_TYPE.byNameCodec().fieldOf("fallback_type").forGetter(recipe -> recipe.fallbackType)
 				).apply(instance, IrradiatingFallbackRecipe::new));
+		private static final StreamCodec<RegistryFriendlyByteBuf, IrradiatingFallbackRecipe> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
 		
 		@Override
-		public Codec<IrradiatingFallbackRecipe> codec()
+		public MapCodec<IrradiatingFallbackRecipe> codec()
 		{
 			return CODEC;
 		}
 		
 		@Override
-		public IrradiatingFallbackRecipe fromNetwork(FriendlyByteBuf buffer)
+		public StreamCodec<RegistryFriendlyByteBuf, IrradiatingFallbackRecipe> streamCodec()
+		{
+			return STREAM_CODEC;
+		}
+		
+		private static IrradiatingFallbackRecipe fromNetwork(FriendlyByteBuf buffer)
 		{
 			ResourceLocation typeName = buffer.readResourceLocation();
 			RecipeType<?> fallbackType = BuiltInRegistries.RECIPE_TYPE.get(typeName);
@@ -97,8 +104,7 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 			return new IrradiatingFallbackRecipe(fallbackType);
 		}
 		
-		@Override
-		public void toNetwork(FriendlyByteBuf buffer, IrradiatingFallbackRecipe recipe)
+		private static void toNetwork(FriendlyByteBuf buffer, IrradiatingFallbackRecipe recipe)
 		{
 			buffer.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.RECIPE_TYPE.getKey(recipe.fallbackType)));
 		}

@@ -1,9 +1,16 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.underling_commission.no_idea",
     "responses": [
       {
-        "message": "minestuck.dialogue.goodbye"
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.goodbye",
+        "triggers": []
       }
     ]
   }

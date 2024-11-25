@@ -1,7 +1,6 @@
 package com.mraof.minestuck.effects;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
@@ -12,11 +11,9 @@ import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
-import net.neoforged.neoforge.event.entity.living.ZombieEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @see #onMount(net.neoforged.neoforge.event.entity.EntityMountEvent) Cancels out attempts to ride affected entities
  * @see #summonAttempt(ZombieEvent.SummonAidEvent) Cancels out attempts to spawn reinforcements
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class SuspicionEffect extends MobEffect
 {
 	/**
@@ -64,7 +61,7 @@ public class SuspicionEffect extends MobEffect
 	{
 		return (isPushable(entity)
 				&& (entity instanceof LivingEntity livingEntity
-				&& livingEntity.hasEffect(MSEffects.SUSPICION.get())));
+				&& livingEntity.hasEffect(MSEffects.SUSPICION)));
 	}
 	
 	/**
@@ -82,17 +79,17 @@ public class SuspicionEffect extends MobEffect
 			event.setCanceled(true);
 	}
 	
-	/**
+	/* * FIXME
 	 * Cancels out attempts to call for reinforcements.
 	 * Examples: {@link net.minecraft.world.entity.monster.Zombie#hurt(DamageSource, float)}, {@link net.minecraft.world.entity.monster.ZombifiedPiglin#hurt(DamageSource, float)})
-	 */
+	 * /
 	@SubscribeEvent
 	public static void summonAttempt(ZombieEvent.SummonAidEvent event)
 	{
 		if(event.getEntity().hasEffect(MSEffects.SUSPICION.get()))
 			event.setResult(Event.Result.DENY);
 	}
-	
+	*/
 	@Override
 	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier)
 	{
@@ -104,32 +101,33 @@ public class SuspicionEffect extends MobEffect
 	 *
 	 * @param pLivingEntity the afflicted entity. It will be pushed away from any afflicted entity, and from its ride(r).
 	 * @param pAmplifier    the effect's strength. Used to calculate the repulsion range, is applied an exponentiation smaller than 1 to create a diminishing return.
+	 * @return true if the effect should remain, false if the effect should be removed
 	 */
 	@Override
-	public void applyEffectTick(@NotNull LivingEntity pLivingEntity, int pAmplifier)
+	public boolean applyEffectTick(@NotNull LivingEntity pLivingEntity, int pAmplifier)
 	{
 		super.applyEffectTick(pLivingEntity, pAmplifier);
 		
 		//If the entity can't be pushed (armor stand/NoAI), there's no point in continuing
 		if(!isPushable(pLivingEntity))
-			return;
+			return false;
 		
 		//Dismount everyone affected
 		if(pLivingEntity.getVehicle() != null)
 			pLivingEntity.dismountTo(pLivingEntity.getX(), pLivingEntity.getY(), pLivingEntity.getZ());
 		
-		if(pLivingEntity.getPassengers().size() > 0)
+		if(!pLivingEntity.getPassengers().isEmpty())
 			pLivingEntity.ejectPassengers();
 		
 		//The entity won't be pushed if not a flying entity and off the ground
 		if(!(pLivingEntity.onGround() || isFlying(pLivingEntity)))
-			return;
+			return true;
 		
 		double range = RANGE_SCALE * Math.pow(pAmplifier, 0.6);
 		
 		for(LivingEntity otherEntity : pLivingEntity.level().getEntitiesOfClass(LivingEntity.class, pLivingEntity.getBoundingBox().inflate(range, 1, range)))
 		{
-			if(otherEntity != pLivingEntity && otherEntity.hasEffect(this))
+			if(otherEntity != pLivingEntity && otherEntity.hasEffect(MSEffects.SUSPICION))
 			{
 				//Push direction vector (this entity <- other entity)
 				Vec3 push = otherEntity.position().vectorTo(pLivingEntity.position()).multiply(1, 0, 1);
@@ -142,6 +140,8 @@ public class SuspicionEffect extends MobEffect
 				pLivingEntity.push(push.x, 0, push.z);
 			}
 		}
+		
+		return true;
 	}
 	
 }

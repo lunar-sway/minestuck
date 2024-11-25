@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_polished_igneous_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:polished_igneous_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:polished_igneous_wall_from_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_polished_igneous_stone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:polished_igneous_wall_from_stonecutting"
+    ]
+  }
+}

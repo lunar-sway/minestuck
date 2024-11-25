@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pumice_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:pumice_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:pumice_brick_wall"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pumice_bricks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:pumice_brick_wall"
+    ]
+  }
+}

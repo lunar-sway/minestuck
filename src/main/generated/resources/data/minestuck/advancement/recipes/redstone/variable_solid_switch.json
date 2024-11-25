@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_solid_switch": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:solid_switch"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:variable_solid_switch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_solid_switch"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:variable_solid_switch"
+    ]
+  }
+}

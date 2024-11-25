@@ -143,7 +143,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 		}
 		
 		AtheneumPackets.Update packet = new AtheneumPackets.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
-		PacketDistributor.PLAYER.with(serverPlayer).send(packet);
+		PacketDistributor.sendToPlayer(serverPlayer, packet);
 	}
 	
 	public void receiveUpdatePacket(AtheneumPackets.Update packet)

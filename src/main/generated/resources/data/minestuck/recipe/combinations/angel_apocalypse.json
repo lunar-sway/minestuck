@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_sword"
+  },
+  "input2": {
+    "item": "minecraft:feather"
+  },
+  "mode": "and",
+  "output": "minestuck:angel_apocalypse"
+}

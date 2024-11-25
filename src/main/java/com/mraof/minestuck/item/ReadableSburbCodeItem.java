@@ -17,7 +17,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
@@ -119,7 +118,7 @@ public abstract class ReadableSburbCodeItem extends Item
 		}
 		
 		@Override
-		public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
+		public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 		{
 			if(Screen.hasShiftDown())
 				tooltip.add(Component.translatable("item.minestuck.completed_sburb_code.additional_info"));

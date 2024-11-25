@@ -8,8 +8,6 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Supplier;
-
 /**
  * specifically for implementing fluid blocks that change fluid fog color on movement
  */
@@ -17,7 +15,7 @@ public class WaterColorsBlock extends LiquidBlock implements IMSFog
 {
 	private final float fogDensity;
 	
-	public WaterColorsBlock(Supplier<? extends FlowingFluid> fluid, float fogDensity, Properties properties)
+	public WaterColorsBlock(FlowingFluid fluid, float fogDensity, Properties properties)
 	{
 		super(fluid, properties);
 		this.fogDensity = fogDensity;

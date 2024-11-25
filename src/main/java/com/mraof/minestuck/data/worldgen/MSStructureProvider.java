@@ -9,7 +9,7 @@ import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
@@ -26,7 +26,7 @@ import static com.mraof.minestuck.world.gen.structure.MSStructures.*;
 
 public final class MSStructureProvider
 {
-	public static void registerStructures(BootstapContext<Structure> context)
+	public static void registerStructures(BootstrapContext<Structure> context)
 	{
 		HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
 		
@@ -54,7 +54,7 @@ public final class MSStructureProvider
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 	}
 	
-	public static void registerStructureSets(BootstapContext<StructureSet> context)
+	public static void registerStructureSets(BootstrapContext<StructureSet> context)
 	{
 		HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
 		
@@ -73,6 +73,6 @@ public final class MSStructureProvider
 	
 	private static ResourceKey<StructureSet> key(String path)
 	{
-		return ResourceKey.create(Registries.STRUCTURE_SET, new ResourceLocation(Minestuck.MOD_ID, path));
+		return ResourceKey.create(Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, path));
 	}
 }

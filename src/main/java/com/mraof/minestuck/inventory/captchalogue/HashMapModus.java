@@ -3,9 +3,12 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -48,15 +51,15 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public void readFromNBT(CompoundTag nbt)
+	public void readFromNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
 		int size = nbt.getInt("size");
 		ejectByChat = nbt.getBoolean("ejectByChat");
 		list = NonNullList.create();
 		
 		for(int i = 0; i < size; i++)
-			if(nbt.contains("item"+i))
-				list.add(ItemStack.of(nbt.getCompound("item"+i)));
+			if(nbt.contains("item"+i, Tag.TAG_COMPOUND))
+				list.add(ItemStack.parse(provider, nbt.getCompound("item"+i)).orElseThrow());
 			else list.add(ItemStack.EMPTY);
 		if(side == LogicalSide.CLIENT)
 		{
@@ -67,7 +70,7 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public CompoundTag writeToNBT(CompoundTag nbt)
+	public CompoundTag writeToNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
 		nbt.putInt("size", list.size());
 		nbt.putBoolean("ejectByChat", ejectByChat);
@@ -76,7 +79,7 @@ public class HashMapModus extends Modus
 		{
 			ItemStack stack = iterator.next();
 			if(!stack.isEmpty())
-				nbt.put("item"+i, stack.save(new CompoundTag()));
+				nbt.put("item"+i, stack.save(provider));
 		}
 		return nbt;
 	}
@@ -89,7 +92,8 @@ public class HashMapModus extends Modus
 		
 		String itemName = BuiltInRegistries.ITEM.getKey(item.getItem()).getPath().replace('_', ' ');
 		
-		int index = ((item.hasCustomHoverName()) ? item.getHoverName() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
+		Component customName = item.get(DataComponents.CUSTOM_NAME);
+		int index = ((customName != null) ? customName.getString() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
 		
 		if(index < 0)
 			index += list.size();
@@ -97,7 +101,7 @@ public class HashMapModus extends Modus
 		if(!list.get(index).isEmpty())
 		{
 			ItemStack otherItem = list.get(index);
-			if(ItemStack.isSameItemSameTags(otherItem, item)
+			if(ItemStack.isSameItemSameComponents(otherItem, item)
 					&& otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
 			{
 				otherItem.grow(item.getCount());
@@ -182,7 +186,7 @@ public class HashMapModus extends Modus
 			markDirty();
 			if(item.isEmpty())
 				return new ItemStack(MSItems.CAPTCHA_CARD.get());
-			else return AlchemyHelper.createCard(item, player.server);
+			else return AlchemyHelper.createCard(item);
 		} else
 		{
 			list.set(id, ItemStack.EMPTY);

@@ -7,6 +7,7 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.network.block.StructureCoreSettingsPacket;
 import com.mraof.minestuck.world.gen.structure.CoreCompatibleScatteredStructurePiece;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -204,9 +205,9 @@ public class StructureCoreBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		tickCycle = compound.getInt("tickCycle");
 		this.actionType = ActionType.fromInt(compound.getInt("actionTypeOrdinal"));
 		hasWiped = compound.getBoolean("hasWiped");
@@ -214,9 +215,9 @@ public class StructureCoreBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("actionTypeOrdinal", getActionType().ordinal());
@@ -225,9 +226,9 @@ public class StructureCoreBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

@@ -18,7 +18,7 @@ public class PunchDesignixScreen extends Screen
 	public static final String TITLE = "minestuck.punch_designix";
 	public static final String ENTER_CAPTCHA_MESSAGE = "minestuck.punch_designix.enter_captcha";
 	public static final String PUNCH_MESSAGE = "minestuck.punch_designix.punch";
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_small.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_small.png");
 	
 	private static final int guiWidth = 126;
 	private static final int guiHeight = 98;
@@ -72,7 +72,7 @@ public class PunchDesignixScreen extends Screen
 		{
 			String captcha = captchaTextField.getValue();
 			be.setCaptcha(captcha);
-			PacketDistributor.SERVER.noArg().send(new TriggerPunchDesignixPacket(captcha, be.getBlockPos()));
+			PacketDistributor.sendToServer(new TriggerPunchDesignixPacket(captcha, be.getBlockPos()));
 			this.minecraft.setScreen(null);
 		}
 	}

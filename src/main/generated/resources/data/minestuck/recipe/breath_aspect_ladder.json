@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "aspect_ladder",
+  "key": {
+    "p": {
+      "item": "minestuck:breath_aspect_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "s s",
+    "sps",
+    "s s"
+  ],
+  "result": {
+    "count": 4,
+    "id": "minestuck:breath_aspect_ladder"
+  }
+}

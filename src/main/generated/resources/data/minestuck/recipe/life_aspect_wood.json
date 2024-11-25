@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "aspect_wood",
+  "key": {
+    "#": {
+      "item": "minestuck:life_aspect_log"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 3,
+    "id": "minestuck:life_aspect_wood"
+  }
+}

@@ -4,6 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
+import com.mraof.minestuck.entity.FrogEntity;
+import com.mraof.minestuck.item.components.FrogTraitsComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -11,13 +14,14 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class MSCreativeTabs
 {
 	public static final String MAIN_KEY = "minestuck.item_group.main";
@@ -694,11 +698,13 @@ public final class MSCreativeTabs
 		output.accept(MSItems.GOLDEN_GRASSHOPPER.get());
 		output.accept(MSItems.BUG_NET.get());
 		output.accept(MSItems.FROG.get());
-		// FROG TYPES
-		for(int i : new int[]{1, 2, 5, 6})
+		for(FrogEntity.FrogVariants variant : new FrogEntity.FrogVariants[]{
+				FrogEntity.FrogVariants.TOTALLY_NORMAL, FrogEntity.FrogVariants.RUBY_CONTRABAND,
+				FrogEntity.FrogVariants.GOLDEN, FrogEntity.FrogVariants.SUSAN})
 		{
 			ItemStack item = new ItemStack(MSItems.FROG.get());
-			item.getOrCreateTag().putInt("Type", i);
+			item.set(MSItemComponents.FROG_TRAITS, new FrogTraitsComponent(Optional.of(variant), Optional.empty(),
+					Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
 			output.accept(item);
 		}
 		output.accept(MSItems.CARVING_TOOL.get());

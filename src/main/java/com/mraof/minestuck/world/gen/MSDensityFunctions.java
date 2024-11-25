@@ -29,7 +29,7 @@ public final class MSDensityFunctions
 	
 	private static ResourceKey<DensityFunction> key(String name)
 	{
-		return ResourceKey.create(Registries.DENSITY_FUNCTION, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.DENSITY_FUNCTION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, name));
 	}
 	
 	public static DensityFunction depth(DensityFunction offset)

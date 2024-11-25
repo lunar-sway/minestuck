@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:string"
+  },
+  "input2": {
+    "item": "minecraft:leather"
+  },
+  "mode": "and",
+  "output": "minecraft:saddle"
+}

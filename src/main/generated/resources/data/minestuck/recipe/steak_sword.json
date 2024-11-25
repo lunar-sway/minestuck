@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.5,
+  "ingredient": {
+    "item": "minestuck:beef_sword"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:steak_sword"
+  }
+}

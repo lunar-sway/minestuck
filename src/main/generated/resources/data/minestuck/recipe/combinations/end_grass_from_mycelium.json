@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:mycelium"
+  },
+  "input2": {
+    "item": "minecraft:end_stone"
+  },
+  "mode": "or",
+  "output": "minestuck:end_grass"
+}

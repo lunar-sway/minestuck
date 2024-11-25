@@ -13,5 +13,7 @@
     ],
     "list_type": "any"
   },
-  "dialogue": "minestuck:consort/cult/start"
+  "dialogue": "minestuck:consort/cult/start",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

@@ -4,38 +4,36 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.util.MagicEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record MagicAOEEffectPacket(MagicEffect.AOEType type, Vec3 minAOEBound, Vec3 maxAOEBound) implements MSPacket.PlayToClient
+public record MagicAOEEffectPacket(MagicEffect.AOEType aoeType, Vec3 minAOEBound, Vec3 maxAOEBound) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("magic_aoe_effect");
+	public static final Type<MagicAOEEffectPacket> ID = new Type<>(Minestuck.id("magic_aoe_effect"));
+	public static final StreamCodec<FriendlyByteBuf, MagicAOEEffectPacket> STREAM_CODEC = StreamCodec.composite(
+			NeoForgeStreamCodecs.enumCodec(MagicEffect.AOEType.class),
+			MagicAOEEffectPacket::aoeType,
+			MSPayloads.VEC3_STREAM_CODEC,
+			MagicAOEEffectPacket::minAOEBound,
+			MSPayloads.VEC3_STREAM_CODEC,
+			MagicAOEEffectPacket::maxAOEBound,
+			MagicAOEEffectPacket::new
+	);
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
+	public void execute(IPayloadContext context)
 	{
-		buffer.writeInt(type.toInt());
-		buffer.writeVec3(minAOEBound);
-		buffer.writeVec3(maxAOEBound);
-	}
-	
-	public static MagicAOEEffectPacket read(FriendlyByteBuf buffer)
-	{
-		MagicEffect.AOEType type = MagicEffect.AOEType.fromInt(buffer.readInt());
-		Vec3 minAOEBound = buffer.readVec3();
-		Vec3 maxAOEBound = buffer.readVec3();
-		return new MagicAOEEffectPacket(type, minAOEBound, maxAOEBound);
-	}
-	
-	@Override
-	public void execute()
-	{
-		MagicEffect.AOEParticleEffect(type, Minecraft.getInstance().level, minAOEBound, maxAOEBound);
+		MagicEffect.AOEParticleEffect(aoeType, Minecraft.getInstance().level, minAOEBound, maxAOEBound);
 	}
 }

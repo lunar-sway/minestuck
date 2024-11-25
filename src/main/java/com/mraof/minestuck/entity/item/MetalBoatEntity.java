@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -128,21 +129,21 @@ public class MetalBoatEntity extends Boat implements IEntityWithComplexSpawn
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeUtf(type.asString());
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
 		this.type = Type.fromString(additionalData.readUtf(16));
 	}
 	
 	public enum Type implements CustomBoatItem.BoatProvider
 	{
-		IRON(1 / 1.5F, () -> Items.IRON_INGOT, MSItems.IRON_BOAT, new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
-		GOLD(1.0F, () -> Items.GOLD_INGOT, MSItems.GOLD_BOAT, new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
+		IRON(1 / 1.5F, () -> Items.IRON_INGOT, MSItems.IRON_BOAT, ResourceLocation.fromNamespaceAndPath("minestuck", "textures/entity/iron_boat.png")),
+		GOLD(1.0F, () -> Items.GOLD_INGOT, MSItems.GOLD_BOAT, ResourceLocation.fromNamespaceAndPath("minestuck", "textures/entity/gold_boat.png"));
 		
 		private final float damageModifier;
 		private final Supplier<Item> droppedItem, boatItem;

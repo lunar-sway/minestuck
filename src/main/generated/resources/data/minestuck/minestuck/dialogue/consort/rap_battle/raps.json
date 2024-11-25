@@ -6,6 +6,8 @@
         "flag": "rap_a"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "messages": [
           {
             "type": "entity",
@@ -26,8 +28,13 @@
         ],
         "responses": [
           {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
             "message": "minestuck.arrow",
-            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap",
+            "triggers": []
           }
         ]
       }
@@ -38,6 +45,8 @@
         "flag": "rap_b"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "messages": [
           {
             "type": "entity",
@@ -58,8 +67,13 @@
         ],
         "responses": [
           {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
             "message": "minestuck.arrow",
-            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap",
+            "triggers": []
           }
         ]
       }
@@ -70,6 +84,8 @@
         "flag": "rap_c"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "messages": [
           {
             "type": "entity",
@@ -95,8 +111,13 @@
         ],
         "responses": [
           {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
             "message": "minestuck.arrow",
-            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap",
+            "triggers": []
           }
         ]
       }
@@ -107,6 +128,8 @@
         "flag": "rap_d"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "messages": [
           {
             "type": "entity",
@@ -127,8 +150,13 @@
         ],
         "responses": [
           {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
             "message": "minestuck.arrow",
-            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap",
+            "triggers": []
           }
         ]
       }
@@ -139,6 +167,8 @@
         "flag": "rap_e"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "messages": [
           {
             "type": "entity",
@@ -159,14 +189,21 @@
         ],
         "responses": [
           {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
             "message": "minestuck.arrow",
-            "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+            "next_dialogue": "minestuck:consort/rap_battle/after_rap",
+            "triggers": []
           }
         ]
       }
     }
   ],
   "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "messages": [
       {
         "type": "entity",
@@ -187,8 +224,13 @@
     ],
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/rap_battle/after_rap"
+        "next_dialogue": "minestuck:consort/rap_battle/after_rap",
+        "triggers": []
       }
     ]
   }

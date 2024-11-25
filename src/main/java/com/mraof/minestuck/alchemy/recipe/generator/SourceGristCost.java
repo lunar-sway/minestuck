@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -15,15 +16,15 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -57,9 +58,9 @@ public final class SourceGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public boolean matches(Container inv, Level level)
+	public boolean matches(SingleRecipeInput input, Level level)
 	{
-		return cache.getCachedCost() != null && ingredient.test(inv.getItem(0));
+		return cache.getCachedCost() != null && ingredient.test(input.item());
 	}
 	
 	@Override
@@ -112,33 +113,38 @@ public final class SourceGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<SourceGristCost>
 	{
-		private static final Codec<SourceGristCost> CODEC = RecordCodecBuilder.create(instance ->
+		private static final MapCodec<SourceGristCost> CODEC = RecordCodecBuilder.mapCodec(instance ->
 				instance.group(
 						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
 						Source.CODEC.listOf().fieldOf("sources").forGetter(recipe -> recipe.sources),
-						ExtraCodecs.strictOptionalField(Codec.FLOAT, "multiplier", 1F).forGetter(recipe -> recipe.multiplier),
-						ImmutableGristSet.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
-						ExtraCodecs.strictOptionalField(Codec.INT, "priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+						Codec.FLOAT.optionalFieldOf("multiplier", 1F).forGetter(recipe -> recipe.multiplier),
+						GristSet.Codecs.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
+						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
 				).apply(instance, SourceGristCost::new));
+		private static final StreamCodec<RegistryFriendlyByteBuf, SourceGristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
 		
 		@Override
-		public Codec<SourceGristCost> codec()
+		public MapCodec<SourceGristCost> codec()
 		{
 			return CODEC;
 		}
 		
 		@Override
-		public void toNetwork(FriendlyByteBuf buffer, SourceGristCost recipe)
+		public StreamCodec<RegistryFriendlyByteBuf, SourceGristCost> streamCodec()
 		{
-			recipe.ingredient.toNetwork(buffer);
+			return STREAM_CODEC;
+		}
+		
+		private static void toNetwork(RegistryFriendlyByteBuf buffer, SourceGristCost recipe)
+		{
+			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 			buffer.writeInt(recipe.getPriority());
 			recipe.cache.toNetwork(buffer);
 		}
 		
-		@Override
-		public SourceGristCost fromNetwork(FriendlyByteBuf buffer)
+		private static SourceGristCost fromNetwork(RegistryFriendlyByteBuf buffer)
 		{
-			Ingredient ingredient = Ingredient.fromNetwork(buffer);
+			Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 			int priority = buffer.readInt();
 			
 			var recipe = new SourceGristCost(ingredient, Collections.emptyList(), 1, GristSet.EMPTY, Optional.of(priority));
@@ -151,11 +157,11 @@ public final class SourceGristCost implements GristCostRecipe
 	public sealed interface Source
 	{
 		//todo handle resource location parse errors
-		Codec<Source> CODEC = Codec.STRING.xmap(
+		Codec<Source> CODEC = Codec.STRING.comapFlatMap(
 				name -> name.startsWith("#")
-						? new TagSource(new ResourceLocation(name.substring(1)))
-						: new ItemSource(new ResourceLocation(name)),
-				Object::toString
+						? ResourceLocation.read(name.substring(1)).map(TagSource::new)
+						: ResourceLocation.read(name).map(ItemSource::new),
+				Source::toString
 				);
 		
 		@Nullable

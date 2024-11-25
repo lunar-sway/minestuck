@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:blue_dye"
+  },
+  "input2": {
+    "item": "minecraft:ice"
+  },
+  "mode": "and",
+  "output": "minecraft:blue_ice"
+}

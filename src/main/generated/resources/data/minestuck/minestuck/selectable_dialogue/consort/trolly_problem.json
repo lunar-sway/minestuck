@@ -3,5 +3,7 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:nakagator"
   },
-  "dialogue": "minestuck:consort/trolly_problem"
+  "dialogue": "minestuck:consort/trolly_problem",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

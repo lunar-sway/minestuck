@@ -22,10 +22,10 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nonnull;
@@ -39,7 +39,7 @@ import java.util.function.BiFunction;
  * items accessible by the server.
  * @author kirderf1
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus= Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus= EventBusSubscriber.Bus.GAME)
 public final class DeployList
 {
 	public static final IAvailabilityCondition HAS_NOT_ENTERED = playerData -> !playerData.hasEntered();
@@ -324,8 +324,7 @@ public final class DeployList
 			return ItemStack.EMPTY;
 		stack = stack.copy();
 		stack.setCount(1);
-		if(stack.hasTag() && stack.getTag().isEmpty())
-			stack.setTag(null);
+		stack.applyComponents(stack.getItem().components());
 		return stack;
 	}
 	
@@ -420,9 +419,9 @@ public final class DeployList
 	}
 	
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Post event)
 	{
-		if(event.phase == TickEvent.Phase.END && !MinestuckConfig.SERVER.hardMode.get())
+		if(!MinestuckConfig.SERVER.hardMode.get())
 		{
 			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 			long currentDay = server.overworld().getGameTime() / 24000L;

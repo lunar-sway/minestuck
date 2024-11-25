@@ -27,31 +27,30 @@ import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ScreenEvent;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
-import net.neoforged.neoforge.event.entity.player.EntityItemPickupEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("resource")
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientEditHandler
 {
 	
 	public static void onKeyPressed()
 	{
-		PacketDistributor.SERVER.noArg().send(new ClientEditPackets.Exit());
+		PacketDistributor.sendToServer(new ClientEditPackets.Exit());
 	}
 	
 	@SubscribeEvent
@@ -95,11 +94,11 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent
-	public static void tickEnd(TickEvent.PlayerTickEvent event)
+	public static void tickEnd(PlayerTickEvent.Post event)
 	{
-		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && ClientEditmodeData.isInEditmode())
+		if(event.getEntity().level().isClientSide && event.getEntity() == Minecraft.getInstance().player && ClientEditmodeData.isInEditmode())
 		{
-			Player player = event.player;
+			Player player = event.getEntity();
 			
 			EditmodeLocations locations = ClientEditmodeData.getLocations();
 			if(locations != null)
@@ -132,10 +131,10 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent
-	public static void onItemPickupEvent(EntityItemPickupEvent event)
+	public static void onItemPickupEvent(ItemEntityPickupEvent.Pre event)
 	{
-		if(event.getEntity().level().isClientSide && ClientEditmodeData.isInEditmode() && event.getEntity().equals(Minecraft.getInstance().player))
-			event.setCanceled(true);
+		if(event.getPlayer().level().isClientSide && ClientEditmodeData.isInEditmode() && event.getPlayer().equals(Minecraft.getInstance().player))
+			event.setCanPickup(TriState.FALSE);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
@@ -143,7 +142,7 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
-			if(!event.getEntity().canReach(event.getPos(), 0.0) || ClientEditToolDrag.canEditRevise(event.getEntity()))
+			if(!event.getEntity().canInteractWithBlock(event.getPos(), 0.0) || ClientEditToolDrag.canEditRevise(event.getEntity()))
 			{
 				event.setCanceled(true);
 				return;
@@ -151,8 +150,8 @@ public final class ClientEditHandler
 			
 			Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntity().getMainHandItem();
-			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
-			if(event.getUseBlock() == Event.Result.ALLOW)
+			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? TriState.TRUE : TriState.FALSE);
+			if(event.getUseBlock() == TriState.TRUE)
 				return;
 			if(event.getHand().equals(InteractionHand.OFF_HAND) || !ServerEditHandler.isBlockItem(stack.getItem()))
 			{
@@ -169,8 +168,8 @@ public final class ClientEditHandler
 				}
 				event.setCanceled(true);
 			}
-			if(event.getUseItem() == Event.Result.DEFAULT)
-				event.setUseItem(Event.Result.ALLOW);
+			if(event.getUseItem() == TriState.DEFAULT)
+				event.setUseItem(TriState.TRUE);
 		}
 	}
 	
@@ -179,7 +178,7 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
-			if(!event.getEntity().canReach(event.getPos(), 0.0) || ClientEditToolDrag.canEditRecycle(event.getEntity()))
+			if(!event.getEntity().canInteractWithBlock(event.getPos(), 0.0) || ClientEditToolDrag.canEditRecycle(event.getEntity()))
 			{
 				event.setCanceled(true);
 				return;

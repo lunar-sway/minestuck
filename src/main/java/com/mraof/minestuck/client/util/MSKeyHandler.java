@@ -15,7 +15,7 @@ import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.world.inventory.Slot;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
@@ -23,7 +23,7 @@ import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class MSKeyHandler
 {
 	public static final String CATEGORY = "key.categories.minestuck";
@@ -90,7 +90,7 @@ public class MSKeyHandler
 				captchalogueInGame();
 			
 			if(effectToggleKey.isActiveAndMatches(input))
-				PacketDistributor.SERVER.noArg().send(new ToggleAspectEffectsPacket());
+				PacketDistributor.sendToServer(new ToggleAspectEffectsPacket());
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
@@ -101,7 +101,7 @@ public class MSKeyHandler
 	private static void captchalogueInGame()
 	{
 		if(!Minecraft.getInstance().player.getMainHandItem().isEmpty())
-			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.CaptchalogueHeldItem());
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueHeldItem());
 	}
 	
 	private static void captchalogueInGui(AbstractContainerScreen<?> screen)
@@ -110,7 +110,7 @@ public class MSKeyHandler
 		{
 			Slot slot = screen.getSlotUnderMouse();
 			if(slot != null && slot.hasItem())
-				PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.CaptchalogueInventorySlot(slot.index, screen.getMenu().containerId));
+				PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueInventorySlot(slot.index, screen.getMenu().containerId));
 		}
 	}
 }

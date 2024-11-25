@@ -17,6 +17,7 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
@@ -71,9 +72,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		
 		if(nbt.contains("programs"))
 		{
@@ -117,9 +118,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		for(Entry<Integer, String> e : latestmessage.entrySet())
 			compound.putString("text" + e.getKey(), e.getValue());
@@ -140,9 +141,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag tagCompound = this.saveWithoutMetadata();
+		CompoundTag tagCompound = this.saveWithoutMetadata(provider);
 		tagCompound.remove("owner");
 		tagCompound.remove("ownerMost");
 		tagCompound.remove("ownerLeast");

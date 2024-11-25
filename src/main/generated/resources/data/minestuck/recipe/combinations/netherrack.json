@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:cobblestone"
+  },
+  "input2": {
+    "item": "minecraft:lava_bucket"
+  },
+  "mode": "and",
+  "output": "minecraft:netherrack"
+}

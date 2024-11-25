@@ -25,8 +25,8 @@ import java.util.Optional;
 public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 {
 	
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/alchemiter.png");
-	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/alchemiter.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/alchemiter.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/alchemiter.png");
 	private static final int PROGRESS_BAR_X = 54;
 	private static final int PROGRESS_BAR_Y = 23;
 	private static final int PROGRESS_BAR_WIDTH = 71;

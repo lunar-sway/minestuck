@@ -4,9 +4,7 @@
   },
   "range": {
     "type": "minecraft:uniform",
-    "value": {
-      "max_inclusive": 625,
-      "min_inclusive": 250
-    }
+    "max_inclusive": 625,
+    "min_inclusive": 250
   }
 }

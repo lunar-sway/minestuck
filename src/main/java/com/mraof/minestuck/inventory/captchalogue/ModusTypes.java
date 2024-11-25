@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public final class ModusTypes
 {
-	public static final DeferredRegister<ModusType<?>> REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "modus_type"), Minestuck.MOD_ID);
+	public static final DeferredRegister<ModusType<?>> REGISTER = DeferredRegister.create(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "modus_type"), Minestuck.MOD_ID);
 	
 	public static final Registry<ModusType<?>> REGISTRY = REGISTER.makeRegistry(builder -> builder.sync(true));
 	

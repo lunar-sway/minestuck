@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +29,7 @@ import java.util.Optional;
  * A class that determines when to stop entry and tell the player to pick a title,
  * and to then handle the selection once it's been sent back.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus= Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus= EventBusSubscriber.Bus.GAME)
 public class TitleSelectionHook
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -53,7 +53,7 @@ public class TitleSelectionHook
 			return true;
 		
 		playersInTitleSelection.put(player, new Pair<>(new Vec3(player.getX(), player.getY(), player.getZ()), savedPos));
-		PacketDistributor.PLAYER.with(player).send(new TitleSelectPackets.OpenScreen(Optional.empty()));
+		PacketDistributor.sendToPlayer(player, new TitleSelectPackets.OpenScreen(Optional.empty()));
 		return false;
 	}
 	

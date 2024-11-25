@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:silver_spoon"
+  },
+  "input2": {
+    "item": "minestuck:grimoire"
+  },
+  "mode": "or",
+  "output": "minestuck:nosferatu_spoon"
+}

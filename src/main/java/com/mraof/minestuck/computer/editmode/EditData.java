@@ -91,18 +91,18 @@ public class EditData
 	public void sendGristCacheToEditor()
 	{
 		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), ClientPlayerData.CacheSource.EDITMODE);
-		PacketDistributor.PLAYER.with(this.getEditor()).send(packet);
+		PacketDistributor.sendToPlayer(this.getEditor(), packet);
 	}
 	
 	public void sendCacheLimitToEditor()
 	{
 		long limit = Echeladder.get(this.getTarget(), player.level()).getGristCapacity();
-		PacketDistributor.PLAYER.with(this.getEditor()).send(new EditmodeCacheLimitPacket(limit));
+		PacketDistributor.sendToPlayer(this.getEditor(), new EditmodeCacheLimitPacket(limit));
 	}
 	
 	public void sendGivenItemsToEditor()
 	{
-		PacketDistributor.PLAYER.with(getEditor()).send(new ServerEditPackets.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())));
+		PacketDistributor.sendToPlayer(getEditor(), new ServerEditPackets.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())));
 	}
 	
 	public CompoundTag writeRecoveryData()

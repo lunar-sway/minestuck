@@ -1,21 +1,20 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 public class TransportalizerItem extends BlockItem
 {
@@ -25,32 +24,38 @@ public class TransportalizerItem extends BlockItem
 	}
 	
 	@Override
-	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
-		BlockEntity be = level.getBlockEntity(pos);
-		if(stack.hasTag() && be instanceof TransportalizerBlockEntity transportalizer)
-		{
-			transportalizer.setId(stack.getTag().getString(TransportalizerBlockEntity.ID));
-			transportalizer.setDestId(stack.getTag().getString(TransportalizerBlockEntity.DEST_ID));
-			if (stack.getTag().getBoolean(TransportalizerBlockEntity.LOCKED))
-				transportalizer.lock();
-		}
-		return true;
-	}
-	
-	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
-	{
-		if (!stack.hasTag())
+		TransportalizerData data = stack.get(MSItemComponents.TRANSPORTALIZER_DATA);
+		if (data == null)
 			return;
 		
-		if (stack.getTag().getBoolean(TransportalizerBlockEntity.LOCKED)) {
+		if (data.locked()) {
 			tooltip.add(Component.translatable("block.minestuck.transportalizer.locked_message").withStyle(ChatFormatting.GRAY));
 		} else {
-			if (stack.getTag().contains(TransportalizerBlockEntity.ID, Tag.TAG_STRING))
-				tooltip.add(Component.translatable("block.minestuck.transportalizer.idString", stack.getTag().getString("idString")).withStyle(ChatFormatting.GRAY));
-			if (stack.getTag().contains(TransportalizerBlockEntity.DEST_ID, Tag.TAG_STRING))
-				tooltip.add(Component.translatable("block.minestuck.transportalizer.destId", stack.getTag().getString("destId")).withStyle(ChatFormatting.GRAY));
+			data.id().ifPresent(id ->
+					tooltip.add(Component.translatable("block.minestuck.transportalizer.idString", id).withStyle(ChatFormatting.GRAY)));
+			data.destinationId().ifPresent(destId ->
+					tooltip.add(Component.translatable("block.minestuck.transportalizer.destId", destId).withStyle(ChatFormatting.GRAY)));
 		}
+	}
+	
+	public record TransportalizerData(Optional<String> id, Optional<String> destinationId, boolean locked)
+	{
+		public static final Codec<TransportalizerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.optionalFieldOf("id").forGetter(TransportalizerData::id),
+				Codec.STRING.optionalFieldOf("destination_id").forGetter(TransportalizerData::destinationId),
+				Codec.BOOL.fieldOf("locked").forGetter(TransportalizerData::locked)
+		).apply(instance, TransportalizerData::new));
+		
+		public static final StreamCodec<FriendlyByteBuf, TransportalizerData> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8),
+				TransportalizerData::id,
+				ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8),
+				TransportalizerData::destinationId,
+				ByteBufCodecs.BOOL,
+				TransportalizerData::locked,
+				TransportalizerData::new
+		);
 	}
 }

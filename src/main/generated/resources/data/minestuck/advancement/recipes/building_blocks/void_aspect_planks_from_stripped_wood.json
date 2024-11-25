@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:void_aspect_planks_from_stripped_wood"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_void_aspect_stripped_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:void_aspect_stripped_wood"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_void_aspect_stripped_wood"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:void_aspect_planks_from_stripped_wood"
+    ]
+  }
+}

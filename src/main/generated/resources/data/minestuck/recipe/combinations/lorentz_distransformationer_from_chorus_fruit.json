@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_axe"
+  },
+  "input2": {
+    "item": "minecraft:chorus_fruit"
+  },
+  "mode": "and",
+  "output": "minestuck:lorentz_distransformationer"
+}

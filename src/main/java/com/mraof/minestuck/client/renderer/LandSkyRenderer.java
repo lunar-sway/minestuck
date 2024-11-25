@@ -29,8 +29,10 @@ public final class LandSkyRenderer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static void render(int ticks, float partialTicks, PoseStack poseStack, ClientLevel level, Minecraft mc)
+	public static void render(int ticks, float partialTicks, Matrix4f modelViewMatrix, ClientLevel level, Minecraft mc)
 	{
+		PoseStack poseStack = new PoseStack();
+		poseStack.mulPose(modelViewMatrix);
 		float heightModifier = (float) Mth.clamp((mc.player.position().y() - 144)/112, 0, 1);
 		float heightModifierDiminish = (1 - heightModifier/1.5F);
 		float skyClearness = 1.0F - level.getRainLevel(partialTicks);
@@ -45,35 +47,35 @@ public final class LandSkyRenderer
 		
 		FogRenderer.levelFogColor();
 		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder buffer = tesselator.getBuilder();
 		RenderSystem.depthMask(false);
 		RenderSystem.setShaderColor(r, g, b, 1);
 		RenderSystem.setShader(GameRenderer::getPositionShader);
 		
 		Matrix4f matrix = poseStack.last().pose();
-		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-		for (int k = -384; k <= 384; k += 64)
 		{
-			for (int l = -384; l <= 384; l += 64)
+			BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+			for(int k = -384; k <= 384; k += 64)
 			{
-				buffer.vertex(matrix, k, 16, l).endVertex();
-				buffer.vertex(matrix, k + 64, 16, l).endVertex();
-				buffer.vertex(matrix, k + 64, 16, l + 64).endVertex();
-				buffer.vertex(matrix, k, 16, l + 64).endVertex();
+				for(int l = -384; l <= 384; l += 64)
+				{
+					buffer.addVertex(matrix, k, 16, l);
+					buffer.addVertex(matrix, k + 64, 16, l);
+					buffer.addVertex(matrix, k + 64, 16, l + 64);
+					buffer.addVertex(matrix, k, 16, l + 64);
+				}
 			}
+			BufferUploader.drawWithShader(buffer.buildOrThrow());
+			
+			RenderSystem.enableBlend();
+			RenderSystem.defaultBlendFunc();
 		}
-		tesselator.end();
-		
-		
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
 		
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, skaiaBrightness);
 		
 		float skaiaSize = 20.0F;
 		TextureAtlasSprite skaiaSprite = LandSkySpriteUploader.getInstance().getSkaiaSprite();
-		drawSprite(buffer, matrix, skaiaSize, skaiaSprite);
+		drawSprite(matrix, skaiaSize, skaiaSprite);
 		
 		if(starBrightness > 0)
 		{
@@ -86,33 +88,34 @@ public final class LandSkyRenderer
 			RenderSystem.setShaderColor(starBrightness*2, starBrightness*2, starBrightness*2, starBrightness*2);
 			drawLands(mc, poseStack, level.dimension());
 		}
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		RenderSystem.disableBlend();
-		RenderSystem.setShaderColor(0, 0, 0, 1);
-		double d3 = mc.player.getEyePosition(partialTicks).y - level.getLevelData().getHorizonHeight(level);
-		
-		poseStack.pushPose();
-		poseStack.translate(0.0, -(d3 - 16.0), 0.0);
-		matrix = poseStack.last().pose();
-		
-		RenderSystem.setShader(GameRenderer::getPositionShader);
-		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-		
-		for(int k = -384; k <= 384; k += 64)
 		{
-			for(int l = -384; l <= 384; l += 64)
+			RenderSystem.disableBlend();
+			RenderSystem.setShaderColor(0, 0, 0, 1);
+			double d3 = mc.player.getEyePosition(partialTicks).y - level.getLevelData().getHorizonHeight(level);
+			
+			poseStack.pushPose();
+			poseStack.translate(0.0, -(d3 - 16.0), 0.0);
+			matrix = poseStack.last().pose();
+			
+			RenderSystem.setShader(GameRenderer::getPositionShader);
+			BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+			
+			for(int k = -384; k <= 384; k += 64)
 			{
-				buffer.vertex(matrix, k + 64, -16, l).endVertex();
-				buffer.vertex(matrix, k, -16, l).endVertex();
-				buffer.vertex(matrix, k, -16, l + 64).endVertex();
-				buffer.vertex(matrix, k + 64, -16, l + 64).endVertex();
+				for(int l = -384; l <= 384; l += 64)
+				{
+					buffer.addVertex(matrix, k + 64, -16, l);
+					buffer.addVertex(matrix, k, -16, l);
+					buffer.addVertex(matrix, k, -16, l + 64);
+					buffer.addVertex(matrix, k + 64, -16, l + 64);
+				}
 			}
+			BufferUploader.drawWithShader(buffer.buildOrThrow());
+			poseStack.popPose();
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderSystem.depthMask(true);
 		}
-		tesselator.end();
-		poseStack.popPose();
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.depthMask(true);
 	}
 	
 	private static Vec3 getSkyColor(Minecraft mc, ClientLevel level, float partialTicks)
@@ -133,12 +136,10 @@ public final class LandSkyRenderer
 	
 	private static void drawVeil(Matrix4f matrix, float partialTicks, ClientLevel level)
 	{
-		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder buffer = tesselator.getBuilder();
 		Random random = new Random(10842L);
 		
 		RenderSystem.setShader(GameRenderer::getPositionShader);
-		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		
 		for(int count = 0; count < 1500; count++)
 		{
@@ -178,11 +179,11 @@ public final class LandSkyRenderer
 					float vertexX = d24 * d9 - d22 * d10;
 					float vertexY = d21 * d12;
 					float vertexZ = d22 * d9 + d24 * d10;
-					buffer.vertex(matrix, drawnX + vertexX, drawnY + vertexY, drawnZ + vertexZ).endVertex();
+					buffer.addVertex(matrix, drawnX + vertexX, drawnY + vertexY, drawnZ + vertexZ);
 				}
 			}
 		}
-		tesselator.end();
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 	
 	private static void drawLands(Minecraft mc, PoseStack poseStack, ResourceKey<Level> dim)
@@ -213,28 +214,27 @@ public final class LandSkyRenderer
 		float v = angledLand.skaiaToLandAngle();
 		float scale = 1/Mth.cos(v);
 		
-		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 		poseStack.pushPose();
 		poseStack.mulPose(Axis.ZP.rotation(v));
 		poseStack.mulPose(Axis.YP.rotationDegrees(90*random.nextInt(4)));
 		Matrix4f matrix = poseStack.last().pose();
 		
 		float planetSize = 4.0F*scale;
-		drawSprite(buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getPlanetSprite(landTypes.getTerrain(), index));
-		drawSprite(buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(landTypes.getTitle(), index));
+		drawSprite(matrix, planetSize, LandSkySpriteUploader.getInstance().getPlanetSprite(landTypes.getTerrain(), index));
+		drawSprite(matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(landTypes.getTitle(), index));
 		
 		poseStack.popPose();
 	}
 	
-	private static void drawSprite(BufferBuilder buffer, Matrix4f matrix, float size, TextureAtlasSprite sprite)
+	private static void drawSprite(Matrix4f matrix, float size, TextureAtlasSprite sprite)
 	{
 		RenderSystem.setShaderTexture(0, sprite.atlasLocation());
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		buffer.vertex(matrix, -size, 100, -size).uv(sprite.getU0(), sprite.getV0()).endVertex();
-		buffer.vertex(matrix, size, 100, -size).uv(sprite.getU1(), sprite.getV0()).endVertex();
-		buffer.vertex(matrix, size, 100, size).uv(sprite.getU1(), sprite.getV1()).endVertex();
-		buffer.vertex(matrix, -size, 100, size).uv(sprite.getU0(), sprite.getV1()).endVertex();
-		BufferUploader.drawWithShader(buffer.end());
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.addVertex(matrix, -size, 100, -size).setUv(sprite.getU0(), sprite.getV0());
+		buffer.addVertex(matrix, size, 100, -size).setUv(sprite.getU1(), sprite.getV0());
+		buffer.addVertex(matrix, size, 100, size).setUv(sprite.getU1(), sprite.getV1());
+		buffer.addVertex(matrix, -size, 100, size).setUv(sprite.getU0(), sprite.getV1());
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 }

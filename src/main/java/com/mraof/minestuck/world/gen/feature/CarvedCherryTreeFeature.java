@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class CarvedCherryTreeFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation CARVED_CHERRY_TREE = new ResourceLocation(Minestuck.MOD_ID, "carved_cherry_tree");
+	private static final ResourceLocation CARVED_CHERRY_TREE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "carved_cherry_tree");
 	
 	public CarvedCherryTreeFeature(Codec<NoneFeatureConfiguration> codec)
 	{

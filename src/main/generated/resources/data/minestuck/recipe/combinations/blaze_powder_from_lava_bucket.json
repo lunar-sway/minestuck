@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:redstone"
+  },
+  "input2": {
+    "item": "minecraft:lava_bucket"
+  },
+  "mode": "or",
+  "output": "minecraft:blaze_powder"
+}

@@ -6,11 +6,13 @@ import com.mraof.minestuck.network.MagicAOEEffectPacket;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -45,7 +47,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 					+ (target.isSensitiveToWater() ? 5 : 0);
 		}
 	};
-	public static final MagicAOERightClickEffect FIRE_MAGIC = new MagicAOERightClickEffect(3.25F, 3, MagicEffect.AOEType.FIRE, target -> target.setSecondsOnFire(5));
+	public static final MagicAOERightClickEffect FIRE_MAGIC = new MagicAOERightClickEffect(3.25F, 3, MagicEffect.AOEType.FIRE, target -> target.igniteForSeconds(5));
 	
 	protected MagicAOERightClickEffect(float radius, int damage, @Nullable MagicEffect.AOEType type)
 	{
@@ -75,7 +77,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 			player.getCooldowns().addCooldown(itemStackIn.getItem(), 100);
 		
 		player.swing(hand, true);
-		itemStackIn.hurtAndBreak(6, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+		itemStackIn.hurtAndBreak(6, player, EquipmentSlot.MAINHAND);
 		player.awardStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
 		
 		return InteractionResultHolder.success(itemStackIn);
@@ -84,7 +86,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 	private void magicAttack(ServerPlayer player)
 	{
 		BlockPos playerPos = player.blockPosition();
-		Level level = player.level();
+		ServerLevel level = player.serverLevel();
 		
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_MAGIC_CAST.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
@@ -110,7 +112,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 	}
 	
 	// If you're an addon that want to use this class with your own effect, override this to use your own network packet
-	protected void sendEffectPacket(Level level, AABB aabb)
+	protected void sendEffectPacket(ServerLevel level, AABB aabb)
 	{
 		if(type != null)
 		{
@@ -118,8 +120,8 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 			Vec3 minAOEBound = new Vec3(aabb.minX, aabb.minY, aabb.minZ);
 			Vec3 maxAOEBound = new Vec3(aabb.maxX, aabb.maxY, aabb.maxZ);
 			
-			PacketDistributor.NEAR.with(new PacketDistributor.TargetPoint(centerPos.x, centerPos.y, centerPos.z, 64, level.dimension()))
-					.send(new MagicAOEEffectPacket(type, minAOEBound, maxAOEBound));
+			PacketDistributor.sendToPlayersNear(level, null, centerPos.x, centerPos.y, centerPos.z, 64,
+					new MagicAOEEffectPacket(type, minAOEBound, maxAOEBound));
 		}
 	}
 	

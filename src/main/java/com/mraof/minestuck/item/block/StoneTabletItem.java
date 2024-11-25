@@ -1,12 +1,12 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.StoneTabletBlock;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.item.components.StoneTabletTextComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,18 +31,12 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
-		super.appendHoverText(stack, level, tooltip, flagIn);
+		super.appendHoverText(stack, context, tooltip, flagIn);
 		
-		if(hasText(stack))
+		if(StoneTabletTextComponent.hasText(stack))
 			tooltip.add(Component.translatable(getDescriptionId() + ".carved").withStyle(ChatFormatting.GRAY));
-	}
-	
-	public static boolean hasText(ItemStack stack)
-	{
-		CompoundTag nbt = stack.getTag();
-		return (nbt != null && nbt.contains("text") && !nbt.getString("text").isEmpty());
 	}
 	
 	@Nullable
@@ -55,7 +49,7 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 		
 		ItemStack stack = context.getItemInHand();
 		
-		state = state.setValue(StoneTabletBlock.FACING, context.getHorizontalDirection()).setValue(StoneTabletBlock.CARVED, hasText(stack));
+		state = state.setValue(StoneTabletBlock.FACING, context.getHorizontalDirection()).setValue(StoneTabletBlock.CARVED, StoneTabletTextComponent.hasText(stack));
 		return state;
 	}
 	
@@ -82,7 +76,7 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 			if(level.isClientSide)
 			{
 				boolean canEdit = playerIn.getItemInHand(handIn == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND).getItem() == MSItems.CARVING_TOOL.get();
-				String text = hasText(itemStackIn) ? itemStackIn.getTag().getString("text") : "";
+				String text = StoneTabletTextComponent.getText(itemStackIn);
 				MSScreenFactories.displayStoneTabletScreen(playerIn, handIn, text, canEdit);
 			}
 			return InteractionResultHolder.success(itemStackIn);

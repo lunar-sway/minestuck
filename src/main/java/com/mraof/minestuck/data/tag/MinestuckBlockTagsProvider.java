@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
 import com.mraof.minestuck.data.SkaiaBlocksData;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
@@ -41,6 +41,31 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		SkaiaBlocksData.addToBlockTags(this);
 		AspectTreeBlocksData.addToBlockTags(this);
 		
+		tag(INCORRECT_FOR_SBAHJ_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
+		tag(INCORRECT_FOR_PAPER_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
+		tag(INCORRECT_FOR_ORGANIC_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
+		tag(INCORRECT_FOR_MEAT_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
+		tag(INCORRECT_FOR_CANDY_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
+		tag(INCORRECT_FOR_BOOK_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
+		tag(INCORRECT_FOR_CACTUS_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
+		tag(INCORRECT_FOR_ICE_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
+		tag(INCORRECT_FOR_POGO_TOOL).addTag(INCORRECT_FOR_GOLD_TOOL);
+		tag(INCORRECT_FOR_PRISMARINE_TOOL).addTag(INCORRECT_FOR_STONE_TOOL);
+		tag(INCORRECT_FOR_URANIUM_TOOL).addTag(INCORRECT_FOR_STONE_TOOL);
+		tag(INCORRECT_FOR_HORRORTERROR_TOOL).addTag(INCORRECT_FOR_IRON_TOOL);
+		tag(INCORRECT_FOR_CORUNDUM_TOOL).addTag(INCORRECT_FOR_IRON_TOOL);
+		tag(INCORRECT_FOR_DENIZEN_TOOL).addTag(INCORRECT_FOR_NETHERITE_TOOL);
+		tag(INCORRECT_FOR_ZILLY_TOOL).addTag(INCORRECT_FOR_NETHERITE_TOOL);
+		tag(INCORRECT_FOR_WELSH_TOOL).addTag(INCORRECT_FOR_NETHERITE_TOOL);
+		
+		tag(MINEABLE_WITH_SICKLE).addTags(MINEABLE_WITH_HOE, SWORD_EFFICIENT);
+		tag(MINEABLE_WITH_SCYTHE).addTags(MINEABLE_WITH_HOE);
+		tag(MINEABLE_WITH_CLAWS).addTags(SWORD_EFFICIENT);
+		tag(MINEABLE_WITH_HAMMER).addTags(MINEABLE_WITH_PICKAXE);
+		tag(MINEABLE_WITH_CHAINSAW).addTags(MINEABLE_WITH_AXE);
+		tag(MINEABLE_WITH_FORK).addTags(Tags.Blocks.STORAGE_BLOCKS_WHEAT);
+		tag(MINEABLE_WITH_SPOON).addTags(MINEABLE_WITH_SHOVEL); //TODO make spoons mine cake
+		
 		tag(DIRT).add(BLUE_DIRT.get());
 		tag(PLANKS).add(GLOWING_PLANKS.get(), SHADEWOOD_PLANKS.get(), FROST_PLANKS.get(), RAINBOW_PLANKS.get(), END_PLANKS.get(), DEAD_PLANKS.get(), CARVED_PLANKS.get(), TREATED_PLANKS.get(), LACQUERED_PLANKS.get(), CINDERED_PLANKS.get());
 		tag(STONE_BRICKS).add(DECREPIT_STONE_BRICKS.get(), MOSSY_DECREPIT_STONE_BRICKS.get(), FLOWERY_MOSSY_STONE_BRICKS.get());
@@ -66,9 +91,9 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(BEE_GROWABLES).add(BLOOMING_CACTUS.get(), GLOWFLOWER.get());
 		tag(PORTALS).add(GATE.get(), GATE_MAIN.get(), RETURN_NODE.get(), RETURN_NODE_MAIN.get());
 		tag(NETHER_CARVER_REPLACEABLES).addTag(HEAT_TERRAIN_BLOCKS);
-		tag(Tags.Blocks.COBBLESTONE).add(FLOWERY_MOSSY_COBBLESTONE.get(), MYCELIUM_COBBLESTONE.get(), BLACK_COBBLESTONE.get());
+		tag(Tags.Blocks.COBBLESTONES).add(FLOWERY_MOSSY_COBBLESTONE.get(), MYCELIUM_COBBLESTONE.get(), BLACK_COBBLESTONE.get());
 		tag(Tags.Blocks.END_STONES).add(COARSE_END_STONE.get());
-		tag(Tags.Blocks.ORES).addTags(CRUXITE_ORES, ExtraForgeTags.Blocks.URANIUM_ORES);
+		tag(Tags.Blocks.ORES).addTags(CRUXITE_ORES, ExtraModTags.Blocks.URANIUM_ORES);
 		tag(BlockTags.COAL_ORES).addTag(MSTags.Blocks.COAL_ORES);
 		tag(BlockTags.DIAMOND_ORES).addTag(MSTags.Blocks.DIAMOND_ORES);
 		tag(BlockTags.GOLD_ORES).addTag(MSTags.Blocks.GOLD_ORES);
@@ -78,8 +103,8 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(BlockTags.REDSTONE_ORES).addTag(MSTags.Blocks.REDSTONE_ORES);
 		tag(BlockTags.EMERALD_ORES).addTag(MSTags.Blocks.EMERALD_ORES);
 		tag(BlockTags.DAMPENS_VIBRATIONS).add(DENSE_CLOUD.get(), BRIGHT_DENSE_CLOUD.get());
-		tag(Tags.Blocks.STONE).add(COARSE_STONE.get(), SHADE_STONE.get(), MYCELIUM_STONE.get(), BLACK_STONE.get(), IGNEOUS_STONE.get(), PUMICE_STONE.get(), COARSE_END_STONE.get(), PINK_STONE.get(), BROWN_STONE.get(), GREEN_STONE.get(), UNCARVED_WOOD.get());
-		tag(Tags.Blocks.STORAGE_BLOCKS).addTags(CRUXITE_STORAGE_BLOCKS, ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS);
+		tag(Tags.Blocks.STONES).add(COARSE_STONE.get(), SHADE_STONE.get(), MYCELIUM_STONE.get(), BLACK_STONE.get(), IGNEOUS_STONE.get(), PUMICE_STONE.get(), COARSE_END_STONE.get(), PINK_STONE.get(), BROWN_STONE.get(), GREEN_STONE.get(), UNCARVED_WOOD.get());
+		tag(Tags.Blocks.STORAGE_BLOCKS).addTags(CRUXITE_STORAGE_BLOCKS, ExtraModTags.Blocks.URANIUM_STORAGE_BLOCKS);
 		tag(Tags.Blocks.BOOKSHELVES).add(GLOWING_BOOKSHELF.get(), FROST_BOOKSHELF.get(), RAINBOW_BOOKSHELF.get(), END_BOOKSHELF.get(), DEAD_BOOKSHELF.get(), TREATED_BOOKSHELF.get(), SHADEWOOD_BOOKSHELF.get(), CINDERED_BOOKSHELF.get());
 		tag(FLOWER_POTS).add(POTTED_FROST_SAPLING.get(), POTTED_RAINBOW_SAPLING.get(), POTTED_END_SAPLING.get(), POTTED_SHADEWOOD_SAPLING.get());
 		
@@ -251,8 +276,8 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(CASSETTE_PLAYER.get());
 		needsWoodPickaxe(PARCEL_PYXIS.get(), PYXIS_LID.get());
 		
-		tag(ExtraForgeTags.Blocks.URANIUM_ORES).addTag(URANIUM_ORES);
-		tag(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK.get());
+		tag(ExtraModTags.Blocks.URANIUM_ORES).addTag(URANIUM_ORES);
+		tag(ExtraModTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK.get());
 		
 		tag(GREEN_HIEROGLYPHS).add(GREEN_STONE_BRICK_FROG.get(), GREEN_STONE_BRICK_LOTUS.get(), GREEN_STONE_BRICK_IGUANA_LEFT.get(), GREEN_STONE_BRICK_IGUANA_RIGHT.get(), GREEN_STONE_BRICK_NAK_LEFT.get(), GREEN_STONE_BRICK_NAK_RIGHT.get(), GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), GREEN_STONE_BRICK_SKAIA.get(), GREEN_STONE_BRICK_TURTLE.get());
 		tag(GLOWING_LOGS).add(GLOWING_LOG.get(), GLOWING_WOOD.get(), STRIPPED_GLOWING_LOG.get(), STRIPPED_GLOWING_WOOD.get());
@@ -329,9 +354,9 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 				CINDERED_SIGN.get(), CINDERED_HANGING_SIGN.get(), CINDERED_WALL_SIGN.get(), CINDERED_WALL_HANGING_SIGN.get());
 		
 		tag(ROTATOR_WHITELISTED).add(Blocks.REPEATER, Blocks.COMPARATOR, AND_GATE_BLOCK.get(), OR_GATE_BLOCK.get(), XOR_GATE_BLOCK.get(), NAND_GATE_BLOCK.get(), NOR_GATE_BLOCK.get(), XNOR_GATE_BLOCK.get(), AREA_EFFECT_BLOCK.get(), WIRELESS_REDSTONE_TRANSMITTER.get(), REMOTE_COMPARATOR.get(), PLATFORM_GENERATOR.get(), ITEM_MAGNET.get());
-		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIAN).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, Blocks.REINFORCED_DEEPSLATE, PUSHABLE_BLOCK.get()); //excludes Platform Receptacle blocks as they only absorb conditionally
+		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIANS).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, Blocks.REINFORCED_DEEPSLATE, PUSHABLE_BLOCK.get()); //excludes Platform Receptacle blocks as they only absorb conditionally
 		tag(PUSHABLE_BLOCK_REPLACEABLE).addTags(SAPLINGS, FLOWERS);
-		tag(PETRIFIED_FLORA_PLACEABLE).addTags(Tags.Blocks.STONE, Tags.Blocks.COBBLESTONE, Tags.Blocks.GRAVEL);
+		tag(PETRIFIED_FLORA_PLACEABLE).addTags(Tags.Blocks.STONES, Tags.Blocks.COBBLESTONES, Tags.Blocks.GRAVELS);
 		tag(EDITMODE_BREAK_BLACKLIST).addTags(BlockTags.PORTALS);
 	}
 	

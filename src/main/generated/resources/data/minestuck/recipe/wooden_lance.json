@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "tag": "c:rods/wooden"
+    },
+    "w": {
+      "item": "minecraft:wooden_sword"
+    }
+  },
+  "pattern": [
+    "wP ",
+    "PP ",
+    "  s"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:wooden_lance"
+  }
+}

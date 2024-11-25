@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:brown_stone"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:brown_stone_stairs"
+  }
+}

@@ -82,7 +82,7 @@ public class ComputerThemeProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, ComputerTheme.Data> entry : computerThemes.entrySet())
 		{
 			Path themePath = getPath(outputPath, entry.getKey());
-			JsonElement encodedTheme = ComputerTheme.Data.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow(false, LOGGER::error);
+			JsonElement encodedTheme = ComputerTheme.Data.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
 			futures.add(DataProvider.saveStable(cache, encodedTheme, themePath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));

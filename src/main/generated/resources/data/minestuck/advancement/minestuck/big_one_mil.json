@@ -1,0 +1,35 @@
+{
+  "parent": "minestuck:minestuck/halfway_point",
+  "criteria": {
+    "reach_rung": {
+      "conditions": {
+        "rung": {
+          "min": 44
+        }
+      },
+      "trigger": "minestuck:echeladder"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.big_one_mil.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "components": {
+        "minestuck:value": 1000000
+      },
+      "count": 1,
+      "id": "minestuck:boondollars"
+    },
+    "title": {
+      "translate": "advancements.minestuck.big_one_mil.title"
+    }
+  },
+  "requirements": [
+    [
+      "reach_rung"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

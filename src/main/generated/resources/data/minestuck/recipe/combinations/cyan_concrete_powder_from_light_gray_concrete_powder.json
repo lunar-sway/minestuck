@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "c:dyes/cyan"
+  },
+  "input2": {
+    "item": "minecraft:light_gray_concrete_powder"
+  },
+  "mode": "or",
+  "output": "minecraft:cyan_concrete_powder"
+}

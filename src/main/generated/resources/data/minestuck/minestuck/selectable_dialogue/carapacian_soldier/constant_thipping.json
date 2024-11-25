@@ -3,5 +3,7 @@
     "type": "minestuck:consort_terrain_land_type",
     "consort": "iguana"
   },
-  "dialogue": "minestuck:carapacian_soldier/constant_thipping"
+  "dialogue": "minestuck:carapacian_soldier/constant_thipping",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

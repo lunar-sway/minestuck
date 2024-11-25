@@ -1,12 +1,16 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.item.block.TransportalizerItem;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -321,9 +325,9 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		this.destId = nbt.getString(DEST_ID);
 		this.id = nbt.getString(ID);
 		if(nbt.contains(ACTIVE))
@@ -332,9 +336,9 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		if (!id.isEmpty())
 			compound.putString(ID, id);
@@ -345,9 +349,29 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	protected void applyImplicitComponents(DataComponentInput componentInput)
 	{
-		return this.saveWithoutMetadata();
+		TransportalizerItem.TransportalizerData data = componentInput.get(MSItemComponents.TRANSPORTALIZER_DATA);
+		if (data != null)
+		{
+			this.id = data.id().orElse("");
+			this.destId = data.destinationId().orElse("");
+			this.locked = data.locked();
+		}
+	}
+	
+	@Override
+	protected void collectImplicitComponents(DataComponentMap.Builder components)
+	{
+		components.set(MSItemComponents.TRANSPORTALIZER_DATA, new TransportalizerItem.TransportalizerData(
+				this.id.isEmpty() ? Optional.empty() : Optional.of(this.id),
+				this.destId.isEmpty() ? Optional.empty() : Optional.of(this.destId), this.locked));
+	}
+	
+	@Override
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
+	{
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

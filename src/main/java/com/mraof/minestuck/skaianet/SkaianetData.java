@@ -5,6 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -77,7 +78,7 @@ public final class SkaianetData extends SavedData
 	}
 	
 	@Override
-	public CompoundTag save(CompoundTag compound)
+	public CompoundTag save(CompoundTag compound, HolderLookup.Provider registries)
 	{
 		ListTag playerDataList = new ListTag();
 		for(SburbPlayerData playerData : playerDataMap.values())
@@ -171,7 +172,7 @@ public final class SkaianetData extends SavedData
 	
 	private static Factory<SkaianetData> factory(MinecraftServer mcServer)
 	{
-		return new Factory<>(() -> new SkaianetData(MinestuckConfig.SERVER.globalSession.get(), mcServer), nbt -> new SkaianetData(mcServer, nbt));
+		return new Factory<>(() -> new SkaianetData(MinestuckConfig.SERVER.globalSession.get(), mcServer), (nbt, provider) -> new SkaianetData(mcServer, nbt));
 	}
 	
 	// Always save skaianet data, since it's difficult to reliably tell when skaianet data has changed.

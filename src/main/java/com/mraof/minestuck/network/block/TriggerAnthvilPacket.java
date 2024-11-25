@@ -5,32 +5,25 @@ import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
 import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record TriggerAnthvilPacket() implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("trigger_anthvil");
+	public static final Type<TriggerAnthvilPacket> ID = new Type<>(Minestuck.id("trigger_anthvil"));
+	public static final StreamCodec<FriendlyByteBuf, TriggerAnthvilPacket> STREAM_CODEC = StreamCodec.unit(new TriggerAnthvilPacket());
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-	}
-	
-	public static TriggerAnthvilPacket read(FriendlyByteBuf ignored)
-	{
-		return new TriggerAnthvilPacket();
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
 		AbstractContainerMenu playerContainer = player.containerMenu;
 		if(!(playerContainer instanceof AnthvilMenu anthvilMenu))

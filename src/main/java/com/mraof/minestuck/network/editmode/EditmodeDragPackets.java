@@ -14,6 +14,10 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -30,8 +34,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.function.Consumer;
+
+import static com.mraof.minestuck.network.MSPayloads.VEC3_STREAM_CODEC;
 
 public final class EditmodeDragPackets
 {
@@ -73,37 +80,29 @@ public final class EditmodeDragPackets
 	
 	public record Fill(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("editmode_drag/fill");
+		public static final Type<Fill> ID = new Type<>(Minestuck.id("editmode_drag/fill"));
+		public static final StreamCodec<FriendlyByteBuf, Fill> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.BOOL,
+				Fill::isDown,
+				BlockPos.STREAM_CODEC,
+				Fill::positionStart,
+				BlockPos.STREAM_CODEC,
+				Fill::positionEnd,
+				VEC3_STREAM_CODEC,
+				Fill::hitVector,
+				Direction.STREAM_CODEC,
+				Fill::side,
+				Fill::new
+		);
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeBoolean(isDown);
-			buffer.writeBlockPos(positionStart);
-			buffer.writeBlockPos(positionEnd);
-			buffer.writeVec3(hitVector);
-			buffer.writeEnum(side);
-		}
-		
-		public static Fill read(FriendlyByteBuf buffer)
-		{
-			boolean isDragging = buffer.readBoolean();
-			BlockPos positionStart = buffer.readBlockPos();
-			BlockPos positionEnd = buffer.readBlockPos();
-			Vec3 hitVector = buffer.readVec3();
-			Direction side = buffer.readEnum(Direction.class);
-			
-			return new Fill(isDragging, positionStart, positionEnd, hitVector, side);
-		}
-		
-		@Override
-		public void execute(ServerPlayer player)
+		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			EditData data = ServerEditHandler.getData(player);
 			
@@ -161,37 +160,29 @@ public final class EditmodeDragPackets
 	
 	public record Destroy(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("editmode_drag/destroy");
+		public static final Type<Destroy> ID = new Type<>(Minestuck.id("editmode_drag/destroy"));
+		public static final StreamCodec<FriendlyByteBuf, Destroy> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.BOOL,
+				Destroy::isDown,
+				BlockPos.STREAM_CODEC,
+				Destroy::positionStart,
+				BlockPos.STREAM_CODEC,
+				Destroy::positionEnd,
+				VEC3_STREAM_CODEC,
+				Destroy::hitVector,
+				Direction.STREAM_CODEC,
+				Destroy::side,
+				Destroy::new
+		);
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeBoolean(isDown);
-			buffer.writeBlockPos(positionStart);
-			buffer.writeBlockPos(positionEnd);
-			buffer.writeVec3(hitVector);
-			buffer.writeEnum(side);
-		}
-		
-		public static Destroy read(FriendlyByteBuf buffer)
-		{
-			boolean isDragging = buffer.readBoolean();
-			BlockPos positionStart = buffer.readBlockPos();
-			BlockPos positionEnd = buffer.readBlockPos();
-			Vec3 hitVector = buffer.readVec3();
-			Direction side = buffer.readEnum(Direction.class);
-			
-			return new Destroy(isDragging, positionStart, positionEnd, hitVector, side);
-		}
-		
-		@Override
-		public void execute(ServerPlayer player)
+		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			EditData data = ServerEditHandler.getData(player);
 			
@@ -239,32 +230,25 @@ public final class EditmodeDragPackets
 	
 	public record Cursor(boolean isDown, BlockPos positionStart, BlockPos positionEnd) implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("editmode_drag/cursor");
+		public static final Type<Cursor> ID = new Type<>(Minestuck.id("editmode_drag/cursor"));
+		public static final StreamCodec<FriendlyByteBuf, Cursor> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.BOOL,
+				Cursor::isDown,
+				BlockPos.STREAM_CODEC,
+				Cursor::positionStart,
+				BlockPos.STREAM_CODEC,
+				Cursor::positionEnd,
+				Cursor::new
+		);
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeBoolean(isDown);
-			buffer.writeBlockPos(positionStart);
-			buffer.writeBlockPos(positionEnd);
-		}
-		
-		public static Cursor read(FriendlyByteBuf buffer)
-		{
-			boolean isDragging = buffer.readBoolean();
-			BlockPos positionStart = buffer.readBlockPos();
-			BlockPos positionEnd = buffer.readBlockPos();
-			return new Cursor(isDragging, positionStart, positionEnd);
-		}
-		
-		@Override
-		public void execute(ServerPlayer player)
+		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			if(ServerEditHandler.isInEditmode(player))
 			{
@@ -280,26 +264,17 @@ public final class EditmodeDragPackets
 	
 	public record Reset() implements MSPacket.PlayToServer
 	{
-		public static final ResourceLocation ID = Minestuck.id("editmode_drag/reset");
+		public static final Type<Reset> ID = new Type<>(Minestuck.id("editmode_drag/reset"));
+		public static final StreamCodec<FriendlyByteBuf, Reset> STREAM_CODEC = StreamCodec.unit(new Reset());
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-		}
-		
-		public static Reset read(FriendlyByteBuf buffer)
-		{
-			return new Reset();
-		}
-		
-		@Override
-		public void execute(ServerPlayer player)
+		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			if(!player.level().isClientSide())
 			{

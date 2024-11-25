@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_chestplate"
+  },
+  "input2": {
+    "item": "minecraft:prismarine"
+  },
+  "mode": "or",
+  "output": "minestuck:prismarine_chestplate"
+}

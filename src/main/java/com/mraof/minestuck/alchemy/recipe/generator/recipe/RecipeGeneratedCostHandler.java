@@ -15,7 +15,7 @@ import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -26,7 +26,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +45,7 @@ import java.util.function.BiConsumer;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<List<RecipeGeneratedCostHandler.SourceEntry>> implements GeneratedCostProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -82,18 +82,18 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		return generatedCosts;
 	}
 	
-	void write(FriendlyByteBuf buffer)
+	void write(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeInt(generatedCosts.size());
 		for(Map.Entry<Item, ImmutableGristSet> entry : generatedCosts.entrySet())
 		{
 			buffer.writeVarInt(Item.getId(entry.getKey()));
-			GristSet.write(entry.getValue(), buffer);
+			GristSet.Codecs.STREAM_CODEC.encode(buffer, entry.getValue());
 		}
 	}
 	
 	@Nullable
-	static RecipeGeneratedCostHandler read(FriendlyByteBuf buffer)
+	static RecipeGeneratedCostHandler read(RegistryFriendlyByteBuf buffer)
 	{
 		if(buffer.readableBytes() == 0)
 			return null;
@@ -103,7 +103,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(int i = 0; i < size; i++)
 		{
 			Item item = Item.byId(buffer.readVarInt());
-			ImmutableGristSet cost = GristSet.read(buffer);
+			ImmutableGristSet cost = GristSet.Codecs.STREAM_CODEC.decode(buffer);
 			builder.put(item, cost);
 		}
 		return new RecipeGeneratedCostHandler(builder.build());
@@ -126,7 +126,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		List<SourceEntry> sources = new ArrayList<>();
 		for(String namespace : resourceManagerIn.getNamespaces())
 		{
-			resourceManagerIn.getResource(new ResourceLocation(namespace, PATH)).ifPresent(resource -> {
+			resourceManagerIn.getResource(ResourceLocation.fromNamespaceAndPath(namespace, PATH)).ifPresent(resource -> {
 				try(
 						Reader reader = resource.openAsReader()
 				)

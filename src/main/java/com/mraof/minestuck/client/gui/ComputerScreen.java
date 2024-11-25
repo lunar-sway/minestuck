@@ -28,8 +28,8 @@ public class ComputerScreen extends Screen
 {
 	
 	public static final String TITLE = "minestuck.computer";
-	public static final ResourceLocation guiMain = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb.png");
-	public static final ResourceLocation guiBsod = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/bsod_message.png");
+	public static final ResourceLocation guiMain = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb.png");
+	public static final ResourceLocation guiBsod = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/bsod_message.png");
 	
 	public static final int xSize = 176;
 	public static final int ySize = 166;

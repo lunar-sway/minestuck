@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class FrogTempleStructure extends Structure
 {
-	public static final Codec<FrogTempleStructure> CODEC = simpleCodec(FrogTempleStructure::new);
+	public static final MapCodec<FrogTempleStructure> CODEC = simpleCodec(FrogTempleStructure::new);
 	
 	public FrogTempleStructure(StructureSettings settings)
 	{

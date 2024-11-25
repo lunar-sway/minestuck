@@ -25,7 +25,9 @@ import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSDispenserBehaviours;
+import com.mraof.minestuck.item.MSItemTypes;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.KindAbstratusList;
@@ -40,12 +42,11 @@ import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import software.bernie.geckolib.GeckoLib;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 
@@ -56,20 +57,22 @@ public class Minestuck
 	
 	public static ResourceLocation id(String path)
 	{
-		return new ResourceLocation(MOD_ID, path);
+		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
 	}
 	
-	public Minestuck(IEventBus eventBus)
+	public Minestuck(IEventBus eventBus, ModContainer modContainer)
 	{
 		
 		eventBus.addListener(this::setup);
 		
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonSpec);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
+		modContainer.registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonSpec);
+		modContainer.registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
+		modContainer.registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		GeckoLib.initialize(eventBus);
+		//GeckoLib.initialize(eventBus); FIXME
 		
+		MSItemComponents.REGISTRY.register(eventBus);
+		MSItemTypes.ARMOR_MATERIAL_REGISTRY.register(eventBus);
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);

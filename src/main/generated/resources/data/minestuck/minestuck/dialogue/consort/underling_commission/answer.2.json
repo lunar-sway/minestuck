@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": {
       "arguments": [
         "land_denizen"
@@ -8,11 +10,21 @@
     },
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.underling_commission.answer.2.ask_carapacian",
-        "next_dialogue": "minestuck:consort/underling_commission/explain_carapacian.1"
+        "next_dialogue": "minestuck:consort/underling_commission/explain_carapacian.1",
+        "triggers": []
       },
       {
-        "message": "minestuck.dialogue.goodbye"
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.goodbye",
+        "triggers": []
       }
     ]
   }

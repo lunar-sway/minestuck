@@ -13,5 +13,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/doctors_inside"
+  "dialogue": "minestuck:consort/doctors_inside",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

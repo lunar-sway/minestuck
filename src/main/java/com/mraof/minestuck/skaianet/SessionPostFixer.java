@@ -3,7 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
  * A class responsible for fixing invalid states in connection or session data,
  * which might happen if a world is saved incorrectly after a crash.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class SessionPostFixer
 {
 	private static final Logger LOGGER = LogManager.getLogger();

@@ -39,8 +39,8 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,7 +49,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
 {
 	public static final String WRONG_DIMENSION = "minestuck.entry.wrong_dimension";
@@ -148,7 +148,7 @@ public class EntryProcess
 		
 		waitingProcess = process;
 		startTime = player.level().getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
-		PacketDistributor.ALL.noArg().send(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
+		PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
@@ -181,18 +181,15 @@ public class EntryProcess
 	private static long startTime;
 	
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Pre event)
 	{
-		if(event.phase == TickEvent.Phase.START)
+		//noinspection resource
+		if(waitingProcess != null && startTime <= event.getServer().overworld().getGameTime())
 		{
-			//noinspection resource
-			if(waitingProcess != null && startTime <= event.getServer().overworld().getGameTime())
-			{
-				waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
-				waitingProcess.runEntry();
-				waitingProcess = null;
-				PacketDistributor.ALL.noArg().send(new EntryEffectPackets.Clear());
-			}
+			waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
+			waitingProcess.runEntry();
+			waitingProcess = null;
+			PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Clear());
 		}
 	}
 	
