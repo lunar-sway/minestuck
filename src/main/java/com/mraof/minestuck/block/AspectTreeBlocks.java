@@ -59,7 +59,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> BLOOD_ASPECT_STAIRS = ItemBlockPair.register("blood_aspect_stairs",
-			() -> new StairBlock(() -> BLOOD_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(BLOOD_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(BLOOD_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(BLOOD_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> BLOOD_ASPECT_SLAB = ItemBlockPair.register("blood_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(BLOOD_ASPECT_PLANKS.asBlock())));
@@ -135,7 +135,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> BREATH_ASPECT_STAIRS = ItemBlockPair.register("breath_aspect_stairs",
-			() -> new StairBlock(() -> BREATH_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(BREATH_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(BREATH_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(BREATH_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> BREATH_ASPECT_SLAB = ItemBlockPair.register("breath_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(BREATH_ASPECT_PLANKS.asBlock())));
@@ -210,7 +210,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> DOOM_ASPECT_STAIRS = ItemBlockPair.register("doom_aspect_stairs",
-			() -> new StairBlock(() -> DOOM_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(DOOM_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(DOOM_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(DOOM_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> DOOM_ASPECT_SLAB = ItemBlockPair.register("doom_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(DOOM_ASPECT_PLANKS.asBlock())));
@@ -285,7 +285,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> HEART_ASPECT_STAIRS = ItemBlockPair.register("heart_aspect_stairs",
-			() -> new StairBlock(() -> HEART_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(HEART_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(HEART_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(HEART_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> HEART_ASPECT_SLAB = ItemBlockPair.register("heart_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(HEART_ASPECT_PLANKS.asBlock())));
@@ -360,7 +360,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> HOPE_ASPECT_STAIRS = ItemBlockPair.register("hope_aspect_stairs",
-			() -> new StairBlock(() -> HOPE_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(HOPE_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(HOPE_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(HOPE_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> HOPE_ASPECT_SLAB = ItemBlockPair.register("hope_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(HOPE_ASPECT_PLANKS.asBlock())));
@@ -435,7 +435,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> LIFE_ASPECT_STAIRS = ItemBlockPair.register("life_aspect_stairs",
-			() -> new StairBlock(() -> LIFE_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(LIFE_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(LIFE_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(LIFE_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> LIFE_ASPECT_SLAB = ItemBlockPair.register("life_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(LIFE_ASPECT_PLANKS.asBlock())));
@@ -510,7 +510,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> LIGHT_ASPECT_STAIRS = ItemBlockPair.register("light_aspect_stairs",
-			() -> new StairBlock(() -> LIGHT_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(LIGHT_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(LIGHT_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(LIGHT_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> LIGHT_ASPECT_SLAB = ItemBlockPair.register("light_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(LIGHT_ASPECT_PLANKS.asBlock())));
@@ -585,7 +585,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> MIND_ASPECT_STAIRS = ItemBlockPair.register("mind_aspect_stairs",
-			() -> new StairBlock(() -> MIND_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(MIND_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(MIND_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(MIND_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> MIND_ASPECT_SLAB = ItemBlockPair.register("mind_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(MIND_ASPECT_PLANKS.asBlock())));
@@ -660,7 +660,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> RAGE_ASPECT_STAIRS = ItemBlockPair.register("rage_aspect_stairs",
-			() -> new StairBlock(() -> RAGE_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(RAGE_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(RAGE_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(RAGE_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> RAGE_ASPECT_SLAB = ItemBlockPair.register("rage_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(RAGE_ASPECT_PLANKS.asBlock())));
@@ -735,7 +735,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> SPACE_ASPECT_STAIRS = ItemBlockPair.register("space_aspect_stairs",
-			() -> new StairBlock(() -> SPACE_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(SPACE_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(SPACE_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(SPACE_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> SPACE_ASPECT_SLAB = ItemBlockPair.register("space_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(SPACE_ASPECT_PLANKS.asBlock())));
@@ -810,7 +810,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> TIME_ASPECT_STAIRS = ItemBlockPair.register("time_aspect_stairs",
-			() -> new StairBlock(() -> TIME_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(TIME_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(TIME_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(TIME_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> TIME_ASPECT_SLAB = ItemBlockPair.register("time_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(TIME_ASPECT_PLANKS.asBlock())));
@@ -885,7 +885,7 @@ public final class AspectTreeBlocks
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final ItemBlockPair<StairBlock, BlockItem> VOID_ASPECT_STAIRS = ItemBlockPair.register("void_aspect_stairs",
-			() -> new StairBlock(() -> VOID_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(VOID_ASPECT_PLANKS.asBlock())));
+			() -> new StairBlock(VOID_ASPECT_PLANKS.asBlock().defaultBlockState(), ofFullCopy(VOID_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<SlabBlock, BlockItem> VOID_ASPECT_SLAB = ItemBlockPair.register("void_aspect_slab",
 			() -> new SlabBlock(ofFullCopy(VOID_ASPECT_PLANKS.asBlock())));
