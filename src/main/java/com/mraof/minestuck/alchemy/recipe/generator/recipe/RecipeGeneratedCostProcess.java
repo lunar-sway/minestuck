@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
@@ -21,14 +20,14 @@ class RecipeGeneratedCostProcess
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> lookupMap;
-	private final Map<Item, ImmutableGristSet> generatedCosts = new HashMap<>();
+	private final Map<Item, GristSet.Immutable> generatedCosts = new HashMap<>();
 	
 	RecipeGeneratedCostProcess(Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> lookupMap)
 	{
 		this.lookupMap = lookupMap;
 	}
 	
-	Map<Item, ImmutableGristSet> buildMap()
+	Map<Item, GristSet.Immutable> buildMap()
 	{
 		//Clean out null grist costs
 		generatedCosts.entrySet().removeIf(entry -> entry.getValue() == null);
