@@ -156,16 +156,12 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		{
 			if(heldStack.is(MSItems.CAPTCHA_CARD) && !heldStack.has(MSItemComponents.ENCODED_ITEM))
 			{
-				CardStoredItemComponent cardStoredItemComponent = heldStack.get(MSItemComponents.CARD_STORED_ITEM);
-				if(cardStoredItemComponent != null && cardStoredItemComponent.code() != null)
+				CardStoredItemComponent cardStoredItemComponent = heldStack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
+				if(cardStoredItemComponent.code() != null)
 				{
 					setCaptcha(cardStoredItemComponent.code());
 					effects(false);
-				} else if(cardStoredItemComponent == null)
-				{
-					setCaptcha(CardCaptchas.EMPTY_CARD_CAPTCHA);
-					effects(false);
-				} else if(cardStoredItemComponent != null && cardStoredItemComponent.code() == null)
+				} else
 					player.displayClientMessage(Component.translatable(REJECT_CARD), true); //card unreadable
 			}
 		}

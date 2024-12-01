@@ -33,7 +33,7 @@ public record CardStoredItemComponent(ItemStack storedStack, boolean isGhostItem
 			(stack, type, optionalCode) -> new CardStoredItemComponent(stack, type, optionalCode.orElse(null))
 	);
 	
-	public static final CardStoredItemComponent EMPTY = new CardStoredItemComponent(ItemStack.EMPTY, false, null);
+	public static final CardStoredItemComponent EMPTY = new CardStoredItemComponent(ItemStack.EMPTY, false, CardCaptchas.EMPTY_CARD_CAPTCHA);
 	
 	public static CardStoredItemComponent create(ItemStack storedStack, boolean isGhostItem, MinecraftServer mcServer)
 	{
