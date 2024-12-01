@@ -14,7 +14,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD;
 
@@ -53,17 +52,6 @@ public class AlchemyHelper
 			return encodedItemComponent.asItemStack();
 		
 		return card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack();
-	}
-	
-	public static boolean isReadableCard(ItemStack card)
-	{
-		return getCode(card) != null;
-	}
-	
-	@Nullable
-	public static String getCode(ItemStack card)
-	{
-		return card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).code();
 	}
 	
 	public static boolean isPunchedCard(ItemStack item)

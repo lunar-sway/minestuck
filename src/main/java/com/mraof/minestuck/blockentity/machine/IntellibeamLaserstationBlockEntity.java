@@ -1,7 +1,6 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
@@ -67,41 +66,43 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void onRightClick(Player player)
 	{
-		if(level instanceof ServerLevel serverLevel)
+		if(!(level instanceof ServerLevel serverLevel))
+			return;
+		if(waitTimer > 0)
+			return;
+		waitTimer = 10;
+		
+		if(analyzedCard.isEmpty())
 		{
-			if(waitTimer > 0)
-				return;
-			
 			ItemStack heldCard = player.getMainHandItem();
 			ItemStack itemInHeldCard = heldCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack();
-			
-			if(!analyzedCard.isEmpty() && player.isShiftKeyDown())
-			{
-				takeCard(player);
-				waitTimer = 10;
-			} else if(AlchemyHelper.isReadableCard(analyzedCard))
-			{
-				this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
-				player.displayClientMessage(Component.translatable(CAPTCHA_DECODED), true);
-				waitTimer = 10;
-			} else if(analyzedCard.isEmpty() && itemInHeldCard.is(MSTags.Items.UNREADABLE))
-			{
+			if(itemInHeldCard.is(MSTags.Items.UNREADABLE))
 				setCard(heldCard.split(1));
-				waitTimer = 10;
-			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
-			{
-				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player,
-						analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack());
-				setReadable(analyzedCard, serverLevel.getServer());
-				takeCard(player);
-				
-				waitTimer = 10;
-			} else
-			{
-				addExperience(player);
-				waitTimer = 10;
-			}
+			return;
 		}
+		
+		if(player.isShiftKeyDown())
+		{
+			takeCard(player);
+			return;
+		}
+		
+		CardStoredItemComponent analyzedCardComponent = this.analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
+		if(analyzedCardComponent.code() != null)
+		{
+			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
+			player.displayClientMessage(Component.translatable(CAPTCHA_DECODED), true);
+			return;
+		}
+		if(getCardItemExperience() < EXP_LEVEL_CAPACITY)
+		{
+			addExperience(player);
+			return;
+		}
+		
+		MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player, analyzedCardComponent.storedStack());
+		setReadable(analyzedCard, serverLevel.getServer());
+		takeCard(player);
 	}
 	
 	private Integer getCardItemExperience()
