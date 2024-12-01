@@ -1,7 +1,6 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
@@ -13,6 +12,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -175,13 +175,14 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		if(itemFromCaptcha != null && !getCard().isEmpty())
 		{
 			ItemStack captchaItemStack = itemFromCaptcha.getDefaultInstance();
-			ItemStack storedStackInCard = AlchemyHelper.getDecodedItem(getCard());
+			EncodedItemComponent encodedItemComponent = getCard().get(MSItemComponents.ENCODED_ITEM);
+			ItemStack storedStackInCard = encodedItemComponent != null ? encodedItemComponent.item().getDefaultInstance() : ItemStack.EMPTY;
+			
 			ItemStack output;
 			
-			if(getCard().is(MSItems.CAPTCHA_CARD) && getCard().has(MSItemComponents.ENCODED_ITEM)) //|| combination. A temporary new captcha card containing captchaItemStack is made
-			{
-				output = CombinationRecipe.findResult(new CombinationInput(captchaItemStack, AlchemyHelper.getDecodedItem(getCard()), CombinationMode.OR), player.level());
-			} else
+			if(!storedStackInCard.isEmpty())
+				output = CombinationRecipe.findResult(new CombinationInput(captchaItemStack, storedStackInCard, CombinationMode.OR), player.level());
+			else
 				output = captchaItemStack;
 			
 			if(!output.isEmpty())
