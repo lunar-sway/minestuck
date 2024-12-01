@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 
@@ -21,7 +21,7 @@ public enum EnumDowelType implements StringRepresentable
 	{
 		if(dowel.isEmpty())
 			return NONE;
-		else if(AlchemyHelper.hasDecodedItem(dowel))
+		else if(dowel.has(MSItemComponents.ENCODED_ITEM))
 			return CARVED_DOWEL;
 		else return DOWEL;
 	}

@@ -1,13 +1,13 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -16,11 +16,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CaptchaCardItem extends Item
 {
 	public CaptchaCardItem(Properties properties)
@@ -31,7 +31,7 @@ public class CaptchaCardItem extends Item
 	@Override
 	public int getMaxStackSize(ItemStack stack)
 	{
-		if(AlchemyHelper.hasDecodedItem(stack))
+		if(stack.has(MSItemComponents.CARD_STORED_ITEM) || stack.has(MSItemComponents.ENCODED_ITEM))
 			return 16;
 		else return 64;
 	}
@@ -42,40 +42,51 @@ public class CaptchaCardItem extends Item
 		
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		
-		if(playerIn.isShiftKeyDown() && AlchemyHelper.isGhostCard(stack))
+		if(playerIn.isShiftKeyDown() && stack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).isGhostItem())
 		{
-			AlchemyHelper.removeItemFromCard(stack);
-			return InteractionResultHolder.success(new ItemStack(playerIn.getItemInHand(handIn).getItem(), playerIn.getItemInHand(handIn).getCount()));
-		} else return InteractionResultHolder.pass(playerIn.getItemInHand(handIn));
+			stack.remove(MSItemComponents.CARD_STORED_ITEM);
+			return InteractionResultHolder.success(new ItemStack(stack.getItem(), stack.getCount()));
+		} else return InteractionResultHolder.pass(stack);
 	}
 	
 	
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag)
 	{
-		if(AlchemyHelper.hasDecodedItem(stack))
+		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
+		CardStoredItemComponent cardStoredItemComponent = stack.get(MSItemComponents.CARD_STORED_ITEM);
+		if(encodedItemComponent != null)
 		{
-			ItemStack content = AlchemyHelper.getDecodedItem(stack);
+			ItemStack content = encodedItemComponent.asItemStack();
 			if(!content.isEmpty())
 			{
 				Component contentName = content.getHoverName();
-				tooltipComponents.add(makeTooltipInfo((AlchemyHelper.isPunchedCard(stack) || AlchemyHelper.isGhostCard(stack))
+				tooltipComponents.add(makeTooltipInfo(contentName));
+				
+				tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
+			} else tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
+		} else if(cardStoredItemComponent != null)
+		{
+			ItemStack content = cardStoredItemComponent.storedStack();
+			if(!content.isEmpty())
+			{
+				Component contentName = content.getHoverName();
+				tooltipComponents.add(makeTooltipInfo(cardStoredItemComponent.isGhostItem()
 						? contentName : Component.literal(content.getCount() + "x").append(contentName)));
 				
-				if(AlchemyHelper.isPunchedCard(stack))
-					tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
-				else if(AlchemyHelper.isGhostCard(stack))
+				if(cardStoredItemComponent.isGhostItem())
 				{
-					Component captcha = getCaptcha(stack);
+					String captcha = cardStoredItemComponent.code();
 					if(captcha != null)
-						tooltipComponents.add(captcha);
+						tooltipComponents.add(Component.literal(captcha));
 					
 					tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
 				} else
 				{
-					Component captcha = getCaptcha(stack);
+					//TODO consider obfuscated characters for unreadable captcha
+					String captcha = cardStoredItemComponent.code();
 					if(captcha != null)
-						tooltipComponents.add(captcha);
+						tooltipComponents.add(Component.literal(captcha));
 				}
 			} else tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
 		} else
@@ -85,16 +96,27 @@ public class CaptchaCardItem extends Item
 		}
 	}
 	
-	//TODO consider obfuscated characters for unreadable unpunched card
-	@Nullable
-	private Component getCaptcha(ItemStack stack)
-	{
-		EncodedItemComponent dataComponent = stack.getOrDefault(MSItemComponents.ENCODED_ITEM, EncodedItemComponent.EMPTY);
-		return dataComponent.code().isEmpty() ? null : Component.literal(dataComponent.code()).withStyle(style -> style.withObfuscated(!dataComponent.canReadCode()));
-	}
-	
 	private Component makeTooltipInfo(Component info)
 	{
 		return Component.literal("(").append(info).append(")").withStyle(ChatFormatting.GRAY);
+	}
+	
+	public static ItemStack createCardWithItem(ItemStack itemIn, MinecraftServer mcServer)
+	{
+		ItemStack itemOut = new ItemStack(MSItems.CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, false, mcServer));
+		return itemOut;
+	}
+	
+	public static ItemStack createGhostCard(ItemStack itemIn, MinecraftServer mcServer)
+	{
+		ItemStack itemOut = new ItemStack(MSItems.CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, true, mcServer));
+		return itemOut;
+	}
+	
+	public static ItemStack createPunchedCard(Item encodedItem)
+	{
+		return EncodedItemComponent.createEncoded(MSItems.CAPTCHA_CARD, encodedItem);
 	}
 }
