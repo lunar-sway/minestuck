@@ -126,7 +126,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		EncodedItemComponent captchaPunchedInput = captchaInput.get(MSItemComponents.ENCODED_ITEM);
 		CardStoredItemComponent captchaStoredInput = captchaInput.get(MSItemComponents.CARD_STORED_ITEM);
 		if (captchaInput.is(MSItems.CAPTCHA_CARD) && captchaPunchedInput != null)
-			output = new ItemStack(captchaPunchedInput.item());
+			output = captchaPunchedInput.asItemStack();
 		else if (captchaInput.is(MSItems.CAPTCHA_CARD) && captchaStoredInput != null)
 		{
 			if(captchaStoredInput.code() == null)
@@ -137,7 +137,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		
 		EncodedItemComponent punchedInput = itemHandler.getStackInSlot(1).get(MSItemComponents.ENCODED_ITEM);
 		if(punchedInput != null)
-			output = CombinationRecipe.findResult(new CombinationInput(output, new ItemStack(punchedInput.item()), CombinationMode.OR), level);
+			output = CombinationRecipe.findResult(new CombinationInput(output, punchedInput.asItemStack(), CombinationMode.OR), level);
 		
 		if(output.isEmpty())
 			return ItemStack.EMPTY;

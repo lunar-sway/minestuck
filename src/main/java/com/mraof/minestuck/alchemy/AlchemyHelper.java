@@ -50,7 +50,7 @@ public class AlchemyHelper
 	{
 		EncodedItemComponent encodedItemComponent = card.get(MSItemComponents.ENCODED_ITEM);
 		if (encodedItemComponent != null)
-			return new ItemStack(encodedItemComponent.item());
+			return encodedItemComponent.asItemStack();
 		
 		return card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack();
 	}

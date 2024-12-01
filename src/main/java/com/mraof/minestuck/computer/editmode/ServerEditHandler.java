@@ -383,7 +383,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	{
 		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
 		return stack.is(MSItems.CAPTCHA_CARD) && encodedItemComponent != null
-				&& DeployList.containsItemStack(new ItemStack(encodedItemComponent.item()), playerData, level, DeployList.EntryLists.ATHENEUM);
+				&& DeployList.containsItemStack(encodedItemComponent.asItemStack(), playerData, level, DeployList.EntryLists.ATHENEUM);
 	}
 	
 	@SubscribeEvent

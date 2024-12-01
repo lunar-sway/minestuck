@@ -45,8 +45,8 @@ public class CaptchaCardItem extends Item
 		if(playerIn.isShiftKeyDown() && stack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).isGhostItem())
 		{
 			stack.remove(MSItemComponents.CARD_STORED_ITEM);
-			return InteractionResultHolder.success(new ItemStack(playerIn.getItemInHand(handIn).getItem(), playerIn.getItemInHand(handIn).getCount()));
-		} else return InteractionResultHolder.pass(playerIn.getItemInHand(handIn));
+			return InteractionResultHolder.success(new ItemStack(stack.getItem(), stack.getCount()));
+		} else return InteractionResultHolder.pass(stack);
 	}
 	
 	
@@ -57,7 +57,7 @@ public class CaptchaCardItem extends Item
 		CardStoredItemComponent cardStoredItemComponent = stack.get(MSItemComponents.CARD_STORED_ITEM);
 		if(encodedItemComponent != null)
 		{
-			ItemStack content = new ItemStack(encodedItemComponent.item());
+			ItemStack content = encodedItemComponent.asItemStack();
 			if(!content.isEmpty())
 			{
 				Component contentName = content.getHoverName();

@@ -176,7 +176,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		{
 			ItemStack captchaItemStack = itemFromCaptcha.getDefaultInstance();
 			EncodedItemComponent encodedItemComponent = getCard().get(MSItemComponents.ENCODED_ITEM);
-			ItemStack storedStackInCard = encodedItemComponent != null ? encodedItemComponent.item().getDefaultInstance() : ItemStack.EMPTY;
+			ItemStack storedStackInCard = encodedItemComponent != null ? encodedItemComponent.asItemStack() : ItemStack.EMPTY;
 			
 			ItemStack output;
 			

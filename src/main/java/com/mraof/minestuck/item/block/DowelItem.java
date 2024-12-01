@@ -43,7 +43,7 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
 		if(encodedItemComponent != null)
 		{
-			ItemStack containedStack = new ItemStack(encodedItemComponent.item());
+			ItemStack containedStack = encodedItemComponent.asItemStack();
 			
 			if(!containedStack.isEmpty())
 			{

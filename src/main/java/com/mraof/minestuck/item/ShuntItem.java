@@ -22,7 +22,7 @@ public class ShuntItem extends Item
 		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
 		if(encodedItemComponent != null)
 		{
-			ItemStack content = new ItemStack(encodedItemComponent.item());
+			ItemStack content = encodedItemComponent.asItemStack();
 			
 			if (!content.isEmpty())
 				tooltip.add(Component.literal("(").append(content.getHoverName()).append(")"));

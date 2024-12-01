@@ -25,6 +25,11 @@ public record EncodedItemComponent(Item item)
 			EncodedItemComponent::new
 	);
 	
+	public ItemStack asItemStack()
+	{
+		return this.item().getDefaultInstance();
+	}
+	
 	public static ItemStack createEncoded(ItemLike containerItem, Item encodedItem)
 	{
 		ItemStack stack = new ItemStack(containerItem);
@@ -42,6 +47,6 @@ public record EncodedItemComponent(Item item)
 	public static ItemStack getEncodedOrBlank(ItemStack stack)
 	{
 		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
-		return encodedItemComponent != null ? new ItemStack(encodedItemComponent.item()) : new ItemStack(MSItems.GENERIC_OBJECT.get());
+		return encodedItemComponent != null ? encodedItemComponent.asItemStack() : new ItemStack(MSItems.GENERIC_OBJECT.get());
 	}
 }
