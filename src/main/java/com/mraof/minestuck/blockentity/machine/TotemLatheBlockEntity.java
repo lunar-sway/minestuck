@@ -12,7 +12,6 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
-import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -202,10 +201,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 		if(be instanceof ItemStackBlockEntity beItem)
 		{
 			ItemStack oldDowel = beItem.getStack();
-			ItemStack newDowel = output.is(MSItems.GENERIC_OBJECT)
-					? new ItemStack(MSItems.CRUXITE_DOWEL.get())
-					: AlchemyHelper.createEncodedItem(output.getItem(), new ItemStack(MSItems.CRUXITE_DOWEL.get()));
-			ColorHandler.setColor(newDowel, ColorHandler.getColorFromStack(oldDowel));
+			ItemStack newDowel = EncodedItemComponent.setEncodedUnlessBlank(oldDowel.copy().split(1), output.getItem());
 			beItem.setStack(newDowel);
 			
 			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.recipe.combination.JeiCombination;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import mezz.jei.api.constants.VanillaTypes;
@@ -70,6 +70,6 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 		builder.addSlot(RecipeIngredientRole.INPUT, 37, 10)
 				.addItemStack(ColorHandler.setColor(new ItemStack(MSItems.CRUXITE_DOWEL.get()), ClientPlayerData.getPlayerColor()));
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 108, 10).addItemStack(recipe.output())
-				.addItemStack(ColorHandler.setColor(AlchemyHelper.createEncodedItem(recipe.output().getItem(), new ItemStack(MSItems.CRUXITE_DOWEL.get())), ClientPlayerData.getPlayerColor()));
+				.addItemStack(ColorHandler.setColor(EncodedItemComponent.createEncoded(MSItems.CRUXITE_DOWEL, recipe.output().getItem()), ClientPlayerData.getPlayerColor()));
 	}
 }

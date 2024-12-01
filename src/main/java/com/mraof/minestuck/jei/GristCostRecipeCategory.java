@@ -1,11 +1,12 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import mezz.jei.api.constants.VanillaTypes;
@@ -74,7 +75,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	{
 		builder.addSlot(RecipeIngredientRole.CATALYST, 19, 5)
 				.addItemStacks(Arrays.stream(recipe.ingredient().getItems())
-						.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack.getItem(), new ItemStack(MSBlocks.CRUXITE_DOWEL.get())))
+						.map(itemStack -> EncodedItemComponent.createEncoded(MSItems.CRUXITE_DOWEL, itemStack.getItem()))
 						.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.getPlayerColor())).toList());
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 127, 5)
 				.addIngredients(recipe.ingredient());

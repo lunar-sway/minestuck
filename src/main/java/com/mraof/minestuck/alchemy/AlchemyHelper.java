@@ -9,7 +9,6 @@ import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -99,12 +98,4 @@ public class AlchemyHelper
 			return card.copy();
 		}
 	}
-	
-	@Nonnull
-	public static ItemStack createEncodedItem(Item itemIn, ItemStack itemOut)
-	{
-		itemOut.set(MSItemComponents.ENCODED_ITEM, new EncodedItemComponent(itemIn));
-		return itemOut;
-	}
-	
 }

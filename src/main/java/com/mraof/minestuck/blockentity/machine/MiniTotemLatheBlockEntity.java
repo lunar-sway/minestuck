@@ -10,7 +10,6 @@ import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
-import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -126,11 +125,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 		if(output.isEmpty())
 			return ItemStack.EMPTY;
 		
-		ItemStack outputDowel = output.is(MSItems.GENERIC_OBJECT)
-				? new ItemStack(MSItems.CRUXITE_DOWEL.get())
-				: AlchemyHelper.createEncodedItem(output.getItem(), new ItemStack(MSItems.CRUXITE_DOWEL.get()));
-		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowelInput));	//Setting color
-		return outputDowel;
+		return EncodedItemComponent.setEncodedUnlessBlank(dowelInput.copy().split(1), output.getItem());
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 public record EncodedItemComponent(Item item)
 {
@@ -23,6 +24,20 @@ public record EncodedItemComponent(Item item)
 			EncodedItemComponent::item,
 			EncodedItemComponent::new
 	);
+	
+	public static ItemStack createEncoded(ItemLike containerItem, Item encodedItem)
+	{
+		ItemStack stack = new ItemStack(containerItem);
+		stack.set(MSItemComponents.ENCODED_ITEM, new EncodedItemComponent(encodedItem));
+		return stack;
+	}
+	
+	public static ItemStack setEncodedUnlessBlank(ItemStack stack, Item encodedItem)
+	{
+		if (encodedItem != MSItems.GENERIC_OBJECT.get())
+			stack.set(MSItemComponents.ENCODED_ITEM, new EncodedItemComponent(encodedItem));
+		return stack;
+	}
 	
 	public static ItemStack getEncodedOrBlank(ItemStack stack)
 	{

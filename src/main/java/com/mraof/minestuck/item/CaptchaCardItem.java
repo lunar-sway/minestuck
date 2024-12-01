@@ -115,10 +115,8 @@ public class CaptchaCardItem extends Item
 		return itemOut;
 	}
 	
-	public static ItemStack createPunchedCard(Item itemIn)
+	public static ItemStack createPunchedCard(Item encodedItem)
 	{
-		ItemStack itemOut = new ItemStack(MSItems.CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.ENCODED_ITEM, new EncodedItemComponent(itemIn));
-		return itemOut;
+		return EncodedItemComponent.createEncoded(MSItems.CAPTCHA_CARD, encodedItem);
 	}
 }
