@@ -1,10 +1,8 @@
 package com.mraof.minestuck.blockentity;
 
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.HolopadBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
-import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -85,8 +83,7 @@ public class HolopadBlockEntity extends BlockEntity
 	
 	public ItemStack getHoloItem()
 	{
-		EncodedItemComponent encodedItemComponent = this.card.get(MSItemComponents.ENCODED_ITEM);
-		return encodedItemComponent != null ? new ItemStack(encodedItemComponent.item()) : new ItemStack(MSBlocks.GENERIC_OBJECT);
+		return EncodedItemComponent.getEncodedOrBlank(this.card);
 	}
 	
 	@Override
