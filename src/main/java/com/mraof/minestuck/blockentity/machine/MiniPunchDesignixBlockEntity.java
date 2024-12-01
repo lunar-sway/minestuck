@@ -1,9 +1,9 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import com.mraof.minestuck.item.CaptchaCardItem;
@@ -35,7 +35,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
-	private final CombinerContainer combinerInventory = new CombinerContainer.ItemHandlerWrapper(itemHandler, CombinationMode.OR);
 	
 	public MiniPunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -119,7 +118,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		ItemStack output = AlchemyHelper.getDecodedItemDesignix(itemHandler.getStackInSlot(0));
 		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(itemHandler.getStackInSlot(1)))
 		{
-			output = CombinationRecipe.findResult(combinerInventory, level);
+			output = CombinationRecipe.findResult(new CombinationInput(itemHandler.getStackInSlot(0), itemHandler.getStackInSlot(1), CombinationMode.OR), level);
 		}
 		
 		if(!output.isEmpty())
