@@ -81,21 +81,4 @@ public class AlchemyHelper
 	{
 		return item.has(MSItemComponents.ENCODED_ITEM) || item.has(MSItemComponents.CARD_STORED_ITEM);
 	}
-	
-	/**
-	 * Given a punched card, this method returns a new item that represents the encoded data,
-	 * or it just returns the item directly if it's not a punched card.
-	 */
-	@Nonnull
-	public static ItemStack getDecodedItemDesignix(ItemStack card)
-	{
-		if (card.is(CAPTCHA_CARD) && hasDecodedItem(card))
-		{
-			return getDecodedItem(card);
-		}
-		else
-		{
-			return card.copy();
-		}
-	}
 }
