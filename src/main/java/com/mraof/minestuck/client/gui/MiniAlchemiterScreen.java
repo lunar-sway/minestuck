@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
@@ -56,8 +55,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 		if (menu.getSlot(0).hasItem())
 		{
 			//Render grist requirements
-			EncodedItemComponent encodedItemComponent = menu.getSlot(0).getItem().get(MSItemComponents.ENCODED_ITEM);
-			ItemStack stack = encodedItemComponent != null ? new ItemStack(encodedItemComponent.item()) : new ItemStack(MSBlocks.GENERIC_OBJECT.get());
+			ItemStack stack = EncodedItemComponent.getEncodedOrBlank(menu.getSlot(0).getItem());
 			
 			Optional<GristCostRecipe> recipe = GristCostRecipe.findRecipeForItem(stack, minecraft.level);
 			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, menu.getWildcardType(), false)).orElse(null);

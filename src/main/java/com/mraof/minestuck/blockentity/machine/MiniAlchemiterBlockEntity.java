@@ -9,9 +9,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
-import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -81,8 +79,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	{
 		if(!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(INPUT).isEmpty() && this.owner != null)
 		{
-			EncodedItemComponent encodedItemComponent = itemHandler.getStackInSlot(INPUT).get(MSItemComponents.ENCODED_ITEM);
-			ItemStack newItem = encodedItemComponent != null ? new ItemStack(encodedItemComponent.item()) : new ItemStack(MSItems.GENERIC_OBJECT.get());
+			ItemStack newItem = EncodedItemComponent.getEncodedOrBlank(itemHandler.getStackInSlot(INPUT));
 			
 			if(newItem.isEmpty())
 				return false;
@@ -104,8 +101,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	private void processContents()
 	{
 		ItemStack card = itemHandler.getStackInSlot(INPUT);
-		EncodedItemComponent encodedItemComponent = card.get(MSItemComponents.ENCODED_ITEM);
-		ItemStack newItem = encodedItemComponent != null ? new ItemStack(encodedItemComponent.item()) : new ItemStack(MSBlocks.GENERIC_OBJECT.get());
+		ItemStack newItem = EncodedItemComponent.getEncodedOrBlank(card);
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 		Objects.requireNonNull(cost);
@@ -186,8 +182,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		ItemStack input = itemHandler.getStackInSlot(INPUT);
 		if(!input.isEmpty() && owner != null)
 		{
-			EncodedItemComponent encodedItemComponent = input.get(MSItemComponents.ENCODED_ITEM);
-			ItemStack newItem = encodedItemComponent != null ? new ItemStack(encodedItemComponent.item()) : new ItemStack(MSBlocks.GENERIC_OBJECT.get());
+			ItemStack newItem = EncodedItemComponent.getEncodedOrBlank(input);
 			
 			if (newItem.isEmpty())
 				return 0;

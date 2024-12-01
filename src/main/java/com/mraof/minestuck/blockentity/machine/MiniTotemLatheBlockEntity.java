@@ -8,6 +8,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
@@ -120,9 +121,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 		else
 		{
 			ItemStack input = input1.isEmpty() ? input2 : input1;
-			if (!AlchemyHelper.isPunchedCard(input))
-				output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-			else output = AlchemyHelper.getDecodedItem(input);
+			output = EncodedItemComponent.getEncodedOrBlank(input);
 		}
 		
 		if(output.isEmpty())

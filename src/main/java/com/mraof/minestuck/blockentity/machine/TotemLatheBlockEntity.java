@@ -399,8 +399,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
-				EncodedItemComponent encodedItemComponent = input.get(MSItemComponents.ENCODED_ITEM);
-				output = encodedItemComponent != null ? new ItemStack(encodedItemComponent.item()) : new ItemStack(MSItems.GENERIC_OBJECT.get());
+				output = EncodedItemComponent.getEncodedOrBlank(input);
 			}
 			
 			if(!output.isEmpty())
