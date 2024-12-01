@@ -1,10 +1,8 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
 import com.mraof.minestuck.item.MSItems;
@@ -106,19 +104,22 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	
 	private ItemStack createResult()
 	{
-		ItemStack input1 = itemHandler.getStackInSlot(0), input2 = itemHandler.getStackInSlot(1), dowelInput = itemHandler.getStackInSlot(2);
-		if(input1.isEmpty() && input2.isEmpty() || dowelInput.isEmpty() || dowelInput.has(MSItemComponents.ENCODED_ITEM))
+		ItemStack cardInput1 = itemHandler.getStackInSlot(0), cardInput2 = itemHandler.getStackInSlot(1), dowelInput = itemHandler.getStackInSlot(2);
+		if(cardInput1.isEmpty() && cardInput2.isEmpty() || dowelInput.isEmpty() || dowelInput.has(MSItemComponents.ENCODED_ITEM))
 			return ItemStack.EMPTY;
 		
 		ItemStack output;
-		if (!input1.isEmpty() && !input2.isEmpty())
-			if (!AlchemyHelper.isPunchedCard(input1) || !AlchemyHelper.isPunchedCard(input2))
-				output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-			else
-				output = CombinationRecipe.findResult(new CombinationInput(AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(0)), AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(1)), CombinationMode.AND), level);
-		else
+		if(!cardInput1.isEmpty() && !cardInput2.isEmpty())
 		{
-			ItemStack input = input1.isEmpty() ? input2 : input1;
+			ItemStack input1 = EncodedItemComponent.getEncodedOrBlank(cardInput1),
+					input2 = EncodedItemComponent.getEncodedOrBlank(cardInput2);
+			if(input1.is(MSItems.GENERIC_OBJECT.get()) || input2.is(MSItems.GENERIC_OBJECT.get()))
+				output = new ItemStack(MSItems.GENERIC_OBJECT.get());
+			else
+				output = CombinationRecipe.findResult(new CombinationInput(input1, input2, CombinationMode.AND), level);
+		} else
+		{
+			ItemStack input = cardInput1.isEmpty() ? cardInput2 : cardInput1;
 			output = EncodedItemComponent.getEncodedOrBlank(input);
 		}
 		

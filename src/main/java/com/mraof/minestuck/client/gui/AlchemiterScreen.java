@@ -1,11 +1,11 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.network.block.TriggerAlchemiterPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -92,7 +92,9 @@ public class AlchemiterScreen extends Screen
 		//Calculate the grist set
 		GristSet set = alchemiter.getGristCost(itemQuantity);
 		//draw the grist board	//FIXME Handle wildcard grist costs instead of hardcoding to captcha card
-		GuiUtil.drawGristBoard(guiGraphics, set, AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get() ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
+		GuiUtil.GristboardMode boardMode = EncodedItemComponent.getEncodedOrBlank(alchemiter.getDowel()).is(MSItems.CAPTCHA_CARD)
+				? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER;
+		GuiUtil.drawGristBoard(guiGraphics, set, boardMode, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
 		//draw the grist
 		Component tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.LARGE_ALCHEMITER, mouseX, mouseY, 9, 45, font);
 		if(tooltip != null)
@@ -124,7 +126,7 @@ public class AlchemiterScreen extends Screen
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
 		if(mouseButton == 0	//FIXME Handle wildcard grist costs instead of hardcoding to captcha card
-				&& alchemiter.getDowel() != null && AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get()
+				&& !alchemiter.getDowel().isEmpty() && EncodedItemComponent.getEncodedOrBlank(alchemiter.getDowel()).is(MSItems.CAPTCHA_CARD)
 				&& mouseX >= (width-guiWidth)/2F +80  && mouseX < (width-guiWidth)/2F + 150 && mouseY >= (height-guiHeight)/2F + 8 && mouseY < (height-guiHeight)/2F + 93)
 		{
 			minecraft.pushGuiLayer(new GristSelectorScreen(this.getAlchemiter().getBlockPos()));

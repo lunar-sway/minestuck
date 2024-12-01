@@ -3,7 +3,6 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.CaptchaCardItem;
@@ -87,7 +86,7 @@ public final class CaptchaDeckHandler
 	
 	public static void launchItem(ServerPlayer player, ItemStack item)
 	{
-		if(item.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.hasDecodedItem(item))
+		if(item.is(MSItems.CAPTCHA_CARD) && !item.has(MSItemComponents.ENCODED_ITEM) && !item.has(MSItemComponents.CARD_STORED_ITEM))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
