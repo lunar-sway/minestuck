@@ -1,7 +1,6 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -14,6 +13,8 @@ import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.util.ColorHandler;
@@ -105,9 +106,8 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	
 	public ItemStack getOutput()
 	{
-		if (!AlchemyHelper.hasDecodedItem(dowel))
-			return new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-		else return AlchemyHelper.getDecodedItem(dowel);
+		EncodedItemComponent encodedItemComponent = dowel.get(MSItemComponents.ENCODED_ITEM);
+		return encodedItemComponent != null ? new ItemStack(encodedItemComponent.item()) : new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 	}
 	
 	/**

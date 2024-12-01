@@ -2,7 +2,6 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
@@ -14,6 +13,8 @@ import com.mraof.minestuck.entity.ServerCursorEntity;
 import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.editmode.EditmodeLocationsPacket;
 import com.mraof.minestuck.network.editmode.ServerEditPackets;
 import com.mraof.minestuck.player.GristCache;
@@ -358,7 +359,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 					data.sburbData().setHasGivenItem(entry);
 					SburbHandler.onEntryItemsDeployed(player.getServer(), data.getTarget());
 				} else event.setCanceled(true);
-			} else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.sburbData(), event.getEntity().level(), DeployList.EntryLists.ATHENEUM))
+			} else if(isAtheneumCard(stack, event.getEntity().level(), data.sburbData()))
 			{
 				GristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, player.level());
 				if(cost == null || !data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
@@ -376,6 +377,13 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				else inventory.setItem(inventory.selected, ItemStack.EMPTY);
 			}
 		}
+	}
+	
+	private static boolean isAtheneumCard(ItemStack stack, Level level, SburbPlayerData playerData)
+	{
+		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
+		return stack.is(MSItems.CAPTCHA_CARD) && encodedItemComponent != null
+				&& DeployList.containsItemStack(new ItemStack(encodedItemComponent.item()), playerData, level, DeployList.EntryLists.ATHENEUM);
 	}
 	
 	@SubscribeEvent
@@ -683,27 +691,17 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			ItemStack stack = player.getInventory().items.get(i);
 			if(stack.isEmpty())
 				continue;
-			if(GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()) == null || !isBlockItem(stack.getItem()))
+			if(!isBlockItem(stack.getItem()) || GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()) == null)
 			{
-				listSearch:
+				if(!isDeployItem(stack, itemList, player.level(), playerData))
 				{
-					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack)
-								|| (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))
-								&& DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, player.level(), DeployList.EntryLists.ATHENEUM)))
-							break listSearch;
 					player.getInventory().items.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
 				}
 			} else if(!stack.isComponentsPatchEmpty())
 			{
-				listSearch:
+				if(!isDeployItem(stack, itemList, player.level(), playerData))
 				{
-					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack)
-								|| (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))
-								&& DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, player.level(), DeployList.EntryLists.ATHENEUM)))
-							break listSearch;
 					clearComponentPatches(stack);
 					inventoryChanged = true;
 				}
@@ -717,6 +715,19 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		if(inventoryChanged)
 			player.getServer().getPlayerList().sendAllPlayerInfo(player);
+	}
+	
+	private static boolean isDeployItem(ItemStack stack, List<ItemStack> deployItemList, Level level, SburbPlayerData playerData)
+	{
+		if(isAtheneumCard(stack, level, playerData))
+			return true;
+		
+		for(ItemStack deployStack : deployItemList)
+		{
+			if(ItemStack.matches(deployStack, stack))
+				return true;
+		}
+		return false;
 	}
 	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
@@ -804,7 +815,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	public static void cleanStackComponentsIfNotDeployable(ItemStack stack, SburbPlayerData playerData, Level level)
 	{
 		if(!DeployList.containsItemStack(stack, playerData, level, DeployList.EntryLists.DEPLOY)
-				|| !(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, level, DeployList.EntryLists.ATHENEUM)))
+				|| !isAtheneumCard(stack, level, playerData))
 			clearComponentPatches(stack);
 	}
 	

@@ -50,8 +50,9 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack getDecodedItem(ItemStack card)
 	{
-		if (card.has(MSItemComponents.ENCODED_ITEM))
-			return new ItemStack(card.get(MSItemComponents.ENCODED_ITEM).item());
+		EncodedItemComponent encodedItemComponent = card.get(MSItemComponents.ENCODED_ITEM);
+		if (encodedItemComponent != null)
+			return new ItemStack(encodedItemComponent.item());
 		
 		return card.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack();
 	}
@@ -90,10 +91,7 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack getDecodedItemDesignix(ItemStack card)
 	{
-		
-		if (card.isEmpty()) {return ItemStack.EMPTY;}
-		
-		if (card.getItem().equals(CAPTCHA_CARD.get()) && hasDecodedItem(card))
+		if (card.is(CAPTCHA_CARD) && hasDecodedItem(card))
 		{
 			return getDecodedItem(card);
 		}

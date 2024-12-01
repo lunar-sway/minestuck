@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -14,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -51,29 +51,40 @@ public class CaptchaCardItem extends Item
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag)
 	{
-		if(AlchemyHelper.hasDecodedItem(stack))
+		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
+		CardStoredItemComponent cardStoredItemComponent = stack.get(MSItemComponents.CARD_STORED_ITEM);
+		if(encodedItemComponent != null)
 		{
-			ItemStack content = AlchemyHelper.getDecodedItem(stack);
+			ItemStack content = new ItemStack(encodedItemComponent.item());
 			if(!content.isEmpty())
 			{
 				Component contentName = content.getHoverName();
-				tooltipComponents.add(makeTooltipInfo((AlchemyHelper.isPunchedCard(stack) || AlchemyHelper.isGhostCard(stack))
+				tooltipComponents.add(makeTooltipInfo(contentName));
+				
+				tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
+			} else tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
+		} else if(cardStoredItemComponent != null)
+		{
+			ItemStack content = cardStoredItemComponent.storedStack();
+			if(!content.isEmpty())
+			{
+				Component contentName = content.getHoverName();
+				tooltipComponents.add(makeTooltipInfo(cardStoredItemComponent.isGhostItem()
 						? contentName : Component.literal(content.getCount() + "x").append(contentName)));
 				
-				if(AlchemyHelper.isPunchedCard(stack))
-					tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
-				else if(AlchemyHelper.isGhostCard(stack))
+				if(cardStoredItemComponent.isGhostItem())
 				{
-					Component captcha = getCaptcha(stack);
+					String captcha = cardStoredItemComponent.code();
 					if(captcha != null)
-						tooltipComponents.add(captcha);
+						tooltipComponents.add(Component.literal(captcha));
 					
 					tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
 				} else
 				{
-					Component captcha = getCaptcha(stack);
+					//TODO consider obfuscated characters for unreadable captcha
+					String captcha = cardStoredItemComponent.code();
 					if(captcha != null)
-						tooltipComponents.add(captcha);
+						tooltipComponents.add(Component.literal(captcha));
 				}
 			} else tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
 		} else
@@ -81,14 +92,6 @@ public class CaptchaCardItem extends Item
 			tooltipComponents.add(Component.literal(CardCaptchas.EMPTY_CARD_CAPTCHA));
 			tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".empty")));
 		}
-	}
-	
-	//TODO consider obfuscated characters for unreadable unpunched card
-	@Nullable
-	private Component getCaptcha(ItemStack stack)
-	{
-		CardStoredItemComponent dataComponent = stack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
-		return dataComponent.code().isEmpty() ? null : Component.literal(dataComponent.code()).withStyle(style -> style.withObfuscated(!dataComponent.canReadCode()));
 	}
 	
 	private Component makeTooltipInfo(Component info)

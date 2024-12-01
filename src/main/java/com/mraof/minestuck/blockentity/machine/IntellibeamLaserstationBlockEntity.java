@@ -69,13 +69,11 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	{
 		if(level instanceof ServerLevel serverLevel)
 		{
-			ItemStack heldCard = player.getMainHandItem();
-			ItemStack itemInHeldCard = AlchemyHelper.getDecodedItem(heldCard);
-			
 			if(waitTimer > 0)
-			{
 				return;
-			}
+			
+			ItemStack heldCard = player.getMainHandItem();
+			ItemStack itemInHeldCard = heldCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack();
 			
 			if(!analyzedCard.isEmpty() && player.isShiftKeyDown())
 			{
@@ -92,7 +90,8 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 				waitTimer = 10;
 			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
 			{
-				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player, AlchemyHelper.getDecodedItem(analyzedCard));
+				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player,
+						analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack());
 				setReadable(analyzedCard, serverLevel.getServer());
 				takeCard(player);
 				
@@ -107,7 +106,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	private Integer getCardItemExperience()
 	{
-		return decodingProgress.getOrDefault(AlchemyHelper.getDecodedItem(analyzedCard).getItem(), 0);
+		return decodingProgress.getOrDefault(analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack().getItem(), 0);
 	}
 	
 	public String processExperienceGuage()
@@ -183,7 +182,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			if(!player.isCreative())
 				player.giveExperienceLevels(-1);
 			
-			Item analyzedItem = AlchemyHelper.getDecodedItem(analyzedCard).getItem();
+			Item analyzedItem = analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack().getItem();
 			int storedExperience = decodingProgress.getOrDefault(analyzedItem, 0);
 			decodingProgress.put(analyzedItem, storedExperience + 1);
 			

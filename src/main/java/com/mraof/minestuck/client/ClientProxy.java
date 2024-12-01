@@ -97,9 +97,6 @@ public class ClientProxy
 		
 		registerArmorModels();
 
-		ItemPropertyFunction content = (stack, level, holder, seed) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
-		ResourceLocation contentName = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "content");
-		
 		ItemBlockRenderTypes.setRenderLayer(MSFluids.OIL.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(MSFluids.FLOWING_OIL.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(MSFluids.BLOOD.get(), RenderType.translucent());
@@ -112,10 +109,13 @@ public class ClientProxy
 		ItemBlockRenderTypes.setRenderLayer(MSFluids.FLOWING_LIGHT_WATER.get(), RenderType.translucent());
 		//ender fluid has non-transparent texture
 		
-		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), contentName, content);
-		ItemProperties.register(MSItems.CRUXITE_DOWEL.get(), contentName, content);
-		ItemProperties.register(MSItems.SHUNT.get(), contentName, content);
-		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "punched"), (stack, level, holder, seed) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
+		ItemPropertyFunction encoded = (stack, level, holder, seed) -> stack.has(MSItemComponents.ENCODED_ITEM) ? 1 : 0;
+		ResourceLocation contentName = Minestuck.id("content");
+		
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), contentName, (stack, level, holder, seed) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.CRUXITE_DOWEL.get(), contentName, encoded);
+		ItemProperties.register(MSItems.SHUNT.get(), contentName, encoded);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), Minestuck.id("punched"), encoded);
 		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
 		
 		ItemProperties.register(MSItems.BOONDOLLARS.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));

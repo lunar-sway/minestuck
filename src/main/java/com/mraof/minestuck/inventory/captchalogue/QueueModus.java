@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -44,7 +45,7 @@ public class QueueModus extends StackModus
 		
 		ItemStack item = list.removeLast();
 		markDirty();
-		if(asCard && !(item.is(MSItems.CAPTCHA_CARD.get()) && AlchemyHelper.hasDecodedItem(item) && !AlchemyHelper.isPunchedCard(item)))
+		if(asCard && !(item.is(MSItems.CAPTCHA_CARD) && item.has(MSItemComponents.CARD_STORED_ITEM) && !item.has(MSItemComponents.ENCODED_ITEM)))
 		{
 			size--;
 			markDirty();

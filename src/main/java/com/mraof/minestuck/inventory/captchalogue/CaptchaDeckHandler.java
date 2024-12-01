@@ -8,6 +8,7 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
@@ -119,7 +120,7 @@ public final class CaptchaDeckHandler
 			ItemStack newItem = changeModus(player, stack, modus, type);
 			containerMenu.setMenuItem(newItem);
 		}
-		else if(stack.is(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack)
+		else if(stack.is(MSItems.CAPTCHA_CARD) && !stack.has(MSItemComponents.ENCODED_ITEM)
 				&& modus != null)
 		{
 			consumeCards(player, stack, modus);
@@ -225,8 +226,8 @@ public final class CaptchaDeckHandler
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			if(stack.is(MSItems.CAPTCHA_CARD) && AlchemyHelper.hasDecodedItem(stack)
-					&& !AlchemyHelper.isPunchedCard(stack))
+			if(stack.is(MSItems.CAPTCHA_CARD) && stack.has(MSItemComponents.CARD_STORED_ITEM)
+					&& !stack.has(MSItemComponents.ENCODED_ITEM))
 				handleCardCaptchalogue(player, modus, stack);
 			else putInModus(player, modus, stack);
 			

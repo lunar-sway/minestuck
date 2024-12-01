@@ -8,6 +8,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -107,7 +108,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	private ItemStack createResult()
 	{
 		ItemStack input1 = itemHandler.getStackInSlot(0), input2 = itemHandler.getStackInSlot(1), dowelInput = itemHandler.getStackInSlot(2);
-		if(input1.isEmpty() && input2.isEmpty() || dowelInput.isEmpty() || AlchemyHelper.hasDecodedItem(dowelInput))
+		if(input1.isEmpty() && input2.isEmpty() || dowelInput.isEmpty() || dowelInput.has(MSItemComponents.ENCODED_ITEM))
 			return ItemStack.EMPTY;
 		
 		ItemStack output;

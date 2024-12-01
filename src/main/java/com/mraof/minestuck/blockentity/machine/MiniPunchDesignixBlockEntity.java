@@ -72,7 +72,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	private boolean contentsValid()
 	{
 		boolean bothHaveItems = !itemHandler.getStackInSlot(0).isEmpty() && !itemHandler.getStackInSlot(1).isEmpty();
-		boolean bothAreReadable = AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(0)) && (AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(1)) || AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(1)).isEmpty());
+		boolean bothAreReadable = AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(0)) && (AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(1)) || !AlchemyHelper.hasDecodedItem(itemHandler.getStackInSlot(1)));
 		
 		if(bothHaveItems && bothAreReadable)
 		{

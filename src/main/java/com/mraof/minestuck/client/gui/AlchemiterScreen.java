@@ -91,7 +91,7 @@ public class AlchemiterScreen extends Screen
 		
 		//Calculate the grist set
 		GristSet set = alchemiter.getGristCost(itemQuantity);
-		//draw the grist board	//TODO Handle select mode correctly
+		//draw the grist board	//FIXME Handle wildcard grist costs instead of hardcoding to captcha card
 		GuiUtil.drawGristBoard(guiGraphics, set, AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get() ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
 		//draw the grist
 		Component tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.LARGE_ALCHEMITER, mouseX, mouseY, 9, 45, font);
@@ -123,7 +123,7 @@ public class AlchemiterScreen extends Screen
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		if(mouseButton == 0
+		if(mouseButton == 0	//FIXME Handle wildcard grist costs instead of hardcoding to captcha card
 				&& alchemiter.getDowel() != null && AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get()
 				&& mouseX >= (width-guiWidth)/2F +80  && mouseX < (width-guiWidth)/2F + 150 && mouseY >= (height-guiHeight)/2F + 8 && mouseY < (height-guiHeight)/2F + 93)
 		{

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -45,7 +45,7 @@ public class GristWidgetMenu extends MachineContainerMenu
 			@Override
 			public boolean mayPlace(ItemStack stack)
 			{
-				return stack.getItem() == MSItems.CAPTCHA_CARD.get() && AlchemyHelper.hasDecodedItem(stack) && !AlchemyHelper.isPunchedCard(stack);
+				return stack.is(MSItems.CAPTCHA_CARD) && stack.has(MSItemComponents.CARD_STORED_ITEM) && !stack.has(MSItemComponents.ENCODED_ITEM);
 			}
 		});
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);

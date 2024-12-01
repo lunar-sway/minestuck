@@ -11,6 +11,8 @@ import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -152,16 +154,20 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			}
 		} else
 		{
-			if(AlchemyHelper.isReadableCard(heldStack))
+			if(heldStack.is(MSItems.CAPTCHA_CARD) && !heldStack.has(MSItemComponents.ENCODED_ITEM))
 			{
-				setCaptcha(CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(heldStack).getItem(), player.getServer()));
-				effects(false);
-			} else if(heldStack.is(MSItems.CAPTCHA_CARD.get()) && AlchemyHelper.getDecodedItem(heldStack).isEmpty())
-			{
-				setCaptcha(CardCaptchas.EMPTY_CARD_CAPTCHA);
-				effects(false);
-			} else if(heldStack.is(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isReadableCard(heldStack))
-				player.displayClientMessage(Component.translatable(REJECT_CARD), true); //card unreadable
+				CardStoredItemComponent cardStoredItemComponent = heldStack.get(MSItemComponents.CARD_STORED_ITEM);
+				if(cardStoredItemComponent != null && cardStoredItemComponent.code() != null)
+				{
+					setCaptcha(cardStoredItemComponent.code());
+					effects(false);
+				} else if(cardStoredItemComponent == null)
+				{
+					setCaptcha(CardCaptchas.EMPTY_CARD_CAPTCHA);
+					effects(false);
+				} else if(cardStoredItemComponent != null && cardStoredItemComponent.code() == null)
+					player.displayClientMessage(Component.translatable(REJECT_CARD), true); //card unreadable
+			}
 		}
 	}
 	
@@ -175,7 +181,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			ItemStack storedStackInCard = AlchemyHelper.getDecodedItem(getCard());
 			ItemStack output;
 			
-			if(AlchemyHelper.isPunchedCard(getCard())) //|| combination. A temporary new captcha card containing captchaItemStack is made
+			if(getCard().is(MSItems.CAPTCHA_CARD) && getCard().has(MSItemComponents.ENCODED_ITEM)) //|| combination. A temporary new captcha card containing captchaItemStack is made
 			{
 				output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(AlchemyHelper.createCard(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level());
 			} else
