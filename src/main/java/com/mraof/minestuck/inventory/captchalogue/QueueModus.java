@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.NonNullList;
@@ -49,7 +49,7 @@ public class QueueModus extends StackModus
 		{
 			size--;
 			markDirty();
-			return AlchemyHelper.createCard(item, player.server);
+			return CaptchaCardItem.createCardWithItem(item, player.server);
 		}
 		else return item;
 	}

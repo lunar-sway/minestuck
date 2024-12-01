@@ -6,6 +6,7 @@ import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -122,7 +123,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		}
 		
 		if(!output.isEmpty())
-			return AlchemyHelper.createPunchedCard(output.getItem());
+			return CaptchaCardItem.createPunchedCard(output.getItem());
 		else return ItemStack.EMPTY;
 	}
 	

@@ -2,10 +2,10 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
 import com.mraof.minestuck.skaianet.SburbHandler;
@@ -71,7 +71,7 @@ public final class DeployList
 		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), GristSet.EMPTY, GristTypes.BUILD.get().amount(100), 0, EntryLists.DEPLOY);
 		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), GristSet.EMPTY, GristTypes.BUILD.get().amount(100), 0, EntryLists.DEPLOY);
 		registerItem("artifact_card", GristSet.EMPTY, null, 0, HAS_NOT_ENTERED,
-				(playerData, level) -> AlchemyHelper.createPunchedCard(SburbHandler.getEntryItem(level, playerData).getItem()), EntryLists.DEPLOY);
+				(playerData, level) -> CaptchaCardItem.createPunchedCard(SburbHandler.getEntryItem(level, playerData).getItem()), EntryLists.DEPLOY);
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), GristSet.EMPTY, GristTypes.BUILD.get().amount(100), 0, EntryLists.DEPLOY);
 		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, playerData) -> playerData.getBaseGrist().amount(4), EntryLists.DEPLOY);
@@ -83,7 +83,7 @@ public final class DeployList
 		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD.get()), GristTypes.BUILD.get().amount(4000), 2, EntryLists.DEPLOY);
 		registerItem("intellibeam_laserstation", new ItemStack(MSBlocks.INTELLIBEAM_LASERSTATION.get()), GristTypes.BUILD.get().amount(100000), 2, EntryLists.DEPLOY);
 		registerItem("card_punched_card", GristTypes.BUILD.get().amount(25), null, 0, config(MinestuckConfig.SERVER.deployCard),
-				(playerData, world) -> AlchemyHelper.createPunchedCard(MSItems.CAPTCHA_CARD.get()), EntryLists.DEPLOY);
+				(playerData, world) -> CaptchaCardItem.createPunchedCard(MSItems.CAPTCHA_CARD.get()), EntryLists.DEPLOY);
 		
 		//Atheneum
 		registerItem("cobblestone", new ItemStack(Blocks.COBBLESTONE), GristTypes.BUILD.get().amount(1), 0, EntryLists.ATHENEUM);

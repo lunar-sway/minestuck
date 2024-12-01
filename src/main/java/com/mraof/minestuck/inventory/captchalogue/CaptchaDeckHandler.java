@@ -6,6 +6,7 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
@@ -335,7 +336,7 @@ public final class CaptchaDeckHandler
 			{
 				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
-					ItemStack card = AlchemyHelper.createCard(stack, player.server);
+					ItemStack card = CaptchaCardItem.createCardWithItem(stack, player.server);
 					player.drop(card, true, false);
 					size--;
 				} else player.drop(stack, true, false);

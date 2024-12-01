@@ -10,6 +10,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
@@ -179,14 +180,14 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			
 			if(getCard().is(MSItems.CAPTCHA_CARD) && getCard().has(MSItemComponents.ENCODED_ITEM)) //|| combination. A temporary new captcha card containing captchaItemStack is made
 			{
-				output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(AlchemyHelper.createCard(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level());
+				output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(CaptchaCardItem.createCardWithItem(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level());
 			} else
 				output = captchaItemStack;
 			
 			if(!output.isEmpty())
 			{
 				MSCriteriaTriggers.PUNCH_DESIGNIX.get().trigger(player, captchaItemStack, storedStackInCard, output);
-				setCard(AlchemyHelper.createPunchedCard(output.getItem()));
+				setCard(CaptchaCardItem.createPunchedCard(output.getItem()));
 				effects(true);
 			}
 		}

@@ -1,12 +1,13 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +20,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CaptchaCardItem extends Item
 {
 	public CaptchaCardItem(Properties properties)
@@ -29,7 +31,7 @@ public class CaptchaCardItem extends Item
 	@Override
 	public int getMaxStackSize(ItemStack stack)
 	{
-		if(AlchemyHelper.hasDecodedItem(stack))
+		if(stack.has(MSItemComponents.CARD_STORED_ITEM) || stack.has(MSItemComponents.ENCODED_ITEM))
 			return 16;
 		else return 64;
 	}
@@ -40,9 +42,9 @@ public class CaptchaCardItem extends Item
 		
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		
-		if(playerIn.isShiftKeyDown() && AlchemyHelper.isGhostCard(stack))
+		if(playerIn.isShiftKeyDown() && stack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).isGhostItem())
 		{
-			AlchemyHelper.removeItemFromCard(stack);
+			stack.remove(MSItemComponents.CARD_STORED_ITEM);
 			return InteractionResultHolder.success(new ItemStack(playerIn.getItemInHand(handIn).getItem(), playerIn.getItemInHand(handIn).getCount()));
 		} else return InteractionResultHolder.pass(playerIn.getItemInHand(handIn));
 	}
@@ -97,5 +99,26 @@ public class CaptchaCardItem extends Item
 	private Component makeTooltipInfo(Component info)
 	{
 		return Component.literal("(").append(info).append(")").withStyle(ChatFormatting.GRAY);
+	}
+	
+	public static ItemStack createCardWithItem(ItemStack itemIn, MinecraftServer mcServer)
+	{
+		ItemStack itemOut = new ItemStack(MSItems.CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, false, mcServer));
+		return itemOut;
+	}
+	
+	public static ItemStack createGhostCard(ItemStack itemIn, MinecraftServer mcServer)
+	{
+		ItemStack itemOut = new ItemStack(MSItems.CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, true, mcServer));
+		return itemOut;
+	}
+	
+	public static ItemStack createPunchedCard(Item itemIn)
+	{
+		ItemStack itemOut = new ItemStack(MSItems.CAPTCHA_CARD.get());
+		itemOut.set(MSItemComponents.ENCODED_ITEM, new EncodedItemComponent(itemIn));
+		return itemOut;
 	}
 }

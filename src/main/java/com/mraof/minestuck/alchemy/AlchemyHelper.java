@@ -9,7 +9,6 @@ import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -108,30 +107,4 @@ public class AlchemyHelper
 		return itemOut;
 	}
 	
-	@Nonnull
-	public static ItemStack createPunchedCard(Item itemIn)
-	{
-		return createEncodedItem(itemIn, new ItemStack(CAPTCHA_CARD.get()));
-	}
-	
-	@Nonnull
-	public static ItemStack createCard(ItemStack itemIn, MinecraftServer mcServer)
-	{
-		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, false, mcServer));
-		return itemOut;
-	}
-	
-	@Nonnull
-	public static ItemStack createGhostCard(ItemStack itemIn, MinecraftServer mcServer)
-	{
-		ItemStack itemOut = new ItemStack(CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, true, mcServer));
-		return itemOut;
-	}
-	
-	public static void removeItemFromCard(ItemStack card)
-	{
-		card.remove(MSItemComponents.CARD_STORED_ITEM);
-	}
 }

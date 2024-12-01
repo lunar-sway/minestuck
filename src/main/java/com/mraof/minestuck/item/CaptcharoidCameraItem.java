@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -48,7 +47,7 @@ public class CaptcharoidCameraItem extends Item
 				ItemStack item = list.get(0).getItem();
 				if(item.isEmpty()) item = new ItemStack(Items.ITEM_FRAME);
 				
-				player.getInventory().add(AlchemyHelper.createGhostCard(item, serverLevel.getServer()));
+				player.getInventory().add(CaptchaCardItem.createGhostCard(item, serverLevel.getServer()));
 				context.getItemInHand().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
 			}
 			else
@@ -56,7 +55,7 @@ public class CaptcharoidCameraItem extends Item
 				BlockState state = level.getBlockState(pos);
 				ItemStack block = state.getCloneItemStack(new BlockHitResult(context.getClickLocation(), facing, pos, inside), level, pos, player);
 				
-				player.getInventory().add(AlchemyHelper.createGhostCard(block, serverLevel.getServer()));
+				player.getInventory().add(CaptchaCardItem.createGhostCard(block, serverLevel.getServer()));
 				context.getItemInHand().hurtAndBreak(1, player,  EquipmentSlot.MAINHAND);
 			}
 			return InteractionResult.PASS;

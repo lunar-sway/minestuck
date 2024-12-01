@@ -1,10 +1,10 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.editmode.AtheneumPackets;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.server.level.ServerPlayer;
@@ -163,7 +163,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 		
 		if(pClickType == ClickType.PICKUP && pButton == 1 && pSlotId >= 0)
 		{
-			this.setCarried(AlchemyHelper.createPunchedCard(this.slots.get(pSlotId).getItem().getItem()));
+			this.setCarried(CaptchaCardItem.createPunchedCard(this.slots.get(pSlotId).getItem().getItem()));
 		}
 		
 	}

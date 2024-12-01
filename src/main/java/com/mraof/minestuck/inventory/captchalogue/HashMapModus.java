@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -186,7 +186,8 @@ public class HashMapModus extends Modus
 			markDirty();
 			if(item.isEmpty())
 				return new ItemStack(MSItems.CAPTCHA_CARD.get());
-			else return AlchemyHelper.createCard(item, player.server);
+			else
+				return CaptchaCardItem.createCardWithItem(item, player.server);
 		} else
 		{
 			list.set(id, ItemStack.EMPTY);
