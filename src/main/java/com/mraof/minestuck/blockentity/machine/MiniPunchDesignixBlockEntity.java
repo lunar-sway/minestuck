@@ -118,7 +118,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		ItemStack output = AlchemyHelper.getDecodedItemDesignix(itemHandler.getStackInSlot(0));
 		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(itemHandler.getStackInSlot(1)))
 		{
-			output = CombinationRecipe.findResult(new CombinationInput(itemHandler.getStackInSlot(0), itemHandler.getStackInSlot(1), CombinationMode.OR), level);
+			output = CombinationRecipe.findResult(new CombinationInput(AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(0)), AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(1)), CombinationMode.OR), level);
 		}
 		
 		if(!output.isEmpty())

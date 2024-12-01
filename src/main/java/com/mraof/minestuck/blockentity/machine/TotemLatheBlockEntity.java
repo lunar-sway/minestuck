@@ -395,7 +395,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
 				else
-					output = CombinationRecipe.findResult(new CombinationInput(card1, card2, CombinationMode.AND), level);
+					output = CombinationRecipe.findResult(new CombinationInput(AlchemyHelper.getDecodedItem(card1), AlchemyHelper.getDecodedItem(card2), CombinationMode.AND), level);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;

@@ -180,7 +180,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			
 			if(getCard().is(MSItems.CAPTCHA_CARD) && getCard().has(MSItemComponents.ENCODED_ITEM)) //|| combination. A temporary new captcha card containing captchaItemStack is made
 			{
-				output = CombinationRecipe.findResult(new CombinationInput(CaptchaCardItem.createCardWithItem(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level());
+				output = CombinationRecipe.findResult(new CombinationInput(captchaItemStack, AlchemyHelper.getDecodedItem(getCard()), CombinationMode.OR), player.level());
 			} else
 				output = captchaItemStack;
 			

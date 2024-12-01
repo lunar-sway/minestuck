@@ -2,7 +2,6 @@ package com.mraof.minestuck.alchemy.recipe;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
@@ -29,8 +28,9 @@ public record RegularCombinationRecipe(Ingredient input1, Ingredient input2, Com
 	@Override
 	public boolean matches(CombinationInput input, Level level)
 	{
-		ItemStack item1 = AlchemyHelper.getDecodedItem(input.input1()), item2 = AlchemyHelper.getDecodedItem(input.input2());
-		return input.mode() == this.mode && (input1.test(item1) && input2.test(item2) || input2.test(item1) && input1.test(item2));
+		return input.mode() == this.mode &&
+				(input1.test(input.input1()) && input2.test(input.input2())
+				|| input2.test(input.input1()) && input1.test(input.input2()));
 	}
 	
 	@Override

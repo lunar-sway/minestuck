@@ -116,7 +116,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 			if (!AlchemyHelper.isPunchedCard(input1) || !AlchemyHelper.isPunchedCard(input2))
 				output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 			else
-				output = CombinationRecipe.findResult(new CombinationInput(itemHandler.getStackInSlot(0), itemHandler.getStackInSlot(1), CombinationMode.AND), level);
+				output = CombinationRecipe.findResult(new CombinationInput(AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(0)), AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(1)), CombinationMode.AND), level);
 		else
 		{
 			ItemStack input = input1.isEmpty() ? input2 : input1;
