@@ -1,7 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
@@ -14,7 +13,7 @@ import java.util.function.Function;
 public final class GeneratedGristCostCache
 {
 	@Nullable
-	private ImmutableGristSet cachedCost = null;
+	private GristSet.Immutable cachedCost = null;
 	private boolean hasGeneratedCost = false;
 	
 	public void fromNetwork(RegistryFriendlyByteBuf buffer)
@@ -37,7 +36,7 @@ public final class GeneratedGristCostCache
 	}
 	
 	@Nullable
-	public ImmutableGristSet getCachedCost()
+	public GristSet.Immutable getCachedCost()
 	{
 		return this.cachedCost;
 	}

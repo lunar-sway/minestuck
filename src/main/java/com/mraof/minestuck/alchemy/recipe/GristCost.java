@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
@@ -36,10 +35,10 @@ public final class GristCost implements GristCostRecipe
 	private final Ingredient ingredient;
 	@Nullable
 	private final Integer priority;
-	private final ImmutableGristSet cost;
+	private final GristSet.Immutable cost;
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public GristCost(Ingredient ingredient, ImmutableGristSet cost, Optional<Integer> priority)
+	public GristCost(Ingredient ingredient, GristSet.Immutable cost, Optional<Integer> priority)
 	{
 		this.ingredient = ingredient;
 		this.priority = priority.orElse(null);
@@ -115,7 +114,7 @@ public final class GristCost implements GristCostRecipe
 		{
 			Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 			int priority = buffer.readInt();
-			ImmutableGristSet cost = GristSet.Codecs.STREAM_CODEC.decode(buffer);
+			GristSet.Immutable cost = GristSet.Codecs.STREAM_CODEC.decode(buffer);
 			
 			return new GristCost(ingredient, cost, Optional.of(priority));
 		}
