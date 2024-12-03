@@ -48,7 +48,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> BLOOD_ASPECT_SAPLING = ItemBlockPair.register("blood_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("blood_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.BLOOD_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 
 	public static final DeferredBlock<Block> POTTED_BLOOD_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_blood_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BLOOD_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -124,7 +125,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> BREATH_ASPECT_SAPLING = ItemBlockPair.register("breath_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("breath_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.BREATH_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_BREATH_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_breath_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BREATH_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -199,7 +201,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> DOOM_ASPECT_SAPLING = ItemBlockPair.register("doom_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("doom_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.DOOM_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_DOOM_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_doom_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, DOOM_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -274,7 +277,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> HEART_ASPECT_SAPLING = ItemBlockPair.register("heart_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("heart_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.HEART_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_HEART_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_heart_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, HEART_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -349,7 +353,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> HOPE_ASPECT_SAPLING = ItemBlockPair.register("hope_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("hope_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.HOPE_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_HOPE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_hope_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, HOPE_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -424,7 +429,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> LIFE_ASPECT_SAPLING = ItemBlockPair.register("life_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("life_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.LIFE_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_LIFE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_life_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, LIFE_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -499,7 +505,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> LIGHT_ASPECT_SAPLING = ItemBlockPair.register("light_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("light_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.LIGHT_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_LIGHT_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_light_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, LIGHT_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -574,7 +581,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> MIND_ASPECT_SAPLING = ItemBlockPair.register("mind_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("mind_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.MIND_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_MIND_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_mind_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, MIND_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -649,7 +657,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> RAGE_ASPECT_SAPLING = ItemBlockPair.register("rage_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("rage_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.RAGE_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_RAGE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_rage_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, RAGE_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -724,7 +733,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> SPACE_ASPECT_SAPLING = ItemBlockPair.register("space_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("space_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.SPACE_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_SPACE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_space_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, SPACE_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -799,7 +809,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> TIME_ASPECT_SAPLING = ItemBlockPair.register("time_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("time_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.TIME_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_TIME_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_time_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, TIME_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
@@ -874,7 +885,8 @@ public final class AspectTreeBlocks
 	
 	public static final ItemBlockPair<Block, BlockItem> VOID_ASPECT_SAPLING = ItemBlockPair.register("void_aspect_sapling",
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("void_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.VOID_TREE), Optional.empty()),
-					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)),
+			() -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	
 	public static final DeferredBlock<Block> POTTED_VOID_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_void_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, VOID_ASPECT_SAPLING.blockHolder(), ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
