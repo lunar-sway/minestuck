@@ -52,6 +52,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Bookshelves for terrain woods can now be crafted, resolving a conflict with the vanilla bookshelf recipe
 - Fixed right-clicking on an Area Effect Block with a Potion not properly updating its settings
 - Fixed right-clicking on a Summoner Block with a Spawn Egg not properly updating its settings
+- Updated holopad collision shape
+- The block model for the holopad with card now renders with cutout
 
 ### Contributors for this release
 
@@ -92,8 +94,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Perfectly generic and cindered signs work again
 - Fixed execution permissions for the `minestuck:command` dialogue trigger
 - Add missing wood-related recipes
-- Updated holopad collision shape
-- The block model for the holopad with card now renders with cutout
 
 ### Contributors for this release
 
