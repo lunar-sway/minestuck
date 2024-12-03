@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_end_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:end_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:end_ladder"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_end_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:end_ladder"
+    ]
+  }
+}

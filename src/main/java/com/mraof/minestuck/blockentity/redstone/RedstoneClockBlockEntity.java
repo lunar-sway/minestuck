@@ -3,6 +3,7 @@ package com.mraof.minestuck.blockentity.redstone;
 import com.mraof.minestuck.block.redstone.RedstoneClockBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -92,26 +93,26 @@ public class RedstoneClockBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		tickCycle = compound.getInt("tickCycle");
 		clockSpeed = compound.getInt("clockSpeed");
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("clockSpeed", clockSpeed);
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

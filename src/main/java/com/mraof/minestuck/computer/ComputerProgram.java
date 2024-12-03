@@ -19,7 +19,7 @@ public abstract class ComputerProgram
 { //This is overall a bad way of handling programs. Should be rewritten
 	
 	private static final HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<>();
-	public static final ResourceLocation INVALID_ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/invalid.png");
+	public static final ResourceLocation INVALID_ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/invalid.png");
 	
 	/**
 	 * Should only be used client-side

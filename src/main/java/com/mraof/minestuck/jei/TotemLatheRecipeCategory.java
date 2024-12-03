@@ -1,8 +1,9 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.recipe.combination.JeiCombination;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import mezz.jei.api.constants.VanillaTypes;
@@ -31,7 +32,7 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 
 	TotemLatheRecipeCategory(IGuiHelper guiHelper)
 	{
-		ResourceLocation totemLatheBackground = new ResourceLocation("minestuck:textures/gui/totem_lathe.png");
+		ResourceLocation totemLatheBackground = Minestuck.id("textures/gui/totem_lathe.png");
 		background = guiHelper.createDrawable(totemLatheBackground, 25, 24, 130, 36);
 		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.TOTEM_LATHE));
 	}

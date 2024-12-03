@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:shade_bricks"
+    },
+    {
+      "item": "minestuck:coagulated_blood"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:blood_shade_bricks"
+  }
+}

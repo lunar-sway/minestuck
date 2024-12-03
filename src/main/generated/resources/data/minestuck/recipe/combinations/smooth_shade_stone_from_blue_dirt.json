@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:smooth_stone"
+  },
+  "input2": {
+    "item": "minestuck:blue_dirt"
+  },
+  "mode": "or",
+  "output": "minestuck:smooth_shade_stone"
+}

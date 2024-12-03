@@ -2,12 +2,13 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
-import com.mraof.minestuck.network.AreaEffectPacket;
+import com.mraof.minestuck.network.block.AreaEffectSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +17,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -35,7 +37,7 @@ public class AreaEffectScreen extends Screen
 	public static final String DONE_MESSAGE = "minestuck.area_effect.done";
 	public static final String ALL_MOBS_MESSAGE = "minestuck.area_effect.all_mobs";
 	public static final String JUST_PLAYERS_MESSAGE = "minestuck.area_effect.just_players";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_large.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_large.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 132;
@@ -123,9 +125,11 @@ public class AreaEffectScreen extends Screen
 	/**
 	 * Returns the current effect type
 	 */
-	private MobEffect getEffect(String stringInput)
+	@Nullable
+	private Holder<MobEffect> getEffect(String stringInput)
 	{
-		return BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.tryParse(stringInput));
+		return ResourceLocation.read(stringInput).result()
+				.flatMap(BuiltInRegistries.MOB_EFFECT::getHolder).orElse(null);
 	}
 	
 	@Override
@@ -149,6 +153,8 @@ public class AreaEffectScreen extends Screen
 	
 	private void finish()
 	{
+		validInput = true;
+		
 		int minX = parseInt(minPosDestinationTextFieldX);
 		int minY = parseInt(minPosDestinationTextFieldY);
 		int minZ = parseInt(minPosDestinationTextFieldZ);
@@ -159,13 +165,12 @@ public class AreaEffectScreen extends Screen
 		BlockPos minOffsetPos = new BlockPos(minX, minY, minZ);
 		BlockPos maxOffsetPos = new BlockPos(maxX, maxY, maxZ);
 		
-		if(validInput)
+		Holder<MobEffect> effect = getEffect(effectTextField.getValue());
+		if(validInput && effect != null)
 		{
-			PacketDistributor.SERVER.noArg().send(new AreaEffectPacket(getEffect(effectTextField.getValue()), Mth.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, be.getBlockPos()));
+			PacketDistributor.sendToServer(new AreaEffectSettingsPacket(effect, Mth.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, be.getBlockPos()));
 			onClose();
 		}
-		
-		validInput = true; //allows players to try again
 	}
 	
 	private int parseInt(EditBox widget)

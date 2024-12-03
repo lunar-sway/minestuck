@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minestuck:polished_igneous_bricks"
+    },
+    "A": {
+      "item": "minestuck:molten_amber_bucket"
+    }
+  },
+  "pattern": [
+    "###",
+    "#A#",
+    "###"
+  ],
+  "result": {
+    "count": 8,
+    "id": "minestuck:heat_lamp"
+  }
+}

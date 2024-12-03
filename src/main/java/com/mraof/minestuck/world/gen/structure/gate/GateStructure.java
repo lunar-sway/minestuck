@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.gen.structure.gate;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class GateStructure extends Structure
 {
-	public static final Codec<GateStructure> CODEC = simpleCodec(GateStructure::new);
+	public static final MapCodec<GateStructure> CODEC = simpleCodec(GateStructure::new);
 	
 	public GateStructure(Structure.StructureSettings settings)
 	{
@@ -32,7 +32,7 @@ public class GateStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructureTypes.LAND_GATE.get();
+		return MSStructures.LAND_GATE_TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

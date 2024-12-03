@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "treated_hanging_sign",
+  "key": {
+    "c": {
+      "item": "minecraft:chain"
+    },
+    "w": {
+      "item": "minestuck:treated_uncarved_wood"
+    }
+  },
+  "pattern": [
+    "c c",
+    "www",
+    "www"
+  ],
+  "result": {
+    "count": 6,
+    "id": "minestuck:treated_hanging_sign"
+  }
+}

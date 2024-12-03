@@ -10,11 +10,13 @@ import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerBoondollars;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -130,14 +132,14 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		if(level.hasNeighborSignal(this.getBlockPos()))
 			return false;
 		int i = getGristWidgetBoondollarValue();
-		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, level).getBoondollars();
+		return owner != null && i != 0 && i <= PlayerBoondollars.getBoondollars(PlayerData.get(owner, level));
 	}
 	
 	private void processContents()
 	{
 		GristSet gristSet = getGristWidgetResult();
 		
-		if(!PlayerSavedData.getData(owner, level).tryTakeBoondollars(getGristWidgetBoondollarValue()))
+		if(!PlayerBoondollars.tryTakeBoondollars(PlayerData.get(owner, level), getGristWidgetBoondollarValue()))
 		{
 			LOGGER.warn("Failed to remove boondollars for a grist widget from {}'s porkhollow", owner.getUsername());
 			return;
@@ -149,18 +151,18 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		
 		this.progressTracker.load(nbt);
 		owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		this.progressTracker.save(compound);
 		if(owner != null)

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_tar_shade_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:tar_shade_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:tar_shade_brick_slab_from_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tar_shade_bricks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:tar_shade_brick_slab_from_stonecutting"
+    ]
+  }
+}

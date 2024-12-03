@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:repeater"
+  },
+  "input2": {
+    "item": "minestuck:energy_core"
+  },
+  "mode": "or",
+  "output": "minestuck:particle_accelerator"
+}

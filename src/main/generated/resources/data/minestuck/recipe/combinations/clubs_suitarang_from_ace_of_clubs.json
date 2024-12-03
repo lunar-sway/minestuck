@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:shuriken"
+  },
+  "input2": {
+    "item": "minestuck:ace_of_clubs"
+  },
+  "mode": "and",
+  "output": "minestuck:clubs_suitarang"
+}

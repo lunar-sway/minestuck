@@ -55,9 +55,9 @@ public class BrokenSwordFeature extends Feature<NoneFeatureConfiguration>
 	
 	private enum Type
 	{
-		REGULAR_0(new ResourceLocation(Minestuck.MOD_ID, "sword_hilt_0"), new ResourceLocation(Minestuck.MOD_ID, "sword_blade_0")),
-		REGULAR_1(new ResourceLocation(Minestuck.MOD_ID, "sword_hilt_1"), new ResourceLocation(Minestuck.MOD_ID, "sword_blade_1")),
-		VALUABLE(new ResourceLocation(Minestuck.MOD_ID, "valuable_sword_hilt"), new ResourceLocation(Minestuck.MOD_ID, "valuable_sword_blade")),
+		REGULAR_0(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "sword_hilt_0"), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "sword_blade_0")),
+		REGULAR_1(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "sword_hilt_1"), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "sword_blade_1")),
+		VALUABLE(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "valuable_sword_hilt"), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "valuable_sword_blade")),
 		;
 		
 		private final ResourceLocation hiltId, bladeId;

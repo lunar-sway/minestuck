@@ -79,11 +79,11 @@ public final class CommonRecipes
 				.group("bark").unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	
-	public static RecipeBuilder bookshelfRecipe(ItemLike bookshelfBlock, ItemLike sourceBlock)
+	public static RecipeBuilder bookshelfRecipe(ItemLike bookshelfBlock, ItemLike sourceBlock, ItemLike sourceBlockSlab)
 	{
 		return ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bookshelfBlock)
-				.define('b', Items.BOOK).define('p',sourceBlock)
-				.pattern("ppp").pattern("bpb").pattern("ppp")
+				.define('b', Items.BOOK).define('p',sourceBlock).define('s',sourceBlockSlab)
+				.pattern("psp").pattern("bbb").pattern("psp")
 				.unlockedBy("has_" + id(sourceBlock).getPath(), has(sourceBlock));
 	}
 	

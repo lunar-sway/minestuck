@@ -3,5 +3,7 @@
     "type": "minestuck:consort_terrain_land_type",
     "consort": "turtle"
   },
-  "dialogue": "minestuck:carapacian_soldier/too_quiet"
+  "dialogue": "minestuck:carapacian_soldier/too_quiet",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

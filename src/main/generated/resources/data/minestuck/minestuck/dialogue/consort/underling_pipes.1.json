@@ -3,11 +3,17 @@
     "animation": {
       "emotion": "angry"
     },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.underling_pipes.1",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/underling_pipes.2"
+        "next_dialogue": "minestuck:consort/underling_pipes.2",
+        "triggers": []
       }
     ]
   }

@@ -1,19 +1,21 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-public class MSSoundEvents
+public final class MSSoundEvents
 {
 	public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Minestuck.MOD_ID);
 	
-	public static final Supplier<SoundEvent> MUSIC_DISC_EMISSARY_OF_DANCE = register("music_disc.emissary_of_dance");
-	public static final Supplier<SoundEvent> MUSIC_DISC_DANCE_STAB_DANCE = register("music_disc.dance_stab_dance");
-	public static final Supplier<SoundEvent> MUSIC_DISC_RETRO_BATTLE_THEME = register("music_disc.retro_battle_theme");
+	public static final Holder<SoundEvent> MUSIC_DISC_EMISSARY_OF_DANCE = register("music_disc.emissary_of_dance");
+	public static final Holder<SoundEvent> MUSIC_DISC_DANCE_STAB_DANCE = register("music_disc.dance_stab_dance");
+	public static final Holder<SoundEvent> MUSIC_DISC_RETRO_BATTLE_THEME = register("music_disc.retro_battle_theme");
 	
 	public static final Supplier<SoundEvent> MUSIC_DEFAULT = register("music.default");
 	public static final Supplier<SoundEvent> MUSIC_FOREST = register("music.forest");
@@ -112,8 +114,8 @@ public class MSSoundEvents
 	public static final Supplier<SoundEvent> BLOCK_CLOCK_TOCK = register("block.clock.tock");
 	
 	
-	private static Supplier<SoundEvent> register(String name)
+	private static DeferredHolder<SoundEvent, SoundEvent> register(String name)
 	{
-		return REGISTER.register(name.replace(".","_"), () -> SoundEvent.createVariableRangeEvent(Minestuck.id(name)));
+		return REGISTER.register(name, () -> SoundEvent.createVariableRangeEvent(Minestuck.id(name)));
 	}
 }

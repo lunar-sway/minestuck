@@ -1,0 +1,29 @@
+{
+  "parent": "minestuck:minestuck/commune",
+  "criteria": {
+    "buy_item": {
+      "conditions": {
+        "type": "shady"
+      },
+      "trigger": "minestuck:consort_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.shady_buyer.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minestuck:rock_cookie"
+    },
+    "title": {
+      "translate": "advancements.minestuck.shady_buyer.title"
+    }
+  },
+  "requirements": [
+    [
+      "buy_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

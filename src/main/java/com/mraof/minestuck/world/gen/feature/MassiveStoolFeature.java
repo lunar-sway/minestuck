@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class MassiveStoolFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation MASSIVE_STOOL = new ResourceLocation(Minestuck.MOD_ID, "massive_stool");
+	private static final ResourceLocation MASSIVE_STOOL = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "massive_stool");
 	
 	public MassiveStoolFeature(Codec<NoneFeatureConfiguration> codec)
 	{

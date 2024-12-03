@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:chakram"
+  },
+  "input2": {
+    "item": "minecraft:obsidian"
+  },
+  "mode": "or",
+  "output": "minestuck:umbral_infiltrator"
+}

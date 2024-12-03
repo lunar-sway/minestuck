@@ -1,31 +1,30 @@
 package com.mraof.minestuck.entity;
 
-import com.mraof.minestuck.network.ServerCursorPacket;
+import com.mraof.minestuck.network.ServerCursorAnimationPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collections;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEntityWithComplexSpawn
+public class ServerCursorEntity extends Entity implements GeoEntity, IEntityWithComplexSpawn
 {
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -72,21 +71,21 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
-		buffer.writeInt(animationType.ordinal());
+		buffer.writeEnum(animationType);
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
-		animationType = AnimationType.values()[additionalData.readInt()];
+		animationType = additionalData.readEnum(AnimationType.class);
 	}
 	
 	@Override
-	public void aiStep()
+	public void tick()
 	{
-		super.aiStep();
+		super.tick();
 		
 		if(!level().isClientSide)
 		{
@@ -105,6 +104,7 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 		}
 	}
 	
+	/*
 	//Ensures that the head and body always face the same way as the root Y rotation.
 	@Override
 	protected float tickHeadTurn(float pYRot, float pAnimStep)
@@ -125,6 +125,13 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 		this.yBodyRot = this.getYRot();
 		this.yHeadRot = this.getYRot();
 	}
+	*/
+	
+	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
+	{
+	
+	}
 	
 	@Override
 	protected MovementEmission getMovementEmission()
@@ -133,26 +140,15 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 	}
 	
 	@Override
-	public Iterable<ItemStack> getArmorSlots()
+	protected void readAdditionalSaveData(CompoundTag pCompound)
 	{
-		return Collections.emptyList();
+	
 	}
 	
 	@Override
-	public ItemStack getItemBySlot(EquipmentSlot pSlot)
+	protected void addAdditionalSaveData(CompoundTag pCompound)
 	{
-		return ItemStack.EMPTY;
-	}
 	
-	@Override
-	public void setItemSlot(EquipmentSlot pSlot, ItemStack pStack)
-	{
-	}
-	
-	@Override
-	public HumanoidArm getMainArm()
-	{
-		return HumanoidArm.RIGHT;
 	}
 	
 	public void setAnimation(AnimationType animation)
@@ -162,8 +158,8 @@ public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEnti
 			this.animationType = animation;
 			if(!removalFlag)
 				this.despawnTimer = 0;
-			ServerCursorPacket packet = ServerCursorPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-			PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
+			ServerCursorAnimationPacket packet = ServerCursorAnimationPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
+			PacketDistributor.sendToPlayersTrackingEntity(this, packet);
 		} else
 			setAnimationFromPacket(animation);
 	}

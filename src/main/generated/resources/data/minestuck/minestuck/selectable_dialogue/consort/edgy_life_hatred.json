@@ -23,5 +23,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/edgy_life_hatred"
+  "dialogue": "minestuck:consort/edgy_life_hatred",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

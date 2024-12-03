@@ -1,16 +1,14 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.network.ServerEditPacket;
-import com.mraof.minestuck.network.data.EditmodeCacheLimitPacket;
-import com.mraof.minestuck.network.data.GristCachePacket;
-import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.network.GristCachePacket;
+import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
+import com.mraof.minestuck.network.editmode.ServerEditPackets;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -66,7 +64,7 @@ public class EditData
 	
 	public EditmodeLocations locations()
 	{
-		return PlayerSavedData.getData(this.getTarget(), player.server).editmodeLocations;
+		return PlayerData.get(this.getTarget(), player.server).getData(MSAttachments.EDITMODE_LOCATIONS);
 	}
 	
 	public GristCache getGristCache()
@@ -92,19 +90,19 @@ public class EditData
 	
 	public void sendGristCacheToEditor()
 	{
-		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), true);
-		PacketDistributor.PLAYER.with(this.getEditor()).send(packet);
+		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), ClientPlayerData.CacheSource.EDITMODE);
+		PacketDistributor.sendToPlayer(this.getEditor(), packet);
 	}
 	
 	public void sendCacheLimitToEditor()
 	{
-		long limit = PlayerSavedData.getData(this.getTarget(), player.server).getEcheladder().getGristCapacity();
-		PacketDistributor.PLAYER.with(this.getEditor()).send(new EditmodeCacheLimitPacket(limit));
+		long limit = Echeladder.get(this.getTarget(), player.level()).getGristCapacity();
+		PacketDistributor.sendToPlayer(this.getEditor(), new EditmodeCacheLimitPacket(limit));
 	}
 	
 	public void sendGivenItemsToEditor()
 	{
-		PacketDistributor.PLAYER.with(getEditor()).send(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())));
+		PacketDistributor.sendToPlayer(getEditor(), new ServerEditPackets.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())));
 	}
 	
 	public CompoundTag writeRecoveryData()

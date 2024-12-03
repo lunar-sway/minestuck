@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:wooden_fences"
+  },
+  "input2": {
+    "item": "minecraft:nether_brick"
+  },
+  "mode": "and",
+  "output": "minecraft:nether_brick_fence"
+}

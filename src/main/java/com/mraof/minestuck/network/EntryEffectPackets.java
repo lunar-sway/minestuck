@@ -5,40 +5,39 @@ import com.mraof.minestuck.client.EntryEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.StreamEncoder;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public final class EntryEffectPackets
 {
 	public record Effect(ResourceKey<Level> level, BlockPos center, int range) implements MSPacket.PlayToClient
 	{
-		public static final ResourceLocation ID = Minestuck.id("entry_effect/effect");
+		public static final Type<Effect> ID = new Type<>(Minestuck.id("entry_effect/effect"));
+		
+		public static final StreamCodec<RegistryFriendlyByteBuf, Effect> STREAM_CODEC = StreamCodec.composite(
+				ResourceKey.streamCodec(Registries.DIMENSION),
+				Effect::level,
+				BlockPos.STREAM_CODEC,
+				Effect::center,
+				ByteBufCodecs.INT,
+				Effect::range,
+				Effect::new
+		);
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeResourceLocation(level.location());
-			buffer.writeBlockPos(center);
-			buffer.writeInt(range);
-		}
-		
-		public static Effect read(FriendlyByteBuf buffer)
-		{
-			ResourceKey<Level> level = ResourceKey.create(Registries.DIMENSION, buffer.readResourceLocation());
-			BlockPos pos = buffer.readBlockPos();
-			int range = buffer.readInt();
-			return new Effect(level, pos, range);
-		}
-		
-		@Override
-		public void execute()
+		public void execute(IPayloadContext context)
 		{
 			EntryEffect.handlePacket(this);
 		}
@@ -46,26 +45,17 @@ public final class EntryEffectPackets
 	
 	public record Clear() implements MSPacket.PlayToClient
 	{
-		public static final ResourceLocation ID = Minestuck.id("entry_effect/clear");
+		public static final Type<Clear> ID = new Type<>(Minestuck.id("entry_effect/clear"));
+		public static final StreamCodec<FriendlyByteBuf, Clear> STREAM_CODEC = StreamCodec.unit(new Clear());
 		
 		@Override
-		public ResourceLocation id()
+		public Type<? extends CustomPacketPayload> type()
 		{
 			return ID;
 		}
 		
 		@Override
-		public void write(FriendlyByteBuf buffer)
-		{
-		}
-		
-		public static Clear read(FriendlyByteBuf ignored)
-		{
-			return new Clear();
-		}
-		
-		@Override
-		public void execute()
+		public void execute(IPayloadContext context)
 		{
 			EntryEffect.reset();
 		}

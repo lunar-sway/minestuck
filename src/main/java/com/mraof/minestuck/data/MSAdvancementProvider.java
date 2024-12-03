@@ -19,6 +19,7 @@ import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
@@ -26,6 +27,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -75,8 +77,9 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	@Override
 	public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper)
 	{
+		HolderLookup.RegistryLookup<Structure> structures = registries.lookupOrThrow(Registries.STRUCTURE);
 		AdvancementHolder root = Advancement.Builder.advancement()
-				.display(MSItems.RAW_CRUXITE.get(), Component.translatable(title(ROOT)), Component.translatable(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), AdvancementType.TASK, false, false, false)
+				.display(MSItems.RAW_CRUXITE.get(), Component.translatable(title(ROOT)), Component.translatable(desc(ROOT)), Minestuck.id("textures/gui/advancement_bg.png"), AdvancementType.TASK, false, false, false)
 				.addCriterion("raw_cruxite", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.RAW_CRUXITE.get())).save(saver, save_loc(ROOT));
 		AdvancementHolder searching = Advancement.Builder.advancement().parent(root)
 				.display(Items.COMPASS, Component.translatable(title(SEARCHING)), Component.translatable(desc(SEARCHING)), null, AdvancementType.TASK, true, true, false)
@@ -116,10 +119,12 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 				.addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(saver, save_loc(RETURN_NODE));
 		AdvancementHolder dungeon = Advancement.Builder.advancement().parent(returnNode)
 				.display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, AdvancementType.TASK, true, true, false)
-				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.IMP_DUNGEON))).save(saver, save_loc(DUNGEON));
+				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(structures.getOrThrow(MSStructures.ImpDungeon.KEY)))).save(saver, save_loc(DUNGEON));
 		AdvancementHolder commune = Advancement.Builder.advancement().parent(entry)
 				.display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, AdvancementType.TASK, true, true, false)
-				.requirements(AdvancementRequirements.Strategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.CONSORT_VILLAGE))).save(saver, save_loc(COMMUNE));
+				.requirements(AdvancementRequirements.Strategy.AND)
+				.addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any())
+				.addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(structures.getOrThrow(MSStructures.ConsortVillage.KEY)))).save(saver, save_loc(COMMUNE));
 		AdvancementHolder frenchFry = Advancement.Builder.advancement().parent(commune)
 				.display(MSItems.FRENCH_FRY.get(), Component.translatable(title(FRENCH_FRY)), Component.translatable(desc(FRENCH_FRY)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("has_french_fry", ConsumeItemTrigger.TriggerInstance.usedItem(MSItems.FRENCH_FRY.get())).save(saver, save_loc(FRENCH_FRY));

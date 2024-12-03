@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "aspect_carved_planks",
+  "key": {
+    "#": {
+      "item": "minestuck:mind_aspect_planks"
+    },
+    "$": {
+      "item": "minestuck:mind_aspect_stripped_log"
+    }
+  },
+  "pattern": [
+    "#$",
+    "$#"
+  ],
+  "result": {
+    "count": 8,
+    "id": "minestuck:mind_aspect_carved_planks"
+  }
+}

@@ -1,5 +1,8 @@
 {
   "node": {
-    "message": "minestuck.dialogue.consort.deep_roots"
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.deep_roots",
+    "responses": []
   }
 }

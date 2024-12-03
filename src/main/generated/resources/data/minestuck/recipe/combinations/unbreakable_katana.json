@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:katana"
+  },
+  "input2": {
+    "item": "minecraft:bedrock"
+  },
+  "mode": "and",
+  "output": "minestuck:unbreakable_katana"
+}

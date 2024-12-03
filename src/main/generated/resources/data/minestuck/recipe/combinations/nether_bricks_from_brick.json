@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:netherrack"
+  },
+  "input2": {
+    "item": "minecraft:brick"
+  },
+  "mode": "and",
+  "output": "minecraft:nether_bricks"
+}

@@ -15,8 +15,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  */
 public class FrogRuinFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation FROG_RUINS_0 = new ResourceLocation(Minestuck.MOD_ID, "frog_ruins_0");
-	private static final ResourceLocation FROG_RUINS_1 = new ResourceLocation(Minestuck.MOD_ID, "frog_ruins_1");
+	private static final ResourceLocation FROG_RUINS_0 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "frog_ruins_0");
+	private static final ResourceLocation FROG_RUINS_1 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "frog_ruins_1");
 	
 	public FrogRuinFeature(Codec<NoneFeatureConfiguration> codec)
 	{

@@ -3,5 +3,7 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:flora"
   },
-  "dialogue": "minestuck:consort/giant_swords"
+  "dialogue": "minestuck:consort/giant_swords",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

@@ -1,17 +1,16 @@
 package com.mraof.minestuck.world.gen.structure.gate;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.world.gen.LandStructureState;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
-import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
-import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -27,7 +26,7 @@ public final class LandGatePlacement extends StructurePlacement
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final Codec<LandGatePlacement> CODEC = RecordCodecBuilder.create(instance -> placementCodec(instance).apply(instance, LandGatePlacement::new));
+	public static final MapCodec<LandGatePlacement> CODEC = RecordCodecBuilder.mapCodec(instance -> placementCodec(instance).apply(instance, LandGatePlacement::new));
 	
 	public LandGatePlacement()
 	{
@@ -42,7 +41,7 @@ public final class LandGatePlacement extends StructurePlacement
 	@Override
 	public StructurePlacementType<LandGatePlacement> type()
 	{
-		return MSStructurePlacements.LAND_GATE.get();
+		return MSStructures.LAND_GATE_PLACEMENT.get();
 	}
 	
 	@Override

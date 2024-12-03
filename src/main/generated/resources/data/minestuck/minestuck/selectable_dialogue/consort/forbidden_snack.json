@@ -3,5 +3,7 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:rain"
   },
-  "dialogue": "minestuck:consort/forbidden_snack"
+  "dialogue": "minestuck:consort/forbidden_snack",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

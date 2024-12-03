@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "minestuck:cast_iron"
-  },
-  "result": "minestuck:chiseled_cast_iron"
-}

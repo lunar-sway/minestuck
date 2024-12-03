@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:dragon_lance"
+  },
+  "input2": {
+    "item": "minestuck:uranium_gummy_bear"
+  },
+  "mode": "or",
+  "output": "minestuck:fiduspawn_lance"
+}

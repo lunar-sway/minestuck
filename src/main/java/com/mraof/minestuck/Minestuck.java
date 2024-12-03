@@ -6,6 +6,7 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
+import com.mraof.minestuck.block.plant.MSPottedSaplings;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.command.MSSuggestionProviders;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
@@ -23,30 +24,29 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSCreativeTabs;
+import com.mraof.minestuck.item.MSDispenserBehaviours;
+import com.mraof.minestuck.item.MSItemTypes;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.KindAbstratusList;
-import com.mraof.minestuck.util.DispenserBehaviourUtil;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
-import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
-import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import software.bernie.geckolib.GeckoLib;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 
@@ -57,20 +57,22 @@ public class Minestuck
 	
 	public static ResourceLocation id(String path)
 	{
-		return new ResourceLocation(MOD_ID, path);
+		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
 	}
 	
-	public Minestuck(IEventBus eventBus)
+	public Minestuck(IEventBus eventBus, ModContainer modContainer)
 	{
 		
 		eventBus.addListener(this::setup);
 		
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonSpec);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
+		modContainer.registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonSpec);
+		modContainer.registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
+		modContainer.registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		GeckoLib.initialize(eventBus);
+		//GeckoLib.initialize(eventBus); FIXME
 		
+		MSItemComponents.REGISTRY.register(eventBus);
+		MSItemTypes.ARMOR_MATERIAL_REGISTRY.register(eventBus);
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
@@ -100,9 +102,9 @@ public class Minestuck
 		
 		MSFeatures.REGISTER.register(eventBus);
 		
-		MSStructurePieces.REGISTER.register(eventBus);
-		MSStructureTypes.REGISTER.register(eventBus);
-		MSStructurePlacements.REGISTER.register(eventBus);
+		MSStructures.PIECE_REGISTER.register(eventBus);
+		MSStructures.TYPE_REGISTER.register(eventBus);
+		MSStructures.PLACEMENT_REGISTER.register(eventBus);
 		
 		MSStructureProcessorTypes.REGISTER.register(eventBus);
 		MSSurfaceRules.REGISTER.register(eventBus);
@@ -112,7 +114,7 @@ public class Minestuck
 		
 		MSCreativeTabs.REGISTER.register(eventBus);
 		
-		MSCapabilities.ATTACHMENT_REGISTER.register(eventBus);
+		MSAttachments.REGISTER.register(eventBus);
 		
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();
@@ -137,7 +139,9 @@ public class Minestuck
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
-		DispenserBehaviourUtil.registerBehaviours();
+		MSDispenserBehaviours.registerBehaviours();
+		
+		MSPottedSaplings.addSaplingsToPot();
 		
 		ProgramData.init();
 		

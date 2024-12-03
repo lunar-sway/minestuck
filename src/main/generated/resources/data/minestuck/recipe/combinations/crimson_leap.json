@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:frog"
+  },
+  "input2": {
+    "item": "minestuck:keyblade"
+  },
+  "mode": "and",
+  "output": "minestuck:crimson_leap"
+}

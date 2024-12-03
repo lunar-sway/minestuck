@@ -13,7 +13,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 {
 	public static final String TITLE = "minestuck.grist_cache";
 	
-	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/grist_cache.png");
+	private static final ResourceLocation guiGristcache = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/grist_cache.png");
 	private int page = 0;
 
 	private Button previousButton;

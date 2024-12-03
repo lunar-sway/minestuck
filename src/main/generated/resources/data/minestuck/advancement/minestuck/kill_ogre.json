@@ -1,0 +1,37 @@
+{
+  "parent": "minestuck:minestuck/entry",
+  "criteria": {
+    "kill_ogre": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minestuck:ogre"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.kill_ogre.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minestuck:pogo_hammer"
+    },
+    "title": {
+      "translate": "advancements.minestuck.kill_ogre.title"
+    }
+  },
+  "requirements": [
+    [
+      "kill_ogre"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

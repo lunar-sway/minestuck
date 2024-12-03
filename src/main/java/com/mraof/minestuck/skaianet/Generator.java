@@ -1,6 +1,9 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -71,19 +74,19 @@ class Generator
 	@NotNull
 	private static Optional<Title> titleForPlayer(PlayerIdentifier player, SkaianetData skaianetData)
 	{
-		return Optional.ofNullable(PlayerSavedData.getData(player, skaianetData.mcServer).getTitle())
+		return Title.getTitle(player, skaianetData.mcServer)
 				.or(() -> skaianetData.getOrCreatePredefineData(player).flatMap(data -> Optional.ofNullable(data.getTitle())));
 	}
 	
 	private static List<EnumAspect> unusedAspects(Set<EnumAspect> base, Set<Title> usedTitles)
 	{
-		Set<EnumAspect> usedAspects = usedTitles.stream().map(Title::getHeroAspect).collect(Collectors.toSet());
+		Set<EnumAspect> usedAspects = usedTitles.stream().map(Title::heroAspect).collect(Collectors.toSet());
 		return base.stream().filter(a -> !usedAspects.contains(a)).collect(Collectors.toList());
 	}
 	
 	private static List<EnumClass> unusedClasses(Set<Title> usedTitles)
 	{
-		Set<EnumClass> usedClasses = usedTitles.stream().map(Title::getHeroClass).collect(Collectors.toSet());
+		Set<EnumClass> usedClasses = usedTitles.stream().map(Title::heroClass).collect(Collectors.toSet());
 		return EnumClass.valuesStream().filter(c -> !usedClasses.contains(c)).collect(Collectors.toList());
 	}
 	

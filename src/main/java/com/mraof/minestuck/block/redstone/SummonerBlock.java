@@ -7,12 +7,12 @@ import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
@@ -46,39 +46,42 @@ public class SummonerBlock extends Block implements EntityBlock
 		registerDefaultState(stateDefinition.any().setValue(UNTRIGGERABLE, false).setValue(TRIGGERED, false));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
 	{
-		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof SummonerBlockEntity summoner))
+			return ItemInteractionResult.FAIL;
+		
+		if(stack.getItem() instanceof SpawnEggItem eggItem)
 		{
-			ItemStack stackIn = player.getItemInHand(handIn);
-			
-			if(stackIn.getItem() instanceof SpawnEggItem eggItem)
+			if(!level.isClientSide)
 			{
-				if(level.getBlockEntity(pos) instanceof SummonerBlockEntity summonerTE)
-				{
-					
-					if(!level.isClientSide)
-					{
-						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()));
-						player.displayClientMessage(Component.translatable(SUMMON_TYPE_CHANGE, BuiltInRegistries.ENTITY_TYPE.getKey(eggItem.getType(stackIn.getTag()))), true);
-					}
-					
-					level.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
-				}
-			} else if(level.isClientSide)
-			{
-				if(level.getBlockEntity(pos) instanceof SummonerBlockEntity be)
-				{
-					MSScreenFactories.displaySummonerScreen(be);
-				}
+				summoner.setSummonedEntity(eggItem.getType(stack));
+				player.displayClientMessage(Component.translatable(SUMMON_TYPE_CHANGE, eggItem.getType(stack).getDescription()), true);
 			}
 			
-			return InteractionResult.SUCCESS;
+			level.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
+			return ItemInteractionResult.SUCCESS;
 		}
 		
-		return InteractionResult.PASS;
+		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+	}
+	
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
+	{
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof SummonerBlockEntity summoner))
+			return InteractionResult.FAIL;
+		
+		if(level.isClientSide)
+			MSScreenFactories.displaySummonerScreen(summoner);
+		
+		return InteractionResult.SUCCESS;
+	}
+	
+	public static boolean canInteract(Player player)
+	{
+		return player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
 	@SuppressWarnings("deprecation")

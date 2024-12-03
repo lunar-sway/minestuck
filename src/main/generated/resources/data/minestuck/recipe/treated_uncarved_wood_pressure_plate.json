@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_pressure_plate",
+  "key": {
+    "#": {
+      "item": "minestuck:treated_uncarved_wood"
+    }
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:treated_uncarved_wood_pressure_plate"
+  }
+}

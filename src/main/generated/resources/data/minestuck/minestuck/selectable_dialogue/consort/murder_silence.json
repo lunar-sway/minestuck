@@ -23,5 +23,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/murder_silence"
+  "dialogue": "minestuck:consort/murder_silence",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:egg"
+  },
+  "input2": {
+    "item": "minecraft:pumpkin"
+  },
+  "mode": "and",
+  "output": "minestuck:surprise_embryo"
+}

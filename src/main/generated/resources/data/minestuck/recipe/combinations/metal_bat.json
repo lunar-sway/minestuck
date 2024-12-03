@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:deuce_club"
+  },
+  "input2": {
+    "item": "minecraft:iron_ingot"
+  },
+  "mode": "and",
+  "output": "minestuck:metal_bat"
+}

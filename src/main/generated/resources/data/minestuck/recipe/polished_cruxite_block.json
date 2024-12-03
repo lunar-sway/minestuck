@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "cruxite_blocks",
+  "key": {
+    "#": {
+      "item": "minestuck:smooth_cruxite_block"
+    }
+  },
+  "pattern": [
+    "## ",
+    "## "
+  ],
+  "result": {
+    "count": 4,
+    "id": "minestuck:polished_cruxite_block"
+  }
+}

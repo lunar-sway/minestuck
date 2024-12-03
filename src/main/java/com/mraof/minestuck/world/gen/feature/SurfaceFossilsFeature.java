@@ -15,14 +15,14 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  */
 public class SurfaceFossilsFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation STRUCTURE_SPINE_01 = new ResourceLocation("fossil/spine_1");
-	private static final ResourceLocation STRUCTURE_SPINE_02 = new ResourceLocation("fossil/spine_2");
-	private static final ResourceLocation STRUCTURE_SPINE_03 = new ResourceLocation("fossil/spine_3");
-	private static final ResourceLocation STRUCTURE_SPINE_04 = new ResourceLocation("fossil/spine_4");
-	private static final ResourceLocation STRUCTURE_SKULL_01 = new ResourceLocation("fossil/skull_1");
-	private static final ResourceLocation STRUCTURE_SKULL_02 = new ResourceLocation("fossil/skull_2");
-	private static final ResourceLocation STRUCTURE_SKULL_03 = new ResourceLocation("fossil/skull_3");
-	private static final ResourceLocation STRUCTURE_SKULL_04 = new ResourceLocation("fossil/skull_4");
+	private static final ResourceLocation STRUCTURE_SPINE_01 = ResourceLocation.withDefaultNamespace("fossil/spine_1");
+	private static final ResourceLocation STRUCTURE_SPINE_02 = ResourceLocation.withDefaultNamespace("fossil/spine_2");
+	private static final ResourceLocation STRUCTURE_SPINE_03 = ResourceLocation.withDefaultNamespace("fossil/spine_3");
+	private static final ResourceLocation STRUCTURE_SPINE_04 = ResourceLocation.withDefaultNamespace("fossil/spine_4");
+	private static final ResourceLocation STRUCTURE_SKULL_01 = ResourceLocation.withDefaultNamespace("fossil/skull_1");
+	private static final ResourceLocation STRUCTURE_SKULL_02 = ResourceLocation.withDefaultNamespace("fossil/skull_2");
+	private static final ResourceLocation STRUCTURE_SKULL_03 = ResourceLocation.withDefaultNamespace("fossil/skull_3");
+	private static final ResourceLocation STRUCTURE_SKULL_04 = ResourceLocation.withDefaultNamespace("fossil/skull_4");
 	private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{STRUCTURE_SPINE_01, STRUCTURE_SPINE_02, STRUCTURE_SPINE_03, STRUCTURE_SPINE_04, STRUCTURE_SKULL_01, STRUCTURE_SKULL_02, STRUCTURE_SKULL_03, STRUCTURE_SKULL_04};
 	
 	public SurfaceFossilsFeature(Codec<NoneFeatureConfiguration> codec)

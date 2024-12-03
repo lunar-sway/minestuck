@@ -3,6 +3,8 @@
     "animation": {
       "emotion": "angry"
     },
-    "message": "minestuck.dialogue.consort.mush_farm.7"
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.mush_farm.7",
+    "responses": []
   }
 }

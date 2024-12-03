@@ -3,10 +3,11 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +24,7 @@ public interface RightClickBlockEffect
 {
 	InteractionResult onClick(UseOnContext context);
 	
-	static RightClickBlockEffect placeFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
+	static RightClickBlockEffect placeFluid(Supplier<Block> fluidBlock, Holder<Item> otherItem)
 	{
 		return withoutCreativeShock((context) -> {
 			Level level = context.getLevel();
@@ -38,11 +39,10 @@ public interface RightClickBlockEffect
 				if(!level.isClientSide && player != null)
 				{
 					level.setBlockAndUpdate(pos, fluidBlock.get().defaultBlockState());
-					ItemStack newItem = new ItemStack(otherItem.get(), itemStack.getCount());
-					newItem.setTag(itemStack.getTag()); //It is important that the item it is switching to has the same durability
+					ItemStack newItem = new ItemStack(otherItem, itemStack.getCount(), itemStack.getComponentsPatch());
 					player.setItemInHand(context.getHand(), newItem);
 					level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1F, 2F);
-					player.getCooldowns().addCooldown(otherItem.get(), 5);
+					player.getCooldowns().addCooldown(otherItem.value(), 5);
 				}
 				return InteractionResult.SUCCESS;
 			}
@@ -71,7 +71,7 @@ public interface RightClickBlockEffect
 					{
 						player.drop(new ItemStack(lookedAtBlockItem), false);
 					}
-					context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+					context.getItemInHand().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
 					level.setBlockAndUpdate(blockRayTrace.getBlockPos(), Blocks.AIR.defaultBlockState());
 				}
 				level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 1F, 1F);

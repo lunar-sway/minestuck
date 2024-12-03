@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": {
       "arguments": [
         "land_class"
@@ -8,8 +10,13 @@
     },
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.denizen.explain.where",
-        "next_dialogue": "minestuck:consort/denizen/location"
+        "next_dialogue": "minestuck:consort/denizen/location",
+        "triggers": []
       }
     ]
   }

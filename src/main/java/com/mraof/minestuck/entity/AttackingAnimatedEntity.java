@@ -25,10 +25,10 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		entityData.define(CURRENT_ACTION, MobAnimation.IDLE_ACTION.ordinal());
+		super.defineSynchedData(builder);
+		builder.define(CURRENT_ACTION, MobAnimation.IDLE_ACTION.ordinal());
 	}
 	
 	@Override

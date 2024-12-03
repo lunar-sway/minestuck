@@ -3,12 +3,13 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.network.ClientEditPacket;
-import com.mraof.minestuck.network.computer.CloseSburbConnectionPacket;
+import com.mraof.minestuck.network.computer.CloseSburbConnectionPackets;
 import com.mraof.minestuck.network.computer.OpenSburbServerPacket;
-import com.mraof.minestuck.network.computer.ResumeSburbConnectionPacket;
+import com.mraof.minestuck.network.computer.ResumeSburbConnectionPackets;
+import com.mraof.minestuck.network.editmode.ClientEditPackets;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -26,7 +27,7 @@ public class SburbServer extends ButtonListProgram
 	public static final String SERVER_ACTIVE = "minestuck.program.server.server_active_message";
 	public static final String RESUME_SERVER = "minestuck.program.server.resume_server_message";
 	
-	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_server.png");
+	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_server.png");
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
@@ -68,12 +69,12 @@ public class SburbServer extends ButtonListProgram
 		{
 			case EDIT_BUTTON, GIVE_BUTTON ->
 			{
-				ClientEditPacket packet = ClientEditPacket.activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
-				PacketDistributor.SERVER.noArg().send(packet);
+				CustomPacketPayload packet = new ClientEditPackets.Activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
+				PacketDistributor.sendToServer(packet);
 			}
-			case RESUME_BUTTON -> PacketDistributor.SERVER.noArg().send(ResumeSburbConnectionPacket.asServer(be));
-			case OPEN_BUTTON -> PacketDistributor.SERVER.noArg().send(OpenSburbServerPacket.create(be));
-			case CLOSE_BUTTON -> PacketDistributor.SERVER.noArg().send(CloseSburbConnectionPacket.asServer(be));
+			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(be));
+			case OPEN_BUTTON -> PacketDistributor.sendToServer(OpenSburbServerPacket.create(be));
+			case CLOSE_BUTTON -> PacketDistributor.sendToServer(CloseSburbConnectionPackets.asServer(be));
 		}
 	}
 	

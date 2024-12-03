@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:irradiating",
+  "category": "misc",
+  "cookingtime": 20,
+  "experience": 0.2,
+  "ingredient": {
+    "item": "minecraft:beef"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:irradiated_steak"
+  }
+}

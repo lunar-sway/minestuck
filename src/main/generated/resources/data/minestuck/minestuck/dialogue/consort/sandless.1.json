@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": {
       "arguments": [
         "land_denizen"
@@ -8,8 +10,13 @@
     },
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/sandless.2"
+        "next_dialogue": "minestuck:consort/sandless.2",
+        "triggers": []
       }
     ]
   }

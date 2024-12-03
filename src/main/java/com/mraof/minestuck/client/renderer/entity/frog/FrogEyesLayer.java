@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.entity.FrogModel;
 import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.entity.FrogEntity;
@@ -9,6 +10,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 
 public class FrogEyesLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>>
 {
@@ -26,7 +28,7 @@ public class FrogEyesLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>
 	{
 		if(!frog.isInvisible())
 		{
-			if (frog.getFrogType() == 6)
+			if (frog.getFrogVariant() == FrogEntity.FrogVariants.SUSAN)
 	        {
 				float r, g, b;
 				switch(frog.tickCount % 4)
@@ -60,21 +62,11 @@ public class FrogEyesLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>
 					} break;
 				}
 
-				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, FastColor.ARGB32.colorFromFloat(1, r, g, b));
 	        }
-			else if (frog.getFrogType() > FrogEntity.maxTypes() || frog.getFrogType() < 1)
+			else if (frog.getFrogVariant() == FrogEntity.FrogVariants.DEFAULT)
 	        {
-				int eyeColor = frog.getEyeColor();
-				
-				float r = (float) ((eyeColor & 16711680) >> 16) / 255f;
-				float g = (float) ((eyeColor & 65280) >> 8) / 255f;
-				float b = (float) ((eyeColor & 255)) / 255f;
-	
-				if(r < this.colorMin) r = this.colorMin;
-				if(g < this.colorMin) g = this.colorMin;
-				if(b < this.colorMin) b = this.colorMin;
-
-				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, frog.getEyeColor());
 	        }
 		}
 	}
@@ -82,13 +74,8 @@ public class FrogEyesLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>
 	@Override
 	public ResourceLocation getTextureLocation(FrogEntity frog)
 	{
-		int id = frog.getEyeType();
-
-		if(frog.getFrogType() == 6) return new ResourceLocation("minestuck:textures/entity/frog/susan_eyes.png");
-		else if(id < 0) id = 0;
-		else if(id > 3) id = 3;
-
-		return new ResourceLocation("minestuck:textures/entity/frog/eyes_" + id + ".png");
+		if(frog.getFrogVariant() == FrogEntity.FrogVariants.SUSAN) return Minestuck.id("textures/entity/frog/eyes_susan.png");
+		return Minestuck.id("textures/entity/frog/eyes_" + frog.getEyeType().getSerializedName() + ".png");
 	}
 
 }

@@ -1,10 +1,17 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.wind_blast",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/wind_blast.hurt"
+        "next_dialogue": "minestuck:consort/wind_blast.hurt",
+        "triggers": []
       }
     ]
   }

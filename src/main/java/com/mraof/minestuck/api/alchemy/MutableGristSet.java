@@ -20,7 +20,7 @@ public interface MutableGristSet extends GristSet
 	}
 	
 	@Override
-	default ImmutableGristSet asImmutable()
+	default GristSet.Immutable asImmutable()
 	{
 		return new DefaultImmutableGristSet(this);
 	}

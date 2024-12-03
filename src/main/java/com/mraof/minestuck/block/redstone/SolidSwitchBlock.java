@@ -7,7 +7,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -20,11 +19,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Can be right clicked while not crouching to cycle on or off. The block gives off full power and light when on and gives off no power or light when off.
  * Does the same job as a lever but gives off light and as a full block can be submerged in liquids without breaking
  */
+@ParametersAreNonnullByDefault
 public class SolidSwitchBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -36,8 +37,7 @@ public class SolidSwitchBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		level.setBlock(pos, state.cycle(POWERED), Block.UPDATE_ALL);
 		if(state.getValue(POWERED))
@@ -47,16 +47,14 @@ public class SolidSwitchBlock extends Block
 		return InteractionResult.SUCCESS;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}

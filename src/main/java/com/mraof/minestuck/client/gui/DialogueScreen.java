@@ -167,13 +167,13 @@ public class DialogueScreen extends Screen
 	{
 		if(responseData.shouldClose())
 			Objects.requireNonNull(this.minecraft).popGuiLayer();
-		PacketDistributor.SERVER.noArg().send(new DialoguePackets.TriggerResponse(responseData.index(), this.dialogueId));
+		PacketDistributor.sendToServer(new DialoguePackets.TriggerResponse(responseData.index(), this.dialogueId));
 	}
 	
 	@Override
 	public void onClose()
 	{
-		PacketDistributor.SERVER.noArg().send(new DialoguePackets.OnCloseScreen(this.dialogueId));
+		PacketDistributor.sendToServer(new DialoguePackets.OnCloseScreen(this.dialogueId));
 		super.onClose();
 	}
 	

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:emerald_immolator"
+  },
+  "input2": {
+    "item": "minestuck:club_zero"
+  },
+  "mode": "or",
+  "output": "minestuck:frosttooth"
+}

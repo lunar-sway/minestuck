@@ -5,7 +5,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
@@ -22,10 +21,10 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nonnull;
@@ -39,7 +38,7 @@ import java.util.function.BiFunction;
  * items accessible by the server.
  * @author kirderf1
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus= Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus= EventBusSubscriber.Bus.GAME)
 public final class DeployList
 {
 	public static final IAvailabilityCondition HAS_NOT_ENTERED = playerData -> !playerData.hasEntered();
@@ -245,7 +244,7 @@ public final class DeployList
 		
 	}
 	
-	public static void registerItem(String name, ItemStack stack, ImmutableGristSet cost, int tier, EntryLists entryList)
+	public static void registerItem(String name, ItemStack stack, GristSet.Immutable cost, int tier, EntryLists entryList)
 	{
 		registerItem(name, stack, cost, cost, tier, entryList);
 	}
@@ -263,7 +262,7 @@ public final class DeployList
 	 * @param entryList Enum defining which list the item is in. (I.E. Deployables or Atheneum).
 	 * You cannot directly register items to EntryLists.ALL, as it is simply a list of all entries, regardless of category.
 	 */
-	public static void registerItem(String name, ItemStack stack, ImmutableGristSet cost1, ImmutableGristSet cost2, int tier, EntryLists entryList)
+	public static void registerItem(String name, ItemStack stack, GristSet.Immutable cost1, GristSet.Immutable cost2, int tier, EntryLists entryList)
 	{
 		registerItem(name, cost1, cost2, tier, null, (connection, world) -> stack, entryList);
 	}
@@ -271,7 +270,7 @@ public final class DeployList
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, ImmutableGristSet cost, int tier, IAvailabilityCondition condition,
+	public static void registerItem(String name, GristSet.Immutable cost, int tier, IAvailabilityCondition condition,
 									BiFunction<SburbPlayerData, Level, ItemStack> item, EntryLists entryList)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, playerData) -> cost, entryList);
@@ -280,7 +279,7 @@ public final class DeployList
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, ImmutableGristSet cost1, ImmutableGristSet cost2, int tier, IAvailabilityCondition condition,
+	public static void registerItem(String name, GristSet.Immutable cost1, GristSet.Immutable cost2, int tier, IAvailabilityCondition condition,
 									BiFunction<SburbPlayerData, Level, ItemStack> item, EntryLists entryList)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, playerData) -> isPrimary ? cost1 : cost2, entryList);
@@ -324,8 +323,7 @@ public final class DeployList
 			return ItemStack.EMPTY;
 		stack = stack.copy();
 		stack.setCount(1);
-		if(stack.hasTag() && stack.getTag().isEmpty())
-			stack.setTag(null);
+		stack.applyComponents(stack.getItem().components());
 		return stack;
 	}
 	
@@ -420,9 +418,9 @@ public final class DeployList
 	}
 	
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Post event)
 	{
-		if(event.phase == TickEvent.Phase.END && !MinestuckConfig.SERVER.hardMode.get())
+		if(!MinestuckConfig.SERVER.hardMode.get())
 		{
 			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 			long currentDay = server.overworld().getGameTime() / 24000L;

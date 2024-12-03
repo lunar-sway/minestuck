@@ -20,13 +20,13 @@ public class SoporSlimeItem extends Item
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving)
 	{
-		if(entityLiving.hasEffect(MSEffects.SOPOR_SICKNESS.get()))
+		if(entityLiving.hasEffect(MSEffects.SOPOR_SICKNESS))
 		{
-			MobEffectInstance oldSoporEffect = entityLiving.getEffect(MSEffects.SOPOR_SICKNESS.get());
+			MobEffectInstance oldSoporEffect = entityLiving.getEffect(MSEffects.SOPOR_SICKNESS);
 			int newAmplifier = oldSoporEffect != null ? oldSoporEffect.getAmplifier() + 1 : 0; //amplification stacks with several pies
-			entityLiving.addEffect(new MobEffectInstance(MSEffects.SOPOR_SICKNESS.get(), duration, newAmplifier));
+			entityLiving.addEffect(new MobEffectInstance(MSEffects.SOPOR_SICKNESS, duration, newAmplifier));
 		} else
-			entityLiving.addEffect(new MobEffectInstance(MSEffects.SOPOR_SICKNESS.get(), duration, 0));
+			entityLiving.addEffect(new MobEffectInstance(MSEffects.SOPOR_SICKNESS, duration, 0));
 		
 		return super.finishUsingItem(stack, level, entityLiving);
 	}

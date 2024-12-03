@@ -9,10 +9,15 @@ import com.mraof.minestuck.blockentity.redstone.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MSBlockEntityTypes
 {
 	public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Minestuck.MOD_ID);
@@ -56,6 +61,7 @@ public class MSBlockEntityTypes
 	public static final Supplier<BlockEntityType<RedstoneClockBlockEntity>> REDSTONE_CLOCK = REGISTER.register("redstone_clock", () -> BlockEntityType.Builder.of(RedstoneClockBlockEntity::new, MSBlocks.REDSTONE_CLOCK.get()).build(null));
 	public static final Supplier<BlockEntityType<RemoteComparatorBlockEntity>> REMOTE_COMPARATOR = REGISTER.register("remote_comparator", () -> BlockEntityType.Builder.of(RemoteComparatorBlockEntity::new, MSBlocks.REMOTE_COMPARATOR.get()).build(null));
 	public static final Supplier<BlockEntityType<StructureCoreBlockEntity>> STRUCTURE_CORE = REGISTER.register("structure_core", () -> BlockEntityType.Builder.of(StructureCoreBlockEntity::new, MSBlocks.STRUCTURE_CORE.get()).build(null));
+	public static final Supplier<BlockEntityType<BlockTeleporterBlockEntity>> BLOCK_TELEPORTER = REGISTER.register("block_teleporter", () -> BlockEntityType.Builder.of(BlockTeleporterBlockEntity::new, MSBlocks.BLOCK_TELEPORTER.get()).build(null));
 	
 	public static final Supplier<BlockEntityType<SignBlockEntity>> SIGN =
 			REGISTER.register("sign", () ->
@@ -112,4 +118,18 @@ public class MSBlockEntityTypes
 									AspectTreeBlocks.TIME_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.TIME_ASPECT_WALL_HANGING_SIGN.get(),
 									AspectTreeBlocks.VOID_ASPECT_HANGING_SIGN.get(), AspectTreeBlocks.VOID_ASPECT_WALL_HANGING_SIGN.get())
 							.build(null));
+	
+	
+	@SubscribeEvent
+	public static void registerCapabilities(RegisterCapabilitiesEvent event)
+	{
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.MINI_CRUXTRUDER.get(), MiniCruxtruderBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.MINI_TOTEM_LATHE.get(), MiniTotemLatheBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.MINI_ALCHEMITER.get(), MiniAlchemiterBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.MINI_PUNCH_DESIGNIX.get(), MiniPunchDesignixBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.SENDIFICATOR.get(), SendificatorBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.GRIST_WIDGET.get(), GristWidgetBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.URANIUM_COOKER.get(), UraniumCookerBlockEntity::getItemHandler);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.ANTHVIL.get(), AnthvilBlockEntity::getItemHandler);
+	}
 }

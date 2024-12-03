@@ -6,9 +6,87 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased dream-moons]
 
-## [Unreleased 1.20.4]
+## [Unreleased 1.21]
 
-## [Unreleased]
+- Updated to run with Minecraft 1.21 / Neoforge 21.0
+
+### Changed
+
+- Knitting needle crafting recipe now produces one item instead of two
+
+### Contributors for this release
+
+- Cibernet, Dweblenod, kirderf1
+
+## [1.20.4-1.12.2.0] - 2024-10-06
+
+- Updated to run with Minecraft 1.20.4 / Neoforge 20.4
+
+### Added
+
+- Block Teleporter
+- Built in compatability for Better Combat mod
+- Cindered ladder and bookshelf
+- Shadewood ladder and bookshelf
+- Parrots will mimic imps, ogres, basilisks, and liches
+
+### Changed
+
+- Gave Underlings and Carapacian Pawns the Attack Speed attribute. This influences how fast their attack animations play
+- Underlings, Carapacian Pawns, and Consorts now adjust their walk animation speed according to their Movement Speed attribute
+- Structure Block Registry Processor can now be used for data generated structures through a processor_list
+- Adjusted the hitbox size for Lotus Flowers
+- The Lotus Time Capsule now spawns a Lotus Flower when placed
+- Lotus Time Capsule blocks now remove any Lotus Flowers above them when destroyed
+- Many organic blocks are now compostable
+- Many wood-based blocks can now be used as fuel
+- Cruxite ore textures tweaked
+- Localized potion name for the status message that appears when right-clicking an Area Effect Block with a potion
+- Localized entity type for the status message that appears when right-clicking a Summoner Block with a Spawn Egg
+
+### Fixed
+
+- The Umbral Infiltrator no longer jitters when thrown by a void player
+- Manually-spawned Lotus Flowers can no longer be hurt or killed by any damage source
+- Lotus Flowers no longer push entities inside of them away
+- Ogres and Basilisks no longer slide around when idling
+- Cruxite button now uses raw cruxite instead of cruxite block, which resolves a conflict with storage block breakdown
+- Bookshelves for terrain woods can now be crafted, resolving a conflict with the vanilla bookshelf recipe
+- Fixed right-clicking on an Area Effect Block with a Potion not properly updating its settings
+- Fixed right-clicking on a Summoner Block with a Spawn Egg not properly updating its settings
+- Updated holopad collision shape
+- The block model for the holopad with card now renders with cutout
+
+### Contributors for this release
+
+- Dweblenod, sipherNil, gtzc, Cibernet, glubtier, rose_bushes_, kirderf1
+
+## [1.20.1-1.12.1.0] - 2024-09-08
+
+### Added
+
+- Predetermined captcha codes can now be set through a data file (`data/<namespace>/minestuck/captcha_codes.json`)
+
+### Changed
+
+- Silicone Caulk Bucket alchemy recipe was changed from Water Bucket && Quartz to Water Bucket && Amethyst Shard, to avoid conflict with Prismarine Shard alchemy recipe
+- Frost Trees will now drop saplings
+- Saplings are now pottable
+- Aspect slabs can now be used in crafting recipes
+- Uranium button now made with 1 raw uranium instead of 1 uranium block
+
+### Fixed
+
+- Fix player gutter multiplier, which wasn't being saved
+- Space sapling texture baseline lowered, space and frost sapling sides trimmed
+- Fixed crash involving null targets with animated attacks
+- Changed aspect-wood bookshelf recipes to match their book drop rate
+- Added missing pressure plates to tag
+- Activating the hashmap modus from chat now gives the correct message
+
+### Contributors for this release
+
+- Akisephila, kirderf1, glubtier, ThalliumSulfate, Dweblenod
 
 ## [1.20.1-1.12.0.1] - 2024-04-15
 

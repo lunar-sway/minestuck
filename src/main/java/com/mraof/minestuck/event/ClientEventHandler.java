@@ -23,29 +23,27 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 /**
  * Used to track mixed client sided events.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientEventHandler
 {
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event)
+	public static void onClientTick(ClientTickEvent.Post event)
 	{
-		if(event.phase == TickEvent.Phase.END)
+		if(ClientPlayerData.shouDisplayColorSelection() && Minecraft.getInstance().screen == null)
 		{
-			if(ClientPlayerData.shouDisplayColorSelection() && Minecraft.getInstance().screen == null)
-			{
-				ClientPlayerData.clearDisplayColorSelection();
-				if(MinestuckConfig.CLIENT.loginColorSelector.get())
-					Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
-			}
+			ClientPlayerData.clearDisplayColorSelection();
+			if(MinestuckConfig.CLIENT.loginColorSelector.get())
+				Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
 		}
+	
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGHEST)

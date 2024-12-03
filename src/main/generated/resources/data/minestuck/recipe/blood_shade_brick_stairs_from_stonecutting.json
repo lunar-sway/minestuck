@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:blood_shade_bricks"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:blood_shade_brick_stairs"
+  }
+}

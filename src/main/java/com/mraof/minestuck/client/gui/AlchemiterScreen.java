@@ -6,7 +6,7 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.AlchemiterPacket;
+import com.mraof.minestuck.network.block.TriggerAlchemiterPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,7 +23,7 @@ public class AlchemiterScreen extends Screen
 {
 	public static final String TITLE = "minestuck.alchemiter";
 	
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/large_alchemiter.png");
 	private static final int guiWidth = 159, guiHeight = 102;
 	private final AlchemiterBlockEntity alchemiter;
 	private int itemQuantity;
@@ -107,8 +107,7 @@ public class AlchemiterScreen extends Screen
 	
 	private void alchemize()
 	{
-		AlchemiterPacket packet = new AlchemiterPacket(alchemiter.getBlockPos(), itemQuantity);
-		PacketDistributor.SERVER.noArg().send(packet);
+		PacketDistributor.sendToServer(new TriggerAlchemiterPacket(itemQuantity, alchemiter.getBlockPos()));
 		this.minecraft.setScreen(null);
 	}
 	

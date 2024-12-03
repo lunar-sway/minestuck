@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.loot.functions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.loot.MSLootTables;
@@ -26,7 +26,7 @@ import java.util.*;
 @MethodsReturnNonnullByDefault
 public class SetSburbCodeFragments extends LootItemConditionalFunction
 {
-	public static final Codec<SetSburbCodeFragments> CODEC = RecordCodecBuilder.create(instance ->
+	public static final MapCodec<SetSburbCodeFragments> CODEC = RecordCodecBuilder.mapCodec(instance ->
 			commonFields(instance).apply(instance, SetSburbCodeFragments::new));
 	public SetSburbCodeFragments(List<LootItemCondition> conditionsIn)
 	{

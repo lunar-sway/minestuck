@@ -20,7 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ import java.util.function.Supplier;
  * This is the class which registers container type -> screen constructor factories,
  * and this is also the class to hide away all screen display code to prevent standalone server crashes due to references to {@link net.minecraft.client.gui.screens.Screen}
  */
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
+@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class MSScreenFactories
 {
 	private static final Map<ModusType<?>, Function<Modus, ? extends SylladexScreen>> SYLLADEX_FACTORIES = Maps.newHashMap();
@@ -107,6 +107,11 @@ public class MSScreenFactories
 	public static void displayStructureCoreScreen(StructureCoreBlockEntity blockEntity)
 	{
 		Minecraft.getInstance().setScreen(new StructureCoreScreen(blockEntity));
+	}
+	
+	public static void displayBlockTeleporterScreen(BlockTeleporterBlockEntity blockEntity)
+	{
+		Minecraft.getInstance().setScreen(new BlockTeleporterScreen(blockEntity));
 	}
 	
 	public static void displayAlchemiterScreen(AlchemiterBlockEntity blockEntity)

@@ -25,7 +25,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
-import software.bernie.geckolib.util.RenderUtils;
+import software.bernie.geckolib.util.RenderUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,7 +46,7 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 	}
 	
 	@Override
-	public void renderRecursively(PoseStack poseStack, TotemLatheDowelBlockEntity animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderRecursively(PoseStack poseStack, TotemLatheDowelBlockEntity animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color)
 	{
 		if(bone.getName().equals("totem"))
 		{
@@ -64,8 +64,8 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 			
 			// position adjustments
 			poseStack.pushPose();
-			RenderUtils.translateMatrixToBone(poseStack, bone);
-			RenderUtils.translateToPivotPoint(poseStack, bone);
+			RenderUtil.translateMatrixToBone(poseStack, bone);
+			RenderUtil.translateToPivotPoint(poseStack, bone);
 			poseStack.translate(0.25, -0.375, 0.03125);
 			poseStack.mulPose(Axis.ZP.rotationDegrees(90));
 			
@@ -83,12 +83,12 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 			bufferSource.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(animatable)));
 			return;
 		}
-		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
 	}
 	
 	@Override
 	public AABB getRenderBoundingBox(TotemLatheDowelBlockEntity blockEntity)
 	{
-		return INFINITE_EXTENT_AABB;
+		return AABB.INFINITE;
 	}
 }

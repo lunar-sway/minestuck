@@ -8,6 +8,7 @@ import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public interface GristCostRecipe extends Recipe<Container>
+public interface GristCostRecipe extends Recipe<SingleRecipeInput>
 {
 	Supplier<RecipeType<GristCostRecipe>> RECIPE_TYPE = MSRecipeTypes.GRIST_COST_TYPE;
 	
@@ -45,7 +46,7 @@ public interface GristCostRecipe extends Recipe<Container>
 	
 	static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level, RecipeManager recipeManager)
 	{
-		return recipeManager.getRecipesFor(GristCostRecipe.RECIPE_TYPE.get(), new SimpleContainer(input), level)
+		return recipeManager.getRecipesFor(GristCostRecipe.RECIPE_TYPE.get(), new SingleRecipeInput(input), level)
 				.stream().map(RecipeHolder::value).max(Comparator.comparingInt(GristCostRecipe::getPriority));
 	}
 	
@@ -79,7 +80,7 @@ public interface GristCostRecipe extends Recipe<Container>
 	}
 	
 	@Override
-	default ItemStack assemble(Container inv, RegistryAccess registryAccess)
+	default ItemStack assemble(SingleRecipeInput inv, HolderLookup.Provider registryAccess)
 	{
 		return ItemStack.EMPTY;
 	}
@@ -98,7 +99,7 @@ public interface GristCostRecipe extends Recipe<Container>
 	}
 	
 	@Override
-	default ItemStack getResultItem(RegistryAccess registryAccess)
+	default ItemStack getResultItem(HolderLookup.Provider registryAccess)
 	{
 		return ItemStack.EMPTY;
 	}

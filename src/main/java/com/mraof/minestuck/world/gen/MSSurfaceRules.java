@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -16,7 +17,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public final class MSSurfaceRules extends SurfaceRules	//This extension is here only for access to the protected interface SurfaceRule
 {
-	public static final DeferredRegister<Codec<? extends SurfaceRules.RuleSource>> REGISTER = DeferredRegister.create(Registries.MATERIAL_RULE, Minestuck.MOD_ID);
+	public static final DeferredRegister<MapCodec<? extends RuleSource>> REGISTER = DeferredRegister.create(Registries.MATERIAL_RULE, Minestuck.MOD_ID);
 	
 	static {
 		REGISTER.register("checkered", CheckeredRuleSource.CODEC::codec);
@@ -24,7 +25,7 @@ public final class MSSurfaceRules extends SurfaceRules	//This extension is here 
 	
 	public record CheckeredRuleSource(int squareSize, List<RuleSource> rules) implements RuleSource
 	{
-		private static final KeyDispatchDataCodec<CheckeredRuleSource> CODEC = KeyDispatchDataCodec.of(RecordCodecBuilder.create(instance -> instance.group(
+		private static final KeyDispatchDataCodec<CheckeredRuleSource> CODEC = KeyDispatchDataCodec.of(RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.intRange(1, Integer.MAX_VALUE).fieldOf("size").forGetter(CheckeredRuleSource::squareSize),
 				SurfaceRules.RuleSource.CODEC.listOf().fieldOf("rules").forGetter(CheckeredRuleSource::rules)
 		).apply(instance, CheckeredRuleSource::new)));

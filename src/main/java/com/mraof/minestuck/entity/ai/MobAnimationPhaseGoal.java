@@ -25,6 +25,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	protected int time = 0;
 	
 	protected Vector3d lookTarget;
+	protected double speed;
 	
 	public MobAnimationPhaseGoal(T entity, PhasedMobAnimation phasedAnimation)
 	{
@@ -51,7 +52,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	@Override
 	public boolean canContinueToUse()
 	{
-		return phasedAnimation.getCurrentPhase(time) != PhasedMobAnimation.Phases.NEUTRAL;
+		return phasedAnimation.getCurrentPhase(entity, time, speed) != PhasedMobAnimation.Phases.NEUTRAL;
 	}
 	
 	@Override
@@ -64,14 +65,15 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	public void start()
 	{
 		MobAnimation animation = phasedAnimation.getAnimation();
+		this.speed = MobAnimation.getAttributeAffectedSpeed(entity, phasedAnimation.getSpeedModifyingAttribute());
 		
 		if(entity instanceof AnimatedPathfinderMob animatedMob)
-			animatedMob.setCurrentAnimation(animation);
+			animatedMob.setCurrentAnimation(animation, speed);
 		
-		if(animation.freezeSight())
+		LivingEntity target = this.entity.getTarget();
+		
+		if(animation.freezeSight() && target != null)
 		{
-			//the target should be guaranteed to be non-null because canUse() requires it to be non-null.
-			LivingEntity target = Objects.requireNonNull(this.entity.getTarget());
 			this.lookTarget = new Vector3d(target.getX(), target.getEyeY(), target.getZ());
 		}
 		
@@ -91,10 +93,10 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	{
 		//make sure the super function is ran in goals that extend this
 		
-		if(phasedAnimation.getAnimation().freezeSight())
+		if(phasedAnimation.getAnimation().freezeSight() && lookTarget != null)
 			this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z);
 		
 		this.time++;
-		phasedAnimation.attemptPhaseChange(time, entity);
+		phasedAnimation.attemptPhaseChange(time, entity, speed);
 	}
 }

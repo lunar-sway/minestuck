@@ -54,6 +54,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("blood_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.BLOOD_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> BLOOD_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_BLOOD_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_blood_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BLOOD_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> BLOOD_ASPECT_PLANKS = MSBlocks.REGISTER.register("blood_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -64,7 +65,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> BLOOD_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> BLOOD_ASPECT_STAIRS = MSBlocks.REGISTER.register("blood_aspect_stairs",
-			() -> new StairBlock(() -> BLOOD_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(BLOOD_ASPECT_PLANKS.get())));
+			() -> new StairBlock(BLOOD_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(BLOOD_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> BLOOD_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> BLOOD_ASPECT_SLAB = MSBlocks.REGISTER.register("blood_aspect_slab",
@@ -145,6 +146,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("breath_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.BREATH_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> BREATH_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_BREATH_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_breath_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BREATH_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> BREATH_ASPECT_PLANKS = MSBlocks.REGISTER.register("breath_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -155,7 +157,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> BREATH_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> BREATH_ASPECT_STAIRS = MSBlocks.REGISTER.register("breath_aspect_stairs",
-			() -> new StairBlock(() -> BREATH_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(BREATH_ASPECT_PLANKS.get())));
+			() -> new StairBlock(BREATH_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(BREATH_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> BREATH_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> BREATH_ASPECT_SLAB = MSBlocks.REGISTER.register("breath_aspect_slab",
@@ -236,6 +238,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("doom_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.DOOM_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> DOOM_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_DOOM_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_doom_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, DOOM_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> DOOM_ASPECT_PLANKS = MSBlocks.REGISTER.register("doom_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -246,7 +249,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> DOOM_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> DOOM_ASPECT_STAIRS = MSBlocks.REGISTER.register("doom_aspect_stairs",
-			() -> new StairBlock(() -> DOOM_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(DOOM_ASPECT_PLANKS.get())));
+			() -> new StairBlock(DOOM_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(DOOM_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> DOOM_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> DOOM_ASPECT_SLAB = MSBlocks.REGISTER.register("doom_aspect_slab",
@@ -327,6 +330,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("heart_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.HEART_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> HEART_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_HEART_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_heart_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, HEART_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> HEART_ASPECT_PLANKS = MSBlocks.REGISTER.register("heart_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -337,7 +341,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> HEART_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> HEART_ASPECT_STAIRS = MSBlocks.REGISTER.register("heart_aspect_stairs",
-			() -> new StairBlock(() -> HEART_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(HEART_ASPECT_PLANKS.get())));
+			() -> new StairBlock(HEART_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(HEART_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> HEART_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> HEART_ASPECT_SLAB = MSBlocks.REGISTER.register("heart_aspect_slab",
@@ -418,6 +422,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("hope_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.HOPE_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> HOPE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_HOPE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_hope_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, HOPE_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> HOPE_ASPECT_PLANKS = MSBlocks.REGISTER.register("hope_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -428,7 +433,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> HOPE_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> HOPE_ASPECT_STAIRS = MSBlocks.REGISTER.register("hope_aspect_stairs",
-			() -> new StairBlock(() -> HOPE_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(HOPE_ASPECT_PLANKS.get())));
+			() -> new StairBlock(HOPE_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(HOPE_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> HOPE_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> HOPE_ASPECT_SLAB = MSBlocks.REGISTER.register("hope_aspect_slab",
@@ -509,6 +514,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("life_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.LIFE_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> LIFE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_LIFE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_life_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, LIFE_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> LIFE_ASPECT_PLANKS = MSBlocks.REGISTER.register("life_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -519,7 +525,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> LIFE_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> LIFE_ASPECT_STAIRS = MSBlocks.REGISTER.register("life_aspect_stairs",
-			() -> new StairBlock(() -> LIFE_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(LIFE_ASPECT_PLANKS.get())));
+			() -> new StairBlock(LIFE_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(LIFE_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> LIFE_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> LIFE_ASPECT_SLAB = MSBlocks.REGISTER.register("life_aspect_slab",
@@ -600,6 +606,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("light_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.LIGHT_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> LIGHT_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_LIGHT_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_light_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, LIGHT_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> LIGHT_ASPECT_PLANKS = MSBlocks.REGISTER.register("light_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -610,7 +617,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> LIGHT_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> LIGHT_ASPECT_STAIRS = MSBlocks.REGISTER.register("light_aspect_stairs",
-			() -> new StairBlock(() -> LIGHT_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(LIGHT_ASPECT_PLANKS.get())));
+			() -> new StairBlock(LIGHT_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(LIGHT_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> LIGHT_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> LIGHT_ASPECT_SLAB = MSBlocks.REGISTER.register("light_aspect_slab",
@@ -691,6 +698,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("mind_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.MIND_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> MIND_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_MIND_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_mind_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, MIND_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> MIND_ASPECT_PLANKS = MSBlocks.REGISTER.register("mind_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -701,7 +709,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> MIND_ASPECT_PLANKS_CARVED_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> MIND_ASPECT_STAIRS = MSBlocks.REGISTER.register("mind_aspect_stairs",
-			() -> new StairBlock(() -> MIND_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(MIND_ASPECT_PLANKS.get())));
+			() -> new StairBlock(MIND_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(MIND_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> MIND_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> MIND_ASPECT_SLAB = MSBlocks.REGISTER.register("mind_aspect_slab",
@@ -782,6 +790,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("rage_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.RAGE_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> RAGE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_RAGE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_rage_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, RAGE_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> RAGE_ASPECT_PLANKS = MSBlocks.REGISTER.register("rage_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -792,7 +801,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> RAGE_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> RAGE_ASPECT_STAIRS = MSBlocks.REGISTER.register("rage_aspect_stairs",
-			() -> new StairBlock(() -> RAGE_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(RAGE_ASPECT_PLANKS.get())));
+			() -> new StairBlock(RAGE_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(RAGE_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> RAGE_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> RAGE_ASPECT_SLAB = MSBlocks.REGISTER.register("rage_aspect_slab",
@@ -873,6 +882,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("space_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.SPACE_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> SPACE_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_SPACE_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_space_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, SPACE_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> SPACE_ASPECT_PLANKS = MSBlocks.REGISTER.register("space_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -883,7 +893,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> SPACE_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> SPACE_ASPECT_STAIRS = MSBlocks.REGISTER.register("space_aspect_stairs",
-			() -> new StairBlock(() -> SPACE_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(SPACE_ASPECT_PLANKS.get())));
+			() -> new StairBlock(SPACE_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(SPACE_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> SPACE_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> SPACE_ASPECT_SLAB = MSBlocks.REGISTER.register("space_aspect_slab",
@@ -964,6 +974,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("time_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.TIME_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> TIME_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_TIME_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_time_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, TIME_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> TIME_ASPECT_PLANKS = MSBlocks.REGISTER.register("time_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -974,7 +985,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> TIME_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> TIME_ASPECT_STAIRS = MSBlocks.REGISTER.register("time_aspect_stairs",
-			() -> new StairBlock(() -> TIME_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(TIME_ASPECT_PLANKS.get())));
+			() -> new StairBlock(TIME_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(TIME_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> TIME_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> TIME_ASPECT_SLAB = MSBlocks.REGISTER.register("time_aspect_slab",
@@ -1055,6 +1066,7 @@ public final class AspectTreeBlocks
 			() -> new AspectSaplingBlock(new TreeGrower(Minestuck.id("void_aspect").toString(), Optional.empty(), Optional.of(MSCFeatures.VOID_TREE), Optional.empty()),
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final DeferredItem<BlockItem> VOID_ASPECT_SAPLING_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final DeferredBlock<Block> POTTED_VOID_ASPECT_SAPLING = MSBlocks.REGISTER.register("potted_void_aspect_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, VOID_ASPECT_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> VOID_ASPECT_PLANKS = MSBlocks.REGISTER.register("void_aspect_planks",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -1065,7 +1077,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> VOID_ASPECT_CARVED_PLANKS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_CARVED_PLANKS);
 	
 	public static final DeferredBlock<StairBlock> VOID_ASPECT_STAIRS = MSBlocks.REGISTER.register("void_aspect_stairs",
-			() -> new StairBlock(() -> VOID_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(VOID_ASPECT_PLANKS.get())));
+			() -> new StairBlock(VOID_ASPECT_PLANKS.get().defaultBlockState(), ofFullCopy(VOID_ASPECT_PLANKS.get())));
 	public static final DeferredItem<BlockItem> VOID_ASPECT_STAIRS_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_STAIRS);
 	
 	public static final DeferredBlock<SlabBlock> VOID_ASPECT_SLAB = MSBlocks.REGISTER.register("void_aspect_slab",

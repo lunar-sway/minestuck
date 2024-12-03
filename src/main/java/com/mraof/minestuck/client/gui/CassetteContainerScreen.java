@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -10,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class CassetteContainerScreen extends AbstractContainerScreen<CassetteContainerMenu>
 {
-	private final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/cassette_container.png");
+	private final ResourceLocation BACKGROUND = Minestuck.id("textures/gui/cassette_container.png");
 	
 	public CassetteContainerScreen(CassetteContainerMenu container, Inventory pPlayerInventory, Component pTitle)
 	{

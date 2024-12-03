@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_gold_seeds": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:gold_seeds"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:gold_nugget_from_seeds"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_gold_seeds"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:gold_nugget_from_seeds"
+    ]
+  }
+}

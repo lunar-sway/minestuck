@@ -13,5 +13,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/thunder_death.1"
+  "dialogue": "minestuck:consort/thunder_death.1",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

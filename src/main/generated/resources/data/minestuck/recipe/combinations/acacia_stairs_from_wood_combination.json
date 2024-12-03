@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:birch_stairs"
+  },
+  "input2": {
+    "item": "minecraft:jungle_stairs"
+  },
+  "mode": "or",
+  "output": "minecraft:acacia_stairs"
+}

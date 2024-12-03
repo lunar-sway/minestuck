@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entry;
 
-import com.mraof.minestuck.util.MSNBTUtil;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -16,9 +16,23 @@ import org.apache.logging.log4j.Logger;
  * To reduce time, and still reduce lightning and "floating" liquids,
  * this was created to handle such tasks during the ticks right after entry instead of during entry.
  */
-public class PostEntryTask
+public final class PostEntryTask
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static final Codec<PostEntryTask> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Level.RESOURCE_KEY_CODEC.fieldOf("dimension").forGetter(task -> task.dimension),
+			Codec.INT.fieldOf("x").forGetter(task -> task.x),
+			Codec.INT.fieldOf("y").forGetter(task -> task.y),
+			Codec.INT.fieldOf("z").forGetter(task -> task.z),
+			Codec.INT.fieldOf("entrySize").forGetter(task -> task.entrySize),
+			Codec.INT.fieldOf("index").forGetter(task -> task.index)
+	).apply(instance, (dimension, x, y, z, entrySize, index) -> {
+		PostEntryTask task = new PostEntryTask(dimension, x, y, z, entrySize);
+		task.index = index;
+		return task;
+	}));
+	
 	/**
 	 * The minimum amount of time (in milliseconds) to spend each game tick
 	 * updating blocks post-entry.
@@ -29,40 +43,16 @@ public class PostEntryTask
 	private final ResourceKey<Level> dimension;
 	private final int x, y, z;
 	private final int entrySize;
-	private final byte entryType;	//Used if we add more ways for entry to happen
 	private int index;
 	
-	public PostEntryTask(ResourceKey<Level> dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
+	public PostEntryTask(ResourceKey<Level> dimension, int xCoord, int yCoord, int zCoord, int entrySize)
 	{
 		this.dimension = dimension;
 		this.x = xCoord;
 		this.y = yCoord;
 		this.z = zCoord;
 		this.entrySize = entrySize;
-		this.entryType = entryType;
 		this.index = 0;
-	}
-	
-	public PostEntryTask(CompoundTag nbt)
-	{
-		this(MSNBTUtil.tryReadDimensionType(nbt, "dimension"), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
-		this.index = nbt.getInt("index");
-		if(dimension == null)
-			LOGGER.warn("Unable to load dimension type by name {}!", nbt.getString("dimension"));
-	}
-	
-	public CompoundTag write()
-	{
-		CompoundTag nbt = new CompoundTag();
-		MSNBTUtil.tryWriteDimensionType(nbt, "dimension", dimension);
-		nbt.putInt("x", x);
-		nbt.putInt("y", y);
-		nbt.putInt("z", z);
-		nbt.putInt("entrySize", entrySize);
-		nbt.putByte("entryType", entryType);
-		nbt.putInt("index", index);
-		
-		return nbt;
 	}
 	
 	public boolean onTick(MinecraftServer server)
@@ -80,32 +70,27 @@ public class PostEntryTask
 		}
 		
 		int preIndex = index;
-		main:
+		
+		long time = System.currentTimeMillis() + MIN_TIME;
+		int i = 0;
+		for(BlockPos pos : EntryBlockIterator.get(x, y, z, entrySize))
 		{
-			if(entryType == 0)
+			if(i >= index)
 			{
-				long time = System.currentTimeMillis() + MIN_TIME;
-				int i = 0;
-				for(BlockPos pos : EntryBlockIterator.get(x, y, z, entrySize))
+				updateBlock(pos.immutable(), world);
+				index++;
+				if(time <= System.currentTimeMillis())
 				{
-					if(i >= index)
-					{
-						updateBlock(pos.immutable(), world);
-						index++;
-						if(time <= System.currentTimeMillis())
-							break main;
-					}
-					i++;
+					LOGGER.debug("Updated {} blocks this tick.", index - preIndex);
+					return index != preIndex;
 				}
 			}
-			
-			LOGGER.info("Completed entry block updates for dimension {}.", dimension.location());
-			setDone();
-			return true;
+			i++;
 		}
 		
-		LOGGER.debug("Updated {} blocks this tick.", index - preIndex);
-		return index != preIndex;
+		LOGGER.info("Completed entry block updates for dimension {}.", dimension.location());
+		setDone();
+		return true;
 	}
 	
 	public boolean isDone()

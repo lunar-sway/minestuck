@@ -12,6 +12,9 @@ import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public abstract class CustomCakeBlock extends CakeBlock
 {
 	protected CustomCakeBlock(Properties builder)
@@ -20,7 +23,7 @@ public abstract class CustomCakeBlock extends CakeBlock
 	}
 	
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if (!level.isClientSide)
 		{
@@ -28,7 +31,7 @@ public abstract class CustomCakeBlock extends CakeBlock
 		}
 		else
 		{
-			ItemStack itemstack = player.getItemInHand(hand);
+			ItemStack itemstack = player.getItemInHand(InteractionHand.MAIN_HAND);
 			return this.eatCake(level, pos, state, player) ? InteractionResult.SUCCESS : itemstack.isEmpty() ? InteractionResult.CONSUME : InteractionResult.PASS;
 		}
 	}

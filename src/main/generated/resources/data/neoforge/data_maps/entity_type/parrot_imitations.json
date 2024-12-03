@@ -1,0 +1,16 @@
+{
+  "values": {
+    "minestuck:basilisk": {
+      "sound": "minestuck:entity.basilisk.ambient"
+    },
+    "minestuck:imp": {
+      "sound": "minestuck:entity.imp.ambient"
+    },
+    "minestuck:lich": {
+      "sound": "minestuck:entity.lich.ambient"
+    },
+    "minestuck:ogre": {
+      "sound": "minestuck:entity.ogre.ambient"
+    }
+  }
+}

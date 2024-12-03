@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
-import com.mraof.minestuck.network.TransportalizerPacket;
+import com.mraof.minestuck.network.block.TransportalizerPackets;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -19,7 +19,7 @@ public class TransportalizerScreen extends Screen
 	public static final String TITLE = "minestuck.transportalizer";
 	public static final String DESTINATION_CODE_MESSAGE = "minestuck.transportalizer.destination_code";
 	public static final String DONE_MESSAGE = "minestuck.transportalizer.done";
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_small.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_small.png");
 
 	private static final int guiWidth = 126;
 	private static final int guiHeight = 98;
@@ -81,12 +81,12 @@ public class TransportalizerScreen extends Screen
 		
 		if(be.hasId()) {
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
-			TransportalizerPacket.DestId packet = new TransportalizerPacket.DestId(be.getBlockPos(), text);
-			PacketDistributor.SERVER.noArg().send(packet);
+			TransportalizerPackets.SetDestId packet = new TransportalizerPackets.SetDestId(be.getBlockPos(), text);
+			PacketDistributor.sendToServer(packet);
 			minecraft.setScreen(null);
 		} else {
-			TransportalizerPacket.Id packet = new TransportalizerPacket.Id(be.getBlockPos(), text);
-			PacketDistributor.SERVER.noArg().send(packet);
+			TransportalizerPackets.SetId packet = new TransportalizerPackets.SetId(be.getBlockPos(), text);
+			PacketDistributor.sendToServer(packet);
 			minecraft.setScreen(null);
 		}
 	}

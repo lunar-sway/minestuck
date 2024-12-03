@@ -60,13 +60,13 @@ public final class SburbHandler
 	
 	static void generateAndSetTitle(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		PlayerData data = PlayerSavedData.getData(player, mcServer);
-		if(data.getTitle() == null)
+		PlayerData data = PlayerData.get(player, mcServer);
+		if(Title.getTitle(data).isEmpty())
 		{
 			Title title = produceTitle(player, mcServer);
 			if(title == null)
 				return;
-			PlayerSavedData.getData(player, mcServer).setTitle(title);
+			Title.setTitle(data, title);
 		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
 	}
@@ -105,7 +105,7 @@ public final class SburbHandler
 	{
 		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		List<PlayerIdentifier> otherPlayers = skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList();
-		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
+		Title title = Title.getTitle(player, mcServer).orElseThrow();
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		
@@ -118,16 +118,16 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !Generator.titleLandTypesUsedBy(otherPlayers, skaianetData).contains(LandTypes.FROGS.get()) &&
+			if(title.heroAspect() == EnumAspect.SPACE && !Generator.titleLandTypesUsedBy(otherPlayers, skaianetData).contains(LandTypes.FROGS.get()) &&
 					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS.get();
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), terrainLandType, skaianetData);
+				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.heroAspect(), terrainLandType, skaianetData);
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.getKey(terrainLandType));
-					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.getHeroAspect(), null, skaianetData);
+					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.heroAspect(), null, skaianetData);
 				}
 			}
 		}

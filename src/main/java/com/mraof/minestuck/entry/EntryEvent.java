@@ -51,9 +51,7 @@ public class EntryEvent
 				entity = EntityType.DRAGON_FIREBALL.create(level);
 			Objects.requireNonNull(entity);
 			entity.moveTo(x, y, z, entity.getYRot(), entity.getXRot());
-			entity.xPower = 0;
-			entity.yPower = -0.1D;
-			entity.zPower = 0;
+			entity.setDeltaMovement(0, -0.1, 0);
 			
 			level.addFreshEntity(entity);
 		}

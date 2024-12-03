@@ -1,8 +1,14 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.rap_battle.start",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.rap_battle.start.accept",
         "next_dialogue": {
           "id": "minestuck:consort/rap_battle/raps",
@@ -25,12 +31,17 @@
         ]
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.rap_battle.start.deny",
         "next_dialogue": {
           "id": "minestuck:consort/rap_battle/deny",
           "player_message": "minestuck.dialogue.consort.rap_battle.start.deny.reply",
           "set_as_entrypoint": false
-        }
+        },
+        "triggers": []
       }
     ]
   }

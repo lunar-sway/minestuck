@@ -3,8 +3,8 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -33,7 +33,7 @@ public interface FinishUseItemEffect
 		{
 			player.addItem(new ItemStack(MSItems.SHARP_CANDY_CANE.get(), 1));
 		}
-		stack.hurtAndBreak(999, entityIn, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+		stack.hurtAndBreak(999, entityIn, EquipmentSlot.MAINHAND);
 		return stack;
 	};
 	
@@ -45,7 +45,7 @@ public interface FinishUseItemEffect
 	static FinishUseItemEffect foodEffect(int healAmount, float saturationModifier, int damageTaken)
 	{
 		return (stack, worldIn, entityIn) -> {
-			stack.hurtAndBreak(damageTaken, entityIn, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+			stack.hurtAndBreak(damageTaken, entityIn, EquipmentSlot.MAINHAND);
 			if(entityIn instanceof Player player)
 			{
 				player.getFoodData().eat(healAmount, saturationModifier);

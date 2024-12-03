@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class TreatedTableFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation TREATED_TABLE = new ResourceLocation(Minestuck.MOD_ID, "treated_table");
+	private static final ResourceLocation TREATED_TABLE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "treated_table");
 	
 	public TreatedTableFeature(Codec<NoneFeatureConfiguration> codec)
 	{

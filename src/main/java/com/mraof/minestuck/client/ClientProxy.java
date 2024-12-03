@@ -15,6 +15,7 @@ import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.*;
+import com.mraof.minestuck.entity.FrogEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -22,7 +23,8 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StructureScannerItem;
-import com.mraof.minestuck.item.block.StoneTabletItem;
+import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.item.components.StoneTabletTextComponent;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
@@ -41,14 +43,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
+@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class ClientProxy
 {
 	@SubscribeEvent
@@ -61,7 +63,6 @@ public class ClientProxy
 	public static void init(final FMLClientSetupEvent event)
 	{
 		EntityRenderers.register(MSEntityTypes.FROG.get(), FrogRenderer::new);
-		EntityRenderers.register(MSEntityTypes.HOLOGRAM.get(), HologramRenderer::new);
 		EntityRenderers.register(MSEntityTypes.LOTUS_FLOWER.get(), LotusFlowerRenderer::new);
 		EntityRenderers.register(MSEntityTypes.SERVER_CURSOR.get(), ServerCursorRenderer::new);
 		EntityRenderers.register(MSEntityTypes.NAKAGATOR.get(), context -> new ConsortRenderer<>(context, EnumConsort.NAKAGATOR));
@@ -87,9 +88,7 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.CONSUMABLE_PROJECTILE.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.RETURNING_PROJECTILE.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.BOUNCING_PROJECTILE.get(), ThrownItemRenderer::new);
-		EntityRenderers.register(MSEntityTypes.MIDNIGHT_CREW_POSTER.get(), manager -> new RenderHangingArt<>(manager, Minestuck.id("midnight_poster")));
-		EntityRenderers.register(MSEntityTypes.SBAHJ_POSTER.get(), manager -> new RenderHangingArt<>(manager, Minestuck.id("sbahj_poster")));
-		EntityRenderers.register(MSEntityTypes.SHOP_POSTER.get(), manager -> new RenderHangingArt<>(manager, Minestuck.id("shop_poster")));
+		EntityRenderers.register(MSEntityTypes.POSTER.get(), PosterRenderer::new);
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
@@ -99,7 +98,7 @@ public class ClientProxy
 		registerArmorModels();
 
 		ItemPropertyFunction content = (stack, level, holder, seed) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
-		ResourceLocation contentName = new ResourceLocation(Minestuck.MOD_ID, "content");
+		ResourceLocation contentName = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "content");
 		
 		ItemBlockRenderTypes.setRenderLayer(MSFluids.OIL.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(MSFluids.FLOWING_OIL.get(), RenderType.translucent());
@@ -116,17 +115,17 @@ public class ClientProxy
 		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), contentName, content);
 		ItemProperties.register(MSItems.CRUXITE_DOWEL.get(), contentName, content);
 		ItemProperties.register(MSItems.SHUNT.get(), contentName, content);
-		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, level, holder, seed) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
-		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "punched"), (stack, level, holder, seed) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
 		
-		ItemProperties.register(MSItems.BOONDOLLARS.get(), new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
-		ItemProperties.register(MSItems.FROG.get(), new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
-		ItemProperties.register(MSItems.STONE_TABLET.get(), new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
-		ItemProperties.register(MSItems.MUSIC_SWORD.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
-		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.BOONDOLLARS.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
+		ItemProperties.register(MSItems.FROG.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> stack.has(MSItemComponents.FROG_TRAITS) ? stack.get(MSItemComponents.FROG_TRAITS).variant().orElse(FrogEntity.FrogVariants.DEFAULT).ordinal() : FrogEntity.FrogVariants.DEFAULT.ordinal());
+		ItemProperties.register(MSItems.STONE_TABLET.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletTextComponent.hasText(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.MUSIC_SWORD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		
-		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "angle"), new CompassItemPropertyFunction((level, stack, entity) -> StructureScannerItem.getTargetFromNbt(stack)));
-		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "powered"), (stack, level, entity, seed) -> StructureScannerItem.isPowered(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "angle"), new CompassItemPropertyFunction((level, stack, entity) -> stack.get(MSItemComponents.TARGET_LOCATION)));
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "powered"), (stack, level, entity, seed) -> StructureScannerItem.isPowered(stack) ? 1 : 0);
 	}
 	
 	@SubscribeEvent

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:macuahuitl"
+  },
+  "input2": {
+    "item": "minestuck:ice_shard"
+  },
+  "mode": "or",
+  "output": "minestuck:frosty_macuahuitl"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:brown_stone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:brown_stone_button"
+  }
+}

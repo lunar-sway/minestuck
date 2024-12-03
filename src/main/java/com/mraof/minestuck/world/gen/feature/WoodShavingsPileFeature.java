@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class WoodShavingsPileFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation WOOD_SHAVINGS_PILE = new ResourceLocation(Minestuck.MOD_ID, "wood_shavings_pile");
+	private static final ResourceLocation WOOD_SHAVINGS_PILE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "wood_shavings_pile");
 	
 	public WoodShavingsPileFeature(Codec<NoneFeatureConfiguration> codec)
 	{

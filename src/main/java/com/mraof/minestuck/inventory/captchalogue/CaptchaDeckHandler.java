@@ -7,10 +7,12 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.data.ModusDataPacket;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.MSAttachments;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -20,20 +22,25 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+//todo this class could use some spring cleaning
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class CaptchaDeckHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -42,12 +49,25 @@ public final class CaptchaDeckHandler
 	public static final int EMPTY_CARD = -2;
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onPlayerDrops(LivingDropsEvent event)
+	private static void onPlayerDrops(LivingDropsEvent event)
 	{
 		if(event.getEntity() instanceof ServerPlayer player && !event.getEntity().level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
 		{
 			dropSylladex(player);
 		}
+	}
+	
+	@SubscribeEvent
+	private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		
+		ModusHolder modusHolder = getHolder(player);
+		if(modusHolder.modus != null)
+			player.connection.send(CaptchaDeckPackets.ModusData.create(modusHolder.modus, player.registryAccess()));
+		
+		if(modusHolder.modus == null && !modusHolder.givenModus)
+			CaptchaDeckHandler.tryGiveStartingModus(modusHolder, player);
 	}
 	
 	public static Modus createClientModus(ResourceLocation name)
@@ -111,8 +131,10 @@ public final class CaptchaDeckHandler
 		
 		if(oldModus == null)
 		{
-			PlayerData data = PlayerSavedData.getData(player);
-			newModus.initModus(modusItem, player, null, data.hasGivenModus() ? 0 : MinestuckConfig.SERVER.initialModusSize.get());
+			ModusHolder modusHolder = getHolder(player);
+			newModus.initModus(modusItem, player, null, modusHolder.givenModus
+					? 0
+					: MinestuckConfig.SERVER.initialModusSize.get());
 		}
 		else
 		{
@@ -130,7 +152,7 @@ public final class CaptchaDeckHandler
 			}
 		}
 		
-		PlayerSavedData.getData(player).setModus(newModus);
+		setModus(getHolder(player), player, newModus);
 		
 		MSCriteriaTriggers.CHANGE_MODUS.get().trigger(player, newModus);
 		
@@ -193,16 +215,16 @@ public final class CaptchaDeckHandler
 	{
 		Modus modus = getModus(player);
 		
-		if(stack.getItem() == MSItems.BOONDOLLARS.get())
+		if(stack.is(MSItems.BOONDOLLARS))
 		{
-			PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
+			PlayerBoondollars.addBoondollars(PlayerData.get(player).orElseThrow(), BoondollarsItem.getCount(stack));
 			stack.shrink(1);
 			return;
 		}
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			if(stack.getItem() == MSItems.CAPTCHA_CARD.get() && AlchemyHelper.hasDecodedItem(stack)
+			if(stack.is(MSItems.CAPTCHA_CARD) && AlchemyHelper.hasDecodedItem(stack)
 					&& !AlchemyHelper.isPunchedCard(stack))
 				handleCardCaptchalogue(player, modus, stack);
 			else putInModus(player, modus, stack);
@@ -306,13 +328,17 @@ public final class CaptchaDeckHandler
 				};
 		
 		for(ItemStack stack : stacks)
-			if(!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack))
+		{
+			if(!stack.isEmpty() && !EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP))
+			{
 				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
-					ItemStack card = AlchemyHelper.createCard(stack, player.server);
+					ItemStack card = AlchemyHelper.createCard(stack);
 					player.drop(card, true, false);
 					size--;
 				} else player.drop(stack, true, false);
+			}
+		}
 		
 		int stackLimit = new ItemStack(MSItems.CAPTCHA_CARD.get()).getMaxStackSize();
 		for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
@@ -321,16 +347,16 @@ public final class CaptchaDeckHandler
 		if(MinestuckConfig.SERVER.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{
 			player.drop(modus.getModusItem(), true, false);
-			PlayerSavedData.getData(player).setModus(null);
+			setModus(getHolder(player), player, null);
 		} else
 		{
 			modus.initModus(null, player, null, size);
-			PacketDistributor.PLAYER.with(player).send(ModusDataPacket.create(modus));
+			player.connection.send(CaptchaDeckPackets.ModusData.create(modus, player.registryAccess()));
 		}
 	}
 	
 	@Nullable
-	public static CompoundTag writeToNBT(@Nullable Modus modus)
+	public static CompoundTag writeToNBT(@Nullable Modus modus, HolderLookup.Provider provider)
 	{
 		if(modus == null)
 			return null;
@@ -338,18 +364,18 @@ public final class CaptchaDeckHandler
 		ResourceLocation name = ModusTypes.REGISTRY.getKey(modus.getType());
 		if(name != null)
 		{
-			CompoundTag nbt = modus.writeToNBT(new CompoundTag());
+			CompoundTag nbt = modus.writeToNBT(new CompoundTag(), provider);
 			nbt.putString("type", name.toString());
 			return nbt;
 		} else return null;
 	}
 	
-	public static Modus readFromNBT(CompoundTag nbt, LogicalSide side)
+	public static Modus readFromNBT(CompoundTag nbt, LogicalSide side, HolderLookup.Provider provider)
 	{
 		if(nbt == null)
 			return null;
 		Modus modus;
-		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
+		ResourceLocation name = ResourceLocation.parse(nbt.getString("type"));
 		
 		if(side.isClient() && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.getKey(ClientPlayerData.getModus().getType())))
 			modus = ClientPlayerData.getModus();
@@ -362,7 +388,7 @@ public final class CaptchaDeckHandler
 				return null;
 			}
 		}
-		modus.readFromNBT(nbt);
+		modus.readFromNBT(nbt, provider);
 		return modus;
 	}
 	
@@ -371,19 +397,99 @@ public final class CaptchaDeckHandler
 		return getModus(player) != null;
 	}
 	
+	@Nullable
 	public static Modus getModus(ServerPlayer player)
 	{
-		return PlayerSavedData.getData(player).getModus();
+		Optional<PlayerData> playerData = PlayerData.get(player);
+		if(playerData.isEmpty())
+			return null;
+		return playerData.get().getData(MSAttachments.MODUS_HOLDER).modus;
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
 	{
-		return ItemStack.isSameItemSameTags(stack1, stack2)
+		return ItemStack.isSameItemSameComponents(stack1, stack2)
 				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
 	}
 	
 	private static boolean canPlayerUseModus(ServerPlayer player)
 	{
-		return !player.isSpectator() && ServerEditHandler.getData(player) == null;
+		return !player.isSpectator() && !ServerEditHandler.isInEditmode(player);
+	}
+	
+	private static void setModus(ModusHolder modusHolder, ServerPlayer player, @Nullable Modus modus)
+	{
+		if(modusHolder.modus == modus)
+			return;
+		
+		modusHolder.modus = modus;
+		if(modus != null)
+			modusHolder.givenModus = true;
+		player.connection.send(CaptchaDeckPackets.ModusData.create(modus, player.registryAccess()));
+	}
+	
+	private static void tryGiveStartingModus(ModusHolder modusHolder, ServerPlayer player)
+	{
+		List<ModusType<?>> startingTypes = StartingModusManager.getStartingModusTypes();
+		
+		if(startingTypes.isEmpty())
+			return;
+		
+		ModusType<?> type = startingTypes.get(player.level().random.nextInt(startingTypes.size()));
+		if(type == null)
+		{
+			modusHolder.givenModus = true;
+			return;
+		}
+		
+		Modus modus = type.createServerSide();
+		if(modus == null)
+		{
+			LOGGER.warn("Couldn't create a starting modus type {}.", ModusTypes.REGISTRY.getKey(type));
+			return;
+		}
+		
+		modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
+		setModus(modusHolder, player, modus);
+	}
+	
+	private static ModusHolder getHolder(ServerPlayer player)
+	{
+		PlayerData data = PlayerData.get(player).orElseThrow();
+		return data.getData(MSAttachments.MODUS_HOLDER);
+	}
+	
+	public static class ModusHolder implements INBTSerializable<CompoundTag>
+	{
+		private boolean givenModus = false;
+		@Nullable
+		private Modus modus = null;
+		
+		@Override
+		public CompoundTag serializeNBT(HolderLookup.Provider provider)
+		{
+			CompoundTag nbt = new CompoundTag();
+			
+			CompoundTag modusTag = writeToNBT(modus, provider);
+			if(modusTag != null)
+				nbt.put("modus", modusTag);
+			else
+				nbt.putBoolean("given_modus", givenModus);
+			
+			return nbt;
+		}
+		
+		@Override
+		public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
+		{
+			if (nbt.contains("modus"))
+			{
+				this.modus = readFromNBT(nbt.getCompound("modus"), LogicalSide.SERVER, provider);
+				givenModus = true;
+			}
+			else
+				givenModus = nbt.getBoolean("given_modus");
+		}
 	}
 }
+

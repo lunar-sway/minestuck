@@ -1,9 +1,9 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.CruxiteDowelBlock;
-import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.item.AlchemizedColored;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -31,13 +31,13 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	@Override
 	public int getMaxStackSize(ItemStack stack)
 	{
-		if(stack.hasTag())
+		if(AlchemyHelper.hasDecodedItem(stack))
 			return 16;
 		else return 64;
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		if(AlchemyHelper.hasDecodedItem(stack))
 		{

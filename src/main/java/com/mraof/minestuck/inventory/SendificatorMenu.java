@@ -5,6 +5,7 @@ import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -28,7 +29,7 @@ public class SendificatorMenu extends MachineContainerMenu
 	private final DataSlot fuelHolder;
 	private final OptionalPosHolder destinationHolder;
 	
-	public static Consumer<FriendlyByteBuf> makeExtraDataWriter(BlockPos position, @Nullable BlockPos destination)
+	public static Consumer<RegistryFriendlyByteBuf> makeExtraDataWriter(BlockPos position, @Nullable BlockPos destination)
 	{
 		return buffer -> {
 			buffer.writeBlockPos(position);

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_helmet"
+  },
+  "input2": {
+    "item": "minecraft:seagrass"
+  },
+  "mode": "or",
+  "output": "minecraft:turtle_helmet"
+}

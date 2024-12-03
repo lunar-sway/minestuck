@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
-import com.mraof.minestuck.network.SummonerPacket;
+import com.mraof.minestuck.network.block.SummonerSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -25,7 +25,7 @@ public class SummonerScreen extends Screen
 	public static final String DONE_MESSAGE = "minestuck.summoner.done";
 	public static final String UNTRIGGERABLE_MESSAGE = "minestuck.summoner.untriggerable";
 	public static final String TRIGGERABLE_MESSAGE = "minestuck.summoner.triggerable";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
@@ -100,7 +100,7 @@ public class SummonerScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		guiGraphics.blit(GUI_BACKGROUND, (this.width - GUI_WIDTH / 2), (this.height - GUI_HEIGHT) / 2, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(GUI_BACKGROUND, (this.width - GUI_WIDTH) / 2, (this.height - GUI_HEIGHT) / 2, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 	}
 	
 	@Override
@@ -116,7 +116,7 @@ public class SummonerScreen extends Screen
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
 		if(attemptedEntityType.isPresent())
 		{
-			PacketDistributor.SERVER.noArg().send(new SummonerPacket(isUntriggerable, summonRange, be.getBlockPos(), attemptedEntityType.get()));
+			PacketDistributor.sendToServer(new SummonerSettingsPacket(isUntriggerable, summonRange, attemptedEntityType.get(), be.getBlockPos()));
 			onClose();
 		} else
 		{

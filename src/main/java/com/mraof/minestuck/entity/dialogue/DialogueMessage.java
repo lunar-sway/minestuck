@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -60,13 +59,13 @@ public record DialogueMessage(String key, List<Argument> arguments)
 				.map(Title::asTextComponent)
 				.orElseGet(() -> Component.literal("Player title"))),
 		LAND_CLASS((npc, player) -> homeLandTitle(npc)
-				.map(title -> title.getHeroClass().asTextComponent())
+				.map(title -> title.heroClass().asTextComponent())
 				.orElseGet(() -> Component.literal("Player class"))),
 		LAND_ASPECT((npc, player) -> homeLandTitle(npc)
-				.map(title -> title.getHeroAspect().asTextComponent())
+				.map(title -> title.heroAspect().asTextComponent())
 				.orElseGet(() -> Component.literal("Player aspect"))),
 		LAND_DENIZEN((npc, player) -> homeLandTitle(npc)
-				.map(title -> Component.translatable("denizen." + title.getHeroAspect().getTranslationKey()))
+				.map(title -> Component.translatable("denizen." + title.heroAspect().getTranslationKey()))
 				.orElseGet(() -> Component.literal("Denizen"))),
 		ENTITY_SOUND((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".sound")),
 		ENTITY_SOUND_2((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".sound.2")),
@@ -74,11 +73,9 @@ public record DialogueMessage(String key, List<Argument> arguments)
 		ENTITY_TYPES((npc, player) -> Component.translatable(npc.getType().getDescriptionId() + ".plural")),
 		PLAYER_TITLE((npc, player) -> {
 			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
-			Title playerTitle = PlayerSavedData.getData(identifier, player.server).getTitle();
-			if(playerTitle != null)
-				return playerTitle.asTextComponent();
-			else
-				return player.getName();
+			return Title.getTitle(identifier, player.server)
+					.map(Title::asTextComponent)
+					.orElseGet(player::getName);
 		}),
 		/**
 		 * Becomes the name of the item that was matched by a {@link com.mraof.minestuck.entity.dialogue.condition.Condition.ItemTagMatch}.
@@ -124,6 +121,6 @@ public record DialogueMessage(String key, List<Argument> arguments)
 	private static Optional<Title> homeLandTitle(LivingEntity entity)
 	{
 		return homeLandClientPlayer(entity)
-				.flatMap(clientPlayer -> Optional.ofNullable(PlayerSavedData.getData(clientPlayer, Objects.requireNonNull(entity.getServer())).getTitle()));
+				.flatMap(clientPlayer -> Title.getTitle(clientPlayer, Objects.requireNonNull(entity.getServer())));
 	}
 }

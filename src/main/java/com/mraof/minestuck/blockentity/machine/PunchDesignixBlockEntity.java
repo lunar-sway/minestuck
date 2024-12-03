@@ -11,9 +11,9 @@ import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
@@ -176,7 +177,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			
 			if(AlchemyHelper.isPunchedCard(getCard())) //|| combination. A temporary new captcha card containing captchaItemStack is made
 			{
-				output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(AlchemyHelper.createCard(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level());
+				output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(AlchemyHelper.createCard(captchaItemStack), getCard(), CombinationMode.OR), player.level());
 			} else
 				output = captchaItemStack;
 			
@@ -191,7 +192,16 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	
 	private void effects(boolean success)
 	{
-		WorldEventUtil.dispenserEffect(getLevel(), getBlockPos(), getBlockState().getValue(FACING), success);
+		if(this.level == null)
+			return;
+		
+		this.level.levelEvent(success ? LevelEvent.SOUND_DISPENSER_DISPENSE : LevelEvent.SOUND_DISPENSER_FAIL, this.worldPosition, 0);
+		if(success)
+		{
+			Direction direction = getBlockState().getValue(FACING);
+			int i = direction.getStepX() + 1 + (direction.getStepZ() + 1) * 3;
+			this.level.levelEvent(LevelEvent.PARTICLES_SHOOT_SMOKE, this.worldPosition, i);
+		}
 	}
 	
 	private boolean isUsable(BlockState state)
@@ -231,29 +241,29 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		broken = nbt.getBoolean("broken");
-		setCard(ItemStack.of(nbt.getCompound("card")));
+		setCard(ItemStack.parseOptional(pRegistries, nbt.getCompound("card")));
 		
 		if(nbt.contains("captcha"))
 			this.captcha = nbt.getString("captcha");
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		compound.putBoolean("broken", this.broken);
-		compound.put("card", getCard().save(new CompoundTag()));
+		compound.put("card", getCard().saveOptional(provider));
 		compound.putString("captcha", this.captcha);
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

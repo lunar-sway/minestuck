@@ -3,19 +3,35 @@
     "animation": {
       "emotion": "happy"
     },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.rock_cycle.7",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.rock_cycle.7.insult",
-        "next_dialogue": "minestuck:consort/rock_cycle/7.sad"
+        "next_dialogue": "minestuck:consort/rock_cycle/7.sad",
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.rock_cycle.7.intrigued",
-        "next_dialogue": "minestuck:consort/rock_cycle/7.hypocrite"
+        "next_dialogue": "minestuck:consort/rock_cycle/7.hypocrite",
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.rock_cycle.7.love_rocks",
-        "next_dialogue": "minestuck:consort/rock_cycle/7.agree"
+        "next_dialogue": "minestuck:consort/rock_cycle/7.agree",
+        "triggers": []
       }
     ]
   }

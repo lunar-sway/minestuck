@@ -1,20 +1,20 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.TotemLatheBlock;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
-import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -356,12 +356,12 @@ public class TotemLatheBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		broken = nbt.getBoolean("broken");
-		card1 = ItemStack.of(nbt.getCompound("card1"));
-		card2 = ItemStack.of(nbt.getCompound("card2"));
+		card1 = ItemStack.parseOptional(pRegistries, nbt.getCompound("card1"));
+		card2 = ItemStack.parseOptional(pRegistries, nbt.getCompound("card2"));
 		isProcessing = nbt.getBoolean("isProcessing");
 		if(card1.isEmpty() && !card2.isEmpty())
 		{
@@ -371,12 +371,12 @@ public class TotemLatheBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		compound.putBoolean("broken",broken);
-		compound.put("card1", card1.save(new CompoundTag()));
-		compound.put("card2", card2.save(new CompoundTag()));
+		compound.put("card1", card1.saveOptional(provider));
+		compound.put("card2", card2.saveOptional(provider));
 		compound.putBoolean("isProcessing", isProcessing);
 	}
 	
@@ -419,21 +419,15 @@ public class TotemLatheBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override
 	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
-	}
-	
-	private void effects(boolean success)
-	{
-		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
-		WorldEventUtil.dispenserEffect(getLevel(), pos, getFacing(), success);
 	}
 	
 	public boolean isProcessing()

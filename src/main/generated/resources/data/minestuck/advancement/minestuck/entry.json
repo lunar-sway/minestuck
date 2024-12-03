@@ -1,0 +1,29 @@
+{
+  "parent": "minestuck:minestuck/connect",
+  "criteria": {
+    "use_artifact": {
+      "trigger": "minestuck:cruxite_artifact"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.entry.description"
+    },
+    "icon": {
+      "components": {
+        "minestuck:color": 10542335
+      },
+      "count": 1,
+      "id": "minestuck:cruxite_apple"
+    },
+    "title": {
+      "translate": "advancements.minestuck.entry.title"
+    }
+  },
+  "requirements": [
+    [
+      "use_artifact"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

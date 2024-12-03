@@ -1,16 +1,15 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
-import com.mraof.minestuck.network.EditmodeDragPacket;
+import com.mraof.minestuck.network.editmode.EditmodeDragPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.Camera;
@@ -21,6 +20,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -34,35 +34,31 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 
 /** Class for handling the click-and-drag editmode tools (Revise and Recycle) on the client-side.
  * (Based on code from the Minestuck Universe addon, with Cibernet's permission.)
- * @see EditmodeDragPacket for the tool's server-sided block-placing code.
+ * @see EditmodeDragPackets for the tool's server-sided block-placing code.
  * @see ServerEditHandler for server-sided code that handles the sburb-cursor.
  * @author Caldw3ll, Cibernet
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientEditToolDrag
 {
 	
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event)
+	public static void onClientTick(ClientTickEvent.Pre event)
 	{
-		if(event.phase != TickEvent.Phase.START)
-			return;
-		
 		Minecraft mc = Minecraft.getInstance();
 		Player player = mc.player;
 		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
 			return;
 		
-		IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		ClientEditToolDrag.doRecycleCode(mc, player, cap);
 		ClientEditToolDrag.doReviseCode(mc, player, cap);
@@ -80,7 +76,7 @@ public class ClientEditToolDrag
 	 */
 	private static void cancelDrag(IEditTools cap)
 	{
-		PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Reset());
+		PacketDistributor.sendToServer(new EditmodeDragPackets.Reset());
 		cap.resetDragTools();
 	}
 	
@@ -115,7 +111,7 @@ public class ClientEditToolDrag
 	private static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
 	{
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
-		PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
+		PacketDistributor.sendToServer(new EditmodeDragPackets.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
 	}
 	
 	/**
@@ -128,9 +124,9 @@ public class ClientEditToolDrag
 	private static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
 		if(targetTool == IEditTools.ToolMode.REVISE)
-			PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			PacketDistributor.sendToServer(new EditmodeDragPackets.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		else
-			PacketDistributor.SERVER.noArg().send(new EditmodeDragPacket.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			PacketDistributor.sendToServer(new EditmodeDragPackets.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		playSoundAndSetParticles(player, targetTool == IEditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
 	
 		cap.resetDragTools();
@@ -348,7 +344,7 @@ public class ClientEditToolDrag
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = player.getAttribute(NeoForgeMod.BLOCK_REACH.value()).getValue();
+		double reachDistance = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 	}
@@ -369,7 +365,7 @@ public class ClientEditToolDrag
 			Player player = mc.player;
 			Camera info = event.getCamera();
 			
-			IEditTools cap = player.getData(MSCapabilities.EDIT_TOOLS_ATTACHMENT.get());
+			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			double d1 = info.getPosition().x;
 			double d2 = info.getPosition().y;
@@ -392,9 +388,7 @@ public class ClientEditToolDrag
 					RenderSystem.depthMask(false);    //GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 					
 					//Create new MultiBufferSource because RenderLevelStageEvent doesn't come with one.
-					Tesselator tesselator = Tesselator.getInstance();
-					BufferBuilder bufferBuilder = tesselator.getBuilder();
-					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(bufferBuilder);
+					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(1536));
 					
 					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox), 0, 0, 0, cap.getToolMode() == IEditTools.ToolMode.RECYCLE ? 1 : 0, cap.getToolMode() == IEditTools.ToolMode.REVISE ? 1 : 0, 0, 1);
 					renderTypeBuffer.endBatch();
@@ -418,8 +412,12 @@ public class ClientEditToolDrag
 			dX /= length;
 			dY /= length;
 			dZ /= length;
-			bufferIn.vertex(matrix4f, (float)(startX + xIn), (float)(startY + yIn), (float)(startZ + zIn)).color(red, green, blue, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
-			bufferIn.vertex(matrix4f, (float)(endX + xIn), (float)(endY + yIn), (float)(endZ + zIn)).color(red, green, blue, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
+			bufferIn.addVertex(matrix4f, (float)(startX + xIn), (float)(startY + yIn), (float)(startZ + zIn))
+					.setColor(red, green, blue, alpha)
+					.setNormal(pose, dX, dY, dZ);
+			bufferIn.addVertex(matrix4f, (float)(endX + xIn), (float)(endY + yIn), (float)(endZ + zIn))
+					.setColor(red, green, blue, alpha)
+					.setNormal(pose, dX, dY, dZ);
 		});
 	}
 }

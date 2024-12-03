@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "minestuck:generic_object"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "ppp",
+    " s "
+  ],
+  "result": {
+    "count": 3,
+    "id": "minestuck:perfectly_generic_sign"
+  }
+}

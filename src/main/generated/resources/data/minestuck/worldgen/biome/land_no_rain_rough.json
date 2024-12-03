@@ -13,12 +13,12 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "consort": [],
     "creature": [],
+    "minestuck:consort": [],
+    "minestuck:underling": [],
     "misc": [],
     "monster": [],
     "underground_water_creature": [],
-    "underling": [],
     "water_ambient": [],
     "water_creature": []
   },

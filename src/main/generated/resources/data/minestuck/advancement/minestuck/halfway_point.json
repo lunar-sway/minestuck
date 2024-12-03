@@ -1,0 +1,34 @@
+{
+  "parent": "minestuck:minestuck/double_digits",
+  "criteria": {
+    "reach_rung": {
+      "conditions": {
+        "rung": {
+          "min": 25
+        }
+      },
+      "trigger": "minestuck:echeladder"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.halfway_point.description"
+    },
+    "icon": {
+      "components": {
+        "minestuck:value": 1000
+      },
+      "count": 1,
+      "id": "minestuck:boondollars"
+    },
+    "title": {
+      "translate": "advancements.minestuck.halfway_point.title"
+    }
+  },
+  "requirements": [
+    [
+      "reach_rung"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

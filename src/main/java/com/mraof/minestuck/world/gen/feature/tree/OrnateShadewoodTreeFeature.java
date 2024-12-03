@@ -15,10 +15,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  */
 public class OrnateShadewoodTreeFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation ORNATE_SHADEWOOD_TREE0 = new ResourceLocation(Minestuck.MOD_ID, "ornate_shadewood_tree0");
-	private static final ResourceLocation ORNATE_SHADEWOOD_TREE1 = new ResourceLocation(Minestuck.MOD_ID, "ornate_shadewood_tree1");
-	private static final ResourceLocation ORNATE_SHADEWOOD_TREE2 = new ResourceLocation(Minestuck.MOD_ID, "ornate_shadewood_tree2");
-	private static final ResourceLocation ORNATE_SHADEWOOD_TREE3 = new ResourceLocation(Minestuck.MOD_ID, "ornate_shadewood_tree3");
+	private static final ResourceLocation ORNATE_SHADEWOOD_TREE0 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "ornate_shadewood_tree0");
+	private static final ResourceLocation ORNATE_SHADEWOOD_TREE1 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "ornate_shadewood_tree1");
+	private static final ResourceLocation ORNATE_SHADEWOOD_TREE2 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "ornate_shadewood_tree2");
+	private static final ResourceLocation ORNATE_SHADEWOOD_TREE3 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "ornate_shadewood_tree3");
 	
 	public OrnateShadewoodTreeFeature(Codec<NoneFeatureConfiguration> codec)
 	{

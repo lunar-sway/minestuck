@@ -3,5 +3,7 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:turtle"
   },
-  "dialogue": "minestuck:consort/wwizard"
+  "dialogue": "minestuck:consort/wwizard",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }
