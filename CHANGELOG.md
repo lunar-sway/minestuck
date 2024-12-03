@@ -12,9 +12,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Knitting needle crafting recipe now produces one item instead of two
 
+### Fixed
+
+- Signs now mineable with axe
+
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1
+- Cibernet, Dweblenod, kirderf1, glubtier
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
