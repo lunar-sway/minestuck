@@ -2,7 +2,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -158,7 +158,7 @@ public class TreeModus extends Modus
 		{
 			size--;
 			markDirty();
-			stack = AlchemyHelper.createCard(stack);
+			stack = CaptchaCardItem.createCardWithItem(stack, player.server);
 		}
 		if(id == 0)
 			node = null;

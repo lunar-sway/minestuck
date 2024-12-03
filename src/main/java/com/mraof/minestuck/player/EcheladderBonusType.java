@@ -1,5 +1,12 @@
 package com.mraof.minestuck.player;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.event.AlchemyEvent;
+import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+
 /**
  * <p>
  * This enum list the bonuses to the echeladder applied to the player when performing specific actions.
@@ -9,7 +16,7 @@ package com.mraof.minestuck.player;
  * the alchemy ones refer to the first time you alchemize something of a certain value.
  * </p>
  */
-
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public enum EcheladderBonusType
 {
 	IMP(10),
@@ -46,5 +53,22 @@ public enum EcheladderBonusType
 				return c;
 		}
 		return null;
+	}
+	
+	@SubscribeEvent
+	private static void onAlchemizedItem(AlchemyEvent event)
+	{
+		Echeladder e = Echeladder.get(event.getPlayer(), event.getLevel());
+		
+		if(!(event.getItemResult().getItem() instanceof CruxiteArtifactItem))
+		{
+			e.checkBonus(ALCHEMY_1);
+			GristSet cost = event.getCost();
+			double value = cost.getValue();
+			if(value >= 50)
+				e.checkBonus(ALCHEMY_2);
+			if(value >= 500)
+				e.checkBonus(ALCHEMY_3);
+		}
 	}
 }

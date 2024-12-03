@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Knitting needle crafting recipe now produces one item instead of two
 
+### Fixed
+
+- Non-color data will now be preserved on dowels going through a totem lathe 
+
 ### Contributors for this release
 
 - Cibernet, Dweblenod, kirderf1

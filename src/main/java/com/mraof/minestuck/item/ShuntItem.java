@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,9 +19,10 @@ public class ShuntItem extends Item
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
-		if(AlchemyHelper.hasDecodedItem(stack))
+		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
+		if(encodedItemComponent != null)
 		{
-			ItemStack content = AlchemyHelper.getDecodedItem(stack);
+			ItemStack content = encodedItemComponent.asItemStack();
 			
 			if (!content.isEmpty())
 				tooltip.add(Component.literal("(").append(content.getHoverName()).append(")"));
