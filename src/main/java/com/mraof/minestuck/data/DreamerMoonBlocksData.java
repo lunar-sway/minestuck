@@ -5,7 +5,6 @@ import com.mraof.minestuck.data.tag.MinestuckBlockTagsProvider;
 import net.minecraft.data.recipes.RecipeOutput;
 
 import static com.mraof.minestuck.block.DreamerMoonBlocks.*;
-import static com.mraof.minestuck.data.MSBlockStateProvider.texture;
 import static net.minecraft.tags.BlockTags.*;
 
 public class DreamerMoonBlocksData
