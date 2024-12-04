@@ -35,6 +35,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	{
 		SkaiaBlocksData.addModels(this);
 		AspectTreeBlocksData.addModels(this);
+		DreamerMoonBlocksData.addModels(this);
 		
 		simpleBlockWithItem(MSBlocks.STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.NETHERRACK_CRUXITE_ORE);

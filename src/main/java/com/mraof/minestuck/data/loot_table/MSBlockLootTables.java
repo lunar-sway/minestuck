@@ -3,6 +3,7 @@ package com.mraof.minestuck.data.loot_table;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
+import com.mraof.minestuck.data.DreamerMoonBlocksData;
 import com.mraof.minestuck.data.SkaiaBlocksData;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.MSItemComponents;
@@ -51,6 +52,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	{
 		SkaiaBlocksData.addLootTables(this);
 		AspectTreeBlocksData.addLootTables(this);
+		DreamerMoonBlocksData.addLootTables(this);
 		
 		add(CARVED_SIGN.get(), block ->
 				createSingleItemTable(MSItems.CARVED_SIGN.get()));
