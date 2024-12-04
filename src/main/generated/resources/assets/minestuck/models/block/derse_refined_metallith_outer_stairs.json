@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/derse_refined_metallith",
+    "side": "minestuck:block/derse_refined_metallith",
+    "top": "minestuck:block/derse_refined_metallith"
+  }
+}

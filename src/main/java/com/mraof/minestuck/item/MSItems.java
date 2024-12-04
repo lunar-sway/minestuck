@@ -561,6 +561,13 @@ public class MSItems
 	public static final DeferredItem<Item> UNKNOWABLE_EGG = REGISTER.register("unknowable_egg", () -> new UnknowableEggItem(new Item.Properties().stacksTo(16).food(MSFoods.UNKNOWABLE_EGG)));
 	public static final DeferredItem<Item> BREADCRUMBS = REGISTER.register("breadcrumbs", () -> new Item(new Item.Properties().food(MSFoods.BREADCRUMBS)));
 	
+	//Dreamer Moon Items
+	public static final DeferredItem<Item> PROSPIT_RAW_ORE = REGISTER.register("prospit_raw_ore", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> PROSPIT_INGOT = REGISTER.register("prospit_ingot", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> PROSPIT_NUGGET = REGISTER.register("prospit_nugget", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> DERSE_RAW_ORE = REGISTER.register("derse_raw_ore", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> DERSE_INGOT = REGISTER.register("derse_ingot", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> DERSE_NUGGET = REGISTER.register("derse_nugget", () -> new Item(new Item.Properties()));
 	
 	//Other Land Items
 	public static final DeferredItem<Item> GOLDEN_GRASSHOPPER = REGISTER.register("golden_grasshopper", () -> new Item(new Item.Properties()));

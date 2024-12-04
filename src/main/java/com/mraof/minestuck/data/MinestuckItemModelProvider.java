@@ -603,6 +603,15 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		
 		simpleItem(MSItems.PLUSH_MUTATED_CAT);
 		
+		//Dreamer moon items
+		simpleItem(MSItems.PROSPIT_RAW_ORE);
+		simpleItem(MSItems.PROSPIT_INGOT);
+		simpleItem(MSItems.PROSPIT_NUGGET);
+		
+		simpleItem(MSItems.DERSE_RAW_ORE);
+		simpleItem(MSItems.DERSE_INGOT);
+		simpleItem(MSItems.DERSE_NUGGET);
+		
 		//Incredibly Useful Items
 		handheldItem(MSItems.URANIUM_POWERED_STICK);
 		simpleItem(MSItems.IRON_BOAT);

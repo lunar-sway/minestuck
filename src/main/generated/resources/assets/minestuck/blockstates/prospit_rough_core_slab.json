@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/prospit_rough_core_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/prospit_rough_core"
+    },
+    "type=top": {
+      "model": "minestuck:block/prospit_rough_core_slab_top"
+    }
+  }
+}
