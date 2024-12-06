@@ -39,7 +39,6 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -110,22 +109,21 @@ public class ClientProxy
 		//ender fluid has non-transparent texture
 		
 		ItemPropertyFunction encoded = (stack, level, holder, seed) -> stack.has(MSItemComponents.ENCODED_ITEM) ? 1 : 0;
-		ResourceLocation contentName = Minestuck.id("content");
 		
-		ItemProperties.register(MSItems.CRUXITE_DOWEL.get(), contentName, encoded);
-		ItemProperties.register(MSItems.SHUNT.get(), contentName, encoded);
+		ItemProperties.register(MSItems.CRUXITE_DOWEL.get(), Minestuck.id("content"), encoded);
+		ItemProperties.register(MSItems.SHUNT.get(), Minestuck.id("content"), encoded);
 		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), Minestuck.id("punched"), encoded);
-		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), contentName, (stack, level, holder, seed) -> stack.has(MSItemComponents.CARD_STORED_ITEM) ? 1 : 0);
-		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> stack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).isGhostItem() ? 1 : 0);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), Minestuck.id("content"), (stack, level, holder, seed) -> stack.has(MSItemComponents.CARD_STORED_ITEM) ? 1 : 0);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), Minestuck.id("ghost"), (stack, level, holder, seed) -> stack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).isGhostItem() ? 1 : 0);
 		
-		ItemProperties.register(MSItems.BOONDOLLARS.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
-		ItemProperties.register(MSItems.FROG.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> stack.has(MSItemComponents.FROG_TRAITS) ? stack.get(MSItemComponents.FROG_TRAITS).variant().orElse(FrogEntity.FrogVariants.DEFAULT).ordinal() : FrogEntity.FrogVariants.DEFAULT.ordinal());
-		ItemProperties.register(MSItems.STONE_TABLET.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletTextComponent.hasText(stack) ? 1 : 0);
-		ItemProperties.register(MSItems.MUSIC_SWORD.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
-		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.BOONDOLLARS.get(), Minestuck.id("count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
+		ItemProperties.register(MSItems.FROG.get(), Minestuck.id("type"), (stack, level, holder, seed) -> stack.has(MSItemComponents.FROG_TRAITS) ? stack.get(MSItemComponents.FROG_TRAITS).variant().orElse(FrogEntity.FrogVariants.DEFAULT).ordinal() : FrogEntity.FrogVariants.DEFAULT.ordinal());
+		ItemProperties.register(MSItems.STONE_TABLET.get(), Minestuck.id("carved"), (stack, level, holder, seed) -> StoneTabletTextComponent.hasText(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.MUSIC_SWORD.get(), Minestuck.id("has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), Minestuck.id("has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		
-		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "angle"), new CompassItemPropertyFunction((level, stack, entity) -> stack.get(MSItemComponents.TARGET_LOCATION)));
-		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "powered"), (stack, level, entity, seed) -> StructureScannerItem.isPowered(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), Minestuck.id("angle"), new CompassItemPropertyFunction((level, stack, entity) -> stack.get(MSItemComponents.TARGET_LOCATION)));
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), Minestuck.id("powered"), (stack, level, entity, seed) -> StructureScannerItem.isPowered(stack) ? 1 : 0);
 	}
 	
 	@SubscribeEvent
