@@ -1,12 +1,15 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -34,7 +37,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
-	private final CombinerContainer combinerInventory = new CombinerContainer.ItemHandlerWrapper(itemHandler, CombinationMode.OR);
 	
 	public MiniPunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -72,9 +74,8 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	private boolean contentsValid()
 	{
 		boolean bothHaveItems = !itemHandler.getStackInSlot(0).isEmpty() && !itemHandler.getStackInSlot(1).isEmpty();
-		boolean bothAreReadable = AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(0)) && (AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(1)) || AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(1)).isEmpty());
 		
-		if(bothHaveItems && bothAreReadable)
+		if(bothHaveItems)
 		{
 			ItemStack output = createResult();
 			if(output.isEmpty())
@@ -96,10 +97,14 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	
 	private void processContents()
 	{
+		ItemStack captchaInput = itemHandler.getStackInSlot(0);
+		boolean shouldConsumeCaptchaInput = !(captchaInput.is(MSItems.CAPTCHA_CARD)
+				&& (captchaInput.has(MSItemComponents.ENCODED_ITEM) || captchaInput.has(MSItemComponents.CARD_STORED_ITEM)));
+		
 		if(!itemHandler.getStackInSlot(2).isEmpty())
 		{
 			itemHandler.extractItem(1, 1, false);
-			if(!AlchemyHelper.hasDecodedItem(itemHandler.getStackInSlot(0)))
+			if(shouldConsumeCaptchaInput)
 				itemHandler.extractItem(0, 1, false);
 			itemHandler.extractItem(2, -1, false);
 			return;
@@ -108,22 +113,36 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		ItemStack outputItem = createResult();
 		
 		itemHandler.setStackInSlot(2, outputItem);
-		if(!AlchemyHelper.hasDecodedItem(itemHandler.getStackInSlot(0)))
+		if(shouldConsumeCaptchaInput)
 			itemHandler.extractItem(0, 1, false);
 		itemHandler.extractItem(1, 1, false);
 	}
 	
 	private ItemStack createResult()
 	{
-		ItemStack output = AlchemyHelper.getDecodedItemDesignix(itemHandler.getStackInSlot(0));
-		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(itemHandler.getStackInSlot(1)))
-		{
-			output = CombinationRecipe.findResult(combinerInventory, level);
-		}
+		ItemStack output;
 		
-		if(!output.isEmpty())
-			return AlchemyHelper.createPunchedCard(output);
-		else return ItemStack.EMPTY;
+		ItemStack captchaInput = itemHandler.getStackInSlot(0);
+		EncodedItemComponent captchaPunchedInput = captchaInput.get(MSItemComponents.ENCODED_ITEM);
+		CardStoredItemComponent captchaStoredInput = captchaInput.get(MSItemComponents.CARD_STORED_ITEM);
+		if (captchaInput.is(MSItems.CAPTCHA_CARD) && captchaPunchedInput != null)
+			output = captchaPunchedInput.asItemStack();
+		else if (captchaInput.is(MSItems.CAPTCHA_CARD) && captchaStoredInput != null)
+		{
+			if(!captchaInput.has(MSItemComponents.CAPTCHA_CODE))
+				return ItemStack.EMPTY;
+			output = captchaStoredInput.storedStack().copy();
+		} else
+			output = captchaInput.copy();
+		
+		EncodedItemComponent punchedInput = itemHandler.getStackInSlot(1).get(MSItemComponents.ENCODED_ITEM);
+		if(punchedInput != null)
+			output = CombinationRecipe.findResult(new CombinationInput(output, punchedInput.asItemStack(), CombinationMode.OR), level);
+		
+		if(output.isEmpty())
+			return ItemStack.EMPTY;
+		
+		return CaptchaCardItem.createPunchedCard(output.getItem());
 	}
 	
 	@Override

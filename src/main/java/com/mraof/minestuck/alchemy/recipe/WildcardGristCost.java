@@ -56,6 +56,7 @@ public final class WildcardGristCost implements GristCostRecipe
 		return Objects.requireNonNullElseGet(this.priority, () -> GristCostRecipe.defaultPriority(this.ingredient));
 	}
 	
+	@Nullable
 	@Override
 	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown)
 	{
