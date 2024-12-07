@@ -10,8 +10,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -93,7 +95,23 @@ public class CaptchaCardItem extends Item
 		}
 	}
 	
-	private Component makeTooltipInfo(Component info)
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected)
+	{
+		if(!(level instanceof ServerLevel serverLevel))
+			return;
+		CaptchaCodeComponent existingCode = stack.get(MSItemComponents.CAPTCHA_CODE);
+		if(existingCode == null || existingCode.hasRefreshed())
+			return;
+		
+		CardStoredItemComponent storedItem = stack.get(MSItemComponents.CARD_STORED_ITEM);
+		if(storedItem != null)
+		{
+			stack.set(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.createFor(storedItem.storedStack(), serverLevel.getServer()));
+		}
+	}
+	
+	private static Component makeTooltipInfo(Component info)
 	{
 		return Component.literal("(").append(info).append(")").withStyle(ChatFormatting.GRAY);
 	}
