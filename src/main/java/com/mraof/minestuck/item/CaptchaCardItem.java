@@ -100,23 +100,22 @@ public class CaptchaCardItem extends Item
 	
 	public static ItemStack createCardWithItem(ItemStack storedStack, MinecraftServer mcServer)
 	{
-		ItemStack cardStack = new ItemStack(MSItems.CAPTCHA_CARD.get());
-		cardStack.set(MSItemComponents.CARD_STORED_ITEM, new CardStoredItemComponent(storedStack, false));
-		if(storedStack.is(MSTags.Items.UNREADABLE))
-			cardStack.remove(MSItemComponents.CAPTCHA_CODE);
-		else
-			cardStack.set(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.createFor(storedStack, mcServer));
-		return cardStack;
+		return createCardWithStorage(new CardStoredItemComponent(storedStack, false), mcServer);
 	}
 	
 	public static ItemStack createGhostCard(ItemStack ghostStack, MinecraftServer mcServer)
 	{
+		return createCardWithStorage(new CardStoredItemComponent(ghostStack, true), mcServer);
+	}
+	
+	private static ItemStack createCardWithStorage(CardStoredItemComponent component, MinecraftServer mcServer)
+	{
 		ItemStack cardStack = new ItemStack(MSItems.CAPTCHA_CARD.get());
-		cardStack.set(MSItemComponents.CARD_STORED_ITEM, new CardStoredItemComponent(ghostStack, true));
-		if(ghostStack.is(MSTags.Items.UNREADABLE))
+		cardStack.set(MSItemComponents.CARD_STORED_ITEM, component);
+		if(component.storedStack().is(MSTags.Items.UNREADABLE))
 			cardStack.remove(MSItemComponents.CAPTCHA_CODE);
 		else
-			cardStack.set(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.createFor(ghostStack, mcServer));
+			cardStack.set(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.createFor(component.storedStack(), mcServer));
 		return cardStack;
 	}
 	
