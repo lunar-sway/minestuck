@@ -8,7 +8,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.network.block.TriggerAlchemiterPacket;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +18,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class AlchemiterScreen extends Screen
+public final class AlchemiterScreen extends Screen
 {
 	public static final String TITLE = "minestuck.alchemiter";
 	
@@ -35,33 +34,35 @@ public class AlchemiterScreen extends Screen
 		itemQuantity = 1;
 	}
 	
-	public AlchemiterBlockEntity getAlchemiter() {
+	public AlchemiterBlockEntity getAlchemiter()
+	{
 		return alchemiter;
 	}
 	
 	@Override
 	protected void init()
 	{
-		Button alchemize = new ExtendedButton((width - 100) / 2, (height - guiHeight) / 2 + 110, 100, 20, Component.literal("ALCHEMIZE"), button -> alchemize());
-		addRenderableWidget(alchemize);
+		int xOffset = (width - guiWidth) / 2;
+		int yOffset = (height - guiHeight) / 2;
+		addRenderableWidget(new ExtendedButton(xOffset + 29, yOffset + 110, 100, 20, Component.literal("ALCHEMIZE"), button -> alchemize()));
 		
 		GristSet cost = alchemiter.getGristCost(1);
 		//don't add the buttons if the item is free or unalchemizeable
 		if(cost != null && !cost.isEmpty())
 		{
-			Button hundredsUp = new ExtendedButton((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 10, 18, 18, Component.literal("^"), button -> changeAmount(100));
-			Button tensUp = new ExtendedButton((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 10, 18, 18, Component.literal("^"), button -> changeAmount(10));
-			Button onesUp = new ExtendedButton((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 10, 18, 18, Component.literal("^"), button -> changeAmount(1));
-			Button hundredsDown = new ExtendedButton((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 74, 18, 18, Component.literal("v"), button -> changeAmount(-100));
-			Button tensDown = new ExtendedButton((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 74, 18, 18, Component.literal("v"), button -> changeAmount(-10));
-			Button onesDown = new ExtendedButton((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 74, 18, 18, Component.literal("v"), button -> changeAmount(-1));
+			addRenderableWidget(new ExtendedButton(xOffset + 10, yOffset + 10, 18, 18,
+					Component.literal("^"), button -> changeAmount(100)));
+			addRenderableWidget(new ExtendedButton(xOffset + 31, yOffset + 10, 18, 18,
+					Component.literal("^"), button -> changeAmount(10)));
+			addRenderableWidget(new ExtendedButton(xOffset + 52, yOffset + 10, 18, 18,
+					Component.literal("^"), button -> changeAmount(1)));
 			
-			addRenderableWidget(onesUp);
-			addRenderableWidget(tensUp);
-			addRenderableWidget(hundredsUp);
-			addRenderableWidget(onesDown);
-			addRenderableWidget(tensDown);
-			addRenderableWidget(hundredsDown);
+			addRenderableWidget(new ExtendedButton(xOffset + 10, yOffset + 74, 18, 18,
+					Component.literal("v"), button -> changeAmount(-100)));
+			addRenderableWidget(new ExtendedButton(xOffset + 31, yOffset + 74, 18, 18,
+					Component.literal("v"), button -> changeAmount(-10)));
+			addRenderableWidget(new ExtendedButton(xOffset + 52, yOffset + 74, 18, 18,
+					Component.literal("v"), button -> changeAmount(-1)));
 		}
 	}
 	
@@ -125,14 +126,15 @@ public class AlchemiterScreen extends Screen
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		if(mouseButton == 0	//FIXME Handle wildcard grist costs instead of hardcoding to captcha card
+		float xOffset = (width - guiWidth) / 2F;
+		float yOffset = (height - guiHeight) / 2F;
+		if(mouseButton == 0    //FIXME Handle wildcard grist costs instead of hardcoding to captcha card
 				&& !alchemiter.getDowel().isEmpty() && EncodedItemComponent.getEncodedOrBlank(alchemiter.getDowel()).is(MSItems.CAPTCHA_CARD)
-				&& mouseX >= (width-guiWidth)/2F +80  && mouseX < (width-guiWidth)/2F + 150 && mouseY >= (height-guiHeight)/2F + 8 && mouseY < (height-guiHeight)/2F + 93)
+				&& xOffset + 80 <= mouseX && mouseX < xOffset + 150 && yOffset + 8 <= mouseY && mouseY < yOffset + 93)
 		{
 			minecraft.pushGuiLayer(new GristSelectorScreen(this.getAlchemiter().getBlockPos()));
 			return true;
 		}
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
-	
 }
