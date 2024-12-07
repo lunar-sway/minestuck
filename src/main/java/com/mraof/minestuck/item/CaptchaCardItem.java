@@ -1,9 +1,11 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.item.components.CaptchaCodeComponent;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
@@ -25,7 +27,7 @@ public class CaptchaCardItem extends Item
 {
 	public CaptchaCardItem(Properties properties)
 	{
-		super(properties);
+		super(properties.component(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.ZERO));
 	}
 	
 	@Override
@@ -74,21 +76,16 @@ public class CaptchaCardItem extends Item
 				tooltipComponents.add(makeTooltipInfo(cardStoredItemComponent.isGhostItem()
 						? contentName : Component.literal(content.getCount() + "x").append(contentName)));
 				
+				//TODO consider obfuscated characters for unreadable captcha
+				CaptchaCodeComponent captchaCode = stack.get(MSItemComponents.CAPTCHA_CODE);
+				if(captchaCode != null)
+					tooltipComponents.add(Component.literal(captchaCode.code()));
+				
 				if(cardStoredItemComponent.isGhostItem())
-				{
-					String captcha = cardStoredItemComponent.code();
-					if(captcha != null)
-						tooltipComponents.add(Component.literal(captcha));
-					
 					tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
-				} else
-				{
-					//TODO consider obfuscated characters for unreadable captcha
-					String captcha = cardStoredItemComponent.code();
-					if(captcha != null)
-						tooltipComponents.add(Component.literal(captcha));
-				}
-			} else tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
+				
+			} else
+				tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
 		} else
 		{
 			tooltipComponents.add(Component.literal(CardCaptchas.EMPTY_CARD_CAPTCHA));
@@ -101,18 +98,26 @@ public class CaptchaCardItem extends Item
 		return Component.literal("(").append(info).append(")").withStyle(ChatFormatting.GRAY);
 	}
 	
-	public static ItemStack createCardWithItem(ItemStack itemIn, MinecraftServer mcServer)
+	public static ItemStack createCardWithItem(ItemStack storedStack, MinecraftServer mcServer)
 	{
-		ItemStack itemOut = new ItemStack(MSItems.CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, false, mcServer));
-		return itemOut;
+		ItemStack cardStack = new ItemStack(MSItems.CAPTCHA_CARD.get());
+		cardStack.set(MSItemComponents.CARD_STORED_ITEM, new CardStoredItemComponent(storedStack, false));
+		if(storedStack.is(MSTags.Items.UNREADABLE))
+			cardStack.remove(MSItemComponents.CAPTCHA_CODE);
+		else
+			cardStack.set(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.createFor(storedStack, mcServer));
+		return cardStack;
 	}
 	
-	public static ItemStack createGhostCard(ItemStack itemIn, MinecraftServer mcServer)
+	public static ItemStack createGhostCard(ItemStack ghostStack, MinecraftServer mcServer)
 	{
-		ItemStack itemOut = new ItemStack(MSItems.CAPTCHA_CARD.get());
-		itemOut.set(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.create(itemIn, true, mcServer));
-		return itemOut;
+		ItemStack cardStack = new ItemStack(MSItems.CAPTCHA_CARD.get());
+		cardStack.set(MSItemComponents.CARD_STORED_ITEM, new CardStoredItemComponent(ghostStack, true));
+		if(ghostStack.is(MSTags.Items.UNREADABLE))
+			cardStack.remove(MSItemComponents.CAPTCHA_CODE);
+		else
+			cardStack.set(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.createFor(ghostStack, mcServer));
+		return cardStack;
 	}
 	
 	public static ItemStack createPunchedCard(Item encodedItem)

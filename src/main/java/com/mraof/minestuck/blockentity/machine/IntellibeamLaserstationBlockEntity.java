@@ -4,6 +4,7 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CaptchaCodeComponent;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -87,8 +88,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			return;
 		}
 		
-		CardStoredItemComponent analyzedCardComponent = this.analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
-		if(analyzedCardComponent.code() != null)
+		if(this.analyzedCard.has(MSItemComponents.CAPTCHA_CODE))
 		{
 			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
 			player.displayClientMessage(Component.translatable(CAPTCHA_DECODED), true);
@@ -100,6 +100,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			return;
 		}
 		
+		CardStoredItemComponent analyzedCardComponent = this.analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
 		MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player, analyzedCardComponent.storedStack());
 		setReadable(analyzedCard, serverLevel.getServer());
 		takeCard(player);
@@ -166,9 +167,9 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void setReadable(ItemStack taggedCard, MinecraftServer mcServer)
 	{
-		CardStoredItemComponent encodedItem = taggedCard.get(MSItemComponents.CARD_STORED_ITEM);
-		if(encodedItem != null)
-			taggedCard.set(MSItemComponents.CARD_STORED_ITEM, encodedItem.readable(mcServer));
+		CardStoredItemComponent storedItem = taggedCard.get(MSItemComponents.CARD_STORED_ITEM);
+		if(storedItem != null)
+			taggedCard.set(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.createFor(storedItem.storedStack(), mcServer));
 	}
 	
 	public void addExperience(Player player)

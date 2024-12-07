@@ -11,7 +11,7 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.CaptchaCodeComponent;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
@@ -157,10 +157,10 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		{
 			if(heldStack.is(MSItems.CAPTCHA_CARD) && !heldStack.has(MSItemComponents.ENCODED_ITEM))
 			{
-				CardStoredItemComponent cardStoredItemComponent = heldStack.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
-				if(cardStoredItemComponent.code() != null)
+				CaptchaCodeComponent captchaCode = heldStack.get(MSItemComponents.CAPTCHA_CODE);
+				if(captchaCode != null)
 				{
-					setCaptcha(cardStoredItemComponent.code());
+					setCaptcha(captchaCode.code());
 					effects(false);
 				} else
 					player.displayClientMessage(Component.translatable(REJECT_CARD), true); //card unreadable

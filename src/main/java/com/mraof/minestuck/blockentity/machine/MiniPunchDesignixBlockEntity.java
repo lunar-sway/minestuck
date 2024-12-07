@@ -129,7 +129,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 			output = captchaPunchedInput.asItemStack();
 		else if (captchaInput.is(MSItems.CAPTCHA_CARD) && captchaStoredInput != null)
 		{
-			if(captchaStoredInput.code() == null)
+			if(!captchaInput.has(MSItemComponents.CAPTCHA_CODE))
 				return ItemStack.EMPTY;
 			output = captchaStoredInput.storedStack().copy();
 		} else
