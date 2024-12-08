@@ -37,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -55,7 +56,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	/**
 	 * 0 = client, 1 = server, 2 = disk burner, 3 = settings
 	 */
-	public HashSet<Integer> installedPrograms = new HashSet<>();
+	private final Set<Integer> installedPrograms = new HashSet<>();
 	public ComputerScreen gui;
 	@Nullable
 	public PlayerIdentifier owner;
@@ -205,6 +206,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		for(int id : installedPrograms)
 			ProgramData.getHandler(id).ifPresent(handler -> handler.onClosed(this));
+	}
+	
+	public Stream<Integer> installedPrograms()
+	{
+		return this.installedPrograms.stream();
 	}
 	
 	@Override

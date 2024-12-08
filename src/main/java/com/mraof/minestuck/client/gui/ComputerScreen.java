@@ -20,19 +20,21 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 //TODO continually check that player is in reach of the computer
 @ParametersAreNonnullByDefault
 public class ComputerScreen extends Screen
 {
-	
 	public static final String TITLE = "minestuck.computer";
 	public static final ResourceLocation guiMain = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb.png");
 	public static final ResourceLocation guiBsod = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/bsod_message.png");
 	
 	public static final int xSize = 176;
 	public static final int ySize = 166;
+	
+	private static final Comparator<Integer> PROGRAM_DISPLAY_ORDER = Comparator.reverseOrder();
 	
 	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
@@ -148,14 +150,14 @@ public class ComputerScreen extends Screen
 		
 		icons.clear();
 		
-		int programCount = be.installedPrograms.size();
-		for(int id : be.installedPrograms.stream().sorted().toList())
+		int programCount = 0;
+		for(int id : be.installedPrograms().sorted(PROGRAM_DISPLAY_ORDER).toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
-					yOffset + 24 + programCount % 5 * 20, id)
+					yOffset + 44 + programCount % 5 * 20, id)
 			));
-			programCount--;
+			programCount++;
 		}
 	}
 	

@@ -164,8 +164,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		be.closeAll();
 		
 		//program disks
-		for(int id : be.installedPrograms)
-			Containers.dropItemStack(level, x, y, z, ProgramData.getItem(id));
+		be.installedPrograms().forEach(id -> Containers.dropItemStack(level, x, y, z, ProgramData.getItem(id)));
 		
 		//blank disks
 		Containers.dropItemStack(level, x, y, z, new ItemStack(MSItems.BLANK_DISK.get(), be.blankDisksStored));
