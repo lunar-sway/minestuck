@@ -120,8 +120,7 @@ public final class CaptchaDeckHandler
 			ItemStack newItem = changeModus(player, stack, modus, type);
 			containerMenu.setMenuItem(newItem);
 		}
-		else if(stack.is(MSItems.CAPTCHA_CARD) && !stack.has(MSItemComponents.ENCODED_ITEM)
-				&& modus != null)
+		else if(CaptchaCardItem.isUnpunchedCard(stack) && modus != null)
 		{
 			consumeCards(player, stack, modus);
 		}
@@ -226,8 +225,7 @@ public final class CaptchaDeckHandler
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			if(stack.is(MSItems.CAPTCHA_CARD) && stack.has(MSItemComponents.CARD_STORED_ITEM)
-					&& !stack.has(MSItemComponents.ENCODED_ITEM))
+			if(CaptchaCardItem.isUnpunchedCard(stack) && stack.has(MSItemComponents.CARD_STORED_ITEM))
 				handleCardCaptchalogue(player, modus, stack);
 			else putInModus(player, modus, stack);
 			

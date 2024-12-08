@@ -7,9 +7,9 @@ import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
-import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
@@ -90,7 +90,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	{
 		if(level == null)
 			return null;
-		if(!stack.is(MSItems.CAPTCHA_CARD) || stack.has(MSItemComponents.ENCODED_ITEM))
+		if(!CaptchaCardItem.isUnpunchedCard(stack))
 			return null;
 		ItemStack containedItem = CardStoredItemComponent.getContainedRealItem(stack);
 		if(containedItem.isEmpty())

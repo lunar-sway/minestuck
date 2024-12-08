@@ -155,7 +155,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			}
 		} else
 		{
-			if(heldStack.is(MSItems.CAPTCHA_CARD) && !heldStack.has(MSItemComponents.ENCODED_ITEM))
+			if(CaptchaCardItem.isUnpunchedCard(heldStack))
 			{
 				CaptchaCodeComponent captchaCode = heldStack.get(MSItemComponents.CAPTCHA_CODE);
 				if(captchaCode != null)

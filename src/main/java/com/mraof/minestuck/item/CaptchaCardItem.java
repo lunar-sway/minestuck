@@ -141,4 +141,9 @@ public class CaptchaCardItem extends Item
 	{
 		return EncodedItemComponent.createEncoded(MSItems.CAPTCHA_CARD, encodedItem);
 	}
+	
+	public static boolean isUnpunchedCard(ItemStack stack)
+	{
+		return stack.is(MSItems.CAPTCHA_CARD) && !stack.has(MSItemComponents.ENCODED_ITEM);
+	}
 }
