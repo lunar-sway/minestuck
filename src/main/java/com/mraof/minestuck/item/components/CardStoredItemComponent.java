@@ -37,4 +37,17 @@ public record CardStoredItemComponent(ItemStack storedStack, boolean isGhostItem
 				.filter(component -> !component.isGhostItem())
 				.map(CardStoredItemComponent::storedStack).orElse(ItemStack.EMPTY);
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof CardStoredItemComponent(ItemStack stack, boolean ghostItem))) return false;
+		return this.isGhostItem == ghostItem && ItemStack.matches(this.storedStack, stack);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return 31 * ItemStack.hashItemAndComponents(this.storedStack) + Boolean.hashCode(this.isGhostItem);
+	}
 }
