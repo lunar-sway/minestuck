@@ -61,13 +61,9 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 			Map.entry(EnumAspect.VOID, new AspectEffect(MobEffects.INVISIBILITY, 1.0F / 12))
 	);
 	
-	//todo valueOf() can throw an exception if the name doesn't match
-	public static final Codec<EnumClass> CLASS_CODEC = Codec.STRING.xmap(EnumClass::valueOf, EnumClass::name);
-	public static final Codec<EnumAspect> ASPECT_CODEC = Codec.STRING.xmap(EnumAspect::valueOf, EnumAspect::name);
-	
 	public static final Codec<Title> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			CLASS_CODEC.fieldOf("class").forGetter(Title::heroClass),
-			ASPECT_CODEC.fieldOf("aspect").forGetter(Title::heroAspect)
+			EnumClass.CODEC.fieldOf("class").forGetter(Title::heroClass),
+			EnumAspect.CODEC.fieldOf("aspect").forGetter(Title::heroAspect)
 	).apply(instance, Title::new));
 	
 	@SubscribeEvent
