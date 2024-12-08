@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -15,11 +14,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -33,28 +30,13 @@ public abstract class AbstractGateBlock extends Block implements LiquidBlockCont
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
 	}
 	
 	@Override
-	public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-	{
-		consumer.accept(new IClientBlockExtensions()
-		{
-			@Override
-			public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine manager)
-			{
-				return true;
-			}
-		});
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public RenderShape getRenderShape(BlockState state)
+	protected RenderShape getRenderShape(BlockState state)
 	{
 		return RenderShape.INVISIBLE;
 	}
@@ -67,8 +49,7 @@ public abstract class AbstractGateBlock extends Block implements LiquidBlockCont
 	protected abstract BlockPos findMainComponent(BlockPos pos, Level level);
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		BlockPos mainPos = findMainComponent(pos, level);
 		if(mainPos == null)
@@ -78,8 +59,7 @@ public abstract class AbstractGateBlock extends Block implements LiquidBlockCont
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		super.onRemove(state, level, pos, newState, isMoving);
 		BlockPos mainPos = findMainComponent(pos, level);
@@ -88,8 +68,7 @@ public abstract class AbstractGateBlock extends Block implements LiquidBlockCont
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean canBeReplaced(BlockState state, Fluid fluid)
+	protected boolean canBeReplaced(BlockState state, Fluid fluid)
 	{
 		return false;
 	}

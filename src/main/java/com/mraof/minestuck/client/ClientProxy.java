@@ -2,6 +2,7 @@ package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.client.model.armor.*;
@@ -23,13 +24,16 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StructureScannerItem;
+import com.mraof.minestuck.item.armor.MSArmorItem;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.components.StoneTabletTextComponent;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
@@ -39,8 +43,15 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -49,7 +60,22 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
+import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class ClientProxy
 {
@@ -96,7 +122,7 @@ public class ClientProxy
 		ComputerProgram.registerProgramClass(3, SettingsApp.class);
 		
 		registerArmorModels();
-
+		
 		ItemPropertyFunction content = (stack, level, holder, seed) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
 		ResourceLocation contentName = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "content");
 		
@@ -129,7 +155,8 @@ public class ClientProxy
 	}
 	
 	@SubscribeEvent
-	public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
+	public static void registerBER(EntityRenderersEvent.RegisterRenderers event)
+	{
 		
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.GATE.get(), GateRenderer::new);
@@ -175,9 +202,117 @@ public class ClientProxy
 		event.registerSpriteSet(MSParticleType.EXHAUST.get(), ExhaustParticle.Provider::new);
 	}
 	
+	@SubscribeEvent
+	private static void registerExtensions(RegisterClientExtensionsEvent event)
+	{
+		event.registerBlock(new IClientBlockExtensions()
+		{
+			@Override
+			public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine manager)
+			{
+				return true;
+			}
+		}, MSBlocks.GATE, MSBlocks.GATE_MAIN, MSBlocks.RETURN_NODE, MSBlocks.RETURN_NODE_MAIN);
+		
+		for(DeferredHolder<FluidType, FluidType> fluidType : Arrays.asList(MSFluids.OIL_TYPE, MSFluids.LIGHT_WATER_TYPE,
+				MSFluids.BLOOD_TYPE, MSFluids.BRAIN_JUICE_TYPE, MSFluids.WATER_COLORS_TYPE, MSFluids.ENDER_TYPE,
+				MSFluids.CAULK_TYPE, MSFluids.MOLTEN_AMBER_TYPE))
+		{
+			event.registerFluidType(new IClientFluidTypeExtensions()
+			{
+				private final ResourceLocation stillTexture = fluidType.getId().withPrefix("block/still_");
+				private final ResourceLocation flowingTexture = fluidType.getId().withPrefix("block/flowing_");
+				
+				@Override
+				public ResourceLocation getStillTexture()
+				{
+					return stillTexture;
+				}
+				
+				@Override
+				public ResourceLocation getFlowingTexture()
+				{
+					return flowingTexture;
+				}
+			}, fluidType);
+		}
+		
+		for(DeferredItem<MSArmorItem> armorItem : Arrays.asList(
+				MSItems.PROSPIT_CIRCLET, MSItems.PROSPIT_SHIRT, MSItems.PROSPIT_PANTS, MSItems.PROSPIT_SHOES,
+				MSItems.DERSE_CIRCLET, MSItems.DERSE_SHIRT, MSItems.DERSE_PANTS, MSItems.DERSE_SHOES,
+				MSItems.AMPHIBEANIE, MSItems.NOSTRILDAMUS, MSItems.PONYTAIL, MSItems.CRUMPLY_HAT))
+		{
+			event.registerItem(new IClientItemExtensions()
+			{
+				@Override
+				public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
+				{
+					ArmorItem.Type type = armorItem.get().getType();
+					if(equipmentSlot != type.getSlot())
+						return original;
+					HumanoidModel<?> model = ArmorModels.get(armorItem.get());
+					if(model == null)
+						return original;
+					
+					model.rightLeg.visible = type == ArmorItem.Type.LEGGINGS || type == ArmorItem.Type.BOOTS;
+					model.leftLeg.visible = type == ArmorItem.Type.LEGGINGS || type == ArmorItem.Type.BOOTS;
+					
+					model.body.visible = type == ArmorItem.Type.CHESTPLATE;
+					model.leftArm.visible = type == ArmorItem.Type.CHESTPLATE;
+					model.rightArm.visible = type == ArmorItem.Type.CHESTPLATE;
+					
+					model.head.visible = type == ArmorItem.Type.HELMET;
+					model.hat.visible = type == ArmorItem.Type.HELMET;
+					
+					
+					model.crouching = original.crouching;
+					model.riding = original.riding;
+					model.young = original.young;
+					
+					model.rightArmPose = original.rightArmPose;
+					model.leftArmPose = original.leftArmPose;
+					
+					return model;
+					
+				}
+			}, armorItem);
+		}
+		
+		event.registerItem(new IClientItemExtensions()
+		{
+			private GeoArmorRenderer<?> renderer;
+			
+			@Override
+			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
+			{
+				if(this.renderer == null)
+					this.renderer = new GeoArmorRenderer<>(new PrismarineArmorModel());
+				
+				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
+				return this.renderer;
+			}
+		}, MSItems.PRISMARINE_HELMET, MSItems.PRISMARINE_CHESTPLATE, MSItems.PRISMARINE_LEGGINGS, MSItems.PRISMARINE_BOOTS);
+		
+		event.registerItem(new IClientItemExtensions()
+		{
+			private GeoArmorRenderer<?> renderer;
+			
+			@Override
+			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
+			{
+				if(this.renderer == null)
+					this.renderer = new GeoArmorRenderer<>(new IronLassArmorModel());
+				
+				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
+				return this.renderer;
+			}
+		}, MSItems.IRON_LASS_GLASSES, MSItems.IRON_LASS_CHESTPLATE, MSItems.IRON_LASS_SKIRT, MSItems.IRON_LASS_SHOES);
+	}
+	
 	/**
 	 * Used to prevent a crash in PlayToClientPackets when loading ClientPlayerEntity on a dedicated server
 	 */
+	@Nullable
 	public static Player getClientPlayer()
 	{
 		Minecraft mc = Minecraft.getInstance();
