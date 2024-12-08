@@ -85,17 +85,15 @@ public class GristCollectorBlock extends HorizontalDirectionalBlock implements E
 		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.GRIST_COLLECTOR.get(), GristCollectorBlockEntity::serverTick) : null;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		updatePower(level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		updatePower(level, pos);

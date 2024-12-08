@@ -36,7 +36,7 @@ public class PetrifiedFloraBlock extends BushBlock
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
+	protected VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
 	{
 		Vec3 vec3 = pState.getOffset(pLevel, pPos);
 		return shape.move(vec3.x, vec3.y, vec3.z);
