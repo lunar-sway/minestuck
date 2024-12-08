@@ -2,77 +2,51 @@ package com.mraof.minestuck.item.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.item.MSItems;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import net.minecraft.world.level.ItemLike;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
-public record EncodedItemComponent(ItemStack storedStack, EncodeType type, @Nullable String code)
+public record EncodedItemComponent(Item item)
 {
-	public static final Codec<EncodedItemComponent> FULL_CODEC = RecordCodecBuilder.create(
+	public static final Codec<EncodedItemComponent> CODEC = RecordCodecBuilder.create(
 			instance -> instance.group(
-					ItemStack.CODEC.fieldOf("item").forGetter(EncodedItemComponent::storedStack),
-					EncodeType.CODEC.fieldOf("type").forGetter(EncodedItemComponent::type),
-					Codec.BOOL.optionalFieldOf("discovered").forGetter(o -> Optional.of(o.code != null))
-			).apply(instance, (item, type, discovered) -> create(item, type, discovered.isPresent() && discovered.get()))
+					BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(EncodedItemComponent::item)
+			).apply(instance, EncodedItemComponent::new)
 	);
-	
-	public static final Codec<EncodedItemComponent> CODEC = Codec.withAlternative(FULL_CODEC, ItemStack.CODEC, stack -> EncodedItemComponent.create(stack, EncodeType.STORE, false));
-	
 	public static final StreamCodec<RegistryFriendlyByteBuf, EncodedItemComponent> STREAM_CODEC = StreamCodec.composite(
-			ItemStack.STREAM_CODEC,
-			EncodedItemComponent::storedStack,
-			EncodeType.STREAM_CODEC,
-			EncodedItemComponent::type,
-			ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8),
-			encodedItemComponent -> Optional.ofNullable(encodedItemComponent.code()),
-			(stack, type, optionalCode) -> new EncodedItemComponent(stack, type, optionalCode.orElse(null))
+			ByteBufCodecs.registry(Registries.ITEM),
+			EncodedItemComponent::item,
+			EncodedItemComponent::new
 	);
 	
-	public static final EncodedItemComponent EMPTY = new EncodedItemComponent(ItemStack.EMPTY, EncodeType.STORE, "");
-	
-	public static EncodedItemComponent create(ItemStack storedStack, EncodeType type, boolean codeDiscovered)
+	public ItemStack asItemStack()
 	{
-		// FIXME ServerLifecycleHooks should not be used in a potentially client-side context. Pass it as a parameter instead
-		//return new EncodedItemComponent(storedStack, type, !codeDiscovered && storedStack.is(MSTags.Items.UNREADABLE) ? null : CardCaptchas.getCaptcha(storedStack.getItem(), ServerLifecycleHooks.getCurrentServer()));
-		return new EncodedItemComponent(storedStack, type, null);
+		return this.item().getDefaultInstance();
 	}
 	
-	public String code()
+	public static ItemStack createEncoded(ItemLike containerItem, Item encodedItem)
 	{
-		return code;
+		ItemStack stack = new ItemStack(containerItem);
+		stack.set(MSItemComponents.ENCODED_ITEM, new EncodedItemComponent(encodedItem));
+		return stack;
 	}
 	
-	public boolean canReadCode()
+	public static ItemStack setEncodedUnlessBlank(ItemStack stack, Item encodedItem)
 	{
-		return code() != null;
+		if (encodedItem != MSItems.GENERIC_OBJECT.get())
+			stack.set(MSItemComponents.ENCODED_ITEM, new EncodedItemComponent(encodedItem));
+		return stack;
 	}
 	
-	public enum EncodeType implements StringRepresentable
+	public static ItemStack getEncodedOrBlank(ItemStack stack)
 	{
-		STORE("stored"),
-		PUNCHED("punched"),
-		GHOST("ghost"),
-		;
-		public static final Codec<EncodeType> CODEC = StringRepresentable.fromEnum(EncodeType::values);
-		public static final StreamCodec<RegistryFriendlyByteBuf, EncodeType> STREAM_CODEC = NeoForgeStreamCodecs.enumCodec(EncodeType.class);
-		
-		private final String name;
-		
-		EncodeType(String name)
-		{
-			this.name = name;
-		}
-		
-		@Override
-		public String getSerializedName()
-		{
-			return name;
-		}
+		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
+		return encodedItemComponent != null ? encodedItemComponent.asItemStack() : new ItemStack(MSItems.GENERIC_OBJECT.get());
 	}
 }

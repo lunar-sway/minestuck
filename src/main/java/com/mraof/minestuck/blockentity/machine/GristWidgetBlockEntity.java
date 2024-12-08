@@ -1,14 +1,15 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
@@ -56,7 +57,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(1, this::isItemValid)
+		return new CustomHandler(1, (slot, stack) -> stack.is(MSItems.CAPTCHA_CARD))
 		{
 			@Override
 			protected void onContentsChanged(int slot)
@@ -78,18 +79,6 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		
 	}
 	
-	private boolean isItemValid(int slot, ItemStack stack)
-	{
-		if(stack.getItem() != MSItems.CAPTCHA_CARD.get())
-		{
-			return false;
-		} else
-		{
-			return (!AlchemyHelper.isPunchedCard(stack) && !AlchemyHelper.isGhostCard(stack)
-					&& AlchemyHelper.getDecodedItem(stack).getItem() != MSItems.CAPTCHA_CARD.get());
-		}
-	}
-	
 	@Nullable
 	public GristSet getGristWidgetResult()
 	{
@@ -101,12 +90,13 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	{
 		if(level == null)
 			return null;
-		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
-		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
-		if(stack.getItem() != MSItems.CAPTCHA_CARD.get() || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
+		if(!CaptchaCardItem.isUnpunchedCard(stack))
+			return null;
+		ItemStack containedItem = CardStoredItemComponent.getContainedRealItem(stack);
+		if(containedItem.isEmpty())
 			return null;
 		
-		return gristSet;
+		return GristCostRecipe.findCostForItem(containedItem, null, true, level);
 	}
 	
 	public int getGristWidgetBoondollarValue()
@@ -138,6 +128,8 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	private void processContents()
 	{
 		GristSet gristSet = getGristWidgetResult();
+		if(gristSet == null)
+			return;
 		
 		if(!PlayerBoondollars.tryTakeBoondollars(PlayerData.get(owner, level), getGristWidgetBoondollarValue()))
 		{

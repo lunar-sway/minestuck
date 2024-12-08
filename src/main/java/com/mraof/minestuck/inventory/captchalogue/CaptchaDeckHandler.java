@@ -3,10 +3,12 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
@@ -84,7 +86,7 @@ public final class CaptchaDeckHandler
 	
 	public static void launchItem(ServerPlayer player, ItemStack item)
 	{
-		if(item.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.hasDecodedItem(item))
+		if(item.is(MSItems.CAPTCHA_CARD) && !item.has(MSItemComponents.ENCODED_ITEM) && !item.has(MSItemComponents.CARD_STORED_ITEM))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -118,8 +120,7 @@ public final class CaptchaDeckHandler
 			ItemStack newItem = changeModus(player, stack, modus, type);
 			containerMenu.setMenuItem(newItem);
 		}
-		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isPunchedCard(stack)
-				&& modus != null)
+		else if(CaptchaCardItem.isUnpunchedCard(stack) && modus != null)
 		{
 			consumeCards(player, stack, modus);
 		}
@@ -161,7 +162,7 @@ public final class CaptchaDeckHandler
 	
 	private static void consumeCards(ServerPlayer player, ItemStack cards, Modus modus)
 	{
-		ItemStack content = AlchemyHelper.getDecodedItem(cards, true);
+		ItemStack content = CardStoredItemComponent.getContainedRealItem(cards);
 		
 		int failed = 0;
 		for(int i = 0; i < cards.getCount(); i++)
@@ -224,8 +225,7 @@ public final class CaptchaDeckHandler
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			if(stack.is(MSItems.CAPTCHA_CARD) && AlchemyHelper.hasDecodedItem(stack)
-					&& !AlchemyHelper.isPunchedCard(stack))
+			if(CaptchaCardItem.isUnpunchedCard(stack) && stack.has(MSItemComponents.CARD_STORED_ITEM))
 				handleCardCaptchalogue(player, modus, stack);
 			else putInModus(player, modus, stack);
 			
@@ -235,7 +235,7 @@ public final class CaptchaDeckHandler
 	
 	private static void handleCardCaptchalogue(ServerPlayer player, Modus modus, ItemStack card)
 	{
-		ItemStack stackInCard = AlchemyHelper.getDecodedItem(card, true);
+		ItemStack stackInCard = CardStoredItemComponent.getContainedRealItem(card);
 		boolean spentCard = modus.increaseSize(player);
 		
 		if(spentCard)
@@ -333,7 +333,7 @@ public final class CaptchaDeckHandler
 			{
 				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
-					ItemStack card = AlchemyHelper.createCard(stack);
+					ItemStack card = CaptchaCardItem.createCardWithItem(stack, player.server);
 					player.drop(card, true, false);
 					size--;
 				} else player.drop(stack, true, false);
