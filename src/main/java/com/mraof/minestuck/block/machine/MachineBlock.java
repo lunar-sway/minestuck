@@ -28,7 +28,6 @@ public abstract class MachineBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
 	public PushReaction getPistonPushReaction(BlockState state)
 	{
 		return PushReaction.BLOCK;
@@ -42,17 +41,14 @@ public abstract class MachineBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public BlockState rotate(BlockState state, Rotation rotation)
+	protected BlockState rotate(BlockState state, Rotation rotation)
 	{
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public BlockState mirror(BlockState state, Mirror mirrorIn)
+	protected BlockState mirror(BlockState state, Mirror mirrorIn)
 	{
-		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
-	
 }

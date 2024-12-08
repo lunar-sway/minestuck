@@ -21,22 +21,19 @@ public class GoldSeedsBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
 	{
 		return level.getBlockState(pos.below()).getBlock() == Blocks.FARMLAND;
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+	protected BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
 	{
 		return !stateIn.canSurvive(level, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, level, currentPos, facingPos);
 	}

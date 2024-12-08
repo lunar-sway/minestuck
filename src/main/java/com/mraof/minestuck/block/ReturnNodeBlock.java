@@ -26,8 +26,7 @@ public class ReturnNodeBlock extends AbstractGateBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
 	{
 		if(entityIn instanceof ServerPlayer player)
 		{

@@ -48,8 +48,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
 	}
@@ -114,8 +113,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if (!level.isClientSide)
 		{

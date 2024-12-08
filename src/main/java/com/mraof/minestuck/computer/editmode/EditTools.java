@@ -10,88 +10,114 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EditTools implements IEditTools
+/**
+ * The Edit Tools capability keeps track of the positional and raytrace data
+ * for the Sburb Editmode building tools. This includes the starting position of the revise tool,
+ * whether the cursor is being dragged after pressing right click, and the position and facing
+ * of raytraces.
+ *
+ * @see ClientEditHandler
+ */
+public final class EditTools
 {
-	
+	enum ToolMode
+	{
+		REVISE,
+		RECYCLE
+	}
 	
 	private ToolMode toolMode = null;
 	private BlockPos editPos1 = null;
 	private BlockPos editPos2 = null;
-	private Vec3 editTraceHit = new Vec3(0,0,0);
+	private Vec3 editTraceHit = new Vec3(0, 0, 0);
 	private Direction editTraceDirection = Direction.NORTH;
 	private double editReachDistance = 0;
 	private boolean isEditDragging = false;
 	private UUID editCursorID = null;
 	
 	@Nullable
-	@Override
-	public ToolMode getToolMode() { return toolMode; }
+	public ToolMode getToolMode()
+	{
+		return toolMode;
+	}
 	
 	@Nullable
-	@Override
-	public BlockPos getEditPos1() {
+	public BlockPos getEditPos1()
+	{
 		return editPos1;
 	}
 	
 	@Nullable
-	@Override
-	public BlockPos getEditPos2() {
+	public BlockPos getEditPos2()
+	{
 		return editPos2;
 	}
 	
 	@Nonnull
-	@Override
-	public Vec3 getEditTraceHit() {
+	public Vec3 getEditTraceHit()
+	{
 		return editTraceHit;
 	}
 	
 	@Nonnull
-	@Override
-	public Direction getEditTraceDirection() { return editTraceDirection; }
+	public Direction getEditTraceDirection()
+	{
+		return editTraceDirection;
+	}
 	
-	@Override
-	public double getEditReachDistance() { return editReachDistance; }
+	public double getEditReachDistance()
+	{
+		return editReachDistance;
+	}
 	
 	@Nullable
-	@Override
-	public UUID getEditCursorID() { return editCursorID; }
+	public UUID getEditCursorID()
+	{
+		return editCursorID;
+	}
 	
-	@Override
-	public void setToolMode(ToolMode mode) { toolMode = mode; }
+	public void setToolMode(ToolMode mode)
+	{
+		toolMode = mode;
+	}
 	
-	@Override
-	public void setEditPos1(BlockPos pos) {
+	public void setEditPos1(BlockPos pos)
+	{
 		editPos1 = pos;
 	}
 	
-	@Override
-	public void setEditPos2(BlockPos pos) {
+	public void setEditPos2(BlockPos pos)
+	{
 		editPos2 = pos;
 	}
 	
-	@Override
 	public void setEditTrace(Vec3 hit, Direction direction)
 	{
 		setEditTraceHit(hit);
 		setEditTraceDirection(direction);
 	}
 	
-	private void setEditTraceHit(Vec3 hit) {
+	private void setEditTraceHit(Vec3 hit)
+	{
 		editTraceHit = hit;
 	}
 	
-	private void setEditTraceDirection(Direction direction) {
+	private void setEditTraceDirection(Direction direction)
+	{
 		editTraceDirection = direction;
 	}
 	
-	@Override
-	public void setEditReachDistance(double reachDistance) { editReachDistance = reachDistance; }
+	public void setEditReachDistance(double reachDistance)
+	{
+		editReachDistance = reachDistance;
+	}
 	
-	@Override
-	public void setEditCursorID(UUID uuid) { editCursorID = uuid; }
+	public void setEditCursorID(UUID uuid)
+	{
+		editCursorID = uuid;
+	}
 	
 	
-	@Override
 	public void beginDragTools(ToolMode toolMode, BlockHitResult blockHit, Player player)
 	{
 		setToolMode(toolMode);
@@ -102,13 +128,13 @@ public class EditTools implements IEditTools
 		setEditTrace(blockHit.getLocation(), blockHit.getDirection());
 		setEditReachDistance(blockHit.getLocation().distanceTo(player.getEyePosition()));
 	}
-	@Override
+	
 	public void resetDragTools()
 	{
 		setToolMode(null);
 		setEditPos1(null);
 		setEditPos2(null);
-		setEditTrace(new Vec3(0,0,0), Direction.NORTH);
+		setEditTrace(new Vec3(0, 0, 0), Direction.NORTH);
 		setEditReachDistance(0);
 		setEditCursorID(null);
 	}

@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Data structure used by the server sided EditHandler
@@ -122,9 +123,12 @@ public class EditData
 	
 	public static ConnectionRecovery readExtraRecovery(CompoundTag nbt)
 	{
-		if(nbt.contains("edit_inv"))
-			return new ConnectionRecovery(nbt);
-		else return null;
+		if(!nbt.contains("edit_inv", Tag.TAG_LIST))
+			return null;
+		
+		Optional<PlayerIdentifier> clientResult = IdentifierHandler.load(nbt, "client").result();
+		
+		return clientResult.map(client -> new ConnectionRecovery(client, nbt.getList("edit_inv", Tag.TAG_COMPOUND))).orElse(null);
 	}
 	
 	void recover()
@@ -235,21 +239,20 @@ public class EditData
 		}
 	}
 	
-	public static class ConnectionRecovery
+	public static final class ConnectionRecovery
 	{
 		private final PlayerIdentifier clientPlayer;
 		private final ListTag inventory;
 		
 		private ConnectionRecovery(EditData data)
 		{
-			clientPlayer = data.getTarget();
-			inventory = data.player.getInventory().save(new ListTag());
+			this(data.getTarget(), data.player.getInventory().save(new ListTag()));
 		}
 		
-		private ConnectionRecovery(CompoundTag nbt)
+		private ConnectionRecovery(PlayerIdentifier client, ListTag editInv)
 		{
-			clientPlayer = IdentifierHandler.loadOrThrow(nbt, "client");
-			inventory = nbt.getList("edit_inv", Tag.TAG_COMPOUND);
+			this.clientPlayer = client;
+			this.inventory = editInv;
 		}
 		
 		private void write(CompoundTag nbt)

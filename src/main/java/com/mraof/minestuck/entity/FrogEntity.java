@@ -22,7 +22,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -37,11 +36,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -86,13 +83,6 @@ public class FrogEntity extends PathfinderMob
 		builder.define(BELLY_COLOR, random(28350));
 		builder.define(EYE_TYPE, EyeTypes.LIGHT);
 		builder.define(BELLY_TYPE, BellyTypes.SOLID);
-	}
-	
-	@Nullable
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pSpawnType, @Nullable SpawnGroupData pSpawnGroupData)
-	{
-		return super.finalizeSpawn(pLevel, pDifficulty, pSpawnType, pSpawnGroupData);
 	}
 	
 	@Override

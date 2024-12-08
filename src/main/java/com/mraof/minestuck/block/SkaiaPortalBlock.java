@@ -46,15 +46,13 @@ public class SkaiaPortalBlock extends BaseEntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
 	{
 		if (!entityIn.isPassenger() && !entityIn.isVehicle() && !level.isClientSide && !entityIn.isOnPortalCooldown())
 		{

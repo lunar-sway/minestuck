@@ -24,9 +24,8 @@ public class GlowingMushroomVinesBlock extends Block
 		super(properties);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
+	protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
 		BlockPos belowPos = pos.below();
 		if(rand.nextInt(90) == 0 && level.getBlockState(belowPos).isAir())
@@ -35,25 +34,22 @@ public class GlowingMushroomVinesBlock extends Block
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
 	{
 		BlockState aboveState = level.getBlockState(pos.above());
 		return aboveState.is(this) || aboveState.is(MSTags.Blocks.SHADEWOOD_LEAVES);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
+	protected VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
 	{
 		Vec3 vec3 = pState.getOffset(pLevel, pPos);
 		return SHAPE.move(vec3.x, vec3.y, vec3.z);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
 	{
 		//will be updated to only survive if the block above is another mushroom vine or shadewood leaf block
 		return direction == Direction.UP && !this.canSurvive(state, level, currentPos)

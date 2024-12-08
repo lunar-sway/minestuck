@@ -110,7 +110,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		if(nbt.contains("ownerId"))
 			ownerId = nbt.getInt("ownerId");
-		else this.owner = IdentifierHandler.loadOrThrow(nbt, "owner");
+		else this.owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
 		
 		//keep this after everything else has been loaded
 		if(gui != null)
@@ -212,6 +212,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		markBlockForUpdate();
 	}
 	
+	@Nullable
 	@Override
 	public PlayerIdentifier getOwner()
 	{

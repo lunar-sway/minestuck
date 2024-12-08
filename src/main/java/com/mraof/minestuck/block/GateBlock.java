@@ -47,6 +47,7 @@ public class GateBlock extends AbstractGateBlock
 	}
 	
 	@Nullable
+	@Override
 	protected BlockPos findMainComponent(BlockPos pos, Level level)
 	{
 		for(int x = -1; x <= 1; x++)
@@ -107,8 +108,7 @@ public class GateBlock extends AbstractGateBlock
 		}
 		
 		@Override
-		@SuppressWarnings("deprecation")
-		public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
+		protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
 		{
 			if(entityIn instanceof ServerPlayer player)
 			{

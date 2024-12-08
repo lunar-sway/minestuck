@@ -38,6 +38,7 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		RenderSystem.disableBlend();
 	}
 	
+	@SuppressWarnings("removal") // Switch to other version of the method when this version no longer need to be implemented
 	@Override
 	public List<Component> getTooltip(GristAmount ingredient, TooltipFlag tooltipFlag)
 	{

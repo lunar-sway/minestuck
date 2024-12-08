@@ -37,8 +37,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if(!level.isClientSide && random.nextFloat() >= .75F)
 		{

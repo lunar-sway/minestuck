@@ -194,8 +194,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(!newState.is(state.getBlock()))
 			dropItems(level, pos.getX(), pos.getY(), pos.getZ(), state);
@@ -224,8 +223,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 	{
 		if(state.getValue(STATE) == State.OFF)
 			return shapeOff.get(state.getValue(FACING));

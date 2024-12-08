@@ -34,29 +34,26 @@ public class PlatformBlock extends MSDirectionalBlock
 		registerDefaultState(stateDefinition.any().setValue(INVISIBLE, false).setValue(GENERATOR_DISTANCE, 1));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+	protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return 1.0F;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return Shapes.empty();
 	}
 	
 	@Override
-	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+	protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public RenderShape getRenderShape(BlockState state)
+	protected RenderShape getRenderShape(BlockState state)
 	{
 		if(state.getValue(INVISIBLE))
 			return RenderShape.INVISIBLE;
@@ -117,25 +114,22 @@ public class PlatformBlock extends MSDirectionalBlock
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		updateSurvival(state, level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
 		super.tick(state, level, pos, rand);
 		updateSurvival(state, level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		level.scheduleTick(new BlockPos(pos), this, 20);

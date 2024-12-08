@@ -134,7 +134,7 @@ public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> imp
 		}
 		
 		@Override
-		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+		protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 		{
 			if(state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL))
 			{

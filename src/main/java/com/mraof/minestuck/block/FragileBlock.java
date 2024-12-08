@@ -26,16 +26,14 @@ public class FragileBlock extends Block
 		super(properties);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context)
+	protected VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context)
 	{
 		return COLLISION_SHAPE;
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void entityInside(BlockState stateIn, Level level, BlockPos pos, Entity entityIn)
+	protected void entityInside(BlockState stateIn, Level level, BlockPos pos, Entity entityIn)
 	{
 		attemptBreak(level, entityIn, pos);
 	}

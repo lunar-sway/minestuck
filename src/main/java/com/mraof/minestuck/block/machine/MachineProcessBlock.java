@@ -22,12 +22,10 @@ public abstract class MachineProcessBlock extends MachineBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
-			@SuppressWarnings("DataFlowIssue")
 			IItemHandler itemHandler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, state, null, null);
 			
 			if(itemHandler != null)

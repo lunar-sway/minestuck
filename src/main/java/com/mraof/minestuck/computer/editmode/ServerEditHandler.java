@@ -590,7 +590,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			throw LOGGER.throwing(new IllegalStateException("Server Level is clientside in updateEditToolsServer()!"));
 		
 		
-		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();
@@ -659,7 +659,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	 */
 	public static void removeCursorEntity(ServerPlayer player, boolean rejected)
 	{
-		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		if(cap.getEditCursorID() != null)
 		{

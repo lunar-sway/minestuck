@@ -50,7 +50,6 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
@@ -296,7 +295,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		talkRepPlayerList.clear();
 		ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
-			talkRepPlayerList.add(IdentifierHandler.loadOrThrow(list.getCompound(i), "id"));
+			talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id").getOrThrow());
 		
 		merchantType = EnumConsort.MerchantType.values()[Mth.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		

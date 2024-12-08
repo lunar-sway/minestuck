@@ -55,10 +55,12 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
 public abstract class UnderlingEntity extends AttackingAnimatedEntity implements Enemy, GeoEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -322,6 +324,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		return worldIn.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(type, worldIn, reason, pos, randomIn);
 	}
 	
+	@SuppressWarnings("deprecation") // Overriding is fine
 	@Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn)

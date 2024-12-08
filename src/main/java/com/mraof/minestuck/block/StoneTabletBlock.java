@@ -51,8 +51,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+	protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
 	{
 		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity itemBE)
 		{
@@ -81,6 +80,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 		return InteractionResult.SUCCESS;
 	}
 	
+	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
