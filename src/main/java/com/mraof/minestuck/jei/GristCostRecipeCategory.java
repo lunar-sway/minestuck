@@ -10,6 +10,7 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -26,8 +27,6 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by mraof on 2017 January 23 at 2:38 AM.
@@ -95,7 +94,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	
 	
 	@Override
-	public List<Component> getTooltipStrings(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY)
+	public void getTooltip(ITooltipBuilder tooltip, JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY)
 	{
 		Component text = null;
 		if(recipe instanceof JeiGristCost.Set gristSetRecipe)
@@ -104,8 +103,6 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 			text = GuiUtil.getGristboardTooltip(GristTypes.BUILD.get().amount(wildcardRecipe.wildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
 		
 		if(text != null)
-			return Collections.singletonList(text);
-		else
-			return Collections.emptyList();
+			tooltip.add(text);
 	}
 }
