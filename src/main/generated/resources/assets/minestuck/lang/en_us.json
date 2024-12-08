@@ -2931,7 +2931,6 @@
   "minestuck.predefine.title_already_set": "That player already has their title set to %s",
   "minestuck.private_computer": "You are not allowed to access other players computers.",
   "minestuck.program.client.client_active_message": "Client is already active",
-  "minestuck.program.client.connect_button": "%s",
   "minestuck.program.client.resume_client_message": "Waiting for server...",
   "minestuck.program.client.select_color_button": "Select a Color",
   "minestuck.program.client.select_message": "Select a server below",

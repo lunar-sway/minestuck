@@ -19,7 +19,6 @@ import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -429,8 +428,9 @@ public class EntryProcess
 				}
 			} else
 			{
-				if(blockEntity instanceof ComputerBlockEntity)    //Avoid duplicating computer data when a computer is kept in the overworld
-					((ComputerBlockEntity) blockEntity).programData = new CompoundTag();
+				//Avoid duplicating computer data when a computer is kept in the overworld
+				if(blockEntity instanceof ComputerBlockEntity computer)
+					computer.clearComputerData();
 				else if(blockEntity instanceof TransportalizerBlockEntity)
 					level.removeBlockEntity(pos);
 			}

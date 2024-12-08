@@ -3,9 +3,10 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerThemeScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsApp extends ButtonListProgram
 {
@@ -15,30 +16,16 @@ public class SettingsApp extends ButtonListProgram
 	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
 	
 	@Override
-	protected ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
+	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
-		var list = new ArrayList<UnlocalizedString>();
-		
-		list.add(new UnlocalizedString(TITLE));
-		list.add(new UnlocalizedString(THEME));
-		
-		return list;
+		return new InterfaceData(Component.translatable(TITLE),
+				List.of(new ButtonData(Component.translatable(THEME), () -> openThemeScreen(be))));
 	}
 	
-	@Override
-	protected void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
+	private static void openThemeScreen(ComputerBlockEntity computer)
 	{
-		if(be.getLevel() == null)
-			return;
-		
-		//TODO ADD MORE SETTINGS
-		switch(buttonName)
-		{
-			case THEME -> {
-				be.gui.getMinecraft().setScreen(null);
-				be.gui.getMinecraft().setScreen(new ComputerThemeScreen(be));
-			}
-		}
+		computer.gui.getMinecraft().setScreen(null);
+		computer.gui.getMinecraft().setScreen(new ComputerThemeScreen(computer));
 	}
 	
 	@Override

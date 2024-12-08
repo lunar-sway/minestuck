@@ -3,27 +3,26 @@ package com.mraof.minestuck.computer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.network.computer.ClearMessagePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ButtonListProgram extends ComputerProgram
 {
 	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
-	private final LinkedHashMap<Button, UnlocalizedString> buttonMap = new LinkedHashMap<>();
+	private final Map<Button, Runnable> buttonMap = new HashMap<>();
+	private final List<Button> buttons = new ArrayList<>(4);
 	private Button upButton, downButton;
-	private String message;
+	private Component message;
 	
 	private int index = 0;
 	
@@ -34,27 +33,23 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 *
 	 * @param be The {@link ComputerBlockEntity} this program is associated with, for access to related data.
 	 */
-	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be);
+	protected abstract InterfaceData getInterfaceData(ComputerBlockEntity be);
 	
-	/**
-	 * Performs the action caused by pressing a button.
-	 *
-	 * @param be         The computer, if needed.
-	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
-	 * @param data       Format data provided by getStringList().
-	 */
-	protected abstract void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data);
+	protected record InterfaceData(Component message, List<ButtonData> buttonData)
+	{
+	}
+	
+	protected record ButtonData(Component message, Runnable onClick)
+	{
+	}
 	
 	public final void onButtonPressed(ComputerScreen screen, Button button)
 	{
-		UnlocalizedString data = buttonMap.get(button);
+		Runnable runnable = buttonMap.get(button);
 		
-		if(data != null)
-		{
-			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
-				PacketDistributor.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
-			onButtonPressed(screen.be, data.string, data.formatData);
-		}
+		if(runnable != null)
+			runnable.run();
+		
 		screen.updateGui();
 	}
 	
@@ -71,10 +66,15 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		var xOffset = (gui.width - ComputerScreen.xSize) / 2;
 		var yOffset = (gui.height - ComputerScreen.ySize) / 2;
+		
 		buttonMap.clear();
+		buttons.clear();
 		for(int i = 0; i < 4; i++)
-			buttonMap.put(gui.addRenderableWidget(
-					new ExtendedButton(xOffset + 14, yOffset + 60 + i * 24, 120, 20, Component.empty(), button -> onButtonPressed(gui, button))), new UnlocalizedString(""));
+		{
+			ExtendedButton button = new ExtendedButton(xOffset + 14, yOffset + 60 + i * 24, 120, 20, Component.empty(), clieckedButton -> onButtonPressed(gui, clieckedButton));
+			gui.addRenderableWidget(button);
+			buttons.add(button);
+		}
 		
 		upButton = gui.addRenderableWidget(new ArrowButton(true, gui));
 		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
@@ -83,47 +83,28 @@ public abstract class ButtonListProgram extends ComputerProgram
 	@Override
 	public final void onUpdateGui(ComputerScreen gui)
 	{
-		downButton.active = false;
-		upButton.active = index > 0;
-		ArrayList<UnlocalizedString> list = getStringList(gui.be);
-		if(!gui.be.latestmessage.get(this.getId()).isEmpty())
-			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
+		InterfaceData data = getInterfaceData(gui.be);
 		
-		int pos = -1;
-		for(UnlocalizedString s : list)
+		message = data.message;
+		
+		downButton.active = data.buttonData.size() >= index + 4;
+		upButton.active = index > 0;
+		
+		for(int i = 0; i < 4; i++)
 		{
-			if(pos == -1)
+			Button button = buttons.get(i);
+			if(index + i < data.buttonData.size())
 			{
-				message = s.translate();
+				ButtonData buttonData = data.buttonData.get(index + i);
+				button.active = true;
+				button.setMessage(buttonData.message);
+				buttonMap.put(button, buttonData.onClick);
 			} else
 			{
-				if(index > pos)
-				{
-					pos++;
-					continue;
-				}
-				if(pos == index + 4)
-				{
-					downButton.active = true;
-					break;
-				}
-				buttonMap.put((Button) buttonMap.keySet().toArray()[pos - index], s);
+				button.active = false;
+				button.setMessage(Component.empty());
+				buttonMap.remove(button);
 			}
-			pos++;
-		}
-		
-		if(index == 0 && pos != 4)
-			for(; pos < 4; pos++)
-			{
-				if(pos >= 0) //can still be -1 in some instances, causing a crash
-					buttonMap.put((Button) buttonMap.keySet().toArray()[pos - index], new UnlocalizedString(""));
-			}
-		
-		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet())
-		{
-			UnlocalizedString data = entry.getValue();
-			entry.getKey().active = !data.string.isEmpty();
-			entry.getKey().setMessage(data.asTextComponent());
 		}
 	}
 	
@@ -131,41 +112,10 @@ public abstract class ButtonListProgram extends ComputerProgram
 	public final void paintGui(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be)
 	{
 		Font font = Minecraft.getInstance().font;
-		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
-		{
-			guiGraphics.drawString(font, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
-		} else
-		{
-			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, gui.getTheme().data().textColor(), false);
-		}
-	}
-	
-	/**
-	 * Represents an unlocalized string and the possible format parameters.
-	 * Is used to represent the value on the buttons, but also the message shown above the buttons.
-	 *
-	 * @see ButtonListProgram#getStringList
-	 */
-	protected static class UnlocalizedString
-	{
-		String string;
-		Object[] formatData;
 		
-		public UnlocalizedString(String str, Object... obj)
-		{
-			string = str;
-			formatData = obj;
-		}
-		
-		public String translate()
-		{
-			return I18n.get(string, formatData);
-		}
-		
-		public Component asTextComponent()
-		{
-			return Component.translatable(string, formatData);
-		}
+		guiGraphics.drawString(font, this.message,
+				(gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45,
+				gui.getTheme().data().textColor(), false);
 	}
 	
 	protected class ArrowButton extends ExtendedButton

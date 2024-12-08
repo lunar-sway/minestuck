@@ -3,24 +3,22 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
-import com.mraof.minestuck.network.computer.CloseRemoteSburbConnectionPacket;
-import com.mraof.minestuck.network.computer.CloseSburbConnectionPackets;
-import com.mraof.minestuck.network.computer.ConnectToSburbServerPacket;
-import com.mraof.minestuck.network.computer.ResumeSburbConnectionPackets;
+import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-public class SburbClient extends ButtonListProgram
+public final class SburbClient extends ButtonListProgram
 {
 	public static final String CLOSE_BUTTON = "minestuck.program.close_button"; //also used in SburbServer
-	public static final String CONNECT_BUTTON = "minestuck.program.client.connect_button";
 	public static final String RESUME_BUTTON = "minestuck.program.resume_button"; //also used in SburbServer
 	public static final String SELECT_COLOR = "minestuck.program.client.select_color_button";
 	public static final String CONNECT = "minestuck.program.connect_message"; //also used in SburbServer
@@ -31,55 +29,81 @@ public class SburbClient extends ButtonListProgram
 	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_client.png");
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
+	protected InterfaceData getInterfaceData(ComputerBlockEntity computer)
 	{
-		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		CompoundTag nbt = be.getData(getId());
+		Component message;
+		List<ButtonData> list = new ArrayList<>();
+		SburbClientData data = computer.getSburbClientData();
+		Optional<String> eventMessage = data.getEventMessage();
 		
-		ReducedConnection c = SkaiaClient.getClientConnection(be.ownerId);
-		if(nbt.getBoolean("connectedToServer") && c != null) //If it is connected to someone.
+		if(eventMessage.isPresent())
+			list.add(new ButtonData(Component.translatable(CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
+		
+		ReducedConnection c = SkaiaClient.getClientConnection(computer.ownerId);
+		if(data.isConnectedToServer() && c != null) //If it is connected to someone.
 		{
 			String displayPlayer = c.server().name();
-			list.add(new UnlocalizedString(CONNECT, displayPlayer));
-			list.add(new UnlocalizedString(CLOSE_BUTTON));
-		} else if(nbt.getBoolean("isResuming"))
+			message = Component.translatable(CONNECT, displayPlayer);
+			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+				sendClearMessagePacketIfRelevant(computer);
+				sendCloseConnectionPacket(computer);
+			}));
+		} else if(data.isResuming())
 		{
-			list.add(new UnlocalizedString(RESUME_CLIENT));
-			list.add(new UnlocalizedString(CLOSE_BUTTON));
-		} else if(!SkaiaClient.isActive(be.ownerId, true)) //If the player doesn't have an other active client
+			message = Component.translatable(RESUME_CLIENT);
+			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+				sendClearMessagePacketIfRelevant(computer);
+				sendCloseConnectionPacket(computer);
+			}));
+		} else if(!SkaiaClient.isActive(computer.ownerId, true)) //If the player doesn't have an other active client
 		{
-			list.add(new UnlocalizedString(SELECT));
-			if(SkaiaClient.hasPrimaryConnectionAsClient(be.ownerId))
-				list.add(new UnlocalizedString(RESUME_BUTTON));
-			for (Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(be.ownerId).entrySet())
-				list.add(new UnlocalizedString(CONNECT_BUTTON, entry.getValue(), entry.getKey()));
+			message = Component.translatable(SELECT);
+			if(SkaiaClient.hasPrimaryConnectionAsClient(computer.ownerId))
+			{
+				list.add(new ButtonData(Component.translatable(RESUME_BUTTON), () -> {
+					sendClearMessagePacketIfRelevant(computer);
+					PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(computer));
+				}));
+			}
+			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(computer.ownerId).entrySet())
+			{
+				list.add(new ButtonData(Component.literal(entry.getValue()), () -> {
+					sendClearMessagePacketIfRelevant(computer);
+					PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(computer, entry.getKey()));
+				}));
+			}
 		} else
 		{
-			list.add(new UnlocalizedString(CLIENT_ACTIVE));
-			list.add(new UnlocalizedString(CLOSE_BUTTON));
+			message = Component.translatable(CLIENT_ACTIVE);
+			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+				sendClearMessagePacketIfRelevant(computer);
+				sendCloseConnectionPacket(computer);
+			}));
 		}
-		if(SkaiaClient.canSelect(be.ownerId))
-			list.add(new UnlocalizedString(SELECT_COLOR));
-		return list;
+		if(SkaiaClient.canSelect(computer.ownerId))
+		{
+			list.add(new ButtonData(Component.translatable(SELECT_COLOR), () -> {
+				sendClearMessagePacketIfRelevant(computer);
+				Minecraft.getInstance().setScreen(new ColorSelectorScreen(computer));
+			}));
+		}
+		
+		return new InterfaceData(eventMessage.<Component>map(Component::translatable).orElse(message), list);
 	}
 	
-	@Override
-	public void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
+	private static void sendClearMessagePacketIfRelevant(ComputerBlockEntity computer)
 	{
-		switch(buttonName)
-		{
-			case RESUME_BUTTON -> PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(be));
-			case CONNECT_BUTTON -> PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(be, (Integer) data[1]));
-			case CLOSE_BUTTON ->
-			{
-				CompoundTag nbt = be.getData(getId());
-				if(!nbt.getBoolean("isResuming") && !nbt.getBoolean("connectedToServer"))
-					PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(be));
-				else
-					PacketDistributor.sendToServer(CloseSburbConnectionPackets.asClient(be));
-			}
-			case SELECT_COLOR -> Minecraft.getInstance().setScreen(new ColorSelectorScreen(be));
-		}
+		if(computer.getSburbServerData().getEventMessage().isPresent())
+			PacketDistributor.sendToServer(new ClearMessagePacket(computer.getBlockPos(), 0));
+	}
+	
+	private static void sendCloseConnectionPacket(ComputerBlockEntity computer)
+	{
+		SburbClientData data = computer.getSburbClientData();
+		if(!data.isResuming() && !data.isConnectedToServer())
+			PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(computer));
+		else
+			PacketDistributor.sendToServer(CloseSburbConnectionPackets.asClient(computer));
 	}
 	
 	@Override

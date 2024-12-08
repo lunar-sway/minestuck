@@ -89,8 +89,7 @@ public abstract class ReadableSburbCodeItem extends Item
 		
 		if(newInfo)
 		{
-			blockEntity.setChanged();
-			blockEntity.markBlockForUpdate();
+			blockEntity.markDirtyAndResend();
 			
 			return true;
 		}

@@ -49,12 +49,12 @@ public final class ComputerInteractions
 	
 	private static boolean isValidClientResuming(ISburbComputer computer)
 	{
-		return computer.getClientBoolean("isResuming");
+		return computer.getSburbClientData().isResuming();
 	}
 	
 	private static boolean isValidServerOpenOrResuming(ISburbComputer computer)
 	{
-		return computer.getServerBoolean("isOpen");
+		return computer.getSburbServerData().isOpen();
 	}
 	
 	public static ComputerInteractions get(MinecraftServer mcServer)
@@ -114,7 +114,7 @@ public final class ComputerInteractions
 			return;
 		}
 		
-		computer.putClientBoolean("isResuming", true);
+		computer.getSburbClientData().setIsResuming(true);
 		resumingClients.put(player, computer.createReference());
 	}
 	
@@ -135,7 +135,7 @@ public final class ComputerInteractions
 			return;
 		}
 		
-		computer.putServerBoolean("isOpen", true);
+		computer.getSburbServerData().setIsOpen(true);
 		resumingServers.put(player, computer.createReference());
 	}
 	
@@ -153,7 +153,7 @@ public final class ComputerInteractions
 			return;
 		}
 		
-		computer.putServerBoolean("isOpen", true);
+		computer.getSburbServerData().setIsOpen(true);
 		openedServers.put(player, computer.createReference());
 	}
 	
@@ -162,8 +162,8 @@ public final class ComputerInteractions
 		if(resumingClients.contains(player))
 		{
 			resumingClients.useComputerAndRemoveOnSuccess(player, computer -> {
-				computer.putClientBoolean("isResuming", false);
-				computer.putClientMessage(STOP_RESUME);
+				computer.getSburbClientData().setIsResuming(false);
+				computer.getSburbClientData().setEventMessage(STOP_RESUME);
 				return true;
 			});
 		} else
@@ -179,8 +179,8 @@ public final class ComputerInteractions
 		if(resumingClients.contains(computer))
 		{
 			resumingClients.remove(owner);
-			computer.putClientBoolean("isResuming", false);
-			computer.putClientMessage(STOP_RESUME);
+			computer.getSburbClientData().setIsResuming(false);
+			computer.getSburbClientData().setEventMessage(STOP_RESUME);
 		} else
 		{
 			skaianetData.connections.getClientConnection(computer).ifPresent(connection ->
@@ -203,8 +203,8 @@ public final class ComputerInteractions
 		if(map.contains(computer))
 		{
 			map.remove(owner);
-			computer.putServerBoolean("isOpen", false);
-			computer.putServerMessage(STOP_RESUME);
+			computer.getSburbServerData().setIsOpen(false);
+			computer.getSburbServerData().setEventMessage(STOP_RESUME);
 		}
 	}
 	

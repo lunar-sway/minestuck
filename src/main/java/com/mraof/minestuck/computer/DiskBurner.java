@@ -3,10 +3,11 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.computer.BurnDiskPacket;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DiskBurner extends ButtonListProgram
 {
@@ -19,34 +20,19 @@ public class DiskBurner extends ButtonListProgram
 	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/disk_burner.png");
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
+	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
 	{
-		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		
 		if(!be.hasAllCode())
-			list.add(new UnlocalizedString(NEED_CODE));
-		else if (be.blankDisksStored == 0)
-			list.add(new UnlocalizedString(NO_DISKS));
-		else
-		{
-			list.add(new UnlocalizedString(CHOOSE));
-			
-			list.add(new UnlocalizedString(BURN_SERVER_DISK));
-			list.add(new UnlocalizedString(BURN_CLIENT_DISK));
-		}
-		return list;
-	}
-	
-	@Override
-	public void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
-	{
-		if(buttonName.equals(BURN_CLIENT_DISK))
-		{
-			PacketDistributor.sendToServer(BurnDiskPacket.create(be, 0));
-		} else if(buttonName.equals(BURN_SERVER_DISK))
-		{
-			PacketDistributor.sendToServer(BurnDiskPacket.create(be, 1));
-		}
+			return new InterfaceData(Component.translatable(NEED_CODE), List.of());
+		
+		if(be.blankDisksStored == 0)
+			return new InterfaceData(Component.translatable(NO_DISKS), List.of());
+		
+		return new InterfaceData(Component.translatable(CHOOSE), List.of(
+				new ButtonData(Component.translatable(BURN_SERVER_DISK),
+						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, 1))),
+				new ButtonData(Component.translatable(BURN_CLIENT_DISK),
+						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, 0)))));
 	}
 	
 	@Override

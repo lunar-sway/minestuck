@@ -3,16 +3,14 @@ package com.mraof.minestuck.blockentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.ComputerBlock;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.computer.ComputerReference;
-import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.IncompleteSburbCodeItem;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.Commands;
@@ -25,10 +23,12 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -56,14 +56,14 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	/**
 	 * 0 = client, 1 = server, 2 = disk burner, 3 = settings
 	 */
-	public HashSet<Integer> installedPrograms = new HashSet<>();
+	private final Set<Integer> installedPrograms = new HashSet<>();
 	public ComputerScreen gui;
 	@Nullable
 	public PlayerIdentifier owner;
 	//client side only
 	public int ownerId;
-	public Hashtable<Integer, String> latestmessage = new Hashtable<>();
-	public CompoundTag programData = new CompoundTag();
+	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
+	private SburbServerData sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	public int programSelected = -1;
 	@Nonnull
 	public Set<Block> hieroglyphsStored = new HashSet<>();
@@ -78,12 +78,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		if(nbt.contains("programs"))
 		{
-			if (nbt.contains("programs", Tag.TAG_INT_ARRAY))
+			if(nbt.contains("programs", Tag.TAG_INT_ARRAY))
 			{
 				for(int id : nbt.getIntArray("programs"))
 					installedPrograms.add(id);
-			}
-			else
+			} else
 			{
 				CompoundTag programs = nbt.getCompound("programs");
 				for(String name : programs.getAllKeys())
@@ -91,11 +90,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			}
 		}
 		
-		latestmessage.clear();
-		for(int id : installedPrograms)
-			latestmessage.put(id, nbt.getString("text" + id));
+		sburbClientProgramData.read(nbt.getCompound("sburb_client_data"));
+		sburbServerProgramData.read(nbt.getCompound("sburb_server_data"));
 		
-		programData = nbt.getCompound("programData");
 		if(nbt.contains("theme", Tag.TAG_STRING))
 			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(nbt.getString("theme")), computerTheme);
 		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
@@ -122,41 +119,43 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		super.saveAdditional(compound, provider);
 		
-		for(Entry<Integer, String> e : latestmessage.entrySet())
-			compound.putString("text" + e.getKey(), e.getValue());
-		
-		
-		compound.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
-		compound.put("programData", programData.copy());
+		compound.put("sburb_client_data", sburbClientProgramData.write());
+		compound.put("sburb_server_data", sburbServerProgramData.write());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		
-		IncompleteSburbCodeItem.writeBlockSet(compound, "hieroglyphsStored", hieroglyphsStored);
-		compound.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
-		
-		compound.putInt("blankDisksStored", blankDisksStored);
-		
-		compound.putString("theme", computerTheme.toString());
+		writeSharedData(compound);
 	}
 	
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag tagCompound = this.saveWithoutMetadata(provider);
-		tagCompound.remove("owner");
-		tagCompound.remove("ownerMost");
-		tagCompound.remove("ownerLeast");
+		CompoundTag compoundtag = new CompoundTag();
+		super.saveAdditional(compoundtag, provider);
+		
+		compoundtag.put("sburb_client_data", sburbClientProgramData.write());
+		compoundtag.put("sburb_server_data", sburbServerProgramData.writeForUpdatePacket(this, getLevel().getServer()));
+		
+		
 		if(owner != null)
-			tagCompound.putInt("ownerId", owner.getId());
-		if(hasProgram(1))
-		{
-			SburbConnections.get(getLevel().getServer()).getServerConnection(this).ifPresent(c ->
-					tagCompound.getCompound("programData").getCompound("program_1")
-							.putInt("connectedClient", c.client().getId())
-			);
-		}
-		return tagCompound;
+			compoundtag.putInt("ownerId", owner.getId());
+		
+		writeSharedData(compoundtag);
+		
+		return compoundtag;
+	}
+	
+	private void writeSharedData(CompoundTag compoundtag)
+	{
+		compoundtag.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
+		
+		IncompleteSburbCodeItem.writeBlockSet(compoundtag, "hieroglyphsStored", hieroglyphsStored);
+		compoundtag.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
+		
+		compoundtag.putInt("blankDisksStored", blankDisksStored);
+		
+		compoundtag.putString("theme", computerTheme.toString());
 	}
 	
 	@Nullable
@@ -184,11 +183,23 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return installedPrograms.contains(id);
 	}
 	
-	public CompoundTag getData(int id)
+	@Override
+	public SburbClientData getSburbClientData()
 	{
-		if(!programData.contains("program_" + id))
-			programData.put("program_" + id, new CompoundTag());
-		return programData.getCompound("program_" + id);
+		return this.sburbClientProgramData;
+	}
+	
+	@Override
+	public SburbServerData getSburbServerData()
+	{
+		return this.sburbServerProgramData;
+	}
+	
+	@Deprecated
+	public void clearComputerData()
+	{
+		this.sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
+		this.sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	}
 	
 	public void closeAll()
@@ -197,19 +208,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			ProgramData.getHandler(id).ifPresent(handler -> handler.onClosed(this));
 	}
 	
-	@Override
-	public void connected(PlayerIdentifier player, boolean isClient)
+	public Stream<Integer> installedPrograms()
 	{
-		if(isClient)
-		{
-			getData(0).putBoolean("isResuming", false);
-			getData(0).putBoolean("connectedToServer", true);
-		} else
-		{
-			getData(1).putBoolean("isOpen", false);
-		}
-		setChanged();
-		markBlockForUpdate();
+		return this.installedPrograms.stream();
 	}
 	
 	@Override
@@ -224,56 +225,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return ComputerReference.of(this);
 	}
 	
-	@Override
-	public boolean getClientBoolean(String name)
-	{
-		return getData(0).getBoolean(name);
-	}
-	@Override
-	public boolean getServerBoolean(String name)
-	{
-		return getData(1).getBoolean(name);
-	}
-	
-	@Override
-	public void putClientBoolean(String name, boolean value)
-	{
-		getData(0).putBoolean(name, value);
-		setChanged();
-		markBlockForUpdate();
-	}
-	@Override
-	public void putServerBoolean(String name, boolean value)
-	{
-		getData(1).putBoolean(name, value);
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	@Override
-	public void clearConnectedClient()
-	{
-		getData(1).putString("connectedClient", "");
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	@Override
-	public void putClientMessage(String message)
-	{
-		latestmessage.put(0, message);
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	@Override
-	public void putServerMessage(String message)
-	{
-		latestmessage.put(1, message);
-		setChanged();
-		markBlockForUpdate();
-	}
-	
 	public ResourceLocation getTheme()
 	{
 		return computerTheme;
@@ -282,8 +233,53 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void setTheme(ResourceLocation themeId)
 	{
 		this.computerTheme = themeId;
-		setChanged();
-		markBlockForUpdate();
+		markDirtyAndResend();
+	}
+	
+	public boolean insertDisk(ItemStack stackInHand)
+	{
+		if(isBroken() || level == null)
+			return false;
+		
+		OptionalInt optionalId = ProgramData.getProgramID(stackInHand);
+		
+		if(stackInHand.is(MSItems.BLANK_DISK.get()))
+		{
+			if(blankDisksStored < 2) //only allow two blank disks to be burned at a time
+			{
+				stackInHand.shrink(1);
+				blankDisksStored++;
+				setChanged();
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+				return true;
+			}
+		} else if(stackInHand.is(Items.MUSIC_DISC_11))
+		{
+			if(!level.isClientSide && installedPrograms.size() < 3)
+			{
+				stackInHand.shrink(1);
+				closeAll();
+				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
+				setChanged();
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+			}
+			return true;
+		} else if(optionalId.isPresent())
+		{
+			int id = optionalId.getAsInt();
+			if(!level.isClientSide && !hasProgram(id))
+			{
+				stackInHand.shrink(1);
+				installedPrograms.add(id);
+				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
+				setChanged();
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+				ProgramData.getHandler(id).ifPresent(handler -> handler.onDiskInserted(this));
+			}
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void burnDisk(int programId)
@@ -307,9 +303,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			
 			blankDisksStored--;
 			
-			//Imitates the structure block to ensure that changes are sent client-side
-			setChanged();
-			markBlockForUpdate();
+			markDirtyAndResend();
 		}
 	}
 	
@@ -321,11 +315,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return hasParadoxInfoStored && hieroglyphsStored.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
 	}
 	
-	public void markBlockForUpdate()
+	public void markDirtyAndResend()
 	{
-		if(level==null) return;
-		BlockState state = level.getBlockState(worldPosition);
-		this.level.sendBlockUpdated(worldPosition, state, state, 3);
+		setChanged();
+		if(level instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(worldPosition);
 	}
 	
 	public static Optional<ComputerBlockEntity> getAccessibleComputer(ServerPlayer player, BlockPos pos)
