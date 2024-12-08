@@ -7,6 +7,7 @@ import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.IncompleteSburbCodeItem;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -27,6 +28,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,10 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -229,6 +228,52 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		this.computerTheme = themeId;
 		markDirtyAndResend();
+	}
+	
+	public boolean insertDisk(ItemStack stackInHand)
+	{
+		if(isBroken() || level == null)
+			return false;
+		
+		OptionalInt optionalId = ProgramData.getProgramID(stackInHand);
+		
+		if(stackInHand.is(MSItems.BLANK_DISK.get()))
+		{
+			if(blankDisksStored < 2) //only allow two blank disks to be burned at a time
+			{
+				stackInHand.shrink(1);
+				blankDisksStored++;
+				setChanged();
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+				return true;
+			}
+		} else if(stackInHand.is(Items.MUSIC_DISC_11))
+		{
+			if(!level.isClientSide && installedPrograms.size() < 3)
+			{
+				stackInHand.shrink(1);
+				closeAll();
+				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
+				setChanged();
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+			}
+			return true;
+		} else if(optionalId.isPresent())
+		{
+			int id = optionalId.getAsInt();
+			if(!level.isClientSide && !hasProgram(id))
+			{
+				stackInHand.shrink(1);
+				installedPrograms.add(id);
+				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
+				setChanged();
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+				ProgramData.getHandler(id).ifPresent(handler -> handler.onDiskInserted(this));
+			}
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void burnDisk(int programId)

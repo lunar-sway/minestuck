@@ -37,7 +37,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
-import java.util.OptionalInt;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -95,7 +94,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity))
 			return ItemInteractionResult.FAIL;
 		
-		if(insertDisk(blockEntity, state, level, pos, player, hand))
+		if(blockEntity.insertDisk(player.getItemInHand(hand)))
 			return ItemInteractionResult.SUCCESS;
 		//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 		
@@ -137,53 +136,6 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			
 			computer.setTheme(defaultTheme);
 		}
-	}
-	
-	private boolean insertDisk(ComputerBlockEntity blockEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
-	{
-		if(blockEntity.isBroken())
-			return false;
-		
-		ItemStack stackInHand = player.getItemInHand(handIn);
-		OptionalInt optionalId = ProgramData.getProgramID(stackInHand);
-		
-		if(stackInHand.is(MSItems.BLANK_DISK.get()))
-		{
-			if(blockEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
-			{
-				stackInHand.shrink(1);
-				blockEntity.blankDisksStored++;
-				blockEntity.setChanged();
-				level.sendBlockUpdated(pos, state, state, 3);
-				return true;
-			}
-		} else if(stackInHand.is(Items.MUSIC_DISC_11))
-		{
-			if(!level.isClientSide && blockEntity.installedPrograms.size() < 3)
-			{
-				stackInHand.shrink(1);
-				blockEntity.closeAll();
-				level.setBlock(pos, state.setValue(STATE, State.BROKEN), Block.UPDATE_CLIENTS);
-				blockEntity.setChanged();
-				level.sendBlockUpdated(pos, state, state, 3);
-			}
-			return true;
-		} else if(optionalId.isPresent())
-		{
-			int id = optionalId.getAsInt();
-			if(!level.isClientSide && !blockEntity.hasProgram(id))
-			{
-				stackInHand.shrink(1);
-				blockEntity.installedPrograms.add(id);
-				level.setBlock(pos, state.setValue(STATE, State.GAME_LOADED), Block.UPDATE_CLIENTS);
-				blockEntity.setChanged();
-				level.sendBlockUpdated(pos, state, state, 3);
-				ProgramData.getHandler(id).ifPresent(handler -> handler.onDiskInserted(blockEntity));
-			}
-			return true;
-		}
-		
-		return false;
 	}
 	
 	@Nullable
