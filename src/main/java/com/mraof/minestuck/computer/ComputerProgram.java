@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 /**
  * The static interface will probably later be merged with DeployList,
@@ -18,13 +18,13 @@ import java.util.Map.Entry;
 public abstract class ComputerProgram
 { //This is overall a bad way of handling programs. Should be rewritten
 	
-	private static final HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<>();
-	public static final ResourceLocation INVALID_ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/invalid.png");
+	private static final HashMap<Integer, Supplier<? extends ComputerProgram>> programs = new HashMap<>();
+	public static final ResourceLocation INVALID_ICON = Minestuck.id("textures/gui/desktop_icon/invalid.png");
 	
 	/**
 	 * Should only be used client-side
 	 */
-	public static void registerProgramClass(int id, Class<? extends ComputerProgram> program)
+	public static void registerProgramGui(int id, Supplier<? extends ComputerProgram> program)
 	{
 		if(programs.containsKey(id) || id == -1 || id == -2)
 			throw new IllegalArgumentException("Program id " + id + " is already used!");
@@ -37,22 +37,7 @@ public abstract class ComputerProgram
 	 */
 	public static ComputerProgram getProgram(int id)
 	{
-		try
-		{
-			return programs.get(id).getDeclaredConstructor().newInstance();
-		} catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public final int getId()
-	{
-		for(Entry<Integer, Class<? extends ComputerProgram>> entry : programs.entrySet())
-			if(entry.getValue() == this.getClass())
-				return entry.getKey();
-		return -1;
+		return programs.get(id).get();
 	}
 	
 	/**
