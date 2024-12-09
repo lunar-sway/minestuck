@@ -2,16 +2,13 @@ package com.mraof.minestuck.item.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BlockTypes;
 
+import java.util.Collections;
 import java.util.List;
 
 public record SburbCodeComponent(boolean paradoxCode, List<Block> hieroglyphs)
@@ -32,5 +29,6 @@ public record SburbCodeComponent(boolean paradoxCode, List<Block> hieroglyphs)
 			SburbCodeComponent::new
 	);
 	
-	public static final SburbCodeComponent DEFAULT_COMPONENT = new SburbCodeComponent(true, List.of());
+	public static final SburbCodeComponent EMPTY = new SburbCodeComponent(false, Collections.emptyList());
+	public static final SburbCodeComponent PARADOX_INFO = new SburbCodeComponent(true, Collections.emptyList());
 }

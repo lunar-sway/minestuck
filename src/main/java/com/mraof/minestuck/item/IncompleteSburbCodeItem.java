@@ -25,7 +25,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,15 +46,12 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	@Override
 	public boolean getParadoxInfo(ItemStack stack)
 	{
-		return stack != null && stack.has(MSItemComponents.SBURB_CODE) && stack.get(MSItemComponents.SBURB_CODE).paradoxCode();
+		return stack.getOrDefault(MSItemComponents.SBURB_CODE, SburbCodeComponent.EMPTY).paradoxCode();
 	}
 	
 	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
 	{
-		List<Block> recordedHieroglyphs = new ArrayList<>();
-		
-		if(stack.has(MSItemComponents.SBURB_CODE))
-			recordedHieroglyphs = stack.get(MSItemComponents.SBURB_CODE).hieroglyphs();
+		List<Block> recordedHieroglyphs = stack.getOrDefault(MSItemComponents.SBURB_CODE, SburbCodeComponent.EMPTY).hieroglyphs();
 		
 		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(hasInfo, recordedHieroglyphs));
 	}
@@ -63,10 +63,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	@Override
 	public Set<Block> getRecordedBlocks(ItemStack stack)
 	{
-		if(stack.has(MSItemComponents.SBURB_CODE))
-			return new HashSet<>(stack.get(MSItemComponents.SBURB_CODE).hieroglyphs());
-		else
-			return Collections.emptySet();
+		return new HashSet<>(stack.getOrDefault(MSItemComponents.SBURB_CODE, SburbCodeComponent.EMPTY).hieroglyphs());
 	}
 	
 	/**
@@ -80,8 +77,8 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	
 	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
 	{
-		SburbCodeComponent existingSburbCode = stack.get(MSItemComponents.SBURB_CODE);
-		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(existingSburbCode != null && existingSburbCode.paradoxCode(), List.copyOf(blockList)));
+		boolean paradoxCode = stack.getOrDefault(MSItemComponents.SBURB_CODE, SburbCodeComponent.EMPTY).paradoxCode();
+		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(paradoxCode, List.copyOf(blockList)));
 		return stack;
 	}
 	
@@ -198,19 +195,14 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	
 	public static boolean tryAddBlockToSet(ItemStack stack, Block block)
 	{
-		if(!stack.has(MSItemComponents.SBURB_CODE))
-		{
-			stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(false, List.of(block)));
-			return true;
-		}
+		SburbCodeComponent existingComponent = stack.getOrDefault(MSItemComponents.SBURB_CODE, SburbCodeComponent.EMPTY);
 		
-		List<Block> recordedHieroglyphs = new ArrayList<>(stack.get(MSItemComponents.SBURB_CODE).hieroglyphs());
-		
-		if(recordedHieroglyphs.contains(block))
+		if(existingComponent.hieroglyphs().contains(block))
 			return false;
 		
+		List<Block> recordedHieroglyphs = new ArrayList<>(existingComponent.hieroglyphs());
 		recordedHieroglyphs.add(block);
-		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(stack.get(MSItemComponents.SBURB_CODE).paradoxCode(), recordedHieroglyphs));
+		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(existingComponent.paradoxCode(), recordedHieroglyphs));
 		
 		return true;
 	}

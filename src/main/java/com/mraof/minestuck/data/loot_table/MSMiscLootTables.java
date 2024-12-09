@@ -40,7 +40,8 @@ public class MSMiscLootTables implements LootTableSubProvider
 				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.COMPUTER_PARTS.get()).setWeight(10).setQuality(3)))
 				.withPool(LootPool.lootPool().name("code").setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3)).apply(SetComponentsFunction.setComponent(MSItemComponents.SBURB_CODE.get(), SburbCodeComponent.DEFAULT_COMPONENT)))
+						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3))
+						.apply(SetComponentsFunction.setComponent(MSItemComponents.SBURB_CODE.get(), SburbCodeComponent.PARADOX_INFO)))
 		);
 	}
 }
