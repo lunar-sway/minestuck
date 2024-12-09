@@ -59,7 +59,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	private final Set<Integer> installedPrograms = new HashSet<>();
 	public ComputerScreen gui;
 	@Nullable
-	public PlayerIdentifier owner;
+	private PlayerIdentifier owner;
 	//client side only
 	public int ownerId;
 	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
@@ -213,10 +213,18 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return this.installedPrograms.stream();
 	}
 	
+	@Nullable
 	@Override
 	public PlayerIdentifier getOwner()
 	{
 		return owner;
+	}
+	
+	public void initializeOwner(PlayerIdentifier owner)
+	{
+		if(this.owner != null)
+			throw new IllegalStateException("Not allowed to set computer owner in this state");
+		this.owner = owner;
 	}
 	
 	@Override

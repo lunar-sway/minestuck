@@ -18,7 +18,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -303,7 +302,7 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 	private static boolean isComputerSourceInvalidFor(Level level, BlockPos pos, PlayerIdentifier owner)
 	{
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computerBlockEntity)
-			return isComputerSourceInvalid(computerBlockEntity) || !computerBlockEntity.owner.equals(owner);
+			return isComputerSourceInvalid(computerBlockEntity) || !owner.equals(computerBlockEntity.getOwner());
 		
 		return true;
 	}

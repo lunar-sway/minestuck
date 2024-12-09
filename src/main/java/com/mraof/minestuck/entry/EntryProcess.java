@@ -252,7 +252,7 @@ public class EntryProcess
 				return true;
 			} else if(be instanceof ComputerBlockEntity computer)
 			{
-				if(!computer.owner.appliesTo(player))
+				if(computer.getOwner() == null || !computer.getOwner().appliesTo(player))
 				{
 					player.displayClientMessage(Component.translatable(NOT_YOUR_COMPUTER), false);
 					return true;

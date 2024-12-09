@@ -37,6 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
+import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -132,7 +133,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			computer.owner = IdentifierHandler.encode(player);
+			computer.initializeOwner(Objects.requireNonNull(IdentifierHandler.encode(player)));
 			
 			computer.setTheme(defaultTheme);
 		}

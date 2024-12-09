@@ -9,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -211,14 +212,14 @@ public final class ComputerInteractions
 	public void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE)
 	{
 		ComputerReference oldRef = ComputerReference.of(oldBE), newRef = ComputerReference.of(newBE);
-		if(!oldBE.owner.equals(newBE.owner))
-			throw new IllegalStateException("Moving computers with different owners! (" + oldBE.owner + " and " + newBE.owner + ")");
+		if(!Objects.equals(oldBE.getOwner(), newBE.getOwner()))
+			throw new IllegalStateException("Moving computers with different owners! (" + oldBE.getOwner() + " and " + newBE.getOwner() + ")");
 		
 		skaianetData.connections.activeConnections().forEach(c -> c.updateComputer(oldBE, newRef));
 		
-		resumingClients.replace(oldBE.owner, oldRef, newRef);
-		resumingServers.replace(oldBE.owner, oldRef, newRef);
-		openedServers.replace(oldBE.owner, oldRef, newRef);
+		resumingClients.replace(oldBE.getOwner(), oldRef, newRef);
+		resumingServers.replace(oldBE.getOwner(), oldRef, newRef);
+		openedServers.replace(oldBE.getOwner(), oldRef, newRef);
 	}
 	
 	public boolean isClientActive(PlayerIdentifier player)
