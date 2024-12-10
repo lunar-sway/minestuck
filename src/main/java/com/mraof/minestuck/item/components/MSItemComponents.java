@@ -6,6 +6,8 @@ import com.mraof.minestuck.item.block.TransportalizerItem;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.Unit;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -32,11 +34,11 @@ public final class MSItemComponents
 					.persistent(StoneTabletTextComponent.CODEC)
 					.networkSynchronized(StoneTabletTextComponent.STREAM_CODEC)
 					.build());
-	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SburbCodeComponent>> SBURB_CODE = REGISTRY.register("sburb_code", () ->
-			new DataComponentType.Builder<SburbCodeComponent>()
-					.persistent(SburbCodeComponent.CODEC)
-					.networkSynchronized(SburbCodeComponent.STREAM_CODEC)
-					.build());
+	public static final Supplier<DataComponentType<HieroglyphCode>> HIEROGLYPH_CODE = REGISTRY.registerComponentType("hieroglyph_code",
+			builder -> builder.persistent(HieroglyphCode.CODEC).networkSynchronized(HieroglyphCode.STREAM_CODEC));
+	public static final Supplier<DataComponentType<Unit>> PARADOX_CODE = REGISTRY.registerComponentType("paradox_code",
+			builder -> builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)));
+	
 	public static final Supplier<DataComponentType<Long>> VALUE = REGISTRY.registerComponentType("value",
 			builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG));
 	public static final Supplier<DataComponentType<Integer>> COLOR = REGISTRY.registerComponentType("color",
