@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.HieroglyphCode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -35,7 +35,7 @@ public class HieroglyphBlock extends Block
 			level.playSound(null, pos, SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
 			
 			ItemStack newStack = new ItemStack(MSItems.SBURB_CODE.get());
-			IncompleteSburbCodeItem.addRecordedInfo(newStack, state.getBlock());
+			HieroglyphCode.addBlock(newStack, state.getBlock());
 			newStack.setCount(amountInHandStack);
 			player.setItemInHand(hand, newStack);
 		}

@@ -19,8 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,31 +46,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	@Override
 	public Set<Block> getRecordedBlocks(ItemStack stack)
 	{
-		return new HashSet<>(stack.getOrDefault(MSItemComponents.HIEROGLYPH_CODE, HieroglyphCode.EMPTY).hieroglyphs());
-	}
-	
-	/**
-	 * Takes a block that is in the GREEN_HIEROGLYPHS block tag and adds its registry name(as a string) to the item's nbt if it did not already have it stored.
-	 * @return true if the item stack was changed.
-	 */
-	public static boolean addRecordedInfo(ItemStack stack, Block block)
-	{
-		HieroglyphCode existingComponent = stack.getOrDefault(MSItemComponents.HIEROGLYPH_CODE, HieroglyphCode.EMPTY);
-		
-		if(existingComponent.hieroglyphs().contains(block))
-			return false;
-		
-		List<Block> recordedHieroglyphs = new ArrayList<>(existingComponent.hieroglyphs());
-		recordedHieroglyphs.add(block);
-		stack.set(MSItemComponents.HIEROGLYPH_CODE, new HieroglyphCode(recordedHieroglyphs));
-		
-		return true;
-	}
-	
-	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
-	{
-		stack.set(MSItemComponents.HIEROGLYPH_CODE, new HieroglyphCode(List.copyOf(blockList)));
-		return stack;
+		return HieroglyphCode.getBlocks(stack);
 	}
 	
 	@Override
@@ -92,7 +66,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		for(Block iterateBlock : blockEntity.hieroglyphsStored)
 		{
 			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
-				changedItem |= IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+				changedItem |= HieroglyphCode.addBlock(heldStack, iterateBlock);
 		}
 		
 		if(changedItem)
@@ -117,7 +91,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		if(!state.is(MSTags.Blocks.GREEN_HIEROGLYPHS))
 			return InteractionResult.FAIL;
 		
-		if(!addRecordedInfo(stackInUse, state.getBlock()))
+		if(!HieroglyphCode.addBlock(stackInUse, state.getBlock()))
 			return InteractionResult.FAIL;
 		
 		level.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
