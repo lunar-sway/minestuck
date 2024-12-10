@@ -5,13 +5,7 @@ import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.components.SburbCodeComponent;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -24,13 +18,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code.
@@ -72,7 +63,16 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	 */
 	public static boolean addRecordedInfo(ItemStack stack, Block block)
 	{
-		return tryAddBlockToSet(stack, block);
+		SburbCodeComponent existingComponent = stack.getOrDefault(MSItemComponents.SBURB_CODE, SburbCodeComponent.EMPTY);
+		
+		if(existingComponent.hieroglyphs().contains(block))
+			return false;
+		
+		List<Block> recordedHieroglyphs = new ArrayList<>(existingComponent.hieroglyphs());
+		recordedHieroglyphs.add(block);
+		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(existingComponent.paradoxCode(), recordedHieroglyphs));
+		
+		return true;
 	}
 	
 	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
@@ -168,42 +168,5 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 			tooltip.add(Component.translatable("item.minestuck.sburb_code.additional_info"));
 		} else
 			tooltip.add(Component.translatable("message.shift_for_more_info"));
-	}
-	
-	public static Set<Block> readBlockSet(CompoundTag nbt, String key)
-	{
-		return nbt.getList(key, Tag.TAG_STRING).stream().map(Tag::getAsString)
-				//Turn the Strings into ResourceLocations
-				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
-				//Turn the ResourceLocations into Blocks
-				.flatMap(blockId -> Stream.ofNullable(BuiltInRegistries.BLOCK.get(blockId)))
-				//Gather the blocks into a set
-				.collect(Collectors.toSet());
-	}
-	
-	public static void writeBlockSet(CompoundTag nbt, String key, @Nonnull Set<Block> blocks)
-	{
-		ListTag listTag = new ListTag();
-		for(Block blockIterate : blocks)
-		{
-			String blockName = String.valueOf(BuiltInRegistries.BLOCK.getKey(blockIterate));
-			listTag.add(StringTag.valueOf(blockName));
-		}
-		
-		nbt.put(key, listTag);
-	}
-	
-	public static boolean tryAddBlockToSet(ItemStack stack, Block block)
-	{
-		SburbCodeComponent existingComponent = stack.getOrDefault(MSItemComponents.SBURB_CODE, SburbCodeComponent.EMPTY);
-		
-		if(existingComponent.hieroglyphs().contains(block))
-			return false;
-		
-		List<Block> recordedHieroglyphs = new ArrayList<>(existingComponent.hieroglyphs());
-		recordedHieroglyphs.add(block);
-		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(existingComponent.paradoxCode(), recordedHieroglyphs));
-		
-		return true;
 	}
 }
