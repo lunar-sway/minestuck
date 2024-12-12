@@ -27,10 +27,7 @@
       "functions": [
         {
           "components": {
-            "minestuck:sburb_code": {
-              "has_paradox_info": true,
-              "recorded_hieroglyphs": []
-            }
+            "minestuck:paradox_code": {}
           },
           "function": "minecraft:set_components"
         }
