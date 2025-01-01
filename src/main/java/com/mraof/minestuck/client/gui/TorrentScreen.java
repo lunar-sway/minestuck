@@ -247,6 +247,7 @@ public class TorrentScreen extends Screen
 			yOffset++;
 		}
 		
+		//TODO because this is being reset, the tooltip is flashing and the scroll returns to 0 preventing it from moving
 		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, torrentSession, cache, font, gristEntries, allGristTypes);
 		torrentContainers.add(torrentContainer);
 		addRenderableWidget(torrentContainer);
