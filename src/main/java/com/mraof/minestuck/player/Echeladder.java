@@ -32,6 +32,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 @MethodsReturnNonnullByDefault
@@ -44,8 +45,8 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static final int RUNG_COUNT = 50;
 	
-	private static final ResourceLocation echeladderHealthBoostModifierID = Minestuck.id("echeladder_health_boost");    //TODO Might be so that only one is needed, as we only add one modifier for each attribute.
-	private static final ResourceLocation echeladderDamageBoostModifierID = Minestuck.id("echeladder_damage_boost");
+	private static final ResourceLocation HEALTH_BOOST_ID = Minestuck.id("echeladder_health_boost");
+	private static final ResourceLocation DAMAGE_BOOST_ID = Minestuck.id("echeladder_damage_boost");
 	private static final int[] BOONDOLLARS = new int[]{0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
 	private static final long[] GRIST_CAPACITY =
@@ -208,15 +209,20 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		updateAttribute(player.getAttribute(Attributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierID, healthBonus, AttributeModifier.Operation.ADD_VALUE));    //If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
-		updateAttribute(player.getAttribute(Attributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierID, damageBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+		updateAttribute(player.getAttribute(Attributes.MAX_HEALTH),
+				new AttributeModifier(HEALTH_BOOST_ID, healthBonus, AttributeModifier.Operation.ADD_VALUE));
+		updateAttribute(player.getAttribute(Attributes.ATTACK_DAMAGE),
+				new AttributeModifier(DAMAGE_BOOST_ID, damageBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 	}
 	
-	public void updateAttribute(AttributeInstance attribute, AttributeModifier modifier)
+	public void updateAttribute(@Nullable AttributeInstance attribute, AttributeModifier modifier)
 	{
-		if(attribute.hasModifier(modifier.id()))
-			attribute.removeModifier(modifier.id());
-		attribute.addPermanentModifier(modifier);
+		if(attribute != null)
+		{
+			// Max health modifiers should be serialized (by being permanent),
+			// or else the health will be clamped without the max health modifier on player load.
+			attribute.addOrReplacePermanentModifier(modifier);
+		}
 	}
 	
 	@Override
