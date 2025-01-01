@@ -8,7 +8,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
-public final class DiskBurner implements ProgramGui
+public final class DiskBurnerGui implements ProgramGui
 {
 	public static final String NEED_CODE = "minestuck.program.disk_burner.needs_code";
 	public static final String NO_DISKS = "minestuck.program.disk_burner.needs_disks";

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class SburbClient implements ProgramGui
+public final class SburbClientGui implements ProgramGui
 {
 	public static final String CLOSE_BUTTON = "minestuck.program.close_button"; //also used in SburbServer
 	public static final String RESUME_BUTTON = "minestuck.program.resume_button"; //also used in SburbServer

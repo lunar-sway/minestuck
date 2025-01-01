@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public final class SburbServer implements ProgramGui
+public final class SburbServerGui implements ProgramGui
 {
-	public static final String CLOSE_BUTTON = SburbClient.CLOSE_BUTTON;
+	public static final String CLOSE_BUTTON = SburbClientGui.CLOSE_BUTTON;
 	public static final String EDIT_BUTTON = "minestuck.program.server.edit_button";
 	public static final String GIVE_BUTTON = "minestuck.program.server.give_button";
 	public static final String OPEN_BUTTON = "minestuck.program.server.open_button";
-	public static final String RESUME_BUTTON = SburbClient.RESUME_BUTTON;
-	public static final String CONNECT = SburbClient.CONNECT;
+	public static final String RESUME_BUTTON = SburbClientGui.RESUME_BUTTON;
+	public static final String CONNECT = SburbClientGui.CONNECT;
 	public static final String OFFLINE = "minestuck.program.server.offline_message";
 	public static final String SERVER_ACTIVE = "minestuck.program.server.server_active_message";
 	public static final String RESUME_SERVER = "minestuck.program.server.resume_server_message";

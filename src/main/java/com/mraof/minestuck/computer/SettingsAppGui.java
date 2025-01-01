@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public final class SettingsApp implements ProgramGui
+public final class SettingsAppGui implements ProgramGui
 {
 	public static final String THEME = "minestuck.program.settings.theme";
 	public static final String TITLE = "minestuck.program.settings.title";

@@ -90,10 +90,10 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.BOUNCING_PROJECTILE.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.POSTER.get(), PosterRenderer::new);
 		
-		ProgramGui.Registry.register(ProgramType.SBURB_CLIENT, SburbClient::new);
-		ProgramGui.Registry.register(ProgramType.SBURB_SERVER, SburbServer::new);
-		ProgramGui.Registry.register(ProgramType.DISK_BURNER, DiskBurner::new);
-		ProgramGui.Registry.register(ProgramType.SETTINGS, SettingsApp::new);
+		ProgramGui.Registry.register(ProgramType.SBURB_CLIENT, SburbClientGui::new);
+		ProgramGui.Registry.register(ProgramType.SBURB_SERVER, SburbServerGui::new);
+		ProgramGui.Registry.register(ProgramType.DISK_BURNER, DiskBurnerGui::new);
+		ProgramGui.Registry.register(ProgramType.SETTINGS, SettingsAppGui::new);
 		
 		registerArmorModels();
 
