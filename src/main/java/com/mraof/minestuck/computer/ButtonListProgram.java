@@ -26,19 +26,6 @@ public abstract class ButtonListProgram extends ComputerProgram
 	
 	private int index = 0;
 	
-	/**
-	 * Creates an ArrayList of UnlocalizedString and returns it.
-	 * The first item in the list must be the message above the buttons, and then it continues with the topmost
-	 * button and down.
-	 *
-	 * @param be The {@link ComputerBlockEntity} this program is associated with, for access to related data.
-	 */
-	protected abstract InterfaceData getInterfaceData(ComputerBlockEntity be);
-	
-	protected record InterfaceData(Component message, List<ButtonData> buttonData)
-	{
-	}
-	
 	protected record ButtonData(Component message, Runnable onClick)
 	{
 	}
@@ -80,22 +67,22 @@ public abstract class ButtonListProgram extends ComputerProgram
 		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
 	}
 	
-	@Override
-	public final void onUpdateGui(ComputerScreen gui)
+	protected final void updateMessage(Component message)
 	{
-		InterfaceData data = getInterfaceData(gui.be);
-		
-		message = data.message;
-		
-		downButton.active = data.buttonData.size() >= index + 4;
+		this.message = message;
+	}
+	
+	protected final void updateButtons(List<ButtonData> buttonsData)
+	{
+		downButton.active = buttonsData.size() >= index + 4;
 		upButton.active = index > 0;
 		
 		for(int i = 0; i < 4; i++)
 		{
 			Button button = buttons.get(i);
-			if(index + i < data.buttonData.size())
+			if(index + i < buttonsData.size())
 			{
-				ButtonData buttonData = data.buttonData.get(index + i);
+				ButtonData buttonData = buttonsData.get(index + i);
 				button.active = true;
 				button.setMessage(buttonData.message);
 				buttonMap.put(button, buttonData.onClick);

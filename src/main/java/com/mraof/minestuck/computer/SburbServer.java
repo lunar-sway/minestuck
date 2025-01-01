@@ -2,6 +2,7 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
 import com.mraof.minestuck.network.computer.CloseSburbConnectionPackets;
 import com.mraof.minestuck.network.computer.OpenSburbServerPacket;
@@ -31,8 +32,9 @@ public final class SburbServer extends ButtonListProgram
 	public static final String RESUME_SERVER = "minestuck.program.server.resume_server_message";
 	
 	@Override
-	protected InterfaceData getInterfaceData(ComputerBlockEntity computer)
+	public void onUpdateGui(ComputerScreen gui)
 	{
+		ComputerBlockEntity computer = gui.be;
 		Component message;
 		List<ButtonData> list = new ArrayList<>();
 		
@@ -88,7 +90,8 @@ public final class SburbServer extends ButtonListProgram
 			}
 		}
 		
-		return new InterfaceData(eventMessage.<Component>map(Component::translatable).orElse(message), list);
+		updateMessage(eventMessage.<Component>map(Component::translatable).orElse(message));
+		updateButtons(list);
 	}
 	
 	private static void sendClearMessagePacketIfRelevant(ComputerBlockEntity computer)
