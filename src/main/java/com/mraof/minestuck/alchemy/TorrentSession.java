@@ -4,19 +4,26 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class TorrentSession
 {
 	private static final Codec<List<GristType>> GRISTS_CODEC = Codec.list(GristTypes.REGISTRY.byNameCodec());
@@ -26,6 +33,15 @@ public class TorrentSession
 			GRISTS_CODEC.fieldOf("seeding").forGetter(TorrentSession::getSeeding),
 			LEECHES_CODEC.fieldOf("leeching").forGetter(TorrentSession::getLeeching)
 	).apply(instance, TorrentSession::new));
+	public static final StreamCodec<RegistryFriendlyByteBuf, TorrentSession> STREAM_CODEC = StreamCodec.composite(
+			IdentifierHandler.UUIDIdentifier.STREAM_CODEC,
+			TorrentSession::getSeeder,
+			GristType.STREAM_CODEC.apply(ByteBufCodecs.list()),
+			TorrentSession::getSeeding,
+			Leech.STREAM_CODEC.apply(ByteBufCodecs.list()),
+			TorrentSession::getLeeching,
+			TorrentSession::new
+	);
 	
 	private final IdentifierHandler.UUIDIdentifier seeder;
 	private final List<GristType> seeding = new ArrayList<>();
@@ -89,11 +105,11 @@ public class TorrentSession
 	}
 	
 	@SubscribeEvent
-	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
+	public static void onServerTickEvent(ServerTickEvent.Post event)
 	{
 		MinecraftServer server = event.getServer();
 		
-		if(event.phase == TickEvent.Phase.START && server.overworld().getGameTime() % 20 == 0)
+		if(server.overworld().getGameTime() % 20 == 0)
 		{
 			if(MinestuckConfig.SERVER.gristTorrentVisibility.get().equals(MinestuckConfig.TorrentVisibility.NONE))
 				return; //no need to update if nothing is visible
@@ -125,7 +141,7 @@ public class TorrentSession
 	/**
 	 * Returns the list of everything the torrent is seeding, minus any grist types the relevant cache cannot distribute
 	 */
-	public List<GristType> getViableSeeding(ImmutableGristSet seederCacheSet)
+	public List<GristType> getViableSeeding(GristSet.Immutable seederCacheSet)
 	{
 		List<GristType> seeding = new ArrayList<>(this.seeding);
 		
@@ -140,6 +156,13 @@ public class TorrentSession
 				IdentifierHandler.UUIDIdentifier.CODEC.fieldOf("id").forGetter(Leech::id),
 				GRISTS_CODEC.fieldOf("grist_types").forGetter(Leech::gristTypes)
 		).apply(instance, Leech::new));
+		public static final StreamCodec<RegistryFriendlyByteBuf, Leech> STREAM_CODEC = StreamCodec.composite(
+				IdentifierHandler.UUIDIdentifier.STREAM_CODEC,
+				Leech::id,
+				GristType.STREAM_CODEC.apply(ByteBufCodecs.list()),
+				Leech::gristTypes,
+				Leech::new
+		);
 		
 		public boolean UUIDMatches(IdentifierHandler.UUIDIdentifier identifierIn)
 		{
@@ -150,12 +173,19 @@ public class TorrentSession
 	}
 	
 	//TODO This overlaps heavily with ClientCache, however that uses GristSet which does not have a CODEC
-	public record LimitedCache(ImmutableGristSet set, long limit)
+	public record LimitedCache(GristSet.Immutable set, long limit)
 	{
 		public static final Codec<LimitedCache> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ImmutableGristSet.NON_NEGATIVE_CODEC.fieldOf("grist_set").forGetter(LimitedCache::set),
+				GristSet.Codecs.NON_NEGATIVE_CODEC.fieldOf("grist_set").forGetter(LimitedCache::set),
 				Codec.LONG.fieldOf("limit").forGetter(LimitedCache::limit)
 		).apply(instance, LimitedCache::new));
+		public static final StreamCodec<RegistryFriendlyByteBuf, LimitedCache> STREAM_CODEC = StreamCodec.composite(
+				GristSet.Codecs.STREAM_CODEC,
+				LimitedCache::set,
+				ByteBufCodecs.VAR_LONG,
+				LimitedCache::limit,
+				LimitedCache::new
+		);
 	}
 	
 	public static final Codec<Map<TorrentSession, LimitedCache>> TORRENT_DATA_CODEC = Codec.unboundedMap(TorrentSession.CODEC, LimitedCache.CODEC);

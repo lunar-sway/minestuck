@@ -136,7 +136,7 @@ public final class TorrentHelper
 				}
 			});
 			
-			PacketDistributor.PLAYER.with(seederPlayer).send(new TorrentPackets.UpdateClient(visibleTorrentData));
+			PacketDistributor.sendToPlayer(seederPlayer, new TorrentPackets.UpdateClient(visibleTorrentData));
 		}
 	}
 	
