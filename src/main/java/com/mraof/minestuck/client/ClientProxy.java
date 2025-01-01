@@ -288,7 +288,9 @@ public class ClientProxy
 				if(this.renderer == null)
 					this.renderer = new GeoArmorRenderer<>(new PrismarineArmorModel());
 				
-				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
+				Minecraft mc = Minecraft.getInstance();
+				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original, mc.renderBuffers().bufferSource(),
+						mc.getTimer().getGameTimeDeltaPartialTick(true), 0, 0, 0, 0);
 				return this.renderer;
 			}
 		}, MSItems.PRISMARINE_HELMET, MSItems.PRISMARINE_CHESTPLATE, MSItems.PRISMARINE_LEGGINGS, MSItems.PRISMARINE_BOOTS);
@@ -303,7 +305,9 @@ public class ClientProxy
 				if(this.renderer == null)
 					this.renderer = new GeoArmorRenderer<>(new IronLassArmorModel());
 				
-				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
+				Minecraft mc = Minecraft.getInstance();
+				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original, mc.renderBuffers().bufferSource(),
+						mc.getTimer().getGameTimeDeltaPartialTick(true), 0, 0, 0, 0);
 				return this.renderer;
 			}
 		}, MSItems.IRON_LASS_GLASSES, MSItems.IRON_LASS_CHESTPLATE, MSItems.IRON_LASS_SKIRT, MSItems.IRON_LASS_SHOES);
