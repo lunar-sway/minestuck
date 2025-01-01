@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -86,7 +86,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack heldItem = player.getItemInHand(hand);
 		if(state.getValue(STATE) == State.OFF)
 		{
-			if(ProgramData.getProgramType(heldItem).isEmpty())
+			if(ProgramType.getForDisk(heldItem).isEmpty())
 				return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
 			
 			turnOn(state, level, pos, player);
@@ -165,7 +165,8 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		be.closeAll();
 		
 		//program disks
-		be.installedPrograms().forEach(programType -> Containers.dropItemStack(level, x, y, z, ProgramData.getItem(programType)));
+		be.installedPrograms().forEach(programType -> programType.diskItem()
+				.ifPresent(disk -> Containers.dropItemStack(level, x, y, z, disk.getDefaultInstance())));
 		
 		//blank disks
 		Containers.dropItemStack(level, x, y, z, new ItemStack(MSItems.BLANK_DISK.get(), be.blankDisksStored));

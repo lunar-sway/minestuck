@@ -27,6 +27,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -168,7 +169,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		super.onLoad();
 		for(ProgramType programType : installedPrograms)
-			ProgramData.getHandler(programType).ifPresent(handler -> handler.onLoad(this));
+			programType.eventHandler().onLoad(this);
 	}
 	
 	public boolean isBroken()
@@ -203,7 +204,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void closeAll()
 	{
 		for(ProgramType programType : installedPrograms)
-			ProgramData.getHandler(programType).ifPresent(handler -> handler.onClosed(this));
+			programType.eventHandler().onClosed(this);
 	}
 	
 	public Stream<ProgramType> installedPrograms()
@@ -247,7 +248,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(isBroken() || level == null)
 			return false;
 		
-		Optional<ProgramType> optionalType = ProgramData.getProgramType(stackInHand);
+		Optional<ProgramType> optionalType = ProgramType.getForDisk(stackInHand);
 		
 		if(stackInHand.is(MSItems.BLANK_DISK.get()))
 		{
@@ -280,7 +281,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
 				setChanged();
 				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-				ProgramData.getHandler(programType).ifPresent(handler -> handler.onDiskInserted(this));
+				programType.eventHandler().onDiskInserted(this);
 			}
 			return true;
 		}
@@ -294,8 +295,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			return;
 		
 		BlockPos bePos = getBlockPos();
-		ItemStack diskStack = ProgramData.getItem(programType);
-		if(!diskStack.isEmpty() && blankDisksStored > 0 && hasAllCode())
+		Optional<Item> disk = programType.diskItem();
+		if(disk.isPresent() && blankDisksStored > 0 && hasAllCode())
 		{
 			RandomSource random = level.getRandom();
 			
@@ -303,7 +304,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			float ry = random.nextFloat() * 0.8F + 0.1F;
 			float rz = random.nextFloat() * 0.8F + 0.1F;
 			
-			ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, diskStack);
+			ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, disk.get().getDefaultInstance());
 			entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
 			level.addFreshEntity(entityItem);
 			
