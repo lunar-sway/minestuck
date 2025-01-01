@@ -10,6 +10,7 @@ import com.mraof.minestuck.network.computer.ResumeSburbConnectionPackets;
 import com.mraof.minestuck.network.editmode.ClientEditPackets;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -30,6 +31,8 @@ public final class SburbServer extends ButtonListProgram
 	public static final String OFFLINE = "minestuck.program.server.offline_message";
 	public static final String SERVER_ACTIVE = "minestuck.program.server.server_active_message";
 	public static final String RESUME_SERVER = "minestuck.program.server.resume_server_message";
+	
+	private Component message;
 	
 	@Override
 	public void onUpdate(ComputerScreen gui)
@@ -90,7 +93,7 @@ public final class SburbServer extends ButtonListProgram
 			}
 		}
 		
-		updateMessage(eventMessage.<Component>map(Component::translatable).orElse(message));
+		this.message = eventMessage.<Component>map(Component::translatable).orElse(message);
 		updateButtons(list);
 	}
 	
@@ -109,5 +112,11 @@ public final class SburbServer extends ButtonListProgram
 	{
 		CustomPacketPayload packet = new ClientEditPackets.Activate(computer.ownerId, computer.getSburbServerData().getConnectedClientId().orElseThrow());
 		PacketDistributor.sendToServer(packet);
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, ComputerScreen gui)
+	{
+		ProgramGui.drawHeaderMessage(this.message, guiGraphics, gui);
 	}
 }

@@ -1,10 +1,7 @@
 package com.mraof.minestuck.computer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -22,7 +19,6 @@ public abstract class ButtonListProgram implements ProgramGui
 	private final Map<Button, Runnable> buttonMap = new HashMap<>();
 	private final List<Button> buttons = new ArrayList<>(4);
 	private Button upButton, downButton;
-	private Component message;
 	
 	private int index = 0;
 	
@@ -67,11 +63,6 @@ public abstract class ButtonListProgram implements ProgramGui
 		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
 	}
 	
-	protected final void updateMessage(Component message)
-	{
-		this.message = message;
-	}
-	
 	protected final void updateButtons(List<ButtonData> buttonsData)
 	{
 		downButton.active = buttonsData.size() >= index + 4;
@@ -93,16 +84,6 @@ public abstract class ButtonListProgram implements ProgramGui
 				buttonMap.remove(button);
 			}
 		}
-	}
-	
-	@Override
-	public final void render(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be)
-	{
-		Font font = Minecraft.getInstance().font;
-		
-		guiGraphics.drawString(font, this.message,
-				(gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45,
-				gui.getTheme().data().textColor(), false);
 	}
 	
 	protected class ArrowButton extends ExtendedButton

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.computer;
 
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -31,7 +31,14 @@ public interface ProgramGui
 	/**
 	 * Called when the gui is to be rendered.
 	 */
-	void render(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be);
+	void render(GuiGraphics guiGraphics, ComputerScreen gui);
+	
+	static void drawHeaderMessage(Component message, GuiGraphics guiGraphics, ComputerScreen gui)
+	{
+		guiGraphics.drawString(gui.getMinecraft().font, message,
+				(gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45,
+				gui.getTheme().data().textColor(), false);
+	}
 	
 	final class Registry
 	{

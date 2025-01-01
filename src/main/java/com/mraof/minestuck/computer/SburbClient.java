@@ -7,6 +7,7 @@ import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -24,6 +25,8 @@ public final class SburbClient extends ButtonListProgram
 	public static final String CLIENT_ACTIVE = "minestuck.program.client.client_active_message";
 	public static final String SELECT = "minestuck.program.client.select_message";
 	public static final String RESUME_CLIENT = "minestuck.program.client.resume_client_message";
+	
+	private Component message;
 	
 	@Override
 	public void onUpdate(ComputerScreen gui)
@@ -86,7 +89,7 @@ public final class SburbClient extends ButtonListProgram
 			}));
 		}
 		
-		updateMessage(eventMessage.<Component>map(Component::translatable).orElse(message));
+		this.message = eventMessage.<Component>map(Component::translatable).orElse(message);
 		updateButtons(list);
 	}
 	
@@ -103,5 +106,11 @@ public final class SburbClient extends ButtonListProgram
 			PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(computer));
 		else
 			PacketDistributor.sendToServer(CloseSburbConnectionPackets.asClient(computer));
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, ComputerScreen gui)
+	{
+		ProgramGui.drawHeaderMessage(this.message, guiGraphics, gui);
 	}
 }

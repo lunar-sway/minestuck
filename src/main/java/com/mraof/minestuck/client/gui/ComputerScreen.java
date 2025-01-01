@@ -93,7 +93,8 @@ public class ComputerScreen extends Screen
 		if(!bsod)
 		{
 			//program and widgets
-			if(program != null) program.render(guiGraphics, this, be);
+			if(program != null)
+				program.render(guiGraphics, this);
 		}
 		
 		//corner bits (goes on top of computer screen slightly)
