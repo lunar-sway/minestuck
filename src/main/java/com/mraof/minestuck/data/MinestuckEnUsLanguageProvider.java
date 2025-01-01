@@ -1734,8 +1734,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.WHITE_QUEENS_RING, "One of a pair. Cast it into the fire!");
 		addItem(MSItems.RAZOR_BLADE, "Razor Blade");
 		addItemTooltip(MSItems.RAZOR_BLADE, "Only a fool would try to pick this up.");
+		addItemExtra(MSItems.RAZOR_BLADE, "cut_self", "While you handle the razor blade, you accidentally cut yourself and drop it.");
 		addItem(MSItems.URANIUM_POWERED_STICK, "Uranium-Powered Stick");
 		addItemTooltip(MSItems.URANIUM_POWERED_STICK, "Never runs out of uranium!");
+		
 		addItem(MSItems.SCALEMATE_APPLESCAB, "Officer Applescab");
 		addItem(MSItems.SCALEMATE_BERRYBREATH, "Inspector Berrybreath");
 		addItem(MSItems.SCALEMATE_CINNAMONWHIFF, "Officer Cinnamonwhiff");
