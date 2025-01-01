@@ -16,7 +16,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -38,10 +38,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
@@ -81,13 +78,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		super.loadAdditional(nbt, pRegistries);
 		
-		for(int id : nbt.getIntArray("programs"))
-		{
-			if(0 <= id && id < ProgramType.values().length)
-				installedPrograms.add(ProgramType.values()[id]);
-			else
-				LOGGER.error("Unknown program id {}", id);
-		}
+		installedPrograms.addAll(
+				ProgramType.LIST_CODEC.parse(NbtOps.INSTANCE, nbt.get("programs"))
+						.resultOrPartial(LOGGER::error).orElse(Collections.emptyList()));
 		
 		sburbClientProgramData.read(nbt.getCompound("sburb_client_data"));
 		sburbServerProgramData.read(nbt.getCompound("sburb_server_data"));
@@ -147,7 +140,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	private void writeSharedData(CompoundTag compoundtag)
 	{
-		compoundtag.put("programs", new IntArrayTag(installedPrograms.stream().map(ProgramType::ordinal).toList()));
+		compoundtag.put("programs", ProgramType.LIST_CODEC.encodeStart(NbtOps.INSTANCE, new ArrayList<>(installedPrograms)).getOrThrow());
 		
 		IncompleteSburbCodeItem.writeBlockSet(compoundtag, "hieroglyphsStored", hieroglyphsStored);
 		compoundtag.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);

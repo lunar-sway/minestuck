@@ -21,7 +21,6 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 //TODO continually check that player is in reach of the computer
@@ -34,8 +33,6 @@ public class ComputerScreen extends Screen
 	
 	public static final int xSize = 176;
 	public static final int ySize = 166;
-	
-	private static final Comparator<ProgramType> PROGRAM_DISPLAY_ORDER = Comparator.reverseOrder();
 	
 	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
@@ -153,7 +150,7 @@ public class ComputerScreen extends Screen
 		icons.clear();
 		
 		int programCount = 0;
-		for(ProgramType programType : be.installedPrograms().sorted(PROGRAM_DISPLAY_ORDER).toList())
+		for(ProgramType programType : be.installedPrograms().sorted(ProgramType.DISPLAY_ORDER_SORTER).toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,

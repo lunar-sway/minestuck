@@ -27,7 +27,7 @@ public abstract class ComputerProgram
 	public static void registerProgramGui(ProgramType programType, Supplier<? extends ComputerProgram> program)
 	{
 		if(programs.containsKey(programType))
-			throw new IllegalArgumentException("Program type " + programType.name() + " is already registered!");
+			throw new IllegalArgumentException("Program type " + programType + " is already registered!");
 		programs.put(programType, program);
 	}
 	

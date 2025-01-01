@@ -1,36 +1,47 @@
 package com.mraof.minestuck.computer;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.skaianet.ComputerInteractions;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Holder;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.ByIdMap;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public enum ProgramType implements StringRepresentable
+public final class ProgramType
 {
-	CLIENT(MSItems.CLIENT_DISK, Handlers.CLIENT),
-	SERVER(MSItems.SERVER_DISK, Handlers.SERVER),
-	DISK_BURNER(null, Handlers.EMPTY),
-	SETTINGS(null, Handlers.EMPTY);
+	public static final ProgramType CLIENT = new ProgramType(MSItems.CLIENT_DISK, Handlers.CLIENT);
+	public static final ProgramType SERVER = new ProgramType(MSItems.SERVER_DISK, Handlers.SERVER);
+	public static final ProgramType DISK_BURNER = new ProgramType(null, Handlers.EMPTY);
+	public static final ProgramType SETTINGS = new ProgramType(null, Handlers.EMPTY);
 	
-	public static final Codec<ProgramType> CODEC = StringRepresentable.fromEnum(ProgramType::values);
-	public static final StreamCodec<ByteBuf, ProgramType> STREAM_CODEC = ByteBufCodecs.idMapper(
-			ByIdMap.continuous(ProgramType::ordinal, ProgramType.values(), ByIdMap.OutOfBoundsStrategy.ZERO), ProgramType::ordinal);
+	private static final BiMap<String, ProgramType> REGISTRY = ImmutableBiMap.of("client", CLIENT, "server", SERVER, "disk_burner", DISK_BURNER, "settings", SETTINGS);
+	
+	public static final Codec<ProgramType> CODEC = Codec.STRING.flatXmap(
+			name -> Optional.ofNullable(REGISTRY.get(name)).map(DataResult::success).orElse(DataResult.error(() -> "Unknown program name " + name)),
+			type -> Optional.ofNullable(REGISTRY.inverse().get(type)).map(DataResult::success).orElse(DataResult.error(() -> "Unknown program type " + type)));
+	public static final Codec<List<ProgramType>> LIST_CODEC = CODEC.listOf();
+	
+	private static final List<ProgramType> DISPLAY_ORDER = List.of(SETTINGS, DISK_BURNER, SERVER, CLIENT);
+	public static final Comparator<ProgramType> DISPLAY_ORDER_SORTER = Comparator.comparing(type -> {
+		int index = DISPLAY_ORDER.indexOf(type);
+		if(index != -1)
+			return index;
+		else
+			return DISPLAY_ORDER.size();
+	});
 	
 	/**
 	 * Returns the type of the program corresponding to the given item.
@@ -39,7 +50,7 @@ public enum ProgramType implements StringRepresentable
 	{
 		if(stack.isEmpty())
 			return Optional.empty();
-		for(ProgramType type : ProgramType.values())
+		for(ProgramType type : REGISTRY.values())
 			if(type.diskItem != null && stack.is(type.diskItem))
 				return Optional.of(type);
 		return Optional.empty();
@@ -49,7 +60,7 @@ public enum ProgramType implements StringRepresentable
 	private final Holder<Item> diskItem;
 	private final EventHandler eventHandler;
 	
-	ProgramType(@Nullable Holder<Item> diskItem, EventHandler eventHandler)
+	private ProgramType(@Nullable Holder<Item> diskItem, EventHandler eventHandler)
 	{
 		this.diskItem = diskItem;
 		this.eventHandler = eventHandler;
@@ -66,9 +77,9 @@ public enum ProgramType implements StringRepresentable
 	}
 	
 	@Override
-	public String getSerializedName()
+	public String toString()
 	{
-		return this.name().toLowerCase(Locale.ROOT);
+		return Objects.requireNonNullElse(REGISTRY.inverse().get(this), "unknown");
 	}
 	
 	public interface EventHandler
