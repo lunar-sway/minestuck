@@ -32,7 +32,7 @@ public final class SburbServer extends ButtonListProgram
 	public static final String RESUME_SERVER = "minestuck.program.server.resume_server_message";
 	
 	@Override
-	public void onUpdateGui(ComputerScreen gui)
+	public void onUpdate(ComputerScreen gui)
 	{
 		ComputerBlockEntity computer = gui.be;
 		Component message;

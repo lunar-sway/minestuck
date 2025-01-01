@@ -14,7 +14,7 @@ public final class SettingsApp extends ButtonListProgram
 	public static final String TITLE = "minestuck.program.settings.title";
 	
 	@Override
-	public void onUpdateGui(ComputerScreen gui)
+	public void onUpdate(ComputerScreen gui)
 	{
 		updateMessage(Component.translatable(TITLE));
 		updateButtons(List.of(new ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.be))));

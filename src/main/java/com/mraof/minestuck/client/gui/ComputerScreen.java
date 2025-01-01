@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.ProgramGui;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
@@ -38,7 +38,7 @@ public class ComputerScreen extends Screen
 	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
 	private PowerButton powerButton;
-	private ComputerProgram program;
+	private ProgramGui program;
 	private ComputerTheme cachedTheme;
 	
 	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
@@ -93,7 +93,7 @@ public class ComputerScreen extends Screen
 		if(!bsod)
 		{
 			//program and widgets
-			if(program != null) program.paintGui(guiGraphics, this, be);
+			if(program != null) program.render(guiGraphics, this, be);
 		}
 		
 		//corner bits (goes on top of computer screen slightly)
@@ -110,7 +110,7 @@ public class ComputerScreen extends Screen
 	{
 		if(!this.cachedTheme.id().equals(be.getTheme()))
 			this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		if(program!=null) program.onUpdateGui(this);
+		if(program!=null) program.onUpdate(this);
 	}
 	
 	protected void setProgram(ProgramType programType)
@@ -118,11 +118,11 @@ public class ComputerScreen extends Screen
 		if(be.isBroken())
 			return;
 		
-		program = ComputerProgram.getProgram(programType);
+		program = ProgramGui.Registry.createGuiInstance(programType);
 		if(program==null) return;
 		
 		be.programSelected = programType;
-		program.onInitGui(this);
+		program.onInit(this);
 		
 		for(ComputerIcon icon : icons)
 			icon.visible = false;

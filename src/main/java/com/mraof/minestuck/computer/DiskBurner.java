@@ -16,7 +16,7 @@ public final class DiskBurner extends ButtonListProgram
 	public static final String CHOOSE = "minestuck.program.disk_burner.choose";
 	
 	@Override
-	public void onUpdateGui(ComputerScreen gui)
+	public void onUpdate(ComputerScreen gui)
 	{
 		if(!gui.be.hasAllCode())
 		{

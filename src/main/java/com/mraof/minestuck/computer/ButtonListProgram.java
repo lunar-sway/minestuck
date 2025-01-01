@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ButtonListProgram extends ComputerProgram
+public abstract class ButtonListProgram implements ProgramGui
 {
 	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
@@ -49,7 +49,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	}
 	
 	@Override
-	public final void onInitGui(ComputerScreen gui)
+	public final void onInit(ComputerScreen gui)
 	{
 		var xOffset = (gui.width - ComputerScreen.xSize) / 2;
 		var yOffset = (gui.height - ComputerScreen.ySize) / 2;
@@ -96,7 +96,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	}
 	
 	@Override
-	public final void paintGui(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be)
+	public final void render(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be)
 	{
 		Font font = Minecraft.getInstance().font;
 		

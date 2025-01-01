@@ -26,7 +26,7 @@ public final class SburbClient extends ButtonListProgram
 	public static final String RESUME_CLIENT = "minestuck.program.client.resume_client_message";
 	
 	@Override
-	public void onUpdateGui(ComputerScreen gui)
+	public void onUpdate(ComputerScreen gui)
 	{
 		ComputerBlockEntity computer = gui.be;
 		Component message;
