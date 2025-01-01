@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerThemeScreen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -24,8 +25,8 @@ public class SettingsApp extends ButtonListProgram
 	
 	private static void openThemeScreen(ComputerBlockEntity computer)
 	{
-		computer.gui.getMinecraft().setScreen(null);
-		computer.gui.getMinecraft().setScreen(new ComputerThemeScreen(computer));
+		Minecraft.getInstance().setScreen(null);
+		Minecraft.getInstance().setScreen(new ComputerThemeScreen(computer));
 	}
 	
 	@Override

@@ -52,7 +52,7 @@ public class ComputerScreen extends Screen
 		this.be = be;
 		this.icons = new ArrayList<>();
 		this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		be.gui = this;
+		be.setGuiCallback(this::updateGui);
 	}
 	
 	@Override

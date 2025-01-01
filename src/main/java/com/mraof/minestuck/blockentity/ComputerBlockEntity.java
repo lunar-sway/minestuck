@@ -2,7 +2,6 @@ package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.ComputerBlock;
-import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
@@ -61,7 +60,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	private final Set<ProgramType> installedPrograms = new HashSet<>();
-	public ComputerScreen gui;
+	@Nullable
+	private Runnable guiCallback = null;
 	@Nullable
 	private PlayerIdentifier owner;
 	//client side only
@@ -109,8 +109,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		else this.owner = IdentifierHandler.loadOrThrow(nbt, "owner");
 		
 		//keep this after everything else has been loaded
-		if(gui != null)
-			gui.updateGui();
+		if(guiCallback != null)
+			guiCallback.run();
 	}
 	
 	@Override
@@ -320,6 +320,13 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public boolean hasAllCode()
 	{
 		return hasParadoxInfoStored && hieroglyphsStored.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
+	}
+	
+	public void setGuiCallback(Runnable guiCallback)
+	{
+		if(this.level == null || !this.level.isClientSide())
+			throw new IllegalStateException("Tried to set gui callback in a non-client context");
+		this.guiCallback = guiCallback;
 	}
 	
 	public void markDirtyAndResend()
