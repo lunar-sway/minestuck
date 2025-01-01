@@ -37,6 +37,6 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 	public void execute(IPayloadContext context, ServerPlayer player)
 	{
 		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
-				.ifPresent(computer -> computer.burnDisk(isClientDisk ? ProgramType.CLIENT : ProgramType.SERVER));
+				.ifPresent(computer -> computer.burnDisk(isClientDisk ? ProgramType.SBURB_CLIENT : ProgramType.SBURB_SERVER));
 	}
 }

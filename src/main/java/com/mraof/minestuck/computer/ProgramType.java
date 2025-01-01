@@ -22,19 +22,19 @@ import java.util.Optional;
 
 public final class ProgramType
 {
-	public static final ProgramType CLIENT = new ProgramType(MSItems.CLIENT_DISK, Handlers.CLIENT);
-	public static final ProgramType SERVER = new ProgramType(MSItems.SERVER_DISK, Handlers.SERVER);
+	public static final ProgramType SBURB_CLIENT = new ProgramType(MSItems.CLIENT_DISK, Handlers.CLIENT);
+	public static final ProgramType SBURB_SERVER = new ProgramType(MSItems.SERVER_DISK, Handlers.SERVER);
 	public static final ProgramType DISK_BURNER = new ProgramType(null, Handlers.EMPTY);
 	public static final ProgramType SETTINGS = new ProgramType(null, Handlers.EMPTY);
 	
-	private static final BiMap<String, ProgramType> REGISTRY = ImmutableBiMap.of("client", CLIENT, "server", SERVER, "disk_burner", DISK_BURNER, "settings", SETTINGS);
+	private static final BiMap<String, ProgramType> REGISTRY = ImmutableBiMap.of("sburb_client", SBURB_CLIENT, "sburb_server", SBURB_SERVER, "disk_burner", DISK_BURNER, "settings", SETTINGS);
 	
 	public static final Codec<ProgramType> CODEC = Codec.STRING.flatXmap(
 			name -> Optional.ofNullable(REGISTRY.get(name)).map(DataResult::success).orElse(DataResult.error(() -> "Unknown program name " + name)),
 			type -> Optional.ofNullable(REGISTRY.inverse().get(type)).map(DataResult::success).orElse(DataResult.error(() -> "Unknown program type " + type)));
 	public static final Codec<List<ProgramType>> LIST_CODEC = CODEC.listOf();
 	
-	private static final List<ProgramType> DISPLAY_ORDER = List.of(SETTINGS, DISK_BURNER, SERVER, CLIENT);
+	private static final List<ProgramType> DISPLAY_ORDER = List.of(SETTINGS, DISK_BURNER, SBURB_SERVER, SBURB_CLIENT);
 	public static final Comparator<ProgramType> DISPLAY_ORDER_SORTER = Comparator.comparing(type -> {
 		int index = DISPLAY_ORDER.indexOf(type);
 		if(index != -1)
