@@ -1,9 +1,9 @@
-package com.mraof.minestuck.client.gui;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import net.minecraft.client.Minecraft;
@@ -21,12 +21,12 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //TODO continually check that player is in reach of the computer
 @ParametersAreNonnullByDefault
 public class ComputerScreen extends Screen
 {
-	
 	public static final String TITLE = "minestuck.computer";
 	public static final ResourceLocation guiMain = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb.png");
 	public static final ResourceLocation guiBsod = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/bsod_message.png");
@@ -37,10 +37,10 @@ public class ComputerScreen extends Screen
 	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
 	private PowerButton powerButton;
-	private ComputerProgram program;
+	private ProgramGui program;
 	private ComputerTheme cachedTheme;
 	
-	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
+	public ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
 		super(Component.translatable(TITLE));
 		
@@ -49,7 +49,7 @@ public class ComputerScreen extends Screen
 		this.be = be;
 		this.icons = new ArrayList<>();
 		this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		be.gui = this;
+		be.setGuiCallback(this::updateGui);
 	}
 	
 	@Override
@@ -57,7 +57,8 @@ public class ComputerScreen extends Screen
 	{
 		genIcons();
 		powerButton = addRenderableWidget(new PowerButton());
-		setProgram(be.programSelected);
+		if(be.programSelected != null)
+			setProgram(be.programSelected);
 	}
 	
 	@Override
@@ -91,7 +92,8 @@ public class ComputerScreen extends Screen
 		if(!bsod)
 		{
 			//program and widgets
-			if(program != null) program.paintGui(guiGraphics, this, be);
+			if(program != null)
+				program.render(guiGraphics, this);
 		}
 		
 		//corner bits (goes on top of computer screen slightly)
@@ -108,19 +110,19 @@ public class ComputerScreen extends Screen
 	{
 		if(!this.cachedTheme.id().equals(be.getTheme()))
 			this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		if(program!=null) program.onUpdateGui(this);
+		if(program!=null) program.onUpdate(this);
 	}
 	
-	protected void setProgram(int id)
+	protected void setProgram(ProgramType programType)
 	{
-		if(be.isBroken() || id == -1 || id == -2)
+		if(be.isBroken())
 			return;
 		
-		program = ComputerProgram.getProgram(id);
+		program = ProgramGui.Registry.createGuiInstance(programType);
 		if(program==null) return;
 		
-		be.programSelected = id;
-		program.onInitGui(this);
+		be.programSelected = programType;
+		program.onInit(this);
 		
 		for(ComputerIcon icon : icons)
 			icon.visible = false;
@@ -131,7 +133,7 @@ public class ComputerScreen extends Screen
 	protected void exitProgram()
 	{
 		program = null;
-		be.programSelected = -1;
+		be.programSelected = null;
 		
 		clearWidgets();
 		icons.forEach(this::addRenderableWidget);
@@ -148,14 +150,14 @@ public class ComputerScreen extends Screen
 		
 		icons.clear();
 		
-		int programCount = be.installedPrograms.size();
-		for(int id : be.installedPrograms.stream().sorted().toList())
+		int programCount = 0;
+		for(ProgramType programType : be.installedPrograms().sorted(ProgramType.DISPLAY_ORDER_SORTER).toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
-					yOffset + 24 + programCount % 5 * 20, id)
+					yOffset + 44 + programCount % 5 * 20, programType)
 			));
-			programCount--;
+			programCount++;
 		}
 	}
 	
@@ -190,14 +192,15 @@ public class ComputerScreen extends Screen
 	
 	private class ComputerIcon extends ExtendedButton
 	{
-		private final ComputerProgram program;
+		private final ResourceLocation icon;
 		private static final int WIDTH = 16, HEIGHT = 16;
 		
-		public ComputerIcon(int xPos, int yPos, int id)
+		public ComputerIcon(int xPos, int yPos, ProgramType programType)
 		{
-			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(id));
+			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(programType));
 			
-			this.program = ComputerProgram.getProgram(id);
+			String programName = Objects.requireNonNullElse(ProgramType.REGISTRY.inverse().get(programType), "invalid");
+			this.icon = Minestuck.id("textures/gui/desktop_icon/" + programName + ".png");
 		}
 		
 		@Override
@@ -206,7 +209,7 @@ public class ComputerScreen extends Screen
 			if(!visible) return;
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			
-			guiGraphics.blit(this.program.getIcon(), getX(), getY(), WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
+			guiGraphics.blit(this.icon, getX(), getY(), WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
 		}
 	}
 	
