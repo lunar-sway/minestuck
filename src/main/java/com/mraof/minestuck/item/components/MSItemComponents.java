@@ -16,11 +16,13 @@ public final class MSItemComponents
 {
 	public static final DeferredRegister.DataComponents REGISTRY = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Minestuck.MOD_ID);
 	
-	public static final DeferredHolder<DataComponentType<?>, DataComponentType<EncodedItemComponent>> ENCODED_ITEM = REGISTRY.register("encoded_item", () ->
-			new DataComponentType.Builder<EncodedItemComponent>()
-					.persistent(EncodedItemComponent.CODEC)
-					.networkSynchronized(EncodedItemComponent.STREAM_CODEC)
-					.build());
+	public static final Supplier<DataComponentType<EncodedItemComponent>> ENCODED_ITEM = REGISTRY.registerComponentType("encoded_item",
+			builder -> builder.persistent(EncodedItemComponent.CODEC).networkSynchronized(EncodedItemComponent.STREAM_CODEC));
+	public static final Supplier<DataComponentType<CardStoredItemComponent>> CARD_STORED_ITEM = REGISTRY.registerComponentType("card_stored_item",
+			builder -> builder.persistent(CardStoredItemComponent.CODEC).networkSynchronized(CardStoredItemComponent.STREAM_CODEC));
+	public static final Supplier<DataComponentType<CaptchaCodeComponent>> CAPTCHA_CODE = REGISTRY.registerComponentType("captcha_code",
+			builder -> builder.persistent(CaptchaCodeComponent.CODEC).networkSynchronized(CaptchaCodeComponent.STREAM_CODEC));
+	
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<FrogTraitsComponent>> FROG_TRAITS = REGISTRY.register("frog_traits", () ->
 			new DataComponentType.Builder<FrogTraitsComponent>()
 					.persistent(FrogTraitsComponent.CODEC)

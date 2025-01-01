@@ -1,16 +1,16 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.TotemLatheBlock;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -200,8 +200,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 		if(be instanceof ItemStackBlockEntity beItem)
 		{
 			ItemStack oldDowel = beItem.getStack();
-			ItemStack newDowel = output.is(MSItems.GENERIC_OBJECT.get()) ? new ItemStack(MSItems.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
-			ColorHandler.setColor(newDowel, ColorHandler.getColorFromStack(oldDowel));
+			ItemStack newDowel = EncodedItemComponent.setEncodedUnlessBlank(oldDowel.copy().split(1), output.getItem());
 			beItem.setStack(newDowel);
 			
 			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
@@ -258,7 +257,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			boolean startingCarving = false;
 			
 			//carve the dowel.
-			if(working && !getDowel().isEmpty() && !AlchemyHelper.hasDecodedItem(getDowel()) && (!card1.isEmpty() || !card2.isEmpty()))
+			if(working && !getDowel().isEmpty() && !getDowel().has(MSItemComponents.ENCODED_ITEM) && (!card1.isEmpty() || !card2.isEmpty()))
 			{
 				this.level.playSound(null, this.getBlockPos(), MSSoundEvents.TOTEM_LATHE_LATHE.get(), SoundSource.BLOCKS, 1F, 1F);
 				startingCarving = true;
@@ -385,25 +384,27 @@ public class TotemLatheBlockEntity extends BlockEntity
 		ItemStack dowel = getDowel();
 		ItemStack output;
 		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
+		if(!dowel.isEmpty() && !dowel.has(MSItemComponents.ENCODED_ITEM) && (!card1.isEmpty() || !card2.isEmpty()))
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
-				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
+			{
+				ItemStack input1 = EncodedItemComponent.getEncodedOrBlank(card1),
+						input2 = EncodedItemComponent.getEncodedOrBlank(card2);
+				if(input1.is(MSItems.GENERIC_OBJECT.get()) || input2.is(MSItems.GENERIC_OBJECT.get()))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
-				else output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(card1, card2, CombinationMode.AND), level);
-			else
+				else
+					output = CombinationRecipe.findResult(new CombinationInput(input1, input2, CombinationMode.AND), level);
+			} else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
-				if(!AlchemyHelper.isPunchedCard(input))
-					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
-				else output = AlchemyHelper.getDecodedItem(input);
+				output = EncodedItemComponent.getEncodedOrBlank(input);
 			}
 			
 			if(!output.isEmpty())
 				success = setCarvedItem(output);
 		}
 		
-		//effects(success);
+		//effects(success); FIXME?
 	}
 	
 	public static void tick(Level level, BlockPos pos, BlockState state, TotemLatheBlockEntity blockEntity)

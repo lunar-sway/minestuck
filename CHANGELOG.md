@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Signs now mineable with axe
+- Non-color data will now be preserved on dowels going through a totem lathe 
 
 ### Contributors for this release
 
