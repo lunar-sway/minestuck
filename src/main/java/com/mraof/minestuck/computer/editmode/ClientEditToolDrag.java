@@ -127,7 +127,7 @@ public class ClientEditToolDrag
 			PacketDistributor.sendToServer(new EditmodeDragPackets.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		else
 			PacketDistributor.sendToServer(new EditmodeDragPackets.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
-		playSoundAndSetParticles(player, targetTool == EditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
+		playSoundAndSetParticles(player, targetTool == EditTools.ToolMode.REVISE, cap.getEditPos1(), cap.getEditPos2());
 	
 		cap.resetDragTools();
 	}
